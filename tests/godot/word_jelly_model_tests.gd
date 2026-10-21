@@ -50,24 +50,24 @@ func _run() -> void:
 	_test_gravity_reserved_operations()
 	_test_gravity_simultaneous_collections()
 	_test_gravity_settlement_determinism()
-	_test_growth_after_gravity()
+	_test_cell_size_after_gravity()
 	_test_gravity_wallet_failure()
 	_test_gravity_lifecycle()
 	_test_wallet_retry()
 	_test_chests()
-	_test_packing_and_growth()
+	_test_repeated_merge_cell_size()
 	_test_target_placement()
 	_test_edge_placement()
 	_test_automatic_support_settlement()
 	_test_reposition_bounds_and_falls()
-	_test_reposition_support_and_growth()
+	_test_reposition_support_and_cell_size()
 	_test_reposition_support_loss()
 	_test_reposition_locked_gravity()
 	_test_reposition_reservations_and_guards()
 	_test_reposition_reward_retry()
 	_test_fusion_reservations()
-	_test_deferred_growth()
-	_test_growth_after_settlement()
+	_test_crowded_merge_cell_size()
+	_test_cell_size_after_settlement()
 	_test_full_board()
 	_test_independent_operations()
 	_test_lifecycle_reentry()
@@ -155,9 +155,25 @@ func _coin_seed_between(minimum: float, maximum: float) -> int:
 
 
 func _tile(id: int, text: String, mass: int = 1, fragments: int = 0, word: Dictionary = {}) -> Dictionary:
-	return {"id": id, "text": text, "mass": mass, "parts_count": mass, "fragments": fragments,
+	if text.begins_with("merged:"):
+		var fields: PackedStringArray = text.split(":")
+		var level: int = int(fields[2])
+		var result: Dictionary = _tile(id, fields[1], 2 * int(pow(2, level - 1)), fragments, _word(fields[1]))
+		result.merge_level = level
+		return result
+	var picture: bool = text.begins_with("picture:")
+	var spelling: String = text.trim_prefix("picture:")
+	var semantic: Dictionary = word.duplicate(true) if not word.is_empty() else _word(spelling)
+	return {"id": id, "text": spelling, "display_text": "" if picture else spelling,
+		"jelly_kind": "merged" if not word.is_empty() else "picture" if picture else "root",
+		"merge_level": 1 if not word.is_empty() else 0,
+		"word_candidate": semantic if word.is_empty() and not picture else {},
+		"image_word": semantic if picture or not word.is_empty() else {},
+		"mastery_eligible": not word.is_empty(), "assisted": false,
+		"mass": mass, "parts_count": mass, "fragments": fragments,
 		"chest": fragments > 0, "word": word.duplicate(true), "kind": "word" if not word.is_empty() else "chunk",
 		"column": id % Model.COLUMNS, "row": Model.ROWS - 1, "width": 1, "height": 1,
+		"preferred_width": 1, "preferred_height": 1,
 		"age": Model.SETTLE_SECONDS, "settling": false, "arrival": false, "falling_rows": 0}
 
 
@@ -165,6 +181,12 @@ func _board(model, pieces: Array[String], fragments: Array[int] = []) -> void:
 	model.cells.clear()
 	for index in range(pieces.size()):
 		var tile: Dictionary = _tile(1000 + index, pieces[index], 1, fragments[index] if index < fragments.size() else 0)
+		var candidate: Dictionary = model._word_lookup.get(Model.normalize_word(str(tile.text)), {})
+		if not candidate.is_empty():
+			if tile.jelly_kind == "picture":
+				tile.image_word = candidate.duplicate(true)
+			elif tile.jelly_kind == "root":
+				tile.word_candidate = candidate.duplicate(true)
 		tile.column = index % Model.COLUMNS
 		tile.row = Model.ROWS - 1 - int(index / Model.COLUMNS)
 		model.cells.append(tile)
@@ -174,8 +196,6 @@ func _placed_tile(id: int, text: String, column: int, row: int, mass: int = 1, f
 	var tile: Dictionary = _tile(id, text, mass, fragments, word)
 	tile.column = column
 	tile.row = row
-	tile.width = mini(mass, Model.COLUMNS)
-	tile.height = ceili(float(mass) / Model.COLUMNS)
 	return tile
 
 
@@ -240,9 +260,15 @@ func _assert_board(model, label: String) -> void:
 				check(not occupied.has(key), label + ": footprints never overlap")
 				occupied[key] = tile.id
 		check(int(tile.mass) >= 1 and int(tile.fragments) >= 0, label + ": mass and fragments remain valid")
+		check(int(tile.width) == 1 and int(tile.height) == 1
+			and int(tile.preferred_width) == 1 and int(tile.preferred_height) == 1,
+			label + ": every source and merged word retains one ordinary cell")
 	check(model.upcoming.size() == Model.UPCOMING_COUNT, label + ": six committed previews remain available")
 	for tile in model.upcoming:
 		check(not ids.has(tile.id), label + ": queued IDs remain distinct")
+		check(int(tile.width) == 1 and int(tile.height) == 1
+			and int(tile.preferred_width) == 1 and int(tile.preferred_height) == 1,
+			label + ": queued bodies retain one ordinary cell")
 		ids[tile.id] = true
 
 
@@ -262,9 +288,9 @@ func _observe(model) -> Dictionary:
 func _powerup_model(kind: String):
 	var model = _model([_word("cat"), _word("cater"), _word("dog")])
 	if kind == "auto_merge":
-		_board(model, ["t", "ca", "er", "do", "g", "x"], [1, 2, 3, 4, 5, 6])
+		_board(model, ["picture:cat", "cat", "merged:cat:1", "dog", "picture:dog", "x"], [1, 2, 3, 4, 5, 6])
 	else:
-		_board(model, ["ca", "t", "do", "g", "x", "y"], [0, 0, 0, 0, 3, 7])
+		_board(model, ["cat", "picture:cat", "dog", "picture:dog", "x", "y"], [0, 0, 0, 0, 3, 7])
 	return model
 
 
@@ -332,11 +358,11 @@ func _test_powerup_eligibility() -> void:
 					model.cells[0].age = 0.0
 					model.cells[0].settling = true
 				"fusion":
-					_board(model, ["ca", "t", "ca", "t"])
+					_board(model, ["cat", "picture:cat", "cat", "picture:cat"])
 					model.try_merge(1000, 1001)
 				"collection", "batch":
 					model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 0, _word("cat")),
-						_placed_tile(1001, "ca", 2, 7), _placed_tile(1002, "t", 3, 7)])
+						_placed_tile(1001, "cat", 2, 7), _placed_tile(1002, "picture:cat", 3, 7)])
 					if blocked_by == "collection":
 						model.collect(1000)
 					else:
@@ -352,7 +378,7 @@ func _test_powerup_eligibility() -> void:
 				"ineligible paid power preserves the board and never invokes the wallet: " + blocked_by)
 			model.purchase_powerup = Callable()
 	var model = _model([_word("cat")])
-	_board(model, ["ca", "x"])
+	_board(model, ["cat", "x"])
 	var payments: Array = _accept_powerup_payments(model)
 	check(not model.can_activate_powerup("auto_merge") and not model.activate_powerup("auto_merge")
 		and payments.is_empty(), "automatic merging cannot charge for a board without an exact dictionary pair")
@@ -362,7 +388,7 @@ func _test_powerup_eligibility() -> void:
 	model.purchase_powerup = Callable()
 	model = _model()
 	model.configure([_word("cat", 3), _word("rocket", 6), _word("advanced", 12)], 6, 42)
-	_board(model, ["ca", "t", "adva", "nced"])
+	_board(model, ["cat", "picture:cat", "advanced", "picture:advanced"])
 	payments = _accept_powerup_payments(model)
 	check(not model.activate_powerup("auto_merge") and payments.is_empty(),
 		"automatic merging excludes both younger and older words from its paid eligibility search")
@@ -409,7 +435,7 @@ func _test_powerup_payment_atomicity() -> void:
 			"an accepted power exposes its persisted receipt and one success response")
 		model.finish_powerup(true)
 		if kind == "auto_merge":
-			_board(model, ["ca", "t"])
+			_board(model, ["cat", "picture:cat"])
 		check(model.activate_powerup(kind) and payments.size() == 2 and payments[1].id != receipt,
 			"separate accepted activations receive distinct wallet receipts")
 		model.finish_powerup(true)
@@ -422,7 +448,7 @@ func _test_powerup_price_progression() -> void:
 		var other: String = "fragments" if kind == "auto_merge" else "auto_merge"
 		var prices: Array = [600, 900, 1200, 1200] if kind == "auto_merge" else [200, 300, 400, 400]
 		for index in range(prices.size()):
-			_board(model, ["ca", "t"])
+			_board(model, ["cat", "picture:cat"])
 			var expected: int = prices[index]
 			check(model.powerup_price(kind) == expected and model.snapshot().powerup_prices[kind] == expected,
 				"each successful-use tier exposes the exact next " + kind + " price")
@@ -460,32 +486,32 @@ func _test_powerup_price_progression() -> void:
 
 func _test_powerup_auto_timeline() -> void:
 	var model = _model([_word("cat")])
-	_board(model, ["t", "ca"], [2, 3])
+	_board(model, ["picture:cat", "cat"], [2, 3])
 	var payments: Array = _accept_powerup_payments(model)
 	var events: Dictionary = _observe_powerups(model)
 	var regular_events: Dictionary = _observe(model)
-	check(model.activate_powerup("auto_merge"), "automatic merging finds the forward pair even when its source follows its target")
+	check(model.activate_powerup("auto_merge"), "Automatic merging accepts the picture before its matching root")
 	var active: Dictionary = model.powerup_snapshot()
 	check(active.active and active.kind == "auto_merge" and active.stage == "drag"
-		and active.source_id == 1001 and active.target_id == 1000,
-		"the paid sequence starts with a visible drag in valid spelling order")
-	check(active.source.text == "ca" and active.target.text == "t" and events.drags.size() == 1,
+		and active.source_id == 1000 and active.target_id == 1001,
+		"The paid sequence starts with a visible picture-to-root drag")
+	check(active.source.text == "cat" and active.target.text == "cat" and events.drags.size() == 1,
 		"the drag exposes both intact endpoint bodies for its presentation")
 	active.source.text = "changed snapshot"
 	active.target.fragments = 999
 	active.drags[0].source.text = "changed nested snapshot"
 	active.drags[0].target.fragments = 888
-	check(model.powerup_snapshot().source.text == "ca" and model.powerup_snapshot().drags[0].source.text == "ca"
+	check(model.powerup_snapshot().source.text == "cat" and model.powerup_snapshot().drags[0].source.text == "cat"
 		and model.cell(1000).fragments == 2,
 		"presentation snapshots cannot mutate the captured power or live bodies")
 	check(is_equal_approx(Model.POWERUP_DRAG_SECONDS, 0.3), "each automatic drag lasts the requested 300 ms")
-	check(is_equal_approx(Model.POWERUP_MERGE_BEAT_SECONDS, 0.2), "independent automatic launches use a 200 ms beat")
+	check(is_equal_approx(Model.POWERUP_MERGE_BEAT_SECONDS, 0.2), "Automatic launches retain their 200 ms minimum beat")
 	model.step(0.299)
 	check(model.powerup_snapshot().stage == "drag" and model.fusions.is_empty() and model.cells.size() == 2,
 		"both bodies remain separate for the complete first 299 ms of the paid drag")
 	model.step(0.001)
 	check(model.powerup_snapshot().stage == "fusion" and model.fusions.size() == 1
-		and model.fusions[0].a_id == 1001 and model.fusions[0].b_id == 1000,
+		and model.fusions[0].a_id == 1000 and model.fusions[0].b_id == 1001,
 		"300 ms starts the normal fusion using the advertised ordered endpoints")
 	model.step(Model.FUSION_SECONDS - 0.001)
 	check(model.cells.size() == 2 and model.powerup_active(), "paid fusion keeps the ordinary full fusion duration")
@@ -507,149 +533,91 @@ func _test_powerup_auto_timeline() -> void:
 
 func _test_powerup_auto_rhythm() -> void:
 	var model = _model([_word("cat"), _word("dog"), _word("sun")])
-	_board(model, ["ca", "t", "do", "g", "su", "n"], [1, 2, 3, 4, 5, 6])
+	_board(model, ["cat", "picture:cat", "dog", "picture:dog", "sun", "picture:sun"], [1, 2, 3, 4, 5, 6])
 	var payments: Array = _accept_powerup_payments(model)
 	var events: Dictionary = _observe_powerups(model)
 	var regular_events: Dictionary = _observe(model)
-	check(model.activate_powerup("auto_merge") and events.drags.size() == 1,
-		"the first automatic source starts immediately after its saved purchase")
-	model.step(0.199)
-	check(events.drags.size() == 1 and model.fusions.is_empty(), "the second launch cannot run before 200 ms")
-	model.step(0.001)
-	check(events.drags.size() == 2 and model.powerup_snapshot().drags.size() == 2 and model.fusions.is_empty(),
-		"at 200 ms two independent source bodies travel simultaneously before either union")
-	model.step(0.099)
-	check(model.fusions.is_empty() and model.powerup_snapshot().drags.size() == 2,
-		"concurrent sources retain their separate 300 ms travel windows")
-	model.step(0.001)
-	check(model.fusions.size() == 1 and model.powerup_snapshot().drags.size() == 1
-		and is_equal_approx(float(model.powerup_snapshot().drags[0].elapsed), 0.1),
-		"the first contact at 300 ms leaves the second source's clock and reservation intact")
-	model.step(0.099)
-	check(events.drags.size() == 2, "the third source waits for its 400 ms launch boundary")
-	model.step(0.001)
-	check(events.drags.size() == 3 and model.powerup_snapshot().drags.size() == 2 and model.fusions.size() == 1,
-		"the 400 ms launch overlaps the second drag and the first ordinary fusion")
-	for drag: Dictionary in model.powerup_snapshot().drags:
-		check(model.cell(int(drag.source_id)).text == drag.source.text
-			and model.cell(int(drag.source_id)).fragments == drag.source.fragments
-			and model.cell(int(drag.target_id)).text == drag.target.text
-			and model.cell(int(drag.target_id)).fragments == drag.target.fragments,
-			"moving source and target bodies remain intact until their own contact")
-		check(str(drag.source.text) + str(drag.target.text) in ["cat", "dog", "sun"],
-			"every concurrent launch preserves forward dictionary spelling")
-	model.step(0.099)
-	check(model.fusions.size() == 1, "the second union cannot start before 500 ms")
-	model.step(0.001)
-	check(model.fusions.size() == 2 and model.powerup_snapshot().drags.size() == 1,
-		"the second source reaches its own target at 500 ms")
-	model.step(0.199)
-	check(model.fusions.size() == 2, "the third union cannot start before 700 ms")
-	model.step(0.001)
-	check(model.fusions.size() == 3 and model.powerup_snapshot().drags.is_empty() and model.merged_count == 0,
-		"three 300 ms drags hand over to ordinary overlapping fusions without early completed words")
-	var reserved: Dictionary = {}
+	check(model.activate_powerup("auto_merge"), "One saved purchase starts the first complete hybrid path")
+	model.step(0.2)
+	check(events.drags.size() == 1 and model.powerup_snapshot().drags.size() == 1,
+		"Auto keeps each hybrid path sequential until its ordinary body settles")
+	for frame in range(600):
+		model.step(0.01)
+		check(model.fusions.size() <= 1 and model.powerup_snapshot().drags.size() <= 1,
+			"Every sequential Auto path owns exactly its current drag or fusion")
+		_assert_reservations(model, "sequential hybrid Auto")
+	check(events.drags.size() == 3 and payments.size() == 1 and model.collectable_ids().size() == 3
+		and not model.powerup_active(), "One purchase settles all three independent picture matches")
 	for index in range(events.drags.size()):
 		var drag: Dictionary = events.drags[index]
-		check(is_equal_approx(float(drag.started_at), index * 0.2),
-			"independent random sources launch exactly at 0, 200, and 400 ms")
-		for id: int in [int(drag.source_id), int(drag.target_id)]:
-			check(not reserved.has(id), "an in-flight automatic endpoint cannot be reserved by another pair")
-			reserved[id] = true
-	_assert_reservations(model, "concurrent automatic drags")
-	check(reserved.size() == 6 and payments.size() == 1,
-		"one purchase schedules the three independent pairs exactly once")
-	model.step(Model.FUSION_SECONDS - 0.4 - 0.001)
-	check(model.merged_count == 0 and regular_events.completed.is_empty(),
-		"overlapping source travel preserves the full first fusion animation")
-	for beat in range(3):
-		model.step(0.001)
-		check(model.merged_count == beat + 1 and regular_events.completed.size() == beat + 1,
-			"completed words arrive on the same 200 ms rhythm as their independent launches")
-		if beat < 2:
-			model.step(0.199)
-			check(model.merged_count == beat + 1,
-				"the next completed word cannot appear before its own 200 ms boundary")
-	model.finish_powerup(true)
-	check(not model.powerup_active() and model.fusions.is_empty() and model.collectable_ids().size() == 3,
-		"all overlapping automatic unions settle into three manually collectable words")
-	check(_board_fragments(model) == 21 and model.collected_coins == 0 and model.fragment_count == 0
-		and regular_events.collections.is_empty() and regular_events.attempts.is_empty(),
-		"the concurrent automatic rhythm preserves carried treasure and never automatically collects or credits learning")
-	_assert_board(model, "concurrent automatic final board")
+		check(model.parts_compatible(drag.source, drag.target), "Every Auto launch is a valid whole-word picture pair")
+		if index > 0:
+			check(float(drag.started_at) - float(events.drags[index - 1].started_at)
+				>= Model.POWERUP_DRAG_SECONDS + Model.FUSION_SECONDS + Model.SETTLE_SECONDS - 0.0001,
+				"The following path waits for drag, fusion, and settlement")
+	check(_board_fragments(model) == 21 and regular_events.attempts.is_empty() and regular_events.collections.is_empty(),
+		"Automatic picture matching conserves every fragment without collecting or claiming mastery")
+	_assert_board(model, "sequential automatic final board")
 	model.purchase_powerup = Callable()
 
-
 func _test_powerup_auto_random_sources() -> void:
-	var source_orders: Dictionary = {}
 	for seed_value in range(1, 17):
 		var models: Array = [_model([_word("cat"), _word("dog"), _word("sun")]),
 			_model([_word("cat"), _word("dog"), _word("sun")])]
 		var orders: Array = []
 		for copy_index in range(models.size()):
 			var model = models[copy_index]
-			_board(model, ["ca", "t", "do", "g", "su", "n"])
+			_board(model, ["cat", "picture:cat", "dog", "picture:dog", "sun", "picture:sun"])
 			model._rng.seed = seed_value
 			_accept_powerup_payments(model)
 			var events: Dictionary = _observe_powerups(model)
 			var rng_before: int = model._rng.state
 			for query in range(8):
-				check(model.can_activate_powerup("auto_merge"), "eligibility can inspect multiple valid random sources")
-				model.powerup_snapshot()
-			check(model._rng.state == rng_before, "eligibility and presentation reads do not consume a random selection")
-			check(model.activate_powerup("auto_merge"), "each seeded source-order fixture accepts its purchase")
+				check(model.can_activate_powerup("auto_merge"), "Repeated availability reads find a complete hybrid path")
+			check(model._rng.state == rng_before, "Preflight never consumes the supply RNG")
+			check(model.activate_powerup("auto_merge"), "A preflighted path accepts its purchase")
 			if copy_index == 0:
-				model.step(4.0)
+				model.step(6.0)
 			else:
-				for frame in range(400):
+				for frame in range(600):
 					model.step(0.01)
 			var order: Array[int] = []
 			for drag: Dictionary in events.drags:
 				order.append(int(drag.source_id))
-				check(str(drag.source.text) + str(drag.target.text) in ["cat", "dog", "sun"],
-					"random selection never launches a reversed or invalid word")
+				check(model.parts_compatible(drag.source, drag.target), "Every planned launch remains semantically valid")
 			check(order.size() == 3 and model.collectable_ids().size() == 3 and not model.powerup_active(),
-				"each random ordering exhausts all three independent pairs")
+				"The deterministic path exhausts all three whole-word picture pairs")
 			orders.append(order)
 			model.purchase_powerup = Callable()
 		check(orders[0] == orders[1] and _approximately_equal_state(_rejection_state(models[0]), _rejection_state(models[1])),
-			"the same seed reproduces source selection and final state under coarse and fine frames")
-		source_orders[str(orders[0])] = true
-	check(source_orders.size() > 1, "different seeds vary automatic source order instead of always traversing the board")
-
+			"Coarse and fine frames reproduce the same hybrid source path and final state")
 
 func _test_powerup_auto_completion_during_drag() -> void:
 	var model = _model([_word("cat")])
 	var pieces: Array[String] = []
 	for index in range(24):
-		pieces.append("ca" if index % 2 == 0 else "t")
+		pieces.append("cat" if index % 2 == 0 else "picture:cat")
 	_board(model, pieces)
 	var payments: Array = _accept_powerup_payments(model)
 	var events: Dictionary = _observe_powerups(model)
-	check(model.activate_powerup("auto_merge"), "a larger board starts one paid automatic stream")
-	var first_completion: float = Model.POWERUP_DRAG_SECONDS + Model.FUSION_SECONDS
-	model.step(first_completion - 0.01)
-	var active: Dictionary = model.powerup_snapshot()
-	var held: Dictionary = active.drags.back()
-	check(events.drags.size() == 6 and active.stage == "drag" and active.drags.size() == 2
-		and is_equal_approx(float(held.started_at), 1.0),
-		"the sixth source is already moving alongside the fifth before the first liquid union completes")
+	check(model.activate_powerup("auto_merge"), "A larger board starts one paid hybrid stream")
+	model.step(Model.POWERUP_DRAG_SECONDS + Model.FUSION_SECONDS - 0.01)
+	check(events.drags.size() == 1 and model.powerup_snapshot().drags.is_empty() and model.fusions.size() == 1,
+		"The accepted result keeps its endpoints reserved through its complete fusion")
 	model.step(0.02)
-	var continued: Array = model.powerup_snapshot().drags.filter(func(drag: Dictionary) -> bool:
-		return int(drag.source_id) == int(held.source_id))
-	check(model.merged_count == 1 and model.powerup_snapshot().stage == "drag" and continued.size() == 1
-		and continued[0].target_id == held.target_id and is_equal_approx(float(continued[0].elapsed), float(held.elapsed) + 0.02),
-		"an older fusion completing mid-drag cannot replace another pair's endpoints or reset its 300 ms clock")
-	model.step(1.2 - first_completion - 0.01)
-	check(events.drags.size() == 7 and is_equal_approx(float(events.drags.back().started_at), 1.2),
-		"the seventh source still starts at 1200 ms despite an earlier completion between beats")
+	check(model.merged_count == 1 and model.powerup_snapshot().stage == "settling",
+		"Auto waits for the completed ordinary body before planning another pair")
 	model.finish_powerup(true)
-	check(not model.powerup_active() and model.merged_count == 12 and model.collectable_ids().size() == 12
-		and payments.size() == 1 and model.collected_coins == 0,
-		"the overlapping stream completes all twelve pairs once without extra payment or automatic collection")
-	_assert_board(model, "automatic stream across concurrent completions")
+	check(not model.powerup_active() and model.collectable_ids().size() == 2 and payments.size() == 1,
+		"The paid stream completes picture matches and same-level upgrades without another payment")
+	var levels: Array[int] = []
+	for tile: Dictionary in model.cells:
+		levels.append(int(tile.merge_level))
+	levels.sort()
+	check(levels == [3, 4] and model.merged_count == 22 and model.collected_coins == 0,
+		"Twelve Lv1 words reduce to Lv4 and Lv3 while retaining their represented word count")
+	_assert_board(model, "automatic picture-and-level stream")
 	model.purchase_powerup = Callable()
-
 
 func _test_powerup_auto_chain() -> void:
 	var model = _powerup_model("auto_merge")
@@ -664,9 +632,9 @@ func _test_powerup_auto_chain() -> void:
 	var words: Dictionary = {}
 	for tile: Dictionary in model.cells:
 		words[str(tile.text)] = tile
-	check(words.has("cater") and words.has("dog") and words.has("x")
-		and words.cater.mass == 3 and words.cater.fragments == 6 and words.dog.fragments == 9,
-		"the new cat result can merge with er while unrelated pieces and all fragments are preserved")
+	check(words.has("cat") and words.has("dog") and words.has("x")
+		and words.cat.mass == 4 and words.cat.merge_level == 2 and words.cat.fragments == 6 and words.dog.fragments == 9,
+		"the new cat result can upgrade with another Lv1 cat while unrelated pieces and all fragments are preserved")
 	check(payments.size() == 1 and events.drags.size() == 3 and regular_events.completed.size() == 3,
 		"one purchase owns the entire recomputed merge sequence with one presentation per pair")
 	check(model.generated_tiles == generated and model.collected_coins == 0 and model.fragment_count == 0
@@ -674,7 +642,7 @@ func _test_powerup_auto_chain() -> void:
 	_assert_board(model, "paid automatic chain")
 	check(not model.can_activate_powerup("auto_merge") and not model.activate_powerup("auto_merge")
 		and payments.size() == 1, "a completed exhausted chain cannot charge again without a new valid pair")
-	check(model.collect(int(words.cater.id)), "the automatically built word still needs an ordinary collection")
+	check(model.collect(int(words.cat.id)), "the automatically built word still needs an ordinary collection")
 	model.step(Model.COLLECT_SECONDS)
 	check(model.collected_coins == 50 and model.fragment_count == 6,
 		"manual collection of the automatic result retains fixed bonus coins and its carried fragments")
@@ -685,7 +653,7 @@ func _test_powerup_manual_guards() -> void:
 	for kind: String in ["auto_merge", "fragments"]:
 		var model = _model([_word("cat")])
 		var root_tile: Dictionary = _placed_tile(1003, "x", 4, 7)
-		model.cells.assign([_placed_tile(1000, "ca", 0, 7), _placed_tile(1001, "t", 1, 7),
+		model.cells.assign([_placed_tile(1000, "cat", 0, 7), _placed_tile(1001, "picture:cat", 1, 7),
 			_placed_tile(1002, "cat", 2, 7, 2, 0, _word("cat")), root_tile])
 		var payments: Array = _accept_powerup_payments(model)
 		check(model.activate_powerup(kind), "stable mixed board can start the paid power")
@@ -1055,7 +1023,7 @@ func _test_powerup_fragments_on_nested_word() -> void:
 		var model = _model([_word("cat"), _word("cater"), _word("caterpillar")])
 		var amounts: Array[int] = []
 		amounts.assign(original_fragments)
-		_board(model, ["ca", "t", "er"], amounts)
+		_board(model, ["cat", "picture:cat", "merged:cat:1"], amounts)
 		var cat: Dictionary = _merge(model, 1000, 1001)
 		var cater: Dictionary = _merge(model, int(cat.id), 1002)
 		model.step(Model.SETTLE_SECONDS * 2.0)
@@ -1066,9 +1034,9 @@ func _test_powerup_fragments_on_nested_word() -> void:
 		model.finish_powerup(true)
 		check(model.cells.size() == 1 and model.cell(int(cater.id)).fragments == original + total
 			and bool(model.cell(int(cater.id)).chest), "every purchased fragment stays on the only eligible merged word")
-		model.cells.append(_placed_tile(2000, "pillar", 5, 7, 1, 2))
+		model.cells.append(_placed_tile(2000, "merged:cat:2", 5, 7, 1, 2))
 		var final_word: Dictionary = _merge(model, int(cater.id), 2000)
-		check(final_word.text == "caterpillar" and final_word.mass == 4 and final_word.fragments == original + total + 2,
+		check(final_word.text == "cat" and final_word.merge_level == 3 and final_word.mass == 8 and final_word.fragments == original + total + 2,
 			"a later valid merge retains the purchased fragments and the new target's fragments")
 		model.step(Model.SETTLE_SECONDS * 2.0)
 		check(model.collect(int(final_word.id)), "the nested word remains manually collectible after its paid effect")
@@ -1092,7 +1060,7 @@ func _test_powerup_pause_and_clocks() -> void:
 		var before: Dictionary = model.snapshot()
 		var active: Dictionary = model.powerup_snapshot()
 		if kind == "auto_merge":
-			check(active.drags.size() == 2, "pause coverage freezes two simultaneously moving sources")
+			check(active.drags.size() == 1, "Pause freezes the current sequential hybrid drag before contact")
 		model.step(50.0)
 		check(model.snapshot() == before and model.powerup_snapshot() == active,
 			"pause freezes paid sequence, board motion, and supply at the exact same point")
@@ -1112,8 +1080,8 @@ func _test_powerup_pause_and_clocks() -> void:
 		var pieces: Array[String] = []
 		for index in range(Model.CAPACITY):
 			pieces.append("x")
-		pieces[0] = "ca"
-		pieces[1] = "t"
+		pieces[0] = "cat"
+		pieces[1] = "picture:cat"
 		_board(model, pieces)
 		model.step(0.001)
 		model.full_elapsed = Model.FULL_SECONDS - 0.1
@@ -1124,9 +1092,13 @@ func _test_powerup_pause_and_clocks() -> void:
 			"paid presentation freezes the active danger deadline without resetting it")
 		model.finish_powerup(true)
 		check(model.phase == "playing" and is_equal_approx(model.full_elapsed, Model.FULL_SECONDS - 0.1),
-			"a paid action that frees no occupied cell preserves the full-board danger deadline")
+			"draining a paid effect preserves its frozen danger clock until normal play resumes")
 		model.step(0.10)
-		check(model.phase == "finished", "unrelieved danger resumes and expires normally after the paid effect")
+		if kind == "auto_merge":
+			check(model.phase == "playing" and model.cells.size() == Model.CAPACITY - 1 and model.full_elapsed < 0.0,
+				"an ordinary-cell Auto merge frees one cell and clears danger when play resumes")
+		else:
+			check(model.phase == "finished", "a fragment award frees no cell, so preserved danger resumes and expires")
 		model.purchase_powerup = Callable()
 
 
@@ -1156,7 +1128,7 @@ func _test_powerup_determinism() -> void:
 	for seed_value in range(1, 25):
 		var model = _model([_word("cat")])
 		model.configure([_word("cat")], 3, seed_value)
-		_board(model, ["ca", "t"])
+		_board(model, ["cat", "picture:cat"])
 		_accept_powerup_payments(model)
 		model.activate_powerup("fragments")
 		var total: int = int(model.powerup_snapshot().total)
@@ -1422,7 +1394,7 @@ func _test_configuration() -> void:
 			== (Model.COLUMNS if row >= Model.ROWS - 3 else 0), "Exactly the bottom three rows start full")
 	check(model.upcoming.size() == 6 and Model.COLUMNS == 6, "six columns and previews")
 	for tile in model.cells:
-		check(str(tile.text) in ["ca", "t"], "duplicate IDs, duplicate spelling, other ages, and incomplete media are omitted")
+		check(str(tile.text) in ["cat", "picture:cat"], "duplicate IDs, duplicate spelling, other ages, and incomplete media are omitted")
 		check(tile.word.is_empty() and not model.collect(int(tile.id)), "an unmerged root cannot be collected")
 	_assert_board(model, "initial board")
 	check(model.configure([_word("cat")], 0, 1), "Baby uses the first vocabulary age")
@@ -1436,18 +1408,19 @@ func _test_configuration() -> void:
 func _test_merging_and_collection() -> void:
 	var model = _model([_word("cat")])
 	var events: Dictionary = _observe(model)
-	_board(model, ["ca", "t"], [1, 1])
-	check(model.try_merge(1000, 1001) == "merged", "drag source concatenates before target")
+	_board(model, ["cat", "picture:cat"], [1, 1])
+	check(model.try_merge(1000, 1001) == "merged", "The whole root matches its picture")
 	check(model.cells.size() == 2 and model.fusions.size() == 1, "both bodies remain reserved during fusion")
 	check(not model.collect(1000) and model.try_merge(1000, 1001) == "ignored", "reserved bodies cannot collect or merge twice")
 	model.step(Model.FUSION_SECONDS - 0.01)
 	check(model.cells.size() == 2 and events.collections.is_empty(), "fusion has a real duration and earns nothing")
 	model.step(0.01)
-	check(model.cells.size() == 1 and model.cells[0].text == "cat", "fusion creates one persistent concatenated jelly")
+	check(model.cells.size() == 1 and model.cells[0].text == "cat", "Fusion creates one persistent pictured word")
 	var result: Dictionary = model.cells[0]
 	check(not model.is_settled(result) and bool(result.settling), "the fixed fusion rectangle reserves its final settlement window before new input")
 	check(result.word.id == "cat" and result.kind == "word", "exact current vocabulary match reveals its word image")
-	check(result.mass == 2 and result.fragments == 2 and result.width > 1, "merged jelly grows and preserves both fragments")
+	check(result.mass == 2 and result.fragments == 2 and result.width == 1 and result.height == 1,
+		"merged jelly preserves both fragments in one ordinary cell")
 	check(result.skin == 1001, "merged body retains the target jelly skin across the animation boundary")
 	check(model.fragment_count == 0 and model.collected_coins == 0 and events.attempts.is_empty(), "fusion alone awards no coins, fragments, or learning attempt")
 	check(events.completed.size() == 1 and events.completed[0].fragments == 0, "fusion completion is distinct from collection")
@@ -1469,7 +1442,7 @@ func _test_merging_and_collection() -> void:
 func _test_rare_coin_drop_boundary() -> void:
 	check(is_equal_approx(Model.COIN_DROP_CHANCE, 0.01), "merged-word collection has exactly a one-percent coin chance")
 	var rejected_model = _model([_word("cat")], false)
-	_board(rejected_model, ["ca", "t"])
+	_board(rejected_model, ["cat", "picture:cat"])
 	var untouched_state: int = rejected_model._coin_rng.state
 	check(not rejected_model.collect(1000) and not rejected_model.collect(1001) and not rejected_model.collect(-1)
 		and rejected_model._coin_rng.state == untouched_state and rejected_model._collection_coin_rewards.is_empty(),
@@ -1663,19 +1636,19 @@ func _test_current_age_validation() -> void:
 	var model := Model.new()
 	model.configure([_word("cat"), _word("rocket", 6)], 6, 2)
 	model.spawn_interval = 10000.0
-	_board(model, ["ca", "t", "roc", "ket"])
+	_board(model, ["cat", "picture:cat", "rocket", "picture:rocket"])
 	check(model.try_merge(1000, 1001) == "wrong" and model.fusions.is_empty(),
 		"a lower-age word is rejected before either part can merge")
 	var current: Dictionary = _merge(model, 1002, 1003)
 	check(current.word.id == "rocket", "current-age word resolves its image")
 	model = _model([_word("ice cream")])
-	_board(model, ["ice ", "cream"])
+	_board(model, ["ice cream", "picture:ice cream"])
 	var spaced: Dictionary = _merge(model, 1000, 1001)
 	check(spaced.word.id == "ice cream" and spaced.text == "ice cream", "multiword vocabulary preserves its separator")
 	model = _model([_word("cat")])
-	_board(model, ["t", "ca"])
-	check(model.try_merge(1000, 1001) == "wrong" and model.cells.size() == 2 and model.fusions.is_empty(),
-		"a reverse-only word keeps both original parts separate")
+	_board(model, ["picture:cat", "cat"])
+	check(model.try_merge(1000, 1001) == "merged" and model.fusions.size() == 1,
+		"A picture dragged onto its root matches the same exact word sense")
 
 
 func _rejection_state(model) -> Dictionary:
@@ -1696,7 +1669,7 @@ func _test_rejected_merge_atomicity() -> void:
 	model.credit_collection = func(_id: String, _coins: int) -> Dictionary:
 		emitted.payments += 1
 		return {"ok": true}
-	for pair: Array in [["ll", "sma"], ["sa", "sleep"], ["ca", "te"], ["cat", "er"]]:
+	for pair: Array in [["picture:small", "cat"], ["sa", "sleep"], ["cat", "te"], ["cat", "er"]]:
 		var pieces: Array[String] = []
 		pieces.assign(pair)
 		_board(model, pieces, [2, 3])
@@ -1710,13 +1683,13 @@ func _test_rejected_merge_atomicity() -> void:
 			"an eligible rejected attempt requests one negative cue")
 	check(events.attempts.is_empty() and events.collections.is_empty() and events.completed.is_empty()
 		and emitted == {"changed": 0, "fusion": 0, "payments": 0}, "rejected words cause no learning penalty, fusion, payout, or board change event")
-	_board(model, ["sma", "ll"], [2, 3])
+	_board(model, ["small", "picture:small"], [2, 3])
 	check(model.try_merge(1000, 1001, true) == "merged" and model.fusions[0].result.text == "small"
 		and model.fusions[0].result.fragments == 5, "the same complementary pieces succeed in forward order and retain all fragments")
 	model.credit_collection = Callable()
 	model = _model()
 	model.configure([_word("cat", 3), _word("rocket", 6), _word("advanced", 12)], 6, 42)
-	for pair: Array in [["ca", "t"], ["adva", "nced"]]:
+	for pair: Array in [["cat", "picture:cat"], ["advanced", "picture:advanced"]]:
 		var pieces: Array[String] = []
 		pieces.assign(pair)
 		_board(model, pieces, [1, 1])
@@ -1724,7 +1697,7 @@ func _test_rejected_merge_atomicity() -> void:
 		check(model.try_merge(1000, 1001) == "wrong" and _rejection_state(model) == before,
 			"both younger and older dictionary spellings reject atomically at the current age")
 	model = _model([_word("cat")])
-	_board(model, ["ca", "t", "ll", "sma"], [1, 1, 2, 3])
+	_board(model, ["cat", "picture:cat", "picture:small", "small"], [1, 1, 2, 3])
 	check(model.try_merge(1000, 1001) == "merged", "independent valid fusion begins before rejection")
 	var before: Dictionary = _rejection_state(model)
 	events = _observe(model)
@@ -1735,7 +1708,7 @@ func _test_rejected_merge_atomicity() -> void:
 	model.set_paused(true)
 	check(model.try_merge(1002, 1003) == "ignored" and events.cues == ["wrong"], "pause rejects input without a negative cue")
 	model = _model([_word("cat")])
-	_board(model, ["ca", "t", "er"], [2, 3, 4])
+	_board(model, ["cat", "picture:cat", "er"], [2, 3, 4])
 	var word: Dictionary = _merge(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
 	model.credit_collection = func(_id: String, _coins: int) -> Dictionary: return {"ok": false}
@@ -1752,7 +1725,7 @@ func _test_rejected_merge_atomicity() -> void:
 	model.credit_collection = Callable()
 	for replace_round: bool in [false, true]:
 		var lifecycle_model = _model([_word("cat")])
-		_board(lifecycle_model, ["t", "ca"], [2, 3])
+		_board(lifecycle_model, ["picture:cat", "small"], [2, 3])
 		var after_callback: Dictionary = {}
 		lifecycle_model.cue_requested.connect(func(cue: String) -> void:
 			check(cue == "wrong", "reentrant rejection delivers the negative cue")
@@ -1767,14 +1740,14 @@ func _test_rejected_merge_atomicity() -> void:
 
 func _test_repeated_merge_and_fragments() -> void:
 	var model = _model([_word("cat"), _word("cater"), _word("caterpillar")])
-	_board(model, ["ca", "t", "er", "pillar"], [1, 1, 1, 1])
+	_board(model, ["cat", "picture:cat", "merged:cat:1", "merged:cat:2"], [1, 1, 1, 1])
 	var first: Dictionary = _merge(model, 1000, 1001)
 	check(first.word.id == "cat", "first merge already forms a word")
 	var second: Dictionary = _merge(model, int(first.id), 1002)
-	check(second.text == "cater" and second.word.id == "cater", "a valid word can grow only into another current-age word")
+	check(second.text == "cat" and second.word.id == "cat" and second.merge_level == 2, "a valid word can grow only into another current-age word")
 	var third: Dictionary = _merge(model, int(second.id), 1003)
-	check(third.text == "caterpillar" and third.word.id == "caterpillar", "repeated exact forward words can build a larger compound")
-	check(third.mass == 4 and third.fragments == 4, "every root and fragment survives repeated merges")
+	check(third.text == "cat" and third.word.id == "cat" and third.merge_level == 3, "Repeated same-level words can build a Lv3 merged Jelly")
+	check(third.mass == 8 and third.fragments == 4, "every root and fragment survives repeated merges")
 	check(Model.coins_for_tile(third) == Model.coins_for_tile(first), "larger jellies keep the fixed bonus category")
 	model.step(Model.SETTLE_SECONDS)
 	model.collect(int(third.id))
@@ -1785,7 +1758,7 @@ func _test_repeated_merge_and_fragments() -> void:
 
 func _test_nested_merge_collection_receipts() -> void:
 	var model = _model([_word("cat"), _word("cater"), _word("caterpillar"), _word("dog")])
-	_board(model, ["ca", "t", "er", "pillar", "do", "g"], [1, 1, 2, 3, 1, 1])
+	_board(model, ["cat", "picture:cat", "merged:cat:1", "merged:cat:2", "dog", "picture:dog"], [1, 1, 2, 3, 1, 1])
 	var cat: Dictionary = _merge(model, 1000, 1001)
 	var dog: Dictionary = _merge(model, 1004, 1005)
 	model.step(Model.SETTLE_SECONDS * 2.0)
@@ -1816,7 +1789,7 @@ func _test_nested_merge_collection_receipts() -> void:
 	check(cater_receipt != cat_receipt, "a larger result never reuses the consumed child's collection receipt")
 	var final_word: Dictionary = _merge(model, cater_id, 1003)
 	check(not model._collection_event_ids.has(cater_id) and not model._collection_coin_rewards.has(cater_receipt)
-		and final_word.mass == 4 and final_word.fragments == 7,
+		and final_word.mass == 8 and final_word.fragments == 7,
 		"a second valid merge also releases its consumed retry while preserving all mass and fragments")
 	model.step(Model.SETTLE_SECONDS * 2.0)
 	payment.ok = true
@@ -1834,7 +1807,7 @@ func _test_nested_merge_collection_receipts() -> void:
 
 func _test_collection_timeline_and_pause() -> void:
 	var model = _model([_word("cat")])
-	_board(model, ["ca", "t"])
+	_board(model, ["cat", "picture:cat"])
 	model.try_merge(1000, 1001)
 	model.set_paused(true)
 	model.step(1000.0)
@@ -1867,8 +1840,8 @@ func _gravity_tower():
 	var model = _model([_word("cat")])
 	model.cells.assign([
 		_placed_tile(1000, "cat", 1, 7, 2, 4, _word("cat")),
-		_placed_tile(1001, "ca", 1, 6, 1, 2),
-		_placed_tile(1002, "t", 1, 5, 1, 1),
+		_placed_tile(1001, "cat", 1, 6, 1, 2),
+		_placed_tile(1002, "picture:cat", 1, 5, 1, 1),
 		_placed_tile(1003, "x", 5, 7)
 	])
 	model.cells[1].skin = 3
@@ -1917,7 +1890,7 @@ func _test_collection_gravity() -> void:
 func _test_gravity_partial_support() -> void:
 	for mass: int in [3, 7]:
 		var model = _model([_word("cat")])
-		var body: Dictionary = _placed_tile(1001, "wide", 2 if mass == 3 else 0, 0, mass, 3)
+		var body: Dictionary = _placed_tile(1001, "merged", 4, 0, mass, 3)
 		model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 0, _word("cat")), body])
 		for row in range(4, Model.ROWS):
 			model.cells.append(_placed_tile(2000 + row, "x", 4, row))
@@ -1926,9 +1899,9 @@ func _test_gravity_partial_support() -> void:
 		var landed: Dictionary = model.cell(1001)
 		check(landed.row == 4 - int(body.height) and landed.column == body.column
 			and landed.width == body.width and landed.height == body.height,
-			"wide or tall bodies stop at their first partial support instead of jumping to a lower gap")
+			"merged words stop at the first support in their own column")
 		check(landed.falling_rows == landed.row and landed.mass == mass and landed.fragments == 3,
-			"multirow falls retain exact travel, wrapped size, mass, and fragments")
+			"ordinary-cell falls retain exact travel, part count, and fragments")
 		_assert_supported_tiles(model, [1001], "partial support")
 		_assert_board(model, "partial support")
 
@@ -1950,19 +1923,18 @@ func _test_gravity_held_stack() -> void:
 		"resume settles the released support first and the upper stack in the same pass")
 	_assert_board(model, "released held stack")
 	model = _model([_word("cat")])
-	var compressed: Dictionary = _placed_tile(1001, "large", 1, 6, 2)
-	compressed.width = 1
-	model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 0, _word("cat")), compressed])
+	var merged: Dictionary = _placed_tile(1001, "large", 1, 6, 2)
+	model.cells.assign([_placed_tile(1000, "cat", 1, 7, 2, 0, _word("cat")), merged])
 	model.set_held_tile(1001)
 	model.collect(1000)
 	model.step(Model.COLLECT_SECONDS)
-	check(_footprint(model.cell(1001)) == Rect2i(1, 6, 1, 1), "collection cannot resize or shift a held compressed body during growth restoration")
+	check(_footprint(model.cell(1001)) == Rect2i(1, 6, 1, 1), "collection cannot resize or shift a held merged body")
 	model.set_held_tile(-1)
-	check(model.cell(1001).width == 2 and model.cell(1001).row == 6 and not model.is_settled(model.cell(1001)),
-		"released compressed body first finishes its reserved growth pose")
+	check(model.cell(1001).width == 1 and model.cell(1001).row == 7 and not model.is_settled(model.cell(1001)),
+		"released merged body falls directly without growing first")
 	model.step(Model.SETTLE_SECONDS)
-	check(model.cell(1001).row == 7 and bool(model.cell(1001).falling), "deferred gravity resumes after the released body's growth settles")
-	_assert_board(model, "released compressed body")
+	check(model.cell(1001).row == 7 and model.is_settled(model.cell(1001)), "the released body settles at the ordinary fall boundary")
+	_assert_board(model, "released merged body")
 
 
 func _test_drag_support_removal() -> void:
@@ -2022,14 +1994,14 @@ func _test_drag_partial_support() -> void:
 	for mass: int in [3, 7]:
 		var model = _model([_word("hat")])
 		var hat: Dictionary = _placed_tile(1000, "hat", 0, 7, 2, 2, _word("hat"))
-		var upper: Dictionary = _placed_tile(1001, "upper", 1 if mass == 3 else 0, 6 if mass == 3 else 5, mass, 3)
 		var support_column: int = 3 if mass == 3 else 5
+		var upper: Dictionary = _placed_tile(1001, "upper", support_column, 6, mass, 3)
 		model.cells.assign([hat.duplicate(true), upper.duplicate(true), _placed_tile(1002, "x", support_column, 7)])
 		model.set_held_tile(1000)
-		check(model.begin_drag(1000), "a supporting word can be lifted beneath a wide or wrapped neighbor")
+		check(model.begin_drag(1000), "a word can be lifted beside an independently supported merged neighbor")
 		model.step(Model.SETTLE_SECONDS)
 		check(_footprint(model.cell(1001)) == _footprint(upper) and not bool(model.cell(1001).get("falling", false)),
-			"a remaining support beneath any part of a wide or wrapped bottom edge prevents an invented fall")
+			"lifting another cell does not disturb the merged neighbor's real support")
 		model.set_held_tile(-1)
 		model.step(Model.SETTLE_SECONDS)
 		check(_board_fragments(model) == 5 and model.collected_coins == 0 and model.fragment_count == 0,
@@ -2042,21 +2014,20 @@ func _test_drag_return_capacity() -> void:
 	var model = _model([_word("hat"), _word("nose"), _word("cat")])
 	var hat: Dictionary = _placed_tile(1000, "hat", 0, 7, 2, 3, _word("hat"))
 	hat.skin = 4
-	var compressed: Dictionary = _placed_tile(1002, "cat", 2, 7, 2, 4, _word("cat"))
-	compressed.width = 1
-	model.cells.assign([hat.duplicate(true), _placed_tile(1001, "nose", 0, 6, 2, 2, _word("nose")), compressed])
+	var merged: Dictionary = _placed_tile(1002, "cat", 2, 7, 2, 4, _word("cat"))
+	model.cells.assign([hat.duplicate(true), _placed_tile(1001, "nose", 0, 6, 2, 2, _word("nose")), merged])
 	_fill_rows(model, 4, 7)
 	var events: Dictionary = _observe(model)
 	_assert_board(model, "crowded drag fixture")
 	var initial_count: int = model.cells.size()
 	var initial_generated: int = model.generated_tiles
 	model.set_held_tile(1000)
-	check(model.begin_drag(1000), "a wide source can lift out of a physically supported crowded board")
+	check(model.begin_drag(1000), "a merged source can lift out of a physically supported crowded board")
 	model.step(Model.SETTLE_SECONDS * 3.0)
 	check(model.cell(1001).row == 7 and model.is_settled(model.cell(1001)),
 		"the return-capacity reservation never holds the unsupported stack in the air")
-	check(model.cell(1002).width == 2,
-		"an independent compressed body can restore growth while preserving a return cell for the live drag")
+	check(model.cell(1002).width == 1 and model.cell(1002).height == 1,
+		"an independent merged body keeps its ordinary cell while the live drag reserves a return cell")
 	var excluded_ids: Array[int] = []
 	var drops: int = 0
 	for attempt in range(Model.ROWS + 2):
@@ -2073,7 +2044,7 @@ func _test_drag_return_capacity() -> void:
 		check(model.phase == "playing" and model.is_lifted(1000),
 			"repeated arrivals retain the live lifted source until the player releases it")
 	check(drops >= 3 and not model.can_drop_now() and model._occupied(excluded_ids, false).size() == Model.CAPACITY - 1,
-		"repeated supply and growth stop exactly at the single remaining real return cell")
+		"repeated supply stops exactly at the single remaining real return cell")
 	var before_cancel: Dictionary = {}
 	for tile: Dictionary in model.cells:
 		before_cancel[int(tile.id)] = tile.duplicate(true)
@@ -2083,7 +2054,7 @@ func _test_drag_return_capacity() -> void:
 	check(not model.is_lifted(1000) and model._held_tile_id == -1 and model._dragged_tile_id == -1,
 		"cancelling at capacity restores the lifted source and clears every live drag identity")
 	check(model.cell(1000).width == 1 and model.cell(1000).height == 1,
-		"the full board uses its one-cell return capacity without discarding the wide source")
+		"the full board uses its one-cell return capacity without discarding the merged source")
 	check(model.cells.size() == initial_count + model.generated_tiles - initial_generated
 		and model.cells.size() == before_cancel.size() and _board_fragments(model) == expected_fragments,
 		"a crowded cancellation retains all original and newly supplied bodies and carried fragments")
@@ -2095,7 +2066,7 @@ func _test_drag_return_capacity() -> void:
 			check(tile.get(key) == original.get(key), "crowded cancellation preserves every body's " + key)
 	check(model.collected_coins == 0 and model.fragment_count == 0
 		and model.merged_count == 0 and events.collections.is_empty() and events.attempts.is_empty() and events.completed.is_empty(),
-		"compressed return preserves source contents and never invents collection or merge rewards")
+		"crowded return preserves source contents and never invents collection or merge rewards")
 	_assert_supported_tiles(model, restored_ids, "crowded drag cancellation")
 	_assert_board(model, "crowded drag cancellation")
 
@@ -2125,7 +2096,7 @@ func _test_drag_finish_lifecycle() -> void:
 	for accepted_merge: bool in [false, true]:
 		var model = _model([_word("hat"), _word("hats"), _word("nose")])
 		model.cells.assign([_placed_tile(1000, "hat", 0, 7, 2, 3, _word("hat")),
-			_placed_tile(1001, "nose", 0, 6, 2, 2, _word("nose")), _placed_tile(1002, "s", 4, 7, 1, 1)])
+			_placed_tile(1001, "nose", 0, 6, 2, 2, _word("nose")), _placed_tile(1002, "merged:hat:1", 4, 7, 2, 1)])
 		var events: Dictionary = _observe(model)
 		model.set_held_tile(1000)
 		check(model.begin_drag(1000), "finish cleanup fixture lifts a supporting source")
@@ -2148,10 +2119,10 @@ func _test_drag_finish_lifecycle() -> void:
 		for tile: Dictionary in model.cells:
 			mass += int(tile.mass)
 			check(not model.is_lifted(int(tile.id)), "finished boards contain no airborne support exclusions")
-		check(mass == 5, "finishing mid-drag preserves the total mass of every jelly")
+		check(mass == 6, "finishing mid-drag preserves the total mass of every jelly")
 		if accepted_merge:
 			check(model.cells.size() == 2 and model.cell(1000).is_empty() and model.cell(1002).is_empty()
-				and model.cell(result_id).text == "hats" and model.cell(result_id).mass == 3
+				and model.cell(result_id).text == "hat" and model.cell(result_id).mass == 4 and model.cell(result_id).merge_level == 2
 				and model.cell(result_id).fragments == 4 and events.completed.size() == 1 and model.merged_count == 1,
 				"finish completes an already accepted lifted merge once without resurrecting its old source rectangle")
 		else:
@@ -2171,7 +2142,7 @@ func _test_drag_finish_lifecycle() -> void:
 func _test_gravity_reserved_operations() -> void:
 	var model = _model([_word("cat")])
 	model.cells.assign([_placed_tile(1000, "cat", 0, 7, 2, 0, _word("cat")),
-		_placed_tile(1001, "ca", 0, 6), _placed_tile(1002, "t", 1, 6), _placed_tile(1003, "x", 0, 4)])
+		_placed_tile(1001, "cat", 0, 6), _placed_tile(1002, "picture:cat", 1, 6), _placed_tile(1003, "x", 1, 4)])
 	check(model.try_merge(1001, 1002) == "merged" and model.collect(1000), "a lower collection can overlap an upper merge")
 	var destination: Dictionary = model.fusions[0].result.duplicate(true)
 	model.step(Model.COLLECT_SECONDS)
@@ -2231,11 +2202,10 @@ func _test_gravity_settlement_determinism() -> void:
 		"gravity time slicing cannot alter collected rewards")
 
 
-func _test_growth_after_gravity() -> void:
+func _test_cell_size_after_gravity() -> void:
 	var model = _model([_word("cat")])
-	var compressed: Dictionary = _placed_tile(1001, "chunk", 0, 5, 2, 2)
-	compressed.width = 1
-	model.cells.assign([_placed_tile(1000, "cat", 1, 7, 2, 0, _word("cat")), compressed,
+	var merged: Dictionary = _placed_tile(1001, "chunk", 0, 5, 2, 2)
+	model.cells.assign([_placed_tile(1000, "cat", 1, 7, 2, 0, _word("cat")), merged,
 		_placed_tile(1002, "x", 0, 6), _placed_tile(1003, "x", 0, 7)])
 	_fill_rows(model, 0, 5)
 	var held_id: int = -1
@@ -2245,14 +2215,14 @@ func _test_growth_after_gravity() -> void:
 	model.set_held_tile(held_id)
 	model.collect(1000)
 	model.step(Model.COLLECT_SECONDS)
-	check(model.cell(1001).width == 1 and model.cell(1001).row == 5 and model._growth_pending,
-		"a growth attempt blocked before gravity is retried after falling vacates a neighboring cell")
+	check(model.cell(1001).width == 1 and model.cell(1001).row == 5,
+		"neighboring collection leaves a supported merged body's ordinary cell unchanged")
 	model.step(Model.SETTLE_SECONDS)
-	check(_footprint(model.cell(1001)) == Rect2i(0, 5, 2, 1) and model.cell(1001).fragments == 2
-		and not model.is_settled(model.cell(1001)), "space released by falling restores a compressed body's full size after landing")
-	check(model.cell(held_id).row == 4, "growth retry keeps the held support's logical anchor unchanged")
+	check(_footprint(model.cell(1001)) == Rect2i(0, 5, 1, 1) and model.cell(1001).fragments == 2
+		and model.is_settled(model.cell(1001)), "newly freed room never grows or restarts a settled merged body")
+	check(model.cell(held_id).row == 4, "neighboring gravity keeps the held support's logical anchor unchanged")
 	model.set_held_tile(-1)
-	_assert_board(model, "growth after gravity")
+	_assert_board(model, "stable cell after gravity")
 
 
 func _test_gravity_wallet_failure() -> void:
@@ -2327,7 +2297,7 @@ func _test_gravity_lifecycle() -> void:
 func _test_wallet_retry() -> void:
 	var model = _model([_word("cat")])
 	var events: Dictionary = _observe(model)
-	_board(model, ["ca", "t"])
+	_board(model, ["cat", "picture:cat"])
 	var merged: Dictionary = _merge(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
 	var calls: Array = []
@@ -2352,7 +2322,7 @@ func _test_wallet_retry() -> void:
 	model.credit_collection = Callable()
 	model = _model([_word("cat")])
 	events = _observe(model)
-	_board(model, ["ca", "t"])
+	_board(model, ["cat", "picture:cat"])
 	merged = _merge(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
 	var pause_calls: Array = []
@@ -2370,7 +2340,7 @@ func _test_wallet_retry() -> void:
 	model.credit_collection = Callable()
 	model = _model([_word("cat")])
 	events = _observe(model)
-	_board(model, ["ca", "t"])
+	_board(model, ["cat", "picture:cat"])
 	merged = _merge(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
 	model.credit_collection = func(_event_id: String, _amount: int) -> Dictionary:
@@ -2473,7 +2443,7 @@ func _test_collection_batch_rhythm() -> void:
 
 func _test_collection_batch_candidates() -> void:
 	var model = _model([_word("cat")])
-	_board(model, ["ca", "t", "x", "y"])
+	_board(model, ["cat", "picture:cat", "x", "y"])
 	var valid: Dictionary = _merge(model, 1000, 1001)
 	check(model.collectable_ids() == [int(valid.id)], "only valid merged words are eligible, including their final wobble")
 	check(model.start_collection_batch() and model.fusions.is_empty(), "a just-merged word can queue while its finishing wobble settles")
@@ -2543,7 +2513,6 @@ func _test_collection_batch_reserved_motion() -> void:
 	_batch_board(model, 3)
 	for tile: Dictionary in model.cells:
 		tile.row = 4
-	model.cells[2].width = 1
 	model.cells.append(_placed_tile(9000, "x", 0, 2))
 	var starts: Array = _observe_batch(model)
 	var payouts: Array = _observe_batch_payouts(model)
@@ -2557,7 +2526,7 @@ func _test_collection_batch_reserved_motion() -> void:
 		"ordinary roots still fall after a collected word while batch targets are reserved")
 	model.step(0.24)
 	check(starts.size() == 3 and payouts.size() == 3 and not model.collection_batch_active(),
-		"floating and compressed words all collect without waiting for growth or gravity")
+		"floating captured words all collect without waiting for gravity")
 	for index in range(starts.size()):
 		check(is_equal_approx(float(starts[index].time), index * 0.12)
 			and is_equal_approx(float(payouts[index].time), (index + 1) * 0.12),
@@ -2568,15 +2537,14 @@ func _test_collection_batch_reserved_motion() -> void:
 	_batch_board(model, 3)
 	for tile: Dictionary in model.cells:
 		tile.row = 4
-	model.cells[2].width = 1
 	model.start_collection_batch()
 	model.step(0.12)
 	model.cancel_collection_batch()
 	model.step(1.2)
 	check(model.cleared_pairs == 2 and model.collected_coins == 100 and model.cells.size() == 1,
 		"cancelling reserves no later payout beyond the already-started word")
-	check(_footprint(model.cell(1002)) == Rect2i(4, 7, 2, 1) and model.is_settled(model.cell(1002)),
-		"cancelling releases the remaining word for its deferred growth and natural fall")
+	check(_footprint(model.cell(1002)) == Rect2i(4, 7, 1, 1) and model.is_settled(model.cell(1002)),
+		"cancelling releases the remaining ordinary cell for its natural fall")
 	check(model.collect(1002), "the released word remains manually collectable after cancellation")
 	model.step(Model.COLLECT_SECONDS)
 	check(model.collected_coins == 150 and model.cells.is_empty(),
@@ -2728,7 +2696,7 @@ func _test_chests() -> void:
 	var model = _model([_word("cat")])
 	var events: Dictionary = _observe(model)
 	for fragments in [4, 5]:
-		_board(model, ["ca", "t"], [fragments, 0])
+		_board(model, ["cat", "picture:cat"], [fragments, 0])
 		var merged: Dictionary = _merge(model, 1000, 1001)
 		model.step(Model.SETTLE_SECONDS)
 		model.collect(int(merged.id))
@@ -2738,39 +2706,34 @@ func _test_chests() -> void:
 	check(events.collections.size() == 2 and events.collections[1].fragments == 5, "multi-fragment collections report the full stack")
 
 
-func _test_packing_and_growth() -> void:
-	# Synthetic exact-word chain isolates mass and packing mechanics.
-	var vocabulary: Array = []
-	for length in range(2, 11):
-		vocabulary.append(_word("a".repeat(length)))
-	var model = _model(vocabulary)
-	var parts: Array[String] = []
-	for index in range(12):
-		parts.append("a")
-	_board(model, parts)
-	var current_id: int = 1000
-	for index in range(1, 10):
-		var merged: Dictionary = _merge(model, current_id, 1000 + index)
-		current_id = int(merged.id)
-		_assert_board(model, "growing merge %d" % index)
-	var large: Dictionary = model.cell(current_id)
-	check(int(large.width) == 6 and int(large.height) >= 2 and int(large.mass) == 10, "large jelly occupies multiple rows within the six-column well")
-	check(str(large.text).length() == 10, "wrapping never truncates accumulated text")
-	check(Model.coins_for_tile(large) == 50, "large jelly bonuses retain the fixed fifty-coin category")
-
+func _test_repeated_merge_cell_size() -> void:
+	var model = _model([_word("cat")])
+	model.cells.clear()
+	var current: Dictionary = _placed_tile(1000, "merged:cat:1", 0, 7, 2, 1)
+	model.cells.append(current)
+	for level in range(2, 10):
+		var sibling: Dictionary = _placed_tile(1000 + level, "merged:cat:%d" % (level - 1), 1, 7, 2, 1)
+		model.cells.append(sibling)
+		current = _merge(model, int(current.id), int(sibling.id))
+		check(current.merge_level == level and current.mass == int(pow(2, level)),
+			"Equal-level joins retain the represented roots while advancing one level")
+		_assert_board(model, "level %d ordinary geometry" % level)
+	check(current.width == 1 and current.height == 1 and current.merge_level == 9,
+		"The highest merged level keeps precisely the ordinary source size")
+	check(Model.coins_for_tile(current) == 50, "Level progression does not multiply the fixed coin bonus")
 
 func _test_target_placement() -> void:
 	var model = _model([_word("cat")])
 	model.cells.assign([
-		_placed_tile(1000, "ca", 0, 7, 1, 1),
-		_placed_tile(1001, "t", 3, 1, 1, 2),
+		_placed_tile(1000, "cat", 0, 7, 1, 1),
+		_placed_tile(1001, "picture:cat", 3, 1, 1, 2),
 		_placed_tile(1002, "x", 5, 5)
 	])
 	var neighbor: Rect2i = _footprint(model.cell(1002))
 	check(model.try_merge(1000, 1001) == "merged", "a lower source can merge into an upper target")
 	var planned: Dictionary = model.fusions[0].result.duplicate(true)
-	check(planned.row == 1 and planned.width == 2 and absf(float(planned.column) + 1.0 - 3.5) <= 0.5,
-		"the frozen footprint stays beside the upper target instead of returning to the floor")
+	check(_footprint(planned) == Rect2i(3, 1, 1, 1),
+		"the frozen ordinary cell stays exactly on the upper target")
 	var merge_obstacles: Dictionary = model._occupied()
 	check(int(planned.row) + int(planned.height) < Model.ROWS and not merge_obstacles.has(2 * Model.COLUMNS + int(planned.column))
 		and not merge_obstacles.has(2 * Model.COLUMNS + int(planned.column) + 1),
@@ -2796,42 +2759,42 @@ func _test_target_placement() -> void:
 		"collecting a lower word settles unsupported anchors vertically without changing their columns")
 	_assert_board(model, "stable target placement")
 	model = _model([_word("cat")])
-	model.cells.assign([_placed_tile(1000, "ca", 0, 7, 4, 2), _placed_tile(1001, "t", 5, 1, 1, 3)])
+	model.cells.assign([_placed_tile(1000, "cat", 0, 7, 4, 2), _placed_tile(1001, "picture:cat", 5, 1, 1, 3)])
 	_fill_rows(model, 0, Model.ROWS - 1)
-	check(model.try_merge(1000, 1001) == "merged", "a crowded target accepts a much larger distant source")
+	check(model.try_merge(1000, 1001) == "merged", "a crowded target accepts a distant source with several accumulated parts")
 	planned = model.fusions[0].result.duplicate(true)
-	check(_footprint(planned) == Rect2i(5, 1, 1, 1), "crowded fallback keeps the target footprint instead of the distant larger source")
+	check(_footprint(planned) == Rect2i(5, 1, 1, 1), "a full board still reserves exactly the target cell")
 	model.step(Model.FUSION_SECONDS)
 	merged = model.cell(int(planned.id))
 	check(_footprint(merged) == _footprint(planned) and merged.mass == 5 and merged.fragments == 5,
-		"temporary target-sized compression preserves full mass and every fragment")
-	_assert_board(model, "crowded target fallback")
+		"ordinary-cell merging preserves full mass and every fragment")
+	_assert_board(model, "crowded target placement")
 
 
 func _test_edge_placement() -> void:
 	for target_row: int in [0, 1, Model.ROWS - 1]:
 		var model = _model([_word("caterpillar")])
 		model.cells.assign([
-			_placed_tile(1000, "cater", 0, 6 if target_row == Model.ROWS - 1 else 7, 6, 2),
-			_placed_tile(1001, "pillar", 5, target_row, 1, 3)
+			_placed_tile(1000, "caterpillar", 0, 6 if target_row == Model.ROWS - 1 else 7, 6, 2),
+			_placed_tile(1001, "picture:caterpillar", 5, target_row, 1, 3)
 		])
-		check(model.try_merge(1000, 1001) == "merged", "an edge target accepts growth across a wrapped row")
+		check(model.try_merge(1000, 1001) == "merged", "an edge target accepts a merged word with seven accumulated parts")
 		var planned: Dictionary = model.fusions[0].result.duplicate(true)
-		check(planned.column == 0 and planned.width == 6 and planned.height == 2 and planned.row <= target_row,
-			"wrapped growth fits six columns without sinking below its target row")
+		check(_footprint(planned) == Rect2i(5, target_row, 1, 1),
+			"every edge merge uses the target's ordinary cell without shifting sideways")
 		check(int(planned.row) >= 0 and int(planned.row) + int(planned.height) <= Model.ROWS,
 			"top and bottom edge destinations remain inside the well")
 		model.step(Model.FUSION_SECONDS)
 		check(_footprint(model.cell(int(planned.id))) == _footprint(planned), "edge fusion and final footprint share one placement")
 		model.step(Model.SETTLE_SECONDS * 2.0)
-		check(model.cell(int(planned.id)).row == Model.ROWS - 2 and model.is_settled(model.cell(int(planned.id))),
-			"a large wrapped merge finishes on the floor after its reserved handover")
-		_assert_board(model, "wrapped edge placement")
+		check(model.cell(int(planned.id)).row == Model.ROWS - 1 and model.is_settled(model.cell(int(planned.id))),
+			"a seven-part merged word finishes in the ordinary bottom row after its reserved handover")
+		_assert_board(model, "ordinary edge placement")
 
 
 func _test_automatic_support_settlement() -> void:
 	var model = _model([_word("cat")])
-	model.cells.assign([_placed_tile(1000, "ca", 0, 7), _placed_tile(1001, "t", 4, 7),
+	model.cells.assign([_placed_tile(1000, "cat", 0, 7), _placed_tile(1001, "picture:cat", 4, 7),
 		_placed_tile(1002, "x", 0, 6)])
 	check(model.try_merge(1000, 1001) == "merged", "moving a lower root into a merge can remove its old support")
 	model.step(Model.FUSION_SECONDS)
@@ -2840,17 +2803,16 @@ func _test_automatic_support_settlement() -> void:
 	model.step(Model.SETTLE_SECONDS)
 	_assert_supported_tiles(model, [1002], "support removed by merge")
 	model = _model()
-	var compressed: Dictionary = _placed_tile(1000, "large", 2, 2, 7, 3)
-	compressed.width = 2
-	compressed.height = 1
-	model.cells.assign([compressed])
+	var merged: Dictionary = _placed_tile(1000, "large", 2, 2, 7, 3)
+	model.cells.assign([merged])
 	model._restore_growth()
-	check(model.cell(1000).width == 6 and model.cell(1000).height == 2 and model._gravity_pending,
-		"automatic wrapped growth schedules support settlement for its enlarged body")
+	check(_footprint(model.cell(1000)) == Rect2i(2, 2, 1, 1) and model.is_settled(model.cell(1000)),
+		"size restoration does not grow or restart an ordinary merged word")
+	model._gravity_pending = true
 	model.step(Model.SETTLE_SECONDS * 2.0)
-	check(_footprint(model.cell(1000)) == Rect2i(0, 6, 6, 2) and model.is_settled(model.cell(1000))
-		and not model._gravity_pending, "a grown wrapped body cannot remain suspended above empty rows")
-	_assert_board(model, "automatic wrapped growth and fall")
+	check(_footprint(model.cell(1000)) == Rect2i(2, 7, 1, 1) and model.is_settled(model.cell(1000))
+		and not model._gravity_pending, "an ordinary merged body falls in its own column to real support")
+	_assert_board(model, "automatic merged-word fall")
 
 
 func _test_reposition_bounds_and_falls() -> void:
@@ -2860,14 +2822,14 @@ func _test_reposition_bounds_and_falls() -> void:
 	model.cells.assign([original, _placed_tile(1001, "x", 4, 3)])
 	var events: Dictionary = _observe(model)
 	var before: Dictionary = model.snapshot()
-	for position: Vector2i in [Vector2i(-1, 0), Vector2i(5, 0), Vector2i(0, -1), Vector2i(0, 8), Vector2i(3, 3), Vector2i(0, 7)]:
+	for position: Vector2i in [Vector2i(-1, 0), Vector2i(6, 0), Vector2i(0, -1), Vector2i(0, 8), Vector2i(4, 3), Vector2i(0, 7)]:
 		check(not model.can_reposition(1000, position.x, position.y)
 			and not model.reposition(1000, position.x, position.y), "invalid, occupied, and unchanged full-body placements are rejected")
 		check(model.snapshot() == before, "a rejected placement leaves position, footprint, clocks, and rewards unchanged")
 	check(not model.can_reposition(-1, 2, 1) and not model.reposition(-1, 2, 1), "missing tile IDs cannot reserve a placement")
-	check(model.can_reposition(1000, 2, 1) and model.reposition(1000, 2, 1), "an entire wide jelly can be placed in a fitting empty space")
+	check(model.can_reposition(1000, 2, 1) and model.reposition(1000, 2, 1), "a complete merged jelly can be placed in any empty ordinary cell")
 	var moved: Dictionary = model.cell(1000)
-	check(_footprint(moved) == Rect2i(2, 7, 2, 1) and bool(moved.placement_locked)
+	check(_footprint(moved) == Rect2i(2, 7, 1, 1) and bool(moved.placement_locked)
 		and not model.is_settled(moved) and bool(moved.settling) and bool(moved.falling)
 		and moved.falling_rows == 6 and is_zero_approx(float(moved.age)),
 		"an unsupported release immediately plans a fall in the chosen column while preserving its whole footprint")
@@ -2881,30 +2843,30 @@ func _test_reposition_bounds_and_falls() -> void:
 	model.step(0.001)
 	check(model.is_settled(model.cell(1000)), "manual drop completes at the ordinary settle boundary")
 	model.step(2.0)
-	check(_footprint(model.cell(1000)) == Rect2i(2, 7, 2, 1) and not model._gravity_pending and not model._growth_pending,
+	check(_footprint(model.cell(1000)) == Rect2i(2, 7, 1, 1) and not model._gravity_pending and not model._growth_pending,
 		"a released word finishes on the floor without keeping pending-motion flags alive")
 	before = model.snapshot()
 	check(not model.reposition(1000, 2, 7) and model.snapshot() == before,
 		"releasing an already supported word at its current coordinate preserves its existing state")
-	check(model.reposition(1000, 3, 1), "a moved footprint may overlap its own old cells when the full destination is free")
+	check(model.reposition(1000, 4, 1), "a moved cell can land above an existing support in another column")
 	model.step(Model.SETTLE_SECONDS)
-	check(_footprint(model.cell(1000)) == Rect2i(3, 6, 2, 1), "a wide drop stops when its right edge reaches another body's support")
-	_assert_supported_tiles(model, [1000], "manual wide drop")
-	_assert_board(model, "manual wide drop")
+	check(_footprint(model.cell(1000)) == Rect2i(4, 6, 1, 1), "a merged word stops above the support in its own column")
+	_assert_supported_tiles(model, [1000], "manual merged-word drop")
+	_assert_board(model, "manual merged-word drop")
 	model = _model()
-	model.cells.assign([_placed_tile(1000, "wrapped", 0, 6, 7, 2)])
-	check(not model.can_reposition(1000, 1, 0) and not model.reposition(1000, 0, 7),
-		"wrapped placement validates both the six-column width and the second occupied row")
-	check(model.reposition(1000, 0, 0), "a wrapped jelly can be placed at the top when its complete body fits")
+	model.cells.assign([_placed_tile(1000, "longword", 0, 6, 7, 2)])
+	check(not model.can_reposition(1000, 6, 0) and not model.reposition(1000, 0, 8),
+		"high-part-count words obey the same board edges as ordinary sources")
+	check(model.reposition(1000, 5, 0), "a seven-part jelly can use the last board column")
 	model.step(Model.SETTLE_SECONDS * 2.0)
-	check(_footprint(model.cell(1000)) == Rect2i(0, 6, 6, 2) and bool(model.cell(1000).placement_locked)
-		and model.cell(1000).falling_rows == 6,
-		"a manually released multirow body falls to the floor with its full height intact")
-	_assert_supported_tiles(model, [1000], "manual wrapped drop")
-	_assert_board(model, "manual wrapped drop")
+	check(_footprint(model.cell(1000)) == Rect2i(5, 7, 1, 1) and bool(model.cell(1000).placement_locked)
+		and model.cell(1000).falling_rows == 7 and model.cell(1000).mass == 7,
+		"a high-part-count word falls as one ordinary cell without losing its content")
+	_assert_supported_tiles(model, [1000], "manual high-part-count drop")
+	_assert_board(model, "manual high-part-count drop")
 
 
-func _test_reposition_support_and_growth() -> void:
+func _test_reposition_support_and_cell_size() -> void:
 	var model = _gravity_tower()
 	model.set_held_tile(1001)
 	model.collect(1000)
@@ -2925,24 +2887,22 @@ func _test_reposition_support_and_growth() -> void:
 		"a manually moved body supports naturally falling neighbors only at its actual landing position")
 	_assert_board(model, "manual position supports a falling neighbor")
 	model = _model()
-	var compressed: Dictionary = _placed_tile(1000, "large", 0, 7, 7, 2)
-	compressed.width = 2
-	compressed.height = 1
-	model.cells.assign([compressed])
-	check(model.reposition(1000, 2, 2), "the actual compressed body can move where its complete current footprint fits")
+	var merged: Dictionary = _placed_tile(1000, "large", 0, 7, 7, 2)
+	model.cells.assign([merged])
+	check(model.reposition(1000, 2, 2), "a seven-part merged word moves as one ordinary cell")
 	model.step(Model.SETTLE_SECONDS)
 	model._restore_growth()
 	model._gravity_pending = true
 	model.step(2.0)
-	check(_footprint(model.cell(1000)) == Rect2i(2, 7, 2, 1) and bool(model.cell(1000).placement_locked)
+	check(_footprint(model.cell(1000)) == Rect2i(2, 7, 1, 1) and bool(model.cell(1000).placement_locked)
 		and not model._gravity_pending and not model._growth_pending,
-		"deferred growth preserves the moved compressed footprint and column while gravity still brings it to the floor")
+		"size restoration preserves the ordinary moved cell and column after gravity brings it to the floor")
 
 
 func _test_reposition_support_loss() -> void:
 	for mass: int in [1, 3, 7]:
 		var model = _model([_word("cat")])
-		var column: int = 0 if mass == 7 else 2 if mass == 3 else 4
+		var column: int = 4
 		var body: Dictionary = _placed_tile(1000, "part", 0, 0, mass, 2)
 		model.cells.assign([body, _placed_tile(1001, "cat", 4, 7, 2, 4, _word("cat"))])
 		var height: int = int(body.height)
@@ -2951,7 +2911,7 @@ func _test_reposition_support_loss() -> void:
 		check(model.reposition(1000, column, 2), "the complete released footprint fits above a partial supporting word")
 		check(_footprint(model.cell(1000)) == Rect2i(column, 7 - height, width, height)
 			and bool(model.cell(1000).falling) and model.cell(1000).falling_rows == 5 - height,
-			"single, wide, and wrapped manual drops stop at the first support under any part of their bottom edge")
+			"all part counts stop at the first real support under their ordinary cell")
 		check(events.collections.is_empty() and events.attempts.is_empty() and events.cues.is_empty(),
 			"finding support during a manual drop never creates a reward or learning attempt")
 		_assert_supported_tiles(model, [1000], "manual partial support")
@@ -3011,9 +2971,9 @@ func _test_reposition_locked_gravity() -> void:
 
 func _test_reposition_reservations_and_guards() -> void:
 	var model = _model([_word("cat")])
-	model.cells.assign([_placed_tile(1000, "x", 5, 7), _placed_tile(1001, "ca", 0, 1), _placed_tile(1002, "t", 2, 1)])
-	check(model.try_merge(1001, 1002) == "merged", "a concurrent merge reserves a new neighboring cell")
-	check(not model.reposition(1000, 1, 1), "reposition cannot occupy an empty-looking cell reserved by a future merge body")
+	model.cells.assign([_placed_tile(1000, "x", 5, 7), _placed_tile(1001, "cat", 0, 1), _placed_tile(1002, "picture:cat", 2, 1)])
+	check(model.try_merge(1001, 1002) == "merged", "a concurrent merge reserves its target cell")
+	check(not model.reposition(1000, 2, 1), "reposition cannot occupy a cell reserved by a future merge body")
 	check(not model.reposition(1001, 3, 3), "a live fusion source cannot be repositioned")
 	model = _model([_word("cat")])
 	_batch_board(model, 3)
@@ -3041,7 +3001,7 @@ func _test_reposition_reservations_and_guards() -> void:
 
 func _test_reposition_reward_retry() -> void:
 	var model = _model([_word("cat")])
-	_board(model, ["ca", "t"], [2, 3])
+	_board(model, ["cat", "picture:cat"], [2, 3])
 	var word: Dictionary = _merge(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
 	var receipts: Array[String] = []
@@ -3066,14 +3026,14 @@ func _test_fusion_reservations() -> void:
 	for stagger: float in [0.0, 0.1]:
 		var model = _model([_word("cat")])
 		model.cells.assign([
-			_placed_tile(1000, "ca", 0, 7), _placed_tile(1001, "t", 1, 4),
-			_placed_tile(1002, "ca", 5, 7), _placed_tile(1003, "t", 3, 4),
+			_placed_tile(1000, "cat", 0, 7), _placed_tile(1001, "picture:cat", 1, 4),
+			_placed_tile(1002, "cat", 5, 7), _placed_tile(1003, "picture:cat", 3, 4),
 			_placed_tile(1004, "x", 0, 4), _placed_tile(1005, "x", 4, 4)
 		])
 		_fill_rows(model, 5, 7)
-		check(model.try_merge(1000, 1001) == "merged", "the first fusion can reserve the shared gap")
+		check(model.try_merge(1000, 1001) == "merged", "the first fusion can reserve its target cell")
 		var first: Dictionary = model.fusions[0].result.duplicate(true)
-		check(_footprint(first).has_point(Vector2i(2, 4)), "the first planned body occupies the sole neighboring gap")
+		check(_footprint(first) == Rect2i(1, 4, 1, 1), "the first planned body leaves the neighboring gap available")
 		if stagger > 0.0:
 			model.step(stagger)
 		check(model.try_merge(1002, 1003) == "merged", "a disjoint second fusion remains playable")
@@ -3099,78 +3059,75 @@ func _test_fusion_reservations() -> void:
 		_assert_board(model, "completed simultaneous placements")
 
 
-func _crowded_growth_model():
+func _crowded_merge_model():
 	var model = _model([_word("cat")])
 	model.cells.clear()
 	for index in range(4):
-		var tile: Dictionary = _tile(1000 + index, "ca" if index == 0 else "t" if index == 1 else "cat",
+		var tile: Dictionary = _tile(1000 + index, "cat" if index == 0 else "picture:cat" if index == 1 else "cat",
 			4 if index < 2 else 2, 2 if index == 0 else 3 if index == 1 else 1,
 			{} if index < 2 else _word("cat"))
-		tile.width = int(tile.mass)
-		tile.column = 0 if index < 2 else 4
+		tile.column = 0 if index < 2 else 1
 		tile.row = 7 if index in [0, 2] else 6
 		model.cells.append(tile)
-	for index in range(36):
-		model.cells.append(_placed_tile(1004 + index, "a", index % Model.COLUMNS, 5 - int(index / Model.COLUMNS)))
+	_fill_rows(model, 0, Model.ROWS - 1)
 	return model
 
 
-func _test_deferred_growth() -> void:
-	var model = _crowded_growth_model()
-	check(not model._has_free_cell(), "explicit legal footprints fill the crowded growth fixture")
+func _test_crowded_merge_cell_size() -> void:
+	var model = _crowded_merge_model()
+	check(not model._has_free_cell(), "ordinary cells fill the crowded merge fixture")
 	model.step(Model.SETTLE_SECONDS)
-	_assert_board(model, "crowded growth fixture")
+	_assert_board(model, "crowded merge fixture")
 	var merged: Dictionary = _merge(model, 1000, 1001)
 	var merged_id: int = int(merged.id)
-	check(merged.mass == 8 and merged.width == 4 and merged.height == 1,
-		"a crowded merge preserves a legal smaller footprint when its preferred size cannot fit")
+	check(merged.mass == 8 and merged.width == 1 and merged.height == 1,
+		"a full board accepts an eight-part result in the target's ordinary cell")
 	check(merged.fragments == 5 and merged.text == "cat" and Model.coins_for_tile(merged) == 50,
-		"temporary compression preserves word content, all fragments, and full coin value")
-	_assert_board(model, "compressed growth")
+		"ordinary-cell sizing preserves word content, all fragments, and full coin value")
+	check(model.cells.size() == Model.CAPACITY - 1, "a completed join releases exactly one cell of board capacity")
+	_assert_board(model, "crowded ordinary merge")
 	model.step(Model.SETTLE_SECONDS)
 	check(model.collect(1002), "the first neighboring word can free some room")
 	model.step(Model.COLLECT_SECONDS)
 	merged = model.cell(merged_id)
-	check(merged.width == 4 and merged.height == 1 and merged.fragments == 5,
-		"failed preferred repacking keeps the current legal footprint and fragments")
-	_assert_board(model, "insufficient growth space")
+	check(merged.width == 1 and merged.height == 1 and merged.fragments == 5,
+		"freed neighboring space never enlarges the merged body or changes its fragments")
+	_assert_board(model, "neighboring collection")
 	model.step(Model.SETTLE_SECONDS)
-	check(model.collect(1003), "the second neighboring word frees the remaining growth space")
+	check(model.collect(1003), "the second neighboring word remains collectable after its fall")
 	model.step(Model.COLLECT_SECONDS)
 	merged = model.cell(merged_id)
-	check(merged.width == 4 and merged.height == 1 and merged.row == Model.ROWS - 1 and merged.mass == 8,
-		"gravity preserves legal compression when settled neighbors occupy the preferred wrapped footprint")
+	check(merged.width == 1 and merged.height == 1 and merged.row == Model.ROWS - 1 and merged.mass == 8,
+		"gravity preserves the ordinary merged cell and accumulated part count")
 	check(merged.fragments == 5 and merged.text == "cat" and merged.word.id == "cat",
-		"restored growth keeps the exact merged word and carried fragments")
-	check(model.is_settled(merged) and not bool(merged.settling), "an unmoved compressed body does not restart settlement after another collection")
-	_assert_board(model, "gravity-constrained growth")
+		"neighboring motion keeps the exact merged word and carried fragments")
+	check(model.is_settled(merged) and not bool(merged.settling), "an unmoved ordinary body does not restart settlement after another collection")
+	_assert_board(model, "stable merged body after gravity")
 	var first_layout: Array[Dictionary] = model.cells.duplicate(true)
 	model._restore_growth()
 	check(model.cells == first_layout, "restoring unchanged footprints is stable and does not restart settlement")
 	model.step(Model.SETTLE_SECONDS)
-	check(model.collect(merged_id), "the expanded word remains collectible")
+	check(model.collect(merged_id), "the eight-part word remains collectible")
 	model.step(Model.COLLECT_SECONDS)
 	check(model.collected_coins == 150 and model.fragment_count == 7,
-		"compression and restored growth preserve the exact final coin and fragment payout")
+		"ordinary-cell placement preserves the exact final coin and fragment payout")
 	model = _model([_word("cat")])
 	model.cells.clear()
 	var fixed_origin: Dictionary = _tile(1000, "cat", 8, 2, _word("cat"))
 	fixed_origin.column = 0
-	fixed_origin.row = Model.ROWS - 2
-	fixed_origin.width = 4
+	fixed_origin.row = Model.ROWS - 1
 	model.cells.append(fixed_origin)
+	var original: Dictionary = fixed_origin.duplicate(true)
 	model._restore_growth()
 	merged = model.cell(1000)
-	check(merged.column == 0 and merged.row == Model.ROWS - 2 and merged.width == 6 and merged.height == 2,
-		"same-position growth restores the full preferred footprint")
-	check(not model.is_settled(merged) and bool(merged.settling),
-		"dimension-only growth prevents collection until its visual settlement completes")
+	check(merged == original and model.is_settled(merged),
+		"high-part-count settled words never resize or become unavailable when size restoration runs")
 
 
-func _test_growth_after_settlement() -> void:
+func _test_cell_size_after_settlement() -> void:
 	var final_states: Array[Dictionary] = []
 	for sliced: bool in [false, true]:
-		var model = _crowded_growth_model()
+		var model = _crowded_merge_model()
 		check(model.try_merge(1000, 1001) == "merged", "a crowded merge starts before neighboring collections")
 		var id: int = int(model.fusions[0].result.id)
 		model.step(0.55)
@@ -3182,18 +3139,18 @@ func _test_growth_after_settlement() -> void:
 		else:
 			model.step(until_collection)
 		var merged: Dictionary = model.cell(id)
-		check(merged.width == 4 and merged.height == 1 and not model.is_settled(merged),
-			"space freed during settlement cannot replace the frozen fusion footprint early")
-		check(model._growth_pending and model.cleared_pairs == 2, "deferred growth remembers newly freed room without another player action")
+		check(merged.width == 1 and merged.height == 1 and not model.is_settled(merged),
+			"space freed during settlement cannot enlarge or move the frozen fusion cell early")
+		check(model._gravity_pending and model.cleared_pairs == 2, "deferred gravity remembers unsupported bodies without another player action")
 		var settle_remaining: float = Model.SETTLE_SECONDS - float(merged.age)
 		model.step(settle_remaining - 0.001)
-		check(model.cell(id).width == 4, "compressed body remains unchanged just before its settlement boundary")
+		check(_footprint(model.cell(id)) == Rect2i(0, 6, 1, 1), "the frozen ordinary cell remains unchanged just before its settlement boundary")
 		model.step(0.002)
 		merged = model.cell(id)
-		check(merged.width == 4 and merged.height == 1 and merged.column == 0 and merged.row == 7,
+		check(merged.width == 1 and merged.height == 1 and merged.column == 0 and merged.row == 7,
 			"settlement completion lets the deferred merged body fall into the newly cleared lower row")
 		check(not model.is_settled(merged) and merged.fragments == 5 and Model.coins_for_tile(merged) == 50,
-			"deferred falling reserves fresh settlement and preserves the full compressed reward")
+			"deferred falling reserves fresh settlement and preserves the full merged reward")
 		_assert_board(model, "deferred falling after settlement")
 		final_states.append({"rect": _footprint(merged), "age": float(merged.age), "coins": model.collected_coins,
 			"fragments": model.fragment_count, "mass": int(merged.mass), "text": str(merged.text)})
@@ -3220,14 +3177,17 @@ func _test_full_board() -> void:
 	var parts: Array[String] = []
 	for index in range(Model.CAPACITY):
 		parts.append("a")
-	parts[0] = "ca"
-	parts[1] = "t"
+	parts[0] = "cat"
+	parts[1] = "picture:cat"
 	_board(model, parts)
 	check(not model.can_drop_now(), "full board blocks manual supply")
 	var merged: Dictionary = _merge(model, 1000, 1001)
 	check(merged.mass == 2, "even a full board allows a merge")
 	_assert_board(model, "full board merge")
 	model.step(Model.SETTLE_SECONDS + 0.01)
+	check(model.full_elapsed < 0.0 and model.can_drop_now(), "merging into one ordinary cell frees capacity and clears full-board danger")
+	check(model.drop_now(), "the single reopened lane admits one fresh preview")
+	model.step(3.0)
 	check(model.full_elapsed >= 0.0, "danger begins only after settled occupancy fills the well")
 	model.set_paused(true)
 	var elapsed: float = model.full_elapsed
@@ -3241,7 +3201,7 @@ func _test_full_board() -> void:
 
 func _test_independent_operations() -> void:
 	var model = _model([_word("cat")])
-	_board(model, ["ca", "t", "ca", "t"], [1, 1, 1, 1])
+	_board(model, ["cat", "picture:cat", "cat", "picture:cat"], [1, 1, 1, 1])
 	check(model.try_merge(1000, 1001) == "merged" and model.try_merge(1002, 1003) == "merged", "disjoint pairs can fuse concurrently")
 	check(model.try_merge(1000, 1002) == "ignored", "concurrent fusions reserve their source IDs")
 	model.step(Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
@@ -3255,7 +3215,7 @@ func _test_independent_operations() -> void:
 
 func _test_lifecycle_reentry() -> void:
 	var model = _model([_word("cat")])
-	_board(model, ["ca", "t"])
+	_board(model, ["cat", "picture:cat"])
 	var events: Dictionary = _observe(model)
 	model.fusion_started.connect(func(_payload: Dictionary) -> void: model.finish_round(), CONNECT_ONE_SHOT)
 	model.try_merge(1000, 1001)
@@ -3263,7 +3223,7 @@ func _test_lifecycle_reentry() -> void:
 	check(model.finish_round().coins == 0, "interrupted merge grants no reward")
 	model = _model([_word("cat")])
 	events = _observe(model)
-	_board(model, ["ca", "t"])
+	_board(model, ["cat", "picture:cat"])
 	var merged: Dictionary = _merge(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
 	model.collect(int(merged.id))
@@ -3274,7 +3234,7 @@ func _test_lifecycle_reentry() -> void:
 		"ending before collection credit grants neither rewards nor mastery")
 	model = _model([_word("cat")])
 	events = _observe(model)
-	_board(model, ["ca", "t"])
+	_board(model, ["cat", "picture:cat"])
 	merged = _merge(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
 	model.credit_collection = func(_id: String, _amount: int) -> Dictionary:
@@ -3288,7 +3248,7 @@ func _test_lifecycle_reentry() -> void:
 	for action: String in ["pause", "finish", "reconfigure"]:
 		model = _model([_word("cat")])
 		events = _observe(model)
-		_board(model, ["ca", "t"])
+		_board(model, ["cat", "picture:cat"])
 		merged = _merge(model, 1000, 1001)
 		model.step(Model.SETTLE_SECONDS)
 		var on_collected: Callable = func(id: String, _word_data: Dictionary, _coins: int, _fragments: int) -> void:
@@ -3314,7 +3274,7 @@ func _test_lifecycle_reentry() -> void:
 		check(events.attempts.size() == 1, "collection mastery survives presentation " + action + " without replay")
 	model = _model([_word("cat")])
 	events = _observe(model)
-	_board(model, ["ca", "t"], [2, 2])
+	_board(model, ["cat", "picture:cat"], [2, 2])
 	merged = _merge(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
 	model.word_attempted.connect(func(_id: String, _words: Array[String], _correct: bool) -> void:
@@ -3446,14 +3406,14 @@ func _assert_supply_conservation(roots: Array, words: Array, label: String, allo
 		check(group_id > 0 and not source.is_empty(), label + ": every root identifies its source-word emission")
 		if group_id <= 0 or source.is_empty():
 			continue
-		var expected_parts: Array = source.get("expected_parts", source.jelly_parts)
+		var expected_parts: Array = [str(source.text), str(source.text)]
 		check(int(root.get("supply_parts", 0)) == expected_parts.size(), label + ": the complete source part count survives mixing")
 		check(part_index >= 0 and part_index < expected_parts.size(), label + ": original part indexes stay in range")
 		if part_index < 0 or part_index >= expected_parts.size():
 			continue
 		check(str(root.text) == str(expected_parts[part_index]), label + ": every part retains its exact curated spelling")
 		check(int(root.mass) == 1 and int(root.parts_count) == 1 and int(root.width) == 1 and int(root.height) == 1
-			and str(root.kind) == "chunk" and root.word.is_empty(), label + ": mixing preserves one-cell unmerged roots")
+			and str(root.jelly_kind) == ("root" if part_index == 0 else "picture") and root.word.is_empty(), label + ": mixing preserves one-cell unmerged roots")
 		check(int(root.fragments) in [0, 1] and bool(root.chest) == (int(root.fragments) == 1),
 			label + ": source fragments remain attached to their original roots")
 		if not groups.has(group_id):
@@ -3470,7 +3430,7 @@ func _assert_supply_conservation(roots: Array, words: Array, label: String, allo
 	for index in range(group_ids.size()):
 		var group_id: int = int(group_ids[index])
 		var group: Dictionary = groups[group_id]
-		var expected_parts: Array = group.source.get("expected_parts", group.source.jelly_parts)
+		var expected_parts: Array = [str(group.source.text), str(group.source.text)]
 		var complete: bool = group.parts.size() == expected_parts.size()
 		check(group_id == index + 1, label + ": FIFO source emissions are conserved without gaps")
 		check(complete or (allow_partial_tail and index == group_ids.size() - 1),
@@ -3482,7 +3442,8 @@ func _assert_supply_conservation(roots: Array, words: Array, label: String, allo
 			var spelling: String = ""
 			for part_index in range(expected_parts.size()):
 				if group.parts.has(part_index):
-					spelling += str(group.parts[part_index].text)
+					if part_index == 0:
+						spelling = str(group.parts[part_index].text)
 			check(spelling == str(group.source.text), label + ": all emitted parts reconstruct their vocabulary word")
 			check(int(group.fragments) == (1 if group_id % 2 == 0 else 0),
 				label + ": complete source emissions preserve the established fragment frequency")
@@ -3490,7 +3451,7 @@ func _assert_supply_conservation(roots: Array, words: Array, label: String, allo
 
 
 func _test_supply_packets() -> void:
-	var cat: Dictionary = _curated_word("cat", ["ca", "t"])
+	var cat: Dictionary = _curated_word("cat", ["cat", "picture:cat"])
 	var dog: Dictionary = _curated_word("dog", ["d", "og"])
 	var rainbow: Dictionary = _curated_word("rainbow", ["rain", "b", "ow"])
 	var sunflower: Dictionary = _curated_word("sunflower", ["sun", "flow", "er"])
@@ -3542,51 +3503,42 @@ func _test_supply_packets() -> void:
 
 func _test_all_age_complementary_supply() -> void:
 	var vocabulary: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
-	check(vocabulary is Array and not vocabulary.is_empty(), "the complete production vocabulary loads for the supply audit")
+	check(vocabulary is Array and not vocabulary.is_empty(), "Production vocabulary loads for the hybrid supply audit")
 	if not vocabulary is Array or vocabulary.is_empty():
 		return
 	var audited: int = 0
-	var expected_total: int = 0
 	for age in range(3, 13):
 		var model := Model.new()
-		check(model.configure(vocabulary, age, 42), "every supported age has an eligible Jelly Words supply")
-		var age_count: int = 0
-		var expected_age: int = 0
+		check(model.configure(vocabulary, age, 42), "Every supported age has eligible hybrid vocabulary")
 		for word: Dictionary in vocabulary:
-			if int(word.min_age) == age and not str(word.image).is_empty() and not str(word.audio).is_empty() and str(word.text).length() >= 2:
-				expected_age += 1
 			if not model._eligible(word, age):
 				continue
-			var parts: Array[String] = model._parts_for_word(word)
-			check(parts.size() == 2 and not parts[0].strip_edges().is_empty() and not parts[1].strip_edges().is_empty()
-				and "".join(parts) == Model.normalize_word(str(word.text)),
-				"every production word has two nonempty complementary chunks: age %d %s" % [age, str(word.id)])
-			if parts.size() != 2:
-				continue
+			check(model._parts_for_word(word) == [str(word.text)],
+				"Unreviewed production vocabulary remains an intact root: " + str(word.id))
+			model.cells.clear()
 			model.fusions.clear()
-			_board(model, parts)
-			check(model.try_merge(1000, 1001) == "merged" and str(model.fusions[0].word.id) == str(word.id),
-				"each production pair completes in one legal forward merge: " + str(word.id))
-			age_count += 1
-		check(age_count > 0 and age_count == expected_age, "each age's complete eligible production word set is audited")
-		audited += age_count
-		expected_total += expected_age
-	check(audited == expected_total, "the supply audit covers every production entry with word art, audio, and at least two letters")
+			var root: Dictionary = model._new_word_root(word)
+			root.column = 0
+			model.cells.append(root)
+			if str(word.get("image", "")).is_empty():
+				check(model.is_valid_word(root), "An image-less atomic source is immediately merged")
+			else:
+				var picture: Dictionary = model._new_picture_tile(word)
+				picture.column = 1
+				model.cells.append(picture)
+				check(model.try_merge(int(picture.id), int(root.id)) == "merged"
+					and str(model.fusions[0].word.id) == str(word.id),
+					"The exact production picture and root match in either direction: " + str(word.id))
+			audited += 1
+	check(audited > 100, "The audit exercises the complete eligible production vocabulary")
 	var model = _model()
-	for fixture: Dictionary in [
-		{"text": "rainbow", "parts": ["rain", "b", "ow"], "expected": ["rain", "bow"]},
-		{"text": "sunflower", "parts": ["sun", "flow", "er"], "expected": ["sun", "flower"]},
-		{"text": "ice cream", "parts": ["i", "ce ", "cre", "am"], "expected": ["ice ", "cream"]},
-		{"text": "cat", "parts": ["wrong", "parts"], "expected": ["ca", "t"]},
-		{"text": "cat", "parts": ["c", "", "at"], "expected": ["ca", "t"]}
-	]:
-		var word: Dictionary = _word(str(fixture.text))
-		word.jelly_parts = fixture.parts
-		check(model._parts_for_word(word) == fixture.expected, "authored chunks preserve meaningful boundaries or fall back to a complete pair: " + str(fixture))
-
+	for spelling: String in ["rainbow", "sunflower", "ice cream", "cat"]:
+		var word: Dictionary = _word(spelling)
+		word.jelly_parts = ["arbitrary", "chunks"]
+		check(model._parts_for_word(word) == [spelling], "Legacy chunk hints cannot substitute for reviewed morphology")
 
 func _test_supply_preview_stability() -> void:
-	var model = _model([_curated_word("cat", ["ca", "t"]), _curated_word("sunflower", ["sun", "flow", "er"])])
+	var model = _model([_curated_word("cat", ["cat", "picture:cat"]), _curated_word("sunflower", ["sun", "flow", "er"])])
 	var preview: Array = model.upcoming.duplicate(true)
 	model._fill_upcoming()
 	model.step(0.1)
@@ -3698,9 +3650,8 @@ func _test_arrival_readiness_and_pause() -> void:
 	var by_readiness: Array[Dictionary] = _arrivals_by_readiness(model)
 	var first_id: int = int(by_readiness.front().id)
 	var last_id: int = int(by_readiness.back().id)
-	var incoming_is_prefix: bool = str(model.cell(first_id).text) == "ca"
 	for tile: Dictionary in model.cells:
-		if model.is_settled(tile) and str(tile.text) == ("t" if incoming_is_prefix else "ca"):
+		if model.is_settled(tile) and model.parts_compatible(model.cell(first_id), tile):
 			target_id = int(tile.id)
 			break
 	var first_contact: float = Model.arrival_contact_at(model.cell(first_id))
@@ -3727,7 +3678,7 @@ func _test_arrival_readiness_and_pause() -> void:
 	check(model.can_drop_now(), "Next remains available after the complete batch recovers")
 	for id in incoming:
 		check(model.is_settled(model.cell(id)) and not bool(model.cell(id).settling), "each arrived root completes its settling flag and readiness together")
-	check(model.try_merge(first_id if incoming_is_prefix else target_id, target_id if incoming_is_prefix else first_id) == "merged", "an arrived root can merge in word order after recovery")
+	check(model.try_merge(first_id, target_id) == "merged", "An arrived root or picture can match after recovery")
 	model.step(Model.FUSION_SECONDS)
 	var merged: Dictionary = model.cells.back()
 	check(not bool(merged.arrival) and is_equal_approx(Model.settle_duration(merged), Model.SETTLE_SECONDS),
@@ -3759,7 +3710,7 @@ func _test_arrival_automatic_timing() -> void:
 func _pacing_ready_word(model) -> int:
 	var completed: int = model.cleared_pairs
 	var interval: float = model.spawn_interval
-	_board(model, ["ca", "t"])
+	_board(model, ["cat", "picture:cat"])
 	var word: Dictionary = _merge(model, 1000, 1001)
 	model.step(Model.SETTLE_SECONDS)
 	check(model.cleared_pairs == completed and is_equal_approx(model.spawn_interval, interval),
@@ -3924,7 +3875,6 @@ func _test_arrival_reachable_lanes() -> void:
 	for column in range(Model.COLUMNS):
 		model.cells.append(_placed_tile(1000 + column, "cat" if column == 0 else "x", column, 0,
 			2 if column == 0 else 1, 0, _word("cat") if column == 0 else {}))
-	model.cells[0].width = 1
 	var preview: Array = model.upcoming.duplicate(true)
 	var generated: int = model.generated_tiles
 	check(model._occupied().size() < Model.CAPACITY and not model.can_drop_now() and not model.drop_now(),
@@ -3982,7 +3932,9 @@ func _test_arrival_preview_columns() -> void:
 func _blocked_preview_model():
 	var model = _model([_word("father"), _word("happy"), _word("sleep"), _word("play"), _word("foot")])
 	model.cells.assign([_placed_tile(1000, "play", 0, 0, 2, 1, _word("play")),
-		_placed_tile(1001, "foot", 4, 0, 2, 1, _word("foot"))])
+		_placed_tile(1001, "foot", 4, 0, 2, 1, _word("foot")),
+		_placed_tile(1002, "play", 1, 0, 2, 1, _word("play")),
+		_placed_tile(1003, "foot", 5, 0, 2, 1, _word("foot"))])
 	for column in [0, 1, 4, 5]:
 		for row in range(1, Model.ROWS):
 			model.cells.append(_placed_tile(2000 + row * Model.COLUMNS + column, "x", column, row))
@@ -4031,7 +3983,7 @@ func _test_arrival_blocked_preview_slots() -> void:
 						"fat, hap, py, and ep stay byte-for-byte in their blocked preview slots")
 			_assert_board(model, "%s screenshot lanes batch %d" % [dispatch, batch])
 		var waiting: Array = model.upcoming.duplicate(true)
-		check(model.collect(1000), "collecting play can reopen its two sealed preview columns")
+		check(model.collect(1000) and model.collect(1002), "collecting the two left roof words reopens their sealed preview columns")
 		model.step(Model.COLLECT_SECONDS + Model.SETTLE_SECONDS)
 		check(model.upcoming == waiting, "opening a lane does not consume or slide any waiting preview")
 		check(model.drop_now(), "newly opened left columns release alongside the still-open middle columns")
@@ -4043,7 +3995,7 @@ func _test_arrival_blocked_preview_slots() -> void:
 				check(model.upcoming[slot] == original[slot] and model.cell(int(original[slot].id)).is_empty(),
 					"the right blocked previews remain untouched when only the left roof clears")
 		waiting = model.upcoming.duplicate(true)
-		check(model.collect(1001), "collecting foot reopens the remaining two preview columns")
+		check(model.collect(1001) and model.collect(1003), "collecting the two right roof words reopens the remaining preview columns")
 		model.step(Model.COLLECT_SECONDS + Model.SETTLE_SECONDS)
 		check(model.drop_now(), "the original right previews can enter once their own roof clears")
 		for slot in [4, 5]:
@@ -4056,13 +4008,13 @@ func _test_arrival_blocked_preview_slots() -> void:
 
 func _test_arrival_reserved_lanes() -> void:
 	var model = _model([_word("cat")])
-	model.cells.assign([_placed_tile(1000, "ca", 0, 0), _placed_tile(1001, "t", 2, 3)])
+	model.cells.assign([_placed_tile(1000, "cat", 0, 0), _placed_tile(1001, "picture:cat", 1, 3)])
 	for column in range(2, Model.COLUMNS):
 		model.cells.append(_placed_tile(2000 + column, "x", column, 0))
-	check(model.try_merge(1000, 1001) == "merged", "arrival reservation fixture commits a wide future word")
+	check(model.try_merge(1000, 1001) == "merged", "arrival reservation fixture commits an ordinary future word")
 	var reserved: Dictionary = model.fusions[0].result.duplicate(true)
-	check(reserved.column == 1 and reserved.row == 3 and reserved.width == 2,
-		"future word reserves its neighboring entry lane before the visual merge finishes")
+	check(_footprint(reserved) == Rect2i(1, 3, 1, 1),
+		"future word reserves its target's entry lane before the visual merge finishes")
 	var preview: Array = model.upcoming.duplicate(true)
 	var generated_before: int = model.generated_tiles
 	for batch in range(3):

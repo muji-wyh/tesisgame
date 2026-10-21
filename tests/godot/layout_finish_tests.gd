@@ -49,9 +49,9 @@ func _run() -> void:
 	var game_top: float = app.grid.global_position.y * app.Style.ui_scale(app)
 	app._show_collection()
 	await settle()
-	check(app._collection_title.text == "Lv0 · Baby Pip"
+	check(app._collection_title.text == "Word library" and app.growth.level == 0 and app.growth.age == 0
 		and app.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
-		"Growth keeps its level-and-age title without theme settings")
+		"The shared word library retains independent growth progress without theme settings")
 	check(app.find_child("WorldChoices", true, false) == null and app.find_child("NextWorld", true, false) == null,
 		"The collection has no old world strip or compact cycle control")
 	check(app._age_choices.get_global_rect().end.y <= app._age_catalog.global_position.y,

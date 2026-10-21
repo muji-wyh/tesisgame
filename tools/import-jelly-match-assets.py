@@ -12,7 +12,7 @@ import subprocess
 import wave
 import zipfile
 
-from PIL import Image, ImageFilter, __version__ as pillow_version
+from PIL import Image, ImageDraw, ImageFilter, __version__ as pillow_version
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -34,7 +34,8 @@ LOWER_PAINT_X_RAMP = (0.06, 0.16, 0.80, 0.90)
 LOWER_PAINT_Y_RAMP = (0.45, 0.56, 0.84, 0.92)
 ROUNDING_SCALE = 4
 ROUNDING_CENTER = (159.5, 159.5)
-ROUNDING_RADII = (148.5, 125.5)
+ROUNDING_HALF_EXTENTS = (148.5, 125.5)
+ROUNDING_CORNER_RADIUS = 56.0
 SOUNDS = {
     "danger": ("question_001.ogg", -12.0),
 }
@@ -104,17 +105,18 @@ def soften_lower_paint(canvas, art_size, art_origin):
 
 
 def round_painted_body(canvas):
-    # Remap the acquired paint along each row into a continuous oval. The
+    # Remap the acquired paint into a broad face with softly rounded corners. The
     # vertical span and foot stay fixed so contact, previews and motion agree.
     scale = ROUNDING_SCALE
     source = canvas.convert("RGBa").resize((canvas.width * scale, canvas.height * scale), Image.Resampling.BICUBIC)
     alpha = source.getchannel("a")
     result = Image.new("RGBa", source.size)
     center_x, center_y = (value * scale for value in ROUNDING_CENTER)
-    radius_x, radius_y = (value * scale for value in ROUNDING_RADII)
+    radius_x, radius_y = (value * scale for value in ROUNDING_HALF_EXTENTS)
+    corner_radius = ROUNDING_CORNER_RADIUS * scale
     for y in range(source.height):
-        vertical = abs((y + 0.5 - center_y) / radius_y)
-        if vertical >= 1.0:
+        vertical = abs(y + 0.5 - center_y)
+        if vertical >= radius_y:
             continue
         row = source.crop((0, y, source.width, y + 1))
         mask = alpha.crop((0, y, source.width, y + 1))
@@ -126,12 +128,20 @@ def round_painted_body(canvas):
         # Subpixel contour crossings prevent visible steps between rows.
         lower = left - (values[left] - 127.5) / max(1, values[left] - values[max(0, left - 1)])
         upper = right + (values[right] - 127.5) / max(1, values[right] - values[min(source.width - 1, right + 1)])
-        half_width = radius_x * math.sqrt(1.0 - vertical * vertical)
+        corner_y = max(0.0, vertical - (radius_y - corner_radius))
+        half_width = radius_x - corner_radius + math.sqrt(corner_radius ** 2 - corner_y ** 2)
         ratio = (upper - lower) / (2.0 * half_width)
         mapped = row.transform((source.width, 1), Image.Transform.AFFINE,
                                (ratio, 0, (lower + upper) * 0.5 - ratio * center_x, 0, 1, 0),
                                Image.Resampling.BICUBIC)
         result.paste(mapped, (0, y))
+    # Expanding the source's narrow top rows also expands their faint fringe.
+    # Clip that stretched fringe to the intended silhouette before downsampling.
+    contour = Image.new("L", source.size)
+    ImageDraw.Draw(contour).rounded_rectangle(
+        (center_x - radius_x, center_y - radius_y, center_x + radius_x, center_y + radius_y),
+        radius=corner_radius, fill=255)
+    result = Image.composite(result, Image.new("RGBa", source.size), contour)
     return result.resize(canvas.size, Image.Resampling.LANCZOS).convert("RGBA")
 
 
@@ -185,10 +195,12 @@ def prepare_images(source):
                             "alpha": "Original source alpha retained during paint softening, before contour remapping",
                             "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"},
                         "contour_rounding": {
-                            "operation": "Horizontal scanline remapping of the acquired painted body into an ellipse",
-                            "center_pixels": list(ROUNDING_CENTER), "radii_pixels": list(ROUNDING_RADII),
+                            "operation": "Horizontal scanline remapping of the acquired painted body into a rounded rectangle",
+                            "center_pixels": list(ROUNDING_CENTER), "half_extents_pixels": list(ROUNDING_HALF_EXTENTS),
+                            "corner_radius_pixels": ROUNDING_CORNER_RADIUS,
                             "supersampling": ROUNDING_SCALE, "alpha_threshold": 128,
                             "edge_interpolation": "Linear subpixel crossing at alpha 127.5",
+                            "fringe_clipping": "Supersampled rounded-rectangle mask removes horizontally stretched source fringe",
                             "resampling": "Premultiplied RGBA; bicubic upscale and affine sampling, Lanczos downsample",
                             "preserved_detail": "Source paint and glints remapped with the contour; alpha-128 vertical span and bottom support unchanged"}})
     shadow_source = source.parents[2] / "Shadow.png"
@@ -378,7 +390,7 @@ def main():
         extract_verified(source_dir, "water-splash-slime-sfx.zip", source_dir / "rubberduck-slime")
     existing = json.loads(MANIFEST.read_text(encoding="utf-8")) if options.images_only else {}
     manifest = {
-        "version": 4, "acquired_on": "2026-10-09", "license": "CC0-1.0",
+        "version": 5, "acquired_on": "2026-10-09", "license": "CC0-1.0",
         "image_source": {"creator": "Zuhria Alfitra (pzUH), GameArt2D", "title": "Jelly Squash Free Sprites",
                          "page": "https://www.gameart2d.com/jelly-squash-free-sprites.html",
                          "download": "https://www.gameart2d.com/uploads/3/0/9/1/30917885/jelly.zip",
@@ -393,7 +405,7 @@ def main():
         **({"material_audio_sources": existing["material_audio_sources"]} if "material_audio_sources" in existing
            else {} if options.images_only else {"material_audio_sources": MATERIAL_AUDIO_SOURCES}),
         "image_processing": {"tool": "Pillow", "version": pillow_version,
-                             "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 34 percent center to 16 percent contour white mix. Localized lower paint uses an alpha-aware 8 source-pixel Gaussian blur at up to 75 percent blend; upper glints remain crisp. Painted rows are remapped into a continuous elliptical contour at 4x resolution, preserving the vertical span and bottom support. Separate contact shadow copied unchanged."},
+                             "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 34 percent center to 16 percent contour white mix. Localized lower paint uses an alpha-aware 8 source-pixel Gaussian blur at up to 75 percent blend; upper glints remain crisp. Painted rows are remapped into a rounded rectangle with a 56 source-pixel corner radius at 4x resolution, preserving the vertical span and bottom support. Separate contact shadow copied unchanged."},
         "images": prepare_images(source_dir / "jelly/png/separate/Jellies/Blank/Jelly (3).png"),
         "audio": existing["audio"] if options.images_only else prepare_sounds(source_dir / "kenney-interface-sounds"),
         "reuse": {"chest_reward": "assets/imported-audio/chest-reference/reward.wav",

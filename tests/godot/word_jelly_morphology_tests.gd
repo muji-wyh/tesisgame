@@ -49,8 +49,10 @@ func _node(id: String, left: String, right: String, surface: String, breaks: Arr
 func _word(id: String, text: String, parts: Array, nodes: Array = [], breaks: Array = []) -> Dictionary:
 	if parts.size() == 1:
 		parts[0].break_offsets = breaks
+	# These grammar and persistence fixtures use the explicit image-less path.
+	# Picture matching and level progression have their own hybrid suite.
 	return {"id": "sense:" + id, "text": text, "min_age": 3,
-		"image": "assets/images/words/cat.png", "audio": "assets/audio/words/cat.wav",
+		"image": "", "audio": "assets/audio/words/cat.wav",
 		"morphology": {"schema": 1, "id": id, "lexeme_id": "sense:" + id,
 			"text": text, "kind": "atomic" if parts.size() == 1 else "morphological",
 			# Executable fixtures do not claim production editorial review.
@@ -130,8 +132,10 @@ func _test_configuration() -> void:
 	var initial_area: int = 0
 	for tile: Dictionary in model.cells:
 		initial_area += int(tile.width) * int(tile.height)
-		check(tile.kind == "word" and tile.text == "I" and tile.mass == 1, "Atomic supply preserves the exact whole spelling")
-	check(initial_area <= Model.INITIAL_SETTLED_TILES, "Initial authored supply uses occupied area instead of piece count")
+		check(tile.kind == "word" and tile.text == "I" and tile.mass == 1 and tile.width == 1 and tile.height == 1,
+			"Atomic supply preserves exact whole spelling in an ordinary Jelly body")
+	check(initial_area == Model.INITIAL_SETTLED_TILES and model.cells.size() == initial_area,
+		"Initial authored supply fills the normal three rows with one body per cell")
 	var professional: Dictionary = _atomic()
 	professional.erase("min_age")
 	professional.track = "professional"
@@ -171,14 +175,17 @@ func _test_partial_and_final() -> void:
 	model.word_attempted.connect(func(event_id: String, ids: Array[String], correct: bool): attempts.append([event_id, ids, correct]))
 	check(model.parts_compatible(pieces[1], pieces[2]) and not model.parts_compatible(pieces[0], pieces[1]), "The palette uses authored logical compatibility")
 	var partial: Dictionary = _merge(model, pieces[1], pieces[2])
-	check(partial.text == "helpful" and partial.kind == "part" and partial.word.is_empty(), "Three-part targets keep a legal intermediate incomplete")
+	check(partial.text == "helpful" and partial.kind == "part" and partial.word.is_empty()
+		and partial.width == 1 and partial.height == 1 and partial.approved_break_offsets == [4],
+		"A legal intermediate keeps its exact authored boundary in an ordinary incomplete body")
 	check(events.size() == 1 and events[0][0].composition_status == "partial" and events[0][0].word.is_empty() and events[0][1] == 0,
 		"Partial fusion has no whole-word pronunciation payload or reward")
 	check(not model.collect(int(partial.id)) and model.cleared_pairs == 0 and attempts.is_empty() and model.fragment_count == 0,
 		"Partial composition is not a collection, speed-stage increment, or mastery event")
 	var whole: Dictionary = _merge(model, pieces[0], partial)
-	check(whole.text == "unhelpful" and whole.mass == 3 and whole.fragments == 3 and whole.composition.mastery_eligible,
-		"Manual completion preserves all semantic parts and carried fragments")
+	check(whole.text == "unhelpful" and whole.mass == 3 and whole.fragments == 3 and whole.composition.mastery_eligible
+		and whole.width == 1 and whole.height == 1 and whole.approved_break_offsets == [2, 6],
+		"Manual completion preserves every semantic part, boundary and carried fragment without enlarging the body")
 	check(events.back()[0].composition_status == "complete" and events.back()[0].word.id == "sense:unhelpful" and attempts.is_empty(),
 		"Only the completed fusion exposes the whole-word payload, without pre-collection mastery")
 	check(model.collect(int(whole.id)), "The completed authored target is collectable")
@@ -228,8 +235,8 @@ func _test_atomic_exposure_and_retry() -> void:
 
 func _test_space_and_hints() -> void:
 	var model = _model()
-	var pieces: Array[Dictionary] = _sources(model, "unhelpful")
-	# Separate the legal pair so their released cells cannot hold its full result.
+	var pieces: Array[Dictionary] = _sources(model, "unhelpful", 1)
+	# A full board leaves only the consumed inputs available for their result.
 	pieces[1].column = 0
 	pieces[1].row = 0
 	pieces[2].column = 4
@@ -242,33 +249,54 @@ func _test_space_and_hints() -> void:
 	var next_event: int = model._next_event_id
 	var cues: Array = []
 	model.cue_requested.connect(func(cue: String): cues.append(cue))
-	check(model.parts_compatible(pieces[1], pieces[2]), "Lack of room does not change linguistic compatibility")
-	check(model.merge_candidate(pieces[1], pieces[2]).status == "needs_room" and model.compatible_pairs().is_empty(),
-		"Live hints exclude a legal result that cannot fit its full rectangle")
-	check(not model.can_merge(pieces[1], pieces[2]), "The fast view query retains authored placement requirements")
-	check(model.try_merge(int(pieces[1].id), int(pieces[2].id)) == "needs_room", "Manual fusion reports room separately from incorrect spelling")
+	var candidate: Dictionary = model.merge_candidate(pieces[1], pieces[2])
+	check(model.cells.size() == Model.CAPACITY and model.parts_compatible(pieces[1], pieces[2]),
+		"The full board keeps authored linguistic compatibility")
+	check(candidate.status == "partial" and model.can_merge(pieces[1], pieces[2])
+		and model.compatible_pairs() == [{"source_id": int(pieces[1].id), "target_id": int(pieces[2].id), "status": "partial"}],
+		"Manual queries and live hints admit a legal one-cell result on a full board")
+	check(candidate.result.column == pieces[2].column and candidate.result.row == pieces[2].row
+		and candidate.result.width == 1 and candidate.result.height == 1,
+		"The partial preflight reuses the consumed target cell without displacing its neighbors")
 	check(model.cells == before and model.fusions.is_empty() and model._next_tile_id == next_tile and model._next_event_id == next_event and cues.is_empty(),
-		"A blocked fusion consumes no inputs, IDs, events, or penalty cues")
+		"Placement and hint queries consume no inputs, IDs, events, or cues")
+	check(model.try_merge(int(pieces[1].id), int(pieces[2].id)) == "merged", "A crowded manual partial starts without an artificial room penalty")
+	var active: Dictionary = model.fusions[0]
+	var consumed_ids: Array[int] = [int(pieces[1].id), int(pieces[2].id)]
+	var reserved: Dictionary = model._occupied(consumed_ids)
+	check(reserved.has(int(active.result.row) * Model.COLUMNS + int(active.result.column)),
+		"The active fusion reserves its destination even when both consumed inputs are excluded")
+	_settle(model)
+	var partial: Dictionary = model.cell(int(active.result.id))
+	check(model.cells.size() == Model.CAPACITY - 1 and partial.text == "helpful" and partial.fragments == 2,
+		"The crowded partial frees exactly one cell and retains both carried fragments")
+	var whole: Dictionary = _merge(model, pieces[0], partial)
+	check(model.cells.size() == Model.CAPACITY - 2 and whole.text == "unhelpful" and whole.mass == 3 and whole.fragments == 3,
+		"Manual completion frees the second consumed cell without dropping spelling or fragment data")
+	# Auto must preflight and reserve both one-cell results on the same full board.
+	model = _model()
+	pieces = _sources(model, "unhelpful", 1)
+	_fill_except_tiles(model)
+	before = model.cells.duplicate(true)
+	var plan: Dictionary = model.authored_completion_plan()
+	check(plan.status == "complete" and plan.placement_checked and plan.steps.size() == 2 and model.cells == before,
+		"Auto preflights the full crowded completion without changing live bodies")
+	for step: Dictionary in plan.steps:
+		check(step.placement.width == 1 and step.placement.height == 1
+			and Rect2i(0, 0, Model.COLUMNS, Model.ROWS).has_point(Vector2i(step.placement.column, step.placement.row)),
+			"Every preflighted partial and final destination occupies one valid board cell")
 	var purchases: Array = []
 	model.purchase_powerup = func(receipt: String, kind: String, price: int) -> Dictionary:
 		purchases.append([receipt, kind, price])
 		return {"ok": true}
-	check(not model.can_activate_powerup("auto_merge") and not model.activate_powerup("auto_merge") and purchases.is_empty(),
-		"Auto merge never charges for a completion blocked by geometry")
+	check(model.can_activate_powerup("auto_merge") and model.activate_powerup("auto_merge") and purchases.size() == 1,
+		"The complete crowded route starts one paid Auto obligation")
+	model.finish_powerup()
+	var completed: Array = model.cells.filter(func(tile: Dictionary) -> bool: return model.is_valid_word(tile))
+	check(not model.powerup_active() and model.cells.size() == Model.CAPACITY - 2 and completed.size() == 1
+		and completed[0].text == "unhelpful" and completed[0].fragments == 3 and completed[0].composition.assisted,
+		"Crowded Auto executes both reserved steps and preserves its complete assisted result")
 	model.purchase_powerup = Callable()
-	# A first partial fits, but neither of the later complete-word rectangles does.
-	model = _model()
-	pieces = _sources(model, "unhelpful")
-	pieces[0].column = 0
-	pieces[0].row = 0
-	pieces[1].column = 0
-	pieces[1].row = 7
-	pieces[2].column = 4
-	pieces[2].row = 7
-	_fill_except_tiles(model)
-	model.cells.erase(model.cell(2000 + 7 * Model.COLUMNS + 2))
-	check(model.merge_candidate(pieces[1], pieces[2]).status == "partial" and model.authored_completion_plan().status == "unavailable",
-		"Auto checks future result geometry even when its first partial can fit")
 
 
 func _test_auto_completion() -> void:
@@ -344,39 +372,36 @@ func _test_auto_timing_and_lifecycle() -> void:
 
 
 func _test_auto_keeps_preflighted_route() -> void:
-	var alternate: Dictionary = _word("unacceptable", "unacceptable",
-		[_part("un", "un-", "prefix"), _part("acceptable", "acceptable", "stem")],
-		[_node("whole", "un", "acceptable", "unacceptable", [2])])
+	var alternate: Dictionary = _word("unworkable", "unworkable",
+		[_part("un", "un-", "prefix"), _part("work", "work"), _part("able", "-able", "suffix")],
+		[_node("workable", "work", "able", "workable", [4]),
+		_node("whole", "un", "workable", "unworkable", [2, 6])])
 	var model := Model.new()
 	check(model.configure([_three(), alternate], 3, 42), "The competing completion fixture configures")
 	model.spawn_interval = 10000.0
 	model.cells.clear()
 	var pieces: Array[Dictionary] = _sources(model, "unhelpful")
-	var others: Array[Dictionary] = _sources(model, "unacceptable")
+	var others: Array[Dictionary] = _sources(model, "unworkable")
 	model.cells.erase(others[0])
-	pieces[0].column = 0
-	pieces[0].row = 2
-	pieces[1].column = 4
-	pieces[1].row = 7
-	pieces[2].column = 0
-	pieces[2].row = 0
-	others[1].column = 0
-	others[1].row = 7
 	_fill_except_tiles(model)
-	for column in range(4):
-		model.cells.erase(model.cell(2000 + 4 * Model.COLUMNS + column))
-	check(model.merge_candidate(pieces[0], others[1]).status == "needs_room"
-		and model.authored_completion_plan().steps.size() == 2,
-		"Only the two-step target has a complete placeable route at purchase")
+	var plan: Dictionary = model.authored_completion_plan()
+	check(model.merge_candidate(pieces[1], pieces[2]).status == "partial"
+		and model.merge_candidate(others[1], others[2]).status == "partial"
+		and plan.steps.size() == 2 and plan.steps[0].result.text == "helpful" and plan.tile.text == "unhelpful",
+		"Two complete authored routes compete for one prefix and Auto preflights the first complete route")
 	model.purchase_powerup = func(_receipt: String, _kind: String, _price: int) -> Dictionary: return {"ok": true}
 	var launches: Array = []
+	var merged_ids: Array[int] = []
 	model.powerup_drag_started.connect(func(payload: Dictionary): launches.append([payload.source_id, payload.target_id]))
-	check(model.activate_powerup("auto_merge"), "The checked route begins before its first merge frees competing space")
+	model.fusion_completed.connect(func(payload: Dictionary, _reward: int): merged_ids.append(int(payload.result.id)))
+	check(model.activate_powerup("auto_merge"), "The checked route begins with both competing source pairs still available")
 	model.step(6.0)
 	var completed: Array = model.cells.filter(func(tile: Dictionary) -> bool: return model.is_valid_word(tile))
 	check(not model.powerup_active() and launches.size() == 2 and completed.size() == 1 and completed[0].text == "unhelpful"
-		and not model.cell(int(others[1].id)).is_empty(),
-		"Auto completes the route it started instead of stranding its partial for a newly unlocked competing word")
+		and not model.cell(int(others[1].id)).is_empty() and not model.cell(int(others[2].id)).is_empty(),
+		"Auto consumes the shared prefix into its chosen whole word and leaves the competing incomplete route intact")
+	check(merged_ids.size() == 2 and launches == [[int(pieces[1].id), int(pieces[2].id)], [int(pieces[0].id), merged_ids[0]]],
+		"Every Auto drag follows the preflighted input and intermediate identities in order")
 	model.purchase_powerup = Callable()
 
 
@@ -396,27 +421,35 @@ func _test_preview_and_arrival() -> void:
 	var model = _model()
 	var pieces: Array[Dictionary] = _sources(model, "unhelpful", 1)
 	model.cells.clear()
-	var wide: Dictionary = pieces[1]
+	var leading: Dictionary = pieces[1]
 	var other: Dictionary = pieces[2]
-	check(wide.width >= 2 and other.width >= 2, "Preview fixtures span multiple lanes")
-	_preview(model, [wide], [0])
 	var head: Dictionary = model._new_composition_tile(model._morphology.source_tiles("unhelpful")[1])
-	head.width = 4
+	var tail: Dictionary = model._new_composition_tile(model._morphology.source_tiles("unhelpful")[2])
+	_preview(model, [leading, pieces[0], head, tail], [0, 2, 4, 5])
+	head = model._new_composition_tile(model._morphology.source_tiles("unhelpful")[1])
 	model._supply.assign([head, other])
-	# Two isolated gaps are insufficient for a four-lane FIFO head.
-	model.upcoming[3] = {"reservation": int(wide.id), "anchor": 0}
-	model.upcoming[5] = {"reservation": int(wide.id), "anchor": 0}
+	# Isolated empty lanes accept whole authored parts without repacking neighbors.
 	var before: Array = model.upcoming.duplicate(true)
 	model._fill_upcoming()
-	check(model.upcoming == before and int(model._supply[0].id) == int(head.id), "A wide FIFO head waits rather than skipping, moving, or replacing advertised cards")
-	_preview(model, [wide, other], [0, 3])
+	check(model.upcoming[1].id == head.id and model.upcoming[3].id == other.id and model._supply.is_empty(),
+		"Single-lane FIFO supply fills separated gaps in order without waiting for adjacent space")
+	for column: int in [0, 2, 4, 5]:
+		check(model.upcoming[column] == before[column], "Refilling isolated lanes preserves every advertised neighbor")
+	for column in range(Model.COLUMNS):
+		var preview: Dictionary = model.upcoming[column]
+		check(preview.has("id") and preview.preview_column == column and preview.preview_span == 1
+			and preview.width == 1 and preview.height == 1,
+			"Each preview owns exactly its advertised lane with no hidden neighboring reservation")
+	_preview(model, [leading, other], [0, 3])
 	model._supply.clear()
-	model.cells.append(_filler(9000, int(wide.width) - 1, 0))
-	var blocked: Dictionary = wide.duplicate(true)
-	var advertised: Array = [int(wide.id), int(other.id)]
+	model.cells.append(_filler(9000, 0, 0))
+	var blocked: Dictionary = leading.duplicate(true)
+	var advertised: Array = [int(leading.id), int(other.id)]
 	model._spawn_drop()
-	check(model.upcoming[0] == blocked and model.upcoming[1].reservation == wide.id, "Any blocked covered lane preserves the whole advertised identity and fragments")
-	check(model.cell(int(other.id)).column == 3 and model.cell(int(other.id)).width == other.width, "An unblocked spanning card enters through its advertised columns")
+	check(model.upcoming[0] == blocked, "A blocked lane preserves its complete advertised identity, spelling and fragments")
+	check(model.cell(int(other.id)).column == 3 and model.cell(int(other.id)).width == 1
+		and model.cell(int(other.id)).text == other.text and model.cell(int(other.id)).fragments == 1,
+		"An unblocked authored part enters through its own lane with its content intact")
 	for tile: Dictionary in model.cells:
 		check(int(tile.id) == 9000 or int(tile.id) in advertised, "Refilled previews cannot depart in the same wave")
 	var occupied: Dictionary = {}
@@ -425,46 +458,51 @@ func _test_preview_and_arrival() -> void:
 	occupied.clear()
 	model._occupy(occupied, 1, 2, 1, 1)
 	check(model._arrival_position(occupied, 0, 2, 2) == Vector2i(0, 0), "Full-height admission stops before any covered-column obstruction")
-	# A short follower must wait for a taller predecessor to leave every shared lane.
+	# A follower waits for the preceding ordinary body to leave their shared lane.
 	model.cells.clear()
-	wide.height = 2
-	wide.row = 6
-	wide.column = 0
-	wide.arrival = true
-	wide.age = 0.0
-	wide.falling_rows = 8
-	wide.arrival_delay = 0.1
-	wide.arrival_index = 0
-	model.cells.append(wide)
-	_preview(model, [other], [1])
+	leading.row = 7
+	leading.column = 0
+	leading.arrival = true
+	leading.age = 0.0
+	leading.falling_rows = 8
+	leading.arrival_delay = 0.1
+	leading.arrival_index = 0
+	model.cells.append(leading)
+	_preview(model, [other], [0])
 	model._spawn_drop()
 	var follower: Dictionary = model.cell(int(other.id))
-	check(not follower.is_empty() and float(follower.arrival_delay) >= 0.1 + sqrt(4.0 / 12.5),
-		"Shared-lane clearance uses the preceding card's full height")
+	check(not follower.is_empty() and follower.column == 0 and follower.row == 6
+		and float(follower.arrival_delay) >= 0.1 + sqrt(2.0 / 12.5),
+		"Successive unit bodies reserve separate destinations and preserve shared-lane entry clearance")
 
 
 func _test_footprint_and_schedule() -> void:
 	var model = _model(_atomic("Supercalifragilisticexpialidocious"))
 	var whole: Dictionary = _sources(model, "Supercalifragilisticexpialidocious")[0]
-	check(whole.width == 6 and whole.height == 2 and whole.requires_read and whole.text == "Supercalifragilisticexpialidocious",
-		"An unwrappable target preserves exact spelling and requests the full Read view")
-	var dimensions := Vector2i(whole.width, whole.height)
+	check(whole.width == 1 and whole.height == 1 and whole.requires_read
+		and whole.text == "Supercalifragilisticexpialidocious" and whole.label_lines == [whole.text],
+		"A long whole word preserves exact spelling and its Read hint inside an ordinary Jelly body")
+	var original: Dictionary = whole.duplicate(true)
 	model._restore_growth()
 	model.set_held_tile(int(whole.id))
-	check(model.begin_drag(int(whole.id)), "A measured body can be lifted")
+	check(model.begin_drag(int(whole.id)), "A long word uses the same ordinary-body drag path")
 	model.set_held_tile()
 	_settle(model)
-	check(Vector2i(whole.width, whole.height) == dimensions and not whole.get("lifted", false), "Drag cancellation and gravity never shrink a measured body")
+	check(not whole.get("lifted", false) and whole.width == 1 and whole.height == 1,
+		"Drag cancellation and gravity preserve the long word's ordinary body")
+	for field: String in ["id", "text", "mass", "word", "composition", "approved_break_offsets", "label_lines", "requires_read"]:
+		check(whole[field] == original[field], "Long-word cancellation preserves " + field)
 	model.cells.clear()
 	_preview(model, [whole], [0])
 	model.cleared_pairs = 4
 	model._schedule_spawn_interval()
-	check(model.preview_area() == 12 and model.spawn_interval == 36.0, "The next wave uses baseline eighteen times preview area over six")
+	check(model.preview_area() == 1 and model.spawn_interval == 18.0,
+		"Long spelling occupies one preview lane and does not inflate the stage's packet timer")
 	model.cleared_pairs = 8
 	model.step(0.1)
-	check(model.spawn_interval == 36.0, "Later collection stages do not change the already advertised timer")
+	check(model.spawn_interval == 18.0, "Later collection stages do not change the already advertised timer")
 	model._schedule_spawn_interval()
-	check(model.spawn_interval == 32.0, "The following schedule applies the new stage and the same measured area")
+	check(model.spawn_interval == 16.0, "The following schedule applies the new stage at the normal packet pace")
 
 
 func _test_supply_conservation() -> void:
@@ -658,7 +696,7 @@ func _foundation01_word(entry: Dictionary) -> Dictionary:
 	# does not pass or replace the separate draft lesson/media admission gates.
 	return {"id": entry.id, "text": entry.text, "track": "professional",
 		"practice_modes": entry.practice_modes.duplicate(), "morphology": entry.morphology.duplicate(true),
-		"image": "assets/images/words/cat.png", "audio": "assets/audio/words/cat.wav"}
+		"image": "", "audio": "assets/audio/words/cat.wav"}
 
 
 func _test_foundation01_current() -> void:
@@ -670,7 +708,9 @@ func _test_foundation01_current() -> void:
 		atomic_count += 1
 		var model = _model(_foundation01_word(entry))
 		var pieces: Array[Dictionary] = _sources(model, entry.morphology.id)
-		check(pieces.size() == 1 and pieces[0].text == entry.text and pieces[0].kind == "word", "Actual intact Foundation01 graph supplies one whole Jelly: " + entry.text)
+		check(pieces.size() == 1 and pieces[0].text == entry.text and pieces[0].kind == "word"
+			and pieces[0].width == 1 and pieces[0].height == 1,
+			"Actual intact Foundation01 graph supplies one ordinary whole-word body: " + entry.text)
 		var attempts: Array = []
 		var collected: Array = []
 		model.word_attempted.connect(func(event_id: String, ids: Array[String], correct: bool): attempts.append([event_id, ids, correct]))
@@ -731,11 +771,11 @@ func _test_foundation01_current() -> void:
 
 
 func _foundation02_word(entry: Dictionary) -> Dictionary:
-	# Synthetic test media admit actual accepted graphs to the isolated model.
-	# These fixtures cannot establish production lesson, image or audio readiness.
+	# The image-less path isolates actual accepted spelling graphs. These fixtures
+	# cannot establish production lesson, image or audio readiness.
 	return {"id": entry.id, "text": entry.text, "track": "professional",
 		"practice_modes": entry.practice_modes.duplicate(), "morphology": entry.morphology.duplicate(true),
-		"image": "assets/images/words/cat.png", "audio": "assets/audio/words/cat.wav"}
+		"image": "", "audio": "assets/audio/words/cat.wav"}
 
 
 func _test_foundation02_current() -> void:
@@ -748,7 +788,9 @@ func _test_foundation02_current() -> void:
 		var pieces: Array[Dictionary] = _sources(model, graph.id, 1)
 		check(pieces.size() == graph.parts.size(), "Actual Foundation02 supply contains every whole authored input: " + entry.text)
 		for index in range(pieces.size()):
-			check(pieces[index].text == graph.parts[index].surface and pieces[index].column >= 0 and pieces[index].row >= 0, "Whole source has a legal board footprint: " + entry.text)
+			check(pieces[index].text == Model._root_spelling(graph.parts[index].surface) and pieces[index].column >= 0 and pieces[index].row >= 0
+				and pieces[index].width == 1 and pieces[index].height == 1,
+				"Whole source preserves its authored spelling inside one ordinary board cell: " + entry.text)
 		var attempts: Array = []
 		var collections: Array = []
 		model.word_attempted.connect(func(event_id: String, ids: Array[String], correct: bool): attempts.append([event_id, ids, correct]))
@@ -763,7 +805,9 @@ func _test_foundation02_current() -> void:
 			check(plan.status == "complete" and plan.placement_checked and plan.steps.size() == 1, "Full authored result footprint passes manual/Auto preflight: " + entry.text)
 			check(model.parts_compatible(pieces[0], pieces[1]) and not model.parts_compatible(pieces[1], pieces[0]), "Palette and manual merge respect authored order: " + entry.text)
 			whole = _merge(model, pieces[0], pieces[1])
-			check(whole.get("text") == entry.text and whole.get("word", {}).get("id") == entry.id, "Manual result retains the exact Foundation02 sense: " + entry.text)
+			check(whole.get("text") == entry.text and whole.get("word", {}).get("id") == entry.id
+				and whole.get("width") == 1 and whole.get("height") == 1,
+				"Manual ordinary-body result retains the exact Foundation02 sense: " + entry.text)
 			check(whole.get("approved_break_offsets") == graph.nodes[0].break_offsets and whole.get("composition", {}).get("mastery_eligible", false), "Manual result keeps authored boundaries and eligibility: " + entry.text)
 		check(attempts.is_empty() and collections.is_empty(), "Supply and composition wait for deliberate collection: " + entry.text)
 		_settle(model)

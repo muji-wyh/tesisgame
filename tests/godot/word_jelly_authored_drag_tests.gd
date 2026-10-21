@@ -20,6 +20,7 @@ func check(condition: bool, message: String) -> void:
 func _board(model: RefCounted, label: String) -> void:
 	for tile: Dictionary in model.cells:
 		check(not tile.get("lifted", false), label + ": no body remains held after cancellation")
+		check(tile.width == 1 and tile.height == 1, label + ": every authored or fixture body retains its ordinary size")
 		var footprint := Rect2i(tile.column, tile.row, tile.width, tile.height)
 		check(Rect2i(0, 0, Model.COLUMNS, Model.ROWS).encloses(footprint), label + ": body stays inside the board")
 		var supported: bool = int(tile.row) + int(tile.height) == Model.ROWS
@@ -62,10 +63,11 @@ func _run() -> void:
 	model.set_held_tile(-1)
 	model.step(2.0)
 	check(model._held_tile_id == -1 and model._dragged_tile_id == -1, "Cancellation releases both held identities")
-	for field: String in ["id", "text", "mass", "width", "height", "word", "fragments", "composition"]:
+	for field: String in ["id", "text", "display_text", "jelly_kind", "merge_level", "word_candidate", "image_word",
+		"mass", "width", "height", "word", "fragments", "composition"]:
 		check(lower[field] == original_lower[field], "Cancellation preserves authored " + field)
 	_board(model, "reviewed lower support")
-	_test_fragmented_return(words)
+	_test_full_board_return(words)
 	_test_arrival_preserves_return(words)
 	if not OS.get_cmdline_user_args().has("--quick"):
 		_test_crowded_returns(words)
@@ -93,27 +95,38 @@ func _fill_fixture(model: RefCounted, keep_empty: Array[Vector2i] = []) -> void:
 			model.cells.append(tile)
 
 
-func _test_fragmented_return(words: Array) -> void:
+func _test_full_board_return(words: Array) -> void:
 	var model := Model.new()
-	check(model.configure(words, 3, 42), "The fragmented-space regression uses the reviewed Growth cohort")
+	check(model.configure(words, 3, 42), "The full-board return regression uses the reviewed Growth cohort")
 	model.spawn_interval = 10000.0
 	model.cells.clear()
 	var source: Dictionary = _cat(model, 0, 7)
+	source.fragments = 2
 	model.cells.append_array([source, _cat(model, 1, 6)])
 	_fill_fixture(model)
-	_board(model, "fragmented-space starting board")
+	_board(model, "full-board starting state")
 	var blocked: Array[String] = []
 	model.drag_blocked.connect(func(reason: String) -> void: blocked.append(reason))
 	model.set_held_tile(int(source.id))
 	var before: Array = model.cells.duplicate(true)
-	check(not model.begin_drag(int(source.id)), "A lift is declined when its fixed return footprint would fragment")
-	check(model.cells == before and model._dragged_tile_id == -1,
-		"Declining the lift does not move, resize, delete, or lift any body")
-	check(blocked == ["needs_room"], "A blocked lift explains the lack of room without a wrong-answer cue")
+	check(before.size() == Model.CAPACITY and model.begin_drag(int(source.id)),
+		"A lower ordinary body can be lifted from a full board with a safe one-cell return")
+	model.step(0.5)
+	check(model.is_lifted(int(source.id)) and blocked.is_empty(), "The full-board lift has no artificial room penalty")
+	var reserved: Vector2i = model._drag_return_after_motion(source)
+	check(reserved == Vector2i(0, 0) and model._occupied().has(0) and not model._occupied([], false).has(0),
+		"The falling column leaves one top cell reserved for cancellation without adding hidden support")
 	model.set_held_tile(-1)
 	model.step(0.5)
-	check(model.cells.size() == before.size(), "Releasing a declined lift retains every body")
-	_board(model, "fragmented-space declined lift")
+	check(model.cells.size() == before.size() and source.column == reserved.x and source.row == reserved.y
+		and model._dragged_tile_id == -1 and model._held_tile_id == -1,
+		"Cancellation places the held body into its reserved top cell and releases both drag identities")
+	for original: Dictionary in before:
+		var retained: Dictionary = model.cell(int(original.id))
+		for field: String in ["id", "text", "display_text", "jelly_kind", "merge_level", "word_candidate", "image_word",
+			"mass", "width", "height", "word", "fragments", "composition"]:
+			check(retained.get(field) == original.get(field), "Full-board return preserves every body's " + field)
+	_board(model, "full-board completed return")
 
 
 func _test_arrival_preserves_return(words: Array) -> void:
@@ -122,26 +135,39 @@ func _test_arrival_preserves_return(words: Array) -> void:
 	model.spawn_interval = 10000.0
 	model.cells.clear()
 	var source: Dictionary = _cat(model, 0, 7)
-	model.cells.append_array([source, _cat(model, 2, 6)])
-	var empty: Array[Vector2i] = []
-	for row in range(7):
-		empty.append_array([Vector2i(0, row), Vector2i(1, row)])
-	_fill_fixture(model, empty)
+	source.fragments = 2
+	model.cells.append(source)
+	_fill_fixture(model)
 	_board(model, "incoming-body starting board")
 	model.set_held_tile(int(source.id))
-	check(model.begin_drag(int(source.id)), "A bridge with separate support leaves a safe full-size return")
+	check(model.begin_drag(int(source.id)), "The full board leaves one safe return cell after its lower support is lifted")
 	model.step(0.5)
 	var incoming: Dictionary = model._new_tile("fixture", 1, 0)
 	model.upcoming.assign([incoming, {}, {}, {}, {}, {}])
 	var original_preview: Array = model.upcoming.duplicate(true)
 	var before: Array = model.cells.duplicate(true)
 	check(not model.can_drop_now(), "The preview control does not advertise an unsafe incoming drop")
-	check(not model._spawn_tile(true, 0), "An arrival cannot fall through the only fixed-size return footprint")
+	check(not model._spawn_tile(true, 0), "An arrival cannot consume the only reserved return cell")
 	check(model.cells == before and model.upcoming == original_preview,
 		"A blocked arrival keeps its advertised identity and all existing bodies")
+	# A separate vacancy remains usable while the held body's own cell is protected.
+	var removed: Dictionary = {}
+	for tile: Dictionary in model.cells:
+		if int(tile.column) == 1 and int(tile.row) == 0:
+			removed = tile
+			break
+	check(not removed.is_empty(), "The neighboring lane has a removable top fixture")
+	model.cells.erase(removed)
+	model.upcoming.assign([{}, incoming, {}, {}, {}, {}])
+	check(model.can_drop_now() and model._spawn_tile(true, 1), "An independent vacant lane still accepts its advertised incoming body")
+	check(model.cell(int(incoming.id)).column == 1 and model.cell(int(incoming.id)).row == 0
+		and model._occupied().has(0), "The admitted neighbor retains its lane and the held body's return reservation")
+	model.step(2.0)
 	model.set_held_tile(-1)
 	model.step(0.5)
-	check(model._dragged_tile_id == -1 and model._held_tile_id == -1, "The reserved full-size body can still be released")
+	check(model._dragged_tile_id == -1 and model._held_tile_id == -1 and source.column == 0 and source.row == 0
+		and source.fragments == 2 and model.cells.size() == Model.CAPACITY,
+		"The reserved ordinary body returns with its fragments after a neighboring arrival")
 	_board(model, "incoming-body protected return")
 
 

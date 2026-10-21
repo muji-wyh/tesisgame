@@ -49,7 +49,8 @@ func _reset_view(view, pieces: Array[String], reduced: bool = false) -> Array[in
 	view.game.cells.clear()
 	var ids: Array[int] = []
 	for index in range(pieces.size()):
-		var tile: Dictionary = view.game._new_tile(pieces[index], 1, 0)
+		var word: Dictionary = words[1] if pieces[index] in ["dog-root", "dog-picture"] else words[0]
+		var tile: Dictionary = view.game._new_picture_tile(word) if pieces[index] in ["cat-picture", "dog-picture"] else view.game._new_word_root(word)
 		tile.column = index
 		tile.row = view.game.ROWS - 1
 		view.game.cells.append(tile)
@@ -83,8 +84,8 @@ func _check_merge_events() -> void:
 	view.word_merged.connect(func(word: Dictionary) -> void: merged.append(word))
 	view.word_requested.connect(func(word: Dictionary) -> void: tapped.append(word))
 	for reduced: bool in [false, true]:
-		var ids: Array[int] = _reset_view(view, ["ca", "t"], reduced)
-		check(view.game.try_merge(ids[0], ids[1]) == "merged", "A manual prefix-first merge starts")
+		var ids: Array[int] = _reset_view(view, ["cat-root", "cat-picture"], reduced)
+		check(view.game.try_merge(ids[0], ids[1]) == "merged", "A manual word-picture merge starts")
 		check(not bool(view.game.fusions[0].automatic), "Manual fusion retains its pronunciation origin")
 		check(merged.size() == 1 and merged[0].id == "cat" and merged[0].audio == words[0].audio,
 			"Accepting a valid manual merge requests its full production word immediately in either motion preference")
@@ -100,15 +101,18 @@ func _check_merge_events() -> void:
 		view._process(view.game.COLLECT_SECONDS)
 		check(merged.size() == 1 and tapped.size() == 1,
 			"Direct collection retains its explicit tap pronunciation without another merge request")
-	var ids: Array[int] = _reset_view(view, ["ca", "t"])
-	check(view.game.try_merge(ids[1], ids[0]) == "wrong", "A reversed invalid word is rejected")
+	var ids: Array[int] = _reset_view(view, ["cat-root", "cat-picture"])
+	var wrong_picture: Dictionary = view.game.cells[view.game._index_for_id(ids[1])]
+	wrong_picture.image_word = words[1].duplicate(true)
+	check(view.game.try_merge(ids[1], ids[0]) == "wrong", "A different word picture is rejected")
 	_advance(view, 1.0)
 	check(merged.is_empty() and tapped.is_empty(), "Rejected contact never requests a pronunciation")
 	view.pause(true)
 	check(view.game.try_merge(ids[0], ids[1]) == "ignored" and merged.is_empty(),
 		"A paused board cannot accept a merge or request its pronunciation")
 	view.pause(false)
-	check(view.game.try_merge(ids[0], ids[1]) == "merged", "The valid direction can still merge after rejection")
+	wrong_picture.image_word = words[0].duplicate(true)
+	check(view.game.try_merge(ids[0], ids[1]) == "merged", "The matching picture can merge after rejection")
 	check(merged.size() == 1, "The accepted word is requested before the next animation frame")
 	view._process(view.game.FUSION_SECONDS * 0.5)
 	view.pause(true)
@@ -119,7 +123,7 @@ func _check_merge_events() -> void:
 	_advance(view, view.game.FUSION_SECONDS)
 	check(merged.size() == 1 and view.game.merged_count == 1,
 		"Resuming completes the pending fusion without requesting its pronunciation again")
-	ids = _reset_view(view, ["ca", "t"])
+	ids = _reset_view(view, ["cat-root", "cat-picture"])
 	var duplicate_results: Array[String] = []
 	var pause_on_word: Callable = func(_word: Dictionary) -> void:
 		duplicate_results.append(view.game.try_merge(ids[0], ids[1]))
@@ -137,8 +141,8 @@ func _check_merge_events() -> void:
 	check(merged.size() == 1 and view.game.merged_count == 1,
 		"The accepted fusion completes exactly once after its synchronous pause resumes")
 	for reduced: bool in [false, true]:
-		_reset_view(view, ["ca", "t", "do", "g", "ca", "t"], reduced)
-		check(view.game.activate_powerup("auto_merge"), "Auto Merge starts with three valid pairs")
+		_reset_view(view, ["cat-root", "cat-picture", "dog-root", "dog-picture"], reduced)
+		check(view.game.activate_powerup("auto_merge"), "Auto Merge starts with two distinct word-picture pairs")
 		view._process(view.game.POWERUP_DRAG_SECONDS)
 		check(view.game.fusions.size() == 1 and bool(view.game.fusions[0].automatic),
 			"An automatic fusion retains its origin through the delayed completion")
@@ -150,14 +154,14 @@ func _check_merge_events() -> void:
 			if not view.game.powerup_active():
 				break
 			view._process(0.01)
-		check(not view.game.powerup_active() and merged.is_empty() and view.game.merged_count == 3,
-			"Every automatic merge stays unspoken through the final overlapping fusion in either motion preference")
-		check(tapped.is_empty() and view.game.collected_coins == 0 and view.game.collectable_ids().size() == 3,
+		check(not view.game.powerup_active() and merged.is_empty() and view.game.merged_count == 2,
+			"Every automatic merge stays unspoken through the final sequential fusion in either motion preference")
+		check(tapped.is_empty() and view.game.collected_coins == 0 and view.game.collectable_ids().size() == 2,
 			"Silent Auto Merge leaves every completed word available for deliberate collection")
 		check(view.game.start_collection_batch(), "The player can separately collect the automatic results")
 		_advance(view, 3.0)
 		check(merged.is_empty() and tapped.is_empty(), "Batch Collect never requests or repeats an automatic word pronunciation")
-	_reset_view(view, ["ca", "t", "do", "g"])
+	_reset_view(view, ["cat-root", "cat-picture", "dog-root", "dog-picture"])
 	check(view.game.activate_powerup("auto_merge"), "A pending paid operation can be stopped")
 	view._process(0.1)
 	view.stop()
@@ -240,7 +244,7 @@ func _check_pending_audio() -> void:
 func _prepare_app(app) -> void:
 	Fixture.enter_mode(app, "word_jelly")
 	await settle()
-	_reset_view(app._word_jelly, ["ca", "t", "do", "g"])
+	_reset_view(app._word_jelly, ["cat-root", "cat-picture", "dog-root", "dog-picture"])
 	app._sync_jelly()
 	app.audio.set_muted(false)
 	app.audio.interact(app.model.theme_id, false)
@@ -271,7 +275,7 @@ func _check_app_routes() -> void:
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + str(completed.word.audio)),
 		"A deliberate tap on an automatically merged word still pronounces it")
 	app.audio.stop_voice()
-	var ids: Array[int] = _reset_view(view, ["ca", "t", "do", "g"])
+	var ids: Array[int] = _reset_view(view, ["cat-root", "cat-picture", "dog-root", "dog-picture"])
 	check(view.game.try_merge(ids[0], ids[1]) == "merged" and view.game.try_merge(ids[2], ids[3]) == "merged",
 		"The application accepts two independent word fusions")
 	check(app.audio.voice.playing and app.audio.voice.stream == load(CAT) and app.audio._voice_queue == [DOG],
@@ -385,9 +389,21 @@ func _check_foundation01_speech_boundary() -> void:
 		check(requests.is_empty() and taps.is_empty() and view.game.cell(partial_id).text == "signate", "Partial animation and settlement remain silent in either motion preference")
 		check(not view.game.collect(partial_id) and requests.is_empty() and taps.is_empty(), "Partial collection refusal cannot leak a pronunciation event")
 		check(view.game.try_merge(partial_id, int(pieces[2].id)) == "merged", "Signature accepts final-e loss into the completed word")
-		check(requests.size() == 1 and requests[0].id == entry.id and requests[0].audio == word.audio, "Only accepted final fusion requests the exact completed-word fixture payload")
+		var spelling_id: int = int(view.game.fusions[0].result.id)
+		check(requests.is_empty() and taps.is_empty(), "Completing the spelling waits for its picture without leaking whole-word speech")
 		_advance(view, 2.0)
-		check(requests.size() == 1 and taps.is_empty(), "Final settlement never repeats pronunciation or collects automatically")
+		check(not view.game.collect(spelling_id), "A complete pictured spelling still needs its picture Jelly")
+		var picture: Dictionary = view.game._new_picture_tile(word)
+		var picture_position: Vector2i = view.game._free_position(view.game._occupied(), 1, 1)
+		picture.column = picture_position.x
+		picture.row = picture_position.y
+		view.game.cells.append(picture)
+		view._sync_tiles()
+		_advance(view, 1.0)
+		check(view.game.try_merge(spelling_id, int(picture.id)) == "merged", "The completed signature spelling pairs with its exact picture")
+		check(requests.size() == 1 and requests[0].id == entry.id and requests[0].audio == word.audio, "Only the accepted picture fusion requests the exact completed-word fixture payload")
+		_advance(view, 2.0)
+		check(requests.size() == 1 and taps.is_empty() and attempts.is_empty(), "Picture settlement never repeats pronunciation, collects or grants mastery automatically")
 	var atomic_count: int = 0
 	for atomic_entry: Dictionary in document.lexemes:
 		if atomic_entry.morphology.kind != "atomic":
@@ -405,6 +421,10 @@ func _check_foundation01_speech_boundary() -> void:
 		whole.column = 0
 		whole.row = view.game.ROWS - int(whole.height)
 		view.game.cells.append(whole)
+		var picture: Dictionary = view.game._new_picture_tile(word)
+		picture.column = 1
+		picture.row = view.game.ROWS - 1
+		view.game.cells.append(picture)
 		view._sync_tiles()
 		view._layout()
 		_advance(view, 1.0)
@@ -412,10 +432,15 @@ func _check_foundation01_speech_boundary() -> void:
 		taps.clear()
 		attempts.clear()
 		view.credit_collection = func(_id: String, _coins: int) -> Dictionary: return {"ok": true}
-		check(view.game.collect(int(whole.id)), "Atomic Foundation01 whole collects through the actual view: " + word.text)
-		check(requests.is_empty() and taps.size() == 1 and taps[0].id == word.id and taps[0].audio == word.audio, "Atomic collection requests one exact whole-word fixture payload without merge speech: " + word.text)
+		check(not view.game.collect(int(whole.id)) and requests.is_empty() and taps.is_empty(), "An atomic text alone cannot collect or pronounce through collection: " + word.text)
+		check(view.game.try_merge(int(whole.id), int(picture.id)) == "merged", "An atomic Foundation01 text pairs with its picture: " + word.text)
+		var merged_id: int = int(view.game.fusions[0].result.id)
+		check(requests.size() == 1 and requests[0].id == word.id and taps.is_empty() and attempts.is_empty(), "Atomic picture matching pronounces once and defers mastery until collection: " + word.text)
+		_advance(view, view.game.FUSION_SECONDS + view.game.SETTLE_SECONDS + 0.05)
+		check(view.game.collect(merged_id), "The matched atomic word collects through the actual view: " + word.text)
+		check(taps.size() == 1 and taps[0].id == word.id and taps[0].audio == word.audio, "Deliberate atomic collection requests its exact whole-word fixture payload: " + word.text)
 		_advance(view, 1.0)
-		check(taps.size() == 1 and attempts.is_empty(), "Atomic pronunciation never repeats or emits spelling mastery: " + word.text)
-	check(atomic_count == 16, "All sixteen intact units retain the real view's pronunciation/exposure boundary")
+		check(requests.size() == 1 and taps.size() == 1 and attempts.size() == 1 and bool(attempts[0][2]), "Manual picture matching earns one learning credit only when collected: " + word.text)
+	check(atomic_count == 16, "All sixteen intact units retain the real view's picture-match, speech and collection boundaries")
 	view.credit_collection = Callable()
 	view.queue_free()

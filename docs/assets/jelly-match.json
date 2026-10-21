@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "acquired_on": "2026-10-09",
   "license": "CC0-1.0",
   "image_source": {
@@ -47,13 +47,13 @@
   "image_processing": {
     "tool": "Pillow",
     "version": "12.2.0",
-    "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 34 percent center to 16 percent contour white mix. Localized lower paint uses an alpha-aware 8 source-pixel Gaussian blur at up to 75 percent blend; upper glints remain crisp. Painted rows are remapped into a continuous elliptical contour at 4x resolution, preserving the vertical span and bottom support. Separate contact shadow copied unchanged."
+    "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 34 percent center to 16 percent contour white mix. Localized lower paint uses an alpha-aware 8 source-pixel Gaussian blur at up to 75 percent blend; upper glints remain crisp. Painted rows are remapped into a rounded rectangle with a 56 source-pixel corner radius at 4x resolution, preserving the vertical span and bottom support. Separate contact shadow copied unchanged."
   },
   "images": [
     {
       "path": "assets/images/jelly-match/gel-coral.png",
       "kind": "gel_surface",
-      "sha256": "deed1a7f5ce9b477df5b371dc4f83e7406b86f815de0e7964628eb7bdd79a4b5",
+      "sha256": "85481864c832a097d7e4e0631485086c0c25d3403878ddc58fb390abf827e0f4",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -104,18 +104,20 @@
         "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"
       },
       "contour_rounding": {
-        "operation": "Horizontal scanline remapping of the acquired painted body into an ellipse",
+        "operation": "Horizontal scanline remapping of the acquired painted body into a rounded rectangle",
         "center_pixels": [
           159.5,
           159.5
         ],
-        "radii_pixels": [
+        "half_extents_pixels": [
           148.5,
           125.5
         ],
+        "corner_radius_pixels": 56.0,
         "supersampling": 4,
         "alpha_threshold": 128,
         "edge_interpolation": "Linear subpixel crossing at alpha 127.5",
+        "fringe_clipping": "Supersampled rounded-rectangle mask removes horizontally stretched source fringe",
         "resampling": "Premultiplied RGBA; bicubic upscale and affine sampling, Lanczos downsample",
         "preserved_detail": "Source paint and glints remapped with the contour; alpha-128 vertical span and bottom support unchanged"
       }
@@ -123,7 +125,7 @@
     {
       "path": "assets/images/jelly-match/gel-mint.png",
       "kind": "gel_surface",
-      "sha256": "231d78bda567d623e5c80cd66b59045ccb1d0729e401acb9722b13586823c6c6",
+      "sha256": "dc18930217710d302f20902992b5451869eb246e20db8265e245cae3f36c32d2",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -174,18 +176,20 @@
         "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"
       },
       "contour_rounding": {
-        "operation": "Horizontal scanline remapping of the acquired painted body into an ellipse",
+        "operation": "Horizontal scanline remapping of the acquired painted body into a rounded rectangle",
         "center_pixels": [
           159.5,
           159.5
         ],
-        "radii_pixels": [
+        "half_extents_pixels": [
           148.5,
           125.5
         ],
+        "corner_radius_pixels": 56.0,
         "supersampling": 4,
         "alpha_threshold": 128,
         "edge_interpolation": "Linear subpixel crossing at alpha 127.5",
+        "fringe_clipping": "Supersampled rounded-rectangle mask removes horizontally stretched source fringe",
         "resampling": "Premultiplied RGBA; bicubic upscale and affine sampling, Lanczos downsample",
         "preserved_detail": "Source paint and glints remapped with the contour; alpha-128 vertical span and bottom support unchanged"
       }
@@ -193,7 +197,7 @@
     {
       "path": "assets/images/jelly-match/gel-sky.png",
       "kind": "gel_surface",
-      "sha256": "d4ad80e2f7d160c7db524863ddfddb0421e03f93a36f42fdec30c4fd8055e82e",
+      "sha256": "ab91b89c83ed9a079a30a1410e22215864e62a7406e8eb8fce4d587e3f35b456",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -244,18 +248,20 @@
         "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"
       },
       "contour_rounding": {
-        "operation": "Horizontal scanline remapping of the acquired painted body into an ellipse",
+        "operation": "Horizontal scanline remapping of the acquired painted body into a rounded rectangle",
         "center_pixels": [
           159.5,
           159.5
         ],
-        "radii_pixels": [
+        "half_extents_pixels": [
           148.5,
           125.5
         ],
+        "corner_radius_pixels": 56.0,
         "supersampling": 4,
         "alpha_threshold": 128,
         "edge_interpolation": "Linear subpixel crossing at alpha 127.5",
+        "fringe_clipping": "Supersampled rounded-rectangle mask removes horizontally stretched source fringe",
         "resampling": "Premultiplied RGBA; bicubic upscale and affine sampling, Lanczos downsample",
         "preserved_detail": "Source paint and glints remapped with the contour; alpha-128 vertical span and bottom support unchanged"
       }
@@ -263,7 +269,7 @@
     {
       "path": "assets/images/jelly-match/gel-lilac.png",
       "kind": "gel_surface",
-      "sha256": "b53c2c271d8bffaa26eb37597cc332baa434aa416671afa975515b4127751a81",
+      "sha256": "3520fc10d209e915c1225d8d9452a46bd6ab0b1b4bca45d43e758c9f14f1a8b9",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -314,18 +320,20 @@
         "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"
       },
       "contour_rounding": {
-        "operation": "Horizontal scanline remapping of the acquired painted body into an ellipse",
+        "operation": "Horizontal scanline remapping of the acquired painted body into a rounded rectangle",
         "center_pixels": [
           159.5,
           159.5
         ],
-        "radii_pixels": [
+        "half_extents_pixels": [
           148.5,
           125.5
         ],
+        "corner_radius_pixels": 56.0,
         "supersampling": 4,
         "alpha_threshold": 128,
         "edge_interpolation": "Linear subpixel crossing at alpha 127.5",
+        "fringe_clipping": "Supersampled rounded-rectangle mask removes horizontally stretched source fringe",
         "resampling": "Premultiplied RGBA; bicubic upscale and affine sampling, Lanczos downsample",
         "preserved_detail": "Source paint and glints remapped with the contour; alpha-128 vertical span and bottom support unchanged"
       }

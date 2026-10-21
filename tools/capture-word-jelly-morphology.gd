@@ -114,20 +114,26 @@ func _capture(stage: String, dimensions: Vector2i) -> void:
 		var tile: Control = view._tiles[int(data.id)]
 		var font_pixels: float = tile._label.get_theme_font_size("font_size") * Style.ui_scale(tile)
 		tiles.append({"text": data.text, "kind": data.kind, "parts": data.composition.part_count,
-			"width": data.width, "height": data.height, "requires_read": data.requires_read,
-			"font_pixels": font_pixels, "lines": data.label_lines,
+			"width": data.width, "height": data.height, "requires_read": tile.requires_read,
+			"font_pixels": font_pixels, "label_visible": tile._label.visible, "lines": tile._label.text.split("\n"),
+			"accessibility_name": tile.get("accessibility_name"), "read_button_visible": tile._read_button.visible,
 			"tile_rect": [tile.position.x, tile.position.y, tile.size.x, tile.size.y],
 			"surface_rect": [tile._surface.position.x, tile._surface.position.y, tile._surface.size.x, tile._surface.size.y],
 			"surface_scale": [tile._surface.scale.x, tile._surface.scale.y],
 			"label_rect": [tile._label.position.x, tile._label.position.y, tile._label.size.x, tile._label.size.y],
 			"visible_lines": tile._label.get_visible_line_count(), "line_count": tile._label.get_line_count()})
 		if stage != "safe-pause":
-			_check(font_pixels >= 16.0, "Spelling remains at least 16 physical pixels: " + str(data.text))
-			_check(tile._label.get_rect().end.y <= tile.size.y + 0.01, "Label stays inside its measured height: " + str(data.text))
-			if data.requires_read:
-				_check(not tile._label.get_rect().intersects(tile._read_button.get_rect()), "Read never covers its spelling label")
-			if not data.requires_read:
-				_check(tile._label.get_visible_line_count() == tile._label.get_line_count(), "All authored lines are visible: " + str(data.text))
+			_check(int(data.width) == 1 and int(data.height) == 1, "Every spelling keeps one ordinary cell: " + str(data.text))
+			_check(is_equal_approx(tile.size.x, view._pitch - view._gap) and is_equal_approx(tile.size.y, tile.size.x),
+				"The square uses the established responsive pitch")
+			_check(not tile._read_button.visible, "Read never covers the square face")
+			_check(str(tile.get("accessibility_name")).contains(str(data.text)), "Full spelling remains accessible")
+			if tile._label.visible:
+				_check(font_pixels >= 13.0, "Visible spelling remains at least 13 physical pixels: " + str(data.text))
+				_check(Rect2(Vector2.ZERO, tile.size).grow(0.1).encloses(tile._label.get_rect()), "Label stays inside its square: " + str(data.text))
+				_check(tile._label.get_visible_line_count() == tile._label.get_line_count(), "Displayed lines fit vertically: " + str(data.text))
+				if tile._picture.visible:
+					_check(not tile._label.get_rect().intersects(tile._picture.get_rect()), "Picture and caption remain separate")
 	var entry: Dictionary = {"file": filename, "stage": stage, "viewport": [dimensions.x, dimensions.y],
 		"paused": view.game.paused, "safe_pause": view._layout_too_small, "tiles": tiles}
 	if view._read_panel.visible:
@@ -186,8 +192,12 @@ func _run() -> void:
 		_check(not view._layout_too_small, "Playable reference viewport " + str(dimensions))
 		_check(identity == _board_identity(), "Resizing keeps physical identities and footprints")
 		await _capture("board", dimensions)
-		view._show_read(read_id)
+		var point: Vector2 = view._tiles[read_id].get_global_rect().get_center()
+		_check(view._press(-1, point), "Read begins through the actual tile hold")
+		view._process(0.50)
+		view._release(point)
 		_check(view.game.paused and view._read_panel.visible, "Read pauses play at " + str(dimensions))
+		_check(identity == _board_identity() and view.game.fusions.is_empty(), "Releasing a Read hold never collects the word")
 		var elapsed: float = view.game.spawn_elapsed
 		view.game.step(20.0)
 		_check(view.game.spawn_elapsed == elapsed, "Read freezes the round clock")
@@ -199,7 +209,7 @@ func _run() -> void:
 		view._close_read()
 		_check(not view.game.paused and identity == _board_identity(), "Closing Read restores the same board")
 		_preview([wide_state])
-		await _capture("wide-preview", dimensions)
+		await _capture("long-preview", dimensions)
 		_preview([partial, parts[0]])
 	await _resize(Vector2i(180, 220))
 	_check(view._layout_too_small and view.game.paused and view._size_cover.visible, "Undersized view pauses with readable explanation")

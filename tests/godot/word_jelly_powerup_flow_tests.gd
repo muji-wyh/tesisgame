@@ -34,18 +34,19 @@ func _prepare(app, pairs: int = 2) -> void:
 	await settle()
 	var view = app._word_jelly
 	view.set_process(false)
-	var word: Dictionary = app._learning_words().filter(func(item: Dictionary) -> bool:
-		return str(item.text).length() >= 3 and str(item.text).length() <= 6)[0]
-	check(view.configure([word], app.growth.learning_age(), Data.theme(app.model.theme_id), app.data.chests, false, round_seed),
-		"The powerup board uses an actual pictured current-age word")
+	var fixture_words: Array = app._learning_words().filter(func(item: Dictionary) -> bool:
+		return str(item.text).length() >= 3 and str(item.text).length() <= 6 and not str(item.get("image", "")).is_empty()).slice(0, pairs)
+	check(fixture_words.size() == pairs, "Every automatic fixture pair has a distinct current-age word")
+	check(view.configure(fixture_words, app.growth.learning_age(), Data.theme(app.model.theme_id), app.data.chests, false, round_seed),
+		"The powerup board uses distinct pictured current-age words")
 	app._sync_jelly()
 	view.set_process(false)
 	var game = view.game
 	game.spawn_interval = 10000.0
 	game.cells.clear()
-	var parts: Array[String] = game._parts_for_word(word)
 	for index in range(pairs * 2):
-		var tile: Dictionary = game._new_tile(parts[index % 2], 1, 0)
+		var word: Dictionary = fixture_words[index / 2]
+		var tile: Dictionary = game._new_word_root(word) if index % 2 == 0 else game._new_picture_tile(word)
 		tile.column = int(index / 2) if index % 2 == 0 else 3 + int(index / 2)
 		tile.row = game.ROWS - 1
 		game.cells.append(tile)
@@ -139,36 +140,41 @@ func _check_auto_merge(app) -> void:
 		and view._powerup_effects.stamps.size() > 0 and game.fusions.is_empty(),
 		"The source jelly travels through an intermediate position with light effects before union")
 	view._process(0.10)
-	var concurrent: Dictionary = game.powerup_snapshot()
-	check(concurrent.drags.size() == 2 and game.fusions.is_empty(),
-		"At 250 ms two automatic sources travel simultaneously before the first contact")
-	var following: Dictionary = concurrent.drags.back()
-	check(int(following.source_id) != int(state.source_id) and int(following.target_id) != int(state.target_id)
-		and is_equal_approx(float(following.elapsed), 0.05),
-		"The second random source receives its own reserved pair and starts at 200 ms")
-	var next_from: Vector2 = view._tile_rect(following.source).get_center()
-	var next_to: Vector2 = view._tile_rect(following.target).get_center()
-	for drag: Dictionary in concurrent.drags:
-		var origin: Vector2 = view._tile_rect(drag.source).get_center()
-		var target: Vector2 = view._tile_rect(drag.target).get_center()
-		var body: Vector2 = view._tiles[int(drag.source_id)].get_rect().get_center()
-		check(body.distance_to(origin) > 0.1 and body.distance_to(target) > 0.1
-			and body.x > minf(origin.x, target.x) and body.x < maxf(origin.x, target.x),
-			"Each concurrent source is painted at its own intermediate travel position")
+	var traveling: Dictionary = game.powerup_snapshot()
+	check(traveling.drags.size() == 1 and game.fusions.is_empty()
+		and int(traveling.drags[0].source_id) == int(state.source_id)
+		and is_equal_approx(float(traveling.drags[0].elapsed), 0.25),
+		"At 250 ms the reserved first pair continues its own complete drag before another path can begin")
 	view._process(0.05)
 	var after_contact: Dictionary = game.powerup_snapshot()
-	check(game.fusions.size() == 1 and after_contact.drags.size() == 1
-		and int(after_contact.drags[0].source_id) == int(following.source_id)
-		and is_equal_approx(float(after_contact.drags[0].elapsed), 0.1),
-		"At 300 ms only the first source contacts while the second keeps its existing motion clock")
+	check(game.fusions.size() == 1 and after_contact.drags.is_empty() and after_contact.stage == "fusion",
+		"At 300 ms the first pair commits while the remaining paid path waits")
+	var first_result_id: int = int(game.fusions[0].result.id)
 	view._process(0.05)
-	var next_halfway: Vector2 = view._tiles[int(following.source_id)].get_rect().get_center()
-	check(game.fusions.size() == 1 and next_halfway.distance_to(next_from) > 2.0
-		and next_halfway.distance_to(next_to) > 2.0 and view._powerup_effects.stamps.size() > 0,
-		"The next source visibly travels with its own light trail while the previous fusion remains animated")
+	check(game.fusions.size() == 1 and game.powerup_snapshot().drags.is_empty(),
+		"An in-progress fusion retains the path reservation through its presentation")
+	var following: Dictionary = {}
+	for frame in range(100):
+		view._process(0.025)
+		var next_state: Dictionary = game.powerup_snapshot()
+		if not next_state.drags.is_empty():
+			following = next_state.drags[0]
+			break
+	check(not following.is_empty() and int(following.source_id) != int(state.source_id)
+		and int(following.target_id) != int(state.target_id) and game.fusions.is_empty()
+		and game.is_settled(game.cell(first_result_id)),
+		"The second reserved word-picture path starts only after the first result has settled")
+	if not following.is_empty():
+		var next_from: Vector2 = view._tile_rect(following.source).get_center()
+		var next_to: Vector2 = view._tile_rect(following.target).get_center()
+		view._process(maxf(0.0, game.POWERUP_DRAG_SECONDS * 0.5 - float(following.elapsed)))
+		var next_halfway: Vector2 = view._tiles[int(following.source_id)].get_rect().get_center()
+		check(next_halfway.distance_to(next_from) > 2.0 and next_halfway.distance_to(next_to) > 2.0
+			and view._powerup_effects.stamps.size() > 0,
+			"The second source retains its own readable transfer and light trail")
 	_drain(view)
 	check(game.cells.size() == 2 and game.collectable_ids().size() == 2 and int(game.powerup_snapshot().completed) == 2,
-		"One automatic purchase completes each available forward word pair on the captured board")
+		"One automatic purchase completes both distinct word-picture pairs on the captured board")
 	check(game.collected_coins == 0 and game.fragment_count == 0 and game.cleared_pairs == 0
 		and app.coin_wallet.balance == before - 600 and app.growth.snapshot().streaks == growth
 		and not app._coin_flight.snapshot().active,
@@ -397,7 +403,7 @@ func _check_lifecycle(app) -> void:
 	view.powerup_buttons.auto_merge.pressed.emit()
 	view._process(0.25)
 	var paused: Dictionary = game.powerup_snapshot()
-	check(paused.drags.size() == 2, "Home interruption covers both concurrently moving paid sources")
+	check(paused.drags.size() == 1 and game.fusions.is_empty(), "Home interruption covers the active source and preserves the remaining paid path")
 	app._show_mode_menu()
 	view._process(0.40)
 	check(game.paused and game.powerup_snapshot() == paused, "Home freezes the paid automatic drag clock")

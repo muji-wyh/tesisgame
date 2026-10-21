@@ -53,13 +53,19 @@ func _run() -> void:
 			var view: Control = app._match_playfield if mode == "match" else app._memory if mode == "memory" else app._phrase
 			var css_scale: float = app.Style.ui_scale(app)
 			var game_area: Rect2 = app._content_margins.get_global_rect()
-			var play_top: int = 130 if mode in ["match", "memory"] else 76
+			# Memory reserves a 52px treasure/study strip; Match uses 46px.
+			var play_top: int = 136 if mode == "memory" else 130 if mode == "match" else 76
 			if dimensions.x < 600:
 				play_top += 32
 			check(absf((view.get_global_rect().position.y - game_area.position.y) * css_scale - play_top) <= 2,
 				"%s %s: the responsive header leaves play %d CSS pixels below its game area: %s" % [dimensions, mode, play_top, view.get_global_rect()])
 			check(app.get_global_rect().grow(1).encloses(game_area) and game_area.grow(1).encloses(view.get_global_rect()),
 				"%s %s: the game area contains the playfield inside the viewport" % [dimensions, mode])
+			if mode == "memory":
+				check(app._header.get_global_rect().end.y <= app._pair_reward_row.global_position.y
+					and app._pair_reward_row.get_global_rect().end.y <= view.global_position.y
+					and is_equal_approx(app._pair_reward_row.size.y * css_scale, 52.0),
+					"%s: Memory keeps its full treasure/study strip between the header and the cards" % dimensions)
 			check(game_area.size.x * css_scale <= 1065,
 				"%s %s: the desktop game area has a bounded width" % [dimensions, mode])
 			if dimensions.x >= 720:
@@ -154,8 +160,9 @@ func _run() -> void:
 	await settle()
 	check(app._age_catalog.is_visible_in_tree() and app._growth_summary.is_visible_in_tree(),
 		"Growth presents progress and a vocabulary catalog without the retired room")
-	check(app._collection_title.text == "Lv0 · Baby Pip" and not app.has_method("_show_reward_section"),
-		"The growth notebook combines the independent level and Pip age in one title")
+	check(app._collection_title.text == "Word library" and app.growth.level == 0 and app.growth.age == 0
+		and not app.has_method("_show_reward_section"),
+		"The shared word library preserves independent level and Pip age without a retired reward route")
 	for dimensions in [Vector2i(480, 900), Vector2i(1040, 900)]:
 		root.size = dimensions
 		app.size = dimensions

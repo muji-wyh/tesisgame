@@ -33,6 +33,10 @@ func _run() -> void:
 	_check_varied_content_cards(reveal)
 	_check_elastic_entry(reveal)
 	_check_reduced_motion(reveal)
+	reveal.reset()
+	reveal.present({"id": "image-free", "text": "on"}, null, Color.WHITE)
+	check(reveal.snapshot().visible and reveal.snapshot().spelling == "on" and reveal.snapshot().picture.is_empty(),
+		"Image-free words present their full spelling without a phantom picture")
 	reveal.queue_free()
 	await process_frame
 	print("Word Jelly word reveal: %d checks, %d failures" % [checks, failures])
@@ -75,10 +79,10 @@ func _check_independent_lifetimes(reveal) -> void:
 	for delta: float in [-1.0, NAN, INF, 0.0]:
 		reveal.advance(delta)
 	check(reveal.snapshot().entries == before.entries, "invalid time steps leave every entry unchanged")
-	reveal.present({"id": "missing", "text": "missing"}, null, Color.WHITE)
+	reveal.present({"id": "missing", "text": ""}, null, Color.WHITE)
 	reveal.present({"id": "blank", "text": "  "}, apple, Color.WHITE)
 	check(reveal.snapshot().entries == before.entries,
-		"invalid new artwork or spelling cannot erase unrelated collected words")
+		"Empty spelling cannot erase unrelated collected words")
 	var duration: float = float(state.duration)
 	reveal.advance(duration - 0.21)
 	state = reveal.snapshot()

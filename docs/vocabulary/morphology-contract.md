@@ -105,24 +105,29 @@ content resolver must select one intended sense and spelling form before play.
 
 ## Footprints
 
-`scripts/jelly_footprint.gd` measures the supplied real font at 16 displayed
-pixels and a 32-pixel cell pitch. `plan(text, font, break_offsets, insets,
-reserved)` chooses the smallest area within one to six columns and one to two
-rows, preferring one row on equal area. Pass actual image/badge reservations;
-`reserved.x` removes text width and `reserved.y` removes text height.
+Word Jelly assigns every source, partial composition, and completed word the
+same one-by-one footprint. This preserves the former ordinary Jelly size in the
+responsive six-column, eight-row well. Semantic part count never changes size.
+Merges reserve the same cell geometry used by their animation, collision, gravity,
+and preview. Resizing changes display scale, not logical dimensions.
 
-The planner preserves all spelling and uses only approved breaks. An exceptional
-unbreakable token receives a six-by-two footprint and `requires_read: true`, with
-the unchanged spelling. The view must expose the paused, scrollable Read detail;
-this planner does not itself render that view. Cache footprints for the round.
-Viewport resizing must not recompute logical dimensions.
+Compact labels preserve exact spelling and approved breaks, use at least 13
+physical pixels, and show an ellipsis when needed. The full spelling remains in
+the accessible name and the paused Read detail, reached by holding an overflowed Jelly for
+450 ms or pressing R while focused. Quick collection and drag gestures retain
+their existing behavior.
+
+`scripts/jelly_footprint.gd` remains a general measured-text helper: its standalone
+`plan` API measures at 16 pixels and a 32-pixel reference pitch, choosing a
+one-to-six-column, one-to-two-row rectangle. Word Jelly uses its authored wrapping
+helper only; this planner no longer decides gameplay body dimensions.
 
 ## Word Jelly integration
 
 `WordJellyModel.configure` accepts reviewed `word.morphology` only when its sense
 ID and exact text match the word. Invalid reviewed data fails configuration.
 `uses_authored_morphology()` identifies rounds containing reviewed analyses;
-legacy and authored pieces may coexist, but cannot cross their merge rules.
+whole-word fallback roots and reviewed parts may coexist; only reviewed graphs split words.
 
 `parts_compatible(left, right)` answers logical compatibility for board and
 preview cards. `can_merge(left, right)` checks a playable merge, including the
@@ -133,19 +138,26 @@ the board. `compatible_pairs(check_space = true)` limits hints to settled,
 unreserved board pieces and results that can fit. A `needs_room` attempt keeps
 the original pieces and does not emit an incorrect-answer cue.
 
-Authored tiles carry their semantic state in `composition`. Their `kind` is
-`part` until complete, then `word`; partial `word` data is empty. Physical
-`width`, `height`, `preferred_width`, and `preferred_height` stay fixed through
-gravity, repositioning, and drag cancellation. `label_lines`,
-`approved_break_offsets`, and `requires_read` are the frozen measured layout.
-`label_reserved_width` reserves 12 reference pixels for a badge and 24 more for
-a completed word's picture, in addition to 4/3/4/3-pixel text insets.
+Authored root tiles carry their semantic state in `composition`. Game tiles add
+`jelly_kind` (`root`, `picture`, or `merged`), `display_text`, `word_candidate`,
+`image_word`, `merge_level`, `mastery_eligible`, and `assisted`. Root captions
+add positional edge hyphens without changing the resolver's exact spelling.
+Only merged tiles have nonempty `word` and levels 1 through 9. Picture tiles
+have `image_word` but no visible text. Completed pictured roots remain roots
+until they match that exact picture sense. Image-free complete words become
+merged immediately. All physical footprints remain one ordinary cell.
 
-Fusion events carry `composition_status`. A partial fusion has an empty `word`
-payload and no reward, completed-word speech, collection count, or mastery.
-Manually composed whole words emit eligible evidence only on collection.
-Atomic whole-word exposure and assisted completion remain collectable without
-emitting spelling or mastery evidence. All Word Jelly bonus wins use the
+The hybrid planner combines reviewed root paths, their final picture join, and
+same-sense, same-level upgrades. Lv9 cannot upgrade. Its queries neither mutate
+the board nor allocate identities. Fusion events carry `composition_status`
+and `merge_kind` to distinguish roots, pictures, and upgrades. Root assembly
+waiting for a picture gives no completed-word speech or collection reward.
+Manual picture matches and composed image-free words become eligible for
+learning evidence only on collection. Image-free atomic exposure and assisted
+completion remain collectable without mastery. Any assisted constituent keeps
+the upgraded result assisted. Levels do not multiply learning credit.
+
+All Word Jelly bonus wins use the
 legacy two-part category (50 coins), at the existing one-percent chance,
 independent of component count or footprint. Receipt reservation and retry
 continue to provide exactly-once settlement.
@@ -153,9 +165,9 @@ continue to provide exactly-once settlement.
 An optional `commit_collection(payload)` callback gates every collection,
 including a zero-coin collection, on durable persistence. Its isolated payload
 includes `event_id`, the current round `generation`, the complete tile snapshot
-in `a`, `word`, `coins`, `fragments`, and the collection-batch metadata. The
-adapter can use `a.composition` to distinguish unassisted composition, assisted
-completion, and atomic exposure. It must persist the exposure and any wallet
+in `a`, `word`, `coins`, `fragments`, `merge_level`, `mastery_eligible`, and
+collection-batch metadata. The adapter uses these game-level fields and
+`a.assisted` to distinguish manual matching, assisted completion, and exposure. It must persist the exposure and any wallet
 reward together before returning `{ok: true}`. Supplying this callback replaces
 the legacy coin-only `credit_collection` callback.
 
@@ -201,8 +213,8 @@ in [Growth morphology](growth-morphology.md). Its resolver decorates each real
 vocabulary record before filtering; pending and invalid entries cannot enter
 the round or fall back to midpoint spelling chunks. The generated index and
 release audit record how much of the 1,550-entry individual review is complete.
-Whole-form exposure does not grant composition mastery. Legacy model-only
-fixtures retain historical behavior for regression comparison. Professional
+Image-free whole-form exposure does not grant mastery. Model fixtures use
+explicit word-picture pairs or reviewed composition graphs. Professional
 pilot analyses with pending review remain ineligible for the reviewed
 composition path.
 

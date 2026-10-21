@@ -193,24 +193,29 @@ func merged_word(view, word: Dictionary, fragments: int = 0) -> Dictionary:
 	game._coin_rng.seed = COIN_REWARD_SEED
 	game.step(0.4)
 	var pair: Array[int] = []
-	for first: Dictionary in game.cells:
-		if int(first.mass) != 1:
-			continue
-		for second: Dictionary in game.cells:
-			if first.id != second.id and int(second.mass) == 1 and str(first.text) + str(second.text) == str(word.text):
-				pair.assign([int(first.id), int(second.id)])
+	for supply_attempt in range(20):
+		for first: Dictionary in game.cells:
+			if str(first.get("jelly_kind", "")) != "root" or str(first.get("word_candidate", {}).get("id", "")) != str(word.id):
+				continue
+			for second: Dictionary in game.cells:
+				if str(second.get("jelly_kind", "")) == "picture" and str(second.image_word.id) == str(word.id) \
+					and game.is_settled(first) and game.is_settled(second) and game.can_merge(first, second):
+					pair.assign([int(first.id), int(second.id)])
+					break
+			if not pair.is_empty():
 				break
 		if not pair.is_empty():
 			break
-	if pair.is_empty():
 		game.drop_now()
-		game.step(0.4)
-		return merged_word(view, word, fragments)
+		game.step(4.0)
+	check(not pair.is_empty(), "Bounded real supply contains the requested text and exact word picture")
+	if pair.is_empty():
+		return {}
 	for tile: Dictionary in game.cells:
 		if int(tile.id) in pair:
 			tile.fragments = fragments if int(tile.id) == pair[0] else 0
 			tile.chest = int(tile.fragments) > 0
-	check(game.try_merge(pair[0], pair[1]) == "merged", "The gameplay model accepts a word-building merge")
+	check(game.try_merge(pair[0], pair[1]) == "merged", "The gameplay model accepts a word-picture merge")
 	var result_id: int = int(game.fusions.back().result.id)
 	game.step(game.FUSION_SECONDS + game.SETTLE_SECONDS * 2.0)
 	var result: Dictionary = game.cell(result_id)
@@ -447,9 +452,7 @@ func check_rejected_drop_flow(app, view, word: Dictionary) -> void:
 	var observe_word: Callable = func(value: Dictionary) -> void: spoken.append(value)
 	view.audio_requested.connect(observe_cue)
 	view.word_requested.connect(observe_word)
-	var parts: Array[String] = view.game._parts_for_word(word)
-	check(parts.size() == 2 and parts[1] + parts[0] != str(word.text),
-		"The flow fixture supplies an exact two-piece word whose reversed order is invalid")
+	check(not word.is_empty(), "The flow fixture uses a real whole-word root")
 	var wallet_before: int = app.coin_wallet.balance
 	var growth_before: Dictionary = app.growth.snapshot().streaks.duplicate(true)
 	for interruption: String in ["next_pick", "home", "finish_confirmation", "mute", "page_hidden", "round_end"]:
@@ -457,7 +460,7 @@ func check_rejected_drop_flow(app, view, word: Dictionary) -> void:
 		game.cells.clear()
 		var children: Array[Dictionary] = []
 		for index in range(2):
-			var child: Dictionary = game._new_tile(parts[index], 1, index + 1)
+			var child: Dictionary = game._new_word_root(word, index + 1)
 			child.column = index * 4
 			child.row = game.ROWS - 1
 			game.cells.append(child)

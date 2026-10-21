@@ -25,24 +25,40 @@ and Voice Pop supply follows current mastery as play continues, while keeping
 existing previews and complete word groups. The current-age vocabulary rule is unchanged.
 
 The persistent level display and progress bar show new words mastered toward the
-next experience level. The display or **More** opens the learning notebook. It
+next experience level. The display or **Word library** opens the vocabulary library. It
 includes all words in each cohort, their 0-2 practice streaks or Mastered labels,
 pronunciation and short meanings. Each age uses one continuous scrolling grid;
 all its words are reachable without page controls, and nearby pictures load as
 the player scrolls. Future cohorts are clearly previews: browsing them cannot
 change the game's earned level or age.
 
-Home leads with a larger, age-specific Pip and a shared-growth welcome. Its
+Word Library has **Everyday English** and **Professional English** categories.
+Professional vocabulary uses the same Grow with Pip Home and six games. Choose
+a career and module, then **Use this vocabulary** to return Home. Browsing alone
+does not change the active vocabulary or the paused round. A module still in
+preparation can be selected, but its games remain unavailable until its content
+is ready. The chosen vocabulary is remembered on this device independently of
+the last played round. Ready modules download their media when a game is chosen.
+
+The active professional vocabulary is identified on Home. Its Pip wears that
+career's dedicated outfit and shows a career level, derived from earned mastery
+of unique terms in that career using the usual level curve. Shared terms count
+once in each relevant career. Earned mastery survives later mistakes; viewing
+words and changing vocabulary award no experience. The gameplay header and
+reward celebrations keep the same career Pip. Returning to everyday vocabulary
+restores the saved everyday level, age, and appearance.
+
+Everyday Home leads with a larger, age-specific Pip and a shared-growth welcome. Its
 journey shows the current vocabulary cohort's mastered words and the next Pip
 appearance, independently of mastery levels. Completing all growth stages turns
 the journey into a recap without promising another appearance. The six games
-follow this welcome; theme and sound choices remain secondary.
+follow this welcome; vocabulary and sound choices remain secondary.
 
 Each Home game card shows a miniature example of its actual mechanic: linking
 a picture and word, turning Memory cards, speaking to pop a flying word card,
 ordering phrase pieces, merging a Jelly Match pair, or building and collecting
-a Jelly Words word. The Jelly Words card continues from `ca` + `t` into `cat`
-to a chest fragment flying into a Royal chest, its lid opening, and a fan of
+a Jelly Words word. The Jelly Words card matches `cat` with its separate picture,
+then shows a chest fragment flying into a Royal chest, its lid opening, and a fan of
 gold coins. This shows the treasure reward alongside word construction.
 These decorative examples use fixed interface artwork and
 do not select curriculum words, load another age's vocabulary, or earn rewards.
@@ -54,12 +70,9 @@ including a completed word and open chest on the Jelly Words card.
 The reused artwork and source rights are recorded in the
 [mode illustration attribution](../assets/images/ui/modes/ATTRIBUTION.md).
 
-Home offers eight illustrated theme choices below the game cards, arranged in
-one row on wide screens and two rows on phones. The selected theme is highlighted
-and saved automatically. Theme switching is available only on Home, including
-controller shoulder shortcuts. Select an unfinished game to continue the same
-round with the new theme; selecting a finished game starts a fresh round. Saved
-treasure batches retain their original theme.
+Vocabulary selection also supplies the setting: everyday words use Pip's garden,
+while professional vocabulary uses its workplace palette and available artwork.
+Saved treasure batches retain their original theme.
 
 See [growth rules and persistence](growth-system.md) and the
 [curriculum research](vocabulary/growth-curriculum.md) for the complete mapping.
@@ -174,18 +187,27 @@ A failed save keeps settlement open for retry.
 
 ## Jelly Words
 
-Join authored word parts on a six-column board. For example, dragging `tooth`
-onto `brush` makes the reviewed age-seven word `toothbrush`. The dragged part
-comes first, and every join must follow the word's authored composition. Both
-bodies flow into one larger jelly near the drop target. A legal intermediate
-can keep merging along its authored graph. Atomic words such as `cat` arrive
-whole. Invalid combinations separate with elastic feedback and a negative
-sound, without creating a merged body.
+Join reviewed roots on a six-column board, then match the complete spelling
+with its separate picture. Positional hyphens show the missing sides: `un-`,
+`-believe-`, and `-able`. Roots follow their authored composition and spelling
+changes; arbitrary letter chunks are not accepted. An atomic word such as
+`cat` starts as one whole-word root plus a picture-only Jelly. Pictures match
+the exact vocabulary meaning in either drag direction. A word without a picture
+becomes merged as soon as its spelling is complete. Invalid combinations separate
+with elastic feedback and a negative sound, without creating a merged body.
+
+Merged Jellies show the word and its available picture, with a brighter rim and
+glints. Two merged Jellies of the same word and level combine into the next
+level, up to Lv9. Levels 2–9 have an upper-right numeral. Every level has a
+distinct collection effect and sound; Lv4 blooms like a firework. The complete
+[level feedback reference](assets/jelly-level-feedback.md) describes all nine.
 
 Jellies can move to another position where they fit. Unsupported bodies fall
 vertically onto the next support or floor, including after a supporting word is
 collected or dragged away. Held bodies and active merges finish before their
-deferred fall. Larger bodies and long text wrap across rows when needed.
+deferred fall. Roots, pictures and every merged level keep the same ordinary
+rounded-square cell. Long labels use reviewed line breaks or an ellipsis;
+hold a clipped label, or focus it and press R, to pause and read its full spelling.
 
 At rest, compatible authored partners share a painted color, including partners
 in the upcoming preview. Other pairs use different hues. Picking up a part
@@ -212,20 +234,21 @@ stop at the first support reachable from above, never inside an enclosed hole.
 Sealing every entrance starts the existing full-well countdown. Reduced motion
 places incoming bodies directly on their supports with the same readiness clock.
 
-An exact word from the current learning-age vocabulary reveals its picture and
-a warm rim. Each word collected by a tap or Collect has an independent 1%
-chance of bonus coins. A lucky drop awards 50 coins for a two-part word, or 100
-for a word with three or more original chunks. Opening chests is the main
-coin source. Every collection records learning and banks all carried fragments,
-including when no coins drop. Merging alone does not grant coins or mastery.
+Each merged word collected by a tap or Collect has an independent 1% chance
+of 50 bonus coins, regardless of its level or number of roots. Opening chests is
+the main coin source. Collection banks all carried fragments. A manually solved
+picture match or root composition records learning only on collection;
+automatic merges and image-free atomic exposure do not earn mastery.
+Merging and upgrading alone do not grant coins or mastery.
 Failed coin saves preserve the word and its original reward for retry;
 repeated input cannot reroll or award the same collection twice.
 
 Auto merge costs 600, 900, then 1200 coins for further uses in the same round;
 Treasure costs 200, 300, then 400. Each item has its own successful-use count,
 and its button displays the next price. Treasure still distributes 2–8 fragments;
-Auto merge launches a random compatible jelly every 200 ms, dragging it to its
-target over 300 ms, and leaves completed words for manual collection. Failed payments
+Auto merge follows a validated sequence of root joins, picture matches and
+equal-level upgrades. It waits for each fusion and settlement before dragging
+the next pair, and leaves merged words for manual collection. Failed payments
 do not advance a price. A fresh round resets prices. See the
 [coin economy plan](coin-economy.md) for income assumptions and spending targets.
 
@@ -247,10 +270,11 @@ pause play; the existing Jelly reward room stores earned chests.
 
 ## Pip and completion
 
-Pip's earned appearance progresses through ten stages. Each adds a motion to the
+Everyday Pip's earned appearance progresses through ten stages. Each adds a motion to the
 previous repertoire. Basic expressions, answer feedback and the full round
-celebration are available from Baby Pip. World selection does not replace the earned
-appearance. The loader retains its established themed wardrobe.
+celebration are available from Baby Pip. Professional vocabulary uses the selected
+career's dedicated outfit and earned level; switching back restores everyday Pip.
+The loader retains its established themed wardrobe.
 
 The [preview](../web/preview/pip-growth/index.html) lets reviewers select every
 stage, replay each unlocked action and explicitly hear its voice lines. Voices

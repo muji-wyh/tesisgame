@@ -1,6 +1,6 @@
 class_name WordJellyModel
 extends RefCounted
-## Persistent word-part jellies: merging builds a word; collecting earns it.
+## Roots build spelling, pictures confirm meaning, and matching words level up.
 
 signal changed
 signal word_attempted(attempt_id: String, word_ids: Array[String], correct: bool)
@@ -22,11 +22,11 @@ const Motion = preload("res://scripts/jelly_motion.gd")
 const WordSampler = preload("res://scripts/word_sampler.gd")
 const CoinEconomy = preload("res://scripts/coin_economy.gd")
 const MorphologyResolver = preload("res://scripts/morphology_resolver.gd")
-const JellyFootprint = preload("res://scripts/jelly_footprint.gd")
 const LABEL_FONT = preload("res://assets/fonts/heading.tres")
 const COLUMNS: int = 6
 const ROWS: int = 8
 const CAPACITY: int = COLUMNS * ROWS
+const MAX_MERGE_LEVEL: int = 9
 const INITIAL_SETTLED_TILES: int = COLUMNS * 3
 const DROP_COUNT: int = 6
 const UPCOMING_COUNT: int = 6
@@ -207,7 +207,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 			analyses.append(word.morphology)
 			_authored_words[str(word.id)] = str(word.morphology.get("id", ""))
 	if _words.is_empty():
-		error = "Word Jelly needs at least one eligible pictured word."
+		error = "Word Jelly needs at least one eligible word."
 		changed.emit()
 		return false
 	if not _morphology.configure(analyses):
@@ -364,44 +364,24 @@ func _same_powerup(generation: int, receipt_id: String) -> bool:
 		and str(_powerup.get("receipt_id", "")) == receipt_id
 
 
-func _powerup_pair(captured_only: bool = true, random_source: bool = false) -> Array[int]:
-	if authored_morphology:
-		# Keep an authored completion path sequential. Its checked geometry stays
-		# fixed until the paid sequence finishes; gravity resumes afterward.
-		if not fusions.is_empty() or (powerup_active() and not _powerup.drags.is_empty()) or _settling_remaining() > EPSILON:
-			return []
-		if powerup_active() and _powerup.has("completion_plan"):
-			var current: Dictionary = _powerup.completion_plan
-			var next: int = current.result_ids.size()
-			if next < current.steps.size():
-				var pending: Dictionary = current.steps[next]
-				return [_plan_tile_id(current, str(pending.left_ref)), _plan_tile_id(current, str(pending.right_ref))]
-		var plan: Dictionary = authored_completion_plan(captured_only)
-		if plan.get("status") == "complete":
-			if powerup_active():
-				plan.result_ids = []
-				_powerup.completion_plan = plan
-			return [int(plan.first_source_id), int(plan.first_target_id)]
-	var candidates: Array = []
-	for source: Dictionary in cells:
-		if (captured_only and not _powerup_ids.has(int(source.id))) or not is_settled(source) \
-			or is_fusing(int(source.id)) or _reserved_for_powerup(int(source.id)):
-			continue
-		for target: Dictionary in cells:
-			if int(source.id) == int(target.id) or (captured_only and not _powerup_ids.has(int(target.id))) or not is_settled(target) \
-				or is_fusing(int(target.id)) or _reserved_for_powerup(int(target.id)):
-				continue
-			if not source.has("composition") and not target.has("composition") and not _legacy_merge_word(source, target).is_empty():
-				if not random_source:
-					return [int(source.id), int(target.id)]
-				# Each eligible source appears once, regardless of how many targets
-				# it can use. Availability checks never consume the seeded RNG.
-				candidates.append([int(source.id), int(target.id)])
-				break
-	var pair: Array[int] = []
-	if not candidates.is_empty():
-		pair.assign(candidates[_rng.randi_range(0, candidates.size() - 1)])
-	return pair
+func _powerup_pair(captured_only: bool = true, _random_source: bool = false) -> Array[int]:
+	# A paid path includes the picture match. Keep its sources fixed until that
+	# whole path has settled; its geometry remains valid even on a full board.
+	if not fusions.is_empty() or (powerup_active() and not _powerup.drags.is_empty()) or _settling_remaining() > EPSILON:
+		return []
+	if powerup_active() and _powerup.has("completion_plan"):
+		var current: Dictionary = _powerup.completion_plan
+		var next: int = current.result_ids.size()
+		if next < current.steps.size():
+			var pending: Dictionary = current.steps[next]
+			return [_plan_tile_id(current, str(pending.left_ref)), _plan_tile_id(current, str(pending.right_ref))]
+	var plan: Dictionary = authored_completion_plan(captured_only)
+	if plan.get("status") == "complete":
+		if powerup_active():
+			plan.result_ids = []
+			_powerup.completion_plan = plan
+		return [int(plan.first_source_id), int(plan.first_target_id)]
+	return []
 
 
 func _plan_tile_id(plan: Dictionary, reference: String) -> int:
@@ -525,8 +505,8 @@ func _advance_powerup() -> void:
 		_powerup_committing = false
 		if not _same_powerup(generation, receipt_id) or paused:
 			return
-	# Launches and arrivals have separate boundaries: a new 300 ms journey
-	# begins every 200 ms while earlier drags and fusions remain in flight.
+	# Launch and contact have separate boundaries. A path's next 300 ms journey
+	# waits for its predecessor's fusion and settlement, with a minimum beat.
 	var launch_ready: bool = float(_powerup.clock) + EPSILON >= float(_powerup.next_launch_at)
 	var pair: Array[int] = _powerup_pair(true, launch_ready)
 	if not pair.is_empty() and launch_ready:
@@ -605,9 +585,8 @@ func _complete_powerup() -> void:
 	_powerup.contact_pending = false
 	_held_tile_id = -1
 	_powerup_ids.clear()
-	if authored_morphology:
-		_growth_pending = true
-		_gravity_pending = true
+	_growth_pending = true
+	_gravity_pending = true
 
 
 func _grant_powerup_fragment(tile: Dictionary) -> void:
@@ -635,15 +614,20 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
 	var result: Dictionary = candidate.result
 	result.id = _next_tile_id
 	_next_tile_id += 1
-	if result.has("composition") and automatic:
-		result.composition.assisted = true
-		result.composition.mastery_eligible = false
+	if automatic:
+		result.assisted = true
+		result.mastery_eligible = false
+		if result.has("composition"):
+			result.composition.assisted = true
+			result.composition.mastery_eligible = false
 	result.skin = int(b.get("skin", b.id))
 	var active: Dictionary = {
 		"operation": "merge", "automatic": automatic, "a_id": a_id, "b_id": b_id,
 		"a": a.duplicate(true), "b": b.duplicate(true), "result": result,
 		"word": result.word.duplicate(true), "attempt_id": _event_id("merge"),
 		"composition_status": candidate.status,
+		"merge_level": int(result.get("merge_level", 0)),
+		"merge_kind": str(candidate.get("merge_kind", "roots")),
 		"elapsed": 0.0, "duration": FUSION_SECONDS, "pop_at": FUSION_SECONDS,
 		"popped": false
 	}
@@ -680,6 +664,8 @@ func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
 		"operation": "collect", "a_id": tile_id, "b_id": tile_id,
 		"a": tile.duplicate(true), "b": tile.duplicate(true), "result": {},
 		"word": tile.word.duplicate(true), "attempt_id": str(_collection_event_ids[tile_id]),
+		"merge_level": int(tile.get("merge_level", 1)),
+		"mastery_eligible": bool(tile.get("mastery_eligible", false)),
 		"coins": int(_collection_coin_rewards[_collection_event_ids[tile_id]]), "fragments": int(tile.fragments),
 		"elapsed": 0.0, "duration": BATCH_BEAT_SECONDS if batch_index > 0 else COLLECT_SECONDS,
 		"pop_at": BATCH_POP_SECONDS if batch_index > 0 else POP_SECONDS,
@@ -916,7 +902,8 @@ func step(delta: float) -> void:
 				continue
 			if str(active.operation) == "collect" and not bool(active.popped) and float(active.elapsed) + EPSILON >= float(active.pop_at):
 				active.popped = true
-				cue_requested.emit("pop")
+				var merge_level: int = clampi(int(active.get("merge_level", 1)), 1, MAX_MERGE_LEVEL)
+				cue_requested.emit("pop" if merge_level == 1 else "jelly-collect-lv%d" % merge_level)
 				if not _can_continue(generation):
 					break
 			if float(active.elapsed) + EPSILON >= float(active.duration):
@@ -1229,6 +1216,8 @@ static func settle_duration(tile: Dictionary) -> float:
 
 
 func is_valid_word(tile: Dictionary) -> bool:
+	if tile.has("jelly_kind"):
+		return tile.jelly_kind == "merged" and not tile.get("word", {}).is_empty()
 	if tile.has("composition"):
 		return bool(tile.composition.get("complete", false)) and not tile.get("word", {}).is_empty()
 	return int(tile.get("mass", 0)) > 1 and not tile.get("word", {}).is_empty()
@@ -1321,9 +1310,11 @@ func finish_round(reason: String = "finished") -> Dictionary:
 
 
 func _eligible(word: Dictionary, level: int) -> bool:
-	for key in ["id", "text", "image", "audio"]:
+	for key in ["id", "text", "audio"]:
 		if not word.get(key) is String or str(word[key]).strip_edges().is_empty():
 			return false
+	if word.has("image") and not word.image is String:
+		return false
 	if str(word.get("track", "")) == "professional":
 		return _reviewed_morphology(word) and word.get("practice_modes") is Array \
 			and "word_jelly" in word.practice_modes
@@ -1332,17 +1323,12 @@ func _eligible(word: Dictionary, level: int) -> bool:
 	if word.has("morphology_status") or word.has("morphology"):
 		if str(word.get("morphology_status", "reviewed")) != "reviewed" or not _reviewed_morphology(word):
 			return false
-	return int(word.get("min_age", 3)) == clampi(level, 3, 12) and normalize_word(str(word.text)).length() >= (1 if _reviewed_morphology(word) else 2)
+	return int(word.get("min_age", 3)) == clampi(level, 3, 12) and not normalize_word(str(word.text)).is_empty()
 
 
 static func _reviewed_morphology(word: Dictionary) -> bool:
 	return word.get("morphology") is Dictionary and word.morphology.get("review") is Dictionary \
 		and word.morphology.review.get("status") == "reviewed"
-
-
-func _legacy_merge_word(left: Dictionary, right: Dictionary) -> Dictionary:
-	var word: Dictionary = _word_lookup.get(normalize_word(str(left.text) + str(right.text)), {})
-	return {} if _authored_words.has(str(word.get("id", ""))) else word
 
 
 func _composition_state(tile: Dictionary) -> Dictionary:
@@ -1356,31 +1342,132 @@ func _composition_state(tile: Dictionary) -> Dictionary:
 func _composition_footprint(state: Dictionary) -> Dictionary:
 	var signature: String = str(state.signature)
 	if not _footprints.has(signature):
-		# The fixed badge and optional picture allocation also applies to pieces
-		# currently carrying no fragment, so later awards cannot resize a body.
-		var reserved_width: float = 12.0 + (24.0 if bool(state.get("complete", false)) else 0.0)
-		var layout: Dictionary = JellyFootprint.plan(str(state.text), LABEL_FONT,
-			state.get("break_offsets", []), Vector4(4, 3, 4, 3), Vector2(reserved_width, 0))
-		layout.label_reserved_width = reserved_width
-		_footprints[signature] = layout
+		# Spelling and composition describe content, never physical board size.
+		# The view lays out the full spelling at its actual ordinary-cell scale.
+		var text: String = str(state.text)
+		var text_width: float = LABEL_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, 16).x
+		_footprints[signature] = {"width": 1, "height": 1, "lines": [text],
+			"requires_read": text_width > 56.0, "label_reserved_width": 0.0}
 	return _footprints[signature].duplicate(true)
 
 
 func _new_composition_tile(state: Dictionary, allocate_id: bool = true) -> Dictionary:
-	var tile: Dictionary = _new_tile(str(state.text), int(state.part_count), int(state.get("fragments", 0)), allocate_id)
+	var semantic: String = _root_spelling(str(state.text))
+	var tile: Dictionary = _new_tile(semantic, int(state.part_count), int(state.get("fragments", 0)), allocate_id)
 	var layout: Dictionary = _composition_footprint(state)
 	tile.composition = state.duplicate(true)
-	tile.word = _words_by_id.get(str(state.get("lexeme_id", "")), {}).duplicate(true) if bool(state.get("complete", false)) else {}
-	tile.kind = "word" if not tile.word.is_empty() else "part"
+	var context: Dictionary = _composition_context(state)
+	var candidate: Dictionary = {}
+	if not context.is_empty() and str(context.node.id) in context.analysis.roots:
+		candidate = _words_by_id.get(str(context.analysis.lexeme_id), {}).duplicate(true)
+	tile.word = {}
+	tile.word_candidate = candidate
+	tile.image_word = {}
+	tile.jelly_kind = "root"
+	tile.kind = "part"
+	tile.merge_level = 0
+	tile.display_text = _root_caption(state)
+	tile.assisted = bool(state.get("assisted", false))
+	tile.mastery_eligible = false
+	if not candidate.is_empty() and not _has_word_picture(candidate):
+		_set_merged_word(tile, candidate, 1, bool(state.get("mastery_eligible", false)))
 	tile.width = int(layout.width)
 	tile.height = int(layout.height)
 	tile.preferred_width = tile.width
 	tile.preferred_height = tile.height
 	tile.row = ROWS - int(tile.height)
 	tile.requires_read = bool(layout.requires_read)
-	tile.label_lines = layout.lines.duplicate()
-	tile.approved_break_offsets = state.get("break_offsets", []).duplicate()
+	tile.label_lines = [tile.display_text]
+	tile.approved_break_offsets = []
+	var prefix_trim: int = 1 if str(state.text).begins_with("-") else 0
+	for offset: Variant in state.get("break_offsets", []):
+		var semantic_offset: int = int(offset) - prefix_trim
+		if semantic_offset > 0 and semantic_offset < semantic.length():
+			tile.approved_break_offsets.append(offset if prefix_trim == 0 else semantic_offset)
 	tile.label_reserved_width = layout.label_reserved_width
+	return tile
+
+
+static func _root_spelling(value: String) -> String:
+	return value.trim_prefix("-").trim_suffix("-")
+
+
+func _root_caption(state: Dictionary) -> String:
+	var spelling: String = _root_spelling(str(state.text))
+	# The authored span, not the part's incidental surface punctuation, tells
+	# the player which sides still need another root. Prefer its source context.
+	var context: Dictionary = _composition_context(state)
+	if context.is_empty():
+		return spelling
+	return ("-" if int(context.node.start) > 0 else "") + spelling \
+		+ ("-" if int(context.node.end) < context.analysis.parts.size() else "")
+
+
+func _composition_context(state: Dictionary) -> Dictionary:
+	# A planning resolver may restrict available targets. Context remains the
+	# live round's authored context, so speculative and manual tiles agree.
+	var candidates: Array = _morphology._states.get(str(state.get("signature", "")), state).get("candidates", [])
+	var selected: Dictionary = {} if candidates.is_empty() else candidates[0]
+	for origin: Variant in state.get("origins", []):
+		for candidate: Dictionary in candidates:
+			if candidate.analysis_id == origin.get("analysis_id", ""):
+				selected = candidate
+				break
+		if not selected.is_empty() and selected.get("analysis_id") == origin.get("analysis_id", ""):
+			break
+	if selected.is_empty():
+		return {}
+	var analysis: Dictionary = _morphology._analyses.get(str(selected.analysis_id), {})
+	var node: Dictionary = analysis.get("nodes", {}).get(str(selected.node_id), {})
+	if node.is_empty():
+		return {}
+	return {"analysis": analysis, "node": node}
+
+
+static func _has_word_picture(word: Dictionary) -> bool:
+	return not str(word.get("image", "")).strip_edges().is_empty()
+
+
+func _set_merged_word(tile: Dictionary, word: Dictionary, level: int, eligible: bool) -> void:
+	tile.word = word.duplicate(true)
+	tile.word_candidate = {}
+	tile.image_word = word.duplicate(true) if _has_word_picture(word) else {}
+	tile.text = str(word.text)
+	tile.display_text = str(word.text)
+	tile.jelly_kind = "merged"
+	tile.kind = "word"
+	tile.merge_level = clampi(level, 1, MAX_MERGE_LEVEL)
+	tile.mastery_eligible = eligible and not bool(tile.get("assisted", false))
+	tile.label_lines = [tile.display_text]
+
+
+func _new_word_root(word: Dictionary, fragments: int = 0, allocate_id: bool = true) -> Dictionary:
+	var tile: Dictionary = _new_tile(str(word.text), 1, fragments, allocate_id)
+	tile.word_candidate = word.duplicate(true)
+	if not _has_word_picture(word):
+		# An image-less atomic word is available immediately, but merely seeing
+		# it is not evidence of an independently solved spelling or picture match.
+		_set_merged_word(tile, word, 1, false)
+	return tile
+
+
+func _new_picture_tile(word: Dictionary, fragments: int = 0, allocate_id: bool = true) -> Dictionary:
+	var tile: Dictionary = _new_tile(str(word.text), 1, fragments, allocate_id)
+	tile.jelly_kind = "picture"
+	tile.kind = "picture"
+	tile.display_text = ""
+	tile.image_word = word.duplicate(true)
+	tile.word_candidate = {}
+	tile.label_lines = []
+	return tile
+
+
+func _joined_word_tile(left: Dictionary, right: Dictionary, word: Dictionary, level: int,
+	eligible: bool) -> Dictionary:
+	var tile: Dictionary = _new_tile(str(word.text), int(left.mass) + int(right.mass),
+		int(left.fragments) + int(right.fragments), false)
+	tile.assisted = bool(left.get("assisted", false)) or bool(right.get("assisted", false))
+	_set_merged_word(tile, word, level, eligible)
 	return tile
 
 
@@ -1398,7 +1485,7 @@ func _place_composition(left: Dictionary, right: Dictionary, state: Dictionary,
 			if not same_left and not same_right:
 				_occupy(occupied, int(tile.column), int(tile.row), int(tile.width), int(tile.height))
 	# Search the whole board, including space below the target. Every accepted
-	# result reserves its complete readable rectangle before the fusion starts.
+	# result reserves its ordinary cell before the fusion starts.
 	var position: Vector2i = _drag_return_position(occupied, int(layout.width), int(layout.height), right)
 	return {"ok": position.x >= 0, "placement": {"column": position.x, "row": position.y,
 		"width": int(layout.width), "height": int(layout.height)}}
@@ -1407,31 +1494,42 @@ func _place_composition(left: Dictionary, right: Dictionary, state: Dictionary,
 func merge_candidate(left: Dictionary, right: Dictionary, check_space: bool = true) -> Dictionary:
 	if left.is_empty() or right.is_empty() or int(left.get("id", -1)) == int(right.get("id", -2)):
 		return {"status": "invalid", "result": {}}
-	if left.has("composition") or right.has("composition"):
-		if not left.has("composition") or not right.has("composition"):
+	var left_kind: String = str(left.get("jelly_kind", "root"))
+	var right_kind: String = str(right.get("jelly_kind", "root"))
+	var tile: Dictionary = {}
+	var merge_kind: String = "roots"
+	if left_kind == "merged" and right_kind == "merged":
+		var level: int = int(left.get("merge_level", 1))
+		if level >= MAX_MERGE_LEVEL or level != int(right.get("merge_level", 1)) \
+			or str(left.get("word", {}).get("id", "")) != str(right.get("word", {}).get("id", "")) \
+			or left.get("word", {}).is_empty():
 			return {"status": "invalid", "result": {}}
-		var fit: Callable = func(a: Dictionary, b: Dictionary, result: Dictionary, _board: Array) -> Dictionary:
-			return _place_composition(a, b, result)
-		var resolved: Dictionary = _morphology.resolve(_composition_state(left), _composition_state(right), fit if check_space else Callable())
+		tile = _joined_word_tile(left, right, left.word, level + 1,
+			bool(left.get("mastery_eligible", false)) or bool(right.get("mastery_eligible", false)))
+		merge_kind = "upgrade"
+	elif (left_kind == "root" and right_kind == "picture") or (left_kind == "picture" and right_kind == "root"):
+		var root: Dictionary = left if left_kind == "root" else right
+		var picture: Dictionary = right if right_kind == "picture" else left
+		var candidate: Dictionary = root.get("word_candidate", {})
+		if candidate.is_empty() or not _words_by_id.has(str(candidate.get("id", ""))) \
+			or str(candidate.get("id", "")) != str(picture.get("image_word", {}).get("id", "")):
+			return {"status": "invalid", "result": {}}
+		tile = _joined_word_tile(left, right, candidate, 1, true)
+		merge_kind = "picture"
+	elif left_kind == "root" and right_kind == "root" and left.has("composition") and right.has("composition"):
+		var resolved: Dictionary = _morphology.resolve(_composition_state(left), _composition_state(right))
 		if not resolved.status in ["partial", "complete"]:
 			return {"status": resolved.status, "result": {}}
-		var tile: Dictionary = _new_composition_tile(resolved.tile, false)
-		if resolved.has("placement"):
-			tile.column = resolved.placement.column
-			tile.row = resolved.placement.row
-		return {"status": resolved.status, "result": tile}
-	if _legacy_merge_word(left, right).is_empty():
+		tile = _new_composition_tile(resolved.tile, false)
+	else:
 		return {"status": "invalid", "result": {}}
-	var tile: Dictionary = _new_tile(str(left.text) + str(right.text), int(left.mass) + int(right.mass), int(left.fragments) + int(right.fragments), false)
-	var position: Vector2i = _position_near(_occupied([int(left.id), int(right.id)]), int(tile.width), int(tile.height), right)
-	if position.x < 0:
-		# Legacy spelling chunks retain their established crowded-board behavior.
-		tile.width = right.width
-		tile.height = right.height
-		position = Vector2i(int(right.column), int(right.row))
-	tile.column = position.x
-	tile.row = position.y
-	return {"status": "complete", "result": tile}
+	if check_space:
+		var position: Vector2i = _drag_return_position(_occupied([int(left.id), int(right.id)]), 1, 1, right)
+		if position.x < 0:
+			return {"status": "needs_room", "result": {}}
+		tile.column = position.x
+		tile.row = position.y
+	return {"status": "complete" if is_valid_word(tile) else "partial", "result": tile, "merge_kind": merge_kind}
 
 
 func uses_authored_morphology() -> bool:
@@ -1439,21 +1537,29 @@ func uses_authored_morphology() -> bool:
 
 
 func parts_compatible(left: Dictionary, right: Dictionary) -> bool:
+	# Palette classification evaluates every visible pair; keep it semantic
+	# without copying complete word records or constructing speculative tiles.
 	if left.is_empty() or right.is_empty() or int(left.get("id", -1)) == int(right.get("id", -2)):
 		return false
-	if left.has("composition") or right.has("composition"):
-		if not left.has("composition") or not right.has("composition"):
-			return false
-		return _morphology.resolve(left.composition, right.composition).status in ["partial", "complete"]
-	# Palette classification runs for every visible ordered pair. A semantic
-	# query must not scan the physical board or create speculative bodies.
-	return not _legacy_merge_word(left, right).is_empty()
+	var left_kind: String = str(left.get("jelly_kind", "root"))
+	var right_kind: String = str(right.get("jelly_kind", "root"))
+	if left_kind == "merged" and right_kind == "merged":
+		return not left.get("word", {}).is_empty() and int(left.get("merge_level", 1)) < MAX_MERGE_LEVEL \
+			and int(left.get("merge_level", 1)) == int(right.get("merge_level", 1)) \
+			and str(left.word.id) == str(right.get("word", {}).get("id", ""))
+	if left_kind == "picture" and right_kind == "root":
+		return not right.get("word_candidate", {}).is_empty() \
+			and _words_by_id.has(str(right.word_candidate.id)) \
+			and str(right.word_candidate.id) == str(left.get("image_word", {}).get("id", ""))
+	if left_kind == "root" and right_kind == "picture":
+		return not left.get("word_candidate", {}).is_empty() \
+			and _words_by_id.has(str(left.word_candidate.id)) \
+			and str(left.word_candidate.id) == str(right.get("image_word", {}).get("id", ""))
+	return left_kind == "root" and right_kind == "root" and left.has("composition") and right.has("composition") \
+		and _morphology.resolve(left.composition, right.composition).status in ["partial", "complete"]
 
 
 func can_merge(left: Dictionary, right: Dictionary) -> bool:
-	if not left.has("composition") and not right.has("composition"):
-		# Legacy pairs can always retain the target rectangle when crowded.
-		return parts_compatible(left, right)
 	return merge_candidate(left, right).status in ["partial", "complete"]
 
 
@@ -1472,21 +1578,72 @@ func compatible_pairs(check_space: bool = true) -> Array[Dictionary]:
 
 
 func authored_completion_plan(captured_only: bool = false) -> Dictionary:
-	var states: Array = []
-	var ids: Array[int] = []
+	var available: Array[Dictionary] = []
 	for tile: Dictionary in cells:
-		if not tile.has("composition") or not is_settled(tile) or is_fusing(int(tile.id)) or is_lifted(int(tile.id)) \
+		if not is_settled(tile) or is_fusing(int(tile.id)) or is_lifted(int(tile.id)) \
 			or (captured_only and not _powerup_ids.has(int(tile.id))) or _reserved_for_powerup(int(tile.id)):
 			continue
-		states.append(_composition_state(tile))
-		ids.append(int(tile.id))
+		available.append(tile)
+	if available.size() < 2:
+		return {"status": "unavailable", "steps": []}
+	# Completed spellings and upgrades are already complete one-step plans.
+	for left: Dictionary in available:
+		for right: Dictionary in available:
+			if not parts_compatible(left, right):
+				continue
+			var direct: Dictionary = merge_candidate(left, right)
+			if direct.status == "complete":
+				return {"status": "complete", "steps": [{"left_ref": "input:0", "right_ref": "input:1",
+					"result_ref": "step:0", "result": direct.result.duplicate(true),
+					"placement": {"column": direct.result.column, "row": direct.result.row, "width": 1, "height": 1}}],
+					"tile": direct.result.duplicate(true), "input_ids": [int(left.id), int(right.id)],
+					"first_source_id": int(left.id), "first_target_id": int(right.id), "placement_checked": true}
+	var pictures: Dictionary = {}
+	for tile: Dictionary in available:
+		if str(tile.get("jelly_kind", "")) == "picture":
+			pictures[str(tile.image_word.id)] = tile
+	# Do not charge for a spelling-only path whose required picture is absent.
+	# Restrict the resolver to targets that can actually finish on this board.
+	var analyses: Array = []
+	for word: Dictionary in _words:
+		if _authored_words.has(str(word.id)) and (not _has_word_picture(word) or pictures.has(str(word.id))):
+			analyses.append(word.morphology)
+	if analyses.is_empty():
+		return {"status": "unavailable", "steps": []}
+	var resolver := MorphologyResolver.new()
+	if not resolver.configure(analyses):
+		return {"status": "unavailable", "steps": []}
+	var states: Array = []
+	var ids: Array[int] = []
+	for tile: Dictionary in available:
+		if str(tile.get("jelly_kind", "root")) == "root" and tile.has("composition") \
+			and resolver._states.has(str(tile.composition.signature)):
+			states.append(_composition_state(tile))
+			ids.append(int(tile.id))
 	if states.size() < 2:
 		return {"status": "unavailable", "steps": []}
 	var fixed: Dictionary = _occupied(ids)
 	var fit: Callable = func(a: Dictionary, b: Dictionary, result: Dictionary, board: Array) -> Dictionary:
 		return _place_composition(a, b, result, board, fixed)
-	var plan: Dictionary = _morphology.completion_plan(states, fit)
+	var accept: Callable = func(state: Dictionary) -> bool:
+		var tile: Dictionary = _new_composition_tile(state, false)
+		return is_valid_word(tile) or (not tile.word_candidate.is_empty() and pictures.has(str(tile.word_candidate.id)))
+	var plan: Dictionary = resolver.completion_plan(states, fit, MorphologyResolver.MAX_PLAN_STATES, accept)
 	if plan.status == "complete":
+		var completed: Dictionary = _new_composition_tile(plan.tile, false)
+		if str(completed.jelly_kind) == "root":
+			var picture: Dictionary = pictures[str(completed.word_candidate.id)]
+			var next_index: int = plan.steps.size()
+			var merged: Dictionary = _joined_word_tile(completed, picture, completed.word_candidate, 1, true)
+			merged.column = int(picture.column)
+			merged.row = int(picture.row)
+			plan.steps.append({"left_ref": "step:%d" % (next_index - 1), "right_ref": "input:%d" % ids.size(),
+				"result_ref": "step:%d" % next_index, "result": merged.duplicate(true),
+				"placement": {"column": picture.column, "row": picture.row, "width": 1, "height": 1}})
+			ids.append(int(picture.id))
+			plan.tile = merged
+		else:
+			plan.tile = completed
 		plan.input_ids = ids.duplicate()
 		plan.first_source_id = ids[int(str(plan.steps[0].left_ref).trim_prefix("input:"))]
 		plan.first_target_id = ids[int(str(plan.steps[0].right_ref).trim_prefix("input:"))]
@@ -1494,33 +1651,13 @@ func authored_completion_plan(captured_only: bool = false) -> Dictionary:
 
 
 func _authored_auto_active() -> bool:
-	return authored_morphology and powerup_active() and str(_powerup.get("kind", "")) == "auto_merge"
+	return powerup_active() and str(_powerup.get("kind", "")) == "auto_merge"
 
 
 func _parts_for_word(word: Dictionary) -> Array[String]:
-	var text: String = normalize_word(str(word.text))
-	var supplied: Array[String] = []
-	if word.get("jelly_parts") is Array:
-		for part in word.jelly_parts:
-			if not part is String or str(part).is_empty():
-				supplied.clear()
-				break
-			supplied.append(str(part).to_lower())
-		if supplied.size() >= 2 and "".join(supplied) == text:
-			# Exact-word merging needs one complementary pair, even for long words.
-			# Preserve authored boundaries by joining adjacent pieces on each side.
-			var split: int = 1
-			var prefix_length: int = supplied[0].length()
-			var best_balance: int = absi(text.length() - prefix_length * 2)
-			for index in range(1, supplied.size() - 1):
-				prefix_length += supplied[index].length()
-				var balance: int = absi(text.length() - prefix_length * 2)
-				if balance < best_balance:
-					best_balance = balance
-					split = index + 1
-			return ["".join(supplied.slice(0, split)), "".join(supplied.slice(split))]
-	var midpoint: int = ceili(float(text.length()) / 2.0)
-	return [text.left(midpoint), text.substr(midpoint)]
+	# Only reviewed graphs may split a term. Legacy spelling chunks are not
+	# morphological evidence; unreviewed vocabulary starts as one whole root.
+	return [str(word.text)]
 
 
 func _new_tile(text: String, mass: int, fragments: int, allocate_id: bool = true) -> Dictionary:
@@ -1530,21 +1667,24 @@ func _new_tile(text: String, mass: int, fragments: int, allocate_id: bool = true
 	var size: Vector2i = _preferred_size(mass)
 	var tile: Dictionary = {
 		"id": _next_tile_id if allocate_id else -1, "text": text, "mass": mass, "parts_count": mass,
+		"display_text": text, "jelly_kind": "root", "merge_level": 0,
+		"word_candidate": {}, "image_word": {}, "mastery_eligible": false, "assisted": false,
 		"fragments": fragments, "chest": fragments > 0,
 		"word": word.duplicate(true), "kind": "word" if not word.is_empty() else "chunk",
 		"column": 0, "row": ROWS - size.y, "width": size.x, "height": size.y,
+		"preferred_width": size.x, "preferred_height": size.y,
 		"age": SETTLE_SECONDS, "settling": false, "arrival": false, "arrival_index": 0, "arrival_delay": 0.0,
 		"falling": false, "falling_rows": 0, "placement_locked": false
 	}
 	if allocate_id:
 		_next_tile_id += 1
+	if not word.is_empty():
+		_set_merged_word(tile, word, 1, true)
 	return tile
 
 
-func _preferred_size(mass: int) -> Vector2i:
-	if mass <= COLUMNS:
-		return Vector2i(maxi(1, mass), 1)
-	return Vector2i(COLUMNS, mini(ROWS, ceili(float(mass) / float(COLUMNS))))
+func _preferred_size(_mass: int) -> Vector2i:
+	return Vector2i.ONE
 
 
 func _fill_upcoming() -> void:
@@ -1623,18 +1763,17 @@ func _build_supply() -> void:
 	while _supply_pending.size() < UPCOMING_COUNT:
 		var word: Dictionary = WordSampler.next_word(_words, _rng, _word_counts, _word_service, practice_weight_for)
 		_supply_words += 1
-		var parts: Array[String] = _parts_for_word(word)
 		var authored_parts: Array = _morphology.source_tiles(str(_authored_words[word.id])) if _authored_words.has(word.id) else []
-		if not authored_parts.is_empty():
-			parts.clear()
-			for state: Dictionary in authored_parts:
-				parts.append(str(state.text))
-		var marked: int = _rng.randi_range(0, parts.size() - 1) if _supply_words % 2 == 0 else -1
-		for index in range(parts.size()):
+		var root_count: int = maxi(1, authored_parts.size())
+		var part_count: int = root_count + (1 if _has_word_picture(word) else 0)
+		var marked: int = _rng.randi_range(0, part_count - 1) if _supply_words % 2 == 0 else -1
+		for index in range(part_count):
 			var fragments: int = 1 if index == marked else 0
 			var tile: Dictionary
-			if authored_parts.is_empty():
-				tile = _new_tile(parts[index], 1, fragments)
+			if index == root_count:
+				tile = _new_picture_tile(word, fragments)
+			elif authored_parts.is_empty():
+				tile = _new_word_root(word, fragments)
 			else:
 				var state: Dictionary = authored_parts[index]
 				state.fragments = fragments
@@ -1643,7 +1782,7 @@ func _build_supply() -> void:
 				tile = _new_composition_tile(state)
 			tile.supply_group = _supply_words
 			tile.supply_part = index
-			tile.supply_parts = parts.size()
+			tile.supply_parts = part_count
 			tile.source_word_id = str(word.id)
 			_supply_pending.append(tile)
 	var packet: Array[Dictionary] = []
@@ -1866,7 +2005,7 @@ func _complete_merge(completed: Dictionary) -> void:
 	_gravity_pending = true
 	merged_count += 1
 	if bool(_powerup.get("active", false)) and str(_powerup.kind) == "auto_merge":
-		if result.has("composition") and _powerup.has("completion_plan"):
+		if _powerup.has("completion_plan"):
 			var plan: Dictionary = _powerup.completion_plan
 			plan.result_ids.append(int(result.id))
 			if plan.result_ids.size() >= plan.steps.size():
@@ -1927,7 +2066,7 @@ func _complete_collection(completed: Dictionary) -> void:
 	# A committed pickup owns its learning evidence, including paused settlement.
 	# Record it before presentation callbacks can pause, end, or replace the round.
 	var word_ids: Array[String] = [str(completed.word.id)]
-	if not completed.a.has("composition") or bool(completed.a.composition.get("mastery_eligible", false)):
+	if bool(completed.get("mastery_eligible", completed.a.get("mastery_eligible", false))):
 		word_attempted.emit(str(completed.attempt_id), word_ids, true)
 	if generation != _generation:
 		return
@@ -1948,8 +2087,8 @@ func _complete_collection(completed: Dictionary) -> void:
 
 
 func _restore_growth(excluded_id: int = -1) -> void:
-	# Growth can reuse nearby space. Its settled result and any neighbors that
-	# lose support then fall. Manual footprints keep their chosen size and column.
+	# Normalize older transient bodies without allowing semantic part counts to
+	# enlarge ordinary cells. Held and reserved bodies finish their current motion.
 	_growth_pending = false
 	if _authored_auto_active():
 		_growth_pending = true

@@ -3,6 +3,7 @@ extends SceneTree
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const Growth = preload("res://scripts/growth_state.gd")
 const Badge = preload("res://scripts/growth_badge.gd")
+const Context = preload("res://scripts/learning_context.gd")
 var checks := 0
 var failures := 0
 
@@ -114,8 +115,9 @@ func _age_milestones(directory: String) -> void:
 		check(app.duck.growth_age == 3, "Starting %s cannot promote Pip from Lv19" % mode)
 	app._show_collection()
 	await settle()
-	check(app._catalog_age == 4 and app._age_catalog.word_count() == 99 and app._collection_title.text.contains("Age 3"),
-		"Notebook distinguishes earned Age 3 from the next 99-word Age 4 set")
+	check(app._catalog_age == 4 and app._age_catalog.word_count() == 99 and app._collection_title.text == "Word library"
+		and app._pip_age_description == "Age 3" and app._growth_summary.text.contains("Age 4"),
+		"Word library distinguishes earned Age 3 from the next 99-word Age 4 vocabulary set")
 	app._hide_collection()
 	app._record_growth("age-three-mistake", [ids[0]], false)
 	check(app.growth.level == 19 and app.growth.age == 3 and app.duck.growth_age == 3,
@@ -158,8 +160,8 @@ func _badge_states() -> void:
 				and badge.count_label.text == ("MAX" if state.get("level_completed", false) else "%d / %d" % [state.level_mastered, state.level_required]),
 				"Growth facts retain the exact earned level and new-word progress")
 			check(description.contains(state.label) and not description.contains(state.age_label)
-				and not description.contains("current age set") and description.contains("View your words"),
-				"The Lv description retains the level target and notebook action without Pip age")
+				and not description.contains("current age set") and description.contains("Open word library"),
+				"The Lv description retains the level target and Word library action without Pip age")
 			if int(state.level) < 99:
 				var next_level: String = "Lv%d" % (int(state.level) + 1)
 				check(description.contains("reach " + next_level),
@@ -284,7 +286,8 @@ func _responsive_badge(app) -> void:
 func _load_failure(directory: String) -> void:
 	var app = load("res://scenes/main.tscn").instantiate()
 	Fixture.install(app, directory, "load-recovery.cfg")
-	app._presentation.path = directory + "/presentation.cfg"
+	app._presentation.path = directory + "/load-recovery-presentation.cfg"
+	app.professional_save_path = directory + "/load-recovery-professional.json"
 	var storage := UnreadableStorage.new()
 	app.growth._host = storage
 	root.add_child(app)
@@ -294,15 +297,37 @@ func _load_failure(directory: String) -> void:
 	check(app._growth_button.level_label.text == "Lv…" and app._growth_bar.value == 0.0,
 		"The persistent entry shows unavailable progress while the saved level cannot be loaded")
 	check(app._pip_age_description.is_empty(), "An unreadable save does not invent a starting Pip age")
-	check(app._storage_retry_button.is_visible_in_tree() and app._message.visible,
-		"The initial load failure explains how to recover (retry visible=%s, message visible=%s, home=%s, description=%s)" % [
-			app._storage_retry_button.is_visible_in_tree(), app._message.visible, app._mode_menu_open(),
-			app._storage_retry_button.get("accessibility_description")])
+	var home_retry: Button = app._mode_panel._home_retry
+	check(app._mode_menu_open() and app._mode_panel._home_status.is_visible_in_tree()
+		and app._mode_panel._home_status.text.contains("could not be loaded")
+		and home_retry.is_visible_in_tree() and home_retry.text == "Retry saving"
+		and home_retry.get("accessibility_description") == app.growth.error
+		and app._valid_focus(home_retry) and app._default_focus() == home_retry,
+		"The initial load failure explains recovery through a visible, accessible Retry saving action inside Home")
 	check(not app.new_round(101, false, "", "pop"), "Mode switching cannot bypass the growth load gate")
-	storage.readable = true
-	app._storage_retry_button.pressed.emit()
+	var course: Dictionary = app.professional.loader.catalog.course("retail")
+	app._select_learning_context(Context.professional(course.id, course.modules[0].id, course.curriculum_revision, "match"))
+	app.professional.phase = "failed"
+	app.professional.error = "Pictures could not be loaded."
+	app._refresh_learning_home()
+	app._refresh()
 	await settle()
-	check(app.growth.ready and app.model.cards.size() == 10 and not app._message.visible,
+	check(not app.growth.ready and home_retry.is_visible_in_tree() and home_retry.text == "Retry"
+		and app._mode_panel._home_cancel.is_visible_in_tree()
+		and app._mode_panel._home_status.text == app.professional.error
+		and not app._mode_panel._home_retry_storage,
+		"Unreadable everyday progress cannot displace the independent professional retry and cancel actions")
+	app._select_learning_context(Context.growth(3, "match"))
+	await settle()
+	check(home_retry.is_visible_in_tree() and home_retry.text == "Retry saving" and app._mode_panel._home_retry_storage,
+		"Returning to everyday vocabulary restores its unresolved storage recovery action")
+	storage.readable = true
+	home_retry.grab_focus()
+	check(home_retry.has_focus(), "Keyboard users can reach Home's storage recovery action")
+	home_retry.pressed.emit()
+	await settle()
+	check(app.growth.ready and app.model.cards.size() == 10 and not app._message.visible
+		and not app._mode_panel._home_status_box.visible and not home_retry.visible,
 		"Successful retry loads progress before starting a playable board")
 	app.audio.halt()
 	app.queue_free()

@@ -41,6 +41,7 @@ const PopRewardRoom = preload("res://scripts/pop_reward_room.gd")
 const ReviewScroll = preload("res://scripts/review_scroll.gd")
 const GrowthState = preload("res://scripts/growth_state.gd")
 const GrowthBadge = preload("res://scripts/growth_badge.gd")
+const ProfessionalPipProgress = preload("res://scripts/professional_pip_progress.gd")
 const AgeWordCatalog = preload("res://scripts/age_word_catalog.gd")
 const LearningContext = preload("res://scripts/learning_context.gd")
 const LearningContent = preload("res://scripts/learning_content_resolver.gd")
@@ -321,6 +322,15 @@ var _learning_theme_key: String = ""
 var _resume_professional_source: String = ""
 var _professional_library: ProfessionalWordLibrary
 var _collection_professional := false
+var _collection_selection: Dictionary = {}
+var _library_tabs: HBoxContainer
+var _library_everyday: Button
+var _library_professional: Button
+var _library_play_everyday: Button
+var _library_scroll: ScrollContainer
+var _library_body: VBoxContainer
+var _career_profiles: Dictionary = {}
+var _vocabulary_preference_saved: bool = true
 var _professional_button: Button
 var _professional_heading: Label
 var _professional_progress_label: Label
@@ -387,7 +397,7 @@ func _ready() -> void:
 	vocabulary_loader.age_failed.connect(_on_vocabulary_failed)
 	vocabulary_loader.progress_changed.connect(_on_vocabulary_progress)
 	_vocabulary_initialized = true
-	# Native assets are already local. Web users reach the path chooser before
+	# Native assets are already local. Web users reach the shared Home before
 	# downloading a curriculum they may never select.
 	if not vocabulary_loader._native:
 		_finish_vocabulary_boot()
@@ -981,6 +991,7 @@ func _build_mode_menu() -> void:
 	_mode_panel.learning_context_selected.connect(_select_learning_context)
 	_mode_panel.learning_continue_requested.connect(_continue_learning_context)
 	_mode_panel.learning_retry_requested.connect(_retry_professional)
+	_mode_panel.storage_retry_requested.connect(_retry_storage)
 	_mode_panel.learning_cancel_requested.connect(_cancel_professional)
 	_mode_panel.learning_course_selected.connect(_preview_learning_course)
 
@@ -1203,6 +1214,12 @@ func _desired_learning_context(mode: String) -> Dictionary:
 
 
 func _select_learning_context(context: Dictionary) -> void:
+	if collection_page.visible:
+		if not LearningContext.validate(context).is_empty():
+			return
+		_collection_selection = context.duplicate(true)
+		_refresh_library_professional()
+		return
 	if not _mode_menu_open() or not LearningContext.validate(context).is_empty():
 		return
 	_professional_preferences_restored = true
@@ -1214,11 +1231,29 @@ func _select_learning_context(context: Dictionary) -> void:
 	if context.track == "growth":
 		_home_context = LearningContext.growth(growth.learning_age(), context.mode)
 		professional.store.request("context", _home_context)
+	_presentation.vocabulary = _home_context.duplicate(true)
+	_vocabulary_preference_saved = _presentation.save_preferences()
 	_refresh_learning_home()
 	_refresh()
 
 
 func _continue_learning_context(context: Dictionary) -> void:
+	if collection_page.visible:
+		if not LearningContext.validate(context).is_empty():
+			return
+		# Choosing vocabulary returns to the same Home. Choosing a game owns
+		# replacement of the paused round and preparation of its media.
+		_collection_from_home = true
+		_hide_collection()
+		if not _mode_menu_open():
+			_announce_status("Finish saving this round's rewards before changing vocabulary.")
+			return
+		_select_learning_context(context)
+		var notice: String = "Vocabulary selected. " + ("Choose a game to play with Pip." if _home_mode_available() else "This module is being prepared.")
+		if not _vocabulary_preference_saved:
+			notice += " This choice could not be saved and will last for this visit only."
+		_announce_status(notice)
+		return
 	_select_learning_context(context)
 	choose_mode(str(context.get("mode", "word_jelly")))
 
@@ -1254,15 +1289,19 @@ func _professional_input_blocked() -> bool:
 func _professional_changed(state: Dictionary) -> void:
 	if _professional_callbacks_closed or not is_inside_tree() or _rebuilding:
 		return
+	_career_profiles.clear()
 	var saved: Dictionary = state.session
 	if collection_page.visible and _collection_professional:
 		_professional_library.set_progress(saved)
+	if not _professional_preferences_restored and _restorable_vocabulary(_presentation.vocabulary):
+		_professional_preferences_restored = true
+		var preferred: Dictionary = _presentation.vocabulary
+		_home_context = preferred.duplicate(true) if preferred.track == "professional" else LearningContext.growth(growth.learning_age(), preferred.mode)
 	if not _professional_preferences_restored and saved.progress_loaded and saved.pending_count == 0 and not saved.blocked:
 		_professional_preferences_restored = true
 		var context: Variant = saved.saved_context
-		if context is Dictionary and LearningContext.validate(context).is_empty():
-			if context.track == "growth" or not professional.loader.catalog.course(context.course_id).is_empty():
-				_home_context = context.duplicate(true)
+		if _restorable_vocabulary(context):
+			_home_context = context.duplicate(true) if context.track == "professional" else LearningContext.growth(growth.learning_age(), context.mode)
 	_refresh_learning_home()
 	if not _vocabulary_initialized:
 		return
@@ -1290,6 +1329,51 @@ func _refresh_learning_home() -> void:
 		_mode_panel.configure_learning(professional.loader.catalog,
 			_home_context if not _home_context.is_empty() else _round_context if _has_entered_game else {},
 			professional.snapshot(), _round_context if _can_continue_round() else {}, _professional_library_available())
+		_mode_panel.configure_professional(_professional_profile_for(_home_context))
+		_refresh_home_storage_recovery()
+
+
+func _refresh_home_storage_recovery() -> void:
+	var message := ""
+	var detail := ""
+	var context: Dictionary = _home_context if not _home_context.is_empty() else _round_context if _has_entered_game else {}
+	var everyday: bool = context.get("track") != "professional"
+	if everyday and not growth.ready:
+		message = "Your learning progress could not be loaded. Choose Retry saving before you play."
+		detail = growth.error
+	elif _save_error:
+		message = "Your rewards could not be saved. Choose Retry saving."
+		detail = medal_progress.error
+	elif not coin_wallet.ready or not coin_wallet.error.is_empty():
+		message = "Your coins are unavailable. Choose Retry saving to recover them."
+		detail = coin_wallet.error
+	elif everyday and _growth_save_failed:
+		message = "Your learning progress could not be saved. Choose Retry saving."
+		detail = growth.error
+	elif _journey_save_failed:
+		message = "Your preferences could not be saved. Choose Retry saving."
+	_mode_panel.configure_storage_recovery(message, detail if not detail.is_empty() else message)
+
+
+func _restorable_vocabulary(context: Variant) -> bool:
+	if not context is Dictionary or not LearningContext.validate(context).is_empty():
+		return false
+	if context.track == "growth":
+		return true
+	var course: Dictionary = professional.loader.catalog.course(str(context.course_id))
+	if course.get("curriculum_revision") != context.curriculum_revision:
+		return false
+	return course.get("modules", []).any(func(module: Dictionary) -> bool: return module.get("id") == context.module_id)
+
+
+func _professional_profile_for(context: Dictionary) -> Dictionary:
+	if context.get("track") != "professional":
+		return {}
+	var key: String = str(professional.loader.catalog.get_instance_id()) + ":" + LearningContext.identity(context, false)
+	if not _career_profiles.has(key):
+		_career_profiles[key] = ProfessionalPipProgress.summary(professional.loader.catalog.course(str(context.course_id)),
+			professional.session.snapshot(), context)
+	return _career_profiles[key].duplicate(true)
 
 
 func _professional_library_available() -> bool:
@@ -1298,6 +1382,8 @@ func _professional_library_available() -> bool:
 
 
 func _preview_learning_course(id: String) -> void:
+	if collection_page.visible:
+		return
 	_home_course_preview = id
 	_refresh()
 
@@ -1344,8 +1430,7 @@ func _record_professional(attempt_id: String, words: Array, correct: bool) -> vo
 				if requirement.sense_id == sense and requirement.skills.has("spelling"):
 					assessed = true
 					break
-			# An atomic tile involved in an invalid merge has no spelling task.
-			# Its only Word Jelly evidence comes from passive collection.
+			# Image-free atomic entries have no independently solved task.
 			if not assessed:
 				continue
 		var event: Dictionary = {"id": _round_id + ":" + attempt_id + ":" + str(sense),
@@ -1365,10 +1450,10 @@ func _commit_professional_collection(payload: Dictionary) -> Dictionary:
 		return {"ok": false, "error": "This round has changed."}
 	var local_id: String = str(payload.event_id)
 	var id: String = _round_id + ":" + local_id
-	var composition: Dictionary = payload.get("a", {}).get("composition", {})
+	var tile: Dictionary = payload.get("a", {})
 	var event: Dictionary = {"id": id, "sense_id": str(payload.word.id), "skill": "spelling",
-		"correct": true, "assisted": bool(composition.get("assisted", false)),
-		"atomic": payload.word.get("morphology", {}).get("kind") == "atomic"}
+		"correct": true, "assisted": bool(tile.get("assisted", false)),
+		"atomic": payload.word.get("morphology", {}).get("kind") == "atomic" and str(payload.word.get("image", "")).is_empty()}
 	if int(payload.coins) > 0:
 		event.reward = {"operation": "credit", "payload": {"tier": int(payload.coins) / CoinWallet.COINS_PER_TIER}}
 	_professional_collections[id] = {"local_id": local_id, "generation": payload.generation, "source": _round_id}
@@ -1404,7 +1489,7 @@ func _build_collection_shell() -> void:
 	_collection_margins.add_child(_collection_column)
 	_collection_header = HBoxContainer.new()
 	_collection_column.add_child(_collection_header)
-	_collection_title = Style.label("Grow with Pip", 22)
+	_collection_title = Style.label("Word library", 22)
 	_collection_title.clip_text = true
 	_collection_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_collection_header.add_child(_collection_title)
@@ -1415,9 +1500,22 @@ func _build_collection_shell() -> void:
 	UiClick.bind_button(_collection_back)
 	_collection_back.pressed.connect(_back_from_collection)
 	_collection_header.add_child(_collection_back)
+	_library_tabs = HBoxContainer.new()
+	_library_tabs.name = "WordLibraryCategories"
+	_collection_column.add_child(_library_tabs)
+	_library_everyday = _library_category("Everyday English", "LibraryEveryday", false)
+	_library_professional = _library_category("Professional English", "LibraryProfessional", true)
 	_growth_summary = Style.label("", 15)
 	_growth_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_collection_column.add_child(_growth_summary)
+	_library_play_everyday = Button.new()
+	_library_play_everyday.name = "PlayEverydayVocabulary"
+	_library_play_everyday.text = "Play with everyday words"
+	_library_play_everyday.pressed.connect(func() -> void:
+		if _can_browse_collection():
+			_continue_learning_context(LearningContext.growth(growth.learning_age(), _mode_id)))
+	UiClick.bind_button(_library_play_everyday)
+	_collection_column.add_child(_library_play_everyday)
 	_build_age_choices()
 	_age_catalog = AgeWordCatalog.new()
 	_age_catalog.interaction_allowed = _can_browse_collection
@@ -1426,12 +1524,65 @@ func _build_collection_shell() -> void:
 		if _can_browse_collection():
 			vocabulary_loader.request_age(_catalog_age))
 	_collection_column.add_child(_age_catalog)
+	_library_scroll = ScrollContainer.new()
+	_library_scroll.name = "ProfessionalVocabularyScroll"
+	_library_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_library_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_library_scroll.follow_focus = true
+	_collection_column.add_child(_library_scroll)
+	_library_body = VBoxContainer.new()
+	_library_body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_library_scroll.add_child(_library_body)
+	_mode_panel.learning.reparent(_library_body)
+	_mode_panel.learning.set_library_mode(true)
+	_mode_panel.learning.show()
+	_mode_panel.learning.browsing_changed.connect(func(_screen: String) -> void:
+		if collection_page.visible:
+			_library_scroll.scroll_vertical = 0
+			_refresh_library_professional.call_deferred())
 	_professional_library = ProfessionalWordLibrary.new()
 	_professional_library.interaction_allowed = _can_browse_collection
 	_professional_library.hear_requested.connect(_hear_professional_word)
-	_collection_column.add_child(_professional_library)
+	_library_body.add_child(_professional_library)
+	_professional_library.embed_in(_library_scroll)
 	_professional_library.hide()
 	collection_page.hide()
+
+
+func _library_category(label: String, id: String, professional_words: bool) -> Button:
+	var button := Button.new()
+	button.name = id
+	button.text = label
+	button.toggle_mode = true
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.pressed.connect(_select_library_category.bind(professional_words))
+	UiClick.bind_button(button)
+	_library_tabs.add_child(button)
+	return button
+
+
+func _select_library_category(professional_words: bool) -> void:
+	if not _can_browse_collection():
+		return
+	audio.stop_voice()
+	_collection_professional = professional_words
+	_library_scroll.scroll_vertical = 0
+	_refresh_collection()
+	_announce_collection_state()
+
+
+func _refresh_library_professional() -> void:
+	if not is_instance_valid(_professional_library) or not collection_page.visible:
+		return
+	var show_words: bool = _collection_professional and _mode_panel.learning.snapshot().screen == "summary" \
+		and _round_context.get("track") == "professional" and not professional.active.is_empty() \
+		and LearningContext.identity(_collection_selection, false) == LearningContext.identity(_round_context, false)
+	_professional_library.visible = show_words
+	if show_words and not _professional_library._configured:
+		_professional_library.configure(_round_content, professional.session.snapshot())
+	elif show_words:
+		_professional_library.set_progress(professional.session.snapshot())
+	_layout_collection()
 
 
 func _hear_professional_word(word: Dictionary) -> void:
@@ -1590,11 +1741,15 @@ func _refresh_collection() -> void:
 	_sync_collected_rewards()
 	_refresh_age_choices()
 	if collection_page.visible:
+		_library_everyday.set_pressed_no_signal(not _collection_professional)
+		_library_professional.set_pressed_no_signal(_collection_professional)
+		_library_scroll.visible = _collection_professional
+		_library_play_everyday.visible = not _collection_professional and \
+			(_home_context if _collection_from_home else _round_context).get("track") == "professional"
 		_age_choices.visible = not _collection_professional
 		_age_catalog.visible = not _collection_professional
-		_professional_library.visible = _collection_professional
 		if _collection_professional:
-			_professional_library.set_progress(professional.session.snapshot())
+			_refresh_library_professional()
 		else:
 			_show_age_catalog()
 	_layout_collection()
@@ -2999,6 +3154,7 @@ func _refresh() -> void:
 		_storage_retry_button.visible = true
 		_storage_retry_button.set("accessibility_description", professional.error)
 	_refresh_growth()
+	_refresh_home_storage_recovery()
 	if model.phase not in ["waiting", "matching", "feedback"] and _voice_mode:
 		_stop_voice()
 	_voice_button.visible = model.phase in ["waiting", "matching", "feedback"] and _mode_id == "match"
@@ -3038,7 +3194,7 @@ func _refresh() -> void:
 	elif playing and _mode_id == "jelly":
 		_message.text = "Drag a picture onto its word. Make room for the falling jellies!"
 	elif playing and _mode_id == "word_jelly":
-		_message.text = "Join word pieces. Collect complete words and treasure fragments, with a 1% chance of bonus coins. Open chests to earn coins."
+		_message.text = "Build words and match their pictures. Merge identical words of the same level, up to Lv9. Tap merged jellies to collect."
 	var won: bool = model.phase == "won"
 	var earned_chest: bool = won and model.chest_earned
 	var saving_reward: bool = won and model.chest_state == "opened" and not _pending_fragment.is_empty() \
@@ -3531,6 +3687,13 @@ func _layout_collection() -> void:
 	_growth_summary.visible = not compact and not _collection_professional
 	_age_notice.visible = not compact and not _collection_professional
 	_professional_library.fit(scale)
+	_mode_panel.learning.fit(scale, size.x * scale >= 760.0)
+	_library_body.add_theme_constant_override("separation", ceili(18.0 / scale))
+	_library_tabs.add_theme_constant_override("separation", ceili(8.0 / scale))
+	for button in [_library_everyday, _library_professional, _library_play_everyday]:
+		Style.action_button(button, Style.GOOD, button == _library_play_everyday)
+		button.custom_minimum_size.y = 44.0 / scale
+		button.add_theme_font_size_override("font_size", ceili((12.0 if size.x * scale < 380.0 else 14.0) / scale))
 	_age_catalog.meaning_label.visible = not compact or _age_catalog.meaning_label.text != "Tap a word to hear it."
 	var padding: int = ceili((8 if compact else 14) / scale)
 	for edge in ["left", "right"]:
@@ -4531,6 +4694,9 @@ func _ensure_collection_focus_visible(control: Control) -> void:
 
 
 func _reveal_catalog_control(target: Control, explicit_focus: bool = false) -> void:
+	if is_instance_valid(_library_scroll) and _library_scroll.is_ancestor_of(target):
+		_library_scroll.ensure_control_visible(target)
+		return
 	for rail in _collection_rails():
 		if not rail.is_ancestor_of(target):
 			continue
@@ -5175,9 +5341,10 @@ func _show_collection() -> void:
 		return
 	var from_home: bool = _mode_menu_open()
 	var selected_professional: bool = (_home_context if from_home else _round_context).get("track") == "professional"
-	if selected_professional and from_home and not _professional_library_available():
-		return
 	_collection_professional = selected_professional
+	_collection_selection = (_home_context if from_home else _round_context).duplicate(true)
+	_mode_panel.learning.set_selection(_collection_selection)
+	_library_scroll.scroll_vertical = 0
 	_coin_flight.sync(coin_wallet.balance)
 	# Preserve prepared and hard-error gates; only an interrupted live or pending
 	# recognizer needs paused wording. Capture this before host stop callbacks.
@@ -5213,10 +5380,6 @@ func _show_collection() -> void:
 			control.focus_mode = Control.FOCUS_NONE
 	_catalog_age = growth.learning_age()
 	collection_page.show()
-	if _collection_professional:
-		_professional_library.show()
-		_professional_library.configure(_round_content, professional.session.snapshot())
-		_collection_title.text = "Word library"
 	_sync_jelly()
 	_publish_jelly_rewards(_jelly_rewards.snapshot())
 	_refresh_collection()
@@ -5235,6 +5398,8 @@ func _hide_collection() -> void:
 	_cancel_collection_rails()
 	_professional_library.clear()
 	collection_page.hide()
+	_collection_selection.clear()
+	_mode_panel.learning.set_selection(_home_context if _collection_from_home else _round_context)
 	for control in _collection_focus_modes:
 		if is_instance_valid(control):
 			control.focus_mode = _collection_focus_modes[control]
@@ -5255,7 +5420,7 @@ func _hide_collection() -> void:
 
 func _announce_collection_state() -> void:
 	if _collection_professional:
-		_announce_status("Professional word library. " + str(_round_content.get("course_title", "")) + ". " + str(_round_content.get("module_title", "")))
+		_announce_status("Word library. Professional English. " + str(_mode_panel.learning.snapshot().active_text))
 		return
 	var announcement := _collection_title.text + ". " + _growth_summary.text + " " + _age_notice.text
 	if _journey_save_failed:
@@ -5295,7 +5460,7 @@ func _update_duck() -> void:
 		return
 	_header_duck_slot.show()
 	var in_collection: bool = collection_page.visible
-	var visible_here: bool = not in_collection and not _mode_menu_open() and _round_context.get("track") != "professional"
+	var visible_here: bool = not in_collection and not _mode_menu_open()
 	var phrase_speaking: bool = _phrase_interaction_allowed() and audio.available and not audio.muted and audio.voice.playing
 	_phrase.set_speaking(phrase_speaking)
 	duck.set_outfit_theme(model.theme_id)
@@ -5619,35 +5784,22 @@ func _refresh_growth() -> void:
 	if not is_instance_valid(_growth_button):
 		return
 	var state: Dictionary = growth.snapshot()
+	var career: Dictionary = _professional_profile_for(_round_context)
 	_mode_panel.configure_growth(state)
+	_mode_panel.configure_professional(_professional_profile_for(_home_context))
 	for mascot in [duck, _phrase.pip, _round_celebration.pip, _single_result.pip]:
 		if is_instance_valid(mascot):
 			mascot.set_growth_age(growth.age)
+			mascot.set_professional_profile(career)
 	for room in [_pop_rewards, _jelly_rewards]:
 		room.set_companion(room.pip.theme_id, growth.age)
-	_growth_button.configure(state)
-	_growth_button.visible = _round_context.get("track") != "professional"
-	_professional_button.visible = not _growth_button.visible
-	if _professional_button.visible:
-		_professional_heading.text = str(_round_content.get("course_title", "Professional English"))
-		var saved: Dictionary = professional.session.snapshot()
-		var learned := 0
-		for term in _round_content.get("requirements", {}).get("terms", []):
-			for skill in term.skills:
-				if saved.progress.get("skills", {}).get(term.sense_id, {}).get(skill, {}).get("earned", false):
-					learned += 1
-					break
-		var progress_text: String = "%d / 50 learned" % learned if saved.progress_loaded and not saved.blocked else "Progress unavailable"
-		_professional_progress_label.text = progress_text
-		_professional_button.tooltip_text = "%s · %s\n%s" % [_professional_heading.text, _round_content.get("module_title", _round_context.module_id), progress_text]
-		_set_accessibility_name(_professional_button, _professional_button.tooltip_text + ". Open word library.")
-		var previous_focus: int = _professional_button.focus_mode
-		Style.quiet_button(_professional_button, _active_palette.get("accent", Style.GOOD))
-		_professional_button.focus_mode = previous_focus
-	_pip_age_description = str(state.age_label) if state.ready else ""
-	_collection_title.text = "%s · %s" % [state.label, "Baby Pip" if state.age == 0 else "Pip · " + state.age_label] if state.ready else "Grow with Pip"
-	if collection_page.visible and _collection_professional:
-		_collection_title.text = "Word library"
+		room.pip.set_professional_profile(career)
+	_growth_button.configure(career if not career.is_empty() else state)
+	_growth_button.show()
+	_professional_button.hide()
+	_pip_age_description = ("%s · %s" % [career.course_title, career.label] if career.get("ready", false)
+		else str(career.get("course_title", "Professional English"))) if not career.is_empty() else str(state.age_label) if state.ready else ""
+	_collection_title.text = "Word library"
 	var level_summary: String = "Lv99 reached!" if state.level_completed else "%d new %s to Lv%d" % [state.level_remaining, "word" if state.level_remaining == 1 else "words", state.level + 1]
 	var age_target: String = "Age 12+" if state.learning_age == 12 else "Age %d" % state.learning_age
 	_growth_summary.text = "%d words learned · %s\n%s · %d / %d mastered%s" % [state.lifetime_mastered, level_summary, age_target, state.mastered, state.total, " · All ages unlocked!" if state.completed else ""] if state.ready else "Learning progress is unavailable. Retry saving to load it."
@@ -5683,6 +5835,8 @@ func _publish_growth_view() -> void:
 	state["background_game"] = _growth_control(_memory if _mode_id == "memory" else _phrase if _mode_id == "phrase" else _pop if _mode_id == "pop" else _active_jelly() if _is_jelly_mode() else _match_playfield)
 	state["pip"] = _growth_control(duck)
 	state.pip["age"] = duck.growth_age
+	state.pip["profile"] = duck.professional_profile.duplicate(true)
+	state["professional"] = _professional_profile_for(_round_context)
 	state.pip["action"] = duck._idle_action
 	state.pip["signature_actions"] = duck.age_actions()
 	state["vocabulary"] = _vocabulary_snapshot()
@@ -5725,8 +5879,10 @@ func _publish_growth_view() -> void:
 		controls.append(_growth_control(_vocabulary_retry))
 		controls.append(_growth_control(_vocabulary_back))
 	if collection_page.visible:
+		state["library"] = _mode_panel.learning.snapshot()
+		state.library["selected_family"] = "professional" if _collection_professional else "everyday"
 		state["catalog"] = _professional_library.snapshot() if _collection_professional else _age_catalog.snapshot()
-		state.catalog["viewport_rect"] = _growth_control(_professional_library.scroll if _collection_professional else _age_catalog.scroll).rect
+		state.catalog["viewport_rect"] = _growth_control(_library_scroll if _collection_professional else _age_catalog.scroll).rect
 		state.catalog.erase("growth")
 		state.catalog.erase("word_ids")
 		state["notice"] = _age_notice.text

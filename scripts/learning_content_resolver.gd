@@ -93,7 +93,7 @@ static func resolve_professional(context: Dictionary, course: Dictionary, lexeme
 			if mode == "phrase" and not contextual_senses.has(id):
 				continue
 			if MODE_SKILLS.has(mode) and not skills.has(MODE_SKILLS[mode]):
-				if mode != "word_jelly" or entry.morphology.get("kind") != "atomic":
+				if mode != "word_jelly" or entry.morphology.get("kind") != "atomic" or not str(entry.get("image", "")).is_empty():
 					skills.append(MODE_SKILLS[mode])
 		if skills.is_empty():
 			return _failure("Every term needs a reachable scored exercise.")
@@ -306,7 +306,7 @@ static func _growth_supports(word: Dictionary, mode: String) -> bool:
 		return not str(word.get("audio", "")).is_empty()
 	if mode == "word_jelly":
 		return word.get("morphology_status") == "reviewed" and word.get("morphology") is Dictionary \
-			and not str(word.get("image", "")).is_empty() and not str(word.get("audio", "")).is_empty()
+			and not str(word.get("audio", "")).is_empty()
 	if mode == "jelly":
 		return not str(word.get("image", "")).is_empty() and not str(word.get("audio", "")).is_empty()
 	return Data.supports_mode(word, mode)

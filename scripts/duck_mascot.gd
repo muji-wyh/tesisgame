@@ -6,6 +6,7 @@ const SHEET = preload("res://assets/images/mascots/pip.svg")
 const DANCE_SHEET = preload("res://assets/images/mascots/pip-dance-parts.svg")
 const Outfits = preload("res://scripts/pip_outfits.gd")
 const AgeMotion = preload("res://scripts/pip_age_motion.gd")
+const ProfessionalPip = preload("res://scripts/professional_pip.gd")
 const GROWTH_CATALOG_PATH := "res://data/pip-growth-stages.json"
 const Style = preload("res://scripts/ui_style.gd")
 const GROWTH_ACTION_SECONDS := {"wave": 1.8, "look": 1.9, "high-five": 1.7,
@@ -53,6 +54,7 @@ var reaction_left: float = 0.0
 var accent: Color = Style.GOOD
 var theme_id: String = "spring"
 var growth_age: int = 0
+var professional_profile: Dictionary = {}
 var _growth_stage: Dictionary = {}
 static var _growth_definitions: Array = []
 var _outfit_sheet: Texture2D
@@ -126,6 +128,10 @@ func set_outfit_theme(value: String) -> void:
 
 func set_growth_age(value: int) -> void:
 	var chosen: int = 0 if value < 3 else clampi(value, 3, 12)
+	if not professional_profile.is_empty():
+		# Preserve the earned age while a career wardrobe occupies the same rig.
+		growth_age = chosen
+		return
 	if growth_age == chosen and not _growth_stage.is_empty():
 		return
 	if _growth_definitions.is_empty():
@@ -140,6 +146,33 @@ func set_growth_age(value: int) -> void:
 	if stage.is_empty():
 		push_error("Missing Pip growth stage for age %d." % chosen)
 		return
+	if _apply_appearance(stage):
+		growth_age = chosen
+
+
+func set_professional_profile(value: Dictionary) -> void:
+	var course_id: String = str(value.get("course_id", ""))
+	var selected: Dictionary = ProfessionalPip.profile(course_id) if not course_id.is_empty() else {}
+	if selected.is_empty():
+		if professional_profile.is_empty():
+			return
+		professional_profile = {}
+		_growth_stage = {}
+		set_growth_age(growth_age)
+		return
+	var previous: String = str(professional_profile.get("course_id", ""))
+	var configured: Dictionary = value.duplicate(true)
+	configured["course_id"] = course_id
+	configured["title"] = str(selected.title)
+	configured["level"] = maxi(0, int(value.get("level", 0)))
+	if previous == course_id:
+		professional_profile = configured
+		return
+	if _apply_appearance(selected):
+		professional_profile = configured
+
+
+func _apply_appearance(stage: Dictionary) -> bool:
 	var art: Dictionary = stage.get("art", {})
 	var sheets: Array[Texture2D] = []
 	for kind in ["regular", "idle", "parts", "expressions", "expressionHeads"]:
@@ -147,9 +180,8 @@ func set_growth_age(value: int) -> void:
 		var texture: Texture2D = load(asset_path) as Texture2D
 		if texture == null:
 			push_error("Missing Pip growth artwork: " + asset_path)
-			return
+			return false
 		sheets.append(texture)
-	growth_age = chosen
 	_growth_stage = stage.duplicate(true)
 	_outfit_sheet = sheets[0]
 	_outfit_idle_sheet = sheets[1]
@@ -160,6 +192,7 @@ func set_growth_age(value: int) -> void:
 	_reset_idle()
 	# Keep final-answer reactions and shared celebration on their original clock.
 	_update_pose()
+	return true
 
 
 func growth_actions() -> Array[String]:
@@ -175,7 +208,7 @@ func growth_voice_path() -> String:
 
 
 func age_actions() -> Array[String]:
-	return AgeMotion.actions(growth_age)
+	return AgeMotion.actions(growth_age if professional_profile.is_empty() else 12)
 
 
 func perform_growth_action(kind: String = "") -> bool:

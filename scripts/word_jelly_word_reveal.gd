@@ -39,7 +39,7 @@ func configure_layout(available: Rect2, ui_scale: float, exclusions: Array[Rect2
 
 
 func present(word: Dictionary, picture: Texture2D, accent: Color, batch: bool = false, initial_age: float = 0.0) -> void:
-	if str(word.get("text", "")).strip_edges().is_empty() or picture == null:
+	if str(word.get("text", "")).strip_edges().is_empty():
 		return
 	var seconds: float = BATCH_SECONDS if batch else SECONDS
 	if batch and size.y * _ui_scale < 180.0:

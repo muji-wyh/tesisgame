@@ -41,7 +41,7 @@ class Catalog extends RefCounted:
 				"morphology": {"schema": 1, "id": "fixture.analysis.%d" % index, "lexeme_id": id, "text": label,
 					"kind": "atomic", "review": {"status": "reviewed", "reviewer": "automated-test-fixture"},
 					"parts": [{"id": "whole", "canonical_id": id, "type": "atomic", "canonical": label, "surface": label}], "nodes": [], "roots": ["whole"]}})
-			terms.append({"sense_id": id, "skills": ["recognition", "speaking", "context"]})
+			terms.append({"sense_id": id, "skills": ["recognition", "speaking", "context", "spelling"]})
 		for index in range(10):
 			var label: String = "Check the invoice."
 			var tokens: Array = []
@@ -185,7 +185,7 @@ func _run() -> void:
 		check_course_palette("retail", "Retail %s entry" % mode)
 		check(not app._message.is_visible_in_tree(), "Unavailable Growth storage does not obscure the independent professional %s game" % mode)
 		check(app.model.cards.size() == (10 if mode in ["match", "memory"] else 0), "No phantom Match lesson for %s" % mode)
-		check(app._professional_button.is_visible_in_tree() and not app._growth_button.is_visible_in_tree(), "Professional %s header replaces the Growth badge with course progress" % mode)
+		check(app._growth_button.is_visible_in_tree() and not app._professional_button.is_visible_in_tree(), "Professional %s header retains the shared Pip progress badge" % mode)
 		app._show_collection()
 		await settle()
 		var library: Dictionary = app._professional_library.snapshot()
@@ -207,20 +207,25 @@ func _run() -> void:
 	var round_id: String = app._round_id
 	var generation: int = app._word_jelly.game._generation
 	var word: Dictionary = app._round_content.words[0]
+	check(not str(word.image).is_empty(), "The pictured fixture requires a word-and-picture merge")
 	var payload: Dictionary = {"event_id": "fixture-collection", "generation": generation, "word": word, "coins": 0,
-		"a": {"composition": {"assisted": false}}}
-	check(app._commit_professional_collection(payload).get("pending", false), "Even zero-coin atomic collection waits for durable evidence")
+		"a": {"assisted": false}}
+	var collection_commit: Dictionary = app._commit_professional_collection(payload)
+	check(collection_commit.get("pending", false), "Even zero-coin picture collection waits for durable evidence: " + str(collection_commit))
 	await settle()
-	var evidence: Dictionary = app.professional.session.snapshot().progress.skills[word.id].spelling
-	check(evidence.exposures == 1 and not evidence.earned and evidence.streak == 0, "Atomic collection is exposure without spelling mastery")
-	check(app._commit_professional_collection(payload).ok, "Collection retry reuses its permanent answer receipt")
+	var evidence: Dictionary = app.professional.session.snapshot().progress.skills.get(word.id, {}).get("spelling", {})
+	check(evidence.get("exposures", 0) == 1 and not evidence.get("earned", false) and evidence.get("streak", 0) == 1,
+		"An unassisted word-and-picture collection advances spelling mastery")
+	check(app._commit_professional_collection(payload).get("ok", false), "Collection retry reuses its permanent answer receipt")
 	await settle()
-	check(app.professional.session.snapshot().progress.skills[word.id].spelling.exposures == 1, "Retry cannot duplicate exposure")
-	var atomic_before: Dictionary = app.professional.session.snapshot().progress.duplicate(true)
-	app._record_growth("atomic-invalid-merge", [word.id], false)
+	check(app.professional.session.snapshot().progress.skills.get(word.id, {}).get("spelling", {}).get("exposures", 0) == 1,
+		"Retry cannot duplicate exposure")
+	app._record_growth("picture-invalid-merge", [word.id], false)
 	await settle()
-	check(app.professional.can_play(round_id), "An invalid merge involving atomic text cannot block progress with an ineligible assessment")
-	check(app.professional.session.snapshot().progress == atomic_before, "Atomic tiles never acquire spelling correctness evidence")
+	check(app.professional.can_play(round_id), "An invalid word-and-picture merge keeps the round playable")
+	var after_mistake: Dictionary = app.professional.session.snapshot().progress.skills.get(word.id, {}).get("spelling", {})
+	check(after_mistake.get("exposures", 0) == 2 and after_mistake.get("streak", -1) == 0,
+		"An invalid pictured-word merge resets the current spelling streak")
 	app._show_mode_menu()
 	app._select_learning_context(Context.professional("nursing", "module03", "v1", "word_jelly"))
 	app.choose_mode("word_jelly")

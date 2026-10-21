@@ -10,14 +10,14 @@ handles loading, accessibility, audio recovery, and speech recognition.
 
 - **Match:** five word-picture pairs, hint purchases at 100, 150, then 200 coins with no per-round use limit, optional spoken answers and unlimited retries.
 - **Memory:** five hidden pairs, with a click-to-peek eye that reveals cards for 10 seconds on the first use in each round and 5 seconds on later uses.
-- **Phrase Builder:** listen, drag pictured or contextual word tiles into order, and complete three phrases from the current learning age to earn a chest. The catalog contains 330 recorded phrases with unlimited retries. Earlier words appear only as prerequisites for those phrases.
+- **Phrase Builder:** listen, drag pictured or contextual word tiles into order, and complete three phrases to earn a chest. Everyday English uses the current learning age from a catalog of 330 recorded phrases; Professional English uses the selected module. Earlier everyday words appear only as prerequisites for those phrases. Retries are unlimited.
 - **Voice Pop:** speak visible words during a 50-second round. Marked targets supply fragments that unlock and upgrade one chest. Results retain scores, chest progress and word review.
 - **Jelly Match:** drag falling pictures onto their words in a four-column well. Matching jellies merge, bounce away, and credit one learning success. Make room before the eight-second full-board countdown ends; marked pairs earn chests. The pace increases as pairs are cleared. Earned treasure is saved when the round ends or you change modes.
-- **Jelly Words:** build current-age words by dragging letter parts together in a six-column well. Only valid words merge; larger words keep their chest fragments and can merge again when the result is another valid word. Tap to collect a word and every carried fragment, with an independent 1% chance of 50 bonus coins for two original parts or 100 for three or more. Collect gathers ready words at 100 ms intervals. Opening chests is the main coin source. Large bodies and long text wrap. Collected fragments unlock and upgrade a chest with the shared celebration and confetti.
+- **Jelly Words:** build words from reviewed roots, then match their pictures in a six-column well. Image-free words become merged when complete. Merge identical words of the same level up to Lv9; every stage keeps the ordinary rounded-square size. Each level has distinct collection effects and audio, including a Lv4 firework bloom. Tap to collect all carried chest fragments, with an independent 1% chance of 50 bonus coins. Collect gathers ready words at 120 ms intervals. Manual learning credit is recorded only on collection; automatic merges and image-free atomic exposure do not earn mastery.
 - **Growth:** everyone starts at Lv0 with Baby Pip. Each word needs three consecutive correct answers in any applicable mode. A wrong answer resets the involved words. First-time word mastery increases Lv up to Lv99; mastering the entire current age cohort grows Pip and unlocks the next cohort, through Age 12+. Earned levels and ages never decrease.
-- **Vocabulary notebook:** the progress bar opens all words in a selected age cohort, including saved mastery and pronunciation. Other ages load when viewed; the next age preloads at 90% mastery of the current cohort. Gameplay uses only current-age questions. Later ages can be previewed but cannot be selected to skip progression. The 1,550-word curriculum is an editorial English-as-a-second-language sequence, not a developmental assessment.
+- **Word Library:** Everyday English and Professional English share Grow with Pip. Select a career/module and use its vocabulary on the same Home, with a dedicated Pip outfit and a level based on earned mastery in that career. Switching back restores everyday Pip and progress. Modules still in preparation are clearly marked and cannot start a game. For everyday vocabulary, the progress bar opens all words in a selected age cohort, including saved mastery and pronunciation. Other ages load when viewed; the next age preloads at 90% mastery of the current cohort. Gameplay uses only current-age questions. Later ages can be previewed but cannot be selected to skip progression. The 1,550-word curriculum is an editorial English-as-a-second-language sequence, not a developmental assessment.
 - **Pip:** ten stage appearances and cumulative action repertoires accompany growth. Run `npm run preview:pip` to review the assets at [localhost](http://127.0.0.1:41774/). The asset preview is not published with the game.
-- **Eight worlds and treasure:** theme choices, three-second round celebrations and existing chest rewards remain available. Usernames, identity avatars, leaderboards and Pip's room have been retired.
+- **Settings and treasure:** the selected vocabulary supplies the garden or workplace setting. Three-second round celebrations and existing chest rewards remain available. Usernames, identity avatars, leaderboards and Pip's room have been retired.
 
 Voice Pop uses `SpeechRecognition` or `webkitSpeechRecognition` by default.
 Browser support, a secure page, microphone permission, and a functioning speech
@@ -28,9 +28,10 @@ The `?speechLocal=1` experiment exposes optional browser-managed on-device
 English preparation. It remains off by default and does not bundle a WASM
 speech model. Automated speech tests do not establish acoustic accuracy.
 
-Startup downloads the current learning age's pictures, animations and recorded
-words. The next age preloads at 90% mastery of the current age; browsing another
-age in the vocabulary page downloads that age on demand. Shared music and game
+Startup opens the shared Home before downloading vocabulary media. Everyday play
+or browsing loads the current learning age's pictures, animations and recorded
+words on demand. The next age preloads at 90% mastery of the current age; browsing
+another age downloads that age on demand. Shared music and game
 effects remain in the core pack. Browsers still require a trusted interaction
 to enable playback. Pip ignores another manual tap until the
 current gesture finishes. Reduced motion keeps readable state and simpler

@@ -1,0 +1,1067 @@
+{
+  "schema_version": 1,
+  "source": "Original project storybook Pip, adapted locally by Codex; repository ISC declaration; original illustrator not recorded.",
+  "cell_pixels": 360,
+  "profiles": [
+    {
+      "course_id": "caregiving",
+      "title": "Home & Elder Care",
+      "description": "A soft peach cardigan, sage collar and a stitched heart pocket.",
+      "accent": "#b98a7b",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-caregiving.png",
+        "idle": "assets/images/mascots/professional/pip-caregiving-idle.png",
+        "parts": "assets/images/mascots/professional/pip-caregiving-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-caregiving-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-caregiving-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "6978f7ad88e90a3c049ee546055cf92218eee86773ed25538051962dab4b7273",
+        "idle": "e24bc7db7d65c8fff92a33afc2f18696150200e6d27a348977e91f6c1034f121",
+        "parts": "79e20c5c21313283d6baf679d7e9a452cd7e5b81760ad6ae5d1a3a4a80079e7b",
+        "expressions": "7f44876d768d1ac57b65d472680a26f2a49d03549e2c9d534bbaef49910c062b",
+        "expressionHeads": "66922632e52156778fbd9850f4461424782a45d57ef53c92235ddc654bb91cb2"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "retail",
+      "title": "Retail & Checkout",
+      "description": "A forest-green shop apron with a stitched pocket and name badge.",
+      "accent": "#6f9d90",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-retail.png",
+        "idle": "assets/images/mascots/professional/pip-retail-idle.png",
+        "parts": "assets/images/mascots/professional/pip-retail-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-retail-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-retail-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "786f1a83cc31d4620f32f497344e43fe45dd05a5514354eaf8b543463fefcc2a",
+        "idle": "7182737d2ed84796d292339b1f317454f1f4c8b14037cf182d945f354fac8a6a",
+        "parts": "b72fbed28bc2ddcbb6f4b41cd3988acb02c85d868b6e9b02377b897b0a019d83",
+        "expressions": "d70000623745ff7177e80a5c4ab3001b4a02af5d4728f2287457350c0827a680",
+        "expressionHeads": "66922632e52156778fbd9850f4461424782a45d57ef53c92235ddc654bb91cb2"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "food_service",
+      "title": "Restaurants & Food Service",
+      "description": "A soft chef toque, folded neckerchief and double-breasted cream jacket.",
+      "accent": "#d5c8b3",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-food-service.png",
+        "idle": "assets/images/mascots/professional/pip-food-service-idle.png",
+        "parts": "assets/images/mascots/professional/pip-food-service-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-food-service-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-food-service-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "920e4c59f9cc7b34a0919af41c1efc2b49e886cf403e0ce707cfe2ad856a3593",
+        "idle": "f7e5879a4204e1f21aa0d5cfed826050c5f30ae292d853543c150df62507665e",
+        "parts": "c20db7381df7c1975e7b4adc0e6b77d956ee12c7529a9d7c512ad06771b0e409",
+        "expressions": "e88503bd6935fcc080761eba4305a6e91a716625ea13674d4cf6a6907a08db0a",
+        "expressionHeads": "7242f55c9caa770b3b493153e1881cdee09a19e30e64a3c4f4ef168f88fef734"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "nursing",
+      "title": "Nursing",
+      "description": "Teal scrubs, rounded patch pockets, an ID clip and a stethoscope.",
+      "accent": "#68a69e",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-nursing.png",
+        "idle": "assets/images/mascots/professional/pip-nursing-idle.png",
+        "parts": "assets/images/mascots/professional/pip-nursing-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-nursing-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-nursing-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "dfff1b06e0c6be16c49817d1e1f6bc389af345d3d1bdf44983759abc4fe96bde",
+        "idle": "23fe3f224725ffd8b068646e402352e5035239751cc235fa1d6dd127b7df95d5",
+        "parts": "8e2ea72b18ffa6ac62baa3c014490ec3d43a67d82e3e6ae14e25b07a14dfef43",
+        "expressions": "65a1340e9ec91aa2b0ab9805ac1f1e444484243e69ec89b947095fb5ecf4d534",
+        "expressionHeads": "66922632e52156778fbd9850f4461424782a45d57ef53c92235ddc654bb91cb2"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "customer_support",
+      "title": "Customer Support",
+      "description": "A lavender cardigan and a softly padded customer-service headset.",
+      "accent": "#9d86ac",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-customer-support.png",
+        "idle": "assets/images/mascots/professional/pip-customer-support-idle.png",
+        "parts": "assets/images/mascots/professional/pip-customer-support-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-customer-support-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-customer-support-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "67d362e167c44faf6d60f1fbc65dacde0d513f311fe931a54c2619b61b26cf43",
+        "idle": "4ad7d881baa79845a788c711b45747cd1091bc11028381f6cb093c41c3d8a52b",
+        "parts": "4356bda3f64100decd7d20b285231350b068dc79352803d1c2edf76dbe8c8bc2",
+        "expressions": "470812af6a2476baf52a4d7fb9734f1f14e0fe7e5bf2f57cef43c843c1a65af6",
+        "expressionHeads": "0519eda5f2173f7bbe28a5184cb5f1a6dfd2b315ab6499c518af9e8c8367b508"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "office_admin",
+      "title": "Office Administration",
+      "description": "A slate-blue blazer, coral collar and clipped office badge.",
+      "accent": "#74889f",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-office-admin.png",
+        "idle": "assets/images/mascots/professional/pip-office-admin-idle.png",
+        "parts": "assets/images/mascots/professional/pip-office-admin-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-office-admin-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-office-admin-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "fdc9c24612ff0d7426c22fc8352dab0131d07e25fd35666090146f28e1568025",
+        "idle": "e43d1eeefc01aa6b59673bfd01c4f697bd4fdc2eceafaf0dfcdad33df2c10f82",
+        "parts": "dbca31a9c1195be3d29380542fa757ca3f09006c531a1af6bc9166888f775945",
+        "expressions": "8b7d7a6de921ec25c50ef6ce693d44829add6acf0f69c8cf090203d9eedc991d",
+        "expressionHeads": "66922632e52156778fbd9850f4461424782a45d57ef53c92235ddc654bb91cb2"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "warehouse_logistics",
+      "title": "Warehousing & Logistics",
+      "description": "A warm amber safety vest with reflective bands and a slate work cap.",
+      "accent": "#778c94",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-warehouse-logistics.png",
+        "idle": "assets/images/mascots/professional/pip-warehouse-logistics-idle.png",
+        "parts": "assets/images/mascots/professional/pip-warehouse-logistics-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-warehouse-logistics-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-warehouse-logistics-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "1b4d824b70fd7e6bee7053bc939d9fc168dd9f6b2bab43c29c51dbc9edd30677",
+        "idle": "596584d49da66773ce604421221f877f862e3ac7f0dee149f611bf3c59042740",
+        "parts": "9eb2d708b3ed4fab79e81459b0f92aaa8a3df0f7b57ac9cd5309fb0024c162b1",
+        "expressions": "1400c10df4b40dfdaaec9435c53e4f46371e6e66afe0d69dd7d8eca230d4482c",
+        "expressionHeads": "f122cbe54e93dc8b9630d8264d78945167d23f89851747d3bfba2d627ca1a472"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "hospitality_tourism",
+      "title": "Hospitality & Tourism",
+      "description": "A plum hospitality waistcoat with a cream collar and bow tie.",
+      "accent": "#806878",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-hospitality-tourism.png",
+        "idle": "assets/images/mascots/professional/pip-hospitality-tourism-idle.png",
+        "parts": "assets/images/mascots/professional/pip-hospitality-tourism-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-hospitality-tourism-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-hospitality-tourism-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "30a07cf6f8c82cea5fd1b38efa4a80f1ceb280f20c085ab17e6fe05510644555",
+        "idle": "65ff5074ceb54190c038a57508ac3ddd4a32f4ddde543620f26f76f537e8fab9",
+        "parts": "04ecd13228a2ed5fdce6e6daa37f39d9b17229ff7eb2090b6d2138a44a007eb0",
+        "expressions": "f954b69781817f6056be44d65df5a5a3c2b8e42f8f53c4d4b496474219f2d42c",
+        "expressionHeads": "66922632e52156778fbd9850f4461424782a45d57ef53c92235ddc654bb91cb2"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "transport_delivery",
+      "title": "Transport & Delivery",
+      "description": "A blue delivery jacket, coral cap and a securely attached shoulder strap.",
+      "accent": "#638a9e",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-transport-delivery.png",
+        "idle": "assets/images/mascots/professional/pip-transport-delivery-idle.png",
+        "parts": "assets/images/mascots/professional/pip-transport-delivery-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-transport-delivery-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-transport-delivery-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "a550d48d8d7278923d4c0dc2c6b784d481cebe1e05dd757528367ec6755765aa",
+        "idle": "dc305808808fb150c5d6527f756fa7469fae30270545c83ae6192b3004d5c3e0",
+        "parts": "2c5fd83b1a8d7bdff643862a4b5874075b501ef04a4f69c20526623d10d2bedb",
+        "expressions": "4b77d0b58039bbf146ace0fd961c3ff29044deaea033bfae7edac994628229a8",
+        "expressionHeads": "f2e34eabfe1bb3ba4617145e8bc63f4fd209501829eacadb33a160ca3c26c126"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "construction_trades",
+      "title": "Construction & Trades",
+      "description": "An amber hard hat and reflective ochre work vest over a canvas shirt.",
+      "accent": "#948975",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-construction-trades.png",
+        "idle": "assets/images/mascots/professional/pip-construction-trades-idle.png",
+        "parts": "assets/images/mascots/professional/pip-construction-trades-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-construction-trades-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-construction-trades-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "873ed000559a83846344a896965adeaca0d75b408644dcf9f94ecd586a54e896",
+        "idle": "ec4c05035a2e9aaa04eed9e63f5599ebc2264f3bc27a8438b2e58f04f8862ec9",
+        "parts": "6ed9842eb70ebf0294ed1f9ee22a35efae55da4a1fdf445482f6b32cfac88e21",
+        "expressions": "96f8226d480f54a1350f60aa3699b81c2edd25dd1559e8e80ea4b3baaf7f8e3a",
+        "expressionHeads": "dc75c7204a8a5d216da937f1bf42bc1c987bbe45a5e1200e7a63bde8b4a34f65"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "cleaning_facilities",
+      "title": "Cleaning & Facilities",
+      "description": "An aqua work apron, folded golden head scarf and practical patch pocket.",
+      "accent": "#6b9fab",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-cleaning-facilities.png",
+        "idle": "assets/images/mascots/professional/pip-cleaning-facilities-idle.png",
+        "parts": "assets/images/mascots/professional/pip-cleaning-facilities-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-cleaning-facilities-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-cleaning-facilities-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "09a116d86008b7d00ee63fd0cfaf1120744b4e2662a6fe52aab97005debddb41",
+        "idle": "d86af3e793cdeb9db2676897bd6a4ba9285f90db588daadb6bb9b4be09752e3a",
+        "parts": "a32ce158efa6c7fa34e02562ba7c20e87fbb97ceae6426b7dadf4d45e8d06cdd",
+        "expressions": "4ccdbc91feb9f75cbaecd2427f1593625000003542c0379529e02ba7ee9df4b5",
+        "expressionHeads": "cb20033e20163bbe325069b85a0e02a1460a649c2fcb04c35aa980178eb316b1"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "education_childcare",
+      "title": "Teaching & Childcare",
+      "description": "A periwinkle cardigan with a warm scarf and colored pencils in the pocket.",
+      "accent": "#8795b8",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-education-childcare.png",
+        "idle": "assets/images/mascots/professional/pip-education-childcare-idle.png",
+        "parts": "assets/images/mascots/professional/pip-education-childcare-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-education-childcare-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-education-childcare-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "26389514dfa91e3d1fa342d686e25d8f13c05ba61b749c1e8de1230bec608c71",
+        "idle": "cb08356fa7fcbc3ddc9b7b7e2d8f48d7b33e6b84145e808d4f516ef7db0aee78",
+        "parts": "0e83c2f43d0b9e29eb2f132e2d477add64e825682b6bf82cbaa08a7410f1e7bc",
+        "expressions": "c2c59045465a16cd4d1d50b08ed475c5142097d770c2c1b3a7b9523a2aec467b",
+        "expressionHeads": "66922632e52156778fbd9850f4461424782a45d57ef53c92235ddc654bb91cb2"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "manufacturing_maintenance",
+      "title": "Manufacturing & Maintenance",
+      "description": "Blue work coveralls, a reinforced collar and clear protective glasses.",
+      "accent": "#637f9b",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-manufacturing-maintenance.png",
+        "idle": "assets/images/mascots/professional/pip-manufacturing-maintenance-idle.png",
+        "parts": "assets/images/mascots/professional/pip-manufacturing-maintenance-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-manufacturing-maintenance-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-manufacturing-maintenance-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "d697aa0af74e870b0937e07b5a433a9757941816eea6ae001e3dfab707e24394",
+        "idle": "f03a47a1c9abc804cf70ed88d4f83c2fe56950bb428b63ae1f0adb989bc17a97",
+        "parts": "4526d48763df11e168a1b11509e268bde32a1931ec74b6218ed79d7056872ccd",
+        "expressions": "bacdb6279de83344e11bdc278355514d5669be01491ac05c6e95ce48dc8ae4e2",
+        "expressionHeads": "3ea4436217c471c187f5aee06ceaa7ab0dbe804fe256af68f361e9ef57f2b122"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "it_support",
+      "title": "IT Support",
+      "description": "A teal shirt, navy utility vest and a compact technical-support headset.",
+      "accent": "#75979e",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-it-support.png",
+        "idle": "assets/images/mascots/professional/pip-it-support-idle.png",
+        "parts": "assets/images/mascots/professional/pip-it-support-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-it-support-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-it-support-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "8f1298747d60371034d7aed2730a0c6efef87eea02f08531c85224c62a014f57",
+        "idle": "ef0805061dcfcc3c9bba1de7580f0a3830a2c0c1019c9d310ccd1cfc94a2652d",
+        "parts": "0fa4d06af62ed87a37258295c0df070a7ec5556b97a96581712218006e14d299",
+        "expressions": "09b66ef12e6fd54afcb27de3638fc9a88003615a5284a08e5da14e6348527e9b",
+        "expressionHeads": "0519eda5f2173f7bbe28a5184cb5f1a6dfd2b315ab6499c518af9e8c8367b508"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "software_data",
+      "title": "Software & Data",
+      "description": "A soft indigo hoodie, roomy kangaroo pocket and round blue glasses.",
+      "accent": "#707e9f",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-software-data.png",
+        "idle": "assets/images/mascots/professional/pip-software-data-idle.png",
+        "parts": "assets/images/mascots/professional/pip-software-data-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-software-data-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-software-data-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "f9d0d4b335a68537d649ab6376c9224e7cfa5c195a05c31693323edb802d1413",
+        "idle": "4c339baaf43cfb4289bbe10a03e378ef8f77b54d937ea23407c8770275d5bbef",
+        "parts": "dbb9d1ade2d2fd5b282e629ad5effd91b263e7eedb84e1e6668269bccf3644ee",
+        "expressions": "a1485b717f435b72f374c32c9340082bd21cc142eb43c3f40d5842c3d1c28cda",
+        "expressionHeads": "23cd4515711c87ac2c01ed49afbfcad0ab1634e19f0ac6498b0580595c6c7e1e"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "accounting_finance",
+      "title": "Accounting & Finance",
+      "description": "A sage tailored jacket, warm gold tie and slender reading glasses.",
+      "accent": "#788f87",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-accounting-finance.png",
+        "idle": "assets/images/mascots/professional/pip-accounting-finance-idle.png",
+        "parts": "assets/images/mascots/professional/pip-accounting-finance-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-accounting-finance-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-accounting-finance-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "a1e13a13067762bca4b975a8a6f61c1459dbaa5d4596df1c26ec95aad7642c40",
+        "idle": "6880a6becea32269b8770b848de59a75c4f6cf899a28bf3b14cd489a79c1757a",
+        "parts": "d9e7fee978b2e72232ae7911dfba0451961ea5b0bdcc3f6a30ae7690bb6820ee",
+        "expressions": "f2c17eb49028f364f70cd6ee9d13c5a49e7e5cc9d2ebae71ca8a5c6895178a0d",
+        "expressionHeads": "23cd4515711c87ac2c01ed49afbfcad0ab1634e19f0ac6498b0580595c6c7e1e"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "sales_marketing",
+      "title": "Sales & Marketing",
+      "description": "A terracotta jacket and a flowing golden scarf tucked beneath the lapel.",
+      "accent": "#a77368",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-sales-marketing.png",
+        "idle": "assets/images/mascots/professional/pip-sales-marketing-idle.png",
+        "parts": "assets/images/mascots/professional/pip-sales-marketing-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-sales-marketing-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-sales-marketing-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "7942cc0afc4b26ac532de20a6548f53d5e7ecade858fbbfd3d5d3bb6e49cf6ca",
+        "idle": "56905576b04958f8a330c2b4933799050b1fef7d203947fca02f2847b7458010",
+        "parts": "98ca4283291c2e4ccc639a329a355cef07561ef528e1b2200a7d06a41621298d",
+        "expressions": "d6677b8b24e617d351c100569889393dff95482dd3e2aee1027afd1d057d5085",
+        "expressionHeads": "66922632e52156778fbd9850f4461424782a45d57ef53c92235ddc654bb91cb2"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "hr_recruitment",
+      "title": "HR & Recruitment",
+      "description": "A moss-green cardigan, peach collar and carefully clipped name badge.",
+      "accent": "#8b9d7b",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-hr-recruitment.png",
+        "idle": "assets/images/mascots/professional/pip-hr-recruitment-idle.png",
+        "parts": "assets/images/mascots/professional/pip-hr-recruitment-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-hr-recruitment-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-hr-recruitment-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "3e37bde02b5d4a548cc32af44665a8037fffb0695a141dcae556519254b6e732",
+        "idle": "e0c91686a3c2a6edbc6fdecfefe56bd8f7cb82e36b7bec572cc16dac2f879aef",
+        "parts": "7ef06147c38f3865c8a37de05ef342d1e8a0f4dca01b0176aa778ec235c03f9e",
+        "expressions": "8d52a4172d51912f9bb6c7eaf7d48e831bd030f7e3955b60526d3a1c0ef34078",
+        "expressionHeads": "66922632e52156778fbd9850f4461424782a45d57ef53c92235ddc654bb91cb2"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "clinical_medicine",
+      "title": "Clinical Medicine",
+      "description": "A warm white consultation coat over a teal shirt, with a stethoscope and ID.",
+      "accent": "#c7cbbb",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-clinical-medicine.png",
+        "idle": "assets/images/mascots/professional/pip-clinical-medicine-idle.png",
+        "parts": "assets/images/mascots/professional/pip-clinical-medicine-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-clinical-medicine-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-clinical-medicine-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "39acb814ce80ee2312cad871dff193d31ecc289fc1933384916180cc5fc1d13e",
+        "idle": "c8500519f127d549d36c3ce7b3931aa77846416fad84a8419f83dcbaaeff2d6a",
+        "parts": "4d223746deddbbdf937c6a079636c7902984e6deb0464a39326b67d575a1f388",
+        "expressions": "defb62ed8674d85f9e796324f547a0e75624dd97a4a10c7c4dc4409f3ec4b95d",
+        "expressionHeads": "66922632e52156778fbd9850f4461424782a45d57ef53c92235ddc654bb91cb2"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    },
+    {
+      "course_id": "legal_paralegal",
+      "title": "Legal & Paralegal",
+      "description": "A violet-blue suit jacket, muted burgundy tie and neatly stitched document pocket.",
+      "accent": "#7c829b",
+      "art": {
+        "regular": "assets/images/mascots/professional/pip-legal-paralegal.png",
+        "idle": "assets/images/mascots/professional/pip-legal-paralegal-idle.png",
+        "parts": "assets/images/mascots/professional/pip-legal-paralegal-parts.png",
+        "expressions": "assets/images/mascots/professional/pip-legal-paralegal-expressions.png",
+        "expressionHeads": "assets/images/mascots/professional/pip-legal-paralegal-expression-heads.png"
+      },
+      "sha256": {
+        "regular": "18c969f0a5a29f6337b92a8f63dfcc848cad5042f92d504e16861b8f978f5027",
+        "idle": "c399a58394e94987b49b0b679af30a5ee860352d453d8e95a7bfef1ee5ce6431",
+        "parts": "dc09d43a271525cb0b743fd1d2d04eee406ad9778d5053a5b975f1f766e9d129",
+        "expressions": "b97f72b7bb4c90b265a585b3c9a9a130f42316080d594880c5528553da22f140",
+        "expressionHeads": "66922632e52156778fbd9850f4461424782a45d57ef53c92235ddc654bb91cb2"
+      },
+      "motionPivots": [
+        [
+          60,
+          100
+        ],
+        [
+          60,
+          56.5
+        ],
+        [
+          45,
+          67
+        ],
+        [
+          75,
+          67
+        ],
+        [
+          47,
+          102
+        ],
+        [
+          73,
+          102
+        ]
+      ],
+      "shadowRadius": 28,
+      "actions": [
+        "wave",
+        "look",
+        "high-five"
+      ],
+      "source": "tools/pip-growth/professional.cjs"
+    }
+  ]
+}

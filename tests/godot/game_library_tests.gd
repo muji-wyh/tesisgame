@@ -2,6 +2,7 @@ extends SceneTree
 
 const Library = preload("res://scripts/game_library.gd")
 const Catalog = preload("res://scripts/professional_catalog.gd")
+const Context = preload("res://scripts/learning_context.gd")
 var checks := 0
 var failures := 0
 var chosen := ""
@@ -201,28 +202,112 @@ func check_growth_states(library: Library) -> void:
 		and library._next_label.visible and library.snapshot().hero.ready,
 		"Recovered progress restores the real growth journey")
 
+func check_professional_states(library: Library, catalog: Catalog) -> void:
+	var course: Dictionary = catalog.course("retail")
+	var context: Dictionary = Context.professional(course.id, course.modules[0].id, course.curriculum_revision, "memory")
+	var profile := {"course_id": course.id, "course_title": course.title, "module_title": course.modules[0].title,
+		"ready": true, "level": 3, "lifetime_mastered": 18, "mastered": 18, "total": 500,
+		"level_mastered": 3, "level_required": 15, "level_progress": 0.2, "level_completed": false}
+	library.configure_learning(catalog, context, {"phase": "idle"})
+	library.configure_professional(profile)
+	await settle()
+	check(library.snapshot().brand == "Grow with Pip" and library._hero.visible and library.grid.visible,
+		"Professional vocabulary uses the same Grow with Pip Home and all six game cards")
+	check(not library.learning.is_visible_in_tree() and not library._learning_art.visible,
+		"Home does not introduce a separate career chooser or workplace splash")
+	check(library._vocabulary_title.text == "Playing professional English"
+		and library._vocabulary_detail.text.contains(course.title) and library._vocabulary_detail.text.contains(course.modules[0].title),
+		"Home identifies the selected vocabulary, career, and module")
+	check(library.heading.text == "Pip · Lv3" and library._journey_heading.text == course.title
+		and is_equal_approx(library._journey_bar.value, 20.0) and not library._next_pip.visible,
+		"Career Pip shows its independent level and progression without an unrelated age destination")
+	check(library._journey_count.text.contains("3 / 15 to Lv4") and library._journey_count.text.contains("18 career words"),
+		"The professional journey explains the next level and earned career vocabulary")
+	library.configure_growth({"ready": true, "age": 9, "learning_age": 10, "mastered": 30, "total": 80, "progress": 0.375})
+	check(library.heading.text == "Pip · Lv3" and is_equal_approx(library._journey_bar.value, 20.0),
+		"An everyday-progress refresh cannot replace the active career level")
+	for dimensions: Vector2i in [Vector2i(320, 320), Vector2i(390, 844), Vector2i(844, 390), Vector2i(1280, 800)]:
+		root.size = dimensions
+		library.fit(Vector2(dimensions), 1.0)
+		await settle()
+		library.fit(Vector2(dimensions), 1.0)
+		await settle()
+		for label: Label in [library.heading, library._journey_heading, library._journey_count, library._pip_caption]:
+			check_label_fits(label, "%s professional: %s" % [dimensions, label.name])
+		for child: Control in [library.pip, library.heading, library._journey_heading, library._journey_count, library._journey_bar, library._pip_caption]:
+			check(library._journey.get_global_rect().grow(1).encloses(child.get_global_rect()),
+				"%s: professional hero encloses %s" % [dimensions, child.name])
+		check(library._vocabulary_context.get_global_rect().grow(1).encloses(library._vocabulary_detail.get_global_rect()),
+			"%s: the selected module wraps within the vocabulary context button" % dimensions)
+	library.configure_learning(catalog, context, {"phase": "media"})
+	check(library._home_status_box.visible and library._home_cancel.visible and not library._home_retry.visible
+		and library.learning_focus() == library._home_cancel and library._vocabulary_context.disabled,
+		"Loading retains a reachable cancellation action after the selector moves to Word library")
+	library.configure_learning(catalog, context, {"phase": "failed", "error": "Pictures could not be loaded."})
+	check(library._home_retry.visible and library._home_cancel.visible and library.learning_focus() == library._home_retry,
+		"Failed loading keeps retry and cancel on the unified Home")
+	var recoveries := {"storage": 0, "learning": 0}
+	library.storage_retry_requested.connect(func() -> void: recoveries.storage += 1)
+	library.learning_retry_requested.connect(func() -> void: recoveries.learning += 1)
+	library._home_retry.pressed.emit()
+	library.configure_storage_recovery("Your learning progress could not be loaded. Choose Retry saving before you play.", "Storage is unavailable.")
+	check(library._home_retry.text == "Retry saving" and library.learning_focus() == library._home_retry
+		and not library._home_cancel.visible and library._home_retry.get("accessibility_description") == "Storage is unavailable.",
+		"Shared storage failures expose their own accessible Home recovery action")
+	library._home_retry.pressed.emit()
+	check(recoveries.storage == 1 and recoveries.learning == 1,
+		"Home routes storage and professional retries to their distinct recovery handlers")
+	library.configure_storage_recovery()
+	check(library._home_retry.text == "Retry" and library._home_cancel.visible
+		and library._home_status.text == "Pictures could not be loaded.",
+		"Recovering shared storage preserves an unresolved professional loading failure")
+	var unavailable: Dictionary = profile.duplicate(true)
+	unavailable.ready = false
+	library.configure_professional(unavailable)
+	check(library.heading.text == "Your career Pip" and not library._journey_bar.visible
+		and library._journey_count.text.contains("unavailable"),
+		"Unavailable career progress never invents an earned level")
+	var external_selector := VBoxContainer.new()
+	root.add_child(external_selector)
+	library.learning.reparent(external_selector)
+	library.learning.show()
+	library.configure_learning(catalog, context, {"phase": "idle"})
+	check(library.learning.visible and not library.snapshot().controls.any(func(control: Dictionary) -> bool: return control.name == "ChangeCareer"),
+		"Home leaves the reparented selector visible and excludes Word library controls from its own navigation")
+	library.learning.reparent(library._body)
+	library.learning.hide()
+	external_selector.queue_free()
+	library.configure_learning(catalog, Context.growth(10, "memory"), {"phase": "idle"})
+	library.configure_professional({})
+	check(library.heading.text == "Let's grow together." and library.pip.growth_age == 9
+		and library._next_pip.visible and library.snapshot().vocabulary.kind == "everyday",
+		"Returning to everyday vocabulary restores its saved Pip age and growth goal")
+	check(not library._home_status_box.visible and not library._vocabulary_context.disabled,
+		"Settled selection clears recovery controls and re-enables the word library")
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	var library := Library.new()
 	root.add_child(library)
+	library.configure("", false, false)
 	library.fit(Vector2(1280, 800), 1.0)
 	var catalog := Catalog.new()
 	check(catalog.load_index(), "Home uses the real learning catalog")
 	library.configure_learning(catalog, {}, {"phase": "idle"})
 	await settle()
-	check(library.learning.snapshot().screen == "paths" and not library.grid.visible
-		and not library._hero.visible, "A fresh Home offers learning paths before games or age progress")
-	check(not library._tiles.any(func(entry: Dictionary) -> bool: return entry.preview.is_processing()),
-		"Hidden game previews do not animate before a learning path is selected")
+	check(library.grid.visible and library._hero.visible and not library.learning.is_visible_in_tree(),
+		"A fresh Home immediately offers Pip and games while vocabulary browsing belongs to Word library")
+	check(library._tiles.all(func(entry: Dictionary) -> bool: return entry.preview.is_processing()),
+		"All six visible games demonstrate their gameplay on first visit")
 	library.learning_context_selected.connect(func(selection: Dictionary) -> void:
 		library.configure_learning(catalog, selection, {"phase": "idle"}))
 	library.learning._growth_button.pressed.emit()
 	await settle()
 	check(library.grid.visible and library._hero.visible and library.learning.snapshot().screen == "summary",
 		"Selecting Growth reveals the age journey and the six game choices")
-	check(library.learning._compact_path.visible and not library.learning._heading.visible
-		and not library.learning._detail.visible and not library.learning._continue.visible,
-		"Growth Home keeps one compact path row above the journey and game choices")
+	check(library._vocabulary_context.visible and library._vocabulary_title.text == "Playing everyday English"
+		and not library.learning.is_visible_in_tree(),
+		"Everyday Home identifies its vocabulary in a compact Word library action")
 	library.configure_learning(catalog, library.learning.snapshot().selection, {"phase": "idle"},
 		preload("res://scripts/learning_context.gd").growth(3, "memory"))
 	await settle()
@@ -277,8 +362,11 @@ func _run() -> void:
 	library.set_home_coins(123)
 	check(library.pip.growth_age == 6, "Home uses the player's current Pip age")
 	check_growth_states(library)
+	await check_professional_states(library, catalog)
 	library.collection_button.pressed.emit()
 	check(collection_visits == 1, "Home requests the collection once")
+	library._vocabulary_context.pressed.emit()
+	check(collection_visits == 2, "The active vocabulary row opens the same Word library exactly once")
 	await check_mode_previews(library)
 	for dimensions: Vector2 in [Vector2(320, 320), Vector2(390, 420), Vector2(390, 600), Vector2(390, 844), Vector2(768, 1024), Vector2(844, 390), Vector2(1280, 800)]:
 		root.size = dimensions
@@ -309,10 +397,10 @@ func _run() -> void:
 			check_label_fits(label, "%s: %s" % [dimensions, label.name])
 		check(not library._theme_choices.visible and library.theme_buttons.all(func(button: Button) -> bool: return not button.is_visible_in_tree()),
 			"%s: automatic learning themes leave no hidden manual picker in the focus flow" % dimensions)
-		library.learning._change_path.grab_focus()
+		library._vocabulary_context.grab_focus()
 		await settle()
-		check(library.learning._change_path.has_focus() and library.scroll.get_global_rect().grow(1).encloses(library.learning._change_path.get_global_rect()),
-			"%s: changing the learning path remains keyboard reachable" % dimensions)
+		check(library._vocabulary_context.has_focus() and library.scroll.get_global_rect().grow(1).encloses(library._vocabulary_context.get_global_rect()),
+			"%s: changing vocabulary remains keyboard reachable through Word library" % dimensions)
 		for tile: Dictionary in library._tiles:
 			library.ensure_mode_visible(str(tile.entry.id))
 			await settle()
@@ -364,26 +452,25 @@ func _run() -> void:
 	await settle()
 	check(library.scroll.get_global_rect().grow(0.01).encloses(library.sound_button.get_global_rect()),
 		"Fractional browser scaling fully reveals the focused Sound button without clipping a CSS pixel")
-	# The refined card is 245 px tall at 320 px width. Keep this dedicated
-	# oversized-focus fixture shorter than the card; 320-square is covered above.
-	for dimensions: Vector2i in [Vector2i(320, 300), Vector2i(844, 260)]:
+	# Exercise Home's scroll ownership with an actual game card taller than the
+	# remaining viewport. Career browsing now belongs to Word library.
+	for dimensions: Vector2i in [Vector2i(320, 230), Vector2i(844, 230)]:
 		root.size = dimensions
 		library.fit(Vector2(dimensions), 1.0)
-		library.learning._show_courses()
 		await settle()
-		var career: Control = library.learning.find_child("Career_retail", true, false)
-		check(career != null, "The actual illustrated Retail card remains available in a short viewport")
-		library.learning._search.grab_focus()
+		var game: Control = library.button_for_mode("word_jelly")
+		check(game != null, "The actual illustrated Jelly Words card remains available in a short viewport")
+		library._vocabulary_context.grab_focus()
 		await settle()
-		career.grab_focus()
+		game.grab_focus()
 		await settle()
 		var viewport: Rect2 = library.scroll.get_global_rect()
-		var card: Rect2 = career.get_global_rect()
-		check(career.has_focus() and card.size.y > viewport.size.y,
+		var card: Rect2 = game.get_global_rect()
+		check(game.has_focus() and card.size.y > viewport.size.y,
 			"%s: the regression exercises an illustrated card taller than the available scroll viewport" % dimensions)
 		check(card.position.y >= viewport.position.y and card.position.y <= viewport.position.y + 4.0
 			and viewport.intersection(card).size.y >= 44.0,
-			"%s: an oversized focused career begins at its illustration/title and retains a visible activation target" % dimensions)
+			"%s: an oversized focused game begins at its illustration and retains a visible activation target" % dimensions)
 	library.queue_free()
 	await process_frame
 	print("Game homepage: %d checks, %d failures" % [checks, failures])

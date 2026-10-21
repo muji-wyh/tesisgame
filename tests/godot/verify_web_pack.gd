@@ -85,6 +85,7 @@ func _verify() -> void:
 			failures += 1
 	failures += _verify_phrases(words)
 	failures += _verify_growth()
+	failures += _verify_professional_pip()
 	failures += _verify_growth_morphology(words)
 	failures += _verify_word_motion(catalog.words)
 	if required.has("--audio-manifest"):
@@ -581,6 +582,31 @@ func _verify_growth() -> int:
 	if ages != [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
 		printerr("Pip artwork must follow the complete independent age sequence.")
 		failures += 1
+	return failures
+
+
+func _verify_professional_pip() -> int:
+	var path := "res://data/pip-professional.json"
+	if not FileAccess.file_exists(path):
+		printerr("The startup pack is missing the career Pip catalog.")
+		return 1
+	var catalog: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not catalog is Dictionary or catalog.get("schema_version") != 1 or not catalog.get("profiles") is Array or catalog.profiles.size() != 20:
+		printerr("The startup pack must contain all twenty career Pip wardrobes.")
+		return 1
+	var failures := 0
+	for profile: Dictionary in catalog.profiles:
+		for kind: String in ["regular", "idle", "parts", "expressions", "expressionHeads"]:
+			var texture_path: String = "res://" + str(profile.get("art", {}).get(kind, ""))
+			if not ResourceLoader.exists(texture_path, "Texture2D"):
+				printerr("A career Pip atlas is missing from the startup pack: " + texture_path)
+				failures += 1
+	var portrait_path := "res://assets/images/mascots/professional/pip-retail.png"
+	var portrait: Texture2D = load(portrait_path) if ResourceLoader.exists(portrait_path) else null
+	if portrait == null or portrait.get_size() != Vector2(1440, 360):
+		printerr("The integrated career Pip portrait cannot be loaded from the startup pack.")
+		failures += 1
+	print("Professional Pip: twenty career catalogs and 100 atlas paths checked in the startup pack.")
 	return failures
 
 

@@ -8,6 +8,7 @@ signal theme_requested(id: String)
 signal learning_context_selected(context: Dictionary)
 signal learning_continue_requested(context: Dictionary)
 signal learning_retry_requested
+signal storage_retry_requested
 signal learning_cancel_requested
 signal learning_course_selected(course_id: String)
 
@@ -24,7 +25,7 @@ const LearningSelector = preload("res://scripts/learning_path_selector.gd")
 const LearningThemeArt = preload("res://scripts/learning_theme_art.gd")
 const Context = preload("res://scripts/learning_context.gd")
 const CATALOG := [
-	{"id": "word_jelly", "title": "Jelly Words", "copy": "Explore word parts.\nCollect whole words.", "detail": "BUILD WORDS · OPEN CHESTS", "tint": Color("#eee5f4")},
+	{"id": "word_jelly", "title": "Jelly Words", "copy": "Build words. Match pictures.\nMerge and level up.", "detail": "MATCH · MERGE · COLLECT", "tint": Color("#eee5f4")},
 	{"id": "match", "title": "Match", "copy": "Match a picture\nto its word.", "detail": "5 PAIRS", "tint": Color("#e6efe3")},
 	{"id": "memory", "title": "Memory", "copy": "Remember, flip,\nfind the pair.", "detail": "NO TIMER", "tint": Color("#f2e9d8")},
 	{"id": "pop", "title": "Voice Pop", "copy": "Say the word.\nPop flying cards.", "detail": "50 SECONDS · MIC", "tint": Color("#e3eef1")},
@@ -80,6 +81,20 @@ var _continuation: Dictionary = {}
 var _continue_round: Button
 var _professional_library_available := false
 var _learning_art: LearningThemeArt
+var _professional_profile: Dictionary = {}
+var _vocabulary_context: Button
+var _vocabulary_title: Label
+var _vocabulary_detail: Label
+var _vocabulary_action: Label
+var _vocabulary_margin: MarginContainer
+var _home_status_box: VBoxContainer
+var _home_status: Label
+var _home_status_actions: HFlowContainer
+var _home_retry: Button
+var _home_cancel: Button
+var _home_learning_status: Dictionary = {}
+var _home_storage_status: Dictionary = {}
+var _home_retry_storage := false
 
 
 func _init() -> void:
@@ -115,6 +130,8 @@ func _init() -> void:
 	_continue_round.pressed.connect(func() -> void: learning_continue_requested.emit(_continuation.duplicate(true)))
 	_body.add_child(_continue_round)
 	_continue_round.hide()
+	_build_vocabulary_context()
+	_build_home_status()
 	_learning_art = LearningThemeArt.new()
 	_learning_art.name = "WorkplacePreview"
 	_body.add_child(_learning_art)
@@ -126,6 +143,7 @@ func _init() -> void:
 	learning.cancel_requested.connect(func() -> void: learning_cancel_requested.emit())
 	learning.course_selected.connect(func(id: String) -> void: learning_course_selected.emit(id))
 	learning.browsing_changed.connect(func(_screen: String) -> void: _sync_learning_layout())
+	learning.hide()
 	_hero = Control.new()
 	_hero.name = "HomeWelcome"
 	_hero.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -146,7 +164,7 @@ func _init() -> void:
 	_games_heading = Style.label("Choose a game", 20)
 	_games_heading.add_theme_font_override("font", Style.HEADING_FONT)
 	_body.add_child(_games_heading)
-	_games_notice = Style.label("These games open with this module.", 14)
+	_games_notice = Style.label("This module is being prepared. Choose everyday English in the word library to keep playing.", 14)
 	_games_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_games_notice.add_theme_color_override("font_color", Style.MUTED)
 	_body.add_child(_games_notice)
@@ -163,7 +181,7 @@ func _init() -> void:
 	collection_button = Button.new()
 	UiClick.bind_button(collection_button)
 	collection_button.name = "HomeCollection"
-	collection_button.set("accessibility_name", "Word library and treasure")
+	collection_button.set("accessibility_name", "Word library")
 	collection_button.pressed.connect(func() -> void: collection_requested.emit())
 	_footer.add_child(collection_button)
 	sound_button = Button.new()
@@ -178,6 +196,70 @@ func _init() -> void:
 	_credit.add_theme_color_override("font_color", Style.MUTED)
 	_body.add_child(_credit)
 	visibility_changed.connect(_sync_pip_visibility)
+
+
+func _build_vocabulary_context() -> void:
+	_vocabulary_context = Button.new()
+	_vocabulary_context.name = "HomeVocabulary"
+	_vocabulary_context.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	UiClick.bind_button(_vocabulary_context)
+	_vocabulary_context.pressed.connect(func() -> void: collection_requested.emit())
+	_body.add_child(_vocabulary_context)
+	_vocabulary_margin = MarginContainer.new()
+	_vocabulary_margin.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_vocabulary_context.add_child(_vocabulary_margin)
+	_vocabulary_margin.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var content := VBoxContainer.new()
+	content.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	content.add_theme_constant_override("separation", 4)
+	_vocabulary_margin.add_child(content)
+	var line := HBoxContainer.new()
+	line.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	line.add_theme_constant_override("separation", 12)
+	content.add_child(line)
+	_vocabulary_title = Style.label("Playing everyday English", 15)
+	_vocabulary_title.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_vocabulary_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	_vocabulary_title.add_theme_font_override("font", Style.HEADING_FONT)
+	line.add_child(_vocabulary_title)
+	_vocabulary_action = Style.label("Change ›", 13)
+	_vocabulary_action.add_theme_color_override("font_color", Style.GOOD)
+	line.add_child(_vocabulary_action)
+	_vocabulary_detail = Style.label("Choose your vocabulary in the word library.", 13)
+	_vocabulary_detail.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_vocabulary_detail.add_theme_color_override("font_color", Style.MUTED)
+	content.add_child(_vocabulary_detail)
+	_vocabulary_margin.minimum_size_changed.connect(func() -> void:
+		_vocabulary_context.custom_minimum_size.y = maxf(68.0 / _factor, _vocabulary_margin.get_combined_minimum_size().y))
+
+
+func _build_home_status() -> void:
+	_home_status_box = VBoxContainer.new()
+	_home_status_box.name = "HomeLearningRecovery"
+	_body.add_child(_home_status_box)
+	_home_status = Style.label("", 14)
+	_home_status.name = "HomeLearningStatus"
+	_home_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_home_status_box.add_child(_home_status)
+	_home_status_actions = HFlowContainer.new()
+	_home_status_box.add_child(_home_status_actions)
+	_home_retry = Button.new()
+	_home_retry.name = "HomeLearningRetry"
+	_home_retry.text = "Retry"
+	UiClick.bind_button(_home_retry)
+	_home_retry.pressed.connect(func() -> void:
+		if _home_retry_storage:
+			storage_retry_requested.emit()
+		else:
+			learning_retry_requested.emit())
+	_home_status_actions.add_child(_home_retry)
+	_home_cancel = Button.new()
+	_home_cancel.name = "HomeLearningCancel"
+	_home_cancel.text = "Cancel"
+	UiClick.bind_button(_home_cancel)
+	_home_cancel.pressed.connect(func() -> void: learning_cancel_requested.emit())
+	_home_status_actions.add_child(_home_cancel)
+	_home_status_box.hide()
 
 
 func _build_growth_journey() -> void:
@@ -241,6 +323,17 @@ func _sync_growth_meter(_value: float = 0.0) -> void:
 func configure_growth(state: Dictionary) -> void:
 	_growth = state
 	set_growth_age(int(state.get("age", 0)))
+	if _professional_selected():
+		_sync_professional_hero()
+		return
+	_show_growth_hero()
+
+
+func _show_growth_hero() -> void:
+	var state: Dictionary = _growth
+	pip.set_professional_profile({})
+	heading.text = "Let's grow together."
+	_pip_caption.text = "Your Pip"
 	var ready: bool = state.get("ready", false)
 	var completed: bool = state.get("completed", false)
 	var next_age: int = int(state.get("learning_age", 3)) if ready and not completed else -1
@@ -264,6 +357,57 @@ func configure_growth(state: Dictionary) -> void:
 	_journey_bar.set("accessibility_name", _journey_count.text + ". " + _journey_heading.text + ".")
 	_next_pip.set("accessibility_name", "Pip's next growth stage, age %d" % next_age if next_age >= 3 else "")
 	_layout_hero()
+
+
+func configure_professional(profile: Dictionary = {}) -> void:
+	_professional_profile = profile.duplicate(true)
+	if _professional_selected():
+		_sync_professional_hero()
+	else:
+		_show_growth_hero()
+	_sync_vocabulary_context()
+
+
+func _professional_selected() -> bool:
+	return _learning_selection.get("track", "growth") == "professional"
+
+
+func _sync_professional_hero() -> void:
+	var state: Dictionary = _professional_profile
+	var ready: bool = state.get("ready", false)
+	var level: int = int(state.get("level", 0))
+	var title: String = str(state.get("course_title", state.get("title", "Your career")))
+	pip.set_professional_profile({"course_id": _learning_selection.get("course_id", ""), "title": title, "level": level})
+	heading.text = "Pip · Lv%d" % level if ready else "Your career Pip"
+	_pip_caption.text = "Your career Pip"
+	_journey_heading.text = title
+	_next_age = -1
+	_next_pip.hide()
+	_next_label.hide()
+	_journey_bar.visible = ready
+	_journey_bar.value = (1.0 if state.get("level_completed", false) else float(state.get("level_progress", 0.0))) * 100.0 if ready else 0.0
+	_journey_bar.set("accessibility_name", "%s. %s. %d career words learned." % [title, heading.text, int(state.get("lifetime_mastered", 0))] if ready else "Career progress is unavailable.")
+	_layout_hero()
+
+
+func _sync_vocabulary_context() -> void:
+	if _vocabulary_context == null:
+		return
+	var professional: bool = _professional_selected()
+	_vocabulary_title.text = "Playing professional English" if professional else "Playing everyday English"
+	if professional:
+		var course_title: String = str(_professional_profile.get("course_title", _professional_profile.get("title", "")))
+		var module_title: String = str(_professional_profile.get("module_title", ""))
+		if _learning_catalog != null and course_title.is_empty():
+			var course: Dictionary = _learning_catalog.course(str(_learning_selection.get("course_id", "")))
+			course_title = str(course.get("title", "Professional English"))
+			for module: Dictionary in course.get("modules", []):
+				if module.get("id") == _learning_selection.get("module_id"):
+					module_title = str(module.get("title", ""))
+		_vocabulary_detail.text = course_title + (" · " + module_title if not module_title.is_empty() else "")
+	else:
+		_vocabulary_detail.text = "Choose your vocabulary in the word library."
+	_vocabulary_context.set("accessibility_name", "%s. %s. Open word library to change vocabulary." % [_vocabulary_title.text, _vocabulary_detail.text])
 
 
 func _build_theme_choices() -> void:
@@ -516,7 +660,24 @@ func fit(available: Vector2, factor: float) -> void:
 	scroll.size = Vector2(content_width, maxf(1.0, available.y - scroll_top - edge))
 	_body.add_theme_constant_override("separation", ceili((12.0 if not wide else 16.0) / _factor))
 	_style_theme_choices()
-	learning.fit(_factor, wide)
+	if is_ancestor_of(learning):
+		learning.fit(_factor, wide)
+	Style.quiet_button(_vocabulary_context, Style.GOOD)
+	for side: String in ["left", "right"]:
+		_vocabulary_margin.add_theme_constant_override("margin_" + side, ceili(14.0 / _factor))
+	for side: String in ["top", "bottom"]:
+		_vocabulary_margin.add_theme_constant_override("margin_" + side, ceili(10.0 / _factor))
+	_vocabulary_title.add_theme_font_size_override("font_size", ceili(15.0 / _factor))
+	_vocabulary_action.add_theme_font_size_override("font_size", ceili(13.0 / _factor))
+	_vocabulary_detail.add_theme_font_size_override("font_size", ceili(13.0 / _factor))
+	_vocabulary_context.custom_minimum_size.y = maxf(68.0 / _factor, _vocabulary_margin.get_combined_minimum_size().y)
+	_home_status_box.add_theme_constant_override("separation", ceili(6.0 / _factor))
+	_home_status_actions.add_theme_constant_override("h_separation", ceili(8.0 / _factor))
+	_home_status.add_theme_font_size_override("font_size", ceili(14.0 / _factor))
+	for button: Button in [_home_retry, _home_cancel]:
+		Style.action_button(button, Style.GOOD)
+		button.custom_minimum_size = Vector2(88.0, 44.0) / _factor
+		button.add_theme_font_size_override("font_size", ceili(14.0 / _factor))
 	Style.action_button(_continue_round, Style.GOOD)
 	_continue_round.custom_minimum_size.y = 48.0 / _factor
 	_continue_round.add_theme_font_size_override("font_size", ceili(14.0 / _factor))
@@ -624,15 +785,28 @@ func _layout_hero() -> void:
 	_journey_heading.position = Vector2(title_x, (77.0 if wide else 58.0) / _factor)
 	_journey_heading.add_theme_font_size_override("font_size", ceili((20.0 if wide else 17.0) / _factor))
 	_journey_heading.size = Vector2(title_width, 30.0 / _factor)
+	if _professional_selected():
+		var career_font: Font = _journey_heading.get_theme_font("font")
+		var career_size: int = _journey_heading.get_theme_font_size("font_size")
+		while career_size > ceili(12.0 / _factor) and career_font.get_string_size(_journey_heading.text, HORIZONTAL_ALIGNMENT_LEFT, -1, career_size).x > title_width:
+			career_size -= 1
+		_journey_heading.add_theme_font_size_override("font_size", career_size)
 	_journey_bar.position = Vector2(copy_x, (119.0 if wide else 124.0) / _factor)
 	_journey_bar.size = Vector2(copy_width, (14.0 if wide else 12.0) / _factor)
 	_journey_count.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if wide else HORIZONTAL_ALIGNMENT_CENTER
 	_journey_count.position = Vector2(copy_x, (143.0 if wide else 144.0) / _factor)
 	_journey_count.size = Vector2(copy_width, (28.0 if wide else 40.0) / _factor)
 	_journey_count.add_theme_font_size_override("font_size", ceili((13.0 if wide else 11.0) / _factor))
-	var ready: bool = _growth.get("ready", false)
-	var completed: bool = _growth.get("completed", false)
-	if not ready:
+	var active_progress: Dictionary = _professional_profile if _professional_selected() else _growth
+	var ready: bool = active_progress.get("ready", false)
+	var completed: bool = active_progress.get("completed", false)
+	if _professional_selected() and ready:
+		if active_progress.get("level_completed", false):
+			_journey_count.text = "%d career words learned" % int(active_progress.get("lifetime_mastered", 0))
+		else:
+			_journey_count.text = "%d / %d to Lv%d\n%d career words learned" % [int(active_progress.get("level_mastered", 0)), int(active_progress.get("level_required", 0)), int(active_progress.get("level", 0)) + 1, int(active_progress.get("lifetime_mastered", 0))]
+		_journey_count.size.y = 40.0 / _factor
+	elif not ready:
 		_journey_count.text = "Progress is unavailable." if wide else "Progress is\nunavailable."
 	elif completed:
 		_journey_count.text = ("%d words learned together" if wide else "%d words learned\ntogether") % int(_growth.get("lifetime_mastered", 0))
@@ -673,20 +847,25 @@ func snapshot() -> Dictionary:
 			"animating": tile.preview.is_processing(), "reduced_motion": tile.preview.reduced_motion,
 			"elapsed": tile.preview._elapsed, "duration": tile.preview.DURATION})
 	var viewport: Rect2 = scroll.get_global_rect()
-	for button: Button in theme_buttons + buttons + [collection_button, sound_button, _continue_round]:
+	for button: Button in theme_buttons + buttons + [collection_button, sound_button, _continue_round, _vocabulary_context, _home_retry, _home_cancel]:
 		var rect: Rect2 = button.get_global_rect()
 		controls.append({"name": str(button.name), "rect": _rect_values(rect), "disabled": button.disabled,
 			"visible": button.is_visible_in_tree() and viewport.intersects(rect), "fully_visible": viewport.encloses(rect),
 			"focused": button.has_focus(), "selected": button.button_pressed, "visible_rect": _rect_values(viewport.intersection(rect))})
-	for control: Control in learning.controls():
+	for control: Control in learning.controls() if is_ancestor_of(learning) else []:
 		var rect: Rect2 = control.get_global_rect()
 		controls.append({"name": str(control.name), "rect": _rect_values(rect), "disabled": false,
-			"visible": viewport.intersects(rect), "fully_visible": viewport.encloses(rect),
+			"visible": control.is_visible_in_tree() and viewport.intersects(rect), "fully_visible": viewport.encloses(rect),
 			"focused": control.has_focus(), "selected": false, "visible_rect": _rect_values(viewport.intersection(rect))})
+	var active_progress: Dictionary = _professional_profile if _professional_selected() else _growth
 	return {"visible": is_visible_in_tree(), "current": _current, "controls": controls, "previews": previews, "learning": learning.snapshot(),
+		"brand": _brand.text, "vocabulary": {"kind": "professional" if _professional_selected() else "everyday", "title": _vocabulary_title.text,
+			"detail": _vocabulary_detail.text, "selection": _learning_selection.duplicate(true)},
+		"professional": _professional_profile.duplicate(true), "recovery": {"status": _home_status.text,
+			"visible": _home_status_box.visible, "retry": _home_retry.visible, "cancel": _home_cancel.visible},
 		"keyboard_focus_visible": _keyboard_focus_visible,
-		"hero": {"title": heading.text, "goal": _journey_heading.text, "count": _journey_count.text, "ready": _growth.get("ready", false),
-			"completed": _growth.get("completed", false), "mastered": _growth.get("mastered", 0), "total": _growth.get("total", 0),
+		"hero": {"title": heading.text, "goal": _journey_heading.text, "count": _journey_count.text, "ready": active_progress.get("ready", false),
+			"completed": active_progress.get("completed", false), "mastered": active_progress.get("mastered", 0), "total": active_progress.get("total", 0),
 			"progress": _journey_bar.value / 100.0, "next_age": _next_age, "rect": _rect_values(_hero.get_global_rect()),
 			"pip_rect": _rect_values(pip.get_global_rect()), "title_rect": _rect_values(heading.get_global_rect()),
 			"journey_rect": _rect_values(_journey.get_global_rect()), "progress_rect": _rect_values(_journey_bar.get_global_rect()),
@@ -694,7 +873,8 @@ func snapshot() -> Dictionary:
 		"theme_id": _theme_id, "theme_save_failed": _theme_save_notice.visible,
 		"rect": _rect_values(get_global_rect()), "scroll_rect": _rect_values(viewport), "viewport_rect": _rect_values(viewport),
 		"scroll_offset": scroll.scroll_vertical, "scrollable": scroll.get_v_scroll_bar().max_value > scroll.get_v_scroll_bar().page,
-		"content_height": _body.size.y, "coins": coin_counter.target, "pip_age": pip.growth_age}
+		"content_height": _body.size.y, "coins": coin_counter.target, "pip_age": pip.growth_age,
+		"pip_profile": pip.professional_profile.duplicate(true)}
 
 
 func _rect_values(rect: Rect2) -> Array:
@@ -722,6 +902,12 @@ func configure_learning(catalog: RefCounted, selection: Dictionary, state: Dicti
 		_learning_initialized = true
 		_learning_selection = selection.duplicate(true)
 		learning.set_selection(selection)
+		if _professional_selected():
+			if _professional_profile.get("course_id", "") != selection.get("course_id", ""):
+				_professional_profile.clear()
+			_sync_professional_hero()
+		else:
+			_show_growth_hero()
 	learning.set_progress(state.get("session", {}))
 	var phase: String = str(state.get("phase", "idle"))
 	var busy: bool = phase in ["media", "storage", "restoring"]
@@ -729,7 +915,30 @@ func configure_learning(catalog: RefCounted, selection: Dictionary, state: Dicti
 	if busy:
 		message = "Loading pictures and sound…" if phase == "media" else "Loading your progress…"
 	learning.set_status(message, busy, phase == "failed" or phase == "ready")
+	_home_learning_status = {"message": message, "busy": busy,
+		"retry": not busy and not message.is_empty() and phase in ["failed", "ready"]}
+	_sync_home_status()
+	_continue_round.disabled = busy
+	_vocabulary_context.disabled = busy
+	_sync_vocabulary_context()
 	_sync_learning_layout()
+
+
+func configure_storage_recovery(message: String = "", detail: String = "") -> void:
+	_home_storage_status = {} if message.is_empty() else {"message": message, "detail": detail, "retry": true, "storage": true}
+	_sync_home_status()
+
+
+func _sync_home_status() -> void:
+	var status: Dictionary = _home_learning_status if _home_storage_status.is_empty() or _home_learning_status.get("busy", false) else _home_storage_status
+	_home_status.text = str(status.get("message", ""))
+	_home_status_box.visible = not _home_status.text.is_empty()
+	_home_retry_storage = bool(status.get("storage", false))
+	_home_retry.text = "Retry saving" if _home_retry_storage else "Retry"
+	_home_retry.set("accessibility_description", str(status.get("detail", _home_status.text)))
+	_home_retry.visible = bool(status.get("retry", false))
+	_home_cancel.visible = not _home_retry_storage and (status.get("busy", false) or _home_retry.visible)
+	_home_status_actions.visible = _home_retry.visible or _home_cancel.visible
 
 
 func apply_learning_palette(palette: Dictionary) -> void:
@@ -737,44 +946,34 @@ func apply_learning_palette(palette: Dictionary) -> void:
 	_style_surface()
 
 
-func apply_learning_art(profile: Dictionary, reduced: bool) -> void:
-	_learning_art.show_profile(profile, "preview", reduced)
+func apply_learning_art(_profile: Dictionary, _reduced: bool) -> void:
+	_learning_art.clear()
 	_sync_learning_layout()
 
 
 func _sync_learning_layout() -> void:
 	if not is_instance_valid(_hero) or not is_instance_valid(grid) or not is_instance_valid(collection_button):
 		return
-	var state: Dictionary = learning.snapshot()
-	var summary: bool = state.screen == "summary"
-	var css: Vector2 = _available * _factor
-	var preview_height: float = (72.0 if css.y <= 440.0 else 180.0 if css.x >= 800.0 else 150.0) / _factor
-	var layout_changed: bool = not is_equal_approx(_learning_art.custom_minimum_size.y, preview_height)
-	if layout_changed:
-		_learning_art.custom_minimum_size.y = preview_height
-	# Keep the current workplace identity while loading and recovery actions fit
-	# above the fold on compact phones and short landscape windows.
-	var needs_action: bool = state.busy or (state.retry and not str(state.status).is_empty())
-	var show_preview: bool = _learning_art.has_art() and not (css.y <= 600.0 and needs_action)
-	var growth_selected: bool = _learning_selection.get("track", "growth") == "growth"
-	var available_games: bool = growth_selected or learning._selected_ready()
-	layout_changed = layout_changed or _learning_art.visible != show_preview \
-		or _hero.visible != (summary and growth_selected) or grid.visible != summary \
-		or collection_button.visible != (growth_selected or _professional_library_available) or _theme_choices.visible
-	_learning_art.visible = show_preview
-	_hero.visible = summary and growth_selected
-	grid.visible = summary
-	_games_heading.visible = summary
+	var available_games: bool = not _professional_selected() or learning._selected_ready()
+	var layout_changed: bool = _learning_art.visible or not _hero.visible or not grid.visible \
+		or not collection_button.visible or _theme_choices.visible
+	_learning_art.hide()
+	_hero.show()
+	grid.show()
+	_games_heading.show()
 	_games_heading.text = "Choose a game" if available_games else "Games in this module"
-	_games_notice.visible = summary and not available_games
-	collection_button.visible = growth_selected or _professional_library_available
+	_games_notice.visible = not available_games
+	collection_button.show()
 	_theme_choices.hide()
 	if layout_changed:
 		queue_sort()
 
 
 func learning_focus() -> Control:
+	if _home_retry.is_visible_in_tree():
+		return _home_retry
+	if _home_cancel.is_visible_in_tree():
+		return _home_cancel
 	if _continue_round.visible and not _continue_round.disabled:
 		return _continue_round
-	var available: Array[Control] = learning.controls()
-	return available[0] if not available.is_empty() else sound_button
+	return _vocabulary_context

@@ -114,7 +114,8 @@ func compatible_pairs(tiles: Array, placement: Callable = Callable()) -> Array[D
 	return pairs
 
 
-func completion_plan(tiles: Array, placement: Callable = Callable(), maximum_states: int = MAX_PLAN_STATES) -> Dictionary:
+func completion_plan(tiles: Array, placement: Callable = Callable(), maximum_states: int = MAX_PLAN_STATES,
+	accept_completion: Callable = Callable()) -> Dictionary:
 	# Breadth-first search returns the fewest authored joins that reach a new complete term.
 	# The caller must provide placement before charging and revalidate when executing.
 	var initial: Array = tiles.duplicate(true)
@@ -142,7 +143,8 @@ func completion_plan(tiles: Array, placement: Callable = Callable(), maximum_sta
 			steps.append({"left_ref": state.tiles[pair.left_index].plan_ref,
 				"right_ref": state.tiles[pair.right_index].plan_ref, "result_ref": merged.plan_ref,
 				"result": merged.duplicate(true), "placement": result.get("placement", {}).duplicate(true)})
-			if result.status == "complete" and _completion_uses_all_steps(steps):
+			if result.status == "complete" and _completion_uses_all_steps(steps) \
+				and (not accept_completion.is_valid() or bool(accept_completion.call(merged.duplicate(true)))):
 				return {"status": "complete", "reason": "", "steps": steps,
 					"tile": merged, "placement_checked": placement.is_valid(), "explored_states": cursor,
 					"evaluated_pairs": pair_checks}

@@ -1169,15 +1169,15 @@ func _check_edge_contact(view) -> void:
 	# Distances are in 320 px artwork coordinates, with the held skin stretched
 	# around its painted foot in ordinary motion. The diagonal entries also
 	# distinguish a rounded silhouette from its larger rectangular bounds.
-	# Pixel-row intersection measures diagonal contact at 192.00 px at rest,
-	# 199.20..199.26 px below and 190.56..190.58 px above when stretched
+	# Pixel-row intersection measures diagonal contact at 238.00 px at rest,
+	# 246.17..246.20 px below and 236.76..237.22 px above when stretched
 	# (0.985, 1.06) about (160, 285). Leave a small tracing margin while
 	# preserving the separated +3 px and overlapping -1 px probes.
 	var edges: Array = [
 		[Vector2.RIGHT, 295.0, 293.0], [Vector2.LEFT, 295.0, 293.0],
 		[Vector2.DOWN, 250.0, 265.0], [Vector2.UP, 250.0, 250.0],
-		[Vector2(1, 1), 191.0, 198.0], [Vector2(-1, 1), 191.0, 198.0],
-		[Vector2(1, -1), 191.0, 190.0], [Vector2(-1, -1), 191.0, 190.0]
+		[Vector2(1, 1), 237.0, 245.0], [Vector2(-1, 1), 237.0, 245.0],
+		[Vector2(1, -1), 237.0, 236.0], [Vector2(-1, -1), 237.0, 236.0]
 	]
 	for dimensions: Vector2 in [Vector2(1000, 720), Vector2(390, 700), Vector2(568, 260)]:
 		view.size = dimensions
@@ -1763,9 +1763,9 @@ func _union_body(view, key: String) -> Rect2:
 
 
 func _check_progressive_union(view) -> void:
-	# The rounded PNG's upper diagonal contact is 184.24 px after the held
-	# stretch and maximum 3.5% selection lift; 0.57 * 320 = 182.4 px overlaps.
-	for offset: Vector2 in [Vector2(-0.91, 0.0), Vector2(0.0, -0.73), Vector2(-0.57, -0.57)]:
+	# The rounded rectangle's upper-left contact is 229.56 px after the held
+	# stretch and maximum 3.5% selection lift; 0.71 * 320 = 227.2 px overlaps.
+	for offset: Vector2 in [Vector2(-0.91, 0.0), Vector2(0.0, -0.73), Vector2(-0.71, -0.71)]:
 		var pair: Array[int] = _contact_pair(view, false)
 		var source = view._tiles[pair[0]]
 		var target = view._tiles[pair[1]]

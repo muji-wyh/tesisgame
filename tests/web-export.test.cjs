@@ -236,13 +236,17 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /Keyboard or controller activation opens a Keep playing \/ Finish confirmation/);
   assert.match(help, /settlement dialog over the frozen board, even when no chest was earned/);
   assert.doesNotMatch(help, /ca onto t|letter parts fall|choose Spring, Summer|50 for two original parts or 100/);
-  assert.match(help, /help and -ful make helpful/);
-  assert.match(help, /Partial forms give no completed-word reward/);
-  assert.match(help, /Atomic words such as cat arrive as one complete jelly/);
-  assert.match(help, /exposure, not spelling mastery/);
-  assert.match(help, /50 bonus coins regardless of its number of parts or occupied cells/);
-  assert.match(help, /Read pauses play and shows the full spelling/);
-  assert.match(help, /Collect gathers all ready words one at a time at 120 ms intervals, without word pronunciation/);
+  assert.match(help, /un-, -believe-, and -able/);
+  assert.match(help, /Merging and upgrading alone do not grant rewards or mastery/);
+  assert.match(help, /Cat has one whole-word root and a separate cat picture/);
+  assert.match(help, /Picture jellies show no word label/);
+  assert.match(help, /two identical words of the same level[\s\S]*up to Lv9/);
+  assert.match(help, /Lv4 blooms like a firework/);
+  assert.match(help, /automatic merges and image-free atomic exposure do not/);
+  assert.match(help, /1% chance of 50 bonus coins/);
+  assert.match(help, /Extra parts or higher levels do not multiply coin rewards/);
+  assert.match(help, /press R, to pause and read its full spelling/);
+  assert.match(help, /Collect gathers all ready words at 120 ms intervals without pronunciation/);
   assert.match(help, /Auto merge costs 600, 900, then 1200 coins/);
   assert.match(help, /Treasure costs 200, 300, then 400 coins[\s\S]*2 to 8 chest fragments/);
   assert.match(help, /A final wrong answer tied to a live target resets that word's streak/);
@@ -326,6 +330,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   fixture.writeImport('assets/audio/jelly-finish/ready.ogg');
   for (const cue of ['downgrade', 'lost']) fixture.writeImport(`assets/audio/memory-chest/${cue}.wav`);
   for (const cue of ['collect-pop', 'land', 'danger']) fixture.writeImport(`assets/audio/jelly-match/${cue}.wav`);
+  for (let level = 2; level <= 9; level++) fixture.writeImport(`assets/audio/jelly-match/collect-lv${level}.wav`);
   for (const cue of ['contact', 'merge-together-v3']) fixture.writeImport(`assets/imported-audio/jelly-interaction/${cue}.wav`);
   require('./helpers/pair-feedback-assets.cjs').pairFeedbackFixture(fixture.directory, fixture.writeImport);
   require('./helpers/ui-click-assets.cjs').uiClickFixture(fixture.directory, fixture.writeImport);
@@ -335,16 +340,17 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 375);
+  assert.equal(required.length, 383);
   assert.equal(fs.existsSync(path.join(fixture.directory, 'assets/audio/chests')), false,
     'Packaging succeeds without the archived theme recordings');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/chests/')),
     'The reviewed shared bank replaces every former theme-specific chest cue');
-  assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction|jelly-finish)\//.test(asset.source)).length, 6,
+  assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction|jelly-finish)\//.test(asset.source)).length, 14,
     'Every Jelly cue is required in the startup pack');
   assert.deepEqual(required.filter(asset => asset.source.includes('/jelly-match/collect-')).map(asset => asset.source),
-    ['res://assets/audio/jelly-match/collect-pop.wav'],
-    'Only the fixed collection pop is required from the collection bank');
+    ['res://assets/audio/jelly-match/collect-pop.wav',
+      ...Array.from({ length: 8 }, (_, index) => `res://assets/audio/jelly-match/collect-lv${index + 2}.wav`)],
+    'The approved pop and every higher-level recording are required in the startup pack');
   assert.ok(required.every(asset => asset.source !== 'res://assets/audio/jelly-match/clear.wav'),
     'The legacy collection source is no longer required at runtime');
   assert.deepEqual(required.slice(-4), reference);

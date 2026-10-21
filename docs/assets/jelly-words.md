@@ -8,42 +8,64 @@ and license records remain in the linked asset documents.
 
 | Material | Source, creator, license | Integration and animation |
 | --- | --- | --- |
-| Four gel skins and contact shadow | Zuhria Alfitra / pzUH, GameArt2D Jelly Squash Free Sprites, CC0 1.0; acquired and integrated previously | The actual mint skin was inspected before reuse. Existing painted contours and material maps stretch with the accumulated parts. The source is static; runtime contact, continuous union, growth, collection, and settling are authored by this game. |
-| Word pictures and pronunciation | Existing current-age vocabulary packs; individual acquisition and license records remain in the vocabulary asset manifests | The normal WordArt loader supplies the exact dictionary picture only after a valid word is built. Existing animated word artwork remains supported. |
+| Four gel skins and contact shadow | Zuhria Alfitra / pzUH, GameArt2D Jelly Squash Free Sprites, CC0 1.0; acquired and integrated previously | The actual mint skin was inspected before reuse. The rounded-square painted contours and material maps keep the ordinary Jelly size through every composition stage. The source is static; runtime contact, continuous union, collection, and settling are authored by this game. |
+| Word pictures and pronunciation | Existing current-age vocabulary packs; individual acquisition and license records remain in the vocabulary asset manifests | The normal WordArt loader supplies picture-only source jellies and the picture above merged words. Roots have no picture. Existing animated artwork remains supported. |
 | Chest models, local light accents, paper confetti | Existing acquired chest and particle assets; creators and licenses recorded in the linked fragment record | The shared ChestCelebration and RewardConfetti timelines provide first-chest synthesis, upgrade rotation, enlargement, flash, and paper bursts. Reused as integrated assets, not source previews. |
-| Contact, merge, and disappear audio | User-selected contact and merge WAVs; original creators greenlinker and rubberduck, CC0. Seven collection notes adapt the existing rubberduck and Aeva CC0 clear recording; exact provenance in the Jelly Match records and [collection manifest](jelly-collection-audio.json) | Contact fires on first painted-body contact, merge on commitment, and the next collection note on release. Collection cycles through Do, Re, Mi, Fa, Sol, La, Ti and repeats. |
+| Contact, merge, and disappear audio | User-selected contact and merge WAVs; original creators greenlinker and rubberduck, CC0. The approved fixed bubble pop and acquired Kenney CC0 layers provide level cues; exact provenance is in [Jelly level feedback](jelly-level-feedback.md) | Contact fires on first painted-body contact, merge on commitment, and the level-specific cue on collection release. Lv1 keeps the approved bubble pop. |
 | Rejected merge audio | Existing user-supplied wrong-answer excerpt; creator, acquisition status and unsupplied license terms are recorded in [pair feedback](pair-feedback-audio.md) | Reuses the integrated 860 ms `wrong.wav` at gain 0.48 once when a failed drop separates. No new extraction, processing or animation asset. |
 
-The board has six columns and eight rows. Growth entries awaiting morphology
-review retain their legacy two-chunk spelling activity and eighteen-piece
-opening. Reviewed entries use authored meaningful parts and exact composition
-rules, including legal intermediate results and spelling transformations.
-Atomic words and abbreviations stay whole. Their opening uses at most eighteen
-occupied cells. See the [morphology contract](../vocabulary/morphology-contract.md)
-for review, canonical identity, placement, and learning-evidence rules.
-A completed word is collectible, and its picture
-and warm gel rim indicate readiness without adding a
-floating instruction label. Each collected word has an independent 1% chance
+The board has six columns and eight rows, opening with at most eighteen cells.
+Reviewed entries use meaningful roots and exact authored spelling transformations.
+Root labels use positional hyphens, such as `un-`, `-believe-`, and `-able`.
+An atomic word such as `cat` supplies a whole-word root plus a separate cat picture.
+Picture jellies show only their artwork. After roots form a complete word, join
+it with its matching picture to create a Lv1 merged jelly. A word without a
+picture becomes merged as soon as its spelling is complete. Unreviewed fallback
+content stays whole; it is never cut into arbitrary letter groups. See the
+[morphology contract](../vocabulary/morphology-contract.md) for editorial rules.
+
+Merged jellies show the full word, its available picture, a warm rim, and sourced
+light accents. Two merged jellies with the same vocabulary identity and level
+combine into the next level, up to Lv9. Lv2–9 show their number at the upper-right;
+carried chest fragments use the opposite corner. All stages retain one ordinary
+cell. Joining, picture matching, and upgrading do not collect rewards or learning
+credit. Collection owns the existing reward transaction and eligible manual
+learning evidence; an upgrade does not multiply mastery or coin payouts.
+
+Each level has distinct collection motion and audio. Lv4 is a radial firework
+bloom; higher levels add layered blooms, comet trails, or a bouquet finale.
+The effect begins at the model's collection pop, remains input-transparent, and
+clears on pause or exit. Reduced motion uses a compact still light accent.
+Profiles and acquired material are recorded in [Jelly level feedback](jelly-level-feedback.md).
+
+Each collected word has an independent 1% chance
 of a fixed 50-coin bonus, independent of component count and footprint. Opening chests
 is the main source of coins. A collection without bonus coins still records
 the learned word and collects all carried chest fragments, without a coin
 flight or coin sound. The roll is retained across collection retries and uses
 a separate random stream from word supply and powerups. Merging preserves all
 fragment markers, while tapping the complete word collects them.
-Carried fragments use a compact lower-right stack of at most two current-tier
+Carried fragments use a compact upper-left stack of at most two current-tier
 chest icons. One or two fragments remain directly countable; larger stacks show
 their exact total in a small cream count capsule. The group fits inside the
-jelly with a separate space below the spelling, so repeat Treasure purchases
+jelly with a separate space above the spelling, so repeat Treasure purchases
 cannot create a row of icons across neighboring bodies. A brief, local receive
 pop follows the existing fragment-arrival clock; reduced motion keeps it still.
 This reuses the acquired chest texture and its existing source/license records
 in [Jelly fragments](jelly-fragments.md) and [chest replacement](chest-refresh.md).
 The chest is a static cropped render here, with runtime scale animation; no new
 artwork or audio is acquired. The count capsule is an interface layout primitive.
-Reviewed spellings use frozen footprints of one to six columns and one to two
-rows, measured at a 16-pixel font and 32-pixel cell pitch. Wrapping uses only
-authored boundaries. Exceptional overflow retains its exact spelling and opens
-a paused, scrollable Read view; resizing never changes the logical footprint.
+All source parts, intermediate compositions, atomic words, completed words, and
+previews use one ordinary square cell. The existing six-column, eight-row well
+and responsive cell pitch remain; neither spelling length nor accumulated parts
+enlarge a body. This is the former ordinary Jelly display size, not a fixed
+32-pixel rendering size. Labels fit the available square at a minimum of 13
+displayed pixels and wrap only at approved boundaries. Overflow uses an ellipsis
+while preserving the full spelling in accessibility text and the Read detail.
+Hold an overflowed Jelly still for 450 ms, or focus it and press R, to pause and read. Moving
+more than seven displayed pixels cancels the hold; quick taps still collect
+completed words. The Read detail also works for supply previews without dropping
+them. Resizing never changes logical footprints.
 The model owns the merge and collection clocks, wallet receipt, fragment count,
 and chest tier. Visual callbacks never grant coins.
 
@@ -59,11 +81,10 @@ direct word taps still pronounce the selected word. Leaving play or muting
 clears queued speech without replaying it on return.
 
 Two [coin powerups](jelly-powerups.md) share the board controls. Auto merge costs
-600 coins initially, then 900 and 1200 on further uses in the round. In the legacy
-activity it launches a random eligible Jelly every 200 ms, dragging it into
-its matching target over 300 ms. Consecutive flights briefly overlap, leaving
-the completed words on the board for ordinary collection. Reviewed composition
-checks an entire completion path and all intermediate rectangles before charging,
+600 coins initially, then 900 and 1200 on further uses in the round. It joins
+compatible roots, finishes picture matching, or upgrades equal-level words.
+It leaves merged jellies on the board for ordinary collection. The planner checks
+an entire completion path and all intermediate rectangles before charging,
 then executes that route sequentially. Partial-only paths cannot buy the tool.
 Its assisted result remains collectable without creating mastery evidence.
 Treasure costs 200,
@@ -76,7 +97,7 @@ failed or duplicate payments do not advance them. Supply and danger clocks wait 
 the Finish pull gesture pause it. Neither ability collects words, grants coins, or
 credits learning progress by itself.
 
-Automatic merges and restored growth check for support after the
+Automatic merges check for support after the
 fusion handover and settle vertically onto the nearest body or the floor.
 Dragging into empty space snaps the entire jelly footprint to the nearest
 grid position, preserving the original finger offset. A translucent
@@ -120,11 +141,10 @@ stay unchanged. Release, cancellation or leaving play clears the cue. Reduced
 motion keeps static light, glints and the painted rim without a sweep or enlargement.
 All composition feedback, including the contact highlight, uses the same resolver
 as manual merging and Auto merge. Reviewed partial joins are valid; results that
-lack room do not light up or incur an incorrect-answer penalty. In legacy
-spelling play, holding `sma` lights `ll` for `small`, while holding `ll` does not light
-`sma`. Incompatible targets keep their resting paint, including reverse partners
-that share an idle pair color: holding `t` never recolors or lights `ca`, while
-holding `ca` lights `t` for `cat`. Every other physical contact still compresses
+lack room do not light up or incur an incorrect-answer penalty. Root joins follow
+the reviewed reading order. Word-picture matching and equal-level upgrades work
+in either drag direction. Incompatible targets keep their resting paint.
+Every other physical contact still compresses
 both painted skins and adds a soft cream glint, with the existing contact sound on first touch. This
 neutral pressure cue does not show a red error rim or a completion glow. Moving
 apart or canceling clears it; reduced motion keeps the static glint. Releasing
@@ -223,9 +243,8 @@ Keyboard navigation, activation, collection cadence and rewards remain unchanged
 each layout keeps stable touch bounds as the available count changes. Earned
 chest celebrations still queue until collection ends.
 
-The seven [collection notes](jelly-collection-audio.md) play in ascending Do, Re,
-Mi, Fa, Sol, La, Ti order and repeat from Do, with one advance per accepted pickup
-and a short common envelope to articulate the 120 ms batch rhythm.
+Collection uses the merged jelly's level-specific cue, with the fixed bubble pop
+at Lv1. The former seven-note cycle remains historical asset material only.
 Each collected word now owns an
 independent picture-and-spelling burst: new words coexist with older ones instead
 of replacing them. A separate presentation RNG varies size and position across

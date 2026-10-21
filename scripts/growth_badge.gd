@@ -4,6 +4,7 @@ const Style = preload("res://scripts/ui_style.gd")
 
 var level_label: Label
 var count_label: Label
+var context_label: Label
 var bar: ProgressBar
 var compact: bool = false
 var _scale: float = 1.0
@@ -32,6 +33,11 @@ func _init() -> void:
 	count_label.add_theme_font_override("font", Style.HEADING_FONT)
 	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	add_child(count_label)
+	context_label = Style.label("", 11)
+	context_label.clip_text = true
+	context_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	context_label.add_theme_color_override("font_color", Style.MUTED)
+	add_child(context_label)
 	resized.connect(_layout)
 	fit(1.0, false)
 
@@ -50,7 +56,12 @@ func configure(state: Dictionary) -> void:
 		description += " Maximum level reached."
 	else:
 		description += " Master %d new %s to reach Lv%d." % [state.get("level_remaining", 1), "word" if state.get("level_remaining", 1) == 1 else "words", level + 1]
-	set("accessibility_name", description + " View your words.")
+	context_label.text = str(state.get("course_title", "Professional")) if state.get("track") == "professional" else ""
+	context_label.visible = not context_label.text.is_empty()
+	if context_label.visible:
+		description = "Professional English · %s. %s %s." % [context_label.text, description, state.get("module_title", "")]
+	tooltip_text = description + " Open word library." if context_label.visible else ""
+	set("accessibility_name", description + " Open word library.")
 	bar.set("accessibility_name", description)
 	_style_type()
 	_layout()
@@ -130,3 +141,11 @@ func _layout() -> void:
 		level_label.add_theme_font_size_override("font_size", ceili(14 / _scale))
 		bar.position = Vector2(2, 28) / _scale
 		bar.size = Vector2(size.x - 4.0 / _scale, 8.0 / _scale)
+		if context_label.visible:
+			context_label.position = Vector2(2, 0) / _scale
+			context_label.size = Vector2(size.x - 4.0 / _scale, 15.0 / _scale)
+			context_label.add_theme_font_size_override("font_size", ceili(10.0 / _scale))
+			level_label.position.y = 14.0 / _scale
+			level_label.size.y = 20.0 / _scale
+			bar.position.y = 36.0 / _scale
+			bar.size.y = 6.0 / _scale

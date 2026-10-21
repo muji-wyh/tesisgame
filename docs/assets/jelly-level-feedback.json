@@ -1,0 +1,614 @@
+{
+  "version": 1,
+  "created_on": "2026-10-21",
+  "name": "Jelly Words level collection feedback",
+  "status": "Acquired existing production textures and CC0 audio prepared for the integrated level effect timeline.",
+  "tool": "tools/prepare-jelly-level-audio.py",
+  "runtime_script": "scripts/word_jelly_collection_fx.gd",
+  "audio_sources": [
+    {
+      "id": "glass",
+      "creator": "Kenney",
+      "pack": "Interface Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_in_collection": "Interface Sounds/Audio/glass_004.ogg",
+      "path": "docs/assets/sources/jelly-level-feedback/glass_004.ogg",
+      "sha256": "948cbe625a35fbd9cf662a9de88b36a3ca63cdebe3f92df365306a8a252bac68",
+      "status": "Acquired from the user's local Kenney All-in-1 3.7.0 collection; complete original preserved, adapted into level cues.",
+      "animations": "Not applicable; authored one-shot audio recording"
+    },
+    {
+      "id": "spark",
+      "creator": "Kenney",
+      "pack": "Interface Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_in_collection": "Interface Sounds/Audio/glass_006.ogg",
+      "path": "docs/assets/sources/jelly-level-feedback/glass_006.ogg",
+      "sha256": "d1b959d0a8107b25d643fb3ab96fd6efd05d69ae142ecbea7097063de091b0ca",
+      "status": "Acquired from the user's local Kenney All-in-1 3.7.0 collection; complete original preserved, adapted into level cues.",
+      "animations": "Not applicable; authored one-shot audio recording"
+    },
+    {
+      "id": "chime",
+      "creator": "Kenney",
+      "pack": "Interface Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_in_collection": "Interface Sounds/Audio/confirmation_003.ogg",
+      "path": "docs/assets/sources/jelly-level-feedback/confirmation_003.ogg",
+      "sha256": "9cddaa348f8ba91a913dceb0f5b1b874379af0f5cce71a9df6cf2b744fbc60cd",
+      "status": "Acquired from the user's local Kenney All-in-1 3.7.0 collection; complete original preserved, adapted into level cues.",
+      "animations": "Not applicable; authored one-shot audio recording"
+    },
+    {
+      "id": "rise",
+      "creator": "Kenney",
+      "pack": "Interface Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_in_collection": "Interface Sounds/Audio/maximize_007.ogg",
+      "path": "docs/assets/sources/jelly-level-feedback/maximize_007.ogg",
+      "sha256": "43a38a0b0366e8a8e6193bf037af73aab35b45fc52c1fd5a75dc662f0e4a84a1",
+      "status": "Acquired from the user's local Kenney All-in-1 3.7.0 collection; complete original preserved, adapted into level cues.",
+      "animations": "Not applicable; authored one-shot audio recording"
+    },
+    {
+      "id": "bell",
+      "creator": "Kenney",
+      "pack": "Impact Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_in_collection": "Impact Sounds/Audio/impactBell_heavy_002.ogg",
+      "path": "docs/assets/sources/jelly-level-feedback/impactBell_heavy_002.ogg",
+      "sha256": "5433bb18b0ebd45dd539f2867296a59f023465dc0c17cde19b20fb97b5687ac5",
+      "status": "Acquired from the user's local Kenney All-in-1 3.7.0 collection; complete original preserved, adapted into level cues.",
+      "animations": "Not applicable; authored one-shot audio recording"
+    }
+  ],
+  "base_pop": {
+    "manifest": "docs/assets/jelly-collection-audio.json",
+    "creator": "farfadet46",
+    "license": "CC0-1.0",
+    "sha256": "17fc1d02e944481eda7f392e1a5a1a1b375693a2868692ff85966b19048e1b3a"
+  },
+  "visual_sources": [
+    {
+      "path": "assets/chests/particles/portal_glow.png",
+      "creator": "Bobardo",
+      "source": "Modern 2D Animated Chests Pack_FREE Demo 1.0.2",
+      "source_path": "Modern 2D Animated Chests Pack_FREE Demo 1.0.2/Particles/Textures/portal_glow.png",
+      "license": "Standard Unity Asset Store EULA",
+      "license_url": "https://unity.com/legal/as-terms",
+      "source_record": "assets/chests/manifest.json",
+      "sha256": "bd68c67e5db6347f12237150c84d6e83055480b11a37906a0d140d3e2294a17c",
+      "status": "Previously acquired and integrated texture, inspected and reused",
+      "animations": "Static authored wisp texture; collection animation authored in the game"
+    },
+    {
+      "paths": [
+        "assets/chests/milestone/rays.png",
+        "assets/chests/milestone/sparkle.png"
+      ],
+      "creator": "Kenneth Foldal Moe (Archanor VFX)",
+      "source": "Toon FX 1.52",
+      "source_page": "https://assetstore.unity.com/packages/vfx/particles/toon-fx-25601",
+      "license": "Standard Unity Asset Store EULA",
+      "license_url": "https://unity.com/legal/as-terms",
+      "source_record": "docs/assets/jelly-fragments.md",
+      "sha256": [
+        "75ecb9a8d2c20b4892dc45160decb6d18387ce3892f7fc8ee2401d5f8773d8c1",
+        "e8387f9328d38d0b10706814f0c3500debaf1ba2133a8c80a65ef636a8238856"
+      ],
+      "status": "Previously acquired private inputs, inspected and reused; shipped only inside the compiled game",
+      "animations": "Static radial streak and four-point sparkle textures; game-authored trajectories and fading, no Unity prefab imported"
+    }
+  ],
+  "processing": "Float decode; mono 44.1 kHz; trimmed boundaries with smooth fades; source sample layering, deterministic resampling and offsets; -8.5 dBFS maximum solo peak and 0.77 batch peak ceiling at 0.90 runtime gain. No synthesized oscillators or procedural sound placeholders.",
+  "runtime": {
+    "gain": 0.9,
+    "pitch": 1.0,
+    "clock": "Existing accepted collection pop boundary",
+    "concurrency": "Eight protected higher-level channels preserve tails at 120 ms batch spacing; shared mute/pause cleanup and no reward callback"
+  },
+  "review": "Acquired texture source sheet visually inspected. Audio source format, identity, decoded waveform, onset, headroom and repeated batch mix checked; auditory taste and physical-device mixing require playback review.",
+  "audio": [
+    {
+      "level": 1,
+      "name": "Pearl pop",
+      "cue": "pop",
+      "path": "assets/audio/jelly-match/collect-pop.wav",
+      "sha256": "17fc1d02e944481eda7f392e1a5a1a1b375693a2868692ff85966b19048e1b3a",
+      "processing": "Unchanged approved fixed pop",
+      "seconds": 0.1,
+      "frames": 4410,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -7.5,
+      "rms_dbfs": -21.066,
+      "onset_minus_40_dbfs_seconds": 0.003628,
+      "batch_120ms_peak_dbfs": -8.415
+    },
+    {
+      "level": 2,
+      "name": "Twin ripple",
+      "cue": "jelly-collect-lv2",
+      "path": "assets/audio/jelly-match/collect-lv2.wav",
+      "sha256": "93a4b0aac45bd08eb3b808bd9a013d53704ca199c9edd3b5de8849c0baed55f4",
+      "layers": [
+        {
+          "source": "pop",
+          "seconds": 0,
+          "gain": 1,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "spark",
+          "seconds": 0.028,
+          "gain": 0.3,
+          "pitch_ratio": 1
+        }
+      ],
+      "seconds": 0.121859,
+      "frames": 5374,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -8.5,
+      "rms_dbfs": -22.744,
+      "onset_minus_40_dbfs_seconds": 0.003628,
+      "batch_120ms_peak_dbfs": -9.415
+    },
+    {
+      "level": 3,
+      "name": "Spiral lift",
+      "cue": "jelly-collect-lv3",
+      "path": "assets/audio/jelly-match/collect-lv3.wav",
+      "sha256": "d5384ab178d82e22e99a4bebe29f5ae2768a4a992c3cbe9b1bdb86c8465d0e70",
+      "layers": [
+        {
+          "source": "pop",
+          "seconds": 0,
+          "gain": 0.95,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "rise",
+          "seconds": 0.012,
+          "gain": 0.38,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "glass",
+          "seconds": 0.105,
+          "gain": 0.22,
+          "pitch_ratio": 1.25
+        }
+      ],
+      "seconds": 0.622494,
+      "frames": 27452,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -8.5,
+      "rms_dbfs": -28.381,
+      "onset_minus_40_dbfs_seconds": 0.003628,
+      "batch_120ms_peak_dbfs": -8.418
+    },
+    {
+      "level": 4,
+      "name": "Firework bloom",
+      "cue": "jelly-collect-lv4",
+      "path": "assets/audio/jelly-match/collect-lv4.wav",
+      "sha256": "a51becb64b76f80bcd5ce11864f59ed286a027cc50bb391112d3929e614d929e",
+      "layers": [
+        {
+          "source": "pop",
+          "seconds": 0,
+          "gain": 0.9,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "bell",
+          "seconds": 0.008,
+          "gain": 0.29,
+          "pitch_ratio": 1.4
+        },
+        {
+          "source": "spark",
+          "seconds": 0.045,
+          "gain": 0.21,
+          "pitch_ratio": 1.0
+        },
+        {
+          "source": "spark",
+          "seconds": 0.092,
+          "gain": 0.192,
+          "pitch_ratio": 1.5
+        },
+        {
+          "source": "spark",
+          "seconds": 0.139,
+          "gain": 0.174,
+          "pitch_ratio": 1.25
+        },
+        {
+          "source": "spark",
+          "seconds": 0.186,
+          "gain": 0.156,
+          "pitch_ratio": 1.0
+        },
+        {
+          "source": "spark",
+          "seconds": 0.23299999999999998,
+          "gain": 0.138,
+          "pitch_ratio": 1.5
+        },
+        {
+          "source": "spark",
+          "seconds": 0.27999999999999997,
+          "gain": 0.12,
+          "pitch_ratio": 1.25
+        }
+      ],
+      "seconds": 0.515896,
+      "frames": 22751,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -8.5,
+      "rms_dbfs": -30.471,
+      "onset_minus_40_dbfs_seconds": 0.003628,
+      "batch_120ms_peak_dbfs": -9.415
+    },
+    {
+      "level": 5,
+      "name": "Double bloom",
+      "cue": "jelly-collect-lv5",
+      "path": "assets/audio/jelly-match/collect-lv5.wav",
+      "sha256": "adccc4a2b54b7abb2128bd7c2eaf4ddbbc762041376851add63443ea1bafc402",
+      "layers": [
+        {
+          "source": "pop",
+          "seconds": 0,
+          "gain": 0.9,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "glass",
+          "seconds": 0.014,
+          "gain": 0.43,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "glass",
+          "seconds": 0.198,
+          "gain": 0.35,
+          "pitch_ratio": 1.5
+        },
+        {
+          "source": "spark",
+          "seconds": 0.24,
+          "gain": 0.16,
+          "pitch_ratio": 1.25
+        }
+      ],
+      "seconds": 0.656848,
+      "frames": 28967,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -8.5,
+      "rms_dbfs": -27.198,
+      "onset_minus_40_dbfs_seconds": 0.003628,
+      "batch_120ms_peak_dbfs": -8.158
+    },
+    {
+      "level": 6,
+      "name": "Comet crown",
+      "cue": "jelly-collect-lv6",
+      "path": "assets/audio/jelly-match/collect-lv6.wav",
+      "sha256": "1e75285298e5de999480e1bfde89bffa1d06246ab4c1d344023dcf3326c312f2",
+      "layers": [
+        {
+          "source": "pop",
+          "seconds": 0,
+          "gain": 0.85,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "rise",
+          "seconds": 0.005,
+          "gain": 0.4,
+          "pitch_ratio": 0.85
+        },
+        {
+          "source": "bell",
+          "seconds": 0.02,
+          "gain": 0.3,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "spark",
+          "seconds": 0.075,
+          "gain": 0.2,
+          "pitch_ratio": 1.0
+        },
+        {
+          "source": "spark",
+          "seconds": 0.15,
+          "gain": 0.2,
+          "pitch_ratio": 1.25
+        },
+        {
+          "source": "spark",
+          "seconds": 0.22499999999999998,
+          "gain": 0.2,
+          "pitch_ratio": 1.5
+        },
+        {
+          "source": "spark",
+          "seconds": 0.3,
+          "gain": 0.2,
+          "pitch_ratio": 2.0
+        }
+      ],
+      "seconds": 0.723084,
+      "frames": 31888,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -8.5,
+      "rms_dbfs": -31.243,
+      "onset_minus_40_dbfs_seconds": 0.003651,
+      "batch_120ms_peak_dbfs": -8.754
+    },
+    {
+      "level": 7,
+      "name": "Aurora orbit",
+      "cue": "jelly-collect-lv7",
+      "path": "assets/audio/jelly-match/collect-lv7.wav",
+      "sha256": "829bd9da6c0f767259d3b78042ef4add85833f06400374c9f01035d8d7bd2e4b",
+      "layers": [
+        {
+          "source": "pop",
+          "seconds": 0,
+          "gain": 0.85,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "chime",
+          "seconds": 0.012,
+          "gain": 0.35,
+          "pitch_ratio": 0.84
+        },
+        {
+          "source": "glass",
+          "seconds": 0.07,
+          "gain": 0.22,
+          "pitch_ratio": 0.75
+        },
+        {
+          "source": "glass",
+          "seconds": 0.19,
+          "gain": 0.26,
+          "pitch_ratio": 1.25
+        },
+        {
+          "source": "chime",
+          "seconds": 0.265,
+          "gain": 0.16,
+          "pitch_ratio": 1.26
+        }
+      ],
+      "seconds": 0.919184,
+      "frames": 40536,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -8.5,
+      "rms_dbfs": -28.911,
+      "onset_minus_40_dbfs_seconds": 0.003628,
+      "batch_120ms_peak_dbfs": -8.422
+    },
+    {
+      "level": 8,
+      "name": "Constellation shower",
+      "cue": "jelly-collect-lv8",
+      "path": "assets/audio/jelly-match/collect-lv8.wav",
+      "sha256": "8e26d7ad02ebf48a5ea52f9622ddb4013c4fa971872c3b5f093d95e304d00f61",
+      "layers": [
+        {
+          "source": "pop",
+          "seconds": 0,
+          "gain": 0.8,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "bell",
+          "seconds": 0.006,
+          "gain": 0.34,
+          "pitch_ratio": 0.84
+        },
+        {
+          "source": "chime",
+          "seconds": 0.075,
+          "gain": 0.24,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "chime",
+          "seconds": 0.2,
+          "gain": 0.215,
+          "pitch_ratio": 1.26
+        },
+        {
+          "source": "chime",
+          "seconds": 0.325,
+          "gain": 0.19,
+          "pitch_ratio": 1.5
+        },
+        {
+          "source": "spark",
+          "seconds": 0.16,
+          "gain": 0.12,
+          "pitch_ratio": 1.5
+        },
+        {
+          "source": "spark",
+          "seconds": 0.213,
+          "gain": 0.12,
+          "pitch_ratio": 1.5
+        },
+        {
+          "source": "spark",
+          "seconds": 0.266,
+          "gain": 0.12,
+          "pitch_ratio": 1.5
+        },
+        {
+          "source": "spark",
+          "seconds": 0.319,
+          "gain": 0.12,
+          "pitch_ratio": 1.5
+        },
+        {
+          "source": "spark",
+          "seconds": 0.372,
+          "gain": 0.12,
+          "pitch_ratio": 1.5
+        }
+      ],
+      "seconds": 0.839365,
+      "frames": 37016,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -8.5,
+      "rms_dbfs": -31.539,
+      "onset_minus_40_dbfs_seconds": 0.003651,
+      "batch_120ms_peak_dbfs": -9.244
+    },
+    {
+      "level": 9,
+      "name": "Grand bouquet",
+      "cue": "jelly-collect-lv9",
+      "path": "assets/audio/jelly-match/collect-lv9.wav",
+      "sha256": "7865e626dc87a082d48c5130f0d0a5bc60707c9fe421b9206f511f6393dc5e3f",
+      "layers": [
+        {
+          "source": "pop",
+          "seconds": 0,
+          "gain": 0.8,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "bell",
+          "seconds": 0.006,
+          "gain": 0.4,
+          "pitch_ratio": 0.75
+        },
+        {
+          "source": "rise",
+          "seconds": 0.018,
+          "gain": 0.25,
+          "pitch_ratio": 0.75
+        },
+        {
+          "source": "chime",
+          "seconds": 0.085,
+          "gain": 0.3,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "chime",
+          "seconds": 0.275,
+          "gain": 0.25,
+          "pitch_ratio": 1.5
+        },
+        {
+          "source": "glass",
+          "seconds": 0.39,
+          "gain": 0.23,
+          "pitch_ratio": 2
+        },
+        {
+          "source": "spark",
+          "seconds": 0.1,
+          "gain": 0.16,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "spark",
+          "seconds": 0.162,
+          "gain": 0.151,
+          "pitch_ratio": 1.25
+        },
+        {
+          "source": "spark",
+          "seconds": 0.224,
+          "gain": 0.14200000000000002,
+          "pitch_ratio": 1.5
+        },
+        {
+          "source": "spark",
+          "seconds": 0.28600000000000003,
+          "gain": 0.133,
+          "pitch_ratio": 2
+        },
+        {
+          "source": "spark",
+          "seconds": 0.348,
+          "gain": 0.124,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "spark",
+          "seconds": 0.41000000000000003,
+          "gain": 0.115,
+          "pitch_ratio": 1.25
+        },
+        {
+          "source": "spark",
+          "seconds": 0.472,
+          "gain": 0.10600000000000001,
+          "pitch_ratio": 1.5
+        },
+        {
+          "source": "spark",
+          "seconds": 0.534,
+          "gain": 0.097,
+          "pitch_ratio": 2
+        },
+        {
+          "source": "spark",
+          "seconds": 0.596,
+          "gain": 0.08800000000000001,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "spark",
+          "seconds": 0.658,
+          "gain": 0.07900000000000001,
+          "pitch_ratio": 1.25
+        }
+      ],
+      "seconds": 0.937279,
+      "frames": 41334,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -8.5,
+      "rms_dbfs": -31.002,
+      "onset_minus_40_dbfs_seconds": 0.003651,
+      "batch_120ms_peak_dbfs": -9.415
+    }
+  ]
+}

@@ -86,12 +86,12 @@ func fit_content(available: Vector2, ui_scale: float) -> void:
 			unit *= 0.80
 	var max_size: Vector2 = ((available - Vector2.ONE * 12.0 / ui_scale) / 1.22).max(Vector2.ONE)
 	var padding: float = 10.0 * unit
-	var gap: float = 8.0 * unit
+	var gap: float = 8.0 * unit if _picture.texture != null else 0.0
 	var pixels: int = maxi(1, roundi((26.0 if _batch else 34.0) * unit))
 	if _batch:
 		pixels = maxi(pixels, roundi(18.0 / ui_scale))
-	var picture_height: float = (50.0 if _batch else 80.0) * unit
-	var aspect: float = clampf(_picture.texture.get_width() / float(maxi(1, _picture.texture.get_height())), 0.5, 1.8)
+	var picture_height: float = (50.0 if _batch else 80.0) * unit if _picture.texture != null else 0.0
+	var aspect: float = clampf(_picture.texture.get_width() / float(maxi(1, _picture.texture.get_height())), 0.5, 1.8) if _picture.texture != null else 1.0
 	var text_size: Vector2 = _measure(pixels)
 	var desired := Vector2(padding * 2.0 + picture_height * aspect + gap + text_size.x,
 		padding * 2.0 + maxf(picture_height, text_size.y))
@@ -156,7 +156,7 @@ func sync() -> void:
 			stretch = Vector2(0.98, 1.045).lerp(Vector2.ONE, smoothstep(0.33, 0.47, elapsed))
 		_visual.scale = stretch
 		_visual.position.y = (4.0 * (1.0 - smoothstep(0.0, 0.16, elapsed)) - fade * 4.0) / _ui_scale
-	_aura.visible = not reduced_motion
+	_aura.visible = not reduced_motion and _picture.texture != null
 	_aura.modulate = Color(_accent.lightened(0.50), 0.50 * (1.0 - smoothstep(0.10, 0.48, elapsed)))
 	for index in range(_glints.size()):
 		var age: float = elapsed - 0.07 - index * 0.075

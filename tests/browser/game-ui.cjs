@@ -178,7 +178,10 @@ async function growthControl(page, name) {
   const visibleTarget = (item, state, bounds) => {
     if (!item) return null;
     const [left, top, width, height] = item.rect;
-    const clip = name.startsWith('AgeWord_') && state.catalog?.viewport_rect || [0, 0, bounds.width, bounds.height];
+    const inProfessionalScroll = state.library?.selected_family === 'professional' &&
+      !['GrowthBack', 'LibraryEveryday', 'LibraryProfessional'].includes(name);
+    const clip = (name.startsWith('AgeWord_') || inProfessionalScroll) && state.catalog?.viewport_rect ||
+      [0, 0, bounds.width, bounds.height];
     const [x, y, w, h] = clip;
     if (left < x - 1 || left + width > x + w + 1) return null;
     if (top >= y - 1 && top + height <= y + h + 1) return item;

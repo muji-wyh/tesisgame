@@ -47,6 +47,7 @@ var _labels: Array[Label] = []
 var _row_buttons: Array[Button] = []
 var _fit_cache: Array = []
 var _row_revision: int = 0
+var _outer_scroll: ScrollContainer
 
 
 func _init() -> void:
@@ -147,6 +148,14 @@ func configure(content: Dictionary, session: Dictionary) -> void:
 	_refresh_progress()
 	_search.editable = true
 	_filter("")
+
+
+func embed_in(outer: ScrollContainer) -> void:
+	_outer_scroll = outer
+	# The whole vocabulary page has one scroll surface on small screens.
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_heading.hide()
+	_summary.hide()
 
 
 func set_progress(session: Dictionary) -> void:
@@ -337,6 +346,9 @@ func _select(index: int, reveal: bool = true) -> void:
 
 func _reveal_detail() -> void:
 	if not _configured or not _detail.is_visible_in_tree():
+		return
+	if is_instance_valid(_outer_scroll):
+		_outer_scroll.scroll_vertical += floori(_detail.global_position.y - _outer_scroll.global_position.y)
 		return
 	# A detail can exceed a phone's scroll window. Reveal its picture first;
 	# aligning the entire panel would move the illustration above the viewport.

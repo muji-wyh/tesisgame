@@ -289,21 +289,29 @@ func _draw_jelly_match(moving: bool) -> void:
 
 
 func _draw_jelly_words(moving: bool) -> void:
-	# Cat is an atomic word: the demonstration must never teach ca + t as roots.
-	var arrival: float = smoothstep(0.5, 1.5, _elapsed) if moving else 1.0
+	# A whole-word root first meets its picture; collection follows the merge.
+	var arrival: float = smoothstep(0.2, 0.5, _elapsed) if moving else 1.0
+	var approach: float = smoothstep(0.8, 1.4, _elapsed) if moving else 1.0
+	var fusion: float = smoothstep(1.4, 1.7, _elapsed) if moving else 1.0
 	var collect: float = smoothstep(2.55, 2.9, _elapsed) if moving else 0.0
 	var opening: float = smoothstep(3.25, 3.85, _elapsed) if moving else 1.0
 	var center := Vector2(56, 66 - 12 * (1.0 - arrival))
-	if arrival > 0.0:
-		var recoil: float = _recoil(1.5) if moving else 0.0
+	if fusion < 1.0:
+		var separation: float = lerpf(29.0, 8.0, approach) * (1.0 - fusion)
+		var opacity: float = arrival * (1.0 - fusion)
+		_gel(Rect2(center - Vector2(separation + 28, 28), Vector2(56, 56)), LILAC, "cat", null, opacity)
+		_gel(Rect2(center + Vector2(separation - 28, -28), Vector2(56, 56)), LILAC, "", CAT, opacity)
+	if fusion > 0.0:
+		var recoil: float = _recoil(1.7) if moving else 0.0
 		var press: float = _hop(2.35, 0.35, 0.12) if moving else 0.0
-		var dimensions := Vector2(96, 90) * Vector2(1.0 + recoil * 0.12 + press, 1.0 - recoil * 0.10 - press)
-		_gel(Rect2(center - dimensions * 0.5 - Vector2(0, collect * 10), dimensions), LILAC, "", null, arrival * (1.0 - collect))
-		var content_alpha: float = arrival
-		var picture_side: float = lerpf(36, 44, collect)
-		var picture_center: Vector2 = center - Vector2(0, 11 + collect * 8)
+		var dimensions := Vector2(56, 56) * Vector2(1.0 + recoil * 0.12 + press, 1.0 - recoil * 0.10 - press)
+		_art(GLOW, Rect2(center - Vector2(43, 43), Vector2(86, 86)), fusion * (1.0 - collect) * 0.55)
+		_gel(Rect2(center - dimensions * 0.5 - Vector2(0, collect * 10), dimensions), LILAC, "", null, fusion * (1.0 - collect))
+		var content_alpha: float = fusion
+		var picture_side: float = lerpf(25, 44, collect)
+		var picture_center: Vector2 = center - Vector2(0, 8 + collect * 8)
 		_art(CAT, Rect2(picture_center - Vector2.ONE * picture_side * 0.5, Vector2.ONE * picture_side), content_alpha)
-		_text("cat", center + Vector2(0, 18), roundi(lerpf(23, 25, collect)), Color(Style.INK, content_alpha))
+		_text("cat", center + Vector2(0, 15), roundi(lerpf(18, 25, collect)), Color(Style.INK, content_alpha))
 	if moving:
 		_tap(Vector2(80, 85), 2.35, PURPLE)
 	# The same acquired Royal layers and hinge as the full-size chest, without

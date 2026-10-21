@@ -53,7 +53,8 @@ The four production textures are:
 
 Each is a 320 × 320 RGBA image. The original 297 × 251 illustration is placed at
 `x=11, y=34, width=297, height=251`, then its painted rows are remapped into a
-continuous oval. This removes the flattened underside and abrupt lower corners.
+rounded rectangle with a 56-source-pixel corner radius. Broad, straight faces
+give the tiles a soft block silhouette while rounded corners retain their gel feel.
 The alpha-128 body span and bottom support at `y=285` stay fixed; a faint
 antialiasing fringe surrounds the contour. The acquired upper highlights retain
 their painted detail while the lower shade receives a localized softening.
@@ -83,8 +84,10 @@ blend; this softening step retains the source alpha before contour remapping.
 
 Contour remapping uses premultiplied RGBA at four times the output resolution.
 Each source row's alpha-128 contour is measured with a subpixel crossing at
-127.5, then the entire painted row is resampled into an ellipse centered at
-`(159.5, 159.5)` with radii `(148.5, 125.5)`. Bicubic sampling followed by Lanczos
+127.5, then the entire painted row is resampled into a rounded rectangle centered
+at `(159.5, 159.5)` with half extents `(148.5, 125.5)` and corner radius `56`.
+A supersampled contour mask clips the faint fringe that would otherwise stretch
+outward with the source's narrow top rows. Bicubic sampling followed by Lanczos
 downsampling keeps the rounded edge smooth. The source glints, shaded body and
 reflections deform with the paint. All four variants share exactly the same
 alpha; the corresponding signed-distance materials are regenerated from these

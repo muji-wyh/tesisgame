@@ -36,6 +36,14 @@ const FRAGMENT_GAIN := 0.45
 const FRAGMENT_MIN_INTERVAL_MS := 60
 const JELLY_PATHS := {
 	"pop": "res://assets/audio/jelly-match/collect-pop.wav",
+	"jelly-collect-lv2": "res://assets/audio/jelly-match/collect-lv2.wav",
+	"jelly-collect-lv3": "res://assets/audio/jelly-match/collect-lv3.wav",
+	"jelly-collect-lv4": "res://assets/audio/jelly-match/collect-lv4.wav",
+	"jelly-collect-lv5": "res://assets/audio/jelly-match/collect-lv5.wav",
+	"jelly-collect-lv6": "res://assets/audio/jelly-match/collect-lv6.wav",
+	"jelly-collect-lv7": "res://assets/audio/jelly-match/collect-lv7.wav",
+	"jelly-collect-lv8": "res://assets/audio/jelly-match/collect-lv8.wav",
+	"jelly-collect-lv9": "res://assets/audio/jelly-match/collect-lv9.wav",
 	"finish_ready": "res://assets/audio/jelly-finish/ready.ogg",
 	"pick": UI_CLICK_PATH,
 	"release": "res://assets/imported-audio/chest-reference/step.wav",
@@ -51,9 +59,14 @@ const JELLY_GAINS := {
 	"pick": 0.64, "release": 0.38, "land": 0.35, "contact": 1.0,
 	"merge": 1.0, "pop": 0.90, "danger": 0.52, "reward": 0.36,
 	"assemble": 0.28,
+	"jelly-collect-lv2": 0.90, "jelly-collect-lv3": 0.90,
+	"jelly-collect-lv4": 0.90, "jelly-collect-lv5": 0.90,
+	"jelly-collect-lv6": 0.90, "jelly-collect-lv7": 0.90,
+	"jelly-collect-lv8": 0.90, "jelly-collect-lv9": 0.90,
 }
 const JELLY_SECONDARY_CUES := ["pick", "release", "land", "contact"]
 const JELLY_SPEECH_DB: float = -6.0
+const JELLY_LEVEL_CHANNELS: int = 8
 const ROUND_CELEBRATION_PATHS := {
 	"step": "res://assets/imported-audio/chest-reference/step.wav",
 	"step-detail": "res://assets/imported-audio/chest-reference/step-detail.wav",
@@ -128,6 +141,8 @@ var _round_celebration_players: Array[AudioStreamPlayer] = []
 var _round_celebration_gains: Dictionary = {}
 var _round_celebration_next_player: int = 0
 var _jelly_players: Array[AudioStreamPlayer] = []
+var _jelly_level_players: Array[AudioStreamPlayer] = []
+var _jelly_level_next: int = 0
 var _jelly_gains: Dictionary = {}
 var _jelly_cues: Dictionary = {}
 var _jelly_next_player: int = 0
@@ -366,6 +381,9 @@ func stop_pair_chest_discovery() -> void:
 func play_jelly_cue(cue_name: String) -> void:
 	if muted or not active or not available or not JELLY_PATHS.has(cue_name):
 		return
+	if cue_name.begins_with("jelly-collect-lv"):
+		_play_jelly_level(cue_name)
+		return
 	if cue_name == "danger":
 		stop_jelly_danger()
 	if _jelly_players.is_empty():
@@ -395,11 +413,29 @@ func play_jelly_cue(cue_name: String) -> void:
 	set_process(true)
 
 
+func _play_jelly_level(cue_name: String) -> void:
+	# Eight independent tails cover the longest recording at 120 ms pickup
+	# intervals. Board contact and warning cues cannot steal these accents.
+	if _jelly_level_players.is_empty():
+		for index in range(JELLY_LEVEL_CHANNELS):
+			var channel: AudioStreamPlayer = _player(1.0)
+			channel.finished.connect(func() -> void: _jelly_cues.erase(channel))
+			_jelly_level_players.append(channel)
+	var player: AudioStreamPlayer = _jelly_level_players[_jelly_level_next]
+	_jelly_level_next = (_jelly_level_next + 1) % JELLY_LEVEL_CHANNELS
+	_jelly_gains[player] = float(JELLY_GAINS[cue_name])
+	_jelly_cues[player] = cue_name
+	player.pitch_scale = 1.0
+	_update_jelly_gain()
+	_play(player, JELLY_PATHS[cue_name])
+	set_process(true)
+
+
 func _update_jelly_gain() -> void:
 	var duck_db: float = JELLY_SPEECH_DB if voice != null and voice.playing else 0.0
 	if pair_chest_discovery != null:
 		pair_chest_discovery.volume_db = linear_to_db(PAIR_CHEST_DISCOVERY_GAIN) + duck_db
-	for player: AudioStreamPlayer in _jelly_players:
+	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players:
 		player.volume_db = linear_to_db(float(_jelly_gains.get(player, 1.0))) + duck_db
 
 
@@ -415,11 +451,12 @@ func stop_jelly_danger() -> void:
 
 func stop_jelly_sounds() -> void:
 	stop_fragment_sounds()
-	for player: AudioStreamPlayer in _jelly_players:
+	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players:
 		_stop(player)
 		player.stream = null
 	_jelly_cues.clear()
 	_jelly_next_player = 0
+	_jelly_level_next = 0
 
 
 func begin_round_celebration(round_id: String) -> void:
@@ -473,7 +510,7 @@ func stop_round_celebration() -> void:
 		_stop(player)
 		player.stream = null
 		player.volume_db = linear_to_db(float(_round_celebration_gains.get(player, 1.0)))
-	set_process(not _jelly_players.is_empty() or not _coin_players.is_empty() or not _fragment_players.is_empty())
+	set_process(not _jelly_players.is_empty() or not _jelly_level_players.is_empty() or not _coin_players.is_empty() or not _fragment_players.is_empty())
 	_update_music_gain()
 
 
@@ -493,7 +530,7 @@ func _process(_delta: float) -> void:
 		set_process(false)
 		return
 	var jelly_playing: bool = pair_chest_discovery != null and pair_chest_discovery.playing
-	for player: AudioStreamPlayer in _jelly_players:
+	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players:
 		jelly_playing = jelly_playing or player.playing
 	_update_jelly_gain()
 	var coin_playing: bool = false

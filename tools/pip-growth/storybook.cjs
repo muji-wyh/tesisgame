@@ -342,4 +342,4 @@ async function main() {
   if(!process.argv.includes('--preview')) writeLoaderAssets();
 }
 if(require.main===module) main().catch(error=>{console.error(error);process.exitCode=1;});
-module.exports={svg,layers,head,AGES,FORMS};
+module.exports={svg,layers,head,body,wing,foot,defs,framed,AGES,FORMS,COLORS};

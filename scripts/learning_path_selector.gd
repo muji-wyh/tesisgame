@@ -30,6 +30,7 @@ var _style_revision: int = 0
 var _factor: float = 1.0
 var _wide: bool = true
 var _busy: bool = false
+var _library_mode: bool = false
 var _retry: bool = false
 var _status_text: String = ""
 var _heading: Label
@@ -131,6 +132,13 @@ func configure(catalog: RefCounted) -> void:
 	_refresh()
 
 
+func set_library_mode(enabled: bool) -> void:
+	_library_mode = enabled
+	if enabled and (_screen == "paths" or _selection.get("track") == "growth"):
+		_show_courses()
+	_refresh()
+
+
 func set_selection(context: Dictionary) -> void:
 	_selection = Context.freeze(context).duplicate(true)
 	_course = {}
@@ -138,6 +146,9 @@ func set_selection(context: Dictionary) -> void:
 		_course = _catalog.course(str(_selection.course_id))
 	_screen = "summary" if not _selection.is_empty() else "paths"
 	_clear_rows()
+	if _library_mode and _selection.get("track") != "professional":
+		_screen = "courses"
+		_build_courses()
 	_refresh()
 
 
@@ -247,6 +258,7 @@ func controls() -> Array[Control]:
 
 func snapshot() -> Dictionary:
 	return {"screen": _screen, "selection": _selection.duplicate(true), "course_id": _course.get("id", ""),
+		"library_mode": _library_mode,
 		"visible_rows": _rows.filter(func(row: Dictionary) -> bool: return row.button.visible).size(),
 		"columns": _list.columns, "busy": _busy, "retry": _retry, "status": _status.text,
 		"continue_enabled": _continue.visible and not _continue.disabled,
@@ -308,7 +320,7 @@ func _choose_module(id: String) -> void:
 
 
 func _continue_selection() -> void:
-	if not _busy and not _selection.is_empty() and _selected_ready():
+	if not _busy and not _selection.is_empty() and _can_use_selection():
 		continue_requested.emit(_selection.duplicate(true))
 
 
@@ -373,6 +385,10 @@ func _selected_module() -> Dictionary:
 
 func _selected_ready() -> bool:
 	return _selection.get("track") == "growth" or _selected_module().get("status") == "ready"
+
+
+func _can_use_selection() -> bool:
+	return not _selected_module().is_empty() if _library_mode else _selected_ready()
 
 
 func _progress_available() -> bool:
@@ -465,10 +481,10 @@ func _refresh() -> void:
 				title = str(module.title)
 		_heading.text = str(selected_course.get("title", _selection.course_id))
 		_active.text = title
-	_paths.visible = _screen == "paths"
+	_paths.visible = _screen == "paths" and not _library_mode
 	_search.visible = _screen == "courses"
 	_list.visible = _screen in ["courses", "modules"]
-	_change_path.visible = _screen != "paths"
+	_change_path.visible = _screen != "paths" and not _library_mode
 	_change_path.text = "Change path" if growth_summary else "All paths"
 	_change_career.visible = _screen in ["modules", "summary"] and (_selection.get("track") == "professional" or not _course.is_empty())
 	_change_module.visible = _screen == "summary" and _selection.get("track") == "professional" and not _course.is_empty()
@@ -491,15 +507,15 @@ func _refresh() -> void:
 			_detail.text += "\nPreparing this module. Explore another module while you wait."
 	_status.text = _status_text
 	_status.visible = not _status_text.is_empty()
-	_continue.visible = _screen == "summary" and not growth_summary and _selected_ready()
-	_continue.text = "Continue"
+	_continue.visible = _screen == "summary" and not growth_summary and _can_use_selection()
+	_continue.text = "Use this vocabulary" if _library_mode else "Continue"
 	_retry_button.visible = _retry
 	_cancel.visible = _busy or _retry
 	_actions.visible = _continue.visible or _retry_button.visible or _cancel.visible
 	for button in _buttons:
 		if is_instance_valid(button):
 			button.disabled = _busy and button != _cancel
-	_continue.disabled = _busy or not _selected_ready() or _selection.is_empty()
+	_continue.disabled = _busy or not _can_use_selection() or _selection.is_empty()
 	_search.editable = not _busy
 	fit(_factor, _wide)
 	if _last_screen != _screen:

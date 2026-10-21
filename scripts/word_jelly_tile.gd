@@ -1,15 +1,16 @@
 extends "res://scripts/jelly_tile.gd"
-## The existing painted skin stretches with mass; letters and artwork do not.
+## Roots, pictures and merged words share the ordinary square Jelly body.
 
 signal read_requested(id: int)
 
 var valid_word: bool = false
 var requires_read: bool = false
+var jelly_kind: String = "root"
+var merge_level: int = 0
 var _authored: bool = false
-var _authored_lines: Array = []
-var _authored_columns: int = 1
-var _authored_rows: int = 1
-var _reserved_width: float = 0.0
+var _spelling: String = ""
+var _break_offsets: Array = []
+const Footprint = preload("res://scripts/jelly_footprint.gd")
 var _read_button := Button.new()
 var fragments: int = 0
 var _fragment_badges: Array[TextureRect] = []
@@ -26,6 +27,13 @@ var completion_hint: bool = false
 var completion_scale: float = 1.0
 var _completion_glow: TextureRect
 var _completion_glints: Array[TextureRect] = []
+var _merged_glow: TextureRect
+var _merged_glints: Array[TextureRect] = []
+var _merged_elapsed: float = 0.0
+var _level_badge: Label
+const MERGED_COLORS: Array[Color] = [Color("#f7c45c"), Color("#f7c45c"), Color("#ffe48b"),
+	Color("#ffc77b"), Color("#ffb4dc"), Color("#c9c2ff"), Color("#9ee8f3"),
+	Color("#bcecb0"), Color("#ffd694"), Color("#f4daff")]
 
 func _init() -> void:
 	super()
@@ -38,6 +46,61 @@ func _init() -> void:
 	_read_button.pressed.connect(func() -> void: read_requested.emit(tile_id))
 	add_child(_read_button)
 	_read_button.hide()
+	_level_badge = Style.label("", 12)
+	_level_badge.name = "MergeLevel"
+	_level_badge.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_level_badge.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_level_badge.add_theme_font_override("font", Style.HEADING_FONT)
+	_level_badge.add_theme_color_override("font_color", Color("#fff8df"))
+	_level_badge.add_theme_color_override("font_outline_color", Color("#473e63"))
+	_level_badge.add_theme_constant_override("outline_size", 1)
+	_level_badge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_level_badge.z_index = 46
+	_visual.add_child(_level_badge)
+	_level_badge.hide()
+
+func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
+	_merged_elapsed = elapsed
+	var active: bool = valid_word and not _projection
+	if active and _merged_glow == null:
+		_merged_glow = TextureRect.new()
+		_merged_glow.name = "MergedLight"
+		_merged_glow.texture = COMPLETION_GLOW
+		_merged_glow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		_merged_glow.stretch_mode = TextureRect.STRETCH_SCALE
+		_merged_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var light := ShaderMaterial.new()
+		light.shader = COMPLETION_LIGHT
+		_merged_glow.material = light
+		add_child(_merged_glow)
+		move_child(_merged_glow, _visual.get_index())
+		for index in range(2):
+			var glint: TextureRect = _texture()
+			glint.texture = COMPLETION_SPARKLE
+			glint.stretch_mode = TextureRect.STRETCH_SCALE
+			glint.name = "MergedGlint%d" % index
+			_merged_glints.append(glint)
+	if _merged_glow != null:
+		_merged_glow.visible = active
+		# The permanent local light distinguishes a collectible word at rest.
+		# It stays small enough that adjacent source pieces retain their own color.
+		_merged_glow.size = size * 1.30
+		_merged_glow.position = (size - _merged_glow.size) * 0.5 - Vector2(0.0, size.y * 0.025)
+		var tint: Color = MERGED_COLORS[clampi(merge_level, 1, 9)]
+		tint.a = 0.48 + float(maxi(0, merge_level - 1)) * 0.025
+		_merged_glow.modulate = tint
+	for index in range(_merged_glints.size()):
+		var glint: TextureRect = _merged_glints[index]
+		glint.visible = active
+		var twinkle: float = 0.5 if reduced else (sin(elapsed * TAU / 2.8 + index * PI + tile_id * 0.41) + 1.0) * 0.5
+		glint.size = Vector2.ONE * minf(_unit * (0.19 if index == 0 else 0.15), 15.0 / Style.ui_scale(self))
+		glint.pivot_offset = glint.size * 0.5
+		glint.position = size * (Vector2(0.47, 0.12) if index == 0 else Vector2(0.89, 0.76)) - glint.size * 0.5
+		glint.scale = Vector2.ONE * (1.0 if reduced else 0.85 + twinkle * 0.20)
+		glint.modulate = Color(1.0, 0.98, 0.86, 0.68 + twinkle * 0.24)
+	if not completion_hint:
+		_gel.set_shader_parameter("completion_strength", 0.35 if active else 0.0)
+		_gel.set_shader_parameter("completion_glint", -2.0 if reduced or not active else -0.3 + fposmod(elapsed + tile_id * 0.13, 4.2) * 0.40)
 
 func set_completion_hint(active: bool, elapsed: float, reduced: bool) -> void:
 	var was_active: bool = completion_hint
@@ -51,7 +114,7 @@ func set_completion_hint(active: bool, elapsed: float, reduced: bool) -> void:
 	# Only the painted skin breathes. Letters, badges, layout and contact stay fixed.
 	_base_stretch *= completion_scale / previous_scale
 	_surface.scale *= completion_scale / previous_scale
-	_gel.set_shader_parameter("completion_strength", (0.9 if reduced else 0.6 + enter * 0.4) if completion_hint else 0.0)
+	_gel.set_shader_parameter("completion_strength", (0.9 if reduced else 0.6 + enter * 0.4) if completion_hint else 0.35 if valid_word and not _projection else 0.0)
 	_gel.set_shader_parameter("completion_glint", -2.0 if reduced else -0.3 + fposmod(elapsed, 1.8) * 1.6)
 	if completion_hint and _completion_glow == null:
 		_completion_glow = TextureRect.new()
@@ -94,6 +157,11 @@ func set_completion_hint(active: bool, elapsed: float, reduced: bool) -> void:
 	if completion_hint or was_active:
 		_refresh_feedback()
 
+func set_projection(value: bool) -> void:
+	super.set_projection(value)
+	if value:
+		set_completion_hint(false, 0.0, _reduced_motion)
+
 func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
 	super.deform(amount, beat, stretch * completion_scale)
 
@@ -103,16 +171,20 @@ func set_palette(index: int, hue: float) -> void:
 
 func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: Texture2D, accent: Color, show_both: bool = false) -> void:
 	_authored = not cell.get("composition", {}).is_empty()
-	valid_word = not cell.get("word", {}).is_empty() and (_authored or int(cell.get("mass", 1)) > 1)
-	requires_read = _authored and bool(cell.get("requires_read", false))
-	_authored_lines = cell.get("label_lines", [str(cell.get("text", ""))]).duplicate()
-	_authored_columns = int(cell.get("preferred_width", cell.get("width", 1)))
-	_authored_rows = int(cell.get("preferred_height", cell.get("height", 1)))
-	_reserved_width = float(cell.get("label_reserved_width", 0.0))
+	var legacy_complete: bool = not cell.get("word", {}).is_empty() and (_authored or int(cell.get("mass", 1)) > 1)
+	jelly_kind = str(cell.get("jelly_kind", "merged" if legacy_complete else "root"))
+	valid_word = jelly_kind == "merged" and not cell.get("word", {}).is_empty()
+	merge_level = clampi(int(cell.get("merge_level", 1)), 1, 9) if valid_word else 0
+	requires_read = jelly_kind != "picture" and _authored and bool(cell.get("requires_read", false))
+	_spelling = str(cell.get("display_text", cell.get("text", ""))) if jelly_kind != "picture" else ""
+	_break_offsets = cell.get("approved_break_offsets", []).duplicate()
+	if _spelling.begins_with("-"):
+		for index in range(_break_offsets.size()):
+			_break_offsets[index] = int(_break_offsets[index]) + 1
 	fragments = int(cell.get("fragments", 0))
 	var face: Dictionary = cell.duplicate(true)
-	face.word = {"text": str(cell.get("text", ""))} if not valid_word else cell.word
-	face.kind = "word"
+	face.word = {"text": _spelling} if not valid_word else cell.word
+	face.kind = "picture" if jelly_kind == "picture" else "word"
 	super.configure(face, surface, picture, chest, accent, valid_word)
 	_fragment_texture = chest
 	_surface.stretch_mode = TextureRect.STRETCH_SCALE
@@ -134,12 +206,18 @@ func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: 
 		_fragment_count.add_theme_color_override("font_color", Color("#674a27"))
 		_fragment_count.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_fragment_holder.add_child(_fragment_count)
-	set("accessibility_name", "%s. %s Drag to a fitting empty space to move it. Shift+Enter selects this jelly to merge with another.%s" % [str(cell.get("text", "")),
-		"Word complete. Press to collect, with a 1% chance of bonus coins, or drag to keep building." if valid_word
-		else "Drag this part before another part to build a word.",
-		" %d chest fragments." % fragments if fragments > 0 else ""])
-	if requires_read:
-		set("accessibility_name", str(get("accessibility_name")) + " Use Read to pause and inspect the full spelling.")
+	var identity: String = "Picture of %s" % str(cell.get("image_word", {}).get("text", cell.get("text", ""))) if jelly_kind == "picture" else _spelling
+	var instruction: String = "Drag this root before another root to build a word."
+	if valid_word:
+		instruction = "Merged word, level %d. Press to collect, with a 1%% chance of bonus coins.%s" % [merge_level,
+			" Drag to the same word at the same level to upgrade." if merge_level < 9 else " Maximum level reached."]
+	elif jelly_kind == "picture":
+		instruction = "Drag to its complete matching word to merge."
+	elif not cell.get("word_candidate", {}).is_empty():
+		instruction = "Word assembled. Drag to its matching picture to merge."
+	set("accessibility_name", "%s. %s Drag to a fitting empty space to move it. Shift+Enter selects this jelly to merge with another.%s%s" % [identity, instruction,
+		" %d chest fragments." % fragments if fragments > 0 else "",
+		" Press R while focused to read the full spelling." if jelly_kind != "picture" else ""])
 	_layout()
 	_refresh_feedback()
 
@@ -154,10 +232,10 @@ func _refresh_feedback(reset_motion: bool = false) -> void:
 		_gel.set_shader_parameter("rim_color", Color("#ffe9a8"))
 		_gel.set_shader_parameter("rim_strength", 1.0)
 		_gel.set_shader_parameter("rim_width", 1.9)
-	elif valid_word and _mark == 0 and _contact_kind == "none":
-		_gel.set_shader_parameter("rim_color", Color("#de9b29"))
-		_gel.set_shader_parameter("rim_strength", 0.85)
-		_gel.set_shader_parameter("rim_width", 1.1)
+	elif valid_word and not _projection and _mark == 0 and _contact_kind == "none":
+		_gel.set_shader_parameter("rim_color", MERGED_COLORS[merge_level].darkened(0.12))
+		_gel.set_shader_parameter("rim_strength", 1.0)
+		_gel.set_shader_parameter("rim_width", 1.65)
 
 func _layout() -> void:
 	if _visual == null:
@@ -167,84 +245,99 @@ func _layout() -> void:
 	_surface.stretch_mode = TextureRect.STRETCH_SCALE
 	_unit = minf(size.y, size.x)
 	_layout_fragment_badge()
-	_read_button.visible = requires_read and not _projection
-	if _authored:
-		_layout_authored_label()
-		return
-	_picture.visible = valid_word and not _projection
-	_label.visible = not _projection
-	var side_by_side: bool = valid_word and size.x > size.y * 1.45
-	if side_by_side:
-		_picture.position = Vector2(size.x * 0.09, size.y * 0.16)
-		_picture.size = Vector2(minf(size.y * 0.66, size.x * 0.32), size.y * 0.60)
-		_label.position = Vector2(size.x * 0.43, size.y * 0.21)
-		_label.size = Vector2(size.x * 0.46, size.y * (0.48 if fragments > 0 else 0.54))
-	elif valid_word:
-		_picture.position = size * Vector2(0.23, 0.14)
-		_picture.size = size * Vector2(0.54, 0.42)
-		_label.position = size * Vector2(0.12, 0.53)
-		_label.size = size * Vector2(0.76, 0.25)
-		if fragments > 0 and size.y < size.x * 1.3:
-			# A small square shares its upper row between the picture and spelling.
-			_picture.position = size * Vector2(0.10, 0.18)
-			_picture.size = size * Vector2(0.30, 0.36)
-			_label.position = size * Vector2(0.43, 0.18)
-			_label.size = size * Vector2(0.47, 0.42)
-	else:
-		_label.position = size * Vector2(0.11, 0.22)
-		_label.size = size * Vector2(0.78, 0.47 if fragments > 0 else 0.53)
-	if fragments > 0 and _fragment_holder != null:
-		var footer_top: float = _fragment_holder.position.y + _fragment_holder.size.y * (1.0 - float(_fragment_holder.get_meta("fit", 1.0))) * 0.5
-		_label.size.y = minf(_label.size.y, maxf(1.0, footer_top - _unit * 0.035 - _label.position.y))
-	_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	var pixels: int = maxi(12, mini(28, roundi(_unit * 0.34)))
-	_label.add_theme_font_size_override("font_size", pixels)
-	# Fit the shaped lines, including rounded font height. Estimating line
-	# height from font size can hide the last line of a two-part long word.
-	while pixels > 1 and (_label.get_visible_line_count() < _label.get_line_count() \
-		or _label.get_line_count() * _label.get_line_height() > _label.size.y):
-		pixels -= 1
-		_label.add_theme_font_size_override("font_size", pixels)
+	_read_button.hide()
+	_layout_compact_label()
+	_layout_level_badge()
+	set_merged_presentation(_merged_elapsed, _reduced_motion)
 
-func _layout_authored_label() -> void:
-	# These dimensions were measured once by JellyFootprint. Keep the authored
-	# lines and reference reservations instead of squeezing text after a resize.
-	var scale_factor: float = minf(size.x / maxf(1.0, _authored_columns * 32.0 - 3.0),
-		size.y / maxf(1.0, _authored_rows * 32.0 - 3.0))
+func _layout_compact_label() -> void:
 	var s: float = Style.ui_scale(self)
-	var reserved: float = _reserved_width * scale_factor
-	_label.visible = not _projection
+	var font: Font = _label.get_theme_font("font")
+	var has_picture: bool = _picture.texture != null and (valid_word or jelly_kind == "picture")
+	_picture.visible = has_picture and not _projection
+	_label.visible = jelly_kind != "picture" and not _projection
+	if jelly_kind == "picture":
+		requires_read = false
+		_label.text = ""
+		tooltip_text = "Match this picture to its word."
+		_picture.size = size * 0.68
+		_picture.position = (size - _picture.size) * 0.5 - Vector2(0.0, size.y * 0.025)
+		if fragments > 0:
+			_picture.size = size * 0.58
+			_picture.position = Vector2(size.x * 0.36, size.y * 0.26) - Vector2(_picture.size.x * 0.12, 0.0)
+		_layout_corner_fragments()
+		return
 	_label.autowrap_mode = TextServer.AUTOWRAP_OFF
-	_label.text_overrun_behavior = TextServer.OVERRUN_NO_TRIMMING
-	_label.add_theme_font_size_override("font_size", maxi(ceili(16.0 / s), floori(16.0 * scale_factor)))
-	_label.text = "\n".join(_authored_lines)
+	_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	# Apply the measured font and lines before the rectangle. Label minimum
-	# height otherwise retains the base tile's larger font while resizing and
-	# pushes authored text below the acquired gel skin.
-	_label.position = Vector2(4.0 * scale_factor + reserved, 3.0 * scale_factor)
-	_label.size = Vector2(maxf(0, size.x - 8.0 * scale_factor - reserved), maxf(0, size.y - 6.0 * scale_factor))
-	_picture.visible = valid_word and not _projection
-	_picture.size = Vector2.ONE * minf(24.0 * scale_factor, size.y - 6.0 * scale_factor)
-	_picture.position = Vector2(4.0 * scale_factor, (size.y - _picture.size.y) * 0.5)
-	if _fragment_holder != null:
-		_fragment_holder.visible = fragments > 0 and not _projection
-		var badge_fit: float = minf(1.0, 10.0 * scale_factor / maxf(1.0, _fragment_holder.size.x))
-		_fragment_holder.set_meta("fit", badge_fit)
-		_fragment_holder.scale = Vector2.ONE * badge_fit
-		_fragment_holder.pivot_offset = Vector2.ZERO
-		_fragment_holder.position = Vector2((28.0 if valid_word else 4.0) * scale_factor,
-			(size.y - _fragment_holder.size.y * badge_fit) * 0.5)
-	if requires_read:
-		# The complete spelling remains in the detail and accessibility name.
-		# Read shares the row so its 44-pixel target never covers the label on
-		# the minimum supported two-row footprint.
-		_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		_read_button.size = Vector2(74.0, 44.0) / s
-		_read_button.position = Vector2(size.x - _read_button.size.x - 4.0 / s, (size.y - _read_button.size.y) * 0.5)
-		_label.size.x = maxf(0.0, _read_button.position.x - 4.0 / s - _label.position.x)
-		_read_button.add_theme_font_size_override("font_size", ceili(16.0 / s))
+	var inset: float = size.x * 0.10
+	var label_top: float = size.y * (0.54 if has_picture else 0.36 if fragments > 0 or merge_level > 1 else 0.21)
+	var label_bottom: float = size.y * (0.85 if has_picture else 0.89 if fragments > 0 or merge_level > 1 else 0.79)
+	var label_size := Vector2(size.x - inset * 2.0, label_bottom - label_top)
+	var minimum: int = ceili(13.0 / s)
+	var pixels: int = maxi(minimum, mini(roundi(_unit * (0.25 if has_picture else 0.34)), ceili((22.0 if has_picture else 28.0) / s)))
+	var lines: Array = [_spelling]
+	# Fit at authored boundaries only. The body never grows with spelling length.
+	while pixels >= minimum:
+		var maximum_lines: int = maxi(1, floori(label_size.y / font.get_height(pixels)))
+		var fit: Dictionary = Footprint._wrap(_spelling, font, _break_offsets,
+			maxf(0.0, label_size.x - 1.0 / s) * float(Footprint.FONT_SIZE) / pixels, maximum_lines)
+		if fit.ok:
+			lines = fit.lines
+			break
+		if pixels == minimum:
+			break
+		pixels -= 1
+	requires_read = false
+	for line: String in lines:
+		requires_read = requires_read or font.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x > label_size.x + 0.01
+	tooltip_text = _spelling + ("\nHold to read. Keyboard: R." if requires_read else "\nKeyboard: R to read.")
+	_label.add_theme_font_size_override("font_size", pixels)
+	_label.text = "\n".join(lines)
+	# Apply font and text first so Label's minimum height reflects this layout.
+	_label.position = Vector2(inset, label_top)
+	_label.size = Vector2(label_size.x, maxf(label_size.y, font.get_height(pixels) * lines.size()))
+	if _label.get_rect().end.y > size.y * 0.89:
+		_label.position.y = maxf(size.y * 0.10, size.y * 0.89 - _label.size.y)
+	var picture_top: float = size.y * 0.12
+	var has_corner_badges: bool = fragments > 0 or merge_level > 1
+	var picture_edge: float = maxf(0.0, minf(size.x * (0.34 if has_corner_badges else 0.44), _label.position.y - picture_top - 1.0 / s))
+	_picture.size = Vector2.ONE * picture_edge
+	_picture.position = Vector2(size.x * (0.45 if merge_level > 1 else 0.50) - picture_edge * 0.5, picture_top)
+	_layout_corner_fragments()
+
+func _layout_corner_fragments() -> void:
+	if _fragment_holder == null or fragments <= 0:
+		return
+	# The left corner remains separate from the level numeral on the right.
+	# Neither badge borrows the word caption's row or its centered picture.
+	var extent: Vector2 = _fragment_holder.size
+	var top: float = size.y * 0.08
+	var height: float = size.y * 0.21
+	if jelly_kind != "picture":
+		# Short landscape bodies lift the caption to preserve its reading floor.
+		# Reserve the same actual caption edge for the badge and its receive pop.
+		height = minf(height, maxf(0.0, _label.position.y - top - 1.0 / Style.ui_scale(self)) / 1.06)
+	var fit: float = minf(1.0, minf(size.x * 0.25 / maxf(1.0, extent.x), height / maxf(1.0, extent.y)))
+	_fragment_holder.set_meta("fit", fit)
+	_fragment_holder.position = Vector2(size.x * 0.02, top) - extent * (1.0 - fit) * 0.5
+	set_fragment_arrival(_fragment_arrival_age, _reduced_motion)
+
+func _layout_level_badge() -> void:
+	if _level_badge == null:
+		return
+	_level_badge.visible = valid_word and merge_level > 1 and not _projection
+	_level_badge.text = str(merge_level) if merge_level > 1 else ""
+	var ui_scale: float = Style.ui_scale(self)
+	var pixels: int = maxi(ceili(10.0 / ui_scale), roundi(minf(_unit * 0.20, 15.0 / ui_scale)))
+	_level_badge.add_theme_font_size_override("font_size", pixels)
+	var edge: float = maxf(Style.HEADING_FONT.get_height(pixels), minf(_unit * 0.28, 21.0 / ui_scale))
+	_level_badge.size = Vector2.ONE * edge
+	_level_badge.position = Vector2(size.x * 0.98 - edge, size.y * 0.08)
+	var badge := Style.box(Color("#4d4565"), MERGED_COLORS[clampi(merge_level, 1, 9)], ceili(edge * 0.42), maxi(1, roundi(1.2 / ui_scale)))
+	badge.set_content_margin_all(0.0)
+	_level_badge.add_theme_stylebox_override("normal", badge)
+	_level_badge.set("accessibility_name", "Level %d" % merge_level)
 
 func _layout_fragment_badge() -> void:
 	if _fragment_holder == null:
@@ -306,3 +399,12 @@ func fragment_badge_snapshot() -> Dictionary:
 
 func visible_fragment_badges() -> int:
 	return mini(fragments, 2) if not _projection else 0
+
+func presentation_snapshot() -> Dictionary:
+	return {"jelly_kind": jelly_kind, "merge_level": merge_level, "display_text": _spelling,
+		"picture_only": jelly_kind == "picture" and _picture.visible and not _label.visible,
+		"merged_light": _merged_glow != null and _merged_glow.visible,
+		"merged_glints": _merged_glints.size() if valid_word and not _projection else 0,
+		"level_badge": _level_badge.text if _level_badge != null and _level_badge.visible else "",
+		"level_badge_rect": [_level_badge.position.x, _level_badge.position.y, _level_badge.size.x, _level_badge.size.y] if _level_badge != null else [],
+		"read_available": requires_read and jelly_kind != "picture"}

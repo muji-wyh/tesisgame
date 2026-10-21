@@ -44,6 +44,7 @@ func _run() -> void:
 	larger.id = "view-fixture-caterpillar"
 	larger.text = "caterpillar"
 	larger.min_age = 3
+	larger.erase("morphology")
 	words = [cat, larger]
 	var view := Jelly.new()
 	root.add_child(view)
@@ -98,8 +99,8 @@ func _run() -> void:
 	_check_partial_word_colors(view)
 	_check_fusion_palette_handover(view)
 	_check_crowded_palette_separation(view)
-	_check_repeat_merge_and_wrap(view)
-	_check_variable_outline(view)
+	_check_repeat_merge_compact_body(view)
+	_check_uniform_outline(view)
 	_check_cancel_and_pause(view)
 	_check_reduced_motion(view)
 	_check_wallet_failure(view)
@@ -134,11 +135,30 @@ func _reset(view, reduced: bool = false, age: int = 3) -> void:
 	attempts.clear()
 
 
+func _fixture_tile(view, description: String, mass: int = 1, fragments: int = 0) -> Dictionary:
+	var parts: PackedStringArray = description.split(":")
+	var face: String = parts[0] if parts.size() > 1 else "merged" if mass > 1 else "root"
+	var spelling: String = parts[1] if parts.size() > 1 else description
+	var word: Dictionary = view.game._word_lookup.get(Model.normalize_word(spelling), {})
+	var tile: Dictionary
+	if face == "picture" and not word.is_empty():
+		tile = view.game._new_picture_tile(word, fragments)
+	elif face == "root" and not word.is_empty():
+		tile = view.game._new_word_root(word, fragments)
+	else:
+		tile = view.game._new_tile(spelling, mass, fragments)
+		if face == "merged" and not word.is_empty():
+			view.game._set_merged_word(tile, word, int(parts[2]) if parts.size() > 2 else 1, true)
+	tile.mass = mass
+	tile.parts_count = mass
+	return tile
+
+
 func _install(view, pieces: Array[String], fragments: Array[int] = [], masses: Array[int] = []) -> Array[int]:
 	view.game.cells.clear()
 	var ids: Array[int] = []
 	for index in range(pieces.size()):
-		var tile: Dictionary = view.game._new_tile(pieces[index], masses[index] if index < masses.size() else 1,
+		var tile: Dictionary = _fixture_tile(view, pieces[index], masses[index] if index < masses.size() else 1,
 			fragments[index] if index < fragments.size() else 0)
 		tile.column = 0 if index == 0 else 4
 		tile.row = 6 if index == 0 else 3
@@ -199,8 +219,10 @@ func _check_opening_and_bounds(view) -> void:
 		check(view._preview_rect.position.y >= 0 and view.finish_button.get_rect().end.y <= dimensions.y,
 			"bottom alignment preserves room for the complete preview and finish control")
 		for tile: Dictionary in state.tiles:
-			check(tile.settled and tile.visible and not tile.picture_visible, "opening root shows text without a word picture")
-			check(view._tiles[int(tile.id)]._label.text == tile.text, "root label matches its part")
+			var cell: Dictionary = view.game.cell(int(tile.id))
+			var pictured: bool = str(cell.jelly_kind) == "picture"
+			check(tile.settled and tile.visible and bool(tile.picture_visible) == pictured, "opening faces distinguish whole roots from picture clues")
+			check(view._tiles[int(tile.id)]._label.text == cell.display_text, "opening faces show the intended spelling or picture-only clue")
 			check(view._board.encloses(view._tile_rect(tile)), "root rectangle stays inside the well")
 			for neighbor: Dictionary in state.tiles:
 				if int(neighbor.row) != int(tile.row) or int(neighbor.column) != int(tile.column) + 1:
@@ -283,9 +305,12 @@ func _check_preview_label_height(view) -> void:
 		var label: Label = tile._label
 		var font: Font = label.get_theme_font("font")
 		var pixels: int = label.get_theme_font_size("font_size")
-		check(not label.text.is_empty() and label.visible, "every committed preview retains a visible part label")
-		check(font.get_height(pixels) <= label.size.y + 0.01,
-			"preview label fits the font's real line height, including marked fragments")
+		if tile.jelly_kind == "picture":
+			check(not label.visible and tile._picture.visible and not tile.requires_read, "picture previews show their clue without spelling or Read")
+		else:
+			check(not label.text.is_empty() and label.visible, "root previews retain a visible label")
+			check(font.get_height(pixels) <= label.size.y + 0.01,
+				"preview label fits the font's real line height, including marked fragments")
 		if tile.fragments > 0:
 			marked += 1
 	check(marked > 0, "preview readability regression includes a chest-marked part")
@@ -296,9 +321,9 @@ func _check_paused_resize(view) -> void:
 	var source: int = -1
 	var target: int = -1
 	for tile: Dictionary in view.game.cells:
-		if str(tile.text) == "ca":
+		if str(tile.text) == "cat" and str(tile.jelly_kind) == "root":
 			source = int(tile.id)
-		elif str(tile.text) == "t":
+		elif str(tile.text) == "cat" and str(tile.jelly_kind) == "picture":
 			target = int(tile.id)
 	check(source >= 0 and target >= 0, "paused resize fixture has a real starter word to merge")
 	_drag(view, source, target)
@@ -335,7 +360,7 @@ func _check_powerup_paused_resize(view) -> void:
 			view.size = Vector2(1000, 720)
 			_reset(view, reduced)
 			purchases.clear()
-			_install(view, ["ca", "t"])
+			_install(view, ["root:cat", "picture:cat"])
 			view._activate_powerup("auto_merge")
 			_advance(view, Model.POWERUP_DRAG_SECONDS * 0.5 if stage == "drag" else Model.POWERUP_DRAG_SECONDS + 0.15)
 			check(view.game.powerup_snapshot().stage == stage,
@@ -395,73 +420,39 @@ func _check_concurrent_powerup_resize(view) -> void:
 		view.size = Vector2(1000, 720)
 		_reset(view, reduced)
 		purchases.clear()
-		var ids: Array[int] = _install(view, ["ca", "t", "ca", "t"], [1, 2, 3, 4])
-		for index in range(ids.size()):
-			var tile: Dictionary = view.game.cells[view.game._index_for_id(ids[index])]
-			tile.column = [0, 3, 1, 4][index]
-			tile.row = Model.ROWS - 1
-		view._sync_tiles()
-		view._layout()
+		var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", "root:caterpillar", "picture:caterpillar"], [1, 2, 3, 4])
 		view._activate_powerup("auto_merge")
 		_advance(view, 0.25)
 		var moving: Dictionary = view.game.powerup_snapshot()
-		check(moving.drags.size() == 2 and view.game.fusions.is_empty(),
-			"native view displays two distinct paid drags between the 200 ms launch and 300 ms contact")
-		for drag: Dictionary in moving.drags:
-			var from: Vector2 = view._tile_rect(drag.source).get_center()
-			var to: Vector2 = view._tile_rect(drag.target).get_center()
-			var center: Vector2 = view._tiles[int(drag.source_id)].get_rect().get_center()
-			check(center.x > minf(from.x, to.x) and center.x < maxf(from.x, to.x),
-				"every active source body is rendered in transit instead of snapping a second drag to its cell")
-			if reduced:
-				check(center.is_equal_approx(from.lerp(to, float(drag.elapsed) / Model.POWERUP_DRAG_SECONDS)),
-					"each reduced-motion source uses its own direct interpolation and elapsed time")
+		check(moving.drags.size() == 1 and view.game.fusions.is_empty(), "hybrid auto merge reserves one complete path at a time")
+		var drag: Dictionary = moving.drags[0]
+		var body = view._tiles[int(drag.source_id)]
+		var from: Vector2 = view._tile_rect(drag.source).get_center()
+		var to: Vector2 = view._tile_rect(drag.target).get_center()
+		check(body.get_rect().get_center().x > minf(from.x, to.x) and body.get_rect().get_center().x < maxf(from.x, to.x),
+			"the active paid source is visibly in transit")
 		view.pause(true)
 		var frozen: Dictionary = view.game.powerup_snapshot()
 		for dimensions: Vector2 in [Vector2(390, 844), Vector2(568, 320)]:
 			view.size = dimensions
 			view._layout()
 			var bounds := Rect2(Vector2.ZERO, view.size).grow(0.01)
-			check(view.game.powerup_snapshot() == frozen, "portrait and landscape resize preserve both paused drag clocks")
-			var centers: Dictionary = {}
-			for drag: Dictionary in frozen.drags:
-				var body = view._tiles[int(drag.source_id)]
-				centers[int(drag.source_id)] = body.get_rect().get_center()
-				check(bounds.encloses(body.get_rect()), "each concurrent drag relocates into the resized viewport")
-				if reduced:
-					var from: Vector2 = view._tile_rect(drag.source).get_center()
-					var to: Vector2 = view._tile_rect(drag.target).get_center()
-					check(body.get_rect().get_center().is_equal_approx(from.lerp(to, float(drag.elapsed) / Model.POWERUP_DRAG_SECONDS)),
-						"resizing recalculates both direct transfers against their own new endpoints")
+			check(view.game.powerup_snapshot() == frozen and bounds.encloses(body.get_rect()), "paused resize preserves the path and moves its artwork inside the viewport")
+			var center: Vector2 = body.get_rect().get_center()
 			view._process(0.5)
-			check(view.game.powerup_snapshot() == frozen, "paused processing advances neither concurrent drag nor launch cadence")
-			for id: int in centers:
-				check(view._tiles[id].get_rect().get_center().is_equal_approx(centers[id]),
-					"both paused source bodies stay at their resized visual positions")
-		var second: Dictionary = frozen.drags[1]
+			check(view.game.powerup_snapshot() == frozen and body.get_rect().get_center().is_equal_approx(center), "paused processing advances neither route nor artwork")
 		view.pause(false)
 		_advance(view, 0.05)
-		var after_contact: Dictionary = view.game.powerup_snapshot()
-		check(view.game.fusions.size() == 1 and after_contact.drags.size() == 1
-			and int(after_contact.drags[0].source_id) == int(second.source_id)
-			and is_equal_approx(float(after_contact.drags[0].elapsed), 0.1),
-			"resuming hands off the first contact while keeping the second travel clock continuous")
-		var before: Vector2 = view._tiles[int(second.source_id)].get_rect().get_center()
-		_advance(view, 0.025)
-		check(view._tiles[int(second.source_id)].get_rect().get_center().distance_to(before) > 0.1,
-			"the second source continues moving while the resized first fusion is painted")
-		_advance(view, 2.0)
+		check(view.game.fusions.size() == 1 and view.game.powerup_snapshot().drags.is_empty(), "the first path reaches fusion before another paid drag starts")
+		_advance(view, 5.0)
 		var fragments: int = 0
 		for tile: Dictionary in view.game.cells:
 			fragments += int(tile.fragments)
-		check(not view.game.powerup_active() and view.game.collectable_ids().size() == 2
-			and int(view.game.merged_count) == 2 and fragments == 10
-			and purchases.size() == 1 and int(purchases[0].price) == 600
-			and payouts.is_empty() and attempts.is_empty() and heard.is_empty(),
-			"concurrent responsive travel finishes two words with all fragments and one debit, awaiting manual collection")
+		check(not view.game.powerup_active() and view.game.collectable_ids().size() == 2 and int(view.game.merged_count) == 2
+			and fragments == 10 and purchases.size() == 1 and payouts.is_empty() and attempts.is_empty() and heard.is_empty(),
+			"sequential resized routes finish both distinct words with all rewards carried and only one debit")
 	view.purchase_powerup = Callable()
 	view.size = Vector2(1000, 720)
-
 
 func _check_long_word_label_visibility(view) -> void:
 	var original_words: Array = words.duplicate(true)
@@ -476,42 +467,70 @@ func _check_long_word_label_visibility(view) -> void:
 	for dimensions: Vector2 in [Vector2(1473, 1175), Vector2(1000, 720), Vector2(390, 844), Vector2(320, 568), Vector2(568, 320)]:
 		view.size = dimensions
 		_reset(view, true, int(quadrilateral.min_age))
-		var parts: Array[String] = view.game._parts_for_word(quadrilateral)
-		check(parts.size() == 2 and parts[0] + parts[1] == "quadrilateral", "the long word has exactly two playable source blocks")
-		var ids: Array[int] = _install(view, parts, [0, 1])
+		var ids: Array[int] = _install(view, ["root:quadrilateral", "picture:quadrilateral"], [0, 1])
 		await process_frame
 		for id: int in ids:
-			_assert_complete_label(view._tiles[id], str(view.game.cell(id).text), "long root at %s" % dimensions)
+			if view.game.cell(id).jelly_kind == "root":
+				_assert_compact_label(view._tiles[id], str(view.game.cell(id).text), "long root at %s" % dimensions)
+			else:
+				check(not view._tiles[id]._label.visible and view._tiles[id]._picture.visible, "a long word's picture remains a picture-only clue")
+		var ordinary_size: Vector2 = view._tiles[ids[0]].size
 		for fragments: int in [0, 2]:
 			ids = _install(view, ["quadrilateral"], [fragments], [2])
 			await process_frame
 			var body = view._tiles[ids[0]]
-			check(view.game.cell(ids[0]).width == 2 and body.valid_word and body._picture.is_visible_in_tree(),
-				"the long-word regression keeps a real two-block pictured word instead of widening its footprint")
-			_assert_complete_label(body, "quadrilateral", "pictured word at %s with %d fragments" % [dimensions, fragments])
+			check(view.game.cell(ids[0]).width == 1 and view.game.cell(ids[0]).height == 1
+				and body.size.is_equal_approx(ordinary_size) and body.valid_word and body._picture.is_visible_in_tree(),
+				"the complete long word keeps its production picture and the same ordinary body as either source")
+			_assert_compact_label(body, "quadrilateral", "pictured word at %s with %d fragments" % [dimensions, fragments])
+			body.read_requested.emit(ids[0])
+			var detail: Dictionary = view.snapshot().read_detail
+			check(detail.visible and detail.text == "quadrilateral" and view.game.cells.size() == 1
+				and payouts.is_empty() and attempts.is_empty(),
+				"the compact long-word caption opens its complete spelling without collecting or assessing it")
+			view._close_read()
 	words = original_words
 	view.size = Vector2(1000, 720)
 
 
-func _assert_complete_label(body, expected: String, context: String) -> void:
+func _assert_compact_label(body, expected: String, context: String) -> void:
 	var label: Label = body._label
+	var font: Font = label.get_theme_font("font")
+	var pixels: int = label.get_theme_font_size("font_size")
 	var lines: int = label.get_line_count()
 	var rounded_height: float = 0.0
 	for line in range(lines):
 		rounded_height += ceilf(label.get_line_height(line))
-	check(label.visible and label.text == expected and label.text_overrun_behavior == TextServer.OVERRUN_NO_TRIMMING,
-		context + ": the label retains the full spelling without ellipsis")
+	check(label.visible and body._spelling == expected and label.text.replace("\n", "") == expected,
+		context + ": compact presentation retains every letter of the full spelling")
+	check(pixels * Style.ui_scale(body) >= 13.0 - 0.01,
+		context + ": the caption keeps at least thirteen physical pixels instead of shrinking with spelling length")
+	check(label.autowrap_mode == TextServer.AUTOWRAP_OFF and label.text_overrun_behavior == TextServer.OVERRUN_TRIM_ELLIPSIS,
+		context + ": overflow can use ellipsis without inventing arbitrary spelling breaks")
+	var shaped_lines: PackedStringArray = label.text.split("\n")
+	var consumed: int = 0
+	var overflows: bool = false
+	for index in range(shaped_lines.size()):
+		var line: String = shaped_lines[index]
+		consumed += line.length()
+		overflows = overflows or font.get_string_size(line, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x > label.size.x + 0.01
+		if index < shaped_lines.size() - 1:
+			check(body._break_offsets.has(consumed), context + ": multiline captions use only an approved authored boundary")
+	check(bool(body.requires_read) == overflows,
+		context + ": the Read hint identifies spelling that cannot fit at the readable caption size")
+	check(body.tooltip_text.begins_with(expected) and str(body.get("accessibility_name")).contains(expected),
+		context + ": the complete spelling remains available to reading and accessibility")
 	check(lines > 0 and label.get_visible_line_count() == lines,
-		context + ": every native-shaped line is visible, including the final letters")
+		context + ": every compact caption line remains vertically visible")
 	check(rounded_height <= label.size.y + 0.01,
 		context + ": rounded native line heights fit the label box (%.2f <= %.2f)" % [rounded_height, label.size.y])
 	check(Rect2(Vector2.ZERO, body.size).grow(0.01).encloses(label.get_rect()),
-		context + ": complete spelling remains inside the jelly's painted footprint")
+		context + ": the caption stays inside the jelly's painted footprint")
 
 
 func _check_root_tap(view) -> void:
 	_reset(view)
-	var ids: Array[int] = _install(view, ["ca", "t"])
+	var ids: Array[int] = _install(view, ["root:cat", "picture:cat"])
 	var center: Vector2 = _center(view, ids[0])
 	view._press(-1, center)
 	view._release(center)
@@ -524,7 +543,7 @@ func _check_root_tap(view) -> void:
 func _check_edge_drag(view) -> void:
 	for reduced: bool in [false, true]:
 		_reset(view, reduced)
-		var ids: Array[int] = _install(view, ["ca", "t"])
+		var ids: Array[int] = _install(view, ["root:cat", "picture:cat"])
 		var source = view._tiles[ids[0]]
 		var target = view._tiles[ids[1]]
 		view._press(-1, _center(view, ids[0]))
@@ -581,8 +600,8 @@ func _pointer_event(view, pointer: int, phase: String, position: Vector2, cancel
 
 func _reposition_fixture(view, mass: int = 1) -> Dictionary:
 	view.game.cells.clear()
-	var text: String = "ca" if mass == 1 else "cat" if mass == 2 else "caterpillar"
-	var tile: Dictionary = view.game._new_tile(text, mass, 2)
+	var text: String = "root:cat" if mass == 1 else "cat" if mass == 2 else "caterpillar"
+	var tile: Dictionary = _fixture_tile(view, text, mass, 2)
 	tile.column = 0
 	tile.row = Model.ROWS - int(tile.height)
 	view.game.cells.append(tile)
@@ -607,7 +626,7 @@ func _check_reposition_release(view) -> void:
 					var release: Vector2 = _placement_point(view, tile, column, 3)
 					_pointer_event(view, pointer, "down", _center(view, id))
 					_pointer_event(view, pointer, "move", motion)
-					check(view._dragging and view._target == -1, "mouse and touch drag roots, words, and wrapped bodies over an empty destination")
+					check(view._dragging and view._target == -1, "mouse and touch drag roots, words, and long spellings over an empty destination")
 					var preview: Dictionary = view.snapshot().placement
 					check(preview.visible and preview.valid and int(preview.tile_id) == id and int(preview.column) == column and int(preview.row) == 1,
 						"the placement skin previews the whole valid snapped destination before release")
@@ -626,7 +645,7 @@ func _check_reposition_release(view) -> void:
 						"gravity starts immediately at the final pointer-up row without a suspended settling delay")
 					check(placed.text == original.text and placed.word == original.word and placed.mass == original.mass
 						and placed.fragments == original.fragments and placed.width == original.width and placed.height == original.height,
-						"repositioning preserves identity, spelling, picture, mass, full footprint, and every fragment")
+						"repositioning preserves identity, spelling, picture, semantic mass, ordinary footprint, and every fragment")
 					check(view.game.fusions.is_empty() and not view._settled(placed), "placing a body starts its short input settling window without merging or collecting it")
 					check(not view.snapshot().placement.visible, "a committed placement removes its temporary destination skin")
 					check(not view._press(pointer, _center(view, id)), "a newly placed body cannot accept a competing tap during its settle")
@@ -653,7 +672,7 @@ func _check_reposition_release(view) -> void:
 					check(view._settled(placed) and view._tiles[id].get_rect().is_equal_approx(view._tile_rect(placed)),
 						"the settled body and its hit target agree at the supported landing position")
 					check(view._tiles[id].visible_fragment_badges() == 2 and view._board.encloses(view._tiles[id].get_rect()),
-						"a relocated root or wrapped word retains its chest artwork inside the well")
+						"a relocated root or long word retains its chest artwork inside the well")
 					view.game._settle_collected_stack()
 					_advance(view, 1.0)
 					check(_has_support(view.game.cells, placed) and int(placed.column) == column,
@@ -668,7 +687,7 @@ func _check_reposition_release(view) -> void:
 
 func _check_reposition_rejection(view) -> void:
 	for pointer: int in [-1, 7]:
-		for destination: Vector2i in [Vector2i(-1, 2), Vector2i(1, 2), Vector2i(0, -1), Vector2i(0, 7)]:
+		for destination: Vector2i in [Vector2i(-1, 2), Vector2i(Model.COLUMNS, 2), Vector2i(0, -1), Vector2i(0, Model.ROWS)]:
 			_reset(view)
 			var tile: Dictionary = _reposition_fixture(view, 7)
 			var original: Rect2 = view._tile_rect(tile)
@@ -678,13 +697,13 @@ func _check_reposition_rejection(view) -> void:
 			_pointer_event(view, pointer, "up", release)
 			_advance(view, Model.SETTLE_SECONDS + 0.1)
 			check(view._tiles[int(tile.id)].get_rect().is_equal_approx(original) and not bool(tile.get("placement_locked", false)),
-				"a wrapped body whose footprint crosses any well edge returns home even when its pointer is inside")
+				"an ordinary long-word body returns home after a drop beyond any well edge")
 			check(view.game.fusions.is_empty() and payouts.is_empty(), "an out-of-bounds drop cannot consume or collect a word")
 		_reset(view)
 		var tile: Dictionary = _reposition_fixture(view, 2)
 		var original: Rect2 = view._tile_rect(tile)
-		var blocker: Dictionary = view.game._new_tile("t", 1, 0)
-		blocker.column = 3
+		var blocker: Dictionary = _fixture_tile(view, "picture:cat", 1, 0)
+		blocker.column = 2
 		blocker.row = 2
 		blocker.age = 0.0
 		blocker.settling = true
@@ -699,14 +718,14 @@ func _check_reposition_rejection(view) -> void:
 		_pointer_event(view, pointer, "up", occupied)
 		_advance(view, Model.SETTLE_SECONDS + 0.1)
 		check(view._tiles[int(tile.id)].get_rect().is_equal_approx(original) and not bool(tile.get("placement_locked", false)),
-			"an occupied tail cell rejects the whole wider footprint instead of checking only its origin")
+			"an occupied destination cell rejects the ordinary body without displacing its occupant")
 		check(view.game.cells.size() == 2 and view.game.fusions.is_empty(), "a rejected occupied drop preserves both bodies")
 		_reset(view)
 		tile = _reposition_fixture(view)
-		var a: Dictionary = view.game._new_tile("ca", 1, 0)
+		var a: Dictionary = _fixture_tile(view, "root:cat", 1, 0)
 		a.column = 3
 		a.row = 2
-		var b: Dictionary = view.game._new_tile("t", 1, 0)
+		var b: Dictionary = _fixture_tile(view, "picture:cat", 1, 0)
 		b.column = 4
 		b.row = 2
 		view.game.cells.append(a)
@@ -767,7 +786,7 @@ func _check_reposition_lifecycle(view) -> void:
 
 func _check_reposition_completed_word(view) -> void:
 	_reset(view)
-	var ids: Array[int] = _install(view, ["ca", "t"], [2, 3])
+	var ids: Array[int] = _install(view, ["root:cat", "picture:cat"], [2, 3])
 	_drag(view, ids[0], ids[1])
 	var id: int = _merged_id(view)
 	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
@@ -792,13 +811,13 @@ func _check_reposition_completed_word(view) -> void:
 
 func _check_collect_and_fragments(view) -> void:
 	_reset(view)
-	var ids: Array[int] = _install(view, ["ca", "t"], [1, 1])
+	var ids: Array[int] = _install(view, ["root:cat", "picture:cat"], [1, 1])
 	_drag(view, ids[0], ids[1])
 	var id: int = _merged_id(view)
 	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	var tile = view._tiles[id]
 	check(tile.visible_fragment_badges() == 2 and tile._fragment_badges[0].visible and tile._fragment_badges[1].visible, "both source chest markers remain independently visible on the merge")
-	check(tile._label.text.to_lower() == "cat" and tile._label.text_overrun_behavior == TextServer.OVERRUN_NO_TRIMMING, "merged word label remains complete")
+	check(tile._label.text.to_lower() == "cat" and not tile.requires_read, "the short merged-word caption fits completely at its readable size")
 	var center: Vector2 = _center(view, id)
 	view._press(7, center)
 	view._release(center)
@@ -821,9 +840,9 @@ func _check_fragment_badge_layout(view) -> void:
 	for dimensions: Vector2 in [Vector2(1473, 1175), Vector2(393, 852), Vector2(320, 568), Vector2(844, 390)]:
 		view.size = dimensions
 		_reset(view, true)
-		var ids: Array[int] = _install(view, ["ca"], [1])
+		var ids: Array[int] = _install(view, ["root:cat"], [1])
 		var unit: float = view._tiles[ids[0]].size.x
-		for shape: Dictionary in [{"name": "root", "size": Vector2.ONE * unit, "mass": 1, "text": "ca"},
+		for shape: Dictionary in [{"name": "root", "size": Vector2.ONE * unit, "mass": 1, "text": "root:cat"},
 			{"name": "square word", "size": Vector2.ONE * unit, "mass": 2, "text": "cat"},
 			{"name": "wide word", "size": Vector2(2, 1) * unit, "mass": 2, "text": "cat"},
 			{"name": "tall word", "size": Vector2(1, 2) * unit, "mass": 2, "text": "cat"}]:
@@ -851,7 +870,7 @@ func _check_fragment_badge_layout(view) -> void:
 				var overlap: Rect2 = rect.intersection(body._label.get_rect())
 				check(overlap.size.x < 0.01 or overlap.size.y < 0.01,
 					context + ": the compact reward marker never covers the learning label")
-				_assert_complete_label(body, str(shape.text), context)
+				_assert_compact_label(body, str(cell.display_text), context)
 				check(body._label.get_theme_font_size("font_size") >= maxi(1, floori(unit * 0.15)),
 					context + ": the caption remains readable rather than shrinking to make room for rewards")
 				if fragments > 2:
@@ -916,16 +935,16 @@ func _install_batch_words(view, count: int, retain_others: bool = false) -> Arra
 	view.game.cells.clear()
 	var ids: Array[int] = []
 	for index in range(count):
-		var tile: Dictionary = view.game._new_tile("cat", 2, index % 3)
+		var tile: Dictionary = _fixture_tile(view, "cat", 2, index % 3)
 		tile.column = (index % 3) * 2
 		tile.row = Model.ROWS - 1 - floori(float(index) / 3.0)
 		view.game.cells.append(tile)
 		ids.append(int(tile.id))
 	if retain_others:
-		var invalid: Dictionary = view.game._new_tile("tc", 2, 2)
+		var invalid: Dictionary = _fixture_tile(view, "tc", 2, 2)
 		invalid.column = 0
 		invalid.row = Model.ROWS - 2
-		var single: Dictionary = view.game._new_tile("cat", 1, 1)
+		var single: Dictionary = _fixture_tile(view, "cat", 1, 1)
 		single.column = 2
 		single.row = Model.ROWS - 2
 		view.game.cells.append(invalid)
@@ -1346,16 +1365,16 @@ func _check_collection_stack_fall(view) -> void:
 		for pointer: int in [-1, 7]:
 			_reset(view, reduced)
 			view.game.cells.clear()
-			var support: Dictionary = view.game._new_tile("cat", 2, 1)
+			var support: Dictionary = _fixture_tile(view, "cat", 2, 1)
 			support.column = 1
 			support.row = 7
-			var lower: Dictionary = view.game._new_tile("ca", 1, 1)
+			var lower: Dictionary = _fixture_tile(view, "root:cat", 1, 1)
 			lower.column = 1
 			lower.row = 6
-			var upper: Dictionary = view.game._new_tile("t", 1, 0)
+			var upper: Dictionary = _fixture_tile(view, "picture:cat", 1, 0)
 			upper.column = 1
 			upper.row = 5
-			var neighbor: Dictionary = view.game._new_tile("stay", 1, 0)
+			var neighbor: Dictionary = _fixture_tile(view, "stay", 1, 0)
 			neighbor.column = 4
 			neighbor.row = 7
 			view.game.cells.assign([support, lower, upper, neighbor])
@@ -1435,9 +1454,9 @@ func _check_dragged_support_fall(view) -> void:
 			for interruption: String in ["cancel", "pointer_cancel", "outside", "pause", "focus"]:
 				_reset(view, reduced)
 				view.game.cells.clear()
-				var support: Dictionary = view.game._new_tile("hat", 2, 2)
-				var lower: Dictionary = view.game._new_tile("nose", 2, 1)
-				var upper: Dictionary = view.game._new_tile("shoe", 2, 0)
+				var support: Dictionary = _fixture_tile(view, "hat", 2, 2)
+				var lower: Dictionary = _fixture_tile(view, "nose", 2, 1)
+				var upper: Dictionary = _fixture_tile(view, "shoe", 2, 0)
 				for index in range(3):
 					var tile: Dictionary = [support, lower, upper][index]
 					tile.column = 1
@@ -1510,10 +1529,10 @@ func _check_dragged_support_fall(view) -> void:
 func _check_release_after_support_collection(view) -> void:
 	_reset(view)
 	view.game.cells.clear()
-	var support: Dictionary = view.game._new_tile("cat", 2, 0)
+	var support: Dictionary = _fixture_tile(view, "cat", 2, 0)
 	support.column = 1
 	support.row = Model.ROWS - 1
-	var upper: Dictionary = view.game._new_tile("ca", 1, 1)
+	var upper: Dictionary = _fixture_tile(view, "root:cat", 1, 1)
 	upper.column = 1
 	upper.row = Model.ROWS - 2
 	view.game.cells.assign([support, upper])
@@ -1546,10 +1565,10 @@ func _check_release_after_support_collection(view) -> void:
 func _check_coarse_frame_collection_landing(view) -> void:
 	_reset(view)
 	view.game.cells.clear()
-	var support: Dictionary = view.game._new_tile("cat", 2, 0)
+	var support: Dictionary = _fixture_tile(view, "cat", 2, 0)
 	support.column = 1
 	support.row = Model.ROWS - 1
-	var upper: Dictionary = view.game._new_tile("ca", 1, 0)
+	var upper: Dictionary = _fixture_tile(view, "root:cat", 1, 0)
 	upper.column = 1
 	upper.row = Model.ROWS - 2
 	view.game.cells.assign([support, upper])
@@ -1575,74 +1594,41 @@ func _palette_item(view, id: int) -> Dictionary:
 
 
 func _check_word_pair_colors(view) -> void:
-	var original_words: Array = words.duplicate(true)
-	for text: String in ["can", "dog"]:
-		var word: Dictionary = original_words[0].duplicate(true)
-		word.id = "view-fixture-" + text
-		word.text = text
-		words.append(word)
 	_reset(view)
-	view.game.cells.clear()
-	var ids: Dictionary = {}
-	for text: String in ["ca", "t", "n", "c", "at", "d", "og", "x"]:
-		var tile: Dictionary = view.game._new_tile(text, 1, 0)
-		tile.column = ids.size() % Model.COLUMNS
-		tile.row = Model.ROWS - 1 - floori(float(ids.size()) / Model.COLUMNS)
-		ids[text] = int(tile.id)
-		view.game.cells.append(tile)
-	view._sync_tiles()
-	view._layout()
-	var resting: Dictionary = view.snapshot()
-	for tile: Dictionary in resting.tiles:
+	var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", "picture:cat", "root:caterpillar", "picture:caterpillar", "x"])
+	var resting: Array = view.snapshot().tiles
+	for tile: Dictionary in resting:
 		check(int(tile.get("palette_index", -1)) >= 0 and float(tile.get("palette_hue", -1.0)) >= 0.0,
-			"word roots expose the palette actually used by their painted gel")
-		check(is_equal_approx(float(tile.get("palette_hue", -1.0)),
-			float(view._tiles[int(tile.id)]._gel.get_shader_parameter("palette_hue"))),
-			"color diagnostics match the rendered shader rather than only model metadata")
-		for other: Dictionary in resting.tiles:
-			if int(tile.id) >= int(other.id) or tile.get("palette_index", -1) != other.get("palette_index", -2):
+			"hybrid faces expose the palette actually used by their painted gel")
+		check(is_equal_approx(float(tile.palette_hue), float(view._tiles[int(tile.id)]._gel.get_shader_parameter("palette_hue"))),
+			"color diagnostics match the rendered shader")
+		for other: Dictionary in resting:
+			if int(tile.id) >= int(other.id) or tile.palette_index != other.palette_index:
 				continue
-			check(view.game._word_lookup.has(str(tile.text) + str(other.text))
-				or view.game._word_lookup.has(str(other.text) + str(tile.text)),
-				"every shared resting color names an exact current-vocabulary completion")
-	check(_palette_item(view, ids.d).get("palette_index", -1) == _palette_item(view, ids.og).get("palette_index", -2),
-		"an unambiguous word pair shares a color at rest")
-	var isolated_palette: int = int(_palette_item(view, ids.x).get("palette_index", -1))
-	for text: String in ["ca", "t", "n", "c", "at", "d", "og"]:
-		check(int(_palette_item(view, ids[text]).get("palette_index", -2)) != isolated_palette,
-			"an unrelated root cannot reuse a word pair's hint color")
+			check(view.game.parts_compatible(view.game.cell(int(tile.id)), view.game.cell(int(other.id)))
+				or view.game.parts_compatible(view.game.cell(int(other.id)), view.game.cell(int(tile.id))),
+				"a shared resting color represents an exact word-picture or same-level match")
 	for keyboard: bool in [false, true]:
-		if keyboard:
-			view._activate(ids.ca)
-		else:
-			check(view._press(-1, _center(view, ids.ca)), "pressing a source previews its compatible completion colors")
-		var source: Dictionary = _palette_item(view, ids.ca)
-		for text: String in ["t", "n"]:
-			check(_palette_item(view, ids[text]).get("palette_index", -1) == source.get("palette_index", -2)
-				and is_equal_approx(float(_palette_item(view, ids[text]).get("palette_hue", -1.0)), float(source.get("palette_hue", -2.0))),
-				"pointer and keyboard selection highlight every exact ordered completion with the source hue")
-		for text: String in ["c", "at", "d", "og", "x"]:
-			check(_palette_item(view, ids[text]).get("palette_index", -1) != source.get("palette_index", -2),
-				"an invalid completion stays visually distinct from the selected source")
-		view.cancel_input()
-		if keyboard:
-			view._activate(ids.t)
-		else:
-			view._press(-1, _center(view, ids.t))
-		_assert_resting_palette(view, resting.tiles, "reverse-only pointer or keyboard source")
-		_assert_completion_hints(view, [], "reverse-only pointer or keyboard source")
-		view.cancel_input()
+		for source_index: int in [0, 1]:
+			if keyboard:
+				view._activate(ids[source_index])
+			else:
+				check(view._press(-1, _center(view, ids[source_index])), "either a root or picture can preview exact partners")
+			var targets: Array[int] = []
+			targets.assign([ids[1], ids[2]] if source_index == 0 else [ids[0]])
+			_assert_completion_hints(view, targets, "symmetric picture matching")
+			for target: int in targets:
+				check(view._tiles[target].palette_index == view._tiles[ids[source_index]].palette_index,
+					"all exact partners adopt the selected face's hue")
+			view.cancel_input()
+			_assert_resting_palette(view, resting, "canceled hybrid match")
 	view.apply_theme(Data.theme("autumn"), data.chests)
-	for tile: Dictionary in resting.tiles:
-		check(_palette_item(view, int(tile.id)).get("palette_index", -1) == tile.get("palette_index", -2),
-			"changing the surrounding theme preserves established word-pair hints")
+	_assert_resting_palette(view, resting, "theme update")
 	for index in range(view._preview_tiles.size()):
 		var slot: Dictionary = view.snapshot().preview.slots[index]
-		check(int(slot.get("palette_index", -1)) >= 0
-			and is_equal_approx(float(slot.get("palette_hue", -1.0)), float(view._preview_tiles[index]._gel.get_shader_parameter("palette_hue"))),
-			"upcoming parts publish the same hint hue that their actual gel renders")
-	words = original_words
-
+		check(int(slot.get("palette_index", -1)) >= 0 and is_equal_approx(float(slot.palette_hue),
+			float(view._preview_tiles[index]._gel.get_shader_parameter("palette_hue"))),
+			"previews publish the hue their actual gel renders")
 
 func _assert_resting_palette(view, resting: Array, context: String) -> void:
 	for original: Dictionary in resting:
@@ -1656,52 +1642,27 @@ func _assert_resting_palette(view, resting: Array, context: String) -> void:
 
 
 func _check_directional_palette_stability(view) -> void:
-	var original_words: Array = words.duplicate(true)
-	var can: Dictionary = original_words[0].duplicate(true)
-	can.id = "view-directional-can"
-	can.text = "can"
-	words.append(can)
 	for pointer: int in [-1, 7]:
 		view.size = Vector2(1000, 720) if pointer < 0 else Vector2(390, 700)
 		for reduced: bool in [false, true]:
 			_reset(view, reduced)
-			var ids: Array[int] = _completion_board(view, ["ca", "t", "n", "c", "at", "x"])
+			var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", "picture:cat", "root:caterpillar", "picture:caterpillar", "x"])
 			var resting: Array = view.snapshot().tiles
-			var context: String = "ca/t with %s%s" % ["mouse" if pointer < 0 else "touch", " and reduced motion" if reduced else ""]
-			check(view._tiles[ids[0]].palette_index == view._tiles[ids[1]].palette_index,
-				context + ": the reverse-selection regression starts with the idle ca/t pair sharing a hue")
-			check(view._tiles[ids[0]].palette_index != view._tiles[ids[2]].palette_index,
-				context + ": the second forward completion starts with a different idle hue")
-			var suffix_center: Vector2 = _center(view, ids[1])
-			_pointer_event(view, pointer, "down", suffix_center)
-			_assert_resting_palette(view, resting, context + " held t")
-			_assert_completion_hints(view, [], context + " held t")
-			_pointer_event(view, pointer, "move", suffix_center + Vector2(0.0, -18.0))
-			_advance(view, 0.24)
-			check(view._dragging, context + ": t enters an actual drag")
-			_assert_resting_palette(view, resting, context + " dragging t")
-			_assert_completion_hints(view, [], context + " dragging t")
-			view.cancel_input()
-			_assert_resting_palette(view, resting, context + " canceled t")
-			_assert_completion_hints(view, [], context + " canceled t")
-			var prefix_center: Vector2 = _center(view, ids[0])
-			_pointer_event(view, pointer, "down", prefix_center)
-			_pointer_event(view, pointer, "move", prefix_center + Vector2(0.0, -18.0))
-			_advance(view, 0.24)
-			_assert_completion_hints(view, [ids[1], ids[2]], context + " dragging ca")
-			for id: int in [ids[1], ids[2]]:
-				check(view._tiles[id].palette_index == view._tiles[ids[0]].palette_index
-					and is_equal_approx(float(view._tiles[id]._gel.get_shader_parameter("palette_hue")),
-						float(view._tiles[ids[0]]._gel.get_shader_parameter("palette_hue"))),
-					context + ": both forward completions use the source hue in their rendered gel")
-			var unaffected: Array = resting.filter(func(tile: Dictionary) -> bool: return not int(tile.id) in [ids[1], ids[2]])
-			_assert_resting_palette(view, unaffected, context + " dragging ca")
-			view.cancel_input()
-			_assert_resting_palette(view, resting, context + " canceled ca")
-			_assert_completion_hints(view, [], context + " canceled ca")
+			for source_index: int in [0, 1]:
+				var point: Vector2 = _center(view, ids[source_index])
+				_pointer_event(view, pointer, "down", point)
+				_pointer_event(view, pointer, "move", point + Vector2(0.0, -18.0))
+				_advance(view, 0.24)
+				var targets: Array[int] = []
+				targets.assign([ids[1], ids[2]] if source_index == 0 else [ids[0]])
+				_assert_completion_hints(view, targets, "either drag direction")
+				check(view._dragging, "root and picture each enter an actual drag")
+				var unaffected: Array = resting.filter(func(tile: Dictionary) -> bool: return not int(tile.id) in targets)
+				_assert_resting_palette(view, unaffected, "unrelated words during a hybrid drag")
+				view.cancel_input()
+				_assert_resting_palette(view, resting, "canceled hybrid drag")
+				_assert_completion_hints(view, [], "canceled hybrid drag")
 	view.size = Vector2(1000, 720)
-	words = original_words
-
 
 func _assert_completion_effect(body, active: bool, context: String) -> void:
 	check((body._completion_glow != null and body._completion_glow.visible) == active,
@@ -1712,8 +1673,8 @@ func _assert_completion_effect(body, active: bool, context: String) -> void:
 			visible_glints += 1
 	check(visible_glints == (2 if active else 0), "%s: only eligible targets display both shoulder sparkles" % context)
 	var strength: Variant = body._gel.get_shader_parameter("completion_strength")
-	check((strength != null and float(strength) > 0.0) == active,
-		"%s: the rendered completion light clears with its halo and sparkles" % context)
+	check((strength != null and float(strength) > 0.35) == active,
+		"%s: target strength clears while merged words retain their permanent light" % context)
 
 
 func _assert_completion_hints(view, expected: Array[int], context: String) -> void:
@@ -1739,7 +1700,7 @@ func _completion_board(view, pieces: Array[String], fragments: Array[int] = []) 
 	view.game.cells.clear()
 	var ids: Array[int] = []
 	for text: String in pieces:
-		var tile: Dictionary = view.game._new_tile(text, 1, fragments[ids.size()] if ids.size() < fragments.size() else 0)
+		var tile: Dictionary = _fixture_tile(view, text, 1, fragments[ids.size()] if ids.size() < fragments.size() else 0)
 		tile.column = ids.size() % Model.COLUMNS
 		tile.row = Model.ROWS - 1 - floori(float(ids.size()) / Model.COLUMNS)
 		ids.append(int(tile.id))
@@ -1750,156 +1711,92 @@ func _completion_board(view, pieces: Array[String], fragments: Array[int] = []) 
 
 
 func _check_completion_hints(view) -> void:
-	var original_words: Array = words.duplicate(true)
-	for text: String in ["can", "car"]:
-		var word: Dictionary = original_words[0].duplicate(true)
-		word.id = "view-completion-" + text
-		word.text = text
-		word.min_age = 4 if text == "car" else 3
-		words.append(word)
 	for pointer: int in [-1, 7]:
 		view.size = Vector2(1000, 720) if pointer < 0 else Vector2(390, 700)
 		_reset(view)
-		var ids: Array[int] = _completion_board(view, ["ca", "t", "n", "t", "r", "x"])
+		var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", "picture:cat", "picture:cat", "picture:caterpillar", "x"])
 		var target = view._tiles[ids[1]]
 		var rectangle: Rect2 = target.get_rect()
 		var outline: PackedVector2Array = target.contact_outline()
 		var center: Vector2 = _center(view, ids[0])
-		check(not view.game._word_lookup.has("car"), "completion candidates use only the current age vocabulary")
 		_assert_completion_hints(view, [], "idle")
 		_pointer_event(view, pointer, "down", center)
 		_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "press before dragging")
 		_pointer_event(view, pointer, "move", center + Vector2(0.0, -4.0))
-		check(not view._dragging, "small mouse or touch jitter leaves the source pressed without dragging")
-		_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "pointer below drag threshold")
+		check(not view._dragging, "small pointer jitter keeps the source pressed")
 		_pointer_event(view, pointer, "move", center + Vector2(0.0, -12.0))
-		check(view._dragging, "moving beyond the threshold keeps completion guidance while dragging")
-		_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "ordered current-age completions")
+		check(view._dragging, "moving beyond the threshold starts a drag")
 		_advance(view, 0.22)
+		_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "all matching pictures")
 		for id: int in [ids[1], ids[2], ids[3]]:
 			check(float(view._tiles[id].completion_scale) > 1.0 and float(view._tiles[id].completion_scale) <= 1.065,
-				"every exact target receives only a small completion enlargement")
+				"each exact target receives a small completion enlargement")
 		check(target.get_rect().is_equal_approx(rectangle) and target.contact_outline() == outline,
-			"completion animation preserves the target's layout, hit rectangle, and contact outline")
+			"completion animation preserves layout and hit geometry")
 		check(cues == ["pick"] and heard.is_empty() and payouts.is_empty() and attempts.is_empty(),
-			"completion guidance adds no audio, learning credit, or rewards before a merge")
+			"completion guidance does not grant speech, learning credit or rewards")
 		view.cancel_input()
 		view._activate(ids[1])
-		_assert_completion_hints(view, [], "reverse-only source")
+		_assert_completion_hints(view, [ids[0]], "picture first")
 		view.cancel_input()
 		view._activate(ids[0])
-		_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "keyboard source selection")
+		_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "keyboard root selection")
 		view._tiles[ids[1]].grab_focus()
 		var change_source := InputEventKey.new()
 		change_source.keycode = KEY_ENTER
 		change_source.pressed = true
 		change_source.shift_pressed = true
 		view._input(change_source)
-		check(view._keyboard_source == ids[1], "keyboard shortcut can replace the active source without merging")
-		_assert_completion_hints(view, [], "source changed to a reverse-only partner")
+		check(view._keyboard_source == ids[1], "keyboard shortcut replaces the active source without merging")
+		_assert_completion_hints(view, [ids[0]], "keyboard picture selection")
 		view.cancel_input()
 	view.size = Vector2(1000, 720)
-	words = original_words
-
 
 func _check_ordered_completion_contact(view) -> void:
-	var original_words: Array = words.duplicate(true)
-	for fixture: Dictionary in [{"text": "small", "age": 6}, {"text": "smaller", "age": 5}, {"text": "smallest", "age": 7}]:
-		var word: Dictionary = original_words[0].duplicate(true)
-		word.id = "view-ordered-contact-" + str(fixture.text)
-		word.text = fixture.text
-		word.min_age = fixture.age
-		words.append(word)
-	var pairings: Array[Dictionary] = [
-		{"source": 0, "target": 1, "text": "small", "complete": true},
-		{"source": 1, "target": 0, "text": "llsma", "complete": false},
-		{"source": 0, "target": 2, "text": "smaller", "complete": false},
-		{"source": 0, "target": 3, "text": "smallest", "complete": false},
-		{"source": 0, "target": 4, "text": "smax", "complete": false}
-	]
 	for pointer: int in [-1, 7]:
 		view.size = Vector2(1000, 720) if pointer < 0 else Vector2(390, 700)
 		for reduced: bool in [false, true]:
-			for pairing: Dictionary in pairings:
-				_reset(view, reduced, 6)
+			for pair: Vector2i in [Vector2i(0, 1), Vector2i(1, 0), Vector2i(0, 2), Vector2i(0, 3), Vector2i(0, 4)]:
+				_reset(view, reduced)
 				var fragments: Array[int] = [0, 0, 0, 0, 0]
-				fragments[int(pairing.source)] = 1
-				fragments[int(pairing.target)] = 2
-				var ids: Array[int] = _completion_board(view, ["sma", "ll", "ller", "llest", "x"], fragments)
-				var source_id: int = ids[int(pairing.source)]
-				var target_id: int = ids[int(pairing.target)]
-				check(view.game.cell(source_id).fragments == 1 and view.game.cell(target_id).fragments == 2,
-					"ordered merge fixtures contain distinct carried fragments")
-				view._sync_tiles()
+				fragments[pair.x] = 1
+				fragments[pair.y] = 2
+				var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", "picture:caterpillar", "root:cat", "x"], fragments)
+				var complete: bool = pair == Vector2i(0, 1) or pair == Vector2i(1, 0)
 				var originals: Array = view.game.cells.duplicate(true)
-				var source = view._tiles[source_id]
-				var target = view._tiles[target_id]
-				var resting_target: Dictionary = _palette_item(view, target_id)
-				var center: Vector2 = _center(view, source_id)
-				var destination: Vector2 = _center(view, target_id)
-				var expected: Array[int] = []
-				if int(pairing.source) == 0:
-					expected.append(ids[1])
-				var context: String = "%s with %s%s" % [pairing.text, "mouse" if pointer < 0 else "touch", " and reduced motion" if reduced else ""]
-				check(view.game._word_lookup.has("small") and not view.game._word_lookup.has("smaller")
-					and not view.game._word_lookup.has("smallest"), context + ": completion vocabulary excludes younger and older ages")
+				var source: int = ids[pair.x]
+				var target: int = ids[pair.y]
+				var center: Vector2 = _center(view, source)
+				var destination: Vector2 = _center(view, target)
 				_pointer_event(view, pointer, "down", center)
-				_assert_completion_hints(view, expected, context + " press")
-				check(source.selected and not target.highlighted and view._contact_state().kind == "none",
-					context + ": pressing previews the ordered candidates without pretending they touch")
-				if bool(pairing.complete):
-					check(source.palette_index == target.palette_index,
-						context + ": an exact forward completion adopts the selected source hue")
-				else:
-					_assert_resting_palette(view, [resting_target], context + " ineligible target")
-				_pointer_event(view, pointer, "move", center + Vector2(0.0, -4.0))
-				check(not view._dragging, context + ": a small pointer movement keeps the press below the drag threshold")
-				_assert_completion_hints(view, expected, context + " small movement")
-				var contacts: int = 1
-				if int(pairing.source) == 0 and not bool(pairing.complete):
-					_pointer_event(view, pointer, "move", _center(view, ids[1]))
-					check(view._contact_state().kind == "match" and view._tiles[ids[1]].highlighted,
-						context + ": the gesture first touches the valid current-age completion")
-					contacts += 1
 				_pointer_event(view, pointer, "move", destination)
 				_advance(view, 0.16)
-				check(view._dragging and view._target == target_id and source.selected,
-					context + ": the physical target remains available for an ordered merge")
-				_assert_completion_hints(view, expected, context + " contact")
-				var kind: String = "match" if bool(pairing.complete) else "touch"
-				check(view._contact_state().kind == kind and bool(target.highlighted) == bool(pairing.complete),
-					context + ": all touching pairs respond while only an exact forward word receives success highlighting")
-				_assert_contact_surfaces(view, source_id, target_id, kind, reduced, context)
-				if int(pairing.source) == 0 and not bool(pairing.complete):
-					check(not view._tiles[ids[1]].highlighted and view._tiles[ids[1]]._contact_kind == "none"
-						and view._tiles[ids[1]].completion_hint,
-						context + ": changing target clears old contact feedback while retaining the valid candidate glow")
-				check(cues.count("contact") == contacts and cues.count("wrong") == 0 and heard.is_empty()
-					and payouts.is_empty() and attempts.is_empty(),
-					context + ": held physical contact has no negative cue, learning credit, or reward")
+				var kind: String = "match" if complete else "touch"
+				check(view._dragging and view._target == target and view._contact_state().kind == kind,
+					"word-picture matching is symmetric; wrong pictures and same-kind roots retain neutral contact")
+				_assert_contact_surfaces(view, source, target, kind, reduced, "hybrid contact")
+				check(cues.count("contact") == 1 and cues.count("wrong") == 0 and heard.is_empty()
+					and payouts.is_empty() and attempts.is_empty(), "held contact never grants a reward or negative cue")
 				for repeat in range(5):
 					_pointer_event(view, pointer, "move", destination)
 				_advance(view, 0.3)
-				check(cues.count("contact") == contacts and view.game.fusions.is_empty(),
-					context + ": holding and repeated movement at one contact never repeat its sound or merge early")
+				check(cues.count("contact") == 1 and view.game.fusions.is_empty(), "held contact neither repeats its sound nor commits early")
 				_pointer_event(view, pointer, "up", destination)
-				if bool(pairing.complete):
+				if complete:
 					check(view.game.fusions.size() == 1 and cues.count("merge") == 1 and cues.count("wrong") == 0,
-						context + ": an exact forward word commits one merge without rejection")
+						"either correct direction commits one fusion")
 					var merged_id: int = _merged_id(view)
 					_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 					var merged: Dictionary = view.game.cell(merged_id)
-					check(str(merged.get("text", "")) == str(pairing.text) and view.game.is_valid_word(merged)
-						and int(merged.fragments) == 3, context + ": the valid result keeps both inputs' fragments")
+					check(merged.text == "cat" and view.game.is_valid_word(merged) and merged.fragments == 3,
+						"a correct result retains both inputs' fragments")
 				else:
-					_assert_rejected_merge(view, originals, source_id, target_id, reduced, context)
+					_assert_rejected_merge(view, originals, source, target, reduced, "hybrid mismatch")
 					_pointer_event(view, pointer, "up", destination)
-					check(cues.count("wrong") == 1, context + ": a repeated pointer release cannot replay the rejection cue")
-				_assert_completion_hints(view, [], context + " released")
-				check(payouts.is_empty() and attempts.is_empty(), context + ": merging alone never collects or awards credit")
+					check(cues.count("wrong") == 1, "a repeated release cannot replay rejection")
+				_assert_completion_hints(view, [], "released hybrid contact")
+				check(payouts.is_empty() and attempts.is_empty(), "fusion alone never collects or credits mastery")
 	view.size = Vector2(1000, 720)
-	words = original_words
-
 
 func _assert_rejected_merge(view, originals: Array, source_id: int, target_id: int, reduced: bool, context: String) -> void:
 	check(view.game.fusions.is_empty() and view._fusion_visuals.is_empty() and cues.count("wrong") == 1
@@ -1986,7 +1883,7 @@ func _check_neutral_contact_targets(view) -> void:
 				_pointer_event(view, pointer, "move", destination)
 				_advance(view, 0.16)
 				check(view._target == ids[1] and view._contact_state().kind == "touch",
-					context + ": a complete or wrapped word still participates in physical collision")
+					context + ": a complete or long word still participates in physical collision")
 				_assert_contact_surfaces(view, ids[0], ids[1], "touch", reduced, context)
 				check(target.get_rect().is_equal_approx(target_rect) and target.contact_outline() == target_outline,
 					context + ": pressure never changes the target's layout or collision outline")
@@ -2024,7 +1921,7 @@ func _check_invalid_body_combinations(view) -> void:
 				_pointer_event(view, pointer, "down", _center(view, ids[0]))
 				_pointer_event(view, pointer, "move", destination)
 				check(view._contact_state().kind == "touch" and cues.count("wrong") == 0,
-					"roots, valid words, and wrapped words all retain neutral physical contact while held")
+					"roots, valid words, and long spellings all retain neutral physical contact while held")
 				_pointer_event(view, pointer, "up", destination)
 				_assert_rejected_merge(view, originals, ids[0], ids[1], reduced,
 					"invalid body combination %s + %s" % pieces)
@@ -2032,7 +1929,7 @@ func _check_invalid_body_combinations(view) -> void:
 
 func _check_rejection_rim_reset(view) -> void:
 	for reduced: bool in [false, true]:
-		for fixture: Dictionary in [{"pieces": ["t", "ca"], "masses": [1, 1]},
+		for fixture: Dictionary in [{"pieces": ["picture:cat", "picture:cat"], "masses": [1, 1]},
 			{"pieces": ["x", "cat"], "masses": [1, 2]}, {"pieces": ["cat", "x"], "masses": [2, 1]}]:
 			_reset(view, reduced)
 			var pieces: Array[String] = []
@@ -2096,14 +1993,15 @@ func _check_neutral_contact_lifecycle(view) -> void:
 func _check_completion_hint_targets(view) -> void:
 	for mass: int in [2, 7]:
 		_reset(view)
-		var ids: Array[int] = _install(view, ["c", "at" if mass == 2 else "aterpillar"], [], [1, mass])
+		var ids: Array[int] = _install(view, ["root:cat", "picture:cat"], [], [1, mass])
 		view._activate(ids[0])
-		_assert_completion_hints(view, [ids[1]], "merged and wrapped completion targets")
-		if mass == 7:
-			check(int(view.game.cell(ids[1]).height) > 1, "completion guidance covers a genuinely wrapped target")
+		_assert_completion_hints(view, [ids[1]], "short and long ordinary completion targets")
+		check(int(view.game.cell(ids[1]).width) == 1 and int(view.game.cell(ids[1]).height) == 1
+			and view._tiles[ids[0]].size.is_equal_approx(view._tiles[ids[1]].size),
+			"completion guidance keeps the same ordinary hit area regardless of the target's semantic mass")
 		view.cancel_input()
 	_reset(view)
-	var ids: Array[int] = _completion_board(view, ["ca", "t", "t", "t", "ca", "t"])
+	var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", "picture:cat", "picture:cat", "root:cat", "picture:cat"])
 	var airborne: Dictionary = view._cell(ids[2])
 	airborne.age = 0.0
 	airborne.arrival = true
@@ -2120,7 +2018,7 @@ func _check_completion_hint_targets(view) -> void:
 func _check_completion_hint_lifecycle(view) -> void:
 	for interruption: String in ["release", "merge", "cancel", "pointer_cancel", "pause", "hide", "focus", "blocked", "stop", "reconfigure"]:
 		_reset(view)
-		var ids: Array[int] = _install(view, ["ca", "t"])
+		var ids: Array[int] = _install(view, ["root:cat", "picture:cat"])
 		var target = view._tiles[ids[1]]
 		var center: Vector2 = _center(view, ids[0])
 		_pointer_event(view, 7, "down", center)
@@ -2152,7 +2050,7 @@ func _check_completion_hint_lifecycle(view) -> void:
 
 func _check_completion_hint_reduced_motion(view) -> void:
 	_reset(view, true)
-	var ids: Array[int] = _install(view, ["ca", "t"])
+	var ids: Array[int] = _install(view, ["root:cat", "picture:cat"])
 	view._activate(ids[0])
 	_assert_completion_hints(view, [ids[1]], "reduced motion retains static completion guidance")
 	var target = view._tiles[ids[1]]
@@ -2185,7 +2083,7 @@ func _check_partial_word_colors(view) -> void:
 	view.game.cells.clear()
 	var ids: Array[int] = []
 	for text: String in ["cate", "rpil", "lar"]:
-		var tile: Dictionary = view.game._new_tile(text, 1, 0)
+		var tile: Dictionary = _fixture_tile(view, text, 1, 0)
 		tile.column = ids.size() * 2
 		tile.row = Model.ROWS - 1
 		ids.append(int(tile.id))
@@ -2207,51 +2105,32 @@ func _hue_distance(first: float, second: float) -> float:
 
 
 func _check_fusion_palette_handover(view) -> void:
-	var original_words: Array = words.duplicate(true)
-	for text: String in ["at", "bat"]:
-		var word: Dictionary = original_words[0].duplicate(true)
-		word.id = "view-fixture-" + text
-		word.text = text
-		words.append(word)
 	_reset(view)
-	view.game.cells.clear()
-	var ids: Dictionary = {}
-	for text: String in ["a", "t", "c", "b"]:
-		var tile: Dictionary = view.game._new_tile(text, 1, 0)
-		tile.column = ids.size()
-		tile.row = Model.ROWS - 1
-		ids[text] = int(tile.id)
-		view.game.cells.append(tile)
-	view._sync_tiles()
-	view._layout()
-	_drag(view, ids.a, ids.t)
+	var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", "merged:cat", "x"])
+	_drag(view, ids[0], ids[1])
 	var pending: Dictionary = view.game.fusions[0]
 	var visual: Dictionary = view._fusion_visuals[str(pending.attempt_id)]
 	var input_colors: Array[int] = [visual.palette_a, visual.palette_b]
 	for id: int in view._palette_indices:
-		check(not int(view._palette_indices[id]) in input_colors,
-			"visible liquid input colors stay reserved while other live and upcoming bodies are recolored")
-	var alternate: int = ids.b if view._tiles[ids.b].palette_index != visual.merged.palette_index else ids.c
-	check(view._press(-1, _center(view, alternate)), "another live prefix can be selected while an unrelated merge animates")
+		check(not int(view._palette_indices[id]) in input_colors, "fusion input paint remains reserved during recoloring")
+	var alternate: int = ids[2]
+	check(view._press(-1, _center(view, alternate)), "a same-level merged word can be selected during an unrelated fusion")
 	_advance(view, Model.FUSION_SECONDS * 0.83)
-	check(visual.merged.palette_index == view._tiles[alternate].palette_index,
-		"the animated future result adopts the selected prefix's newly relevant completion hue")
-	check(_hue_distance(float(visual.art._gel.get_shader_parameter("palette_hue_b")),
-		float(visual.merged._gel.get_shader_parameter("palette_hue"))) < 0.00001,
-		"liquid paint reaches the current result hue before the solid skin handover")
+	check(not view._tiles[alternate].requires_read and not view.snapshot().read_detail.visible and not view.game.paused,
+		"holding a readable merged word keeps the pending fusion running")
+	check(visual.merged.palette_index == view._tiles[alternate].palette_index, "the future result adopts its pending same-level upgrade partner's hue")
+	check(_hue_distance(float(visual.art._gel.get_shader_parameter("palette_hue_b")), float(visual.merged._gel.get_shader_parameter("palette_hue"))) < 0.00001,
+		"liquid paint reaches the result hue before skin handover")
 	_advance(view, Model.FUSION_SECONDS * 0.18 + Model.SETTLE_SECONDS)
-	var partial_id: int = int(pending.result.id)
-	check(view._tiles[partial_id].palette_index == view._tiles[alternate].palette_index,
-		"the persistent merged body's color agrees with the active completion hint after handover")
+	var merged_id: int = int(pending.result.id)
+	check(view._tiles[merged_id].palette_index == view._tiles[alternate].palette_index, "persistent paint agrees with the live upgrade hint after handover")
 	view.cancel_input()
-	words = original_words
-
 
 func _check_crowded_palette_separation(view) -> void:
 	_reset(view)
 	view.game.cells.clear()
 	for index in range(18):
-		var tile: Dictionary = view.game._new_tile("unpaired%d" % index, 1, 0)
+		var tile: Dictionary = _fixture_tile(view, "unpaired%d" % index, 1, 0)
 		tile.column = index % Model.COLUMNS
 		tile.row = Model.ROWS - 1 - floori(float(index) / Model.COLUMNS)
 		view.game.cells.append(tile)
@@ -2275,10 +2154,10 @@ func _check_crowded_palette_separation(view) -> void:
 func _check_merge_handover_stability(view) -> void:
 	for reduced: bool in [false, true]:
 		_reset(view, reduced)
-		var ids: Array[int] = _install(view, ["ca", "t"])
+		var ids: Array[int] = _install(view, ["root:cat", "picture:cat"])
 		var target: Dictionary = view.game.cell(ids[1])
 		var target_rect: Rect2 = view._tile_rect(target)
-		var neighbor: Dictionary = view.game._new_tile("stay", 1, 0)
+		var neighbor: Dictionary = _fixture_tile(view, "stay", 1, 0)
 		neighbor.column = 1
 		neighbor.row = Model.ROWS - 1
 		view.game.cells.append(neighbor)
@@ -2345,43 +2224,38 @@ func _has_support(cells: Array, child: Dictionary) -> bool:
 	return false
 
 
-func _check_repeat_merge_and_wrap(view) -> void:
+func _check_repeat_merge_compact_body(view) -> void:
 	_reset(view)
-	var ids: Array[int] = _install(view, ["cat", "erpillar"], [2, 3], [2, 5])
-	check(view.game.is_valid_word(view.game.cell(ids[0])), "a prebuilt valid word remains eligible to drag")
+	var ids: Array[int] = _install(view, ["merged:cat", "merged:cat"], [2, 3], [2, 5])
+	var ordinary_size: Vector2 = view._tiles[ids[0]].size
 	_drag(view, ids[0], ids[1])
 	var id: int = _merged_id(view)
 	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	var cell: Dictionary = view.game.cell(id)
-	check(cell.text == "caterpillar" and cell.mass == 7 and cell.fragments == 5, "dragging a merged word builds a larger persistent word and retains every fragment")
-	check(cell.height == 2 and view._tiles[id].size.x > view._tiles[id].size.y, "large jelly grows across multiple grid rows")
+	check(cell.text == "cat" and cell.merge_level == 2 and cell.mass == 7 and cell.fragments == 5,
+		"identical merged words upgrade once and retain all semantic parts and fragments")
+	check(cell.width == 1 and cell.height == 1 and view._tiles[id].size.is_equal_approx(ordinary_size), "level upgrades preserve the ordinary square body")
 	check(_has_support(view.game.cells, cell) and not bool(cell.get("placement_locked", false))
-		and view._tiles[id].get_rect().is_equal_approx(view._tile_rect(cell)),
-		"a wrapped automatic merge lands on support with its full painted footprint and no implicit position lock")
-	check(view._tiles[id]._label.autowrap_mode == TextServer.AUTOWRAP_WORD_SMART and view._tiles[id]._label.text_overrun_behavior == TextServer.OVERRUN_NO_TRIMMING,
-		"large jelly uses wrapping without ellipsis")
-	check(view._tiles[id].visible_fragment_badges() == 2 and view._tiles[id].fragment_badge_snapshot().count_text == "5"
-		and view._board.encloses(view._tiles[id].get_rect()), "large body and its compact, exact fragment count stay in the six-column board")
-	var label: Label = view._tiles[id]._label
-	check(Rect2(Vector2.ZERO, view._tiles[id].size).encloses(label.get_rect()), "wrapped label stays within the painted body's layout bounds")
-	var extra: Dictionary = view.game._new_tile("extra", 1, 1)
+		and view._tiles[id].get_rect().is_equal_approx(view._tile_rect(cell)), "upgraded words land with coherent art and hit geometry")
+	_assert_compact_label(view._tiles[id], "cat", "level-two word")
+	check(view._tiles[id].presentation_snapshot().level_badge == "2" and view._tiles[id].fragment_badge_snapshot().count_text == "5",
+		"level and exact fragment count remain independently visible")
+	var extra: Dictionary = _fixture_tile(view, "merged:cat", 2, 1)
 	extra.column = 0
 	extra.row = 0
 	view.game.cells.append(extra)
 	view._sync_tiles()
 	_drag(view, id, int(extra.id))
-	check(view.game.fusions.is_empty() and cues.count("wrong") == 1, "a large valid word rejects an invalid extension")
+	check(view.game.fusions.is_empty() and cues.count("wrong") == 1, "different levels reject an upgrade")
 	_advance(view, 0.4)
-	check(view.game.cell(id).text == "caterpillar" and view.game.is_valid_word(view.game.cell(id))
-		and view.game.cell(int(extra.id)).text == "extra", "rejected extensions preserve the original valid word and separate root")
-	check(view._tiles[id]._picture.visible and view._tiles[id].visible_fragment_badges() == 2
-		and view._tiles[id].fragment_badge_snapshot().count_text == "5"
-		and view._tiles[int(extra.id)].visible_fragment_badges() == 1, "rejection retains the word image and each body's own chest markers")
+	check(view.game.cell(id).merge_level == 2 and view.game.cell(int(extra.id)).merge_level == 1,
+		"a rejected upgrade preserves both levels and their separate identities")
+	check(view._tiles[id]._picture.visible and view._tiles[id].fragment_badge_snapshot().count_text == "5"
+		and view._tiles[int(extra.id)].visible_fragment_badges() == 1, "upgrade rejection preserves pictures and each carried reward")
 
-
-func _check_variable_outline(view) -> void:
+func _check_uniform_outline(view) -> void:
 	_reset(view, true)
-	var ids: Array[int] = _install(view, ["ca", "t"], [], [3, 1])
+	var ids: Array[int] = _install(view, ["root:cat", "picture:cat"], [], [3, 1])
 	var source = view._tiles[ids[0]]
 	var target = view._tiles[ids[1]]
 	var source_outline: PackedVector2Array = source.contact_outline()
@@ -2390,7 +2264,13 @@ func _check_variable_outline(view) -> void:
 	for point: Vector2 in source_outline:
 		min_x = minf(min_x, point.x)
 		max_x = maxf(max_x, point.x)
-	check(max_x - min_x > target.size.x * 2.5, "painted contact outline expands with the merged body's width")
+	var target_min_x: float = INF
+	var target_max_x: float = -INF
+	for point: Vector2 in target.contact_outline():
+		target_min_x = minf(target_min_x, point.x)
+		target_max_x = maxf(target_max_x, point.x)
+	check(source.size.is_equal_approx(target.size) and is_equal_approx(max_x - min_x, target_max_x - target_min_x),
+		"different semantic masses retain the same ordinary painted contact extent")
 	view._press(-1, _center(view, ids[0]))
 	var destination: Vector2 = target.get_rect().get_center()
 	# Search along the horizontal center line from separation toward actual skin
@@ -2400,18 +2280,19 @@ func _check_variable_outline(view) -> void:
 		var point: Vector2 = destination + Vector2((source.size.x + target.size.x) * 0.5 * float(index) / 100.0, 0)
 		view._move(view.get_global_transform() * point)
 		var overlaps: bool = not Geometry2D.intersect_polygons(source.contact_outline(), target.contact_outline()).is_empty()
-		check((view._target == ids[1]) == overlaps, "variable-size target selection agrees with painted silhouette contact")
+		check((view._target == ids[1]) == overlaps, "ordinary-body target selection agrees with painted silhouette contact at every sampled edge")
 		if overlaps:
 			first_contact = point
 			break
-	check(not first_contact.is_zero_approx() and not target.get_rect().has_point(first_contact), "a wide jelly contacts while its held center is outside the target")
+	check(not first_contact.is_zero_approx() and not target.get_rect().has_point(first_contact),
+		"ordinary painted bodies contact before the held center enters the target's rectangle")
 	view._release(view.get_global_transform() * first_contact)
-	check(view.game.fusions.size() == 1, "wide-body edge contact commits a merge")
+	check(view.game.fusions.size() == 1, "ordinary-body edge contact still commits the valid semantic merge")
 
 
 func _check_cancel_and_pause(view) -> void:
 	_reset(view)
-	var ids: Array[int] = _install(view, ["ca", "t"])
+	var ids: Array[int] = _install(view, ["root:cat", "picture:cat"])
 	view._press(-1, _center(view, ids[0]))
 	view._move(_center(view, ids[1]))
 	view.cancel_input()
@@ -2442,7 +2323,7 @@ func _check_cancel_and_pause(view) -> void:
 
 func _check_reduced_motion(view) -> void:
 	_reset(view, true)
-	var ids: Array[int] = _install(view, ["ca", "t"], [1, 1])
+	var ids: Array[int] = _install(view, ["root:cat", "picture:cat"], [1, 1])
 	_drag(view, ids[0], ids[1])
 	var id: int = _merged_id(view)
 	_advance(view, 0.2)
@@ -2478,7 +2359,7 @@ func _check_wallet_failure(view) -> void:
 
 func _check_keyboard(view) -> void:
 	_reset(view)
-	var ids: Array[int] = _install(view, ["ca", "t"])
+	var ids: Array[int] = _install(view, ["root:cat", "picture:cat"])
 	view._activate(ids[0])
 	check(view._keyboard_source == ids[0] and view.game.fusions.is_empty(), "keyboard activation selects a root")
 	view._activate(ids[1])
@@ -2493,28 +2374,21 @@ func _check_keyboard(view) -> void:
 func _check_keyboard_rejection(view) -> void:
 	for reduced: bool in [false, true]:
 		_reset(view, reduced)
-		var ids: Array[int] = _completion_board(view, ["t", "ca"], [1, 2])
-		check(view.game.cell(ids[0]).fragments == 1 and view.game.cell(ids[1]).fragments == 2,
-			"keyboard rejection fixtures contain distinct carried fragments")
-		view._sync_tiles()
+		var ids: Array[int] = _completion_board(view, ["picture:cat", "picture:caterpillar", "root:cat"], [1, 2, 2])
 		var originals: Array = view.game.cells.duplicate(true)
 		view._tiles[ids[0]].pressed.emit()
-		check(view._keyboard_source == ids[0] and cues.count("wrong") == 0,
-			"keyboard source selection alone never produces negative feedback")
+		check(view._keyboard_source == ids[0] and cues.count("wrong") == 0, "keyboard selection never produces negative feedback")
 		view._tiles[ids[1]].pressed.emit()
 		check(view._keyboard_source == -1, "a failed keyboard merge releases the selected source")
-		_assert_rejected_merge(view, originals, ids[0], ids[1], reduced, "keyboard reversed word")
-		view._tiles[ids[1]].pressed.emit()
-		check(view._keyboard_source == ids[1] and view._rejection.is_empty(),
-			"keyboard retry can immediately select the correct prefix")
+		_assert_rejected_merge(view, originals, ids[0], ids[1], reduced, "keyboard picture mismatch")
+		view._tiles[ids[2]].pressed.emit()
+		check(view._keyboard_source == ids[2] and view._rejection.is_empty(), "keyboard retry immediately selects the correct root")
 		view._tiles[ids[0]].pressed.emit()
-		check(view.game.fusions.size() == 1 and cues.count("merge") == 1 and cues.count("wrong") == 1,
-			"forward keyboard retry merges once and adds no second negative cue")
+		check(view.game.fusions.size() == 1 and cues.count("merge") == 1 and cues.count("wrong") == 1, "correct keyboard retry commits once")
 		var id: int = _merged_id(view)
 		_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
-		check(view.game.cell(id).text == "cat" and view.game.cell(id).fragments == 3,
-			"keyboard correction preserves the word and every rejected input's fragments")
-
+		check(view.game.cell(id).text == "cat" and view.game.cell(id).fragments == 3
+			and view.game.cell(ids[1]).fragments == 2, "keyboard correction preserves the matched and unmatched rewards")
 
 func _check_arrival_packet(view) -> void:
 	for reduced: bool in [false, true]:
@@ -2545,7 +2419,7 @@ func _check_arrival_packet(view) -> void:
 						"every preview ID survives release and remains unavailable through its arrival")
 					check(int(cell.arrival_index) == index, "the wave preserves the original preview order")
 					check(cell.text == packet[index].text and cell.fragments == packet[index].fragments
-						and view._tiles[id]._label.text == packet[index].text,
+						and view._tiles[id]._label.text == packet[index].display_text,
 						"falling roots retain their exact letters and carried chest fragments")
 					check(view._tiles[id].palette_index == colors[id], "preview partner colors survive handover into the falling bodies")
 					var expected: Rect2 = view._tile_rect(cell) if reduced else origins[id]
@@ -2591,7 +2465,7 @@ func _check_arrival_packet(view) -> void:
 				var resized_body: Rect2 = view._tiles[first_id].get_rect()
 				var resized_target: Rect2 = view._tile_rect(view.game.cell(first_id))
 				var coherent_route: bool = resized_body.is_equal_approx(resized_target) if reduced else resized_body.get_center().y <= resized_target.get_center().y
-				check(coherent_route and view._tiles[first_id]._label.text == packet[0].text,
+				check(coherent_route and view._tiles[first_id]._label.text == packet[0].display_text,
 					"resize keeps the same visible letters on a coherent route to the new well: reduced=%s, automatic=%s, dimensions=%s, body_y=%.9f, target_y=%.9f, body=%s, target=%s" %
 					[reduced, automatic, dimensions, resized_body.get_center().y, resized_target.get_center().y, resized_body, resized_target])
 				_advance(view, final_ready + 0.001 - float(view.game.cell(first_id).age))
@@ -2608,14 +2482,15 @@ func _check_arrival_packet(view) -> void:
 func _partial_preview_fixture(view, reduced: bool) -> Array:
 	_reset(view, reduced)
 	view.game.cells.clear()
-	for column: int in [0, 4]:
-		var roof: Dictionary = view.game._new_tile("play" if column == 0 else "foot", 2, 1)
+	# Four ordinary bodies block four entrances; semantic mass cannot span lanes.
+	for column: int in [0, 1, 4, 5]:
+		var roof: Dictionary = _fixture_tile(view, "play" if column < 2 else "foot", 2, 1)
 		roof.column = column
 		roof.row = 0
 		view.game.cells.append(roof)
 	view.game.upcoming.clear()
 	for text: String in ["fat", "hap", "sle", "her", "py", "ep"]:
-		view.game.upcoming.append(view.game._new_tile(text, 1, 1 if text in ["fat", "sle"] else 0))
+		view.game.upcoming.append(_fixture_tile(view, text, 1, 1 if text in ["fat", "sle"] else 0))
 	view._sync_tiles()
 	view._layout()
 	view._sync_preview()
@@ -2639,13 +2514,13 @@ func _check_partial_preview_columns(view) -> void:
 					var point: Vector2 = view.get_global_transform() * view._preview_rect.get_center()
 					check(view._press(2, point), "a partially open tray accepts an ordinary pointer press")
 					view._release(point)
-				check(view.game.generated_tiles == generated + 2 and view.game.cells.size() == 4,
-					"only sle and her leave a tray whose outer entrances are blocked by play and foot")
+				check(view.game.generated_tiles == generated + 2 and view.game.cells.size() == 6,
+					"only sle and her leave a tray whose four outer entrances have ordinary roof bodies")
 				for slot: int in [2, 3]:
 					var id: int = int(packet[slot].id)
 					var cell: Dictionary = view.game.cell(id)
 					check(not cell.is_empty() and cell.column == slot and cell.arrival_index == slot
-						and view._arrival_origins[id].slot == slot and view._tiles[id]._label.text == packet[slot].text,
+						and view._arrival_origins[id].slot == slot and view._tiles[id]._label.text == packet[slot].display_text,
 						"each middle root owns its original tray slot and the column directly below it")
 					var expected: Rect2 = view._tile_rect(cell) if reduced else origins[slot]
 					check(view._tiles[id].get_rect().is_equal_approx(expected), "a partial release preserves the original painted origin")
@@ -2653,7 +2528,7 @@ func _check_partial_preview_columns(view) -> void:
 					for slot: int in [0, 1, 4, 5]:
 						var preview = view._preview_tiles[slot]
 						check(view.game.upcoming[slot] == packet[slot] and preview.visible
-							and preview.tile_id == int(packet[slot].id) and preview._label.text == packet[slot].text
+							and preview.tile_id == int(packet[slot].id) and preview._label.text == packet[slot].display_text
 							and preview.get_rect().is_equal_approx(origins[slot]) and is_equal_approx(preview.modulate.a, 1.0)
 							and not view._tiles.has(int(packet[slot].id)),
 							"blocked previews remain visible, unchanged, and in their own slots throughout the middle descent")
@@ -2860,7 +2735,7 @@ func _check_immediate_preview_packets(view) -> void:
 			var cell: Dictionary = view.game.cell(id)
 			var expected: Rect2 = view._tile_rect(cell) if reduced else Rect2(view._preview_origins[index], view._preview_tiles[index].size)
 			check(not cell.is_empty() and view._tiles[id].get_rect().is_equal_approx(expected)
-				and view._tiles[id]._label.text == str(second[index].text),
+				and view._tiles[id]._label.text == str(second[index].display_text),
 				"every immediately repeated root starts from its own tray slot with the correct letters")
 			if not reduced:
 				var visible_waiting: int = 0
@@ -2877,7 +2752,7 @@ func _check_arrival_land_timing(view) -> void:
 	for reduced: bool in [false, true]:
 		for row: int in [0, Model.ROWS - 1]:
 			_reset(view, reduced)
-			var ids: Array[int] = _install(view, ["ca"])
+			var ids: Array[int] = _install(view, ["root:cat"])
 			var arriving: Dictionary = view.game.cells[0]
 			arriving.row = row
 			arriving.age = 0.0
@@ -2919,7 +2794,7 @@ func _fill_well(view) -> void:
 		for column in range(Model.COLUMNS):
 			if occupied.has(row * Model.COLUMNS + column):
 				continue
-			var filler: Dictionary = view.game._new_tile("x", 1, 0)
+			var filler: Dictionary = _fixture_tile(view, "x", 1, 0)
 			filler.column = column
 			filler.row = row
 			view.game.cells.append(filler)
@@ -2952,11 +2827,16 @@ func _check_danger_ends_when_collecting(view) -> void:
 
 func _check_danger_ends_when_merge_frees_space(view) -> void:
 	_reset(view)
-	var ids: Array[int] = _install(view, ["cater", "pillar"], [], [4, 4])
+	var ids: Array[int] = _install(view, ["merged:caterpillar", "merged:caterpillar"], [], [4, 4])
 	# The source must reopen the roof; an internal cavity cannot receive a fall.
 	view.game.cells[0].row = 0
 	_fill_well(view)
-	view._activate(ids[0])
+	view._tiles[ids[0]].grab_focus()
+	var select := InputEventKey.new()
+	select.keycode = KEY_ENTER
+	select.pressed = true
+	select.shift_pressed = true
+	view._input(select)
 	view._activate(ids[1])
 	check(view.game.fusions.size() == 1, "a full well still accepts a persistent large-word merge")
 	_advance(view, Model.FUSION_SECONDS - 0.001)

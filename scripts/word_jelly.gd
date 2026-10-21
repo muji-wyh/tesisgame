@@ -10,6 +10,7 @@ const WordModel = preload("res://scripts/word_jelly_model.gd")
 const WordTile = preload("res://scripts/word_jelly_tile.gd")
 const Palette = preload("res://scripts/word_jelly_palette.gd")
 const WordReveal = preload("res://scripts/word_jelly_word_reveal.gd")
+const CollectionEffects = preload("res://scripts/word_jelly_collection_fx.gd")
 const CollectButton = preload("res://scripts/word_jelly_collect_button.gd")
 const PowerupButton = preload("res://scripts/word_jelly_powerup_button.gd")
 const PowerupEffects = preload("res://scripts/word_jelly_powerup_effects.gd")
@@ -44,6 +45,8 @@ var _palette_cache: Dictionary = {}
 var _arrival_origins: Dictionary = {}
 var _preview_generated: int = -1
 var _word_reveal: WordReveal
+var _collection_effects: CollectionEffects
+var _presentation_elapsed: float = 0.0
 var collect_button: CollectButton
 var _action_divider := ColorRect.new()
 var _placement_tile: WordTile
@@ -65,6 +68,9 @@ var _size_cover: ColorRect
 var _size_message: Label
 var _room_notice: Label
 var _room_notice_remaining: float = 0.0
+var _read_hold_id: int = -1
+var _read_hold_elapsed: float = 0.0
+const READ_HOLD_SECONDS: float = 0.45
 
 func _init() -> void:
 	super()
@@ -109,9 +115,11 @@ func _init() -> void:
 		_preview_tiles.append(tile)
 		_preview_origins.append(Vector2.ZERO)
 		tile.read_requested.connect(_show_read)
-	drop_button.set("accessibility_name", "Drop the next word parts")
+	drop_button.set("accessibility_name", "Drop the next roots and pictures")
 	_word_reveal = WordReveal.new()
 	add_child(_word_reveal)
+	_collection_effects = CollectionEffects.new()
+	add_child(_collection_effects)
 	collect_button = CollectButton.new()
 	collect_button.name = "WordJellyCollectAll"
 	collect_button.pressed.connect(_collect_all)
@@ -169,6 +177,9 @@ func _init() -> void:
 	add_child(_room_notice)
 
 func stop() -> void:
+	_presentation_elapsed = 0.0
+	if _collection_effects != null:
+		_collection_effects.reset()
 	_room_notice_remaining = 0.0
 	if _room_notice != null:
 		_room_notice.hide()
@@ -207,6 +218,8 @@ func stop() -> void:
 
 func pause(value: bool = true) -> void:
 	_requested_pause = value
+	if value and _collection_effects != null:
+		_collection_effects.reset()
 	if value and _word_reveal != null:
 		_word_reveal.reset()
 	_apply_pause_reasons()
@@ -229,11 +242,11 @@ func _show_read(id: int) -> void:
 			if int(item.get("id", -1)) == id:
 				target = item
 				break
-	if target.is_empty() or not target.get("requires_read", false):
+	if target.is_empty() or str(target.get("jelly_kind", "")) == "picture":
 		return
 	_read_cell = target.duplicate(true)
 	_apply_pause_reasons()
-	_read_panel.present(str(target.text), not str(target.get("word", {}).get("audio", "")).is_empty())
+	_read_panel.present(str(target.get("display_text", target.text)), not str(target.get("word", {}).get("audio", "")).is_empty())
 	_publish()
 
 func _close_read() -> void:
@@ -243,6 +256,11 @@ func _close_read() -> void:
 	_apply_pause_reasons()
 	if _can_play() and _tiles.has(id):
 		_tiles[id].grab_focus()
+	elif _can_play():
+		for preview: WordTile in _preview_tiles:
+			if preview.tile_id == id and preview.visible and not preview.disabled:
+				preview.grab_focus()
+				break
 	_publish()
 
 func _read_action_at(point: Vector2) -> bool:
@@ -253,22 +271,28 @@ func _read_action_at(point: Vector2) -> bool:
 
 func set_reduced_motion(value: bool) -> void:
 	_word_reveal.set_reduced_motion(value)
+	_collection_effects.set_reduced_motion(value)
 	collect_button.set_reduced_motion(value)
 	for kind: String in powerup_buttons:
 		powerup_buttons[kind].configure(kind, game.powerup_price(kind), value)
 	super.set_reduced_motion(value)
 
 func _visibility_changed() -> void:
+	if not is_visible_in_tree() and _collection_effects != null:
+		_collection_effects.reset()
 	if not is_visible_in_tree() and _word_reveal != null:
 		_word_reveal.reset()
 	super._visibility_changed()
 
 func _finished(result: Dictionary) -> void:
 	_word_reveal.reset()
+	_collection_effects.reset()
 	_powerup_effects.hide()
 	super._finished(result)
 
 func cancel_input() -> void:
+	_read_hold_id = -1
+	_read_hold_elapsed = 0.0
 	_keyboard_source = -1
 	# Resolve the lifted body before the base view paints its resting position.
 	game.set_held_tile()
@@ -315,6 +339,14 @@ func _input(event: InputEvent) -> void:
 		return
 	if game.collection_batch_active() or game.powerup_active():
 		return
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R \
+		and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and _can_play():
+		var focused: Control = get_viewport().gui_get_focus_owner()
+		for tile: WordTile in _tiles.values() + _preview_tiles:
+			if tile == focused and tile.is_visible_in_tree():
+				_show_read(tile.tile_id)
+				get_viewport().set_input_as_handled()
+				return
 	if event.is_action_pressed("ui_cancel") and _keyboard_source >= 0:
 		cancel_input()
 		get_viewport().set_input_as_handled()
@@ -341,7 +373,21 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	var point: Vector2 = get_global_transform().affine_inverse() * global_point
 	if _preview_rect.has_point(point):
 		_preview_generated = game.generated_tiles
-		return super._press(pointer, global_point)
+		var accepted: bool = super._press(pointer, global_point)
+		if not accepted:
+			# A blocked supply row can still be read without dispatching it.
+			_pointer = pointer
+			_preview_first_id = _preview_identity()
+			_preview_canceled = true
+			_press_point = point
+			accepted = true
+		if accepted:
+			for tile: WordTile in _preview_tiles:
+				if tile.visible and tile.requires_read and tile.get_rect().has_point(point):
+					_read_hold_id = tile.tile_id
+					_read_hold_elapsed = 0.0
+					break
+		return accepted
 	var id: int = _tile_at(point)
 	if id < 0:
 		return false
@@ -358,12 +404,16 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	_drag_point = point
 	_drag_offset = point - _tiles[id].position
 	_dragging = false
+	_read_hold_id = id if _tiles[id].requires_read else -1
+	_read_hold_elapsed = 0.0
 	audio_requested.emit("pick")
 	_refresh_marks()
 	_publish()
 	return true
 
 func _move(global_point: Vector2) -> void:
+	if (get_global_transform().affine_inverse() * global_point).distance_to(_press_point) * Style.ui_scale(self) > 7.0:
+		_read_hold_id = -1
 	if _preview_first_id < 0 and not _dragging and _source >= 0:
 		var point: Vector2 = get_global_transform().affine_inverse() * global_point
 		if point.distance_to(_press_point) * Style.ui_scale(self) > 7.0:
@@ -379,6 +429,8 @@ func _move(global_point: Vector2) -> void:
 	super._move(global_point)
 
 func _release(global_point: Vector2) -> void:
+	_read_hold_id = -1
+	_read_hold_elapsed = 0.0
 	if _preview_first_id >= 0:
 		# A partial timed dispatch can leave the first slot unchanged while the
 		# pressed packet has already departed through its other open columns.
@@ -514,6 +566,10 @@ func _collection_started(fusion: Dictionary) -> void:
 		and int(fusion.get("batch_id", -1)) == _reveal_frame_batch:
 		initial_age = maxf(0.0, _reveal_frame_end - float(game.collection_batch_snapshot().elapsed))
 	_word_reveal.present(word, _picture(word), _theme.get("accent", Style.GOOD), batch, initial_age)
+	_collection_effects.set_reduced_motion(reduced_motion)
+	_collection_effects.present(get_global_transform().affine_inverse() * origin,
+		int(fusion.get("merge_level", fusion.a.get("merge_level", 1))),
+		_theme.get("accent", Style.GOOD), batch, initial_age, float(fusion.pop_at))
 	# Batch pickups keep their pop rhythm without additional pronunciation.
 	if not bool(fusion.get("batch", false)):
 		word_requested.emit(word)
@@ -565,7 +621,8 @@ func _configure_tile(tile: Tile, cell: Dictionary, combined: bool = false) -> vo
 	if cell.is_empty() or _surfaces.is_empty():
 		return
 	# Recolor one acquired painted skin, so matching hues also share shading.
-	tile.configure(cell, _surfaces[0], _picture(cell.word), _chest_texture, _theme.get("accent", Style.GOOD), combined)
+	tile.configure(cell, _surfaces[0], _picture(cell.get("image_word", cell.get("word", {}))), _chest_texture, _theme.get("accent", Style.GOOD), combined)
+	tile.set_merged_presentation(_presentation_elapsed, reduced_motion)
 	_apply_palette(tile, int(cell.id))
 
 func _apply_palette(tile: WordTile, id: int) -> void:
@@ -684,6 +741,7 @@ func _sync_positions() -> void:
 		if not _tiles.has(id):
 			continue
 		var tile: WordTile = _tiles[id]
+		tile.set_merged_presentation(_presentation_elapsed, reduced_motion)
 		var rect: Rect2 = _tile_rect(cell)
 		if _rest_rects.has(id) and _rest_rects[id] != rect and not reduced_motion:
 			_reflow[id] = {"from": tile.position, "started": 0.0 if bool(cell.get("falling", false)) else float(cell.age), "falling": bool(cell.get("falling", false))}
@@ -898,6 +956,7 @@ func _sync_preview() -> void:
 		if preview.tile_id != int(item.id):
 			_configure_tile(preview, item)
 		_apply_palette(preview, int(item.id))
+		preview.set_merged_presentation(_presentation_elapsed, reduced_motion)
 		var pose: Dictionary = _preview_pose(index)
 		preview.size = Vector2(int(item.get("width", 1)), int(item.get("height", 1))) * _pitch - Vector2.ONE * _gap
 		_preview_origins[index] = Vector2(_preview_rect.position.x + index * _pitch + _gap * 0.5,
@@ -906,11 +965,25 @@ func _sync_preview() -> void:
 		preview.modulate.a = clampf(refill, 0.0, 1.0)
 		preview.deform(0.0, 0.0)
 		preview.set_preview_pressure(float(pose.pressure), float(pose.sway), float(pose.pull))
+	_refresh_preview_read_controls()
+
+func _refresh_preview_read_controls() -> void:
+	for preview: WordTile in _preview_tiles:
+		var available: bool = preview.visible and preview.requires_read and _can_play() and not _finish_is_pulling() \
+			and not game.collection_batch_active() and not game.powerup_active()
+		preview.disabled = not available
+		preview.focus_mode = Control.FOCUS_ALL if available else Control.FOCUS_NONE
 
 func _preview_pose(index: int) -> Dictionary:
 	return Motion.preview(game.spawn_elapsed, game.spawn_interval, index, reduced_motion or game.phase != "playing" or not game.can_drop_now())
 
 func _process(delta: float) -> void:
+	if _read_hold_id >= 0 and _pointer != NO_POINTER and not _dragging and _can_play() and delta <= 0.5:
+		_read_hold_elapsed += delta
+		if _read_hold_elapsed >= READ_HOLD_SECONDS:
+			var id: int = _read_hold_id
+			_read_hold_id = -1
+			_show_read(id)
 	if _room_notice_remaining > 0.0:
 		_room_notice_remaining = maxf(0.0, _room_notice_remaining - delta)
 		_room_notice.visible = _room_notice_remaining > 0.0
@@ -924,6 +997,8 @@ func _process(delta: float) -> void:
 	_reveal_frame_end = -1.0
 	_powerup_frame_end = -1.0
 	if _can_play() and delta <= 0.5:
+		_presentation_elapsed += delta
+		_collection_effects.advance(delta)
 		var powerup: Dictionary = game.powerup_snapshot()
 		if bool(powerup.active) and str(powerup.kind) == "fragments":
 			_powerup_frame_end = float(powerup.elapsed) + delta
@@ -997,11 +1072,9 @@ func navigation_controls() -> Array[Control]:
 	for cell: Dictionary in ordered:
 		if _settled(cell) and _tiles.has(int(cell.id)) and not game.collection_batch_active() and not game.powerup_active():
 			controls.append(_tiles[int(cell.id)])
-			if _tiles[int(cell.id)]._read_button.visible:
-				controls.append(_tiles[int(cell.id)]._read_button)
 	for preview: WordTile in _preview_tiles:
-		if preview.is_visible_in_tree() and preview._read_button.visible:
-			controls.append(preview._read_button)
+		if preview.is_visible_in_tree() and not preview.disabled:
+			controls.append(preview)
 	if not collect_button.disabled:
 		controls.append(collect_button)
 	for button: PowerupButton in powerup_buttons.values():
@@ -1073,6 +1146,7 @@ func _remove_fusion_visual(id: String) -> void:
 
 func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 	var merged: WordTile = visual.merged
+	merged.set_merged_presentation(_presentation_elapsed, reduced_motion)
 	_apply_palette(merged, int(fusion.result.id) if str(fusion.operation) == "merge" else int(fusion.a_id))
 	var art: Control = visual.art
 	var p: float = clampf(float(fusion.elapsed) / float(fusion.duration), 0.0, 1.0)
@@ -1229,6 +1303,7 @@ func _refresh_controls() -> void:
 	if can_finish_round():
 		finish_button.show()
 		finish_button.disabled = _pointer != NO_POINTER
+	_refresh_preview_read_controls()
 	if collect_button == null:
 		return
 	if game.collection_batch_active() or game.powerup_active():
@@ -1388,6 +1463,8 @@ func _layout() -> void:
 		_room_notice.add_theme_font_size_override("font_size", ceili(16.0 / s))
 	_reward_presentation.size = size
 	_reward_presentation.set_chest_anchor(chest_anchor_rect())
+	if _collection_effects != null:
+		_collection_effects.configure_layout(Rect2(Vector2.ZERO, size), s)
 	if _word_reveal != null:
 		# Short landscape screens need two compact rows for distinct collection beats.
 		var reveal_fraction: float = 0.60 if size.x > size.y * 1.4 and size.y * s < 350.0 else 0.40
@@ -1428,6 +1505,7 @@ func snapshot() -> Dictionary:
 	state["board_ratio"] = float(WordModel.COLUMNS) / WordModel.ROWS
 	state["playfield_rect"] = _rect(get_global_rect())
 	state["word_reveal"] = _word_reveal.snapshot() if _word_reveal != null else {"visible": false}
+	state["collection_effects"] = _collection_effects.snapshot() if _collection_effects != null else {"visible": false}
 	state["read_detail"] = _read_panel.snapshot() if _read_panel != null else {"visible": false}
 	state["layout_paused"] = _layout_too_small
 	state["cell_pitch_pixels"] = _pitch * Style.ui_scale(self)
@@ -1452,12 +1530,18 @@ func snapshot() -> Dictionary:
 	state.drag["needs_room"] = _room_notice != null and _room_notice.visible
 	for item: Dictionary in state.tiles:
 		var tile: WordTile = _tiles[int(item.id)]
+		item["presentation"] = tile.presentation_snapshot()
 		item["completion_hint"] = tile.completion_hint
 		item["completion_scale"] = tile.completion_scale
 		item["picture_visible"] = tile._picture.is_visible_in_tree()
 		item["label_text"] = tile._label.text
+		item["label_visible"] = tile._label.is_visible_in_tree()
+		item["accessibility_name"] = tile.get("accessibility_name")
+		item["tooltip_text"] = tile.tooltip_text
 		item["label_font_pixels"] = tile._label.get_theme_font_size("font_size") * Style.ui_scale(self)
-		item["read_available"] = tile._read_button.is_visible_in_tree()
+		item["requires_read"] = tile.requires_read
+		item["read_available"] = tile.requires_read
+		item["read_button_visible"] = tile._read_button.is_visible_in_tree()
 		item["label_line_count"] = tile._label.get_line_count()
 		item["label_visible_line_count"] = tile._label.get_visible_line_count()
 		item["label_line_height"] = tile._label.get_line_height()

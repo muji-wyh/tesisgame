@@ -51,9 +51,13 @@ func _growth_cases() -> void:
 	]
 	var original: Array = words.duplicate(true)
 	var result: Dictionary = Resolver.resolve_growth(Context.growth(3, "word_jelly"), words)
-	check(result.ok and result.words.size() == 1 and result.words[0].id == "cat", "Jelly needs one eligible Growth entry, independent of Match's five-pair requirement")
+	check(result.ok and result.words.size() == 1 and result.words[0].id == "cat", "Jelly accepts the reviewed Growth sense")
 	check(result.ok and result.words[0].morphology_status == "reviewed" and result.words[0].morphology.kind == "atomic",
-		"Growth resolves cat as one reviewed whole Jelly rather than spelling chunks")
+		"Growth supplies one reviewed cat root for picture matching")
+	var image_free: Dictionary = words[0].duplicate(true)
+	image_free.image = ""
+	check(Resolver.resolve_growth(Context.growth(3, "word_jelly"), [image_free]).ok,
+		"Reviewed image-free words reach Jelly Words without invented pictures")
 	var altered: Dictionary = words[0].duplicate(true)
 	altered.text = "cats"
 	check(not Resolver.resolve_growth(Context.growth(3, "word_jelly"), [altered]).ok,
@@ -137,7 +141,7 @@ func _professional_cases() -> void:
 		check(result.words.any(func(word: Dictionary) -> bool: return word.text == "MRI") \
 			and result.words.any(func(word: Dictionary) -> bool: return word.text == "2-factor authentication"), "Genuine capitalization, spaces, hyphens and digits survive resolution")
 		check(not result.words[0].has("min_age"), "Professional words are not assigned fabricated Growth ages")
-		check(not result.requirements.terms[0].skills.has("spelling"), "Collecting an atomic Jelly cannot establish spelling mastery")
+		check(result.requirements.terms[0].skills.has("spelling"), "Manual atomic word-picture matching has a reachable Jelly learning route")
 		check(result.expressions[0].tokens[1].text == result.expressions[0].tokens[4].text \
 			and result.expressions[0].tokens[1].index != result.expressions[0].tokens[4].index, "Repeated phrase tokens keep distinct positions")
 	words[ids[2]].morphology.roots = ["missing"]
