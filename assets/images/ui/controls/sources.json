@@ -80,6 +80,17 @@
       "source_sha256": "364f70af3c90a9ef4178610227bf68c0b43b897241f146a8e56faf9724cc9c42",
       "integrated_sha256": "1cce711b9a875f8ae61142517ab745845864d697df6eeab2d77831ac7ed3642a",
       "variant": "outline"
+    },
+    {
+      "id": "refresh",
+      "file": "assets/images/ui/controls/refresh.svg",
+      "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/refresh.svg",
+      "source_sha256": "409389d29efeb6350ddf32d800964b179a2595702060e963ce449188f831a53b",
+      "integrated_sha256": "52d4fa9ba77903237bc7d011448990697e8efef9bf8c3e339e00fb5834617f8e",
+      "variant": "outline",
+      "acquired": "2026-10-21",
+      "status": "Acquired, source-scale inspected, and integrated for the Memory new-round action.",
+      "source_review": "build/memory-fixes-20261021/refresh-source-review.png"
     }
   ],
   "source_review": {

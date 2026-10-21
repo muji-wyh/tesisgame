@@ -265,6 +265,7 @@ func _run() -> void:
 	check(view.card_buttons.is_empty() and view.controls().is_empty() and not view.status_label.text.is_empty(), "Invalid content explains the error and leaves no stale playable board")
 	await _check_feedback_lock(view, words)
 	await _check_matched_fronts(view, words)
+	await _check_selection_and_hover(view, words)
 	await _check_catalog_text(view)
 	view.queue_free()
 	await process_frame
@@ -289,12 +290,12 @@ func _start_matching(view) -> void:
 
 func _check_feedback_lock(view, words: Array) -> void:
 	view.size = Vector2(456, 200)
-	for outcome in ["wrong", "same-kind", "correct"]:
+	for outcome in ["wrong", "correct"]:
 		view.start_round(words, Data.theme("spring"), 71)
 		_start_matching(view)
 		await _settle()
 		var first := _index(view, words[0].id, "word")
-		var second := _index(view, words[0 if outcome == "correct" else 1].id, "word" if outcome == "same-kind" else "image")
+		var second := _index(view, words[0 if outcome == "correct" else 1].id, "image")
 		var target := _index(view, words[2].id, "word")
 		var before_reveals := revealed.size()
 		view.card_buttons[first].pressed.emit()
@@ -371,6 +372,96 @@ func _check_matched_fronts(view, words: Array) -> void:
 		"Peek cancellation and pause recovery preserve only the earned pair and its score")
 	check(view.memory.cards == order and _positions(view) == positions, "Persistent matched fronts preserve every remembered position")
 	view.set_reduced_motion(true)
+
+
+func _check_selection_and_hover(view, words: Array) -> void:
+	view.size = Vector2(456, 320)
+	view.start_round(words, Data.theme("spring"), 91)
+	await _settle()
+	var first := _index(view, words[0].id, "word")
+	var partner := _index(view, words[0].id, "image")
+	var other_word := _index(view, words[1].id, "word")
+	var other_picture := _index(view, words[1].id, "image")
+	var first_back = view.card_buttons[first].find_child("CardBack", true, false)
+	var original_fill: Color = first_back.fill_color
+	view.start_game()
+	await _hover(view.card_buttons[first])
+	check(view.card_buttons[first].disabled and view.card_buttons[partner].disabled
+		and _highlighted_indices(view) == [mini(first, partner), maxi(first, partner)],
+		"Real pointer hover lights exactly the word-picture pair while observation keeps both cards disabled")
+	await _mouse(view.card_buttons[first], true)
+	await _mouse(view.card_buttons[first], false)
+	check(view.memory.selected_indices.is_empty() and view.memory.attempts == 0,
+		"Hovering an observed pair does not make observation cards clickable")
+	view.end_peek()
+	check(_highlighted_indices(view).is_empty(), "Closing observation removes the pair hint before its answers are concealed")
+	await _hover(view.card_buttons[partner])
+	check(_highlighted_indices(view).is_empty(), "Hovering a concealed card cannot disclose its partner")
+	var before: Array = [answers.size(), revealed.size(), progress.size()]
+	view.card_buttons[first].pressed.emit()
+	check(view.card_buttons[first].is_selection_visible() and first_back.fill_color != original_fill
+		and not view.card_buttons[first].face_up and view.snapshot().cards[first].selection_visible,
+		"First selection keeps a persistent outline and changed back surface without revealing the word")
+	view.card_buttons[other_word].pressed.emit()
+	check(view.memory.selected_indices == [other_word] and not view.card_buttons[first].is_selection_visible()
+		and first_back.fill_color == original_fill and view.card_buttons[other_word].is_selection_visible(),
+		"Choosing a second word transfers the visible selection and restores the earlier back")
+	check(view.memory.attempts == 0 and view.memory.mistakes == 0 and view.memory.reward_tier() == 6
+		and [answers.size(), revealed.size(), progress.size()] == before and view._feedback_timer.is_stopped(),
+		"Same-kind word changes emit no answer, audio, progress, feedback deadline, or chest penalty")
+	view.card_buttons[other_word].pressed.emit()
+	check(not view.card_buttons[other_word].is_selection_visible(), "Cancelling a selection removes its persistent outline")
+	view.card_buttons[partner].pressed.emit()
+	view.card_buttons[other_picture].pressed.emit()
+	check(view.memory.selected_indices == [other_picture] and view.card_buttons[other_picture].is_selection_visible()
+		and not view.card_buttons[partner].is_selection_visible() and view.memory.attempts == 0
+		and [answers.size(), revealed.size(), progress.size()] == before,
+		"Same-kind picture changes also transfer the concealed selection without an attempt")
+	view.card_buttons[other_picture].pressed.emit()
+	view.card_buttons[first].pressed.emit()
+	view.card_buttons[partner].pressed.emit()
+	view.continue_feedback()
+	await _hover(view.card_buttons[first])
+	check(view.card_buttons[first].disabled and view.card_buttons[partner].disabled
+		and _highlighted_indices(view) == [mini(first, partner), maxi(first, partner)]
+		and view.card_buttons[first].match_mark.active and view.card_buttons[partner].match_mark.active,
+		"Hovering a matched disabled card lights both fronts and their shared pair badges")
+	await _hover(view.card_buttons[partner])
+	check(_highlighted_indices(view) == [mini(first, partner), maxi(first, partner)],
+		"The picture and word both drive the same paired hover glow")
+	await _hover(view.card_buttons[other_word])
+	check(_highlighted_indices(view).is_empty() and view.memory.attempts == 1 and view.memory.mistakes == 0,
+		"Leaving the matched pair removes its light without changing the score")
+	await _hover(view.card_buttons[first])
+	view.pause(true)
+	check(_highlighted_indices(view).is_empty(), "Pausing clears hover light from both matched fronts")
+	view.pause(false)
+	await _hover(view.card_buttons[other_word])
+	view.begin_peek()
+	await _hover(view.card_buttons[other_picture])
+	check(_highlighted_indices(view) == [mini(other_word, other_picture), maxi(other_word, other_picture)],
+		"A paid eyes-open interval also enables hover pairing for unmatched fronts")
+	var stale = view.card_buttons[other_picture]
+	view.start_round(words, Data.theme("spring"), 91)
+	stale.mouse_entered.emit()
+	check(_highlighted_indices(view).is_empty() and not view.memory.started,
+		"Restart disconnects stale hover callbacks and clears the old pair highlight")
+
+
+func _highlighted_indices(view) -> Array:
+	var result: Array = []
+	for index in range(view.card_buttons.size()):
+		if view.card_buttons[index].is_pair_highlighted():
+			result.append(index)
+	return result
+
+
+func _hover(control: Control) -> void:
+	var event := InputEventMouseMotion.new()
+	event.position = control.get_global_rect().get_center()
+	event.global_position = event.position
+	root.push_input(event, true)
+	await _settle()
 
 
 func _check_resting_faces(view) -> void:

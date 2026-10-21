@@ -9,8 +9,10 @@ const CLIPS = {
   contact: 'assets/imported-audio/jelly-interaction/contact.wav',
   merge: 'assets/imported-audio/jelly-interaction/merge-together-v3.wav'
 };
-const COLLECTION_CLIPS = ['do', 're', 'mi', 'fa', 'sol', 'la', 'ti']
-  .map(note => `assets/audio/jelly-match/collect-${note}.wav`);
+const COLLECTION_CLIP = 'assets/audio/jelly-match/collect-pop.wav';
+const COMPOSITION_AGE = 8;
+const compositionAnalyses = new Map(require('../../data/vocabulary/morphology/age-08.json').entries
+  .map(entry => [entry.id, entry.analysis]));
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 const playbackIndex = page => page.evaluate(() => window.audioObservation.playbacks.length);
 const playbacksSince = (page, from) => page.evaluate(index => window.audioObservation.playbacks.slice(index), from);
@@ -131,23 +133,22 @@ async function audibleRecording(page, from, path, excludedFingerprint = '') {
 }
 
 function matching(playbacks, recording) {
-  if (recording.collection) return collectionSounds(playbacks);
   return playbacks.filter(playback => playback.fingerprint === recording.fingerprint);
 }
 
-function collectionSounds(playbacks) {
-  const timing = recordingTiming(COLLECTION_CLIPS[0]);
-  // Godot resamples the source WAV into browser-rate stereo PCM. All seven notes share
-  // one short envelope; native tests cover their identities and cyclic order.
+function collectionSounds(playbacks, reference) {
+  const timing = recordingTiming(COLLECTION_CLIP);
+  // Identify the first isolated pop by its source duration. Later collections
+  // must also contain exactly the same decoded samples as that first playback.
   return playbacks.filter(sound => sound.contextState === 'running' &&
-    Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate);
+    Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate &&
+    (!reference || sound.fingerprint === reference.fingerprint));
 }
 
 async function audibleCollection(page, from) {
-  const timings = COLLECTION_CLIPS.map(recordingTiming);
-  expect(timings.every(timing => timing.seconds === 0.24), 'Every collection note keeps the same 240 ms envelope').toBe(true);
-  const sound = await audibleRecording(page, from, COLLECTION_CLIPS[0]);
-  return { ...sound, collection: true, candidates: COLLECTION_CLIPS };
+  const sound = await audibleRecording(page, from, COLLECTION_CLIP);
+  expect(sound.playbackRate, 'Collection preserves the bubble-pop recording at its original pitch').toBe(1);
+  return { ...sound, source: COLLECTION_CLIP };
 }
 
 async function muteInMenu(page, muted, mode = 'jelly') {
@@ -326,6 +327,7 @@ test('Jelly gestures render distinct bundled sounds, preserve pronunciation, and
     const resumeFrom = await playbackIndex(page);
     await chooseMode(page, 'jelly');
     evidence.resumedClear = await audibleCollection(page, resumeFrom);
+    expect(evidence.resumedClear.fingerprint, 'Resuming collection uses the same bubble-pop recording').toBe(evidence.clear.fingerprint);
     await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(paused.cleared_pairs + 1);
     const resumed = await playbacksSince(page, resumeFrom);
     expect(matching(resumed, evidence.clear)).toHaveLength(1);
@@ -358,97 +360,166 @@ async function pressJellyRect(page, rect) {
   await rendered(page);
 }
 
-async function mergeReadyWord(page, { unmarked = false } = {}) {
-  const before = await settledBoard(page), groups = new Map();
-  for (const tile of before.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1)) {
-    if (!groups.has(tile.supply_group)) groups.set(tile.supply_group, []);
-    groups.get(tile.supply_group).push(tile);
-  }
-  const pair = [...groups.values()].find(roots => roots.length === 2 &&
-    (!unmarked || roots.every(tile => tile.fragments === 0)));
-  expect(pair, 'The real starting supply contains another complete two-part word').toBeTruthy();
-  pair.sort((a, b) => a.supply_part - b.supply_part);
+async function settledWordSupply(page) {
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.visible && !state.paused && state.phase === 'playing' &&
+      state.tiles.every(tile => tile.settled) && !Object.keys(state.fusion).length &&
+      !state.reward_presentation.active;
+  }, { timeout: 20000, message: 'The authored supply settles before another ordinary gesture' }).toBe(true);
+  return jelly(page);
+}
+
+async function mergeAuthoredParts(page, left, right, surface) {
+  const before = await settledWordSupply(page), bounds = await metrics(page);
   const from = await playbackIndex(page);
-  await beginDrag(page, pair[0]);
-  await hoverTile(page, pair[1]);
-  await page.mouse.up();
+  await beginDrag(page, left);
+  try {
+    await expect.poll(async () => {
+      const state = await jelly(page), target = state.tiles.find(tile => tile.id === right.id);
+      if (!target?.settled) return false;
+      if (state.drag.active && state.drag.target === right.id) return true;
+      const point = center(target.rect, bounds);
+      await page.mouse.move(point.x, point.y, { steps: 8 });
+      return false;
+    }, { message: 'The held source follows its authored partner after support-removal gravity' }).toBe(true);
+  } finally {
+    await page.mouse.up();
+  }
   let completed;
   await expect.poll(async () => {
     const state = await jelly(page);
     completed = state.tiles.find(tile => !before.tiles.some(old => old.id === tile.id) &&
-      tile.text === pair[0].text + pair[1].text && tile.word?.id);
+      tile.text === surface && tile.mass === left.mass + right.mass);
     return state.merged_count === before.merged_count + 1 && Boolean(completed?.settled) &&
       state.tiles.every(tile => tile.settled);
   }, { message: 'The real drag produces a settled merged word ready to collect' }).toBe(true);
   expect((await jelly(page)).cleared_pairs, 'A word merge waits for deliberate collection').toBe(before.cleared_pairs);
-  expect(collectionSounds(await playbacksSince(page, from)), 'Building a word does not play a collection note').toEqual([]);
+  expect(collectionSounds(await playbacksSince(page, from)), 'Building a word does not play the collection pop').toEqual([]);
   return completed;
 }
 
-test('Jelly Words plays one scale note per manual or batch collection and respects mute', async ({ page, context, browserName }, info) => {
+async function completeAuthoredWord(page, roots) {
+  const analysis = compositionAnalyses.get(roots[0].source_word_id);
+  const ready = new Map(analysis.parts.map((part, index) => [part.id, roots[index]]));
+  const visit = async id => {
+    if (ready.has(id)) return ready.get(id);
+    const node = analysis.nodes.find(item => item.id === id);
+    expect(node, 'The supply follows an explicit reviewed composition node').toBeTruthy();
+    const left = await visit(node.left), right = await visit(node.right);
+    const result = await mergeAuthoredParts(page, left, right, node.surface);
+    ready.set(id, result);
+    return result;
+  };
+  const completed = await visit(analysis.roots[0]);
+  expect(completed.word.id).toBe(roots[0].source_word_id);
+  return completed;
+}
+
+async function collectSupplyWord(page, tile, before) {
+  await pressJellyRect(page, tile.rect);
+  await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + 1);
+  await settledWordSupply(page);
+}
+
+async function prepareWordCollection(page, { composed = false } = {}) {
+  // Keep ready atomic words for the batch. Only the manual case needs a
+  // composed word; chest markings do not change the collection recording.
+  for (let attempt = 0; attempt < 24; attempt++) {
+    const state = await settledWordSupply(page), groups = new Map();
+    if (!composed && state.collect_button.count >= 2) return state;
+    for (const tile of state.tiles.filter(tile => tile.visible && tile.mass === 1 && tile.supply_group)) {
+      if (!groups.has(tile.supply_group)) groups.set(tile.supply_group, []);
+      groups.get(tile.supply_group).push(tile);
+    }
+    const words = [...groups.values()].filter(roots => roots.length > 1 &&
+      roots.length === compositionAnalyses.get(roots[0].source_word_id)?.parts.length)
+      .map(roots => roots.sort((a, b) => a.supply_part - b.supply_part))
+      .sort((left, right) => left.length - right.length);
+    if (words.length) {
+      const completed = await completeAuthoredWord(page, words[0]);
+      if (composed) return completed;
+      continue;
+    }
+    if (state.preview.enabled) {
+      await pressJellyRect(page, state.preview.rect);
+      await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(state.generated_tiles);
+      continue;
+    }
+    const blockingWord = state.tiles.find(tile => tile.word?.id);
+    expect(blockingWord, 'A full supply board has a real collectable word to make room').toBeTruthy();
+    await collectSupplyWord(page, blockingWord, state);
+  }
+  throw new Error('The ordinary supply did not prepare the collection case within twenty-four gestures.');
+}
+
+test('Jelly Words reuses one fixed bubble pop per manual or batch collection and respects mute', async ({ page, context, browserName }, info) => {
   test.setTimeout(180000);
-  const requests = watchAudioRequests(page), evidence = { candidates: COLLECTION_CLIPS };
+  const requests = watchAudioRequests(page), evidence = { source: COLLECTION_CLIP };
   await observeOutputAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5, trackSourceLifecycle: true });
+  // Reuse the saved-learner cohort used by the authored Word Jelly browser suite.
+  await page.addInitScript(age => {
+    const key = 'growWithPip.growth.v1';
+    if (!localStorage.getItem(key)) localStorage.setItem(key,
+      `[growth]\nversion=3\nlevel=0\nage=${age - 1}\nstreaks={}\nmastered_words=[]\nreceipts=[]\n`);
+  }, COMPOSITION_AGE);
   const errors = await openGame(page, { mode: 'word_jelly', reducedMotion: 'no-preference' });
   const available = await page.evaluate(() => window.audioObservation.available);
   if (browserName === 'chromium') expect(available).toBe(true);
   test.skip(!available, 'This browser runtime has no WebAudio.');
   const opening = await settledBoard(page);
   expect(opening.mode).toBe('word_jelly');
-  expect(opening.tiles.length).toBeGreaterThanOrEqual(18);
+  expect(opening.authored_morphology).toBe(true);
+  expect(opening.tiles.reduce((area, tile) => area + tile.width * tile.height, 0),
+    'The authored opening respects its eighteen-cell occupied-area budget').toBeLessThanOrEqual(18);
   await context.setOffline(true);
   try {
-    // Unmarked words isolate collection from chest assembly, whose separate
-    // recording is also 240 ms. Successful drops emit no empty-release cue.
-    const manual = await mergeReadyWord(page, { unmarked: true }), beforeManual = await jelly(page);
+    const manual = await prepareWordCollection(page, { composed: true }), beforeManual = await jelly(page);
+    expect(manual.composition.composed, 'The manual case collects a word built by real drags').toBe(true);
     const manualFrom = await playbackIndex(page);
     await pressJellyRect(page, manual.rect);
     evidence.manual = await audibleCollection(page, manualFrom);
     await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(beforeManual.cleared_pairs + 1);
-    expect(collectionSounds(await playbacksSince(page, manualFrom)), 'A manual collection plays exactly one note').toHaveLength(1);
+    expect(collectionSounds(await playbacksSince(page, manualFrom), evidence.manual), 'A manual collection plays exactly one bubble pop').toHaveLength(1);
     await audibleRecording(page, manualFrom, manual.word.audio);
 
-    for (let index = 0; index < 3; index++) await mergeReadyWord(page, { unmarked: true });
-    const beforeBatch = await jelly(page), batchFrom = await playbackIndex(page);
-    expect(beforeBatch.collect_button.count).toBe(3);
+    const beforeBatch = await prepareWordCollection(page), batchFrom = await playbackIndex(page);
+    const batchCount = beforeBatch.collect_button.count;
+    expect(batchCount).toBeGreaterThanOrEqual(2);
     expect(beforeBatch.collect_button.enabled).toBe(true);
     await pressJellyRect(page, beforeBatch.collect_button.rect);
-    await expect.poll(async () => (await jelly(page)).collection_batch.completed).toBe(3);
+    await expect.poll(async () => (await jelly(page)).collection_batch.completed).toBe(batchCount);
     await expect.poll(async () => (await jelly(page)).collection_batch.active).toBe(false);
-    await expect.poll(async () => collectionSounds(await playbacksSince(page, batchFrom)).length).toBe(3);
-    evidence.batch = collectionSounds(await playbacksSince(page, batchFrom));
+    await expect.poll(async () => collectionSounds(await playbacksSince(page, batchFrom), evidence.manual).length).toBe(batchCount);
+    evidence.batch = collectionSounds(await playbacksSince(page, batchFrom), evidence.manual);
+    evidence.batchCount = batchCount;
     const afterBatch = await jelly(page);
-    expect(afterBatch.cleared_pairs).toBe(beforeBatch.cleared_pairs + 3);
-    expect(afterBatch.fragment_count, 'Unmarked audio cases cannot trigger the equal-length chest assembly recording').toBe(0);
-    expect(afterBatch.reward_presentation.active).toBe(false);
-    expect(afterBatch.collection_batch.elapsed, 'The three collection beats retain their 120 ms game cadence').toBeCloseTo(0.36, 6);
+    expect(afterBatch.cleared_pairs).toBe(beforeBatch.cleared_pairs + batchCount);
+    expect(afterBatch.collection_batch.elapsed, 'Each collection retains its 120 ms game cadence').toBeCloseTo(batchCount * 0.12, 6);
     for (const [index, sound] of evidence.batch.entries()) {
-      expect(sound.fingerprint, 'Each batch note contains decoded PCM').toBeTruthy();
-      expect(sound.peak, 'Each batch note contains audible samples').toBeGreaterThan(0.01);
-      expect(sound.playbackRate, 'The bundled notes retain their intended pitch and length').toBe(1);
+      expect(sound.fingerprint, 'Each batch item reuses the manual collection recording').toBe(evidence.manual.fingerprint);
+      expect(sound.peak, 'Each collection pop contains audible samples').toBeGreaterThan(0.01);
+      expect(sound.playbackRate, 'The fixed recording retains its original pitch and length').toBe(1);
       if (index > 0) expect(sound.at, 'The next collected word starts a new audio beat').toBeGreaterThan(evidence.batch[index - 1].at);
     }
     await page.waitForTimeout(350);
-    expect(collectionSounds(await playbacksSince(page, batchFrom)), 'Finished batch presentation never repeats the collection notes').toHaveLength(3);
+    expect(collectionSounds(await playbacksSince(page, batchFrom), evidence.manual), 'Finished batch presentation never repeats the collection pop').toHaveLength(batchCount);
 
     await muteInMenu(page, true, 'word_jelly');
-    const mutedFrom = await playbackIndex(page), mutedManual = await mergeReadyWord(page);
-    const beforeMutedManual = await jelly(page);
-    await pressJellyRect(page, mutedManual.rect);
-    await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(beforeMutedManual.cleared_pairs + 1);
-    for (let index = 0; index < 2; index++) await mergeReadyWord(page);
-    const beforeMutedBatch = await jelly(page);
-    expect(beforeMutedBatch.collect_button.count).toBe(2);
+    const mutedFrom = await playbackIndex(page), beforeMutedBatch = await prepareWordCollection(page);
+    const mutedCount = beforeMutedBatch.collect_button.count;
+    expect(mutedCount).toBeGreaterThanOrEqual(2);
     await pressJellyRect(page, beforeMutedBatch.collect_button.rect);
-    await expect.poll(async () => (await jelly(page)).collection_batch.completed).toBe(2);
+    await expect.poll(async () => (await jelly(page)).collection_batch.completed).toBe(mutedCount);
     await expect.poll(async () => (await jelly(page)).collection_batch.active).toBe(false);
-    expect((await jelly(page)).cleared_pairs).toBe(beforeMutedBatch.cleared_pairs + 2);
-    expect(await playbacksSince(page, mutedFrom), 'Muted manual and batch collections emit no audio sources').toEqual([]);
+    expect((await jelly(page)).cleared_pairs).toBe(beforeMutedBatch.cleared_pairs + mutedCount);
+    evidence.mutedBatchCount = mutedCount;
+    expect(await playbacksSince(page, mutedFrom), 'Muted supply preparation and batch collection emit no audio sources').toEqual([]);
   } finally {
     await page.mouse.up();
     await context.setOffline(false);
     await info.attach('word-jelly-browser-audio.json', { body: Buffer.from(JSON.stringify(evidence, null, 2)), contentType: 'application/json' });
   }
-  expect(requests, 'Every scale note and pronunciation is already bundled for offline collection').toEqual([]);
+  expect(requests, 'The fixed collection pop and pronunciations are bundled for offline collection').toEqual([]);
   expect(errors).toEqual([]);
 });

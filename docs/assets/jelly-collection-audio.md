@@ -1,65 +1,69 @@
-# Jelly collection notes
+# Jelly collection bubble pop
 
-Jelly Words and Jelly Match share seven short collection cues in an ascending
-cycle: **Do, Re, Mi, Fa, Sol, La, Ti, then Do again**. The sequence starts at Do
-and advances once per accepted live `pop` event. Both modes share the next note,
-which is preserved through mute, pause and mode changes. Suppressed cues do not
-advance the sequence. Collection playback does not use a random choice.
+Jelly Words and Jelly Match play the same short bubble pop for every accepted
+collection. The recording uses one fixed authored pitch. There is no note
+sequence, random sample choice or per-collection transposition.
 
-The bank retains the existing gel-skin and elastic spring recording, with
-major-scale intervals of 0, 2, 4, 5, 7, 9 and 11 semitones above Do. The range
-straddles the original cue, from five semitones below to six above. These are
-relative musical degrees: the source retains its elastic pitch movement and
-is not a set of sustained concert-pitch notes.
+The gameplay clocks remain unchanged: Jelly Match's fusion release, Jelly Words'
+180 ms manual-pop boundary, and its 60 ms batch-pop boundary within each 120 ms
+collection beat. `collect-pop.wav` is cached at startup and required in the core
+Web pack. It uses the existing bounded Jelly audio players, collection gain 0.90,
+speech ducking and mute, pause and exit cancellation.
 
-Each cue lasts **240 ms**, with a 2 ms edge fade, a damped body and a 45 ms
-tail fade. More than 99.5% of each file's energy falls before the next 120 ms
-batch beat, giving each new collection a distinct attack. The files have a
-common RMS of -24.966 dBFS and peaks at or below -7.5 dBFS. The worst of all
-49 adjacent-note combinations at the actual batch spacing reaches -8.24 dBFS
-after the existing 0.90 collection gain. These are waveform measurements,
-not a listening preference or a full-mix loudness assessment.
+## Source and delivered asset
 
-The gameplay event clocks remain unchanged: Jelly Match's fusion release,
-Jelly Words' 180 ms manual-pop boundary, and its 60 ms batch-pop boundary
-within each 120 ms collection beat. The seven streams are cached at startup
-and required in the core Web pack. They use the existing three-player pool,
-speech ducking, mute, pause and exit cancellation. Runtime playback uses pitch
-1.0; pitch and envelope processing are already baked into each asset.
+The source is **farfadet46's [bubbles 'pop'](https://opengameart.org/content/bubbles-pop)**,
+released as **CC0 1.0**. The creator describes it as a bubble-pop effect for games.
+It is an authored sound effect; this record does not claim a recording of a
+physical bubble. No animation asset is supplied or needed.
 
-## Source and delivered material
+The original [pop.ogg](https://opengameart.org/sites/default/files/pop.ogg) was
+downloaded on 2026-10-21 and is preserved byte for byte at
+`docs/assets/sources/jelly-collection-audio/farfadet46-pop.ogg`. Its SHA-256 is
+`d55886ec5b145045d1abd13926675b93646a8865e53e1f7a3a58cfbb7b733cff`.
+This is the acquired original download, not an unacquired source preview.
+The source notice and CC0 link are also retained in
+`assets/audio/jelly-match/LICENSE-Bubble-Pop.txt`.
 
-| Material | Creator / original source | License and acquisition | Integration |
-| --- | --- | --- | --- |
-| Gel-skin recording, `slime_16.ogg` | rubberduck, [40 CC0 water / splash / slime SFX](https://opengameart.org/content/40-cc0-water-splash-slime-sfx) | CC0 1.0; original OGG archive previously acquired | Existing `clear.wav` composite; its source hash and processing remain in [Jelly Match's manifest](jelly-match.json). |
-| Elastic spring recording, `boing.flac` | Aeva, [BOING!](https://opengameart.org/content/boing) | CC0 1.0; original FLAC previously acquired; authored on an Arturia MicroFreak | Existing `clear.wav` composite; this is a synthesized source recording, not rubber foley. |
-| Seven collection notes | Local adaptation of the two acquired recordings | Same CC0 sources; no new samples, oscillators or cloud generation | `assets/audio/jelly-match/collect-{do,re,mi,fa,sol,la,ti}.wav`; integrated in both modes. |
+The complete original lasts about 276 ms but its main pop begins at about
+135 ms. Preparation keeps the 131–231 ms window, preserving the attack and
+natural tail at their original speed and pitch. It applies a 65 Hz high-pass,
+6500 Hz low-pass, DC removal, 1 ms onset fade, 12 ms end fade and peak adjustment.
+No spring, musical, voice or generated layer is added.
 
-All delivered notes are 44.1 kHz mono PCM16 WAV, with uncompressed Godot
-imports, no automatic trimming or normalization, and no loops. These are
-audio-only assets with no animation clips. The unchanged 340 ms `clear.wav`
-is retained as the source master, rather than used for live collections.
-The [bank manifest](jelly-collection-audio.json) records its SHA-256, the
-original creators and licenses, the exact per-note processing and output hashes.
+The delivered `assets/audio/jelly-match/collect-pop.wav` is **100 ms**, 44.1 kHz
+mono PCM16, with a **−7.50 dBFS** peak. Twelve repeats at the actual 120 ms batch
+spacing reach **−8.42 dBFS** after the existing 0.90 collection gain. Godot imports
+use no compression, automatic trimming, normalization or looping. These are
+signal measurements, not subjective loudness or physical speaker assessments.
 
-## Rebuild and checks
+The former collection-note WAVs and `clear.wav` stay unchanged for historical
+provenance and independent fixtures. They are no longer the Jelly collection
+sound. Their original rubberduck and Aeva licenses remain beside those files.
+
+## Rebuild and verification
 
 ```powershell
 python tools/prepare-jelly-collection-audio.py
 python tools/prepare-jelly-collection-audio.py --check
 ```
 
-The generator requires NumPy, SoundFile and FFmpeg with Rubber Band. It
-transposes and compresses the original recording, then shapes and level-matches
-the results. It checks file identity, format, onset, zero boundaries, clipping,
-relative intervals, RMS consistency and every adjacent-note overlap. It also
-writes `build/jelly-collection-audio/seven-notes-and-rapid-collection.wav`:
-the seven-note scale followed by two ascending cycles at the 120 ms collection
-spacing, demonstrating the same Ti-to-Do wrap used in gameplay.
+The generator requires NumPy, SoundFile and FFmpeg. It uses the preserved local
+source, verifies its hash, prepares the single fixed cue, and records the output
+hash and exact processing in [the manifest](jelly-collection-audio.json).
+Verification checks PCM format, onset, zero-valued boundaries, headroom and
+repeated batch playback.
 
-Native audio checks cover the seven cached files, ascending cyclic playback,
-one advance per accepted event, sequence continuity across interruptions, bounded
-voices, speech ducking and cancellation of delayed playback. Browser checks exercise real Jelly Match and Jelly Words collections,
-including a three-word batch, mute and offline playback. Physical-device
-listening remains a separate check; decoded output does not establish timbral
-preference.
+`build/jelly-collection-audio/one-pop-and-rapid-collection.wav` contains one
+isolated pop followed by twelve identical pops at gameplay gain and spacing.
+It is an asset preview, not an engine-mixed capture. Direct auditory input is
+unavailable in the agent tools. The user approved this audio preview on
+2026-10-21; this does not imply physical-device gameplay testing.
+
+Verification on 2026-10-21 passed the audio preparation checks, three focused
+packaging tests, native Jelly audio (195 checks), Jelly Match flow (421 checks)
+and Jelly Words flow (757 checks), and the production Web export. Desktop
+Chromium passed the Jelly Match audio/lifecycle case and the focused Jelly Words
+manual collection, batch collection and mute case. The browser checks observe
+the same decoded recording at playback rate 1.0 and verify bundled offline
+playback; the Words batch retains its 120 ms collection cadence.

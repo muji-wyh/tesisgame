@@ -132,15 +132,20 @@ func _test_selections(model) -> void:
 	var selected: Dictionary = _snapshot(model)
 	check(model.select(-1) == "ignored" and model.select(10) == "ignored"
 		and _snapshot(model) == selected, "Invalid indexes cannot cancel or change a selection")
-	check(model.select(dog) == "wrong" and model.selected_indices == [cat, dog]
-		and model.is_revealed(cat) and model.is_revealed(dog), "Two distinct words commit and reveal one wrong attempt together")
-	check(model.attempts == 1 and model.mistakes == 1 and model.reward_tier() == 5, "A same-kind attempt counts one mistake and lowers the tier")
-	model.continue_feedback()
-	model.select(dog)
+	check(model.select(dog) == "selected" and model.selected_indices == [dog]
+		and not model.is_revealed(cat) and not model.is_revealed(dog), "A second word replaces the concealed first choice without forming a pair")
+	check(model.phase == "matching" and model.attempts == 0 and model.mistakes == 0 and model.reward_tier() == 6
+		and model.feedback_words.is_empty(), "Changing a word selection cannot score, publish evidence, or lower the chest")
 	check(model.select(dog) == "cancelled" and model.phase == "waiting"
 		and model.selected_indices.is_empty() and not model.is_revealed(dog), "Selecting the same first card cancels it")
 	var picture: int = _index(model, "cat", "image")
-	check(model.select(picture) == "selected" and model.select(cat) == "correct", "Pairs can start with the picture")
+	var other_picture: int = _index(model, "dog", "image")
+	check(model.select(picture) == "selected" and model.select(other_picture) == "selected"
+		and model.selected_indices == [other_picture] and model.attempts == 0 and model.mistakes == 0
+		and not model.is_revealed(picture) and not model.is_revealed(other_picture),
+		"Two pictures also replace the first choice without revealing either or recording a miss")
+	check(model.select(picture) == "selected" and model.select(cat) == "correct"
+		and model.attempts == 1 and model.mistakes == 0, "A real pair can start with the most recently selected picture")
 	check(model.cards == board, "Selection, cancellation and pair reveal never move cards")
 
 

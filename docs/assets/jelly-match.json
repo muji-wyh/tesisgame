@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "acquired_on": "2026-10-09",
   "license": "CC0-1.0",
   "image_source": {
@@ -47,13 +47,13 @@
   "image_processing": {
     "tool": "Pillow",
     "version": "12.2.0",
-    "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 34 percent center to 16 percent contour white mix. Localized lower paint uses an alpha-aware 8 source-pixel Gaussian blur at up to 75 percent blend; upper glints remain crisp. Original silhouette and every source alpha value preserved. Separate contact shadow copied unchanged."
+    "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 34 percent center to 16 percent contour white mix. Localized lower paint uses an alpha-aware 8 source-pixel Gaussian blur at up to 75 percent blend; upper glints remain crisp. Painted rows are remapped into a continuous elliptical contour at 4x resolution, preserving the vertical span and bottom support. Separate contact shadow copied unchanged."
   },
   "images": [
     {
       "path": "assets/images/jelly-match/gel-coral.png",
       "kind": "gel_surface",
-      "sha256": "3993aff5493c81e55112c7ca7def0220e93e9edec0e3fa243f77b36dc5c58bd5",
+      "sha256": "deed1a7f5ce9b477df5b371dc4f83e7406b86f815de0e7964628eb7bdd79a4b5",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -100,14 +100,30 @@
         ],
         "interpolation": "Product of rising and falling smoothstep masks",
         "coordinates": "Normalized source artwork before transparent padding",
-        "alpha": "Every original source alpha value retained unchanged",
+        "alpha": "Original source alpha retained during paint softening, before contour remapping",
         "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"
+      },
+      "contour_rounding": {
+        "operation": "Horizontal scanline remapping of the acquired painted body into an ellipse",
+        "center_pixels": [
+          159.5,
+          159.5
+        ],
+        "radii_pixels": [
+          148.5,
+          125.5
+        ],
+        "supersampling": 4,
+        "alpha_threshold": 128,
+        "edge_interpolation": "Linear subpixel crossing at alpha 127.5",
+        "resampling": "Premultiplied RGBA; bicubic upscale and affine sampling, Lanczos downsample",
+        "preserved_detail": "Source paint and glints remapped with the contour; alpha-128 vertical span and bottom support unchanged"
       }
     },
     {
       "path": "assets/images/jelly-match/gel-mint.png",
       "kind": "gel_surface",
-      "sha256": "986e4bdcd72bd3dc228f26261c3c04d6dc8d5d1624184c6e799501f1652cfadd",
+      "sha256": "231d78bda567d623e5c80cd66b59045ccb1d0729e401acb9722b13586823c6c6",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -154,14 +170,30 @@
         ],
         "interpolation": "Product of rising and falling smoothstep masks",
         "coordinates": "Normalized source artwork before transparent padding",
-        "alpha": "Every original source alpha value retained unchanged",
+        "alpha": "Original source alpha retained during paint softening, before contour remapping",
         "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"
+      },
+      "contour_rounding": {
+        "operation": "Horizontal scanline remapping of the acquired painted body into an ellipse",
+        "center_pixels": [
+          159.5,
+          159.5
+        ],
+        "radii_pixels": [
+          148.5,
+          125.5
+        ],
+        "supersampling": 4,
+        "alpha_threshold": 128,
+        "edge_interpolation": "Linear subpixel crossing at alpha 127.5",
+        "resampling": "Premultiplied RGBA; bicubic upscale and affine sampling, Lanczos downsample",
+        "preserved_detail": "Source paint and glints remapped with the contour; alpha-128 vertical span and bottom support unchanged"
       }
     },
     {
       "path": "assets/images/jelly-match/gel-sky.png",
       "kind": "gel_surface",
-      "sha256": "d19d38f797f4e42bbe86da20173a044f5dd7573009bc7049619ad0c57b735aa0",
+      "sha256": "d4ad80e2f7d160c7db524863ddfddb0421e03f93a36f42fdec30c4fd8055e82e",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -208,14 +240,30 @@
         ],
         "interpolation": "Product of rising and falling smoothstep masks",
         "coordinates": "Normalized source artwork before transparent padding",
-        "alpha": "Every original source alpha value retained unchanged",
+        "alpha": "Original source alpha retained during paint softening, before contour remapping",
         "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"
+      },
+      "contour_rounding": {
+        "operation": "Horizontal scanline remapping of the acquired painted body into an ellipse",
+        "center_pixels": [
+          159.5,
+          159.5
+        ],
+        "radii_pixels": [
+          148.5,
+          125.5
+        ],
+        "supersampling": 4,
+        "alpha_threshold": 128,
+        "edge_interpolation": "Linear subpixel crossing at alpha 127.5",
+        "resampling": "Premultiplied RGBA; bicubic upscale and affine sampling, Lanczos downsample",
+        "preserved_detail": "Source paint and glints remapped with the contour; alpha-128 vertical span and bottom support unchanged"
       }
     },
     {
       "path": "assets/images/jelly-match/gel-lilac.png",
       "kind": "gel_surface",
-      "sha256": "c02a93588b356ec314a5e7abfdc9823f18be038ea9b962a500ac66fcd484e314",
+      "sha256": "b53c2c271d8bffaa26eb37597cc332baa434aa416671afa975515b4127751a81",
       "source": "png/separate/Jellies/Blank/Jelly (3).png",
       "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
       "size": [
@@ -262,8 +310,24 @@
         ],
         "interpolation": "Product of rising and falling smoothstep masks",
         "coordinates": "Normalized source artwork before transparent padding",
-        "alpha": "Every original source alpha value retained unchanged",
+        "alpha": "Original source alpha retained during paint softening, before contour remapping",
         "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"
+      },
+      "contour_rounding": {
+        "operation": "Horizontal scanline remapping of the acquired painted body into an ellipse",
+        "center_pixels": [
+          159.5,
+          159.5
+        ],
+        "radii_pixels": [
+          148.5,
+          125.5
+        ],
+        "supersampling": 4,
+        "alpha_threshold": 128,
+        "edge_interpolation": "Linear subpixel crossing at alpha 127.5",
+        "resampling": "Premultiplied RGBA; bicubic upscale and affine sampling, Lanczos downsample",
+        "preserved_detail": "Source paint and glints remapped with the contour; alpha-128 vertical span and bottom support unchanged"
       }
     },
     {

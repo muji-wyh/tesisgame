@@ -1,7 +1,7 @@
 extends Button
 
 const Style = preload("res://scripts/ui_style.gd")
-enum Symbol { MORE, VOICE, HINT, EYE, BACK, NEXT, HOME }
+enum Symbol { MORE, VOICE, HINT, EYE, BACK, NEXT, HOME, REFRESH }
 const ART := {
 	Symbol.MORE: preload("res://assets/images/ui/controls/menu.svg"),
 	Symbol.VOICE: preload("res://assets/images/ui/controls/microphone.svg"),
@@ -9,7 +9,8 @@ const ART := {
 	Symbol.EYE: preload("res://assets/images/ui/controls/eye-closed.svg"),
 	Symbol.BACK: preload("res://assets/images/ui/controls/chevron-left.svg"),
 	Symbol.NEXT: preload("res://assets/images/ui/controls/chevron-right.svg"),
-	Symbol.HOME: preload("res://assets/images/ui/controls/home.svg")
+	Symbol.HOME: preload("res://assets/images/ui/controls/home.svg"),
+	Symbol.REFRESH: preload("res://assets/images/ui/controls/refresh.svg")
 }
 const ACTIVE_VOICE = preload("res://assets/images/ui/controls/microphone-active.svg")
 const OPEN_EYE = preload("res://assets/images/ui/controls/eye.svg")

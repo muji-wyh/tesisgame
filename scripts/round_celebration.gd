@@ -4,6 +4,7 @@ extends Control
 signal performance_finished(round_id: String)
 signal open_requested(round_id: String)
 signal home_requested
+signal replay_requested(round_id: String)
 signal cue_requested(round_id: String, cue: String)
 signal confetti_requested(round_id: String)
 
@@ -12,6 +13,7 @@ const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
 const ChestView = preload("res://scripts/chest_view.gd")
+const UiClick = preload("res://scripts/ui_click.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const DURATION: float = Mascot.CELEBRATION_SECONDS
 const MOVE_START: float = 1.46
@@ -27,6 +29,9 @@ var pip: Mascot
 var chest: ChestView
 var action_button: Button
 var home_button: Button
+var replay_button: Button
+var _early_replay: bool = false
+var _replay_blocked: bool = false
 var _heading: Label
 var _caption: Label
 var _summary: Label
@@ -100,6 +105,16 @@ func _init() -> void:
 		if _active and not _paused and not _open_emitted and home_button.is_visible_in_tree():
 			home_requested.emit())
 	add_child(home_button)
+	replay_button = Button.new()
+	replay_button.name = "CelebrationEarlyReplay"
+	replay_button.text = "Play again"
+	replay_button.set("accessibility_name", "Play again")
+	replay_button.pressed.connect(func() -> void:
+		if controls().has(replay_button) and not replay_button.disabled:
+			replay_requested.emit(_round_id))
+	UiClick.bind_button(replay_button)
+	add_child(replay_button)
+	replay_button.hide()
 	resized.connect(_layout)
 	visibility_changed.connect(_visibility_changed)
 	set_process(false)
@@ -116,10 +131,12 @@ func _label(text: String, node_name: String) -> Label:
 
 
 func begin(round_id: String, theme_id: String, chest_manifest: Dictionary,
-		chest_count: int, reduce: bool, automatic: bool = false, score: int = -1, chest_tier: int = 0, chest_announced: bool = false, summary: String = "") -> void:
+		chest_count: int, reduce: bool, automatic: bool = false, score: int = -1, chest_tier: int = 0, chest_announced: bool = false, summary: String = "", early_replay: bool = false) -> void:
 	if round_id.is_empty() or (_active and round_id == _round_id):
 		return
 	stop()
+	_early_replay = early_replay
+	_replay_blocked = false
 	_round_id = round_id
 	_chest_count = maxi(0, chest_count)
 	_chest_announced = chest_announced
@@ -234,12 +251,16 @@ func controls() -> Array[Control]:
 	if not _active or _paused or _open_emitted or not is_visible_in_tree():
 		return result
 	result.append(home_button)
-	if _ready_to_open and not _automatic and _chest_count == 0:
+	if _early_replay and not _replay_blocked:
+		result.append(replay_button)
+	elif not _early_replay and _ready_to_open and not _automatic and _chest_count == 0:
 		result.append(action_button)
 	return result
 
 
 func default_focus() -> Control:
+	if controls().has(replay_button):
+		return replay_button
 	return action_button if _ready_to_open and controls().has(action_button) else null
 
 
@@ -298,6 +319,10 @@ func advance(delta: float) -> void:
 func _try_finish() -> void:
 	if not _active or _paused or _ready_to_open or not is_visible_in_tree() or _elapsed < DURATION or _narration_playing:
 		return
+	# Keep the pressed control alive across the automatic settlement handoff.
+	# Its release must either activate the action or cancel before we replace it.
+	if home_button.is_pressed() or (_early_replay and replay_button.is_pressed()):
+		return
 	_ready_to_open = true
 	_sample()
 	_sync_processing()
@@ -319,9 +344,16 @@ func _visibility_changed() -> void:
 	_sync_processing()
 
 
+func set_replay_blocked(value: bool) -> void:
+	_replay_blocked = value
+	_refresh_action()
+
+
 func _refresh_action() -> void:
-	action_button.visible = _active and _ready_to_open and not _automatic and _chest_count == 0
+	action_button.visible = _active and _ready_to_open and not _automatic and _chest_count == 0 and not _early_replay
 	action_button.disabled = not _active or not _ready_to_open or _paused or _open_emitted or _chest_count > 0
+	replay_button.visible = _active and _early_replay
+	replay_button.disabled = not _active or _paused or _open_emitted or _replay_blocked
 	home_button.visible = _active
 	home_button.disabled = not _active or _paused or _open_emitted
 
@@ -370,7 +402,7 @@ func _layout() -> void:
 	var scale_factor: float = maxf(0.25, Style.ui_scale(self))
 	var layout: Dictionary = RewardLayout.measure(size, scale_factor, _chest_count > 0, false, _score >= 0)
 	for item: Array in [[_heading, "heading"], [_summary, "summary"], [_caption, "caption"], [pip, "pip"], [chest, "chest"],
-		[home_button, "home"], [action_button, "replay"]]:
+		[home_button, "home"], [action_button, "replay"], [replay_button, "replay"]]:
 		var control: Control = item[0]
 		var rect: Rect2 = layout[item[1]]
 		control.custom_minimum_size = Vector2.ZERO
@@ -390,6 +422,7 @@ func _layout() -> void:
 	_count.size = Vector2(50, 26) / scale_factor
 	_count.add_theme_font_size_override("font_size", ceili(22.0 / scale_factor))
 	Style.action_button(action_button, _palette.get("accent", Style.GOOD), true)
+	Style.action_button(replay_button, _palette.get("accent", Style.GOOD), true)
 	Style.action_button(home_button, _palette.get("accent", Style.GOOD))
 	_sample()
 
@@ -412,5 +445,7 @@ func snapshot() -> Dictionary:
 		"action": {"rect": _rect(action_button.get_global_rect()), "visible": action_button.is_visible_in_tree(),
 			"disabled": action_button.disabled, "text": action_button.text},
 		"home": {"rect": _rect(home_button.get_global_rect()), "visible": home_button.is_visible_in_tree(), "disabled": home_button.disabled},
+		"replay": {"rect": _rect(replay_button.get_global_rect()), "visible": replay_button.is_visible_in_tree(),
+			"disabled": replay_button.disabled, "text": replay_button.text},
 		"pip_rect": _rect(pip.get_global_rect()), "chest_rect": _rect(chest.get_global_rect()),
 		"expression": pip.expression_name(), "chest_mode": chest.mode}

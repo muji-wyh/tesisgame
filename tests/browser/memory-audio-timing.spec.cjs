@@ -8,6 +8,8 @@ test.use({ deviceScaleFactor: 1,
   launchOptions: { ignoreDefaultArgs: ['--autoplay-policy=no-user-gesture-required'] } });
 
 test('Memory keeps its concealed first choice silent and synchronizes feedback with the revealed pair', async ({ page, context, browserName }, info) => {
+
+  test.setTimeout(180000);
   const requests = watchAudioRequests(page);
   await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
   const errors = await openGame(page, { mode: 'memory', reducedMotion: 'no-preference' });
@@ -28,7 +30,7 @@ test('Memory keeps its concealed first choice silent and synchronizes feedback w
     new MutationObserver(() => {
       const memory = JSON.parse(growth.dataset.view || '{}').memory;
       if (memory) window.memoryAudioTiming.frames.push({ at: performance.now(), phase: memory.phase,
-        faces: memory.cards.filter(card => card.face_up).map(card => card.index) });
+        faces: memory.cards.filter(card => card.face_up).map(card => card.index), reward: memory.reward });
     }).observe(growth, { attributes: true, attributeFilter: ['data-view'] });
     document.addEventListener('pointerup', event => {
       if (event.isTrusted && event.target.id === 'canvas') window.memoryAudioTiming.pointerUp = performance.now();
@@ -56,18 +58,25 @@ test('Memory keeps its concealed first choice silent and synchronizes feedback w
   };
   const observations = [];
   const revealPair = async (firstIndex, index, correct) => {
+    const priorTier = (await memoryState(page)).reward.tier;
+    const recording = correct ? 'assets/imported-audio/pair-feedback/right.wav'
+      : priorTier > 1 ? 'assets/audio/memory-chest/downgrade.wav'
+        : priorTier === 1 ? 'assets/audio/memory-chest/lost.wav' : 'assets/imported-audio/pair-feedback/wrong.wav';
     const from = await audioCount();
     const selectionCount = await page.evaluate(() => window.memoryAudioTiming.selections.length);
     await memoryCardTap(page, index);
     await expect.poll(() => page.evaluate(() => window.memoryAudioTiming.selections.length)).toBeGreaterThan(selectionCount);
     const published = await page.evaluate(index => window.memoryAudioTiming.selections[index], selectionCount);
     expect(published.text).toMatch(/^Two cards revealed\./);
-    const cue = await expectRecording(page, from, `assets/imported-audio/pair-feedback/${correct ? 'right' : 'wrong'}.wav`);
+    const cue = await expectRecording(page, from, recording);
     const revealed = await page.evaluate(({ since, index }) => window.memoryAudioTiming.frames.find(frame =>
       frame.at >= since && frame.phase === 'feedback' && frame.faces.includes(index)), { since: published.pointerUp, index });
     expect(revealed, 'The transient published feedback shows both selected faces together').toBeTruthy();
     expect(revealed.faces).toEqual([firstIndex, index].sort((a, b) => a - b));
-    observations.push({ firstIndex, index, correct, published, cue, revealed });
+    expect(revealed.reward.tier).toBe(correct ? priorTier : Math.max(0, priorTier - 1));
+    expect(nonMusic(await page.evaluate(from => window.audioObservation.playbacks.slice(from), from)),
+      'A tier loss replaces the ordinary wrong cue instead of stacking two effects').toHaveLength(1);
+    observations.push({ firstIndex, index, correct, priorTier, recording, published, cue, revealed });
     await waitForMemoryInput(page);
   };
   await context.setOffline(true);
@@ -83,6 +92,10 @@ test('Memory keeps its concealed first choice silent and synchronizes feedback w
       'Cancelling the first choice is silent').toEqual([]);
     await silentFirst(first.index);
     await revealPair(first.index, wrong.index, false);
+    for (let remaining = 5; remaining >= 0; remaining--) {
+      await silentFirst(first.index);
+      await revealPair(first.index, wrong.index, false);
+    }
     const pair = memoryPairs(board).find(pair => pair.includes(first.index));
     await silentFirst(pair[0]);
     await revealPair(pair[0], pair[1], true);
@@ -92,7 +105,10 @@ test('Memory keeps its concealed first choice silent and synchronizes feedback w
   const timingPath = info.outputPath('memory-audio-timing.json');
   fs.writeFileSync(timingPath, JSON.stringify(observations, null, 2));
   await info.attach('memory-audio-timing.json', { path: timingPath, contentType: 'application/json' });
-  expect(observations).toHaveLength(2);
+  expect(observations).toHaveLength(8);
+  expect(observations.filter(item => item.recording.endsWith('/downgrade.wav'))).toHaveLength(5);
+  expect(observations.filter(item => item.recording.endsWith('/lost.wav'))).toHaveLength(1);
+  expect(observations.filter(item => item.recording.endsWith('/wrong.wav'))).toHaveLength(1);
   for (const { published, cue } of observations) {
     expect(published.pointerUp, 'The measurement follows a trusted second-card gesture').toBeGreaterThan(0);
     expect(cue.at, 'Pair feedback starts before publishing the revealed pair').toBeLessThanOrEqual(published.at);

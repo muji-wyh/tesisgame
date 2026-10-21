@@ -64,7 +64,9 @@ visible controls ignore pointer input, and confetti remains in the current game.
 Memory uses `scripts/memory_reward_badge.gd` instead of the random pair-drop
 presentation. Its fixed 44/52 CSS-pixel header starts at the highest available
 level, currently Level 6, and steps down one level per mistake to a grey "No chest" state. The existing tier chest artwork
-reacts at its original anchor with a 0.52-second scale and rotation change;
+reacts at its original anchor with a 0.78-second reverse full turn, darkening and
+contracting to 40% to swap tier artwork before a subdued recovery without overshoot.
+The final loss compresses to 18% with a darker, longer pause before turning grey;
 reduced motion updates the tier without moving it. Reconfiguration never
 replays a downgrade. The full five-pair completion saves the surviving tier and
 uses the shared Pip finale before opening. An unfinished round grants no reward.

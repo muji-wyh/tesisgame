@@ -428,7 +428,7 @@
         Complete three phrases to open the settlement dialog over your finished answer. Hold the chest directly after the celebration to collect your gift. Play again starts another three phrases. Phrase difficulty follows your current learning age.
         Match feedback stays on the board and clears automatically. Completed pairs share a numbered, colored badge. Every completed pair keeps its connection until the round ends. The latest pair is emphasized. Tap a completed card to emphasize its partner and connection and hear its word again; all earlier connections stay visible.
         Memory has ten hidden cards: match each word with its picture to find five pairs. Choose Start game to begin a free 10-second observation. Cards ignore input while you look and remember. The labeled countdown and glowing progress bar show the observation time left. Choose Start matching beside the countdown to hide the cards immediately.
-        During matching, the first selected card stays hidden and is not pronounced. Select a second distinct card to reveal both together. A correct pair stays face up with the same number and color on both cards. A wrong pair gives brief feedback, then both cards hide again. Selecting the first card again cancels your choice without a mistake.
+        During matching, the first selected card stays hidden and is not pronounced; a bright outline marks your choice. Select a card of the other kind to reveal both together. Selecting another word or another picture changes your first choice without counting an attempt. A correct pair stays face up with the same number and color on both cards. Hover either card in a matched pair to highlight both; this also works for all visible pairs during observation. A wrong pair gives brief feedback, then both cards hide again. Selecting the first card again cancels your choice without a mistake. The New Memory game refresh button starts a fresh board at the Start game gate.
         The eye buys another 5-second observation. The first purchased observation costs 100 coins, the second 200, and every later one 300. The eye button shows the next price. A failed payment does not reveal cards or advance the price.
         Space, Enter, or Xbox A activates Start game, Start matching, or the focused eye. Releasing or moving away does not close an observation. Repeated activation during the countdown does not extend it or charge again. Escape or Xbox B ends the observation or cancels a single selected card. Memory has no round time limit or limit on attempts.
         Voice Pop is a single-player game using your browser's system speech recognition. Tap to start and request microphone access. Say the words you see to pop them. Each round starts with 50 seconds.
@@ -438,7 +438,7 @@
         After time runs out, Voice Pop stops listening and opens the shared settlement dialog over the frozen board. It shows your score, the number of words popped, and any final upgraded chest you earned. A round without a chest uses the same dialog. Earlier unopened treasure remains available. Hold the chest artwork in the dialog until it opens, or choose Home or Play again to collect and save all unopened Pop treasure automatically. If saving fails, choose Retry save before leaving. Play again returns to the microphone-ready gate; tap Start listening to begin the next round. When all restored treasure has been opened, Back returns to the microphone-ready gate without starting the microphone.
         If voice is unavailable or permission is denied, follow the message and use Retry, or choose another mode.
         Match has a 50% base chance to earn one chest per round, with at most one per round. Each successful word-picture pair tells you whether it found a chest. After two completed Match rounds without a chest, the next round guarantees one. A found Match chest celebrates on the current board with chest effects and full-screen confetti while you keep matching.
-        Memory has no random chest drops. Its fixed chest begins at the highest available level, currently Level 6. Each wrong pair lowers it by one level with a small animation in place. A mistake at Level 1 turns the chest grey, and no chest remains for that round. Finish all five pairs to earn the remaining level; an unfinished round awards no chest. Match, Memory, and Phrase Builder celebrate and settle inside the shared settlement dialog over the finished board. Hold an earned chest directly after Pip celebrates, or choose Play again. Phrase Builder earns one chest after three phrases. Reduced motion keeps the reward display still.
+        Memory has no random chest drops. Its fixed chest begins at the highest available level, currently Level 6. Each wrong pair lowers it by one level with a reverse turn and contraction in place. A mistake at Level 1 turns the chest grey, and no chest remains for that round. Finish all five pairs to earn the remaining level; an unfinished round awards no chest. Match, Memory, and Phrase Builder celebrate and settle inside the shared settlement dialog over the finished board. Hold an earned chest directly after Pip celebrates, or choose Play again. Memory keeps Play again available throughout Pip's celebration and the chest entrance. Phrase Builder earns one chest after three phrases. Reduced motion keeps the reward display still.
         Play again in the settlement dialog starts a fresh round in the same game: Match, Memory, or Phrase Builder. Home returns to the game menu. Both actions automatically collect and save an unopened earned chest before leaving. If saving fails, the dialog stays open and Retry save lets you try again.
         Opening an ordinary chest gives 50 coins. Higher chest levels give 50 coins per level. Match earns ordinary chests; Memory earns its remaining level, up to 300 coins for a perfect round. Coins fly from the opened chest into the top coin display; the total rolls upward only as they arrive. Your coin balance is saved on this device.
         Your learning journey starts at Lv0 with Baby Pip. Level and age grow independently. The ten vocabulary cohorts are ages 3, 4, 5, 6, 7, 8, 9, 10, 11 and 12+. They are a guide to English learning, not a developmental assessment.
@@ -516,7 +516,7 @@
                   </g>
                 </svg>
               </button>
-              <button id="loading-duck" type="button" aria-label="Dance with Pip the duck" aria-describedby="loading-hint" data-activity="idle" data-pose="idle" data-queued="0">
+              <button id="loading-duck" type="button" aria-label="Play with Pip the duck" aria-describedby="loading-hint" data-activity="idle" data-pose="idle" data-queued="0">
                 <svg viewBox="-14 -40 148 168" aria-hidden="true">
                   <g stroke="#785D3E" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <ellipse cx="60" cy="114" rx="28" ry="4" fill="#65708A" opacity=".14" stroke="none"/>
@@ -685,7 +685,7 @@
       const loadingNote = document.getElementById('loading-note');
       const percent = document.getElementById('loading-percent');
       const loadingDuck = document.getElementById('loading-duck');
-      const danceParts = Object.fromEntries(['body', 'head', 'left-wing', 'right-wing', 'left-foot', 'right-foot']
+      const pipParts = Object.fromEntries(['body', 'head', 'left-wing', 'right-wing', 'left-foot', 'right-foot']
         .map(part => [part, document.getElementById('loading-pip-' + part)]));
       const pipWardrobe = $PIP_WARDROBE_JSON;
       const loadingPipArt = loadingDuck.querySelector('svg');
@@ -699,7 +699,7 @@
       }
       function finishLoadingThemeTransition() {
         clearPipThemeTransition();
-        // Finish palette changes without interrupting the separate dance timeline.
+        // Finish palette changes without interrupting the current reaction timeline.
         for (const animation of status.getAnimations({ subtree: true })) {
           if (animation instanceof CSSTransition) animation.finish();
         }
@@ -710,8 +710,8 @@
         clearPipThemeTransition();
         if (animate && !loadingMotionReduced() && !document.hidden) {
           outgoingPipArt = loadingPipArt.cloneNode(true);
-          // Freeze the outgoing pose; the live, identifiable parts keep dancing.
-          for (const [part, element] of Object.entries(danceParts)) {
+          // Freeze the outgoing pose while the live parts retain the current reaction.
+          for (const [part, element] of Object.entries(pipParts)) {
             const snapshot = outgoingPipArt.querySelector('#loading-pip-' + part);
             const pose = getComputedStyle(element);
             snapshot.style.transform = pose.transform;
@@ -742,8 +742,8 @@
         document.documentElement.dataset.pipTheme = theme;
         document.documentElement.style.setProperty('--pip-art', `url("${outfit.sprite}")`);
         loadingDuck.dataset.theme = theme;
-        for (const [part, element] of Object.entries(danceParts)) element.innerHTML = outfit.parts[part];
-        danceParts.head.insertAdjacentHTML('beforeend',
+        for (const [part, element] of Object.entries(pipParts)) element.innerHTML = outfit.parts[part];
+        pipParts.head.insertAdjacentHTML('beforeend',
           '<g class="pip-shy-cheeks" fill="#EE8C9C" stroke="none"><ellipse cx="40" cy="55" rx="5.5" ry="3.5"/><ellipse cx="80" cy="55" rx="5.5" ry="3.5"/></g>' +
           '<g class="pip-bonk-stars" fill="#FFD979" stroke="#B88535" stroke-width="1.5"><path d="m10 20 2-5 2 5 5 2-5 2-2 5-2-5-5-2Z"/><path d="m109 12 2-5 2 5 5 2-5 2-2 5-2-5-5-2Z"/></g>');
         if (outgoingPipArt) {
@@ -892,10 +892,10 @@
 
       function scheduleLoadingThemeCycle() {
         stopLoadingThemeCycle();
-        if (themePicker.hidden || themeChosenByPlayer || !canPlayLoadingDance()) return;
+        if (themePicker.hidden || themeChosenByPlayer || !canPlayLoadingInteraction()) return;
         themeCycleTimer = window.setTimeout(() => {
           themeCycleTimer = 0;
-          if (themeChosenByPlayer || !canPlayLoadingDance()) return;
+          if (themeChosenByPlayer || !canPlayLoadingInteraction()) return;
           // Keep a focused choice, entry press, or character reaction stable.
           if (!gesture && !gamepadStartPressed && loadingDuck.dataset.activity !== 'reacting' &&
               !themePicker.contains(document.activeElement) && document.activeElement !== enterButton) {
@@ -952,7 +952,7 @@
           percent.textContent = Math.floor(displayed * 100) + '%';
           if (displayed === 1) {
             message.textContent = 'Ready to play!';
-            downloadStatus.textContent = 'Keep dancing, or enter the game.';
+            downloadStatus.textContent = 'Keep playing, or enter the game.';
           }
         }
 
@@ -1058,7 +1058,7 @@
         }
 
         function play(gestureAllowed) {
-          if (loadingPreferences.muted === true || !gestureAllowed || !canPlayLoadingDance() || !players.length || activePlayer) return;
+          if (loadingPreferences.muted === true || !gestureAllowed || !canPlayLoadingInteraction() || !players.length || activePlayer) return;
           stop();
           if (!bag.length) {
             bag = players.map((_, index) => index);
@@ -1090,7 +1090,7 @@
               // click that has already reused the same preloaded element.
               if (request !== generation) {
                 if (activePlayer !== player) player.pause();
-              } else if (!canPlayLoadingDance()) stop();
+              } else if (!canPlayLoadingInteraction()) stop();
             }).catch(finish);
           } catch { finish(); }
         }
@@ -1187,9 +1187,7 @@
         return { start, stop };
       }
       const loadingMusic = createLoadingMusic();
-      const danceBeats = 12;
-      const danceDuration = danceBeats * 440;
-      let danceGeneration = 0;
+      let pipReactionGeneration = 0;
       let reactionTimer = 0;
       let loadingPageSuspended = false;
       let reactionBag = [];
@@ -1200,20 +1198,20 @@
         bonk: 'Boop! Pip bounces right back!'
       };
 
-      function clearLoadingDance() {
-        danceGeneration++;
+      function clearLoadingPipReaction() {
+        pipReactionGeneration++;
         window.clearTimeout(reactionTimer);
         reactionTimer = 0;
         loadingDuck.dataset.activity = 'idle';
         loadingDuck.dataset.pose = 'idle';
         loadingDuck.dataset.queued = '0';
-        for (const part of Object.values(danceParts)) {
+        for (const part of Object.values(pipParts)) {
           part.getAnimations().forEach(animation => animation.cancel());
           part.style.transform = '';
         }
       }
 
-      const loadingPipJoints = Object.fromEntries(Object.entries(danceParts).map(([name, part]) =>
+      const loadingPipJoints = Object.fromEntries(Object.entries(pipParts).map(([name, part]) =>
         [name, getComputedStyle(part).transformOrigin.split(' ').map(parseFloat)]));
 
       function anchorLoadingWings(pose) {
@@ -1232,54 +1230,8 @@
         return result;
       }
 
-      function dancePose(beat) {
-        const clamp = value => Math.max(0, Math.min(1, value));
-        const smooth = value => { const t = clamp(value); return t * t * (3 - 2 * t); };
-        const wave = start => Math.sin(Math.PI * clamp((beat - start) / 2));
-        const left = wave(0), right = wave(2);
-        const amount = smooth((beat - 4) / .65) * smooth((danceBeats - beat) / .65);
-        const phase = (beat - 4) * Math.PI;
-        const hips = Math.sin(phase) * amount;
-        const follow = Math.sin(phase - .32) * amount;
-        // Sink during the weight transfer, then rise into each hip accent.
-        const bend = Math.pow(Math.cos(phase), 2) * amount;
-        const bounce = Math.max(left, right);
-        const n = value => Number(value.toFixed(3));
-        return anchorLoadingWings({
-          // Shear below the shoulders: the hem swings further than the chest.
-          // A small counter-lean keeps the head balanced over the planted feet.
-          body: `translate(${n(hips * 6)}px, ${n(bend * 1.5 - bounce)}px) rotate(${n(-hips * 2)}deg) skewX(${n(hips * 18)}deg) scale(${n(1 + bend * .045)}, ${n(1 - bend * .06)})`,
-          head: `translate(${n(-follow * 1.8)}px, ${n(bend * 3 - bounce * 1.5)}px) rotate(${n(-follow * 4)}deg)`,
-          'left-wing': `translate(${n(follow * 3)}px, ${n(bend * 1.8)}px) rotate(${n(left * 108 - amount * 22 - follow * 3)}deg)`,
-          'right-wing': `translate(${n(follow * 3)}px, ${n(bend * 1.8)}px) rotate(${n(-right * 108 + amount * 22 - follow * 3)}deg)`,
-          // Rotate around each outside toe (38,114 / 82,114), never slide or
-          // lift the whole foot. Only the heel opposite the weight rises.
-          'left-foot': `translate(-10px, 8px) rotate(${n(-Math.max(hips, 0) * 5 - right * 2)}deg) translate(10px, -8px)`,
-          'right-foot': `translate(10px, 8px) rotate(${n(Math.max(-hips, 0) * 5 + left * 2)}deg) translate(-10px, -8px)`
-        });
-      }
-
-      // Sample the curved movement once. Playback stays in six bounded browser
-      // animations, with no per-frame JavaScript or queued dance steps.
-      const dancePoses = Array.from({ length: danceBeats * 8 + 1 }, (_, index) => dancePose(index / 8));
-
-      function canPlayLoadingDance() {
+      function canPlayLoadingInteraction() {
         return !loadingEvents.signal.aborted && !document.hidden && !loadingPageSuspended;
-      }
-
-      function startLoadingDance() {
-        if (!canPlayLoadingDance() || loadingMotionReduced() || loadingDuck.dataset.activity === 'dancing') return;
-        clearLoadingDance();
-        loadingDuck.dataset.activity = 'dancing';
-        loadingDuck.dataset.pose = 'dance';
-        // One compositor-driven loop per limb keeps dancing through engine startup
-        // without queuing timers or trying to catch up after a busy frame.
-        for (const [name, part] of Object.entries(danceParts)) {
-          const frames = dancePoses.map((pose, index) => ({
-            transform: pose[name], offset: index / (dancePoses.length - 1)
-          }));
-          part.animate(frames, { duration: danceDuration, iterations: Infinity });
-        }
       }
 
       function nextPipReaction() {
@@ -1325,28 +1277,27 @@
       }
 
       function playWithDuck(gestureAllowed = false, describe = true) {
-        if (!canPlayLoadingDance() || loadingDuck.dataset.activity === 'reacting' || loadingPipSounds.isBusy()) return false;
+        if (!canPlayLoadingInteraction() || loadingDuck.dataset.activity === 'reacting' || loadingPipSounds.isBusy()) return false;
         loadingMusic.start(gestureAllowed);
         const name = nextPipReaction(), reaction = pipReaction(name);
         // Ignore repeat input until both the action and its recording finish.
         // There is no queued poke to replay after the player stops tapping.
-        clearLoadingDance();
+        clearLoadingPipReaction();
         loadingDuck.dataset.activity = 'reacting';
         loadingDuck.dataset.pose = name;
         if (describe) hint.textContent = pipReactionLabels[name];
-        const generation = danceGeneration;
+        const generation = pipReactionGeneration;
         const finish = () => {
-          if (generation !== danceGeneration) return;
-          clearLoadingDance();
-          startLoadingDance();
+          if (generation !== pipReactionGeneration) return;
+          clearLoadingPipReaction();
         };
         if (loadingMotionReduced()) {
-          for (const [part, transform] of Object.entries(anchorLoadingWings(reaction.still))) danceParts[part].style.transform = transform;
+          for (const [part, transform] of Object.entries(anchorLoadingWings(reaction.still))) pipParts[part].style.transform = transform;
           reactionTimer = window.setTimeout(finish, reaction.duration);
           return true;
         }
         const anchoredBeats = reaction.beats.map(([offset, pose]) => [offset, anchorLoadingWings(pose)]);
-        for (const [partName, part] of Object.entries(danceParts)) {
+        for (const [partName, part] of Object.entries(pipParts)) {
           const animation = part.animate(anchoredBeats.map(([offset, pose]) => ({
             offset, transform: pose[partName] || 'translate(0, 0) rotate(0deg)', easing: 'ease-in-out'
           })), { duration: reaction.duration });
@@ -1360,7 +1311,7 @@
         loadingPlay.getAnimations({ subtree: true }).forEach(animation => animation.cancel());
         sparks.replaceChildren();
         chestArt.style.transform = '';
-        clearLoadingDance();
+        clearLoadingPipReaction();
         gesture = null;
       }
 
@@ -1382,7 +1333,7 @@
       }, loadingListener);
 
       function playWithTreasure(gestureAllowed = false) {
-        if (!canPlayLoadingDance()) return;
+        if (!canPlayLoadingInteraction()) return;
         sparkleCount++;
         score.textContent = sparkleCount + (sparkleCount === 1 ? ' sparkle' : ' sparkles');
         const party = sparkleCount % 5 === 0;
@@ -1459,7 +1410,7 @@
 
       function pollLoadingGamepad() {
         gamepadFrame = 0;
-        if (!canPlayLoadingDance()) return;
+        if (!canPlayLoadingInteraction()) return;
         const pads = loadingGamepads();
         enterController.hidden = !pads.length;
         if (!pads.length) { stopLoadingGamepad(); return; }
@@ -1483,7 +1434,7 @@
       }
 
       function startLoadingGamepad(ignoreHeld = false) {
-        if (gamepadFrame || !canPlayLoadingDance()) return;
+        if (gamepadFrame || !canPlayLoadingInteraction()) return;
         if (ignoreHeld) {
           const pads = loadingGamepads();
           gamepadPressed = pads.some(pad => pad.buttons[0]?.pressed);
@@ -1525,7 +1476,6 @@
       }, loadingListener);
       function resetLoadingEffects() {
         clearLoadingEffects();
-        startLoadingDance();
       }
       toy.addEventListener('pointercancel', resetLoadingEffects, loadingListener);
       toy.addEventListener('lostpointercapture', event => {
@@ -1543,7 +1493,6 @@
           loadingMusic.stop();
           loadingPipSounds.stop();
         } else {
-          startLoadingDance();
           startLoadingGamepad(true);
           scheduleLoadingThemeCycle();
         }
@@ -1559,11 +1508,9 @@
       window.addEventListener('pageshow', () => {
         if (!loadingPageSuspended) return;
         loadingPageSuspended = false;
-        startLoadingDance();
         startLoadingGamepad(true);
         scheduleLoadingThemeCycle();
       }, loadingListener);
-      startLoadingDance();
       startLoadingGamepad();
       scheduleLoadingThemeCycle();
 

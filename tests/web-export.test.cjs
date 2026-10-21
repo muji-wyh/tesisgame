@@ -125,6 +125,7 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
     'assets/audio/voice/spring-theme.wav',
     ...['step', 'step-detail', 'step-roll', 'release', 'reward'].map(cue => `assets/imported-audio/chest-reference/${cue}.wav`),
     ...require('../tools/chest-kenney-audio.cjs').CHEST_KENNEY_CUES.map(cue => `assets/audio/chest-kenney/${cue}.wav`),
+    ...['downgrade', 'lost'].map(cue => `assets/audio/memory-chest/${cue}.wav`),
     'assets/imported-audio/pair-feedback/right.wav', 'assets/imported-audio/pair-feedback/wrong.wav',
     'assets/imported-audio/ui-click/select.wav'
   ]) {
@@ -323,8 +324,8 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   fixture.writeImport('assets/audio/coins/collect.wav');
   fixture.writeImport('assets/audio/coins/release.wav');
   fixture.writeImport('assets/audio/jelly-finish/ready.ogg');
-  for (const cue of ['collect-do', 'collect-re', 'collect-mi', 'collect-fa', 'collect-sol', 'collect-la', 'collect-ti',
-    'land', 'danger']) fixture.writeImport(`assets/audio/jelly-match/${cue}.wav`);
+  for (const cue of ['downgrade', 'lost']) fixture.writeImport(`assets/audio/memory-chest/${cue}.wav`);
+  for (const cue of ['collect-pop', 'land', 'danger']) fixture.writeImport(`assets/audio/jelly-match/${cue}.wav`);
   for (const cue of ['contact', 'merge-together-v3']) fixture.writeImport(`assets/imported-audio/jelly-interaction/${cue}.wav`);
   require('./helpers/pair-feedback-assets.cjs').pairFeedbackFixture(fixture.directory, fixture.writeImport);
   require('./helpers/ui-click-assets.cjs').uiClickFixture(fixture.directory, fixture.writeImport);
@@ -334,16 +335,16 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 379);
+  assert.equal(required.length, 375);
   assert.equal(fs.existsSync(path.join(fixture.directory, 'assets/audio/chests')), false,
     'Packaging succeeds without the archived theme recordings');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/chests/')),
     'The reviewed shared bank replaces every former theme-specific chest cue');
-  assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction|jelly-finish)\//.test(asset.source)).length, 12,
+  assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction|jelly-finish)\//.test(asset.source)).length, 6,
     'Every Jelly cue is required in the startup pack');
   assert.deepEqual(required.filter(asset => asset.source.includes('/jelly-match/collect-')).map(asset => asset.source),
-    ['do', 're', 'mi', 'fa', 'sol', 'la', 'ti'].map(note => `res://assets/audio/jelly-match/collect-${note}.wav`),
-    'Every collection note ships in the startup pack');
+    ['res://assets/audio/jelly-match/collect-pop.wav'],
+    'Only the fixed collection pop is required from the collection bank');
   assert.ok(required.every(asset => asset.source !== 'res://assets/audio/jelly-match/clear.wav'),
     'The legacy collection source is no longer required at runtime');
   assert.deepEqual(required.slice(-4), reference);
@@ -359,6 +360,9 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     chest.assets.map(asset => `res://${asset.destination}`), 'Five shared chest recordings each ship once in the pack');
   assert.deepEqual(required.filter(asset => asset.source.includes('/chest-kenney/')).map(asset => asset.source),
     kenney.assets.map(asset => `res://${asset.destination}`), 'All eleven Kenney chest cues ship once for every theme');
+  assert.deepEqual(required.filter(asset => asset.source.includes('/memory-chest/')).map(asset => asset.source),
+    ['downgrade', 'lost'].map(cue => `res://assets/audio/memory-chest/${cue}.wav`),
+    'Both Memory loss cues ship locally before the first accepted mismatch');
   assert.deepEqual(required.filter(asset => asset.source.includes('/voice/phrase-')).map(asset => asset.source),
     phrases.map(phrase => `res://${phrase.audio}`), 'Every whole-phrase recording is verified as a required resource');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/quest/')),

@@ -182,7 +182,8 @@ func start_manual(app, mode: String, earned: bool = true, theme_id: String = "")
 		var view = app._memory
 		if not earned:
 			var mismatch: int = 1
-			while view.memory.cards[mismatch].word.id == view.memory.cards[0].word.id:
+			while view.memory.cards[mismatch].word.id == view.memory.cards[0].word.id \
+				or view.memory.cards[mismatch].kind == view.memory.cards[0].kind:
 				mismatch += 1
 			for attempt in range(RewardProgress.THEMES.size()):
 				view.card_buttons[0].pressed.emit()
@@ -248,6 +249,9 @@ func check_manual_mode(app, mode: String) -> void:
 			mode + " celebration retains the earned chest tier")
 	check(not app.chest_button.is_visible_in_tree() and not view.snapshot().ready,
 		mode + " keeps direct chest input unavailable during the performance")
+	if mode == "memory":
+		check(view.replay_button.is_visible_in_tree() and not view.replay_button.disabled
+			and view.controls().has(view.replay_button), "Memory already offers Play again while Pip begins celebrating")
 	var initial_bursts: int = app._reward_confetti.snapshot().keys.size()
 	check(initial_bursts == (1 if mode == "match" else 0),
 		mode + " begins its finale with only paper already earned during play")
@@ -381,8 +385,13 @@ func check_no_chest_mode(app, mode: String) -> void:
 	check(app.model.phase == "won" and not app.model.chest_earned and view.snapshot().chest_count == 0
 		and not view.snapshot().chest_visible and view.snapshot().caption == "Every word matched!",
 		mode + " celebrates its real completed round without claiming an unearned chest")
-	check(not app.chest_button.is_visible_in_tree() and not view.action_button.visible,
-		mode + " shows neither an unearned chest nor an early replay action")
+	var replay: Button = view.replay_button if mode == "memory" else view.action_button
+	check(not app.chest_button.is_visible_in_tree() and not view.action_button.visible
+		and view.replay_button.visible == (mode == "memory"),
+		mode + " hides unearned chest input and follows its mode's replay timing")
+	if mode == "memory":
+		check(not replay.disabled and view.controls() == [view.home_button, replay],
+			"Memory has an immediate replay action even when its earned chest tier is zero")
 	app._open_chest()
 	app.chest_button.button_down.emit()
 	app._accept_round_chest(identity)
@@ -400,18 +409,27 @@ func check_no_chest_mode(app, mode: String) -> void:
 	view.advance(1.2)
 	view.action_button.pressed.emit()
 	check(not view.is_ready() and app._round_id == identity and pieces(app) == before,
-		mode + " waits for final pronunciation before offering another round")
+		mode + " cannot bypass the final pronunciation through a hidden legacy action")
+	if mode == "memory":
+		check(replay.is_visible_in_tree() and not replay.disabled,
+			"Memory keeps its separate replay action available while narration finishes")
 	view.set_narration_playing(false)
-	check(view.is_ready() and view.action_button.text == "Play again" and view.controls() == [view.home_button, view.action_button],
-		mode + " offers Play again once the celebration and final word both finish")
+	check(view.is_ready() and replay.text == "Play again" and view.controls() == [view.home_button, replay],
+		mode + " retains Play again after the celebration and final word both finish")
 	app.growth.ready = false
-	view.action_button.pressed.emit()
-	check(app._round_id == identity and view.is_ready() and not view.action_button.disabled
-		and view.controls() == [view.home_button, view.action_button] and not view.snapshot().open_emitted and pieces(app) == before,
-		mode + " keeps Play again usable when unavailable growth storage rejects the new round")
+	replay.pressed.emit()
+	if mode == "memory":
+		replay = app._single_result.replay_button
+		check(app._round_id == identity and not view.is_active() and app._single_result.is_visible_in_tree()
+			and replay.is_visible_in_tree() and not replay.disabled and pieces(app) == before,
+			"A failed Memory replay keeps the completed zero-chest result and its replay action available")
+	else:
+		check(app._round_id == identity and view.is_ready() and not replay.disabled
+			and view.controls() == [view.home_button, replay] and not view.snapshot().open_emitted and pieces(app) == before,
+			mode + " keeps Play again usable when unavailable growth storage rejects the new round")
 	app.growth.ready = true
 	app._growth_save_failed = false
-	view.action_button.pressed.emit()
+	replay.pressed.emit()
 	await settle()
 	var next_identity: String = app._round_id
 	view.open_requested.emit(identity)

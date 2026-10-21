@@ -1,0 +1,20 @@
+Bubble-pop collection sound
+
+Title: bubbles 'pop'
+Creator: farfadet46
+Source page: https://opengameart.org/content/bubbles-pop
+Original download: https://opengameart.org/sites/default/files/pop.ogg
+License: CC0 1.0 Universal
+License URL: https://creativecommons.org/publicdomain/zero/1.0/
+Source page and license inspected: 2026-10-21
+
+The original complete OGG is retained at:
+docs/assets/sources/jelly-collection-audio/farfadet46-pop.ogg
+SHA-256: d55886ec5b145045d1abd13926675b93646a8865e53e1f7a3a58cfbb7b733cff
+
+Adaptation: leading/trailing silence trim, filtering, boundary fades,
+and level adjustment. Original authored pitch and speed are retained.
+No additional musical, spring, voice or synthetic layers were added.
+
+Preparation: tools/prepare-jelly-collection-audio.py
+Provenance: docs/assets/jelly-collection-audio.json

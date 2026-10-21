@@ -481,7 +481,7 @@ function expectSupplyLayout(state, bounds) {
     expect(rect[3] * scale, `${label} retains a forty-four-pixel target height within viewport rounding`).toBeGreaterThanOrEqual(43.75);
   }
   const bottom = Math.max(...regions.map(([, rect]) => rect[1] + rect[3]));
-  expect(Math.abs(bottom - (area[1] + area[3] - 6 / scale)), 'The authored board retains six-pixel bottom padding').toBeLessThan(tolerance);
+  expect(Math.abs(bottom - (area[1] + area[3] - 12 / scale)), 'The authored board retains twelve-pixel bottom padding').toBeLessThan(tolerance);
 }
 
 function expectSupportedChild(state, child) {

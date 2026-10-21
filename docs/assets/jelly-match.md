@@ -51,18 +51,19 @@ The four production textures are:
 - `assets/images/jelly-match/gel-sky.png`
 - `assets/images/jelly-match/gel-lilac.png`
 
-Each is a 320 × 320 RGBA image. The original 297 × 251 illustration occupies
-`x=11, y=34, width=297, height=251`; surrounding pixels are transparent. The source
-aspect ratio, silhouette and every alpha value are retained. The acquired upper
-highlights remain crisp while the lower painted shade receives a localized softening.
+Each is a 320 × 320 RGBA image. The original 297 × 251 illustration is placed at
+`x=11, y=34, width=297, height=251`, then its painted rows are remapped into a
+continuous oval. This removes the flattened underside and abrupt lower corners.
+The alpha-128 body span and bottom support at `y=285` stay fixed; a faint
+antialiasing fringe surrounds the contour. The acquired upper highlights retain
+their painted detail while the lower shade receives a localized softening.
 The adaptation changes hue while retaining 88% of the source HSV saturation
 (78% for mint to restrain its bright green contour). It mixes 34% white into the
 central reading area and 16% into the outer contour and lower foot. The lighter
 center keeps words readable while the shoulders and foot retain more fruit color.
-The adaptation does not
-redraw the source silhouette or add a face. The source's other bodies have
-protruding ears or bubble clusters; those are intentionally not included in the
-gameplay set.
+The adaptation reshapes the acquired illustration without adding a face. The
+source's other bodies have protruding ears or bubble clusters; those are
+intentionally not included in the gameplay set.
 
 Processing uses normalized coordinates within the unpadded source. The horizontal
 center weight is `smoothstep(0.08, 0.28, x) * smoothstep(0.08, 0.28, 1 - x)`;
@@ -78,8 +79,16 @@ maximum blend is 0.75, weighted horizontally by
 hard lower shade boundary without blurring the upper glints or the rightmost
 small reflection. The brighter reading area and original painted lighting remain
 recognizable. Premultiplication prevents transparent RGB from bleeding into the
-blend; output alpha always comes from the unblurred source. The manifest records
-the color and softening recipe for each variant.
+blend; this softening step retains the source alpha before contour remapping.
+
+Contour remapping uses premultiplied RGBA at four times the output resolution.
+Each source row's alpha-128 contour is measured with a subpixel crossing at
+127.5, then the entire painted row is resampled into an ellipse centered at
+`(159.5, 159.5)` with radii `(148.5, 125.5)`. Bicubic sampling followed by Lanczos
+downsampling keeps the rounded edge smooth. The source glints, shaded body and
+reflections deform with the paint. All four variants share exactly the same
+alpha; the corresponding signed-distance materials are regenerated from these
+adapted skins. The manifest records the color, softening and rounding recipe.
 
 The ordinary skin, continuous fusion, release beads and Finish control share
 `scripts/jelly_optics.gdshaderinc`. It reads inward distance and the contour normal

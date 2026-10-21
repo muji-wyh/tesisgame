@@ -2,6 +2,7 @@ extends SceneTree
 
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
+const Style = preload("res://scripts/ui_style.gd")
 var checks := 0
 var failures := 0
 
@@ -39,7 +40,9 @@ func _run() -> void:
 	Fixture.enter_mode(app, "memory")
 	await settle()
 	await _check_player_flow(app)
+	await _check_refresh(app)
 	await _check_reward_tiers(app)
+	await _check_early_replay(app)
 	await _check_responsive_header(app)
 	Fixture.enter_mode(app, "match")
 	app._memory.round_finished.emit(true, app.model.lesson_words)
@@ -138,6 +141,63 @@ func _check_player_flow(app) -> void:
 	check(app.coin_wallet.balance == before_exit and app.medal_progress.counts.is_empty(), "Leaving unfinished Memory grants neither preview coins nor medal pieces")
 
 
+func _check_refresh(app) -> void:
+	for stage: String in ["ready", "observation", "selection", "feedback"]:
+		check(app.new_round(520, false, "", "memory"), "Prepare refresh during " + stage)
+		var view = app._memory
+		if stage == "observation":
+			view.start_button.pressed.emit()
+		elif stage in ["selection", "feedback"]:
+			Fixture.start_memory(app)
+			var wrong := _wrong_pair(view)
+			view.card_buttons[wrong[0]].pressed.emit()
+			if stage == "feedback":
+				view.card_buttons[wrong[1]].pressed.emit()
+		var previous_round: String = app._round_id
+		var previous_model = view.memory
+		var previous_card: Button = view.card_buttons[0]
+		var before: int = app.coin_wallet.balance
+		var counts: Dictionary = app.medal_progress.counts.duplicate(true)
+		check(app._memory_refresh.is_visible_in_tree() and not app._memory_refresh.disabled
+			and app._focus_candidates().has(app._memory_refresh), "Refresh is an available header action during " + stage)
+		app._memory_refresh.pressed.emit()
+		check(app._round_id != previous_round and view.memory != previous_model and previous_model.phase == "stopped",
+			"Refresh replaces and stops the previous Memory round during " + stage)
+		check(view.start_button.is_visible_in_tree() and not view.memory.started and not view.memory.studying
+			and view.memory.selected_indices.is_empty() and view.memory.attempts == 0 and view.memory.mistakes == 0
+			and view.memory.matched_word_ids.is_empty() and app._memory_reward.snapshot().tier == RewardProgress.THEMES.size(),
+			"Refresh restores the Start gate, empty attempt and top chest during " + stage)
+		check(view._feedback_timer.is_stopped() and not app._memory_peek_countdown.visible
+			and not app._memory_reward.snapshot().animating, "Refresh cancels observation, feedback and chest motion during " + stage)
+		var next_round: String = app._round_id
+		previous_card.pressed.emit()
+		view._feedback_timer.timeout.emit()
+		view._advance_peek(20.0)
+		view.round_finished.emit(true, [])
+		check(app._round_id == next_round and not view.memory.started and view.memory.attempts == 0
+			and app.model.phase != "won" and app.coin_wallet.balance == before and app.medal_progress.counts == counts,
+			"Late controls and timers cannot mutate or reward the refreshed round during " + stage)
+		await settle()
+	var current_round: String = app._round_id
+	app.on_page_hidden()
+	app._memory_refresh.pressed.emit()
+	check(app._round_id == current_round, "A hidden page ignores a stale refresh signal")
+	app.on_page_visible()
+	app._show_collection()
+	app._memory_refresh.pressed.emit()
+	check(app._round_id == current_round and not app._focus_candidates().has(app._memory_refresh),
+		"The collection covers and disables access to Memory refresh")
+	app._hide_collection()
+	app._show_mode_menu()
+	app._memory_refresh.pressed.emit()
+	check(app._round_id == current_round, "Home ignores refresh from the covered board")
+	app._hide_mode_menu()
+	Fixture.enter_mode(app, "match")
+	current_round = app._round_id
+	app._memory_refresh.pressed.emit()
+	check(app._round_id == current_round and not app._memory_refresh.visible, "A departed Memory refresh cannot restart Match")
+
+
 func _check_reward_tiers(app) -> void:
 	for mistakes in range(RewardProgress.THEMES.size() + 1):
 		check(app.new_round(800 + mistakes, false, "", "memory"), "Prepare a fresh Memory reward outcome")
@@ -162,8 +222,17 @@ func _check_reward_tiers(app) -> void:
 		var saved: Dictionary = app.medal_progress.pair_round("memory")
 		check(saved.completed and saved.tier == tier and saved.awarded == (tier > 0)
 			and app.model.chest_earned == (tier > 0), "Completion saves the remaining tier, including no chest")
-		check(app._round_celebration.is_active() and not app.chest_button.is_visible_in_tree(), "Pip celebrates before result controls appear")
-		Fixture.finish_celebration(app)
+		check(app._round_celebration.is_active() and not app.chest_button.is_visible_in_tree()
+			and app._round_celebration.replay_button.is_visible_in_tree() and not app._round_celebration.replay_button.disabled,
+			"Pip's entrance keeps Play again immediately available while the chest arrives")
+		if tier > 0:
+			Fixture.finish_celebration(app)
+		else:
+			app.audio.stop_voice()
+			app._round_celebration.set_narration_playing(false)
+			app._round_celebration.advance(3.01)
+			check(app._round_celebration.is_ready() and app._round_celebration.replay_button.is_visible_in_tree()
+				and not app._round_celebration.action_button.visible, "No-chest completion retains the same replay action after Pip finishes")
 		var before: int = app.coin_wallet.balance
 		var medal_id: String = str(saved.fragment.get("medal_id", ""))
 		var previous_pieces: int = app.medal_progress.count_for(medal_id)
@@ -191,6 +260,90 @@ func _check_reward_tiers(app) -> void:
 		await settle()
 
 
+func _check_early_replay(app) -> void:
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+	for mistakes: int in [0, 2, RewardProgress.THEMES.size()]:
+		root.size = Vector2i(320, 568) if mistakes == 0 else Vector2i(844, 390) if mistakes == 2 else Vector2i(390, 844)
+		check(app.new_round(950 + mistakes, false, "", "memory"), "Prepare early replay with %d mistakes" % mistakes)
+		await settle()
+		Fixture.start_memory(app)
+		var view = app._memory
+		var wrong := _wrong_pair(view)
+		for attempt in range(mistakes):
+			view.card_buttons[wrong[0]].pressed.emit()
+			view.card_buttons[wrong[1]].pressed.emit()
+			view.continue_feedback()
+		for word in app.model.lesson_words.duplicate(true):
+			_match(view, str(word.id))
+			view.continue_feedback()
+		await settle()
+		var completed_round: String = app._round_id
+		var saved: Dictionary = app.medal_progress.pair_round("memory")
+		var tier: int = RewardProgress.THEMES.size() - mistakes
+		var receipt: String = "pair:memory:" + completed_round
+		var before: int = app.coin_wallet.balance
+		var medal_id: String = str(saved.fragment.get("medal_id", ""))
+		var before_count: int = app.medal_progress.count_for(medal_id)
+		var before_counts: Dictionary = app.medal_progress.counts.duplicate(true)
+		check(saved.completed and saved.tier == tier and app._round_celebration.is_active()
+			and not app._round_celebration.is_ready(), "The replay test starts before the celebration entrance finishes")
+		check(app._round_celebration.replay_button.is_visible_in_tree() and not app._round_celebration.replay_button.disabled
+			and app._default_focus() == app._round_celebration.replay_button,
+			"Play again is immediately visible and keyboard reachable for every reward outcome")
+		var replay_bounds: Rect2 = app._round_celebration.replay_button.get_global_rect()
+		var replay_scale: float = Style.ui_scale(app._round_celebration.replay_button)
+		check(root.get_visible_rect().grow(1).encloses(replay_bounds) and replay_bounds.size.y * replay_scale >= 43.5
+			and not replay_bounds.intersects(app._round_celebration.home_button.get_global_rect()),
+			"The immediate replay target fits beside Home at " + str(root.size))
+		app._memory_refresh.pressed.emit()
+		check(app._round_id == completed_round, "The settlement modal rejects a stale refresh signal")
+		app._round_celebration.replay_button.pressed.emit()
+		check(app._round_id != completed_round and not app._round_celebration.is_active()
+			and not app._settlement_dialog_open() and view.start_button.is_visible_in_tree() and not view.memory.started,
+			"Early Play again immediately returns to the new Memory Start gate")
+		if tier > 0:
+			check(app.coin_wallet.balance == before + tier * 50 and app.coin_wallet._receipts.get(receipt, 0) == tier * 50
+				and app.medal_progress.count_for(medal_id) == before_count + 1,
+				"Early replay saves the surviving tier's coins and medal fragment exactly once")
+		else:
+			check(app.coin_wallet.balance == before and not app.coin_wallet._receipts.has(receipt)
+				and app.medal_progress.counts == before_counts, "Early replay with no chest grants no coins or fragments")
+		var replayed_round: String = app._round_id
+		var after: int = app.coin_wallet.balance
+		var after_counts: Dictionary = app.medal_progress.counts.duplicate(true)
+		app._round_celebration.replay_button.pressed.emit()
+		app._round_celebration.replay_requested.emit(completed_round)
+		app._round_celebration.performance_finished.emit(completed_round)
+		app._on_chest_opened()
+		check(app._round_id == replayed_round and app.coin_wallet.balance == after and app.medal_progress.counts == after_counts
+			and not view.memory.started, "Duplicate replay and old celebration callbacks cannot repeat settlement or skip Start")
+		await settle()
+	check(app.new_round(990, false, "", "memory"), "Prepare refresh during the final successful pair")
+	Fixture.start_memory(app)
+	var final_view = app._memory
+	var completed_words: Array = app.model.lesson_words.duplicate(true)
+	for word in completed_words:
+		_match(final_view, str(word.id))
+		if final_view.memory.matched_word_ids.size() < 5:
+			final_view.continue_feedback()
+	var final_round: String = app._round_id
+	var final_before: int = app.coin_wallet.balance
+	var fragments_before: int = _total_fragments(app)
+	check(final_view.memory.phase == "feedback" and final_view.memory.matched_word_ids.size() == 5
+		and app.model.phase != "won", "The fifth pair still has its final feedback before reward settlement")
+	app._memory_refresh.pressed.emit()
+	check(app._round_id != final_round and final_view.start_button.is_visible_in_tree() and not final_view.memory.started
+		and app.coin_wallet.balance == final_before + 300 and app.coin_wallet._receipts.get("pair:memory:" + final_round, 0) == 300
+		and _total_fragments(app) == fragments_before + 1,
+		"Refresh during the fifth successful pair settles the completed chest before starting again")
+	final_view.round_finished.emit(true, completed_words)
+	app._round_celebration.replay_requested.emit(final_round)
+	app._on_chest_opened()
+	check(app.coin_wallet.balance == final_before + 300 and _total_fragments(app) == fragments_before + 1,
+		"Late final-pair callbacks cannot duplicate the reward settled by refresh")
+	await settle()
+
+
 func _check_responsive_header(app) -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	for dimensions in [Vector2i(320, 568), Vector2i(390, 844), Vector2i(844, 390), Vector2i(1280, 800)]:
@@ -201,14 +354,24 @@ func _check_responsive_header(app) -> void:
 		var board_bounds: Rect2 = view.get_global_rect()
 		var card_bounds: Array = _targets(view)
 		var badge_bounds: Rect2 = app._memory_reward.get_global_rect()
+		var refresh_bounds: Rect2 = app._memory_refresh.get_global_rect()
+		var scale_factor: float = Style.ui_scale(app._memory_refresh)
+		check(app._memory_refresh.is_visible_in_tree() and root.get_visible_rect().grow(1).encloses(refresh_bounds)
+			and refresh_bounds.size.x * scale_factor >= 43.5 and refresh_bounds.size.y * scale_factor >= 43.5
+			and not refresh_bounds.intersects(board_bounds) and not refresh_bounds.intersects(badge_bounds),
+			"Refresh retains an unobstructed touch target at " + str(dimensions))
 		check(root.get_visible_rect().grow(1).encloses(board_bounds)
 			and board_bounds.encloses(view.start_button.get_global_rect()), "Board and Start fit the viewport")
 		view.start_button.pressed.emit()
+		check(not app._memory_refresh.get_global_rect().intersects(view.study_button.get_global_rect())
+			and not app._memory_refresh.get_global_rect().intersects(app._mode_heading_button.get_global_rect()),
+			"Refresh stays separate from the eye and Home during observation")
 		var clock = app._memory_peek_countdown
 		var area: Rect2 = clock.get_global_rect()
 		check(clock.is_visible_in_tree() and clock.seconds == 10 and clock.action_button.is_visible_in_tree(), "Observation shows the clock and skip action")
 		check(root.get_visible_rect().grow(1).encloses(area) and area.grow(0.5).encloses(clock.action_button.get_global_rect())
-			and not area.intersects(board_bounds) and not area.intersects(badge_bounds), "Countdown, skip and chest fit without covering cards")
+			and not area.intersects(board_bounds) and not area.intersects(badge_bounds)
+			and not area.intersects(app._memory_refresh.get_global_rect()), "Countdown, skip, refresh and chest fit without covering cards")
 		view._advance_peek(6.25)
 		check(clock.seconds == 4 and is_equal_approx(clock.progress(), 0.375), "The clock follows the real remaining time")
 		view._advance_peek(view.memory.peek_remaining)
@@ -223,9 +386,17 @@ func _targets(view) -> Array:
 	return view.card_buttons.map(func(card: Button) -> Rect2: return card.get_global_rect())
 
 
+func _total_fragments(app) -> int:
+	var total: int = 0
+	for count in app.medal_progress.counts.values():
+		total += int(count)
+	return total
+
+
 func _wrong_pair(view) -> Array[int]:
 	for index in range(1, view.memory.cards.size()):
-		if view.memory.cards[index].word.id != view.memory.cards[0].word.id:
+		if view.memory.cards[index].word.id != view.memory.cards[0].word.id \
+			and view.memory.cards[index].kind != view.memory.cards[0].kind:
 			return [0, index]
 	return []
 

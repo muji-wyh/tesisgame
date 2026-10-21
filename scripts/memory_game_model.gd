@@ -101,9 +101,14 @@ func select(index: int) -> String:
 		phase = "matching"
 		return "selected"
 	var previous: Dictionary = cards[selected_indices[0]]
+	if previous.kind == card.kind:
+		# A pair needs one word and one picture. Changing the first choice is
+		# neutral and must not reveal cards, spend a reward tier, or record evidence.
+		selected_indices.assign([index])
+		return "selected"
 	selected_indices.append(index)
 	attempts += 1
-	last_correct = previous.kind != card.kind and previous.word.id == card.word.id
+	last_correct = previous.word.id == card.word.id
 	feedback_words.assign([previous.word])
 	phase = "feedback"
 	if last_correct:

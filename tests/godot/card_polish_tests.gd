@@ -98,8 +98,11 @@ func _run() -> void:
 	memory_card.pressed.emit()
 	check(memory_card._press_motion._tween != null and memory_card._flip == null and not memory_card.face_up,
 		"Memory acknowledges its first selection without revealing it")
-	app._memory.card_buttons[1].pressed.emit()
-	check(memory_card._flip != null and app._memory.card_buttons[1]._flip != null,
+	var next_index: int = 1
+	while app._memory.card_buttons[next_index].card_data.kind == memory_card.card_data.kind:
+		next_index += 1
+	app._memory.card_buttons[next_index].pressed.emit()
+	check(memory_card._flip != null and app._memory.card_buttons[next_index]._flip != null,
 		"The second selection flips both Memory cards together")
 	app.set_reduced_motion(true)
 	check(memory_card.get_global_rect() == memory_rect and memory_card._press_motion._tween == null

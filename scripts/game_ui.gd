@@ -184,6 +184,7 @@ var _mode_menu_resume_voice: bool = false
 var _mode_menu_resume_pop: bool = false
 var _mode_menu_pointer: int = -2
 var _memory: MemoryGarden
+var _memory_refresh: Icons
 var _round_celebration: RoundCelebration
 var _celebration_seen_id: String = ""
 var _celebration_suspended: bool = false
@@ -649,6 +650,14 @@ func _build_controls() -> void:
 	_set_accessibility_name(hint_button, "Hint: %d coins (Xbox X)" % _match_hint_price())
 	hint_button.pressed.connect(_request_hint)
 	_toolbar.add_child(hint_button)
+	_memory_refresh = Icons.new()
+	_memory_refresh.name = "RefreshMemory"
+	_memory_refresh.symbol = Icons.Symbol.REFRESH
+	_set_accessibility_name(_memory_refresh, "New Memory game")
+	UiClick.bind_button(_memory_refresh)
+	_memory_refresh.pressed.connect(_refresh_memory_round)
+	_toolbar.add_child(_memory_refresh)
+	_memory_refresh.hide()
 	_growth_button = GrowthBadge.new()
 	UiClick.bind_button(_growth_button)
 	_growth_button.pressed.connect(_show_collection)
@@ -735,6 +744,7 @@ func _build_controls() -> void:
 	grid.sort_children.connect(func() -> void: _refresh_voice_match_link.call_deferred())
 	grid.visibility_changed.connect(_refresh_voice_match_link)
 	_memory = MemoryGarden.new()
+	_memory.presentation_changed.connect(_publish_growth_view)
 	_memory.name = "MemoryGarden"
 	_memory.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_memory.answer_chosen.connect(_memory_answer)
@@ -864,6 +874,7 @@ func _build_controls() -> void:
 	_round_celebration.performance_finished.connect(_on_round_celebration_finished)
 	_round_celebration.open_requested.connect(_accept_round_chest)
 	_round_celebration.home_requested.connect(_show_mode_menu)
+	_round_celebration.replay_requested.connect(_replay_memory_celebration)
 	_round_celebration.cue_requested.connect(_round_celebration_cue)
 	_round_celebration.confetti_requested.connect(_round_confetti_requested)
 	_settlement_dialog.panel.add_child(_round_celebration)
@@ -2586,7 +2597,7 @@ func _begin_round_celebration(chest_count: int) -> void:
 	_settlement_dialog.configure(_round_celebration, Data.theme(model.theme_id), reduced_motion, chest_count > 0, "Round complete")
 	if not _mode_menu_open() and not collection_page.visible and not _page_hidden:
 		_settlement_dialog.open(true)
-	_round_celebration.begin(_round_id, theme_id, data.chests, chest_count, reduced_motion, false, score, tier, chest_announced, summary)
+	_round_celebration.begin(_round_id, theme_id, data.chests, chest_count, reduced_motion, false, score, tier, chest_announced, summary, _mode_id == "memory")
 	_round_celebration.set_narration_playing(audio.voice.playing and not audio.muted and audio.available)
 	if _round_celebration_allowed():
 		_start_round_celebration_audio()
@@ -2788,7 +2799,10 @@ func _memory_answer(words: Array, correct: bool) -> void:
 	_record_growth("memory-%d" % _memory_attempt, words.map(func(word: Dictionary) -> String: return str(word.id)), correct)
 	audio.interact(model.theme_id)
 	audio.stop_voice()
-	audio.play_pair_feedback(correct)
+	if not correct and _memory.memory.mistakes <= JellyRewardProgress.THEMES.size():
+		audio.play_memory_chest_loss(_memory.memory.reward_tier() == 0)
+	else:
+		audio.play_pair_feedback(correct)
 	_react_to_gameplay(correct)
 	if correct and not words.is_empty():
 		_pair_matched(str(words[0].id))
@@ -2805,6 +2819,25 @@ func _memory_finished(won: bool, found: Array) -> void:
 
 func _memory_status() -> String:
 	return "Memory. %d of 5 pairs matched. %d attempts. %s" % [_memory.memory.matched_word_ids.size(), _memory.memory.attempts, _memory.status_label.text]
+
+
+func _refresh_memory_round() -> void:
+	if _mode_id != "memory" or _rebuilding or _page_hidden or collection_page.visible or _mode_menu_open() \
+		or _speech_debug_active or _professional_input_blocked() or _settlement_dialog_open() or not _memory_refresh.is_visible_in_tree():
+		return
+	# The fifth pair has already been earned even while its feedback is playing.
+	# Finish that outcome and use the same durable reward path as Play again.
+	if _memory.memory.phase == "feedback" and _memory.memory.matched_word_ids.size() == 5:
+		_memory.continue_feedback()
+		_new_adventure()
+		return
+	if new_round(-1, false, "", "memory"):
+		_default_focus().grab_focus()
+
+
+func _replay_memory_celebration(round_id: String) -> void:
+	if _mode_id == "memory" and round_id == _round_id and _round_celebration_allowed():
+		_new_adventure()
 
 
 func _skip_memory_observation() -> void:
@@ -2969,6 +3002,8 @@ func _refresh() -> void:
 	if model.phase not in ["waiting", "matching", "feedback"] and _voice_mode:
 		_stop_voice()
 	_voice_button.visible = model.phase in ["waiting", "matching", "feedback"] and _mode_id == "match"
+	_memory_refresh.visible = _mode_id == "memory" and model.phase in ["waiting", "matching", "feedback"]
+	_memory_refresh.disabled = _professional_input_blocked() or _rebuilding
 	_refresh_hint()
 	_match_playfield.visible = _mode_id == "match"
 	grid.visible = _mode_id == "match"
@@ -3014,6 +3049,7 @@ func _refresh() -> void:
 	_single_result.configure(palette, earned_chest, saving_reward, _save_error, model.chest_state == "opened", result_message)
 	_single_result.retry_button.set("accessibility_description", medal_progress.error if _save_error else "")
 	var actions_blocked: bool = saving_reward or _save_error
+	_round_celebration.set_replay_blocked(actions_blocked)
 	_single_result.replay_button.disabled = actions_blocked
 	_single_result.home_button.disabled = actions_blocked
 	chest_button.disabled = not earned_chest or model.chest_state == "opened" or chest.opening_committed() or _save_error
@@ -3366,7 +3402,7 @@ func _fit_mode_buttons() -> void:
 	_mode_panel.set_home_coins(coin_wallet.balance)
 	_layout_mode_menu()
 	_layout_mode_menu.call_deferred()
-	for button in [hint_button, _memory.study_button]:
+	for button in [hint_button, _memory.study_button, _memory_refresh]:
 		_style_header_action(button, accent)
 	_style_voice_button()
 	var compact_retry: bool = size.x * css_scale < 680
@@ -5635,7 +5671,7 @@ func _publish_growth_view() -> void:
 	if _host == null or not is_instance_valid(_growth_button):
 		return
 	var controls: Array = [_growth_control(_growth_button), _growth_control(_growth_bar)]
-	for control: Control in [_mode_heading_button, _voice_button, hint_button, _memory.study_button, _coin_counter, _storage_retry_button]:
+	for control: Control in [_mode_heading_button, _voice_button, hint_button, _memory.study_button, _memory_refresh, _coin_counter, _storage_retry_button]:
 		controls.append(_growth_control(control))
 	var state := {"visible": collection_page.visible, "controls": controls}
 	state["game_area"] = _growth_control(_content_margins)
@@ -5662,9 +5698,12 @@ func _publish_growth_view() -> void:
 			card["face_up"] = _memory.memory.is_revealed(index)
 			card["word_id"] = data_card.word.id if card.face_up else ""
 			card["selected"] = _memory.memory.selected_indices.has(index)
+			card["selection_visible"] = _memory.card_buttons[index].is_selection_visible()
+			card["pair_highlighted"] = _memory.card_buttons[index].is_pair_highlighted()
 			card["pair"] = _memory.memory.matched_word_ids.find(str(data_card.word.id)) + 1
 			memory_cards.append(card)
 		state["memory"] = {"started": _memory.memory.started, "phase": _memory.memory.phase,
+			"refresh": _growth_control(_memory_refresh), "round_id": _round_id,
 			"start": _growth_control(_memory.start_button), "cards": memory_cards,
 			"mistakes": _memory.memory.mistakes, "attempts": _memory.memory.attempts,
 			"pairs": _memory.memory.matched_word_ids.size(), "reward": _memory_reward.snapshot(),

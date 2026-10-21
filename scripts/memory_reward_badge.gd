@@ -5,12 +5,16 @@ const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const ChestView = preload("res://scripts/chest_view.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
-const CHANGE_SECONDS: float = 0.52
+const CHANGE_SECONDS: float = 0.78
+const SWAP_SECONDS: float = 0.34
+const LOSS_HOLD_SECONDS: float = 0.40
+const EMPTY_HOLD_SECONDS: float = 0.48
 
 var chest := ChestView.new()
 var tier_label := Style.label("", 13)
 var _round_id: String = ""
 var _tier: int = RewardProgress.THEMES.size()
+var _display_tier: int = RewardProgress.THEMES.size()
 var _theme_id: String = ""
 var _manifest: Dictionary = {}
 var _paused: bool = false
@@ -68,6 +72,8 @@ func configure(round_id: String, tier: int, manifest: Dictionary, _palette: Dict
 		return false
 	var new_round: bool = round_id != _round_id
 	var stepped_down: bool = not new_round and tier < _tier
+	if stepped_down and not reduce:
+		_display_tier = _tier
 	if new_round:
 		_elapsed = 0.0
 		_animating = false
@@ -84,6 +90,8 @@ func configure(round_id: String, tier: int, manifest: Dictionary, _palette: Dict
 		_animating = not reduce
 	if reduce:
 		_animating = false
+	if not _animating:
+		_display_tier = tier
 	visible = true
 	_prepare_chest()
 	tier_label.add_theme_color_override("font_color", Style.INK if tier > 0 else Style.MUTED)
@@ -105,6 +113,7 @@ func set_paused(value: bool) -> void:
 func reset() -> void:
 	_round_id = ""
 	_tier = RewardProgress.THEMES.size()
+	_display_tier = _tier
 	_animating = false
 	_elapsed = 0.0
 	_change_count = 0
@@ -112,6 +121,7 @@ func reset() -> void:
 	_render_until_frame = -1
 	chest.scale = Vector2.ONE
 	chest.rotation = 0.0
+	chest.modulate = Color.WHITE
 	tier_label.text = ""
 	hide()
 	_sync_processing()
@@ -133,17 +143,41 @@ func _process(delta: float) -> void:
 
 
 func _sample() -> void:
-	var time: float = clampf(_elapsed / CHANGE_SECONDS, 0.0, 1.0)
-	var weight: float = 1.0 - time if _animating and not _reduced_motion else 0.0
-	chest.scale = Vector2.ONE * (1.0 + sin(time * TAU) * 0.085 * weight)
-	chest.rotation = sin(time * TAU * 1.5) * 0.085 * weight
+	if _display_tier != _tier and (not _animating or _elapsed >= SWAP_SECONDS):
+		_display_tier = _tier
+		_prepare_chest()
+	# Reverse Jelly's full positive turn around the actual artwork center. Losing
+	# a tier compresses and dims the chest; recovery has no celebratory overshoot.
+	var art: Rect2 = chest.closed_art_rect()
+	if art.has_area():
+		chest.pivot_offset = art.get_center()
+	var extent: float = 1.0
+	var turn: float = 0.0
+	var shade: float = 1.0
+	if _animating and not _reduced_motion:
+		var minimum: float = 0.18 if _tier == 0 else 0.40
+		var hold_until: float = EMPTY_HOLD_SECONDS if _tier == 0 else LOSS_HOLD_SECONDS
+		var darkest: float = 0.46 if _tier == 0 else 0.68
+		if _elapsed < 0.10:
+			extent = lerpf(1.0, 0.82, smoothstep(0.0, 0.10, _elapsed))
+		elif _elapsed < SWAP_SECONDS:
+			extent = lerpf(0.82, minimum, smoothstep(0.10, SWAP_SECONDS, _elapsed))
+		else:
+			extent = lerpf(minimum, 1.0, smoothstep(hold_until, CHANGE_SECONDS, _elapsed))
+		shade = lerpf(1.0, darkest, smoothstep(0.0, 0.16, _elapsed))
+		if _elapsed > hold_until:
+			shade = lerpf(darkest, 1.0, smoothstep(hold_until, CHANGE_SECONDS, _elapsed))
+		turn = -TAU * smoothstep(0.04, 0.68, _elapsed)
+	chest.scale = Vector2.ONE * extent
+	chest.rotation = turn
+	chest.modulate = Color(shade, shade, shade, 1.0)
 	_sync_processing()
 
 
 func _prepare_chest() -> void:
 	if not is_inside_tree() or _round_id.is_empty() or _manifest.is_empty():
 		return
-	var chosen: String = RewardProgress.theme_for_tier(maxi(1, _tier))
+	var chosen: String = RewardProgress.theme_for_tier(maxi(1, _display_tier))
 	if _theme_id != chosen:
 		_original_materials.clear()
 		_theme_id = chosen
@@ -154,13 +188,13 @@ func _prepare_chest() -> void:
 	# Replace only this instance's surface material; never mutate shared assets.
 	for part: Dictionary in chest._pieces:
 		var sprite: Sprite2D = part.node
-		if _tier == 0:
+		if _display_tier == 0:
 			if not _original_materials.has(sprite):
 				_original_materials[sprite] = sprite.material
 			sprite.material = _empty_material
 		elif _original_materials.has(sprite):
 			sprite.material = _original_materials[sprite]
-	if _tier > 0:
+	if _display_tier > 0:
 		_original_materials.clear()
 	chest.set_process(false)
 
@@ -172,7 +206,6 @@ func _layout() -> void:
 	if chest.position != target.position or chest.size != target.size:
 		chest.position = target.position
 		chest.size = target.size
-		chest.pivot_offset = Vector2(edge * 0.5, edge * 0.82)
 		_warm_chest()
 	var left: float = maxf(44.0 * unit, edge - 4.0 * unit)
 	tier_label.position = Vector2(left, 0)
@@ -222,9 +255,11 @@ func _sync_processing() -> void:
 func snapshot() -> Dictionary:
 	var area: Rect2 = get_global_rect()
 	var art: Rect2 = chest.get_global_transform() * chest.closed_art_rect()
-	return {"visible": is_visible_in_tree(), "round_id": _round_id, "tier": _tier, "theme_id": _theme_id,
+	var anchor: Vector2 = get_global_transform() * (chest.position + chest.size * 0.5)
+	return {"visible": is_visible_in_tree(), "round_id": _round_id, "tier": _tier, "display_tier": _display_tier, "theme_id": _theme_id,
 		"text": tier_label.text, "grey": _tier == 0, "paused": _paused, "reduced_motion": _reduced_motion,
 		"animating": _animating, "elapsed": _elapsed, "change_count": _change_count,
-		"scale": chest.scale.x, "rotation": chest.rotation, "chest_mode": chest.mode,
+		"scale": chest.scale.x, "rotation": chest.rotation, "shade": chest.modulate.r, "chest_mode": chest.mode,
+		"anchor": [anchor.x, anchor.y], "art_center": [art.get_center().x, art.get_center().y],
 		"rect": [area.position.x, area.position.y, area.size.x, area.size.y],
 		"chest_rect": [art.position.x, art.position.y, art.size.x, art.size.y]}

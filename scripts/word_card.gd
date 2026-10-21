@@ -69,6 +69,37 @@ class FeedbackOverlay:
 				draw_circle(point, edge * 0.022, tint)
 
 
+class StateOutline:
+	extends Control
+
+	var selected: bool = false
+	var pair_highlighted: bool = false
+	var tint: Color = Style.GOOD
+	var pair_tint: Color = Style.GOOD
+
+	func _draw() -> void:
+		if not selected and not pair_highlighted:
+			return
+		var pixel: float = 1.0 / Style.ui_scale(self)
+		var bounds := Rect2(Vector2.ONE * pixel, size - Vector2.ONE * 2 * pixel)
+		if bounds.size.x <= 0 or bounds.size.y <= 0:
+			return
+		var color: Color = pair_tint if pair_highlighted else tint
+		# A shadow on a transparent overlay also paints beneath its center.
+		# Use open edge rings so the glow never veils the word or picture.
+		for distance: int in range(7 if pair_highlighted else 5, 0, -1):
+			var halo := Style.box(Color.TRANSPARENT, Color(color, 0.025 * (8 - distance)),
+				ceili((13 + distance) * pixel), ceili(2 * pixel))
+			halo.draw_center = false
+			draw_style_box(halo, bounds.grow(distance * pixel))
+		var outline: StyleBoxFlat = Style.box(Color(color, 0.08) if pair_highlighted else Color.TRANSPARENT,
+			color, ceili(13 * pixel), ceili(3 * pixel))
+		draw_style_box(outline, bounds)
+		if selected:
+			# The inner light ring remains visible over both kinds of opaque back.
+			draw_style_box(Style.box(Color.TRANSPARENT, Color.WHITE, ceili(10 * pixel), ceili(2 * pixel)), bounds.grow(-4 * pixel))
+
+
 var card_data: Dictionary = {}
 var picture: TextureRect
 var word_label: Label
@@ -82,6 +113,7 @@ var _back: Control
 var _shown_face_up: bool = true
 var _flip: Tween
 var _feedback: FeedbackOverlay
+var _state_outline: StateOutline
 var _feedback_state: String = ""
 var _matched: bool = false
 var _feedback_kind: String = ""
@@ -141,6 +173,11 @@ func setup(value: Dictionary) -> void:
 	add_child(_feedback)
 	_feedback.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_feedback.hide()
+	_state_outline = StateOutline.new()
+	_state_outline.name = "CardStateOutline"
+	_state_outline.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_state_outline)
+	_state_outline.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	visibility_changed.connect(_visibility_changed)
 	resized.connect(_fit_text)
 	_face.resized.connect(_resize_face)
@@ -155,6 +192,9 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 		stop_press()
 	accent = palette.accent
 	_matched = matched
+	_state_outline.selected = _back != null and selected and not matched and not wrong
+	_state_outline.tint = accent
+	_state_outline.queue_redraw()
 	_show_face(_shown_face_up)
 	var state: String = "matched" if matched else "wrong" if wrong else "selected" if selected and not locked else ""
 	if state != _feedback_state:
@@ -208,11 +248,30 @@ func refresh(palette: Dictionary, selected: bool, matched: bool, wrong: bool, lo
 	disabled = matched or locked
 	match_mark.pair_number = pair_index + 1 if matched else 0
 	match_mark.tint = pair_tint
-	match_mark.active = matched and pair_focused
+	match_mark.active = matched and (pair_focused or _state_outline.pair_highlighted)
 	match_mark.visible = matched and _pair_badge_allowed()
 	match_mark.queue_redraw()
 	picture.modulate.a = 0.68 if matched else 1.0
 	word_label.modulate.a = 0.75 if matched else 1.0
+
+
+func set_pair_highlight(value: bool, tint: Color) -> void:
+	if _state_outline.pair_highlighted == value and _state_outline.pair_tint == tint:
+		return
+	_state_outline.pair_highlighted = value
+	_state_outline.pair_tint = tint
+	_state_outline.queue_redraw()
+	match_mark.active = _matched and value
+	match_mark.queue_redraw()
+
+
+func is_pair_highlighted() -> bool:
+	return _state_outline != null and _state_outline.pair_highlighted and _state_outline.is_visible_in_tree()
+
+
+func is_selection_visible() -> bool:
+	return _state_outline != null and _state_outline.selected and _state_outline.is_visible_in_tree() \
+		and _back != null and _back.is_visible_in_tree()
 
 
 func set_reduced_motion(value: bool) -> void:
@@ -282,6 +341,10 @@ func _resize_face() -> void:
 
 func clear_feedback() -> void:
 	stop_word_play()
+	if _state_outline != null:
+		_state_outline.selected = false
+		set_pair_highlight(false, accent)
+		_state_outline.queue_redraw()
 	_feedback_state = ""
 	_stop_feedback()
 	_settle_flip()

@@ -7,6 +7,7 @@ signal round_finished(won: bool, found_words: Array)
 signal prompt_ready
 signal peek_feedback(success: bool, price: int)
 signal peek_clock_changed(remaining: float, duration: float)
+signal presentation_changed
 
 const Style = preload("res://scripts/ui_style.gd")
 const Memory = preload("res://scripts/memory_game_model.gd")
@@ -32,6 +33,7 @@ class CardBack:
 	var _symbol_rect := Rect2()
 	var _palette_ready: bool = false
 	var _palette_scale: float = -1.0
+	var _selected: bool = false
 
 	func setup(kind: String, index: int) -> void:
 		name = "CardBack"
@@ -65,12 +67,19 @@ class CardBack:
 		accent = next_accent
 		_light = next_light
 		_spark = next_spark
-		fill_color = accent if _kind == "image" else _light.lerp(Color.WHITE, 0.3)
-		ink_color = Color.WHITE if _kind == "image" else accent.darkened(0.12)
+		fill_color = accent.lightened(0.5) if _selected else accent if _kind == "image" else _light.lerp(Color.WHITE, 0.3)
+		ink_color = Style.INK if _selected else Color.WHITE if _kind == "image" else accent.darkened(0.12)
 		for label in [kind_label, number_label, symbol_label]:
 			if label.get_theme_color("font_color") != ink_color:
 				label.add_theme_color_override("font_color", ink_color)
 		_layout()
+
+	func set_selected(value: bool) -> void:
+		if _selected == value:
+			return
+		_selected = value
+		_palette_ready = false
+		set_palette({"accent": accent, "light": _light, "spark": _spark})
 
 	func _layout() -> void:
 		if size.x <= 0 or size.y <= 0:
@@ -154,6 +163,7 @@ var _peek_touch_active: bool = false
 var _peek_purchasing: bool = false
 var _peek_generation: int = 0
 var _peek_origin_frame: int = -1
+var _hovered_card_index: int = -1
 
 
 func _ready() -> void:
@@ -246,6 +256,8 @@ func start_round(words: Array, palette: Dictionary, seed_value: int = -1) -> voi
 			button.set_reduced_motion(reduced_motion)
 			button.set_pair_badge_on_word(true)
 			button.pressed.connect(_choose.bind(index))
+			button.mouse_entered.connect(_card_mouse_entered.bind(index))
+			button.mouse_exited.connect(_card_mouse_exited.bind(index))
 			_board.add_child(button)
 			var back := CardBack.new()
 			back.setup(memory.cards[index].kind, index)
@@ -303,9 +315,12 @@ func stop() -> void:
 
 func _clear_cards() -> void:
 	# Stop owns permanent teardown. Pause keeps the current board resumable.
+	_hovered_card_index = -1
 	for index in range(card_buttons.size()):
 		var button = card_buttons[index]
 		button.pressed.disconnect(_choose.bind(index))
+		button.mouse_entered.disconnect(_card_mouse_entered.bind(index))
+		button.mouse_exited.disconnect(_card_mouse_exited.bind(index))
 		button.clear_feedback()
 		button.picture.texture = null
 		button.card_data.clear()
@@ -339,7 +354,9 @@ func snapshot() -> Dictionary:
 		var rect: Rect2 = card_buttons[index].get_global_rect()
 		var revealed: bool = memory.is_revealed(index)
 		var state: Dictionary = {"index": index, "kind": card.kind, "rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y],
-			"face_up": revealed, "selected": memory.selected_indices.has(index), "matched": memory.matched_word_ids.has(card.word.id)}
+			"face_up": revealed, "selected": memory.selected_indices.has(index), "matched": memory.matched_word_ids.has(card.word.id),
+			"selection_visible": card_buttons[index].is_selection_visible(),
+			"pair_highlighted": card_buttons[index].is_pair_highlighted()}
 		if revealed:
 			state["word_id"] = card.word.id
 			state["text"] = card.word.text
@@ -408,6 +425,36 @@ func _choose(index: int) -> void:
 	if result in ["correct", "wrong"]:
 		progress_changed.emit(memory.matched_word_ids.size(), memory.attempts)
 	prompt_ready.emit()
+
+
+func _card_mouse_entered(index: int) -> void:
+	if _paused or not is_visible_in_tree() or index < 0 or index >= memory.cards.size():
+		return
+	_hovered_card_index = index
+	_refresh_pair_highlight()
+	presentation_changed.emit()
+
+
+func _card_mouse_exited(index: int) -> void:
+	if _hovered_card_index != index:
+		return
+	_hovered_card_index = -1
+	_refresh_pair_highlight()
+	presentation_changed.emit()
+
+
+func _refresh_pair_highlight() -> void:
+	var word_id: String = ""
+	var tint: Color = _palette.accent
+	if not _paused and is_visible_in_tree() and _hovered_card_index >= 0 and _hovered_card_index < memory.cards.size():
+		var hovered: Dictionary = memory.cards[_hovered_card_index]
+		var pair_index: int = memory.matched_word_ids.find(hovered.word.id)
+		if memory.studying or pair_index >= 0:
+			word_id = hovered.word.id
+			if pair_index >= 0:
+				tint = PairConnections.PAIR_COLORS[pair_index % PairConnections.PAIR_COLORS.size()]
+	for index in range(card_buttons.size()):
+		card_buttons[index].set_pair_highlight(not word_id.is_empty() and memory.cards[index].word.id == word_id, tint)
 
 
 func begin_peek() -> void:
@@ -519,7 +566,9 @@ func _input(event: InputEvent) -> void:
 
 func _notification(what: int) -> void:
 	if what in [NOTIFICATION_APPLICATION_PAUSED, NOTIFICATION_APPLICATION_FOCUS_OUT]:
+		_hovered_card_index = -1
 		end_peek()
+		_refresh_pair_highlight()
 		for button in card_buttons:
 			button.set_reduced_motion(true)
 			button.set_reduced_motion(reduced_motion)
@@ -527,6 +576,7 @@ func _notification(what: int) -> void:
 
 func _visibility_changed() -> void:
 	if not is_visible_in_tree():
+		_hovered_card_index = -1
 		end_peek()
 	_refresh()
 	prompt_ready.emit()
@@ -538,6 +588,8 @@ func _refresh() -> void:
 	var playing: bool = memory.phase in ["waiting", "matching"] and not card_buttons.is_empty()
 	var reviewing: bool = memory.phase == "feedback"
 	var suspended: bool = _paused or not is_visible_in_tree()
+	if suspended:
+		_hovered_card_index = -1
 	var awaiting_start: bool = not memory.started and playing
 	_feedback_timer.paused = suspended
 	_board.visible = playing or reviewing or memory.phase == "won"
@@ -587,6 +639,7 @@ func _refresh() -> void:
 		button.word_label.modulate.a = 1.0
 		var back: CardBack = button.find_child("CardBack", true, false)
 		back.set_palette(_palette)
+		back.set_selected(selected and not revealed)
 		var label: String = ("Word" if card.kind == "word" else "Picture") + " %d" % (index + 1)
 		if revealed:
 			label += ": " + card.word.text
@@ -595,6 +648,7 @@ func _refresh() -> void:
 		elif selected and not revealed:
 			label += ". Selected."
 		_name_control(button, label)
+	_refresh_pair_highlight()
 	_layout()
 	peek_clock_changed.emit(memory.peek_remaining, memory.peek_duration)
 

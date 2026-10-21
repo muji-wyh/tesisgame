@@ -28,7 +28,7 @@ what ships. Private source packs remain subject to their own licenses.
 | [Chest feel](chest-feel.md) | Current chest art, motion, timing, and previews |
 | [Kenney chest audio](chest-kenney-audio.md) | Active CC0 wood/latch/hinge bank, opening flourish, source processing, and review limitations |
 | [Jelly chest fragments](jelly-fragments.md) | One upgradable chest per round, milestone motion reference, acquired confetti atlas, source rights and restoration |
-| [Jelly collection notes](jelly-collection-audio.md) | Seven sourced, diatonic collection cues shared by Jelly Words and Jelly Match, generation and verification |
+| [Jelly collection pop](jelly-collection-audio.md) | Fixed bubble-pop collection cue shared by Jelly Words and Jelly Match, source and verification |
 | [Reference pair feedback](pair-feedback-audio.md) | Match, Memory, and Phrase Builder right/wrong excerpts, source provenance, extraction and required build assets |
 | [Reference menu click](ui-click-audio.md) | Shared native and loading-screen selection cue, source provenance, extraction, and required build asset |
 | [Reference Voice Pop audio](voice-pop-reference-audio.md) | Preferred hit bank, separate launch cue, import checks, and recording limitations |

@@ -45,6 +45,7 @@ func _run() -> void:
 	_check_theme_audio(app)
 	_check_match_prompt_audio(app)
 	_check_memory_prompt_audio(app)
+	_check_memory_chest_loss_audio(app)
 	_enter_mode(app, "memory")
 	await process_frame
 	await process_frame
@@ -147,9 +148,9 @@ func _run() -> void:
 	memory._choose(a)
 	memory._choose(b)
 	check(not app.audio.voice.playing and app.audio.pair_feedback.playing
-		and app.audio.pair_feedback.stream == load("res://assets/imported-audio/pair-feedback/wrong.wav")
+		and app.audio.pair_feedback.stream == load("res://assets/audio/memory-chest/downgrade.wav")
 		and memory.memory.is_revealed(a) and memory.memory.is_revealed(b),
-		"Memory reveals the attempt together with the supplied miss cue and no word pronunciation")
+		"Memory reveals the attempt together with its descending chest cue and no word pronunciation")
 	await create_timer(0.8).timeout
 	check(memory.memory.phase == "waiting" and not app.audio.voice.playing
 		and not memory.memory.is_revealed(a) and not memory.memory.is_revealed(b),
@@ -413,12 +414,20 @@ func _check_memory_prompt_audio(app) -> void:
 	view.card_buttons[first].pressed.emit()
 	events.clear()
 	view.card_buttons[other].pressed.emit()
+	check(events.size() == 1 and events[0].event == "prompt" and events[0].voice.is_empty()
+		and events[0].effect.is_empty() and events[0].pair.is_empty()
+		and view.memory.selected_indices == [other] and not view.card_buttons[first].face_up
+		and not view.card_buttons[other].face_up and view.memory.attempts == 0 and view.memory.mistakes == 0
+		and view._feedback_timer.is_stopped(),
+		"Changing the concealed word selection publishes one silent prompt without attempt feedback")
+	events.clear()
+	view.card_buttons[partner].pressed.emit()
 	check(events.map(func(event: Dictionary) -> String: return event.event) == ["reveal", "answer", "progress", "prompt"]
-		and events[0].face_up and events[1].face_up and view.card_buttons[first].face_up
+		and events[0].face_up and events[1].face_up and view.card_buttons[other].face_up
 		and events.all(func(event: Dictionary) -> bool: return event.voice.is_empty())
-		and events[1].pair == "res://assets/imported-audio/pair-feedback/wrong.wav"
+		and events[1].pair == "res://assets/audio/memory-chest/downgrade.wav"
 		and view.memory.attempts == 1 and view.memory.mistakes == 1 and not view._feedback_timer.is_stopped(),
-		"Two distinct words reveal together and issue one gentle miss cue without pronunciation")
+		"A mismatched word and picture reveal together and issue one gentle miss cue without pronunciation")
 	events.clear()
 	view.card_buttons[first].pressed.emit()
 	view.card_buttons[partner].pressed.emit()
@@ -475,6 +484,59 @@ func _check_memory_prompt_audio(app) -> void:
 	view.answer_chosen.disconnect(answer_observer)
 	view.progress_changed.disconnect(progress_observer)
 	view.prompt_ready.disconnect(prompt_observer)
+	app.new_round(73, true, "", "memory")
+
+
+func _check_memory_chest_loss_audio(app) -> void:
+	app.new_round(73, true, "", "memory")
+	_start_memory_matching(app)
+	var view = app._memory
+	var first := 0
+	var other := -1
+	for index in range(1, view.memory.cards.size()):
+		if view.memory.cards[index].kind != view.memory.cards[first].kind \
+			and view.memory.cards[index].word.id != view.memory.cards[first].word.id:
+			other = index
+			break
+	var initial_tier: int = view.memory.reward_tier()
+	check(app.audio.MEMORY_CHEST_LOSS_PATHS.values().all(func(path: String) -> bool: return app.audio.cache.has(path)),
+		"Both acquired chest-loss recordings are ready before the first mismatch")
+	for mistake in range(1, initial_tier + 2):
+		view.card_buttons[first].pressed.emit()
+		var request: int = app.audio._playback_requests.get(app.audio.pair_feedback, 0)
+		view.card_buttons[other].pressed.emit()
+		var expected: String = app.audio.MEMORY_CHEST_LOSS_PATHS[mistake == initial_tier] \
+			if mistake <= initial_tier else app.audio.PAIR_FEEDBACK_PATHS[false]
+		check(view.memory.mistakes == mistake and app.audio.pair_feedback.playing
+			and app.audio.pair_feedback.stream.resource_path == expected
+			and app.audio._playback_requests[app.audio.pair_feedback] == request + 1,
+			"Memory mistake %d plays exactly one cue for its actual chest transition" % mistake)
+		check(is_equal_approx(app.audio.pair_feedback.pitch_scale, 1.0)
+			and is_equal_approx(db_to_linear(app.audio.pair_feedback.volume_db), 0.48),
+			"Memory loss uses its authored source adaptation without shifting later answer sounds")
+		view.continue_feedback()
+	app.new_round(73, true, "", "memory")
+	check(not app.audio.pair_feedback.playing, "A new Memory round cancels the previous loss cue")
+	_start_memory_matching(app)
+	view.card_buttons[first].pressed.emit()
+	view.card_buttons[other].pressed.emit()
+	app.on_page_hidden()
+	check(not app.audio.pair_feedback.playing and app.audio.pair_feedback.stream == null,
+		"Background pause clears the loss recording and its pending playback request")
+	app.on_page_visible()
+	check(not app.audio.pair_feedback.playing, "Foreground resume cannot replay the old chest loss")
+	view.continue_feedback()
+	view.card_buttons[first].pressed.emit()
+	view.card_buttons[other].pressed.emit()
+	app.audio.set_muted(true)
+	check(not app.audio.pair_feedback.playing, "Mute immediately silences a chest downgrade tail")
+	view.continue_feedback()
+	view.card_buttons[first].pressed.emit()
+	view.card_buttons[other].pressed.emit()
+	check(view.memory.mistakes == 3 and not app.audio.pair_feedback.playing,
+		"Muted mismatches still lower the chest without audio")
+	app.audio.set_muted(false)
+	check(not app.audio.pair_feedback.playing, "Unmuting does not replay a muted loss")
 	app.new_round(73, true, "", "memory")
 
 

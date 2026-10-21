@@ -32,6 +32,9 @@ LOWER_PAINT_RADIUS = 8.0
 LOWER_PAINT_STRENGTH = 0.75
 LOWER_PAINT_X_RAMP = (0.06, 0.16, 0.80, 0.90)
 LOWER_PAINT_Y_RAMP = (0.45, 0.56, 0.84, 0.92)
+ROUNDING_SCALE = 4
+ROUNDING_CENTER = (159.5, 159.5)
+ROUNDING_RADII = (148.5, 125.5)
 SOUNDS = {
     "danger": ("question_001.ogg", -12.0),
 }
@@ -100,6 +103,38 @@ def soften_lower_paint(canvas, art_size, art_origin):
     return result
 
 
+def round_painted_body(canvas):
+    # Remap the acquired paint along each row into a continuous oval. The
+    # vertical span and foot stay fixed so contact, previews and motion agree.
+    scale = ROUNDING_SCALE
+    source = canvas.convert("RGBa").resize((canvas.width * scale, canvas.height * scale), Image.Resampling.BICUBIC)
+    alpha = source.getchannel("a")
+    result = Image.new("RGBa", source.size)
+    center_x, center_y = (value * scale for value in ROUNDING_CENTER)
+    radius_x, radius_y = (value * scale for value in ROUNDING_RADII)
+    for y in range(source.height):
+        vertical = abs((y + 0.5 - center_y) / radius_y)
+        if vertical >= 1.0:
+            continue
+        row = source.crop((0, y, source.width, y + 1))
+        mask = alpha.crop((0, y, source.width, y + 1))
+        bounds = mask.point(lambda value: 255 if value >= 128 else 0).getbbox()
+        if not bounds:
+            continue
+        values = list(mask.get_flattened_data())
+        left, right = bounds[0], bounds[2] - 1
+        # Subpixel contour crossings prevent visible steps between rows.
+        lower = left - (values[left] - 127.5) / max(1, values[left] - values[max(0, left - 1)])
+        upper = right + (values[right] - 127.5) / max(1, values[right] - values[min(source.width - 1, right + 1)])
+        half_width = radius_x * math.sqrt(1.0 - vertical * vertical)
+        ratio = (upper - lower) / (2.0 * half_width)
+        mapped = row.transform((source.width, 1), Image.Transform.AFFINE,
+                               (ratio, 0, (lower + upper) * 0.5 - ratio * center_x, 0, 1, 0),
+                               Image.Resampling.BICUBIC)
+        result.paste(mapped, (0, y))
+    return result.resize(canvas.size, Image.Resampling.LANCZOS).convert("RGBA")
+
+
 def prepare_images(source):
     original = Image.open(source).convert("RGBA")
     if original.size != (297, 251):
@@ -127,6 +162,7 @@ def prepare_images(source):
         canvas = Image.new("RGBA", (320, 320))
         canvas.paste(recolored, (11, 34))
         canvas = soften_lower_paint(canvas, original.size, (11, 34))
+        canvas = round_painted_body(canvas)
         destination = output / f"gel-{color}.png"
         canvas.save(destination, optimize=True)
         records.append({"path": relative(destination), "kind": "gel_surface", "sha256": sha256(destination),
@@ -146,8 +182,15 @@ def prepare_images(source):
                             "vertical_ramp": list(LOWER_PAINT_Y_RAMP),
                             "interpolation": "Product of rising and falling smoothstep masks",
                             "coordinates": "Normalized source artwork before transparent padding",
-                            "alpha": "Every original source alpha value retained unchanged",
-                            "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"}})
+                            "alpha": "Original source alpha retained during paint softening, before contour remapping",
+                            "preserved_detail": "Upper glints and rightmost reflection excluded from the blur blend"},
+                        "contour_rounding": {
+                            "operation": "Horizontal scanline remapping of the acquired painted body into an ellipse",
+                            "center_pixels": list(ROUNDING_CENTER), "radii_pixels": list(ROUNDING_RADII),
+                            "supersampling": ROUNDING_SCALE, "alpha_threshold": 128,
+                            "edge_interpolation": "Linear subpixel crossing at alpha 127.5",
+                            "resampling": "Premultiplied RGBA; bicubic upscale and affine sampling, Lanczos downsample",
+                            "preserved_detail": "Source paint and glints remapped with the contour; alpha-128 vertical span and bottom support unchanged"}})
     shadow_source = source.parents[2] / "Shadow.png"
     shadow = Image.open(shadow_source)
     if shadow.mode != "RGBA" or shadow.size != (334, 150):
@@ -335,7 +378,7 @@ def main():
         extract_verified(source_dir, "water-splash-slime-sfx.zip", source_dir / "rubberduck-slime")
     existing = json.loads(MANIFEST.read_text(encoding="utf-8")) if options.images_only else {}
     manifest = {
-        "version": 3, "acquired_on": "2026-10-09", "license": "CC0-1.0",
+        "version": 4, "acquired_on": "2026-10-09", "license": "CC0-1.0",
         "image_source": {"creator": "Zuhria Alfitra (pzUH), GameArt2D", "title": "Jelly Squash Free Sprites",
                          "page": "https://www.gameart2d.com/jelly-squash-free-sprites.html",
                          "download": "https://www.gameart2d.com/uploads/3/0/9/1/30917885/jelly.zip",
@@ -350,7 +393,7 @@ def main():
         **({"material_audio_sources": existing["material_audio_sources"]} if "material_audio_sources" in existing
            else {} if options.images_only else {"material_audio_sources": MATERIAL_AUDIO_SOURCES}),
         "image_processing": {"tool": "Pillow", "version": pillow_version,
-                             "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 34 percent center to 16 percent contour white mix. Localized lower paint uses an alpha-aware 8 source-pixel Gaussian blur at up to 75 percent blend; upper glints remain crisp. Original silhouette and every source alpha value preserved. Separate contact shadow copied unchanged."},
+                             "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 34 percent center to 16 percent contour white mix. Localized lower paint uses an alpha-aware 8 source-pixel Gaussian blur at up to 75 percent blend; upper glints remain crisp. Painted rows are remapped into a continuous elliptical contour at 4x resolution, preserving the vertical span and bottom support. Separate contact shadow copied unchanged."},
         "images": prepare_images(source_dir / "jelly/png/separate/Jellies/Blank/Jelly (3).png"),
         "audio": existing["audio"] if options.images_only else prepare_sounds(source_dir / "kenney-interface-sounds"),
         "reuse": {"chest_reward": "assets/imported-audio/chest-reference/reward.wav",

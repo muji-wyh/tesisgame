@@ -45,6 +45,7 @@ func _run() -> void:
 	_check_motion(view)
 	_check_deadline_and_actions(view, data.chests)
 	_check_exit_during_performance(view, data.chests)
+	await _check_early_replay_pointer(view, data.chests)
 	_check_reward_counts(view, data.chests)
 	_check_staged_arrival(view, data.chests)
 	_check_confetti(view, data.chests)
@@ -202,6 +203,71 @@ func _check_exit_during_performance(view, manifest: Dictionary) -> void:
 	view.stop()
 	view.home_button.pressed.emit()
 	check(_home_requests == requests_before + 1, "Paused and stopped presentations reject stale Home callbacks")
+
+
+func _check_early_replay_pointer(view, manifest: Dictionary) -> void:
+	var replays: Array[String] = []
+	var handoffs: Array[String] = []
+	# Model the host's real ownership change: either accepted action removes
+	# the celebration and its button immediately, so a lost release is visible.
+	var replay_owner := func(id: String) -> void:
+		replays.append(id)
+		view.stop()
+	var handoff_owner := func(id: String) -> void:
+		handoffs.append(id)
+		view.stop()
+	view.replay_requested.connect(replay_owner)
+	view.performance_finished.connect(handoff_owner)
+	for cancelled: bool in [false, true]:
+		var id: String = "early-pointer-cancel" if cancelled else "early-pointer-replay"
+		view.show()
+		view.begin(id, "spring", manifest, 1, false, false, -1, 0, false, "", true)
+		view.set_process(false)
+		_step(view, Celebration.DURATION - 0.05)
+		var replay_center: Vector2 = view.replay_button.get_global_rect().get_center()
+		var finished_before: int = _finished.size()
+		var replays_before: int = replays.size()
+		await _pointer_button(replay_center, true)
+		check(view.replay_button.is_pressed(), "A real pointer-down captures the early replay button before the deadline")
+		_step(view, 0.2)
+		check(view.is_active() and not view.is_ready() and is_equal_approx(view.snapshot().elapsed, Celebration.DURATION)
+			and view.replay_button.is_visible_in_tree() and not view.replay_button.disabled
+			and view.controls().has(view.replay_button) and _finished.size() == finished_before and handoffs.is_empty(),
+			"Crossing the finale deadline preserves the pressed replay target until its pointer gesture resolves")
+		await _pointer_button(replay_center, false, cancelled)
+		if cancelled:
+			check(not view.replay_button.is_pressed() and replays.size() == replays_before,
+				"A cancelled pointer release clears the pressed state without requesting replay")
+			_step(view, 0.01)
+			check(not view.is_active() and handoffs == [id] and _finished.size() == finished_before + 1
+				and _finished.back() == id and replays.size() == replays_before,
+				"A cancelled replay gesture allows the completed finale to hand off exactly once")
+		else:
+			check(replays == [id] and not view.is_active() and _finished.size() == finished_before and handoffs.is_empty(),
+				"A valid release after the deadline requests replay once instead of disappearing during handoff")
+			await _pointer_button(replay_center, false)
+			_step(view, 1.0)
+			check(replays == [id] and handoffs.is_empty() and _finished.size() == finished_before,
+				"A duplicate release and the retired clock cannot replay or hand off the abandoned celebration")
+	view.replay_requested.disconnect(replay_owner)
+	view.performance_finished.disconnect(handoff_owner)
+	view.stop()
+
+
+func _pointer_button(point: Vector2, pressed: bool, cancelled: bool = false) -> void:
+	var motion := InputEventMouseMotion.new()
+	motion.position = point
+	motion.global_position = point
+	root.push_input(motion, true)
+	var event := InputEventMouseButton.new()
+	event.position = point
+	event.global_position = point
+	event.button_index = MOUSE_BUTTON_LEFT
+	event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
+	event.pressed = pressed
+	event.canceled = cancelled
+	root.push_input(event, true)
+	await process_frame
 
 
 func _check_reward_counts(view, manifest: Dictionary) -> void:

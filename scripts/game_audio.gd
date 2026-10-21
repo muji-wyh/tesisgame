@@ -16,6 +16,10 @@ const PAIR_FEEDBACK_PATHS := {
 	false: "res://assets/imported-audio/pair-feedback/wrong.wav",
 }
 const PAIR_FEEDBACK_GAIN := 0.48
+const MEMORY_CHEST_LOSS_PATHS := {
+	false: "res://assets/audio/memory-chest/downgrade.wav",
+	true: "res://assets/audio/memory-chest/lost.wav",
+}
 const PAIR_CHEST_DISCOVERY_PATH := "res://assets/audio/pair-chest/discovery.wav"
 const PAIR_CHEST_DISCOVERY_GAIN := 0.75
 const UI_CLICK_PATH := "res://assets/imported-audio/ui-click/select.wav"
@@ -30,16 +34,8 @@ const FRAGMENT_ARRIVE_PATH := "res://assets/audio/fragments/arrive.wav"
 const FRAGMENT_CHANNELS := 4
 const FRAGMENT_GAIN := 0.45
 const FRAGMENT_MIN_INTERVAL_MS := 60
-const JELLY_COLLECTION_PATHS := [
-	"res://assets/audio/jelly-match/collect-do.wav",
-	"res://assets/audio/jelly-match/collect-re.wav",
-	"res://assets/audio/jelly-match/collect-mi.wav",
-	"res://assets/audio/jelly-match/collect-fa.wav",
-	"res://assets/audio/jelly-match/collect-sol.wav",
-	"res://assets/audio/jelly-match/collect-la.wav",
-	"res://assets/audio/jelly-match/collect-ti.wav",
-]
 const JELLY_PATHS := {
+	"pop": "res://assets/audio/jelly-match/collect-pop.wav",
 	"finish_ready": "res://assets/audio/jelly-finish/ready.ogg",
 	"pick": UI_CLICK_PATH,
 	"release": "res://assets/imported-audio/chest-reference/step.wav",
@@ -135,7 +131,6 @@ var _jelly_players: Array[AudioStreamPlayer] = []
 var _jelly_gains: Dictionary = {}
 var _jelly_cues: Dictionary = {}
 var _jelly_next_player: int = 0
-var _jelly_collection_next_note: int = 0
 var _coin_players: Array[AudioStreamPlayer] = []
 var _coin_next_player: int = 0
 var _fragment_players: Array[AudioStreamPlayer] = []
@@ -146,8 +141,7 @@ var _fragment_last_ms: Dictionary = {}
 func _ready() -> void:
 	set_process(false)
 	_pop_slice_rng.randomize()
-	for path: String in JELLY_COLLECTION_PATHS:
-		_stream(path)
+	_stream(JELLY_PATHS["pop"])
 	for path in POP_SLICE_PATHS:
 		if ResourceLoader.exists(path):
 			_pop_slice_paths.append(path)
@@ -173,6 +167,8 @@ func _ready() -> void:
 	_stream(_pop_launch_path)
 	pair_feedback = _player(PAIR_FEEDBACK_GAIN)
 	for path: String in PAIR_FEEDBACK_PATHS.values():
+		_stream(path)
+	for path: String in MEMORY_CHEST_LOSS_PATHS.values():
 		_stream(path)
 	ui_click = _player(UI_CLICK_GAIN)
 	_stream(UI_CLICK_PATH)
@@ -244,6 +240,13 @@ func _play_pop_slice() -> void:
 func play_pair_feedback(correct: bool) -> void:
 	if not muted and active and available and _speech_debug_mix > 0.0:
 		_play(pair_feedback, PAIR_FEEDBACK_PATHS[correct])
+
+
+func play_memory_chest_loss(lost: bool) -> void:
+	# The chest response replaces the wrong-answer sound on the same bounded
+	# player, so navigation, pause, mute and round reset cancel both alike.
+	if not muted and active and available and _speech_debug_mix > 0.0:
+		_play(pair_feedback, MEMORY_CHEST_LOSS_PATHS[lost])
 
 
 func stop_pair_feedback() -> void:
@@ -361,7 +364,7 @@ func stop_pair_chest_discovery() -> void:
 
 
 func play_jelly_cue(cue_name: String) -> void:
-	if muted or not active or not available or (cue_name != "pop" and not JELLY_PATHS.has(cue_name)):
+	if muted or not active or not available or not JELLY_PATHS.has(cue_name):
 		return
 	if cue_name == "danger":
 		stop_jelly_danger()
@@ -387,14 +390,8 @@ func play_jelly_cue(cue_name: String) -> void:
 	_jelly_gains[player] = float(JELLY_GAINS[cue_name])
 	_jelly_cues[player] = cue_name
 	_update_jelly_gain()
-	var path: String
-	if cue_name == "pop":
-		# Keep the seven-note cycle across pauses and mode changes.
-		path = JELLY_COLLECTION_PATHS[_jelly_collection_next_note]
-		_jelly_collection_next_note = (_jelly_collection_next_note + 1) % JELLY_COLLECTION_PATHS.size()
-	else:
-		path = JELLY_PATHS[cue_name]
-	_play(player, path)
+	player.pitch_scale = 1.0
+	_play(player, JELLY_PATHS[cue_name])
 	set_process(true)
 
 
