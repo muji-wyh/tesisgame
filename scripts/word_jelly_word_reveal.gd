@@ -38,7 +38,7 @@ func configure_layout(available: Rect2, ui_scale: float, exclusions: Array[Rect2
 		entry.sync()
 
 
-func present(word: Dictionary, picture: Texture2D, accent: Color, batch: bool = false, initial_age: float = 0.0) -> void:
+func present(word: Dictionary, picture: Texture2D, accent: Color, batch: bool = false, initial_age: float = 0.0, level: int = 1) -> void:
 	if str(word.get("text", "")).strip_edges().is_empty():
 		return
 	var seconds: float = BATCH_SECONDS if batch else SECONDS
@@ -54,7 +54,7 @@ func present(word: Dictionary, picture: Texture2D, accent: Color, batch: bool = 
 		variation = 0.84 if _entries.back().variant_scale > 1.0 else 1.16
 	var entry := Card.new()
 	add_child(entry)
-	entry.configure(_serial, word, picture, accent, batch, variation, seconds, _reduced_motion)
+	entry.configure(_serial, word, picture, accent, batch, variation, seconds, _reduced_motion, clampi(level, 1, 9))
 	entry.fit_content(size, _ui_scale)
 	_place(entry, _entries)
 	entry.elapsed = maxf(0.0, initial_age)
@@ -64,11 +64,12 @@ func present(word: Dictionary, picture: Texture2D, accent: Color, batch: bool = 
 
 
 func _place(entry: Card, occupied: Array[Card]) -> void:
-	# Reserve the entire squash/stretch envelope, including shadow and lift.
-	var margin := Vector2.ONE * 6.0 / _ui_scale
+	# Reserve the entire squash/stretch envelope and the level-specific effect halo.
+	var margin := Vector2.ONE * entry.effect_margin()
 	var envelope: Vector2 = entry.size * 1.22 + margin * 2.0
 	var room: Vector2 = (size - envelope).max(Vector2.ZERO)
 	var best := Rect2(margin, entry.size)
+	var best_excluded_area: float = INF
 	var best_score: float = INF
 	for attempt in range(72):
 		var anchor := Vector2(_rng.randf(), _rng.randf())
@@ -82,13 +83,15 @@ func _place(entry: Card, occupied: Array[Card]) -> void:
 		var candidate := Rect2(room * anchor, envelope)
 		var candidate_rest: Vector2 = candidate.get_center() - entry.size * 0.5
 		var spelling := Rect2(candidate_rest + entry._spelling.position, entry._spelling.size)
+		var excluded_area: float = 0.0
 		var score: float = 0.0
 		for exclusion: Rect2 in _exclusions:
 			var local := Rect2(exclusion.position - position, exclusion.size)
-			score += candidate.intersection(local).get_area() * 100.0
+			excluded_area += candidate.intersection(local).get_area()
 		for other: Card in occupied:
-			var bounds := Rect2(other.rest_position - other.size * 0.11 - margin,
-				other.size * 1.22 + margin * 2.0)
+			var other_margin := Vector2.ONE * other.effect_margin()
+			var bounds := Rect2(other.rest_position - other.size * 0.11 - other_margin,
+				other.size * 1.22 + other_margin * 2.0)
 			var tail: float = 1.0 - smoothstep(other.duration - 0.22, other.duration, other.elapsed)
 			score += candidate.intersection(bounds).get_area() * lerpf(0.12, 1.0, tail)
 			var other_spelling := Rect2(other.rest_position + other._spelling.position, other._spelling.size)
@@ -97,10 +100,12 @@ func _place(entry: Card, occupied: Array[Card]) -> void:
 			if other == occupied.back():
 				var separation: float = candidate.get_center().distance_to(bounds.get_center())
 				score += maxf(0.0, minf(size.x, size.y) * 0.48 - separation) * 16.0
-		if score < best_score:
+		# Readable controls take priority even during a crowded collection run.
+		if excluded_area < best_excluded_area or (is_equal_approx(excluded_area, best_excluded_area) and score < best_score):
+			best_excluded_area = excluded_area
 			best_score = score
 			best = candidate
-		if score <= 0.0:
+		if excluded_area <= 0.0 and score <= 0.0:
 			break
 	entry.rest_position = best.get_center() - entry.size * 0.5
 
@@ -140,7 +145,8 @@ func snapshot() -> Dictionary:
 	var latest: Dictionary = states.back().duplicate(true) if not states.is_empty() else {
 		"word_id": "", "word": {}, "picture": "", "spelling": "", "elapsed": 0.0,
 		"duration": SECONDS, "rect": [], "resting_rect": [], "picture_rect": [],
-		"spelling_rect": [], "content_alpha": 0.0, "reduced_motion": _reduced_motion}
+		"spelling_rect": [], "content_alpha": 0.0, "reduced_motion": _reduced_motion,
+		"merge_level": 1, "effects": {}}
 	latest["visible"] = visible and not states.is_empty()
 	latest["entries"] = states
 	latest["active_count"] = states.size()

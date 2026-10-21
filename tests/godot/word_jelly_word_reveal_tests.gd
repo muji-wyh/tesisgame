@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Reveal = preload("res://scripts/word_jelly_word_reveal.gd")
+const Model = preload("res://scripts/word_jelly_model.gd")
 const WordArt = preload("res://scripts/word_art.gd")
 
 var checks: int = 0
@@ -33,6 +34,8 @@ func _run() -> void:
 	_check_varied_content_cards(reveal)
 	_check_elastic_entry(reveal)
 	_check_reduced_motion(reveal)
+	_check_level_effects(reveal)
+	_check_level_lifetimes(reveal)
 	reveal.reset()
 	reveal.present({"id": "image-free", "text": "on"}, null, Color.WHITE)
 	check(reveal.snapshot().visible and reveal.snapshot().spelling == "on" and reveal.snapshot().picture.is_empty(),
@@ -43,8 +46,8 @@ func _run() -> void:
 	quit(1 if failures > 0 else 0)
 
 
-func _present(reveal, text: String, picture: Texture2D = null, batch: bool = false) -> void:
-	reveal.present({"id": text, "text": text}, apple if picture == null else picture, Color("#598c6c"), batch)
+func _present(reveal, text: String, picture: Texture2D = null, batch: bool = false, level: int = 1) -> void:
+	reveal.present({"id": text, "text": text}, apple if picture == null else picture, Color("#598c6c"), batch, 0.0, level)
 
 
 func _check_independent_lifetimes(reveal) -> void:
@@ -139,8 +142,10 @@ func _check_layout_case(reveal, area: Rect2, scale_factor: float, batch: bool) -
 	reveal.reset()
 	reveal.set_reduced_motion(false)
 	reveal.configure_layout(area, scale_factor)
-	for text: String in ["cat", "hippopotamus", "ice cream"]:
-		_present(reveal, text, cat if text == "cat" else apple, batch)
+	var spellings: Array[String] = ["cat", "hippopotamus", "ice cream"]
+	for index in range(spellings.size()):
+		var text: String = spellings[index]
+		_present(reveal, text, cat if text == "cat" else apple, batch, [1, 4, 9][index])
 		reveal.advance(0.10)
 	for tick in range(16 if batch else 28):
 		_check_bounds(reveal, area)
@@ -224,9 +229,9 @@ func _check_reduced_motion(reveal) -> void:
 		reveal.reset()
 		reveal.configure_layout(Rect2(18, 10, 760, 190), 1.0)
 		reveal.set_reduced_motion(enabled_before)
-		_present(reveal, "apple")
+		_present(reveal, "apple", apple, false, 4)
 		reveal.advance(0.10)
-		_present(reveal, "cat", cat)
+		_present(reveal, "cat", cat, false, 9)
 		reveal.advance(0.10)
 		reveal.set_reduced_motion(true)
 		var before: Array = reveal.snapshot().entries.duplicate(true)
@@ -236,6 +241,8 @@ func _check_reduced_motion(reveal) -> void:
 		for index in range(after.size()):
 			check(after[index].rect == before[index].rect and after[index].resting_rect == before[index].resting_rect,
 				"reduced motion keeps every sampled card position and scale completely still")
+			check(bool(after[index].effects.reduced_motion) and after[index].effects.rect == before[index].effects.rect,
+				"changing the motion preference keeps high-level effect footprints still")
 			check(is_equal_approx(float(after[index].elapsed), float(before[index].elapsed) + 0.40)
 				and float(after[index].content_alpha) == 1.0,
 				"static reveals keep independent lifetimes and a clear reading beat")
@@ -243,6 +250,103 @@ func _check_reduced_motion(reveal) -> void:
 		reveal.advance(float(reveal.snapshot().duration))
 		check(not reveal.snapshot().visible and reveal.snapshot().entries.is_empty(),
 			"reduced-motion reveals still expire normally")
+
+
+func _check_level_effects(reveal) -> void:
+	reveal.configure_layout(Rect2(20, 12, 980, 260), 1.0)
+	var profiles: Array[Dictionary] = []
+	var patterns: Array[String] = []
+	for level in range(1, 10):
+		reveal.reset()
+		reveal.set_reduced_motion(false)
+		_present(reveal, "cat", cat, false, level)
+		reveal.advance(0.12)
+		var state: Dictionary = reveal.snapshot()
+		var fx: Dictionary = state.effects
+		check(int(state.merge_level) == level and int(fx.level) == level,
+			"each reading pop retains the collected Jelly's level")
+		check(not str(fx.name).is_empty() and not str(fx.pattern).is_empty(),
+			"every level has a named effect treatment")
+		check(bool(fx.input_transparent) and not bool(fx.reduced_motion),
+			"level effects remain decorative during ordinary motion")
+		check(int(fx.spark_count) > 0 and int(fx.burst_count) >= 0,
+			"each level carries a nonempty sourced-particle effect")
+		check(state.spelling == "cat" and str(state.picture).ends_with("cat.webp")
+			and is_equal_approx(float(state.duration), Reveal.SECONDS),
+			"higher-level decoration keeps the complete picture, spelling and reading lifetime")
+		profiles.append(fx.duplicate(true))
+		patterns.append(str(fx.pattern))
+		_check_bounds(reveal, Rect2(20, 12, 980, 260))
+		_check_input(reveal)
+	check(patterns[0] != patterns[3] and patterns[3] != patterns[8] and patterns[0] != patterns[8],
+		"Lv1, Lv4 and Lv9 use distinct collection-pop choreography")
+	check(str(profiles[3].pattern) == "fireworks", "Lv4 carries its fireworks identity into the reading pop")
+	check(int(profiles[8].spark_count) > int(profiles[3].spark_count)
+		and int(profiles[3].spark_count) > int(profiles[0].spark_count),
+		"collection-pop sparkle density grows from Lv1 through Lv4 to Lv9")
+	for requested: int in [-10, 0, 1, 4, 9, 20]:
+		reveal.reset()
+		_present(reveal, "apple", apple, false, requested)
+		var clamped: int = clampi(requested, 1, 9)
+		check(int(reveal.snapshot().merge_level) == clamped and int(reveal.snapshot().effects.level) == clamped,
+			"out-of-range level input clamps safely to the available effect tiers")
+
+
+func _check_level_lifetimes(reveal) -> void:
+	var area := Rect2(20, 12, 980, 260)
+	reveal.configure_layout(area, 1.0)
+	for batch: bool in [false, true]:
+		for reduced: bool in [false, true]:
+			reveal.reset()
+			reveal.set_reduced_motion(reduced)
+			var duration: float = Reveal.BATCH_SECONDS if batch else Reveal.SECONDS
+			var cadence: float = Model.BATCH_BEAT_SECONDS if batch else 0.10
+			var levels: Array[int] = [1, 4, 9]
+			for index in range(levels.size()):
+				if index > 0:
+					reveal.advance(cadence)
+				var prior: Array = reveal.snapshot().entries.duplicate(true)
+				_present(reveal, "cat", cat, batch, levels[index])
+				var entries: Array = reveal.snapshot().entries
+				check(entries.size() == index + 1, "rapid mixed-level pickups retain every still-living pop")
+				for earlier in range(prior.size()):
+					check(entries[earlier] == prior[earlier],
+						"a richer new pop cannot reroll a previous pop's content, identity or clock")
+				check(int(entries[index].merge_level) == levels[index]
+					and int(entries[index].effects.level) == levels[index]
+					and bool(entries[index].effects.reduced_motion) == reduced,
+					"manual and automatic collection retain the correct effect tier and motion preference")
+			var before: Array = reveal.snapshot().entries.duplicate(true)
+			reveal.configure_layout(Rect2(8, 6, 250, 115), 1.0)
+			var after: Array = reveal.snapshot().entries
+			for index in range(after.size()):
+				check(after[index].entry_id == before[index].entry_id
+					and after[index].effects.level == before[index].effects.level
+					and is_equal_approx(float(after[index].elapsed), float(before[index].elapsed)),
+					"resizing active level effects preserves identity and lifetime")
+			_check_bounds(reveal, Rect2(8, 6, 250, 115))
+			_check_input(reveal)
+			reveal.advance(duration - cadence * 2.0 + 0.01)
+			var survivors: Array = reveal.snapshot().entries
+			check(survivors.size() == 2 and int(survivors[0].merge_level) == 4 and int(survivors[1].merge_level) == 9,
+				"Lv1 expires on its original beat without clearing younger Lv4 and Lv9 effects")
+			reveal.reset()
+			check(reveal.get_child_count() == 0 and reveal.snapshot().effects.is_empty(),
+				"reset releases every effect node and removes the last tier from the empty state")
+			reveal.configure_layout(area, 1.0)
+			for level: int in levels:
+				reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, duration - 0.04, level)
+			var late: Array = reveal.snapshot().entries
+			check(late.size() == 3, "a late frame creates the remaining tail for each live effect tier")
+			for index in range(late.size()):
+				check(int(late[index].merge_level) == levels[index] and float(late[index].content_alpha) < 0.15,
+					"late-frame effects inherit the existing fade instead of restarting their flash")
+			reveal.advance(0.05)
+			check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
+				"late effect tails expire without retaining a particle subtree")
+			reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, duration + 0.01, 9)
+			check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
+				"an already-expired Lv9 catch-up cannot replay its showcase")
 
 
 func _check_bounds(reveal, area: Rect2) -> void:
@@ -256,6 +360,9 @@ func _check_bounds(reveal, area: Rect2) -> void:
 				entry.spelling, entry.elapsed, panel, _rect(entry.picture_rect), _rect(entry.spelling_rect)])
 		check(_rect(entry.picture_rect).end.x <= _rect(entry.spelling_rect).position.x,
 			"artwork and spelling retain separate reading space")
+		check(area.grow(0.1).encloses(_rect(entry.effects.rect)),
+			"the full effect footprint remains inside the available reading region: area %s effect %s card %s level %d age %.3f" % [
+				area, _rect(entry.effects.rect), _rect(entry.resting_rect), int(entry.merge_level), float(entry.elapsed)])
 		var json: Dictionary = JSON.parse_string(JSON.stringify(entry))
 		check(json.rect is Array and json.picture_rect is Array and json.spelling_rect is Array and json.resting_rect is Array,
 			"each entry exposes numeric rectangle coordinates to the browser")

@@ -73,6 +73,7 @@ func _run() -> void:
 	_check_collect_and_fragments(view)
 	await _check_fragment_badge_layout(view)
 	_check_ordinary_collection(view)
+	_check_collection_click_duration(view)
 	_check_collect_button_growth(view)
 	_check_batch_collection(view)
 	_check_coarse_frame_batch_reveals(view)
@@ -80,6 +81,8 @@ func _run() -> void:
 	_check_batch_lifecycle(view)
 	_check_batch_wallet_failure(view)
 	_check_word_reveal(view)
+	_check_word_reveal_levels(view)
+	_check_word_reveal_control_clearance(view)
 	_check_word_reveal_lifecycle(view)
 	_check_collection_stack_fall(view)
 	_check_dragged_support_fall(view)
@@ -362,7 +365,8 @@ func _check_powerup_paused_resize(view) -> void:
 			purchases.clear()
 			_install(view, ["root:cat", "picture:cat"])
 			view._activate_powerup("auto_merge")
-			_advance(view, Model.POWERUP_DRAG_SECONDS * 0.5 if stage == "drag" else Model.POWERUP_DRAG_SECONDS + 0.15)
+			var fusion_elapsed: float = Model.POWERUP_FUSION_SECONDS * 0.5
+			_advance(view, Model.POWERUP_DRAG_SECONDS * 0.5 if stage == "drag" else Model.POWERUP_DRAG_SECONDS + fusion_elapsed)
 			check(view.game.powerup_snapshot().stage == stage,
 				"responsive powerup coverage reaches the paid " + stage + " stage")
 			view.pause(true)
@@ -397,11 +401,11 @@ func _check_powerup_paused_resize(view) -> void:
 						check(phone.encloses(Rect2(center - Vector2(paint.z, paint.w) * 0.5, Vector2(paint.z, paint.w))),
 							"each native gel lobe stays inside the resized phone instead of retaining desktop pixels")
 				view._process(0.25)
-				check(view.game.powerup_snapshot() == frozen and is_equal_approx(float(view.game.fusions[0].elapsed), 0.15),
+				check(view.game.powerup_snapshot() == frozen and is_equal_approx(float(view.game.fusions[0].elapsed), fusion_elapsed),
 					"paused responsive union preserves its normal fusion timeline")
 				view.pause(false)
-				_advance(view, 0.04)
-				check(float(view.game.fusions[0].elapsed) > 0.15,
+				_advance(view, Model.POWERUP_FUSION_SECONDS * 0.25)
+				check(float(view.game.fusions[0].elapsed) > fusion_elapsed,
 					"resuming a resized union advances the same already-paid fusion")
 			_advance(view, 2.0)
 			check(not view.game.powerup_active() and view.game.cells.size() == 1 and str(view.game.cells[0].text) == "cat"
@@ -905,6 +909,56 @@ func _snapshot_rect(value: Array) -> Rect2:
 	return Rect2(float(value[0]), float(value[1]), float(value[2]), float(value[3]))
 
 
+func _check_collection_click_duration(view) -> void:
+	for pointer: int in [-1, 0]:
+		for held_ms: int in [100, 500, 850]:
+			_reset(view)
+			var ids: Array[int] = _install(view, ["merged:cat"], [2])
+			var center: Vector2 = _center(view, ids[0])
+			_pointer_event(view, pointer, "down", center)
+			check(view._pointer == pointer and view.game.fusions.is_empty() and payouts.is_empty(),
+				"mouse and touch presses never collect before release")
+			# Advance the wall clock independently of frames, including the 500 ms boundary.
+			view._tile_press_started_ms = Time.get_ticks_msec() - held_ms
+			_pointer_event(view, pointer, "up", center)
+			if held_ms >= 500:
+				check(view.game.fusions.is_empty() and not view.game.cell(ids[0]).is_empty(),
+					"holding a merged word for at least 500 ms never starts collection on release")
+				_advance(view, Model.COLLECT_SECONDS + Model.SETTLE_SECONDS)
+				check(payouts.is_empty() and attempts.is_empty() and heard.is_empty()
+					and cues.count("pop") == 0 and view.game.fragment_count == 0,
+					"long holds cannot grant rewards or mastery, pronounce, or play collection effects")
+				center = _center(view, ids[0])
+				_pointer_event(view, pointer, "down", center)
+				_pointer_event(view, pointer, "up", center)
+			check(view.game.fusions.size() == 1 and str(view.game.fusions[0].operation) == "collect",
+				"a short click collects, including a fresh click after a rejected long hold")
+			_advance(view, Model.COLLECT_SECONDS + Model.SETTLE_SECONDS)
+			check(payouts.size() == 1 and attempts.size() == 1 and view.game.fragment_count == 2,
+				"the accepted click credits its word and carried fragments exactly once")
+		_reset(view)
+		var ids: Array[int] = _install(view, ["merged:cat", "merged:cat"])
+		var destination: Vector2 = _center(view, ids[1])
+		_pointer_event(view, pointer, "down", _center(view, ids[0]))
+		view._tile_press_started_ms = Time.get_ticks_msec() - 850
+		_pointer_event(view, pointer, "move", destination)
+		_pointer_event(view, pointer, "up", destination)
+		check(view.game.fusions.size() == 1 and str(view.game.fusions[0].operation) == "merge",
+			"a long hold still allows dragging matching merged words together")
+		var merged: int = _merged_id(view)
+		_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
+		check(int(view.game.cell(merged).get("merge_level", 0)) == 2 and payouts.is_empty() and attempts.is_empty(),
+			"dragging after a long hold upgrades without collecting or granting mastery")
+		_reset(view)
+		ids = _install(view, ["merged:cat"])
+		var center: Vector2 = _center(view, ids[0])
+		_pointer_event(view, pointer, "down", center)
+		_pointer_event(view, pointer, "up", center, true)
+		_pointer_event(view, pointer, "up", center)
+		check(view._tile_press_started_ms == -1 and view.game.fusions.is_empty() and payouts.is_empty(),
+			"canceled pointer input clears click timing and ignores a late release")
+
+
 func _check_ordinary_collection(view) -> void:
 	for reduced: bool in [false, true]:
 		for batch: bool in [false, true]:
@@ -1026,6 +1080,7 @@ func _check_collect_button_growth(view) -> void:
 
 
 func _check_batch_collection(view) -> void:
+	check(is_equal_approx(Model.BATCH_BEAT_SECONDS, 0.25), "Auto Collect starts each collection exactly 250 ms apart")
 	for reduced: bool in [false, true]:
 		_reset(view, reduced)
 		var ids: Array[int] = _install_batch_words(view, 3, true)
@@ -1080,7 +1135,7 @@ func _check_batch_collection(view) -> void:
 				"the rhythmic queue never overlaps reward transactions or disappearance poses")
 			var visible_reveals: int = _batch_reveal_count(now_started, elapsed, float(started.word_reveal.duration))
 			check(int(state.word_reveal.active_count) == visible_reveals and state.word_reveal.entries.size() == visible_reveals,
-				"each 350 ms pickup adds its own reveal and expired reading cards leave independently")
+				"each 250 ms pickup adds its own reveal and expired reading cards leave independently")
 			if now_started > previous_started:
 				start_times.append(float(state.collection_batch.elapsed))
 			if now_completed > previous_completed:
@@ -1091,16 +1146,16 @@ func _check_batch_collection(view) -> void:
 			previous_completed = now_completed
 		var final: Dictionary = view.snapshot()
 		check(not final.collection_batch.active and int(final.collection_batch.completed) == 3
-			and int(final.collection_batch.started) == 3 and is_equal_approx(elapsed, 1.05),
-			"three words finish in exactly 1050 ms through three sequential collection beats")
+			and int(final.collection_batch.started) == 3 and is_equal_approx(elapsed, 3.0 * Model.BATCH_BEAT_SECONDS),
+			"three words finish in exactly 750 ms through three sequential collection beats")
 		check(start_times.size() == 3 and payout_times.size() == 3 and pop_times.size() == 3,
 			"each collected word has a separate visible start, payout and disappearance sound")
 		for index in range(start_times.size()):
-			check(is_equal_approx(start_times[index], index * 0.35)
-				and is_equal_approx(payout_times[index], (index + 1) * 0.35),
-				"ordinary and reduced-motion collection both preserve exact 350 ms start and payout spacing")
-			check(is_equal_approx(pop_times[index], index * 0.35 + 0.06),
-				"the existing disappearance sound stays at 60 ms within every 350 ms beat")
+			check(is_equal_approx(start_times[index], index * Model.BATCH_BEAT_SECONDS)
+				and is_equal_approx(payout_times[index], (index + 1) * Model.BATCH_BEAT_SECONDS),
+				"ordinary and reduced-motion collection both preserve exact 250 ms start and payout spacing")
+			check(is_equal_approx(pop_times[index], index * Model.BATCH_BEAT_SECONDS + 0.06),
+				"the existing disappearance sound stays at 60 ms within every 250 ms beat")
 		check(payouts.size() == 3 and credits.size() == 1 and attempts.size() == 3,
 			"batch collection records every word but only persists its one rare coin drop")
 		check(payouts[0].amount == 50 and payouts[1].amount == 0 and payouts[2].amount == 0,
@@ -1111,11 +1166,13 @@ func _check_batch_collection(view) -> void:
 			"all carried fragments and disappearance beats survive a batch containing one rare coin drop")
 		check(heard.is_empty(), "batch collection never pronounces a word, including the final pickup")
 		var reveals: Array = final.word_reveal.entries
-		check(reveals.size() == 2 and int(final.word_reveal.active_count) == 2,
-			"the most recent two words remain visible after the first reading card expires")
+		var surviving_count: int = _batch_reveal_count(3, elapsed, float(started.word_reveal.duration))
+		check(reveals.size() == surviving_count and int(final.word_reveal.active_count) == surviving_count,
+			"all three reading cards retain their independent lifetimes after the faster batch completes")
 		for index in range(reveals.size()):
-			check(str(reveals[index].word_id) == "cat" and is_equal_approx(float(reveals[index].elapsed), 1.05 - (index + 1) * 0.35),
-				"repeated spellings retain separate reveal timelines at the 350 ms cadence")
+			check(str(reveals[index].word_id) == "cat"
+				and is_equal_approx(float(reveals[index].elapsed), elapsed - (3 - surviving_count + index) * Model.BATCH_BEAT_SECONDS),
+				"repeated spellings retain separate reveal timelines at the 250 ms cadence")
 		for id: int in retained:
 			check(not view.game.cell(id).is_empty(), "unfinished merges and unmerged roots stay available after collecting")
 		check(not final.collect_button.enabled and int(final.collect_button.count) == 0,
@@ -1138,15 +1195,15 @@ func _check_coarse_frame_batch_reveals(view) -> void:
 		var entries: Array = state.word_reveal.entries
 		check(entries.size() == 2 and int(state.word_reveal.active_count) == 2
 			and state.collection_batch.active and int(state.collection_batch.completed) == 1,
-			"one coarse frame preserves both reveals on either side of the 350 ms collection beat")
+			"one coarse frame preserves both reveals on either side of the 250 ms collection beat")
 		for index in range(entries.size()):
-			check(is_equal_approx(float(entries[index].elapsed), 0.40 - index * 0.35),
+			check(is_equal_approx(float(entries[index].elapsed), 0.40 - index * Model.BATCH_BEAT_SECONDS),
 				"coarse frames carry only the remaining frame time into each new collection reveal")
 		view._process(0.40)
 		entries = view.snapshot().word_reveal.entries
 		check(entries.size() == 3, "Three reading cards briefly coexist before their first expiry")
 		for index in range(entries.size()):
-			check(is_equal_approx(float(entries[index].elapsed), 0.80 - index * 0.35),
+			check(is_equal_approx(float(entries[index].elapsed), 0.80 - index * Model.BATCH_BEAT_SECONDS),
 				"the second coarse frame advances earlier reveals and creates the third at its exact beat")
 		view._process(0.30)
 		state = view.snapshot()
@@ -1156,9 +1213,9 @@ func _check_coarse_frame_batch_reveals(view) -> void:
 			"coarse reveal catch-up preserves one rare drop and three disappearance sounds without pronunciation")
 		view._process(0.10)
 		entries = view.snapshot().word_reveal.entries
-		check(entries.size() == 2, "Coarse collection frames expire the oldest reveal without removing newer words")
+		check(entries.size() == 1, "Coarse collection frames expire the first two reveals while the newest word remains")
 		for index in range(entries.size()):
-			check(is_equal_approx(float(entries[index].elapsed), 1.20 - (index + 1) * 0.35),
+			check(is_equal_approx(float(entries[index].elapsed), 1.20 - (3 - entries.size() + index) * Model.BATCH_BEAT_SECONDS),
 				"after a completed batch each independent reveal advances once per frame")
 		var before_pause: Array = entries.duplicate(true)
 		view._process(1.25)
@@ -1191,8 +1248,9 @@ func _check_batch_chest_queue(view) -> void:
 		check(queued_during_batch and not view.game.collection_batch_active()
 			and view.game.fragment_count == 9 and view.game.chest_tier == 2,
 			"all nine fragments and the second chest tier commit before queued celebration begins")
-		check(payouts.size() == 9 and view.game.collected_coins == 50 and is_equal_approx(elapsed, 3.15),
-			"waiting chest artwork preserves nine collections and one rare coin reward across nine 350 ms beats")
+		check(payouts.size() == 9 and view.game.collected_coins == 50
+			and is_equal_approx(elapsed, 9.0 * Model.BATCH_BEAT_SECONDS),
+			"waiting chest artwork preserves nine collections and one rare coin reward across nine 250 ms beats")
 		var kinds: Dictionary = {}
 		for tick in range(320):
 			_advance(view, 0.025)
@@ -1345,10 +1403,88 @@ func _check_word_reveal(view) -> void:
 	view.size = Vector2(1000, 720)
 
 
+func _check_word_reveal_levels(view) -> void:
+	var levels: Array[int] = [1, 4, 9]
+	for reduced: bool in [false, true]:
+		for batch: bool in [false, true]:
+			_reset(view, reduced)
+			var ids: Array[int] = _install_batch_words(view, 3)
+			for index in range(ids.size()):
+				view.game.cells[index].merge_level = levels[index]
+			view._sync_tiles()
+			if batch:
+				view._collect_all()
+				view._process(0.40)
+				check(view.snapshot().word_reveal.entries.size() == 2,
+					"a late auto-collect frame keeps both mixed-level pop entries alive")
+				view._process(0.40)
+			else:
+				for id: int in ids:
+					view._activate(id)
+					_advance(view, 0.10)
+			var entries: Array = view.snapshot().word_reveal.entries
+			check(entries.size() == 3, "rapid individual and automatic pickups retain Lv1, Lv4 and Lv9 pops together")
+			var entry_ids: Array[int] = []
+			for index in range(entries.size()):
+				var entry: Dictionary = entries[index]
+				entry_ids.append(int(entry.entry_id))
+				check(int(entry.merge_level) == levels[index] and int(entry.effects.level) == levels[index],
+					"collection passes the actual merged-Jelly level into its independent reading-pop effects")
+				check(bool(entry.effects.reduced_motion) == reduced and bool(entry.effects.input_transparent),
+					"collection-pop effects follow the current motion preference and pass pointer input through")
+				check(entry.word_id == "cat" and entry.spelling == "cat" and str(entry.picture).ends_with("cat.webp"),
+					"all collection levels retain the collected spelling and its production artwork")
+				var expected_age: float = 0.80 - index * Model.BATCH_BEAT_SECONDS if batch else (3 - index) * 0.10
+				check(is_equal_approx(float(entry.elapsed), expected_age),
+					"collection levels share the original clock, including late-frame catch-up")
+			check(entry_ids.size() == 3 and entry_ids[0] != entry_ids[1]
+				and entry_ids[1] != entry_ids[2] and entry_ids[0] != entry_ids[2],
+				"repeated words at different levels have independent presentation identities")
+			check(entries[0].effects.pattern != entries[1].effects.pattern
+				and entries[1].effects.pattern == "fireworks" and entries[1].effects.pattern != entries[2].effects.pattern,
+				"the collection pop distinguishes the ordinary, fireworks and highest-tier treatments")
+			_advance(view, 2.0)
+			check(payouts.size() == 3 and attempts.size() == 3 and heard.size() == (0 if batch else 3),
+				"richer reading-pop effects preserve collection credit and manual-only pronunciation")
+			check(cues.count("pop") == 1 and cues.count("jelly-collect-lv4") == 1
+				and cues.count("jelly-collect-lv9") == 1,
+				"each pickup emits its existing level sound once without extra reading-pop audio")
+			check(view.snapshot().word_reveal.entries.is_empty() and view._word_reveal.get_child_count() == 0,
+				"every level's collection-pop effect subtree expires with its original reading lifetime")
+
+
+func _check_word_reveal_control_clearance(view) -> void:
+	for dimensions: Vector2 in [Vector2(1000, 720), Vector2(844, 390), Vector2(390, 844)]:
+		view.size = dimensions
+		_reset(view)
+		_install_batch_words(view, 4)
+		for index in range(4):
+			view.game.cells[index].merge_level = [1, 4, 7, 9][index]
+		view._word_reveal._rng.seed = 20261022
+		view._collect_all()
+		var protected: Array[Rect2] = [view.finish_button.get_global_rect(), view.collect_button.get_global_rect(),
+			view.get_global_transform() * view.chest_meter_rect()]
+		for tick in range(16):
+			view._process(0.05)
+			for entry: Dictionary in view.snapshot().word_reveal.entries:
+				var panel: Rect2 = _snapshot_rect(entry.rect)
+				var effects: Rect2 = _snapshot_rect(entry.effects.rect)
+				for control: Rect2 in protected:
+					check(not panel.intersects(control) and not effects.intersects(control),
+						"collection cards and their high-level halos leave Finish, chest and Collect readable at %s" % dimensions)
+		var state: Dictionary = view.snapshot()
+		var visible_count: int = _batch_reveal_count(4, 0.80, float(state.word_reveal.duration))
+		check(int(state.collection_batch.started) == 4 and int(state.word_reveal.active_count) == visible_count,
+			"the 250 ms cadence retains every unexpired collection pop after the fourth start")
+		if dimensions == Vector2(1000, 720):
+			check(visible_count == 4, "the full reading region supports four concurrent collection pops before their first expiry")
+	view.size = Vector2(1000, 720)
+
+
 func _check_word_reveal_lifecycle(view) -> void:
 	for action: String in ["pause", "hide", "finish", "stop", "configure"]:
 		_reset(view)
-		var ids: Array[int] = _install(view, ["cat", "caterpillar"], [], [2, 2])
+		var ids: Array[int] = _install(view, ["merged:cat:4", "merged:caterpillar:9"], [], [2, 2])
 		view._activate(ids[0])
 		_advance(view, 0.2)
 		view._activate(ids[1])
@@ -1369,7 +1505,7 @@ func _check_word_reveal_lifecycle(view) -> void:
 		check(not view.snapshot().word_reveal.visible and view.snapshot().word_reveal.entries.is_empty(),
 			action + " never restores stale collected-word overlays")
 	_reset(view)
-	var ids: Array[int] = _install(view, ["cat"], [], [2])
+	var ids: Array[int] = _install(view, ["merged:cat:9"], [], [2])
 	view._activate(ids[0])
 	_advance(view, 0.2)
 	var elapsed: float = float(view.snapshot().word_reveal.elapsed)

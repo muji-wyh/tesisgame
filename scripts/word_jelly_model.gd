@@ -37,7 +37,7 @@ const ARRIVAL_ORDER: Array[int] = [0, 3, 1, 4, 2, 5]
 const FUSION_SECONDS: float = 0.76
 const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
-const BATCH_BEAT_SECONDS: float = 0.35
+const BATCH_BEAT_SECONDS: float = 0.25
 const BATCH_POP_SECONDS: float = 0.06
 const COIN_DROP_CHANCE: float = CoinEconomy.JELLY_BONUS_CHANCE
 const INITIAL_SPAWN_INTERVAL: float = 20.0
@@ -49,10 +49,10 @@ const CHEST_UNLOCK_FRAGMENTS: int = RewardProgress.CHEST_UNLOCK_FRAGMENTS
 const CHEST_UPGRADE_FRAGMENTS: int = RewardProgress.CHEST_UPGRADE_FRAGMENTS
 const EPSILON: float = 0.000001
 const POWERUP_PRICES: Dictionary = CoinEconomy.POWERUP_BASE_PRICES
-const POWERUP_MERGE_BEAT_SECONDS: float = 0.4
-const POWERUP_DRAG_SECONDS: float = 0.16
-const POWERUP_FUSION_SECONDS: float = 0.2
-const POWERUP_SETTLE_SECONDS: float = 0.04
+const POWERUP_MERGE_BEAT_SECONDS: float = 0.3
+const POWERUP_DRAG_SECONDS: float = 0.12
+const POWERUP_FUSION_SECONDS: float = 0.15
+const POWERUP_SETTLE_SECONDS: float = 0.03
 const POWERUP_FRAGMENT_FLIGHT: float = 0.42
 const POWERUP_FRAGMENT_STAGGER: float = 0.18
 const POWERUP_FRAGMENT_RECOVERY: float = 0.35
@@ -590,7 +590,7 @@ func _advance_powerup() -> void:
 		_powerup_committing = false
 		if not _same_powerup(generation, receipt_id) or paused:
 			return
-	# A full automatic path fits one 400 ms beat: transfer, fusion, and landing.
+	# A full automatic path fits one 300 ms beat: transfer, fusion, and landing.
 	# The next step can safely use the settled result from the preceding path.
 	var launch_ready: bool = float(_powerup.clock) + EPSILON >= float(_powerup.next_launch_at)
 	var pair: Array[int] = _powerup_pair(true, launch_ready)
@@ -861,7 +861,7 @@ func _advance_collection_batch() -> void:
 	if not collection_batch_active() or phase != "playing" or paused:
 		return
 	# Let existing motion finish once, then keep the captured bodies in place
-	# so later gravity or growth cannot stretch the 350 ms collection beat.
+	# so later gravity or growth cannot stretch the 250 ms collection beat.
 	if _collection_batch_started == 0 and _collection_batch_settling_remaining() > EPSILON:
 		return
 	# A manual collection started before the button was pressed can finish,

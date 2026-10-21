@@ -3,6 +3,7 @@ extends Control
 
 const Style = preload("res://scripts/ui_style.gd")
 const WordArt = preload("res://scripts/word_art.gd")
+const LevelEffects = preload("res://scripts/word_jelly_reveal_fx.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const GLINT = preload("res://assets/chests/milestone/sparkle.png")
 
@@ -12,9 +13,12 @@ var duration: float = 1.95
 var variant_scale: float = 1.0
 var reduced_motion: bool = false
 var rest_position := Vector2.ZERO
+var merge_level: int = 1
+var _level_effects: LevelEffects
 var _word: Dictionary = {}
 var _batch: bool = false
 var _ui_scale: float = 1.0
+var _available := Vector2.ZERO
 var _accent: Color = Style.GOOD
 var _visual: Control
 var _surface: Panel
@@ -27,6 +31,8 @@ var _glints: Array[TextureRect] = []
 func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	focus_mode = Control.FOCUS_NONE
+	_level_effects = LevelEffects.new()
+	add_child(_level_effects)
 	_visual = Control.new()
 	_visual.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_visual)
@@ -62,8 +68,9 @@ func _texture(value: Texture2D) -> TextureRect:
 
 
 func configure(id: int, word: Dictionary, picture: Texture2D, accent: Color,
-		batch: bool, variation: float, seconds: float, steady: bool) -> void:
+		batch: bool, variation: float, seconds: float, steady: bool, level: int = 1) -> void:
 	entry_id = id
+	merge_level = clampi(level, 1, 9)
 	_word = word.duplicate(true)
 	_picture.texture = picture
 	WordArt.bind(picture, _picture)
@@ -78,13 +85,14 @@ func configure(id: int, word: Dictionary, picture: Texture2D, accent: Color,
 
 func fit_content(available: Vector2, ui_scale: float) -> void:
 	_ui_scale = ui_scale
+	_available = available
 	var unit: float = variant_scale / ui_scale
 	if _batch:
 		if available.y * ui_scale < 180.0:
 			unit *= 0.70
 		elif available.x * ui_scale < 520.0:
 			unit *= 0.80
-	var max_size: Vector2 = ((available - Vector2.ONE * 12.0 / ui_scale) / 1.22).max(Vector2.ONE)
+	var max_size: Vector2 = ((available - Vector2.ONE * effect_margin() * 2.0) / 1.22).max(Vector2.ONE)
 	var padding: float = 10.0 * unit
 	var gap: float = 8.0 * unit if _picture.texture != null else 0.0
 	var pixels: int = maxi(1, roundi((26.0 if _batch else 34.0) * unit))
@@ -107,9 +115,12 @@ func fit_content(available: Vector2, ui_scale: float) -> void:
 	_visual.size = size
 	_visual.pivot_offset = size * 0.5
 	_surface.size = size
-	var skin := Style.box(Style.PAPER.lightened(0.46), _accent.lightened(0.66),
-		maxi(1, roundi(size.y * 0.30)), maxi(1, roundi(1.2 / ui_scale)))
-	skin.shadow_color = Color(_accent.darkened(0.55), 0.16)
+	_level_effects.configure(size, ui_scale, merge_level, _accent, _batch, effect_margin())
+	var tier: Color = _level_effects.color_at()
+	var skin := Style.box(Style.PAPER.lightened(0.46).lerp(tier.lightened(0.84), 0.035 * merge_level),
+		_accent.lightened(0.66) if merge_level == 1 else tier.lightened(0.24),
+		maxi(1, roundi(size.y * 0.30)), maxi(1, roundi((1.2 + merge_level * 0.20) / ui_scale)))
+	skin.shadow_color = Color(tier.darkened(0.28), 0.16 + merge_level * 0.012)
 	skin.shadow_size = maxi(1, roundi(5.0 / ui_scale))
 	skin.shadow_offset = Vector2(0.0, 2.0 / ui_scale)
 	_surface.add_theme_stylebox_override("panel", skin)
@@ -135,8 +146,15 @@ func _measure(pixels: int) -> Vector2:
 		ceilf(Style.HEADING_FONT.get_height(pixels)))
 
 
+func effect_margin() -> float:
+	# Preserve the readable card in short landscape regions as well as portrait.
+	return minf(LevelEffects.margin_for(merge_level, _batch, _ui_scale),
+		minf(_available.x, _available.y) * 0.20)
+
+
 func sync() -> void:
 	position = rest_position
+	_level_effects.sync(elapsed, duration, reduced_motion)
 	var fade_start: float = duration - (0.22 if _batch else 0.31)
 	var fade: float = smoothstep(fade_start, duration, elapsed)
 	_visual.modulate.a = smoothstep(0.0, 0.055, elapsed) * (1.0 - fade)
@@ -162,13 +180,14 @@ func sync() -> void:
 		var age: float = elapsed - 0.07 - index * 0.075
 		var pulse: float = sin(clampf(age / 0.29, 0.0, 1.0) * PI)
 		_glints[index].visible = not reduced_motion and pulse > 0.001
-		_glints[index].modulate = Color(_accent.lightened(0.60), pulse * 0.95)
+		_glints[index].modulate = Color(_accent.lightened(0.60) if merge_level == 1 else _level_effects.color_at(index).lightened(0.35), pulse * 0.95)
 		_glints[index].scale = Vector2.ONE * lerpf(0.55, 1.18, pulse)
 		_glints[index].rotation = age * 0.40
 
 
 func snapshot() -> Dictionary:
 	return {"entry_id": entry_id, "word_id": str(_word.get("id", "")), "word": _word.duplicate(true),
+		"merge_level": merge_level, "effects": _level_effects.snapshot(),
 		"picture": WordArt.source_path(_picture.texture), "spelling": _spelling.text, "visible": is_visible_in_tree(),
 		"elapsed": elapsed, "duration": duration, "batch": _batch, "variant_scale": variant_scale,
 		"animated_scale": [_visual.scale.x, _visual.scale.y], "font_size": _spelling.get_theme_font_size("font_size"),

@@ -258,8 +258,8 @@ Merge retains fusion sound effects without pronouncing its words. An accepted
 word tap also presents its picture and spelling above the board and pronounces
 it once. Picture-only jellies and complete spellings awaiting their picture also
 pronounce their word on a tap. Partial roots stay silent. Collect gathers ready
-words at 350 ms intervals without pronunciation. Auto Merge starts each next
-merge on a 400 ms beat, including its drag, fusion, and settlement.
+words at 250 ms intervals without pronunciation. Auto Merge starts each next
+merge on a 300 ms beat, including its drag, fusion, and settlement.
 Each reveal has its own randomly varied position and size, fits its picture and
 spelling, and enters with elastic squash and stretch. Successive reveals coexist
 and fade independently instead of replacing one another. They do not intercept

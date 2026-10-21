@@ -94,9 +94,9 @@ new extraction, source audio claim, or CC0 attribution is applied to them.
 The source recording, processing and embedded-game limits remain documented in
 [answer feedback sounds](pair-feedback-audio.md).
 
-Auto merge selects an eligible source Jelly on each 400 ms beat and
+Auto merge selects an eligible source Jelly on each 300 ms beat and
 finds a matching target, starting immediately after purchase. Each automatic drag
-lasts 160 ms, followed by a 200 ms fusion and 40 ms settlement. Manual gestures
+lasts 120 ms, followed by a 150 ms fusion and 30 ms settlement. Manual gestures
 retain their existing timing. Every moving source and its target stay reserved
 until contact; later beats can use other available pairs.
 If only moving or settling pairs remain, the operation waits for an eligible

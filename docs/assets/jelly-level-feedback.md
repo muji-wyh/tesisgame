@@ -27,6 +27,41 @@ Reduced motion shows a brief, static group of acquired glints and a local glow;
 the level cue and reward remain unchanged. The owning view supplies the clock,
 freezes it during pause and resets it when leaving or restarting the round.
 
+## Collected-word popup
+
+The reading popup now receives the accepted Jelly's merge level. The board's
+collection release and the popup are two views of the same collection event;
+neither owns rewards or advances gameplay. The picture and spelling retain their
+opaque, readable surface while acquired light and star textures celebrate around
+its perimeter. Color, layered releases, movement pattern and star density grow
+across the nine levels, including the required firework identity at Lv4.
+
+| Level | Popup signature |
+| --- | --- |
+| 1 | Pearl greeting: mint glints and a gentle local light |
+| 2 | Crystal ribbon: cyan stars around the frame |
+| 3 | Sapphire spiral: blue stars turn around the reading card |
+| 4 | Golden fireworks: staggered gold blooms with bright spark cores |
+| 5 | Rose cascade: three pink releases and falling tails |
+| 6 | Comet coronation: a rising crown of cyan and green sparks |
+| 7 | Aurora embrace: contrasting colors travel in opposite directions |
+| 8 | Starlight festival: five constellation releases with longer star trails |
+| 9 | Prismatic finale: six multicolor blooms, bright cores and dense trailing stars |
+
+The popup uses the existing reading lifetime: 1.95 seconds for individual
+collections, 0.86 seconds for batches, shortened to 0.62 seconds on narrow
+screens and 0.48 seconds in short regions. Batch effects reach their peak sooner
+and reduce their density to preserve the 250 ms automatic collection rhythm.
+Placement reserves the animated card and its level-specific effect halo while
+respecting the existing control exclusions. Reduced motion keeps a static,
+colored star setting and light around the same picture and spelling.
+
+Popup effects share the owning card's elapsed time, so pause, late-frame catchup,
+resize and exit follow the established reveal lifecycle. The effect has no hit
+target or independent timers. This addition reuses the existing visual textures
+listed below and introduces no additional asset or audio acquisition. Existing
+collection sounds and their timing remain unchanged.
+
 ## Acquired material
 
 The three existing production particle textures were inspected in a local source
@@ -51,7 +86,8 @@ No oscillator, synthetic placeholder tone, voice or soundtrack extraction is
 introduced. Audio imports must preserve pitch, disable normalization/looping and
 use the existing mute, speech ducking and pause/exit cleanup.
 
-The outputs reserve headroom for twelve pickups at the real 120 ms batch spacing.
+The outputs reserve headroom even for twelve pickups spaced 120 ms apart,
+faster than the current 250 ms automatic collection rhythm.
 Every level starts promptly, has zeroed boundaries, and is mono 44,100 Hz PCM16.
 The existing Lv1 pop retains its own approved peak; higher cues have a maximum
 solo peak of -8.5 dBFS and a repeated-batch ceiling below 0.78 at runtime gain 0.90.
@@ -100,3 +136,56 @@ lifecycle suite passed 87 checks and the level audio suite passed 104 checks,
 including an explicit PCM-import check that caught and corrected Godot's default
 WAV compression. These still studies do not establish normal-speed feel or
 subjective acoustic quality.
+
+### Popup reproduction
+
+The popup harness uses the real `WordRevealCard`, `WordReveal` and `WordJelly`
+controls with production cat/apple artwork and the game's acquired sky/garden
+backdrop. It writes only to the ignored `build/jelly-reveal-feedback/` directory.
+The `--baseline` option records the card from the checked-out source, so it must
+be run before edits or against an older revision to capture the old appearance.
+The regular run preserves those files and writes matching `after-*` captures.
+
+```powershell
+node tools/run-godot.cjs --path . --rendering-method gl_compatibility --rendering-driver opengl3_angle --audio-driver Dummy --disable-vsync --max-fps 30 --resolution 1366x768 --script res://tools/capture-word-jelly-reveals.gd
+ffmpeg -y -framerate 30 -i build/jelly-reveal-feedback/animation/frame-%03d.png -c:v libx264 -pix_fmt yuv420p build/jelly-reveal-feedback/popup-levels-normal-speed.mp4
+ffmpeg -y -framerate 30 -i build/jelly-reveal-feedback/batch-animation-250ms/frame-%03d.png -c:v libx264 -pix_fmt yuv420p build/jelly-reveal-feedback/popup-batch-250ms.mp4
+```
+
+The output includes one nine-level sheet, eight timeline samples each for Lv4
+and Lv9, matching desktop/phone comparisons, and full fixture boards at
+1366 x 768, 390 x 844 and 844 x 390. Each board is captured with normal and
+reduced motion, both individually and at the current collection rhythm from
+`WordJellyModel.BATCH_BEAT_SECONDS` (250 ms).
+Deterministic 30 fps frame sequences compare Lv1/Lv4/Lv9 and show all nine
+levels arriving 250 ms apart on the portrait fixture. Batch output filenames
+include the interval so earlier cadence studies remain available. Add
+`-- --batch-only` to render just portrait and short landscape batch stills in
+normal and reduced motion, with a separate interval-labeled report.
+These are silent native
+render studies with explicit board state, not recordings of user input or the
+browser/audio mix. Review geometry and effect state in `render-report.json`.
+
+The original popup run at the former 350 ms cadence completed 203 captures
+without renderer errors: 31 stills and
+172 animation frames. The original desktop/portrait card, nine-level sheet,
+Lv4/Lv9 timeline phases, portrait and short landscape fixtures, batch frames and
+reduced-motion stills were visually inspected. The final Lv9 popup has six
+separated radial blooms, colored side lighting and a second rim-star wave;
+the picture and word remain readable. Short landscape placement keeps the
+effect clear of the Finish button, and reduced motion retains a static star
+setting. Encoded silent previews were checked at 30 fps: 64 frames / 2.133 seconds
+for the level comparison and 108 frames / 3.6 seconds for the original portrait
+batch. Those earlier batch frames and the `popup-batch-350ms.mp4` preview remain
+historical evidence of the 350 ms cadence.
+These checks establish rendered appearance and frame timing, not physical-device
+audio mixing or an end-to-end browser interaction recording.
+
+After changing the cadence to 250 ms, the focused batch study produced four
+fresh native captures without renderer errors: 390 x 844 and 844 x 390, each
+with normal and reduced motion. Both overlapping word cards remain readable in
+portrait, and the fading previous card stays separate from the incoming card in
+short landscape. Effects remain clear of Finish. These current-cadence stills
+and their elapsed-time snapshots are recorded in
+`batch-250ms-render-report.json`; the historical 350 ms video was not reused as
+evidence for the faster cadence.

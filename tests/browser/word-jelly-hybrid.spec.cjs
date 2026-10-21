@@ -89,7 +89,22 @@ test('whole-word roots match pictures and merged words remain compact and collec
   expect(live.label_font_pixels).toBeGreaterThanOrEqual(13);
   expect(phone.tiles.find(tile => tile.jelly_kind === 'picture').label_visible).toBe(false);
   await page.screenshot({ path: info.outputPath('hybrid-phone.png') });
-  await tap(page, live.rect[0] + live.rect[2] / 2, live.rect[1] + live.rect[3] / 2);
+  const holdPoint = point(live, await metrics(page));
+  await page.mouse.move(holdPoint.x, holdPoint.y);
+  await page.mouse.down();
+  try {
+    await expect.poll(async () => (await state(page)).drag.source).toBe(merged.id);
+    await page.waitForTimeout(650);
+  } finally {
+    await page.mouse.up();
+  }
+  await expect.poll(async () => (await state(page)).drag.source).toBe(-1);
+  const afterHold = await state(page), retained = afterHold.tiles.find(tile => tile.id === merged.id);
+  expect(afterHold.cleared_pairs).toBe(phone.cleared_pairs);
+  expect(afterHold.tiles.map(tile => tile.id)).toEqual(expect.arrayContaining(phone.tiles.map(tile => tile.id)));
+  expect(retained?.jelly_kind).toBe('merged');
+  expect(afterHold.fusions.some(fusion => fusion.operation === 'collect')).toBe(false);
+  await tap(page, retained.rect[0] + retained.rect[2] / 2, retained.rect[1] + retained.rect[3] / 2);
   await expect.poll(async () => (await state(page)).cleared_pairs).toBe(before.cleared_pairs + 1);
   await expect.poll(async () => (await state(page)).tiles.some(tile => tile.id === merged.id)).toBe(false);
   expect(errors).toEqual([]);

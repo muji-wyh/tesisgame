@@ -1606,7 +1606,17 @@ test('six columns build a pictured word and a deliberate tap rolls its rare coin
 test('collect button grows with completed words and collects a rhythmic batch once', async ({ page }, info) => {
   test.setTimeout(240000);
   const errors = await startWordJelly(page);
-  await availableWord(page, COMPOSITION_AGE, 2, { markedOnly: true });
+  const availableStageWord = async (markedOnly = false) => {
+    await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
+    const state = await jelly(page);
+    const candidates = Array.from({ length: 10 }, (_, index) => suppliedWords(state, index + 3)).flat()
+      .filter(candidate => !markedOnly || [...candidate.roots, candidate.picture].some(tile => tile?.fragments > 0))
+      .sort((left, right) => Number(!(left.roots.length === 1 && left.picture)) -
+        Number(!(right.roots.length === 1 && right.picture)));
+    expect(candidates.length, 'The live mastery stage supplies a complete word packet across age groups').toBeGreaterThan(0);
+    return candidates[0];
+  };
+  await availableStageWord(true);
   const initial = await jelly(page), bounds = await metrics(page);
   expect(initial.collect_button.visible).toBe(true);
   expect(initial.collect_button.enabled).toBe(false);
@@ -1616,7 +1626,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
   const collectedIds = [];
   const stages = [initial.collect_button];
   for (let count = 1; count <= 3; count++) {
-    const candidate = await availableWord(page, COMPOSITION_AGE, 2, { markedOnly: count === 1 });
+    const candidate = await availableStageWord(count === 1);
     const merged = await completeSuppliedWord(page, candidate);
     collectedIds.push(merged.id);
     await expect.poll(async () => (await jelly(page)).collect_button.count).toBe(count);
@@ -1637,9 +1647,10 @@ test('collect button grows with completed words and collects a rhythmic batch on
   const retained = before.tiles.filter(tile => !collectedIds.includes(tile.id)).map(tile => tile.id);
   const expectedFragments = selected.reduce((sum, tile) => sum + tile.fragments, 0);
   expect(expectedFragments, 'The ordinary-input batch includes a real carried treasure fragment').toBeGreaterThan(0);
+  const readingTiming = { interval: 0.25, entrance: 0.055, fade: 0.22 };
   await page.exposeFunction('saveWordJellyBatchFrame', (index, encoded) =>
     fs.writeFileSync(info.outputPath(`word-jelly-batch-${index}.png`), Buffer.from(encoded, 'base64')));
-  await page.evaluate(() => {
+  await page.evaluate(readingTiming => {
     const status = document.getElementById('game-status');
     window.wordJellyBatchTimeline = [];
     window.wordJellyBatchCaptured = [];
@@ -1653,9 +1664,14 @@ test('collect button grows with completed words and collects a rhythmic batch on
       const reveal = state.word_reveal;
       // Status publications can miss a short pickup during slower frames. Capture
       // playback and the overlapping reading burst, without requiring every transient.
-      const index = batch.active && batch.started && state.fusion_effects?.length ? 'active' :
-        !batch.active && batch.completed === batch.total && reveal?.entries?.length === batch.total &&
-        reveal.entries.every(entry => entry.content_alpha > 0.9) ? 'reveal' : '';
+      const entries = reveal?.entries || [];
+      const opaqueSeconds = Math.max(0, Math.min(...entries.map(entry => entry.duration)) -
+        readingTiming.entrance - readingTiming.fade);
+      const requiredOpaque = Math.min(batch.total, 1 + Math.floor(opaqueSeconds / readingTiming.interval));
+      const readingBurst = batch.active && batch.started === batch.total &&
+        entries.filter(entry => entry.content_alpha > 0.9).length >= requiredOpaque;
+      const index = readingBurst ? 'reveal' :
+        batch.active && batch.started && state.fusion_effects?.length ? 'active' : '';
       if (!index || pending.has(index)) return;
       pending.add(index);
       // Let the status update reach the rendered canvas before capturing it.
@@ -1672,7 +1688,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
       }));
     });
     window.wordJellyBatchObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
-  });
+  }, readingTiming);
   // Consecutive trusted presses exercise the disabled state during playback.
   const point = center(before.collect_button.rect, bounds);
   await page.touchscreen.tap(point.x, point.y);
@@ -1735,14 +1751,23 @@ test('collect button grows with completed words and collects a rhythmic batch on
   }
   expect(final.collection_batch.started).toBe(3);
   expect(final.collection_batch.completed).toBe(3);
-  expect(final.collection_batch.elapsed, 'Three 120 ms collections finish in 360 ms of game time').toBeCloseTo(0.36, 6);
-  const readable = timeline.find(frame => !frame.active && frame.revealed?.entries?.length === 3 &&
-    frame.revealed.entries.every(entry => entry.content_alpha > 0.9));
+  expect(final.collection_batch.elapsed, 'Three 250 ms collections finish in 750 ms of game time').toBeCloseTo(0.75, 6);
+  expect(entryStates.size, 'Each of the three collected words owns an independent reading card').toBe(3);
+  const opaqueSeconds = Math.max(0, Math.min(...[...entryStates.values()].map(entry => entry.duration)) -
+    readingTiming.entrance - readingTiming.fade);
+  const requiredOpaque = Math.min(3, 1 + Math.floor(opaqueSeconds / readingTiming.interval));
+  const readable = timeline.find(frame => frame.active && frame.started === 3 &&
+    frame.revealed.entries.filter(entry => entry.content_alpha > 0.9).length >= requiredOpaque);
   const lastWord = selectedById.get(final.collection_batch.ids.at(-1)).word;
-  expect(readable, 'All three collected words coexist in an opaque reading burst after the fast batch').toBeTruthy();
+  expect(readable, `The batch sustains ${requiredOpaque} opaque cards within the layout's reading lifetime`).toBeTruthy();
   expect(readable.revealed.word_id).toBe(lastWord.id);
   expect(readable.revealed.spelling).toBe(lastWord.text);
-  const burst = readable.revealed.entries;
+  const entries = timeline.flatMap(frame => frame.revealed.entries);
+  const burst = [...entryStates.keys()].map(id => {
+    const entry = entries.find(candidate => candidate.entry_id === id && candidate.content_alpha > 0.9);
+    expect(entry, 'Each collected word has an opaque reading beat, even if older cards have begun fading').toBeTruthy();
+    return entry;
+  });
   expect(new Set(burst.map(entry => entry.entry_id)).size, 'New words add independent cards').toBe(3);
   expect(burst.map(entry => entry.word_id).sort()).toEqual(selected.map(tile => tile.word.id).sort());
   expect(new Set(burst.map(entry => entry.resting_rect.slice(0, 2).join(','))).size,

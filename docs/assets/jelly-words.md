@@ -31,6 +31,9 @@ carried chest fragments use the opposite corner. All stages retain one ordinary
 cell. Joining, picture matching, and upgrading do not collect rewards or learning
 credit. Collection owns the existing reward transaction and eligible manual
 learning evidence; an upgrade does not multiply mastery or coin payouts.
+Manual collection requires a click or tap released in under 500 ms on the same
+merged jelly without dragging. Holding for 500 ms or longer never collects on
+release; the held jelly can still be dragged into another matching merged jelly.
 
 Each level has distinct collection motion and audio. Lv4 is a radial firework
 bloom; higher levels add layered blooms, comet trails, or a bouquet finale.
@@ -191,7 +194,7 @@ The cloud environment and recessed rim are documented in [Jelly Words well](jell
 
 The Collect button snapshots all completed word jellies currently on the board.
 It collects them from the upper rows downward, alternating direction across
-rows, with one pickup every 350 ms. Each batch collection finishes within that
+rows, with one pickup every 250 ms. Each batch collection finishes within that
 same beat, keeping reward transactions sequential, with the existing pop sound
 at 60 ms to match the squash and release. Each jelly squashes, lifts
 with alternating sideways drift, and clears through the ordinary wallet and

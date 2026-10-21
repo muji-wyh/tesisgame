@@ -72,7 +72,9 @@ var _room_notice: Label
 var _room_notice_remaining: float = 0.0
 var _read_hold_id: int = -1
 var _read_hold_elapsed: float = 0.0
+var _tile_press_started_ms: int = -1
 const READ_HOLD_SECONDS: float = 0.45
+const COLLECTION_CLICK_MAX_MS: int = 500
 
 func _init() -> void:
 	super()
@@ -303,6 +305,7 @@ func _finished(result: Dictionary) -> void:
 func cancel_input() -> void:
 	_read_hold_id = -1
 	_read_hold_elapsed = 0.0
+	_tile_press_started_ms = -1
 	_keyboard_source = -1
 	# Resolve the lifted body before the base view paints its resting position.
 	game.set_held_tile()
@@ -404,6 +407,7 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	_rejection.clear()
 	_keyboard_source = -1
 	_pointer = pointer
+	_tile_press_started_ms = Time.get_ticks_msec()
 	_gesture_serial += 1
 	_source = id
 	game.set_held_tile(id)
@@ -441,6 +445,10 @@ func _move(global_point: Vector2) -> void:
 func _release(global_point: Vector2) -> void:
 	_read_hold_id = -1
 	_read_hold_elapsed = 0.0
+	# Use real elapsed time so a stalled frame cannot turn a hold into collection.
+	var collection_click: bool = _tile_press_started_ms >= 0 \
+		and Time.get_ticks_msec() - _tile_press_started_ms < COLLECTION_CLICK_MAX_MS
+	_tile_press_started_ms = -1
 	if _preview_first_id >= 0:
 		# A partial timed dispatch can leave the first slot unchanged while the
 		# pressed packet has already departed through its other open columns.
@@ -451,7 +459,8 @@ func _release(global_point: Vector2) -> void:
 	var was_dragging: bool = _dragging
 	var point: Vector2 = get_global_transform().affine_inverse() * global_point
 	var valid_tap: bool = _can_play() and source >= 0 and not was_dragging \
-		and point.distance_to(_press_point) * Style.ui_scale(self) <= 7.0 and _tile_at(point) == source
+		and point.distance_to(_press_point) * Style.ui_scale(self) <= 7.0 and _tile_at(point) == source \
+		and (not game.is_valid_word(_cell(source)) or collection_click)
 	super._release(global_point)
 	if valid_tap:
 		_tap_tile(source)
@@ -590,16 +599,17 @@ func _collection_started(fusion: Dictionary) -> void:
 	var origin: Vector2 = _tiles[id].get_global_rect().get_center() if _tiles.has(id) else get_global_transform() * _tile_rect(fusion.a).get_center()
 	_collection_origins[str(fusion.attempt_id)] = origin
 	var word: Dictionary = fusion.word
+	var merge_level: int = clampi(int(fusion.get("merge_level", fusion.a.get("merge_level", 1))), 1, 9)
 	_word_reveal.set_reduced_motion(reduced_motion)
 	var batch: bool = bool(fusion.get("batch", false))
 	var initial_age: float = 0.0
 	if batch and _reveal_frame_end >= 0.0 and _reveal_frame_generation == _generation \
 		and int(fusion.get("batch_id", -1)) == _reveal_frame_batch:
 		initial_age = maxf(0.0, _reveal_frame_end - float(game.collection_batch_snapshot().elapsed))
-	_word_reveal.present(word, _picture(word), _theme.get("accent", Style.GOOD), batch, initial_age)
+	_word_reveal.present(word, _picture(word), _theme.get("accent", Style.GOOD), batch, initial_age, merge_level)
 	_collection_effects.set_reduced_motion(reduced_motion)
 	_collection_effects.present(get_global_transform().affine_inverse() * origin,
-		int(fusion.get("merge_level", fusion.a.get("merge_level", 1))),
+		merge_level,
 		_theme.get("accent", Style.GOOD), batch, initial_age, float(fusion.pop_at))
 	# Batch pickups keep their pop rhythm without additional pronunciation.
 	if not bool(fusion.get("batch", false)):
@@ -1519,9 +1529,10 @@ func _layout() -> void:
 	if _word_reveal != null:
 		# Short landscape screens need two compact rows for distinct collection beats.
 		var reveal_fraction: float = 0.60 if size.x > size.y * 1.4 and size.y * s < 350.0 else 0.40
+		var finish_rect: Rect2 = get_global_transform().affine_inverse() * finish_button.get_global_rect()
 		_word_reveal.configure_layout(Rect2(Vector2.ONE * edge,
 			Vector2(size.x - edge * 2.0, minf(280.0 / s, size.y * reveal_fraction) - edge)), s,
-			[chest_meter_rect().grow(10.0 / s), collect_button.get_rect().grow(8.0 / s)])
+			[chest_meter_rect().grow(10.0 / s), collect_button.get_rect().grow(8.0 / s), finish_rect.grow(8.0 / s)])
 	_sync_positions()
 	_refresh_fusion()
 	_refresh_hud()
