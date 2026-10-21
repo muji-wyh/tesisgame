@@ -414,8 +414,8 @@ func play_jelly_cue(cue_name: String) -> void:
 
 
 func _play_jelly_level(cue_name: String) -> void:
-	# Eight independent tails cover the longest recording at 120 ms pickup
-	# intervals. Board contact and warning cues cannot steal these accents.
+	# Eight independent tails cover overlapping level collection recordings.
+	# Board contact and warning cues cannot steal these accents.
 	if _jelly_level_players.is_empty():
 		for index in range(JELLY_LEVEL_CHANNELS):
 			var channel: AudioStreamPlayer = _player(1.0)

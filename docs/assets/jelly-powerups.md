@@ -94,10 +94,11 @@ new extraction, source audio claim, or CC0 attribution is applied to them.
 The source recording, processing and embedded-game limits remain documented in
 [answer feedback sounds](pair-feedback-audio.md).
 
-Auto merge randomly selects an eligible source Jelly on each 200 ms beat and
-finds a matching target, starting immediately after purchase. Each drag lasts
-300 ms, so consecutive flights overlap briefly. Every moving source and its
-target stay reserved until contact; later beats can use other available pairs.
+Auto merge selects an eligible source Jelly on each 400 ms beat and
+finds a matching target, starting immediately after purchase. Each automatic drag
+lasts 160 ms, followed by a 200 ms fusion and 40 ms settlement. Manual gestures
+retain their existing timing. Every moving source and its target stay reserved
+until contact; later beats can use other available pairs.
 If only moving or settling pairs remain, the operation waits for an eligible
 pair without compressing missed beats. The existing arcing motion, gentle
 stretch, target glow, and sparkle trail follow each flight's own clock. Contact

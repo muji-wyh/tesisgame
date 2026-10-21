@@ -32,6 +32,7 @@ const RewardConfetti = preload("res://scripts/reward_confetti.gd")
 const VoicePop = preload("res://scripts/voice_pop.gd")
 const JellyMatch = preload("res://scripts/jelly_match.gd")
 const WordJelly = preload("res://scripts/word_jelly.gd")
+const WordJellyStages = preload("res://scripts/word_jelly_stages.gd")
 const FinishConfirmation = preload("res://scripts/finish_confirmation.gd")
 const SettlementDialog = preload("res://scripts/settlement_dialog.gd")
 const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
@@ -113,6 +114,8 @@ var _vocabulary_initialized: bool = false
 var _vocabulary_booting: bool = true
 var _vocabulary_catalog: Dictionary = {}
 var _pending_vocabulary_round: Array = []
+var _pending_vocabulary_age: int = 0
+var _pending_vocabulary_stage: bool = false
 var _vocabulary_prompt: Panel
 var _vocabulary_label: Label
 var _vocabulary_progress: ProgressBar
@@ -204,6 +207,9 @@ var _pop_reward_theme: String = ""
 var _pop_settling: bool = false
 var _jelly: JellyMatch
 var _word_jelly: WordJelly
+var _word_jelly_stages: WordJellyStages
+var _jelly_stage_professional_skills: Dictionary = {}
+var _jelly_stage_check_left: float = 0.0
 var _finish_confirmation: FinishConfirmation
 var _finish_confirmation_mode: String = ""
 var _finish_confirmation_round: String = ""
@@ -457,10 +463,12 @@ func _build_vocabulary_prompt() -> void:
 	_vocabulary_prompt.hide()
 
 
-func _wait_for_vocabulary(arguments: Array) -> void:
+func _wait_for_vocabulary(arguments: Array, requested_age: int = 0) -> void:
 	if not _stop_pop_listening():
 		return
 	_pending_vocabulary_round = arguments
+	_pending_vocabulary_stage = arguments.is_empty()
+	_pending_vocabulary_age = requested_age if requested_age > 0 else growth.learning_age()
 	if not _vocabulary_prompt.visible:
 		_vocabulary_previous_pause = get_tree().paused
 		_stop_controller_actions()
@@ -470,13 +478,14 @@ func _wait_for_vocabulary(arguments: Array) -> void:
 		_sync_reward_confetti()
 		get_tree().paused = true
 	_update_vocabulary_prompt()
-	if str(vocabulary_loader.status(growth.learning_age()).state) == "idle":
-		vocabulary_loader.request_age(growth.learning_age())
+	if str(vocabulary_loader.status(_pending_vocabulary_age).state) == "idle":
+		vocabulary_loader.request_age(_pending_vocabulary_age)
 
 
 func _update_vocabulary_prompt() -> void:
-	var state: Dictionary = vocabulary_loader.status(growth.learning_age())
-	_vocabulary_label.text = "Words could not be loaded.\nPlease try again." if state.state == "failed" else "Loading Age %s words…" % ("12+" if growth.learning_age() == 12 else str(growth.learning_age()))
+	var age: int = _pending_vocabulary_age if _pending_vocabulary_age > 0 else growth.learning_age()
+	var state: Dictionary = vocabulary_loader.status(age)
+	_vocabulary_label.text = "Words could not be loaded.\nPlease try again." if state.state == "failed" else "Loading Age %s words…" % ("12+" if age == 12 else str(age))
 	_vocabulary_progress.value = float(state.progress) * 100.0
 	_vocabulary_retry.visible = state.state == "failed"
 	_vocabulary_back.visible = not _vocabulary_booting
@@ -488,8 +497,8 @@ func _update_vocabulary_prompt() -> void:
 
 
 func _retry_vocabulary() -> void:
-	if not _pending_vocabulary_round.is_empty():
-		vocabulary_loader.request_age(growth.learning_age())
+	if not _pending_vocabulary_round.is_empty() or _pending_vocabulary_stage:
+		vocabulary_loader.request_age(_pending_vocabulary_age)
 
 
 func _close_vocabulary_prompt() -> void:
@@ -505,7 +514,12 @@ func _cancel_vocabulary_round() -> void:
 	if _vocabulary_booting:
 		return
 	_pending_vocabulary_round.clear()
+	var stage_wait: bool = _pending_vocabulary_stage
+	_pending_vocabulary_stage = false
+	_pending_vocabulary_age = 0
 	_close_vocabulary_prompt()
+	if stage_wait:
+		_show_mode_menu()
 	_refresh()
 	_default_focus().grab_focus()
 	_restore_mode_music()
@@ -515,17 +529,26 @@ func _cancel_vocabulary_round() -> void:
 func _on_vocabulary_ready(age: int) -> void:
 	if collection_page.visible and age == _catalog_age:
 		_show_age_catalog()
-	if age == growth.learning_age() and not _pending_vocabulary_round.is_empty():
+	if age == _pending_vocabulary_age and (not _pending_vocabulary_round.is_empty() or _pending_vocabulary_stage):
 		_resume_vocabulary_round.call_deferred()
 	_prefetch_vocabulary()
 	_publish_growth_view()
 
 
 func _resume_vocabulary_round() -> void:
-	if _pending_vocabulary_round.is_empty() or _page_hidden or not vocabulary_loader.is_ready(growth.learning_age()):
+	if (_pending_vocabulary_round.is_empty() and not _pending_vocabulary_stage) or _page_hidden or not vocabulary_loader.is_ready(_pending_vocabulary_age):
+		return
+	if _pending_vocabulary_stage:
+		_pending_vocabulary_stage = false
+		_pending_vocabulary_age = 0
+		_close_vocabulary_prompt()
+		_sync_jelly()
+		_advance_word_jelly_stages(0.0)
+		_restore_mode_music()
 		return
 	var arguments: Array = _pending_vocabulary_round.duplicate()
 	_pending_vocabulary_round.clear()
+	_pending_vocabulary_age = 0
 	_close_vocabulary_prompt()
 	if not new_round.callv(arguments):
 		return
@@ -547,7 +570,7 @@ func _on_vocabulary_failed(age: int, message: String) -> void:
 
 
 func _on_vocabulary_progress(age: int, _progress: float) -> void:
-	if _vocabulary_prompt.visible and age == growth.learning_age():
+	if _vocabulary_prompt.visible and age == _pending_vocabulary_age:
 		_update_vocabulary_prompt()
 	if collection_page.visible and age == _catalog_age:
 		_show_age_catalog()
@@ -574,8 +597,8 @@ func _vocabulary_snapshot() -> Dictionary:
 	for value in range(3, 13):
 		states[str(value)] = vocabulary_loader.status(value)
 	return {"age": age, "status": state.state, "progress": state.progress,
-		"ready": vocabulary_loader.is_ready(age), "pending_age": age if not _pending_vocabulary_round.is_empty() else 0,
-		"pending_action": "round" if not _pending_vocabulary_round.is_empty() else "",
+		"ready": vocabulary_loader.is_ready(age), "pending_age": _pending_vocabulary_age,
+		"pending_action": "stage" if _pending_vocabulary_stage else "round" if not _pending_vocabulary_round.is_empty() else "",
 		"states": states}
 
 
@@ -1110,7 +1133,17 @@ func _can_continue_round() -> bool:
 
 
 func _home_can_continue() -> bool:
-	return _can_continue_round() and LearningContext.same_round(_round_context, _desired_learning_context(_mode_id))
+	return _can_continue_round() and _matches_current_learning_context(_mode_id)
+
+
+func _matches_current_learning_context(mode: String) -> bool:
+	var desired: Dictionary = _desired_learning_context(mode)
+	if mode == "word_jelly" and _word_jelly_stages != null and _round_context.get("track") == "growth" \
+		and desired.get("track") == "growth":
+		# A staged game already spans ages. Pip growing must not reset its board
+		# when the player returns from Home; receipts keep the frozen round age.
+		desired["module_id"] = _round_context.module_id
+	return LearningContext.same_round(_round_context, desired)
 
 
 func _home_mode_available() -> bool:
@@ -1800,7 +1833,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		return false
 	var phrase_dependencies: Array = _vocabulary_catalog.get("ages", {}).get(str(growth.learning_age()), {}).get("word_ids", [])
 	var content: Dictionary = prepared_content if is_professional else LearningContent.resolve_growth(next_context,
-		_learning_words(requested_mode == "phrase"), phrase_dependencies)
+		data.words if requested_mode == "word_jelly" else _learning_words(requested_mode == "phrase"), phrase_dependencies, requested_mode == "word_jelly")
 	if not content.ok:
 		_show_error(content.error)
 		return false
@@ -1821,6 +1854,20 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 		return false
 	if not _settle_pop_reward():
 		return false
+	var next_jelly_stages: WordJellyStages
+	if requested_mode == "word_jelly":
+		if seed_value < 0:
+			seed_value = int(randi())
+		_jelly_stage_professional_skills = professional.session.snapshot().get("progress", {}).get("skills", {}) if is_professional else {}
+		next_jelly_stages = WordJellyStages.new()
+		next_jelly_stages.configure(content.words.filter(_jelly_stage_assessable), _jelly_word_mastered, seed_value)
+		if next_jelly_stages.words.is_empty():
+			_announce_status("All available Jelly Words are mastered. Choose another vocabulary in Word Library.")
+			return false
+		var missing_age: int = _jelly_stage_missing_age(next_jelly_stages.words)
+		if missing_age > 0:
+			_wait_for_vocabulary([seed_value, repeat_lesson, adventure_id, next_mode, required_word_id, resume_saved_treasure], missing_age)
+			return false
 	if is_professional:
 		var state: Dictionary = professional.session.snapshot()
 		if state.source_id != source_id or not state.ready or state.blocked:
@@ -1862,6 +1909,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_controller_holding_pop_chest = false
 	_jelly.stop()
 	_word_jelly.stop()
+	_word_jelly_stages = null
 	_word_jelly_credits.clear()
 	_professional_library.clear()
 	_learning_backdrop.clear()
@@ -1968,10 +2016,16 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 			_pop_rewards_shown = true
 	if _is_jelly_mode():
 		_active_jelly().game.practice_weight_for = _practice_weight
-		if not _active_jelly().configure(content.words, growth.learning_age(), Data.theme(model.theme_id), data.chests, reduced_motion, seed_value):
+		_word_jelly.game.allow_cross_age = true
+		var jelly_words: Array = next_jelly_stages.words if _mode_id == "word_jelly" else content.words
+		if not _active_jelly().configure(jelly_words, growth.learning_age(), Data.theme(model.theme_id), data.chests, reduced_motion, seed_value):
 			_rebuilding = false
 			_show_error(_active_jelly().game.error)
 			return false
+		if _mode_id == "word_jelly":
+			_word_jelly_stages = next_jelly_stages
+			_jelly_stage_check_left = 0.0
+			_word_jelly.set_stage_progress(_word_jelly_stages.snapshot())
 		if resume_saved_treasure and _jelly_rewards.has_pending():
 			_jelly_rewards.configure_saved(data.chests, reduced_motion)
 			_jelly_rewards_shown = true
@@ -1988,7 +2042,7 @@ func choose_mode(id: String) -> void:
 	if not _mode_menu_open() or _page_hidden or not MODES.has(id) or collection_page.visible or model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
 		return
 	_has_entered_game = true
-	if id == _mode_id and not _current_round_ended() and LearningContext.same_round(_round_context, _desired_learning_context(id)):
+	if id == _mode_id and not _current_round_ended() and _matches_current_learning_context(id):
 		if _professional_input_blocked():
 			_resume_professional_source = _round_id
 			professional.cancel()
@@ -2047,6 +2101,73 @@ func _is_jelly_mode() -> bool:
 	return _mode_id in ["jelly", "word_jelly"]
 
 
+func _jelly_stage_assessable(word: Dictionary) -> bool:
+	# An image-free atomic word has no independently solved spelling task.
+	return not str(word.get("image", "")).is_empty() or word.get("morphology", {}).get("kind", "atomic") != "atomic"
+
+
+func _jelly_word_mastered(word: Dictionary) -> bool:
+	if word.get("track") == "professional":
+		for evidence: Dictionary in _jelly_stage_professional_skills.get(str(word.id), {}).values():
+			if evidence.get("earned", false):
+				return true
+		return false
+	return growth.is_mastered(str(word.id))
+
+
+func _jelly_stage_missing_age(words: Array) -> int:
+	for word: Dictionary in words:
+		if word.get("track") != "professional" and not vocabulary_loader.is_ready(Data.word_age(word)):
+			return Data.word_age(word)
+	return 0
+
+
+func _refresh_jelly_stage_targets() -> void:
+	if _word_jelly_stages == null or _mode_id != "word_jelly" or _rebuilding:
+		return
+	if _round_context.get("track") == "professional":
+		_jelly_stage_professional_skills = professional.session.snapshot().get("progress", {}).get("skills", {})
+	var retired: Array[String] = _word_jelly_stages.refresh()
+	if not retired.is_empty():
+		_word_jelly.game.retire_mastered_words(retired)
+		_word_jelly.set_stage_progress(_word_jelly_stages.snapshot())
+
+
+func _advance_word_jelly_stages(delta: float) -> void:
+	if _word_jelly_stages == null or _mode_id != "word_jelly" or _rebuilding \
+		or not _jelly_interaction_allowed() or _vocabulary_prompt.visible or _word_jelly.game.phase != "playing" or _word_jelly.game.paused:
+		return
+	_jelly_stage_check_left -= delta
+	if _jelly_stage_check_left <= 0.0:
+		_jelly_stage_check_left = 0.1
+		_refresh_jelly_stage_targets()
+	if not _word_jelly_stages.remaining.is_empty() or not _word_jelly.game.stage_transition_ready():
+		return
+	# Wait for all receipts and active operations before changing the supply.
+	if _growth_save_failed and _round_context.get("track") != "professional":
+		return
+	var next_words: Array[Dictionary] = _word_jelly_stages.next_words()
+	if next_words.is_empty():
+		_word_jelly_stages.begin_next()
+		_word_jelly.set_stage_progress(_word_jelly_stages.snapshot(), true)
+		_word_jelly.game.finish_round("mastered")
+		_announce_status("All available Jelly Words mastered. Beautiful work!")
+		return
+	var missing_age: int = _jelly_stage_missing_age(next_words)
+	if missing_age > 0:
+		_wait_for_vocabulary([], missing_age)
+		return
+	if not _word_jelly.game.replace_stage_words(next_words, growth.learning_age()):
+		return
+	_word_jelly_stages.begin_next()
+	_word_jelly.set_stage_progress(_word_jelly_stages.snapshot(), true)
+	_word_jelly.game.drop_now()
+	_word_jelly._sync_tiles()
+	_word_jelly._layout()
+	audio.play_jelly_cue("reward")
+	_announce_status("Stage %d! %d new words to master." % [_word_jelly_stages.number, _word_jelly_stages.words.size()])
+
+
 func _active_jelly():
 	return _word_jelly if _mode_id == "word_jelly" else _jelly
 
@@ -2054,7 +2175,7 @@ func _active_jelly():
 func _jelly_interaction_allowed() -> bool:
 	return _is_jelly_mode() and not _jelly_rewards_shown and not _round_celebration_active() \
 		and not _professional_input_blocked() and not _rebuilding and not _page_hidden and not _speech_debug_active \
-		and not collection_page.visible and not _mode_menu_open() and not _finish_confirmation_open()
+		and not collection_page.visible and not _mode_menu_open() and not _finish_confirmation_open() and not _vocabulary_prompt.visible
 
 
 func _finish_confirmation_open() -> bool:
@@ -2168,7 +2289,8 @@ func _jelly_hear(word: Dictionary, source_mode: String = "") -> void:
 func _word_jelly_merged(word: Dictionary) -> void:
 	if _mode_id == "word_jelly" and _jelly_interaction_allowed():
 		audio.interact(model.theme_id)
-		audio.say_queued("res://" + str(word.audio))
+		# Each accepted merge speaks now, even if an earlier word is still playing.
+		audio.say("res://" + str(word.audio))
 
 
 func _jelly_audio(cue: String, source_mode: String = "") -> void:
@@ -4184,7 +4306,7 @@ func on_page_hidden() -> void:
 
 
 func on_page_visible() -> void:
-	if not _pending_vocabulary_round.is_empty():
+	if not _pending_vocabulary_round.is_empty() or _pending_vocabulary_stage:
 		_resume_vocabulary_round.call_deferred()
 	if _speech_debug_active:
 		_page_hidden = false
@@ -4836,7 +4958,7 @@ func _on_speech_debug(arguments: Array) -> bool:
 func _open_speech_debug() -> bool:
 	if _speech_debug_active:
 		return not _page_hidden
-	if _page_hidden or not _pending_vocabulary_round.is_empty() or (OS.has_feature("web") and not _loading_revealed) \
+	if _page_hidden or not _pending_vocabulary_round.is_empty() or _pending_vocabulary_stage or (OS.has_feature("web") and not _loading_revealed) \
 		or _holding_chest or model.chest_state == "opening" or _save_error or not _pending_fragment.is_empty():
 		return false
 	# Stop the old recognizer before freezing the scene. A failed microphone
@@ -5196,6 +5318,7 @@ func _process(delta: float) -> void:
 
 
 func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
+	_advance_word_jelly_stages(delta)
 	_sync_reward_confetti()
 	_reward_confetti.advance(delta)
 	_coin_flight.reduced_motion = reduced_motion
@@ -5328,7 +5451,8 @@ func _retry_storage() -> void:
 		_growth_save_failed = not growth.load_state()
 	else:
 		_growth_save_failed = not bool(growth.retry_pending().save_ok)
-	if growth.ready and model.cards.is_empty() and _round_context.get("track") != "professional":
+	_refresh_jelly_stage_targets()
+	if growth.ready and _round_id.is_empty() and _round_context.get("track") != "professional":
 		new_round()
 	_refresh_growth()
 	_refresh()
@@ -5759,8 +5883,9 @@ func _record_growth(attempt_id: String, words: Array, correct: bool) -> void:
 	if _round_id.is_empty() or _round_context.get("track", "growth") != "growth":
 		return
 	var was_failed: bool = _growth_save_failed
-	var result: Dictionary = growth.record_attempt(_round_id + ":" + attempt_id, words, correct)
+	var result: Dictionary = growth.record_attempt(_round_id + ":" + attempt_id, words, correct, _mode_id == "word_jelly")
 	_growth_save_failed = not bool(result.save_ok)
+	_refresh_jelly_stage_targets()
 	_refresh_growth()
 	if _growth_save_failed != was_failed:
 		# Memory, Phrase and Pop do not otherwise refresh the shared header per answer.

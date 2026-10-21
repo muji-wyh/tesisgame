@@ -73,12 +73,15 @@ Each manual drop completing a whole word requests its pronunciation immediately 
 merge is accepted, alongside the fusion animation. This removes the previous
 760 ms wait for the animation to finish, using the unchanged
 [Ava Sweet recordings](ava-voice.md). Animation completion never repeats the cue. Rapid manual
-completions queue their words in order so each recording can finish. Auto Merge
+completions immediately replace earlier speech, keeping pronunciation aligned
+with the accepted merge. Auto Merge
 keeps the fusion sound effects without pronouncing or queuing its completed words.
 Contact, rejected drops, and moving a completed word do not start pronunciation.
 Collect cancels pending merge speech and retains its sound-effect rhythm;
 direct word taps still pronounce the selected word. Leaving play or muting
-clears queued speech without replaying it on return.
+clears speech without replaying it on return. Picture-only jellies and complete
+spellings awaiting a picture also pronounce their word when tapped; partial
+roots remain silent.
 
 Two [coin powerups](jelly-powerups.md) share the board controls. Auto merge costs
 600 coins initially, then 900 and 1200 on further uses in the round. It joins
@@ -188,7 +191,7 @@ The cloud environment and recessed rim are documented in [Jelly Words well](jell
 
 The Collect button snapshots all completed word jellies currently on the board.
 It collects them from the upper rows downward, alternating direction across
-rows, with one pickup every 120 ms. Each batch collection finishes within that
+rows, with one pickup every 350 ms. Each batch collection finishes within that
 same beat, keeping reward transactions sequential, with the existing pop sound
 at 60 ms to match the squash and release. Each jelly squashes, lifts
 with alternating sideways drift, and clears through the ordinary wallet and
@@ -258,3 +261,19 @@ steady cards with the same content and lifetimes. The vocabulary artwork and
 the acquired Bobardo portal glow and Archanor sparkle above are reused, with no
 new asset downloads. Batch collection remains silent for pronunciation,
 including the final pickup; individual word taps retain their pronunciation.
+
+Stage progress occupies its own compact row above the supply tray, or a two-line
+badge in the action rail on short landscape screens. Each stage
+holds ten unmastered targets, or the remaining eligible words when fewer are
+available. A saved mastery removes future root and picture supply for that word,
+including advertised previews, without deleting existing board bodies or their
+rewards. Stage changes preserve the round and reward receipts. The 1.8-second
+arrival banner uses a small elastic entrance, acquired portal light and six
+acquired sparkle accents around a cream text card; it never receives input.
+Reduced motion keeps a steady card with fades. Pause and exit dismiss the banner.
+The portal texture is by Bobardo under the Standard Unity Asset Store EULA;
+the sparkle is by Kenneth Foldal Moe / Archanor VFX under the same license,
+with acquisition records in [Jelly fragments](jelly-fragments.md). Both inspected
+textures were already integrated static artwork; their banner motion is authored
+at runtime. The stage cue reuses the integrated chest-reference reward recording
+documented there. No additional assets were downloaded.

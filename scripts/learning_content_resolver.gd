@@ -9,7 +9,7 @@ const MODE_SKILLS: Dictionary = {"match": "recognition", "memory": "recognition"
 	"jelly": "recognition", "pop": "speaking", "word_jelly": "spelling", "phrase": "context"}
 
 
-static func resolve_growth(context: Dictionary, words: Array, phrase_dependencies: Array = []) -> Dictionary:
+static func resolve_growth(context: Dictionary, words: Array, phrase_dependencies: Array = [], cross_age_jelly: bool = false) -> Dictionary:
 	var problem: String = Context.validate(context)
 	if not problem.is_empty() or context.get("track") != "growth":
 		return _failure(problem if not problem.is_empty() else "Growth needs a Growth context.")
@@ -22,7 +22,7 @@ static func resolve_growth(context: Dictionary, words: Array, phrase_dependencie
 		if mode == "phrase":
 			if not phrase_dependencies.has(str(candidate.get("id", ""))):
 				continue
-		elif Data.word_age(candidate) != age:
+		elif Data.word_age(candidate) != age and not (mode == "word_jelly" and cross_age_jelly):
 			continue
 		var word: Dictionary = GrowthMorphology.decorate(candidate) if mode == "word_jelly" else candidate
 		if _growth_supports(word, mode):

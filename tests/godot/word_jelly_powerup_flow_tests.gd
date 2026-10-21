@@ -139,16 +139,16 @@ func _check_auto_merge(app) -> void:
 		and halfway.x > minf(from.x, to.x) and halfway.x < maxf(from.x, to.x)
 		and view._powerup_effects.stamps.size() > 0 and game.fusions.is_empty(),
 		"The source jelly travels through an intermediate position with light effects before union")
-	view._process(0.10)
+	view._process(game.POWERUP_DRAG_SECONDS * 0.25)
 	var traveling: Dictionary = game.powerup_snapshot()
 	check(traveling.drags.size() == 1 and game.fusions.is_empty()
 		and int(traveling.drags[0].source_id) == int(state.source_id)
-		and is_equal_approx(float(traveling.drags[0].elapsed), 0.25),
-		"At 250 ms the reserved first pair continues its own complete drag before another path can begin")
-	view._process(0.05)
+		and is_equal_approx(float(traveling.drags[0].elapsed), 0.12),
+		"At 120 ms the reserved first pair is still traveling within its 160 ms drag")
+	view._process(game.POWERUP_DRAG_SECONDS * 0.25)
 	var after_contact: Dictionary = game.powerup_snapshot()
 	check(game.fusions.size() == 1 and after_contact.drags.is_empty() and after_contact.stage == "fusion",
-		"At 300 ms the first pair commits while the remaining paid path waits")
+		"At 160 ms the first pair starts its 200 ms fusion while the remaining paid path waits")
 	var first_result_id: int = int(game.fusions[0].result.id)
 	view._process(0.05)
 	check(game.fusions.size() == 1 and game.powerup_snapshot().drags.is_empty(),
@@ -401,7 +401,7 @@ func _check_lifecycle(app) -> void:
 	var game = view.game
 	var before: int = app.coin_wallet.balance
 	view.powerup_buttons.auto_merge.pressed.emit()
-	view._process(0.25)
+	view._process(game.POWERUP_DRAG_SECONDS * 0.75)
 	var paused: Dictionary = game.powerup_snapshot()
 	check(paused.drags.size() == 1 and game.fusions.is_empty(), "Home interruption covers the active source and preserves the remaining paid path")
 	app._show_mode_menu()

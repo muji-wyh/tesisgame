@@ -1,24 +1,97 @@
 const fs = require('node:fs');
+const path = require('node:path');
 const { test, expect } = require('@playwright/test');
 const { openGame, metrics, tap } = require('./game-ui.cjs');
 const { observeOutputAudio, expectRecording, recordingTiming, watchAudioRequests } = require('./bundled-audio.cjs');
 const vocabulary = require('../../words.json');
 
-const words = vocabulary.filter(word => word.min_age === 3);
-const dictionary = new Map(words.map(word => [word.text.toLowerCase(), word]));
+const words = vocabulary;
 const timings = new Map(words.map(word => [word.id, recordingTiming(word.audio)]));
+const rewardTiming = recordingTiming('assets/imported-audio/chest-reference/reward.wav');
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 const wallet = page => page.locator('#coin-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const sounds = page => page.evaluate(() => window.audioObservation.playbacks);
 const matches = (sound, timing) => Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate;
 const pronunciations = (playbacks, from = 0) => playbacks.slice(from).filter(sound =>
-  !sound.loop && [...timings.values()].some(timing => matches(sound, timing)));
+  !sound.loop && !(sound.rewardEnvelopeSimilarity >= 0.99) && [...timings.values()].some(timing => matches(sound, timing)));
+
+function rewardEnvelope() {
+  const bytes = fs.readFileSync(path.resolve(__dirname, '../../assets/imported-audio/chest-reference/reward.wav'));
+  let samples;
+  for (let at = 12; at + 8 <= bytes.length;) {
+    const length = bytes.readUInt32LE(at + 4), kind = bytes.toString('ascii', at, at + 4);
+    if (kind === 'fmt ') {
+      if (bytes.readUInt16LE(at + 8) !== 1 || bytes.readUInt16LE(at + 10) !== 1 || bytes.readUInt16LE(at + 22) !== 16)
+        throw new Error('The reward classifier expects the production mono PCM16 recording.');
+    }
+    if (kind === 'data') samples = bytes.subarray(at + 8, at + 8 + length);
+    at += 8 + length + (length % 2);
+  }
+  if (!samples) throw new Error('The production reward recording has no samples.');
+  return Array.from({ length: 32 }, (_, bin) => {
+    const first = Math.floor(bin * samples.length / 64), last = Math.floor((bin + 1) * samples.length / 64);
+    let energy = 0;
+    for (let frame = first; frame < last; frame++) energy += (samples.readInt16LE(frame * 2) / 32768) ** 2;
+    return Math.sqrt(energy / (last - first));
+  });
+}
+
+async function observeRewardIdentity(page) {
+  // The reward cue and twelve words share a 1.2 s duration. Compare the
+  // recording's envelope as well as the existing exact decoded-buffer fingerprint.
+  // Envelope identity survives Godot's resampling; all colliding words score below 0.34.
+  await page.addInitScript(({ reference, seconds }) => {
+    const Context = window.AudioContext || window.webkitAudioContext;
+    if (!Context) return;
+    const identities = new Map(), referenceNorm = Math.sqrt(reference.reduce((sum, value) => sum + value * value, 0));
+    const Wrapped = new Proxy(Context, {
+      construct(Target, args) {
+        const context = Reflect.construct(Target, args), createSource = context.createBufferSource.bind(context);
+        context.createBufferSource = () => {
+          const source = createSource(), start = source.start.bind(source);
+          source.start = (...values) => {
+            const index = window.audioObservation.playbacks.length;
+            const result = start(...values), buffer = source.buffer;
+            if (!buffer || Math.abs(buffer.duration - seconds) >= 0.001) return result;
+            // Init-script wrappers can nest in either order. The outer observer
+            // records this exact index before the microtask reads its fingerprint.
+            queueMicrotask(() => {
+              const sound = window.audioObservation.playbacks[index];
+              if (!sound?.fingerprint) return;
+              if (!identities.has(sound.fingerprint)) {
+                const samples = buffer.getChannelData(0);
+                let dot = 0, norm = 0;
+                for (let bin = 0; bin < reference.length; bin++) {
+                  const first = Math.floor(bin * samples.length / reference.length);
+                  const last = Math.floor((bin + 1) * samples.length / reference.length);
+                  let energy = 0;
+                  for (let frame = first; frame < last; frame++) energy += samples[frame] * samples[frame];
+                  const rms = Math.sqrt(energy / (last - first));
+                  dot += rms * reference[bin];
+                  norm += rms * rms;
+                }
+                identities.set(sound.fingerprint, norm ? dot / (Math.sqrt(norm) * referenceNorm) : 0);
+              }
+              sound.rewardEnvelopeSimilarity = identities.get(sound.fingerprint);
+            });
+            return result;
+          };
+          return source;
+        };
+        return context;
+      }
+    });
+    if (window.AudioContext) window.AudioContext = Wrapped;
+    else window.webkitAudioContext = Wrapped;
+  }, { reference: rewardEnvelope(), seconds: rewardTiming.seconds });
+}
 
 test.use({ deviceScaleFactor: 1, trace: 'off',
   launchOptions: { ignoreDefaultArgs: ['--autoplay-policy=no-user-gesture-required'] } });
 
 async function start(page, browserName) {
   await observeOutputAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5, trackSourceLifecycle: true });
+  await observeRewardIdentity(page);
   await page.addInitScript(() => {
     localStorage.setItem('growWithPip.growth.v1',
       '[growth]\nversion=3\nlevel=0\nage=0\nstreaks={}\nmastered_words=[]\nreceipts=[]\n');
@@ -41,14 +114,20 @@ async function pressRect(page, rect, bounds) {
   await tap(page, rect[0] + rect[2] / 2, rect[1] + rect[3] / 2, bounds);
 }
 
+function wordPicturePair(state) {
+  const reserved = new Set(state.fusions.flatMap(fusion => [fusion.a_id, fusion.b_id]));
+  const ready = state.tiles.filter(tile => tile.visible && tile.settled && !reserved.has(tile.id))
+    .sort((a, b) => a.row - b.row);
+  const source = ready.find(tile => tile.jelly_kind === 'root' && tile.word_candidate?.id &&
+    ready.some(picture => picture.jelly_kind === 'picture' && picture.image_word?.id === tile.word_candidate.id));
+  expect(source, 'The board contains a complete spelling with its matching picture').toBeTruthy();
+  return { source, target: ready.find(tile => tile.jelly_kind === 'picture' && tile.image_word?.id === source.word_candidate.id),
+    word: source.word_candidate };
+}
+
 async function mergeNextPair(page) {
   const state = await jelly(page), bounds = await metrics(page);
-  const reserved = new Set(state.fusions.flatMap(fusion => [fusion.a_id, fusion.b_id]));
-  const roots = state.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1 && !reserved.has(tile.id))
-    .sort((a, b) => a.row - b.row);
-  const source = roots.find(first => roots.some(second => first.id !== second.id && dictionary.has((first.text + second.text).toLowerCase())));
-  expect(source, 'The board still contains a valid forward word pair').toBeTruthy();
-  const target = roots.find(second => source.id !== second.id && dictionary.has((source.text + second.text).toLowerCase()));
+  const { source, target } = wordPicturePair(state);
   const point = tile => ({ x: bounds.x + (tile.rect[0] + tile.rect[2] / 2) * bounds.scale,
     y: bounds.y + (tile.rect[1] + tile.rect[3] / 2) * bounds.scale });
   const from = point(source), to = point(target);
@@ -57,7 +136,14 @@ async function mergeNextPair(page) {
   try {
     await expect.poll(async () => (await jelly(page)).drag.source, { intervals: [25, 50] }).toBe(source.id);
     await page.mouse.move(to.x, to.y, { steps: 5 });
-    await expect.poll(async () => (await jelly(page)).drag.target, { intervals: [25, 50] }).toBe(target.id);
+    await expect.poll(async () => {
+      const next = await jelly(page), live = next.tiles.find(tile => tile.id === target.id);
+      if (!live?.settled) return false;
+      if (next.drag.target === target.id) return true;
+      const destination = point(live);
+      await page.mouse.move(destination.x, destination.y, { steps: 4 });
+      return false;
+    }, { intervals: [25, 50] }).toBe(true);
   } finally {
     await page.mouse.up();
   }
@@ -111,23 +197,42 @@ async function retain(page, info, label) {
 function expectNaturalEnd(sound) {
   expect(sound.peak, 'The bundled pronunciation contains audible PCM samples').toBeGreaterThan(0.01);
   expect(sound.contextState).toBe('running');
-  expect(sound.endedAt, 'Each queued recording reaches its end').toBeDefined();
+  expect(sound.endedAt, 'An uninterrupted recording reaches its end').toBeDefined();
   if (sound.stopScheduledAt !== undefined)
-    expect(sound.stopScheduledAt - sound.scheduledAt, 'Another merge never cuts off the pronunciation')
+    expect(sound.stopScheduledAt - sound.scheduledAt, 'An isolated pronunciation retains its full duration')
       .toBeGreaterThanOrEqual(sound.duration - 0.04);
-  expect(sound.endedAt - sound.at, 'The complete word plays before the next queued word')
+  expect(sound.endedAt - sound.at, 'An uninterrupted word plays completely')
     .toBeGreaterThanOrEqual(sound.duration * 1000 - 60);
 }
+
+test('picture and complete spelling taps pronounce their word without collecting', async ({ page, browserName }) => {
+  test.setTimeout(120000);
+  const requests = watchAudioRequests(page), errors = await start(page, browserName);
+  const opening = await jelly(page), pair = wordPicturePair(opening);
+  for (const id of [pair.target.id, pair.source.id]) {
+    const live = (await jelly(page)).tiles.find(tile => tile.id === id);
+    const from = (await sounds(page)).length;
+    await pressRect(page, live.rect);
+    await expectRecording(page, from, pair.word.audio);
+    await expect.poll(async () => pronunciations(await sounds(page), from).every(sound => sound.endedAt !== undefined))
+      .toBe(true);
+    const spoken = pronunciations(await sounds(page), from);
+    expect(spoken, 'Each picture or complete spelling tap pronounces exactly once').toHaveLength(1);
+    expectNaturalEnd(spoken[0]);
+    const current = await jelly(page);
+    expect(current.tiles.some(tile => tile.id === id)).toBe(true);
+    expect(current.merged_count).toBe(opening.merged_count);
+    expect(current.cleared_pairs).toBe(opening.cleared_pairs);
+  }
+  expect(requests, 'Tap pronunciation uses bundled recordings').toEqual([]);
+  expect(errors).toEqual([]);
+});
 
 test('a manual Jelly Words merge pronounces its word immediately on the accepted drop', async ({ page, browserName }, info) => {
   test.setTimeout(120000);
   const requests = watchAudioRequests(page), errors = await start(page, browserName);
   const opening = await jelly(page);
-  const roots = opening.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1);
-  const source = roots.find(first => roots.some(second => first.id !== second.id && dictionary.has((first.text + second.text).toLowerCase())));
-  expect(source, 'The opening three rows contain a valid forward word pair').toBeTruthy();
-  const target = roots.find(second => source.id !== second.id && dictionary.has((source.text + second.text).toLowerCase()));
-  const word = dictionary.get((source.text + target.text).toLowerCase());
+  const { source, target, word } = wordPicturePair(opening);
   await observeMerges(page);
   const fromIndex = await page.evaluate(() => window.mergeSpeechEvidence.from), bounds = await metrics(page);
   const point = tile => ({ x: bounds.x + (tile.rect[0] + tile.rect[2] / 2) * bounds.scale,
@@ -138,7 +243,14 @@ test('a manual Jelly Words merge pronounces its word immediately on the accepted
   try {
     await expect.poll(async () => (await jelly(page)).drag.source).toBe(source.id);
     await page.mouse.move(to.x, to.y, { steps: 10 });
-    await expect.poll(async () => (await jelly(page)).drag.target).toBe(target.id);
+    await expect.poll(async () => {
+      const next = await jelly(page), live = next.tiles.find(tile => tile.id === target.id);
+      if (!live?.settled) return false;
+      if (next.drag.target === target.id) return true;
+      const destination = point(live);
+      await page.mouse.move(destination.x, destination.y, { steps: 4 });
+      return false;
+    }).toBe(true);
     await page.waitForTimeout(150);
     expect(pronunciations(await sounds(page), fromIndex), 'Touching a compatible target does not pronounce an unfinished word').toEqual([]);
   } finally {

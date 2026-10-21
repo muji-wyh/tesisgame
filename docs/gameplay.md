@@ -252,15 +252,29 @@ the next pair, and leaves merged words for manual collection. Failed payments
 do not advance a price. A fresh round resets prices. See the
 [coin economy plan](coin-economy.md) for income assumptions and spending targets.
 
-A completed manual merge queues the word's recorded pronunciation once. Auto
+A completed manual merge immediately plays the word's recorded pronunciation once,
+replacing earlier speech instead of waiting in a queue. Auto
 Merge retains fusion sound effects without pronouncing its words. An accepted
 word tap also presents its picture and spelling above the board and pronounces
-it once. Collect gathers ready words at 120 ms intervals without pronunciation.
+it once. Picture-only jellies and complete spellings awaiting their picture also
+pronounce their word on a tap. Partial roots stay silent. Collect gathers ready
+words at 350 ms intervals without pronunciation. Auto Merge starts each next
+merge on a 400 ms beat, including its drag, fusion, and settlement.
 Each reveal has its own randomly varied position and size, fits its picture and
 spelling, and enters with elastic squash and stretch. Successive reveals coexist
 and fade independently instead of replacing one another. They do not intercept
 board input and clear on pause, exit or round completion. Reduced motion keeps
 the picture and spelling steady.
+
+Jelly Words selects ten unmastered, independently assessable words for each
+stage. Everyday English fills from the earliest unfinished ages, crossing age
+boundaries when needed; Professional English stays in the selected ready module.
+The set remains fixed until all its words are mastered. Saved mastery immediately
+removes a word from future supply and advertised previews. Existing board bodies,
+levels, fragments, and receipts survive a stage change. A permanent stage counter
+shows mastered targets, and a short light-and-sparkle banner announces each next
+stage. The final stage can contain fewer than ten available words; completing
+the whole eligible pool ends the round. Unsuccessful saves never advance a stage.
 
 Chest fragments remain attached when either jelly is merged. Two marked pieces
 produce two visible markers, and collecting the complete word banks all of its

@@ -325,9 +325,14 @@ func practice_weights() -> void:
 				"Voice Pop keeps mastered review words even with many unfinished words available")
 		elif mode in ["jelly", "word_jelly"]:
 			pool = app._active_jelly().game._words
-		check(not pool.is_empty() and pool.all(func(word: Dictionary) -> bool:
-			return word.has("_practice_weight") and int(word.min_age) == 3),
-			"%s receives weighted vocabulary within the current learning age" % mode)
+		if mode == "word_jelly":
+			check(pool.size() == 10 and pool.all(func(word: Dictionary) -> bool:
+				return not app.growth.is_mastered(str(word.id)) and app.vocabulary_loader.is_ready(int(word.min_age))),
+				"Jelly Words receives ten unmastered targets whose age-scoped media is ready")
+		else:
+			check(not pool.is_empty() and pool.all(func(word: Dictionary) -> bool:
+				return word.has("_practice_weight") and int(word.min_age) == 3),
+				"%s receives weighted vocabulary within the current learning age" % mode)
 	for game in [app._pop.game, app._jelly.game, app._word_jelly.game]:
 		check(game.practice_weight_for.is_valid()
 			and is_equal_approx(float(game.practice_weight_for.call(mastered_word)), 0.8),

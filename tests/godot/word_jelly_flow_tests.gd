@@ -441,6 +441,9 @@ func _check_playfield_layout(view, s: float, context: String) -> void:
 			occupied = occupied.merge(rectangle)
 	var horizontal_slack: float = view.size.x - occupied.size.x
 	var top_slack: float = tray.position.y - view.global_position.y
+	var stage_badge: Rect2 = view._stage_banner._label.get_global_rect()
+	if view._stage_banner.visible and stage_badge.position.x < tray.end.x and stage_badge.end.y <= tray.position.y:
+		top_slack -= stage_badge.size.y + 6.0 / s
 	check(horizontal_slack * s <= 24.0 or top_slack * s <= 16.0,
 		"The board uses the available width or height instead of leaving spare room in both directions" + context)
 

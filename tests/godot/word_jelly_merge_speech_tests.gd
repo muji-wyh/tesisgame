@@ -170,6 +170,48 @@ func _check_merge_events() -> void:
 	view.free()
 
 
+func _check_tile_taps() -> void:
+	var view := Jelly.new()
+	root.add_child(view)
+	view.size = Vector2(1000, 720)
+	var spoken: Array[Dictionary] = []
+	view.word_requested.connect(func(word: Dictionary) -> void: spoken.append(word))
+	for reduced: bool in [false, true]:
+		var ids: Array[int] = _reset_view(view, ["cat-root", "dog-picture"], reduced)
+		spoken.clear()
+		for index in range(ids.size()):
+			var tile = view._tiles[ids[index]]
+			var point: Vector2 = tile.get_global_rect().get_center()
+			check(view._press(-1, point), "The complete spelling and picture accept a pointer press")
+			check(spoken.size() == index, "Pressing a tile does not speak before a deliberate tap completes")
+			view._release(point)
+			check(spoken.size() == index + 1 and spoken[-1].id == words[index].id,
+				"A pointer tap pronounces the exact spelling or picture word once")
+		check(view.game.fusions.is_empty() and view.game.cells.size() == 2 and view.game.cleared_pairs == 0,
+			"Listening to a source spelling or picture does not collect or merge it")
+		for index in range(ids.size()):
+			view.cancel_input()
+			view._activate(ids[index])
+			check(spoken.size() == 3 + index and spoken[-1].id == words[index].id
+				and view._keyboard_source == ids[index],
+				"Keyboard activation speaks once and retains source selection for a later merge")
+		view.cancel_input()
+		view.pause(true)
+		view._tap_tile(ids[0])
+		view._activate(ids[1])
+		check(spoken.size() == 4, "A paused board cannot pronounce source tiles")
+		view.pause(false)
+		var partial: Dictionary = view.game._new_tile("ca", 1, 0)
+		partial.column = 2
+		partial.row = view.game.ROWS - 1
+		view.game.cells.append(partial)
+		view._sync_tiles()
+		view._tap_tile(int(partial.id))
+		view._activate(int(partial.id))
+		check(spoken.size() == 4, "A partial root never pronounces a guessed whole word")
+	view.free()
+
+
 func _check_audio_queue() -> void:
 	var audio := Audio.new()
 	root.add_child(audio)
@@ -262,6 +304,13 @@ func _check_app_routes() -> void:
 	await settle()
 	await _prepare_app(app)
 	var view = app._word_jelly
+	for source: int in [0, 3]:
+		var tile: Dictionary = view.game.cells[source]
+		view._tap_tile(int(tile.id))
+		var word: Dictionary = tile.word_candidate if source == 0 else tile.image_word
+		check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + str(word.audio))
+			and app.audio._voice_queue.is_empty(), "Source spelling and picture taps route immediately to their exact recording")
+	app.audio.stop_voice()
 	var voice_request: int = int(app.audio._playback_requests.get(app.audio.voice, 0))
 	view._activate_powerup("auto_merge")
 	_advance(view, 4.0)
@@ -278,13 +327,13 @@ func _check_app_routes() -> void:
 	var ids: Array[int] = _reset_view(view, ["cat-root", "cat-picture", "dog-root", "dog-picture"])
 	check(view.game.try_merge(ids[0], ids[1]) == "merged" and view.game.try_merge(ids[2], ids[3]) == "merged",
 		"The application accepts two independent word fusions")
-	check(app.audio.voice.playing and app.audio.voice.stream == load(CAT) and app.audio._voice_queue == [DOG],
-		"Accepted manual merges start or queue their production recording before any animation frame")
+	check(app.audio.voice.playing and app.audio.voice.stream == load(DOG) and app.audio._voice_queue.is_empty(),
+		"The latest accepted merge immediately replaces earlier speech instead of waiting in a queue")
 	var accepted_request: int = int(app.audio._playback_requests.get(app.audio.voice, 0))
 	_advance(view, view.game.FUSION_SECONDS + view.game.SETTLE_SECONDS * 3.0)
-	check(app.audio.voice.playing and app.audio.voice.stream == load(CAT) and app.audio._voice_queue == [DOG]
+	check(app.audio.voice.playing and app.audio.voice.stream == load(DOG) and app.audio._voice_queue.is_empty()
 		and int(app.audio._playback_requests.get(app.audio.voice, 0)) == accepted_request,
-		"Fusion completion preserves current playback and its queue without restarting or duplicating speech")
+		"Fusion completion preserves current playback without restarting or duplicating speech")
 	view._collect_all()
 	check(view.game.collection_batch_active() and not app.audio.voice.playing and app.audio._voice_queue.is_empty(),
 		"Collect cancels residual merge narration before its first pickup")
@@ -296,8 +345,8 @@ func _check_app_routes() -> void:
 		await _prepare_app(app)
 		view.word_merged.emit(words[0])
 		view.word_merged.emit(words[1])
-		check(app.audio.voice.playing and app.audio._voice_queue.size() == 1,
-			interruption + " starts with one speaking word and one waiting word")
+		check(app.audio.voice.playing and app.audio.voice.stream == load(DOG) and app.audio._voice_queue.is_empty(),
+			interruption + " starts with the latest merged word speaking and no delayed words")
 		match interruption:
 			"home": app._show_mode_menu()
 			"hidden": app.on_page_hidden()
@@ -334,6 +383,7 @@ func _run() -> void:
 				words.append(word.duplicate(true))
 	check(words.size() == 2, "Both speech fixtures have production entries")
 	_check_merge_events()
+	_check_tile_taps()
 	_check_foundation01_speech_boundary()
 	_check_audio_queue()
 	_check_pending_audio()
@@ -387,12 +437,18 @@ func _check_foundation01_speech_boundary() -> void:
 		check(requests.is_empty(), "Accepting bound signate never requests whole-word speech")
 		_advance(view, 2.0)
 		check(requests.is_empty() and taps.is_empty() and view.game.cell(partial_id).text == "signate", "Partial animation and settlement remain silent in either motion preference")
+		view._tap_tile(partial_id)
+		check(taps.is_empty(), "Tapping an authored bound intermediate never pronounces the completed word")
 		check(not view.game.collect(partial_id) and requests.is_empty() and taps.is_empty(), "Partial collection refusal cannot leak a pronunciation event")
 		check(view.game.try_merge(partial_id, int(pieces[2].id)) == "merged", "Signature accepts final-e loss into the completed word")
 		var spelling_id: int = int(view.game.fusions[0].result.id)
 		check(requests.is_empty() and taps.is_empty(), "Completing the spelling waits for its picture without leaking whole-word speech")
 		_advance(view, 2.0)
 		check(not view.game.collect(spelling_id), "A complete pictured spelling still needs its picture Jelly")
+		view._tap_tile(spelling_id)
+		check(taps.size() == 1 and taps[0].id == entry.id and attempts.is_empty(),
+			"Tapping an authored complete spelling pronounces it before picture matching without granting mastery")
+		taps.clear()
 		var picture: Dictionary = view.game._new_picture_tile(word)
 		var picture_position: Vector2i = view.game._free_position(view.game._occupied(), 1, 1)
 		picture.column = picture_position.x

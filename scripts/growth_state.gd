@@ -1,7 +1,7 @@
 extends RefCounted
 ## Durable word mastery, earned experience levels and independent Pip ages.
 
-const VERSION: int = 3
+const VERSION: int = 4
 const FIRST_LEVEL: int = 0
 const LAST_LEVEL: int = 99
 const FIRST_AGE: int = 3
@@ -153,7 +153,7 @@ func _read_state() -> Dictionary:
 	if not _whole_number(version, 1, VERSION):
 		return _invalid_save("This learning progress save needs a supported version.")
 	var legacy: bool = int(version) == 1
-	var saved_threshold: int = LEGACY_MASTERY_STREAK if int(version) < VERSION else MASTERY_STREAK
+	var saved_threshold: int = LEGACY_MASTERY_STREAK if int(version) < 3 else MASTERY_STREAK
 	next.migrated = int(version) < VERSION
 	var saved_level: Variant = config.get_value("growth", "level")
 	var saved_streaks: Variant = config.get_value("growth", "streaks")
@@ -175,7 +175,7 @@ func _read_state() -> Dictionary:
 	for id in saved_streaks:
 		if not id is String or not _word_ages.has(id) \
 			or not _whole_number(saved_streaks[id], 0, saved_threshold) \
-			or (int(_word_ages[id]) > eligible_age and int(saved_streaks[id]) > 0):
+			or (int(version) < 4 and int(_word_ages[id]) > eligible_age and int(saved_streaks[id]) > 0):
 			return _invalid_save("Your learning progress contains an invalid word streak.")
 		if int(saved_streaks[id]) > 0:
 			next.streaks[id] = int(saved_streaks[id])
@@ -190,7 +190,8 @@ func _read_state() -> Dictionary:
 		if not saved_mastered is Array or saved_mastered.size() > _word_ages.size():
 			return _invalid_save("Your learning progress contains an invalid mastery history.")
 		for id in saved_mastered:
-			if not id is String or not _word_ages.has(id) or next.mastered_words.has(id) or int(_word_ages[id]) > eligible_age:
+			if not id is String or not _word_ages.has(id) or next.mastered_words.has(id) \
+				or (int(version) < 4 and int(_word_ages[id]) > eligible_age):
 				return _invalid_save("Your learning progress contains an invalid mastery history.")
 			next.mastered_words[id] = true
 		for id in next.streaks:
@@ -199,7 +200,7 @@ func _read_state() -> Dictionary:
 	next.level = level_for_mastered(next.mastered_words.size())
 	if not legacy and int(saved_level) != int(next.level):
 		return _invalid_save("Your learning level does not match its saved mastery history.")
-	if next.migrated:
+	if int(version) < 3:
 		# Validate the original history before applying the easier mastery rule.
 		# Existing streaks of three or more now qualify without another answer.
 		for id in next.streaks:
@@ -238,7 +239,7 @@ func _learning_age_for(earned_age: int) -> int:
 	return FIRST_AGE if earned_age == 0 else mini(earned_age + 1, LAST_AGE)
 
 
-func record_attempt(event_id: String, word_ids: Array, correct: bool) -> Dictionary:
+func record_attempt(event_id: String, word_ids: Array, correct: bool, allow_cross_age: bool = false) -> Dictionary:
 	if not ready:
 		return _outcome(false, false, false, level, age, "Load learning progress successfully before recording an answer.")
 	if not _valid_event_id(event_id) or word_ids.is_empty():
@@ -252,9 +253,9 @@ func record_attempt(event_id: String, word_ids: Array, correct: bool) -> Diction
 	for id in word_ids:
 		if not id is String or not _word_ages.has(id):
 			return _outcome(false, false, false, level, age, "An answer contains an unknown learning word.")
-		# Capture eligibility now. A delayed save cannot credit a future cohort
-		# after an earlier queued answer has made Pip old enough to learn it.
-		if int(_word_ages[id]) <= learning_age() and not eligible.has(id):
+		# Jelly Words may deliberately select words across ages. Other games keep
+		# their age gate, captured now so a delayed save cannot change eligibility.
+		if (allow_cross_age or int(_word_ages[id]) <= learning_age()) and not eligible.has(id):
 			eligible.append(id)
 	_pending.append({"id": event_id, "words": eligible, "correct": correct})
 	_pending_ids[event_id] = true

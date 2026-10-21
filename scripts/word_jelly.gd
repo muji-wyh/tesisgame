@@ -11,6 +11,7 @@ const WordTile = preload("res://scripts/word_jelly_tile.gd")
 const Palette = preload("res://scripts/word_jelly_palette.gd")
 const WordReveal = preload("res://scripts/word_jelly_word_reveal.gd")
 const CollectionEffects = preload("res://scripts/word_jelly_collection_fx.gd")
+const StageBanner = preload("res://scripts/word_jelly_stage_banner.gd")
 const CollectButton = preload("res://scripts/word_jelly_collect_button.gd")
 const PowerupButton = preload("res://scripts/word_jelly_powerup_button.gd")
 const PowerupEffects = preload("res://scripts/word_jelly_powerup_effects.gd")
@@ -46,6 +47,7 @@ var _arrival_origins: Dictionary = {}
 var _preview_generated: int = -1
 var _word_reveal: WordReveal
 var _collection_effects: CollectionEffects
+var _stage_banner: StageBanner
 var _presentation_elapsed: float = 0.0
 var collect_button: CollectButton
 var _action_divider := ColorRect.new()
@@ -120,6 +122,8 @@ func _init() -> void:
 	add_child(_word_reveal)
 	_collection_effects = CollectionEffects.new()
 	add_child(_collection_effects)
+	_stage_banner = StageBanner.new()
+	add_child(_stage_banner)
 	collect_button = CollectButton.new()
 	collect_button.name = "WordJellyCollectAll"
 	collect_button.pressed.connect(_collect_all)
@@ -162,8 +166,9 @@ func _init() -> void:
 	_read_panel = ReadPanel.new()
 	_read_panel.dismissed.connect(_close_read)
 	_read_panel.pronunciation_requested.connect(func() -> void:
-		if not _read_cell.get("word", {}).is_empty():
-			word_requested.emit(_read_cell.word.duplicate(true)))
+		var word: Dictionary = _pronunciation_word(_read_cell)
+		if not word.is_empty():
+			word_requested.emit(word.duplicate(true)))
 	add_child(_read_panel)
 	_room_notice = Style.label("Make room before moving this jelly.", 16)
 	_room_notice.name = "JellyRoomNotice"
@@ -177,6 +182,8 @@ func _init() -> void:
 	add_child(_room_notice)
 
 func stop() -> void:
+	if _stage_banner != null:
+		_stage_banner.reset()
 	_presentation_elapsed = 0.0
 	if _collection_effects != null:
 		_collection_effects.reset()
@@ -217,6 +224,8 @@ func stop() -> void:
 	_placement_tile.hide()
 
 func pause(value: bool = true) -> void:
+	if value and _stage_banner != null:
+		_stage_banner.dismiss()
 	_requested_pause = value
 	if value and _collection_effects != null:
 		_collection_effects.reset()
@@ -246,7 +255,7 @@ func _show_read(id: int) -> void:
 		return
 	_read_cell = target.duplicate(true)
 	_apply_pause_reasons()
-	_read_panel.present(str(target.get("display_text", target.text)), not str(target.get("word", {}).get("audio", "")).is_empty())
+	_read_panel.present(str(target.get("display_text", target.text)), not str(_pronunciation_word(target).get("audio", "")).is_empty())
 	_publish()
 
 func _close_read() -> void:
@@ -270,6 +279,7 @@ func _read_action_at(point: Vector2) -> bool:
 	return false
 
 func set_reduced_motion(value: bool) -> void:
+	_stage_banner.reduced_motion = value
 	_word_reveal.set_reduced_motion(value)
 	_collection_effects.set_reduced_motion(value)
 	collect_button.set_reduced_motion(value)
@@ -365,7 +375,7 @@ func _input(event: InputEvent) -> void:
 	super._input(event)
 
 func _press(pointer: int, global_point: Vector2) -> bool:
-	# Roots have no pronunciation recording; a completed word keeps its audio.
+	# A completed tap speaks; pressing before a drag never reveals a partial root.
 	if _pointer != NO_POINTER or not _can_play() or _finish_is_pulling() or game.collection_batch_active() or game.powerup_active():
 		return false
 	if _read_action_at(global_point):
@@ -524,10 +534,31 @@ func _activate(id: int) -> void:
 		game.set_held_tile(_keyboard_source)
 		_refresh_marks()
 		_publish()
+		_speak_tile(id)
 
 func _tap_tile(id: int) -> void:
 	if game.is_valid_word(_cell(id)):
 		_collect(id)
+	else:
+		_speak_tile(id)
+
+func _pronunciation_word(tile: Dictionary) -> Dictionary:
+	if str(tile.get("jelly_kind", "")) == "picture":
+		return tile.get("image_word", {})
+	if game.is_valid_word(tile):
+		return tile.get("word", {})
+	# Only a complete spelling has a candidate; a bound root stays silent.
+	return tile.get("word_candidate", {})
+
+func _speak_tile(id: int) -> void:
+	if not _can_play() or _finish_is_pulling() or game.collection_batch_active() or game.powerup_active():
+		return
+	var tile: Dictionary = _cell(id)
+	if tile.is_empty() or not _settled(tile):
+		return
+	var word: Dictionary = _pronunciation_word(tile)
+	if not str(word.get("audio", "")).is_empty():
+		word_requested.emit(word.duplicate(true))
 
 func _collect(id: int) -> void:
 	if not _can_play() or _finish_is_pulling() or game.collection_batch_active() or not game.is_valid_word(_cell(id)):
@@ -997,6 +1028,7 @@ func _process(delta: float) -> void:
 	_reveal_frame_end = -1.0
 	_powerup_frame_end = -1.0
 	if _can_play() and delta <= 0.5:
+		_stage_banner.advance(delta)
 		_presentation_elapsed += delta
 		_collection_effects.advance(delta)
 		var powerup: Dictionary = game.powerup_snapshot()
@@ -1006,7 +1038,7 @@ func _process(delta: float) -> void:
 			_powerup_frame_generation = _generation
 		_word_reveal.advance(delta)
 		if game.collection_batch_active():
-			# New cards keep their actual 120 ms offsets even when a frame spans several beats.
+			# New cards keep their collection offsets even when a frame spans several beats.
 			_reveal_frame_end = float(game.collection_batch_snapshot().elapsed) + delta
 			_reveal_frame_batch = game._collection_batch_serial
 			_reveal_frame_generation = _generation
@@ -1253,6 +1285,14 @@ func _refresh_hud() -> void:
 		_layout.call_deferred()
 	_refresh_collect_button()
 
+func set_stage_progress(state: Dictionary, celebrate: bool = false) -> void:
+	var was_visible: bool = _stage_banner.visible
+	_stage_banner.reduced_motion = reduced_motion
+	_stage_banner.set_stage(state, celebrate)
+	if was_visible != _stage_banner.visible:
+		_layout()
+	_publish()
+
 func _finish_hint_allowed() -> bool:
 	return super._finish_hint_allowed() and not game.collection_batch_active() and not game.powerup_active() and _keyboard_source < 0
 
@@ -1359,6 +1399,11 @@ func _layout() -> void:
 	var local_chest: bool = not has_header_chest()
 	var top_hud_height: float = (44.0 if authored else 52.0) / s if local_finish or local_chest else 0.0
 	var notice_y: float = top_hud_height
+	var stage_y: float = top_hud_height
+	var stage_in_rail: bool = size.x > size.y * 1.4 and size.y * s <= 400.0
+	if _stage_banner != null and _stage_banner.visible and not stage_in_rail:
+		top_hud_height += 34.0 / s
+		notice_y = top_hud_height
 	if not game.error.is_empty():
 		top_hud_height += 42.0 / s
 	var content_top: float = top_hud_height + (2.0 if authored else 12.0) / s
@@ -1408,6 +1453,12 @@ func _layout() -> void:
 	var footer_width: float = minf(size.x - edge * 2.0, 388.0 / s)
 	var item_width: float = clampf((footer_width - 132.0 / s) * 0.5, 88.0 / s, 112.0 / s)
 	var hud_x: float = _board.end.x + hud_gap if side_hud else (size.x - footer_width) * 0.5
+	if _stage_banner != null:
+		_stage_banner.size = size
+		var badge := Rect2(Vector2(_board.position.x, stage_y), Vector2(_board.size.x, 28.0 / s))
+		if stage_in_rail and side_hud:
+			badge = Rect2(Vector2(hud_x, content_top), Vector2(hud_width, 46.0 / s))
+		_stage_banner.configure_layout(badge, _board, s)
 	if not layout_header_chest():
 		_loot_meter.position = Vector2(edge, 4.0 / s)
 		_loot_meter.size = Vector2.ONE * 44.0 / s
@@ -1499,6 +1550,7 @@ func _fit_layout_pitch(available: Vector2, s: float) -> float:
 
 func snapshot() -> Dictionary:
 	var state: Dictionary = super.snapshot()
+	state["stage"] = _stage_banner.snapshot() if _stage_banner != null else {}
 	state["mode"] = "word_jelly"
 	state["columns"] = WordModel.COLUMNS
 	state["rows"] = WordModel.ROWS

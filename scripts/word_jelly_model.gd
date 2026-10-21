@@ -37,7 +37,7 @@ const ARRIVAL_ORDER: Array[int] = [0, 3, 1, 4, 2, 5]
 const FUSION_SECONDS: float = 0.76
 const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
-const BATCH_BEAT_SECONDS: float = 0.12
+const BATCH_BEAT_SECONDS: float = 0.35
 const BATCH_POP_SECONDS: float = 0.06
 const COIN_DROP_CHANCE: float = CoinEconomy.JELLY_BONUS_CHANCE
 const INITIAL_SPAWN_INTERVAL: float = 20.0
@@ -49,8 +49,10 @@ const CHEST_UNLOCK_FRAGMENTS: int = RewardProgress.CHEST_UNLOCK_FRAGMENTS
 const CHEST_UPGRADE_FRAGMENTS: int = RewardProgress.CHEST_UPGRADE_FRAGMENTS
 const EPSILON: float = 0.000001
 const POWERUP_PRICES: Dictionary = CoinEconomy.POWERUP_BASE_PRICES
-const POWERUP_MERGE_BEAT_SECONDS: float = 0.2
-const POWERUP_DRAG_SECONDS: float = 0.3
+const POWERUP_MERGE_BEAT_SECONDS: float = 0.4
+const POWERUP_DRAG_SECONDS: float = 0.16
+const POWERUP_FUSION_SECONDS: float = 0.2
+const POWERUP_SETTLE_SECONDS: float = 0.04
 const POWERUP_FRAGMENT_FLIGHT: float = 0.42
 const POWERUP_FRAGMENT_STAGGER: float = 0.18
 const POWERUP_FRAGMENT_RECOVERY: float = 0.35
@@ -77,12 +79,14 @@ var error: String = ""
 var credit_collection: Callable
 var commit_collection: Callable
 var purchase_powerup: Callable
+var allow_cross_age: bool = false
 
 var _words: Array[Dictionary] = []
 var _word_lookup: Dictionary = {}
 var _words_by_id: Dictionary = {}
 var _authored_words: Dictionary = {}
 var _morphology := MorphologyResolver.new()
+var _sense_resolvers: Dictionary = {}
 var _footprints: Dictionary = {}
 var authored_morphology: bool = false
 var _supply: Array[Dictionary] = []
@@ -142,6 +146,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_word_lookup.clear()
 	_words_by_id.clear()
 	_authored_words.clear()
+	_sense_resolvers.clear()
 	_footprints.clear()
 	authored_morphology = false
 	_supply.clear()
@@ -229,6 +234,86 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 			break
 	if authored_morphology:
 		_schedule_spawn_interval()
+	changed.emit()
+	return true
+
+
+func stage_transition_ready() -> bool:
+	return phase == "playing" and not powerup_active() and not collection_batch_active() \
+		and fusions.is_empty() and _held_tile_id < 0 and _dragged_tile_id < 0 \
+		and not _powerup_activating and not _powerup_committing and not _finishing_powerup
+
+
+func retire_mastered_words(word_ids: Array) -> void:
+	# Retirement changes future supply only. Existing bodies and their collection
+	# receipts keep their fragments, levels, and original learning context.
+	var retired: Dictionary = {}
+	for word_id: Variant in word_ids:
+		retired[str(word_id)] = true
+	if retired.is_empty():
+		return
+	_words = _words.filter(func(word: Dictionary) -> bool: return not retired.has(str(word.id)))
+	_supply = _supply.filter(func(tile: Dictionary) -> bool: return not retired.has(str(tile.get("source_word_id", ""))))
+	_supply_pending = _supply_pending.filter(func(tile: Dictionary) -> bool: return not retired.has(str(tile.get("source_word_id", ""))))
+	if authored_morphology:
+		for index in range(upcoming.size()):
+			if retired.has(str(upcoming[index].get("source_word_id", ""))):
+				_release_preview_slot(index)
+	else:
+		upcoming = upcoming.filter(func(tile: Dictionary) -> bool: return not retired.has(str(tile.get("source_word_id", ""))))
+	_fill_upcoming()
+	changed.emit()
+
+
+func replace_stage_words(words: Array, level: int) -> bool:
+	if not stage_transition_ready():
+		return false
+	# Keep historical definitions so an older body can still finish its spelling,
+	# picture match, level upgrade, or collection after the next stage begins.
+	var next_words: Array[Dictionary] = []
+	var next_ids: Dictionary = {}
+	var next_texts: Dictionary = {}
+	var definitions: Dictionary = _words_by_id.duplicate(true)
+	for candidate: Variant in words:
+		if not candidate is Dictionary or not _eligible(candidate, level):
+			continue
+		var word_id: String = str(candidate.id)
+		var normalized: String = normalize_word(str(candidate.text))
+		if next_ids.has(word_id) or next_texts.has(normalized):
+			continue
+		var word: Dictionary = candidate.duplicate(true)
+		next_words.append(word)
+		next_ids[word_id] = true
+		next_texts[normalized] = word
+		definitions[word_id] = word
+	if next_words.is_empty():
+		return false
+	var analyses: Array = []
+	var authored: Dictionary = {}
+	for word: Dictionary in definitions.values():
+		if not _reviewed_morphology(word):
+			continue
+		if str(word.morphology.get("lexeme_id", "")) != str(word.id) or str(word.morphology.get("text", "")) != str(word.text):
+			return false
+		analyses.append(word.morphology)
+		authored[str(word.id)] = str(word.morphology.get("id", ""))
+	var next_morphology := MorphologyResolver.new()
+	if not next_morphology.configure(analyses):
+		return false
+	_words = next_words
+	_words_by_id = definitions
+	_word_lookup.merge(next_texts, true)
+	_authored_words = authored
+	_morphology = next_morphology
+	_sense_resolvers.clear()
+	authored_morphology = not analyses.is_empty()
+	_supply.clear()
+	_supply_pending.clear()
+	upcoming.clear()
+	_fill_upcoming()
+	spawn_elapsed = 0.0
+	full_elapsed = -1.0
+	_schedule_spawn_interval()
 	changed.emit()
 	return true
 
@@ -505,8 +590,8 @@ func _advance_powerup() -> void:
 		_powerup_committing = false
 		if not _same_powerup(generation, receipt_id) or paused:
 			return
-	# Launch and contact have separate boundaries. A path's next 300 ms journey
-	# waits for its predecessor's fusion and settlement, with a minimum beat.
+	# A full automatic path fits one 400 ms beat: transfer, fusion, and landing.
+	# The next step can safely use the settled result from the preceding path.
 	var launch_ready: bool = float(_powerup.clock) + EPSILON >= float(_powerup.next_launch_at)
 	var pair: Array[int] = _powerup_pair(true, launch_ready)
 	if not pair.is_empty() and launch_ready:
@@ -628,7 +713,8 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
 		"composition_status": candidate.status,
 		"merge_level": int(result.get("merge_level", 0)),
 		"merge_kind": str(candidate.get("merge_kind", "roots")),
-		"elapsed": 0.0, "duration": FUSION_SECONDS, "pop_at": FUSION_SECONDS,
+		"elapsed": 0.0, "duration": POWERUP_FUSION_SECONDS if automatic else FUSION_SECONDS,
+		"pop_at": POWERUP_FUSION_SECONDS if automatic else FUSION_SECONDS,
 		"popped": false
 	}
 	fusions.append(active)
@@ -775,7 +861,7 @@ func _advance_collection_batch() -> void:
 	if not collection_batch_active() or phase != "playing" or paused:
 		return
 	# Let existing motion finish once, then keep the captured bodies in place
-	# so later gravity or growth cannot stretch the 120 ms collection beat.
+	# so later gravity or growth cannot stretch the 350 ms collection beat.
 	if _collection_batch_started == 0 and _collection_batch_settling_remaining() > EPSILON:
 		return
 	# A manual collection started before the button was pressed can finish,
@@ -875,6 +961,11 @@ func step(delta: float) -> void:
 		for tile in cells:
 			tile.age = float(tile.age) + consumed
 			tile.settling = float(tile.age) + EPSILON < settle_duration(tile)
+			if tile.has("settle_seconds") and not bool(tile.settling):
+				# The short landing belongs only to this automatic merge. Later
+				# manual drops and gravity use the ordinary body motion again.
+				tile.erase("settle_seconds")
+				tile.age = maxf(float(tile.age), SETTLE_SECONDS)
 		for active in fusions:
 			if not bool(active.get("commit_pending", false)):
 				active.elapsed = float(active.elapsed) + consumed
@@ -1164,7 +1255,7 @@ func reposition(tile_id: int, column: int, row: int) -> bool:
 
 
 func can_drop_now() -> bool:
-	return phase == "playing" and not paused and not powerup_active() and not collection_batch_active() and not upcoming.is_empty() and _has_free_cell()
+	return phase == "playing" and not paused and not powerup_active() and not collection_batch_active() and not _first_preview_tile().is_empty() and _has_free_cell()
 
 
 func drop_now(expected_first_id: int = -1) -> bool:
@@ -1212,7 +1303,7 @@ static func _scheduled_arrival_delay(slot: int) -> float:
 static func settle_duration(tile: Dictionary) -> float:
 	if bool(tile.get("arrival", false)):
 		return arrival_delay(tile) + Motion.ready_at(tile)
-	return SETTLE_SECONDS
+	return float(tile.get("settle_seconds", SETTLE_SECONDS))
 
 
 func is_valid_word(tile: Dictionary) -> bool:
@@ -1323,7 +1414,7 @@ func _eligible(word: Dictionary, level: int) -> bool:
 	if word.has("morphology_status") or word.has("morphology"):
 		if str(word.get("morphology_status", "reviewed")) != "reviewed" or not _reviewed_morphology(word):
 			return false
-	return int(word.get("min_age", 3)) == clampi(level, 3, 12) and not normalize_word(str(word.text)).is_empty()
+	return (allow_cross_age or int(word.get("min_age", 3)) == clampi(level, 3, 12)) and not normalize_word(str(word.text)).is_empty()
 
 
 static func _reviewed_morphology(word: Dictionary) -> bool:
@@ -1491,6 +1582,34 @@ func _place_composition(left: Dictionary, right: Dictionary, state: Dictionary,
 		"width": int(layout.width), "height": int(layout.height)}}
 
 
+func _resolve_composition(left: Dictionary, right: Dictionary) -> Dictionary:
+	var resolved: Dictionary = _morphology.resolve(left, right)
+	if str(resolved.get("reason", "")) != "ambiguous_sense":
+		return resolved
+	# A later stage can introduce another sense with the same spelling. Old
+	# roots retain their original analysis, so matching origins disambiguate it.
+	var shared: Dictionary = {}
+	for left_origin: Dictionary in left.get("origins", []):
+		for right_origin: Dictionary in right.get("origins", []):
+			var analysis_id: String = str(left_origin.get("analysis_id", ""))
+			if not analysis_id.is_empty() and analysis_id == str(right_origin.get("analysis_id", "")):
+				shared[analysis_id] = true
+	if shared.size() != 1:
+		return resolved
+	var analysis_id: String = str(shared.keys()[0])
+	var analysis: Dictionary = _morphology._analyses.get(analysis_id, {})
+	var word: Dictionary = _words_by_id.get(str(analysis.get("lexeme_id", "")), {})
+	if word.is_empty():
+		return resolved
+	if not _sense_resolvers.has(analysis_id):
+		var focused := MorphologyResolver.new()
+		if not focused.configure([word.morphology]):
+			return resolved
+		_sense_resolvers[analysis_id] = focused
+	var resolver: RefCounted = _sense_resolvers[analysis_id]
+	return resolver.resolve(left, right)
+
+
 func merge_candidate(left: Dictionary, right: Dictionary, check_space: bool = true) -> Dictionary:
 	if left.is_empty() or right.is_empty() or int(left.get("id", -1)) == int(right.get("id", -2)):
 		return {"status": "invalid", "result": {}}
@@ -1517,7 +1636,7 @@ func merge_candidate(left: Dictionary, right: Dictionary, check_space: bool = tr
 		tile = _joined_word_tile(left, right, candidate, 1, true)
 		merge_kind = "picture"
 	elif left_kind == "root" and right_kind == "root" and left.has("composition") and right.has("composition"):
-		var resolved: Dictionary = _morphology.resolve(_composition_state(left), _composition_state(right))
+		var resolved: Dictionary = _resolve_composition(_composition_state(left), _composition_state(right))
 		if not resolved.status in ["partial", "complete"]:
 			return {"status": resolved.status, "result": {}}
 		tile = _new_composition_tile(resolved.tile, false)
@@ -1556,7 +1675,7 @@ func parts_compatible(left: Dictionary, right: Dictionary) -> bool:
 			and _words_by_id.has(str(left.word_candidate.id)) \
 			and str(left.word_candidate.id) == str(right.get("image_word", {}).get("id", ""))
 	return left_kind == "root" and right_kind == "root" and left.has("composition") and right.has("composition") \
-		and _morphology.resolve(left.composition, right.composition).status in ["partial", "complete"]
+		and _resolve_composition(left.composition, right.composition).status in ["partial", "complete"]
 
 
 func can_merge(left: Dictionary, right: Dictionary) -> bool:
@@ -1605,11 +1724,30 @@ func authored_completion_plan(captured_only: bool = false) -> Dictionary:
 	# Do not charge for a spelling-only path whose required picture is absent.
 	# Restrict the resolver to targets that can actually finish on this board.
 	var analyses: Array = []
-	for word: Dictionary in _words:
+	for word: Dictionary in _words_by_id.values():
 		if _authored_words.has(str(word.id)) and (not _has_word_picture(word) or pictures.has(str(word.id))):
 			analyses.append(word.morphology)
 	if analyses.is_empty():
 		return {"status": "unavailable", "steps": []}
+	var plan: Dictionary = _authored_spelling_plan(available, pictures, analyses)
+	if plan.status == "complete":
+		return plan
+	# Cumulative stage definitions can contain identical spellings with different
+	# senses. Retry a single authored context without mixing its root origins.
+	var spellings: Dictionary = {}
+	for analysis: Dictionary in analyses:
+		var spelling: String = normalize_word(str(analysis.text))
+		spellings[spelling] = int(spellings.get(spelling, 0)) + 1
+	for analysis: Dictionary in analyses:
+		if int(spellings[normalize_word(str(analysis.text))]) > 1:
+			plan = _authored_spelling_plan(available, pictures, [analysis], str(analysis.id))
+			if plan.status == "complete":
+				return plan
+	return plan
+
+
+func _authored_spelling_plan(available: Array[Dictionary], pictures: Dictionary,
+	analyses: Array, origin_analysis: String = "") -> Dictionary:
 	var resolver := MorphologyResolver.new()
 	if not resolver.configure(analyses):
 		return {"status": "unavailable", "steps": []}
@@ -1618,6 +1756,9 @@ func authored_completion_plan(captured_only: bool = false) -> Dictionary:
 	for tile: Dictionary in available:
 		if str(tile.get("jelly_kind", "root")) == "root" and tile.has("composition") \
 			and resolver._states.has(str(tile.composition.signature)):
+			if not origin_analysis.is_empty() and not tile.composition.get("origins", []).any(
+				func(origin: Dictionary) -> bool: return str(origin.get("analysis_id", "")) == origin_analysis):
+				continue
 			states.append(_composition_state(tile))
 			ids.append(int(tile.id))
 	if states.size() < 2:
@@ -1699,6 +1840,8 @@ func _fill_upcoming() -> void:
 				return
 			if _supply.is_empty():
 				_build_supply()
+			if _supply.is_empty():
+				return
 			var next: Dictionary = _supply[0]
 			var width: int = int(next.width)
 			var anchor: int = -1
@@ -1719,7 +1862,10 @@ func _fill_upcoming() -> void:
 				upcoming[lane] = {"reservation": int(tile.id), "anchor": anchor}
 		return
 	while upcoming.size() < UPCOMING_COUNT:
-		upcoming.append(_next_supply_tile())
+		var tile: Dictionary = _next_supply_tile()
+		if tile.is_empty():
+			return
+		upcoming.append(tile)
 
 
 func _first_preview_tile() -> Dictionary:
@@ -1754,13 +1900,13 @@ func _schedule_spawn_interval() -> void:
 func _next_supply_tile() -> Dictionary:
 	if _supply.is_empty():
 		_build_supply()
-	return _supply.pop_front()
+	return {} if _supply.is_empty() else _supply.pop_front()
 
 
 func _build_supply() -> void:
 	# Mix only a new six-part packet. Advertised preview identities never move,
 	# and any word crossing a packet boundary keeps its remaining chunks first.
-	while _supply_pending.size() < UPCOMING_COUNT:
+	while _supply_pending.size() < UPCOMING_COUNT and not _words.is_empty():
 		var word: Dictionary = WordSampler.next_word(_words, _rng, _word_counts, _word_service, practice_weight_for)
 		_supply_words += 1
 		var authored_parts: Array = _morphology.source_tiles(str(_authored_words[word.id])) if _authored_words.has(word.id) else []
@@ -1786,8 +1932,10 @@ func _build_supply() -> void:
 			tile.source_word_id = str(word.id)
 			_supply_pending.append(tile)
 	var packet: Array[Dictionary] = []
-	for index in range(UPCOMING_COUNT):
+	for index in range(mini(UPCOMING_COUNT, _supply_pending.size())):
 		packet.append(_supply_pending.pop_front())
+	if packet.is_empty():
+		return
 	var best: Dictionary = {"score": 2147483647, "order": []}
 	_search_supply_order(packet, [], 0, best)
 	for index: int in best.order:
@@ -1866,7 +2014,7 @@ func _spawn_tile(arrival: bool, arrival_index: int = 0) -> bool:
 				break
 		if arrival_index < 0:
 			return false
-	if authored_morphology and not upcoming[arrival_index].has("id"):
+	if not upcoming[arrival_index].has("id"):
 		return false
 	var preview: Dictionary = upcoming[arrival_index] if arrival or authored_morphology else upcoming[0]
 	var occupied: Dictionary = _occupied()
@@ -1989,6 +2137,8 @@ func _complete_merge(completed: Dictionary) -> void:
 	# The fusion already ends at this reserved rectangle. Allow its final wobble
 	# to settle before accepting another drag or collection.
 	result.age = 0.0
+	if bool(completed.get("automatic", false)):
+		result.settle_seconds = POWERUP_SETTLE_SECONDS
 	result.settling = true
 	result.arrival = false
 	result.falling = false
@@ -2017,7 +2167,7 @@ func _complete_merge(completed: Dictionary) -> void:
 		if _powerup.drags.is_empty():
 			_powerup.stage = "settling"
 			_powerup.elapsed = 0.0
-			_powerup.duration = SETTLE_SECONDS
+			_powerup.duration = settle_duration(result)
 	if _has_free_cell():
 		full_elapsed = -1.0
 	completed.result = cell(int(result.id))
@@ -2235,6 +2385,8 @@ func _free_position(occupied: Dictionary, width: int, height: int) -> Vector2i:
 
 
 func _has_free_cell() -> bool:
+	if _first_preview_tile().is_empty():
+		return _arrival_position(_occupied()).x >= 0
 	if authored_morphology:
 		var occupied: Dictionary = _occupied()
 		for index in range(upcoming.size()):

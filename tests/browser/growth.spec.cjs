@@ -312,7 +312,7 @@ test('existing six-answer saves adopt three-answer mastery without losing earned
   expect(current.level).toBe(3);
   expect(current.age).toBe(0);
   const saved = await page.evaluate(key => localStorage.getItem(key), KEY);
-  expect(saved).toMatch(/version=3/);
+  expect(saved).toMatch(/version=4/);
   expect(saved).toContain(receipt);
   await page.reload();
   await enterGame(page);
@@ -334,7 +334,7 @@ test('mastering the complete age 3 cohort grows Pip while independent Lv progres
   expect(before.state.level).toBe(19);
   expect(before.state.age).toBe(0);
   expect(Math.abs(before.bar.value / before.bar.max_value - 1 / 7)).toBeLessThanOrEqual(GROWTH_BAR_RATIO_TOLERANCE);
-  expect(await page.evaluate(key => localStorage.getItem(key), KEY)).toMatch(/version=3/);
+  expect(await page.evaluate(key => localStorage.getItem(key), KEY)).toMatch(/version=4/);
   const cards = await discoverMatchCards(page);
   const target = cards[0].word;
   const pair = cards.filter(card => card.word === target);
