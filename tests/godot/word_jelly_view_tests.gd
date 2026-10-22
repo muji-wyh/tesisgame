@@ -128,7 +128,7 @@ func _reset(view, reduced: bool = false, age: int = 3) -> void:
 	check(view.configure(words, age, Data.theme("spring"), data.chests, reduced, 42), "Word Jelly configures with real art")
 	view.set_process(false)
 	view.game.spawn_interval = 10000.0
-	# This deterministic stream wins once, followed by eleven ordinary pickups.
+	# The first eligible Lv2 collection wins; Lv1 collections never roll for coins.
 	view.game._coin_rng.seed = COIN_REWARD_SEED
 	view.credit_collection = func(_id: String, _amount: int) -> Dictionary: return {"ok": true}
 	view._layout()
@@ -632,6 +632,8 @@ func _check_reposition_release(view) -> void:
 					_pointer_event(view, pointer, "down", _center(view, id))
 					_pointer_event(view, pointer, "move", motion)
 					check(view._dragging and view._target == -1, "mouse and touch drag roots, words, and long spellings over an empty destination")
+					# Pointer motion presents placement at the next rendered frame.
+					view._process(0.0)
 					var preview: Dictionary = view.snapshot().placement
 					check(preview.visible and preview.valid and int(preview.tile_id) == id and int(preview.column) == column and int(preview.row) == 1,
 						"the placement skin previews the whole valid snapped destination before release")
@@ -718,6 +720,8 @@ func _check_reposition_rejection(view) -> void:
 		_pointer_event(view, pointer, "down", _center(view, int(tile.id)))
 		_pointer_event(view, pointer, "move", occupied)
 		check(view._target == -1, "a moving occupant cannot become a merge target")
+		# Observe the rejected placement after buffered motion is presented.
+		view._process(0.0)
 		check(view.snapshot().placement.visible and not view.snapshot().placement.valid,
 			"a blocked footprint gets visual rejection while leaving the held jelly under pointer control")
 		_pointer_event(view, pointer, "up", occupied)
@@ -836,8 +840,8 @@ func _check_collect_and_fragments(view) -> void:
 	check(view.game.cells.size() == 1 and payouts.is_empty(), "manual collection keeps the word reserved before its 420 ms payout")
 	_advance(view, 0.001)
 	check(view.game.cells.is_empty() and payouts.size() == 1 and attempts.size() == 1, "tap collection removes the word and emits one reward and learning attempt")
-	check(payouts[0].amount == 50 and payouts[0].fragments == 2 and payouts[0].origin.distance_to(center) < 0.1,
-		"coin and fragment flight origin matches the tapped merged jelly")
+	check(payouts[0].amount == 0 and payouts[0].fragments == 2 and payouts[0].origin.distance_to(center) < 0.1,
+		"Lv1 collection retains the tapped fragment origin without a coin reward")
 	check(cues.count("pop") == 1 and view.game.fragment_count == 2, "collection retains the disappearance cue and all accumulated fragments")
 
 
@@ -970,7 +974,7 @@ func _check_ordinary_collection(view) -> void:
 				return {"ok": false}
 			var count: int = 3 if batch else 1
 			if batch:
-				_install_batch_words(view, count)
+				_install_batch_words(view, count, false, false)
 				view._collect_all()
 			else:
 				var ids: Array[int] = _install(view, ["cat"], [2], [2])
@@ -996,11 +1000,12 @@ func _batch_reveal_count(started: int, elapsed: float, duration: float) -> int:
 	return count
 
 
-func _install_batch_words(view, count: int, retain_others: bool = false) -> Array[int]:
+func _install_batch_words(view, count: int, retain_others: bool = false, eligible_first: bool = true) -> Array[int]:
 	view.game.cells.clear()
 	var ids: Array[int] = []
 	for index in range(count):
-		var tile: Dictionary = _fixture_tile(view, "cat", 2, index % 3)
+		var level_two: bool = eligible_first and index == 0
+		var tile: Dictionary = _fixture_tile(view, "merged:cat:2" if level_two else "cat", 4 if level_two else 2, index % 3)
 		tile.column = (index % 3) * 2
 		tile.row = Model.ROWS - 1 - floori(float(index) / 3.0)
 		view.game.cells.append(tile)
@@ -1095,7 +1100,7 @@ func _check_batch_collection(view) -> void:
 			return {"ok": true}
 		var pop_times: Array[float] = []
 		var on_pop: Callable = func(cue: String) -> void:
-			if cue == "pop":
+			if cue == "pop" or cue == "jelly-collect-lv2":
 				pop_times.append(float(view.game.collection_batch_snapshot().elapsed))
 		view.audio_requested.connect(on_pop)
 		view.collect_button.pressed.emit()
@@ -1162,8 +1167,9 @@ func _check_batch_collection(view) -> void:
 			"ordinary batch members collect successfully without creating a coin reward")
 		for times: int in credits.values():
 			check(times == 1, "each batch event reaches persistent credit only once")
-		check(view.game.collected_coins == 50 and view.game.fragment_count == 3 and cues.count("pop") == 3,
-			"all carried fragments and disappearance beats survive a batch containing one rare coin drop")
+		check(view.game.collected_coins == 50 and view.game.fragment_count == 3
+			and cues.count("pop") == 2 and cues.count("jelly-collect-lv2") == 1,
+			"the Lv2 bonus and two Lv1 collections retain every fragment and their own level sounds")
 		check(heard.is_empty(), "batch collection never pronounces a word, including the final pickup")
 		var reveals: Array = final.word_reveal.entries
 		var surviving_count: int = _batch_reveal_count(3, elapsed, float(started.word_reveal.duration))
@@ -1209,7 +1215,7 @@ func _check_coarse_frame_batch_reveals(view) -> void:
 		state = view.snapshot()
 		check(not state.collection_batch.active and int(state.collection_batch.completed) == 3
 			and payouts.size() == 3 and attempts.size() == 3 and view.game.collected_coins == 50
-			and view.game.fragment_count == 3 and cues.count("pop") == 3 and heard.is_empty(),
+			and view.game.fragment_count == 3 and cues.count("pop") == 2 and cues.count("jelly-collect-lv2") == 1 and heard.is_empty(),
 			"coarse reveal catch-up preserves one rare drop and three disappearance sounds without pronunciation")
 		view._process(0.10)
 		entries = view.snapshot().word_reveal.entries
@@ -1222,7 +1228,8 @@ func _check_coarse_frame_batch_reveals(view) -> void:
 		state = view.snapshot()
 		check(state.word_reveal.entries == before_pause,
 			"an ignored hidden-tab frame preserves all reveal ages and geometry")
-		check(payouts.size() == 3 and view.game.collected_coins == 50 and cues.count("pop") == 3 and heard.is_empty(),
+		check(payouts.size() == 3 and view.game.collected_coins == 50
+			and cues.count("pop") == 2 and cues.count("jelly-collect-lv2") == 1 and heard.is_empty(),
 			"an ignored hidden-tab frame cannot replay any batch rewards or sounds")
 
 
@@ -1394,8 +1401,8 @@ func _check_word_reveal(view) -> void:
 				and is_equal_approx(float(concurrent.entries[1].elapsed), 0.20),
 				"both individual reveals retain the correct picture, spelling and independent collection age")
 			_advance(view, Model.COLLECT_SECONDS)
-			check(payouts.size() == 2 and view.game.collected_coins == 50 and cues.count("pop") == 2,
-				"rapid different-word reveals preserve their rare drop and one disappearance cue per collection")
+			check(payouts.size() == 2 and view.game.collected_coins == 0 and cues.count("pop") == 2,
+				"rapid Lv1 reveals produce no coins and retain one disappearance cue per collection")
 			_advance(view, float(view.snapshot().word_reveal.duration))
 			check(not view.snapshot().word_reveal.visible and view.snapshot().word_reveal.entries.is_empty()
 				and int(view.snapshot().word_reveal.active_count) == 0 and heard.size() == 2 and payouts.size() == 2,
@@ -1412,6 +1419,12 @@ func _check_word_reveal_levels(view) -> void:
 			for index in range(ids.size()):
 				view.game.cells[index].merge_level = levels[index]
 			view._sync_tiles()
+			var advertised: Array = view.snapshot().tiles
+			for index in range(ids.size()):
+				var reward: Dictionary = advertised.filter(func(tile: Dictionary) -> bool: return int(tile.id) == ids[index])[0]
+				check(is_equal_approx(float(reward.coin_drop_chance), [0.0, 0.06, 0.80][index])
+					and int(reward.coins) == [0, 150, 450][index],
+					"the view snapshot advertises exact Lv1, Lv4 and Lv9 collection odds and payouts")
 			if batch:
 				view._collect_all()
 				view._process(0.40)
@@ -1523,7 +1536,7 @@ func _check_collection_stack_fall(view) -> void:
 		for pointer: int in [-1, 7]:
 			_reset(view, reduced)
 			view.game.cells.clear()
-			var support: Dictionary = _fixture_tile(view, "cat", 2, 1)
+			var support: Dictionary = _fixture_tile(view, "merged:cat:2", 4, 1)
 			support.column = 1
 			support.row = 7
 			var lower: Dictionary = _fixture_tile(view, "root:cat", 1, 1)
@@ -2047,6 +2060,8 @@ func _check_neutral_contact_targets(view) -> void:
 					context + ": pressure never changes the target's layout or collision outline")
 				var empty: Vector2 = view.get_global_transform() * (view._board.position + Vector2(view._pitch * 0.5, view._pitch * 0.5))
 				_pointer_event(view, pointer, "move", empty)
+				# Separation must be rendered before testing a later recontact.
+				view._process(0.0)
 				check(view._target == -1 and view._contact_state().kind == "none", context + ": separating ends the collision")
 				for id: int in ids:
 					check(view._tiles[id]._contact_kind == "none" and view._tiles[id]._surface.position.is_zero_approx(),
@@ -2078,6 +2093,8 @@ func _check_invalid_body_combinations(view) -> void:
 				var destination: Vector2 = _center(view, ids[1])
 				_pointer_event(view, pointer, "down", _center(view, ids[0]))
 				_pointer_event(view, pointer, "move", destination)
+				# Inspect contact after the frame consumes the latest pointer motion.
+				view._process(0.0)
 				check(view._contact_state().kind == "touch" and cues.count("wrong") == 0,
 					"roots, valid words, and long spellings all retain neutral physical contact while held")
 				_pointer_event(view, pointer, "up", destination)
@@ -2494,12 +2511,12 @@ func _check_reduced_motion(view) -> void:
 	_advance(view, 0.1)
 	check(view._fusion_visuals.values()[0].merged.scale == Vector2.ONE, "reduced-motion collection fades without squeezing")
 	_advance(view, Model.COLLECT_SECONDS)
-	check(view.game.collected_coins == 50 and view.game.fragment_count == 2 and view._loot_flights.is_empty(), "reduced motion preserves rewards while suppressing fragment travel")
+	check(view.game.collected_coins == 0 and view.game.fragment_count == 2 and view._loot_flights.is_empty(), "reduced motion preserves Lv1 fragments without inventing a coin reward")
 
 
 func _check_wallet_failure(view) -> void:
 	_reset(view)
-	var ids: Array[int] = _install(view, ["cat"], [2], [2])
+	var ids: Array[int] = _install(view, ["merged:cat:2"], [2], [4])
 	view.credit_collection = func(_id: String, _amount: int) -> Dictionary: return {"ok": false}
 	var center: Vector2 = _center(view, ids[0])
 	view._press(-1, center)
@@ -2526,7 +2543,7 @@ func _check_keyboard(view) -> void:
 	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
 	view._activate(id)
 	_advance(view, Model.COLLECT_SECONDS)
-	check(payouts.size() == 1 and view.game.collected_coins == 50, "keyboard activation can collect a valid merged word")
+	check(payouts.size() == 1 and view.game.collected_coins == 0, "keyboard activation collects a Lv1 word without a coin bonus")
 
 
 func _check_keyboard_rejection(view) -> void:
@@ -2978,8 +2995,8 @@ func _check_danger_ends_when_collecting(view) -> void:
 	_advance(view, 0.002)
 	check(cues.count("danger_end") == 1 and view.game.full_elapsed < 0.0 and view.game._has_free_cell(),
 		"successful collection stops danger in the same frame that its footprint is freed")
-	check(payouts.size() == 1 and payouts[0].amount == 50,
-		"danger relief does not duplicate or delay the collection reward")
+	check(payouts.size() == 1 and payouts[0].amount == 0,
+		"danger relief completes the Lv1 collection once without inventing a coin bonus")
 	_advance(view, 0.6)
 	check(cues.count("danger") == 1 and cues.count("danger_end") == 1,
 		"a relieved well cannot repeat the old danger pulse or stop event")

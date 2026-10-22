@@ -198,12 +198,14 @@ func _post_settlement_selection() -> void:
 	check(predicted.snapshot().word_ids.has(target.id),
 		"Selecting before settlement would incorrectly include the almost-mastered target")
 	game.cells.clear()
-	var tile: Dictionary = game._new_word_root(target, 0)
-	game._set_merged_word(tile, target, 1, true)
+	var tile: Dictionary = game._new_tile(str(target.text), 4, 0)
+	game._set_merged_word(tile, target, 2, true)
 	tile.column = 0
 	tile.row = game.ROWS - 1
 	tile.age = game.SETTLE_SECONDS
 	game.cells.append(tile)
+	check(game.coins_for_tile(tile) == 50 and game.coin_drop_chance_for_tile(tile) > 0.0,
+		"The delayed-settlement fixture uses an eligible Lv2 coin collection")
 	game._coin_rng.seed = 208
 	var credit: Callable = game.credit_collection
 	game.credit_collection = func(event_id: String, amount: int) -> Dictionary:

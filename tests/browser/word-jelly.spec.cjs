@@ -2,7 +2,7 @@ const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
 const { openGame, openModeMenu, chooseMode, metrics, tap, rendered, enterGame, observeAudio, seedGrowth } = require('./game-ui.cjs');
 const { recordingTiming, expectRecording } = require('./bundled-audio.cjs');
-const { collectionCoins } = require('./word-jelly-rewards.cjs');
+const { collectionCoins, expectCollectionReward } = require('./word-jelly-rewards.cjs');
 const vocabulary = require('../../words.json');
 const morphology = Array.from({ length: 10 }, (_, index) =>
   require(`../../data/vocabulary/morphology/age-${String(index + 3).padStart(2, '0')}.json`).entries).flat();
@@ -214,6 +214,7 @@ async function merge(page, sourceId, targetId) {
   } else {
     expect(result.jelly_kind).toBe('merged');
     expect(result.merge_level).toBe(authored.mergeLevel);
+    expectCollectionReward(result);
     expect(result.mastery_eligible).toBe(authored.masteryEligible);
   }
   expect([result.width, result.height], 'Composition preserves the ordinary one-cell body').toEqual([1, 1]);
@@ -1516,7 +1517,7 @@ test('merged word mastery is recorded only on collection and survives reload', a
   expect(errors).toEqual([]);
 });
 
-test('six columns build a pictured word and a deliberate tap rolls its rare coins once', async ({ page }, info) => {
+test('six columns build a pictured word and a deliberate tap collects Lv1 without coins', async ({ page }, info) => {
   const errors = await startWordJelly(page), opening = await jelly(page), bounds = await metrics(page);
   expect(opening.columns).toBe(6);
   expect(opening.rows).toBe(8);
@@ -2351,8 +2352,9 @@ for (const { age, parts, minimumLength } of [
   expectCompactLabel(completed);
   expect(completed.mass).toBe(parts + (selected.picture ? 1 : 0));
   expect((await jelly(page)).merged_count).toBe(beforeMerge.merged_count + parts - 1 + (selected.picture ? 1 : 0));
-  expect(completed.coins).toBe(50);
-  expect(completed.coin_drop_chance).toBe(0.01);
+  expect(completed.merge_level).toBe(1);
+  expect(completed.coins).toBe(0);
+  expect(completed.coin_drop_chance).toBe(0);
   expect(completed.picture_visible).toBe(Boolean(word.image));
   expectInside(completed.rect, await metrics(page));
   if (parts === 3) {

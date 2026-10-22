@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { openGame, chooseMode, metrics, tap, rendered } = require('./game-ui.cjs');
+const { expectCollectionReward } = require('./word-jelly-rewards.cjs');
 
 const state = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 const point = (tile, bounds) => ({
@@ -7,27 +8,56 @@ const point = (tile, bounds) => ({
   y: bounds.y + (tile.rect[1] + tile.rect[3] / 2) * bounds.scale,
 });
 
-async function join(page, first, second) {
+async function join(page, first, second, projectName) {
   const before = await state(page), bounds = await metrics(page);
   const source = before.tiles.find(tile => tile.id === first);
   const destination = before.tiles.find(tile => tile.id === second);
   const from = point(source, bounds), to = point(destination, bounds);
-  await page.mouse.move(from.x, from.y);
-  await page.mouse.down();
+  const touch = projectName === 'android-chromium' ? await page.context().newCDPSession(page) : null;
+  let cursor = from;
+  const move = async (next, steps = 1) => {
+    if (touch) {
+      const start = cursor;
+      for (let step = 1; step <= steps; step++) {
+        await touch.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ id: 1,
+          x: start.x + (next.x - start.x) * step / steps,
+          y: start.y + (next.y - start.y) * step / steps }] });
+      }
+      cursor = next;
+    } else {
+      await page.mouse.move(next.x, next.y, { steps });
+    }
+  };
   try {
-    await page.mouse.move(from.x, from.y - 16);
-    await page.mouse.move(to.x, to.y, { steps: 8 });
+    if (touch) {
+      await touch.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...from }] });
+    } else {
+      await page.mouse.move(from.x, from.y);
+      await page.mouse.down();
+    }
+    await move({ x: from.x, y: from.y - 16 });
+    await move(to, 8);
     await expect.poll(async () => (await state(page)).drag.source).toBe(first);
+    if (touch) await expect.poll(async () => (await state(page)).drag.pointer,
+      { message: 'Android dragging is owned by a real touch pointer' }).toBeGreaterThanOrEqual(0);
     await expect.poll(async () => {
       const current = await state(page), target = current.tiles.find(tile => tile.id === second);
       if (!target?.settled) return false;
       if (current.drag.target === second) return true;
       const next = point(target, bounds);
-      await page.mouse.move(next.x, next.y, { steps: 4 });
+      await move(next, 4);
       return false;
     }).toBe(true);
   } finally {
-    await page.mouse.up();
+    if (touch) {
+      try {
+        await touch.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      } finally {
+        await touch.detach();
+      }
+    } else {
+      await page.mouse.up();
+    }
   }
   let merged;
   await expect.poll(async () => {
@@ -38,6 +68,7 @@ async function join(page, first, second) {
   }).toBe(true);
   expect((await state(page)).cleared_pairs).toBe(before.cleared_pairs);
   expect([merged.width, merged.height]).toEqual([1, 1]);
+  expectCollectionReward(merged);
   return merged;
 }
 
@@ -67,7 +98,7 @@ test('whole-word roots match pictures and merged words remain compact and collec
   expect(picture.label_text).toBe('');
   expect(picture.picture_visible).toBe(true);
   expect(picture.requires_read).toBe(false);
-  const merged = await join(page, root.id, picture.id);
+  const merged = await join(page, root.id, picture.id, info.project.name);
   expect(merged.word.id).toBe(root.word_candidate.id);
   expect(merged.merge_level).toBe(1);
   expect(merged.mastery_eligible).toBe(true);
@@ -104,8 +135,21 @@ test('whole-word roots match pictures and merged words remain compact and collec
   expect(afterHold.tiles.map(tile => tile.id)).toEqual(expect.arrayContaining(phone.tiles.map(tile => tile.id)));
   expect(retained?.jelly_kind).toBe('merged');
   expect(afterHold.fusions.some(fusion => fusion.operation === 'collect')).toBe(false);
-  await tap(page, retained.rect[0] + retained.rect[2] / 2, retained.rect[1] + retained.rect[3] / 2);
+  expect(afterHold.read_detail.visible, 'Holding a clipped phone label opens its Read dialog').toBe(retained.requires_read);
+  if (afterHold.read_detail.visible) {
+    expect(afterHold.read_detail.text).toBe(merged.word.text);
+    expect(afterHold.paused).toBe(true);
+    await page.screenshot({ path: info.outputPath('hybrid-read-dialog.png') });
+    await page.keyboard.press('Escape');
+    await expect.poll(async () => {
+      const current = await state(page);
+      return !current.read_detail.visible && !current.paused;
+    }).toBe(true);
+  }
+  const collectable = (await state(page)).tiles.find(tile => tile.id === merged.id);
+  await tap(page, collectable.rect[0] + collectable.rect[2] / 2, collectable.rect[1] + collectable.rect[3] / 2);
   await expect.poll(async () => (await state(page)).cleared_pairs).toBe(before.cleared_pairs + 1);
   await expect.poll(async () => (await state(page)).tiles.some(tile => tile.id === merged.id)).toBe(false);
+  expect((await state(page)).collected_coins, 'Collecting Lv1 never awards bonus coins').toBe(before.collected_coins);
   expect(errors).toEqual([]);
 });

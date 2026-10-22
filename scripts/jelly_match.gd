@@ -66,6 +66,9 @@ var _press_point := Vector2.ZERO
 var _drag_point := Vector2.ZERO
 var _drag_offset := Vector2.ZERO
 var _dragging: bool = false
+var _motion_pending: bool = false
+var _pending_motion := Vector2.ZERO
+var _defer_motion_visuals: bool = false
 var _snapbacks: Dictionary = {}
 var _fusion_visuals: Dictionary = {}
 var _contact_elapsed: float = 0.0
@@ -385,6 +388,7 @@ func stop() -> void:
 	_publish()
 
 func cancel_input() -> void:
+	_motion_pending = false
 	if is_instance_valid(finish_button):
 		finish_button.cancel_pull(true)
 	_chest_tap.clear()
@@ -473,7 +477,7 @@ func _input(event: InputEvent) -> void:
 			_release(event.position)
 			handled = true
 	elif event is InputEventScreenDrag and event.index == _pointer:
-		_move(event.position)
+		_queue_drag_motion(event.position)
 		handled = true
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.canceled and _pointer == MOUSE_POINTER:
@@ -486,7 +490,7 @@ func _input(event: InputEvent) -> void:
 			handled = true
 	elif event is InputEventMouseMotion and _pointer == MOUSE_POINTER:
 		if event.button_mask & MOUSE_BUTTON_MASK_LEFT:
-			_move(event.position)
+			_queue_drag_motion(event.position)
 		else:
 			cancel_input()
 		handled = true
@@ -542,6 +546,26 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	_publish()
 	return true
 
+func _queue_drag_motion(global_point: Vector2) -> void:
+	# Preview cancellation and the first threshold crossing must remember even
+	# an excursion that returns before the next frame. Once lifted, keep only
+	# the newest touch position; the frame owns contact and board presentation.
+	if _preview_first_id >= 0:
+		_move(global_point)
+		return
+	_pending_motion = global_point
+	_motion_pending = true
+	if not _dragging:
+		_consume_drag_motion()
+
+func _consume_drag_motion() -> void:
+	if not _motion_pending:
+		return
+	_motion_pending = false
+	_defer_motion_visuals = true
+	_move(_pending_motion)
+	_defer_motion_visuals = false
+
 func _move(global_point: Vector2) -> void:
 	if _preview_first_id >= 0:
 		var point: Vector2 = get_global_transform().affine_inverse() * global_point
@@ -560,12 +584,14 @@ func _move(global_point: Vector2) -> void:
 		return
 	_tiles[_source].position = point - _drag_offset
 	_tiles[_source].z_index = 40
+	if _defer_motion_visuals:
+		return
 	_sync_positions()
 	_refresh_fusion()
-	_publish()
 	_sound_contact()
 
 func _release(global_point: Vector2) -> void:
+	_consume_drag_motion()
 	if _preview_first_id >= 0:
 		var expected_id: int = _preview_first_id
 		var generation: int = _generation
@@ -708,6 +734,7 @@ func _drag_target() -> int:
 		return -1
 	var source: Tile = _tiles[_source]
 	var outline: PackedVector2Array = source.contact_outline(Vector2.ONE if reduced_motion else DRAG_STRETCH)
+	var bounds: Rect2 = _outline_bounds(outline)
 	var nearest: int = -1
 	var nearest_distance: float = INF
 	for cell: Dictionary in game.cells:
@@ -720,11 +747,31 @@ func _drag_target() -> int:
 		var distance: float = source.get_rect().get_center().distance_squared_to(target.get_rect().get_center())
 		if distance > nearest_distance or (is_equal_approx(distance, nearest_distance) and id != _target):
 			continue
-		if Geometry2D.intersect_polygons(outline, target.contact_outline()).is_empty():
+		var target_outline: PackedVector2Array = target.contact_outline()
+		if not bounds.intersects(_outline_bounds(target_outline), true):
+			continue
+		if Geometry2D.intersect_polygons(outline, target_outline).is_empty():
 			continue
 		nearest = id
 		nearest_distance = distance
 	return nearest
+
+func _outline_bounds(outline: PackedVector2Array) -> Rect2:
+	if outline.is_empty():
+		return Rect2()
+	var bounds := Rect2(outline[0], Vector2.ZERO)
+	for point: Vector2 in outline:
+		bounds = bounds.expand(point)
+	return bounds
+
+func _begin_view_update() -> void:
+	pass
+
+func _end_view_update() -> void:
+	pass
+
+func _can_drop_preview() -> bool:
+	return game.can_drop_now()
 
 func _picture(word: Dictionary) -> Texture2D:
 	var path: String = str(word.get("image", ""))
@@ -901,6 +948,7 @@ func _refresh_contact() -> void:
 		_tiles[id].set_contact(str(state.kind) if involved else "none", direction, float(state.strength) if involved else 0.0, reduced_motion)
 
 func _process(delta: float) -> void:
+	_consume_drag_motion()
 	for id in _chest_cache:
 		var cache: Dictionary = _chest_cache[id]
 		if int(cache.frames) < 6:
@@ -952,10 +1000,12 @@ func _process(delta: float) -> void:
 		_snapbacks[id].elapsed += delta
 		if float(_snapbacks[id].elapsed) >= 0.24:
 			_snapbacks.erase(id)
+	_begin_view_update()
 	_sync_tiles()
 	_refresh_fusion()
 	_refresh_hud()
 	queue_redraw()
+	_end_view_update()
 	_publish_elapsed += delta
 	if _publish_elapsed >= 0.1:
 		_publish()
@@ -1226,11 +1276,11 @@ func _refresh_hud() -> void:
 	_loot_meter.set("accessibility_name", "%d fragments. Chest level %d. %d of %d toward the next reward." % [game.fragment_count, game.chest_tier, progress.fragments_toward_next, progress.fragments_required])
 	_loot_icon.texture = _reward_texture(displayed_tier)
 	_loot_icon.modulate.a = 1.0 if displayed_tier > 0 else 0.72
-	var state: Dictionary = game.snapshot()
 	var full: bool = float(game.full_elapsed) >= 0.0
-	_notice.text = "Board full · %ds to make space" % maxi(1, ceili(float(state.get("full_remaining", 8.0)))) if full else "Match a picture to its word."
+	var full_remaining: float = maxf(0.0, game.FULL_SECONDS - game.full_elapsed)
+	_notice.text = "Board full · %ds to make space" % maxi(1, ceili(full_remaining)) if full else "Match a picture to its word."
 	if _compact_hud and full:
-		_notice.text = "Make space\n%ds" % maxi(1, ceili(float(state.get("full_remaining", 8.0))))
+		_notice.text = "Make space\n%ds" % maxi(1, ceili(full_remaining))
 	_notice.add_theme_color_override("font_color", Color("#733713") if full else Color("#315142"))
 	_notice.visible = _configured and not has_header_chest() and (not _compact_hud or full)
 	_sync_chest_tap()
@@ -1248,7 +1298,7 @@ func _refresh_controls() -> void:
 		_configured and game.phase == "playing"
 	finish_button.disabled = not _can_play() or _pointer != NO_POINTER
 	drop_button.visible = _configured and game.phase == "playing"
-	drop_button.disabled = not _can_play() or _finish_is_pulling() or not game.can_drop_now() or (_pointer != NO_POINTER and _preview_first_id < 0)
+	drop_button.disabled = not _can_play() or _finish_is_pulling() or not _can_drop_preview() or (_pointer != NO_POINTER and _preview_first_id < 0)
 	if drop_button.disabled:
 		_set_preview_pressed(false)
 
@@ -1510,7 +1560,7 @@ func snapshot() -> Dictionary:
 	var first_effect: Dictionary = result.fusion_effects[0] if not result.fusion_effects.is_empty() else {}
 	result["fusion_effect"] = {"visible": first_effect.get("visible", false), "stage": first_effect.get("stage", "none")}
 	result["preview"] = {"visible": is_visible_in_tree() and _configured,
-		"enabled": _can_play() and game.can_drop_now() and _pointer == NO_POINTER,
+		"enabled": _can_play() and _can_drop_preview() and _pointer == NO_POINTER,
 		"control": _control(drop_button), "rect": _rect(_global_rect(_preview_rect)), "slots": []}
 	for index in range(_preview_tiles.size()):
 		var preview: Tile = _preview_tiles[index]

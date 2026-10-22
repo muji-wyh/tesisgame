@@ -447,14 +447,21 @@ func _check_collect_application_route(app) -> void:
 	var view = app._word_jelly
 	var game = view.game
 	game.spawn_interval = 10000.0
-	# This stream gives the first pickup a bonus and the next eleven no coins.
+	# The first eligible Lv2 pickup wins; the other eleven Lv1 pickups never roll.
 	game._coin_rng.seed = 208
 	game.cells.clear()
 	for index in range(12):
 		var tile: Dictionary = game._new_tile(str(game._words[0].text), 2, 0)
+		game._set_merged_word(tile, game._words[0], 1, true)
 		tile.column = (index % 3) * 2
 		tile.row = game.ROWS - 1 - floori(float(index) / 3.0)
 		game.cells.append(tile)
+	var rewarded_tile: Dictionary = game.cells[game._index_for_id(game.collectable_ids()[0])]
+	rewarded_tile.mass = 4
+	rewarded_tile.parts_count = 4
+	game._set_merged_word(rewarded_tile, game._words[0], 2, true)
+	check(game.coins_for_tile(game.cell(int(rewarded_tile.id))) == 50,
+		"The first reserved collection is an eligible Lv2 word")
 	view._sync_tiles()
 	view._layout()
 	var before: int = app.coin_wallet.balance
@@ -472,7 +479,7 @@ func _check_collect_application_route(app) -> void:
 	check(not app.audio.voice.playing, "Starting Collect cancels pending pronunciation before the first pickup")
 	check(game.collection_batch_active() and game.collection_batch_snapshot().total == 12,
 		"The real Collect button queues twelve valid merged jellies")
-	for frame in range(150):
+	for frame in range(ceili((12.0 * game.BATCH_BEAT_SECONDS + 0.2) / 0.01)):
 		observed.time += 0.01
 		view._process(0.01)
 		app._coin_flight.advance(0.01)
@@ -480,7 +487,7 @@ func _check_collect_application_route(app) -> void:
 		and not game.collection_batch_active(),
 		"Twelve rapid word pickups produce only the one successful rare coin appearance")
 	check(observed.streams.size() == 1 and observed.streams[0] == Audio.COIN_RELEASE_PATH
-		and is_equal_approx(float(observed.releases[0]), 0.12),
+		and is_equal_approx(float(observed.releases[0]), game.BATCH_BEAT_SECONDS),
 		"The rare drop uses the appearance recording on its collection beat")
 	check(observed.receipts[0].coins == 50
 		and observed.receipts.slice(1).all(func(receipt: Dictionary) -> bool: return receipt.coins == 0),

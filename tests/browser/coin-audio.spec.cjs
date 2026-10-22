@@ -6,7 +6,6 @@ const {
 const {
   watchAudioRequests, observeOutputAudio, expectRecording, recordingTiming
 } = require('./bundled-audio.cjs');
-const vocabulary = require('../../words.json');
 const { collectionCoins } = require('./word-jelly-rewards.cjs');
 const { roomState } = require('./pop-treasure-ui.cjs');
 
@@ -16,7 +15,6 @@ const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(n
 const wallet = page => page.locator('#coin-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const playbackIndex = page => page.evaluate(() => window.audioObservation.playbacks.length);
 const playbacksSince = (page, from) => page.evaluate(index => window.audioObservation.playbacks.slice(index), from);
-const matching = (sounds, recording) => sounds.filter(sound => sound.fingerprint === recording.fingerprint);
 
 test.use({ deviceScaleFactor: 1, trace: 'off',
   launchOptions: { ignoreDefaultArgs: ['--autoplay-policy=no-user-gesture-required'] } });
@@ -48,17 +46,17 @@ async function settled(page) {
 }
 
 async function makeWord(page, { marked = false } = {}) {
-  const words = new Map(vocabulary.filter(word => word.min_age === 3).map(word => [word.text.toLowerCase(), word]));
   let pair;
   for (let attempt = 0; attempt < 4; attempt++) {
     await settled(page);
     const state = await jelly(page);
-    const roots = state.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1);
+    const roots = state.tiles.filter(tile => tile.visible && tile.settled && tile.jelly_kind === 'root' && tile.word_candidate?.id);
     // One marked word verifies fragment retention; other trials prefer unmarked
     // roots to avoid an unrelated chest celebration in the audio observation.
     const candidates = [];
-    for (const first of roots) for (const second of roots) {
-      if (first.id !== second.id && words.has((first.text + second.text).toLowerCase())) candidates.push([first, second]);
+    for (const first of roots) for (const second of state.tiles) {
+      if (second.visible && second.settled && second.jelly_kind === 'picture' &&
+        second.image_word?.id === first.word_candidate.id) candidates.push([first, second]);
     }
     candidates.sort((a, b) => (marked ? -1 : 1) * (a[0].fragments + a[1].fragments - b[0].fragments - b[1].fragments));
     if (candidates.length) { pair = candidates[0]; break; }
@@ -66,7 +64,7 @@ async function makeWord(page, { marked = false } = {}) {
     await pressRect(page, state.preview.rect);
     await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(state.generated_tiles);
   }
-  expect(pair, 'The current-age supply contains a complete two-root word').toBeTruthy();
+  expect(pair, 'The current-age supply contains a whole-word root and its exact picture').toBeTruthy();
   const bounds = await metrics(page), before = await jelly(page);
   const center = tile => ({ x: bounds.x + (tile.rect[0] + tile.rect[2] / 2) * bounds.scale,
     y: bounds.y + (tile.rect[1] + tile.rect[3] / 2) * bounds.scale });
@@ -74,9 +72,17 @@ async function makeWord(page, { marked = false } = {}) {
   await page.mouse.move(from.x, from.y);
   await page.mouse.down();
   try {
+    await page.mouse.move(from.x, from.y - 16);
     await expect.poll(async () => (await jelly(page)).drag.source).toBe(pair[0].id);
     await page.mouse.move(to.x, to.y, { steps: 10 });
-    await expect.poll(async () => (await jelly(page)).drag.target).toBe(pair[1].id);
+    await expect.poll(async () => {
+      const current = await jelly(page), target = current.tiles.find(tile => tile.id === pair[1].id);
+      if (!target?.settled) return false;
+      if (current.drag.target === pair[1].id) return true;
+      const next = center(target);
+      await page.mouse.move(next.x, next.y, { steps: 4 });
+      return false;
+    }, { message: 'The drag follows its picture after lifting a supporting root' }).toBe(true);
   } finally {
     await page.mouse.up();
   }
@@ -84,7 +90,8 @@ async function makeWord(page, { marked = false } = {}) {
   await expect.poll(async () => {
     const state = await jelly(page);
     merged = state.tiles.find(tile => !before.tiles.some(old => old.id === tile.id) &&
-      tile.text === pair[0].text + pair[1].text && tile.mass === 2 && tile.settled);
+      tile.word?.id === pair[0].word_candidate.id && tile.merge_level === 1 &&
+      tile.mass === pair[0].mass + pair[1].mass && tile.settled);
     return Boolean(merged?.word?.id);
   }, { message: 'The real drag produces a valid word without collecting it' }).toBe(true);
   return merged;
@@ -133,37 +140,6 @@ function expectNoPronunciation(sounds, words) {
   }
 }
 
-function expectReleaseAndArrival(releases, deposits, timeline, balance, reducedMotion, maximum) {
-  const sounds = [...releases, ...deposits].sort((a, b) => a.at - b.at);
-  const launches = timeline.filter((frame, index, frames) => frame.active && frame.balance >
-    (index ? frames[index - 1].balance : balance));
-  const arrivals = timeline.filter((frame, index, frames) => index > 0 &&
-    frame.arrived_balance > frames[index - 1].arrived_balance);
-  expect(launches.length, 'A visual coin flight begins for the collected word').toBeGreaterThan(0);
-  expect(arrivals.length, 'The same flight eventually deposits its coins').toBeGreaterThan(0);
-  expect(releases.length, 'The appearing coins play their own recording').toBeGreaterThan(0);
-  expect(deposits.length, 'The HUD deposits play their distinct recording').toBeGreaterThan(0);
-  expect(sounds.length, 'Coin appearance and later arrival both have feedback').toBeGreaterThanOrEqual(2);
-  expect(sounds.length, 'Launches and dense arrivals share one bounded cadence').toBeLessThanOrEqual(maximum);
-  expect(Math.abs(releases[0].at - launches[0].at),
-    'The appearance recording accompanies the first visible coins, including publication latency').toBeLessThan(180);
-  expect(arrivals[0].at - releases[0].at,
-    'The initial accent is audible before the later HUD deposit').toBeGreaterThan(reducedMotion === 'reduce' ? 50 : 650);
-  for (const sound of releases) expect(launches.some(frame => Math.abs(frame.at - sound.at) < 180),
-    'The appearance recording belongs only to a visible coin launch').toBe(true);
-  for (const sound of deposits) expect(arrivals.some(frame => Math.abs(frame.at - sound.at) < 180),
-    'The arrival recording belongs only to an actual HUD deposit').toBe(true);
-  expect(deposits[0].at - releases[0].at,
-    'The two distinct recordings follow appearance then deposit in time').toBeGreaterThan(reducedMotion === 'reduce' ? 50 : 650);
-  for (const [index, sound] of sounds.entries()) {
-    expect([...launches, ...arrivals].some(frame => Math.abs(frame.at - sound.at) < 180),
-      'Each coin accent belongs to a visible launch or actual HUD deposit').toBe(true);
-    if (index) expect(sound.at - sounds[index - 1].at,
-      'Release and arrival share the existing 100 ms cadence without per-frame restarts').toBeGreaterThanOrEqual(75);
-  }
-  return { launches, arrivals };
-}
-
 function coinRecordings(sounds) {
   return sounds.filter(sound => Object.values(COIN_CLIPS).some(path => {
     const timing = recordingTiming(path);
@@ -172,7 +148,7 @@ function coinRecordings(sounds) {
 }
 
 for (const reducedMotion of ['no-preference', 'reduce']) {
-  test(`Jelly collection keeps rare coin feedback honest with ${reducedMotion} motion`, async ({ page, context, browserName }, info) => {
+  test(`Lv1 Jelly collection stays coin-free with ${reducedMotion} motion`, async ({ page, context, browserName }, info) => {
     test.setTimeout(180000);
     const requests = watchAudioRequests(page), evidence = { reducedMotion, collections: [] };
     await observeOutputAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5, trackSourceLifecycle: true });
@@ -194,6 +170,8 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
         else await pressRect(page, before.tiles.find(tile => tile.id === tiles[0].id).rect);
         await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + tiles.length);
         const after = await jelly(page), earned = collectionCoins(after, before, tiles);
+        expect(tiles.every(tile => tile.merge_level === 1)).toBe(true);
+        expect(earned, 'Lv1 collection never launches a bonus coin reward').toBe(0);
         await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(startingWallet.balance + earned);
         await expect.poll(async () => (await wallet(page)).active).toBe(false);
         expect(after.fragment_count).toBe(before.fragment_count + tiles.reduce((sum, tile) => sum + tile.fragments, 0));
@@ -204,21 +182,13 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
         const sounds = await playbacksSince(page, from), timeline = await page.evaluate(() => window.coinAudioTimeline);
         const trial = { batch, earned, words: tiles.map(tile => tile.word.id), sounds, timeline };
         evidence.collections.push(trial);
-        if (earned === 0) {
-          if (available) expect(coinRecordings(sounds), 'An ordinary no-drop collection plays neither coin appearance nor deposit recording').toEqual([]);
-          expect(timeline.every(frame => !frame.active && frame.balance === startingWallet.balance &&
-            frame.arrived_balance === startingWallet.arrived_balance), 'No-drop collection launches no phantom coin flight').toBe(true);
-        } else if (available) {
-          const recordings = { release: await expectRecording(page, from, COIN_CLIPS.release),
-            arrival: await expectRecording(page, from, COIN_CLIPS.arrival) };
-          expect(recordings.release.fingerprint).not.toBe(recordings.arrival.fingerprint);
-          trial.events = expectReleaseAndArrival(matching(sounds, recordings.release), matching(sounds, recordings.arrival),
-            timeline, startingWallet.balance, reducedMotion, batch ? 10 : 6);
-        }
+        if (available) expect(coinRecordings(sounds), 'A Lv1 collection plays neither coin appearance nor deposit recording').toEqual([]);
+        expect(timeline.every(frame => !frame.active && frame.balance === startingWallet.balance &&
+          frame.arrived_balance === startingWallet.arrived_balance), 'Lv1 collection launches no phantom coin flight').toBe(true);
         if (batch) {
           if (available) expectNoPronunciation(sounds, tiles.map(tile => tile.word));
           expect(after.collection_batch.completed).toBe(tiles.length);
-          expect(after.collection_batch.elapsed).toBeCloseTo(tiles.length * 0.12, 6);
+          expect(after.collection_batch.elapsed).toBeCloseTo(tiles.length * 0.25, 6);
         }
         expect((await wallet(page)).balance, 'Presentation frames cannot repeat a lucky reward').toBe(startingWallet.balance + earned);
       };

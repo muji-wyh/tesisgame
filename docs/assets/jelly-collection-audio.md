@@ -1,11 +1,12 @@
 # Jelly collection bubble pop
 
-Jelly Words and Jelly Match play the same short bubble pop for every accepted
-collection. The recording uses one fixed authored pitch. There is no note
-sequence, random sample choice or per-collection transposition.
+Jelly Words Lv1 and Jelly Match play the same short bubble pop for every accepted
+collection. This recording uses one fixed authored pitch, with no random sample
+choice or per-collection transposition. Higher Jelly Words levels use the
+[level collection feedback profiles](jelly-level-feedback.md).
 
-The gameplay clocks remain unchanged: Jelly Match's fusion release, Jelly Words'
-180 ms manual-pop boundary, and its 60 ms batch-pop boundary within each 120 ms
+The gameplay clocks use Jelly Match's fusion release, Jelly Words'
+180 ms manual-pop boundary, and its 60 ms batch-pop boundary within each 250 ms
 collection beat. `collect-pop.wav` is cached at startup and required in the core
 Web pack. It uses the existing bounded Jelly audio players, collection gain 0.90,
 speech ducking and mute, pause and exit cancellation.
@@ -32,8 +33,9 @@ natural tail at their original speed and pitch. It applies a 65 Hz high-pass,
 No spring, musical, voice or generated layer is added.
 
 The delivered `assets/audio/jelly-match/collect-pop.wav` is **100 ms**, 44.1 kHz
-mono PCM16, with a **−7.50 dBFS** peak. Twelve repeats at the actual 120 ms batch
-spacing reach **−8.42 dBFS** after the existing 0.90 collection gain. Godot imports
+mono PCM16, with a **−7.50 dBFS** peak. Twelve repeats at the recorded 120 ms
+verification spacing reach **−8.42 dBFS** after the existing 0.90 collection gain.
+Current gameplay uses 250 ms batch spacing. Godot imports
 use no compression, automatic trimming, normalization or looping. These are
 signal measurements, not subjective loudness or physical speaker assessments.
 
@@ -55,7 +57,8 @@ Verification checks PCM format, onset, zero-valued boundaries, headroom and
 repeated batch playback.
 
 `build/jelly-collection-audio/one-pop-and-rapid-collection.wav` contains one
-isolated pop followed by twelve identical pops at gameplay gain and spacing.
+isolated pop followed by twelve identical pops at gameplay gain and the recorded
+120 ms verification spacing.
 It is an asset preview, not an engine-mixed capture. Direct auditory input is
 unavailable in the agent tools. The user approved this audio preview on
 2026-10-21; this does not imply physical-device gameplay testing.
@@ -66,4 +69,5 @@ and Jelly Words flow (757 checks), and the production Web export. Desktop
 Chromium passed the Jelly Match audio/lifecycle case and the focused Jelly Words
 manual collection, batch collection and mute case. The browser checks observe
 the same decoded recording at playback rate 1.0 and verify bundled offline
-playback; the Words batch retains its 120 ms collection cadence.
+playback. That verification used the former 120 ms Words batch cadence; current
+gameplay uses 250 ms.

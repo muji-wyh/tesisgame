@@ -187,7 +187,7 @@ func check_input_focus(app) -> void:
 	await settle()
 
 
-func merged_word(view, word: Dictionary, fragments: int = 0) -> Dictionary:
+func merged_word(view, word: Dictionary, fragments: int = 0, level: int = 1) -> Dictionary:
 	var game = view.game
 	# Existing persistence fixtures deliberately exercise the rare winning branch.
 	game._coin_rng.seed = COIN_REWARD_SEED
@@ -220,6 +220,14 @@ func merged_word(view, word: Dictionary, fragments: int = 0) -> Dictionary:
 	game.step(game.FUSION_SECONDS + game.SETTLE_SECONDS * 2.0)
 	var result: Dictionary = game.cell(result_id)
 	check(not result.is_empty() and result.word.id == word.id, "The resulting word persists on the board")
+	if level == 2:
+		var partner: Dictionary = merged_word(view, word)
+		check(game.try_merge(result.id, partner.id) == "merged", "A payment fixture upgrades two genuine Lv1 words to Lv2")
+		result_id = int(game.fusions.back().result.id)
+		game.step(game.FUSION_SECONDS + game.SETTLE_SECONDS * 2.0)
+		result = game.cell(result_id)
+		check(int(result.merge_level) == 2 and int(result.fragments) == fragments,
+			"The eligible Lv2 payment fixture retains exactly its assigned fragments")
 	return result
 
 
@@ -584,7 +592,7 @@ func check_collection_mastery(app, view, word: Dictionary) -> void:
 	view.set_process(false)
 	app.growth.record_attempt("collection-mastery-seed-1", word_ids, true)
 	app.growth.record_attempt("collection-mastery-seed-2", word_ids, true)
-	var merged: Dictionary = merged_word(view, word)
+	var merged: Dictionary = merged_word(view, word, 0, 2)
 	var credit: Callable = game.credit_collection
 	game.credit_collection = func(event_id: String, amount: int) -> Dictionary:
 		var result: Dictionary = credit.call(event_id, amount)
@@ -694,12 +702,12 @@ func _run() -> void:
 	var game = view.game
 	game.spawn_interval = 10000.0
 	var initial_streak: int = int(app.growth.snapshot().streaks.get(word.id, 0))
-	var merged: Dictionary = merged_word(view, word, 2)
+	var merged: Dictionary = merged_word(view, word, 2, 2)
 	check(game.fragment_count == 0 and app.coin_wallet.balance == 0, "Merging keeps carried fragments and coins uncollected")
 	check(game.collect(merged.id), "A valid word can be collected through the shared view model")
 	var receipt_event: String = str(game.fusions.back().attempt_id)
 	game.step(game.COLLECT_SECONDS)
-	check(game.cell(merged.id).is_empty() and app.coin_wallet.balance == 50, "A two-piece word's rare drop saves its fifty bonus coins immediately")
+	check(game.cell(merged.id).is_empty() and app.coin_wallet.balance == 50, "A Lv2 word's reserved drop saves its fifty bonus coins immediately")
 	check(game.fragment_count == 2 and int(app.growth.snapshot().streaks.get(word.id, 0)) == initial_streak + 1, "The collection credits every carried fragment and one learning answer")
 	check(app._coin_flight.snapshot().active, "The rare coin drop launches the shared coin flight")
 	var duplicate: Dictionary = app._credit_word_jelly(receipt_event, 50)
@@ -709,7 +717,7 @@ func _run() -> void:
 	app._jelly.word_attempted.emit("hidden-match", [str(word.id)] as Array[String], true)
 	app._jelly.round_finished.emit({"score": 900, "chest_count": 1, "chest_tier": 6})
 	check(app.growth.snapshot().streaks == growth_before and app._round_result.is_empty(), "Hidden Jelly Match callbacks cannot change this mode's progress or result")
-	merged = merged_word(view, word, 2)
+	merged = merged_word(view, word, 2, 2)
 	check(game.collect(merged.id), "The next complete word accepts collection")
 	game.step(0.1)
 	var paused_time: float = float(game.fusions.back().elapsed)
@@ -744,7 +752,7 @@ func _run() -> void:
 		and is_equal_approx(float(view._reward_presentation.snapshot().elapsed), reward_elapsed),
 		"Closing vocabulary resumes the original flight without replaying its reveal")
 	view.advance_reward_presentation(ChestCelebration.PERFORMANCE_SECONDS - ChestCelebration.REVEAL_SECONDS)
-	merged = merged_word(view, word, 1)
+	merged = merged_word(view, word, 1, 2)
 	var save_test_size: Vector2i = root.size
 	root.size = Vector2i(320, 480)
 	await settle()
@@ -798,7 +806,7 @@ func _run() -> void:
 	app.set_reduced_motion(false)
 	check(not view.reduced_motion, "Motion preferences reach the new mode")
 	for index in range(2):
-		merged = merged_word(view, word, 2)
+		merged = merged_word(view, word, 2, 2)
 		check(game.collect(merged.id), "Another word can contribute to the same chest")
 		game.step(game.COLLECT_SECONDS)
 	check(game.fragment_count == 9 and game.chest_tier == 2, "Additional collections upgrade the earned chest")

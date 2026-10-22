@@ -63,9 +63,15 @@ func _test_economy_ladder() -> void:
 	check(Economy.match_hint_price(-1) == 100 and Economy.memory_peek_price(-1) == 0
 		and Economy.powerup_price("auto_merge", -1) == 600, "Negative counters cannot discount a first purchase")
 	check(Economy.powerup_price("unknown", 0) == 0, "Unknown item kinds have no purchasable price")
-	check(Economy.jelly_bonus(2) == 50 and Economy.jelly_bonus(3) == 100 and Economy.jelly_bonus(999) == 100,
-		"Lucky drops respect larger words but cannot grow without a cap")
-	check(is_equal_approx(Economy.JELLY_BONUS_CHANCE, 0.01), "Lucky drops preserve the requested one-percent chance")
+	var chances: Array[float] = [0.0, 0.02, 0.04, 0.06, 0.10, 0.16, 0.28, 0.50, 0.80]
+	var amounts: Array[int] = [0, 50, 100, 150, 200, 250, 300, 350, 450]
+	for level in range(1, 10):
+		check(is_equal_approx(Economy.jelly_bonus_chance(level), chances[level - 1])
+			and Economy.jelly_bonus(level) == amounts[level - 1],
+			"Collection odds and amounts follow the approved level %d table" % level)
+	check(Economy.jelly_bonus(0) == 0 and Economy.jelly_bonus(-1) == 0
+		and Economy.jelly_bonus(999) == 450 and is_equal_approx(Economy.jelly_bonus_chance(999), 0.80),
+		"Reward lookup uses bounded merged levels and never infers a reward from mass")
 	check(Economy.chest_coins(0) == 50 and Economy.chest_coins(1) == 50 and Economy.chest_coins(6) == 300,
 		"Ordinary and existing levelled chest rewards keep their saved meaning")
 
@@ -87,17 +93,22 @@ func _test_supply_and_budget() -> void:
 	check(report == Report.build_report(), "Economy reports reproduce exactly from the fixed supply seed")
 	for row: Dictionary in report.scenarios:
 		check(float(row.free_play_total) > 0.0, "Playing without paid help always builds savings in the modeled workloads")
-		check(float(row.free_play_chest) / float(row.free_play_total) >= 0.85,
-			"Chests supply at least eighty-five percent of expected income in every modeled workload")
-		check(float(row.one_treasure_every_three_sessions_net_average) > 0.0,
-			"An occasional first-price Treasure every three fresh rounds leaves positive expected savings")
+		check(float(row.free_play_bonus) == 0.0 and float(row.free_play_chest) == float(row.free_play_total),
+			"Collecting ordinary Lv1 words earns only the unchanged chest income")
+		if int(row.supplied_words) >= 40:
+			check(float(row.one_treasure_every_three_sessions_net_average) > 0.0,
+				"Larger ordinary workloads can save while buying a first-price Treasure every three rounds")
 		check(float(row.one_auto_merge_net) < 0.0 and float(row.three_auto_merge_net) < float(row.one_auto_merge_net),
 			"A premium purchase every modeled round drains savings; repeated use drains faster")
 		check(float(row.three_treasure_net) < 0.0,
 			"Three Treasure purchases cannot sustain themselves even when every paid fragment is retained")
 		if is_equal_approx(float(row.success_probability), 1.0):
-			check(is_equal_approx(float(row.free_play_total), int(row.supplied_words) * 5.5),
-				"Perfect completion earns five chest coins and half a lucky coin per source word in full ten-word blocks")
+			check(is_equal_approx(float(row.free_play_total), int(row.supplied_words) * 5.0),
+				"Perfect Lv1 completion earns five chest coins per source word in full ten-word blocks")
+	check(report.upgraded_collections.size() == 9, "The report separates upgraded collection rewards from Lv1 source workloads")
+	for row: Dictionary in report.upgraded_collections:
+		check(is_equal_approx(float(row.expected_bonus), Economy.jelly_bonus_chance(int(row.merge_level)) * Economy.jelly_bonus(int(row.merge_level))),
+			"Every upgrade scenario uses the exact level-dependent expectation")
 	check(Report.purchase_total("auto_merge", 3) == 2700 and Report.purchase_total("fragments", 3) == 900,
 		"Constant-use scenarios include escalating prices rather than repeating the opening discount")
 
@@ -172,11 +183,12 @@ func _test_real_lucky_collection() -> void:
 	game.configure(Report.fixture_words(), 3, 73)
 	game.cells.clear()
 	game.cells.append(game._new_tile("cat", 2, 0))
+	game._set_merged_word(game.cells[0], Report.fixture_words()[0], 2, true)
 	var probe := RandomNumberGenerator.new()
 	var winning_seed: int = -1
 	for candidate in range(10000):
 		probe.seed = candidate
-		if probe.randf() < Economy.JELLY_BONUS_CHANCE:
+		if probe.randf() < Economy.jelly_bonus_chance(2):
 			winning_seed = candidate
 			break
 	check(winning_seed >= 0, "A deterministic real RNG seed exercises the rare winning branch")
@@ -186,5 +198,5 @@ func _test_real_lucky_collection() -> void:
 	check(game.collect(int(game.cells[0].id)), "A real completed word can reserve a lucky collection")
 	game.step(Jelly.COLLECT_SECONDS + Jelly.SETTLE_SECONDS)
 	check(wallet.balance == 50 and game.collected_coins == 50 and game.cleared_pairs == 1,
-		"Natural two-chunk lucky collection commits the smaller fifty-coin payout through the wallet")
+		"Eligible Lv2 collection commits its fifty-coin payout through the wallet")
 	game.credit_collection = Callable()

@@ -90,7 +90,8 @@ static func scenario(supplied_words: int, success: float) -> Dictionary:
 	for group: Dictionary in groups:
 		marked += int(group.fragments)
 	var chest: float = expected_chest(marked, success)
-	var bonus: float = supplied_words * success * Economy.JELLY_BONUS_CHANCE * Economy.jelly_bonus(2)
+	# This source workload collects each ordinary word at Lv1 without upgrades.
+	var bonus: float = supplied_words * success * Economy.jelly_bonus_chance(1) * Economy.jelly_bonus(1)
 	var total: float = chest + bonus
 	var with_treasure: float = expected_chest(marked, success, 1) + bonus - purchase_total("fragments", 1)
 	return {
@@ -107,6 +108,11 @@ static func scenario(supplied_words: int, success: float) -> Dictionary:
 
 static func build_report() -> Dictionary:
 	var scenarios: Array[Dictionary] = []
+	var upgraded_collections: Array[Dictionary] = []
+	for level in range(1, 10):
+		upgraded_collections.append({"merge_level": level,
+			"chance": Economy.jelly_bonus_chance(level), "winning_amount": Economy.jelly_bonus(level),
+			"expected_bonus": Economy.jelly_bonus_chance(level) * Economy.jelly_bonus(level)})
 	for count: int in [20, 40, 60]:
 		for success: float in [0.6, 1.0]:
 			scenarios.append(scenario(count, success))
@@ -114,10 +120,11 @@ static func build_report() -> Dictionary:
 		"assumptions": [
 			"Scenario inputs are modeled workloads, not measured players or session lengths.",
 			"Each supplied two-chunk word has an independent stated chance of being collected.",
+			"Source workloads collect ordinary Lv1 words, which have no coin bonus; upgraded collection rewards are reported separately.",
 			"All injected Treasure fragments are collected: this overestimates paid returns.",
 			"Net budgets assume enough previously saved coins to buy the specified items.",
 			"Auto Merge uses the same completed workload; no automatic collection or bonus income is assumed.",
 			"One modeled session is one round; fresh rounds reset repeat prices."
 		],
-		"scenarios": scenarios
+		"scenarios": scenarios, "upgraded_collections": upgraded_collections
 	}

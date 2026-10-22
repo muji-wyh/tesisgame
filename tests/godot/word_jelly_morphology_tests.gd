@@ -204,7 +204,7 @@ func _winning_seed() -> int:
 	var rng := RandomNumberGenerator.new()
 	for seed_value in range(100000):
 		rng.seed = seed_value
-		if rng.randf() < Model.COIN_DROP_CHANCE:
+		if rng.randf() < 0.02:
 			return seed_value
 	return -1
 
@@ -217,18 +217,38 @@ func _test_atomic_exposure_and_retry() -> void:
 	model.word_attempted.connect(func(event_id: String, ids: Array[String], correct: bool): attempts.append([event_id, ids, correct]))
 	model.credit_collection = func(event_id: String, coins: int) -> Dictionary:
 		payments.append([event_id, coins])
-		return {"ok": payments.size() > 1}
+		return {"ok": false}
 	model._coin_rng.seed = _winning_seed()
-	check(Model.COIN_DROP_CHANCE == 0.01 and Model.coins_for_tile(whole) == 50, "Atomic collection uses the same fixed bonus and one-percent odds")
+	var initial_rng_state: int = model._coin_rng.state
+	check(Model.coin_drop_chance_for_tile(whole) == 0.0 and Model.coins_for_tile(whole) == 0,
+		"Ordinary atomic Lv1 exposure has no bonus regardless of its winning random seed")
 	check(model.collect(int(whole.id)), "Atomic exposure can collect its complete Jelly")
 	_settle(model)
-	var rng_state: int = model._coin_rng.state
-	check(model.cleared_pairs == 0 and model.cells.size() == 1 and attempts.is_empty(), "Failed bonus persistence leaves atomic exposure uncommitted")
-	check(model.collect(int(whole.id)) and model._coin_rng.state == rng_state, "Retry reuses the reserved rare-roll outcome")
+	check(model.cleared_pairs == 1 and model.collected_coins == 0 and model.fragment_count == 2
+		and payments.is_empty() and attempts.is_empty() and model._coin_rng.state == initial_rng_state,
+		"Lv1 collects its exposure and fragments without coin persistence, mastery, or a random draw")
+	model.credit_collection = Callable()
+	model = _model(_atomic())
+	var left: Dictionary = _sources(model, "MRI", 2)[0]
+	var right: Dictionary = _sources(model, "MRI")[0]
+	whole = _merge(model, left, right)
+	check(whole.merge_level == 2 and Model.coins_for_tile(whole) == 50
+		and is_equal_approx(Model.coin_drop_chance_for_tile(whole), 0.02),
+		"Two identical atomic words upgrade into an eligible Lv2 collection")
+	model.word_attempted.connect(func(event_id: String, ids: Array[String], correct: bool): attempts.append([event_id, ids, correct]))
+	model.credit_collection = func(event_id: String, coins: int) -> Dictionary:
+		payments.append([event_id, coins])
+		return {"ok": payments.size() > 1}
+	model._coin_rng.seed = _winning_seed()
+	check(model.collect(int(whole.id)), "An upgraded atomic word can reserve a winning collection")
 	_settle(model)
-	check(payments.size() == 2 and payments[0] == payments[1] and payments[0][1] == 50, "Retry retains the same receipt and fixed bonus")
+	var rng_state: int = model._coin_rng.state
+	check(model.cleared_pairs == 0 and model.cells.size() == 1 and attempts.is_empty(), "Failed bonus persistence leaves upgraded atomic exposure uncommitted")
+	check(model.collect(int(whole.id)) and model._coin_rng.state == rng_state, "Retry reuses the reserved level-based outcome")
+	_settle(model)
+	check(payments.size() == 2 and payments[0] == payments[1] and payments[0][1] == 50, "Retry retains the same receipt and Lv2 bonus")
 	check(model.cleared_pairs == 1 and model.collected_coins == 50 and model.fragment_count == 2 and attempts.is_empty(),
-		"Atomic collection advances speed once without spelling or mastery evidence")
+		"Upgraded atomic collection advances speed once without spelling mastery evidence")
 	check(not model.collect(int(whole.id)) and model._collection_event_ids.is_empty(), "A committed atomic receipt cannot pay twice")
 	model.credit_collection = Callable()
 
@@ -649,7 +669,9 @@ func _test_collection_commit_lifecycle() -> void:
 func _test_collection_commit_batch() -> void:
 	var model = _model(_atomic())
 	for index in range(3):
-		_sources(model, "MRI", 1)
+		var left: Dictionary = _sources(model, "MRI", 1)[0]
+		var right: Dictionary = _sources(model, "MRI")[0]
+		_merge(model, left, right)
 	model._coin_rng.seed = _winning_seed()
 	var submissions: Array = []
 	var fallback_calls: Array = []

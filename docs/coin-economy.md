@@ -1,165 +1,161 @@
 # Coin economy
 
-## Intent and acceptance criteria
+## Current policy
 
-Coins are saved help for a difficult moment. Ordinary play remains free, builds
-the wallet steadily, and never requires a purchase to finish or learn. A first
-small aid should be reachable; repeated assistance should consume savings.
-Chests should be the clear main source of coins, and buying Treasure must never
-create a profitable currency loop.
-
-The numerical targets are:
-
-- Preserve every saved coin, receipt, earned chest, and chest level payout.
-- Keep at least 85% of expected income in the modeled Jelly Words workloads
-  coming from chests; natural long-run two-chunk play is about 91% chest income.
-- Price a first Hint at two ordinary chest rewards, Treasure at four, and Auto
-  Merge at twelve. This makes their relative value understandable.
-- Allow occasional modest help while saving; make repeated premium help and
-  repeated Treasure draw down an existing wallet.
-- Keep the first Memory peek free and all normal interactions free. Failure to
-  afford or save a purchase does not charge coins, grant an effect, or raise the
-  next price.
-
-These are design assumptions and reproducible model checks, not measured player
-behavior. A later playtest can tune the source-count targets without replacing
-the persistence rules.
-
-## Audit and changes
-
-The previous prices were 200 per Match hint, 500 per Treasure, and 2000 per Auto
-Merge. Treasure supplied five fragments on average, worth about 50 coins in
-long-run chest progression. About 90% of its purchase price was a net coin cost; Auto
-Merge took roughly 30-37 minutes of perfect passive-cadence Jelly Words supply.
-Those prices made optional help remote rather than creating frequent, thoughtful
-decisions. Meanwhile, a lucky ordinary two-chunk word paid 100 coins, twice a
-basic chest, weakening the chest's perceived importance.
+Coins remain saved help for a difficult moment. Ordinary play is free, the
+wallet starts at zero, and purchases never gate finishing or learning. Existing
+balances, saved receipts, chest payouts, item prices, and fragment rules are
+unchanged by the level-based Jelly collection bonus.
 
 The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 
-| Event or item | Previous values | New values |
-| --- | --- | --- |
-| Ordinary / tier-one chest | 50 | 50, unchanged |
-| Levelled chest | 50 x level | 50 x level, unchanged |
-| Match Hint | 200 each | 100, 150, then 200; no per-round use limit |
-| Memory observation | 0, 100, 200, 300, then 300 | Start game begins a free 10-second observation. Later optional reveals last 5 seconds. Start matching skips either countdown; repeated clicks cannot charge or extend it. |
-| Auto Merge | 2000 each | 600, 900, 1200, then 1200 |
-| Treasure | 500 each | 200, 300, 400, then 400 |
-| Treasure fragments | Random 2-8 | Random 2-8, unchanged |
-| Lucky Jelly Words collection | 1%; 50 x original chunk count | 1%; 50 for two chunks, 100 for three or more |
+| Event or item | Values |
+| --- | --- |
+| Ordinary / tier-one chest | 50 coins |
+| Levelled chest | 50 coins multiplied by chest level |
+| Match Hint | 100, 150, then 200; no per-round use limit |
+| Memory observation | A free initial 10-second observation, then optional 5-second reveals costing 100, 200, 300, then 300 |
+| Auto Merge | 600, 900, 1200, then 1200 |
+| Treasure | 200, 300, 400, then 400 |
+| Treasure fragments | Random 2-8 |
 
-Only successful purchases advance their item's price. Match Hint stays at 200
-coins from the third purchase onward, without a use-count allowance. An active
-hint cannot be purchased again. Auto Merge and Treasure
+Only successful purchases advance their item's price. Auto Merge and Treasure
 have separate counters. A new round resets the prices; a menu, pause, rejected
 payment, or wallet retry does not. The current price is shown before purchase.
-Auto Merge retains its 200 ms launch rhythm and 300 ms automatic drag. It does
-not collect the resulting words. Treasure retains its fragment delivery effects
-and only banks its fragments when the carrying words are collected.
+Auto Merge retains its 200 ms launch rhythm and 300 ms automatic drag and never
+collects the resulting words. Treasure banks its fragments only when their
+carrying words are collected. Memory's Start matching action can skip either
+observation countdown; repeated clicks cannot charge or extend a reveal.
 
-Larger valid words still have a larger lucky reward, capped at 100. The 1% roll
-remains independent of board randomness and is reserved before payment, so
-retrying a failed save cannot reroll or duplicate it.
+## Jelly Words collection bonuses
 
-## Income and saving targets
+A coin bonus is considered only when collecting a valid merged word. Lv1 always
+pays zero bonus. Roots, picture pieces, partial spellings, and bodies without a
+valid word cannot earn one. Merging, dropping, selecting, or moving a Jelly never
+awards coins. The displayed merge level determines both probability and amount;
+root count, mass, word length, and carried fragments do not affect either.
 
-All chest rewards remain 50 coins per level. The shared continuous-mode chest
-progression unlocks at four fragments and adds a level every five fragments.
-Below four fragments the payout is zero; otherwise it is
-`50 * floor((fragments + 1) / 5)`.
+| Merged level | Chance on collection | Coins on a successful drop | Expected bonus per collected body |
+| ---: | ---: | ---: | ---: |
+| 1 | 0% | 0 | 0 |
+| 2 | 2% | 50 | 1 |
+| 3 | 4% | 100 | 4 |
+| 4 | 6% | 150 | 9 |
+| 5 | 10% | 200 | 20 |
+| 6 | 16% | 250 | 40 |
+| 7 | 28% | 300 | 84 |
+| 8 | 50% | 350 | 175 |
+| 9 | 80% | 450 | 360 |
+
+The expected values are averages over repeated independent collections, not a
+promise for any particular collection. Building higher levels consumes matching
+words, so this table does not imply an income rate or a typical player level mix.
+
+For a budget measured per source word, a LvN body represents `2^(N-1)` completed
+Lv1 words because every upgrade consumes two matching bodies of the same level.
+Divide each body's expected bonus by that source count. The maximum is Lv9:
+`360 / 256 = 1.40625` expected bonus coins per source word. This counts completed
+words, not their component roots, and does not award bonuses during upgrading.
+
+With every natural fragment retained and eventually collected, ordinary supply
+provides about five chest coins per source word in the long run. The modeled
+chest share of expected gross coins is therefore at least
+`5 / (5 + 1.40625)`, approximately 78.05%, across any mix of collection levels.
+This is a long-run budget bound under perfect retention, not observed player income or a
+guarantee for one round; fragment thresholds, lost words, and purchase spending
+can change a particular round's result.
+
+Every accepted collection reserves one outcome under its existing collection
+receipt before persistence. Eligible Lv2-9 collections draw once from the separate
+coin random stream; Lv1 reserves zero without consuming a draw. A failed save,
+pause, batch retry, or repeated tap reuses that decision and amount. Successful
+commit pays at most once and leaves word, learning, and fragment settlement under
+the existing transaction lifecycle. An upgrade that replaces a body invalidates
+its obsolete pending collection receipt only when the merge commits.
+
+## Ordinary source income and saving
+
+All chest rewards remain 50 coins per level. Continuous modes unlock a chest at
+four fragments and add one level per five further fragments. Below four fragments
+the payout is zero; otherwise it is `50 * floor((fragments + 1) / 5)`.
 
 | Mode | Source rule | Useful source-count budget |
 | --- | --- | --- |
-| Match | 50% chest chance, guaranteed after two dry completed rounds | 28.57 coins per completed five-pair round on average; 3.5 rounds to save the first 100-coin Hint |
-| Memory | Starts at the highest available chest level, currently Level 6; each mismatch removes one level, down to no chest | Completing all five pairs earns 50 coins per remaining level: 300 for a perfect round, down to 0 after six mistakes |
+| Match | 50% chest chance, guaranteed after two dry completed rounds | 28.57 coins per completed five-pair round on average |
+| Memory | Starts at the highest available chest level, currently 6; each mismatch removes one level down to zero | 300 coins for a perfect five-pair round, down to zero after six mistakes |
 | Phrase | One ordinary chest after three phrases | 50 coins per completed round |
 | Jelly Match | One fragment per three supplied word/picture pairs | About 3.33 chest coins per successfully collected pair in long runs |
-| Jelly Words | One fragment per two supplied words | About 5 chest coins plus 0.5 lucky coins per successfully collected ordinary word in long runs |
+| Jelly Words, collected at Lv1 | One fragment per two supplied words; no Lv1 coin bonus | About 5 chest coins per successfully collected ordinary word in long runs |
 | Voice Pop | Each target has a 35% chest marker chance | Expected chest coins for 10 / 20 / 30 hits: 24.34 / 59.74 / 95.06 |
 
-The Match expectation includes the three-round guarantee:
-`50 / (1 + 0.5 + 0.25) = 28.57`. Memory has no random draw or dry-round
-guarantee. Its fixed header chest is a potential reward until the whole round
-is complete; leaving an unfinished round earns nothing. Previously earned
-Memory chests remain recoverable with their original tier-one payout.
-Jelly Words' approximate long-run saving targets are 36 successfully collected
-ordinary words for the first Treasure and 110 for the first Auto Merge. Without
-relying on any lucky coin, those purchases require 38 and 118 source words
-respectively, when their natural marked halves are all collected in one round.
-Actual collections may combine pieces from different source groups, and partial
-rounds can finish below a chest threshold, so these are planning units.
+Match's expectation includes the three-round guarantee:
+`50 / (1 + 0.5 + 0.25) = 28.57`. Memory grants its remaining chest only after the
+whole round is completed; leaving an unfinished round earns nothing. Previously
+earned Memory chests retain their original payouts.
 
-For reference only, automatic Jelly Words supply provides three new words every
-20 seconds initially, down to every 10 seconds after twenty successful word
-collections. Every four collections reduce the next cycle's interval by two seconds;
-the interval is fixed at successful batch dispatch and never shortens the
-countdown already running. Merging alone, Auto Merge, and idle time do not
-advance this progression.
+Collecting ordinary Jelly words at Lv1 requires 38 source words to unlock the
+first 200-coin Treasure budget, or 118 for the first 600-coin Auto Merge budget,
+when every naturally marked half is collected in one round. Partial rounds can
+finish below a chest threshold, and upgraded bodies combine source words, so
+these are explicit planning units rather than observed player behavior.
 
-At 5.5 expected coins per ordinary source word, perfect completion gives a
-theoretical automatic-supply bound of 49.5-99 expected coins per minute:
-`3 * (60 / interval_seconds) * 5.5`. This is a supply calculation, not a measured
-player earning rate. It excludes the initial board and assumes every supplied
-word is successfully collected; players can tap the preview to release supply
-early or take longer to solve it. Rewards, odds, prices, and source-count saving
-targets remain unchanged. No reward-per-minute cap or artificial waiting gate
-is introduced.
+Automatic supply provides three new source words every 20 seconds initially,
+down to every 10 seconds after twenty successful word collections. Every four
+collections reduce the next cycle's interval by two seconds; the interval is
+fixed at dispatch and never shortens the countdown already running. Merging,
+Auto Merge, and idle time do not advance that progression. At five chest coins
+per source word, perfect Lv1 collection gives a theoretical automatic-supply
+bound of 45-90 coins per minute. This excludes the opening board, assumes complete
+collection, and is not a measured earning rate. Preview taps can release supply
+early. No new cap or waiting gate is introduced.
 
-## Session budget scenarios
+## Reproducible workload scenarios
 
-The report drains the real Jelly Words source packets, then models 20, 40, or 60
-supplied two-chunk words. Each word has an independent 60% or 100% chance of being
-successfully collected. A scenario session means one round. These workload and
-success choices are sensitivity tests, not observations of children.
+The report drains real source packets and models 20, 40, or 60 supplied two-chunk
+words with independent 60% or 100% collection success. Each source word is
+collected at Lv1, so these scenarios have zero coin bonuses and all income comes
+from chests. Upgraded collection probabilities and expectations appear in a
+separate report table. The source-normalized bound above assumes perfect
+retention; these finite workloads use their exact fragment-threshold distributions.
 
-Chest income uses the full binomial fragment distribution and the real chest
-thresholds, rather than paying out on rounded mean fragments. Lucky income uses
-the exact 1% expected value. Paid scenarios assume an existing wallet can afford
-the purchases; negative values mean savings are spent, not a negative wallet.
+Chest income uses the full binomial fragment distribution and actual reward
+thresholds. Paid scenarios assume an existing wallet can afford each purchase;
+negative net values mean savings are spent. Treasure calculations optimistically
+retain every injected fragment. Auto Merge uses the same completed workload,
+without treating convenience as new supply. One session is one fresh round.
 
 | Supplied words | Collection chance | No paid aid: expected coins | One Treasure: net coins | One Auto Merge: net coins | Three Treasure uses: net coins |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 20 | 60% | 55.58 | -93.90 | -544.42 | -693.99 |
-| 20 | 100% | 110.00 | -54.29 | -490.00 | -650.20 |
-| 40 | 60% | 121.70 | -27.93 | -478.30 | -628.00 |
-| 40 | 100% | 220.00 | 55.71 | -380.00 | -540.20 |
-| 60 | 60% | 188.00 | 38.00 | -412.00 | -562.00 |
-| 60 | 100% | 330.00 | 165.71 | -270.00 | -430.20 |
+| 20 | 60% | 49.58 | -99.90 | -550.42 | -699.99 |
+| 20 | 100% | 100.00 | -64.29 | -500.00 | -660.20 |
+| 40 | 60% | 109.70 | -39.93 | -490.30 | -640.00 |
+| 40 | 100% | 200.00 | 35.71 | -400.00 | -560.20 |
+| 60 | 60% | 170.00 | 20.00 | -430.00 | -580.00 |
+| 60 | 100% | 300.00 | 135.71 | -300.00 | -460.20 |
 
-Treasure scenarios optimistically assume every injected fragment is collected,
-making their return an upper estimate for that purchase. Auto Merge is compared
-at the same completed workload; its convenience and board rescue are not
-treated as newly created supply. Even if it rescues every word, the 100% rows
-show that using it in every modeled session still spends savings.
-
-An occasional first-price Treasure every three fresh rounds leaves positive
-expected savings in all six scenarios: approximately 5.75-275.24 coins per round
-averaged across the three. Three Treasure uses in one round cost 900 and drain
-savings even with perfect collection of the supplied words and paid fragments.
-Three Auto Merge uses cost 2700. Thus occasional aid is reachable while constant
-use remains a deliberate expense.
+The smallest workload no longer quite funds one Treasure every three fresh
+rounds on average after removing Lv1 bonuses; larger modeled workloads do.
+Repeated purchases still consume savings. Prices have not been changed to offset
+the new bonus policy. Three Treasure purchases cost 900; three Auto Merge uses
+cost 2700.
 
 ## Treasure cannot fund itself
 
-For each existing fragment total from 0 through 100, the regression suite checks
-every possible award from 2 through 8. The largest extra payout is two chest
-levels, or 100 coins, below even the first 200-coin price. The best possible
-purchase therefore consumes at least 100 saved coins.
+For every existing fragment total from 0 through 100, the regression suite checks
+all awards from 2 through 8. The largest extra chest payout is two levels, or
+100 coins, below the first 200-coin price. Even perfect fragment luck consumes at
+least 100 saved coins. Across all five upgrade offsets, uniformly distributed
+fragment awards return 50 coins on average. A particular offset gives
+28.57-71.43 expected extra coins. These calculations cover Treasure's injected
+fragments; independent level-based word collection bonuses are not a refund
+created by buying fragments.
 
-Across the five possible upgrade offsets, uniformly distributed fragment
-awards return 50 coins on average. A specific offset gives 28.57-71.43 expected
-extra coins. At first price the long-run average net cost is 150; repeat prices
-increase that to 250 and 350. Combining purchases or starting a fresh round for
-the first price cannot turn the fragment return into a profitable loop.
+## Saves and validation
 
-## Saves and regression checks
-
-The wallet still starts at zero and keeps its version, 50-coin denomination,
-receipt IDs, and atomic debit/credit behavior. Existing balances and receipts
-are not reset or recomputed. Pending saved chests keep their tier and payout.
-Permanent chest receipts, retained reserved pair outcomes, and the independent
-lucky collection receipt prevent duplicate callbacks, retries, or restarts from
-manufacturing a second payment.
+The wallet keeps its version, zero starting balance, 50-coin denomination,
+receipt identities, and atomic debit/credit behavior. Existing balances and
+receipts are not reset or recomputed. Pending saved chests keep their original
+tiers and payouts. Collection presentation never writes a second payment.
 
 Run the reproducible report:
 
@@ -167,14 +163,16 @@ Run the reproducible report:
 node tools/run-godot.cjs --headless --path . --script res://tools/coin-economy-report.gd
 ```
 
-Run the policy, actual supply, budget, Treasure, wallet, and real lucky-collection
-checks:
+Run policy, supply, budget, Treasure, wallet, and level reward checks:
 
 ```powershell
 node tools/run-godot.cjs --headless --path . --script res://tests/godot/coin_economy_tests.gd
+node tools/run-godot.cjs --headless --path . --script res://tests/godot/word_jelly_model_tests.gd
+node tools/run-godot.cjs --headless --path . --script res://tests/godot/word_jelly_morphology_tests.gd
 ```
 
-Existing wallet and reward-flow suites remain responsible for save migration,
-partial saves, duplicate credit, and concurrent-session conflicts. Model and UI
-purchase suites cover current-price presentation, unavailable funds, failed
-saves, successful-use escalation, and reset boundaries.
+Coverage includes Lv1 zero rewards, both sides of every eligible level's random
+boundary, mass-independent odds and amounts, higher-level upgrades, coin-stream
+independence, mixed batches, persistence retries, pause/reentry, and once-only
+credit. Existing wallet and reward-flow suites cover saved receipts, migration,
+partial writes, and concurrent-session conflicts.

@@ -234,9 +234,24 @@ stop at the first support reachable from above, never inside an enclosed hole.
 Sealing every entrance starts the existing full-well countdown. Reduced motion
 places incoming bodies directly on their supports with the same readiness clock.
 
-Each merged word collected by a tap or Collect has an independent 1% chance
-of 50 bonus coins, regardless of its level or number of roots. Opening chests is
-the main coin source. Collection banks all carried fragments. A manually solved
+Lv1 collection gives no bonus coins. From Lv2 onward, each merged word collected
+by a tap or Collect has one independent chance of a level-based bonus:
+
+| Merge level | Coin chance | Coins when awarded |
+| --- | ---: | ---: |
+| Lv1 | 0% | 0 |
+| Lv2 | 2% | 50 |
+| Lv3 | 4% | 100 |
+| Lv4 | 6% | 150 |
+| Lv5 | 10% | 200 |
+| Lv6 | 16% | 250 |
+| Lv7 | 28% | 300 |
+| Lv8 | 50% | 350 |
+| Lv9 | 80% | 450 |
+
+Higher levels increase both the chance and the award; component count and footprint
+do not change that level's policy. Opening chests remains the main coin source.
+Collection banks all carried fragments. A manually solved
 picture match or root composition records learning only on collection;
 automatic merges and image-free atomic exposure do not earn mastery.
 Merging and upgrading alone do not grant coins or mastery.

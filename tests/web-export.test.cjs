@@ -229,9 +229,10 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /first selected card stays hidden and is not pronounced/);
   assert.match(help, /first purchased observation costs 100 coins, the second 200, and every later one 300/);
   assert.match(help, /Memory has no random chest drops[\s\S]*highest available level, currently Level 6[\s\S]*mistake at Level 1 turns the chest grey/);
-  assert.match(help, /Themes follow your selected learning path and career automatically/);
+  assert.match(help, /Themes follow your selected vocabulary and career automatically/);
   assert.match(help, /failed or cancelled course download preserves your previous round/);
-  assert.match(help, /independently of Pip's growth/);
+  assert.match(help, /Open Word Library to choose Everyday English or Professional English/);
+  assert.match(help, /Your selected career has its own Pip outfit and mastery level/);
   assert.match(help, /fresh round in the same game: Match, Memory, or Phrase Builder/);
   assert.match(help, /Keyboard or controller activation opens a Keep playing \/ Finish confirmation/);
   assert.match(help, /settlement dialog over the frozen board, even when no chest was earned/);
@@ -243,20 +244,34 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /two identical words of the same level[\s\S]*up to Lv9/);
   assert.match(help, /Lv4 blooms like a firework/);
   assert.match(help, /automatic merges and image-free atomic exposure do not/);
-  assert.match(help, /1% chance of 50 bonus coins/);
-  assert.match(help, /Extra parts or higher levels do not multiply coin rewards/);
+  assert.match(help, /Lv1 collections give no bonus coins/);
+  assert.match(help, /Lv2 and higher increase both the chance and amount of bonus coins/);
   assert.match(help, /press R, to pause and read its full spelling/);
-  assert.match(help, /Collect gathers all ready words at 120 ms intervals without pronunciation/);
+  assert.match(help, /Collect gathers all ready words at 250 ms intervals without pronunciation/);
   assert.match(help, /Auto merge costs 600, 900, then 1200 coins/);
   assert.match(help, /Treasure costs 200, 300, then 400 coins[\s\S]*2 to 8 chest fragments/);
   assert.match(help, /A final wrong answer tied to a live target resets that word's streak/);
   assert.doesNotMatch(shell, /speech-successes|speech-mistakes|speech-score|roundProgress|Three mistakes/);
 });
 
+test('Jelly collection help publishes every level reward and the real batch cadence', () => {
+  const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8');
+  const help = shell.match(/<p\b[^>]*id="help"[^>]*>([\s\S]*?)<\/p>/)?.[1];
+  assert.ok(help);
+  assert.match(help, /Lv1 collections give no bonus coins/);
+  for (const [level, chance, coins] of [[2, 2, 50], [3, 4, 100], [4, 6, 150], [5, 10, 200],
+    [6, 16, 250], [7, 28, 300], [8, 50, 350], [9, 80, 450]]) {
+    assert.match(help, new RegExp(`Lv${level}: ${chance}% for ${coins} coins`));
+  }
+  assert.match(help, /Each eligible collection rolls once, and a failed save retains its original result for retry/);
+  assert.match(help, /Collect gathers all ready words at 250 ms intervals without pronunciation/);
+  assert.doesNotMatch(help, /1% chance of 50 bonus coins|Extra parts or higher levels do not multiply coin rewards/);
+});
+
 test('the web shell retires Talk Quest without accessing or clearing its saved progress', () => {
   const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8');
   const help = shell.match(/<p\b[^>]*id="help"[^>]*>([\s\S]*?)<\/p>/)?.[1];
-  assert.match(help, /choose Match, Memory, Voice Pop, Phrase Builder, Jelly Match, or Jelly Words\./i);
+  assert.match(help, /choose Match, Memory, Voice Pop, Phrase Builder, Jelly Match, or Jelly Words to play\./i);
   assert.doesNotMatch(shell, /Talk Quest|quest-status|createQuestHost|questHost|questProgress|saveQuestProgress|questStatus|observeQuestSpeech|questTargets?/);
   assert.doesNotMatch(shell, /wordBuddies\.talkQuest|localStorage\.clear\s*\(/,
     'Retired adventure progress stays on the device and is neither read nor erased');

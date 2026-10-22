@@ -33,6 +33,7 @@ var _contact_kind: String = "none"
 var _base_stretch := Vector2.ONE
 var _content_offset := Vector2.ZERO
 var _contact_outline := PackedVector2Array()
+var _surface_parameters: Dictionary = {}
 
 func _init() -> void:
 	text = ""
@@ -119,9 +120,9 @@ func set_marked(value: bool, picked: bool = false, enabled: bool = true, reduced
 func _refresh_feedback(reset_motion: bool = false) -> void:
 	# Pointer selection, drop contact and keyboard focus have separate weights.
 	var mark: int = (3 if highlighted else 2 if selected else 1 if has_focus() else 0) if _feedback_enabled else 0
-	_gel.set_shader_parameter("rim_color", Color("#ae702b") if mark == 3 else _accent)
-	_gel.set_shader_parameter("rim_strength", 1.0 if mark >= 2 else 0.85 if mark == 1 else 0.0)
-	_gel.set_shader_parameter("rim_width", 1.0 if mark >= 2 else 0.8)
+	_gel.set_shader_parameter("rim_color", Color("#507968") if _projection else Color("#ae702b") if mark == 3 else _accent)
+	_gel.set_shader_parameter("rim_strength", 0.8 if _projection else 1.0 if mark >= 2 else 0.85 if mark == 1 else 0.0)
+	_gel.set_shader_parameter("rim_width", 1.0 if _projection or mark >= 2 else 0.8)
 	if mark == _mark and not reset_motion:
 		return
 	_mark = mark
@@ -147,27 +148,37 @@ func contact_outline(stretch: Vector2 = Vector2.ONE) -> PackedVector2Array:
 	return outline
 
 func set_projection(value: bool) -> void:
+	if _projection == value:
+		return
 	_projection = value
 	_layout()
+	_refresh_feedback()
 	if value:
 		_badge.hide()
-		_gel.set_shader_parameter("rim_color", Color("#507968"))
-		_gel.set_shader_parameter("rim_strength", 0.8)
-		_gel.set_shader_parameter("rim_width", 1.0)
+
+func _set_surface_parameter(parameter: StringName, value: Variant) -> void:
+	# Only tile-owned parameters are cached. Placement and contact can override
+	# the rim directly, so their feedback parameters stay outside this cache.
+	if _surface_parameters.has(parameter) and _surface_parameters[parameter] == value:
+		return
+	_surface_parameters[parameter] = value
+	_gel.set_shader_parameter(parameter, value)
 
 func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
-	_gel.set_shader_parameter("bend", amount)
-	_gel.set_shader_parameter("beat", beat)
-	_surface.pivot_offset = size * Vector2(0.5, Motion.FOOT_Y)
+	_set_surface_parameter(&"bend", amount)
+	_set_surface_parameter(&"beat", beat)
+	var pivot: Vector2 = size * Vector2(0.5, Motion.FOOT_Y)
+	if _surface.pivot_offset != pivot:
+		_surface.pivot_offset = pivot
 	_base_stretch = stretch * (Vector2(1.025, 0.97) if _mark == 3 and not _reduced_motion else Vector2.ONE)
-	_surface.scale = _base_stretch
+	if _surface.scale != _base_stretch:
+		_surface.scale = _base_stretch
 
 func set_preview_pressure(pressure: float, sway: float, pull: float = 0.0) -> void:
-	_gel.set_shader_parameter("preview_pressure", pressure)
-	_gel.set_shader_parameter("preview_sway", sway)
-	_gel.set_shader_parameter("preview_pull", pull)
-	set_support(0.0, clampf(pressure / 0.20 + pull, 0.0, 1.0))
-	_shadow.position.y += size.y * Motion.FOOT_Y * pull
+	_set_surface_parameter(&"preview_pressure", pressure)
+	_set_surface_parameter(&"preview_sway", sway)
+	_set_surface_parameter(&"preview_pull", pull)
+	_update_support(0.0, clampf(pressure / 0.20 + pull, 0.0, 1.0), true, size.y * Motion.FOOT_Y * pull)
 
 func set_contact(kind_value: String, direction: Vector2 = Vector2.ZERO, strength: float = 0.0, reduced: bool = false) -> void:
 	if kind_value == "none" and _contact_kind == "none":
@@ -208,12 +219,22 @@ func set_contact(kind_value: String, direction: Vector2 = Vector2.ZERO, strength
 
 
 func set_support(lift: float = 0.0, compression: float = 0.0, visible_shadow: bool = true) -> void:
+	_update_support(lift, compression, visible_shadow)
+
+func _update_support(lift: float, compression: float, visible_shadow: bool, drop: float = 0.0) -> void:
 	# The source-painted shadow stays on the support while the body descends.
 	var distance: float = clampf(lift / maxf(1.0, size.y * 2.0), 0.0, 1.0)
-	_shadow.visible = visible_shadow
-	_shadow.size = size * Vector2(lerpf(0.64, 0.94, distance) + compression * 0.07, lerpf(0.082, 0.19, distance))
-	_shadow.position = Vector2((size.x - _shadow.size.x) * 0.5, size.y * Motion.FOOT_Y + lift - _shadow.size.y * 0.6)
-	_shadow.modulate.a = lerpf(1.0, 0.16, distance)
+	var extent := size * Vector2(lerpf(0.64, 0.94, distance) + compression * 0.07, lerpf(0.082, 0.19, distance))
+	var origin := Vector2((size.x - extent.x) * 0.5, size.y * Motion.FOOT_Y + lift - extent.y * 0.6 + drop)
+	var alpha: float = lerpf(1.0, 0.16, distance)
+	if _shadow.visible != visible_shadow:
+		_shadow.visible = visible_shadow
+	if _shadow.size != extent:
+		_shadow.size = extent
+	if _shadow.position != origin:
+		_shadow.position = origin
+	if _shadow.modulate.a != alpha:
+		_shadow.modulate.a = alpha
 
 func _layout() -> void:
 	if _visual == null:
@@ -221,9 +242,9 @@ func _layout() -> void:
 	_visual.size = size
 	_content_offset = Vector2.ZERO
 	_surface.size = size
-	_gel.set_shader_parameter("surface_size", size)
+	_set_surface_parameter(&"surface_size", size)
 	# Stay within the artwork's transparent margin, including tiny landscape tiles.
-	_gel.set_shader_parameter("rim_uv", clampf(2.8 / maxf(1.0, size.x * Style.ui_scale(self)), 0.014, 0.03))
+	_set_surface_parameter(&"rim_uv", clampf(2.8 / maxf(1.0, size.x * Style.ui_scale(self)), 0.014, 0.03))
 	_picture.visible = not _projection and (kind == "picture" or combined)
 	_label.visible = not _projection and (kind == "word" or combined)
 	_picture.position = size * (Vector2(0.26, 0.18) if combined else Vector2(0.18, 0.20))

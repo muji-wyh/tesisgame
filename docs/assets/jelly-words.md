@@ -41,8 +41,10 @@ The effect begins at the model's collection pop, remains input-transparent, and
 clears on pause or exit. Reduced motion uses a compact still light accent.
 Profiles and acquired material are recorded in [Jelly level feedback](jelly-level-feedback.md).
 
-Each collected word has an independent 1% chance
-of a fixed 50-coin bonus, independent of component count and footprint. Opening chests
+Lv1 collections do not award bonus coins. Lv2 through Lv9 use independent collection
+chances of 2%, 4%, 6%, 10%, 16%, 28%, 50%, and 80%, with respective payouts of
+50, 100, 150, 200, 250, 300, 350, and 450 coins. Both probability and amount increase
+with merge level, independently of component count and footprint. Opening chests
 is the main source of coins. A collection without bonus coins still records
 the learned word and collects all carried chest fragments, without a coin
 flight or coin sound. The roll is retained across collection retries and uses

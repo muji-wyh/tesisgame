@@ -3,7 +3,11 @@
 The numerical policy, affordability targets and reproducible budget scenarios
 are documented in [Coin economy](coin-economy.md). Chest payouts and saved wallet
 balances retain their previous values. Future purchases use escalating per-round
-prices, and rare Jelly collection bonuses are capped at 100 coins.
+prices. Jelly Words collection bonuses now follow the merged-level table: Lv1
+has no bonus; Lv2-9 have increasing chances from 2% to 80% and winning amounts
+from 50 to 450 coins. Only collecting a valid merged word can award this bonus;
+root count and mass do not determine it. The same reserved outcome and receipt
+survive persistence retries, preventing rerolls or duplicate payment.
 
 Opening an ordinary chest awards **50 coins**. A levelled chest awards **50 × its chest level**: level 2 gives 100, level 3 gives 150, and so on. Pip's learning level and age do not change the payout. Match retains its ordinary tier-one chest, 50% round drop chance, and guarantee after two completed dry rounds. Memory starts at the highest available chest level, currently 6, and loses one level per wrong pair. Completing all five pairs earns the remaining level and its matching payout; level zero earns no chest or coins. Memory has no random drop or dry-round guarantee. Phrase Builder pays 50 coins. Voice Pop and Jelly Match pay according to the final level of each earned chest.
 

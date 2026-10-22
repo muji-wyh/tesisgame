@@ -39,7 +39,6 @@ const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
 const BATCH_BEAT_SECONDS: float = 0.25
 const BATCH_POP_SECONDS: float = 0.06
-const COIN_DROP_CHANCE: float = CoinEconomy.JELLY_BONUS_CHANCE
 const INITIAL_SPAWN_INTERVAL: float = 20.0
 const MIN_SPAWN_INTERVAL: float = 10.0
 const CLEARS_PER_DIFFICULTY_STAGE: int = 4
@@ -744,8 +743,9 @@ func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
 		return false
 	if not _collection_event_ids.has(tile_id):
 		_collection_event_ids[tile_id] = _event_id("collect")
-		# Reserve one independent roll per collection, including wallet retries.
-		_collection_coin_rewards[_collection_event_ids[tile_id]] = coins_for_tile(tile) if _coin_rng.randf() < COIN_DROP_CHANCE else 0
+		# Eligible collections reserve one independent roll; retries reuse its outcome.
+		var chance: float = coin_drop_chance_for_tile(tile)
+		_collection_coin_rewards[_collection_event_ids[tile_id]] = coins_for_tile(tile) if chance > 0.0 and _coin_rng.randf() < chance else 0
 	var active: Dictionary = {
 		"operation": "collect", "a_id": tile_id, "b_id": tile_id,
 		"a": tile.duplicate(true), "b": tile.duplicate(true), "result": {},
@@ -1314,9 +1314,17 @@ func is_valid_word(tile: Dictionary) -> bool:
 	return int(tile.get("mass", 0)) > 1 and not tile.get("word", {}).is_empty()
 
 
-static func coins_for_tile(_tile: Dictionary) -> int:
-	# Potential bonus value; collection separately reserves the rare drop roll.
-	return CoinEconomy.jelly_bonus(2)
+static func coin_drop_chance_for_tile(tile: Dictionary) -> float:
+	if str(tile.get("jelly_kind", "")) != "merged" or tile.get("word", {}).is_empty():
+		return 0.0
+	return CoinEconomy.jelly_bonus_chance(int(tile.get("merge_level", 0)))
+
+
+static func coins_for_tile(tile: Dictionary) -> int:
+	# Potential collection bonus: level governs it independently of roots or mass.
+	if str(tile.get("jelly_kind", "")) != "merged" or tile.get("word", {}).is_empty():
+		return 0
+	return CoinEconomy.jelly_bonus(int(tile.get("merge_level", 0)))
 
 
 func score() -> int:

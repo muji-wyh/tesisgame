@@ -73,6 +73,15 @@ var _room_notice_remaining: float = 0.0
 var _read_hold_id: int = -1
 var _read_hold_elapsed: float = 0.0
 var _tile_press_started_ms: int = -1
+var _view_update_active: bool = false
+var _view_cells: Dictionary = {}
+var _view_mergeable: Dictionary = {}
+var _view_drop_known: bool = false
+var _view_drop_available: bool = false
+var _view_palette_ready: bool = false
+var _view_hints_ready: bool = false
+var _view_hint_source: int = -1
+var _preview_drop_available: bool = false
 const READ_HOLD_SECONDS: float = 0.45
 const COLLECTION_CLICK_MAX_MS: int = 500
 
@@ -303,6 +312,7 @@ func _finished(result: Dictionary) -> void:
 	super._finished(result)
 
 func cancel_input() -> void:
+	_end_view_update()
 	_read_hold_id = -1
 	_read_hold_elapsed = 0.0
 	_tile_press_started_ms = -1
@@ -443,6 +453,7 @@ func _move(global_point: Vector2) -> void:
 	super._move(global_point)
 
 func _release(global_point: Vector2) -> void:
+	_consume_drag_motion()
 	_read_hold_id = -1
 	_read_hold_elapsed = 0.0
 	# Use real elapsed time so a stalled frame cannot turn a hold into collection.
@@ -671,9 +682,48 @@ func _apply_palette(tile: WordTile, id: int) -> void:
 	if tile.palette_index != index:
 		tile.set_palette(index, Palette.hue(index))
 
+func _begin_view_update() -> void:
+	# These caches live only across a presentation pass, after model.step().
+	# No time-, occupancy-, or return-space decision survives a simulation step.
+	_view_update_active = true
+	_view_cells.clear()
+	for cell: Dictionary in game.cells:
+		_view_cells[int(cell.id)] = cell
+	_view_mergeable.clear()
+	_view_drop_known = false
+	_view_palette_ready = false
+	_view_hints_ready = false
+
+func _end_view_update() -> void:
+	_view_update_active = false
+	_view_cells.clear()
+	_view_mergeable.clear()
+
+func _cell(id: int) -> Dictionary:
+	return _view_cells.get(id, {}) if _view_update_active else super._cell(id)
+
+func _can_drop_preview() -> bool:
+	if not _view_update_active:
+		return game.can_drop_now()
+	if not _view_drop_known:
+		_view_drop_available = game.can_drop_now()
+		_view_drop_known = true
+	return _view_drop_available
+
+func _can_merge_for_feedback(source: Dictionary, target: Dictionary) -> bool:
+	if not _view_update_active:
+		return game.can_merge(source, target)
+	var pair := Vector2i(int(source.get("id", -1)), int(target.get("id", -1)))
+	if not _view_mergeable.has(pair):
+		_view_mergeable[pair] = game.can_merge(source, target)
+	return bool(_view_mergeable[pair])
+
 func _refresh_palette() -> void:
 	if not _configured:
 		return
+	if _view_update_active and _view_palette_ready:
+		return
+	_view_palette_ready = true
 	var items: Array[Dictionary] = []
 	var reserved: Array[int] = []
 	for cell: Dictionary in game.cells:
@@ -703,6 +753,9 @@ func _refresh_palette() -> void:
 func _sync_tiles() -> void:
 	if not _configured:
 		return
+	var owns_update: bool = not _view_update_active
+	if owns_update:
+		_begin_view_update()
 	if _preview_first_id >= 0 and _preview_generated != game.generated_tiles:
 		_preview_canceled = true
 		_set_preview_pressed(false)
@@ -744,6 +797,8 @@ func _sync_tiles() -> void:
 	_refresh_marks()
 	_sync_positions()
 	_refresh_controls()
+	if owns_update:
+		_end_view_update()
 
 func _tile_rect(cell: Dictionary) -> Rect2:
 	return Rect2(_board.position + Vector2(int(cell.get("column", 0)), int(cell.get("row", 0))) * _pitch + Vector2.ONE * _gap * 0.5,
@@ -764,6 +819,9 @@ func _arrival_delay(cell: Dictionary) -> float:
 	return WordModel.arrival_delay(cell)
 
 func _sync_positions() -> void:
+	var owns_update: bool = not _view_update_active
+	if owns_update:
+		_begin_view_update()
 	_refresh_completion_hints()
 	var preview_owners: Dictionary = {}
 	if not reduced_motion:
@@ -866,6 +924,8 @@ func _sync_positions() -> void:
 	_refresh_contact()
 	_refresh_placement()
 	_pose_powerup()
+	if owns_update:
+		_end_view_update()
 
 func _activate_powerup(kind: String) -> void:
 	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling() or _keyboard_source >= 0:
@@ -969,6 +1029,7 @@ func _pose_powerup() -> void:
 
 func _sync_preview() -> void:
 	drop_button.queue_redraw()
+	_preview_drop_available = _can_drop_preview()
 	var refills: Array[float] = []
 	refills.resize(_preview_tiles.size())
 	refills.fill(1.0)
@@ -1016,9 +1077,10 @@ func _refresh_preview_read_controls() -> void:
 		preview.focus_mode = Control.FOCUS_ALL if available else Control.FOCUS_NONE
 
 func _preview_pose(index: int) -> Dictionary:
-	return Motion.preview(game.spawn_elapsed, game.spawn_interval, index, reduced_motion or game.phase != "playing" or not game.can_drop_now())
+	return Motion.preview(game.spawn_elapsed, game.spawn_interval, index, reduced_motion or game.phase != "playing" or not _preview_drop_available)
 
 func _process(delta: float) -> void:
+	_consume_drag_motion()
 	if _read_hold_id >= 0 and _pointer != NO_POINTER and not _dragging and _can_play() and delta <= 0.5:
 		_read_hold_elapsed += delta
 		if _read_hold_elapsed >= READ_HOLD_SECONDS:
@@ -1092,6 +1154,10 @@ func _refresh_marks() -> void:
 
 func _refresh_completion_hints() -> void:
 	var source: int = (_source if _source >= 0 else _keyboard_source) if _can_play() and not game.collection_batch_active() else -1
+	if _view_update_active and _view_hints_ready and _view_hint_source == source:
+		return
+	_view_hints_ready = true
+	_view_hint_source = source
 	if source != _completion_source:
 		_completion_source = source
 		_completion_elapsed = 0.0
@@ -1099,7 +1165,7 @@ func _refresh_completion_hints() -> void:
 	for id: int in _tiles:
 		var target: Dictionary = _cell(id)
 		var eligible: bool = not prefix.is_empty() and _settled(prefix) and _settled(target) \
-			and game.can_merge(prefix, target)
+			and _can_merge_for_feedback(prefix, target)
 		_tiles[id].set_completion_hint(eligible, _completion_elapsed, reduced_motion)
 
 func navigation_controls() -> Array[Control]:
@@ -1146,7 +1212,7 @@ func _contact_state() -> Dictionary:
 		return state
 	# All painted bodies respond to pressure. Only a forward word earns the
 	# separate completion highlight. A failed drop is rejected only on release.
-	var completing: bool = game.can_merge(source, target)
+	var completing: bool = _can_merge_for_feedback(source, target)
 	var direction: Vector2 = (_tiles[_target].get_rect().get_center() - _tiles[_source].get_rect().get_center()).normalized()
 	if direction.length_squared() < 0.1:
 		direction = (_tile_rect(target).get_center() - _tile_rect(source).get_center()).normalized()
@@ -1560,6 +1626,9 @@ func _fit_layout_pitch(available: Vector2, s: float) -> float:
 	return maxf(8.0 / s, minf(available.x / WordModel.COLUMNS, height_pitch))
 
 func snapshot() -> Dictionary:
+	# A pause or collection may publish before the next presentation pass.
+	# Refresh once so all preview slots describe the current model state.
+	_preview_drop_available = _can_drop_preview()
 	var state: Dictionary = super.snapshot()
 	state["stage"] = _stage_banner.snapshot() if _stage_banner != null else {}
 	state["mode"] = "word_jelly"
@@ -1612,7 +1681,7 @@ func snapshot() -> Dictionary:
 		item["fragment_badges"] = tile.visible_fragment_badges()
 		item["fragment_badge"] = tile.fragment_badge_snapshot()
 		item["coins"] = WordModel.coins_for_tile(item)
-		item["coin_drop_chance"] = WordModel.COIN_DROP_CHANCE
+		item["coin_drop_chance"] = WordModel.coin_drop_chance_for_tile(item)
 		item["palette_index"] = tile.palette_index
 		item["palette_hue"] = tile._gel.get_shader_parameter("palette_hue")
 	for index in range(state.preview.slots.size()):

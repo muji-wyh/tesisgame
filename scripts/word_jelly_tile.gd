@@ -11,6 +11,7 @@ var _authored: bool = false
 var _spelling: String = ""
 var _break_offsets: Array = []
 const Footprint = preload("res://scripts/jelly_footprint.gd")
+const WordModel = preload("res://scripts/word_jelly_model.gd")
 var _read_button := Button.new()
 var fragments: int = 0
 var _fragment_badges: Array[TextureRect] = []
@@ -30,6 +31,13 @@ var _completion_glints: Array[TextureRect] = []
 var _merged_glow: TextureRect
 var _merged_glints: Array[TextureRect] = []
 var _merged_elapsed: float = 0.0
+var _merged_geometry_size := Vector2(-1.0, -1.0)
+var _merged_geometry_scale: float = -1.0
+var _merged_geometry_level: int = -1
+var _merged_geometry_active: bool = false
+var _merged_pose_elapsed: float = -1.0
+var _merged_pose_reduced: bool = false
+var _merged_pose_id: int = -1
 var _level_badge: Label
 const MERGED_COLORS: Array[Color] = [Color("#f7c45c"), Color("#f7c45c"), Color("#ffe48b"),
 	Color("#ffc77b"), Color("#ffb4dc"), Color("#c9c2ff"), Color("#9ee8f3"),
@@ -81,26 +89,40 @@ func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 			glint.name = "MergedGlint%d" % index
 			_merged_glints.append(glint)
 	if _merged_glow != null:
-		_merged_glow.visible = active
-		# The permanent local light distinguishes a collectible word at rest.
-		# It stays small enough that adjacent source pieces retain their own color.
-		_merged_glow.size = size * 1.30
-		_merged_glow.position = (size - _merged_glow.size) * 0.5 - Vector2(0.0, size.y * 0.025)
-		var tint: Color = MERGED_COLORS[clampi(merge_level, 1, 9)]
-		tint.a = 0.48 + float(maxi(0, merge_level - 1)) * 0.025
-		_merged_glow.modulate = tint
-	for index in range(_merged_glints.size()):
-		var glint: TextureRect = _merged_glints[index]
-		glint.visible = active
-		var twinkle: float = 0.5 if reduced else (sin(elapsed * TAU / 2.8 + index * PI + tile_id * 0.41) + 1.0) * 0.5
-		glint.size = Vector2.ONE * minf(_unit * (0.19 if index == 0 else 0.15), 15.0 / Style.ui_scale(self))
-		glint.pivot_offset = glint.size * 0.5
-		glint.position = size * (Vector2(0.47, 0.12) if index == 0 else Vector2(0.89, 0.76)) - glint.size * 0.5
-		glint.scale = Vector2.ONE * (1.0 if reduced else 0.85 + twinkle * 0.20)
-		glint.modulate = Color(1.0, 0.98, 0.86, 0.68 + twinkle * 0.24)
+		var ui_scale: float = Style.ui_scale(self)
+		var geometry_changed: bool = size != _merged_geometry_size or ui_scale != _merged_geometry_scale \
+			or merge_level != _merged_geometry_level or active != _merged_geometry_active
+		if geometry_changed:
+			_merged_geometry_size = size
+			_merged_geometry_scale = ui_scale
+			_merged_geometry_level = merge_level
+			_merged_geometry_active = active
+			_merged_glow.visible = active
+			# The sourced readiness light has fixed geometry between layout changes.
+			_merged_glow.size = size * 1.30
+			_merged_glow.position = (size - _merged_glow.size) * 0.5 - Vector2(0.0, size.y * 0.025)
+			var tint: Color = MERGED_COLORS[clampi(merge_level, 1, 9)]
+			tint.a = 0.48 + float(maxi(0, merge_level - 1)) * 0.025
+			_merged_glow.modulate = tint
+			for index in range(_merged_glints.size()):
+				var glint: TextureRect = _merged_glints[index]
+				glint.visible = active
+				glint.size = Vector2.ONE * minf(_unit * (0.19 if index == 0 else 0.15), 15.0 / ui_scale)
+				glint.pivot_offset = glint.size * 0.5
+				glint.position = size * (Vector2(0.47, 0.12) if index == 0 else Vector2(0.89, 0.76)) - glint.size * 0.5
+		if active and (geometry_changed or reduced != _merged_pose_reduced \
+			or not reduced and (elapsed != _merged_pose_elapsed or tile_id != _merged_pose_id)):
+			for index in range(_merged_glints.size()):
+				var glint: TextureRect = _merged_glints[index]
+				var twinkle: float = 0.5 if reduced else (sin(elapsed * TAU / 2.8 + index * PI + tile_id * 0.41) + 1.0) * 0.5
+				glint.scale = Vector2.ONE * (1.0 if reduced else 0.85 + twinkle * 0.20)
+				glint.modulate = Color(1.0, 0.98, 0.86, 0.68 + twinkle * 0.24)
+		_merged_pose_elapsed = elapsed
+		_merged_pose_reduced = reduced
+		_merged_pose_id = tile_id
 	if not completion_hint:
-		_gel.set_shader_parameter("completion_strength", 0.35 if active else 0.0)
-		_gel.set_shader_parameter("completion_glint", -2.0 if reduced or not active else -0.3 + fposmod(elapsed + tile_id * 0.13, 4.2) * 0.40)
+		_set_surface_parameter(&"completion_strength", 0.35 if active else 0.0)
+		_set_surface_parameter(&"completion_glint", -2.0 if reduced or not active else -0.3 + fposmod(elapsed + tile_id * 0.13, 4.2) * 0.40)
 
 func set_completion_hint(active: bool, elapsed: float, reduced: bool) -> void:
 	var was_active: bool = completion_hint
@@ -114,8 +136,8 @@ func set_completion_hint(active: bool, elapsed: float, reduced: bool) -> void:
 	# Only the painted skin breathes. Letters, badges, layout and contact stay fixed.
 	_base_stretch *= completion_scale / previous_scale
 	_surface.scale *= completion_scale / previous_scale
-	_gel.set_shader_parameter("completion_strength", (0.9 if reduced else 0.6 + enter * 0.4) if completion_hint else 0.35 if valid_word and not _projection else 0.0)
-	_gel.set_shader_parameter("completion_glint", -2.0 if reduced else -0.3 + fposmod(elapsed, 1.8) * 1.6)
+	_set_surface_parameter(&"completion_strength", (0.9 if reduced else 0.6 + enter * 0.4) if completion_hint else 0.35 if valid_word and not _projection else 0.0)
+	_set_surface_parameter(&"completion_glint", -2.0 if reduced else -0.3 + fposmod(elapsed, 1.8) * 1.6)
 	if completion_hint and _completion_glow == null:
 		_completion_glow = TextureRect.new()
 		_completion_glow.texture = COMPLETION_GLOW
@@ -158,6 +180,8 @@ func set_completion_hint(active: bool, elapsed: float, reduced: bool) -> void:
 		_refresh_feedback()
 
 func set_projection(value: bool) -> void:
+	if _projection == value:
+		return
 	super.set_projection(value)
 	if value:
 		set_completion_hint(false, 0.0, _reduced_motion)
@@ -167,7 +191,7 @@ func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
 
 func set_palette(index: int, hue: float) -> void:
 	palette_index = index
-	_gel.set_shader_parameter("palette_hue", hue)
+	_set_surface_parameter(&"palette_hue", hue)
 
 func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: Texture2D, accent: Color, show_both: bool = false) -> void:
 	_authored = not cell.get("composition", {}).is_empty()
@@ -209,7 +233,9 @@ func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: 
 	var identity: String = "Picture of %s" % str(cell.get("image_word", {}).get("text", cell.get("text", ""))) if jelly_kind == "picture" else _spelling
 	var instruction: String = "Drag this root before another root to build a word."
 	if valid_word:
-		instruction = "Merged word, level %d. Press to collect, with a 1%% chance of bonus coins.%s" % [merge_level,
+		var chance: float = WordModel.coin_drop_chance_for_tile(cell)
+		var reward: String = " No bonus coins at this level." if chance <= 0.0 else " %d%% chance of %d bonus coins." % [roundi(chance * 100.0), WordModel.coins_for_tile(cell)]
+		instruction = "Merged word, level %d. Press to collect.%s%s" % [merge_level, reward,
 			" Drag to the same word at the same level to upgrade." if merge_level < 9 else " Maximum level reached."]
 	elif jelly_kind == "picture":
 		instruction = "Drag to its complete matching word to merge."
@@ -386,7 +412,9 @@ func set_fragment_arrival(age: float, reduced: bool = false) -> void:
 	var pop: float = 0.0
 	if age >= 0.0 and age < 0.48 and not reduced:
 		pop = sin(minf(age / 0.11, 1.0) * PI * 0.5) * exp(-maxf(0.0, age - 0.11) * 10.0)
-	_fragment_holder.scale = Vector2.ONE * float(_fragment_holder.get_meta("fit", 1.0)) * (1.0 + pop * 0.12)
+	var target_scale := Vector2.ONE * float(_fragment_holder.get_meta("fit", 1.0)) * (1.0 + pop * 0.12)
+	if _fragment_holder.scale != target_scale:
+		_fragment_holder.scale = target_scale
 
 func fragment_badge_snapshot() -> Dictionary:
 	if _fragment_holder == null:

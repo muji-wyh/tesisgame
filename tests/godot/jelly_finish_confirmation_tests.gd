@@ -207,7 +207,8 @@ func start_merge(view) -> bool:
 				continue
 			var compatible: bool = false
 			if view.game is WordJellyModel:
-				compatible = int(first.mass) == 1 and int(second.mass) == 1 and view.game._word_lookup.has(str(first.text) + str(second.text))
+				compatible = not view.game.is_valid_word(first) and not view.game.is_valid_word(second) \
+					and view.game.can_merge(first, second)
 			else:
 				compatible = first.word.id == second.word.id and first.kind != second.kind
 			if compatible:
@@ -275,7 +276,8 @@ func check_collection_batch(app) -> void:
 	fresh_round(app, "word_jelly")
 	var view = app._word_jelly
 	var word: Dictionary = app._learning_words().filter(func(candidate: Dictionary) -> bool:
-		return str(candidate.text).length() >= 2 and str(candidate.text).length() <= 6)[0]
+		return str(candidate.text).length() >= 2 and str(candidate.text).length() <= 6 \
+			and not str(candidate.get("image", "")).is_empty() and not view.game._reviewed_morphology(candidate))[0]
 	check(view.configure([word], app.growth.learning_age(), Data.theme(app.model.theme_id), app.data.chests, true, 731),
 		"The batch fixture uses one real current-age word")
 	app._sync_jelly()
@@ -283,12 +285,16 @@ func check_collection_batch(app) -> void:
 	for tile: Dictionary in view.game.cells:
 		tile.fragments = 0
 		tile.chest = false
-	for index in range(3):
+	for index in range(4):
 		view.game.step(2.0)
 		check(start_merge(view), "A real word merges for batch collection")
 		view.game.step(view.game.FUSION_SECONDS + 2.0)
+	var merged_ids: Array[int] = view.game.collectable_ids()
+	check(merged_ids.size() == 4 and view.game.try_merge(merged_ids[0], merged_ids[1]) == "merged",
+		"Two genuine Lv1 words upgrade to an eligible Lv2 collection")
+	view.game.step(view.game.FUSION_SECONDS + 2.0)
 	var ready: int = view.game.collectable_ids().size()
-	# The reserved batch contains one rare bonus followed by two ordinary pickups.
+	# The batch contains one eligible Lv2 bonus and two Lv1 pickups that never roll.
 	view.game._coin_rng.seed = 208
 	check(ready == 3 and view.game.start_collection_batch(), "Collect begins the real three-word sequence")
 	view.game.step(0.04)
