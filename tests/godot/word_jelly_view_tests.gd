@@ -1845,13 +1845,11 @@ func _check_directional_palette_stability(view) -> void:
 	view.size = Vector2(1000, 720)
 
 func _assert_completion_effect(body, active: bool, context: String) -> void:
-	check((body._completion_glow != null and body._completion_glow.visible) == active,
-		"%s: the visible halo follows completion eligibility" % context)
 	var visible_glints: int = 0
 	for glint: TextureRect in body._completion_glints:
 		if glint.visible:
 			visible_glints += 1
-	check(visible_glints == (2 if active else 0), "%s: only eligible targets display both shoulder sparkles" % context)
+	check(visible_glints == (1 if active else 0), "%s: only eligible targets display the small surface reflection" % context)
 	var strength: Variant = body._gel.get_shader_parameter("completion_strength")
 	check((strength != null and float(strength) > 0.35) == active,
 		"%s: target strength clears while merged words retain their permanent light" % context)
@@ -1909,7 +1907,7 @@ func _check_completion_hints(view) -> void:
 		_advance(view, 0.22)
 		_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "all matching pictures")
 		for id: int in [ids[1], ids[2], ids[3]]:
-			check(float(view._tiles[id].completion_scale) > 1.0 and float(view._tiles[id].completion_scale) <= 1.065,
+			check(float(view._tiles[id].completion_scale) > 1.0 and float(view._tiles[id].completion_scale) <= 1.025,
 				"each exact target receives a small completion enlargement")
 		check(target.get_rect().is_equal_approx(rectangle) and target.contact_outline() == outline,
 			"completion animation preserves layout and hit geometry")
@@ -2242,19 +2240,19 @@ func _check_completion_hint_reduced_motion(view) -> void:
 	view._activate(ids[0])
 	_assert_completion_hints(view, [ids[1]], "reduced motion retains static completion guidance")
 	var target = view._tiles[ids[1]]
-	var halo_rect: Rect2 = target._completion_glow.get_rect()
-	var halo_color: Color = target._completion_glow.modulate
+	var rim_color: Color = target._gel.get_shader_parameter("rim_color")
+	var rim_strength: float = target._gel.get_shader_parameter("rim_strength")
 	var glints: Array[Dictionary] = []
 	for glint: TextureRect in target._completion_glints:
 		glints.append({"transform": glint.get_transform(), "color": glint.modulate})
 	_advance(view, 0.3)
 	check(is_equal_approx(float(view._tiles[ids[1]].completion_scale), 1.0), "reduced-motion completion guidance never scales the body")
-	check(target._completion_glow.get_rect().is_equal_approx(halo_rect) and target._completion_glow.modulate.is_equal_approx(halo_color),
-		"reduced-motion completion halo remains steady over time")
+	check(target._gel.get_shader_parameter("rim_color") == rim_color and is_equal_approx(float(target._gel.get_shader_parameter("rim_strength")), rim_strength),
+		"reduced-motion completion contour remains steady over time")
 	for index in range(glints.size()):
 		var glint: TextureRect = target._completion_glints[index]
 		check(glint.get_transform().is_equal_approx(glints[index].transform) and glint.modulate.is_equal_approx(glints[index].color),
-			"reduced-motion shoulder sparkles stay still and keep constant brightness")
+			"reduced-motion surface reflection stays still and keeps constant brightness")
 	view.set_reduced_motion(false)
 	_advance(view, 0.2)
 	check(view._tiles[ids[1]].completion_hint and float(view._tiles[ids[1]].completion_scale) > 1.0,

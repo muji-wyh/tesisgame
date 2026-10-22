@@ -73,7 +73,7 @@ func _run() -> void:
 			check(tile._merged_glints[0].scale == still_glint and tile._merged_glints[0].modulate.a == still_alpha, "Reduced motion preserves a steady merged accent")
 			check(tile._label.get_rect().is_equal_approx(label_rect) and tile._surface.scale.is_equal_approx(Vector2.ONE), "Idle level accents leave the learning face and body scale fixed")
 			tile.set_completion_hint(true, 0.6, false)
-			check(tile.completion_hint and tile._completion_glow.visible, "Merged words can still show upgrade target feedback")
+			check(tile.completion_hint and tile._completion_glints[0].visible, "Merged words can still show upgrade target feedback")
 			tile.set_completion_hint(false, 0.0, false)
 			check(tile.presentation_snapshot().merged_light and is_equal_approx(tile.completion_scale, 1.0), "Clearing target feedback preserves merged readiness without enlarged skin")
 			tile.set_projection(true)

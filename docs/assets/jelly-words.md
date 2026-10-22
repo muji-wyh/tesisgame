@@ -158,26 +158,23 @@ span packet boundaries; already visible previews are never reshuffled.
 Neighboring bodies leave a nine-percent cell gap for clearer separation.
 
 On pointer press, every settled target that legally composes with the selected part in
-source-then-target order receives a violet local glow, a slow light sweep across
-the acquired gel paint, and a gentle 3.5-5.5 percent breathing enlargement of
-its skin. Keyboard source selection shows the same candidates. The cue reuses
-the acquired `portal_glow.png` from Bobardo's Modern 2D Animated Chests, under
-the Standard Unity Asset Store EULA documented in
-[treasure assets](../voice-pop-treasure.md), with its source mapping in
-`assets/chests/manifest.json`.
-Both source textures are static; these cues are runtime animation. The portal's
-authored wisps have lifted opacity and a wider falloff, layered above the contact
-shadow and below the gel, so the breathing light remains visible against the pale
-garden. The violet halo keeps a bright baseline from the first selected frame; a
-wide violet contour with a cream keyline separates it from ordinary merged-word
-readiness. Two larger gold
-shoulder glints reuse the integrated Toon FX 1.52 sparkle by Kenneth Foldal Moe
-(Archanor VFX), under the Standard Unity Asset Store EULA recorded in the
-[fragment asset record](jelly-fragments.md); its source image is static, with
-alternating soft twinkles authored at runtime. No new artwork
-or audio was acquired. Lettering, pictures, fragment markers, hit areas and rewards
-stay unchanged. Release, cancellation or leaving play clears the cue. Reduced
-motion keeps static light, glints and the painted rim without a sweep or enlargement.
+source-then-target order receives a thin amber contour with a cream keyline, a
+slow light sweep across the acquired gel paint, and a 1.5-2.3 percent breathing
+enlargement of its skin. Keyboard source selection shows the same candidates.
+The contour follows the painted body; matching hints no longer use the enlarged
+violet portal halo or the two large gold stars. The existing merged-word readiness
+light retains its acquired Bobardo portal texture and established presentation.
+
+One small ivory reflection sits on the skin, capped at 14 screen pixels. It reuses
+the integrated Toon FX 1.52 sparkle by Kenneth Foldal Moe (Archanor VFX), under
+the Standard Unity Asset Store EULA recorded in the
+[fragment asset record](jelly-fragments.md). The source image is static; the
+gentle twinkle and slower surface sweep are runtime animation. The underlying
+Jelly Squash artwork and CC0 attribution remain in [Jelly Match](jelly-match.md).
+No new artwork or audio was acquired. Lettering, pictures, fragment markers, hit
+areas and rewards stay unchanged. Release, cancellation or leaving play clears
+the cue. Reduced motion keeps the thin rim and small reflection steady without
+a sweep or enlargement.
 Selected merged words also highlight every settled merged word with the same
 word ID, including different levels and Lv9. This word-family cue does not change
 upgrade eligibility: only equal levels below Lv9 can merge.

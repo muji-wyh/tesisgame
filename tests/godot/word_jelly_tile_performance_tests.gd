@@ -60,7 +60,7 @@ func _run() -> void:
 	tile.set_projection(true)
 	check(not tile._label.visible and not tile._picture.visible and not tile._level_badge.visible,
 		"Projection hides the learning face and level badge")
-	check(not tile._merged_glow.visible and not tile._completion_glow.visible and not tile._fragment_holder.visible,
+	check(not tile._merged_glow.visible and not tile._completion_glints[0].visible and not tile._fragment_holder.visible,
 		"Projection hides sourced decorations without deleting them")
 	var projected_layouts: int = tile.layout_count
 	var placement_rim := Color("#ce655b")
@@ -77,7 +77,7 @@ func _run() -> void:
 	tile.set_projection(false)
 	check(tile._label.visible and tile._picture.visible and tile._level_badge.visible,
 		"Leaving projection restores the complete learning face")
-	check(tile._merged_glow.visible and tile._fragment_holder.visible and not tile._completion_glow.visible,
+	check(tile._merged_glow.visible and tile._fragment_holder.visible and not tile._completion_glints[0].visible,
 		"Leaving projection restores readiness and fragments without reviving a stale completion hint")
 	var restored_layouts: int = tile.layout_count
 	tile.set_projection(false)
@@ -138,7 +138,7 @@ func _run() -> void:
 	tile.set_completion_hint(true, 0.6, false)
 	var completion_strength: float = tile._gel.get_shader_parameter("completion_strength")
 	tile.set_merged_presentation(10.0, false)
-	check(tile._completion_glow.visible and tile.completion_scale > 1.0
+	check(tile._completion_glints[0].visible and tile.completion_scale > 1.0
 		and is_equal_approx(float(tile._gel.get_shader_parameter("completion_strength")), completion_strength),
 		"Readiness updates preserve active completion feedback")
 	tile.set_completion_hint(false, 0.0, false)
