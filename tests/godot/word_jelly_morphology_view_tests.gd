@@ -96,7 +96,7 @@ func _run() -> void:
 		await process_frame
 		check(not view._layout_too_small, "The reference layout fits %s" % viewport_size)
 		check(_positions(view) == positions, "Resize preserves identities, grid positions and footprints at %s" % viewport_size)
-		check(view.game.COLUMNS == 6 and view.game.ROWS == 8, "The established six-by-eight well remains")
+		check(view.game.COLUMNS == 5 and view.game.ROWS == 8, "The five-by-eight well retains ordinary square bodies")
 		for cell: Dictionary in view.game.cells:
 			_check_tile(view, view._tiles[int(cell.id)], cell, str(viewport_size))
 		var preview_ids: Array = []

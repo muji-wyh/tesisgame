@@ -2,6 +2,7 @@ extends SceneTree
 ## Native effect study with ordinary-sized production Jelly tiles, not gameplay.
 
 const Effects = preload("res://scripts/word_jelly_collection_fx.gd")
+const Model = preload("res://scripts/word_jelly_model.gd")
 const Tile = preload("res://scripts/word_jelly_tile.gd")
 const Backdrop = preload("res://scripts/jelly_backdrop.gd")
 const Style = preload("res://scripts/ui_style.gd")
@@ -106,14 +107,16 @@ func _run() -> void:
 		await _resize(Vector2i(390, 844))
 		_label("Lv4 - Firework bloom", Vector2(0, 24), Vector2(390, 36), 24)
 		_label("Reduced motion" if steady else "Phone scale effect study", Vector2(0, 61), Vector2(390, 28), 16)
-		# Real tile controls retain a normal six-column cell pitch around the release.
-		for row in range(6):
-			for column in range(6):
-				var point := Vector2(35 + column * 64, 220 + row * 64)
+		# Real tile controls use the current well dimensions and a square cell pitch.
+		var pitch: float = 384.0 / Model.COLUMNS
+		var origin := Vector2(3.0, 130.0)
+		for row in range(Model.ROWS):
+			for column in range(Model.COLUMNS):
+				var point: Vector2 = origin + (Vector2(column, row) + Vector2.ONE * 0.5) * pitch
 				if row == 2 and column == 2:
 					continue
-				_tile(point, 1 + (row + column) % 9, 58.0)
-		var point := Vector2(163, 348)
+				_tile(point, 1 + (row + column) % 9, pitch * 0.91)
+		var point: Vector2 = origin + Vector2(2.5, 2.5) * pitch
 		var fx: Control = _effect(Rect2(Vector2(0, 130), Vector2(390, 620)), point, 4, 0.27, steady)
 		await _capture("lv4-phone-steady" if steady else "lv4-phone", fx.snapshot())
 	var report: Dictionary = {"kind": "Native effect study with acquired production textures and WordTile controls",

@@ -426,7 +426,7 @@ func _test_auto_keeps_preflighted_route() -> void:
 
 
 func _preview(model: RefCounted, tiles: Array, columns: Array) -> void:
-	model.upcoming.assign([{}, {}, {}, {}, {}, {}])
+	model.upcoming.assign([{}, {}, {}, {}, {}])
 	for index in range(tiles.size()):
 		var tile: Dictionary = tiles[index]
 		var column: int = int(columns[index])
@@ -443,17 +443,16 @@ func _test_preview_and_arrival() -> void:
 	model.cells.clear()
 	var leading: Dictionary = pieces[1]
 	var other: Dictionary = pieces[2]
-	var head: Dictionary = model._new_composition_tile(model._morphology.source_tiles("unhelpful")[1])
 	var tail: Dictionary = model._new_composition_tile(model._morphology.source_tiles("unhelpful")[2])
-	_preview(model, [leading, pieces[0], head, tail], [0, 2, 4, 5])
-	head = model._new_composition_tile(model._morphology.source_tiles("unhelpful")[1])
+	_preview(model, [leading, pieces[0], tail], [0, 2, 4])
+	var head: Dictionary = model._new_composition_tile(model._morphology.source_tiles("unhelpful")[1])
 	model._supply.assign([head, other])
 	# Isolated empty lanes accept whole authored parts without repacking neighbors.
 	var before: Array = model.upcoming.duplicate(true)
 	model._fill_upcoming()
 	check(model.upcoming[1].id == head.id and model.upcoming[3].id == other.id and model._supply.is_empty(),
 		"Single-lane FIFO supply fills separated gaps in order without waiting for adjacent space")
-	for column: int in [0, 2, 4, 5]:
+	for column: int in [0, 2, 4]:
 		check(model.upcoming[column] == before[column], "Refilling isolated lanes preserves every advertised neighbor")
 	for column in range(Model.COLUMNS):
 		var preview: Dictionary = model.upcoming[column]
@@ -473,7 +472,7 @@ func _test_preview_and_arrival() -> void:
 	for tile: Dictionary in model.cells:
 		check(int(tile.id) == 9000 or int(tile.id) in advertised, "Refilled previews cannot depart in the same wave")
 	var occupied: Dictionary = {}
-	model._occupy(occupied, 0, 0, 6, 1)
+	model._occupy(occupied, 0, 0, Model.COLUMNS, 1)
 	check(model._arrival_position(occupied, 0, 2, 2).x < 0, "Empty pockets below a roof are inaccessible from the preview")
 	occupied.clear()
 	model._occupy(occupied, 1, 2, 1, 1)
@@ -541,7 +540,7 @@ func _test_supply_conservation() -> void:
 	model._supply_pending.clear()
 	model._supply_words = 0
 	var groups: Dictionary = {}
-	for index in range(42):
+	for index in range(35):
 		var tile: Dictionary = model._next_supply_tile()
 		var group: int = int(tile.supply_group)
 		if not groups.has(group):
@@ -550,7 +549,7 @@ func _test_supply_conservation() -> void:
 		groups[group].fragments += int(tile.fragments)
 		check(tile.supply_parts == 7 and tile.composition.origins[0].supply_group == group,
 			"Packet mixing preserves every authored occurrence and its origin")
-	check(groups.size() == 6, "Seven-part targets span six-lane packets without losing or adding groups")
+	check(groups.size() == 5, "Seven-part targets span five-lane packets without losing or adding groups")
 	for group: int in groups:
 		groups[group].parts.sort()
 		check(groups[group].parts == [0, 1, 2, 3, 4, 5, 6] and groups[group].fragments == (1 if group % 2 == 0 else 0),

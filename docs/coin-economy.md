@@ -22,10 +22,12 @@ The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 Only successful purchases advance their item's price. Auto Merge and Treasure
 have separate counters. A new round resets the prices; a menu, pause, rejected
 payment, or wallet retry does not. The current price is shown before purchase.
-Auto Merge retains its 200 ms launch rhythm and 300 ms automatic drag and never
-collects the resulting words. Treasure banks its fragments only when their
-carrying words are collected. Memory's Start matching action can skip either
-observation countdown; repeated clicks cannot charge or extend a reveal.
+Auto Merge launches an eligible pair every 200 ms. Each 250 ms flight can overlap
+the next flight, then completes a 110 ms fusion and 30 ms settlement; the next
+launch does not wait for that full sequence. It never collects the resulting
+words. Treasure banks its fragments only when their carrying words are collected.
+Memory's Start matching action can skip either observation countdown; repeated
+clicks cannot charge or extend a reveal.
 
 ## Jelly Words collection bonuses
 

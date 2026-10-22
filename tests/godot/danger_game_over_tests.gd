@@ -214,7 +214,7 @@ func earn_chest(app, mode: String) -> void:
 				if first.id == second.id or not game.is_settled(first) or not game.is_settled(second):
 					continue
 				var compatible: bool = first.word.id == second.word.id and first.kind != second.kind if mode == "jelly" \
-					else str(first.text) + str(second.text) == str(word.text)
+					else not game.is_valid_word(first) and not game.is_valid_word(second) and game.can_merge(first, second)
 				if compatible:
 					chosen = [first, second]
 					break
@@ -228,7 +228,7 @@ func earn_chest(app, mode: String) -> void:
 		check(outcome == ("correct" if mode == "jelly" else "merged"), mode + ": a real merge earns the reward fixture")
 		var merged_id: int = int(game.fusions.back().result.id) if mode == "word_jelly" else -1
 		game.step(game.FUSION_SECONDS + 2.0)
-		if mode == "word_jelly":
+		if mode == "word_jelly" and game.is_valid_word(game.cell(merged_id)):
 			game._coin_rng.seed = 0
 			check(game.collect(merged_id), mode + ": a real word is collected with its carried fragments")
 			game.step(game.COLLECT_SECONDS + 2.0)

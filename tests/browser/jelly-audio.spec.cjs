@@ -10,9 +10,11 @@ const CLIPS = {
   merge: 'assets/imported-audio/jelly-interaction/merge-together-v3.wav'
 };
 const COLLECTION_CLIP = 'assets/audio/jelly-match/collect-pop.wav';
-const COMPOSITION_AGE = 8;
-const compositionAnalyses = new Map(require('../../data/vocabulary/morphology/age-08.json').entries
-  .map(entry => [entry.id, entry.analysis]));
+const LEARNER_AGE = 8;
+const vocabulary = new Map(require('../../words.json').map(word => [word.id, word]));
+const compositionAnalyses = new Map(Array.from({ length: 10 }, (_, index) =>
+  require(`../../data/vocabulary/morphology/age-${String(index + 3).padStart(2, '0')}.json`).entries)
+  .flat().map(entry => [entry.id, entry.analysis]));
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 const playbackIndex = page => page.evaluate(() => window.audioObservation.playbacks.length);
 const playbacksSince = (page, from) => page.evaluate(index => window.audioObservation.playbacks.slice(index), from);
@@ -373,8 +375,15 @@ async function settledWordSupply(page) {
 async function mergeAuthoredParts(page, left, right, surface) {
   const before = await settledWordSupply(page), bounds = await metrics(page);
   const from = await playbackIndex(page);
-  await beginDrag(page, left);
+  const source = before.tiles.find(tile => tile.id === left.id);
+  expect(source?.visible && source.settled, 'The real drag starts from a visible, settled authored tile').toBe(true);
+  const start = center(source.rect, bounds);
+  await page.mouse.move(start.x, start.y);
+  await page.mouse.down();
   try {
+    // Cross the drag threshold before a clipped label can open its Read panel.
+    await page.mouse.move(start.x, start.y - 16);
+    await expect.poll(async () => (await jelly(page)).drag.source).toBe(left.id);
     await expect.poll(async () => {
       const state = await jelly(page), target = state.tiles.find(tile => tile.id === right.id);
       if (!target?.settled) return false;
@@ -393,26 +402,30 @@ async function mergeAuthoredParts(page, left, right, surface) {
       tile.text === surface && tile.mass === left.mass + right.mass);
     return state.merged_count === before.merged_count + 1 && Boolean(completed?.settled) &&
       state.tiles.every(tile => tile.settled);
-  }, { message: 'The real drag produces a settled merged word ready to collect' }).toBe(true);
+  }, { message: 'The real drag produces the expected settled authored result' }).toBe(true);
   expect((await jelly(page)).cleared_pairs, 'A word merge waits for deliberate collection').toBe(before.cleared_pairs);
   expect(collectionSounds(await playbacksSince(page, from)), 'Building a word does not play the collection pop').toEqual([]);
   return completed;
 }
 
-async function completeAuthoredWord(page, roots) {
-  const analysis = compositionAnalyses.get(roots[0].source_word_id);
+async function completeAuthoredWord(page, candidate) {
+  const { roots, picture, analysis, word } = candidate;
   const ready = new Map(analysis.parts.map((part, index) => [part.id, roots[index]]));
   const visit = async id => {
     if (ready.has(id)) return ready.get(id);
     const node = analysis.nodes.find(item => item.id === id);
     expect(node, 'The supply follows an explicit reviewed composition node').toBeTruthy();
     const left = await visit(node.left), right = await visit(node.right);
-    const result = await mergeAuthoredParts(page, left, right, node.surface);
+    const result = await mergeAuthoredParts(page, left, right, node.surface.replace(/^-+|-+$/g, ''));
     ready.set(id, result);
     return result;
   };
-  const completed = await visit(analysis.roots[0]);
-  expect(completed.word.id).toBe(roots[0].source_word_id);
+  let completed = await visit(analysis.roots[0]);
+  if (picture && completed.jelly_kind !== 'merged')
+    completed = await mergeAuthoredParts(page, picture, completed, word.text);
+  expect(completed.word.id).toBe(word.id);
+  expect(completed.jelly_kind, 'The spelling and required picture have both been completed').toBe('merged');
+  expect(completed.merge_level, 'The fixed bubble pop case collects a Lv1 word').toBe(1);
   return completed;
 }
 
@@ -422,23 +435,30 @@ async function collectSupplyWord(page, tile, before) {
   await settledWordSupply(page);
 }
 
-async function prepareWordCollection(page, { composed = false } = {}) {
-  // Keep ready atomic words for the batch. Only the manual case needs a
-  // composed word; chest markings do not change the collection recording.
+async function prepareWordCollection(page, { manual = false } = {}) {
+  // Read the live stage's authored packets. A whole-word root still needs its
+  // picture, and a saved learner age does not select the current stage's words.
   for (let attempt = 0; attempt < 24; attempt++) {
     const state = await settledWordSupply(page), groups = new Map();
-    if (!composed && state.collect_button.count >= 2) return state;
+    if (!manual && state.collect_button.count >= 2) return state;
     for (const tile of state.tiles.filter(tile => tile.visible && tile.mass === 1 && tile.supply_group)) {
       if (!groups.has(tile.supply_group)) groups.set(tile.supply_group, []);
       groups.get(tile.supply_group).push(tile);
     }
-    const words = [...groups.values()].filter(roots => roots.length > 1 &&
-      roots.length === compositionAnalyses.get(roots[0].source_word_id)?.parts.length)
-      .map(roots => roots.sort((a, b) => a.supply_part - b.supply_part))
-      .sort((left, right) => left.length - right.length);
+    const words = [...groups.values()].map(bodies => {
+      const roots = bodies.filter(tile => tile.jelly_kind === 'root').sort((a, b) => a.supply_part - b.supply_part);
+      const picture = bodies.find(tile => tile.jelly_kind === 'picture');
+      const word = vocabulary.get(bodies[0].source_word_id);
+      return { roots, picture, word, analysis: compositionAnalyses.get(word?.id) };
+    }).filter(candidate => candidate.analysis && candidate.roots.length === candidate.analysis.parts.length &&
+      candidate.roots.every((root, index) => root.text === candidate.analysis.parts[index].surface.replace(/^-+|-+$/g, '')) &&
+      (!candidate.word.image || candidate.picture?.image_word.id === candidate.word.id))
+      .sort((left, right) => left.roots.length - right.roots.length ||
+        [...left.roots, left.picture].reduce((sum, tile) => sum + (tile?.fragments || 0), 0) -
+        [...right.roots, right.picture].reduce((sum, tile) => sum + (tile?.fragments || 0), 0));
     if (words.length) {
       const completed = await completeAuthoredWord(page, words[0]);
-      if (composed) return completed;
+      if (manual) return completed;
       continue;
     }
     if (state.preview.enabled) {
@@ -457,12 +477,12 @@ test('Jelly Words reuses one fixed bubble pop per manual or batch collection and
   test.setTimeout(180000);
   const requests = watchAudioRequests(page), evidence = { source: COLLECTION_CLIP };
   await observeOutputAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5, trackSourceLifecycle: true });
-  // Reuse the saved-learner cohort used by the authored Word Jelly browser suite.
+  // Keep the saved learner used by the authored suite while following live stage supply.
   await page.addInitScript(age => {
     const key = 'growWithPip.growth.v1';
     if (!localStorage.getItem(key)) localStorage.setItem(key,
       `[growth]\nversion=3\nlevel=0\nage=${age - 1}\nstreaks={}\nmastered_words=[]\nreceipts=[]\n`);
-  }, COMPOSITION_AGE);
+  }, LEARNER_AGE);
   const errors = await openGame(page, { mode: 'word_jelly', reducedMotion: 'no-preference' });
   const available = await page.evaluate(() => window.audioObservation.available);
   if (browserName === 'chromium') expect(available).toBe(true);
@@ -471,11 +491,11 @@ test('Jelly Words reuses one fixed bubble pop per manual or batch collection and
   expect(opening.mode).toBe('word_jelly');
   expect(opening.authored_morphology).toBe(true);
   expect(opening.tiles.reduce((area, tile) => area + tile.width * tile.height, 0),
-    'The authored opening respects its eighteen-cell occupied-area budget').toBeLessThanOrEqual(18);
+    'The authored opening respects its fifteen-cell occupied-area budget').toBeLessThanOrEqual(15);
   await context.setOffline(true);
   try {
-    const manual = await prepareWordCollection(page, { composed: true }), beforeManual = await jelly(page);
-    expect(manual.composition.composed, 'The manual case collects a word built by real drags').toBe(true);
+    const manual = await prepareWordCollection(page, { manual: true }), beforeManual = await jelly(page);
+    expect(manual.mass, 'The manual case collects a word built by real drags').toBeGreaterThan(1);
     const manualFrom = await playbackIndex(page);
     await pressJellyRect(page, manual.rect);
     evidence.manual = await audibleCollection(page, manualFrom);
@@ -495,7 +515,7 @@ test('Jelly Words reuses one fixed bubble pop per manual or batch collection and
     evidence.batchCount = batchCount;
     const afterBatch = await jelly(page);
     expect(afterBatch.cleared_pairs).toBe(beforeBatch.cleared_pairs + batchCount);
-    expect(afterBatch.collection_batch.elapsed, 'Each collection retains its 120 ms game cadence').toBeCloseTo(batchCount * 0.12, 6);
+    expect(afterBatch.collection_batch.elapsed, 'Each collection uses the 200 ms game cadence').toBeCloseTo(batchCount * 0.20, 6);
     for (const [index, sound] of evidence.batch.entries()) {
       expect(sound.fingerprint, 'Each batch item reuses the manual collection recording').toBe(evidence.manual.fingerprint);
       expect(sound.peak, 'Each collection pop contains audible samples').toBeGreaterThan(0.01);

@@ -525,7 +525,7 @@ static production textures animated by the reveal; no new assets are acquired.
 Each collection creates an independent content-sized burst in the upper
 playfield, with varied placement and scale and an elastic entrance. Direct taps
 retain the 1.95-second reading beat and selected-word pronunciation. Collect
-batches launch a new burst every 120 ms, retaining older bursts for 480-860 ms
+batches launch a new burst every 200 ms, retaining older bursts for 480-860 ms
 according to screen space; batch pickups never pronounce words. The next ascending
 [collection note](jelly-collection-audio.md) fires at the 180 ms manual-pop
 boundary or the 60 ms batch-pop boundary. Speech ducking, mute and interruption rules remain shared with

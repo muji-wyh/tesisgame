@@ -98,6 +98,7 @@ func _run() -> void:
 	_test_powerup_auto_random_sources()
 	_test_powerup_auto_completion_during_drag()
 	_test_powerup_auto_chain()
+	_test_powerup_auto_interleaved_authored_paths()
 	_test_powerup_manual_guards()
 	_test_powerup_fragment_timeline()
 	_test_powerup_fragment_launch_rhythm()
@@ -259,7 +260,7 @@ func _assert_board(model, label: String) -> void:
 		ids[tile.id] = true
 		check(int(tile.column) >= 0 and int(tile.row) >= 0 and int(tile.width) >= 1 and int(tile.height) >= 1
 			and int(tile.column) + int(tile.width) <= Model.COLUMNS and int(tile.row) + int(tile.height) <= Model.ROWS,
-			label + ": every rectangular footprint stays within six columns and eight rows")
+			label + ": every rectangular footprint stays within five columns and eight rows")
 		for y in range(int(tile.row), int(tile.row) + int(tile.height)):
 			for x in range(int(tile.column), int(tile.column) + int(tile.width)):
 				var key: int = y * Model.COLUMNS + x
@@ -269,7 +270,7 @@ func _assert_board(model, label: String) -> void:
 		check(int(tile.width) == 1 and int(tile.height) == 1
 			and int(tile.preferred_width) == 1 and int(tile.preferred_height) == 1,
 			label + ": every source and merged word retains one ordinary cell")
-	check(model.upcoming.size() == Model.UPCOMING_COUNT, label + ": six committed previews remain available")
+	check(model.upcoming.size() == Model.UPCOMING_COUNT, label + ": five committed previews remain available")
 	for tile in model.upcoming:
 		check(not ids.has(tile.id), label + ": queued IDs remain distinct")
 		check(int(tile.width) == 1 and int(tile.height) == 1
@@ -509,17 +510,17 @@ func _test_powerup_auto_timeline() -> void:
 	check(model.powerup_snapshot().source.text == "cat" and model.powerup_snapshot().drags[0].source.text == "cat"
 		and model.cell(1000).fragments == 2,
 		"presentation snapshots cannot mutate the captured power or live bodies")
-	check(is_equal_approx(Model.POWERUP_DRAG_SECONDS, 0.12), "each automatic drag uses a readable 120 ms transfer")
-	check(is_equal_approx(Model.POWERUP_MERGE_BEAT_SECONDS, 0.3), "Automatic launches follow the requested 300 ms beat")
+	check(is_equal_approx(Model.POWERUP_DRAG_SECONDS, 0.25), "each automatic drag uses the complete 250 ms transfer")
+	check(is_equal_approx(Model.POWERUP_MERGE_BEAT_SECONDS, 0.20), "Automatic launches follow the requested 200 ms beat")
 	model.step(Model.POWERUP_DRAG_SECONDS - 0.001)
 	check(model.powerup_snapshot().stage == "drag" and model.fusions.is_empty() and model.cells.size() == 2,
 		"both bodies remain separate for the complete transfer before its final millisecond")
 	model.step(0.001)
 	check(model.powerup_snapshot().stage == "fusion" and model.fusions.size() == 1
 		and model.fusions[0].a_id == 1000 and model.fusions[0].b_id == 1001,
-		"120 ms starts the automatic fusion using the advertised ordered endpoints")
+		"250 ms starts the automatic fusion using the advertised ordered endpoints")
 	model.step(Model.POWERUP_FUSION_SECONDS - 0.001)
-	check(model.cells.size() == 2 and model.powerup_active(), "paid fusion keeps its complete 150 ms presentation")
+	check(model.cells.size() == 2 and model.powerup_active(), "paid fusion keeps its complete 110 ms presentation")
 	model.step(0.001)
 	check(model.cells.size() == 1 and model.cells[0].text == "cat" and model.cells[0].fragments == 5
 		and model.powerup_snapshot().stage == "settling" and not model.is_settled(model.cells[0]),
@@ -539,30 +540,52 @@ func _test_powerup_auto_timeline() -> void:
 func _test_powerup_auto_rhythm() -> void:
 	var model = _model([_word("cat"), _word("dog"), _word("sun")])
 	_board(model, ["cat", "picture:cat", "dog", "picture:dog", "sun", "picture:sun"], [1, 2, 3, 4, 5, 6])
+	for index in range(model.cells.size()):
+		model.cells[index].column = int(index / 2) * 2
+		model.cells[index].row = Model.ROWS - 2 + index % 2
 	var payments: Array = _accept_powerup_payments(model)
 	var events: Dictionary = _observe_powerups(model)
 	var regular_events: Dictionary = _observe(model)
 	check(model.activate_powerup("auto_merge"), "One saved purchase starts the first complete hybrid path")
-	model.step(Model.POWERUP_DRAG_SECONDS * 0.5)
+	model.step(Model.POWERUP_MERGE_BEAT_SECONDS - 0.001)
 	check(events.drags.size() == 1 and model.powerup_snapshot().drags.size() == 1,
-		"Auto keeps each hybrid path sequential until its body settles")
+		"Auto keeps the next independent flight pending until its 200 ms launch boundary")
+	model.step(0.001)
+	var overlapping: Dictionary = model.powerup_snapshot()
+	check(events.drags.size() == 2 and overlapping.drags.size() == 2 and model.fusions.is_empty(),
+		"the second independent flight starts at 200 ms while the first is still traveling")
+	if overlapping.drags.size() == 2:
+		check(is_equal_approx(float(overlapping.drags[0].elapsed), 0.20)
+			and is_zero_approx(float(overlapping.drags[1].elapsed)),
+			"overlapping flights retain independent elapsed times")
 	for frame in range(600):
 		model.step(0.01)
-		check(model.fusions.size() <= 1 and model.powerup_snapshot().drags.size() <= 1,
-			"Every sequential Auto path owns exactly its current drag or fusion")
-		_assert_reservations(model, "sequential hybrid Auto")
+		var active_drags: Array = model.powerup_snapshot().drags
+		check(model.fusions.size() <= 1 and active_drags.size() <= 2,
+			"the 200 ms beat allows two 250 ms flights while keeping each fusion independent")
+		var reserved_ids: Array[int] = []
+		for drag: Dictionary in active_drags:
+			for id: int in [int(drag.source_id), int(drag.target_id)]:
+				check(not reserved_ids.has(id), "overlapping flights never reserve the same endpoint")
+				reserved_ids.append(id)
+		for fusion: Dictionary in model.fusions:
+			for id: int in [int(fusion.a_id), int(fusion.b_id)]:
+				check(not reserved_ids.has(id), "a fusion endpoint cannot be reused by a live flight")
+				reserved_ids.append(id)
+		_assert_reservations(model, "overlapping hybrid Auto")
 	check(events.drags.size() == 3 and payments.size() == 1 and model.collectable_ids().size() == 3
 		and not model.powerup_active(), "One purchase settles all three independent picture matches")
 	for index in range(events.drags.size()):
 		var drag: Dictionary = events.drags[index]
 		check(model.parts_compatible(drag.source, drag.target), "Every Auto launch is a valid whole-word picture pair")
-		if index > 0:
-			check(float(drag.started_at) - float(events.drags[index - 1].started_at)
-				>= Model.POWERUP_MERGE_BEAT_SECONDS - 0.0001 and float(drag.started_at) - float(events.drags[index - 1].started_at) <= Model.POWERUP_MERGE_BEAT_SECONDS + 0.0001,
-				"Every following path starts exactly 300 ms after the preceding launch")
+		check(model.is_settled(drag.source) and model.is_settled(drag.target),
+			"each launch captures settled endpoints before reserving them for its flight")
+		check(is_equal_approx(float(drag.started_at), index * 0.20)
+			and is_equal_approx(float(drag.duration), 0.25),
+			"the three independent flights start at 0, 200 and 400 ms and each lasts 250 ms")
 	check(_board_fragments(model) == 21 and regular_events.attempts.is_empty() and regular_events.collections.is_empty(),
 		"Automatic picture matching conserves every fragment without collecting or claiming mastery")
-	_assert_board(model, "sequential automatic final board")
+	_assert_board(model, "overlapping automatic final board")
 	model.purchase_powerup = Callable()
 
 func _test_powerup_auto_random_sources() -> void:
@@ -573,6 +596,9 @@ func _test_powerup_auto_random_sources() -> void:
 		for copy_index in range(models.size()):
 			var model = models[copy_index]
 			_board(model, ["cat", "picture:cat", "dog", "picture:dog", "sun", "picture:sun"])
+			for index in range(model.cells.size()):
+				model.cells[index].column = int(index / 2) * 2
+				model.cells[index].row = Model.ROWS - 2 + index % 2
 			model._rng.seed = seed_value
 			_accept_powerup_payments(model)
 			var events: Dictionary = _observe_powerups(model)
@@ -607,11 +633,17 @@ func _test_powerup_auto_completion_during_drag() -> void:
 	var events: Dictionary = _observe_powerups(model)
 	check(model.activate_powerup("auto_merge"), "A larger board starts one paid hybrid stream")
 	model.step(Model.POWERUP_DRAG_SECONDS + Model.POWERUP_FUSION_SECONDS - 0.01)
-	check(events.drags.size() == 1 and model.powerup_snapshot().drags.is_empty() and model.fusions.size() == 1,
-		"The accepted result keeps its endpoints reserved through its complete fusion")
+	check(events.drags.size() == 2 and model.powerup_snapshot().drags.size() == 1 and model.fusions.size() == 1,
+		"the first fusion keeps its endpoints reserved while the next independent flight continues")
+	var first_result_id: int = int(model.fusions[0].result.id)
 	model.step(0.02)
-	check(model.merged_count == 1 and model.powerup_snapshot().stage == "settling",
-		"Auto waits for the completed body before planning another pair")
+	check(model.merged_count == 1 and model.powerup_snapshot().drags.size() == 1
+		and not model.is_settled(model.cell(first_result_id)),
+		"a completed fusion settles while the next flight continues on its independent clock")
+	for drag: Dictionary in events.drags:
+		check(model.is_settled(drag.source) and model.is_settled(drag.target)
+			and int(drag.source_id) != first_result_id and int(drag.target_id) != first_result_id,
+			"no launch can reuse the new result before its landing settles")
 	model.finish_powerup(true)
 	check(not model.powerup_active() and model.collectable_ids().size() == 2 and payments.size() == 1,
 		"The paid stream completes picture matches and same-level upgrades without another payment")
@@ -642,6 +674,11 @@ func _test_powerup_auto_chain() -> void:
 		"the new cat result can upgrade with another Lv1 cat while unrelated pieces and all fragments are preserved")
 	check(payments.size() == 1 and events.drags.size() == 3 and regular_events.completed.size() == 3,
 		"one purchase owns the entire recomputed merge sequence with one presentation per pair")
+	for index in range(events.drags.size()):
+		var drag: Dictionary = events.drags[index]
+		check(model.is_settled(drag.source) and model.is_settled(drag.target)
+			and is_equal_approx(float(drag.started_at), index * 0.20),
+			"independent matches and the dependent level upgrade launch on the 200 ms grid with settled endpoints")
 	check(model.generated_tiles == generated and model.collected_coins == 0 and model.fragment_count == 0
 		and regular_events.collections.is_empty(), "automatic merging consumes only captured board pieces and never collects them")
 	_assert_board(model, "paid automatic chain")
@@ -651,6 +688,89 @@ func _test_powerup_auto_chain() -> void:
 	model.step(Model.COLLECT_SECONDS)
 	check(model.collected_coins == 50 and model.fragment_count == 6,
 		"manual collection of the automatic Lv2 result retains its bonus and carried fragments")
+	model.purchase_powerup = Callable()
+
+
+func _test_powerup_auto_interleaved_authored_paths() -> void:
+	var authored_words: Array = []
+	for parts: Array in [["rain", "bow"], ["sun", "flower"]]:
+		var spelling: String = str(parts[0]) + str(parts[1])
+		var word: Dictionary = _word(spelling)
+		word.morphology = {"schema": 1, "id": "fixture:" + spelling, "lexeme_id": spelling,
+			"text": spelling, "kind": "morphological",
+			"review": {"status": "reviewed", "reviewer": "automated-test-fixture"},
+			"parts": [{"id": "left", "canonical_id": "fixture:" + str(parts[0]), "type": "root",
+				"canonical": parts[0], "surface": parts[0]},
+				{"id": "right", "canonical_id": "fixture:" + str(parts[1]), "type": "root",
+				"canonical": parts[1], "surface": parts[1]}],
+			"nodes": [{"id": "whole", "left": "left", "right": "right", "surface": spelling,
+				"rule": "test_authored_join", "break_offsets": [str(parts[0]).length()]}], "roots": ["whole"]}
+		authored_words.append(word)
+	var model = _model(authored_words)
+	model.cells.clear()
+	var pictures: Dictionary = {}
+	for word: Dictionary in authored_words:
+		for state: Dictionary in model._morphology.source_tiles(str(word.morphology.id)):
+			state.fragments = 1
+			model.cells.append(model._new_composition_tile(state))
+		var picture: Dictionary = model._new_picture_tile(word, 1)
+		pictures[str(word.id)] = int(picture.id)
+		model.cells.append(picture)
+	for state: Dictionary in model._morphology.source_tiles(str(authored_words[0].morphology.id)):
+		state.fragments = 1
+		model.cells.append(model._new_composition_tile(state))
+	for index in range(model.cells.size()):
+		model.cells[index].column = index % Model.COLUMNS
+		model.cells[index].row = Model.ROWS - 1 - int(index / Model.COLUMNS)
+		model.cells[index].age = Model.SETTLE_SECONDS
+		model.cells[index].settling = false
+	var payments: Array = _accept_powerup_payments(model)
+	var events: Dictionary = _observe_powerups(model)
+	var regular_events: Dictionary = _observe(model)
+	check(model.activate_powerup("auto_merge") and events.drags.size() == 1,
+		"two authored pictured paths accept one purchase with a competing duplicate root pair")
+	if events.drags.is_empty():
+		model.purchase_powerup = Callable()
+		return
+	var first_word: String = str(events.drags[0].source.text) + str(events.drags[0].target.text)
+	check(pictures.has(first_word) and model._reserved_for_powerup(int(pictures.get(first_word, -1))),
+		"the first authored path reserves its future picture before the spelling has reached contact")
+	model.step(0.20)
+	check(events.drags.size() == 2 and model.powerup_snapshot().drags.size() == 2,
+		"an independent authored spelling begins at 200 ms before the first spelling finishes")
+	var spellings: Array[String] = []
+	for drag: Dictionary in events.drags:
+		spellings.append(str(drag.source.text) + str(drag.target.text))
+	spellings.sort()
+	check(spellings == ["rainbow", "sunflower"],
+		"a competing root pair cannot start another path using the already reserved picture")
+	model.step(0.19)
+	check(events.drags.size() == 2 and regular_events.completed.size() == 1,
+		"the first spelling can finish landing at 390 ms without launching its dependent step early")
+	model.step(0.01)
+	model.step(0.20)
+	check(events.drags.size() == 4 and regular_events.completed.size() == 2,
+		"both authored paths launch their own picture match on the 400 and 600 ms beats")
+	if events.drags.size() == 4 and regular_events.completed.size() == 2:
+		for index in range(4):
+			var drag: Dictionary = events.drags[index]
+			check(is_equal_approx(float(drag.started_at), index * 0.20)
+				and model.is_settled(drag.source) and model.is_settled(drag.target),
+				"interleaved authored steps stay on the launch grid and never reuse an unsettled result")
+		for index in range(2):
+			var drag: Dictionary = events.drags[index + 2]
+			var result: Dictionary = regular_events.completed[index].payload.result
+			check(int(drag.source_id) == int(result.id)
+				and int(drag.target_id) == int(pictures[str(result.text)]),
+				"each dependent picture match uses its own path's completed spelling and reserved picture")
+	model.step(1.0)
+	check(not model.powerup_active() and events.drags.size() == 4 and model.merged_count == 4
+		and model.collectable_ids().size() == 2 and model.cells.size() == 4 and payments.size() == 1,
+		"interleaved authored paths finish once and leave the competing incomplete roots untouched")
+	check(_board_fragments(model) == 8 and model.collected_coins == 0 and model.fragment_count == 0
+		and regular_events.collections.is_empty() and regular_events.attempts.is_empty(),
+		"overlapping authored paths preserve carried fragments without collecting or granting mastery")
+	_assert_board(model, "interleaved authored automatic paths")
 	model.purchase_powerup = Callable()
 
 
@@ -1039,7 +1159,7 @@ func _test_powerup_fragments_on_nested_word() -> void:
 		model.finish_powerup(true)
 		check(model.cells.size() == 1 and model.cell(int(cater.id)).fragments == original + total
 			and bool(model.cell(int(cater.id)).chest), "every purchased fragment stays on the only eligible merged word")
-		model.cells.append(_placed_tile(2000, "merged:cat:2", 5, 7, 1, 2))
+		model.cells.append(_placed_tile(2000, "merged:cat:2", Model.COLUMNS - 1, 7, 1, 2))
 		var final_word: Dictionary = _merge(model, int(cater.id), 2000)
 		check(final_word.text == "cat" and final_word.merge_level == 3 and final_word.mass == 8 and final_word.fragments == original + total + 2,
 			"a later valid merge retains the purchased fragments and the new target's fragments")
@@ -1060,12 +1180,12 @@ func _test_powerup_pause_and_clocks() -> void:
 		var generated: int = model.generated_tiles
 		var upcoming: Array = model.upcoming.duplicate(true)
 		check(model.activate_powerup(kind), "paid sequence starts near the automatic supply deadline")
-		model.step(Model.POWERUP_DRAG_SECONDS * 0.5)
+		model.step(0.225 if kind == "auto_merge" else Model.POWERUP_DRAG_SECONDS * 0.5)
 		model.set_paused(true)
 		var before: Dictionary = model.snapshot()
 		var active: Dictionary = model.powerup_snapshot()
 		if kind == "auto_merge":
-			check(active.drags.size() == 1, "Pause freezes the current sequential hybrid drag before contact")
+			check(active.drags.size() == 2, "Pause freezes both overlapping flights before their contact boundaries")
 		model.step(50.0)
 		check(model.snapshot() == before and model.powerup_snapshot() == active,
 			"pause freezes paid sequence, board motion, and supply at the exact same point")
@@ -1148,7 +1268,7 @@ func _test_powerup_determinism() -> void:
 
 func _test_powerup_finish_and_lifecycle() -> void:
 	for kind: String in ["auto_merge", "fragments"]:
-		for progress: float in [0.0, 0.20, 0.25, 0.60, 1.20]:
+		for progress: float in [0.0, 0.225, 0.30, 0.37, 1.20]:
 			var model = _powerup_model(kind)
 			var payments: Array = _accept_powerup_payments(model)
 			var events: Dictionary = _observe_powerups(model)
@@ -1393,11 +1513,11 @@ func _test_configuration() -> void:
 	var words: Array = [_word("cat"), _word(" CAT ", 3, "duplicate-spelling"), _word("dog", 3, "cat"),
 		_word("rocket", 6), {"id": "missing-media", "text": "test", "min_age": 3}]
 	check(model.configure(words, 3, 1), "eligible pictured words configure")
-	check(model.cells.size() == Model.INITIAL_SETTLED_TILES, "round starts with eighteen parts")
+	check(model.cells.size() == Model.INITIAL_SETTLED_TILES, "round starts with fifteen parts")
 	for row in range(Model.ROWS):
 		check(model.cells.filter(func(tile: Dictionary) -> bool: return int(tile.row) == row).size()
 			== (Model.COLUMNS if row >= Model.ROWS - 3 else 0), "Exactly the bottom three rows start full")
-	check(model.upcoming.size() == 6 and Model.COLUMNS == 6, "six columns and previews")
+	check(model.upcoming.size() == 5 and Model.COLUMNS == 5, "five columns and previews")
 	for tile in model.cells:
 		check(str(tile.text) in ["cat", "picture:cat"], "duplicate IDs, duplicate spelling, other ages, and incomplete media are omitted")
 		check(tile.word.is_empty() and not model.collect(int(tile.id)), "an unmerged root cannot be collected")
@@ -1407,7 +1527,7 @@ func _test_configuration() -> void:
 	var configured := _word("sunflower")
 	configured.jelly_parts = ["sun", "flower"]
 	model.configure([configured], 3, 1)
-	_assert_supply_conservation(model.cells, [configured], "curated two-part opening", false)
+	_assert_supply_conservation(model.cells, [configured], "curated two-part opening")
 
 
 func _test_merging_and_collection() -> void:
@@ -1873,7 +1993,7 @@ func _gravity_tower():
 		_reward_tile(1000, "cat", 1, 7, 2, 4, _word("cat")),
 		_placed_tile(1001, "cat", 1, 6, 1, 2),
 		_placed_tile(1002, "picture:cat", 1, 5, 1, 1),
-		_placed_tile(1003, "x", 5, 7)
+		_placed_tile(1003, "x", Model.COLUMNS - 1, 7)
 	])
 	model.cells[1].skin = 3
 	return model
@@ -1898,7 +2018,7 @@ func _test_collection_gravity() -> void:
 			and tile.word == original.word, "falling preserves body identity, word content, mass, and carried fragments")
 		check(bool(tile.falling) and tile.falling_rows == 1 and tile.age == 0.0 and bool(tile.settling) and not bool(tile.arrival),
 			"falling publishes a fresh settlement and exact vertical travel for the view")
-	check(model.cell(1001).skin == 3 and _footprint(model.cell(1003)) == Rect2i(5, 7, 1, 1),
+	check(model.cell(1001).skin == 3 and _footprint(model.cell(1003)) == Rect2i(Model.COLUMNS - 1, 7, 1, 1),
 		"collection gravity preserves skins and already-supported neighboring bodies")
 	check(model.try_merge(1001, 1002) == "ignored" and model.can_drop_now(), "falling bodies wait for landing while supply remains available")
 	check(model.collected_coins == 50 and model.fragment_count == 4 and model.chest_tier == 1
@@ -1974,7 +2094,7 @@ func _test_drag_support_removal() -> void:
 	var nose: Dictionary = _placed_tile(1001, "nose", 1, 6, 2, 2, _word("nose"))
 	hat.skin = 4
 	nose.skin = 6
-	model.cells.assign([hat.duplicate(true), nose.duplicate(true), _placed_tile(1002, "x", 5, 7)])
+	model.cells.assign([hat.duplicate(true), nose.duplicate(true), _placed_tile(1002, "x", Model.COLUMNS - 1, 7)])
 	var events: Dictionary = _observe(model)
 	check(not model.begin_drag(1000) and not model.is_lifted(1000),
 		"an unheld word cannot silently detach itself from the board")
@@ -2025,7 +2145,7 @@ func _test_drag_partial_support() -> void:
 	for mass: int in [3, 7]:
 		var model = _model([_word("hat")])
 		var hat: Dictionary = _placed_tile(1000, "hat", 0, 7, 2, 2, _word("hat"))
-		var support_column: int = 3 if mass == 3 else 5
+		var support_column: int = 3 if mass == 3 else Model.COLUMNS - 1
 		var upper: Dictionary = _placed_tile(1001, "upper", support_column, 6, mass, 3)
 		model.cells.assign([hat.duplicate(true), upper.duplicate(true), _placed_tile(1002, "x", support_column, 7)])
 		model.set_held_tile(1000)
@@ -2441,7 +2561,7 @@ func _test_collection_batch_rhythm() -> void:
 		if index > 0:
 			model.step(Model.BATCH_BEAT_SECONDS - 0.001)
 			check(starts.size() == index and payouts.size() == index - 1,
-				"neither the next collection nor its preceding payout runs before 250 ms")
+				"neither the next collection nor its preceding payout runs before 200 ms")
 			model.step(0.001)
 			expected_time += Model.BATCH_BEAT_SECONDS
 		check(starts.size() == index + 1, "exact beat boundary starts one collection")
@@ -2451,22 +2571,22 @@ func _test_collection_batch_rhythm() -> void:
 		check(is_equal_approx(float(start.time), expected_time) and start.collections_running == 1,
 			"each rhythmic start occurs at its authoritative time with one collecting body")
 		check(model.collected_coins == index * 50, "only preceding completed transactions have earned coins")
-		check(payouts.size() == index, "each 250 ms boundary commits exactly one preceding word")
+		check(payouts.size() == index, "each 200 ms boundary commits exactly one preceding word")
 		if index > 0:
 			check(is_equal_approx(float(payouts[index - 1].time), expected_time),
-				"authoritative coin and fragment payouts follow the exact 250 ms cadence")
+				"authoritative coin and fragment payouts follow the exact 200 ms cadence")
 	model.step(Model.BATCH_BEAT_SECONDS - 0.001)
 	check(model.collection_batch_active() and payouts.size() == 8,
-		"the final word also retains its complete 250 ms transaction")
+		"the final word also retains its complete 200 ms transaction")
 	model.step(0.001)
 	check(not model.collection_batch_active() and model.cells.is_empty(), "the batch ends only after its final transaction completes")
 	check(model.collection_batch_snapshot().completed == 9 and model.collection_batch_snapshot().remaining == 0, "completed status accounts for every collected word")
 	check(model.collected_coins == 450 and model.fragment_count == 9 and model.cleared_pairs == 9, "all coins and fragments use normal once-only collection rewards")
 	check(events.collections.size() == 9 and events.attempts.size() == 9 and events.cues.count("jelly-collect-lv2") == 9, "every word gets one collection, learning attempt and disappearance cue")
 	check(events.milestones == [[0, 1], [1, 2]], "batch fragments preserve normal chest unlock and upgrade milestones")
-	check(payouts.size() == 9 and is_equal_approx(float(payouts.back().time), 2.25)
-		and is_equal_approx(float(model.collection_batch_snapshot().elapsed), 2.25),
-		"nine words take 2.25 seconds with no acceleration or extra breathing gaps")
+	check(payouts.size() == 9 and is_equal_approx(float(payouts.back().time), 1.80)
+		and is_equal_approx(float(model.collection_batch_snapshot().elapsed), 1.80),
+		"nine words take 1.80 seconds with no acceleration or extra breathing gaps")
 	var coin_total: int = model.collected_coins
 	model.step(1.0)
 	check(model.collected_coins == coin_total and not model.start_collection_batch(), "an empty batch has no repeat rewards")
@@ -2522,7 +2642,7 @@ func _test_collection_batch_settlement() -> void:
 		for index in range(starts.size()):
 			check(is_equal_approx(float(starts[index].time), Model.SETTLE_SECONDS + index * Model.BATCH_BEAT_SECONDS)
 				and is_equal_approx(float(payouts[index].time), Model.SETTLE_SECONDS + (index + 1) * Model.BATCH_BEAT_SECONDS),
-				"initial settlement cannot introduce later gaps into the 250 ms collection cadence")
+				"initial settlement cannot introduce later gaps into the 200 ms collection cadence")
 	var model = _model([_word("cat")])
 	_batch_board(model, 3)
 	model.start_collection_batch()
@@ -2550,7 +2670,7 @@ func _test_collection_batch_reserved_motion() -> void:
 	model.start_collection_batch()
 	model.step(Model.BATCH_BEAT_SECONDS)
 	check(starts.size() == 2 and payouts.size() == 1,
-		"an unsupported captured word starts on the next 250 ms beat")
+		"an unsupported captured word starts on the next 200 ms beat")
 	check(_footprint(model.cell(1002)) == Rect2i(4, 4, 1, 1),
 		"queued captured words keep their original footprint until their collection beat")
 	check(model.cell(9000).row == 7 and bool(model.cell(9000).get("falling", false)),
@@ -2561,7 +2681,7 @@ func _test_collection_batch_reserved_motion() -> void:
 	for index in range(starts.size()):
 		check(is_equal_approx(float(starts[index].time), index * Model.BATCH_BEAT_SECONDS)
 			and is_equal_approx(float(payouts[index].time), (index + 1) * Model.BATCH_BEAT_SECONDS),
-			"reserved batch bodies retain exact 250 ms starts and payouts")
+			"reserved batch bodies retain exact 200 ms starts and payouts")
 	check(model.cells.size() == 1 and model.cell(9000).row == 7,
 		"collecting the reserved batch leaves the unrelated root on its support")
 	model = _model([_word("cat")])
@@ -2597,11 +2717,11 @@ func _test_collection_batch_pause_and_cancel() -> void:
 	model.set_paused(false)
 	model.step(Model.BATCH_BEAT_SECONDS - 0.051)
 	check(model.cleared_pairs == 0 and model.collection_batch_active(),
-		"resume preserves the final millisecond of the current 250 ms transaction")
+		"resume preserves the final millisecond of the current 200 ms transaction")
 	model.cancel_collection_batch()
 	model.step(0.001)
 	check(model.cleared_pairs == 1 and not model.collection_batch_active(),
-		"cancelling the queue still finishes the current word at its preserved 250 ms deadline")
+		"cancelling the queue still finishes the current word at its preserved 200 ms deadline")
 	model.step(2.0)
 	check(model.cleared_pairs == 1 and model.cells.size() == 2 and not model.collection_batch_active(), "cancelling releases queued words without awarding them")
 	check(model.start_collection_batch(), "remaining words can start a fresh batch after cancellation")
@@ -2759,7 +2879,7 @@ func _test_target_placement() -> void:
 	model.cells.assign([
 		_placed_tile(1000, "cat", 0, 7, 1, 1),
 		_placed_tile(1001, "picture:cat", 3, 1, 1, 2),
-		_placed_tile(1002, "x", 5, 5)
+		_placed_tile(1002, "x", Model.COLUMNS - 1, 5)
 	])
 	var neighbor: Rect2i = _footprint(model.cell(1002))
 	check(model.try_merge(1000, 1001) == "merged", "a lower source can merge into an upper target")
@@ -2791,11 +2911,11 @@ func _test_target_placement() -> void:
 		"collecting a lower word settles unsupported anchors vertically without changing their columns")
 	_assert_board(model, "stable target placement")
 	model = _model([_word("cat")])
-	model.cells.assign([_placed_tile(1000, "cat", 0, 7, 4, 2), _placed_tile(1001, "picture:cat", 5, 1, 1, 3)])
+	model.cells.assign([_placed_tile(1000, "cat", 0, 7, 4, 2), _placed_tile(1001, "picture:cat", Model.COLUMNS - 1, 1, 1, 3)])
 	_fill_rows(model, 0, Model.ROWS - 1)
 	check(model.try_merge(1000, 1001) == "merged", "a crowded target accepts a distant source with several accumulated parts")
 	planned = model.fusions[0].result.duplicate(true)
-	check(_footprint(planned) == Rect2i(5, 1, 1, 1), "a full board still reserves exactly the target cell")
+	check(_footprint(planned) == Rect2i(Model.COLUMNS - 1, 1, 1, 1), "a full board still reserves exactly the target cell")
 	model.step(Model.FUSION_SECONDS)
 	merged = model.cell(int(planned.id))
 	check(_footprint(merged) == _footprint(planned) and merged.mass == 5 and merged.fragments == 5,
@@ -2808,11 +2928,11 @@ func _test_edge_placement() -> void:
 		var model = _model([_word("caterpillar")])
 		model.cells.assign([
 			_placed_tile(1000, "caterpillar", 0, 6 if target_row == Model.ROWS - 1 else 7, 6, 2),
-			_placed_tile(1001, "picture:caterpillar", 5, target_row, 1, 3)
+			_placed_tile(1001, "picture:caterpillar", Model.COLUMNS - 1, target_row, 1, 3)
 		])
 		check(model.try_merge(1000, 1001) == "merged", "an edge target accepts a merged word with seven accumulated parts")
 		var planned: Dictionary = model.fusions[0].result.duplicate(true)
-		check(_footprint(planned) == Rect2i(5, target_row, 1, 1),
+		check(_footprint(planned) == Rect2i(Model.COLUMNS - 1, target_row, 1, 1),
 			"every edge merge uses the target's ordinary cell without shifting sideways")
 		check(int(planned.row) >= 0 and int(planned.row) + int(planned.height) <= Model.ROWS,
 			"top and bottom edge destinations remain inside the well")
@@ -2854,7 +2974,7 @@ func _test_reposition_bounds_and_falls() -> void:
 	model.cells.assign([original, _placed_tile(1001, "x", 4, 3)])
 	var events: Dictionary = _observe(model)
 	var before: Dictionary = model.snapshot()
-	for position: Vector2i in [Vector2i(-1, 0), Vector2i(6, 0), Vector2i(0, -1), Vector2i(0, 8), Vector2i(4, 3), Vector2i(0, 7)]:
+	for position: Vector2i in [Vector2i(-1, 0), Vector2i(Model.COLUMNS, 0), Vector2i(0, -1), Vector2i(0, Model.ROWS), Vector2i(4, 3), Vector2i(0, 7)]:
 		check(not model.can_reposition(1000, position.x, position.y)
 			and not model.reposition(1000, position.x, position.y), "invalid, occupied, and unchanged full-body placements are rejected")
 		check(model.snapshot() == before, "a rejected placement leaves position, footprint, clocks, and rewards unchanged")
@@ -2887,11 +3007,11 @@ func _test_reposition_bounds_and_falls() -> void:
 	_assert_board(model, "manual merged-word drop")
 	model = _model()
 	model.cells.assign([_placed_tile(1000, "longword", 0, 6, 7, 2)])
-	check(not model.can_reposition(1000, 6, 0) and not model.reposition(1000, 0, 8),
+	check(not model.can_reposition(1000, Model.COLUMNS, 0) and not model.reposition(1000, 0, Model.ROWS),
 		"high-part-count words obey the same board edges as ordinary sources")
-	check(model.reposition(1000, 5, 0), "a seven-part jelly can use the last board column")
+	check(model.reposition(1000, Model.COLUMNS - 1, 0), "a seven-part jelly can use the last board column")
 	model.step(Model.SETTLE_SECONDS * 2.0)
-	check(_footprint(model.cell(1000)) == Rect2i(5, 7, 1, 1) and bool(model.cell(1000).placement_locked)
+	check(_footprint(model.cell(1000)) == Rect2i(Model.COLUMNS - 1, 7, 1, 1) and bool(model.cell(1000).placement_locked)
 		and model.cell(1000).falling_rows == 7 and model.cell(1000).mass == 7,
 		"a high-part-count word falls as one ordinary cell without losing its content")
 	_assert_supported_tiles(model, [1000], "manual high-part-count drop")
@@ -3003,7 +3123,7 @@ func _test_reposition_locked_gravity() -> void:
 
 func _test_reposition_reservations_and_guards() -> void:
 	var model = _model([_word("cat")])
-	model.cells.assign([_placed_tile(1000, "x", 5, 7), _placed_tile(1001, "cat", 0, 1), _placed_tile(1002, "picture:cat", 2, 1)])
+	model.cells.assign([_placed_tile(1000, "x", Model.COLUMNS - 1, 7), _placed_tile(1001, "cat", 0, 1), _placed_tile(1002, "picture:cat", 2, 1)])
 	check(model.try_merge(1001, 1002) == "merged", "a concurrent merge reserves its target cell")
 	check(not model.reposition(1000, 2, 1), "reposition cannot occupy a cell reserved by a future merge body")
 	check(not model.reposition(1001, 3, 3), "a live fusion source cannot be repositioned")
@@ -3013,7 +3133,7 @@ func _test_reposition_reservations_and_guards() -> void:
 	check(not model.can_reposition(1002, 3, 2) and not model.reposition(1002, 3, 2), "a batch keeps all explicit placement input gated")
 	model.step(Model.BATCH_BEAT_SECONDS * 3.0)
 	check(model.cleared_pairs == 3 and is_equal_approx(float(model.collection_batch_snapshot().elapsed), Model.BATCH_BEAT_SECONDS * 3.0),
-		"rejected manual movement preserves the three exact 250 ms batch transactions")
+		"rejected manual movement preserves the three exact 200 ms batch transactions")
 	model = _model()
 	_board(model, ["x"])
 	model.set_paused(true)
@@ -3059,7 +3179,7 @@ func _test_fusion_reservations() -> void:
 		var model = _model([_word("cat")])
 		model.cells.assign([
 			_placed_tile(1000, "cat", 0, 7), _placed_tile(1001, "picture:cat", 1, 4),
-			_placed_tile(1002, "cat", 5, 7), _placed_tile(1003, "picture:cat", 3, 4),
+			_placed_tile(1002, "cat", Model.COLUMNS - 1, 7), _placed_tile(1003, "picture:cat", 3, 4),
 			_placed_tile(1004, "x", 0, 4), _placed_tile(1005, "x", 4, 4)
 		])
 		_fill_rows(model, 5, 7)
@@ -3082,7 +3202,7 @@ func _test_fusion_reservations() -> void:
 		model.step(Model.FUSION_SECONDS - stagger)
 		check(_footprint(model.cell(int(first.id))) == _footprint(first), "the first completed operation retains its frozen destination")
 		if stagger > 0.0:
-			check(model.fusions.size() == 1 and _footprint(model.cell(1002)) == Rect2i(5, 7, 1, 1)
+			check(model.fusions.size() == 1 and _footprint(model.cell(1002)) == Rect2i(Model.COLUMNS - 1, 7, 1, 1)
 				and _footprint(model.cell(1003)) == Rect2i(3, 4, 1, 1), "completing one fusion cannot move the other fusion's live inputs")
 			check(_footprint(model.fusions[0].result) == _footprint(second), "the pending animation keeps its reserved destination")
 			_assert_reservations(model, "reservation after an earlier completion")
@@ -3370,7 +3490,7 @@ func _test_mastery_supply() -> void:
 	model._fill_upcoming()
 	check(model.upcoming == preview, "new mastery cannot replace already advertised Jelly Words chunks")
 	var emitted: Array = model.cells.duplicate(true)
-	for packet_index in range(400):
+	for packet_index in range(481):
 		preview = model.upcoming.duplicate(true)
 		emitted.append_array(preview)
 		model.cells.clear()
@@ -3414,7 +3534,7 @@ func _curated_word(text: String, parts: Array[String]) -> Dictionary:
 
 
 func _assert_supply_packet(packet: Array, label: String) -> void:
-	check(packet.size() == Model.UPCOMING_COUNT, label + ": each advertised packet contains six roots")
+	check(packet.size() == Model.UPCOMING_COUNT, label + ": each advertised packet contains five roots")
 	for index in range(1, packet.size()):
 		check(int(packet[index].get("supply_group", -1)) != int(packet[index - 1].get("supply_group", -1)),
 			label + ": sibling chunks have an intervening root when other source groups are available")
@@ -3514,7 +3634,7 @@ func _test_supply_packets() -> void:
 				repeated.cells.clear()
 				var generated_before: int = model.generated_tiles
 				check(model.drop_now(int(preview[0].id)) and repeated.drop_now(int(preview[0].id)), label + ": the complete advertised packet releases")
-				check(model.generated_tiles == generated_before + Model.DROP_COUNT, label + ": each released packet contributes exactly six roots")
+				check(model.generated_tiles == generated_before + Model.DROP_COUNT, label + ": each released packet contributes exactly five roots")
 				for root: Dictionary in preview:
 					var released: Dictionary = model.cell(int(root.id))
 					for key in ["text", "mass", "parts_count", "fragments", "chest", "supply_group", "supply_part", "supply_parts", "source_word_id"]:
@@ -3530,7 +3650,7 @@ func _test_supply_packets() -> void:
 				for group: Dictionary in groups.values():
 					if group.packets.size() > 1:
 						crossed_groups += 1
-				check(crossed_groups == 0, label + ": every complementary pair fits wholly inside its six-root packet")
+				check(crossed_groups > 0, label + ": complementary pairs crossing five-root packet boundaries retain both original parts")
 
 
 func _test_all_age_complementary_supply() -> void:
@@ -3640,7 +3760,7 @@ func _latest_arrival_ready(model) -> float:
 
 func _test_arrival_timing() -> void:
 	var initial = _model([_word("cat")])
-	var onset_slots: Array[int] = [0, 3, 1, 4, 2, 5]
+	var onset_slots: Array[int] = [0, 3, 1, 4, 2]
 	check(is_equal_approx(Model.ARRIVAL_STAGGER, 0.15), "arrival onsets have a readable 150-millisecond separation")
 	check(initial.cells.size() == Model.INITIAL_SETTLED_TILES, "natural arrival keeps the three-row opening")
 	for tile: Dictionary in initial.cells:
@@ -3661,7 +3781,7 @@ func _test_arrival_timing() -> void:
 			check(tile.arrival_index == index and bool(tile.arrival) and bool(tile.settling) and tile.age == 0.0,
 				"batch roots retain their advertised preview slot and start on the shared model clock")
 			check(is_equal_approx(Model.arrival_delay(tile), stagger),
-				"unrestricted lanes launch in the alternating 0, 3, 1, 4, 2, 5 preview-slot order")
+				"unrestricted lanes launch in the alternating 0, 3, 1, 4, 2 preview-slot order")
 			check(is_equal_approx(Model.arrival_contact_at(tile), expected_contact),
 				"arrival contact follows board-scaled acceleration and batch stagger")
 			check(is_equal_approx(Model.settle_duration(tile), expected_contact + Motion.COMPRESSION_SECONDS + Motion.REBOUND_SECONDS + Motion.RECOVERY_SECONDS),
@@ -3729,7 +3849,7 @@ func _test_arrival_automatic_timing() -> void:
 	automatic.step(Model.INITIAL_SPAWN_INTERVAL - 0.001)
 	check(automatic.generated_tiles == Model.INITIAL_SETTLED_TILES, "natural descent preserves the twenty-second initial supply interval")
 	automatic.step(0.001)
-	check(automatic.generated_tiles == Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT, "automatic supply starts one six-root batch at its existing deadline")
+	check(automatic.generated_tiles == Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT, "automatic supply starts one five-root batch at its existing deadline")
 	for id in incoming:
 		check(manual.cell(id) == automatic.cell(id), "manual and automatic arrival share identities, placement, delays, and clocks")
 	var latest_ready: float = _latest_arrival_ready(automatic)
@@ -3774,7 +3894,7 @@ func _test_pacing_progression() -> void:
 		var expected_interval: float = maxf(10.0, 20.0 - floorf(float(count) / 4.0) * 2.0)
 		check(model.generated_tiles == generated + Model.DROP_COUNT and is_zero_approx(model.spawn_elapsed)
 			and is_equal_approx(model.spawn_interval, expected_interval),
-			"%d successfully collected words start the next six-root cycle at %.1f seconds" % [count, expected_interval])
+			"%d successfully collected words start the next five-root cycle at %.1f seconds" % [count, expected_interval])
 	check(model.configure([_word("cat")], 3, 42) and model.cleared_pairs == 0
 		and is_zero_approx(model.spawn_elapsed) and is_equal_approx(model.spawn_interval, 20.0),
 		"a replacement round restores the beginner supply interval and discards earned acceleration")
@@ -3925,7 +4045,7 @@ func _test_arrival_preview_columns() -> void:
 	for dispatch: String in ["manual", "automatic"]:
 		var model = _model([_word("cat")])
 		model.cells.clear()
-		var roofs: Array[int] = [4, 7, 3, 6, 2, 5]
+		var roofs: Array[int] = [4, 7, 3, 6, 2]
 		for column in range(Model.COLUMNS):
 			for row in range(roofs[column], Model.ROWS):
 				model.cells.append(_placed_tile(2000 + row * Model.COLUMNS + column, "x", column, row))
@@ -3965,13 +4085,12 @@ func _blocked_preview_model():
 	var model = _model([_word("father"), _word("happy"), _word("sleep"), _word("play"), _word("foot")])
 	model.cells.assign([_placed_tile(1000, "play", 0, 0, 2, 1, _word("play")),
 		_placed_tile(1001, "foot", 4, 0, 2, 1, _word("foot")),
-		_placed_tile(1002, "play", 1, 0, 2, 1, _word("play")),
-		_placed_tile(1003, "foot", 5, 0, 2, 1, _word("foot"))])
-	for column in [0, 1, 4, 5]:
+		_placed_tile(1002, "play", 1, 0, 2, 1, _word("play"))])
+	for column in [0, 1, 4]:
 		for row in range(1, Model.ROWS):
 			model.cells.append(_placed_tile(2000 + row * Model.COLUMNS + column, "x", column, row))
 	model.upcoming.clear()
-	var parts: Array[String] = ["fat", "hap", "sle", "her", "py", "ep"]
+	var parts: Array[String] = ["fat", "hap", "sle", "her", "py"]
 	for slot in range(parts.size()):
 		model.upcoming.append(model._new_tile(parts[slot], 1, 1 if slot % 2 == 0 else 0))
 	return model
@@ -4001,7 +4120,7 @@ func _test_arrival_blocked_preview_slots() -> void:
 				model.spawn_elapsed = model.spawn_interval - 0.01
 				model.step(0.01)
 			check(model.generated_tiles == generated + (batch + 1) * 2 and model.cells.size() == existing_count + (batch + 1) * 2,
-				"%s release adds exactly the two admitted roots while four preview columns are blocked" % dispatch)
+				"%s release adds exactly the two admitted roots while three preview columns are blocked" % dispatch)
 			check(is_zero_approx(model.spawn_elapsed), "%s partial release resets the supply timer once" % dispatch)
 			for slot in range(Model.UPCOMING_COUNT):
 				var tile: Dictionary = model.cell(int(advertised[slot].id))
@@ -4012,7 +4131,7 @@ func _test_arrival_blocked_preview_slots() -> void:
 						"only a departing preview slot receives a fresh root")
 				else:
 					check(tile.is_empty() and model.upcoming[slot] == original[slot],
-						"fat, hap, py, and ep stay byte-for-byte in their blocked preview slots")
+						"fat, hap, and py stay byte-for-byte in their blocked preview slots")
 			_assert_board(model, "%s screenshot lanes batch %d" % [dispatch, batch])
 		var waiting: Array = model.upcoming.duplicate(true)
 		check(model.collect(1000) and model.collect(1002), "collecting the two left roof words reopens their sealed preview columns")
@@ -4027,10 +4146,10 @@ func _test_arrival_blocked_preview_slots() -> void:
 				check(model.upcoming[slot] == original[slot] and model.cell(int(original[slot].id)).is_empty(),
 					"the right blocked previews remain untouched when only the left roof clears")
 		waiting = model.upcoming.duplicate(true)
-		check(model.collect(1001) and model.collect(1003), "collecting the two right roof words reopens the remaining preview columns")
+		check(model.collect(1001), "collecting the right roof word reopens the remaining preview column")
 		model.step(Model.COLLECT_SECONDS + Model.SETTLE_SECONDS)
 		check(model.drop_now(), "the original right previews can enter once their own roof clears")
-		for slot in [4, 5]:
+		for slot in [4]:
 			_assert_advertised_root(model.cell(int(original[slot].id)), original[slot], slot, 0,
 				"reopened right columns slot %d" % slot)
 		for slot in [0, 1]:
@@ -4058,7 +4177,7 @@ func _test_arrival_reserved_lanes() -> void:
 			"repeated partial dispatch preserves the slot stagger and same-column clearance")
 		check(model.generated_tiles == generated_before + batch + 1,
 			"each dispatch consumes exactly one root from the only open preview column")
-		for slot in [0, 2, 3, 4, 5]:
+		for slot in [0, 2, 3, 4]:
 			check(model.cell(int(preview[slot].id)).is_empty() and model.upcoming[slot] == preview[slot],
 				"reserved and occupied top lanes retain every waiting preview in its own slot")
 	check(not model.can_drop_now(), "the third same-column arrival seals the remaining reachable entry")
@@ -4077,18 +4196,18 @@ func _test_arrival_same_lane_spacing() -> void:
 	var incoming: Array[int] = []
 	var clearance: float = 0.4
 	for index in range(6):
-		var advertised: Dictionary = model.upcoming[5].duplicate(true)
+		var advertised: Dictionary = model.upcoming[Model.COLUMNS - 1].duplicate(true)
 		incoming.append(int(advertised.id))
 		check(model.drop_now(), "one open lane accepts its own preview on each immediate partial dispatch")
 		var tile: Dictionary = model.cell(int(advertised.id))
 		check(tile.column == Model.COLUMNS - 1 and tile.row == Model.ROWS - 1 - index,
 			"the only reachable lane stacks new roots from the floor upward")
-		check(tile.arrival_index == 5 and is_equal_approx(Model.arrival_delay(tile), 0.75 + float(index) * clearance),
-			"repeated use of slot five retains its stagger and 400 milliseconds of headroom")
+		check(tile.arrival_index == Model.COLUMNS - 1 and is_equal_approx(Model.arrival_delay(tile), 0.45 + float(index) * clearance),
+			"repeated use of the last slot retains its stagger and 400 milliseconds of headroom")
 		check(is_equal_approx(Model.arrival_contact_at(tile), Model.arrival_delay(tile) + Motion.contact_at(tile))
 			and is_equal_approx(Model.settle_duration(tile), Model.arrival_delay(tile) + Motion.ready_at(tile)),
 			"contact and input readiness use the stored lane delay")
-		for slot in range(5):
+		for slot in range(Model.COLUMNS - 1):
 			check(model.upcoming[slot] == waiting[slot] and model.cell(int(waiting[slot].id)).is_empty(),
 				"repeated use of the last slot never consumes a blocked earlier preview")
 	_assert_arrival_lane_clearance(model, "same-lane batch")

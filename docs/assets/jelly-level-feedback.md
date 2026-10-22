@@ -33,25 +33,33 @@ The reading popup now receives the accepted Jelly's merge level. The board's
 collection release and the popup are two views of the same collection event;
 neither owns rewards or advances gameplay. The picture and spelling retain their
 opaque, readable surface while acquired light and star textures celebrate around
-its perimeter. Color, layered releases, movement pattern and star density grow
-across the nine levels, including the required firework identity at Lv4.
+its perimeter. Lv1-Lv3 retain their gentle frame effects. From Lv4 onward,
+separate fireworks blossom from points around the card. Each opens into radial
+petals, leaves tapered trails made from the acquired sparkle texture, slows,
+and drops its fading embers. Larger levels add more spokes, longer trails and
+more staggered blooms; the highest levels use several colors. The main heads
+shrink as each bloom fades. Batch mode caps each trail at three stamps.
+The board collection effect remains a separate presentation.
 
 | Level | Popup signature |
 | --- | --- |
 | 1 | Pearl greeting: mint glints and a gentle local light |
 | 2 | Crystal ribbon: cyan stars around the frame |
 | 3 | Sapphire spiral: blue stars turn around the reading card |
-| 4 | Golden fireworks: staggered gold blooms with bright spark cores |
-| 5 | Rose cascade: three pink releases and falling tails |
-| 6 | Comet coronation: a rising crown of cyan and green sparks |
-| 7 | Aurora embrace: contrasting colors travel in opposite directions |
-| 8 | Starlight festival: five constellation releases with longer star trails |
-| 9 | Prismatic finale: six multicolor blooms, bright cores and dense trailing stars |
+| 4 | Golden fireworks: two gold blooms with short radial trails |
+| 5 | Rose cascade: three pink and gold blossoms with falling embers |
+| 6 | Comet coronation: three larger cyan and green fireworks above the card |
+| 7 | Aurora embrace: four multicolor blossoms with longer trails |
+| 8 | Starlight festival: five staggered blooms and denser sparks |
+| 9 | Prismatic finale: six multicolor fireworks and the densest ember trails |
 
 The popup uses the existing reading lifetime: 1.95 seconds for individual
 collections, 0.86 seconds for batches, shortened to 0.62 seconds on narrow
 screens and 0.48 seconds in short regions. Batch effects reach their peak sooner
-and reduce their density to preserve the 250 ms automatic collection rhythm.
+and reduce their density to preserve the 200 ms automatic collection rhythm.
+Bloom releases span `0.16 + (level - 4) * 0.065` seconds from Lv4 for individual
+collections and `0.075 + level * 0.007` seconds for batches. The batch span reaches
+at most 0.138 seconds at Lv9, so its final release precedes the next pickup.
 Placement reserves the animated card and its level-specific effect halo while
 respecting the existing control exclusions. Reduced motion keeps a static,
 colored star setting and light around the same picture and spelling.
@@ -87,7 +95,7 @@ introduced. Audio imports must preserve pitch, disable normalization/looping and
 use the existing mute, speech ducking and pause/exit cleanup.
 
 The outputs reserve headroom even for twelve pickups spaced 120 ms apart,
-faster than the current 250 ms automatic collection rhythm.
+faster than the current 200 ms automatic collection rhythm.
 Every level starts promptly, has zeroed boundaries, and is mono 44,100 Hz PCM16.
 The existing Lv1 pop retains its own approved peak; higher cues have a maximum
 solo peak of -8.5 dBFS and a repeated-batch ceiling below 0.78 at runtime gain 0.90.
@@ -119,8 +127,8 @@ bounded pooling, reduced motion and cleanup.
 nonlooping PCM import, original runtime pitch, protected channels, speech duck,
 mute/pause/exit cleanup and cancellation during delayed resource preparation.
 `tools/capture-word-jelly-levels.gd`
-creates a nine-level sheet, five Lv4 timeline frames and ordinary six-column
-phone-scale and reduced-motion studies from real WordTile controls. These are
+creates a nine-level sheet, five Lv4 timeline frames and ordinary five-column,
+eight-row phone-scale and reduced-motion studies from real WordTile controls. These are
 isolated native-rendered studies, separate from end-to-end gameplay evidence.
 
 Source texture appearance and audio identity, waveform, onset, headroom and
@@ -149,16 +157,16 @@ The regular run preserves those files and writes matching `after-*` captures.
 ```powershell
 node tools/run-godot.cjs --path . --rendering-method gl_compatibility --rendering-driver opengl3_angle --audio-driver Dummy --disable-vsync --max-fps 30 --resolution 1366x768 --script res://tools/capture-word-jelly-reveals.gd
 ffmpeg -y -framerate 30 -i build/jelly-reveal-feedback/animation/frame-%03d.png -c:v libx264 -pix_fmt yuv420p build/jelly-reveal-feedback/popup-levels-normal-speed.mp4
-ffmpeg -y -framerate 30 -i build/jelly-reveal-feedback/batch-animation-250ms/frame-%03d.png -c:v libx264 -pix_fmt yuv420p build/jelly-reveal-feedback/popup-batch-250ms.mp4
+ffmpeg -y -framerate 30 -i build/jelly-reveal-feedback/batch-animation-200ms/frame-%03d.png -c:v libx264 -pix_fmt yuv420p build/jelly-reveal-feedback/popup-batch-200ms.mp4
 ```
 
 The output includes one nine-level sheet, eight timeline samples each for Lv4
 and Lv9, matching desktop/phone comparisons, and full fixture boards at
 1366 x 768, 390 x 844 and 844 x 390. Each board is captured with normal and
 reduced motion, both individually and at the current collection rhythm from
-`WordJellyModel.BATCH_BEAT_SECONDS` (250 ms).
+`WordJellyModel.BATCH_BEAT_SECONDS` (200 ms).
 Deterministic 30 fps frame sequences compare Lv1/Lv4/Lv9 and show all nine
-levels arriving 250 ms apart on the portrait fixture. Batch output filenames
+levels arriving 200 ms apart on the portrait fixture. Batch output filenames
 include the interval so earlier cadence studies remain available. Add
 `-- --batch-only` to render just portrait and short landscape batch stills in
 normal and reduced motion, with a separate interval-labeled report.
@@ -181,11 +189,19 @@ historical evidence of the 350 ms cadence.
 These checks establish rendered appearance and frame timing, not physical-device
 audio mixing or an end-to-end browser interaction recording.
 
-After changing the cadence to 250 ms, the focused batch study produced four
+At the former 250 ms cadence, the focused batch study produced four
 fresh native captures without renderer errors: 390 x 844 and 844 x 390, each
 with normal and reduced motion. Both overlapping word cards remain readable in
 portrait, and the fading previous card stays separate from the incoming card in
-short landscape. Effects remain clear of Finish. These current-cadence stills
+short landscape. Effects remained clear of Finish. These historical 250 ms stills
 and their elapsed-time snapshots are recorded in
 `batch-250ms-render-report.json`; the historical 350 ms video was not reused as
-evidence for the faster cadence.
+evidence for that cadence.
+
+The current 200 ms cadence was rendered on 2026-10-22 at 390 x 844 and
+844 x 390, with normal and reduced motion. All four captures completed without
+renderer errors and were visually inspected. The portrait sample retained two
+prominent words and a fading earlier card; the landscape sample separated the
+word cards and kept Finish clear. These stills and their exact reveal ages are
+recorded in `batch-200ms-render-report.json`. They establish the sampled layout;
+they do not establish physical-device timing or audio mixing.

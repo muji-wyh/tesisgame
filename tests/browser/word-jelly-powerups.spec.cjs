@@ -1,9 +1,11 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
-const { collectionCoins } = require('./word-jelly-rewards.cjs');
+const { collectionCoins, expectCollectionReward } = require('./word-jelly-rewards.cjs');
 const { openGame, openModeMenu, chooseMode, activateLibraryControl, metrics, tap, observeAudio } = require('./game-ui.cjs');
 const { expectRecording, recordingTiming } = require('./bundled-audio.cjs');
-const vocabulary = require('../../words.json');
+const morphology = Array.from({ length: 10 }, (_, index) =>
+  require(`../../data/vocabulary/morphology/age-${String(index + 3).padStart(2, '0')}.json`).entries).flat();
+const analyses = new Map(morphology.map(entry => [entry.analysis.id, entry.analysis]));
 
 const WALLET_KEY = 'growWithPip.coinWallet.v1';
 const GROWTH_KEY = 'growWithPip.growth.v1';
@@ -13,9 +15,10 @@ const FRAGMENT_APPEAR = 'assets/audio/fragments/appear.wav';
 const FRAGMENT = 'assets/audio/fragments/arrive.wav';
 const MERGE = 'assets/imported-audio/jelly-interaction/merge-together-v3.wav';
 const prices = { auto_merge: 600, fragments: 200 };
-const AUTO_MERGE_BEAT = 0.2;
-const AUTO_MERGE_DRAG = 0.3;
-const words = new Set(vocabulary.filter(word => word.min_age === 3).map(word => word.text.trim().toLowerCase()));
+const AUTO_MERGE_BEAT = 0.20;
+const AUTO_MERGE_DRAG = 0.25;
+const AUTO_MERGE_FUSION = 0.11;
+const AUTO_MERGE_SETTLE = 0.03;
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 const wallet = page => page.locator('#coin-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const playbackIndex = page => page.evaluate(() => window.audioObservation.playbacks.length);
@@ -24,8 +27,26 @@ const savedGrowth = page => page.evaluate(key => localStorage.getItem(key), GROW
 const fragmentTotal = state => state.tiles.reduce((total, tile) => total + tile.fragments, 0);
 const progress = state => ({ collected_coins: state.collected_coins, cleared_pairs: state.cleared_pairs,
   fragment_count: state.fragment_count, chest_tier: state.chest_tier, chest_count: state.chest_count });
-const forwardPairs = state => state.tiles.flatMap(source => state.tiles.filter(target => source.id !== target.id &&
-  words.has((source.text + target.text).trim().toLowerCase())).map(target => [source.id, target.id]));
+const forwardPairs = state => state.tiles.flatMap(source => state.tiles.filter(target =>
+  validPair(source, target)).map(target => [source.id, target.id]));
+
+function validPair(source, target) {
+  if (!source || !target || source.id === target.id) return false;
+  if (source.jelly_kind === 'merged' && target.jelly_kind === 'merged')
+    return Boolean(source.word?.id && source.word.id === target.word?.id &&
+      source.merge_level === target.merge_level && source.merge_level < 9);
+  const picture = source.jelly_kind === 'picture' ? source : target.jelly_kind === 'picture' ? target : null;
+  if (picture) {
+    const root = picture === source ? target : source;
+    return root.jelly_kind === 'root' && Boolean(root.word_candidate?.id && root.word_candidate.id === picture.image_word?.id);
+  }
+  if (source.jelly_kind !== 'root' || target.jelly_kind !== 'root') return false;
+  return (source.composition?.candidates || []).some(candidate => {
+    const analysis = analyses.get(candidate.analysis_id);
+    return analysis?.nodes.some(node => node.left === candidate.node_id &&
+      target.composition?.candidates.some(other => other.analysis_id === analysis.id && other.node_id === node.right));
+  });
+}
 
 function expectFragmentBadge(tile) {
   expect(tile.fragment_badges).toBe(Math.min(2, tile.fragments));
@@ -58,7 +79,7 @@ async function start(page, info, balance) {
   const errors = await openGame(page, { reducedMotion, mode: 'word_jelly' });
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.visible && state.phase === 'playing' && state.tiles.length >= 18 &&
+    return state.visible && state.phase === 'playing' && state.tiles.length >= 15 &&
       state.tiles.every(tile => tile.settled) && Object.keys(state.powerup_buttons || {}).length === 2;
   }, { timeout: 20000 }).toBe(true);
   await expect.poll(async () => (await wallet(page)).balance).toBe(balance);
@@ -155,9 +176,10 @@ async function beginTrace(page, label, { pauseOnOverlap = false } = {}) {
         coins: state.collected_coins, fragments: state.fragment_count, chest_tier: state.chest_tier,
         tiles: state.tiles.map(tile => ({ id: tile.id, text: tile.text, mass: tile.mass, fragments: tile.fragments,
           fragment_badges: tile.fragment_badges, fragment_badge: tile.fragment_badge,
-          rect: tile.rect, visible: tile.visible, settled: tile.settled,
+          rect: tile.rect, visible: tile.visible, settled: tile.settled, settling: tile.settling,
+          settle_seconds: tile.settle_seconds,
           word: tile.word, picture_visible: tile.picture_visible, coins: tile.coins })),
-        fusions: (state.fusions || []).map(fusion => ({ operation: fusion.operation, a_id: fusion.a_id,
+        fusions: (state.fusions || []).map(fusion => ({ operation: fusion.operation, automatic: fusion.automatic, a_id: fusion.a_id,
           b_id: fusion.b_id, result: fusion.result, elapsed: fusion.elapsed, duration: fusion.duration })) });
       for (const [kind, button] of Object.entries(state.powerup_buttons || {})) {
         if (button.feedback_active && !button.feedback_success && button.light > 0.05) capture(`negative-${kind}`);
@@ -168,12 +190,17 @@ async function beginTrace(page, label, { pauseOnOverlap = false } = {}) {
       if (powerup.kind === 'fragments' && state.tiles.some(tile => tile.fragments > 2 && tile.fragment_badge?.scale > 1.04))
         capture('fragment-stack-arrival');
       const drags = powerup.drags || [];
-      if (powerup.active && drags.some(drag => drag.elapsed / drag.duration > 0.2 && drag.elapsed / drag.duration < 0.8))
+      const inFlight = powerup.active && powerup.kind === 'auto_merge' &&
+        drags.some(drag => drag.elapsed / drag.duration > 0.2 && drag.elapsed / drag.duration < 0.8);
+      if (inFlight)
         capture('auto-midpoint');
-      if (powerup.active && powerup.kind === 'auto_merge' && drags.length > 1)
+      const overlapping = powerup.active && powerup.kind === 'auto_merge' && drags.length > 1;
+      if (overlapping)
         capture('auto-overlap');
-      if (pauseOnOverlap && !evidence.pausedOnOverlap && powerup.active && drags.length > 1) {
-        // Hide at the overlap itself so browser-driver latency cannot miss the short transfer.
+      if (powerup.active && powerup.kind === 'auto_merge' && drags.length && state.fusions?.length)
+        capture('auto-fusion');
+      if (pauseOnOverlap && !evidence.pausedOnOverlap && overlapping) {
+        // Hide at the overlap itself so browser-driver latency cannot miss the short shared flight.
         evidence.pausedOnOverlap = true;
         Object.defineProperty(document, 'hidden', { configurable: true, value: true });
         document.dispatchEvent(new Event('visibilitychange'));
@@ -204,40 +231,71 @@ function recordingCount(sounds, relative) {
 }
 
 function expectAutoMergeTimeline(evidence, completed) {
-  const frames = evidence.timeline.filter(frame => !frame.paused && frame.powerup.kind === 'auto_merge' && frame.powerup.drags?.length);
-  expect(frames.length, 'The browser renders the automatic transfers').toBeGreaterThan(1);
+  const frames = evidence.timeline.filter(frame => !frame.paused && frame.powerup.kind === 'auto_merge' && frame.powerup.active);
+  const dragFrames = frames.filter(frame => frame.powerup.drags?.length);
+  expect(dragFrames.length, 'The browser renders the automatic transfers').toBeGreaterThan(1);
+  const resultIds = new Set(frames.flatMap(frame => frame.fusions.map(fusion => fusion.result.id)));
   const launches = new Map();
   for (const frame of frames) {
+    expect(frame.powerup.drags.length, 'A 250 ms flight overlaps at most one following 200 ms launch').toBeLessThanOrEqual(2);
     const reserved = new Set();
     for (const drag of frame.powerup.drags) {
-      expect(drag.duration, 'Every jelly has its own 300 ms transfer').toBeCloseTo(AUTO_MERGE_DRAG, 6);
+      expect(drag.duration, 'Every automatic transfer takes 250 ms').toBeCloseTo(AUTO_MERGE_DRAG, 6);
       expect(drag.elapsed).toBeGreaterThanOrEqual(0);
       expect(drag.elapsed).toBeLessThanOrEqual(AUTO_MERGE_DRAG + 0.00001);
       expect(drag.started_at).toBeGreaterThanOrEqual(0);
       expect(drag.source_id).not.toBe(drag.target_id);
-      expect(words.has((drag.source.text + drag.target.text).trim().toLowerCase()),
-        'Each randomly selected source has a valid forward target').toBe(true);
+      expect(validPair(drag.source, drag.target),
+        'Every transfer follows a reviewed root join, matching picture, or equal-level upgrade').toBe(true);
       for (const id of [drag.source_id, drag.target_id]) {
-        expect(reserved.has(id), 'Concurrent drags cannot reserve the same jelly').toBe(false);
+        expect(reserved.has(id), 'Overlapping transfers reserve distinct sources and targets').toBe(false);
         reserved.add(id);
+        expect(frame.tiles.some(tile => tile.id === id), 'Both reserved endpoints remain on the board until fusion').toBe(true);
+      }
+      for (const tile of [drag.source, drag.target].filter(tile => resultIds.has(tile.id))) {
+        expect(tile.settling, 'A dependent source or target has completed its landing').toBe(false);
+        expect(tile.age, 'A dependent source or target is stable before its next flight')
+          .toBeGreaterThanOrEqual((tile.settle_seconds ?? 0.36) - 0.00001);
       }
       launches.set(`${drag.started_at}:${drag.source_id}:${drag.target_id}`, drag);
+    }
+    for (const fusion of frame.fusions) {
+      expect(fusion.operation).toBe('merge');
+      expect(fusion.automatic).toBe(true);
+      expect(fusion.duration, 'The transfer is followed by a 110 ms liquid union').toBeCloseTo(AUTO_MERGE_FUSION, 6);
+      expect(fusion.elapsed).toBeGreaterThanOrEqual(0);
+      expect(fusion.elapsed).toBeLessThanOrEqual(AUTO_MERGE_FUSION + 0.00001);
+      for (const id of [fusion.a_id, fusion.b_id]) {
+        expect(reserved.has(id), 'Fusion endpoints cannot be reused by another operation').toBe(false);
+        reserved.add(id);
+      }
+      expect(reserved.has(fusion.result.id), 'An unfinished fusion result cannot be used by an overlapping flight').toBe(false);
+    }
+    for (const tile of frame.tiles.filter(tile => resultIds.has(tile.id) && tile.settling)) {
+      expect(tile.settled, 'A new union remains unavailable during its landing').toBe(false);
+      expect(tile.settle_seconds, 'Each new union uses a 30 ms landing before becoming stable').toBeCloseTo(AUTO_MERGE_SETTLE, 6);
     }
   }
   const ordered = [...launches.values()].sort((a, b) => a.started_at - b.started_at);
   expect(ordered.length, 'Every completed pair was shown in transit').toBe(completed);
   expect(ordered.length).toBeGreaterThan(1);
+  expect(ordered[0].started_at, 'The first eligible pair launches immediately').toBeCloseTo(0, 5);
   expect(ordered[1].started_at - ordered[0].started_at,
-    'The next eligible pair starts on the 200 ms beat before the first arrives').toBeCloseTo(AUTO_MERGE_BEAT, 5);
+    'The next independent pair launches on the 200 ms beat while the first still flies').toBeCloseTo(AUTO_MERGE_BEAT, 5);
+  for (const launch of ordered) {
+    const beat = launch.started_at / AUTO_MERGE_BEAT;
+    expect(beat, 'Every launch remains aligned to the 200 ms grid after dependency waits').toBeCloseTo(Math.round(beat), 5);
+  }
   for (let index = 1; index < ordered.length; index++)
     expect(ordered[index].started_at - ordered[index - 1].started_at,
-      'Dependency waits cannot turn into a burst of catch-up launches').toBeGreaterThanOrEqual(AUTO_MERGE_BEAT - 0.00001);
-  expect(frames.some(frame => frame.powerup.drags.length > 1), 'The 300 ms drags visibly overlap on the 200 ms launch rhythm').toBe(true);
-  expect(frames.some(frame => frame.fusions.length > 0), 'An earlier liquid union can continue while another jelly travels').toBe(true);
-  return { frames, launches: ordered };
+      'A skipped dependency beat never becomes a burst of catch-up launches').toBeGreaterThanOrEqual(AUTO_MERGE_BEAT - 0.00001);
+  expect(frames.some(frame => frame.powerup.drags.length > 1), 'The browser renders overlapping 250 ms flights on the 200 ms rhythm').toBe(true);
+  expect(frames.some(frame => frame.powerup.drags.length && frame.fusions.length),
+    'A liquid union remains visible while the next pair flies').toBe(true);
+  return { frames: dragFrames, launches: ordered };
 }
 
-test('Auto merge launches eligible pairs every 200 ms with overlapping 300 ms transfers', async ({ page }, info) => {
+test('Auto merge launches eligible pairs every 200 ms with overlapping 250 ms flights', async ({ page }, info) => {
   const { errors } = await start(page, info, 5000);
   const before = await jelly(page), saved = await savedGrowth(page);
   await beginTrace(page, 'auto-merge-200ms');
@@ -245,15 +303,16 @@ test('Auto merge launches eligible pairs every 200 ms with overlapping 300 ms tr
   await expect.poll(async () => (await wallet(page)).balance).toBe(4400);
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.powerup.kind === 'auto_merge' && !state.powerup.active && state.powerup.stage === 'complete';
+    return state.powerup.kind === 'auto_merge' && !state.powerup.active && state.powerup.stage === 'complete' &&
+      state.tiles.every(tile => tile.settled);
   }, { timeout: 20000 }).toBe(true);
   const after = await jelly(page);
-  const evidence = await retainTrace(page, info, 'auto-merge-200ms', ['auto-midpoint', 'auto-overlap']);
+  const evidence = await retainTrace(page, info, 'auto-merge-200ms', ['auto-midpoint', 'auto-overlap', 'auto-fusion']);
   expectAutoMergeTimeline(evidence, after.powerup.completed);
   expect(after.powerup.completed).toBeGreaterThan(1);
   expect(after.powerup.total).toBe(after.powerup.completed);
   expect(after.merged_count - before.merged_count).toBe(after.powerup.completed);
-  expect(forwardPairs(after)).toEqual([]);
+  expect(after.powerup_buttons.auto_merge.enabled, 'All complete authored paths have been consumed').toBe(false);
   expect(progress(after), 'Auto merge leaves the resulting words for manual collection').toEqual(progress(before));
   expect(fragmentTotal(after)).toBe(fragmentTotal(before));
   expect(await savedGrowth(page)).toBe(saved);
@@ -506,7 +565,14 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
   const paused = await jelly(page), pausedWallet = await storedWallet(page);
   try {
     expect(paused.powerup.active, 'A paid multi-pair operation remains pending while the tab is hidden').toBe(true);
-    expect(paused.powerup.drags.length, 'The visibility change interrupts concurrent transfers').toBeGreaterThan(1);
+    expect(paused.powerup.drags, 'The visibility change interrupts both overlapping flights').toHaveLength(2);
+    expect(paused.powerup.drags.some(drag => drag.elapsed > 0)).toBe(true);
+    for (const drag of paused.powerup.drags) {
+      expect(drag.elapsed).toBeGreaterThanOrEqual(0);
+      expect(drag.elapsed).toBeLessThan(drag.duration);
+    }
+    expect(new Set(paused.powerup.drags.flatMap(drag => [drag.source_id, drag.target_id])).size,
+      'The paused flights retain four distinct reservations').toBe(4);
     await page.waitForTimeout(350);
     const stillPaused = await jelly(page);
     expect(stillPaused.powerup, 'Each transfer and the next-launch clock remain frozen').toEqual(paused.powerup);
@@ -526,7 +592,7 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
       state.powerup.stage === 'complete' && state.tiles.every(tile => tile.settled);
   }, { timeout: 45000 }).toBe(true);
   const afterAuto = await jelly(page);
-  const autoEvidence = await retainTrace(page, info, 'word-jelly-auto-merge', ['auto-midpoint', 'auto-overlap']);
+  const autoEvidence = await retainTrace(page, info, 'word-jelly-auto-merge', ['auto-midpoint', 'auto-overlap', 'auto-fusion']);
   expect(autoEvidence.pausedOnOverlap).toBe(true);
   const { frames: dragFrames, launches } = expectAutoMergeTimeline(autoEvidence, afterAuto.powerup.completed);
   const firstSource = launches[0].source_id;
@@ -541,7 +607,8 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
     return moving?.visible && distance(moving.rect, original.rect) > 0.5 && distance(moving.rect, target.rect) > 0.5 &&
       distance(moving.rect, target.rect) < distance(original.rect, target.rect);
   }), 'The actual source jelly moves between its original slot and the target, rather than only drawing a trail').toBe(true);
-  expect(forwardPairs(afterAuto), 'Auto merge leaves no available forward dictionary pair').toEqual([]);
+  expect(afterAuto.powerup_buttons.auto_merge.enabled,
+    'The captured supply has no remaining complete authored path or equal-level upgrade').toBe(false);
   expect(afterAuto.merged_count - beforeAuto.merged_count).toBe(afterAuto.powerup.completed);
   expect(afterAuto.powerup.completed).toBeGreaterThan(0);
   expect(fragmentTotal(afterAuto)).toBe(fragmentTotal(beforeAuto));
@@ -566,9 +633,11 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
   expect(Object.values(savedAuto.receipts).filter(amount => amount < 0).sort((a, b) => a - b)).toEqual([-600, -200]);
   const completed = afterAuto.tiles.filter(tile => tile.mass > 1 && tile.word?.id);
   expect(completed.length).toBeGreaterThan(0);
+  expect(completed.every(tile => tile.assisted && !tile.mastery_eligible),
+    'Automatically completed words retain their assisted learning status').toBe(true);
   for (const tile of completed) {
     expect(tile.picture_visible).toBe(true);
-    expect(tile.coins).toBe(tile.mass <= 2 ? 50 : 100);
+    expectCollectionReward(tile);
     expectFragmentBadge(tile);
   }
   if (audioAvailable) {
@@ -619,7 +688,7 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
     }
   }
   await page.evaluate(() => window.fragmentCollectionObserver.disconnect());
-  await expect.poll(() => savedGrowth(page)).not.toBe(growth);
+  expect(await savedGrowth(page), 'Collecting automatically merged words does not grant mastery').toBe(growth);
   const finalSave = await storedWallet(page);
   expect(finalSave.balance).toBe(4200 + earnedCoins);
   expect(Object.values(finalSave.receipts).filter(amount => amount < 0).sort((a, b) => a - b)).toEqual([-600, -200]);

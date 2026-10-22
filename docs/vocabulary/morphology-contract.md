@@ -107,7 +107,8 @@ content resolver must select one intended sense and spelling form before play.
 
 Word Jelly assigns every source, partial composition, and completed word the
 same one-by-one footprint. This preserves the former ordinary Jelly size in the
-responsive six-column, eight-row well. Semantic part count never changes size.
+responsive five-column, eight-row well, with a 1:1 aspect ratio for every jelly.
+Semantic part count never changes size.
 Merges reserve the same cell geometry used by their animation, collision, gravity,
 and preview. Resizing changes display scale, not logical dimensions.
 
@@ -192,7 +193,7 @@ pinned until that target completes, even if a different word becomes placeable
 partway through. Pause and exit draining
 retain the accepted obligation; the result records assisted ancestry.
 
-The authored preview is a six-element lane array, not six required cards. An
+The authored preview is a five-element lane array with up to five cards. An
 anchor contains the tile plus `preview_column` and `preview_span`. Its covered
 lanes contain `{reservation: tile_id, anchor: column}`; unused lanes are empty
 objects. The FIFO head waits for contiguous lanes and never displaces shown
@@ -202,9 +203,10 @@ advertised columns, retaining blocked identities and fragments. Consecutive
 arrivals wait for the preceding body's full height to clear every shared lane.
 
 The next wave's timer is the existing 20-to-10-second collection-stage baseline
-multiplied by `max(1, preview_area / 6)`. It is frozen until the next successful
+multiplied by `max(1, preview_area / 5)`. It is frozen until the next successful
 wave. Atomic collection advances the stage once; partial fusion never does.
-The initial board uses an 18-cell occupied-area budget for authored rounds.
+The initial board uses a 15-cell occupied-area budget for authored rounds,
+within the well's 40-cell capacity.
 
 ## Rollout
 

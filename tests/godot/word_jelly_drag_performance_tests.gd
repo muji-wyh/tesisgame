@@ -2,6 +2,7 @@ extends SceneTree
 
 const Fixture = preload("res://tests/performance/jelly_drag_fixture.gd")
 const Data = preload("res://scripts/game_data.gd")
+const Model = preload("res://scripts/word_jelly_model.gd")
 
 class ObservedJelly extends "res://scripts/word_jelly.gd":
 	var position_passes: int = 0
@@ -43,7 +44,7 @@ func _run() -> void:
 	var view := ObservedJelly.new()
 	root.add_child(view)
 	view.size = Vector2(390, 844)
-	for count: int in [18, 42]:
+	for count: int in [Model.INITIAL_SETTLED_TILES, Model.CAPACITY - Model.COLUMNS]:
 		var pair: Array[int] = Fixture.install(view, data, count)
 		var start: Vector2 = view._tiles[pair[0]].get_global_rect().get_center()
 		check(view._press(7, start), "Touch can pick up a settled jelly")
@@ -80,7 +81,7 @@ func _run() -> void:
 
 	for cancellation: String in ["touch", "pause", "resize"]:
 		view.size = Vector2(390, 844)
-		var pair: Array[int] = Fixture.install(view, data, 18)
+		var pair: Array[int] = Fixture.install(view, data, Model.INITIAL_SETTLED_TILES)
 		var start: Vector2 = view._tiles[pair[0]].get_global_rect().get_center()
 		view._press(7, start)
 		Fixture.motion(view, start + Vector2(30, 0))
@@ -100,9 +101,9 @@ func _run() -> void:
 				view._layout()
 		view._process(1.0 / 60.0)
 		check(view._pointer == view.NO_POINTER and not view._motion_pending and not view._dragging, cancellation + ": pending input cannot replay on the next frame")
-		check(view.game.fusions.is_empty() and view.game.cells.size() == 18 and view.game._dragged_tile_id == -1, cancellation + ": cancellation neither merges nor collects and releases the held body")
+		check(view.game.fusions.is_empty() and view.game.cells.size() == Model.INITIAL_SETTLED_TILES and view.game._dragged_tile_id == -1, cancellation + ": cancellation neither merges nor collects and releases the held body")
 
-	var pair: Array[int] = Fixture.install(view, data, 18)
+	var pair: Array[int] = Fixture.install(view, data, Model.INITIAL_SETTLED_TILES)
 	view._begin_view_update()
 	check(view._can_drop_preview(), "The initial presentation pass has room for a preview")
 	check(view._can_merge_for_feedback(view._cell(pair[0]), view._cell(pair[1])), "The initial presentation pass finds the valid word-picture pair")

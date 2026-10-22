@@ -247,8 +247,9 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /Lv1 collections give no bonus coins/);
   assert.match(help, /Lv2 and higher increase both the chance and amount of bonus coins/);
   assert.match(help, /press R, to pause and read its full spelling/);
-  assert.match(help, /Collect gathers all ready words at 250 ms intervals without pronunciation/);
+  assert.match(help, /Collect gathers all ready words at 200 ms intervals without pronunciation/);
   assert.match(help, /Auto merge costs 600, 900, then 1200 coins/);
+  assert.match(help, /Auto merge launches an eligible pair every 200 ms with a 250 ms flight, so consecutive flights overlap/);
   assert.match(help, /Treasure costs 200, 300, then 400 coins[\s\S]*2 to 8 chest fragments/);
   assert.match(help, /A final wrong answer tied to a live target resets that word's streak/);
   assert.doesNotMatch(shell, /speech-successes|speech-mistakes|speech-score|roundProgress|Three mistakes/);
@@ -264,7 +265,7 @@ test('Jelly collection help publishes every level reward and the real batch cade
     assert.match(help, new RegExp(`Lv${level}: ${chance}% for ${coins} coins`));
   }
   assert.match(help, /Each eligible collection rolls once, and a failed save retains its original result for retry/);
-  assert.match(help, /Collect gathers all ready words at 250 ms intervals without pronunciation/);
+  assert.match(help, /Collect gathers all ready words at 200 ms intervals without pronunciation/);
   assert.doesNotMatch(help, /1% chance of 50 bonus coins|Extra parts or higher levels do not multiply coin rewards/);
 });
 

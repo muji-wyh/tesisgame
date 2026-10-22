@@ -89,14 +89,14 @@ func _board_identity() -> Array:
 
 func _preview(states: Array) -> void:
 	view.game.upcoming.clear()
-	for lane in range(6):
+	for lane in range(view.game.COLUMNS):
 		view.game.upcoming.append({})
 	var column: int = 0
 	for state: Dictionary in states:
 		var tile: Dictionary = view.game._new_composition_tile(state)
 		var span: int = int(tile.width)
-		_check(column + span <= 6, "Fixture preview fits its six lanes")
-		if column + span > 6:
+		_check(column + span <= view.game.COLUMNS, "Fixture preview fits the well's lanes")
+		if column + span > view.game.COLUMNS:
 			break
 		tile.preview_column = column
 		tile.preview_span = span

@@ -340,10 +340,10 @@ func check_finish_header(app, view) -> void:
 			view._word_reveal.reset()
 			view._word_reveal.set_reduced_motion(view.reduced_motion)
 		if dimensions == Vector2i(624, 1119):
-			check(view._board.size.x * s >= 540.0,
-				"The reported portrait size gains substantial board width beyond its former 468-pixel cap")
+			check(view._pitch * s >= 90.0,
+				"The reported portrait size keeps at least ninety display pixels per square cell")
 		if dimensions == Vector2i(320, 480):
-			check(view._board.size.x * s >= 180.0,
+			check(view._pitch * s >= 30.0,
 				"The small phone keeps at least thirty display pixels per board column beside the responsive action rail")
 	root.size = original_size
 	await settle()
@@ -439,9 +439,9 @@ func _check_playfield_layout(view, s: float, context: String) -> void:
 		for next in range(index + 1, names.size()):
 			check(not rectangle.intersects(regions[names[next]]),
 				str(names[index]) + " stays clear of " + str(names[next]) + context)
-	check(is_equal_approx(board.size.x / board.size.y, 6.0 / 8.0)
+	check(is_equal_approx(board.size.x / board.size.y, 5.0 / 8.0)
 		and is_equal_approx(tray.position.x, board.position.x) and is_equal_approx(tray.size.x, board.size.x),
-		"Six square-cell columns keep an aligned supply tray without stretching the board" + context)
+		"Five square-cell columns keep an aligned supply tray without stretching the board" + context)
 	# The occupied width includes the single side rail when it enlarges the well.
 	var occupied: Rect2 = board
 	if view._compact_hud:

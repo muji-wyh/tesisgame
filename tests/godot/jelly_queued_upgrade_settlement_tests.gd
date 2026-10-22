@@ -131,7 +131,7 @@ func earn_fragments(app, mode: String, target: int) -> bool:
 				if first.id == second.id or not game.is_settled(second) or game.is_fusing(int(second.id)):
 					continue
 				var compatible: bool = first.word.id == second.word.id and first.kind != second.kind if mode == "jelly" \
-					else str(first.text) + str(second.text) == str(word.get("text", ""))
+					else not game.is_valid_word(first) and not game.is_valid_word(second) and game.can_merge(first, second)
 				if not compatible:
 					continue
 				var fragments: int = int(bool(first.chest)) + int(bool(second.chest)) if mode == "jelly" \
@@ -155,7 +155,7 @@ func earn_fragments(app, mode: String, target: int) -> bool:
 			return false
 		var merged_id: int = int(game.fusions.back().result.id) if mode == "word_jelly" else -1
 		advance_game(game, game.FUSION_SECONDS + 2.0)
-		if mode == "word_jelly":
+		if mode == "word_jelly" and game.is_valid_word(game.cell(merged_id)):
 			# Select the normal no-bonus branch, leaving chest payout measurable.
 			game._coin_rng.seed = 0
 			var collected: bool = game.collect(merged_id)

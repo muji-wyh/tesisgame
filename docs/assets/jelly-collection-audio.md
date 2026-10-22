@@ -6,7 +6,7 @@ choice or per-collection transposition. Higher Jelly Words levels use the
 [level collection feedback profiles](jelly-level-feedback.md).
 
 The gameplay clocks use Jelly Match's fusion release, Jelly Words'
-180 ms manual-pop boundary, and its 60 ms batch-pop boundary within each 250 ms
+180 ms manual-pop boundary, and its 60 ms batch-pop boundary within each 200 ms
 collection beat. `collect-pop.wav` is cached at startup and required in the core
 Web pack. It uses the existing bounded Jelly audio players, collection gain 0.90,
 speech ducking and mute, pause and exit cancellation.
@@ -35,7 +35,7 @@ No spring, musical, voice or generated layer is added.
 The delivered `assets/audio/jelly-match/collect-pop.wav` is **100 ms**, 44.1 kHz
 mono PCM16, with a **−7.50 dBFS** peak. Twelve repeats at the recorded 120 ms
 verification spacing reach **−8.42 dBFS** after the existing 0.90 collection gain.
-Current gameplay uses 250 ms batch spacing. Godot imports
+Current gameplay uses 200 ms batch spacing. Godot imports
 use no compression, automatic trimming, normalization or looping. These are
 signal measurements, not subjective loudness or physical speaker assessments.
 
@@ -70,4 +70,4 @@ Chromium passed the Jelly Match audio/lifecycle case and the focused Jelly Words
 manual collection, batch collection and mute case. The browser checks observe
 the same decoded recording at playback rate 1.0 and verify bundled offline
 playback. That verification used the former 120 ms Words batch cadence; current
-gameplay uses 250 ms.
+gameplay uses 200 ms.

@@ -101,7 +101,7 @@ async function start(page, browserName) {
   const errors = await openGame(page, { mode: 'word_jelly', reducedMotion: 'no-preference' });
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.visible && state.phase === 'playing' && state.tiles.length >= 18 &&
+    return state.visible && state.phase === 'playing' && state.tiles.length >= 15 &&
       state.tiles.every(tile => tile.settled) && state.powerup_buttons.auto_merge.enabled;
   }, { timeout: 20000 }).toBe(true);
   const available = await page.evaluate(() => window.audioObservation.available);

@@ -190,11 +190,7 @@ func _motion(age: float) -> Dictionary:
 	var edge: float = minf(_anchor.size.x, _anchor.size.y)
 	var upgrade: bool = is_active() and int(_events[0].previous_tier) > 0
 	var peak: float = 216.0 if upgrade else 176.0
-	var pose: Dictionary = Flight.sample(age, _anchor.get_center(), _flight_bounds(), edge, peak / Style.ui_scale(self), true)
-	if is_active() and int(_events[0].tier) > 4:
-		# Unmodeled tiers rotate their original artwork in the screen plane.
-		pose.roll = pose.yaw
-	return pose
+	return Flight.sample(age, _anchor.get_center(), _flight_bounds(), edge, peak / Style.ui_scale(self), true)
 
 
 func _placement(pose: Dictionary, edge: float, _center: Vector2) -> Dictionary:
@@ -238,12 +234,14 @@ func _draw_flight() -> void:
 				continue
 			var radius: float = accent_edge * lerpf(0.36, 1.34, 1.0 - pow(1.0 - ripple / 0.76, 2.0))
 			_draw_ring(point, Vector2.ONE * radius, accent, (1.0 - ripple / 0.76) * 0.85)
-	_flight_surface.draw_set_transform(point, float(pose.roll), Vector2.ONE * float(placement.scale))
 	var texture: Texture2D = after if _revealed or int(event.previous_tier) == 0 else before
 	var model_weight: float = float(pose.model_weight) if not _model_sample.is_empty() else 0.0
 	if texture != null and model_weight < 1.0:
+		# Project the original flat artwork around its vertical axis.
+		_flight_surface.draw_set_transform(point, 0.0, Vector2(float(pose.sprite_scale_x), 1.0) * float(placement.scale))
 		_flight_surface.draw_texture_rect(texture, _texture_rect(texture, Vector2.ZERO, edge), false, Color(1, 1, 1, 1.0 - model_weight))
 	if model_weight > 0.0:
+		_flight_surface.draw_set_transform(point, 0.0, Vector2.ONE * float(placement.scale))
 		var bounds: Rect2 = _model_sample.bounds
 		var unit: float = edge / maxf(bounds.size.x, bounds.size.y)
 		_flight_surface.draw_texture_rect(_model_sample.texture, Rect2(-bounds.get_center() * unit, Vector2.ONE * 1024.0 * unit), false, Color(1, 1, 1, model_weight))
@@ -287,7 +285,7 @@ func snapshot() -> Dictionary:
 		motion = _placement(_motion(_elapsed - ARRIVAL_SECONDS), minf(_anchor.size.x, _anchor.size.y), _anchor.get_center())
 		if reduced_motion:
 			motion.merge({"center": _anchor.get_center(), "scale": 1.0, "yaw": 0.0, "roll": 0.0,
-				"pitch": 0.0, "depth": 0.0, "model_weight": 0.0, "phase": "still"}, true)
+				"pitch": 0.0, "depth": 0.0, "sprite_scale_x": 1.0, "model_weight": 0.0, "phase": "still"}, true)
 		motion.center = [motion.center.x, motion.center.y]
 	var bounds: Rect2 = _flight_bounds()
 	return {"active": is_active(), "visible": visible, "elapsed": _elapsed,

@@ -84,6 +84,9 @@ func _run() -> void:
 			"Theme " + theme_id + " reuses real closed chest artwork")
 		check(view.chest.scale == Vector2.ONE and is_zero_approx(view.chest.rotation) and reveals == ["round-a"],
 			"Reduced motion preserves a static earned status in " + theme_id)
+		check(is_zero_approx(float(view.snapshot().motion.yaw)) and is_zero_approx(float(view.snapshot().motion.pitch))
+			and is_zero_approx(float(view.snapshot().motion.roll)) and is_equal_approx(float(view.snapshot().motion.sprite_scale_x), 1.0),
+			"Reduced motion keeps the source chest upright and at its full width in " + theme_id)
 		view.advance(PairReward.REWARD_SECONDS)
 		check(not view.snapshot().performance_active and view.snapshot().earned,
 			"Reduced motion completes the same presentation deadline for " + theme_id)
@@ -145,7 +148,8 @@ func check_turn(view, data) -> void:
 			check(absf(offset.cross(route)) / route.length() < 0.1 and progress > last_progress and progress < 1.0,
 				"%s flies directly from the HUD to the upper center without visiting the screen center" % dimensions)
 			check(departure.phase == "depart" and float(departure.scale) > 1.0
-				and is_zero_approx(float(departure.yaw)) and is_zero_approx(float(departure.roll)),
+				and is_zero_approx(float(departure.yaw)) and is_zero_approx(float(departure.pitch))
+				and is_zero_approx(float(departure.roll)),
 				"The pair reward grows during its direct flight and saves its turn for arrival")
 			last_progress = progress
 		view.advance(Flight.REVEAL_SECONDS - float(view.snapshot().elapsed))
@@ -169,9 +173,12 @@ func check_turn(view, data) -> void:
 		var model = view._models._pool[1]
 		var safe := Rect2(Vector2.ZERO, Vector2(dimensions))
 		var contained: bool = true
+		var upright: bool = true
 		for age: float in [1.36, 1.55, 1.72, Flight.TURN_END]:
 			view.advance(age - float(view.snapshot().elapsed))
 			pose = view.snapshot().motion
+			upright = upright and is_zero_approx(float(pose.pitch)) and is_zero_approx(float(pose.roll)) \
+				and model._rig.basis.y.is_equal_approx(Vector3.UP)
 			var bounds: Rect2 = model.closed_bounds()
 			var unit: float = float(pose.edge) / maxf(bounds.size.x, bounds.size.y)
 			var transform: Transform2D = view.get_global_transform_with_canvas() * Transform2D(
@@ -179,8 +186,8 @@ func check_turn(view, data) -> void:
 			for corner in range(8):
 				var projected: Vector2 = model._project_point(model._rig.transform * model._closed_box.get_endpoint(corner))
 				contained = contained and safe.has_point(transform * ((projected - bounds.get_center()) * unit))
-		check(contained and is_equal_approx(float(pose.yaw), TAU),
-			"%s keeps the real model inside the viewport throughout a complete closed-chest turn" % dimensions)
+		check(contained and upright and is_equal_approx(float(pose.yaw), TAU),
+			"%s keeps the real model upright and inside the viewport throughout a complete vertical-axis turn" % dimensions)
 		view.set_paused(true)
 		var paused: Dictionary = view.snapshot().motion
 		view.advance(0.2)
@@ -246,6 +253,7 @@ func check_growth_and_reverse(view, label: String) -> void:
 	var original_age: float = view._elapsed
 	var cue_count: int = cues.size()
 	var reveal_count: int = reveals.size()
+	var departure: Dictionary = pair_pose_at(view, 0.0)
 	var top: Dictionary = pair_pose_at(view, Flight.TOP_SECONDS)
 	var last_scale: float = 1.0
 	for step in range(1, 25):
@@ -258,16 +266,22 @@ func check_growth_and_reverse(view, label: String) -> void:
 		check(float(outbound.scale) > last_scale
 			and absf(float(outbound.scale) - lerpf(1.0, float(top.scale), smoothstep(0.0, 1.0, fraction))) < 0.0001,
 			"%s grows on every outbound sample %d and reaches its full size on arrival" % [label, step])
-		check(Vector2(outbound.center).distance_to(returning.center) < 0.01
-			and absf(float(outbound.scale) - float(returning.scale)) < 0.0001,
-			"%s reverses its exact fitted route and size at sample %d" % [label, step])
+		var expected_center: Vector2 = Vector2(departure.center).lerp(top.center, smoothstep(0.0, 1.0, fraction))
+		check(Vector2(outbound.center).distance_to(expected_center) < 0.1
+			and Vector2(outbound.center).distance_to(returning.center) < 0.01
+			and absf(float(outbound.scale) - float(returning.scale)) < 0.0001
+			and is_zero_approx(float(outbound.pitch)) and is_zero_approx(float(outbound.roll))
+			and is_zero_approx(float(returning.pitch)) and is_zero_approx(float(returning.roll)),
+			"%s reverses its straight fitted route and size without tilting at sample %d" % [label, step])
 		check(contained, "%s keeps both travel samples %d inside the viewport" % [label, step])
 		last_scale = float(outbound.scale)
 	for step in range(13):
 		var pose: Dictionary = pair_pose_at(view,
 			lerpf(Flight.TOP_SECONDS, Flight.RETURN_START, float(step) / 12.0))
-		check(is_equal_approx(float(pose.scale), float(top.scale)),
-			label + " holds its arrival size through the top turn without growing again")
+		check(is_equal_approx(float(pose.scale), float(top.scale))
+			and Vector2(pose.center).distance_to(top.center) < 0.1
+			and is_zero_approx(float(pose.pitch)) and is_zero_approx(float(pose.roll)),
+			label + " holds its arrival position and size through the vertical-axis turn")
 	pair_pose_at(view, original_age)
 	check(cues.size() == cue_count and reveals.size() == reveal_count,
 		label + " visual sampling leaves the actual sound and confetti gates untouched")
@@ -315,14 +329,23 @@ func check_sprite_flight(view, data) -> void:
 		view.show_pair_result(round_id, true)
 		check_growth_and_reverse(view, "Sprite pair chest at %s" % dimensions)
 		var contained: bool = true
-		var saw_rotation: bool = false
+		var saw_yaw_turn: bool = false
+		var saw_edge_on: bool = false
+		var upright_projection: bool = true
 		for frame in range(160):
 			view.advance(1.0 / 60.0)
 			var pose: Dictionary = view.snapshot().motion
 			contained = contained and pair_pose_contained(view, pose)
-			if float(pose.roll) > PI * 0.5 and float(pose.roll) < PI * 1.5:
-				saw_rotation = true
-		check(contained and saw_rotation and not view.snapshot().live_turn,
-			"Source 2D chest art visibly rotates in its own plane while staying inside the %s viewport" % dimensions)
+			var horizontal: float = cos(float(pose.yaw))
+			upright_projection = upright_projection and is_zero_approx(float(pose.pitch)) \
+				and is_zero_approx(float(pose.roll)) and is_zero_approx(view.chest.rotation) \
+				and is_equal_approx(float(pose.sprite_scale_x), horizontal) \
+				and view.chest.scale.is_equal_approx(Vector2(horizontal, 1.0) * float(pose.scale))
+			if float(pose.yaw) > PI * 0.5 and float(pose.yaw) < PI * 1.5:
+				saw_yaw_turn = true
+			if absf(horizontal) < 0.2:
+				saw_edge_on = true
+		check(contained and saw_yaw_turn and saw_edge_on and upright_projection and not view.snapshot().live_turn,
+			"Source 2D chest art turns around its vertical axis while upright and inside the %s viewport" % dimensions)
 		check(view.chest.scale == Vector2.ONE and is_zero_approx(view.chest.rotation),
 			"A source sprite returns to its exact authored pose after its full flight")

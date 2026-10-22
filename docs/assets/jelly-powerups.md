@@ -94,15 +94,18 @@ new extraction, source audio claim, or CC0 attribution is applied to them.
 The source recording, processing and embedded-game limits remain documented in
 [answer feedback sounds](pair-feedback-audio.md).
 
-Auto merge selects an eligible source Jelly on each 300 ms beat and
-finds a matching target, starting immediately after purchase. Each automatic drag
-lasts 120 ms, followed by a 150 ms fusion and 30 ms settlement. Manual gestures
-retain their existing timing. Every moving source and its target stay reserved
-until contact; later beats can use other available pairs.
-If only moving or settling pairs remain, the operation waits for an eligible
-pair without compressing missed beats. The existing arcing motion, gentle
-stretch, target glow, and sparkle trail follow each flight's own clock. Contact
-starts the liquid merge and its cue at the destination. Completed words remain
+Auto merge selects an eligible pair on each 200 ms launch beat, starting
+immediately after purchase. Each automatic flight lasts 250 ms, followed by a
+110 ms fusion and 30 ms settlement. Consecutive flights overlap for 50 ms;
+the next launch does not wait for the preceding 390 ms sequence to finish.
+Manual gestures retain their existing timing. Every moving source and its
+target stay reserved until contact, and each path preserves the inputs needed
+by its later steps. Independent pairs can launch while earlier paths continue.
+A step that needs an earlier result waits for that result to settle. If no pair
+is eligible, the operation waits without compressing missed beats. The existing
+arcing motion, gentle stretch, target glow, and sparkle trail follow each flight's
+own clock. Contact starts the liquid merge and its cue at the destination.
+Completed words remain
 on the board until the player collects them.
 
 Automatic movement reuses the ordinary pick, contact, and merge cues. Treasure

@@ -3,6 +3,7 @@ extends SceneTree
 
 const Fixture = preload("res://tests/performance/jelly_drag_fixture.gd")
 const Data = preload("res://scripts/game_data.gd")
+const Model = preload("res://scripts/word_jelly_model.gd")
 
 class ObservedJelly extends "res://scripts/word_jelly.gd":
 	var position_passes: int = 0
@@ -32,7 +33,7 @@ func _run() -> void:
 	var data := Data.new()
 	assert(data.load_all())
 	var rows: Array[Dictionary] = []
-	for count: int in [18, 42]:
+	for count: int in [Model.INITIAL_SETTLED_TILES, Model.CAPACITY - Model.COLUMNS]:
 		for contact: bool in [false, true]:
 			for bursts: int in [1, 4]:
 				var view := ObservedJelly.new()

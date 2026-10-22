@@ -82,7 +82,7 @@ async function observeCycles(page) {
 }
 
 for (const { mode, initial, reduction, batch } of [
-  { mode: 'word_jelly', initial: 20, reduction: 2, batch: 6 },
+  { mode: 'word_jelly', initial: 20, reduction: 2, batch: 5 },
   { mode: 'jelly', initial: 10, reduction: 1, batch: 4 }
 ]) {
   test(`${mode} difficulty preserves the current timer and gives the next faster packet a full cycle`, async ({ page }, info) => {
@@ -91,7 +91,7 @@ for (const { mode, initial, reduction, batch } of [
     await expect.poll(async () => {
       const state = await snapshot(page);
       return state.mode === mode && state.phase === 'playing' && state.preview?.enabled &&
-        state.tiles?.length >= (mode === 'word_jelly' ? 18 : 12) && state.tiles.every(tile => tile.settled);
+        state.tiles?.length >= (mode === 'word_jelly' ? 15 : 12) && state.tiles.every(tile => tile.settled);
     }).toBe(true);
     const opening = await snapshot(page);
     expect(opening.spawn_interval).toBe(initial);

@@ -25,16 +25,16 @@ establish visible beats; they do not constitute a normal-speed audio review.
 The adaptation preserves the existing 0.65-second pickup flight and progress
 fill. The whole closed chest travels from its HUD anchor to the upper-center
 area, growing throughout its flight, rotates at full size, and retraces the same
-path back to its anchor. First-chest synthesis and upgrades follow one bowed
-curve in both directions. A gradual perspective
-enlargement, side turn, forward pitch and gentle bank give travel a sense of depth;
-the acquired 3D model stays visible throughout the journey. The paths respond to
+path back to its anchor. First-chest synthesis and upgrades follow one straight
+line in both directions. The chest stays upright during travel and enlarges
+gradually; the acquired 3D model stays visible throughout the journey. The paths respond to
 the HUD position and viewport, without an intermediate stop at screen center.
 Match and Memory retain their existing direct flight.
 Tiers 1-4 use the acquired closed 3D models for a full vertical-axis turn, with a
-fixed camera envelope accommodating both the travel pitch and celebration yaw.
-Transitions to Royal and Crystal rotate their original 2D artwork in the screen
-plane without inventing rear geometry. No new artwork or sound is acquired.
+fixed camera envelope and no pitch or screen-plane roll.
+Transitions to Royal and Crystal use horizontal cosine projection of their
+original 2D artwork for a vertical-axis turn, retaining the existing illustrated
+appearance without adding rear geometry. No new artwork or sound is acquired.
 Intermediate chests never run final opening or saving callbacks; the gameplay
 model alone owns fragment credit and tier changes.
 
@@ -45,7 +45,7 @@ size exactly on arrival, with no second enlargement at the destination. The
 full turn runs from 0.90 to 1.82 seconds. Material change, local flash, reward
 sound and confetti share the 1.36-second midpoint. This places the Jelly Words
 milestone peak after its 1.95-second word-picture reading beat. The return runs
-from 1.98 to 2.65 seconds, reversing the same curve, scale and travel pose to recover
+from 1.98 to 2.65 seconds, reversing the same straight path and scale to recover
 the original position and size without
 fading the chest away. First-chest and pair rewards target a 176px silhouette;
 upgrades target 216px, fitted to the available viewport on small screens.

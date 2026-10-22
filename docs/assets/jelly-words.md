@@ -11,10 +11,11 @@ and license records remain in the linked asset documents.
 | Four gel skins and contact shadow | Zuhria Alfitra / pzUH, GameArt2D Jelly Squash Free Sprites, CC0 1.0; acquired and integrated previously | The actual mint skin was inspected before reuse. The rounded-square painted contours and material maps keep the ordinary Jelly size through every composition stage. The source is static; runtime contact, continuous union, collection, and settling are authored by this game. |
 | Word pictures and pronunciation | Existing current-age vocabulary packs; individual acquisition and license records remain in the vocabulary asset manifests | The normal WordArt loader supplies picture-only source jellies and the picture above merged words. Roots have no picture. Existing animated artwork remains supported. |
 | Chest models, local light accents, paper confetti | Existing acquired chest and particle assets; creators and licenses recorded in the linked fragment record | The shared ChestCelebration and RewardConfetti timelines provide first-chest synthesis, upgrade rotation, enlargement, flash, and paper bursts. Reused as integrated assets, not source previews. |
-| Contact, merge, and disappear audio | User-selected contact and merge WAVs; original creators greenlinker and rubberduck, CC0. The approved fixed bubble pop and acquired Kenney CC0 layers provide level cues; exact provenance is in [Jelly level feedback](jelly-level-feedback.md) | Contact fires on first painted-body contact, merge on commitment, and the level-specific cue on collection release. Lv1 keeps the approved bubble pop. |
+| Contact, merge, and disappear audio | User-selected contact and merge WAVs; original creators greenlinker and rubberduck, CC0. The approved fixed bubble pop and acquired Kenney CC0 layers provide level cues; exact provenance is in [Jelly level feedback](jelly-level-feedback.md) | Contact fires on the first eligible approach or painted-body touch, merge on commitment, and the level-specific cue on collection release. Lv1 keeps the approved bubble pop. |
 | Rejected merge audio | Existing user-supplied wrong-answer excerpt; creator, acquisition status and unsupplied license terms are recorded in [pair feedback](pair-feedback-audio.md) | Reuses the integrated 860 ms `wrong.wav` at gain 0.48 once when a failed drop separates. No new extraction, processing or animation asset. |
 
-The board has six columns and eight rows, opening with at most eighteen cells.
+The board has five columns and eight rows, holding 40 cells and opening with at
+most 15 jellies across three rows. Every jelly keeps a 1:1 square aspect ratio.
 Reviewed entries use meaningful roots and exact authored spelling transformations.
 Root labels use positional hyphens, such as `un-`, `-believe-`, and `-able`.
 An atomic word such as `cat` supplies a whole-word root plus a separate cat picture.
@@ -61,8 +62,8 @@ in [Jelly fragments](jelly-fragments.md) and [chest replacement](chest-refresh.m
 The chest is a static cropped render here, with runtime scale animation; no new
 artwork or audio is acquired. The count capsule is an interface layout primitive.
 All source parts, intermediate compositions, atomic words, completed words, and
-previews use one ordinary square cell. The existing six-column, eight-row well
-and responsive cell pitch remain; neither spelling length nor accumulated parts
+previews use one ordinary square cell. The five-column, eight-row well uses a
+responsive cell pitch; neither spelling length nor accumulated parts
 enlarge a body. This is the former ordinary Jelly display size, not a fixed
 32-pixel rendering size. Labels fit the available square at a minimum of 13
 displayed pixels and wrap only at approved boundaries. Overflow uses an ellipsis
@@ -92,8 +93,10 @@ Two [coin powerups](jelly-powerups.md) share the board controls. Auto merge cost
 600 coins initially, then 900 and 1200 on further uses in the round. It joins
 compatible roots, finishes picture matching, or upgrades equal-level words.
 It leaves merged jellies on the board for ordinary collection. The planner checks
-an entire completion path and all intermediate rectangles before charging,
-then executes that route sequentially. Partial-only paths cannot buy the tool.
+an entire completion path and all intermediate rectangles before charging.
+Eligible pairs launch every 200 ms, each with a 250 ms flight, 110 ms fusion,
+and 30 ms settlement. Flights overlap; only steps that need an earlier result
+wait for that result to settle. Partial-only paths cannot buy the tool.
 Its assisted result remains collectable without creating mastery evidence.
 Treasure costs 200,
 300, then 400 coins per round and delivers a random total of two to eight carried fragments to the current
@@ -105,8 +108,9 @@ failed or duplicate payments do not advance them. Supply and danger clocks wait 
 the Finish pull gesture pause it. Neither ability collects words, grants coins, or
 credits learning progress by itself.
 
-Automatic merges check for support after the
-fusion handover and settle vertically onto the nearest body or the floor.
+Automatic merges keep the board positions fixed while their reserved paths run.
+After the operation finishes, unsupported jellies settle vertically onto the
+nearest body or the floor.
 Dragging into empty space snaps the entire jelly footprint to the nearest
 grid position, preserving the original finger offset. A translucent
 copy of the acquired gel skin previews the destination, with a mint rim for a
@@ -121,14 +125,28 @@ picture, mass, fragments, and reward receipt without paying coins.
 Reduced motion keeps the same placement rules and static preview, placing
 the body directly at its supported destination.
 
-New six-part supply packets mix parts from different words, leaving intervening
+A manual pair remains draggable during its fusion. Picking either visible lobe
+moves the whole joining pair while the existing merge clock continues. When the
+clock finishes, its single result inherits the same pointer and finger offset.
+Releasing earlier completes that already accepted pair once, then uses the
+ordinary placement or merge rules for the resulting body. Canceling movement
+returns the animation to its reserved slot. Pressing a fusion never collects it.
+Automatic powerup playback retains its existing exclusive input ownership.
+
+Valid drag targets offer merge contact within 22 percent of a tile's width,
+capped at 18 screen pixels beyond the painted source contour. Nonmatching
+bodies retain the original silhouette-overlap threshold. Actual touching bodies
+take priority over a nearby match; otherwise the closest eligible match wins.
+The same selected target is used for the release, so the early cue is actionable.
+
+New five-part supply packets mix parts from different words, leaving intervening
 pieces between siblings whenever the packet permits it. Word provenance, part
 order, and fragment markers stay attached to each piece, including targets that
 span packet boundaries; already visible previews are never reshuffled.
 Neighboring bodies leave a nine-percent cell gap for clearer separation.
 
 On pointer press, every settled target that legally composes with the selected part in
-source-then-target order receives a warm local glow, a slow light sweep across
+source-then-target order receives a violet local glow, a slow light sweep across
 the acquired gel paint, and a gentle 3.5-5.5 percent breathing enlargement of
 its skin. Keyboard source selection shows the same candidates. The cue reuses
 the acquired `portal_glow.png` from Bobardo's Modern 2D Animated Chests, under
@@ -138,8 +156,9 @@ the Standard Unity Asset Store EULA documented in
 Both source textures are static; these cues are runtime animation. The portal's
 authored wisps have lifted opacity and a wider falloff, layered above the contact
 shadow and below the gel, so the breathing light remains visible against the pale
-garden. The wider amber halo keeps a bright baseline between pulses; a stronger
-cream-lit contour and surface sweep connect it to the painted body. Two larger
+garden. The violet halo keeps a bright baseline from the first selected frame; a
+wide violet contour with a cream keyline separates it from ordinary merged-word
+readiness. Two larger gold
 shoulder glints reuse the integrated Toon FX 1.52 sparkle by Kenneth Foldal Moe
 (Archanor VFX), under the Standard Unity Asset Store EULA recorded in the
 [fragment asset record](jelly-fragments.md); its source image is static, with
@@ -147,8 +166,10 @@ alternating soft twinkles authored at runtime. No new artwork
 or audio was acquired. Lettering, pictures, fragment markers, hit areas and rewards
 stay unchanged. Release, cancellation or leaving play clears the cue. Reduced
 motion keeps static light, glints and the painted rim without a sweep or enlargement.
-All composition feedback, including the contact highlight, uses the same resolver
-as manual merging and Auto merge. Reviewed partial joins are valid; results that
+Selected merged words also highlight every settled merged word with the same
+word ID, including different levels and Lv9. This word-family cue does not change
+upgrade eligibility: only equal levels below Lv9 can merge.
+Actual merge contact uses the same resolver as manual merging and Auto merge. Reviewed partial joins are valid; results that
 lack room do not light up or incur an incorrect-answer penalty. Root joins follow
 the reviewed reading order. Word-picture matching and equal-level upgrades work
 in either drag direction. Incompatible targets keep their resting paint.
@@ -164,7 +185,7 @@ The next pickup, pause, round finish or navigation stops the previous sound tail
 Rejection preserves both bodies, carried fragments and rewards without recording
 a learning attempt.
 
-Supply releases across alternating columns (1, 4, 2, 5, 3, 6), with 0.15 seconds
+Supply releases across alternating columns (1, 4, 2, 5, 3), with 0.15 seconds
 between starts. The bodies accelerate under the existing gravity and recover
 after landing. Shared entry lanes retain extra clearance so a later piece cannot
 overtake an earlier one. Each preview slot refills after its own departing body
@@ -178,13 +199,13 @@ packet dispatch, automatic or manual, fixes the interval for the following
 cycle. Collections never shorten the current Next countdown, and rejected
 dispatches leave it intact. New rounds restore the twenty-second opening
 baseline interval. Reviewed rounds multiply that baseline by
-`max(1, preview occupied area / 6)` for the next wave; atomic collections count
+`max(1, preview occupied area / 5)` for the next wave; atomic collections count
 once, while partial merges never count. The existing danger grace period remains independent. This polish
 reuses the integrated gel artwork and landing
 audio above; it adds no downloaded assets.
 
-The committed preview has six lanes. Reviewed cards span their measured widths,
-so fewer than six cards may be shown. The next FIFO card waits for a contiguous
+The committed preview has five lanes, with each jelly using one square slot.
+Unused lanes remain empty. The next FIFO card waits for a contiguous
 span without rearranging cards. Each card enters through its advertised columns
 only when its full rectangle fits; a sealed entry keeps its identity, exact text,
 and fragments in the same preview span. A dispatch launches only cards already
@@ -196,7 +217,7 @@ The cloud environment and recessed rim are documented in [Jelly Words well](jell
 
 The Collect button snapshots all completed word jellies currently on the board.
 It collects them from the upper rows downward, alternating direction across
-rows, with one pickup every 250 ms. Each batch collection finishes within that
+rows, with one pickup every 200 ms. Each batch collection finishes within that
 same beat, keeping reward transactions sequential, with the existing pop sound
 at 60 ms to match the squash and release. Each jelly squashes, lifts
 with alternating sideways drift, and clears through the ordinary wallet and

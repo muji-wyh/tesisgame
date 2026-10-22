@@ -207,7 +207,7 @@ for (const mode of ['jelly', 'word_jelly']) {
     await expect.poll(async () => {
       const state = await jelly(page);
       return state.mode === mode && state.phase === 'playing' &&
-        state.tiles?.length >= (mode === 'jelly' ? 12 : 18) && state.tiles.every(tile => tile.settled);
+        state.tiles?.length >= (mode === 'jelly' ? 12 : 15) && state.tiles.every(tile => tile.settled);
     }).toBe(true);
     const before = await jelly(page), bounds = await metrics(page);
     const point = center(before.finish.rect, bounds);
@@ -296,7 +296,7 @@ for (const mode of ['jelly', 'word_jelly']) {
       await expect.poll(async () => {
         const state = await jelly(page);
         return state.mode === mode && state.visible && state.phase === 'playing' &&
-          state.tiles?.length >= (mode === 'jelly' ? 12 : 18) && state.tiles.every(tile => tile.settled);
+          state.tiles?.length >= (mode === 'jelly' ? 12 : 15) && state.tiles.every(tile => tile.settled);
       }).toBe(true);
       const before = await jelly(page);
       await pressControl(page, before.finish);
@@ -414,7 +414,7 @@ for (const mode of ['jelly', 'word_jelly']) {
     await expect.poll(async () => {
       const state = await jelly(page);
       return state.mode === mode && state.phase === 'playing' &&
-        state.tiles?.length >= (mode === 'jelly' ? 12 : 18) && state.tiles.every(tile => tile.settled);
+        state.tiles?.length >= (mode === 'jelly' ? 12 : 15) && state.tiles.every(tile => tile.settled);
     }).toBe(true);
     const before = await jelly(page);
     expect(before.full_elapsed, 'The regression begins before the natural full-board countdown').toBeLessThan(0);

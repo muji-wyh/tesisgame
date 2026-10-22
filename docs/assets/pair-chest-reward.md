@@ -88,8 +88,8 @@ Unity Asset Store Standard EULA, acquisition records and available source clips
 remain in [the chest replacement record](chest-refresh.md). This presentation
 does not run any source opening clip. `chest_reward_model.gd` reuses the acquired
 closed models for full turns in the first four reward tiers; original 2D skins
-retain their artwork and use enlargement and a short roll instead of invented
-rear geometry. The enlarged, turned model silhouette is fitted to the viewport
+retain their artwork and use horizontal cosine projection for a vertical-axis
+turn without adding rear geometry. The enlarged, turned model silhouette is fitted to the viewport
 on desktop and narrow or short phones.
 
 The existing `portal_glow.png` comes from the acquired Modern 2D Animated Chests

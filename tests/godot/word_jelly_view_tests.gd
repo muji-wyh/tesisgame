@@ -203,14 +203,14 @@ func _check_opening_and_bounds(view) -> void:
 		view.size = dimensions
 		_reset(view)
 		var state: Dictionary = view.snapshot()
-		check(state.columns == 6 and state.rows == 8 and state.tiles.size() == 18, "opening contains three full rows of six settled roots")
-		check(state.preview.slots.size() == 6 and state.preview.enabled, "six upcoming roots have a working manual drop")
+		check(state.columns == 5 and state.rows == 8 and state.tiles.size() == 15, "opening contains three full rows of five settled roots")
+		check(state.preview.slots.size() == 5 and state.preview.enabled, "five upcoming roots have a working manual drop")
 		check(view._preview_rect.end.y <= view._board.position.y,
 			"the whole supply tray sits above the well in portrait and landscape")
 		for index in range(1, view._preview_tiles.size()):
 			check(is_equal_approx(view._preview_tiles[index].position.y, view._preview_tiles[0].position.y)
 				and view._preview_tiles[index].position.x > view._preview_tiles[index - 1].position.x,
-				"all six upcoming bodies form one horizontal row above the well")
+				"all five upcoming bodies form one horizontal row above the well")
 		check(view._board.position.x >= 0 and view._board.position.y >= 0 and view._board.end.x <= dimensions.x + 0.1
 			and view._board.end.y <= dimensions.y + 0.1, "board fits portrait and landscape bounds")
 		var s: float = Style.ui_scale(view)
@@ -226,7 +226,9 @@ func _check_opening_and_bounds(view) -> void:
 			var pictured: bool = str(cell.jelly_kind) == "picture"
 			check(tile.settled and tile.visible and bool(tile.picture_visible) == pictured, "opening faces distinguish whole roots from picture clues")
 			check(view._tiles[int(tile.id)]._label.text == cell.display_text, "opening faces show the intended spelling or picture-only clue")
-			check(view._board.encloses(view._tile_rect(tile)), "root rectangle stays inside the well")
+			var body: Rect2 = view._tile_rect(tile)
+			check(view._board.encloses(body) and is_equal_approx(body.size.x, body.size.y),
+				"root rectangle stays square and inside the five-column well")
 			for neighbor: Dictionary in state.tiles:
 				if int(neighbor.row) != int(tile.row) or int(neighbor.column) != int(tile.column) + 1:
 					continue
@@ -238,7 +240,8 @@ func _check_opening_and_bounds(view) -> void:
 				check(not view._press(-1, view.get_global_transform() * between),
 					"pressing the clear gap cannot accidentally pick up either neighboring root")
 		for tile in view._preview_tiles:
-			check(tile.visible and view._preview_rect.encloses(tile.get_rect()), "preview parts remain within their drop control")
+			check(tile.visible and view._preview_rect.encloses(tile.get_rect()) and is_equal_approx(tile.size.x, tile.size.y),
+				"preview parts remain square and within their drop control")
 		_check_supply_layout(view)
 		_check_preview_label_height(view)
 	view.size = Vector2(1000, 720)
@@ -426,35 +429,41 @@ func _check_concurrent_powerup_resize(view) -> void:
 		purchases.clear()
 		var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", "root:caterpillar", "picture:caterpillar"], [1, 2, 3, 4])
 		view._activate_powerup("auto_merge")
-		_advance(view, Model.POWERUP_DRAG_SECONDS * 0.75)
+		_advance(view, 0.225)
 		var moving: Dictionary = view.game.powerup_snapshot()
-		check(moving.drags.size() == 1 and view.game.fusions.is_empty(), "hybrid auto merge reserves one complete path at a time")
-		var drag: Dictionary = moving.drags[0]
-		var body = view._tiles[int(drag.source_id)]
-		var from: Vector2 = view._tile_rect(drag.source).get_center()
-		var to: Vector2 = view._tile_rect(drag.target).get_center()
-		check(body.get_rect().get_center().x > minf(from.x, to.x) and body.get_rect().get_center().x < maxf(from.x, to.x),
-			"the active paid source is visibly in transit")
+		check(moving.drags.size() == 2 and view.game.fusions.is_empty(), "two independent Auto flights overlap before the first reaches contact")
+		var bodies: Array = []
+		for drag: Dictionary in moving.drags:
+			var body = view._tiles[int(drag.source_id)]
+			bodies.append(body)
+			var from: Vector2 = view._tile_rect(drag.source).get_center()
+			var to: Vector2 = view._tile_rect(drag.target).get_center()
+			check(body.get_rect().get_center().x > minf(from.x, to.x) and body.get_rect().get_center().x < maxf(from.x, to.x),
+				"each overlapping paid source is visibly in transit")
 		view.pause(true)
 		var frozen: Dictionary = view.game.powerup_snapshot()
 		for dimensions: Vector2 in [Vector2(390, 844), Vector2(568, 320)]:
 			view.size = dimensions
 			view._layout()
 			var bounds := Rect2(Vector2.ZERO, view.size).grow(0.01)
-			check(view.game.powerup_snapshot() == frozen and bounds.encloses(body.get_rect()), "paused resize preserves the path and moves its artwork inside the viewport")
-			var center: Vector2 = body.get_rect().get_center()
+			var centers: Array[Vector2] = []
+			for body in bodies:
+				check(view.game.powerup_snapshot() == frozen and bounds.encloses(body.get_rect()), "paused resize preserves both paths and moves their artwork inside the viewport")
+				centers.append(body.get_rect().get_center())
 			view._process(0.5)
-			check(view.game.powerup_snapshot() == frozen and body.get_rect().get_center().is_equal_approx(center), "paused processing advances neither route nor artwork")
+			for index in range(bodies.size()):
+				check(view.game.powerup_snapshot() == frozen and bodies[index].get_rect().get_center().is_equal_approx(centers[index]), "paused processing advances neither overlapping route nor its artwork")
 		view.pause(false)
 		_advance(view, 0.05)
-		check(view.game.fusions.size() == 1 and view.game.powerup_snapshot().drags.is_empty(), "the first path reaches fusion before another paid drag starts")
+		check(view.game.fusions.size() == 1 and view.game.powerup_snapshot().drags.size() == 1,
+			"the first flight reaches fusion while the second keeps traveling after resize")
 		_advance(view, 5.0)
 		var fragments: int = 0
 		for tile: Dictionary in view.game.cells:
 			fragments += int(tile.fragments)
 		check(not view.game.powerup_active() and view.game.collectable_ids().size() == 2 and int(view.game.merged_count) == 2
 			and fragments == 10 and purchases.size() == 1 and payouts.is_empty() and attempts.is_empty() and heard.is_empty(),
-			"sequential resized routes finish both distinct words with all rewards carried and only one debit")
+			"overlapping resized routes finish both distinct words with all rewards carried and only one debit")
 	view.purchase_powerup = Callable()
 	view.size = Vector2(1000, 720)
 
@@ -559,7 +568,7 @@ func _check_edge_drag(view) -> void:
 		var gap: Vector2 = target.get_rect().get_center() + Vector2((edge + 3.0) / 320.0 * source.size.x, 0)
 		var touch: Vector2 = target.get_rect().get_center() + Vector2((edge - 1.0) / 320.0 * source.size.x, 0)
 		view._move(view.get_global_transform() * gap)
-		check(view._target == -1 and cues.count("contact") == 0, "separated silhouettes cannot trigger contact")
+		check(view._target == ids[1] and cues.count("contact") == 1, "a matching pair offers contact before its painted edges overlap")
 		view._move(view.get_global_transform() * touch)
 		check(view._target == ids[1] and not target.get_rect().has_point(touch), "slight body overlap selects the target before pointer entry")
 		check(view._contact_state().kind == "match" and cues.count("contact") == 1, "an ordered completion shows a match contact response")
@@ -1085,7 +1094,7 @@ func _check_collect_button_growth(view) -> void:
 
 
 func _check_batch_collection(view) -> void:
-	check(is_equal_approx(Model.BATCH_BEAT_SECONDS, 0.25), "Auto Collect starts each collection exactly 250 ms apart")
+	check(is_equal_approx(Model.BATCH_BEAT_SECONDS, 0.20), "Auto Collect starts each collection exactly 200 ms apart")
 	for reduced: bool in [false, true]:
 		_reset(view, reduced)
 		var ids: Array[int] = _install_batch_words(view, 3, true)
@@ -1140,7 +1149,7 @@ func _check_batch_collection(view) -> void:
 				"the rhythmic queue never overlaps reward transactions or disappearance poses")
 			var visible_reveals: int = _batch_reveal_count(now_started, elapsed, float(started.word_reveal.duration))
 			check(int(state.word_reveal.active_count) == visible_reveals and state.word_reveal.entries.size() == visible_reveals,
-				"each 250 ms pickup adds its own reveal and expired reading cards leave independently")
+				"each 200 ms pickup adds its own reveal and expired reading cards leave independently")
 			if now_started > previous_started:
 				start_times.append(float(state.collection_batch.elapsed))
 			if now_completed > previous_completed:
@@ -1152,15 +1161,15 @@ func _check_batch_collection(view) -> void:
 		var final: Dictionary = view.snapshot()
 		check(not final.collection_batch.active and int(final.collection_batch.completed) == 3
 			and int(final.collection_batch.started) == 3 and is_equal_approx(elapsed, 3.0 * Model.BATCH_BEAT_SECONDS),
-			"three words finish in exactly 750 ms through three sequential collection beats")
+			"three words finish in exactly 600 ms through three sequential collection beats")
 		check(start_times.size() == 3 and payout_times.size() == 3 and pop_times.size() == 3,
 			"each collected word has a separate visible start, payout and disappearance sound")
 		for index in range(start_times.size()):
 			check(is_equal_approx(start_times[index], index * Model.BATCH_BEAT_SECONDS)
 				and is_equal_approx(payout_times[index], (index + 1) * Model.BATCH_BEAT_SECONDS),
-				"ordinary and reduced-motion collection both preserve exact 250 ms start and payout spacing")
+				"ordinary and reduced-motion collection both preserve exact 200 ms start and payout spacing")
 			check(is_equal_approx(pop_times[index], index * Model.BATCH_BEAT_SECONDS + 0.06),
-				"the existing disappearance sound stays at 60 ms within every 250 ms beat")
+				"the existing disappearance sound stays at 60 ms within every 200 ms beat")
 		check(payouts.size() == 3 and credits.size() == 1 and attempts.size() == 3,
 			"batch collection records every word but only persists its one rare coin drop")
 		check(payouts[0].amount == 50 and payouts[1].amount == 0 and payouts[2].amount == 0,
@@ -1178,7 +1187,7 @@ func _check_batch_collection(view) -> void:
 		for index in range(reveals.size()):
 			check(str(reveals[index].word_id) == "cat"
 				and is_equal_approx(float(reveals[index].elapsed), elapsed - (3 - surviving_count + index) * Model.BATCH_BEAT_SECONDS),
-				"repeated spellings retain separate reveal timelines at the 250 ms cadence")
+				"repeated spellings retain separate reveal timelines at the 200 ms cadence")
 		for id: int in retained:
 			check(not view.game.cell(id).is_empty(), "unfinished merges and unmerged roots stay available after collecting")
 		check(not final.collect_button.enabled and int(final.collect_button.count) == 0,
@@ -1196,22 +1205,22 @@ func _check_coarse_frame_batch_reveals(view) -> void:
 		_reset(view, reduced)
 		_install_batch_words(view, 3)
 		view._collect_all()
-		view._process(0.40)
+		view._process(0.30)
 		var state: Dictionary = view.snapshot()
 		var entries: Array = state.word_reveal.entries
 		check(entries.size() == 2 and int(state.word_reveal.active_count) == 2
 			and state.collection_batch.active and int(state.collection_batch.completed) == 1,
-			"one coarse frame preserves both reveals on either side of the 250 ms collection beat")
+			"one coarse frame preserves both reveals on either side of the 200 ms collection beat")
 		for index in range(entries.size()):
-			check(is_equal_approx(float(entries[index].elapsed), 0.40 - index * Model.BATCH_BEAT_SECONDS),
+			check(is_equal_approx(float(entries[index].elapsed), 0.30 - index * Model.BATCH_BEAT_SECONDS),
 				"coarse frames carry only the remaining frame time into each new collection reveal")
-		view._process(0.40)
+		view._process(0.30)
 		entries = view.snapshot().word_reveal.entries
 		check(entries.size() == 3, "Three reading cards briefly coexist before their first expiry")
 		for index in range(entries.size()):
-			check(is_equal_approx(float(entries[index].elapsed), 0.80 - index * Model.BATCH_BEAT_SECONDS),
+			check(is_equal_approx(float(entries[index].elapsed), 0.60 - index * Model.BATCH_BEAT_SECONDS),
 				"the second coarse frame advances earlier reveals and creates the third at its exact beat")
-		view._process(0.30)
+		view._process(0.40)
 		state = view.snapshot()
 		check(not state.collection_batch.active and int(state.collection_batch.completed) == 3
 			and payouts.size() == 3 and attempts.size() == 3 and view.game.collected_coins == 50
@@ -1221,7 +1230,7 @@ func _check_coarse_frame_batch_reveals(view) -> void:
 		entries = view.snapshot().word_reveal.entries
 		check(entries.size() == 1, "Coarse collection frames expire the first two reveals while the newest word remains")
 		for index in range(entries.size()):
-			check(is_equal_approx(float(entries[index].elapsed), 1.20 - (3 - entries.size() + index) * Model.BATCH_BEAT_SECONDS),
+			check(is_equal_approx(float(entries[index].elapsed), 1.10 - (3 - entries.size() + index) * Model.BATCH_BEAT_SECONDS),
 				"after a completed batch each independent reveal advances once per frame")
 		var before_pause: Array = entries.duplicate(true)
 		view._process(1.25)
@@ -1257,7 +1266,7 @@ func _check_batch_chest_queue(view) -> void:
 			"all nine fragments and the second chest tier commit before queued celebration begins")
 		check(payouts.size() == 9 and view.game.collected_coins == 50
 			and is_equal_approx(elapsed, 9.0 * Model.BATCH_BEAT_SECONDS),
-			"waiting chest artwork preserves nine collections and one rare coin reward across nine 250 ms beats")
+			"waiting chest artwork preserves nine collections and one rare coin reward across nine 200 ms beats")
 		var kinds: Dictionary = {}
 		for tick in range(320):
 			_advance(view, 0.025)
@@ -1427,10 +1436,10 @@ func _check_word_reveal_levels(view) -> void:
 					"the view snapshot advertises exact Lv1, Lv4 and Lv9 collection odds and payouts")
 			if batch:
 				view._collect_all()
-				view._process(0.40)
+				view._process(0.30)
 				check(view.snapshot().word_reveal.entries.size() == 2,
 					"a late auto-collect frame keeps both mixed-level pop entries alive")
-				view._process(0.40)
+				view._process(0.30)
 			else:
 				for id: int in ids:
 					view._activate(id)
@@ -1447,7 +1456,7 @@ func _check_word_reveal_levels(view) -> void:
 					"collection-pop effects follow the current motion preference and pass pointer input through")
 				check(entry.word_id == "cat" and entry.spelling == "cat" and str(entry.picture).ends_with("cat.webp"),
 					"all collection levels retain the collected spelling and its production artwork")
-				var expected_age: float = 0.80 - index * Model.BATCH_BEAT_SECONDS if batch else (3 - index) * 0.10
+				var expected_age: float = 0.60 - index * Model.BATCH_BEAT_SECONDS if batch else (3 - index) * 0.10
 				check(is_equal_approx(float(entry.elapsed), expected_age),
 					"collection levels share the original clock, including late-frame catch-up")
 			check(entry_ids.size() == 3 and entry_ids[0] != entry_ids[1]
@@ -1488,7 +1497,7 @@ func _check_word_reveal_control_clearance(view) -> void:
 		var state: Dictionary = view.snapshot()
 		var visible_count: int = _batch_reveal_count(4, 0.80, float(state.word_reveal.duration))
 		check(int(state.collection_batch.started) == 4 and int(state.word_reveal.active_count) == visible_count,
-			"the 250 ms cadence retains every unexpired collection pop after the fourth start")
+			"the 200 ms cadence retains every unexpired collection pop after the fourth start")
 		if dimensions == Vector2(1000, 720):
 			check(visible_count == 4, "the full reading region supports four concurrent collection pops before their first expiry")
 	view.size = Vector2(1000, 720)
@@ -1904,7 +1913,8 @@ func _check_completion_hints(view) -> void:
 				"each exact target receives a small completion enlargement")
 		check(target.get_rect().is_equal_approx(rectangle) and target.contact_outline() == outline,
 			"completion animation preserves layout and hit geometry")
-		check(cues == ["pick"] and heard.is_empty() and payouts.is_empty() and attempts.is_empty(),
+		check(cues.count("pick") == 1 and cues.count("contact") <= 1 and cues.count("wrong") == 0 \
+			and heard.is_empty() and payouts.is_empty() and attempts.is_empty(),
 			"completion guidance does not grant speech, learning credit or rewards")
 		view.cancel_input()
 		view._activate(ids[1])
@@ -2430,7 +2440,7 @@ func _check_repeat_merge_compact_body(view) -> void:
 
 func _check_uniform_outline(view) -> void:
 	_reset(view, true)
-	var ids: Array[int] = _install(view, ["root:cat", "picture:cat"], [], [3, 1])
+	var ids: Array[int] = _install(view, ["root:cat", "picture:caterpillar"], [], [3, 1])
 	var source = view._tiles[ids[0]]
 	var target = view._tiles[ids[1]]
 	var source_outline: PackedVector2Array = source.contact_outline()
@@ -2462,7 +2472,7 @@ func _check_uniform_outline(view) -> void:
 	check(not first_contact.is_zero_approx() and not target.get_rect().has_point(first_contact),
 		"ordinary painted bodies contact before the held center enters the target's rectangle")
 	view._release(view.get_global_transform() * first_contact)
-	check(view.game.fusions.size() == 1, "ordinary-body edge contact still commits the valid semantic merge")
+	check(view.game.fusions.is_empty() and cues.count("wrong") == 1, "nonmatching edge contact rejects only when released")
 
 
 func _check_cancel_and_pause(view) -> void:
@@ -2584,7 +2594,7 @@ func _check_arrival_packet(view) -> void:
 					_advance(view, 0.001)
 				else:
 					view._drop_next(int(packet[0].id))
-				check(view.game.cells.size() == Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT, "manual and timed release each commit the six preview bodies")
+				check(view.game.cells.size() == Model.INITIAL_SETTLED_TILES + Model.DROP_COUNT, "manual and timed release each commit the five preview bodies")
 				var first_id: int = int(packet[0].id)
 				var last_id: int = int(packet[-1].id)
 				var first_contact: float = Model.arrival_contact_at(view.game.cell(first_id))
@@ -2659,14 +2669,14 @@ func _check_arrival_packet(view) -> void:
 func _partial_preview_fixture(view, reduced: bool) -> Array:
 	_reset(view, reduced)
 	view.game.cells.clear()
-	# Four ordinary bodies block four entrances; semantic mass cannot span lanes.
-	for column: int in [0, 1, 4, 5]:
+	# Three ordinary bodies block three entrances; semantic mass cannot span lanes.
+	for column: int in [0, 1, 4]:
 		var roof: Dictionary = _fixture_tile(view, "play" if column < 2 else "foot", 2, 1)
 		roof.column = column
 		roof.row = 0
 		view.game.cells.append(roof)
 	view.game.upcoming.clear()
-	for text: String in ["fat", "hap", "sle", "her", "py", "ep"]:
+	for text: String in ["fat", "hap", "sle", "her", "py"]:
 		view.game.upcoming.append(_fixture_tile(view, text, 1, 1 if text in ["fat", "sle"] else 0))
 	view._sync_tiles()
 	view._layout()
@@ -2691,8 +2701,8 @@ func _check_partial_preview_columns(view) -> void:
 					var point: Vector2 = view.get_global_transform() * view._preview_rect.get_center()
 					check(view._press(2, point), "a partially open tray accepts an ordinary pointer press")
 					view._release(point)
-				check(view.game.generated_tiles == generated + 2 and view.game.cells.size() == 6,
-					"only sle and her leave a tray whose four outer entrances have ordinary roof bodies")
+				check(view.game.generated_tiles == generated + 2 and view.game.cells.size() == 5,
+					"only sle and her leave a tray whose three outer entrances have ordinary roof bodies")
 				for slot: int in [2, 3]:
 					var id: int = int(packet[slot].id)
 					var cell: Dictionary = view.game.cell(id)
@@ -2702,7 +2712,7 @@ func _check_partial_preview_columns(view) -> void:
 					var expected: Rect2 = view._tile_rect(cell) if reduced else origins[slot]
 					check(view._tiles[id].get_rect().is_equal_approx(expected), "a partial release preserves the original painted origin")
 				for sample in range(25):
-					for slot: int in [0, 1, 4, 5]:
+					for slot: int in [0, 1, 4]:
 						var preview = view._preview_tiles[slot]
 						check(view.game.upcoming[slot] == packet[slot] and preview.visible
 							and preview.tile_id == int(packet[slot].id) and preview._label.text == packet[slot].display_text

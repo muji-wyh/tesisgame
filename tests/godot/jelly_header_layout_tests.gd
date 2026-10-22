@@ -71,8 +71,15 @@ func check_geometry(app, view, dimensions: Vector2i) -> void:
 		check(absf(board.end.y - (view.get_global_rect().end.y - 8.0 / s)) < 0.1,
 			context + " anchors gameplay above a small bottom margin")
 	if dimensions.x >= 624 and dimensions.x < dimensions.y:
-		check(board.size.x * s >= float(dimensions.x) * 0.74,
-			context + " uses the portrait width for playable cells")
+		if app._mode_id == "word_jelly":
+			# Five square columns retain the former minimum cell size while the
+			# eight-row board becomes narrower on height-limited tablets.
+			check(board.size.x * s / 5.0 >= float(dimensions.x) * 0.74 / 6.0
+				and is_equal_approx(board.size.x / board.size.y, 5.0 / 8.0),
+				context + " keeps five columns of playable square cells")
+		else:
+			check(board.size.x * s >= float(dimensions.x) * 0.74,
+				context + " uses the portrait width for playable cells")
 	if dimensions == Vector2i(834, 1194):
 		check(app._content_margins.size.y * s > 1100.0,
 			context + " uses portrait height instead of the old desktop cap")

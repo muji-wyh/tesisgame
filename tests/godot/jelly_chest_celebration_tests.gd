@@ -160,9 +160,10 @@ func _check_reduced_motion(view) -> void:
 	check(view.snapshot().revealed and reveals.is_empty() and heard.size() == 2,
 		"Reduced motion preserves the same reward gate and one sound per milestone")
 	var still: Dictionary = view.snapshot().motion
-	check(is_zero_approx(float(still.pitch)) and is_zero_approx(float(still.depth))
-		and is_equal_approx(float(still.scale), 1.0),
-		"Reduced motion removes flight depth and pitch while retaining the resting chest size")
+	check(is_zero_approx(float(still.yaw)) and is_zero_approx(float(still.pitch))
+		and is_zero_approx(float(still.roll)) and is_zero_approx(float(still.depth))
+		and is_equal_approx(float(still.scale), 1.0) and is_equal_approx(float(still.sprite_scale_x), 1.0),
+		"Reduced motion removes flight and rotation while retaining the authored chest dimensions")
 	view.advance(Celebration.PERFORMANCE_SECONDS)
 	check(not view.is_active(), "Static presentation finishes after the same duration")
 
@@ -232,9 +233,9 @@ func _check_flight_route(view) -> void:
 	var resized_midway: Dictionary = _pose_at(view, Flight.TOP_SECONDS * 0.5)
 	var resized_route: Vector2 = Vector2(resized_upper.center) - resized_anchor.get_center()
 	var resized_offset: Vector2 = Vector2(resized_midway.center) - resized_anchor.get_center()
-	check(absf(resized_offset.cross(resized_route)) / resized_route.length() > 6.0
+	check(absf(resized_offset.cross(resized_route)) / resized_route.length() < 0.1
 		and resized_offset.dot(resized_route) > 0.0 and resized_offset.dot(resized_route) < resized_route.length_squared(),
-		"The resized upgrade keeps a visible arc toward its sole upper destination")
+		"The resized upgrade keeps a straight route toward its sole upper destination")
 	var resized_arrival: Dictionary = _pose_at(view, Flight.PERFORMANCE_SECONDS)
 	check(Vector2(resized_arrival.center).is_equal_approx(resized_anchor.get_center())
 		and is_equal_approx(float(resized_arrival.scale), 1.0), "The resized flight returns to the current chest anchor")
@@ -289,9 +290,9 @@ func _check_flight_choreography(view, anchor: Rect2) -> void:
 			max_depth = maxf(max_depth, float(outbound.depth))
 			max_model_weight = maxf(max_model_weight, float(outbound.model_weight))
 			last_progress = progress
-		check(max_deviation > 6.0 and max_travel_scale > 1.1 and max_yaw > 0.025
-			and max_pitch > 0.025 and max_roll > 0.025 and max_depth > 0.9,
-			"Tier %d follows a visible arc with approach scale, yaw, pitch, bank and depth" % (previous + 1))
+		check(max_deviation < 0.1 and max_travel_scale > 1.1 and is_zero_approx(max_yaw)
+			and is_zero_approx(max_pitch) and is_zero_approx(max_roll) and max_depth > 0.9,
+			"Tier %d grows along a straight approach with no pitch, roll or premature turn" % (previous + 1))
 		if previous < 4:
 			check(max_model_weight > 0.9 and not view._model_sample.is_empty(),
 				"The acquired three-dimensional chest is visible during the tier %d flight" % (previous + 1))
@@ -309,13 +310,13 @@ func _check_flight_choreography(view, anchor: Rect2) -> void:
 			"The return visibly approaches the anchor while recovering the resting size")
 		var return_offset: Vector2 = Vector2(returning.center) - anchor.get_center()
 		var outbound_midway: Dictionary = _pose_at(view, Flight.TOP_SECONDS * 0.5)
-		check(absf(return_offset.cross(route)) / route.length() > 6.0
+		check(absf(return_offset.cross(route)) / route.length() < 0.1
 			and Vector2(returning.center).distance_to(outbound_midway.center) < 0.01
 			and absf(float(returning.scale) - float(outbound_midway.scale)) < 0.0001,
-			"Tier %d retraces the same visible arc with the matching outbound size" % (previous + 1))
+			"Tier %d retraces the same straight route with the matching outbound size" % (previous + 1))
 		check(Vector2(arrived.center).is_equal_approx(anchor.get_center()) and is_equal_approx(float(arrived.scale), 1.0)
 			and is_zero_approx(wrapf(float(arrived.roll), -PI, PI)) and is_zero_approx(float(arrived.pitch))
-			and is_zero_approx(float(arrived.depth)), "The chest lands exactly at its original anchor without residual bank or depth")
+			and is_zero_approx(float(arrived.depth)), "The chest lands exactly at its original anchor without residual tilt or depth")
 		for boundary: float in [Flight.TOP_SECONDS, Flight.TURN_START,
 			Flight.REVEAL_SECONDS, Flight.TURN_END, Flight.RETURN_START, Flight.PERFORMANCE_SECONDS]:
 			var before: Dictionary = _pose_at(view, boundary - 0.0001)
@@ -328,6 +329,7 @@ func _check_flight_choreography(view, anchor: Rect2) -> void:
 
 
 func _check_reversible_growth(view, label: String, steps: int = 24) -> void:
+	var departure: Dictionary = _pose_at(view, 0.0)
 	var top: Dictionary = _pose_at(view, Flight.TOP_SECONDS)
 	var raw_top: Dictionary = view._motion(Flight.TOP_SECONDS)
 	var previous_raw_scale: float = 1.0
@@ -350,9 +352,13 @@ func _check_reversible_growth(view, label: String, steps: int = 24) -> void:
 		check(Vector2(raw_outbound.center).distance_to(raw_returning.center) < 0.01
 			and absf(float(raw_outbound.scale) - float(raw_returning.scale)) < 0.0001,
 			"%s samples the same route and size in reverse at sample %d" % [label, step])
-		check(Vector2(outbound.center).distance_to(returning.center) < 0.01
-			and absf(float(outbound.scale) - float(returning.scale)) < 0.0001,
-			"%s retains the same outbound and return route after viewport fitting at sample %d" % [label, step])
+		var expected_center: Vector2 = Vector2(departure.center).lerp(top.center, smoothstep(0.0, 1.0, fraction))
+		check(Vector2(outbound.center).distance_to(expected_center) < 0.1
+			and Vector2(outbound.center).distance_to(returning.center) < 0.01
+			and absf(float(outbound.scale) - float(returning.scale)) < 0.0001
+			and is_zero_approx(float(outbound.pitch)) and is_zero_approx(float(outbound.roll))
+			and is_zero_approx(float(returning.pitch)) and is_zero_approx(float(returning.roll)),
+			"%s retains a straight upright outbound and return route after viewport fitting at sample %d" % [label, step])
 		previous_raw_scale = float(raw_outbound.scale)
 		previous_fitted_scale = float(outbound.scale)
 	for step in range(13):
@@ -360,8 +366,13 @@ func _check_reversible_growth(view, label: String, steps: int = 24) -> void:
 		var pose: Dictionary = _pose_at(view, age)
 		var raw: Dictionary = view._motion(age)
 		check(is_equal_approx(float(raw.scale), float(raw_top.scale))
-			and is_equal_approx(float(pose.scale), float(top.scale)),
-			"%s holds its arrival size through the top performance without a second growth phase" % label)
+			and is_equal_approx(float(pose.scale), float(top.scale))
+			and Vector2(pose.center).distance_to(top.center) < 0.1
+			and is_zero_approx(float(pose.pitch)) and is_zero_approx(float(pose.roll)),
+			"%s holds its arrival position and size while turning only around the vertical axis" % label)
+		if int(view._events[0].tier) > 4:
+			check(is_equal_approx(float(pose.sprite_scale_x), cos(float(pose.yaw))),
+				"%s projects its source artwork horizontally for the vertical-axis turn" % label)
 
 
 func _check_upgrade_containment(view) -> void:
@@ -369,6 +380,7 @@ func _check_upgrade_containment(view) -> void:
 		_begin(view, previous, previous + 1)
 		var contained: bool = true
 		var recovered: bool = true
+		var upright: bool = true
 		var frames: int = ceili(Celebration.PERFORMANCE_SECONDS * 60.0)
 		for frame in range(frames + 1):
 			var age: float = minf(float(frame) / 60.0, Celebration.PERFORMANCE_SECONDS)
@@ -385,6 +397,7 @@ func _check_upgrade_containment(view) -> void:
 					view.set_chest_anchor(anchor)
 					view._sync()
 					var pose: Dictionary = view._motion(age)
+					upright = upright and is_zero_approx(float(pose.pitch)) and is_zero_approx(float(pose.roll))
 					var edge: float = minf(anchor.size.x, anchor.size.y)
 					var placement: Dictionary = view._placement(pose, edge, anchor.get_center())
 					var transform := Transform2D(float(pose.roll), Vector2.ONE * float(placement.scale), 0.0, placement.center)
@@ -393,6 +406,7 @@ func _check_upgrade_containment(view) -> void:
 					if not view._model_sample.is_empty():
 						var tier: int = previous + 1 if view._revealed or previous == 0 else previous
 						var model = view._models._pool[tier]
+						upright = upright and model._rig.basis.y.is_equal_approx(Vector3.UP)
 						var bounds: Rect2 = model.closed_bounds()
 						var unit: float = edge / maxf(bounds.size.x, bounds.size.y)
 						for corner in range(8):
@@ -402,6 +416,7 @@ func _check_upgrade_containment(view) -> void:
 						recovered = recovered and Vector2(placement.center).is_equal_approx(anchor.get_center()) \
 							and is_equal_approx(float(placement.scale), 1.0)
 		check(contained, "Chest transition %d keeps every turned model corner and static fallback inside the viewport" % previous)
+		check(upright, "Chest transition %d keeps the pose and real model upright throughout acquisition or upgrade" % previous)
 		check(recovered, "Chest transition %d starts and settles at the original HUD position and size" % previous)
 		for dimensions: Vector2 in [Vector2(1366, 600), Vector2(390, 640), Vector2(320, 220), Vector2(844, 235)]:
 			root.size = Vector2i(dimensions)

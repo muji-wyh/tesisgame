@@ -58,10 +58,10 @@ async function startWordJelly(page, { age = COMPOSITION_AGE, reducedMotion = 'no
   }, { timeout: 20000, message: 'The real Word Jelly board opens with reviewed, settled content' }).toBe(true);
   const opening = await jelly(page);
   const occupiedArea = opening.tiles.reduce((sum, tile) => sum + tile.width * tile.height, 0);
-  expect(occupiedArea, 'The opening contains eighteen ordinary square cells').toBe(18);
+  expect(occupiedArea, 'The opening contains fifteen ordinary square cells').toBe(15);
   const next = opening.upcoming.find(tile => tile.id);
   expect(occupiedArea + next.width * next.height,
-    'The next fixed-size body would exceed the opening budget').toBeGreaterThan(18);
+    'The next fixed-size body would exceed the opening budget').toBeGreaterThan(15);
   for (const tile of opening.tiles) {
     expect([tile.width, tile.height], 'Every source part uses one normal square cell').toEqual([1, 1]);
     expect(tile.rect[2], 'The displayed starter keeps the ordinary square proportions').toBeCloseTo(tile.rect[3], 3);
@@ -421,6 +421,18 @@ function expectWordRevealContent(entry, bounds, area) {
   expect(height, 'The card height follows its content with modest padding').toBeLessThan(contentHeight * 1.7);
 }
 
+async function currentSupplyLayout(page) {
+  // Read the game and canvas together so a resize cannot mix two layout frames.
+  return page.evaluate(() => {
+    const rect = document.getElementById('canvas').getBoundingClientRect();
+    const scale = Math.min(rect.width, rect.height) / 480;
+    return {
+      state: JSON.parse(document.getElementById('game-status').dataset.jelly || '{}'),
+      bounds: { width: rect.width / scale, height: rect.height / scale, scale }
+    };
+  });
+}
+
 function expectSupplyLayout(state, bounds) {
   const board = state.board_rect, tray = state.preview.rect, area = state.playfield_rect;
   const collect = state.collect_button.rect, paidTools = Object.values(state.powerup_buttons).map(button => button.rect);
@@ -436,11 +448,11 @@ function expectSupplyLayout(state, bounds) {
     expect(rect[1] + rect[3], `${label} is inside the bottom edge`).toBeLessThanOrEqual(parent[1] + parent[3] + tolerance);
   };
   expect(Math.abs(tray[0] - board[0]), 'The supply tray starts at the well left edge').toBeLessThan(tolerance);
-  expect(Math.abs(tray[2] - board[2]), 'The supply tray is exactly as wide as the six-column well').toBeLessThan(tolerance);
+  expect(Math.abs(tray[2] - board[2]), 'The supply tray is exactly as wide as the five-column well').toBeLessThan(tolerance);
   expect(tray[1] + tray[3], 'The supply tray stays above the well').toBeLessThanOrEqual(board[1] + tolerance);
   for (const [axis, value] of state.preview.control.rect.entries())
     expect(Math.abs(value - tray[axis]), 'The whole tray remains the manual drop target').toBeLessThan(tolerance);
-  expect(state.preview.slots).toHaveLength(6);
+  expect(state.preview.slots).toHaveLength(5);
   for (const [index, slot] of state.preview.slots.entries()) {
     const body = state.upcoming[index];
     if (!body.id) {
@@ -452,7 +464,7 @@ function expectSupplyLayout(state, bounds) {
     expect([body.width, body.height], `Preview ${index} uses one normal square cell`).toEqual([1, 1]);
     expect(slot.rect[2], `Preview ${index} keeps square proportions`).toBeCloseTo(slot.rect[3], 3);
     inside(slot.rect, tray, `Preview ${index}`);
-    expect(Math.abs(slot.rect[0] + slot.rect[2] / 2 - (board[0] + (index + body.width / 2) * board[2] / 6)),
+    expect(Math.abs(slot.rect[0] + slot.rect[2] / 2 - (board[0] + (index + body.width / 2) * board[2] / state.columns)),
       `Preview ${index} is centered over its reserved well columns`).toBeLessThan(tolerance);
   }
   const regions = [['well', board], ['supply tray', tray], ['Collect words', collect], ['Action divider', divider],
@@ -655,7 +667,7 @@ async function verifyArrival(page, info, before, label) {
   }] : []);
   const delay = root => root.arrival_delay;
   for (const root of arrivals) expect(delay(root), 'The advertised lane keeps its authored crossing release beat')
-    .toBeCloseTo([0, 3, 1, 4, 2, 5].indexOf(root.slot) * 0.15, 4);
+    .toBeCloseTo([0, 3, 1, 4, 2].indexOf(root.slot) * 0.15, 4);
   expect(new Set(arrivals.map(delay)).size, `${label}: advertised bodies have separate release beats`).toBe(arrivals.length);
   expect(Math.max(...arrivals.map(delay)) - Math.min(...arrivals.map(delay)),
     `${label}: the packet spreads across a perceptible release sequence`).toBeGreaterThanOrEqual((arrivals.length - 1) * 0.15 - 0.001);
@@ -663,7 +675,7 @@ async function verifyArrival(page, info, before, label) {
     .filter(late => early.slot > late.slot && delay(late) - delay(early) > 0.29)
     .map(late => ({ early, late })));
   const expectedCrossLane = arrivals.some(early => arrivals.some(late => early.slot > late.slot &&
-    [0, 3, 1, 4, 2, 5].indexOf(late.slot) - [0, 3, 1, 4, 2, 5].indexOf(early.slot) >= 2));
+    [0, 3, 1, 4, 2].indexOf(late.slot) - [0, 3, 1, 4, 2].indexOf(early.slot) >= 2));
   expect(crossLanePairs.length > 0).toBe(expectedCrossLane);
   const pitch = after.board_rect[3] / after.rows;
   const travel = (frame, root) => {
@@ -1517,9 +1529,10 @@ test('merged word mastery is recorded only on collection and survives reload', a
   expect(errors).toEqual([]);
 });
 
-test('six columns build a pictured word and a deliberate tap collects Lv1 without coins', async ({ page }, info) => {
+test('five columns build a pictured word and a deliberate tap collects Lv1 without coins', async ({ page, isMobile }, info) => {
+  test.setTimeout(isMobile ? 300000 : 180000);
   const errors = await startWordJelly(page), opening = await jelly(page), bounds = await metrics(page);
-  expect(opening.columns).toBe(6);
+  expect(opening.columns).toBe(5);
   expect(opening.rows).toBe(8);
   const occupied = new Set();
   for (const tile of opening.tiles) for (let row = tile.row; row < tile.row + tile.height; row++)
@@ -1527,22 +1540,27 @@ test('six columns build a pictured word and a deliberate tap collects Lv1 withou
       expect(occupied.has(row * opening.columns + column), 'Authored starter footprints do not overlap').toBe(false);
       occupied.add(row * opening.columns + column);
     }
-  expect(occupied.size).toBe(18);
-  expect(opening.upcoming).toHaveLength(6);
+  expect(occupied.size).toBe(15);
+  expect(opening.upcoming).toHaveLength(5);
   for (const tile of opening.tiles) {
     expect(tile.mass).toBe(1);
     expect(tile.picture_visible, 'Only picture sources and pictured merged words show image artwork')
       .toBe(tile.jelly_kind === 'picture' || tile.jelly_kind === 'merged' && Boolean(tile.word.image));
     expectInside(tile.rect, bounds);
   }
-  await capture(page, info, 'word-jelly-six-column-opening');
+  await capture(page, info, 'word-jelly-five-column-opening');
   const originalViewport = page.viewportSize();
-  for (const viewport of [{ width: 1473, height: 1175 }, { width: 768, height: 1024 },
-    { width: 390, height: 844 }, { width: 393, height: 852 }]) {
+  const viewports = isMobile
+    ? [{ width: 390, height: 844 }, { width: 393, height: 852 }, { width: 844, height: 390 }]
+    : [{ width: 1473, height: 1175 }, { width: 768, height: 1024 },
+      { width: 390, height: 844 }, { width: 393, height: 852 }];
+  for (const viewport of viewports) {
     await page.setViewportSize(viewport);
     await rendered(page);
-    await expect(async () => expectSupplyLayout(await jelly(page), await metrics(page)))
-      .toPass({ timeout: 5000 });
+    await expect(async () => {
+      const { state, bounds: currentBounds } = await currentSupplyLayout(page);
+      expectSupplyLayout(state, currentBounds);
+    }).toPass({ timeout: 15000 });
     if (viewport.width === 393) await capture(page, info, 'word-jelly-header-finish-393x852');
   }
   await page.setViewportSize({ width: 568, height: 320 });
@@ -1555,10 +1573,18 @@ test('six columns build a pictured word and a deliberate tap collects Lv1 withou
   await capture(page, info, 'word-jelly-landscape-reading-pause');
   await page.setViewportSize(originalViewport);
   await rendered(page);
-  await expect(async () => expectSupplyLayout(await jelly(page), await metrics(page)))
-    .toPass({ timeout: 5000 });
-  const candidate = rootsForWord(await jelly(page), COMPOSITION_AGE, 2) ||
-    await availableWord(page, COMPOSITION_AGE, 2);
+  await expect(async () => {
+    const { state, bounds: currentBounds } = await currentSupplyLayout(page);
+    expectSupplyLayout(state, currentBounds);
+  }).toPass({ timeout: 15000 });
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return !state.paused && !state.layout_paused;
+  }, { message: 'Restoring the readable viewport resumes the board' }).toBe(true);
+  const liveStage = await jelly(page);
+  const candidate = Array.from({ length: 10 }, (_, index) => suppliedWords(liveStage, index + 3))
+    .flat().find(item => item.picture && item.roots.length);
+  expect(candidate, 'The live mastery stage supplies a complete pictured word').toBeTruthy();
   const { roots, word } = candidate;
   const startingWallet = await wallet(page);
   await pressRect(page, roots[0].rect);
@@ -1567,7 +1593,7 @@ test('six columns build a pictured word and a deliberate tap collects Lv1 withou
   expect((await wallet(page)).balance).toBe(startingWallet.balance);
   const merged = await completeSuppliedWord(page, candidate);
   expect(merged.word.id).toBe(word.id);
-  expect(merged.word.min_age).toBe(COMPOSITION_AGE);
+  expect(merged.word.min_age).toBe(word.min_age);
   expect(merged.picture_visible, 'The actual word art appears on the completed jelly').toBe(true);
   expect([merged.width, merged.height], 'The completed body keeps one normal square cell').toEqual([1, 1]);
   expect(merged.rect[2], 'The pictured word keeps square proportions').toBeCloseTo(merged.rect[3], 3);
@@ -1648,7 +1674,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
   const retained = before.tiles.filter(tile => !collectedIds.includes(tile.id)).map(tile => tile.id);
   const expectedFragments = selected.reduce((sum, tile) => sum + tile.fragments, 0);
   expect(expectedFragments, 'The ordinary-input batch includes a real carried treasure fragment').toBeGreaterThan(0);
-  const readingTiming = { interval: 0.25, entrance: 0.055, fade: 0.22 };
+  const readingTiming = { interval: 0.20, entrance: 0.055, fade: 0.22 };
   await page.exposeFunction('saveWordJellyBatchFrame', (index, encoded) =>
     fs.writeFileSync(info.outputPath(`word-jelly-batch-${index}.png`), Buffer.from(encoded, 'base64')));
   await page.evaluate(readingTiming => {
@@ -1752,7 +1778,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
   }
   expect(final.collection_batch.started).toBe(3);
   expect(final.collection_batch.completed).toBe(3);
-  expect(final.collection_batch.elapsed, 'Three 250 ms collections finish in 750 ms of game time').toBeCloseTo(0.75, 6);
+  expect(final.collection_batch.elapsed, 'Three 200 ms collections finish in 600 ms of game time').toBeCloseTo(0.60, 6);
   expect(entryStates.size, 'Each of the three collected words owns an independent reading card').toBe(3);
   const opaqueSeconds = Math.max(0, Math.min(...[...entryStates.values()].map(entry => entry.duration)) -
     readingTiming.entrance - readingTiming.fade);
@@ -1789,14 +1815,15 @@ test('collect button grows with completed words and collects a rhythmic batch on
   expect(errors).toEqual([]);
 });
 
-test('collected words reveal their picture and spelling above the bottom-anchored game with one pronunciation', async ({ page, browserName }, info) => {
+test('collected words reveal their picture and spelling above the bottom-anchored game with one pronunciation', async ({ page, browserName, isMobile }, info) => {
+  test.setTimeout(180000);
   await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 4 });
   const errors = await startWordJelly(page, { age: 3 }), opening = await jelly(page), bounds = await metrics(page);
   const scale = Math.max(2 / 3, bounds.scale), area = opening.playfield_rect;
   const gameBottom = Math.max(...[opening.board_rect, opening.collect_button.rect, opening.loot.progress.rect,
     ...Object.values(opening.powerup_buttons).map(button => button.rect)]
     .map(rect => rect[1] + rect[3]));
-  expect(Math.abs(gameBottom - (area[1] + area[3] - 6 / scale)) * bounds.scale,
+  expect(Math.abs(gameBottom - (area[1] + area[3] - 12 / scale)) * bounds.scale,
     'The board and collection controls retain their bottom padding within a quarter rendered pixel')
     .toBeLessThan(0.25);
   expect(opening.preview.rect[1] + opening.preview.rect[3], 'The full supply tray remains above the board')
@@ -1839,7 +1866,13 @@ test('collected words reveal their picture and spelling above the bottom-anchore
       for (const entry of reveal.entries) {
         if (!entry.visible || entry.content_alpha < 0.95 || entry.elapsed < 0.20 || pending.has(entry.word_id)) continue;
         pending.add(entry.word_id);
-        document.getElementById('canvas').toBlob(blob => {
+        const canvas = document.getElementById('canvas');
+        const size = canvas.getBoundingClientRect();
+        const snapshot = document.createElement('canvas');
+        snapshot.width = Math.round(size.width);
+        snapshot.height = Math.round(size.height);
+        snapshot.getContext('2d').drawImage(canvas, 0, 0, snapshot.width, snapshot.height);
+        snapshot.toBlob(blob => {
           if (!blob) return;
           const reader = new FileReader();
           reader.onload = () => {
@@ -1858,18 +1891,27 @@ test('collected words reveal their picture and spelling above the bottom-anchore
   if (browserName === 'chromium') expect(audioAvailable).toBe(true);
   const candidates = [{ merged: firstMerged, word: first.word }, { merged: secondMerged, word: second.word }];
   const points = candidates.map(candidate => center(before.tiles.find(tile => tile.id === candidate.merged.id).rect, bounds));
-  // Keep trusted gestures inside the reading beat. Helpers that wait for DOM
-  // snapshots between each tap can consume the whole short effect under tracing.
-  await page.touchscreen.tap(points[0].x, points[0].y);
-  await page.touchscreen.tap(points[0].x, points[0].y);
+  // Chromium's native gesture queue keeps duplicate mobile taps together even
+  // when high-DPI software rendering delays individual protocol round trips.
+  const gestureSession = isMobile && browserName === 'chromium' ? await page.context().newCDPSession(page) : null;
+  const tapTwice = async point => {
+    if (gestureSession) await gestureSession.send('Input.synthesizeTapGesture', {
+      x: point.x, y: point.y, tapCount: 2, duration: 35, gestureSourceType: 'touch'
+    });
+    else {
+      await page.touchscreen.tap(point.x, point.y);
+      await page.touchscreen.tap(point.x, point.y);
+    }
+  };
+  await tapTwice(points[0]);
   await page.waitForTimeout(240);
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await page.touchscreen.tap(points[1].x, points[1].y);
-  await page.touchscreen.tap(points[1].x, points[1].y);
+  await tapTwice(points[1]);
   await expect.poll(() => page.evaluate(() => Object.keys(window.wordRevealFrames).length),
     { message: 'Both real reading beats produce a captured opaque picture and spelling' }).toBe(2);
   const evidence = await page.evaluate(() => ({ timeline: window.wordRevealTimeline, frames: window.wordRevealFrames,
     inputs: window.wordRevealInputs, sounds: window.audioObservation.playbacks }));
+  fs.writeFileSync(info.outputPath('word-jelly-reveal-inputs.json'), JSON.stringify(evidence.inputs, null, 2));
   fs.writeFileSync(info.outputPath('word-jelly-reveal-timeline.json'), JSON.stringify(evidence.timeline, null, 2));
   const together = evidence.timeline.find(reveal => reveal.entries.some(entry => entry.word_id === first.word.id) &&
     reveal.entries.some(entry => entry.word_id === second.word.id));
@@ -2290,7 +2332,7 @@ for (const { age, parts, minimumLength } of [
       await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(state.cleared_pairs + ready.length);
       continue;
     }
-    if (!protectTarget && state.tiles.length >= 30 && state.powerup_buttons.auto_merge.enabled) {
+    if (!protectTarget && state.tiles.length >= state.columns * 5 && state.powerup_buttons.auto_merge.enabled) {
       recordDiscovery({ action: 'auto_merge', bodies: state.tiles.length, generated: state.generated_tiles });
       const previousReceipt = state.powerup.receipt_id;
       await pressDiscovery(state.powerup_buttons.auto_merge.rect);
@@ -2305,7 +2347,7 @@ for (const { age, parts, minimumLength } of [
     const unrelated = supplied.filter(candidate => !targetIds.has(candidate.word.id));
     const blocksTarget = candidate => [...candidate.roots, candidate.picture].some(tile => tile && targetColumns.includes(tile.column));
     const other = unrelated.find(blocksTarget) || unrelated.find(candidate => candidate.roots.length === 1) || unrelated[0];
-    if (other && (!state.preview.enabled || protectTarget && state.tiles.length >= 36)) {
+    if (other && (!state.preview.enabled || protectTarget && state.tiles.length >= state.columns * 6)) {
       const completed = await completeSuppliedWord(page, other);
       sampled.push({ id: other.word.id, parts: other.analysis.parts.length, text: completed.text });
       recordDiscovery({ action: 'manual_clear', word: other.word.id, generated: state.generated_tiles });

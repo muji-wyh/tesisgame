@@ -1,6 +1,6 @@
 class_name WordJelly
 extends "res://scripts/jelly_match.gd"
-## Six-column word construction, with the established jelly input and rewards.
+## Five-column word construction, with the established jelly input and rewards.
 
 signal collected(event_id: String, word: Dictionary, amount: int, fragments: int, origin: Vector2)
 signal word_merged(word: Dictionary)
@@ -55,6 +55,7 @@ var _placement_tile: WordTile
 var _placement: Dictionary = {}
 var _completion_source: int = -1
 var _completion_elapsed: float = 0.0
+var _fusion_drag: Dictionary = {}
 var _reveal_frame_end: float = -1.0
 var _reveal_frame_batch: int = -1
 var _reveal_frame_generation: int = -1
@@ -313,6 +314,9 @@ func _finished(result: Dictionary) -> void:
 
 func cancel_input() -> void:
 	_end_view_update()
+	if not _fusion_drag.is_empty():
+		game.hold_merge_for_drag(str(_fusion_drag.event_id), false)
+		_fusion_drag.clear()
 	_read_hold_id = -1
 	_read_hold_elapsed = 0.0
 	_tile_press_started_ms = -1
@@ -394,6 +398,18 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	if _read_action_at(global_point):
 		return false
 	var point: Vector2 = get_global_transform().affine_inverse() * global_point
+	var merging: String = _fusion_at(point)
+	if not merging.is_empty() and game.hold_merge_for_drag(merging, true):
+		_keyboard_source = -1
+		_pointer = pointer
+		_gesture_serial += 1
+		_press_point = point
+		_drag_point = point
+		_tile_press_started_ms = -1
+		_fusion_drag = {"event_id": merging, "offset": Vector2.ZERO, "moved": false}
+		audio_requested.emit("pick")
+		_publish()
+		return true
 	if _preview_rect.has_point(point):
 		_preview_generated = game.generated_tiles
 		var accepted: bool = super._press(pointer, global_point)
@@ -436,6 +452,15 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	return true
 
 func _move(global_point: Vector2) -> void:
+	if not _fusion_drag.is_empty():
+		_drag_point = get_global_transform().affine_inverse() * global_point
+		if _drag_point.distance_to(_press_point) * Style.ui_scale(self) > 7.0:
+			_fusion_drag.moved = true
+		if bool(_fusion_drag.moved):
+			_fusion_drag.offset = _drag_point - _press_point
+		_refresh_fusion()
+		_publish()
+		return
 	if (get_global_transform().affine_inverse() * global_point).distance_to(_press_point) * Style.ui_scale(self) > 7.0:
 		_read_hold_id = -1
 	if _preview_first_id < 0 and not _dragging and _source >= 0:
@@ -454,6 +479,17 @@ func _move(global_point: Vector2) -> void:
 
 func _release(global_point: Vector2) -> void:
 	_consume_drag_motion()
+	if not _fusion_drag.is_empty():
+		_move(global_point)
+		if not bool(_fusion_drag.moved):
+			cancel_input()
+			return
+		# A release commits the already accepted pair before the ordinary drop
+		# resolves its new position or partner. Natural completion uses the same handoff.
+		game.complete_merge_drag(str(_fusion_drag.event_id))
+		if not _fusion_drag.is_empty() or _source < 0:
+			cancel_input()
+			return
 	_read_hold_id = -1
 	_read_hold_elapsed = 0.0
 	# Use real elapsed time so a stalled frame cannot turn a hold into collection.
@@ -1164,9 +1200,64 @@ func _refresh_completion_hints() -> void:
 	var prefix: Dictionary = _cell(source)
 	for id: int in _tiles:
 		var target: Dictionary = _cell(id)
+		var same_word: bool = str(prefix.get("jelly_kind", "")) == "merged" \
+			and str(target.get("jelly_kind", "")) == "merged" and id != source \
+			and not prefix.get("word", {}).is_empty() \
+			and str(prefix.word.id) == str(target.get("word", {}).get("id", ""))
 		var eligible: bool = not prefix.is_empty() and _settled(prefix) and _settled(target) \
-			and _can_merge_for_feedback(prefix, target)
+			and (same_word or _can_merge_for_feedback(prefix, target))
 		_tiles[id].set_completion_hint(eligible, _completion_elapsed, reduced_motion)
+
+func _drag_target() -> int:
+	# Actual contact takes precedence, including a closer nonmatching body.
+	var touching: int = super._drag_target()
+	if touching >= 0 or not _tiles.has(_source):
+		return touching
+	var source: WordTile = _tiles[_source]
+	var outline: PackedVector2Array = source.contact_outline(Vector2.ONE if reduced_motion else DRAG_STRETCH)
+	var reach: float = minf(minf(source.size.x, source.size.y) * 0.22, 18.0 / Style.ui_scale(self))
+	var bounds: Rect2 = _outline_bounds(outline).grow(reach)
+	var expanded: Array[PackedVector2Array] = []
+	var nearest: int = -1
+	var nearest_distance: float = INF
+	for cell: Dictionary in game.cells:
+		var id: int = int(cell.id)
+		if id == _source or not _settled(cell) or not _tiles.has(id):
+			continue
+		var target: WordTile = _tiles[id]
+		if not bounds.intersects(target.get_rect()) or not _can_merge_for_feedback(_cell(_source), cell):
+			continue
+		var distance: float = source.get_rect().get_center().distance_squared_to(target.get_rect().get_center())
+		if distance > nearest_distance or (is_equal_approx(distance, nearest_distance) and id != _target):
+			continue
+		if expanded.is_empty():
+			expanded = Geometry2D.offset_polygon(outline, reach, Geometry2D.JOIN_ROUND)
+		for area: PackedVector2Array in expanded:
+			if not Geometry2D.intersect_polygons(area, target.contact_outline()).is_empty():
+				nearest = id
+				nearest_distance = distance
+				break
+	return nearest
+
+func _fusion_at(point: Vector2) -> String:
+	for fusion: Dictionary in game.fusions:
+		if str(fusion.operation) != "merge" or bool(fusion.get("automatic", false)):
+			continue
+		var visual: Dictionary = _fusion_visuals.get(str(fusion.attempt_id), {})
+		if visual.is_empty():
+			continue
+		if reduced_motion or float(visual.merged.modulate.a) > 0.2:
+			if visual.merged.get_rect().has_point(point):
+				return str(fusion.attempt_id)
+		if not visual.art.visible:
+			continue
+		for key: String in ["body_a", "body_b"]:
+			var body: Vector4 = visual.art._gel.get_shader_parameter(key)
+			var extent := Vector2(body.z, body.w) * 0.86
+			var center: Vector2 = visual.art.position + Vector2(body.x, body.y)
+			if Rect2(center - extent * 0.5, extent).has_point(point):
+				return str(fusion.attempt_id)
+	return ""
 
 func navigation_controls() -> Array[Control]:
 	if _read_panel != null and _read_panel.visible:
@@ -1324,6 +1415,9 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 	merged._surface.modulate.a = 1.0 if reduced_motion else handover
 	merged.modulate.a = 1.0 if reduced_motion else smoothstep(0.34, 0.65, p)
 	merged.deform(0.0, 0.0, Vector2.ONE if reduced_motion else stretch)
+	if str(_fusion_drag.get("event_id", "")) == str(fusion.attempt_id):
+		art.position += Vector2(_fusion_drag.offset)
+		merged.position += Vector2(_fusion_drag.offset)
 	merged.show()
 
 func _merge_started(fusion: Dictionary) -> void:
@@ -1335,6 +1429,24 @@ func _merge_started(fusion: Dictionary) -> void:
 		word_merged.emit(fusion.word)
 
 func _fusion_completed(fusion: Dictionary, _awarded: int) -> void:
+	if str(_fusion_drag.get("event_id", "")) == str(fusion.attempt_id):
+		var moved: bool = bool(_fusion_drag.moved)
+		var from: Vector2 = _tile_rect(fusion.result).position + Vector2(_fusion_drag.offset)
+		_fusion_drag.clear()
+		if _can_play() and _pointer != NO_POINTER:
+			_end_view_update()
+			_source = int(fusion.result.id)
+			_dragging = moved
+			_drag_offset = _drag_point - from
+			if moved:
+				game.begin_drag(_source)
+			_sync_tiles()
+			if _tiles.has(_source):
+				_tiles[_source].position = from
+			_snapbacks.erase(_source)
+			_reflow.erase(_source)
+			_refresh_marks()
+			return
 	if game._has_free_cell():
 		_cue("danger_end")
 	if str(fusion.get("operation", "")) == "merge" and not reduced_motion:

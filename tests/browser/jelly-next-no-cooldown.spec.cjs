@@ -17,7 +17,7 @@ for (const mode of ['jelly', 'word_jelly']) {
         return state.visible && state.phase === 'playing' && state.preview?.enabled;
       }).toBe(true);
       const before = await snapshot(page), bounds = await metrics(page);
-      const batchSize = mode === 'jelly' ? 4 : 6;
+      const batchSize = mode === 'jelly' ? 4 : 5;
       const firstIds = before.upcoming.map(tile => tile.id);
       const [x, y, width, height] = before.preview.rect;
       const point = { x: bounds.x + (x + width / 2) * bounds.scale,

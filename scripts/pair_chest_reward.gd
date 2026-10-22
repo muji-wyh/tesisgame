@@ -374,8 +374,9 @@ func _layout_discovery(unit: float) -> void:
 func _sample_chest_motion(unit: float) -> void:
 	_model_sample.clear()
 	var rest: Vector2 = _chest_rect.position + _art_rect.get_center()
-	_pose = {"center": rest, "scale": 1.0, "yaw": 0.0, "roll": 0.0,
-		"edge": maxf(_art_rect.size.x, _art_rect.size.y), "emphasis": 0.0, "model_weight": 0.0, "phase": "rest"}
+	_pose = {"center": rest, "scale": 1.0, "yaw": 0.0, "roll": 0.0, "pitch": 0.0, "depth": 0.0,
+		"edge": maxf(_art_rect.size.x, _art_rect.size.y), "emphasis": 0.0, "model_weight": 0.0,
+		"sprite_scale_x": 1.0, "phase": "rest"}
 	if not _earned or not _performance_active or _elapsed >= Flight.PERFORMANCE_SECONDS or _reduced_motion or not _art_rect.has_area():
 		return
 	var safe: Rect2 = get_global_transform_with_canvas().affine_inverse() * get_viewport_rect()
@@ -390,13 +391,12 @@ func _sample_chest_motion(unit: float) -> void:
 		var model_unit: float = float(_pose.edge) / maxf(framing.size.x, framing.size.y)
 		local = local.merge(Rect2((turned.position - framing.get_center()) * model_unit, turned.size * model_unit))
 	else:
-		# Source sprites turn in their own plane without invented rear geometry.
-		_pose.roll = _pose.yaw
 		_pose.model_weight = 0.0
 	_pose = Flight.fit(_pose, local, safe)
 	chest.pivot_offset = _art_rect.get_center()
 	chest.position = Vector2(_pose.center) - chest.pivot_offset
-	chest.scale = Vector2.ONE * float(_pose.scale)
+	# Sprite-only skins use the same vertical-axis turn as the acquired models.
+	chest.scale = Vector2(float(_pose.sprite_scale_x), 1.0) * float(_pose.scale)
 	chest.rotation = float(_pose.roll)
 	chest.modulate.a = 1.0 - float(_pose.model_weight)
 

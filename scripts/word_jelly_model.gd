@@ -23,21 +23,21 @@ const WordSampler = preload("res://scripts/word_sampler.gd")
 const CoinEconomy = preload("res://scripts/coin_economy.gd")
 const MorphologyResolver = preload("res://scripts/morphology_resolver.gd")
 const LABEL_FONT = preload("res://assets/fonts/heading.tres")
-const COLUMNS: int = 6
+const COLUMNS: int = 5
 const ROWS: int = 8
 const CAPACITY: int = COLUMNS * ROWS
 const MAX_MERGE_LEVEL: int = 9
 const INITIAL_SETTLED_TILES: int = COLUMNS * 3
-const DROP_COUNT: int = 6
-const UPCOMING_COUNT: int = 6
+const DROP_COUNT: int = COLUMNS
+const UPCOMING_COUNT: int = COLUMNS
 const SETTLE_SECONDS: float = 0.36
 const ARRIVAL_STAGGER: float = 0.15
 const ARRIVAL_SLOT_CLEARANCE: float = 0.36
-const ARRIVAL_ORDER: Array[int] = [0, 3, 1, 4, 2, 5]
+const ARRIVAL_ORDER: Array[int] = [0, 3, 1, 4, 2]
 const FUSION_SECONDS: float = 0.76
 const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
-const BATCH_BEAT_SECONDS: float = 0.25
+const BATCH_BEAT_SECONDS: float = 0.20
 const BATCH_POP_SECONDS: float = 0.06
 const INITIAL_SPAWN_INTERVAL: float = 20.0
 const MIN_SPAWN_INTERVAL: float = 10.0
@@ -48,9 +48,9 @@ const CHEST_UNLOCK_FRAGMENTS: int = RewardProgress.CHEST_UNLOCK_FRAGMENTS
 const CHEST_UPGRADE_FRAGMENTS: int = RewardProgress.CHEST_UPGRADE_FRAGMENTS
 const EPSILON: float = 0.000001
 const POWERUP_PRICES: Dictionary = CoinEconomy.POWERUP_BASE_PRICES
-const POWERUP_MERGE_BEAT_SECONDS: float = 0.3
-const POWERUP_DRAG_SECONDS: float = 0.12
-const POWERUP_FUSION_SECONDS: float = 0.15
+const POWERUP_MERGE_BEAT_SECONDS: float = 0.20
+const POWERUP_DRAG_SECONDS: float = 0.25
+const POWERUP_FUSION_SECONDS: float = 0.11
 const POWERUP_SETTLE_SECONDS: float = 0.03
 const POWERUP_FRAGMENT_FLIGHT: float = 0.42
 const POWERUP_FRAGMENT_STAGGER: float = 0.18
@@ -331,7 +331,13 @@ func powerup_price(kind: String) -> int:
 
 
 func powerup_snapshot() -> Dictionary:
-	return _powerup.duplicate(true) if not _powerup.is_empty() else {
+	if not _powerup.is_empty():
+		# Rendering needs live journeys, not the resolver's full word graphs.
+		var snapshot: Dictionary = _powerup.duplicate()
+		snapshot.erase("plans")
+		snapshot.erase("next_plan_id")
+		return snapshot.duplicate(true)
+	return {
 		"active": false, "kind": "", "receipt_id": "", "stage": "", "elapsed": 0.0,
 		"duration": 0.0, "source_id": -1, "target_id": -1, "source": {}, "target": {},
 		"completed": 0, "total": 0, "arrivals": [], "drags": [], "clock": 0.0,
@@ -395,6 +401,7 @@ func _purchase_powerup(kind: String) -> bool:
 		_powerup = {"active": true, "kind": kind, "receipt_id": receipt_id, "stage": "ready",
 			"elapsed": 0.0, "duration": 0.0, "source_id": -1, "target_id": -1,
 			"source": {}, "target": {}, "completed": 0, "total": 0, "arrivals": [], "drags": [],
+			"plans": [], "next_plan_id": 0,
 			"clock": 0.0, "started_at": 0.0, "next_launch_at": 0.0, "contact_played": false, "contact_pending": false}
 	var timeline_id: String = str(_powerup.receipt_id)
 	if kind == "fragments":
@@ -448,30 +455,62 @@ func _same_powerup(generation: int, receipt_id: String) -> bool:
 		and str(_powerup.get("receipt_id", "")) == receipt_id
 
 
-func _powerup_pair(captured_only: bool = true, _random_source: bool = false) -> Array[int]:
-	# A paid path includes the picture match. Keep its sources fixed until that
-	# whole path has settled; its geometry remains valid even on a full board.
-	if not fusions.is_empty() or (powerup_active() and not _powerup.drags.is_empty()) or _settling_remaining() > EPSILON:
-		return []
-	if powerup_active() and _powerup.has("completion_plan"):
-		var current: Dictionary = _powerup.completion_plan
-		var next: int = current.result_ids.size()
-		if next < current.steps.size():
-			var pending: Dictionary = current.steps[next]
-			return [_plan_tile_id(current, str(pending.left_ref)), _plan_tile_id(current, str(pending.right_ref))]
+func _powerup_pair(captured_only: bool = true) -> Array[int]:
 	var plan: Dictionary = authored_completion_plan(captured_only)
 	if plan.get("status") == "complete":
-		if powerup_active():
-			plan.result_ids = []
-			_powerup.completion_plan = plan
 		return [int(plan.first_source_id), int(plan.first_target_id)]
 	return []
+
+
+func _next_powerup_merge() -> Dictionary:
+	# Independent paths may overlap, while each path keeps its future roots and
+	# picture reserved until its final result exists. Prefer ready continuations.
+	for plan: Dictionary in _powerup.plans:
+		var job: Dictionary = _powerup_plan_job(plan)
+		if not job.is_empty():
+			return job
+	var plan: Dictionary = authored_completion_plan(true)
+	if plan.get("status") != "complete":
+		return {}
+	plan.plan_id = int(_powerup.next_plan_id)
+	_powerup.next_plan_id = int(_powerup.next_plan_id) + 1
+	plan.result_ids = {}
+	plan.launched_steps = {}
+	plan.reserved_ids = []
+	# The resolver's input table also contains unused roots. Reserve only the
+	# references actually consumed by this complete path so others can launch.
+	for pending: Dictionary in plan.steps:
+		for key: String in ["left_ref", "right_ref"]:
+			var reference: String = str(pending[key])
+			if reference.begins_with("input:"):
+				var tile_id: int = _plan_tile_id(plan, reference)
+				if not plan.reserved_ids.has(tile_id):
+					plan.reserved_ids.append(tile_id)
+	_powerup.plans.append(plan)
+	return _powerup_plan_job(plan)
+
+
+func _powerup_plan_job(plan: Dictionary) -> Dictionary:
+	for index in range(plan.steps.size()):
+		if plan.launched_steps.has(index):
+			continue
+		var pending: Dictionary = plan.steps[index]
+		var source_id: int = _plan_tile_id(plan, str(pending.left_ref))
+		var target_id: int = _plan_tile_id(plan, str(pending.right_ref))
+		var source: Dictionary = cell(source_id)
+		var target: Dictionary = cell(target_id)
+		if source.is_empty() or target.is_empty() or not is_settled(source) or not is_settled(target) \
+			or is_fusing(source_id) or is_fusing(target_id) or is_lifted(source_id) or is_lifted(target_id):
+			continue
+		if can_merge(source, target):
+			return {"plan": plan, "step_index": index, "source_id": source_id, "target_id": target_id}
+	return {}
 
 
 func _plan_tile_id(plan: Dictionary, reference: String) -> int:
 	if reference.begins_with("input:"):
 		return int(plan.input_ids[int(reference.trim_prefix("input:"))])
-	return int(plan.result_ids[int(reference.trim_prefix("step:"))])
+	return int(plan.result_ids.get(int(reference.trim_prefix("step:")), -1))
 
 
 func _reserved_for_powerup(tile_id: int) -> bool:
@@ -479,6 +518,9 @@ func _reserved_for_powerup(tile_id: int) -> bool:
 		return false
 	for drag: Dictionary in _powerup.drags:
 		if tile_id in [int(drag.source_id), int(drag.target_id)]:
+			return true
+	for plan: Dictionary in _powerup.plans:
+		if plan.reserved_ids.has(tile_id) or plan.result_ids.values().has(tile_id):
 			return true
 	return false
 
@@ -585,21 +627,30 @@ func _advance_powerup() -> void:
 		_powerup.stage = "fusion"
 		_sync_powerup_drag()
 		_powerup_committing = true
-		try_merge(int(drag.source_id), int(drag.target_id), true)
+		try_merge(int(drag.source_id), int(drag.target_id), true, drag)
 		_powerup_committing = false
 		if not _same_powerup(generation, receipt_id) or paused:
 			return
-	# A full automatic path fits one 300 ms beat: transfer, fusion, and landing.
-	# The next step can safely use the settled result from the preceding path.
+	# Start one journey per beat even while an independent journey is in flight.
+	# A dependent step waits for its result to settle and joins a later beat.
 	var launch_ready: bool = float(_powerup.clock) + EPSILON >= float(_powerup.next_launch_at)
-	var pair: Array[int] = _powerup_pair(true, launch_ready)
-	if not pair.is_empty() and launch_ready:
-		var drag: Dictionary = {"source_id": pair[0], "target_id": pair[1],
-			"source": cell(pair[0]), "target": cell(pair[1]), "elapsed": 0.0,
+	var job: Dictionary = {}
+	# Search once per beat during motion; avoid rerunning the authored resolver
+	# on every render frame while all usable paths are already reserved.
+	if launch_ready or (_powerup.drags.is_empty() and fusions.is_empty() and _settling_remaining() <= EPSILON):
+		job = _next_powerup_merge()
+	if launch_ready:
+		# Empty beats are skipped, never accumulated into a burst when a result
+		# becomes ready. Pause freezes this same model clock.
+		_powerup.next_launch_at = float(_powerup.next_launch_at) + POWERUP_MERGE_BEAT_SECONDS
+	if not job.is_empty() and launch_ready:
+		job.plan.launched_steps[int(job.step_index)] = true
+		var drag: Dictionary = {"source_id": int(job.source_id), "target_id": int(job.target_id),
+			"source": cell(int(job.source_id)), "target": cell(int(job.target_id)), "elapsed": 0.0,
+			"plan_id": int(job.plan.plan_id), "step_index": int(job.step_index),
 			"duration": POWERUP_DRAG_SECONDS, "started_at": float(_powerup.clock),
 			"contact_played": false, "contact_pending": false}
 		_powerup.drags.append(drag)
-		_powerup.next_launch_at = float(_powerup.clock) + POWERUP_MERGE_BEAT_SECONDS
 		_powerup.total = int(_powerup.total) + 1
 		_sync_powerup_drag()
 		var payload: Dictionary = powerup_snapshot()
@@ -613,7 +664,7 @@ func _advance_powerup() -> void:
 	_sync_powerup_drag()
 	if not _powerup.drags.is_empty():
 		return
-	if pair.is_empty():
+	if job.is_empty():
 		if not fusions.is_empty():
 			_powerup.stage = "fusion"
 			_powerup.elapsed = float(fusions[0].elapsed)
@@ -627,8 +678,7 @@ func _advance_powerup() -> void:
 			return
 		_complete_powerup()
 		return
-	# A newly available pair can wait for the remaining beat. Missed beats
-	# never accumulate: the next deadline is based on the actual launch time.
+	# A newly available pair waits for the next scheduled beat.
 	_powerup.stage = "ready"
 	_powerup.elapsed = 0.0
 	_powerup.duration = maxf(0.0, float(_powerup.next_launch_at) - float(_powerup.clock))
@@ -665,6 +715,7 @@ func _complete_powerup() -> void:
 	_powerup.source = {}
 	_powerup.target = {}
 	_powerup.drags.clear()
+	_powerup.plans.clear()
 	_powerup.contact_played = false
 	_powerup.contact_pending = false
 	_held_tile_id = -1
@@ -678,7 +729,7 @@ func _grant_powerup_fragment(tile: Dictionary) -> void:
 	tile.chest = true
 
 
-func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
+func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dictionary = {}) -> String:
 	if phase != "playing" or paused or collection_batch_active() or (powerup_active() and not _powerup_committing) or a_id == b_id or is_fusing(a_id) or is_fusing(b_id):
 		return "ignored"
 	var automatic: bool = _powerup_committing
@@ -716,6 +767,9 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
 		"pop_at": POWERUP_FUSION_SECONDS if automatic else FUSION_SECONDS,
 		"popped": false
 	}
+	if automatic:
+		active.powerup_plan_id = int(powerup_job.get("plan_id", -1))
+		active.powerup_step_index = int(powerup_job.get("step_index", -1))
 	fusions.append(active)
 	if _dragged_tile_id == a_id:
 		# The accepted fusion owns the airborne source from this point onward.
@@ -727,6 +781,23 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false) -> String:
 		if _can_continue(generation):
 			changed.emit()
 	return "merged"
+
+
+func hold_merge_for_drag(event_id: String, held: bool) -> bool:
+	var index: int = _fusion_index(event_id)
+	if index < 0 or str(fusions[index].operation) != "merge":
+		return false
+	if held and (phase != "playing" or paused or powerup_active() or collection_batch_active()):
+		return false
+	fusions[index].held_for_drag = held
+	return true
+
+
+func complete_merge_drag(event_id: String) -> void:
+	var index: int = _fusion_index(event_id)
+	if phase != "playing" or paused or index < 0 or not bool(fusions[index].get("held_for_drag", false)):
+		return
+	_complete_operation(event_id)
 
 
 func collect(tile_id: int) -> bool:
@@ -861,7 +932,7 @@ func _advance_collection_batch() -> void:
 	if not collection_batch_active() or phase != "playing" or paused:
 		return
 	# Let existing motion finish once, then keep the captured bodies in place
-	# so later gravity or growth cannot stretch the 250 ms collection beat.
+	# so later gravity or growth cannot stretch the 200 ms collection beat.
 	if _collection_batch_started == 0 and _collection_batch_settling_remaining() > EPSILON:
 		return
 	# A manual collection started before the button was pressed can finish,
@@ -1912,7 +1983,7 @@ func _next_supply_tile() -> Dictionary:
 
 
 func _build_supply() -> void:
-	# Mix only a new six-part packet. Advertised preview identities never move,
+	# Mix only a new supply packet. Advertised preview identities never move,
 	# and any word crossing a packet boundary keeps its remaining chunks first.
 	while _supply_pending.size() < UPCOMING_COUNT and not _words.is_empty():
 		var word: Dictionary = WordSampler.next_word(_words, _rng, _word_counts, _word_service, practice_weight_for)
@@ -1957,7 +2028,7 @@ func _search_supply_order(packet: Array[Dictionary], order: Array[int], score: i
 		best.score = score
 		best.order = order.duplicate()
 		return
-	# Six slots have at most 720 arrangements. Deterministic scoring avoids a
+	# Five slots have at most 120 arrangements. Deterministic scoring avoids a
 	# greedy tail that leaves siblings adjacent when a separated order exists.
 	for index in range(packet.size()):
 		if index in order:
@@ -2144,10 +2215,11 @@ func _complete_merge(completed: Dictionary) -> void:
 	var result: Dictionary = completed.result.duplicate(true)
 	# The fusion already ends at this reserved rectangle. Allow its final wobble
 	# to settle before accepting another drag or collection.
-	result.age = 0.0
+	var held_for_drag: bool = bool(completed.get("held_for_drag", false))
+	result.age = SETTLE_SECONDS if held_for_drag else 0.0
 	if bool(completed.get("automatic", false)):
 		result.settle_seconds = POWERUP_SETTLE_SECONDS
-	result.settling = true
+	result.settling = not held_for_drag
 	result.arrival = false
 	result.falling = false
 	result.falling_rows = 0
@@ -2155,6 +2227,8 @@ func _complete_merge(completed: Dictionary) -> void:
 	cells.append(result)
 	if _held_tile_id in [int(a.id), int(b.id)]:
 		_held_tile_id = -1
+	if held_for_drag:
+		_held_tile_id = int(result.id)
 	# Consumed words cannot return after a valid merge. Release any failed
 	# collection rolls only when their replacement has committed.
 	_discard_collection_reward(int(a.id))
@@ -2163,11 +2237,13 @@ func _complete_merge(completed: Dictionary) -> void:
 	_gravity_pending = true
 	merged_count += 1
 	if bool(_powerup.get("active", false)) and str(_powerup.kind) == "auto_merge":
-		if _powerup.has("completion_plan"):
-			var plan: Dictionary = _powerup.completion_plan
-			plan.result_ids.append(int(result.id))
+		for plan: Dictionary in _powerup.plans:
+			if int(plan.plan_id) != int(completed.get("powerup_plan_id", -1)):
+				continue
+			plan.result_ids[int(completed.powerup_step_index)] = int(result.id)
 			if plan.result_ids.size() >= plan.steps.size():
-				_powerup.erase("completion_plan")
+				_powerup.plans.erase(plan)
+			break
 		_powerup_ids.erase(int(a.id))
 		_powerup_ids.erase(int(b.id))
 		_powerup_ids.append(int(result.id))

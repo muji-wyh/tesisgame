@@ -187,8 +187,8 @@ A failed save keeps settlement open for retry.
 
 ## Jelly Words
 
-Join reviewed roots on a six-column board, then match the complete spelling
-with its separate picture. Positional hyphens show the missing sides: `un-`,
+Join reviewed roots on a five-column, eight-row board, then match the complete
+spelling with its separate picture. Positional hyphens show the missing sides: `un-`,
 `-believe-`, and `-able`. Roots follow their authored composition and spelling
 changes; arbitrary letter chunks are not accepted. An atomic word such as
 `cat` starts as one whole-word root plus a picture-only Jelly. Pictures match
@@ -206,8 +206,10 @@ Jellies can move to another position where they fit. Unsupported bodies fall
 vertically onto the next support or floor, including after a supporting word is
 collected or dragged away. Held bodies and active merges finish before their
 deferred fall. Roots, pictures and every merged level keep the same ordinary
-rounded-square cell. Long labels use reviewed line breaks or an ellipsis;
-hold a clipped label, or focus it and press R, to pause and read its full spelling.
+rounded-square cell with a 1:1 aspect ratio. The well holds 40 cells and opens
+with at most 15 jellies across three rows. Long labels use reviewed line breaks
+or an ellipsis; hold a clipped label, or focus it and press R, to pause and read
+its full spelling.
 
 At rest, compatible authored partners share a painted color, including partners
 in the upcoming preview. Other pairs use different hues. Picking up a part
@@ -224,7 +226,7 @@ after twenty collections. Tap and Collect pickups both count; idle time,
 merging alone, Auto Merge, and unsuccessful collections do not. A successful
 batch dispatch fixes the next cycle's interval, so the current Next countdown
 never shrinks when a word is collected. Tapping the preview can still release
-the next batch early. The preview sits above the well: each jelly
+the next batch early. The five-slot preview sits above the well: each jelly
 leaves its visible slot, accelerates straight down its corresponding column and
 compresses briefly on contact before becoming playable. A small stagger separates the releases;
 only a sealed column redirects a root into reachable space. The preview is already
@@ -261,9 +263,11 @@ repeated input cannot reroll or award the same collection twice.
 Auto merge costs 600, 900, then 1200 coins for further uses in the same round;
 Treasure costs 200, 300, then 400. Each item has its own successful-use count,
 and its button displays the next price. Treasure still distributes 2–8 fragments;
-Auto merge follows a validated sequence of root joins, picture matches and
-equal-level upgrades. It waits for each fusion and settlement before dragging
-the next pair, and leaves merged words for manual collection. Failed payments
+Auto merge follows validated paths of root joins, picture matches and
+equal-level upgrades. It launches an eligible pair every 200 ms, with each
+250 ms flight overlapping the following flight. A dependent step waits for its
+required result to settle; independent pairs can launch while earlier merges
+continue. It leaves merged words for manual collection. Failed payments
 do not advance a price. A fresh round resets prices. See the
 [coin economy plan](coin-economy.md) for income assumptions and spending targets.
 
@@ -273,8 +277,9 @@ Merge retains fusion sound effects without pronouncing its words. An accepted
 word tap also presents its picture and spelling above the board and pronounces
 it once. Picture-only jellies and complete spellings awaiting their picture also
 pronounce their word on a tap. Partial roots stay silent. Collect gathers ready
-words at 250 ms intervals without pronunciation. Auto Merge starts each next
-merge on a 300 ms beat, including its drag, fusion, and settlement.
+words at 200 ms intervals without pronunciation. Each Auto Merge takes 250 ms
+to fly, 110 ms to fuse, and 30 ms to settle. Its 200 ms launch interval runs
+independently of that 390 ms sequence.
 Each reveal has its own randomly varied position and size, fits its picture and
 spelling, and enters with elastic squash and stretch. Successive reveals coexist
 and fade independently instead of replacing one another. They do not intercept
