@@ -1,5 +1,9 @@
 # Forgiving matching contact in a crowded board
 
+This records the preceding crowded-contact release. The later
+[slight-touch correction](jelly-close-contact-2026-10-22.md) tightens its approach
+margin and removes matching repulsion while retaining the priority fix.
+
 The reported carrot drag grazed its matching picture while overlapping bird,
 walk and tooth. Physical contact with an unrelated neighbor returned before the
 matching search, so the carrot picture kept only its word-family glow and the

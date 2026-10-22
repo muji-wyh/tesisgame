@@ -208,7 +208,8 @@ func set_contact(kind_value: String, direction: Vector2 = Vector2.ZERO, strength
 			_lift.kill()
 		_visual.position = Vector2.ZERO
 		return
-	var pull: float = -strength * (0.25 if kind_value == "match" else 0.16)
+	# A match leans toward its partner; only neutral/rejected contact recoils.
+	var pull: float = strength * (0.035 if kind_value == "match" else -0.16)
 	_surface.position = direction * size * pull
 	_content_offset = _surface.position
 	_picture.position += _content_offset

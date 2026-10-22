@@ -5,7 +5,7 @@ func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	check(data.load_all(), "Interaction fixtures load production vocabulary")
 	for word: Dictionary in data.words:
-		if str(word.id) in ["cat", "apple", "carrot", "tooth", "bird", "walk"]:
+		if str(word.id) in ["cat", "apple", "carrot", "tooth", "bird", "walk", "hear", "chair"]:
 			words.append(word)
 	var view := Jelly.new()
 	root.add_child(view)
@@ -47,26 +47,63 @@ func _check_early_match(view, reduced: bool) -> void:
 		var ids: Array[int] = _install(view, ["root:cat", target])
 		var destination: Vector2 = _center(view, ids[1])
 		check(view._press(-1, _center(view, ids[0])), "The approach fixture can be held")
-		view._move(destination - Vector2(view._pitch * 0.98, 0))
+		_place_at_gap(view, ids[1], Vector2.LEFT, 1.0)
 		var source_outline: PackedVector2Array = view._tiles[ids[0]].contact_outline(Vector2.ONE if reduced else view.DRAG_STRETCH)
 		check(Geometry2D.intersect_polygons(source_outline, view._tiles[ids[1]].contact_outline()).is_empty(), "Early guidance starts before the painted bodies overlap")
-		check(view._target == (ids[1] if target == "picture:cat" else -1), "Only a valid match is offered at the wider distance")
+		check(view._target == (ids[1] if target == "picture:cat" else -1), "Only a valid match is offered with a one-pixel painted gap")
 		view._move(destination)
 		check(view._target == ids[1] and view._contact_state().kind == ("match" if target == "picture:cat" else "touch"), "Close contact retains correct and neutral feedback")
 		view.cancel_input()
 
 func _check_match_edges(view, reduced: bool) -> void:
-	for offset: Vector2 in [Vector2(1.04, 0), Vector2(-1.04, 0), Vector2(0, 0.90), Vector2(0, -0.90),
+	for offset: Vector2 in [Vector2.RIGHT, Vector2.LEFT, Vector2.DOWN, Vector2.UP,
 		Vector2(0.78, 0.72), Vector2(-0.78, 0.72), Vector2(0.78, -0.72), Vector2(-0.78, -0.72)]:
 		_reset(view, reduced, 4)
-		var ids: Array[int] = _install(view, ["root:carrot", "picture:carrot"])
-		var destination: Vector2 = _center(view, ids[1])
+		var ids: Array[int] = _install(view, ["root:hear", "picture:hear"])
 		check(view._press(7, _center(view, ids[0])), "The edge fixture can be picked up")
-		view._move(destination + offset * view._pitch)
+		_place_at_gap(view, ids[1], offset, 8.0)
+		check(view._target == -1, "An eight-pixel painted gap cannot advertise a merge: " + str(offset))
+		var approach: Vector2 = _place_at_gap(view, ids[1], offset, 1.0)
 		check(view._target == ids[1] and view._contact_state().kind == "match", "A matching edge or corner gets forgiving contact: " + str(offset))
-		view._move(destination + offset * view._pitch * 1.6)
-		check(view._target == -1, "A distant word-family highlight never becomes a merge target")
-		view.cancel_input()
+		_advance(view, 0.2)
+		check(view._target == ids[1], "Steady contact cannot disconnect itself")
+		for id: int in ids:
+			var tile = view._tiles[id]
+			var direction: Vector2 = tile._gel.get_shader_parameter("contact_direction")
+			check(tile._surface.position.dot(direction) >= 0.0, "Matching feedback never pushes either painted body away")
+			check(tile._surface.position.length() < tile.size.length() * 0.03, "Matching attraction stays subtle and attached to the pointer")
+		view._release(approach)
+		_advance(view, 1.0)
+		check(view.game.merged_count == 1 and view.game.fusions.is_empty(), "A slight-touch cue releases into exactly one merge")
+
+func _painted_gap(view, target: int) -> float:
+	var gap: float = INF
+	var other: PackedVector2Array = view._tiles[target].contact_outline()
+	for outline: PackedVector2Array in view._feedback_outlines(view._feedback_body()):
+		if not Geometry2D.intersect_polygons(outline, other).is_empty():
+			return 0.0
+		for a: int in range(outline.size()):
+			for b: int in range(other.size()):
+				gap = minf(gap, outline[a].distance_to(Geometry2D.get_closest_point_to_segment(outline[a], other[b], other[(b + 1) % other.size()])))
+				gap = minf(gap, other[b].distance_to(Geometry2D.get_closest_point_to_segment(other[b], outline[a], outline[(a + 1) % outline.size()])))
+	return gap * Style.ui_scale(view)
+
+func _place_at_gap(view, target: int, direction: Vector2, pixels: float, grab_offset: Vector2 = Vector2.ZERO) -> Vector2:
+	# Measure the acquired paint, independently of the production match margin.
+	var destination: Vector2 = _center(view, target) + grab_offset
+	var near: float = 0.0
+	var far: float = view._pitch * 3.0
+	for step: int in range(16):
+		var distance: float = (near + far) * 0.5
+		view._move(destination + direction.normalized() * distance)
+		if _painted_gap(view, target) < pixels:
+			near = distance
+		else:
+			far = distance
+	var approach: Vector2 = destination + direction.normalized() * far
+	view._move(approach)
+	check(absf(_painted_gap(view, target) - pixels) < 0.1, "The fixture uses the requested visible edge gap")
+	return approach
 
 func _fusion_grab_point(view, fusion: Dictionary) -> Vector2:
 	if view.reduced_motion:
@@ -117,8 +154,7 @@ func _check_crowded_match(view, reduced: bool) -> void:
 		check(accepted, "The crowded carrot can be picked up: " + mode)
 		if not accepted:
 			continue
-		var approach: Vector2 = _center(view, ids[2]) - Vector2(0.75, 0.65) * view._pitch + grab_offset
-		view._move(approach)
+		var approach: Vector2 = _place_at_gap(view, ids[2], Vector2(-0.75, -0.65), 1.0, grab_offset)
 		var outlines: Array[PackedVector2Array] = view._feedback_outlines(view._feedback_body())
 		var neutral_overlap: bool = false
 		for index: int in [1, 3, 4]:
@@ -226,8 +262,11 @@ func _check_fusion_contact(view, reduced: bool) -> void:
 		var matching: bool = description == "merged:cat:1"
 		check(view._press(7, origin), "An active fusion can be held for contact feedback")
 		check(view._tiles[partner].completion_hint == description.begins_with("merged:cat"), "Pending words highlight their same-word family across levels")
+		var separated: Vector2 = _place_at_gap(view, partner, Vector2.UP, 8.0)
+		check(view._target == -1, "A pending fusion cannot advertise contact across an eight-pixel gap")
+		var approach: Vector2 = _place_at_gap(view, partner, Vector2.UP, 1.0)
+		view._move(separated)
 		cues.clear()
-		var approach: Vector2 = destination - Vector2(0, view._pitch * 0.90)
 		view._move(approach)
 		var overlaps: bool = false
 		for outline: PackedVector2Array in view._feedback_outlines(visual.merged):
@@ -277,11 +316,10 @@ func _check_fusion_approach_drop(view, reduced: bool) -> void:
 	var fusion: Dictionary = view.game.fusions[0].duplicate(true)
 	var origin: Vector2 = view.get_global_transform() * view._tile_rect(fusion.result).get_center()
 	view._press(-1, origin)
-	var approach: Vector2 = _center(view, ids[2]) - Vector2(0, view._pitch * 0.90)
-	view._move(approach)
-	check(view._contact_state().kind == "match", "The fusion's wider approach advertises an actionable drop")
+	var approach: Vector2 = _place_at_gap(view, ids[2], Vector2.UP, 1.0)
+	check(view._contact_state().kind == "match", "The fusion's slight-touch cue advertises an actionable drop")
 	view._release(approach)
-	check(view.game.merged_count == 1 and view.game.fusions.size() == 1, "Releasing at the wider approach commits the pair and starts its advertised upgrade")
+	check(view.game.merged_count == 1 and view.game.fusions.size() == 1, "Releasing at slight touch commits the pair and starts its advertised upgrade")
 	_advance(view, 1.0)
 	check(view.game.merged_count == 2 and view.game.fusions.is_empty() and view.game.collected_coins == 0, "The early approach drop commits each merge once without collection")
 

@@ -31,7 +31,7 @@ vec3 palette(vec3 paint, float hue_value) {
 
 vec2 body_uv(vec2 point, vec4 body) {
 	bool matching = contact_kind == 2;
-	vec2 pull = -contact_direction * body.zw * contact_strength * (matching ? 0.25 : 0.16);
+	vec2 pull = contact_direction * body.zw * contact_strength * (matching ? 0.035 : -0.16);
 	vec2 stretch = vec2(1.0) + (abs(contact_direction) * 2.0 - vec2(1.0)) * contact_strength * (matching ? 0.08 : -0.10);
 	vec2 uv = (point - body.xy - pull) / (body.zw * stretch) + vec2(0.5);
 	// A traveling pressure ripple bends the painted contour and highlights.

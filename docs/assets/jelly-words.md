@@ -141,12 +141,15 @@ rim on both sides. Completing the fusion retains the pointer, target and single
 contact cue without committing a second merge until release.
 Automatic powerup playback retains its existing exclusive input ownership.
 
-Valid drag targets offer merge contact within 28 percent of a tile's shorter side,
-capped at 24 screen pixels beyond the painted source contour, including corners.
+Valid drag targets offer merge contact within 6 percent of a tile's shorter side,
+capped at 4 screen pixels beyond the painted source contour, including corners.
 The closest eligible match in that margin takes priority over unrelated touching
 neighbors. Without a nearby match, nonmatching bodies retain the original
 silhouette-overlap threshold and closest-contact selection.
 The same selected target is used for the release, so the early cue is actionable.
+Matching surfaces lean slightly toward each other instead of recoiling apart;
+ordinary tiles and active fusion lobes use the same attraction. Contact feedback
+does not move its own detection contour, preventing flicker while held still.
 
 New five-part supply packets mix parts from different words, leaving intervening
 pieces between siblings whenever the packet permits it. Word provenance, part

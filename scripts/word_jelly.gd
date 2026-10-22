@@ -1233,7 +1233,8 @@ func _drag_target() -> int:
 	if source == null:
 		return -1
 	var outlines: Array[PackedVector2Array] = _feedback_outlines(source)
-	var reach: float = minf(minf(source.size.x, source.size.y) * 0.28, 24.0 / Style.ui_scale(self))
+	# Forgive a slight painted-edge gap without advertising a remote merge.
+	var reach: float = minf(minf(source.size.x, source.size.y) * 0.06, 4.0 / Style.ui_scale(self))
 	var pending: Dictionary = _feedback_source()
 	var bounds: Rect2 = _outline_bounds(outlines[0])
 	for outline: PackedVector2Array in outlines:
