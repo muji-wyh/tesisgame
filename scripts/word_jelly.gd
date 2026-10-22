@@ -406,8 +406,17 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 		_press_point = point
 		_drag_point = point
 		_tile_press_started_ms = -1
-		_fusion_drag = {"event_id": merging, "offset": Vector2.ZERO, "moved": false}
+		for fusion: Dictionary in game.fusions:
+			if str(fusion.attempt_id) == merging:
+				_fusion_drag = {"event_id": merging, "offset": Vector2.ZERO, "moved": false, "result": fusion.result}
+		_source = int(_fusion_drag.result.id)
+		_dragging = false
+		_target = -1
+		_contact_cue_target = -1
+		_contact_elapsed = 0.0
+		_rejection.clear()
 		audio_requested.emit("pick")
+		_refresh_marks()
 		_publish()
 		return true
 	if _preview_rect.has_point(point):
@@ -458,7 +467,11 @@ func _move(global_point: Vector2) -> void:
 			_fusion_drag.moved = true
 		if bool(_fusion_drag.moved):
 			_fusion_drag.offset = _drag_point - _press_point
-		_refresh_fusion()
+			_dragging = true
+		if _defer_motion_visuals:
+			return
+		_sync_positions()
+		_sound_contact()
 		_publish()
 		return
 	if (get_global_transform().affine_inverse() * global_point).distance_to(_press_point) * Style.ui_scale(self) > 7.0:
@@ -896,7 +909,9 @@ func _sync_positions() -> void:
 		var arrival: bool = bool(cell.get("arrival", false)) and not game.is_settled(cell)
 		var shadow_visible: bool = true
 		tile.set_preview_pressure(0.0, 0.0)
-		if not dragging:
+		if dragging:
+			tile.position = _drag_point - _drag_offset
+		else:
 			tile.position = rect.position
 			if arrival and not reduced_motion:
 				# A rapid release may reserve another body in the same tray slot.
@@ -951,6 +966,10 @@ func _sync_positions() -> void:
 		tile.deform(0.0, 0.0, DRAG_STRETCH if dragging and not reduced_motion else stretch)
 		var support_lift: float = maxf(0.0, rect.position.y - tile.position.y) if arrival or bool(cell.get("falling", false)) else 0.0
 		tile.set_support(6.0 / Style.ui_scale(self) if dragging else support_lift, compression, shadow_visible)
+	# Pose the pending body before testing contact, including on frames without
+	# pointer motion while its two lobes continue to join.
+	if not _fusion_drag.is_empty():
+		_refresh_fusion()
 	if _dragging:
 		var target: int = _drag_target()
 		if target != _target:
@@ -1197,26 +1216,31 @@ func _refresh_completion_hints() -> void:
 	if source != _completion_source:
 		_completion_source = source
 		_completion_elapsed = 0.0
-	var prefix: Dictionary = _cell(source)
+	var prefix: Dictionary = _feedback_source() if source == _source else _cell(source)
 	for id: int in _tiles:
 		var target: Dictionary = _cell(id)
 		var same_word: bool = str(prefix.get("jelly_kind", "")) == "merged" \
 			and str(target.get("jelly_kind", "")) == "merged" and id != source \
 			and not prefix.get("word", {}).is_empty() \
 			and str(prefix.word.id) == str(target.get("word", {}).get("id", ""))
-		var eligible: bool = not prefix.is_empty() and _settled(prefix) and _settled(target) \
+		var eligible: bool = not prefix.is_empty() and (not _fusion_drag.is_empty() or _settled(prefix)) and _settled(target) \
 			and (same_word or _can_merge_for_feedback(prefix, target))
 		_tiles[id].set_completion_hint(eligible, _completion_elapsed, reduced_motion)
 
 func _drag_target() -> int:
 	# Actual contact takes precedence, including a closer nonmatching body.
-	var touching: int = super._drag_target()
-	if touching >= 0 or not _tiles.has(_source):
+	var source: WordTile = _feedback_body()
+	if source == null:
+		return -1
+	var outlines: Array[PackedVector2Array] = _feedback_outlines(source)
+	var touching: int = super._drag_target() if _fusion_drag.is_empty() else _fusion_touching_target(outlines, source)
+	if touching >= 0:
 		return touching
-	var source: WordTile = _tiles[_source]
-	var outline: PackedVector2Array = source.contact_outline(Vector2.ONE if reduced_motion else DRAG_STRETCH)
 	var reach: float = minf(minf(source.size.x, source.size.y) * 0.22, 18.0 / Style.ui_scale(self))
-	var bounds: Rect2 = _outline_bounds(outline).grow(reach)
+	var bounds: Rect2 = _outline_bounds(outlines[0])
+	for outline: PackedVector2Array in outlines:
+		bounds = bounds.merge(_outline_bounds(outline))
+	bounds = bounds.grow(reach)
 	var expanded: Array[PackedVector2Array] = []
 	var nearest: int = -1
 	var nearest_distance: float = INF
@@ -1225,15 +1249,63 @@ func _drag_target() -> int:
 		if id == _source or not _settled(cell) or not _tiles.has(id):
 			continue
 		var target: WordTile = _tiles[id]
-		if not bounds.intersects(target.get_rect()) or not _can_merge_for_feedback(_cell(_source), cell):
+		if not bounds.intersects(target.get_rect()) or not _can_merge_for_feedback(_feedback_source(), cell):
 			continue
 		var distance: float = source.get_rect().get_center().distance_squared_to(target.get_rect().get_center())
 		if distance > nearest_distance or (is_equal_approx(distance, nearest_distance) and id != _target):
 			continue
 		if expanded.is_empty():
-			expanded = Geometry2D.offset_polygon(outline, reach, Geometry2D.JOIN_ROUND)
+			for outline: PackedVector2Array in outlines:
+				expanded.append_array(Geometry2D.offset_polygon(outline, reach, Geometry2D.JOIN_ROUND))
 		for area: PackedVector2Array in expanded:
 			if not Geometry2D.intersect_polygons(area, target.contact_outline()).is_empty():
+				nearest = id
+				nearest_distance = distance
+				break
+	return nearest
+
+func _feedback_source() -> Dictionary:
+	# A reserved result can preview its next interaction without entering the
+	# model's cell list or completing the accepted merge ahead of its clock.
+	return _fusion_drag.result if not _fusion_drag.is_empty() else _cell(_source)
+
+func _feedback_body() -> WordTile:
+	if not _fusion_drag.is_empty():
+		return _fusion_visuals.get(str(_fusion_drag.event_id), {}).get("merged")
+	return _tiles.get(_source)
+
+func _feedback_outlines(source: WordTile) -> Array[PackedVector2Array]:
+	var outlines: Array[PackedVector2Array] = []
+	if not _fusion_drag.is_empty() and not reduced_motion:
+		var visual: Dictionary = _fusion_visuals.get(str(_fusion_drag.event_id), {})
+		if not visual.is_empty() and visual.art.visible and float(visual.merged._surface.modulate.a) < 0.5:
+			# Sample both painted lobes, excluding pressure deformation so contact
+			# cannot move its own hit threshold and flicker on and off.
+			for key: String in ["body_a", "body_b"]:
+				var body: Vector4 = visual.art._gel.get_shader_parameter(key)
+				var outline := PackedVector2Array()
+				for point: Vector2 in source._contact_outline:
+					outline.append(visual.art.position + Vector2(body.x, body.y) + (point - Vector2.ONE * 0.5) * Vector2(body.z, body.w))
+				outlines.append(outline)
+	if outlines.is_empty():
+		outlines.append(source.contact_outline(Vector2.ONE if reduced_motion else DRAG_STRETCH))
+	return outlines
+
+func _fusion_touching_target(outlines: Array[PackedVector2Array], source: WordTile) -> int:
+	var nearest: int = -1
+	var nearest_distance: float = INF
+	for cell: Dictionary in game.cells:
+		var id: int = int(cell.id)
+		if not _settled(cell) or not _tiles.has(id):
+			continue
+		var target: WordTile = _tiles[id]
+		var distance: float = source.get_rect().get_center().distance_squared_to(target.get_rect().get_center())
+		if distance > nearest_distance or (is_equal_approx(distance, nearest_distance) and id != _target):
+			continue
+		var target_outline: PackedVector2Array = target.contact_outline()
+		for outline: PackedVector2Array in outlines:
+			if _outline_bounds(outline).intersects(_outline_bounds(target_outline), true) \
+				and not Geometry2D.intersect_polygons(outline, target_outline).is_empty():
 				nearest = id
 				nearest_distance = distance
 				break
@@ -1297,19 +1369,30 @@ func _contact_state() -> Dictionary:
 		return state
 	if not _dragging or _source < 0 or _target < 0 or not _tiles.has(_target):
 		return state
-	var source: Dictionary = _cell(_source)
+	var source: Dictionary = _feedback_source()
 	var target: Dictionary = _cell(_target)
-	if not _settled(source) or not _settled(target):
+	var body: WordTile = _feedback_body()
+	if body == null or source.is_empty() or (_fusion_drag.is_empty() and not _settled(source)) or not _settled(target):
 		return state
 	# All painted bodies respond to pressure. Only a forward word earns the
 	# separate completion highlight. A failed drop is rejected only on release.
 	var completing: bool = _can_merge_for_feedback(source, target)
-	var direction: Vector2 = (_tiles[_target].get_rect().get_center() - _tiles[_source].get_rect().get_center()).normalized()
+	var direction: Vector2 = (_tiles[_target].get_rect().get_center() - body.get_rect().get_center()).normalized()
 	if direction.length_squared() < 0.1:
 		direction = (_tile_rect(target).get_center() - _tile_rect(source).get_center()).normalized()
 	state.merge({"kind": "match" if completing else "touch", "source": _source, "target": _target,
 		"strength": lerpf(0.2, 0.65, smoothstep(0.0, 0.14, _contact_elapsed)), "direction": direction}, true)
 	return state
+
+func _refresh_contact() -> void:
+	super._refresh_contact()
+	var state: Dictionary = _contact_state()
+	for event_id: String in _fusion_visuals:
+		var visual: Dictionary = _fusion_visuals[event_id]
+		var held: bool = event_id == str(_fusion_drag.get("event_id", ""))
+		var kind: String = str(state.kind) if held else "none"
+		visual.merged.set_contact(kind, state.direction, float(state.strength), reduced_motion)
+		visual.art.set_contact(kind, state.direction, float(state.strength), reduced_motion)
 
 func _ensure_fusion_visual(fusion: Dictionary) -> Dictionary:
 	var id: String = str(fusion.attempt_id)
@@ -1418,6 +1501,8 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 	if str(_fusion_drag.get("event_id", "")) == str(fusion.attempt_id):
 		art.position += Vector2(_fusion_drag.offset)
 		merged.position += Vector2(_fusion_drag.offset)
+		var state: Dictionary = _contact_state()
+		merged.set_contact(str(state.kind), state.direction, float(state.strength), reduced_motion)
 	merged.show()
 
 func _merge_started(fusion: Dictionary) -> void:

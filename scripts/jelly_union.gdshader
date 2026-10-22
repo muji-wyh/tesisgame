@@ -17,6 +17,9 @@ uniform float charge = 0.0;
 uniform float opacity = 1.0;
 uniform float palette_hue_a = -1.0;
 uniform float palette_hue_b = -1.0;
+uniform int contact_kind = 0;
+uniform vec2 contact_direction = vec2(0.0);
+uniform float contact_strength = 0.0;
 
 vec3 palette(vec3 paint, float hue_value) {
 	if (hue_value < 0.0) { return paint; }
@@ -27,7 +30,10 @@ vec3 palette(vec3 paint, float hue_value) {
 }
 
 vec2 body_uv(vec2 point, vec4 body) {
-	vec2 uv = (point - body.xy) / body.zw + vec2(0.5);
+	bool matching = contact_kind == 2;
+	vec2 pull = -contact_direction * body.zw * contact_strength * (matching ? 0.25 : 0.16);
+	vec2 stretch = vec2(1.0) + (abs(contact_direction) * 2.0 - vec2(1.0)) * contact_strength * (matching ? 0.08 : -0.10);
+	vec2 uv = (point - body.xy - pull) / (body.zw * stretch) + vec2(0.5);
 	// A traveling pressure ripple bends the painted contour and highlights.
 	uv.x += sin(uv.y * 6.28318 + flow * 5.0) * sin(flow * 3.14159) * 0.014;
 	return uv;
@@ -70,6 +76,10 @@ void fragment() {
 	) / (epsilon * 2.0);
 	paint = jelly_light(paint, -field.x / max(unit, 1.0), normal);
 	float edge = 1.0 - smoothstep(0.0, unit * 0.105, -field.x);
+	if (contact_kind > 0) {
+		vec3 rim = contact_kind == 2 ? vec3(0.14, 0.52, 0.42) : vec3(1.0, 0.957, 0.831);
+		paint = mix(paint, rim, edge * (contact_kind == 2 ? 0.85 : 0.6));
+	}
 	vec2 local = (point - mix(body_a.xy, body_b.xy, 0.5)) / body_b.zw;
 	float sheen = exp(-pow((local.x + 0.23 - flow * 0.12) / 0.07, 2.0)
 		- pow((local.y + 0.18) / 0.18, 2.0));

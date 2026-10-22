@@ -49,6 +49,11 @@ func configure(colors: Array, a: int, b: int, surface: Texture2D) -> void:
 	for bead: TextureRect in _beads:
 		bead.texture = surface
 
+func set_contact(kind: String, direction: Vector2, strength: float, reduced: bool) -> void:
+	_gel.set_shader_parameter("contact_kind", 2 if kind == "match" else 1 if kind == "touch" else 0)
+	_gel.set_shader_parameter("contact_direction", direction)
+	_gel.set_shader_parameter("contact_strength", strength if kind != "none" and not reduced else 0.0)
+
 func pose(a: Vector2, b: Vector2, destination: Vector2, extent_a: Vector2, extent_b: Vector2, unit: float,
 		progress: float, compression: float, release: float, opacity: float) -> void:
 	stage = "release" if progress >= 2.0 / 3.0 else "compress" if progress >= 0.57 else "hold" if progress >= 0.52 else "union" if progress >= 0.12 else "contact"

@@ -131,6 +131,14 @@ clock finishes, its single result inherits the same pointer and finger offset.
 Releasing earlier completes that already accepted pair once, then uses the
 ordinary placement or merge rules for the resulting body. Canceling movement
 returns the animation to its reserved slot. Pressing a fusion never collects it.
+
+While held, the reserved result supplies word-family guidance and merge
+eligibility before the fusion finishes. Contact follows both painted joining
+lobes, then the resulting body. Matching partners receive the same expanded
+approach margin as ordinary drags; other bodies respond only at painted contact.
+The existing gel materials receive the same directional pressure and contact
+rim on both sides. Completing the fusion retains the pointer, target and single
+contact cue without committing a second merge until release.
 Automatic powerup playback retains its existing exclusive input ownership.
 
 Valid drag targets offer merge contact within 22 percent of a tile's width,
