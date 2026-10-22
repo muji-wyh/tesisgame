@@ -134,6 +134,9 @@ async function mergeNextPair(page) {
   await page.mouse.move(from.x, from.y);
   await page.mouse.down();
   try {
+    // Start moving before waiting for the published state so a clipped label
+    // cannot turn this drag into its intentional long-press reading action.
+    await page.mouse.move(from.x + 16, from.y);
     await expect.poll(async () => (await jelly(page)).drag.source, { intervals: [25, 50] }).toBe(source.id);
     await page.mouse.move(to.x, to.y, { steps: 5 });
     await expect.poll(async () => {
@@ -241,6 +244,8 @@ test('a manual Jelly Words merge pronounces its word immediately on the accepted
   await page.mouse.move(from.x, from.y);
   await page.mouse.down();
   try {
+    // Cross the drag threshold immediately, including for clipped word labels.
+    await page.mouse.move(from.x + 16, from.y);
     await expect.poll(async () => (await jelly(page)).drag.source).toBe(source.id);
     await page.mouse.move(to.x, to.y, { steps: 10 });
     await expect.poll(async () => {

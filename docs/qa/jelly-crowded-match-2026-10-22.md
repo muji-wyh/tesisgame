@@ -41,3 +41,18 @@ device recordings. No audio changes or listening claims are part of this fix.
 
 The directory contains the baseline script and failure log, passing test logs,
 five 36-frame captures, contact crops, a before/after video and release logs.
+
+## Browser verification
+
+The fresh Web build passed its packaged resource checks. The current-stage
+manual word-picture merge passed in desktop Chromium and Pixel 7 Chromium
+emulation, checking contact before release, the actual fusion, one immediate
+pronunciation and no collection.
+
+The first desktop attempt opened the clipped word's long-press reading panel
+while the harness waited after pointer-down. The harness now crosses the drag
+threshold immediately before polling published state. Both desktop and Android
+passed with that input sequence; the original failure and successful rerun are
+retained in `browser.log`, `browser-current-stage/`, `browser-recheck.log` and
+`browser-recheck/`. The screenshot-specific crowded layout remains covered by
+the native regression and render comparison.
