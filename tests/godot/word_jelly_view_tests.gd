@@ -1942,8 +1942,11 @@ func _check_ordered_completion_contact(view) -> void:
 				var fragments: Array[int] = [0, 0, 0, 0, 0]
 				fragments[pair.x] = 1
 				fragments[pair.y] = 2
-				var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", "picture:caterpillar", "root:cat", "x"], fragments)
 				var complete: bool = pair == Vector2i(0, 1) or pair == Vector2i(1, 0)
+				# Isolate rejection from the nearby valid-match priority covered by
+				# the crowded drag interaction tests.
+				var pieces: Array[String] = ["root:cat", "picture:cat" if complete else "picture:caterpillar", "picture:caterpillar", "root:cat", "x"]
+				var ids: Array[int] = _completion_board(view, pieces, fragments)
 				var originals: Array = view.game.cells.duplicate(true)
 				var source: int = ids[pair.x]
 				var target: int = ids[pair.y]

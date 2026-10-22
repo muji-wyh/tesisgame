@@ -1228,15 +1228,13 @@ func _refresh_completion_hints() -> void:
 		_tiles[id].set_completion_hint(eligible, _completion_elapsed, reduced_motion)
 
 func _drag_target() -> int:
-	# Actual contact takes precedence, including a closer nonmatching body.
+	# A nearby valid match must remain reachable through crowded neighbors.
 	var source: WordTile = _feedback_body()
 	if source == null:
 		return -1
 	var outlines: Array[PackedVector2Array] = _feedback_outlines(source)
-	var touching: int = super._drag_target() if _fusion_drag.is_empty() else _fusion_touching_target(outlines, source)
-	if touching >= 0:
-		return touching
-	var reach: float = minf(minf(source.size.x, source.size.y) * 0.22, 18.0 / Style.ui_scale(self))
+	var reach: float = minf(minf(source.size.x, source.size.y) * 0.28, 24.0 / Style.ui_scale(self))
+	var pending: Dictionary = _feedback_source()
 	var bounds: Rect2 = _outline_bounds(outlines[0])
 	for outline: PackedVector2Array in outlines:
 		bounds = bounds.merge(_outline_bounds(outline))
@@ -1249,7 +1247,7 @@ func _drag_target() -> int:
 		if id == _source or not _settled(cell) or not _tiles.has(id):
 			continue
 		var target: WordTile = _tiles[id]
-		if not bounds.intersects(target.get_rect()) or not _can_merge_for_feedback(_feedback_source(), cell):
+		if not bounds.intersects(target.get_rect()) or not _can_merge_for_feedback(pending, cell):
 			continue
 		var distance: float = source.get_rect().get_center().distance_squared_to(target.get_rect().get_center())
 		if distance > nearest_distance or (is_equal_approx(distance, nearest_distance) and id != _target):
@@ -1262,7 +1260,9 @@ func _drag_target() -> int:
 				nearest = id
 				nearest_distance = distance
 				break
-	return nearest
+	if nearest >= 0:
+		return nearest
+	return super._drag_target() if _fusion_drag.is_empty() else _fusion_touching_target(outlines, source)
 
 func _feedback_source() -> Dictionary:
 	# A reserved result can preview its next interaction without entering the

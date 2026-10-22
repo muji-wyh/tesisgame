@@ -5,7 +5,7 @@ func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	check(data.load_all(), "Interaction fixtures load production vocabulary")
 	for word: Dictionary in data.words:
-		if str(word.id) in ["cat", "apple"]:
+		if str(word.id) in ["cat", "apple", "carrot", "tooth", "bird", "walk"]:
 			words.append(word)
 	var view := Jelly.new()
 	root.add_child(view)
@@ -16,6 +16,8 @@ func _run() -> void:
 		for reduced: bool in [false, true]:
 			_check_cross_level_hints(view, reduced)
 			_check_early_match(view, reduced)
+			_check_match_edges(view, reduced)
+			_check_crowded_match(view, reduced)
 			for release_early: bool in [false, true]:
 				_check_fusion_drag(view, reduced, release_early)
 			_check_fusion_cancel(view, reduced)
@@ -52,6 +54,91 @@ func _check_early_match(view, reduced: bool) -> void:
 		view._move(destination)
 		check(view._target == ids[1] and view._contact_state().kind == ("match" if target == "picture:cat" else "touch"), "Close contact retains correct and neutral feedback")
 		view.cancel_input()
+
+func _check_match_edges(view, reduced: bool) -> void:
+	for offset: Vector2 in [Vector2(1.04, 0), Vector2(-1.04, 0), Vector2(0, 0.90), Vector2(0, -0.90),
+		Vector2(0.78, 0.72), Vector2(-0.78, 0.72), Vector2(0.78, -0.72), Vector2(-0.78, -0.72)]:
+		_reset(view, reduced, 4)
+		var ids: Array[int] = _install(view, ["root:carrot", "picture:carrot"])
+		var destination: Vector2 = _center(view, ids[1])
+		check(view._press(7, _center(view, ids[0])), "The edge fixture can be picked up")
+		view._move(destination + offset * view._pitch)
+		check(view._target == ids[1] and view._contact_state().kind == "match", "A matching edge or corner gets forgiving contact: " + str(offset))
+		view._move(destination + offset * view._pitch * 1.6)
+		check(view._target == -1, "A distant word-family highlight never becomes a merge target")
+		view.cancel_input()
+
+func _fusion_grab_point(view, fusion: Dictionary) -> Vector2:
+	if view.reduced_motion:
+		return view.get_global_transform() * view._tile_rect(fusion.result).get_center()
+	var visual: Dictionary = view._fusion_visuals[str(fusion.attempt_id)]
+	var body: Vector4 = visual.art._gel.get_shader_parameter("body_b")
+	return view.get_global_transform() * (visual.art.position + Vector2(body.x, body.y))
+
+func _crowded_carrot_board(view, fusing: bool = false) -> Array[int]:
+	var pieces: Array[String] = ["root:carrot", "root:tooth", "merged:carrot:1" if fusing else "picture:carrot", "root:bird", "root:walk"]
+	if fusing:
+		pieces.append("picture:carrot")
+	var ids: Array[int] = _completion_board(view, pieces)
+	for index: int in [3, 4]:
+		var cell: Dictionary = view.game.cells[index]
+		cell.column = index - 2
+		cell.row = Model.ROWS - 2
+	if fusing:
+		view.game.cells[0].column = 4
+		view.game.cells[0].row = Model.ROWS - 2
+		var cell: Dictionary = view.game.cells[5]
+		cell.column = 4
+		cell.row = Model.ROWS - 1
+	view._sync_tiles()
+	view._layout()
+	view._reflow.clear()
+	view._sync_positions()
+	return ids
+
+func _check_crowded_match(view, reduced: bool) -> void:
+	for mode: String in ["ordinary", "fusion-early", "fusion-handoff"]:
+		_reset(view, reduced, 4)
+		var fusing: bool = mode != "ordinary"
+		var ids: Array[int] = _crowded_carrot_board(view, fusing)
+		var origin: Vector2 = _center(view, ids[0])
+		var grab_offset := Vector2.ZERO
+		var fusion: Dictionary = {}
+		if fusing:
+			_drag(view, ids[0], ids[5])
+			check(view.game.fusions.size() == 1, "The crowded fixture starts one accepted carrot merge")
+			if view.game.fusions.is_empty():
+				continue
+			_advance(view, 0.08)
+			fusion = view.game.fusions[0].duplicate(true)
+			origin = _fusion_grab_point(view, fusion)
+			grab_offset = origin - view.get_global_transform() * view._tile_rect(fusion.result).get_center()
+		var accepted: bool = view._press(7, origin)
+		check(accepted, "The crowded carrot can be picked up: " + mode)
+		if not accepted:
+			continue
+		var approach: Vector2 = _center(view, ids[2]) - Vector2(0.75, 0.65) * view._pitch + grab_offset
+		view._move(approach)
+		var outlines: Array[PackedVector2Array] = view._feedback_outlines(view._feedback_body())
+		var neutral_overlap: bool = false
+		for index: int in [1, 3, 4]:
+			for outline: PackedVector2Array in outlines:
+				neutral_overlap = neutral_overlap or not Geometry2D.intersect_polygons(outline, view._tiles[ids[index]].contact_outline()).is_empty()
+		check(neutral_overlap, "The screenshot fixture physically overlaps unrelated neighbors")
+		check(view._target == ids[2] and view._contact_state().kind == "match", "A diagonal carrot match takes priority over unrelated overlaps: " + mode)
+		check(view._tiles[ids[2]].highlighted and view._tiles[ids[2]]._contact_kind == "match", "The matching carrot visibly responds before release")
+		for index: int in [1, 3, 4]:
+			check(view._tiles[ids[index]]._contact_kind == "none", "Unrelated neighbors cannot steal matching contact")
+		if mode == "fusion-handoff":
+			_advance(view, float(fusion.duration))
+			check(view._target == ids[2] and view._contact_state().kind == "match", "The crowded diagonal match survives natural fusion completion")
+		view._release(approach)
+		_advance(view, 1.0)
+		check(view.game.merged_count == (2 if fusing else 1) and view.game.fusions.is_empty(), "Releasing on the diagonal cue performs exactly the advertised merge: " + mode)
+		check(view.game.cell(ids[2]).is_empty(), "The indicated carrot is consumed by its match")
+		for index: int in [1, 3, 4]:
+			check(not view.game.cell(ids[index]).is_empty(), "The advertised drop preserves each unrelated neighbor")
+		check(view.game.collected_coins == 0 and view.game.cleared_pairs == 0, "Matching priority does not collect or pay out")
 
 func _start_fusion(view) -> Dictionary:
 	var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", "merged:cat:1", "picture:apple", "root:apple"])
