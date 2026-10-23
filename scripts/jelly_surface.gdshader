@@ -33,6 +33,9 @@ vec3 palette(vec3 paint) {
 }
 
 void vertex() {
+	// Pad only the matching light; inverse UV mapping keeps the painted body fixed.
+	float glow = smoothstep(0.35, 0.7, completion_strength);
+	VERTEX = (VERTEX - surface_size * 0.5) * (1.0 + glow * 0.16) + surface_size * 0.5;
 	// Extend the skin mesh, not its UV bounds, so the hanging belly cannot clip.
 	// The learning face and input rectangle are separate, stationary controls.
 	VERTEX.y *= 1.0 + preview_pull;
@@ -40,18 +43,20 @@ void vertex() {
 }
 
 void fragment() {
-	vec2 sample_uv = UV;
-	sample_uv.x += sin(UV.y * 3.14159265) * sin(beat + UV.y * 3.14159265) * bend;
-	sample_uv.y += sin(UV.x * 3.14159265) * cos(beat + UV.x * 3.14159265) * bend * 0.55;
+	float glow = smoothstep(0.35, 0.7, completion_strength);
+	vec2 skin_uv = (UV - vec2(0.5)) * (1.0 + glow * 0.16) + vec2(0.5);
+	vec2 sample_uv = skin_uv;
+	sample_uv.x += sin(skin_uv.y * 3.14159265) * sin(beat + skin_uv.y * 3.14159265) * bend;
+	sample_uv.y += sin(skin_uv.x * 3.14159265) * cos(beat + skin_uv.x * 3.14159265) * bend * 0.55;
 	// The crown resists while gravity stretches the acquired lower lobe.
 	// A pinched shoulder preserves volume as the skin extends downwards.
-	float height = clamp((0.890625 - UV.y) / 0.784375, 0.0, 1.0);
+	float height = clamp((0.890625 - skin_uv.y) / 0.784375, 0.0, 1.0);
 	// Keep lateral pressure inside the acquired texture's transparent margin.
 	float bulge = sin(height * 3.14159265) * preview_pressure * 0.28;
 	sample_uv.x = 0.5 + (sample_uv.x - 0.5) / (1.0 + bulge - preview_pull * smoothstep(0.15, 0.9, height) * 0.42);
 	sample_uv.x -= preview_sway * height * height;
 	sample_uv.y -= preview_pressure * 0.784375 * pow(height, 1.35);
-	vec2 local = UV - vec2(0.5);
+	vec2 local = skin_uv - vec2(0.5);
 	float pressure = exp(-pow(dot(local, vec2(-contact_direction.y, contact_direction.x)) * 4.0, 2.0));
 	sample_uv -= contact_direction * pressure * contact_strength * (contact_match ? 0.025 : -0.02);
 	vec4 gel = texture(TEXTURE, clamp(sample_uv, vec2(0.0), vec2(1.0)));
@@ -77,6 +82,14 @@ void fragment() {
 		float alpha = gel.a + rim;
 		vec3 ink = mix(rim_color.rgb, vec3(1.0, 0.99, 0.94), clamp(light / max(rim, 0.001), 0.0, 1.0));
 		gel = vec4((gel.rgb * gel.a + ink * rim) / max(alpha, 0.001), alpha);
+	}
+	if (glow > 0.0) {
+		// Bloom follows the acquired silhouette and fades within a few screen pixels.
+		float distance = max(0.0, (texture(shape_sdf, sample_uv).a - 0.5) * 0.4);
+		float bloom = (1.0 - smoothstep(0.0, 0.085, distance)) * 0.5 * glow * (1.0 - gel.a);
+		float alpha = gel.a + bloom;
+		vec3 light = mix(rim_color.rgb, vec3(1.0, 0.96, 0.72), 0.24);
+		gel = vec4((gel.rgb * gel.a + light * bloom) / max(alpha, 0.001), alpha);
 	}
 	COLOR = gel * gel_modulate;
 }
