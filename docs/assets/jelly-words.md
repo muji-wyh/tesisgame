@@ -240,9 +240,10 @@ The cloud environment and recessed rim are documented in [Jelly Words well](jell
 
 The Collect button snapshots all completed word jellies currently on the board.
 It collects them from the upper rows downward, alternating direction across
-rows, with one pickup every 200 ms. Each batch collection finishes within that
+rows, with one pickup every 140 ms. Each batch collection finishes within that
 same beat, keeping reward transactions sequential, with the existing pop sound
-at 60 ms to match the squash and release. Each jelly squashes, lifts
+at 40 ms to match the squash and release. Ten words finish in 1.4 seconds.
+Each jelly squashes, lifts
 with alternating sideways drift, and clears through the ordinary wallet and
 fragment transaction. Unmatched parts remain on the board.
 Existing movement settles before the first pickup; queued words then keep their

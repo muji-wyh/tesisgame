@@ -1729,7 +1729,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
   const retained = before.tiles.filter(tile => !collectedIds.includes(tile.id)).map(tile => tile.id);
   const expectedFragments = selected.reduce((sum, tile) => sum + tile.fragments, 0);
   expect(expectedFragments, 'The ordinary-input batch includes a real carried treasure fragment').toBeGreaterThan(0);
-  const readingTiming = { interval: 0.20, entrance: 0.055, fade: 0.22 };
+  const readingTiming = { interval: 0.14, entrance: 0.055, fade: 0.22 };
   await page.exposeFunction('saveWordJellyBatchFrame', (index, encoded) =>
     fs.writeFileSync(info.outputPath(`word-jelly-batch-${index}.png`), Buffer.from(encoded, 'base64')));
   await page.evaluate(readingTiming => {
@@ -1833,7 +1833,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
   }
   expect(final.collection_batch.started).toBe(3);
   expect(final.collection_batch.completed).toBe(3);
-  expect(final.collection_batch.elapsed, 'Three 200 ms collections finish in 600 ms of game time').toBeCloseTo(0.60, 6);
+  expect(final.collection_batch.elapsed, 'Three 140 ms collections finish in 420 ms of game time').toBeCloseTo(0.42, 6);
   expect(entryStates.size, 'Each of the three collected words owns an independent reading card').toBe(3);
   const opaqueSeconds = Math.max(0, Math.min(...[...entryStates.values()].map(entry => entry.duration)) -
     readingTiming.entrance - readingTiming.fade);

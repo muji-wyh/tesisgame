@@ -2561,7 +2561,7 @@ func _test_collection_batch_rhythm() -> void:
 		if index > 0:
 			model.step(Model.BATCH_BEAT_SECONDS - 0.001)
 			check(starts.size() == index and payouts.size() == index - 1,
-				"neither the next collection nor its preceding payout runs before 200 ms")
+				"neither the next collection nor its preceding payout runs before 140 ms")
 			model.step(0.001)
 			expected_time += Model.BATCH_BEAT_SECONDS
 		check(starts.size() == index + 1, "exact beat boundary starts one collection")
@@ -2571,22 +2571,22 @@ func _test_collection_batch_rhythm() -> void:
 		check(is_equal_approx(float(start.time), expected_time) and start.collections_running == 1,
 			"each rhythmic start occurs at its authoritative time with one collecting body")
 		check(model.collected_coins == index * 50, "only preceding completed transactions have earned coins")
-		check(payouts.size() == index, "each 200 ms boundary commits exactly one preceding word")
+		check(payouts.size() == index, "each 140 ms boundary commits exactly one preceding word")
 		if index > 0:
 			check(is_equal_approx(float(payouts[index - 1].time), expected_time),
-				"authoritative coin and fragment payouts follow the exact 200 ms cadence")
+				"authoritative coin and fragment payouts follow the exact 140 ms cadence")
 	model.step(Model.BATCH_BEAT_SECONDS - 0.001)
 	check(model.collection_batch_active() and payouts.size() == 8,
-		"the final word also retains its complete 200 ms transaction")
+		"the final word also retains its complete 140 ms transaction")
 	model.step(0.001)
 	check(not model.collection_batch_active() and model.cells.is_empty(), "the batch ends only after its final transaction completes")
 	check(model.collection_batch_snapshot().completed == 9 and model.collection_batch_snapshot().remaining == 0, "completed status accounts for every collected word")
 	check(model.collected_coins == 450 and model.fragment_count == 9 and model.cleared_pairs == 9, "all coins and fragments use normal once-only collection rewards")
 	check(events.collections.size() == 9 and events.attempts.size() == 9 and events.cues.count("jelly-collect-lv2") == 9, "every word gets one collection, learning attempt and disappearance cue")
 	check(events.milestones == [[0, 1], [1, 2]], "batch fragments preserve normal chest unlock and upgrade milestones")
-	check(payouts.size() == 9 and is_equal_approx(float(payouts.back().time), 1.80)
-		and is_equal_approx(float(model.collection_batch_snapshot().elapsed), 1.80),
-		"nine words take 1.80 seconds with no acceleration or extra breathing gaps")
+	check(payouts.size() == 9 and is_equal_approx(float(payouts.back().time), 1.26)
+		and is_equal_approx(float(model.collection_batch_snapshot().elapsed), 1.26),
+		"nine words take 1.26 seconds with no acceleration or extra breathing gaps")
 	var coin_total: int = model.collected_coins
 	model.step(1.0)
 	check(model.collected_coins == coin_total and not model.start_collection_batch(), "an empty batch has no repeat rewards")
@@ -2642,7 +2642,7 @@ func _test_collection_batch_settlement() -> void:
 		for index in range(starts.size()):
 			check(is_equal_approx(float(starts[index].time), Model.SETTLE_SECONDS + index * Model.BATCH_BEAT_SECONDS)
 				and is_equal_approx(float(payouts[index].time), Model.SETTLE_SECONDS + (index + 1) * Model.BATCH_BEAT_SECONDS),
-				"initial settlement cannot introduce later gaps into the 200 ms collection cadence")
+				"initial settlement cannot introduce later gaps into the 140 ms collection cadence")
 	var model = _model([_word("cat")])
 	_batch_board(model, 3)
 	model.start_collection_batch()
@@ -2670,7 +2670,7 @@ func _test_collection_batch_reserved_motion() -> void:
 	model.start_collection_batch()
 	model.step(Model.BATCH_BEAT_SECONDS)
 	check(starts.size() == 2 and payouts.size() == 1,
-		"an unsupported captured word starts on the next 200 ms beat")
+		"an unsupported captured word starts on the next 140 ms beat")
 	check(_footprint(model.cell(1002)) == Rect2i(4, 4, 1, 1),
 		"queued captured words keep their original footprint until their collection beat")
 	check(model.cell(9000).row == 7 and bool(model.cell(9000).get("falling", false)),
@@ -2681,7 +2681,7 @@ func _test_collection_batch_reserved_motion() -> void:
 	for index in range(starts.size()):
 		check(is_equal_approx(float(starts[index].time), index * Model.BATCH_BEAT_SECONDS)
 			and is_equal_approx(float(payouts[index].time), (index + 1) * Model.BATCH_BEAT_SECONDS),
-			"reserved batch bodies retain exact 200 ms starts and payouts")
+			"reserved batch bodies retain exact 140 ms starts and payouts")
 	check(model.cells.size() == 1 and model.cell(9000).row == 7,
 		"collecting the reserved batch leaves the unrelated root on its support")
 	model = _model([_word("cat")])
@@ -2717,11 +2717,11 @@ func _test_collection_batch_pause_and_cancel() -> void:
 	model.set_paused(false)
 	model.step(Model.BATCH_BEAT_SECONDS - 0.051)
 	check(model.cleared_pairs == 0 and model.collection_batch_active(),
-		"resume preserves the final millisecond of the current 200 ms transaction")
+		"resume preserves the final millisecond of the current 140 ms transaction")
 	model.cancel_collection_batch()
 	model.step(0.001)
 	check(model.cleared_pairs == 1 and not model.collection_batch_active(),
-		"cancelling the queue still finishes the current word at its preserved 200 ms deadline")
+		"cancelling the queue still finishes the current word at its preserved 140 ms deadline")
 	model.step(2.0)
 	check(model.cleared_pairs == 1 and model.cells.size() == 2 and not model.collection_batch_active(), "cancelling releases queued words without awarding them")
 	check(model.start_collection_batch(), "remaining words can start a fresh batch after cancellation")
@@ -3133,7 +3133,7 @@ func _test_reposition_reservations_and_guards() -> void:
 	check(not model.can_reposition(1002, 3, 2) and not model.reposition(1002, 3, 2), "a batch keeps all explicit placement input gated")
 	model.step(Model.BATCH_BEAT_SECONDS * 3.0)
 	check(model.cleared_pairs == 3 and is_equal_approx(float(model.collection_batch_snapshot().elapsed), Model.BATCH_BEAT_SECONDS * 3.0),
-		"rejected manual movement preserves the three exact 200 ms batch transactions")
+		"rejected manual movement preserves the three exact 140 ms batch transactions")
 	model = _model()
 	_board(model, ["x"])
 	model.set_paused(true)

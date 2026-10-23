@@ -37,8 +37,8 @@ const ARRIVAL_ORDER: Array[int] = [0, 3, 1, 4, 2]
 const FUSION_SECONDS: float = 0.76
 const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
-const BATCH_BEAT_SECONDS: float = 0.20
-const BATCH_POP_SECONDS: float = 0.06
+const BATCH_BEAT_SECONDS: float = 0.14
+const BATCH_POP_SECONDS: float = 0.04
 const INITIAL_SPAWN_INTERVAL: float = 20.0
 const MIN_SPAWN_INTERVAL: float = 10.0
 const CLEARS_PER_DIFFICULTY_STAGE: int = 4
@@ -933,7 +933,7 @@ func _advance_collection_batch() -> void:
 	if not collection_batch_active() or phase != "playing" or paused:
 		return
 	# Let existing motion finish once, then keep the captured bodies in place
-	# so later gravity or growth cannot stretch the 200 ms collection beat.
+	# so later gravity or growth cannot stretch the collection beat.
 	if _collection_batch_started == 0 and _collection_batch_settling_remaining() > EPSILON:
 		return
 	# A manual collection started before the button was pressed can finish,

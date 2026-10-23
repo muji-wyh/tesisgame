@@ -1094,7 +1094,7 @@ func _check_collect_button_growth(view) -> void:
 
 
 func _check_batch_collection(view) -> void:
-	check(is_equal_approx(Model.BATCH_BEAT_SECONDS, 0.20), "Auto Collect starts each collection exactly 200 ms apart")
+	check(is_equal_approx(Model.BATCH_BEAT_SECONDS, 0.14), "Auto Collect starts each collection exactly 140 ms apart")
 	for reduced: bool in [false, true]:
 		_reset(view, reduced)
 		var ids: Array[int] = _install_batch_words(view, 3, true)
@@ -1149,7 +1149,7 @@ func _check_batch_collection(view) -> void:
 				"the rhythmic queue never overlaps reward transactions or disappearance poses")
 			var visible_reveals: int = _batch_reveal_count(now_started, elapsed, float(started.word_reveal.duration))
 			check(int(state.word_reveal.active_count) == visible_reveals and state.word_reveal.entries.size() == visible_reveals,
-				"each 200 ms pickup adds its own reveal and expired reading cards leave independently")
+				"each 140 ms pickup adds its own reveal and expired reading cards leave independently")
 			if now_started > previous_started:
 				start_times.append(float(state.collection_batch.elapsed))
 			if now_completed > previous_completed:
@@ -1161,15 +1161,15 @@ func _check_batch_collection(view) -> void:
 		var final: Dictionary = view.snapshot()
 		check(not final.collection_batch.active and int(final.collection_batch.completed) == 3
 			and int(final.collection_batch.started) == 3 and is_equal_approx(elapsed, 3.0 * Model.BATCH_BEAT_SECONDS),
-			"three words finish in exactly 600 ms through three sequential collection beats")
+			"three words finish in exactly 420 ms through three sequential collection beats")
 		check(start_times.size() == 3 and payout_times.size() == 3 and pop_times.size() == 3,
 			"each collected word has a separate visible start, payout and disappearance sound")
 		for index in range(start_times.size()):
 			check(is_equal_approx(start_times[index], index * Model.BATCH_BEAT_SECONDS)
 				and is_equal_approx(payout_times[index], (index + 1) * Model.BATCH_BEAT_SECONDS),
-				"ordinary and reduced-motion collection both preserve exact 200 ms start and payout spacing")
-			check(is_equal_approx(pop_times[index], index * Model.BATCH_BEAT_SECONDS + 0.06),
-				"the existing disappearance sound stays at 60 ms within every 200 ms beat")
+				"ordinary and reduced-motion collection both preserve exact 140 ms start and payout spacing")
+			check(is_equal_approx(pop_times[index], index * Model.BATCH_BEAT_SECONDS + 0.04),
+				"the disappearance sound stays at 40 ms within every 140 ms beat")
 		check(payouts.size() == 3 and credits.size() == 1 and attempts.size() == 3,
 			"batch collection records every word but only persists its one rare coin drop")
 		check(payouts[0].amount == 50 and payouts[1].amount == 0 and payouts[2].amount == 0,
@@ -1187,7 +1187,7 @@ func _check_batch_collection(view) -> void:
 		for index in range(reveals.size()):
 			check(str(reveals[index].word_id) == "cat"
 				and is_equal_approx(float(reveals[index].elapsed), elapsed - (3 - surviving_count + index) * Model.BATCH_BEAT_SECONDS),
-				"repeated spellings retain separate reveal timelines at the 200 ms cadence")
+				"repeated spellings retain separate reveal timelines at the 140 ms cadence")
 		for id: int in retained:
 			check(not view.game.cell(id).is_empty(), "unfinished merges and unmerged roots stay available after collecting")
 		check(not final.collect_button.enabled and int(final.collect_button.count) == 0,
@@ -1208,9 +1208,9 @@ func _check_coarse_frame_batch_reveals(view) -> void:
 		view._process(0.30)
 		var state: Dictionary = view.snapshot()
 		var entries: Array = state.word_reveal.entries
-		check(entries.size() == 2 and int(state.word_reveal.active_count) == 2
-			and state.collection_batch.active and int(state.collection_batch.completed) == 1,
-			"one coarse frame preserves both reveals on either side of the 200 ms collection beat")
+		check(entries.size() == 3 and int(state.word_reveal.active_count) == 3
+			and state.collection_batch.active and int(state.collection_batch.completed) == 2,
+			"one coarse frame preserves all three reveals across two collection boundaries")
 		for index in range(entries.size()):
 			check(is_equal_approx(float(entries[index].elapsed), 0.30 - index * Model.BATCH_BEAT_SECONDS),
 				"coarse frames carry only the remaining frame time into each new collection reveal")
@@ -1266,7 +1266,7 @@ func _check_batch_chest_queue(view) -> void:
 			"all nine fragments and the second chest tier commit before queued celebration begins")
 		check(payouts.size() == 9 and view.game.collected_coins == 50
 			and is_equal_approx(elapsed, 9.0 * Model.BATCH_BEAT_SECONDS),
-			"waiting chest artwork preserves nine collections and one rare coin reward across nine 200 ms beats")
+			"waiting chest artwork preserves nine collections and one rare coin reward across nine 140 ms beats")
 		var kinds: Dictionary = {}
 		for tick in range(320):
 			_advance(view, 0.025)
@@ -1437,8 +1437,8 @@ func _check_word_reveal_levels(view) -> void:
 			if batch:
 				view._collect_all()
 				view._process(0.30)
-				check(view.snapshot().word_reveal.entries.size() == 2,
-					"a late auto-collect frame keeps both mixed-level pop entries alive")
+				check(view.snapshot().word_reveal.entries.size() == 3,
+					"a late auto-collect frame keeps all three mixed-level pop entries alive")
 				view._process(0.30)
 			else:
 				for id: int in ids:
@@ -1497,7 +1497,7 @@ func _check_word_reveal_control_clearance(view) -> void:
 		var state: Dictionary = view.snapshot()
 		var visible_count: int = _batch_reveal_count(4, 0.80, float(state.word_reveal.duration))
 		check(int(state.collection_batch.started) == 4 and int(state.word_reveal.active_count) == visible_count,
-			"the 200 ms cadence retains every unexpired collection pop after the fourth start")
+			"the 140 ms cadence retains every unexpired collection pop after the fourth start")
 		if dimensions == Vector2(1000, 720):
 			check(visible_count == 4, "the full reading region supports four concurrent collection pops before their first expiry")
 	view.size = Vector2(1000, 720)
