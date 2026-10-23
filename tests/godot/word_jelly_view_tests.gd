@@ -1902,8 +1902,8 @@ func _check_completion_hints(view) -> void:
 		_advance(view, 0.22)
 		_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "all matching pictures")
 		for id: int in [ids[1], ids[2], ids[3]]:
-			check(float(view._tiles[id].completion_scale) > 1.0 and float(view._tiles[id].completion_scale) <= 1.025,
-				"each exact target receives a small completion enlargement")
+			check(float(view._tiles[id].completion_scale) >= 1.12 and float(view._tiles[id].completion_scale) <= 1.145,
+				"each exact target grows into its held enlargement")
 		check(target.get_rect().is_equal_approx(rectangle) and target.contact_outline() == outline,
 			"completion animation preserves layout and hit geometry")
 		check(cues.count("pick") == 1 and cues.count("contact") <= 1 and cues.count("wrong") == 0 \

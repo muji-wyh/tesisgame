@@ -56,6 +56,7 @@ func _run() -> void:
 	root.add_child(tile)
 	tile.size = Vector2.ONE * 100.0
 	tile.configure(_cell(), SKIN, PICTURE, CHEST, Color("#357d70"))
+	tile.set_completion_hint(true, 0.0, false)
 	tile.set_completion_hint(true, 0.6, false)
 	tile.set_projection(true)
 	check(not tile._label.visible and not tile._picture.visible and not tile._level_badge.visible,
@@ -135,6 +136,7 @@ func _run() -> void:
 		"Reduced motion keeps readiness glints still as elapsed time advances")
 	tile.set_merged_presentation(9.8, false)
 	check(not tile._merged_glints[0].scale.is_equal_approx(still_glint), "Leaving reduced motion resumes the existing glint animation")
+	tile.set_completion_hint(true, 0.0, false)
 	tile.set_completion_hint(true, 0.6, false)
 	var completion_strength: float = tile._gel.get_shader_parameter("completion_strength")
 	tile.set_merged_presentation(10.0, false)

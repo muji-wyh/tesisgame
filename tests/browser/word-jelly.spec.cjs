@@ -1327,6 +1327,61 @@ test('word pair colors distinguish exact completion targets and preserve source 
   expect(errors).toEqual([]);
 });
 
+test('current-stage matching targets stay enlarged and breathe until cancellation', async ({ page }, info) => {
+  test.setTimeout(180000);
+  const errors = await startWordJelly(page, { age: 3 });
+  const opening = await jelly(page), bounds = await metrics(page);
+  const source = opening.tiles.find(tile => tile.jelly_kind === 'root' &&
+    opening.tiles.some(other => authoredJoin(tile, other)?.kind === 'picture'));
+  expect(source, 'The current stage supplies a complete word with its matching picture').toBeTruthy();
+  const target = opening.tiles.find(tile => authoredJoin(source, tile)?.kind === 'picture');
+  const from = center(source.rect, bounds);
+  const hold = center([opening.board_rect[0] + opening.board_rect[2] * 0.5,
+    opening.board_rect[1] + opening.board_rect[3] * 0.15, 0, 0], bounds);
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  try {
+    await page.mouse.move(from.x, from.y - 16);
+    await page.mouse.move(hold.x, hold.y);
+    await expect.poll(async () => {
+      const state = await jelly(page), live = state.tiles.find(tile => tile.id === target.id);
+      return state.drag.active && live?.settled && live.completion_hint && live.completion_scale >= 1.12;
+    }, { message: 'The actual matching target finishes growing while the source remains held' }).toBe(true);
+    const rectangle = (await jelly(page)).tiles.find(tile => tile.id === target.id).rect;
+    const frames = await page.evaluate(async id => {
+      const frames = [];
+      for (let frame = 0; frame < 24; frame++) {
+        const state = JSON.parse(document.getElementById('game-status').dataset.jelly);
+        const tile = state.tiles.find(tile => tile.id === id);
+        frames.push({ completion_hint: tile.completion_hint, completion_scale: tile.completion_scale, rect: tile.rect });
+        await new Promise(resolve => setTimeout(resolve, 110));
+      }
+      return frames;
+    }, target.id);
+    const samples = frames.map(frame => frame.completion_scale);
+    for (const live of frames) {
+      expect(live.completion_hint).toBe(true);
+      expect(live.completion_scale).toBeGreaterThanOrEqual(1.12);
+      expect(live.completion_scale).toBeLessThanOrEqual(1.145);
+      expect(live.rect, 'Breathing keeps the settled target hit box in place').toEqual(rectangle);
+    }
+    expect(Math.max(...samples) - Math.min(...samples), 'The held enlargement completes a visible breathing cycle')
+      .toBeGreaterThan(0.02);
+    fs.writeFileSync(info.outputPath('matching-target-scales.json'), JSON.stringify(samples, null, 2));
+    await capture(page, info, 'word-jelly-enlarged-breathing-target');
+    await page.keyboard.press('Escape');
+  } finally {
+    await page.mouse.up();
+  }
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return !state.drag.active && state.tiles.every(tile => !tile.completion_hint && tile.completion_scale === 1);
+  }, { message: 'Canceling restores every target to its normal size' }).toBe(true);
+  expect((await jelly(page)).merged_count).toBe(opening.merged_count);
+  expect((await jelly(page)).cleared_pairs).toBe(opening.cleared_pairs);
+  expect(errors).toEqual([]);
+});
+
 for (const { layout, viewport, reducedMotion } of [
   { layout: 'desktop', viewport: { width: 1366, height: 768 }, reducedMotion: 'no-preference' },
   { layout: 'desktop', viewport: { width: 1366, height: 768 }, reducedMotion: 'reduce' },
@@ -1399,14 +1454,14 @@ for (const { layout, viewport, reducedMotion } of [
           if (original && !authoredJoin(pair.roots[0], tile))
             expectRestingPalette(tile, original, 'Dragging a prefix leaves all invalid ordered targets in their resting colors');
           expect(tile.completion_scale).toBeGreaterThanOrEqual(1);
-          expect(tile.completion_scale).toBeLessThanOrEqual(1.065);
+          expect(tile.completion_scale).toBeLessThanOrEqual(1.145);
           if (reducedMotion === 'reduce' || !tile.completion_hint) expect(tile.completion_scale).toBe(1);
         }
         samples.push(state.tiles.find(tile => tile.id === pair.roots[1].id).completion_scale);
         await page.waitForTimeout(120);
       }
       if (reducedMotion === 'no-preference') {
-        expect(Math.max(...samples), 'A compatible target softly grows during an actual drag').toBeGreaterThan(1.01);
+        expect(Math.min(...samples.slice(2)), 'The target stays enlarged through every sampled breath after entry').toBeGreaterThanOrEqual(1.12);
         expect(Math.max(...samples) - Math.min(...samples), 'The target breathes gently rather than snapping to one size')
           .toBeGreaterThan(0.003);
       }

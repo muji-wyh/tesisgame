@@ -29,6 +29,91 @@ func _cell(face_kind: String, spelling: String, display: String, level: int = 0,
 func _inside(tile: Control, rect: Rect2) -> bool:
 	return Rect2(Vector2.ZERO, tile.size).grow(0.1).encloses(rect)
 
+func _check_completion_enlargement() -> void:
+	var tile := Tile.new()
+	root.add_child(tile)
+	for side: float in [36.0, 100.0]:
+		tile.size = Vector2.ONE * side
+		for face_kind: String in ["root", "picture", "merged"]:
+			tile.configure(_cell(face_kind, "cat", "cat", 3 if face_kind == "merged" else 0, 8),
+				SKIN, PICTURE, CHEST, Color("#357d70"))
+			tile.deform(0.0, 0.0)
+			var rectangle: Rect2 = tile.get_rect()
+			var outline: PackedVector2Array = tile.contact_outline()
+			var label_rect: Rect2 = tile._label.get_rect()
+			var picture_rect: Rect2 = tile._picture.get_rect()
+			tile.set_completion_hint(true, 0.0, false)
+			check(is_equal_approx(tile.completion_scale, 1.0), "A newly matched target starts its enlargement at the resting size")
+			var previous: float = tile.completion_scale
+			for elapsed: float in [0.05, 0.10, 0.15, 0.20]:
+				tile.set_completion_hint(true, elapsed, false)
+				check(tile.completion_scale > previous, "The target grows progressively during entry")
+				previous = tile.completion_scale
+			check(tile.completion_scale >= 1.12 - 0.0001, "The target reaches a clearly enlarged held size after entry")
+			var smallest: float = INF
+			var largest: float = 0.0
+			for frame in range(49):
+				tile.set_completion_hint(true, 0.20 + float(frame) * 0.10, false)
+				smallest = minf(smallest, tile.completion_scale)
+				largest = maxf(largest, tile.completion_scale)
+				check(tile.completion_scale >= 1.12 - 0.0001 and tile.completion_scale <= 1.145 + 0.0001,
+					"A held target keeps its enlarged baseline through more than two breathing cycles")
+				check(tile._surface.scale.is_equal_approx(Vector2.ONE * tile.completion_scale),
+					"The sampled completion scale is applied to the authored skin")
+			check(largest - smallest > 0.02, "The enlarged target visibly breathes while it remains highlighted")
+			check(tile.get_rect().is_equal_approx(rectangle) and tile.contact_outline() == outline,
+				"The stronger enlargement leaves target placement and contact geometry stable")
+			check(tile._label.get_rect().is_equal_approx(label_rect) and tile._picture.get_rect().is_equal_approx(picture_rect)
+				and tile._visual.scale.is_equal_approx(Vector2.ONE), "Skin breathing preserves readable picture and caption geometry")
+			var stretch := Vector2(1.04, 0.96)
+			tile.deform(0.02, 0.4, stretch)
+			check(tile._base_stretch.is_equal_approx(stretch * tile.completion_scale),
+				"Ordinary jelly deformation retains the held target enlargement")
+			tile.set_contact("match", Vector2.RIGHT, 0.6)
+			check(not tile._surface.scale.is_equal_approx(tile._base_stretch), "Matching contact can deform an already enlarged skin")
+			tile.set_contact("none")
+			check(tile._surface.scale.is_equal_approx(stretch * tile.completion_scale),
+				"Leaving contact restores the enlarged target instead of its resting size")
+			tile.set_completion_hint(false, 0.0, false)
+			for attempt in range(5):
+				tile.set_completion_hint(true, 0.0, false)
+				tile.set_completion_hint(true, 0.8, false)
+				tile.set_completion_hint(false, 0.0, false)
+				check(is_equal_approx(tile.completion_scale, 1.0) and tile._surface.scale.is_equal_approx(stretch)
+					and tile._base_stretch.is_equal_approx(stretch), "Repeated selection and cancellation cannot accumulate enlargement")
+			tile.deform(0.0, 0.0)
+			tile.set_completion_hint(true, 0.0, false)
+			tile.set_completion_hint(true, 0.8, false)
+			tile.set_completion_hint(true, 0.8, true)
+			var still_light: float = tile._gel.get_shader_parameter("completion_strength")
+			tile.set_completion_hint(true, 5.2, true)
+			check(tile.completion_hint and is_equal_approx(tile.completion_scale, 1.0)
+				and tile._surface.scale.is_equal_approx(Vector2.ONE), "Reduced motion immediately clears enlargement and keeps the matching cue still")
+			check(is_equal_approx(float(tile._gel.get_shader_parameter("completion_strength")), still_light),
+				"Reduced-motion matching brightness stays steady during a long hold")
+			tile.set_completion_hint(true, 5.2, false)
+			check(tile.completion_scale >= 1.12 - 0.0001, "Reenabling motion restores the still-active target's enlarged state")
+			tile.set_projection(true)
+			check(not tile.completion_hint and is_equal_approx(tile.completion_scale, 1.0)
+				and tile._surface.scale.is_equal_approx(Vector2.ONE), "Placement projection clears the active enlargement immediately")
+			tile.set_projection(false)
+			check(not tile.completion_hint and is_equal_approx(tile.completion_scale, 1.0),
+				"Leaving projection does not revive an old target enlargement")
+			tile.set_completion_hint(true, 5.0, false)
+			check(is_equal_approx(tile.completion_scale, 1.0), "A target becoming eligible late in a hold starts at its resting size")
+			tile.set_completion_hint(true, 5.1, false)
+			check(tile.completion_scale > 1.0 and tile.completion_scale < 1.12,
+				"Late eligibility animates a fresh entry instead of jumping to the held size")
+			tile.set_completion_hint(true, 5.2, false)
+			check(tile.completion_scale >= 1.12 - 0.0001, "A late target reaches the same enlarged held size")
+			tile.set_completion_hint(true, 0.0, false)
+			check(is_equal_approx(tile.completion_scale, 1.0), "A replacement source restarts entry when its shared elapsed time rewinds")
+			tile.set_completion_hint(true, 0.2, false)
+			check(tile.completion_scale >= 1.12 - 0.0001, "A replacement source keeps the target's normal growth timing")
+			tile.set_completion_hint(false, 0.0, false)
+		tile.set_completion_hint(false, 0.0, false)
+	tile.free()
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1280, 800)
@@ -87,5 +172,6 @@ func _run() -> void:
 		check(tile.valid_word and tile._label.visible and not tile._picture.visible, "A pictureless word has a full-sized word face and remains collectable")
 		check(tile.presentation_snapshot().merged_light, "Pictureless merged words retain the same readiness light")
 	tile.free()
+	_check_completion_enlargement()
 	print("Word Jelly hybrid tile: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

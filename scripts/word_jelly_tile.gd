@@ -24,8 +24,14 @@ var palette_index: int = -1
 const COMPLETION_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const COMPLETION_LIGHT = preload("res://scripts/jelly_completion_glow.gdshader")
 const COMPLETION_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const COMPLETION_GROW_SECONDS: float = 0.20
+const COMPLETION_HELD_SCALE: float = 1.12
+const COMPLETION_BREATH_AMOUNT: float = 0.025
+const COMPLETION_BREATH_SECONDS: float = 2.2
 var completion_hint: bool = false
 var completion_scale: float = 1.0
+var _completion_started_at: float = 0.0
+var _completion_last_elapsed: float = 0.0
 var _merged_glow: TextureRect
 var _merged_glints: Array[TextureRect] = []
 var _merged_elapsed: float = 0.0
@@ -127,10 +133,16 @@ func set_completion_hint(active: bool, elapsed: float, reduced: bool) -> void:
 	completion_hint = active and not _projection
 	if not completion_hint and not was_active:
 		return
+	# A newly available target grows in even when the source has been held awhile.
+	if completion_hint and (not was_active or elapsed < _completion_last_elapsed):
+		_completion_started_at = elapsed
+	_completion_last_elapsed = elapsed
+	var age: float = maxf(0.0, elapsed - _completion_started_at)
 	var previous_scale: float = completion_scale
-	var enter: float = smoothstep(0.0, 0.14, elapsed)
-	var breath: float = (1.0 - cos(maxf(0.0, elapsed - 0.14) * TAU / 2.2)) * 0.5
-	completion_scale = 1.0 + enter * (0.015 + breath * 0.008) if completion_hint and not reduced else 1.0
+	var enter: float = smoothstep(0.0, COMPLETION_GROW_SECONDS, age)
+	var breath: float = (1.0 - cos(maxf(0.0, age - COMPLETION_GROW_SECONDS) * TAU / COMPLETION_BREATH_SECONDS)) * 0.5
+	# Keep the enlarged resting size throughout every breath while still eligible.
+	completion_scale = lerpf(1.0, COMPLETION_HELD_SCALE + breath * COMPLETION_BREATH_AMOUNT, enter) if completion_hint and not reduced else 1.0
 	# Only the painted skin breathes. Letters, badges, layout and contact stay fixed.
 	_base_stretch *= completion_scale / previous_scale
 	_surface.scale *= completion_scale / previous_scale

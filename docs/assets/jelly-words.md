@@ -171,8 +171,10 @@ part in source-then-target order lights from within its acquired gel skin. A wet
 upper-left crown and transmitted lower-shoulder light follow the skin's distance
 field; directional spill inherits the jelly's own palette. Matching guidance
 uses no added border or star sprite. A brief sheen crosses the skin during the
-first second of each three-second cycle, accompanied by the existing 1.5-2.3
-percent breathing enlargement. Keyboard source selection shows the same targets.
+first second of each three-second cycle. The skin grows to 112 percent over
+200 ms, then breathes between 112 and 114.5 percent on a 2.2-second cycle while
+the target remains eligible. Newly available targets get their own entrance
+even during a long hold. Keyboard source selection shows the same targets.
 
 The distance field continues beyond the texture's transparent margin, allowing
 the spill to fade naturally rather than terminating at a rectangular mesh edge.
