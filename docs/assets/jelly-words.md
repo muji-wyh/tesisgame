@@ -151,13 +151,22 @@ Matching surfaces lean slightly toward each other instead of recoiling apart;
 ordinary tiles and active fusion lobes use the same attraction. Contact feedback
 does not move its own detection contour, preventing flicker while held still.
 
+Falling neighbors and supply pictures that have departed the tray remain
+available as drag targets before settlement. Contact follows their current
+painted position and refreshes each frame, so a stationary held word can catch
+its matching picture as it descends. The same slight-touch margin applies;
+nonmatches still require silhouette overlap. Releasing a valid catch starts
+the union at the visible contact pose and removes the consumed fall animation.
+Queued supply items, lifted bodies and accepted fusion endpoints cannot be
+caught again. Keyboard and automatic merge commands retain settled targets.
+
 New five-part supply packets mix parts from different words, leaving intervening
 pieces between siblings whenever the packet permits it. Word provenance, part
 order, and fragment markers stay attached to each piece, including targets that
 span packet boundaries; already visible previews are never reshuffled.
 Neighboring bodies leave a nine-percent cell gap for clearer separation.
 
-On pointer press, every settled target that legally composes with the selected
+On pointer press, every available target that legally composes with the selected
 part in source-then-target order lights from within its acquired gel skin. A wet
 upper-left crown and transmitted lower-shoulder light follow the skin's distance
 field; directional spill inherits the jelly's own palette. Matching guidance
@@ -178,7 +187,7 @@ Green merge contact keeps its own contour. No new artwork or audio was acquired.
 Lettering, pictures, fragment markers, hit areas and rewards stay unchanged.
 Release, cancellation or leaving play clears the cue. Reduced motion keeps the
 material light steady without a sweep or enlargement.
-Selected merged words also highlight every settled merged word with the same
+Selected merged words also highlight every available merged word with the same
 word ID, including different levels and Lv9. This word-family cue does not change
 upgrade eligibility: only equal levels below Lv9 can merge.
 Actual merge contact uses the same resolver as manual merging and Auto merge. Reviewed partial joins are valid; results that

@@ -737,7 +737,8 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dic
 	_powerup_committing = false
 	var a: Dictionary = cell(a_id)
 	var b: Dictionary = cell(b_id)
-	if a.is_empty() or b.is_empty() or (not held_source and not is_settled(a)) or not is_settled(b) or is_lifted(b_id):
+	var target_ready: bool = is_settled(b) or (held_source and not automatic and is_contactable(b))
+	if a.is_empty() or b.is_empty() or (not held_source and not is_settled(a)) or not target_ready or is_lifted(b_id):
 		return "ignored"
 	# Validate spelling and the full result rectangle before consuming IDs.
 	var candidate: Dictionary = merge_candidate(a, b)
@@ -1357,6 +1358,18 @@ func is_fusing(tile_id: int) -> bool:
 
 func is_settled(tile: Dictionary) -> bool:
 	return not tile.is_empty() and float(tile.get("age", 0.0)) + EPSILON >= settle_duration(tile)
+
+
+func is_contactable(tile: Dictionary) -> bool:
+	if tile.is_empty() or is_fusing(int(tile.id)) or is_lifted(int(tile.id)):
+		return false
+	if is_settled(tile):
+		return true
+	# A falling body can receive a held drop before landing. Scheduled arrivals
+	# remain owned by the supply tray until their individual departure begins.
+	if bool(tile.get("arrival", false)):
+		return float(tile.age) + EPSILON >= arrival_delay(tile)
+	return bool(tile.get("falling", false))
 
 
 static func arrival_contact_at(tile: Dictionary) -> float:

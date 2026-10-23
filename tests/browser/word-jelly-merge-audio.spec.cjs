@@ -141,7 +141,8 @@ async function mergeNextPair(page) {
     await page.mouse.move(to.x, to.y, { steps: 5 });
     await expect.poll(async () => {
       const next = await jelly(page), live = next.tiles.find(tile => tile.id === target.id);
-      if (!live?.settled) return false;
+      // Lifting a support can start the target falling; follow its visible body.
+      if (!live?.visible) return false;
       if (next.drag.target === target.id) return true;
       const destination = point(live);
       await page.mouse.move(destination.x, destination.y, { steps: 4 });

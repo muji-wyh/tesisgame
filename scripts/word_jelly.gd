@@ -705,6 +705,9 @@ func _merge(first: int, second: int, from: Vector2, held: Dictionary = {}, held_
 				break
 		_snapbacks.erase(first)
 		_snapbacks.erase(second)
+		for id: int in [first, second]:
+			_reflow.erase(id)
+			_arrival_origins.erase(id)
 		_rejection.clear()
 	else:
 		if result == "wrong":
@@ -889,6 +892,10 @@ func _sync_positions() -> void:
 		if not _tiles.has(id):
 			continue
 		var tile: WordTile = _tiles[id]
+		if game.is_fusing(id):
+			# The union owns both captured bodies, including an interrupted fall.
+			tile.hide()
+			continue
 		tile.set_merged_presentation(_presentation_elapsed, reduced_motion)
 		var rect: Rect2 = _tile_rect(cell)
 		if _rest_rects.has(id) and _rest_rects[id] != rect and not reduced_motion:
@@ -1223,7 +1230,7 @@ func _refresh_completion_hints() -> void:
 			and str(target.get("jelly_kind", "")) == "merged" and id != source \
 			and not prefix.get("word", {}).is_empty() \
 			and str(prefix.word.id) == str(target.get("word", {}).get("id", ""))
-		var eligible: bool = not prefix.is_empty() and (not _fusion_drag.is_empty() or _settled(prefix)) and _settled(target) \
+		var eligible: bool = not prefix.is_empty() and (not _fusion_drag.is_empty() or _settled(prefix)) and game.is_contactable(target) \
 			and (same_word or _can_merge_for_feedback(prefix, target))
 		_tiles[id].set_completion_hint(eligible, _completion_elapsed, reduced_motion)
 
@@ -1245,7 +1252,7 @@ func _drag_target() -> int:
 	var nearest_distance: float = INF
 	for cell: Dictionary in game.cells:
 		var id: int = int(cell.id)
-		if id == _source or not _settled(cell) or not _tiles.has(id):
+		if id == _source or not game.is_contactable(cell) or not _tiles.has(id) or not _tiles[id].visible:
 			continue
 		var target: WordTile = _tiles[id]
 		if not bounds.intersects(target.get_rect()) or not _can_merge_for_feedback(pending, cell):
@@ -1263,7 +1270,7 @@ func _drag_target() -> int:
 				break
 	if nearest >= 0:
 		return nearest
-	return super._drag_target() if _fusion_drag.is_empty() else _fusion_touching_target(outlines, source)
+	return _touching_target(outlines, source)
 
 func _feedback_source() -> Dictionary:
 	# A reserved result can preview its next interaction without entering the
@@ -1292,12 +1299,12 @@ func _feedback_outlines(source: WordTile) -> Array[PackedVector2Array]:
 		outlines.append(source.contact_outline(Vector2.ONE if reduced_motion else DRAG_STRETCH))
 	return outlines
 
-func _fusion_touching_target(outlines: Array[PackedVector2Array], source: WordTile) -> int:
+func _touching_target(outlines: Array[PackedVector2Array], source: WordTile) -> int:
 	var nearest: int = -1
 	var nearest_distance: float = INF
 	for cell: Dictionary in game.cells:
 		var id: int = int(cell.id)
-		if not _settled(cell) or not _tiles.has(id):
+		if id == _source or not game.is_contactable(cell) or not _tiles.has(id) or not _tiles[id].visible:
 			continue
 		var target: WordTile = _tiles[id]
 		var distance: float = source.get_rect().get_center().distance_squared_to(target.get_rect().get_center())
@@ -1373,7 +1380,7 @@ func _contact_state() -> Dictionary:
 	var source: Dictionary = _feedback_source()
 	var target: Dictionary = _cell(_target)
 	var body: WordTile = _feedback_body()
-	if body == null or source.is_empty() or (_fusion_drag.is_empty() and not _settled(source)) or not _settled(target):
+	if body == null or source.is_empty() or (_fusion_drag.is_empty() and not _settled(source)) or not game.is_contactable(target):
 		return state
 	# All painted bodies respond to pressure. Only a forward word earns the
 	# separate completion highlight. A failed drop is rejected only on release.
@@ -1542,6 +1549,8 @@ func _fusion_completed(fusion: Dictionary, _awarded: int) -> void:
 	_refresh_hud()
 
 func _landing_contact_at(cell: Dictionary) -> float:
+	if game.is_fusing(int(cell.id)):
+		return INF
 	if bool(cell.get("arrival", false)):
 		return WordModel.arrival_contact_at(cell)
 	return WordModel.SETTLE_SECONDS * (0.70 if bool(cell.get("falling", false)) else 1.0)
