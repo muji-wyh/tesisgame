@@ -171,14 +171,19 @@ span packet boundaries; already visible previews are never reshuffled.
 Neighboring bodies leave a nine-percent cell gap for clearer separation.
 
 On pointer press, every available target that legally composes with the selected
-part in source-then-target order lights from within its acquired gel skin. A wet
-upper-left crown and transmitted lower-shoulder light follow the skin's distance
-field; directional spill inherits the jelly's own palette. Matching guidance
-uses no added border or star sprite. A brief sheen crosses the skin during the
+part in source-then-target order gains a cream inner edge and deep teal outer
+edge traced from its acquired gel silhouette. The steady contour separates the
+target from both pale scenery and crowded neighboring skins. Material light
+and a reduced directional spill support that boundary. A brief sheen crosses the skin during the
 first second of each three-second cycle. The skin grows to 112 percent over
 200 ms, then breathes between 112 and 114.5 percent on a 2.2-second cycle while
 the target remains eligible. Newly available targets get their own entrance
 even during a long hold. Keyboard source selection shows the same targets.
+While at least one target is available, unrelated board skins and their permanent
+light accents recede. Pictures, lettering, level and fragment badges retain their
+normal appearance. The held source and matching family stay bright; candidates
+render above neighboring ordinary bodies and below the dragged source. No targets
+means no dimming. Preview and placement controls keep their own presentation.
 
 The distance field continues beyond the texture's transparent margin, allowing
 the spill to fade naturally rather than terminating at a rectangular mesh edge.
@@ -191,8 +196,8 @@ Squash artwork and CC0 attribution remain in [Jelly Match](jelly-match.md).
 
 Green merge contact keeps its own contour. No new artwork or audio was acquired.
 Lettering, pictures, fragment markers, hit areas and rewards stay unchanged.
-Release, cancellation or leaving play clears the cue. Reduced motion keeps the
-material light steady without a sweep or enlargement.
+Release, cancellation or leaving play clears the cue and restores unrelated skins.
+Reduced motion keeps the contour and material contrast steady without a sweep or enlargement.
 Selected merged words also highlight every available merged word with the same
 word ID, including different levels and Lv9. This word-family cue does not change
 upgrade eligibility: only equal levels below Lv9 can merge.

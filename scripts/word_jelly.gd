@@ -910,7 +910,7 @@ func _sync_positions() -> void:
 		tile.modulate.a = 1.0
 		tile.visible = true
 		var dragging: bool = id == _source and _dragging
-		tile.z_index = 40 if dragging else 1
+		tile.z_index = 40 if dragging else 4 if tile.completion_hint else 1
 		var stretch: Vector2 = Vector2.ONE
 		var compression: float = 0.0
 		var arrival: bool = bool(cell.get("arrival", false)) and not game.is_settled(cell)
@@ -1224,6 +1224,7 @@ func _refresh_completion_hints() -> void:
 		_completion_source = source
 		_completion_elapsed = 0.0
 	var prefix: Dictionary = _feedback_source() if source == _source else _cell(source)
+	var has_matches: bool = false
 	for id: int in _tiles:
 		var target: Dictionary = _cell(id)
 		var same_word: bool = str(prefix.get("jelly_kind", "")) == "merged" \
@@ -1233,6 +1234,9 @@ func _refresh_completion_hints() -> void:
 		var eligible: bool = not prefix.is_empty() and (not _fusion_drag.is_empty() or _settled(prefix)) and game.is_contactable(target) \
 			and (same_word or _can_merge_for_feedback(prefix, target))
 		_tiles[id].set_completion_hint(eligible, _completion_elapsed, reduced_motion)
+		has_matches = has_matches or eligible
+	for id: int in _tiles:
+		_tiles[id].set_match_dimmed(has_matches and id != source and not _tiles[id].completion_hint)
 
 func _drag_target() -> int:
 	# A nearby valid match must remain reachable through crowded neighbors.
@@ -1871,6 +1875,7 @@ func snapshot() -> Dictionary:
 		var tile: WordTile = _tiles[int(item.id)]
 		item["presentation"] = tile.presentation_snapshot()
 		item["completion_hint"] = tile.completion_hint
+		item["match_dimmed"] = tile.match_dimmed
 		item["completion_scale"] = tile.completion_scale
 		item["picture_visible"] = tile._picture.is_visible_in_tree()
 		item["label_text"] = tile._label.text

@@ -1908,11 +1908,17 @@ func _assert_completion_effect(body, active: bool, context: String) -> void:
 
 
 func _assert_completion_hints(view, expected: Array[int], context: String) -> void:
+	var source: int = view._source if view._source >= 0 else view._keyboard_source
 	for tile: Dictionary in view.snapshot().tiles:
 		var active: bool = int(tile.id) in expected
 		var body = view._tiles[int(tile.id)]
+		var dimmed: bool = not expected.is_empty() and not active and int(tile.id) != source
 		check(tile.has("completion_hint") and bool(tile.get("completion_hint", false)) == active
 			and bool(body.completion_hint) == active, "%s: completion hint follows the live eligible target" % context)
+		check(tile.has("match_dimmed") and bool(tile.get("match_dimmed", false)) == dimmed
+			and bool(body.match_dimmed) == dimmed, "%s: only unrelated bodies recede while actual matching targets exist" % context)
+		check((body._surface.self_modulate.r < 1.0) == dimmed,
+			"%s: source and candidates stay bright while unrelated skins visibly recede" % context)
 		_assert_completion_effect(body, active, context)
 		check(tile.has("completion_scale") and is_equal_approx(float(tile.get("completion_scale", -1.0)), float(body.completion_scale)),
 			"%s: diagnostic scale matches the rendered completion feedback" % context)
@@ -1921,8 +1927,10 @@ func _assert_completion_hints(view, expected: Array[int], context: String) -> vo
 	for preview in view._preview_tiles:
 		check(not preview.completion_hint and is_equal_approx(float(preview.completion_scale), 1.0),
 			"%s: upcoming parts never advertise an actionable completion" % context)
+		check(not preview.match_dimmed, "%s: upcoming parts stay readable outside board matching feedback" % context)
 		_assert_completion_effect(preview, false, context + " preview")
 	check(not view._placement_tile.completion_hint, "%s: placement projection never acts as a second completion target" % context)
+	check(not view._placement_tile.match_dimmed, "%s: placement projection keeps its own translucency" % context)
 	_assert_completion_effect(view._placement_tile, false, context + " placement")
 
 
@@ -1980,6 +1988,9 @@ func _check_completion_hints(view) -> void:
 		view._input(change_source)
 		check(view._keyboard_source == ids[1], "keyboard shortcut replaces the active source without merging")
 		_assert_completion_hints(view, [ids[0]], "keyboard picture selection")
+		view.cancel_input()
+		view._activate(ids[5])
+		_assert_completion_hints(view, [], "source without any available match")
 		view.cancel_input()
 	view.size = Vector2(1000, 720)
 
@@ -2256,13 +2267,15 @@ func _check_completion_hint_targets(view) -> void:
 func _check_completion_hint_lifecycle(view) -> void:
 	for interruption: String in ["release", "merge", "cancel", "pointer_cancel", "pause", "hide", "focus", "blocked", "stop", "reconfigure"]:
 		_reset(view)
-		var ids: Array[int] = _install(view, ["root:cat", "picture:cat"])
+		var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", "x"])
 		var target = view._tiles[ids[1]]
+		var unrelated = view._tiles[ids[2]]
 		var center: Vector2 = _center(view, ids[0])
 		_pointer_event(view, 7, "down", center)
 		_pointer_event(view, 7, "move", center + Vector2(12.0, 0.0))
 		_advance(view, 0.2)
 		check(target.completion_hint and float(target.completion_scale) > 1.0, "%s starts from an animated completion target" % interruption)
+		check(unrelated.match_dimmed, "%s starts with unrelated jelly skins muted" % interruption)
 		match interruption:
 			"release": _pointer_event(view, 7, "up", center)
 			"merge": _pointer_event(view, 7, "up", _center(view, ids[1]))
@@ -2278,6 +2291,8 @@ func _check_completion_hint_lifecycle(view) -> void:
 			"reconfigure": _reset(view)
 		check(not target.completion_hint and is_equal_approx(float(target.completion_scale), 1.0),
 			"%s immediately removes the old target's light and enlargement" % interruption)
+		check(not unrelated.match_dimmed and unrelated._surface.self_modulate.is_equal_approx(Color.WHITE),
+			"%s immediately restores unrelated skins even when old nodes are pending disposal" % interruption)
 		_assert_completion_effect(target, false, interruption + " old target")
 		_assert_completion_hints(view, [], interruption)
 		view.interaction_allowed = Callable()
@@ -2288,7 +2303,7 @@ func _check_completion_hint_lifecycle(view) -> void:
 
 func _check_completion_hint_reduced_motion(view) -> void:
 	_reset(view, true)
-	var ids: Array[int] = _install(view, ["root:cat", "picture:cat"])
+	var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", "x"])
 	view._activate(ids[0])
 	_assert_completion_hints(view, [ids[1]], "reduced motion retains static completion guidance")
 	var target = view._tiles[ids[1]]
@@ -2296,10 +2311,15 @@ func _check_completion_hint_reduced_motion(view) -> void:
 	var rim_strength: float = target._gel.get_shader_parameter("rim_strength")
 	var light_strength: float = target._gel.get_shader_parameter("completion_strength")
 	var light_sweep: float = target._gel.get_shader_parameter("completion_glint")
+	var quiet_skin: Color = view._tiles[ids[2]]._surface.self_modulate
+	check(rim_color.a >= 0.99 and rim_strength >= 0.99,
+		"reduced-motion targets retain an opaque contour without relying on enlargement")
 	_advance(view, 0.3)
 	check(is_equal_approx(float(view._tiles[ids[1]].completion_scale), 1.0), "reduced-motion completion guidance never scales the body")
 	check(target._gel.get_shader_parameter("rim_color") == rim_color and is_equal_approx(float(target._gel.get_shader_parameter("rim_strength")), rim_strength),
 		"reduced-motion completion contour remains steady over time")
+	check(view._tiles[ids[2]]._surface.self_modulate.is_equal_approx(quiet_skin),
+		"reduced-motion matching contrast stays steady over time")
 	check(is_equal_approx(float(target._gel.get_shader_parameter("completion_strength")), light_strength)
 		and is_equal_approx(float(target._gel.get_shader_parameter("completion_glint")), light_sweep) and light_sweep < 0.0,
 		"reduced-motion material light keeps constant brightness with its sweep parked off the body")

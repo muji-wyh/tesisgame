@@ -94,7 +94,7 @@ void fragment() {
 		float distance = max(0.0, -depth);
 		// Uneven, directional spill avoids a uniform frame around the jelly.
 		light_alpha = exp(-pow(distance / 0.08, 2.0)) * (1.0 - smoothstep(0.1, 0.15, distance))
-			* (crown * 0.95 + shoulder * 0.62) * glow;
+			* (crown * 0.95 + shoulder * 0.62) * glow * 0.42;
 	}
 	float gleam = exp(-pow((local.x + 0.22) * 13.0, 2.0) - pow((local.y + 0.14) * 5.0, 2.0));
 	gel.rgb = mix(gel.rgb, vec3(1.0, 0.995, 0.95), gleam * contact_strength * 0.28);

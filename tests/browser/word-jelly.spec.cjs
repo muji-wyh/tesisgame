@@ -77,6 +77,8 @@ async function startWordJelly(page, { age = COMPOSITION_AGE, reducedMotion = 'no
   expect(opening.drag.selected, 'Pointer entry starts without a keyboard-selected jelly').toBe(-1);
   expect(opening.tiles.every(tile => tile.completion_hint === false),
     'Pointer entry does not advertise a selected completion target').toBe(true);
+  expect(opening.tiles.every(tile => tile.match_dimmed === false),
+    'An idle board keeps all jelly skins at full brightness').toBe(true);
   return errors;
 }
 
@@ -1360,7 +1362,12 @@ test('current-stage matching targets stay enlarged and breathe until cancellatio
       const state = await jelly(page), live = state.tiles.find(tile => tile.id === target.id);
       return state.drag.active && live?.settled && live.completion_hint && live.completion_scale >= 1.12;
     }, { message: 'The actual matching target finishes growing while the source remains held' }).toBe(true);
-    const rectangle = (await jelly(page)).tiles.find(tile => tile.id === target.id).rect;
+    const held = await jelly(page);
+    expect(held.tiles.some(tile => tile.match_dimmed), 'Unrelated jellies recede around the available target').toBe(true);
+    for (const tile of held.tiles)
+      expect(tile.match_dimmed, 'The held source and matching candidates remain bright')
+        .toBe(tile.id !== source.id && !tile.completion_hint);
+    const rectangle = held.tiles.find(tile => tile.id === target.id).rect;
     const frames = await page.evaluate(async id => {
       const frames = [];
       for (let frame = 0; frame < 24; frame++) {
@@ -1388,8 +1395,8 @@ test('current-stage matching targets stay enlarged and breathe until cancellatio
   }
   await expect.poll(async () => {
     const state = await jelly(page);
-    return !state.drag.active && state.tiles.every(tile => !tile.completion_hint && tile.completion_scale === 1);
-  }, { message: 'Canceling restores every target to its normal size' }).toBe(true);
+    return !state.drag.active && state.tiles.every(tile => !tile.completion_hint && !tile.match_dimmed && tile.completion_scale === 1);
+  }, { message: 'Canceling restores every jelly to its normal size and brightness' }).toBe(true);
   expect((await jelly(page)).merged_count).toBe(opening.merged_count);
   expect((await jelly(page)).cleared_pairs).toBe(opening.cleared_pairs);
   expect(errors).toEqual([]);
@@ -1421,10 +1428,19 @@ for (const { layout, viewport, reducedMotion } of [
     const hintedIds = state => state.tiles.filter(tile => tile.completion_hint).map(tile => tile.id).sort((a, b) => a - b);
     const expectedIds = (state, source) => state.tiles.filter(tile => tile.id !== source.id && tile.settled &&
       Boolean(authoredJoin(source, tile))).map(tile => tile.id).sort((a, b) => a - b);
+    const expectMatchFocus = (state, source) => {
+      const candidates = expectedIds(state, source);
+      for (const tile of state.tiles)
+        expect(tile.match_dimmed, 'Only unrelated skins recede when the held source has available matches')
+          .toBe(candidates.length > 0 && tile.id !== source.id && !candidates.includes(tile.id));
+    };
     const expectQuiet = state => {
       expect(hintedIds(state), 'Idle, canceled and paused jellies do not advertise a held prefix').toEqual([]);
       expect(state.contact.kind, 'Contact pressure clears when the gesture ends or pauses').toBe('none');
-      for (const tile of state.tiles) expect(tile.completion_scale).toBe(1);
+      for (const tile of state.tiles) {
+        expect(tile.completion_scale).toBe(1);
+        expect(tile.match_dimmed, 'Ending or pausing a gesture immediately restores all jelly skins').toBe(false);
+      }
     };
     const safePoint = center([opening.board_rect[0] + opening.board_rect[2] * 0.25,
       opening.board_rect[1] + opening.board_rect[3] * 0.18, 0, 0], bounds);
@@ -1460,6 +1476,7 @@ for (const { layout, viewport, reducedMotion } of [
         const state = await jelly(page);
         expect(hintedIds(state), 'Only exact current-age source-plus-target words receive a completion effect')
           .toEqual(expectedIds(state, pair.roots[0]));
+        expectMatchFocus(state, pair.roots[0]);
         for (const tile of state.tiles.filter(tile => tile.id !== pair.roots[0].id)) {
           const original = opening.tiles.find(item => item.id === tile.id);
           const layout = activeOpening.tiles.find(item => item.id === tile.id);
@@ -1502,6 +1519,7 @@ for (const { layout, viewport, reducedMotion } of [
     await beginDrag(pair.roots[1]);
     try {
       const reversed = await jelly(page);
+      expectMatchFocus(reversed, pair.roots[1]);
       expect(reversed.tiles.find(tile => tile.id === pair.roots[0].id).completion_hint,
         'Dragging a suffix never highlights the original prefix when their reversed spelling is invalid').toBe(false);
       expectRestingPalette(reversed.tiles.find(tile => tile.id === pair.roots[0].id), restingPrefix,

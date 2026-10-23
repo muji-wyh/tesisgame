@@ -114,6 +114,47 @@ func _check_completion_enlargement() -> void:
 		tile.set_completion_hint(false, 0.0, false)
 	tile.free()
 
+func _check_match_dimming() -> void:
+	var tile := Tile.new()
+	root.add_child(tile)
+	tile.size = Vector2.ONE * 44.0
+	for face_kind: String in ["root", "picture", "merged"]:
+		tile.configure(_cell(face_kind, "cat", "cat", 3 if face_kind == "merged" else 0, 8),
+			SKIN, PICTURE, CHEST, Color("#357d70"))
+		tile.set_merged_presentation(0.8, true)
+		var rectangle: Rect2 = tile.get_rect()
+		var outline: PackedVector2Array = tile.contact_outline()
+		var original_skin: Color = tile._surface.self_modulate
+		var label_color: Color = tile._label.modulate
+		var picture_color: Color = tile._picture.modulate
+		var badge_color: Color = tile._fragment_holder.modulate
+		tile.modulate.a = 0.42
+		for attempt in range(3):
+			tile.set_match_dimmed(true)
+			check(tile.match_dimmed and tile._surface.self_modulate.r < original_skin.r
+				and tile._surface.self_modulate.g < original_skin.g,
+				"Unrelated jelly skins visibly recede while a matching choice is held")
+			check(is_equal_approx(tile.modulate.a, 0.42)
+				and is_equal_approx(tile._surface.self_modulate.a, original_skin.a),
+				"Matching contrast preserves independent arrival and collection transparency")
+			check(tile._label.modulate == label_color and tile._picture.modulate == picture_color
+				and tile._fragment_holder.modulate == badge_color and tile._visual.modulate == Color.WHITE,
+				"Dimming the material preserves the word, picture and reward badge readability")
+			check(tile.get_rect().is_equal_approx(rectangle) and tile.contact_outline() == outline,
+				"A visually muted jelly keeps its original hit ownership and contact geometry")
+			if face_kind == "merged":
+				check(tile._merged_glow.self_modulate.a < 1.0 and tile._merged_glints[0].self_modulate.a < 1.0,
+					"An unrelated merged word's permanent accents recede with its skin")
+			tile.set_match_dimmed(false)
+			check(not tile.match_dimmed and tile._surface.self_modulate.is_equal_approx(original_skin)
+				and is_equal_approx(tile.modulate.a, 0.42),
+				"Repeated matching cancellation restores the exact skin without overwriting opacity")
+			if face_kind == "merged":
+				check(tile._merged_glow.self_modulate == Color.WHITE and tile._merged_glints[0].self_modulate == Color.WHITE,
+					"Matching cancellation restores the permanent merged-word accents")
+		tile.modulate.a = 1.0
+	tile.free()
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1280, 800)
@@ -173,5 +214,6 @@ func _run() -> void:
 		check(tile.presentation_snapshot().merged_light, "Pictureless merged words retain the same readiness light")
 	tile.free()
 	_check_completion_enlargement()
+	_check_match_dimming()
 	print("Word Jelly hybrid tile: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

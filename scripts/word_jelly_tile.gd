@@ -29,6 +29,7 @@ const COMPLETION_HELD_SCALE: float = 1.12
 const COMPLETION_BREATH_AMOUNT: float = 0.025
 const COMPLETION_BREATH_SECONDS: float = 2.2
 var completion_hint: bool = false
+var match_dimmed: bool = false
 var completion_scale: float = 1.0
 var _completion_started_at: float = 0.0
 var _completion_last_elapsed: float = 0.0
@@ -81,6 +82,7 @@ func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 		_merged_glow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		_merged_glow.stretch_mode = TextureRect.STRETCH_SCALE
 		_merged_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_merged_glow.self_modulate.a = 0.25 if match_dimmed else 1.0
 		var light := ShaderMaterial.new()
 		light.shader = COMPLETION_LIGHT
 		_merged_glow.material = light
@@ -91,6 +93,7 @@ func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 			glint.texture = COMPLETION_SPARKLE
 			glint.stretch_mode = TextureRect.STRETCH_SCALE
 			glint.name = "MergedGlint%d" % index
+			glint.self_modulate.a = 0.25 if match_dimmed else 1.0
 			_merged_glints.append(glint)
 	if _merged_glow != null:
 		var ui_scale: float = Style.ui_scale(self)
@@ -151,12 +154,25 @@ func set_completion_hint(active: bool, elapsed: float, reduced: bool) -> void:
 	if completion_hint or was_active:
 		_refresh_feedback()
 
+func set_match_dimmed(value: bool) -> void:
+	value = value and not _projection
+	if match_dimmed == value:
+		return
+	match_dimmed = value
+	# Lower competing material light, keeping learning faces and badges readable.
+	_surface.self_modulate = Color(0.68, 0.72, 0.76) if value else Color.WHITE
+	if _merged_glow != null:
+		_merged_glow.self_modulate.a = 0.25 if value else 1.0
+	for glint: TextureRect in _merged_glints:
+		glint.self_modulate.a = 0.25 if value else 1.0
+
 func set_projection(value: bool) -> void:
 	if _projection == value:
 		return
 	super.set_projection(value)
 	if value:
 		set_completion_hint(false, 0.0, _reduced_motion)
+		set_match_dimmed(false)
 
 func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
 	super.deform(amount, beat, stretch * completion_scale)
@@ -227,8 +243,10 @@ func set_chest_texture(texture: Texture2D) -> void:
 func _refresh_feedback(reset_motion: bool = false) -> void:
 	super._refresh_feedback(reset_motion)
 	if completion_hint and _mark < 2 and _contact_kind == "none":
-		# Candidate light belongs to the skin; contact keeps its separate contour.
-		_gel.set_shader_parameter("rim_strength", 0.0)
+		# A cream inner edge and dark outer edge follow the acquired silhouette.
+		_gel.set_shader_parameter("rim_color", Color("#236451"))
+		_gel.set_shader_parameter("rim_strength", 1.0)
+		_gel.set_shader_parameter("rim_width", 1.8)
 	elif valid_word and not _projection and _mark == 0 and _contact_kind == "none":
 		_gel.set_shader_parameter("rim_color", MERGED_COLORS[merge_level].darkened(0.12))
 		_gel.set_shader_parameter("rim_strength", 1.0)
