@@ -157,30 +157,27 @@ order, and fragment markers stay attached to each piece, including targets that
 span packet boundaries; already visible previews are never reshuffled.
 Neighboring bodies leave a nine-percent cell gap for clearer separation.
 
-On pointer press, every settled target that legally composes with the selected part in
-source-then-target order receives a bright amber contour with a cream keyline,
-a close, softly fading glow, a slow light sweep across the acquired gel paint,
-and a 1.5-2.3 percent breathing enlargement of its skin. Keyboard source selection
-shows the same candidates.
-The contour follows the painted body; matching hints no longer use the enlarged
-violet portal halo or the two large gold stars. The existing merged-word readiness
-light retains its acquired Bobardo portal texture and established presentation.
+On pointer press, every settled target that legally composes with the selected
+part in source-then-target order lights from within its acquired gel skin. A wet
+upper-left crown and transmitted lower-shoulder light follow the skin's distance
+field; directional spill inherits the jelly's own palette. Matching guidance
+uses no added border or star sprite. A brief sheen crosses the skin during the
+first second of each three-second cycle, accompanied by the existing 1.5-2.3
+percent breathing enlargement. Keyboard source selection shows the same targets.
 
-The close glow follows the acquired skin's distance field, fading within about
-five pixels at the common phone tile size. Shader padding accommodates the light
-without enlarging the painted body or hit area. Idle merged-word strength stays
-below the glow threshold; contact uses its existing rim color.
+The distance field continues beyond the texture's transparent margin, allowing
+the spill to fade naturally rather than terminating at a rectangular mesh edge.
+Shader padding accommodates the light without enlarging the painted body or hit
+area. Idle merged-word strength stays below the matching-light threshold. Its
+established Bobardo portal texture and Toon FX sparkles retain their existing
+presentation; source, creator and Standard Unity Asset Store EULA details remain
+in the [fragment asset record](jelly-fragments.md). The underlying acquired Jelly
+Squash artwork and CC0 attribution remain in [Jelly Match](jelly-match.md).
 
-One small ivory reflection sits on the skin, capped at 18 screen pixels. It reuses
-the integrated Toon FX 1.52 sparkle by Kenneth Foldal Moe (Archanor VFX), under
-the Standard Unity Asset Store EULA recorded in the
-[fragment asset record](jelly-fragments.md). The source image is static; the
-gentle twinkle and slower surface sweep are runtime animation. The underlying
-Jelly Squash artwork and CC0 attribution remain in [Jelly Match](jelly-match.md).
-No new artwork or audio was acquired. Lettering, pictures, fragment markers, hit
-areas and rewards stay unchanged. Release, cancellation or leaving play clears
-the cue. Reduced motion keeps the rim, glow and small reflection steady without
-a sweep or enlargement.
+Green merge contact keeps its own contour. No new artwork or audio was acquired.
+Lettering, pictures, fragment markers, hit areas and rewards stay unchanged.
+Release, cancellation or leaving play clears the cue. Reduced motion keeps the
+material light steady without a sweep or enlargement.
 Selected merged words also highlight every settled merged word with the same
 word ID, including different levels and Lv9. This word-family cue does not change
 upgrade eligibility: only equal levels below Lv9 can merge.

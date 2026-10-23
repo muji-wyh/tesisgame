@@ -26,7 +26,6 @@ const COMPLETION_LIGHT = preload("res://scripts/jelly_completion_glow.gdshader")
 const COMPLETION_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 var completion_hint: bool = false
 var completion_scale: float = 1.0
-var _completion_glints: Array[TextureRect] = []
 var _merged_glow: TextureRect
 var _merged_glints: Array[TextureRect] = []
 var _merged_elapsed: float = 0.0
@@ -136,26 +135,7 @@ func set_completion_hint(active: bool, elapsed: float, reduced: bool) -> void:
 	_base_stretch *= completion_scale / previous_scale
 	_surface.scale *= completion_scale / previous_scale
 	_set_surface_parameter(&"completion_strength", (0.82 if reduced else 0.7 + enter * 0.25) if completion_hint else 0.35 if valid_word and not _projection else 0.0)
-	_set_surface_parameter(&"completion_glint", -2.0 if reduced else -0.3 + fposmod(elapsed, 3.0) * 0.68)
-	if completion_hint and _completion_glints.is_empty():
-		# A small reflection sits on the acquired skin, leaving neighbors clear.
-		var glint := TextureRect.new()
-		glint.texture = COMPLETION_SPARKLE
-		glint.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		glint.stretch_mode = TextureRect.STRETCH_SCALE
-		glint.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		_visual.add_child(glint)
-		_completion_glints.append(glint)
-	for index in range(_completion_glints.size()):
-		var glint: TextureRect = _completion_glints[index]
-		glint.visible = completion_hint
-		var twinkle: float = 0.5 if reduced else (1.0 + sin(elapsed * TAU / 2.2)) * 0.5
-		var edge: float = minf(minf(size.x, size.y) * 0.24, 18.0 / Style.ui_scale(self))
-		glint.size = Vector2.ONE * edge
-		glint.pivot_offset = glint.size * 0.5
-		glint.position = size * Vector2(0.80, 0.18) + _content_offset - glint.size * 0.5
-		glint.scale = Vector2.ONE * (1.0 if reduced else 0.92 + twinkle * 0.08)
-		glint.modulate = Color(1.0, 0.99, 0.92, 0.78 + twinkle * 0.18)
+	_set_surface_parameter(&"completion_glint", -2.0 if reduced else -0.25 + fposmod(elapsed, 3.0) * 1.35)
 	if completion_hint or was_active:
 		_refresh_feedback()
 
@@ -235,9 +215,8 @@ func set_chest_texture(texture: Texture2D) -> void:
 func _refresh_feedback(reset_motion: bool = false) -> void:
 	super._refresh_feedback(reset_motion)
 	if completion_hint and _mark < 2 and _contact_kind == "none":
-		_gel.set_shader_parameter("rim_color", Color("#e6ac4c"))
-		_gel.set_shader_parameter("rim_strength", 1.0)
-		_gel.set_shader_parameter("rim_width", 1.35)
+		# Candidate light belongs to the skin; contact keeps its separate contour.
+		_gel.set_shader_parameter("rim_strength", 0.0)
 	elif valid_word and not _projection and _mark == 0 and _contact_kind == "none":
 		_gel.set_shader_parameter("rim_color", MERGED_COLORS[merge_level].darkened(0.12))
 		_gel.set_shader_parameter("rim_strength", 1.0)
