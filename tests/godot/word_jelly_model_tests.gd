@@ -43,6 +43,7 @@ func _run() -> void:
 	_test_gravity_partial_support()
 	_test_gravity_held_stack()
 	_test_drag_support_removal()
+	_test_drag_gravity_delay()
 	_test_drag_partial_support()
 	_test_drag_return_capacity()
 	_test_drag_same_cell_release()
@@ -2104,10 +2105,18 @@ func _test_drag_support_removal() -> void:
 		"merely pressing or selecting hat leaves nose resting on its unchanged support")
 	check(model.begin_drag(1000) and model.is_lifted(1000),
 		"an actual drag lifts hat out of the board's support occupancy")
+	model.step(Model.DRAG_GRAVITY_DELAY_SECONDS - 0.001)
+	check(model.cell(1001).row == 6 and not bool(model.cell(1001).get("falling", false)),
+		"nose remains at its original row for the first 599 ms after hat moves away")
+	model.set_paused(true)
+	model.step(10.0)
+	model.set_paused(false)
+	check(model.cell(1001).row == 6, "pause preserves the last millisecond of the support delay")
+	model.step(0.001)
 	var falling: Dictionary = model.cell(1001)
 	check(falling.column == 1 and falling.row == 7 and bool(falling.falling) and falling.falling_rows == 1
 		and bool(falling.settling) and is_zero_approx(float(falling.age)) and not bool(falling.arrival),
-		"nose immediately begins a natural one-row fall while hat is still being dragged")
+		"nose begins a natural one-row fall exactly 600 ms after hat is lifted")
 	for original: Dictionary in [hat, nose]:
 		var live: Dictionary = model.cell(int(original.id))
 		for key: String in ["id", "text", "word", "mass", "parts_count", "fragments", "chest", "kind", "skin", "width", "height"]:
@@ -2139,6 +2148,85 @@ func _test_drag_support_removal() -> void:
 	var settled: Dictionary = model.snapshot()
 	model.set_held_tile(-1)
 	check(model.snapshot() == settled, "a late repeated cancellation cannot move or duplicate the restored word")
+
+
+func _test_drag_gravity_delay() -> void:
+	for release: String in ["held", "reposition", "direct_reposition", "cancel"]:
+		var model = _gravity_tower()
+		model.cell(1003).row = 3
+		model.set_held_tile(1000)
+		if release == "direct_reposition":
+			check(model.reposition(1000, 3, 3), "direct placement also delays the abandoned stack")
+		else:
+			check(model.begin_drag(1000), "the timing fixture starts a real support drag")
+		model.step(0.20)
+		check(model.cell(1001).row == 6 and model.cell(1002).row == 5,
+			"the whole abandoned stack stays in place during its grace period")
+		check(model.cell(1003).row == 7,
+			"the support delay does not freeze unrelated gravity elsewhere on the board")
+		if release == "reposition":
+			check(model.reposition(1000, 3, 3), "a held support can be placed before the deadline")
+		elif release == "cancel":
+			model.set_held_tile()
+			check(model.cell(1000).row == 7 and model.cell(1000).column == 1,
+				"early cancellation restores the support to its still-vacant original cell")
+		if release in ["reposition", "direct_reposition"]:
+			check(model.cell(1000).row == 7 and model.cell(1000).column == 3,
+				"the manually placed source itself starts falling immediately")
+		model.step(0.399)
+		check(model.cell(1001).row == 6 and model.cell(1002).row == 5,
+			"releasing or repositioning does not shorten the original 600 ms delay")
+		model.step(0.001)
+		if release == "cancel":
+			check(model.cell(1001).row == 6 and model.cell(1002).row == 5
+				and model._drag_gravity_delays.is_empty(),
+				"restored support cancels the delayed fall without a later timer jump")
+		else:
+			check(model.cell(1001).row == 7 and model.cell(1002).row == 6
+				and is_zero_approx(float(model.cell(1001).age)),
+				"the entire unsupported stack begins falling at the original deadline")
+		model.step(Model.SETTLE_SECONDS)
+		if release == "held":
+			model.set_held_tile()
+			model.step(Model.SETTLE_SECONDS)
+		_assert_board(model, "delayed support " + release)
+	var fine = _gravity_tower()
+	var coarse = _gravity_tower()
+	for model in [fine, coarse]:
+		model.set_held_tile(1000)
+		model.begin_drag(1000)
+	for tick in range(70):
+		fine.step(0.01)
+	coarse.step(0.70)
+	for id: int in [1001, 1002]:
+		check(_footprint(fine.cell(id)) == _footprint(coarse.cell(id))
+			and is_equal_approx(float(fine.cell(id).age), float(coarse.cell(id).age))
+			and is_equal_approx(float(coarse.cell(id).age), 0.10),
+			"a coarse frame advances only the fall time remaining after the 600 ms delay")
+	var model = _gravity_tower()
+	model.set_held_tile(1000)
+	model.begin_drag(1000)
+	model.step(0.20)
+	model.set_held_tile()
+	model.set_held_tile(1000)
+	model.begin_drag(1000)
+	model.step(0.599)
+	check(model.cell(1001).row == 6, "a fresh drag after cancellation owns a fresh 600 ms delay")
+	model.step(0.001)
+	check(model.cell(1001).row == 7, "the second drag starts gravity at its own deadline")
+	model = _gravity_tower()
+	model.set_held_tile(1000)
+	model.begin_drag(1000)
+	check(model.reposition(1000, 3, 3), "the old support can leave a waiting child behind")
+	model.set_held_tile(1001)
+	check(model.begin_drag(1001) and model.reposition(1001, 0, 3),
+		"a waiting child remains interactive and can itself be moved")
+	check(model.cell(1001).row == 7 and bool(model.cell(1001).falling),
+		"moving a waiting child clears its old delay so its own drop starts immediately")
+	model.finish_round()
+	check(model._drag_gravity_delays.is_empty(), "round exit discards outstanding support timers")
+	model.configure([_word("cat")], 3, 42)
+	check(model._drag_gravity_delays.is_empty(), "a new round cannot inherit support timers")
 
 
 func _test_drag_partial_support() -> void:
@@ -2251,7 +2339,7 @@ func _test_drag_finish_lifecycle() -> void:
 		var events: Dictionary = _observe(model)
 		model.set_held_tile(1000)
 		check(model.begin_drag(1000), "finish cleanup fixture lifts a supporting source")
-		model.step(Model.SETTLE_SECONDS)
+		model.step(Model.DRAG_GRAVITY_DELAY_SECONDS + Model.SETTLE_SECONDS)
 		var result_id: int = -1
 		if accepted_merge:
 			check(model.try_merge(1000, 1002, true) == "merged", "the lifted prefix can enter an accepted merge")
@@ -3026,10 +3114,10 @@ func _test_reposition_support_and_cell_size() -> void:
 	check(model.cell(1001).row == 6 and model.cell(1002).row == 5, "held source keeps its old stack stable while support is collected")
 	check(model.reposition(1001, 3, 3), "a held source can commit its explicit destination after lower support changes")
 	check(model.cell(1001).row == 7 and bool(model.cell(1001).placement_locked) and bool(model.cell(1001).falling)
-		and model.cell(1002).row == 7 and bool(model.cell(1002).falling),
-		"manual relocation immediately drops both the released body and the abandoned upper stack onto real support")
+		and model.cell(1002).row == 5 and not bool(model.cell(1002).get("falling", false)),
+		"manual relocation drops the released body immediately and delays the abandoned upper stack")
 	model.set_held_tile(-1)
-	model.step(Model.SETTLE_SECONDS)
+	model.step(Model.DRAG_GRAVITY_DELAY_SECONDS + Model.SETTLE_SECONDS)
 	check(model.cell(1001).row == 7 and model.cell(1001).column == 3 and model.is_settled(model.cell(1001)) and not model._gravity_pending,
 		"releasing the drag anchor preserves the chosen column through the natural landing")
 	model.cells.append(_placed_tile(9000, "x", 3, 1))

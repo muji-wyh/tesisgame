@@ -119,8 +119,12 @@ enough space return to the previous position; painted-body contact still takes
 priority for merging. After release, an unsupported jelly immediately falls
 from the final pointer position onto the nearest supporting body or the floor.
 The full footprint determines support, and the fall keeps the chosen column
-and body size. Removing its support starts another fall; bodies above its
-former position also settle. Moving preserves its word,
+and body size. Moving a supporting jelly away leaves the stack above its old
+position in place for 600 ms before gravity starts. The delay begins when the
+drag crosses its movement threshold, continues through placement, and pauses
+with the game. Returning the support before the deadline cancels that fall.
+The released jelly itself and unrelated stacks retain their ordinary gravity.
+Moving preserves its word,
 picture, mass, fragments, and reward receipt without paying coins.
 Reduced motion keeps the same placement rules and static preview, placing
 the body directly at its supported destination.

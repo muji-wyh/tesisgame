@@ -96,37 +96,46 @@ func _fill_fixture(model: RefCounted, keep_empty: Array[Vector2i] = []) -> void:
 
 
 func _test_full_board_return(words: Array) -> void:
-	var model := Model.new()
-	check(model.configure(words, 3, 42), "The full-board return regression uses the reviewed Growth cohort")
-	model.spawn_interval = 10000.0
-	model.cells.clear()
-	var source: Dictionary = _cat(model, 0, 7)
-	source.fragments = 2
-	model.cells.append_array([source, _cat(model, 1, 6)])
-	_fill_fixture(model)
-	_board(model, "full-board starting state")
-	var blocked: Array[String] = []
-	model.drag_blocked.connect(func(reason: String) -> void: blocked.append(reason))
-	model.set_held_tile(int(source.id))
-	var before: Array = model.cells.duplicate(true)
-	check(before.size() == Model.CAPACITY and model.begin_drag(int(source.id)),
-		"A lower ordinary body can be lifted from a full board with a safe one-cell return")
-	model.step(0.5)
-	check(model.is_lifted(int(source.id)) and blocked.is_empty(), "The full-board lift has no artificial room penalty")
-	var reserved: Vector2i = model._drag_return_after_motion(source)
-	check(reserved == Vector2i(0, 0) and model._occupied().has(0) and not model._occupied([], false).has(0),
-		"The falling column leaves one top cell reserved for cancellation without adding hidden support")
-	model.set_held_tile(-1)
-	model.step(0.5)
-	check(model.cells.size() == before.size() and source.column == reserved.x and source.row == reserved.y
-		and model._dragged_tile_id == -1 and model._held_tile_id == -1,
-		"Cancellation places the held body into its reserved top cell and releases both drag identities")
-	for original: Dictionary in before:
-		var retained: Dictionary = model.cell(int(original.id))
-		for field: String in ["id", "text", "display_text", "jelly_kind", "merge_level", "word_candidate", "image_word",
-			"mass", "width", "height", "word", "fragments", "composition"]:
-			check(retained.get(field) == original.get(field), "Full-board return preserves every body's " + field)
-	_board(model, "full-board completed return")
+	for early_cancel: bool in [true, false]:
+		var model := Model.new()
+		check(model.configure(words, 3, 42), "The full-board return regression uses the reviewed Growth cohort")
+		model.spawn_interval = 10000.0
+		model.cells.clear()
+		var source: Dictionary = _cat(model, 0, 7)
+		source.fragments = 2
+		model.cells.append_array([source, _cat(model, 1, 6)])
+		_fill_fixture(model)
+		_board(model, "full-board starting state")
+		var blocked: Array[String] = []
+		model.drag_blocked.connect(func(reason: String) -> void: blocked.append(reason))
+		model.set_held_tile(int(source.id))
+		var before: Array = model.cells.duplicate(true)
+		check(before.size() == Model.CAPACITY and model.begin_drag(int(source.id)),
+			"A lower ordinary body can be lifted from a full board with a safe one-cell return")
+		model.step(Model.DRAG_GRAVITY_DELAY_SECONDS - 0.001 if early_cancel else Model.DRAG_GRAVITY_DELAY_SECONDS + 0.5)
+		check(model.is_lifted(int(source.id)) and blocked.is_empty(), "The full-board lift has no artificial room penalty")
+		var reserved: Vector2i = model._drag_return_after_motion(source)
+		check(reserved == Vector2i(0, 0), "The delayed column reserves its eventual top return cell before cancellation")
+		var expected_return := Vector2i(0, 7) if early_cancel else reserved
+		if early_cancel:
+			for original: Dictionary in before:
+				var retained: Dictionary = model.cell(int(original.id))
+				check(retained.column == original.column and retained.row == original.row and not bool(retained.falling),
+					"At 599 ms every body still retains its original column and row")
+		else:
+			check(model._occupied().has(0) and not model._occupied([], false).has(0),
+				"The falling column leaves one top cell reserved without adding hidden support")
+		model.set_held_tile(-1)
+		model.step(0.5)
+		check(model.cells.size() == before.size() and source.column == expected_return.x and source.row == expected_return.y
+			and model._dragged_tile_id == -1 and model._held_tile_id == -1,
+			"Early cancellation restores the origin; cancellation after the delay uses the reserved top cell")
+		for original: Dictionary in before:
+			var retained: Dictionary = model.cell(int(original.id))
+			for field: String in ["id", "text", "display_text", "jelly_kind", "merge_level", "word_candidate", "image_word",
+				"mass", "width", "height", "word", "fragments", "composition"]:
+				check(retained.get(field) == original.get(field), "Full-board return preserves every body's " + field)
+		_board(model, "full-board completed return")
 
 
 func _test_arrival_preserves_return(words: Array) -> void:
@@ -141,7 +150,9 @@ func _test_arrival_preserves_return(words: Array) -> void:
 	_board(model, "incoming-body starting board")
 	model.set_held_tile(int(source.id))
 	check(model.begin_drag(int(source.id)), "The full board leaves one safe return cell after its lower support is lifted")
-	model.step(0.5)
+	model.step(Model.DRAG_GRAVITY_DELAY_SECONDS - 0.001)
+	check(model._drag_return_after_motion(source) == Vector2i(0, 0),
+		"Incoming supply accounts for the return cell needed after the support grace period")
 	var incoming: Dictionary = model._new_tile("fixture", 1, 0)
 	model.upcoming.assign([incoming, {}, {}, {}, {}, {}])
 	var original_preview: Array = model.upcoming.duplicate(true)

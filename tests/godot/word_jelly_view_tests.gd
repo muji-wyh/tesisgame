@@ -86,6 +86,7 @@ func _run() -> void:
 	_check_word_reveal_lifecycle(view)
 	_check_collection_stack_fall(view)
 	_check_dragged_support_fall(view)
+	_check_dragged_support_early_cancel(view)
 	_check_release_after_support_collection(view)
 	_check_coarse_frame_collection_landing(view)
 	_check_word_pair_colors(view)
@@ -1658,9 +1659,19 @@ func _check_dragged_support_fall(view) -> void:
 				_pointer_event(view, pointer, "move", destination)
 				check(view._dragging and view.game.is_lifted(source) and view._source == source,
 					"mouse and touch lift the source only when actual dragging begins")
+				check(int(lower.row) == Model.ROWS - 2 and int(upper.row) == Model.ROWS - 3
+					and not bool(lower.get("falling", false)) and not bool(upper.get("falling", false)),
+					"dragging the support away leaves both upper words in place during their grace period")
+				_advance(view, 0.599)
+				check(int(lower.row) == Model.ROWS - 2 and int(upper.row) == Model.ROWS - 3
+					and view._tiles[int(lower.id)].position.is_equal_approx(lower_origin)
+					and view._tiles[int(upper.id)].position.is_equal_approx(upper_origin)
+					and cues.count("land") == 0,
+					"the unsupported stack stays visibly stationary and silent through 599 ms")
+				_advance(view, 0.001)
 				check(int(lower.row) == Model.ROWS - 1 and int(upper.row) == Model.ROWS - 2
 					and bool(lower.get("falling", false)) and bool(upper.get("falling", false)),
-					"dragging hat away starts both nose and shoe falling before pointer release")
+					"both upper words begin falling at 600 ms while the support remains held")
 				var held_position: Vector2 = view._tiles[source].position
 				_advance(view, Model.SETTLE_SECONDS * 0.45)
 				if reduced:
@@ -1704,6 +1715,52 @@ func _check_dragged_support_fall(view) -> void:
 					and int(lower.fragments) == 1 and view.game.cells.size() == 3
 					and view.game.fusions.is_empty() and payouts.is_empty() and attempts.is_empty() and heard.is_empty(),
 					"support removal and cancellation retain every word and fragment without merging or collecting")
+
+
+func _check_dragged_support_early_cancel(view) -> void:
+	for reduced: bool in [false, true]:
+		for pointer: int in [-1, 7]:
+			for interruption: String in ["cancel", "pointer_cancel", "outside", "pause", "focus"]:
+				_reset(view, reduced)
+				view.game.cells.clear()
+				var support: Dictionary = _fixture_tile(view, "hat", 2, 2)
+				var lower: Dictionary = _fixture_tile(view, "nose", 2, 1)
+				var upper: Dictionary = _fixture_tile(view, "shoe", 2, 0)
+				var origins: Dictionary = {}
+				for index in range(3):
+					var tile: Dictionary = [support, lower, upper][index]
+					tile.column = 1
+					tile.row = Model.ROWS - 1 - index
+					view.game.cells.append(tile)
+				view._sync_tiles()
+				view._layout()
+				for tile: Dictionary in view.game.cells:
+					origins[int(tile.id)] = view._tiles[int(tile.id)].get_rect()
+				var source: int = int(support.id)
+				var destination: Vector2 = _placement_point(view, support, 4, 3)
+				_pointer_event(view, pointer, "down", _center(view, source))
+				_pointer_event(view, pointer, "move", destination)
+				_advance(view, 0.25)
+				check(view.game.is_lifted(source) and not bool(lower.get("falling", false))
+					and int(lower.row) == Model.ROWS - 2, "early cancellation starts within the stack's 600 ms grace period")
+				match interruption:
+					"cancel": view.cancel_input()
+					"pointer_cancel": _pointer_event(view, pointer, "up", destination, true)
+					"outside": _pointer_event(view, pointer, "up", view.get_global_transform() * (view._board.end + Vector2(100.0, 0.0)))
+					"pause":
+						view.pause(true)
+						_advance(view, 1.0)
+						view.pause(false)
+					"focus": view._notification(NOTIFICATION_APPLICATION_FOCUS_OUT)
+				_advance(view, 0.70)
+				check(not view.game.is_lifted(source) and view._source == -1 and not view._dragging,
+					"%s before grace expiry returns the support and clears pointer ownership" % interruption)
+				for tile: Dictionary in view.game.cells:
+					check(view._tiles[int(tile.id)].get_rect().is_equal_approx(origins[int(tile.id)])
+						and _has_support(view.game.cells, tile) and view._settled(tile),
+						"%s before grace expiry keeps the original supported stack intact after the deadline" % interruption)
+				check(cues.count("land") == 0 and payouts.is_empty() and attempts.is_empty() and heard.is_empty(),
+					"restoring support during the delay cannot produce a later phantom fall, landing sound, or reward")
 
 
 func _check_release_after_support_collection(view) -> void:

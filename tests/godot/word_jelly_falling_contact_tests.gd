@@ -35,7 +35,11 @@ func _lift_support(view, reduced: bool, pointer: int = 7, target: String = "pict
 	view._sync_positions()
 	check(view._press(pointer, _center(view, ids[0])), "The walk support can be picked up")
 	view._move(_center(view, ids[0]) - Vector2(view._pitch * 1.6, 0))
-	check(view.game.is_lifted(ids[0]) and bool(view.game.cell(ids[1]).falling), "Lifting walk starts the picture falling")
+	check(view.game.is_lifted(ids[0]) and not bool(view.game.cell(ids[1]).falling),
+		"Lifting walk holds its picture in place during the support grace period")
+	_advance(view, Model.DRAG_GRAVITY_DELAY_SECONDS)
+	check(view.game.is_lifted(ids[0]) and bool(view.game.cell(ids[1]).falling),
+		"The picture starts falling after the 600 ms support grace period")
 	check(not view.game.is_settled(view.game.cell(ids[1])), "The picture has not landed")
 	return ids
 

@@ -974,7 +974,8 @@ test('collecting a lower word makes the stack above it visibly fall onto support
   expect(errors).toEqual([]);
 });
 
-test('lifting a lower jelly drops its stack while the pointer remains held', async ({ page }, info) => {
+test('lifting a lower jelly waits 600 ms before dropping its stack while held', async ({ page }, info) => {
+  test.setTimeout(180000);
   const errors = await startWordJelly(page, { age: 3 }), bounds = await metrics(page);
   const before = await jelly(page), startingWallet = await wallet(page);
   const above = lower => before.tiles.find(upper => upper.id !== lower.id && upper.row + upper.height === lower.row &&
@@ -987,16 +988,17 @@ test('lifting a lower jelly drops its stack while the pointer remains held', asy
   const from = center(support.rect, bounds);
   const destination = center([before.board_rect[0] + before.board_rect[2] * 0.8,
     before.board_rect[1] + before.board_rect[3] * 0.15, 0, 0], bounds);
-  await page.evaluate(id => {
+  await page.evaluate(({ id, sourceId }) => {
     const status = document.getElementById('game-status');
     window.heldSupportFall = [];
     const observer = new MutationObserver(() => {
       const state = JSON.parse(status.dataset.jelly || '{}');
       const tile = state.tiles?.find(item => item.id === id);
-      if (tile) window.heldSupportFall.push({ time: performance.now(), tile, drag: state.drag });
+      const source = state.tiles?.find(item => item.id === sourceId);
+      if (tile && source) window.heldSupportFall.push({ time: performance.now(), sourceAge: source.age, tile, drag: state.drag });
     });
     observer.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
-  }, upper.id);
+  }, { id: upper.id, sourceId: support.id });
   await page.mouse.move(from.x, from.y);
   await page.mouse.down();
   try {
@@ -1012,10 +1014,21 @@ test('lifting a lower jelly drops its stack while the pointer remains held', asy
     expect(landed.rect[1]).toBeGreaterThan(upper.rect[1]);
     expectSupportedChild(held, landed);
     const timeline = await page.evaluate(() => window.heldSupportFall);
+    fs.writeFileSync(info.outputPath('word-jelly-held-support-fall.json'), JSON.stringify({ before, held, timeline }, null, 2));
+    const heldFrames = timeline.filter(frame => frame.drag.active && frame.drag.source === support.id);
+    const firstHeld = heldFrames[0];
+    const firstFall = heldFrames.find(frame => frame.tile.row > upper.row);
+    const beforeLift = timeline.filter(frame => !frame.drag.active && frame.drag.source === support.id).at(-1);
+    expect(beforeLift, 'The recording includes the held source before the movement threshold').toBeTruthy();
+    expect(firstHeld.tile.row, 'The newly lifted stack remains at its original row').toBe(upper.row);
+    const fallStartedAt = firstFall.sourceAge - firstFall.tile.age;
+    expect(fallStartedAt - beforeLift.sourceAge, 'Gravity cannot start before 600 ms of game time after lift')
+      .toBeGreaterThanOrEqual(0.599);
+    expect(fallStartedAt - firstHeld.sourceAge, 'Gravity starts by 600 ms after the first observed lifted frame')
+      .toBeLessThanOrEqual(0.601);
     expect(timeline.some(frame => frame.drag.source === support.id && frame.tile.falling && !frame.tile.settled &&
       frame.tile.rect[1] > upper.rect[1] && frame.tile.rect[1] < landed.rect[1]),
     'The browser renders an intermediate fall while the lower jelly is held').toBe(true);
-    fs.writeFileSync(info.outputPath('word-jelly-held-support-fall.json'), JSON.stringify({ before, held, timeline }, null, 2));
     await capture(page, info, 'word-jelly-stack-landed-while-support-held');
     expect(held.collected_coins).toBe(before.collected_coins);
     expect(held.merged_count).toBe(before.merged_count);

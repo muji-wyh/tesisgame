@@ -31,6 +31,7 @@ const INITIAL_SETTLED_TILES: int = COLUMNS * 3
 const DROP_COUNT: int = COLUMNS
 const UPCOMING_COUNT: int = COLUMNS
 const SETTLE_SECONDS: float = 0.36
+const DRAG_GRAVITY_DELAY_SECONDS: float = 0.60
 const ARRIVAL_STAGGER: float = 0.15
 const ARRIVAL_SLOT_CLEARANCE: float = 0.36
 const ARRIVAL_ORDER: Array[int] = [0, 3, 1, 4, 2]
@@ -105,6 +106,7 @@ var _growth_pending: bool = false
 var _gravity_pending: bool = false
 var _held_tile_id: int = -1
 var _dragged_tile_id: int = -1
+var _drag_gravity_delays: Dictionary = {}
 var _collection_batch_active: bool = false
 var _collection_batch_ids: Array[int] = []
 var _collection_batch_cursor: int = 0
@@ -175,6 +177,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_gravity_pending = false
 	_held_tile_id = -1
 	_dragged_tile_id = -1
+	_drag_gravity_delays.clear()
 	_reset_collection_batch()
 	_powerup.clear()
 	_powerup_ids.clear()
@@ -1009,6 +1012,7 @@ func step(delta: float) -> void:
 		var consumed: float = remaining
 		consumed = minf(consumed, _collection_batch_boundary())
 		consumed = minf(consumed, _powerup_boundary())
+		consumed = minf(consumed, _next_drag_gravity_boundary())
 		if _growth_pending and _settling_remaining() > EPSILON:
 			consumed = minf(consumed, _settling_remaining())
 		if _gravity_pending and _next_settlement() > EPSILON:
@@ -1041,6 +1045,7 @@ func step(delta: float) -> void:
 		for active in fusions:
 			if not bool(active.get("commit_pending", false)):
 				active.elapsed = float(active.elapsed) + consumed
+		_advance_drag_gravity_delays(consumed)
 		if powerup_running:
 			_powerup.elapsed = float(_powerup.elapsed) + consumed
 			_powerup.clock = float(_powerup.clock) + consumed
@@ -1140,22 +1145,42 @@ func begin_drag(tile_id: int) -> bool:
 	if source.has("composition") and _drag_return_after_motion(source).x < 0:
 		drag_blocked.emit("needs_room")
 		return false
-	var removed_support: bool = false
+	_delay_drag_support(source)
+	_drag_gravity_delays.erase(tile_id)
+	_dragged_tile_id = tile_id
+	source.lifted = true
+	_resume_pending_motion()
+	changed.emit()
+	return true
+
+
+func _delay_drag_support(source: Dictionary) -> void:
 	for tile: Dictionary in cells:
-		if int(tile.id) == tile_id or bool(tile.get("lifted", false)):
+		if int(tile.id) == int(source.id) or bool(tile.get("lifted", false)):
 			continue
 		if int(tile.row) + int(tile.height) == int(source.row) \
 			and int(tile.column) < int(source.column) + int(source.width) \
 			and int(source.column) < int(tile.column) + int(tile.width):
-			removed_support = true
-			break
-	_dragged_tile_id = tile_id
-	source.lifted = true
-	if removed_support:
-		_gravity_pending = true
-		_resume_pending_motion()
-	changed.emit()
-	return true
+			# Keeping the direct child in place also supports the rest of its stack.
+			_drag_gravity_delays[int(tile.id)] = DRAG_GRAVITY_DELAY_SECONDS
+			_gravity_pending = true
+
+
+func _next_drag_gravity_boundary() -> float:
+	var boundary: float = INF
+	for remaining: float in _drag_gravity_delays.values():
+		boundary = minf(boundary, remaining)
+	return boundary
+
+
+func _advance_drag_gravity_delays(delta: float) -> void:
+	for tile_id: int in _drag_gravity_delays.keys():
+		var remaining: float = float(_drag_gravity_delays[tile_id]) - delta
+		if remaining <= EPSILON or _index_for_id(tile_id) < 0:
+			_drag_gravity_delays.erase(tile_id)
+			_gravity_pending = true
+		else:
+			_drag_gravity_delays[tile_id] = remaining
 
 
 func is_lifted(tile_id: int) -> bool:
@@ -1243,8 +1268,8 @@ func _drag_return_after_motion(anchor: Dictionary, additional: Dictionary = {}) 
 		current.append(tile.duplicate())
 	if not additional.is_empty():
 		current.append(additional.duplicate())
-	# Settled neighbors commit their new grid positions in begin_drag itself.
-	# Their vacated cells are immediately available, even during visual falling.
+	# Project the positions neighbors will commit after the support delay. The
+	# return reservation must remain available once that delayed fall begins.
 	current.sort_custom(_gravity_order)
 	for tile: Dictionary in current:
 		if int(tile.id) in consumed or not is_settled(tile):
@@ -1294,6 +1319,9 @@ func reposition(tile_id: int, column: int, row: int) -> bool:
 		return false
 	var tile: Dictionary = cells[_index_for_id(tile_id)]
 	var changed_position: bool = column != int(tile.column) or row != int(tile.row)
+	if changed_position and not is_lifted(tile_id):
+		_delay_drag_support(tile)
+	_drag_gravity_delays.erase(tile_id)
 	tile.column = column
 	tile.row = row
 	# This preserves the chosen footprint during later automatic growth only;
@@ -1479,6 +1507,7 @@ func finish_round(reason: String = "finished") -> Dictionary:
 	fusions.clear()
 	_dragged_tile_id = -1
 	_held_tile_id = -1
+	_drag_gravity_delays.clear()
 	for tile: Dictionary in cells:
 		tile.lifted = false
 	_result = {"reason": _finish_reason, "cleared_pairs": cleared_pairs, "score": score(), "coins": collected_coins, "words": []}
@@ -2394,6 +2423,12 @@ func _settle_collected_stack() -> void:
 			continue
 		var occupied: Dictionary = _occupied([int(tile.id)], false)
 		var row: int = int(tile.row)
+		if _drag_gravity_delays.has(int(tile.id)):
+			if row + int(tile.height) < ROWS and _fits(occupied, int(tile.column), row + 1, int(tile.width), int(tile.height)):
+				_gravity_pending = true
+				continue
+			# Returning the support before the deadline cancels this pending fall.
+			_drag_gravity_delays.erase(int(tile.id))
 		while row + int(tile.height) < ROWS and _fits(occupied, int(tile.column), row + 1, int(tile.width), int(tile.height)):
 			row += 1
 		if row == int(tile.row):
