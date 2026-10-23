@@ -36,6 +36,7 @@ func _run() -> void:
 	_check_reduced_motion(reveal)
 	_check_level_effects(reveal)
 	_check_level_lifetimes(reveal)
+	await _check_delayed_reveal(reveal)
 	reveal.reset()
 	reveal.present({"id": "image-free", "text": "on"}, null, Color.WHITE)
 	check(reveal.snapshot().visible and reveal.snapshot().spelling == "on" and reveal.snapshot().picture.is_empty(),
@@ -145,7 +146,7 @@ func _check_layout_case(reveal, area: Rect2, scale_factor: float, batch: bool) -
 	var spellings: Array[String] = ["cat", "hippopotamus", "ice cream"]
 	for index in range(spellings.size()):
 		var text: String = spellings[index]
-		_present(reveal, text, cat if text == "cat" else apple, batch, [1, 4, 9][index])
+		_present(reveal, text, cat if text == "cat" else apple, batch, [1, 4, 6][index])
 		reveal.advance(0.10)
 	for tick in range(16 if batch else 28):
 		_check_bounds(reveal, area)
@@ -231,7 +232,7 @@ func _check_reduced_motion(reveal) -> void:
 		reveal.set_reduced_motion(enabled_before)
 		_present(reveal, "apple", apple, false, 4)
 		reveal.advance(0.10)
-		_present(reveal, "cat", cat, false, 9)
+		_present(reveal, "cat", cat, false, 6)
 		reveal.advance(0.10)
 		reveal.set_reduced_motion(true)
 		var before: Array = reveal.snapshot().entries.duplicate(true)
@@ -256,7 +257,7 @@ func _check_level_effects(reveal) -> void:
 	reveal.configure_layout(Rect2(20, 12, 980, 260), 1.0)
 	var profiles: Array[Dictionary] = []
 	var patterns: Array[String] = []
-	for level in range(1, 10):
+	for level in range(1, Model.MAX_MERGE_LEVEL + 1):
 		reveal.reset()
 		reveal.set_reduced_motion(false)
 		_present(reveal, "cat", cat, false, level)
@@ -278,16 +279,19 @@ func _check_level_effects(reveal) -> void:
 		patterns.append(str(fx.pattern))
 		_check_bounds(reveal, Rect2(20, 12, 980, 260))
 		_check_input(reveal)
-	check(patterns[0] != patterns[3] and patterns[3] != patterns[8] and patterns[0] != patterns[8],
-		"Lv1, Lv4 and Lv9 use distinct collection-pop choreography")
+	check(patterns.size() == 6, "All six merged-word levels receive a reading-pop treatment")
+	for index in range(patterns.size()):
+		check(patterns.count(patterns[index]) == 1, "Every available level has a distinct collection-pop choreography")
 	check(str(profiles[3].pattern) == "fireworks", "Lv4 carries its fireworks identity into the reading pop")
-	check(int(profiles[8].spark_count) > int(profiles[3].spark_count)
+	check(str(profiles[4].pattern) == "cascade" and str(profiles[5].pattern) == "bouquet",
+		"Lv5 carries the double cascade and Lv6 carries the prismatic bouquet")
+	check(int(profiles[5].spark_count) > int(profiles[3].spark_count)
 		and int(profiles[3].spark_count) > int(profiles[0].spark_count),
-		"collection-pop sparkle density grows from Lv1 through Lv4 to Lv9")
-	for requested: int in [-10, 0, 1, 4, 9, 20]:
+		"collection-pop sparkle density grows from Lv1 through Lv4 to Lv6")
+	for requested: int in [-10, 0, 1, 4, 6, 9, 20]:
 		reveal.reset()
 		_present(reveal, "apple", apple, false, requested)
-		var clamped: int = clampi(requested, 1, 9)
+		var clamped: int = clampi(requested, 1, Model.MAX_MERGE_LEVEL)
 		check(int(reveal.snapshot().merge_level) == clamped and int(reveal.snapshot().effects.level) == clamped,
 			"out-of-range level input clamps safely to the available effect tiers")
 
@@ -301,7 +305,7 @@ func _check_level_lifetimes(reveal) -> void:
 			reveal.set_reduced_motion(reduced)
 			var duration: float = Reveal.BATCH_SECONDS if batch else Reveal.SECONDS
 			var cadence: float = Model.BATCH_BEAT_SECONDS if batch else 0.10
-			var levels: Array[int] = [1, 4, 9]
+			var levels: Array[int] = [1, 4, 6]
 			for index in range(levels.size()):
 				if index > 0:
 					reveal.advance(cadence)
@@ -328,8 +332,8 @@ func _check_level_lifetimes(reveal) -> void:
 			_check_input(reveal)
 			reveal.advance(duration - cadence * 2.0 + 0.01)
 			var survivors: Array = reveal.snapshot().entries
-			check(survivors.size() == 2 and int(survivors[0].merge_level) == 4 and int(survivors[1].merge_level) == 9,
-				"Lv1 expires on its original beat without clearing younger Lv4 and Lv9 effects")
+			check(survivors.size() == 2 and int(survivors[0].merge_level) == 4 and int(survivors[1].merge_level) == 6,
+				"Lv1 expires on its original beat without clearing younger Lv4 and Lv6 effects")
 			reveal.reset()
 			check(reveal.get_child_count() == 0 and reveal.snapshot().effects.is_empty(),
 				"reset releases every effect node and removes the last tier from the empty state")
@@ -344,9 +348,62 @@ func _check_level_lifetimes(reveal) -> void:
 			reveal.advance(0.05)
 			check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
 				"late effect tails expire without retaining a particle subtree")
-			reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, duration + 0.01, 9)
+			reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, duration + 0.01, 6)
 			check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
-				"an already-expired Lv9 catch-up cannot replay its showcase")
+				"an already-expired Lv6 catch-up cannot replay its showcase")
+
+
+func _check_delayed_reveal(reveal) -> void:
+	for reduced: bool in [false, true]:
+		reveal.reset()
+		reveal.configure_layout(Rect2(20, 12, 980, 260), 1.0)
+		reveal.set_reduced_motion(reduced)
+		reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, false, 0.0, 4, 0.66)
+		var waiting: Dictionary = reveal.snapshot()
+		check(not waiting.visible and waiting.entries.size() == 1 and not waiting.entries[0].visible
+			and is_zero_approx(float(waiting.content_alpha)),
+			"the reading card stays hidden while the board jelly charges")
+		check(is_equal_approx(float(waiting.elapsed), -0.66) and is_equal_approx(float(waiting.duration), Reveal.SECONDS),
+			"anticipation reserves a future reveal without consuming reading time")
+		await process_frame
+		await process_frame
+		check(reveal.snapshot() == waiting, "a paused collection clock cannot release a delayed card on its own")
+		reveal.configure_layout(Rect2(8, 6, 250, 115), 1.0)
+		check(not reveal.snapshot().visible and not reveal._entries[0].visible
+			and is_equal_approx(float(reveal.snapshot().elapsed), -0.66),
+			"layout changes cannot expose a waiting card or restart its delay")
+		reveal.advance(0.65)
+		check(not reveal.snapshot().visible and is_zero_approx(float(reveal.snapshot().content_alpha)),
+			"the complete anticipation remains free of opaque reading content")
+		reveal.advance(0.10)
+		check(reveal.snapshot().visible and is_equal_approx(float(reveal.snapshot().elapsed), 0.09)
+			and float(reveal.snapshot().content_alpha) > 0.9,
+			"crossing release starts the reading beat at the correct residual frame age")
+		reveal.advance(Reveal.SECONDS - 0.10)
+		check(reveal.snapshot().visible and float(reveal.snapshot().content_alpha) < 0.1,
+			"a delayed card retains its complete original reading lifetime")
+		reveal.advance(0.02)
+		check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
+			"a delayed card frees itself after its own full reading lifetime")
+		reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, false, 0.90, 4, 0.66)
+		check(reveal.snapshot().visible and is_equal_approx(float(reveal.snapshot().elapsed), 0.24),
+			"a late release catches up from the pop boundary without replaying anticipation")
+		reveal.reset()
+		reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, false, 0.66 + Reveal.SECONDS - 0.04, 4, 0.66)
+		check(reveal.snapshot().visible and float(reveal.snapshot().content_alpha) < 0.15,
+			"late delayed presentations retain only their existing fading tail")
+		reveal.advance(0.05)
+		reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, false, 0.66 + Reveal.SECONDS + 0.01, 4, 0.66)
+		check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
+			"an expired delayed presentation cannot replay its reading card")
+		reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, false, 0.0, 4, 0.66)
+		reveal.reset()
+		reveal.advance(3.0)
+		check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
+			"pause or exit cleanup cancels delayed cards without a later callback")
+	for invalid: float in [NAN, INF]:
+		reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, false, 0.0, 4, invalid)
+	check(reveal.get_child_count() == 0, "invalid anticipation durations cannot retain a permanent hidden card")
 
 
 func _check_bounds(reveal, area: Rect2) -> void:

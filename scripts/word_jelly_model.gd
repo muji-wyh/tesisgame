@@ -26,7 +26,7 @@ const LABEL_FONT = preload("res://assets/fonts/heading.tres")
 const COLUMNS: int = 5
 const ROWS: int = 8
 const CAPACITY: int = COLUMNS * ROWS
-const MAX_MERGE_LEVEL: int = 9
+const MAX_MERGE_LEVEL: int = 6
 const INITIAL_SETTLED_TILES: int = COLUMNS * 3
 const DROP_COUNT: int = COLUMNS
 const UPCOMING_COUNT: int = COLUMNS
@@ -810,6 +810,22 @@ func collect(tile_id: int) -> bool:
 	return _begin_collection(tile_id)
 
 
+static func collection_pop_seconds(level: int, batch: bool = false) -> float:
+	if batch:
+		return BATCH_POP_SECONDS
+	match clampi(level, 1, MAX_MERGE_LEVEL):
+		4: return 0.66
+		5: return 0.72
+		6: return 0.78
+	return POP_SECONDS
+
+
+static func collection_seconds(level: int, batch: bool = false) -> float:
+	if batch:
+		return BATCH_BEAT_SECONDS
+	return COLLECT_SECONDS + collection_pop_seconds(level) - POP_SECONDS
+
+
 func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
 	if phase != "playing" or paused or powerup_active() or is_fusing(tile_id):
 		return false
@@ -828,8 +844,8 @@ func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
 		"merge_level": int(tile.get("merge_level", 1)),
 		"mastery_eligible": bool(tile.get("mastery_eligible", false)),
 		"coins": int(_collection_coin_rewards[_collection_event_ids[tile_id]]), "fragments": int(tile.fragments),
-		"elapsed": 0.0, "duration": BATCH_BEAT_SECONDS if batch_index > 0 else COLLECT_SECONDS,
-		"pop_at": BATCH_POP_SECONDS if batch_index > 0 else POP_SECONDS,
+		"elapsed": 0.0, "duration": collection_seconds(int(tile.get("merge_level", 1)), batch_index > 0),
+		"pop_at": collection_pop_seconds(int(tile.get("merge_level", 1)), batch_index > 0),
 		"popped": false, "credited": false,
 		"batch": batch_index > 0, "batch_index": batch_index,
 		"batch_total": _collection_batch_ids.size() if batch_index > 0 else 0,
@@ -1739,12 +1755,10 @@ func merge_candidate(left: Dictionary, right: Dictionary, check_space: bool = tr
 	var tile: Dictionary = {}
 	var merge_kind: String = "roots"
 	if left_kind == "merged" and right_kind == "merged":
-		var level: int = int(left.get("merge_level", 1))
-		if level >= MAX_MERGE_LEVEL or level != int(right.get("merge_level", 1)) \
-			or str(left.get("word", {}).get("id", "")) != str(right.get("word", {}).get("id", "")) \
-			or left.get("word", {}).is_empty():
+		var level: int = _merged_upgrade_level(left, right)
+		if level == 0:
 			return {"status": "invalid", "result": {}}
-		tile = _joined_word_tile(left, right, left.word, level + 1,
+		tile = _joined_word_tile(left, right, left.word, level,
 			bool(left.get("mastery_eligible", false)) or bool(right.get("mastery_eligible", false)))
 		merge_kind = "upgrade"
 	elif (left_kind == "root" and right_kind == "picture") or (left_kind == "picture" and right_kind == "root"):
@@ -1776,6 +1790,17 @@ func uses_authored_morphology() -> bool:
 	return authored_morphology
 
 
+static func _merged_upgrade_level(left: Dictionary, right: Dictionary) -> int:
+	var word_id: String = str(left.get("word", {}).get("id", ""))
+	if word_id.is_empty() or word_id != str(right.get("word", {}).get("id", "")):
+		return 0
+	var left_level: int = int(left.get("merge_level", 1))
+	var right_level: int = int(right.get("merge_level", 1))
+	var combined: int = left_level + right_level
+	# A full result must fit the six levels; never silently discard a level.
+	return combined if left_level >= 1 and right_level >= 1 and combined <= MAX_MERGE_LEVEL else 0
+
+
 func parts_compatible(left: Dictionary, right: Dictionary) -> bool:
 	# Palette classification evaluates every visible pair; keep it semantic
 	# without copying complete word records or constructing speculative tiles.
@@ -1784,9 +1809,7 @@ func parts_compatible(left: Dictionary, right: Dictionary) -> bool:
 	var left_kind: String = str(left.get("jelly_kind", "root"))
 	var right_kind: String = str(right.get("jelly_kind", "root"))
 	if left_kind == "merged" and right_kind == "merged":
-		return not left.get("word", {}).is_empty() and int(left.get("merge_level", 1)) < MAX_MERGE_LEVEL \
-			and int(left.get("merge_level", 1)) == int(right.get("merge_level", 1)) \
-			and str(left.word.id) == str(right.get("word", {}).get("id", ""))
+		return _merged_upgrade_level(left, right) > 0
 	if left_kind == "picture" and right_kind == "root":
 		return not right.get("word_candidate", {}).is_empty() \
 			and _words_by_id.has(str(right.word_candidate.id)) \

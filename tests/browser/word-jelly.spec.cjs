@@ -90,9 +90,9 @@ function center(rect, bounds) {
 function authoredJoin(left, right) {
   if (!left || !right || left.id === right.id) return null;
   if (left.jelly_kind === 'merged' && right.jelly_kind === 'merged') {
-    if (left.word.id !== right.word.id || left.merge_level !== right.merge_level || left.merge_level >= 9) return null;
+    if (left.word.id !== right.word.id || left.merge_level + right.merge_level > 6) return null;
     return { kind: 'upgrade', node: { surface: left.word.text }, complete: true, collectable: true,
-      mergeLevel: left.merge_level + 1, masteryEligible: left.mastery_eligible || right.mastery_eligible };
+      mergeLevel: left.merge_level + right.merge_level, masteryEligible: left.mastery_eligible || right.mastery_eligible };
   }
   const picture = left.jelly_kind === 'picture' ? left : right.jelly_kind === 'picture' ? right : null;
   if (picture) {
@@ -173,7 +173,7 @@ async function merge(page, sourceId, targetId) {
   const before = await jelly(page), bounds = await metrics(page);
   const source = before.tiles.find(tile => tile.id === sourceId), target = before.tiles.find(tile => tile.id === targetId);
   const authored = authoredJoin(source, target);
-  expect(authored, 'The drag follows a reviewed root join, matching picture, or equal-level upgrade').toBeTruthy();
+  expect(authored, 'The drag follows a reviewed root join, matching picture, or same-word level sum up to six').toBeTruthy();
   expect(source?.settled, 'The held jelly is ready').toBe(true);
   expect(target?.settled, 'The destination jelly is ready').toBe(true);
   const from = center(source.rect, bounds), to = center(target.rect, bounds);
@@ -265,11 +265,12 @@ async function completeSuppliedWord(page, candidate) {
   return result;
 }
 
-async function rejectMerge(page, sourceId, targetId, { info, label, reducedMotion = 'no-preference', inspectContact } = {}) {
+async function rejectMerge(page, sourceId, targetId, { info, label, reducedMotion = 'no-preference', inspectContact, familyHint = false } = {}) {
   const before = await jelly(page), bounds = await metrics(page);
   const source = before.tiles.find(tile => tile.id === sourceId), target = before.tiles.find(tile => tile.id === targetId);
   const contents = tile => ({ id: tile.id, text: tile.text, mass: tile.mass, word: tile.word,
-    fragments: tile.fragments, badges: tile.fragment_badges, picture: tile.picture_visible, coins: tile.coins });
+    fragments: tile.fragments, badges: tile.fragment_badges, picture: tile.picture_visible, coins: tile.coins,
+    merge_level: tile.merge_level });
   expect(source?.settled).toBe(true);
   expect(target?.settled).toBe(true);
   const from = center(source.rect, bounds), to = center(target.rect, bounds);
@@ -293,7 +294,8 @@ async function rejectMerge(page, sourceId, targetId, { info, label, reducedMotio
     await expect.poll(async () => (await jelly(page)).contact).toMatchObject({ kind: 'touch', source: sourceId, target: targetId });
     held = await jelly(page);
     expect(held.contact.strength, 'An incompatible pair still responds to physical contact').toBeGreaterThan(0);
-    expect(held.tiles.find(tile => tile.id === targetId).completion_hint).toBe(false);
+    expect(held.tiles.find(tile => tile.id === targetId).completion_hint,
+      'Same-word family guidance is independent from the maximum-level merge rule').toBe(familyHint);
     if (inspectContact) await inspectContact(held);
     await page.evaluate(({ sourceId, targetId }) => {
       const status = document.getElementById('game-status');
@@ -1586,6 +1588,126 @@ for (const { layout, viewport, reducedMotion } of [
     expect(errors).toEqual([]);
   });
 }
+
+const additiveTest = test.extend({ trace: 'off' });
+additiveTest('different merged levels add up to six and an over-limit same-word merge preserves both jellies', async ({ page }, info) => {
+  test.setTimeout(300000);
+  // A real saved learner leaves one outstanding word; the ordinary supply keeps
+  // producing its pictured word packets without adding a mutation-only test API.
+  await seedGrowth(page, 12, { unmastered: ['cat'] });
+  const errors = await startWordJelly(page, { age: 3, preseededGrowth: true });
+  expect((await jelly(page)).stage.word_ids).toEqual(['cat']);
+  const joins = [];
+  const joinLevels = async (sourceId, targetId) => {
+    const before = await jelly(page), bounds = await metrics(page);
+    const source = before.tiles.find(tile => tile.id === sourceId);
+    const target = before.tiles.find(tile => tile.id === targetId);
+    const expected = authoredJoin(source, target);
+    expect(expected).toBeTruthy();
+    const from = center(source.rect, bounds), to = center(target.rect, bounds);
+    await page.mouse.move(from.x, from.y);
+    await page.mouse.down();
+    try {
+      await page.mouse.move(from.x, from.y - 16);
+      await page.mouse.move(to.x, to.y);
+      await expect.poll(async () => {
+        const current = await jelly(page), destination = current.tiles.find(tile => tile.id === targetId);
+        if (current.drag.source === sourceId && current.drag.target === targetId && destination?.settled) return true;
+        if (destination?.settled) {
+          const next = center(destination.rect, bounds);
+          await page.mouse.move(next.x, next.y);
+        }
+        return false;
+      }, { message: 'The real pointer holds the intended word pair' }).toBe(true);
+    } finally {
+      await page.mouse.up();
+    }
+    let result;
+    await expect.poll(async () => {
+      const current = await jelly(page);
+      result = current.tiles.find(tile => !before.tiles.some(original => original.id === tile.id) &&
+        tile.jelly_kind === 'merged' && tile.word.id === 'cat' && tile.mass === source.mass + target.mass);
+      return current.merged_count === before.merged_count + 1 && result?.settled;
+    }, { message: 'The level-sum result settles after one accepted merge' }).toBe(true);
+    expect(result.merge_level).toBe(expected.mergeLevel);
+    expect(result.fragments).toBe(source.fragments + target.fragments);
+    expect((await jelly(page)).cleared_pairs).toBe(before.cleared_pairs);
+    expectCollectionReward(result);
+    joins.push({ source: source.merge_level, target: target.merge_level, result: result.merge_level,
+      source_id: sourceId, target_id: targetId, result_id: result.id });
+    fs.writeFileSync(info.outputPath('word-jelly-level-sums.json'), JSON.stringify(joins, null, 2));
+    return result;
+  };
+  const singles = [];
+  for (let attempt = 0; singles.length < 7 && attempt < 16; attempt++) {
+    await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
+    const current = await jelly(page);
+    const candidate = suppliedWords(current, 3).find(item => item.word.id === 'cat');
+    if (candidate) {
+      singles.push(await joinLevels(candidate.roots[0].id, candidate.picture.id));
+      continue;
+    }
+    expect(current.preview.enabled, 'Ordinary supply can provide the next matching word packet').toBe(true);
+    await pressRect(page, current.preview.rect);
+    await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(current.generated_tiles);
+  }
+  expect(singles, 'Seven genuine word-picture matches are ready for additive upgrades').toHaveLength(7);
+  const two = await joinLevels(singles[0].id, singles[1].id);
+  expect(two.merge_level).toBe(2);
+  const three = await joinLevels(two.id, singles[2].id);
+  expect(three.merge_level, 'Lv2 plus Lv1 produces Lv3').toBe(3);
+  const four = await joinLevels(singles[3].id, three.id);
+  expect(four.merge_level, 'Lv1 plus Lv3 also adds the levels in the reverse direction').toBe(4);
+  const secondTwo = await joinLevels(singles[4].id, singles[5].id);
+  const six = await joinLevels(four.id, secondTwo.id);
+  expect(six.merge_level, 'Lv4 plus Lv2 reaches the sixth and final level').toBe(6);
+  expect(six.presentation.level_badge).toBe('6');
+  const beforeRejection = await jelly(page);
+  expect(beforeRejection.cleared_pairs, 'Upgrades cannot consume a collection or award its reward').toBe(0);
+  const rejected = await rejectMerge(page, six.id, singles[6].id, {
+    info, label: 'word-jelly-level-sum-rejected', familyHint: true,
+  });
+  expect(rejected.after.tiles.find(tile => tile.id === six.id).merge_level).toBe(6);
+  expect(rejected.after.tiles.find(tile => tile.id === singles[6].id).merge_level).toBe(1);
+  expect(rejected.after.merged_count).toBe(beforeRejection.merged_count);
+  await capture(page, info, 'word-jelly-six-level-result');
+
+  await page.evaluate(() => {
+    const status = document.getElementById('game-status');
+    window.sixLevelCollection = [];
+    window.sixLevelCollectionObserver = new MutationObserver(() => {
+      const current = JSON.parse(status.dataset.jelly || '{}');
+      window.sixLevelCollection.push({ fusions: current.fusions, effects: current.collection_effects,
+        reveal: current.word_reveal, cleared: current.cleared_pairs });
+    });
+    window.sixLevelCollectionObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+  });
+  const collectible = rejected.after.tiles.find(tile => tile.id === six.id);
+  let timeline;
+  try {
+    await pressRect(page, collectible.rect);
+    await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(1);
+    await expect.poll(() => page.evaluate(() => window.sixLevelCollection.some(frame =>
+      frame.reveal.entries.some(entry => entry.merge_level === 6 && entry.visible && entry.content_alpha > 0.9))),
+    { message: 'The observed collection reaches a visible full-opacity Lv6 reading card' }).toBe(true);
+  } finally {
+    timeline = await page.evaluate(() => {
+      window.sixLevelCollectionObserver.disconnect();
+      return window.sixLevelCollection;
+    });
+    fs.writeFileSync(info.outputPath('word-jelly-six-level-collection.json'), JSON.stringify(timeline, null, 2));
+  }
+  expect(timeline.some(frame => frame.reveal.entries.some(entry =>
+    entry.merge_level === 6 && entry.elapsed < 0 && !entry.visible && entry.content_alpha === 0)),
+  'The reading card waits invisibly while the real Lv6 jelly charges').toBe(true);
+  expect(timeline.some(frame => frame.reveal.entries.some(entry =>
+    entry.merge_level === 6 && entry.visible && entry.effects.pattern === 'bouquet')),
+  'The final level releases its prismatic reading-card echo').toBe(true);
+  expect(timeline.some(frame => frame.effects.entries.some(entry =>
+    entry.level === 6 && entry.popped && entry.pattern === 'bouquet' && entry.duration >= 3)),
+  'The board releases a sustained Lv6 firework bouquet from the same collection').toBe(true);
+  expect(errors).toEqual([]);
+});
 
 test('merged word mastery is recorded only on collection and survives reload', async ({ page }) => {
   test.setTimeout(180000);

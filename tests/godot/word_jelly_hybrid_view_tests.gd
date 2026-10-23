@@ -88,9 +88,19 @@ func _run() -> void:
 	merged = view.game.cells[0]
 	check(view._tiles[int(merged.id)].presentation_snapshot().level_badge == "2", "Lv2 badge is visible")
 	check(attempts.is_empty(), "Upgrade does not prematurely grant mastery")
+	second = merged.duplicate(true)
+	second.id = view.game._next_tile_id
+	view.game._next_tile_id += 1
+	second.merge_level = 3
+	_install(view, [merged, second])
+	_drag(view, int(merged.id), int(second.id))
+	check(view.game.cells.size() == 1 and view.game.cells[0].merge_level == 5,
+		"Dragging a Lv2 onto the same Lv3 word adds into Lv5")
+	merged = view.game.cells[0]
+	check(view._tiles[int(merged.id)].presentation_snapshot().level_badge == "5", "The summed result displays its Lv5 badge")
 	# The same actual tile is promoted for focused presentation checks; model
-	# tests separately prove every legal upgrade and the Lv9 cap.
-	for level in range(1, 10):
+	# tests separately prove every legal upgrade and the Lv6 cap.
+	for level in range(1, view.game.MAX_MERGE_LEVEL + 1):
 		var tile: Dictionary = merged.duplicate(true)
 		tile.id = view.game._next_tile_id
 		view.game._next_tile_id += 1
@@ -100,7 +110,10 @@ func _run() -> void:
 		var previous_attempts: int = attempts.size()
 		view._collect(int(tile.id))
 		check(view._collection_effects.snapshot().active_count == 1, "Lv%d schedules one collection effect" % level)
-		_advance(view, 0.19)
+		_advance(view, view.game.collection_pop_seconds(level) - 0.01)
+		check(not cues.has("pop" if level == 1 else "jelly-collect-lv%d" % level),
+			"Lv%d sound waits through its visible anticipation" % level)
+		_advance(view, 0.02)
 		check(cues.has("pop" if level == 1 else "jelly-collect-lv%d" % level), "Lv%d sound follows collection pop" % level)
 		_advance(view, 0.35)
 		check(view.game.cells.is_empty() and attempts.size() == previous_attempts + 1, "Lv%d collection credits once" % level)
@@ -118,6 +131,121 @@ func _run() -> void:
 	_advance(view, 0.5)
 	view.stop()
 	check(view._collection_effects.snapshot().active_count == 0, "Stop clears all effects")
+	for dimensions: Vector2 in [Vector2(1000, 720), Vector2(390, 844)]:
+		view.size = dimensions
+		for reduced: bool in [false, true]:
+			_check_charge(view, cat, data, reduced)
+	_check_charge_resize(view, cat, data)
 	view.free()
 	print("Word Jelly hybrid view: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _begin_charge(view, cat: Dictionary) -> Dictionary:
+	var tile: Dictionary = view.game._new_word_root(cat, 2)
+	view.game._set_merged_word(tile, cat, 4, true)
+	_install(view, [tile])
+	cues.clear()
+	view._collect(int(tile.id))
+	return view._fusion_visuals[str(view.game.fusions[0].attempt_id)]
+
+
+func _charge_nodes(visual: Dictionary) -> Array[Node]:
+	var nodes: Array[Node] = [visual.collect_glow]
+	for spark: TextureRect in visual.get("charge_sparks", []):
+		nodes.append(spark)
+	return nodes
+
+
+func _check_charge(view, cat: Dictionary, data, reduced: bool) -> void:
+	check(view.configure([cat], 3, Data.theme("spring"), data.chests, reduced, 44), "Charge fixture configures")
+	view.game.spawn_interval = 10000.0
+	var visual: Dictionary = _begin_charge(view, cat)
+	var card = view._word_reveal._entries[0]
+	check(not card.visible and not view._word_reveal.snapshot().visible,
+		"The reading card remains hidden while the original Lv4 Jelly charges")
+	_advance(view, 0.22)
+	check(visual.merged.scale.is_equal_approx(Vector2.ONE) if reduced else visual.merged.scale.x < 0.63,
+		"Lv4 visibly contracts before its firework, while reduced motion keeps the original size")
+	check(visual.merged.modulate.a == 1.0 and visual.collect_glow.visible,
+		"The contracted Jelly and its acquired energy glow remain readable during charge")
+	check(visual.get("charge_sparks", []).size() == (0 if reduced else 8),
+		"Normal motion gathers acquired sparkle artwork; reduced motion has no moving sparks")
+	var position_before: Vector2 = visual.merged.position
+	var glow_before: Rect2 = visual.collect_glow.get_rect()
+	var radius_before: float = 0.0
+	if not reduced:
+		radius_before = visual.charge_sparks[0].get_rect().get_center().distance_to(visual.merged.get_rect().get_center())
+	_advance(view, 0.25)
+	if reduced:
+		check(visual.merged.scale.is_equal_approx(Vector2.ONE) and visual.merged.position == position_before
+			and visual.collect_glow.get_rect().is_equal_approx(glow_before),
+			"Reduced-motion charge keeps the body and glow geometry still")
+	else:
+		check(visual.charge_sparks[0].get_rect().get_center().distance_to(visual.merged.get_rect().get_center()) < radius_before,
+			"The acquired sparkles travel inward toward the charging Jelly")
+	_advance(view, view.game.collection_pop_seconds(4) - 0.47 - 0.001)
+	check(not card.visible and not cues.has("jelly-collect-lv4") and view.game.cleared_pairs == 0,
+		"The last anticipation frame has no early card, burst sound, or collection credit")
+	_advance(view, 0.002)
+	check(card.visible and cues.count("jelly-collect-lv4") == 1 and view.game.cleared_pairs == 0,
+		"The reading card and firework sound release together at the Lv4 pop boundary")
+	_advance(view, 0.14)
+	check(visual.merged.modulate.a < 0.001 and not view.game.cells.is_empty(),
+		"The Jelly disappears into its burst before its reserved collection completes")
+	var owned: Array[Node] = _charge_nodes(visual)
+	_advance(view, 0.11)
+	check(view.game.cells.is_empty() and view._fusion_visuals.is_empty() and cues.count("jelly-collect-lv4") == 1,
+		"The completed firework leaves one collection and retires its fusion presentation")
+	for node: Node in owned:
+		check(node.is_queued_for_deletion(), "Charge glow and sparkles retire with their owning collection")
+	for action: String in ["configure", "stop"]:
+		check(view.configure([cat], 3, Data.theme("spring"), data.chests, reduced, 45), "Interrupted charge fixture configures")
+		view.game.spawn_interval = 10000.0
+		visual = _begin_charge(view, cat)
+		_advance(view, 0.30)
+		owned = _charge_nodes(visual)
+		if action == "configure":
+			view.configure([cat], 3, Data.theme("spring"), data.chests, reduced, 46)
+		else:
+			view.stop()
+		check(view._fusion_visuals.is_empty() and view._word_reveal.snapshot().entries.is_empty()
+			and view._collection_effects.snapshot().active_count == 0,
+			action + " clears charging Jellies, pending reading cards, and future firework tails")
+		for node: Node in owned:
+			check(node.is_queued_for_deletion(), action + " releases every extra charge node")
+
+
+func _check_charge_resize(view, cat: Dictionary, data) -> void:
+	view.size = Vector2(1000, 720)
+	check(view.configure([cat], 3, Data.theme("spring"), data.chests, false, 47), "Resize charge fixture configures")
+	view.game.spawn_interval = 10000.0
+	var visual: Dictionary = _begin_charge(view, cat)
+	_advance(view, 0.30)
+	var fusion: Dictionary = view.game.fusions[0].duplicate(true)
+	var before: Dictionary = view._collection_effects.snapshot().entries[0]
+	view.size = Vector2(390, 844)
+	view._layout()
+	var expected: Vector2 = view._tile_rect(fusion.a).get_center()
+	var after: Dictionary = view._collection_effects.snapshot().entries[0]
+	var moved_origin := Vector2(after.origin[0], after.origin[1])
+	check(moved_origin.is_equal_approx(expected)
+		and moved_origin.distance_to(Vector2(before.origin[0], before.origin[1])) > 10.0,
+		"Desktop-to-phone resize moves the pending firework to the charged Jelly's actual new center")
+	check(visual.collect_glow.get_rect().get_center().is_equal_approx(expected),
+		"The gathering glow and pending explosion remain anchored to the same resized Jelly")
+	check(after.id == before.id and after.anchor_id == fusion.attempt_id and after.elapsed == before.elapsed
+		and after.delay == before.delay and not after.popped,
+		"Reanchoring preserves the exact pending effect identity, charge age, and pop boundary")
+	_advance(view, float(fusion.pop_at) - float(before.elapsed) + 0.01)
+	var released: Dictionary = view._collection_effects.snapshot().entries[0]
+	check(released.popped and Vector2(released.origin[0], released.origin[1]).is_equal_approx(expected)
+		and cues.count("jelly-collect-lv4") == 1,
+		"The resized Jelly releases its firework at the new position on its original audio boundary")
+	view.size = Vector2(1000, 720)
+	view._layout()
+	var settled: Dictionary = view._collection_effects.snapshot().entries[0]
+	check(settled.origin == released.origin and settled.elapsed == released.elapsed
+		and view._collection_effects.snapshot().active_count == 1,
+		"A later resize cannot teleport, restart, or duplicate an already released firework")
+	view.stop()

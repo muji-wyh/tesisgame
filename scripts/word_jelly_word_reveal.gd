@@ -2,6 +2,7 @@ extends Control
 ## Independent reading bursts, advanced by the same clock as collection.
 
 const Card = preload("res://scripts/word_jelly_word_reveal_card.gd")
+const WordModel = preload("res://scripts/word_jelly_model.gd")
 const SECONDS: float = 1.95
 const BATCH_SECONDS: float = 0.86
 
@@ -38,7 +39,7 @@ func configure_layout(available: Rect2, ui_scale: float, exclusions: Array[Rect2
 		entry.sync()
 
 
-func present(word: Dictionary, picture: Texture2D, accent: Color, batch: bool = false, initial_age: float = 0.0, level: int = 1) -> void:
+func present(word: Dictionary, picture: Texture2D, accent: Color, batch: bool = false, initial_age: float = 0.0, level: int = 1, delay: float = 0.0) -> void:
 	if str(word.get("text", "")).strip_edges().is_empty():
 		return
 	var seconds: float = BATCH_SECONDS if batch else SECONDS
@@ -46,7 +47,11 @@ func present(word: Dictionary, picture: Texture2D, accent: Color, batch: bool = 
 		seconds = 0.48
 	elif batch and size.x * _ui_scale < 520.0:
 		seconds = 0.62
-	if not is_finite(initial_age) or initial_age >= seconds:
+	if not is_finite(initial_age) or not is_finite(delay):
+		return
+	# Anticipation belongs to the board jelly; reading time starts on its release.
+	var age: float = maxf(0.0, initial_age) - maxf(0.0, delay)
+	if age >= seconds:
 		return
 	_serial += 1
 	var variation: float = _rng.randf_range(0.82, 1.18)
@@ -54,10 +59,10 @@ func present(word: Dictionary, picture: Texture2D, accent: Color, batch: bool = 
 		variation = 0.84 if _entries.back().variant_scale > 1.0 else 1.16
 	var entry := Card.new()
 	add_child(entry)
-	entry.configure(_serial, word, picture, accent, batch, variation, seconds, _reduced_motion, clampi(level, 1, 9))
+	entry.configure(_serial, word, picture, accent, batch, variation, seconds, _reduced_motion, clampi(level, 1, WordModel.MAX_MERGE_LEVEL))
 	entry.fit_content(size, _ui_scale)
 	_place(entry, _entries)
-	entry.elapsed = maxf(0.0, initial_age)
+	entry.elapsed = age
 	_entries.append(entry)
 	entry.sync()
 	show()
@@ -147,7 +152,7 @@ func snapshot() -> Dictionary:
 		"duration": SECONDS, "rect": [], "resting_rect": [], "picture_rect": [],
 		"spelling_rect": [], "content_alpha": 0.0, "reduced_motion": _reduced_motion,
 		"merge_level": 1, "effects": {}}
-	latest["visible"] = visible and not states.is_empty()
+	latest["visible"] = visible and states.any(func(entry: Dictionary) -> bool: return bool(entry.visible))
 	latest["entries"] = states
 	latest["active_count"] = states.size()
 	return latest

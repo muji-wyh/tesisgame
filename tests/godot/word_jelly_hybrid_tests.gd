@@ -21,6 +21,7 @@ func _run() -> void:
 	_test_authored_spelling()
 	_test_no_picture()
 	_test_levels_and_fragments()
+	_test_all_level_pairs()
 	_test_collection_retry()
 	_test_assistance()
 	_test_supply_packets()
@@ -203,47 +204,88 @@ func _test_levels_and_fragments() -> void:
 	var attempts: Array = []
 	model.cue_requested.connect(func(cue: String): cues.append(cue))
 	model.word_attempted.connect(func(event: String, ids: Array[String], correct: bool): attempts.append([event, ids, correct]))
-	for level in range(2, 10):
-		var twin: Dictionary = _ready(model, word, level - 1, int(current.fragments))
-		check(model.parts_compatible(current, twin), "Equal-level identical words can upgrade through Lv9")
-		current = _join(model, current, twin)
-		check(current.merge_level == level and current.fragments == int(pow(2, level - 1)), "Upgrades advance one level and preserve both fragment stores")
+	for level in range(2, Model.MAX_MERGE_LEVEL + 1):
+		var addition: Dictionary = _ready(model, word, 1, 1)
+		check(model.parts_compatible(current, addition), "A same-word Lv1 can add to every level below Lv6")
+		current = _join(model, current, addition)
+		check(current.merge_level == level and current.fragments == level, "Upgrades add levels and preserve both fragment stores")
 		check(attempts.is_empty(), "Level upgrades do not award mastery before collection")
-		var wrong_level: Dictionary = _ready(model, word, maxi(1, level - 1))
-		check(not model.parts_compatible(current, wrong_level), "Unequal levels cannot merge")
-		model.cells.erase(wrong_level)
 		var other_word: Dictionary = _ready(model, _word("dog"), level)
 		check(not model.parts_compatible(current, other_word), "Different word identities never upgrade together")
 		model.cells.erase(other_word)
-	var max_twin: Dictionary = _ready(model, word, 9)
+	var max_twin: Dictionary = _ready(model, word, 1)
 	check(not model.parts_compatible(current, max_twin) and model.merge_candidate(current, max_twin).status == "invalid",
-		"Lv9 is a hard cap and cannot create Lv10")
+		"Lv6 is a hard cap and cannot create Lv7")
 	model.cells.erase(max_twin)
 	var payloads: Array = []
 	model.collection_started.connect(func(payload: Dictionary): payloads.append(payload))
 	check(model.collect(current.id), "Max-level merged words remain collectable")
-	model.step(Model.POP_SECONDS)
-	check("jelly-collect-lv9" in cues and payloads[0].merge_level == 9 and payloads[0].mastery_eligible,
+	model.step(Model.collection_pop_seconds(6))
+	check("jelly-collect-lv6" in cues and payloads[0].merge_level == 6 and payloads[0].mastery_eligible,
 		"Collection exposes the level and plays its distinct sound at the pop boundary")
 	model.step(2.0)
-	check(attempts.size() == 1 and model.fragment_count == 256, "One collected high-level word records one learning event and all accumulated fragments")
-	for level in range(1, 10):
+	check(attempts.size() == 1 and model.fragment_count == 6, "One collected high-level word records one learning event and all accumulated fragments")
+	for level in range(1, Model.MAX_MERGE_LEVEL + 1):
 		var pick: Dictionary = _ready(model, word, level)
 		cues.clear()
 		check(model.collect(pick.id), "Each implemented level is collectable")
-		model.step(Model.POP_SECONDS - 0.01)
+		model.step(Model.collection_pop_seconds(level) - 0.01)
 		check(cues.is_empty(), "Collection audio waits for the shared visible pop boundary")
 		model.step(0.02)
 		check(cues == ["pop" if level == 1 else "jelly-collect-lv%d" % level], "Every level chooses its dedicated collection sound")
 		model.step(2.0)
 	model = _model()
-	var a: Dictionary = _ready(model, word, 8, 2)
-	var b: Dictionary = _ready(model, word, 8, 3)
+	var a: Dictionary = _ready(model, word, 2, 2)
+	var b: Dictionary = _ready(model, word, 4, 3)
 	while model.cells.size() < Model.CAPACITY:
 		_put(model, model._new_tile("filler", 1, 0))
 	var upgraded: Dictionary = _join(model, a, b)
-	check(upgraded.merge_level == 9 and model.cells.size() == Model.CAPACITY - 1 and upgraded.fragments == 5,
+	check(upgraded.merge_level == 6 and model.cells.size() == Model.CAPACITY - 1 and upgraded.fragments == 5,
 		"A crowded board can upgrade in the consumed pair's ordinary cell")
+
+
+func _test_all_level_pairs() -> void:
+	check(Model.MAX_MERGE_LEVEL == 6, "Merged Jellies have exactly six supported levels")
+	for left_level in range(1, Model.MAX_MERGE_LEVEL + 1):
+		for right_level in range(1, Model.MAX_MERGE_LEVEL + 1):
+			var model: RefCounted = _model()
+			var left: Dictionary = _ready(model, _word(), left_level, left_level + 1)
+			var right: Dictionary = _ready(model, _word(), right_level, right_level + 2)
+			var combined: int = left_level + right_level
+			var allowed: bool = combined <= Model.MAX_MERGE_LEVEL
+			var label: String = "Lv%d + Lv%d" % [left_level, right_level]
+			var cells_before: Array = model.cells.duplicate(true)
+			var next_id: int = model._next_tile_id
+			var next_event: int = model._next_event_id
+			var supply_rng: int = model._rng.state
+			var coin_rng: int = model._coin_rng.state
+			check(model.parts_compatible(left, right) == allowed and model.can_merge(left, right) == allowed,
+				label + " agrees across highlights and manual merge eligibility")
+			var plan: Dictionary = model.authored_completion_plan()
+			check((plan.status == "complete") == allowed, label + " uses the same rule in Auto Merge preflight")
+			check(model.cells == cells_before and model._next_tile_id == next_id and model._next_event_id == next_event
+				and model._rng.state == supply_rng and model._coin_rng.state == coin_rng,
+				label + " preflight never mutates board, identity, or reward randomness")
+			if allowed:
+				check(plan.tile.merge_level == combined, label + " previews the exact level sum")
+				var result: Dictionary = _join(model, left, right)
+				check(result.merge_level == combined and result.fragments == combined + 3 and result.mass == 2,
+					label + " commits the level sum with every carried fragment and source mass")
+			else:
+				check(model.try_merge(left.id, right.id) == "wrong" and model.cells == cells_before
+					and model._next_tile_id == next_id and model._next_event_id == next_event and model.fusions.is_empty(),
+					label + " rejects atomically instead of clamping or consuming either Jelly")
+	var model: RefCounted = _model()
+	var left: Dictionary = _ready(model, _word(), 2)
+	var right: Dictionary = _ready(model, _word(), 3)
+	right.word.id = "other-sense:cat"
+	check(not model.parts_compatible(left, right), "Equal spelling cannot merge two different word senses")
+	right.word.id = left.word.id
+	right.merge_level = 0
+	check(not model.parts_compatible(left, right) and model.merge_candidate(left, right).status == "invalid",
+		"A malformed level cannot create a valid upgrade")
+	model._set_merged_word(right, _word(), 99, true)
+	check(right.merge_level == 6, "Creating a merged word cannot expose unsupported higher levels")
 
 
 func _test_collection_retry() -> void:
@@ -287,13 +329,23 @@ func _test_assistance() -> void:
 	model.step(2.0)
 	check(attempts.is_empty() and model.fragment_count == 4, "Assisted collection awards inventory without claiming independent mastery")
 	model = _model()
-	_ready(model, _word(), 3, 2)
+	_ready(model, _word(), 2, 2)
 	_ready(model, _word(), 3, 3)
 	model.purchase_powerup = func(_event: String, _kind: String, _price: int) -> Dictionary: return {"ok": true}
 	check(model.activate_powerup("auto_merge"), "Auto merge also supports eligible level-up pairs")
 	model.finish_powerup(false)
-	check(model.cells.size() == 1 and model.cells[0].merge_level == 4 and model.cells[0].fragments == 5
+	check(model.cells.size() == 1 and model.cells[0].merge_level == 5 and model.cells[0].fragments == 5
 		and not model.cells[0].mastery_eligible, "Automatic upgrades conserve level and fragments without learning credit")
+	model = _model()
+	_ready(model, _word(), 4, 2)
+	_ready(model, _word(), 3, 3)
+	var purchases: Array = []
+	model.purchase_powerup = func(event: String, _kind: String, _price: int) -> Dictionary:
+		purchases.append(event)
+		return {"ok": true}
+	check(not model.can_activate_powerup("auto_merge") and not model.activate_powerup("auto_merge")
+		and purchases.is_empty() and model.cells.size() == 2,
+		"An over-cap pair never sells an unavailable Auto Merge or consumes either word")
 
 
 func _test_supply_packets() -> void:

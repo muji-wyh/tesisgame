@@ -1,7 +1,7 @@
 """Prepare deterministic level collection cues from acquired CC0 recordings.
 
-Lv1 remains the user's approved fixed bubble pop. Lv2-Lv9 layer that recording
-with Kenney glass, bell and interface recordings, without generated oscillators.
+Lv1 remains the user's approved fixed bubble pop. Active Lv2-Lv6 and archived
+Lv7-Lv9 layer it with Kenney recordings, without generated oscillators.
 Use --acquire-from with the local Kenney Audio directory to restore originals.
 """
 
@@ -169,6 +169,7 @@ compress/mode=0
 
 
 def generate():
+    existing = json.loads(MANIFEST.read_text(encoding="utf-8")) if MANIFEST.exists() else {}
     sources = read_sources()
     audio = [{"level": 1, "name": NAMES[0], "cue": "pop", "path": "assets/audio/jelly-match/collect-pop.wav",
               "sha256": BASE_HASH, "processing": "Unchanged approved fixed pop", **metrics(sources["pop"])}]
@@ -210,6 +211,12 @@ def generate():
               "runtime": {"gain": .90, "pitch": 1.0, "clock": "Existing accepted collection pop boundary", "concurrency": "Eight protected higher-level channels preserve tails at 120 ms batch spacing; shared mute/pause cleanup and no reward callback"},
               "review": "Acquired texture source sheet visually inspected. Audio source format, identity, decoded waveform, onset, headroom and repeated batch mix checked; auditory taste and physical-device mixing require playback review.",
               "audio": audio}
+    # This audio tool does not own hand-reviewed visual profiles, acquisition
+    # evidence, or art direction. Preserve those fields when refreshing audio.
+    audio_owned_fields = {"tool", "audio_sources", "base_pop", "processing", "audio", "runtime"}
+    record.update({key: value for key, value in existing.items() if key not in audio_owned_fields})
+    record["runtime"].update(existing.get("runtime", {}))
+    record["runtime"].update({"active_levels": list(range(1, 7)), "archived_audio_levels": [7, 8, 9]})
     MANIFEST.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
     preview_dir = ROOT / "build/jelly-level-feedback"
     preview_dir.mkdir(parents=True, exist_ok=True)
@@ -226,6 +233,8 @@ def verify():
     read_sources()
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     assert [entry["level"] for entry in manifest["audio"]] == list(range(1, 10))
+    assert manifest["runtime"]["active_levels"] == list(range(1, 7))
+    assert manifest["runtime"]["archived_audio_levels"] == [7, 8, 9]
     hashes = set()
     for entry in manifest["audio"]:
         path = ROOT / entry["path"]
@@ -244,7 +253,7 @@ def verify():
         hashes.add(entry["sha256"])
     assert len(hashes) == 9, "Every level must have a distinct asset, with the approved pop unchanged."
     assert digest(DEST / "collect-pop.wav") == BASE_HASH
-    print("Verified 9 distinct level cues; approved Lv1 unchanged; all PCM16, prompt attacks and safe 120 ms batch headroom.")
+    print("Verified 6 active and 3 archived level cues; approved Lv1 unchanged; all PCM16, prompt attacks and safe 120 ms batch headroom.")
 
 
 if __name__ == "__main__":

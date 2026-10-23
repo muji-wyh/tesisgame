@@ -4,21 +4,16 @@ extends Control
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const RAYS = preload("res://assets/chests/milestone/rays.png")
 const STAR = preload("res://assets/chests/milestone/sparkle.png")
+const WordModel = preload("res://scripts/word_jelly_model.gd")
 const PROFILES: Array[Dictionary] = [
 	{"name": "Pearl greeting", "pattern": "pearl", "sparks": 3, "bursts": 1, "hue": 0.43, "margin": 6.0},
-	{"name": "Crystal ribbon", "pattern": "ribbon", "sparks": 9, "bursts": 1, "hue": 0.51, "margin": 9.0},
+	{"name": "Crystal ripple", "pattern": "ripple", "sparks": 9, "bursts": 2, "hue": 0.51, "margin": 9.0},
 	{"name": "Sapphire spiral", "pattern": "spiral", "sparks": 18, "bursts": 1, "hue": 0.65, "margin": 12.0},
 	{"name": "Golden fireworks", "pattern": "fireworks", "sparks": 32, "bursts": 2, "hue": 0.11, "margin": 38.0,
 		"trails": 2},
-	{"name": "Rose cascade", "pattern": "cascade", "sparks": 44, "bursts": 3, "hue": 0.93, "margin": 43.0,
+	{"name": "Double cascade", "pattern": "cascade", "sparks": 56, "bursts": 4, "hue": 0.93, "margin": 48.0,
 		"trails": 3},
-	{"name": "Comet coronation", "pattern": "crown", "sparks": 56, "bursts": 3, "hue": 0.51, "margin": 48.0,
-		"trails": 3},
-	{"name": "Aurora embrace", "pattern": "aurora", "sparks": 72, "bursts": 4, "hue": 0.75, "margin": 52.0,
-		"trails": 4},
-	{"name": "Starlight festival", "pattern": "constellation", "sparks": 92, "bursts": 5, "hue": 0.12, "margin": 59.0,
-		"trails": 4},
-	{"name": "Prismatic finale", "pattern": "bouquet", "sparks": 120, "bursts": 6, "hue": 0.10, "margin": 68.0,
+	{"name": "Prismatic bouquet", "pattern": "bouquet", "sparks": 120, "bursts": 6, "hue": 0.10, "margin": 68.0,
 		"trails": 5},
 ]
 
@@ -41,15 +36,15 @@ func _init() -> void:
 
 
 static func profile(value: int) -> Dictionary:
-	return PROFILES[clampi(value, 1, 9) - 1].duplicate(true)
+	return PROFILES[clampi(value, 1, WordModel.MAX_MERGE_LEVEL) - 1].duplicate(true)
 
 
 static func margin_for(value: int, batch: bool, ui_scale: float) -> float:
-	return float(PROFILES[clampi(value, 1, 9) - 1].margin) * (0.68 if batch else 1.0) / ui_scale
+	return float(PROFILES[clampi(value, 1, WordModel.MAX_MERGE_LEVEL) - 1].margin) * (0.68 if batch else 1.0) / ui_scale
 
 
 func configure(card_size: Vector2, ui_scale: float, value: int, accent: Color, batch: bool, margin: float) -> void:
-	level = clampi(value, 1, 9)
+	level = clampi(value, 1, WordModel.MAX_MERGE_LEVEL)
 	_ui_scale = maxf(0.5, ui_scale)
 	_batch = batch
 	_accent = accent
@@ -69,7 +64,7 @@ func sync(age: float, seconds: float, steady: bool) -> void:
 
 func color_at(index: int = 0) -> Color:
 	var hue: float = float(PROFILES[level - 1].hue)
-	if level >= 7:
+	if level == WordModel.MAX_MERGE_LEVEL:
 		hue += [0.0, 0.39, 0.62, 0.85][posmod(index, 4)]
 	elif level >= 4:
 		hue += [0.0, -0.08, 0.13][posmod(index, 3)]
@@ -100,8 +95,6 @@ func _rim(angle: float, offset: float = 0.0) -> Vector2:
 
 
 func _burst_angle(group: int) -> float:
-	if level == 6:
-		return -PI * 0.83 + float(group) * PI * 0.33
 	return -PI * 0.75 + float(group) * TAU / float(PROFILES[level - 1].bursts)
 
 
@@ -158,8 +151,8 @@ func _trail_count() -> int:
 
 
 func _emission_span() -> float:
-	# Even the last batch wave launches before the next 200 ms pickup.
-	return 0.075 + level * 0.007 if _batch else 0.16 + maxf(0.0, level - 4) * 0.065
+	# Echo the release quickly in batch cards; the board owns the extended tail.
+	return 0.075 + level * 0.007 if _batch else [0.0, 0.0, 0.0, 0.16, 0.38, 0.48][level - 1]
 
 
 func _draw_celebration(fade: float) -> void:
@@ -170,6 +163,11 @@ func _draw_celebration(fade: float) -> void:
 	var launch: float = smoothstep(0.0, 0.08, clock)
 	var glow: float = (0.38 + float(level) * 0.055) * fade * (1.0 - smoothstep(0.35, 1.10, clock) * 0.65)
 	_stamp(GLOW, _card.get_center(), _card.size + Vector2.ONE * _margin * 1.9, Color(color_at(), glow))
+	if level == 2:
+		for wave in range(2):
+			var ripple: float = clampf((clock - float(wave) * 0.16) / 0.60, 0.0, 1.0)
+			_stamp(GLOW, _card.get_center(), _card.size + Vector2.ONE * _margin * ripple * 2.0,
+				Color(color_at(wave), sin(ripple * PI) * fade * 0.40))
 	if level == 3:
 		var rays_alpha: float = fade * launch * (1.0 - smoothstep(0.30, 0.95, clock))
 		_stamp(RAYS, _card.get_center(), _card.size + Vector2.ONE * _margin * 2.0,
@@ -196,7 +194,7 @@ func _draw_explosion(fade: float) -> void:
 	var selected: Dictionary = PROFILES[level - 1]
 	var groups: int = int(selected.bursts)
 	var span: float = _emission_span()
-	var life: float = minf(0.36, duration - span) if _batch else 0.72 + level * 0.025
+	var life: float = minf(0.36, duration - span) if _batch else 1.32
 	var count: int = _spark_count()
 	var trails: int = _trail_count()
 	for group in range(groups):

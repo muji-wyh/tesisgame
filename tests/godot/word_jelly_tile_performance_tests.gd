@@ -146,13 +146,13 @@ func _run() -> void:
 	tile.set_completion_hint(false, 0.0, false)
 	check(is_equal_approx(tile.completion_scale, 1.0) and tile._merged_glow.visible,
 		"Clearing completion feedback retains ordinary merged readiness")
-	tile.configure(_cell(9), SKIN, PICTURE, CHEST, Color("#357d70"))
+	tile.configure(_cell(6), SKIN, PICTURE, CHEST, Color("#357d70"))
 	tile.set_merged_presentation(10.0, false)
-	check(tile._merged_glow.modulate != light_tint and tile._level_badge.text == "9",
+	check(tile._merged_glow.modulate != light_tint and tile._level_badge.text == "6",
 		"Reusing the same tile at a new level updates readiness tint and badge")
-	var chances: Array[int] = [0, 2, 4, 6, 10, 16, 28, 50, 80]
-	var coins: Array[int] = [0, 50, 100, 150, 200, 250, 300, 350, 450]
-	for level in range(1, 10):
+	var chances: Array[int] = [0, 2, 4, 6, 10, 16]
+	var coins: Array[int] = [0, 50, 100, 150, 200, 250]
+	for level in range(1, 7):
 		tile.configure(_cell(level), SKIN, PICTURE, CHEST, Color("#357d70"))
 		var description: String = tile.get("accessibility_name")
 		check(description.contains("No bonus coins at this level.") if level == 1

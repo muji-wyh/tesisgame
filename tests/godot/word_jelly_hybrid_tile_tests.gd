@@ -2,6 +2,7 @@ extends SceneTree
 ## Hybrid word faces retain one ordinary square and preserve picture-only clues.
 
 const Tile = preload("res://scripts/word_jelly_tile.gd")
+const Model = preload("res://scripts/word_jelly_model.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const SKIN = preload("res://assets/images/jelly-match/gel-mint.png")
 const PICTURE = preload("res://assets/images/ui/modes/cat.webp")
@@ -177,7 +178,7 @@ func _run() -> void:
 		check(not tile.tooltip_text.contains("cat") and not str(tile.get("accessibility_name")).contains("Press R"), "Picture hover and keyboard hints do not reveal Read")
 		check(str(tile.get("accessibility_name")).contains("Picture of cat"), "Screen readers can identify the depicted word")
 		check(_inside(tile, tile._picture.get_rect()), "Picture art remains within its ordinary square")
-		for level in range(1, 10):
+		for level in range(1, Model.MAX_MERGE_LEVEL + 1):
 			var cell: Dictionary = _cell("merged", "cat", "cat", level, 8)
 			tile.configure(cell, SKIN, PICTURE, CHEST, Color("#357d70"))
 			tile.set_merged_presentation(1.2, false)
@@ -185,6 +186,10 @@ func _run() -> void:
 			check(tile.valid_word and tile._picture.visible and tile._label.visible, "Merged faces show picture and full word")
 			check(tile.presentation_snapshot().merged_light and tile.presentation_snapshot().merged_glints == 2, "Merged levels have a permanent sourced readiness light")
 			check(tile.presentation_snapshot().level_badge == (str(level) if level > 1 else ""), "Only upgraded merged words carry the upper-right numeral")
+			var guidance: String = str(tile.get("accessibility_name"))
+			check(guidance.contains("add their levels") if level < Model.MAX_MERGE_LEVEL else guidance.contains("Maximum level reached"),
+				"Merged-word guidance describes additive levels and the final tier")
+			check(not guidance.contains("same level"), "Mixed-level word merges are discoverable to screen-reader users")
 			check(not tile._label.get_rect().intersects(tile._picture.get_rect()), "Merged picture and caption have separate space")
 			check(_inside(tile, tile._label.get_rect()) and _inside(tile, tile._picture.get_rect()), "Merged learning content fits the ordinary square")
 			if level > 1:
@@ -212,6 +217,10 @@ func _run() -> void:
 		tile.configure(no_picture, SKIN, null, CHEST, Color("#357d70"))
 		check(tile.valid_word and tile._label.visible and not tile._picture.visible, "A pictureless word has a full-sized word face and remains collectable")
 		check(tile.presentation_snapshot().merged_light, "Pictureless merged words retain the same readiness light")
+		for requested: int in [0, 7, 9, 20]:
+			tile.configure(_cell("merged", "cat", "cat", requested), SKIN, PICTURE, CHEST, Color("#357d70"))
+			check(tile.merge_level == clampi(requested, 1, Model.MAX_MERGE_LEVEL),
+				"Legacy and invalid level inputs fit the six available tile presentations")
 	tile.free()
 	_check_completion_enlargement()
 	_check_match_dimming()

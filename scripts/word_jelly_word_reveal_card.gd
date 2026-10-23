@@ -3,6 +3,7 @@ extends Control
 
 const Style = preload("res://scripts/ui_style.gd")
 const WordArt = preload("res://scripts/word_art.gd")
+const WordModel = preload("res://scripts/word_jelly_model.gd")
 const LevelEffects = preload("res://scripts/word_jelly_reveal_fx.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const GLINT = preload("res://assets/chests/milestone/sparkle.png")
@@ -70,7 +71,7 @@ func _texture(value: Texture2D) -> TextureRect:
 func configure(id: int, word: Dictionary, picture: Texture2D, accent: Color,
 		batch: bool, variation: float, seconds: float, steady: bool, level: int = 1) -> void:
 	entry_id = id
-	merge_level = clampi(level, 1, 9)
+	merge_level = clampi(level, 1, WordModel.MAX_MERGE_LEVEL)
 	_word = word.duplicate(true)
 	_picture.texture = picture
 	WordArt.bind(picture, _picture)
@@ -155,6 +156,10 @@ func effect_margin() -> float:
 func sync() -> void:
 	position = rest_position
 	_level_effects.sync(elapsed, duration, reduced_motion)
+	visible = elapsed >= 0.0
+	if not visible:
+		_visual.modulate.a = 0.0
+		return
 	var fade_start: float = duration - (0.22 if _batch else 0.31)
 	var fade: float = smoothstep(fade_start, duration, elapsed)
 	_visual.modulate.a = smoothstep(0.0, 0.055, elapsed) * (1.0 - fade)

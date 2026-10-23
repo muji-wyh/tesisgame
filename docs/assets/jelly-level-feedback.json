@@ -114,8 +114,63 @@
   "runtime": {
     "gain": 0.9,
     "pitch": 1.0,
-    "clock": "Existing accepted collection pop boundary",
-    "concurrency": "Eight protected higher-level channels preserve tails at 120 ms batch spacing; shared mute/pause cleanup and no reward callback"
+    "clock": "Accepted collection release: manual levels 1-3 at 0.18 seconds, levels 4-6 at 0.66/0.72/0.78 seconds; batch at 0.04 seconds in each 0.14-second beat.",
+    "concurrency": "Eight protected higher-level channels preserve tails at the current 140 ms batch spacing; shared mute/pause cleanup and no reward callback. Historical audio headroom verification used 120 ms spacing.",
+    "active_levels": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "archived_audio_levels": [
+      7,
+      8,
+      9
+    ],
+    "archive_note": "Audio entries for former levels 7 through 9 retain their acquired recordings, authored mixes and hashes for provenance. Active Jelly Words gameplay uses only levels 1 through 6; existing level 1 through 6 audio bytes and reward values are unchanged.",
+    "board_effects": {
+      "profiles": [
+        {
+          "level": 1,
+          "name": "Pearl pop",
+          "seconds_after_pop": 0.8
+        },
+        {
+          "level": 2,
+          "name": "Twin ripple",
+          "seconds_after_pop": 1.1
+        },
+        {
+          "level": 3,
+          "name": "Spiral lift",
+          "seconds_after_pop": 1.45
+        },
+        {
+          "level": 4,
+          "name": "Firework bloom",
+          "seconds_after_pop": 2.8,
+          "beats": "Contract and charge on the real jelly; gold explosion; three delayed colored blossoms; descending fading embers."
+        },
+        {
+          "level": 5,
+          "name": "Rose cascade",
+          "seconds_after_pop": 3.1
+        },
+        {
+          "level": 6,
+          "name": "Prismatic bouquet",
+          "seconds_after_pop": 3.4
+        }
+      ],
+      "batch_duration_factor": 0.75,
+      "batch_radius_factor": 0.66,
+      "batch_firework_spark_factor": 0.45,
+      "maximum_active": 12,
+      "reduced_motion_seconds": 0.42,
+      "asset_status": "Previously integrated authored portal, rays and sparkle textures re-inspected on 2026-10-24. No new artwork or audio acquired; runtime texture trajectories and timing updated."
+    }
   },
   "review": "Acquired texture source sheet visually inspected. Audio source format, identity, decoded waveform, onset, headroom and repeated batch mix checked; auditory taste and physical-device mixing require playback review.",
   "audio": [

@@ -31,6 +31,7 @@ func _run() -> void:
 	_test_repeated_merge_and_fragments()
 	_test_nested_merge_collection_receipts()
 	_test_collection_timeline_and_pause()
+	_test_level_collection_anticipation()
 	_test_collection_batch_rhythm()
 	_test_collection_batch_candidates()
 	_test_collection_batch_settlement()
@@ -160,7 +161,7 @@ func _tile(id: int, text: String, mass: int = 1, fragments: int = 0, word: Dicti
 	if text.begins_with("merged:"):
 		var fields: PackedStringArray = text.split(":")
 		var level: int = int(fields[2])
-		var result: Dictionary = _tile(id, fields[1], 2 * int(pow(2, level - 1)), fragments, _word(fields[1]))
+		var result: Dictionary = _tile(id, fields[1], 2 * level, fragments, _word(fields[1]))
 		result.merge_level = level
 		return result
 	var picture: bool = text.begins_with("picture:")
@@ -646,14 +647,15 @@ func _test_powerup_auto_completion_during_drag() -> void:
 			and int(drag.source_id) != first_result_id and int(drag.target_id) != first_result_id,
 			"no launch can reuse the new result before its landing settles")
 	model.finish_powerup(true)
-	check(not model.powerup_active() and model.collectable_ids().size() == 2 and payments.size() == 1,
-		"The paid stream completes picture matches and same-level upgrades without another payment")
-	var levels: Array[int] = []
+	check(not model.powerup_active() and model.collectable_ids().size() >= 2 and payments.size() == 1,
+		"The paid stream completes picture matches and additive upgrades without another payment")
+	var represented_levels: int = 0
 	for tile: Dictionary in model.cells:
-		levels.append(int(tile.merge_level))
-	levels.sort()
-	check(levels == [3, 4] and model.merged_count == 22 and model.collected_coins == 0,
-		"Twelve Lv1 words reduce to Lv4 and Lv3 while retaining their represented word count")
+		represented_levels += int(tile.merge_level)
+		check(int(tile.merge_level) <= Model.MAX_MERGE_LEVEL, "Automatic upgrades never exceed Lv6")
+	check(represented_levels == 12 and model.merged_count == 24 - model.cells.size() and model.collected_coins == 0
+		and model.compatible_pairs().is_empty(),
+		"The exhausted stream preserves all twelve represented levels and stops at the six-level cap")
 	_assert_board(model, "automatic picture-and-level stream")
 	model.purchase_powerup = Callable()
 
@@ -1162,11 +1164,11 @@ func _test_powerup_fragments_on_nested_word() -> void:
 			and bool(model.cell(int(cater.id)).chest), "every purchased fragment stays on the only eligible merged word")
 		model.cells.append(_placed_tile(2000, "merged:cat:2", Model.COLUMNS - 1, 7, 1, 2))
 		var final_word: Dictionary = _merge(model, int(cater.id), 2000)
-		check(final_word.text == "cat" and final_word.merge_level == 3 and final_word.mass == 8 and final_word.fragments == original + total + 2,
+		check(final_word.text == "cat" and final_word.merge_level == 4 and final_word.mass == 8 and final_word.fragments == original + total + 2,
 			"a later valid merge retains the purchased fragments and the new target's fragments")
 		model.step(Model.SETTLE_SECONDS * 2.0)
 		check(model.collect(int(final_word.id)), "the nested word remains manually collectible after its paid effect")
-		model.step(Model.COLLECT_SECONDS)
+		model.step(Model.collection_seconds(int(final_word.merge_level)))
 		check(model.cells.is_empty() and model.fragment_count == original + total + 2,
 			"collecting the final word awards every original and purchased fragment exactly once")
 		model.purchase_powerup = Callable()
@@ -1566,8 +1568,8 @@ func _test_merging_and_collection() -> void:
 
 
 func _test_rare_coin_drop_boundary() -> void:
-	var chances: Array[float] = [0.0, 0.02, 0.04, 0.06, 0.10, 0.16, 0.28, 0.50, 0.80]
-	var amounts: Array[int] = [0, 50, 100, 150, 200, 250, 300, 350, 450]
+	var chances: Array[float] = [0.0, 0.02, 0.04, 0.06, 0.10, 0.16]
+	var amounts: Array[int] = [0, 50, 100, 150, 200, 250]
 	var rejected_model = _model([_word("cat")], false)
 	_board(rejected_model, ["cat", "picture:cat"])
 	var untouched_state: int = rejected_model._coin_rng.state
@@ -1575,15 +1577,15 @@ func _test_rare_coin_drop_boundary() -> void:
 		and rejected_model._coin_rng.state == untouched_state and rejected_model._collection_coin_rewards.is_empty(),
 		"roots, pictures and missing IDs never create a receipt or consume a coin chance")
 	for kind: String in ["root", "picture"]:
-		var invalid: Dictionary = _tile(1000, "merged:cat:9")
+		var invalid: Dictionary = _tile(1000, "merged:cat:6")
 		invalid.jelly_kind = kind
 		check(Model.coins_for_tile(invalid) == 0 and Model.coin_drop_chance_for_tile(invalid) == 0.0,
 			"a level field cannot grant bonus eligibility to an unmerged body")
-	var missing_word: Dictionary = _tile(1000, "merged:cat:9")
+	var missing_word: Dictionary = _tile(1000, "merged:cat:6")
 	missing_word.word = {}
 	check(Model.coins_for_tile(missing_word) == 0 and Model.coin_drop_chance_for_tile(missing_word) == 0.0,
 		"a merged marker without a valid word has no bonus")
-	for level in range(1, 10):
+	for level in range(1, Model.MAX_MERGE_LEVEL + 1):
 		var chance: float = chances[level - 1]
 		var intervals: Array[Vector2] = [Vector2(0.0, 0.0001), Vector2(0.9999, 1.0001)]
 		if level > 1:
@@ -1898,19 +1900,19 @@ func _test_repeated_merge_and_fragments() -> void:
 	var second: Dictionary = _merge(model, int(first.id), 1002)
 	check(second.text == "cat" and second.word.id == "cat" and second.merge_level == 2, "a valid word can grow only into another current-age word")
 	var third: Dictionary = _merge(model, int(second.id), 1003)
-	check(third.text == "cat" and third.word.id == "cat" and third.merge_level == 3, "Repeated same-level words can build a Lv3 merged Jelly")
+	check(third.text == "cat" and third.word.id == "cat" and third.merge_level == 4, "Two Lv2 words add into a Lv4 merged Jelly")
 	check(third.mass == 8 and third.fragments == 4, "every root and fragment survives repeated merges")
-	check(Model.coins_for_tile(first) == 0 and Model.coins_for_tile(second) == 50 and Model.coins_for_tile(third) == 100, "each real upgrade raises its level-based potential bonus")
+	check(Model.coins_for_tile(first) == 0 and Model.coins_for_tile(second) == 50 and Model.coins_for_tile(third) == 150, "each real upgrade raises its level-based potential bonus")
 	model.step(Model.SETTLE_SECONDS)
 	model.collect(int(third.id))
-	model.step(Model.COLLECT_SECONDS)
-	check(model.collected_coins == 100 and model.fragment_count == 4, "larger word collects the entire accumulated reward")
+	model.step(Model.collection_seconds(int(third.merge_level)))
+	check(model.collected_coins == 150 and model.fragment_count == 4, "larger word collects the entire accumulated reward")
 	check(model.chest_tier == 1 and model.chest_count == 1, "four fragments unlock a chest")
 
 
 func _test_nested_merge_collection_receipts() -> void:
 	var model = _model([_word("cat"), _word("cater"), _word("caterpillar"), _word("dog")])
-	_board(model, ["merged:cat:1", "merged:cat:1", "merged:cat:2", "merged:cat:3", "merged:dog:1", "merged:dog:1"], [1, 1, 2, 3, 1, 1])
+	_board(model, ["merged:cat:1", "merged:cat:1", "merged:cat:2", "merged:cat:2", "merged:dog:1", "merged:dog:1"], [1, 1, 2, 3, 1, 1])
 	var cat: Dictionary = _merge(model, 1000, 1001)
 	var dog: Dictionary = _merge(model, 1004, 1005)
 	model.step(Model.SETTLE_SECONDS * 2.0)
@@ -1936,12 +1938,12 @@ func _test_nested_merge_collection_receipts() -> void:
 		"merging another word leaves the independent failed reward locked to its original receipt")
 	model.step(Model.SETTLE_SECONDS * 2.0)
 	check(model.collect(cater_id), "the larger word owns a new independent collection attempt")
-	model.step(Model.COLLECT_SECONDS)
+	model.step(Model.collection_seconds(int(model.cell(cater_id).merge_level)))
 	var cater_receipt: String = str(model._collection_event_ids[cater_id])
 	check(cater_receipt != cat_receipt, "a larger result never reuses the consumed child's collection receipt")
 	var final_word: Dictionary = _merge(model, cater_id, 1003)
 	check(not model._collection_event_ids.has(cater_id) and not model._collection_coin_rewards.has(cater_receipt)
-		and final_word.mass == 16 and final_word.fragments == 7,
+		and final_word.merge_level == 6 and final_word.mass == 12 and final_word.fragments == 7,
 		"a second valid merge also releases its consumed retry while preserving all mass and fragments")
 	model.step(Model.SETTLE_SECONDS * 2.0)
 	payment.ok = true
@@ -1950,9 +1952,9 @@ func _test_nested_merge_collection_receipts() -> void:
 	check(calls.back() == [dog_receipt, dog_reward], "the untouched retry keeps its exact receipt and locked coin amount")
 	model.step(Model.SETTLE_SECONDS * 2.0)
 	check(model.collect(int(final_word.id)), "the nested result collects only its own final reward")
-	model.step(Model.COLLECT_SECONDS)
+	model.step(Model.collection_seconds(int(final_word.merge_level)))
 	check(model._collection_event_ids.is_empty() and model._collection_coin_rewards.is_empty()
-		and model.collected_coins == 200 and model.fragment_count == 9 and model.cleared_pairs == 2,
+		and model.collected_coins == 300 and model.fragment_count == 9 and model.cleared_pairs == 2,
 		"terminal collection leaves no consumed retry data and pays only the two collected words")
 	model.credit_collection = Callable()
 
@@ -1986,6 +1988,89 @@ func _test_collection_timeline_and_pause() -> void:
 	model.step(NAN)
 	model.step(INF)
 	check(model.snapshot() == snapshot, "invalid time steps cannot corrupt model state")
+
+
+func _test_level_collection_anticipation() -> void:
+	var pop_times: Array[float] = [0.18, 0.18, 0.18, 0.66, 0.72, 0.78]
+	var collection_times: Array[float] = [0.42, 0.42, 0.42, 0.90, 0.96, 1.02]
+	for level in range(1, Model.MAX_MERGE_LEVEL + 1):
+		check(is_equal_approx(Model.collection_pop_seconds(level), pop_times[level - 1])
+			and is_equal_approx(Model.collection_seconds(level), collection_times[level - 1]),
+			"Lv%d has its deliberate manual anticipation and unchanged post-pop reward interval" % level)
+		check(is_equal_approx(Model.collection_pop_seconds(level, true), 0.04)
+			and is_equal_approx(Model.collection_seconds(level, true), 0.14),
+			"Lv%d keeps the existing batch pop and collection beat" % level)
+		var batch = _model([_word("cat")])
+		_board(batch, ["merged:cat:%d" % level], [3])
+		var batch_events: Dictionary = _observe(batch)
+		check(batch.start_collection_batch(), "Every supported level can use batch collection")
+		batch.step(0.039)
+		check(batch_events.cues.is_empty() and batch.cleared_pairs == 0, "Batch anticipation does not pop before 40 ms")
+		batch.step(0.001)
+		check(batch_events.cues == ["pop" if level == 1 else "jelly-collect-lv%d" % level]
+			and batch.cleared_pairs == 0, "Each batch level pops at 40 ms without granting rewards early")
+		batch.step(0.099)
+		check(batch.cleared_pairs == 0, "Each batch level remains reserved until 140 ms")
+		batch.step(0.001)
+		check(batch.cleared_pairs == 1 and batch.fragment_count == 3 and not batch.collection_batch_active(),
+			"Each batch level completes on the unchanged 140 ms beat")
+		if level < 4:
+			continue
+		var model = _model([_word("cat")])
+		_board(model, ["merged:cat:%d" % level], [3])
+		var events: Dictionary = _observe(model)
+		var commits: Array = []
+		model.commit_collection = func(payload: Dictionary) -> Dictionary:
+			commits.append(payload.duplicate(true))
+			return {"ok": true}
+		check(model.collect(1000), "A high-level word begins its longer collection anticipation")
+		var pending: Dictionary = model.fusions[0].duplicate(true)
+		check(is_equal_approx(float(pending.pop_at), pop_times[level - 1])
+			and is_equal_approx(float(pending.duration), collection_times[level - 1]),
+			"The published collection timeline drives both visual anticipation and sound")
+		model.step(pop_times[level - 1] - 0.001)
+		check(events.cues.is_empty() and commits.is_empty() and model.cleared_pairs == 0
+			and not model.cell(1000).is_empty() and not model.collect(1000),
+			"The charging Jelly stays reserved with no early pop, payment, or repeated collection")
+		model.set_paused(true)
+		var paused_state: Dictionary = model.snapshot()
+		model.step(5.0)
+		check(model.snapshot() == paused_state and events.cues.is_empty() and commits.is_empty(),
+			"Pausing during charge freezes its precise remaining anticipation")
+		model.set_paused(false)
+		model.step(0.001)
+		check(events.cues == ["jelly-collect-lv%d" % level] and commits.is_empty() and model.cleared_pairs == 0,
+			"Resuming crosses the high-level pop boundary once without paying before the reward boundary")
+		model.set_paused(true)
+		paused_state = model.snapshot()
+		model.step(5.0)
+		check(model.snapshot() == paused_state and events.cues.size() == 1, "Pause after the burst cannot replay its sound")
+		model.set_paused(false)
+		model.step(collection_times[level - 1] - pop_times[level - 1] - 0.001)
+		check(commits.is_empty() and model.cleared_pairs == 0 and not model.cell(1000).is_empty(),
+			"Post-burst recovery retains the source until the exact collection boundary")
+		model.step(0.001)
+		check(commits.size() == 1 and commits[0].merge_level == level and commits[0].attempt_id == pending.attempt_id
+			and model.cells.is_empty() and model.fragment_count == 3 and events.attempts.size() == 1
+			and events.collections.size() == 1 and model.collected_coins == Model.coins_for_tile(pending.a),
+			"The delayed collection commits its original receipt, level, reward, and learning event exactly once")
+		model.step(10.0)
+		check(commits.size() == 1 and events.cues.count("jelly-collect-lv%d" % level) == 1 and events.attempts.size() == 1,
+			"Late frames cannot duplicate a finished high-level burst or its rewards")
+		model.commit_collection = Callable()
+		var coarse = _model([_word("cat")])
+		var fine = _model([_word("cat")])
+		var coarse_events: Dictionary = _observe(coarse)
+		var fine_events: Dictionary = _observe(fine)
+		for active in [coarse, fine]:
+			_board(active, ["merged:cat:%d" % level], [3])
+			active.collect(1000)
+		coarse.step(3.0)
+		for frame in range(300):
+			fine.step(0.01)
+		check(_approximately_equal_state(coarse.snapshot(), fine.snapshot()) and _approximately_equal_state(coarse_events, fine_events)
+			and coarse_events.cues.count("jelly-collect-lv%d" % level) == 1 and coarse_events.collections.size() == 1,
+			"A single late frame and fine simulation produce identical high-level pops, rewards, and final state")
 
 
 func _gravity_tower():
@@ -2950,17 +3035,17 @@ func _test_repeated_merge_cell_size() -> void:
 	model.cells.clear()
 	var current: Dictionary = _placed_tile(1000, "merged:cat:1", 0, 7, 2, 1)
 	model.cells.append(current)
-	for level in range(2, 10):
-		var sibling: Dictionary = _placed_tile(1000 + level, "merged:cat:%d" % (level - 1), 1, 7, 2, 1)
+	for level in range(2, Model.MAX_MERGE_LEVEL + 1):
+		var sibling: Dictionary = _placed_tile(1000 + level, "merged:cat:1", 1, 7, 2, 1)
 		model.cells.append(sibling)
 		current = _merge(model, int(current.id), int(sibling.id))
-		check(current.merge_level == level and current.mass == int(pow(2, level)),
-			"Equal-level joins retain the represented roots while advancing one level")
+		check(current.merge_level == level and current.mass == 2 * level,
+			"Additive joins retain every represented root while advancing through the six levels")
 		_assert_board(model, "level %d ordinary geometry" % level)
-	check(current.width == 1 and current.height == 1 and current.merge_level == 9,
+	check(current.width == 1 and current.height == 1 and current.merge_level == 6,
 		"The highest merged level keeps precisely the ordinary source size")
-	check(Model.coins_for_tile(current) == 450 and is_equal_approx(Model.coin_drop_chance_for_tile(current), 0.80),
-		"The real Lv9 upgrade chain reaches the approved eighty-percent, 450-coin reward")
+	check(Model.coins_for_tile(current) == 250 and is_equal_approx(Model.coin_drop_chance_for_tile(current), 0.16),
+		"The real Lv6 upgrade chain retains its existing sixteen-percent, 250-coin reward")
 
 func _test_target_placement() -> void:
 	var model = _model([_word("cat")])

@@ -1,12 +1,12 @@
 const { expect } = require('@playwright/test');
 
-const CHANCES = [0, 0, 0.02, 0.04, 0.06, 0.10, 0.16, 0.28, 0.50, 0.80];
-const AMOUNTS = [0, 0, 50, 100, 150, 200, 250, 300, 350, 450];
+const CHANCES = [0, 0, 0.02, 0.04, 0.06, 0.10, 0.16];
+const AMOUNTS = [0, 0, 50, 100, 150, 200, 250];
 
 function expectCollectionReward(tile) {
   const level = tile.merge_level;
   expect(tile.jelly_kind, 'Only a completed merged word can be collected').toBe('merged');
-  expect(Number.isInteger(level) && level >= 1 && level <= 9, 'A collection has an explicit supported merge level').toBe(true);
+  expect(Number.isInteger(level) && level >= 1 && level <= 6, 'A collection has an explicit supported merge level').toBe(true);
   expect(tile.coin_drop_chance, `Lv${level} advertises its exact collection chance`).toBe(CHANCES[level]);
   expect(tile.coins, `Lv${level} advertises its exact potential payout`).toBe(AMOUNTS[level]);
 }

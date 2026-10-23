@@ -1421,7 +1421,7 @@ func _check_word_reveal(view) -> void:
 
 
 func _check_word_reveal_levels(view) -> void:
-	var levels: Array[int] = [1, 4, 9]
+	var levels: Array[int] = [1, 4, 6]
 	for reduced: bool in [false, true]:
 		for batch: bool in [false, true]:
 			_reset(view, reduced)
@@ -1432,9 +1432,9 @@ func _check_word_reveal_levels(view) -> void:
 			var advertised: Array = view.snapshot().tiles
 			for index in range(ids.size()):
 				var reward: Dictionary = advertised.filter(func(tile: Dictionary) -> bool: return int(tile.id) == ids[index])[0]
-				check(is_equal_approx(float(reward.coin_drop_chance), [0.0, 0.06, 0.80][index])
-					and int(reward.coins) == [0, 150, 450][index],
-					"the view snapshot advertises exact Lv1, Lv4 and Lv9 collection odds and payouts")
+				check(is_equal_approx(float(reward.coin_drop_chance), [0.0, 0.06, 0.16][index])
+					and int(reward.coins) == [0, 150, 250][index],
+					"the view snapshot advertises exact Lv1, Lv4 and Lv6 collection odds and payouts")
 			if batch:
 				view._collect_all()
 				view._process(0.30)
@@ -1446,7 +1446,7 @@ func _check_word_reveal_levels(view) -> void:
 					view._activate(id)
 					_advance(view, 0.10)
 			var entries: Array = view.snapshot().word_reveal.entries
-			check(entries.size() == 3, "rapid individual and automatic pickups retain Lv1, Lv4 and Lv9 pops together")
+			check(entries.size() == 3, "rapid individual and automatic pickups retain Lv1, Lv4 and Lv6 pops together")
 			var entry_ids: Array[int] = []
 			for index in range(entries.size()):
 				var entry: Dictionary = entries[index]
@@ -1458,19 +1458,21 @@ func _check_word_reveal_levels(view) -> void:
 				check(entry.word_id == "cat" and entry.spelling == "cat" and str(entry.picture).ends_with("cat.webp"),
 					"all collection levels retain the collected spelling and its production artwork")
 				var expected_age: float = 0.60 - index * Model.BATCH_BEAT_SECONDS if batch else (3 - index) * 0.10
+				if not batch and levels[index] >= 4:
+					expected_age -= Model.collection_pop_seconds(levels[index])
 				check(is_equal_approx(float(entry.elapsed), expected_age),
-					"collection levels share the original clock, including late-frame catch-up")
+					"collection levels honor delayed manual reveals and unchanged batch catch-up")
 			check(entry_ids.size() == 3 and entry_ids[0] != entry_ids[1]
 				and entry_ids[1] != entry_ids[2] and entry_ids[0] != entry_ids[2],
 				"repeated words at different levels have independent presentation identities")
 			check(entries[0].effects.pattern != entries[1].effects.pattern
 				and entries[1].effects.pattern == "fireworks" and entries[1].effects.pattern != entries[2].effects.pattern,
 				"the collection pop distinguishes the ordinary, fireworks and highest-tier treatments")
-			_advance(view, 2.0)
+			_advance(view, 3.0)
 			check(payouts.size() == 3 and attempts.size() == 3 and heard.size() == (0 if batch else 3),
 				"richer reading-pop effects preserve collection credit and manual-only pronunciation")
 			check(cues.count("pop") == 1 and cues.count("jelly-collect-lv4") == 1
-				and cues.count("jelly-collect-lv9") == 1,
+				and cues.count("jelly-collect-lv6") == 1,
 				"each pickup emits its existing level sound once without extra reading-pop audio")
 			check(view.snapshot().word_reveal.entries.is_empty() and view._word_reveal.get_child_count() == 0,
 				"every level's collection-pop effect subtree expires with its original reading lifetime")
@@ -1482,7 +1484,7 @@ func _check_word_reveal_control_clearance(view) -> void:
 		_reset(view)
 		_install_batch_words(view, 4)
 		for index in range(4):
-			view.game.cells[index].merge_level = [1, 4, 7, 9][index]
+			view.game.cells[index].merge_level = [1, 4, 5, 6][index]
 		view._word_reveal._rng.seed = 20261022
 		view._collect_all()
 		var protected: Array[Rect2] = [view.finish_button.get_global_rect(), view.collect_button.get_global_rect(),
@@ -1507,13 +1509,13 @@ func _check_word_reveal_control_clearance(view) -> void:
 func _check_word_reveal_lifecycle(view) -> void:
 	for action: String in ["pause", "hide", "finish", "stop", "configure"]:
 		_reset(view)
-		var ids: Array[int] = _install(view, ["merged:cat:4", "merged:caterpillar:9"], [], [2, 2])
+		var ids: Array[int] = _install(view, ["merged:cat:4", "merged:caterpillar:6"], [], [2, 2])
 		view._activate(ids[0])
 		_advance(view, 0.2)
 		view._activate(ids[1])
 		_advance(view, 0.2)
-		check(view.snapshot().word_reveal.visible and int(view.snapshot().word_reveal.active_count) == 2,
-			"lifecycle fixture begins with two simultaneous collected words")
+		check(not view.snapshot().word_reveal.visible and int(view.snapshot().word_reveal.active_count) == 2,
+			"lifecycle fixture begins with two reserved reading reveals during charge")
 		match action:
 			"pause": view.pause(true)
 			"hide": view.hide()
@@ -1528,7 +1530,7 @@ func _check_word_reveal_lifecycle(view) -> void:
 		check(not view.snapshot().word_reveal.visible and view.snapshot().word_reveal.entries.is_empty(),
 			action + " never restores stale collected-word overlays")
 	_reset(view)
-	var ids: Array[int] = _install(view, ["merged:cat:9"], [], [2])
+	var ids: Array[int] = _install(view, ["merged:cat:6"], [], [2])
 	view._activate(ids[0])
 	_advance(view, 0.2)
 	var elapsed: float = float(view.snapshot().word_reveal.elapsed)
@@ -1844,7 +1846,7 @@ func _check_word_pair_colors(view) -> void:
 				continue
 			check(view.game.parts_compatible(view.game.cell(int(tile.id)), view.game.cell(int(other.id)))
 				or view.game.parts_compatible(view.game.cell(int(other.id)), view.game.cell(int(tile.id))),
-				"a shared resting color represents an exact word-picture or same-level match")
+				"a shared resting color represents an exact word-picture or valid same-word upgrade")
 	for keyboard: bool in [false, true]:
 		for source_index: int in [0, 1]:
 			if keyboard:
@@ -2496,15 +2498,15 @@ func _check_repeat_merge_compact_body(view) -> void:
 	_assert_compact_label(view._tiles[id], "cat", "level-two word")
 	check(view._tiles[id].presentation_snapshot().level_badge == "2" and view._tiles[id].fragment_badge_snapshot().count_text == "5",
 		"level and exact fragment count remain independently visible")
-	var extra: Dictionary = _fixture_tile(view, "merged:cat", 2, 1)
+	var extra: Dictionary = _fixture_tile(view, "merged:cat:5", 2, 1)
 	extra.column = 0
 	extra.row = 0
 	view.game.cells.append(extra)
 	view._sync_tiles()
 	_drag(view, id, int(extra.id))
-	check(view.game.fusions.is_empty() and cues.count("wrong") == 1, "different levels reject an upgrade")
+	check(view.game.fusions.is_empty() and cues.count("wrong") == 1, "a sum above Lv6 rejects an upgrade")
 	_advance(view, 0.4)
-	check(view.game.cell(id).merge_level == 2 and view.game.cell(int(extra.id)).merge_level == 1,
+	check(view.game.cell(id).merge_level == 2 and view.game.cell(int(extra.id)).merge_level == 5,
 		"a rejected upgrade preserves both levels and their separate identities")
 	check(view._tiles[id]._picture.visible and view._tiles[id].fragment_badge_snapshot().count_text == "5"
 		and view._tiles[int(extra.id)].visible_fragment_badges() == 1, "upgrade rejection preserves pictures and each carried reward")

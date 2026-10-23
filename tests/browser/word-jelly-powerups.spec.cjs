@@ -34,7 +34,7 @@ function validPair(source, target) {
   if (!source || !target || source.id === target.id) return false;
   if (source.jelly_kind === 'merged' && target.jelly_kind === 'merged')
     return Boolean(source.word?.id && source.word.id === target.word?.id &&
-      source.merge_level === target.merge_level && source.merge_level < 9);
+      source.merge_level + target.merge_level <= 6);
   const picture = source.jelly_kind === 'picture' ? source : target.jelly_kind === 'picture' ? target : null;
   if (picture) {
     const root = picture === source ? target : source;
@@ -246,7 +246,7 @@ function expectAutoMergeTimeline(evidence, completed) {
       expect(drag.started_at).toBeGreaterThanOrEqual(0);
       expect(drag.source_id).not.toBe(drag.target_id);
       expect(validPair(drag.source, drag.target),
-        'Every transfer follows a reviewed root join, matching picture, or equal-level upgrade').toBe(true);
+        'Every transfer follows a reviewed root join, matching picture, or same-word level sum up to six').toBe(true);
       for (const id of [drag.source_id, drag.target_id]) {
         expect(reserved.has(id), 'Overlapping transfers reserve distinct sources and targets').toBe(false);
         reserved.add(id);
@@ -608,7 +608,7 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
       distance(moving.rect, target.rect) < distance(original.rect, target.rect);
   }), 'The actual source jelly moves between its original slot and the target, rather than only drawing a trail').toBe(true);
   expect(afterAuto.powerup_buttons.auto_merge.enabled,
-    'The captured supply has no remaining complete authored path or equal-level upgrade').toBe(false);
+    'The captured supply has no remaining complete authored path or valid same-word level sum').toBe(false);
   expect(afterAuto.merged_count - beforeAuto.merged_count).toBe(afterAuto.powerup.completed);
   expect(afterAuto.powerup.completed).toBeGreaterThan(0);
   expect(fragmentTotal(afterAuto)).toBe(fragmentTotal(beforeAuto));

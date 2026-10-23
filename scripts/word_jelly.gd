@@ -659,18 +659,19 @@ func _collection_started(fusion: Dictionary) -> void:
 	var origin: Vector2 = _tiles[id].get_global_rect().get_center() if _tiles.has(id) else get_global_transform() * _tile_rect(fusion.a).get_center()
 	_collection_origins[str(fusion.attempt_id)] = origin
 	var word: Dictionary = fusion.word
-	var merge_level: int = clampi(int(fusion.get("merge_level", fusion.a.get("merge_level", 1))), 1, 9)
+	var merge_level: int = clampi(int(fusion.get("merge_level", fusion.a.get("merge_level", 1))), 1, WordModel.MAX_MERGE_LEVEL)
 	_word_reveal.set_reduced_motion(reduced_motion)
 	var batch: bool = bool(fusion.get("batch", false))
 	var initial_age: float = 0.0
 	if batch and _reveal_frame_end >= 0.0 and _reveal_frame_generation == _generation \
 		and int(fusion.get("batch_id", -1)) == _reveal_frame_batch:
 		initial_age = maxf(0.0, _reveal_frame_end - float(game.collection_batch_snapshot().elapsed))
-	_word_reveal.present(word, _picture(word), _theme.get("accent", Style.GOOD), batch, initial_age, merge_level)
+	var reveal_delay: float = float(fusion.pop_at) if not batch and merge_level >= 4 else 0.0
+	_word_reveal.present(word, _picture(word), _theme.get("accent", Style.GOOD), batch, initial_age, merge_level, reveal_delay)
 	_collection_effects.set_reduced_motion(reduced_motion)
 	_collection_effects.present(get_global_transform().affine_inverse() * origin,
 		merge_level,
-		_theme.get("accent", Style.GOOD), batch, initial_age, float(fusion.pop_at))
+		_theme.get("accent", Style.GOOD), batch, initial_age, float(fusion.pop_at), str(fusion.attempt_id))
 	# Batch pickups keep their pop rhythm without additional pronunciation.
 	if not bool(fusion.get("batch", false)):
 		word_requested.emit(word)
@@ -1436,7 +1437,54 @@ func _remove_fusion_visual(id: String) -> void:
 	if glow != null:
 		glow.hide()
 		glow.queue_free()
+	for spark: TextureRect in _fusion_visuals[id].get("charge_sparks", []):
+		spark.hide()
+		spark.queue_free()
 	super._remove_fusion_visual(id)
+
+func _collection_glow(visual: Dictionary) -> TextureRect:
+	if not visual.has("collect_glow"):
+		var glow: TextureRect = _image(self)
+		glow.texture = COLLECTION_GLOW
+		glow.z_index = 29
+		visual["collect_glow"] = glow
+	return visual.collect_glow
+
+func _pose_collection_charge(fusion: Dictionary, visual: Dictionary, rect: Rect2) -> void:
+	var elapsed: float = float(fusion.elapsed)
+	var pop_at: float = float(fusion.pop_at)
+	var contraction: float = smoothstep(0.0, 0.22, elapsed)
+	var charge: float = smoothstep(0.18, pop_at, elapsed)
+	var release: float = smoothstep(pop_at, pop_at + 0.14, elapsed)
+	var compressed: float = lerpf(1.0, 0.58, contraction)
+	compressed += sin(charge * PI * 3.0) * 0.025 * contraction * (1.0 - release)
+	var merged: WordTile = visual.merged
+	merged.scale = Vector2.ONE if reduced_motion else Vector2.ONE * lerpf(compressed, 1.28, release)
+	merged.modulate.a = 1.0 - release
+	var edge: float = maxf(rect.size.y, _pitch)
+	var center: Vector2 = rect.get_center()
+	var glow: TextureRect = _collection_glow(visual)
+	glow.size = Vector2.ONE * edge * (0.88 if reduced_motion else lerpf(1.55, 0.82, charge))
+	glow.position = center - glow.size * 0.5
+	glow.modulate = Color("#ffe3a1", (0.22 + charge * 0.53) * (1.0 - release))
+	glow.show()
+	if not reduced_motion and not visual.has("charge_sparks"):
+		var sparks: Array[TextureRect] = []
+		for index in range(8):
+			var spark: TextureRect = _image(self)
+			spark.texture = POWERUP_SPARKLE
+			spark.z_index = 31
+			sparks.append(spark)
+		visual["charge_sparks"] = sparks
+	for index in range(visual.get("charge_sparks", []).size()):
+		var spark: TextureRect = visual.charge_sparks[index]
+		var angle: float = TAU * float(index) / 8.0 + charge * 0.24
+		var inward: float = smoothstep(0.08 + float(index % 3) * 0.04, 0.96, charge)
+		var point: Vector2 = center + Vector2.from_angle(angle) * edge * lerpf(0.86, 0.12, inward)
+		spark.size = Vector2.ONE * edge * lerpf(0.20, 0.09, inward)
+		spark.position = point - spark.size * 0.5
+		spark.modulate = Color("#ffc957", smoothstep(0.0, 0.16, charge) * (1.0 - release))
+		spark.visible = not reduced_motion and elapsed < pop_at + 0.14
 
 func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 	var merged: WordTile = visual.merged
@@ -1461,17 +1509,14 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 		var release: float = smoothstep(pop_progress, 1.0, p)
 		merged.scale = Vector2.ONE if reduced_motion else Vector2(1.0 + charge * 0.12, 1.0 - charge * 0.12).lerp(Vector2.ONE * 0.18, release)
 		merged.modulate.a = 1.0 - release
-		if bool(fusion.get("batch", false)) and not reduced_motion:
+		if not bool(fusion.get("batch", false)) and int(fusion.get("merge_level", 1)) >= 4:
+			_pose_collection_charge(fusion, visual, rect)
+		elif bool(fusion.get("batch", false)) and not reduced_motion:
 			var direction: float = -1.0 if int(fusion.batch_index) % 2 == 0 else 1.0
 			var lift: float = sin(release * PI * 0.5)
 			merged.position += Vector2(direction * _pitch * 0.28 * release, -_pitch * 0.72 * lift)
 			merged.rotation = direction * 0.12 * release
-			if not visual.has("collect_glow"):
-				var glow: TextureRect = _image(self)
-				glow.texture = COLLECTION_GLOW
-				glow.z_index = 29
-				visual["collect_glow"] = glow
-			var glow: TextureRect = visual.collect_glow
+			var glow: TextureRect = _collection_glow(visual)
 			glow.size = Vector2.ONE * maxf(rect.size.y, _pitch) * (1.2 + release * 0.5)
 			glow.position = merged.position + rect.size * 0.5 - glow.size * 0.5
 			glow.modulate = Color("#fff0b0", sin(p * PI) * 0.6)
@@ -1803,6 +1848,11 @@ func _layout() -> void:
 	_reward_presentation.set_chest_anchor(chest_anchor_rect())
 	if _collection_effects != null:
 		_collection_effects.configure_layout(Rect2(Vector2.ZERO, size), s)
+		# A charging Jelly follows responsive board layout until its burst begins.
+		# Once released, the particle tail retains its own position and clock.
+		for fusion: Dictionary in game.fusions:
+			if str(fusion.operation) == "collect":
+				_collection_effects.reanchor_pending(str(fusion.attempt_id), _tile_rect(fusion.a).get_center())
 	if _word_reveal != null:
 		# Short landscape screens need two compact rows for distinct collection beats.
 		var reveal_fraction: float = 0.60 if size.x > size.y * 1.4 and size.y * s < 350.0 else 0.40

@@ -26,8 +26,10 @@ content stays whole; it is never cut into arbitrary letter groups. See the
 [morphology contract](../vocabulary/morphology-contract.md) for editorial rules.
 
 Merged jellies show the full word, its available picture, a warm rim, and sourced
-light accents. Two merged jellies with the same vocabulary identity and level
-combine into the next level, up to Lv9. Lv2–9 show their number at the upper-right;
+light accents. Two merged jellies with the same vocabulary identity combine by
+adding their levels, including different levels: Lv1 + Lv3 becomes Lv4 and
+Lv2 + Lv4 becomes Lv6. There are six levels. A sum greater than six cannot merge;
+the existing bodies and their rewards remain intact. Lv2–6 show their number at the upper-right;
 carried chest fragments use the opposite corner. All stages retain one ordinary
 cell. Joining, picture matching, and upgrading do not collect rewards or learning
 credit. Collection owns the existing reward transaction and eligible manual
@@ -36,15 +38,21 @@ Manual collection requires a click or tap released in under 500 ms on the same
 merged jelly without dragging. Holding for 500 ms or longer never collects on
 release; the held jelly can still be dragged into another matching merged jelly.
 
-Each level has distinct collection motion and audio. Lv4 is a radial firework
-bloom; higher levels add layered blooms, comet trails, or a bouquet finale.
-The effect begins at the model's collection pop, remains input-transparent, and
-clears on pause or exit. Reduced motion uses a compact still light accent.
+Each level has distinct collection motion and audio. Lv1–3 use pearl, twin-ripple
+and spiral releases. Lv4 contracts and gathers light before its gold firework
+explodes, opens three colored blossoms, and drops fading embers. Lv5 adds a rose
+cascade; Lv6 opens a prismatic bouquet. Manual release occurs at 180 ms for
+Lv1–3, then 660, 720 and 780 ms for Lv4–6. The model's collection transaction
+finishes 240 ms after release. The separate board effects last 0.80, 1.10, 1.45,
+2.80, 3.10 and 3.40 seconds after release, remain input-transparent, and clear
+on pause or exit. Batch collection keeps its 40 ms release and 140 ms cadence,
+with smaller and less dense effects at 75 percent of their manual lifetime.
+Reduced motion uses a compact still light accent.
 Profiles and acquired material are recorded in [Jelly level feedback](jelly-level-feedback.md).
 
-Lv1 collections do not award bonus coins. Lv2 through Lv9 use independent collection
-chances of 2%, 4%, 6%, 10%, 16%, 28%, 50%, and 80%, with respective payouts of
-50, 100, 150, 200, 250, 300, 350, and 450 coins. Both probability and amount increase
+Lv1 collections do not award bonus coins. Lv2 through Lv6 retain independent collection
+chances of 2%, 4%, 6%, 10% and 16%, with respective payouts of
+50, 100, 150, 200 and 250 coins. Both probability and amount increase
 with merge level, independently of component count and footprint. Opening chests
 is the main source of coins. A collection without bonus coins still records
 the learned word and collects all carried chest fragments, without a coin
@@ -91,7 +99,8 @@ roots remain silent.
 
 Two [coin powerups](jelly-powerups.md) share the board controls. Auto merge costs
 600 coins initially, then 900 and 1200 on further uses in the round. It joins
-compatible roots, finishes picture matching, or upgrades equal-level words.
+compatible roots, finishes picture matching, or adds levels of matching words
+whose sum is at most six.
 It leaves merged jellies on the board for ordinary collection. The planner checks
 an entire completion path and all intermediate rectangles before charging.
 Eligible pairs launch every 200 ms, each with a 250 ms flight, 110 ms fusion,
@@ -198,12 +207,13 @@ Green merge contact keeps its own contour. No new artwork or audio was acquired.
 Lettering, pictures, fragment markers, hit areas and rewards stay unchanged.
 Release, cancellation or leaving play clears the cue and restores unrelated skins.
 Reduced motion keeps the contour and material contrast steady without a sweep or enlargement.
-Selected merged words also highlight every available merged word with the same
-word ID, including different levels and Lv9. This word-family cue does not change
-upgrade eligibility: only equal levels below Lv9 can merge.
+Selected merged words highlight every available merged word with the same word
+ID, including different levels and Lv6. This word-family cue preserves the
+existing matching guidance; a merge still requires the combined level to be
+at most six. Over-cap contact stays neutral and a rejected drop preserves both.
 Actual merge contact uses the same resolver as manual merging and Auto merge. Reviewed partial joins are valid; results that
 lack room do not light up or incur an incorrect-answer penalty. Root joins follow
-the reviewed reading order. Word-picture matching and equal-level upgrades work
+the reviewed reading order. Word-picture matching and additive upgrades work
 in either drag direction. Incompatible targets keep their resting paint.
 Every other physical contact still compresses
 both painted skins and adds a soft cream glint, with the existing contact sound on first touch. This

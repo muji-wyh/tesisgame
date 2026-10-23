@@ -6,16 +6,16 @@ const RAYS = preload("res://assets/chests/milestone/rays.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const MAX_ACTIVE: int = 12
 const PROFILES: Array[Dictionary] = [
-	{"name": "Pearl pop", "pattern": "pearl", "seconds": 0.46, "radius": 38.0, "sparks": 7, "bursts": 1, "hue": 0.44},
-	{"name": "Twin ripple", "pattern": "ripple", "seconds": 0.64, "radius": 52.0, "sparks": 12, "bursts": 2, "hue": 0.49},
-	{"name": "Spiral lift", "pattern": "spiral", "seconds": 0.82, "radius": 68.0, "sparks": 20, "bursts": 1, "hue": 0.67},
-	{"name": "Firework bloom", "pattern": "firework", "seconds": 1.02, "radius": 91.0, "sparks": 32, "bursts": 1, "hue": 0.10},
-	{"name": "Double bloom", "pattern": "double", "seconds": 1.18, "radius": 107.0, "sparks": 40, "bursts": 2, "hue": 0.92},
-	{"name": "Comet crown", "pattern": "crown", "seconds": 1.30, "radius": 121.0, "sparks": 48, "bursts": 1, "hue": 0.53},
-	{"name": "Aurora orbit", "pattern": "orbit", "seconds": 1.43, "radius": 136.0, "sparks": 58, "bursts": 2, "hue": 0.72},
-	{"name": "Constellation shower", "pattern": "constellation", "seconds": 1.58, "radius": 151.0, "sparks": 70, "bursts": 3, "hue": 0.12},
-	{"name": "Grand bouquet", "pattern": "bouquet", "seconds": 1.80, "radius": 173.0, "sparks": 90, "bursts": 5, "hue": 0.08},
+	{"name": "Pearl pop", "pattern": "pearl", "seconds": 0.80, "radius": 40.0, "sparks": 9, "bursts": 1, "hue": 0.44},
+	{"name": "Twin ripple", "pattern": "ripple", "seconds": 1.10, "radius": 58.0, "sparks": 16, "bursts": 2, "hue": 0.51},
+	{"name": "Spiral lift", "pattern": "spiral", "seconds": 1.45, "radius": 78.0, "sparks": 28, "bursts": 1, "hue": 0.67},
+	{"name": "Firework bloom", "pattern": "firework", "seconds": 2.80, "radius": 112.0, "sparks": 60, "bursts": 4, "hue": 0.10},
+	{"name": "Rose cascade", "pattern": "cascade", "seconds": 3.10, "radius": 134.0, "sparks": 80, "bursts": 5, "hue": 0.92},
+	{"name": "Prismatic bouquet", "pattern": "bouquet", "seconds": 3.40, "radius": 158.0, "sparks": 108, "bursts": 7, "hue": 0.53},
 ]
+const FIREWORK_PALETTE: Array[Color] = [Color("#efaf35"), Color("#23b8d2"), Color("#eb6ba8"), Color("#9274df")]
+const CASCADE_PALETTE: Array[Color] = [Color("#ed5b9a"), Color("#f3bd52"), Color("#b474db"), Color("#ee8754")]
+const BOUQUET_PALETTE: Array[Color] = [Color("#35bec1"), Color("#f0bc42"), Color("#ef6b9e"), Color("#8e82ee"), Color("#7bc77a"), Color("#57a5e3")]
 
 var _entries: Array[Dictionary] = []
 var _reduced_motion: bool = false
@@ -32,14 +32,14 @@ func _init() -> void:
 
 
 static func profile(level: int) -> Dictionary:
-	var result: Dictionary = PROFILES[clampi(level, 1, 9) - 1].duplicate(true)
-	result["level"] = clampi(level, 1, 9)
+	var result: Dictionary = PROFILES[clampi(level, 1, PROFILES.size()) - 1].duplicate(true)
+	result["level"] = clampi(level, 1, PROFILES.size())
 	result["cue"] = cue_for_level(level)
 	return result
 
 
 static func cue_for_level(level: int) -> String:
-	return "pop" if level <= 1 else "jelly-collect-lv%d" % clampi(level, 2, 9)
+	return "pop" if level <= 1 else "jelly-collect-lv%d" % clampi(level, 2, PROFILES.size())
 
 
 func configure_layout(available: Rect2, ui_scale: float = 1.0) -> void:
@@ -50,13 +50,13 @@ func configure_layout(available: Rect2, ui_scale: float = 1.0) -> void:
 
 
 func present(origin: Vector2, level: int, accent: Color, batch: bool = false,
-		initial_age: float = 0.0, delay: float = 0.0) -> void:
+		initial_age: float = 0.0, delay: float = 0.0, anchor_id: String = "") -> void:
 	if not origin.is_finite() or not is_finite(initial_age) or not is_finite(delay):
 		return
 	var selected: Dictionary = profile(level)
 	var duration: float = float(selected.seconds)
 	if batch:
-		duration = minf(duration * 0.72, 0.84)
+		duration *= 0.75
 	if _reduced_motion:
 		duration = 0.42
 	var wait: float = maxf(0.0, delay)
@@ -65,11 +65,23 @@ func present(origin: Vector2, level: int, accent: Color, batch: bool = false,
 	_serial += 1
 	_entries.append({"id": _serial, "origin": origin - position, "profile": selected,
 		"accent": accent, "batch": batch, "elapsed": maxf(0.0, initial_age),
-		"delay": wait, "duration": duration})
+		"delay": wait, "duration": duration, "anchor_id": anchor_id})
 	while _entries.size() > MAX_ACTIVE:
 		_entries.pop_front()
 	show()
 	queue_redraw()
+
+
+func reanchor_pending(anchor_id: String, origin: Vector2) -> void:
+	if anchor_id.is_empty() or not origin.is_finite():
+		return
+	var moved: bool = false
+	for entry: Dictionary in _entries:
+		if str(entry.anchor_id) == anchor_id and float(entry.elapsed) < float(entry.delay):
+			entry.origin = origin - position
+			moved = true
+	if moved:
+		queue_redraw()
 
 
 func advance(delta: float) -> void:
@@ -97,9 +109,12 @@ func reset() -> void:
 func snapshot() -> Dictionary:
 	var states: Array[Dictionary] = []
 	for entry: Dictionary in _entries:
+		var age: float = float(entry.elapsed) - float(entry.delay)
 		states.append({"id": entry.id, "level": entry.profile.level, "name": entry.profile.name,
+			"anchor_id": entry.anchor_id,
 			"pattern": entry.profile.pattern, "cue": entry.profile.cue, "batch": entry.batch,
-			"elapsed": entry.elapsed, "delay": entry.delay, "popped": float(entry.elapsed) >= float(entry.delay),
+			"elapsed": entry.elapsed, "delay": entry.delay, "popped": age >= 0.0,
+			"phase": _phase(entry, age),
 			"duration": entry.duration, "origin": [entry.origin.x + position.x, entry.origin.y + position.y],
 			"reduced_motion": _reduced_motion})
 	return {"visible": visible and not states.is_empty(), "active_count": states.size(),
@@ -114,6 +129,8 @@ func _draw() -> void:
 		var progress: float = clampf(age / float(entry.duration), 0.0, 1.0)
 		if _reduced_motion:
 			_draw_steady(entry, progress)
+		elif int(entry.profile.level) >= 4:
+			_draw_fireworks(entry, progress)
 		else:
 			_draw_burst(entry, progress)
 	draw_set_transform(Vector2.ZERO)
@@ -129,12 +146,27 @@ func _radius(entry: Dictionary) -> float:
 func _palette(entry: Dictionary, index: int) -> Color:
 	var hue: float = float(entry.profile.hue)
 	var level: int = int(entry.profile.level)
-	if level >= 8:
-		hue += [0.0, 0.40, 0.61, 0.84][posmod(index, 4)]
-	elif level >= 4:
-		hue += 0.12 * float(posmod(index, 3) - 1)
+	if level == 6:
+		return BOUQUET_PALETTE[posmod(index, BOUQUET_PALETTE.size())]
+	if level == 5:
+		return CASCADE_PALETTE[posmod(index, CASCADE_PALETTE.size())]
+	if level == 4:
+		return FIREWORK_PALETTE[posmod(index, FIREWORK_PALETTE.size())]
 	var color := Color.from_hsv(fposmod(hue, 1.0), 0.69, 0.95)
-	return color.lerp(entry.accent, 0.16 if level < 4 else 0.06)
+	return color.lerp(entry.accent, 0.16)
+
+
+func _phase(entry: Dictionary, age: float) -> String:
+	if age < 0.0:
+		return "waiting"
+	if _reduced_motion:
+		return "steady"
+	if int(entry.profile.level) < 4:
+		return "release" if age < float(entry.duration) * 0.42 else "settling"
+	var progress: float = age / float(entry.duration)
+	if progress < 0.11:
+		return "explosion"
+	return "blossom" if progress < 0.46 else "falling_embers"
 
 
 func _stamp(texture: Texture2D, point: Vector2, dimensions: Vector2, color: Color, angle: float = 0.0) -> void:
@@ -169,55 +201,22 @@ func _draw_burst(entry: Dictionary, progress: float) -> void:
 	_stamp(GLOW, origin, Vector2.ONE * radius * lerpf(0.55, 2.1, progress), Color(_palette(entry, 0), peak * 0.34))
 	if level >= 3:
 		_stamp(RAYS, origin, Vector2.ONE * radius * (1.0 + progress * 1.55),
-			Color(_palette(entry, 1), peak * (0.52 if level < 8 else 0.78)), progress * 0.28)
+			Color(_palette(entry, 1), peak * 0.52), progress * 0.28)
 	for index in range(count):
 		var slot: float = float(index) / float(count)
 		var phase: float = float(posmod(index * 7, 11)) / 11.0
 		var group: int = index % int(entry.profile.bursts)
-		var delay: float = _burst_delay(pattern, group)
+		var delay: float = float(group) * 0.24 if pattern == "ripple" else 0.0
 		var p: float = clampf((progress - delay) / (1.0 - delay), 0.0, 1.0)
 		if p <= 0.0:
 			continue
 		var angle: float = slot * TAU - PI * 0.5 + float(entry.id % 7) * 0.17
-		var base: Vector2 = origin + _burst_offset(pattern, group, radius)
-		var point: Vector2 = base + _trajectory(pattern, angle, p, phase, group, radius)
+		var point: Vector2 = origin + _trajectory(pattern, angle, p, phase, group, radius)
 		var fade: float = smoothstep(0.0, 0.025, p) * (1.0 - smoothstep(0.42 + phase * 0.19, 1.0, p))
 		var edge: float = (6.2 + float(level) * 0.62 + phase * 4.0) / _ui_scale
 		edge *= lerpf(1.10, 0.45, p)
 		var tint: Color = _palette(entry, index)
-		if level >= 4:
-			# Repeated texture stamps form luminous spark trails, never line stand-ins.
-			var trail_count: int = 3 if level < 8 else 5
-			for tail in range(trail_count, 0, -1):
-				var previous: float = maxf(0.0, p - float(tail) * 0.022)
-				var behind: Vector2 = base + _trajectory(pattern, angle, previous, phase, group, radius)
-				var tail_alpha: float = fade * (1.0 - float(tail) / float(trail_count + 1)) * 0.36
-				_stamp(SPARKLE, behind, Vector2.ONE * edge * 0.66, Color(tint, tail_alpha), angle)
 		_stamp(SPARKLE, point, Vector2.ONE * edge, Color(tint, fade), angle + p * 0.45)
-		if level >= 6 and index % 5 == 0:
-			_stamp(SPARKLE, point, Vector2.ONE * edge * 0.45, Color(1.0, 0.98, 0.81, fade * 0.88), -angle)
-	if level >= 5:
-		_draw_satellite_peaks(entry, progress, radius)
-
-
-func _burst_delay(pattern: String, group: int) -> float:
-	match pattern:
-		"ripple": return float(group) * 0.22
-		"double": return float(group) * 0.24
-		"orbit": return float(group) * 0.10
-		"constellation": return float(group) * 0.13
-		"bouquet": return float(group) * 0.095
-	return 0.0
-
-
-func _burst_offset(pattern: String, group: int, radius: float) -> Vector2:
-	match pattern:
-		"double": return Vector2(-0.18 if group == 0 else 0.21, -float(group) * 0.22) * radius
-		"constellation": return Vector2.from_angle(-PI * 0.5 + float(group) * TAU / 3.0) * radius * 0.34
-		"bouquet":
-			if group > 0:
-				return Vector2.from_angle(-PI * 0.5 + float(group - 1) * TAU / 4.0) * radius * 0.43
-	return Vector2.ZERO
 
 
 func _trajectory(pattern: String, angle: float, p: float, phase: float, group: int, radius: float) -> Vector2:
@@ -231,26 +230,94 @@ func _trajectory(pattern: String, angle: float, p: float, phase: float, group: i
 			return direction * reach * release * (0.72 if group == 0 else 1.0)
 		"spiral":
 			return Vector2.from_angle(angle + p * 1.5) * reach * release + Vector2.UP * radius * p * 0.18
-		"crown":
-			var crown_angle: float = lerpf(-PI * 0.94, -PI * 0.06, fposmod(angle / TAU + 0.25, 1.0))
-			return Vector2.from_angle(crown_angle) * reach * release + Vector2.DOWN * radius * p * p * 0.62
-		"orbit":
-			return Vector2.from_angle(angle + p * (2.1 if group == 0 else -2.1)) * reach * release * Vector2(1.0, 0.62)
-		"constellation":
-			return direction * reach * 0.63 * release + Vector2.DOWN * radius * p * p * 0.34
-		"bouquet":
-			return direction * reach * (0.80 if group == 0 else 0.48) * release + Vector2.DOWN * radius * p * p * 0.40
-	# Fireworks and the double bloom expand rapidly, then their embers curve down.
-	return direction * reach * release + Vector2.DOWN * radius * p * p * 0.34
+	return direction * reach * release
 
 
-func _draw_satellite_peaks(entry: Dictionary, progress: float, radius: float) -> void:
-	var pattern: String = str(entry.profile.pattern)
-	for group in range(1, int(entry.profile.bursts)):
-		var age: float = progress - _burst_delay(pattern, group)
+func _draw_fireworks(entry: Dictionary, progress: float) -> void:
+	var radius: float = _radius(entry)
+	var level: int = int(entry.profile.level)
+	var group_count: int = int(entry.profile.bursts)
+	var count: int = int(entry.profile.sparks)
+	if bool(entry.batch):
+		count = roundi(float(count) * 0.45)
+	var main_count: int = roundi(float(count) * (0.50 if level == 4 else 0.34))
+	var secondary_count: int = maxi(5, (count - main_count) / (group_count - 1))
+	# The central gold release opens first; distinct colored blossoms open along
+	# its outward path. A long dim ember tail preserves the space after the peak.
+	for group in range(group_count):
+		var delay: float = _firework_delay(level, group)
+		var age: float = (progress - delay) * float(entry.profile.seconds)
 		if age < 0.0:
 			continue
-		var peak: float = smoothstep(0.0, 0.025, age) * (1.0 - smoothstep(0.045, 0.20, age))
-		var point: Vector2 = entry.origin + _burst_offset(pattern, group, radius)
-		_stamp(GLOW, point, Vector2.ONE * radius * 0.60, Color(_palette(entry, group), peak * 0.52))
-		_stamp(RAYS, point, Vector2.ONE * radius * (0.6 + age * 1.4), Color(_palette(entry, group), peak * 0.65), age * 0.8)
+		var life: float = (1.0 - delay) * float(entry.profile.seconds)
+		var base: Vector2 = entry.origin + _firework_offset(level, group, radius)
+		var reach: float = radius * _firework_reach(level, group)
+		var spokes: int = main_count if group == 0 else secondary_count
+		var tint: Color = _palette(entry, group)
+		var peak: float = (1.0 - smoothstep(0.05, 0.38, age)) * (0.85 + smoothstep(0.0, 0.035, age) * 0.15)
+		_stamp(GLOW, base, Vector2.ONE * reach * (0.55 + minf(age, 0.4) * 2.0), Color(tint, peak * 0.32))
+		_stamp(RAYS, base, Vector2.ONE * reach * (0.60 + minf(age, 0.35) * 2.2), Color(tint, peak * 0.48), group * 0.37)
+		for index in range(spokes):
+			var phase: float = float(posmod(index * 7 + group * 3, 13)) / 13.0
+			var angle: float = TAU * float(index) / float(spokes) - PI * 0.5 + group * 0.38 + float(entry.id % 7) * 0.09
+			var point: Vector2 = base + _firework_trajectory(angle, age, phase, reach, level)
+			var fade: float = 1.0 - smoothstep(life * (0.60 + phase * 0.10), life, age)
+			# Ember flicker changes luminance, not trajectory or visibility ownership.
+			var flicker: float = lerpf(1.0, 0.90 + 0.10 * sin(age * 12.0 + phase * TAU), smoothstep(0.55, 1.4, age))
+			var edge: float = (12.0 + phase * 4.0 + float(level - 4) * 0.8) / _ui_scale
+			edge *= lerpf(1.08, 0.62, clampf(age / life, 0.0, 1.0))
+			var spark_tint: Color = tint.lerp(_palette(entry, group + 1), 0.18 if index % 3 == 0 else 0.0)
+			var trail_count: int = 3 if bool(entry.batch) else 7 + level - 4
+			for tail in range(trail_count, 0, -1):
+				var prior_age: float = age - float(tail) * 0.05
+				if prior_age < 0.0:
+					continue
+				var behind: Vector2 = base + _firework_trajectory(angle, prior_age, phase, reach, level)
+				var taper: float = 1.0 - float(tail) / float(trail_count + 1)
+				_stamp(SPARKLE, behind, Vector2.ONE * edge * (0.40 + taper * 0.50),
+					Color(spark_tint, fade * taper * 0.70), angle)
+			_stamp(SPARKLE, point, Vector2.ONE * edge, Color(spark_tint, fade * flicker), angle + age * 0.35)
+			_stamp(SPARKLE, point, Vector2.ONE * edge * 0.35, Color(1.0, 0.98, 0.84, fade * flicker * 0.90), -angle)
+
+
+func _firework_delay(level: int, group: int) -> float:
+	if group == 0:
+		return 0.0
+	match level:
+		4: return 0.10 + float(group - 1) * 0.045
+		5: return 0.10 + float(group - 1) * 0.075
+		6: return 0.08 + float(group - 1) * 0.043
+	return 0.0
+
+
+func _firework_offset(level: int, group: int, radius: float) -> Vector2:
+	if group == 0:
+		return Vector2.ZERO
+	match level:
+		4:
+			return Vector2.from_angle(-PI * 0.5 + float(group - 1) * TAU / 3.0) * radius * 0.62
+		5:
+			var side: float = -1.0 if group % 2 == 1 else 1.0
+			var row: int = (group - 1) / 2
+			return Vector2(side * (0.51 - row * 0.12), -0.36 + row * 0.65) * radius
+		6:
+			return Vector2.from_angle(-PI * 0.5 + float(group - 1) * TAU / 6.0) * radius * 0.57
+	return Vector2.ZERO
+
+
+func _firework_reach(level: int, group: int) -> float:
+	if group == 0:
+		return 0.96 if level == 4 else 0.84
+	return 0.43 if level == 4 else 0.49
+
+
+func _firework_trajectory(angle: float, age: float, phase: float, reach: float, level: int) -> Vector2:
+	# Fast release loses radial speed to drag. Gravity then wins, making the last
+	# beat visibly descend instead of merely fading an expanded star pattern.
+	var release: float = 1.0 - exp(-age * 5.0)
+	var direction: Vector2 = Vector2.from_angle(angle)
+	var spread: Vector2 = direction * reach * (0.72 + phase * 0.28) * release
+	var falling_age: float = maxf(0.0, age - 0.16)
+	var drop: float = reach * falling_age * falling_age * (0.115 if level == 5 else 0.095)
+	var drift: float = sin(phase * TAU) * reach * 0.035 * falling_age
+	return spread + Vector2(drift, drop)

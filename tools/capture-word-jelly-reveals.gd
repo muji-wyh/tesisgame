@@ -4,13 +4,12 @@ extends SceneTree
 const Reveal = preload("res://scripts/word_jelly_word_reveal.gd")
 const Model = preload("res://scripts/word_jelly_model.gd")
 const Card = preload("res://scripts/word_jelly_word_reveal_card.gd")
+const LevelEffects = preload("res://scripts/word_jelly_reveal_fx.gd")
 const Backdrop = preload("res://scripts/jelly_backdrop.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const CAT = preload("res://assets/images/ui/modes/cat.webp")
 const APPLE = preload("res://assets/images/ui/modes/apple.webp")
-const OUTPUT: String = "res://build/jelly-reveal-feedback"
-const PROFILE_NAMES: Array[String] = ["Pearl greeting", "Crystal ribbon", "Sapphire spiral",
-	"Golden fireworks", "Rose cascade", "Comet coronation", "Aurora embrace", "Starlight festival", "Prismatic finale"]
+const OUTPUT: String = "res://build/jelly-reveal-feedback/six-levels"
 
 var content: Control
 var backdrop: Control
@@ -101,23 +100,23 @@ func _comparison(prefix: String) -> void:
 		await _resize(dimensions)
 		_label("Collected word", Vector2(0, 24), Vector2(dimensions.x, 44), 28)
 		_label("Same production popup at +0.24 seconds", Vector2(0, 70), Vector2(dimensions.x, 28), 16)
-		var result: Control = _card(Vector2(dimensions) * 0.5, 9, 0.24, Vector2(dimensions))
+		var result: Control = _card(Vector2(dimensions) * 0.5, Model.MAX_MERGE_LEVEL, 0.24, Vector2(dimensions))
 		await _capture("%s-%dx%d" % [prefix, dimensions.x, dimensions.y], result.snapshot())
 
 
 func _levels() -> void:
-	await _resize(Vector2i(1440, 1040))
+	await _resize(Vector2i(1440, 740))
 	_label("Collected word celebration", Vector2(0, 8), Vector2(1440, 44), 30)
 	_label("Production popup cards at +0.30 seconds; identical word, scale and backdrop", Vector2(0, 50), Vector2(1440, 26), 17)
-	for level in range(1, 10):
+	for level in range(1, Model.MAX_MERGE_LEVEL + 1):
 		var cell := Vector2((level - 1) % 3, (level - 1) / 3) * Vector2(480, 320) + Vector2(0, 80)
 		_card(cell + Vector2(240, 142), level, 0.30, Vector2(480, 320))
-		_label("Lv%d - %s" % [level, PROFILE_NAMES[level - 1]], cell + Vector2(8, 266), Vector2(464, 36), 20)
-	await _capture("all-nine-levels")
-	for level in [4, 9]:
+		_label("Lv%d - %s" % [level, LevelEffects.profile(level).name], cell + Vector2(8, 266), Vector2(464, 36), 20)
+	await _capture("all-six-levels")
+	for level in [4, Model.MAX_MERGE_LEVEL]:
 		for age in [0.04, 0.12, 0.24, 0.40, 0.60, 0.90, 1.35, 1.80]:
 			await _resize(Vector2i(900, 600))
-			_label("Lv%d - %s" % [level, PROFILE_NAMES[level - 1]], Vector2(0, 22), Vector2(900, 44), 28)
+			_label("Lv%d - %s" % [level, LevelEffects.profile(level).name], Vector2(0, 22), Vector2(900, 44), 28)
 			_label("Collected word release + %.2f seconds" % age, Vector2(0, 66), Vector2(900, 30), 18)
 			var result: Control = _card(Vector2(450, 320), level, age, Vector2(900, 600))
 			await _capture("lv%d-%04dms" % [level, roundi(age * 1000.0)], result.snapshot())
@@ -159,12 +158,12 @@ func _devices(batch_only: bool = false) -> void:
 			await _resize(dimensions)
 			var view: Control = _game_fixture(dimensions, steady)
 			if not batch_only:
-				_present(view._word_reveal, 9, 0.24)
-				await _capture("game-lv9-%dx%d%s" % [dimensions.x, dimensions.y, "-steady" if steady else ""], view._word_reveal.snapshot())
+				_present(view._word_reveal, Model.MAX_MERGE_LEVEL, 0.24)
+				await _capture("game-lv6-%dx%d%s" % [dimensions.x, dimensions.y, "-steady" if steady else ""], view._word_reveal.snapshot())
 				view._word_reveal.reset()
 				view._word_reveal._rng.seed = 20261022
 			for index in range(3):
-				_present(view._word_reveal, 7 + index, 0.0, true, index % 2 == 1)
+				_present(view._word_reveal, 4 + index, 0.0, true, index % 2 == 1)
 				view._word_reveal.advance(Model.BATCH_BEAT_SECONDS if index < 2 else 0.18)
 			await _capture("batch-%dms-%dx%d%s" % [roundi(Model.BATCH_BEAT_SECONDS * 1000.0), dimensions.x, dimensions.y, "-steady" if steady else ""], view._word_reveal.snapshot())
 
@@ -175,10 +174,10 @@ func _frames() -> void:
 	_label("Collected word: normal-speed comparison", Vector2(0, 20), Vector2(960, 44), 28)
 	_label("Lv1", Vector2(0, 470), Vector2(320, 36), 22)
 	_label("Lv4 - Firework bloom", Vector2(320, 470), Vector2(320, 36), 22)
-	_label("Lv9 - Grand bouquet", Vector2(640, 470), Vector2(320, 36), 22)
+	_label("Lv6 - Prismatic bouquet", Vector2(640, 470), Vector2(320, 36), 22)
 	var cards: Array[Control] = []
 	for index in range(3):
-		cards.append(_card(Vector2(160 + 320 * index, 285), [1, 4, 9][index], 0.0, Vector2(320, 400)))
+		cards.append(_card(Vector2(160 + 320 * index, 285), [1, 4, 6][index], 0.0, Vector2(320, 400)))
 	for frame in range(64):
 		for card: Control in cards:
 			card.elapsed = frame / 30.0
@@ -187,7 +186,7 @@ func _frames() -> void:
 
 
 func _batch_frame_count() -> int:
-	return ceili((8.0 * Model.BATCH_BEAT_SECONDS + Reveal.BATCH_SECONDS) * 30.0) + 1
+	return ceili(((Model.MAX_MERGE_LEVEL - 1) * Model.BATCH_BEAT_SECONDS + Reveal.BATCH_SECONDS) * 30.0) + 1
 
 
 func _batch_frame_directory() -> String:
@@ -202,7 +201,7 @@ func _rapid_frames() -> void:
 		var time: float = frame / 30.0
 		if frame > 0:
 			view._word_reveal.advance(1.0 / 30.0)
-		while next_release < 9 and time + 0.0001 >= next_release * Model.BATCH_BEAT_SECONDS:
+		while next_release < Model.MAX_MERGE_LEVEL and time + 0.0001 >= next_release * Model.BATCH_BEAT_SECONDS:
 			_present(view._word_reveal, 1 + next_release, maxf(0.0, time - next_release * Model.BATCH_BEAT_SECONDS), true, next_release % 2 == 1)
 			next_release += 1
 		await _capture("%s/frame-%03d" % [_batch_frame_directory(), frame], view._word_reveal.snapshot())

@@ -44,9 +44,8 @@ var _merged_pose_elapsed: float = -1.0
 var _merged_pose_reduced: bool = false
 var _merged_pose_id: int = -1
 var _level_badge: Label
-const MERGED_COLORS: Array[Color] = [Color("#f7c45c"), Color("#f7c45c"), Color("#ffe48b"),
-	Color("#ffc77b"), Color("#ffb4dc"), Color("#c9c2ff"), Color("#9ee8f3"),
-	Color("#bcecb0"), Color("#ffd694"), Color("#f4daff")]
+const MERGED_COLORS: Array[Color] = [Color("#f7c45c"), Color("#f7c45c"), Color("#9ee8f3"),
+	Color("#b6c3ff"), Color("#ffd16f"), Color("#ffb4dc"), Color("#f4daff")]
 
 func _init() -> void:
 	super()
@@ -108,7 +107,7 @@ func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 			# The sourced readiness light has fixed geometry between layout changes.
 			_merged_glow.size = size * 1.30
 			_merged_glow.position = (size - _merged_glow.size) * 0.5 - Vector2(0.0, size.y * 0.025)
-			var tint: Color = MERGED_COLORS[clampi(merge_level, 1, 9)]
+			var tint: Color = MERGED_COLORS[clampi(merge_level, 1, WordModel.MAX_MERGE_LEVEL)]
 			tint.a = 0.48 + float(maxi(0, merge_level - 1)) * 0.025
 			_merged_glow.modulate = tint
 			for index in range(_merged_glints.size()):
@@ -186,7 +185,7 @@ func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: 
 	var legacy_complete: bool = not cell.get("word", {}).is_empty() and (_authored or int(cell.get("mass", 1)) > 1)
 	jelly_kind = str(cell.get("jelly_kind", "merged" if legacy_complete else "root"))
 	valid_word = jelly_kind == "merged" and not cell.get("word", {}).is_empty()
-	merge_level = clampi(int(cell.get("merge_level", 1)), 1, 9) if valid_word else 0
+	merge_level = clampi(int(cell.get("merge_level", 1)), 1, WordModel.MAX_MERGE_LEVEL) if valid_word else 0
 	requires_read = jelly_kind != "picture" and _authored and bool(cell.get("requires_read", false))
 	_spelling = str(cell.get("display_text", cell.get("text", ""))) if jelly_kind != "picture" else ""
 	_break_offsets = cell.get("approved_break_offsets", []).duplicate()
@@ -224,7 +223,8 @@ func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: 
 		var chance: float = WordModel.coin_drop_chance_for_tile(cell)
 		var reward: String = " No bonus coins at this level." if chance <= 0.0 else " %d%% chance of %d bonus coins." % [roundi(chance * 100.0), WordModel.coins_for_tile(cell)]
 		instruction = "Merged word, level %d. Press to collect.%s%s" % [merge_level, reward,
-			" Drag to the same word at the same level to upgrade." if merge_level < 9 else " Maximum level reached."]
+			" Drag onto the same word to add their levels. The total must be %d or less." % WordModel.MAX_MERGE_LEVEL
+			if merge_level < WordModel.MAX_MERGE_LEVEL else " Maximum level reached."]
 	elif jelly_kind == "picture":
 		instruction = "Drag to its complete matching word to merge."
 	elif not cell.get("word_candidate", {}).is_empty():
@@ -349,7 +349,7 @@ func _layout_level_badge() -> void:
 	var edge: float = maxf(Style.HEADING_FONT.get_height(pixels), minf(_unit * 0.28, 21.0 / ui_scale))
 	_level_badge.size = Vector2.ONE * edge
 	_level_badge.position = Vector2(size.x * 0.98 - edge, size.y * 0.08)
-	var badge := Style.box(Color("#4d4565"), MERGED_COLORS[clampi(merge_level, 1, 9)], ceili(edge * 0.42), maxi(1, roundi(1.2 / ui_scale)))
+	var badge := Style.box(Color("#4d4565"), MERGED_COLORS[clampi(merge_level, 1, WordModel.MAX_MERGE_LEVEL)], ceili(edge * 0.42), maxi(1, roundi(1.2 / ui_scale)))
 	badge.set_content_margin_all(0.0)
 	_level_badge.add_theme_stylebox_override("normal", badge)
 	_level_badge.set("accessibility_name", "Level %d" % merge_level)

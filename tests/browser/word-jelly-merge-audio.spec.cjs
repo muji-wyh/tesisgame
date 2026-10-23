@@ -309,9 +309,13 @@ test('Auto Merge completes its paid animated fusions without pronouncing words',
   expect(evidence.completions).toHaveLength(after.powerup.completed);
   expect(spoken, 'Automatic merges neither speak immediately nor leave queued words').toEqual([]);
   for (const completion of evidence.completions) {
-    const pending = evidence.frames.filter(frame => frame.fusions.some(fusion =>
-      fusion.operation === 'merge' && fusion.result.id === completion.id));
-    expect(pending.length, 'Each automatic union appears in the published animation').toBeGreaterThan(0);
+    // The 110 ms union can fall between 100 ms bridge snapshots on a slow
+    // frame. Its preceding 250 ms drag is also part of the visible animation.
+    const pending = evidence.frames.filter(frame => frame.at <= completion.at && (
+      frame.fusions.some(fusion => fusion.operation === 'merge' && fusion.result.id === completion.id) ||
+      frame.powerup.drags.some(drag => drag.source.source_word_id === completion.word.id &&
+        drag.target.source_word_id === completion.word.id && drag.elapsed > 0 && drag.elapsed < drag.duration)));
+    expect(pending.length, 'Each automatic word has an animated drag or union before its completion').toBeGreaterThan(0);
   }
   expect(after.merged_count).toBe(opening.merged_count + after.powerup.completed);
   expect(after.cleared_pairs, 'Auto Merge does not trigger Collect').toBe(opening.cleared_pairs);
