@@ -21,6 +21,8 @@ class Storage extends RefCounted:
 	var medal_writable: bool = true
 	var reward_writable: bool = true
 	var coin_writes: int = 0
+	var coin_quote_writes: int = 0
+	var coin_payment_writes: int = 0
 
 	func coinWalletState() -> Variant:
 		return coins
@@ -28,6 +30,15 @@ class Storage extends RefCounted:
 	func saveCoinWalletState(value: String, expected: Variant) -> bool:
 		if not coin_writable or expected != coins:
 			return false
+		var previous := ConfigFile.new()
+		var next := ConfigFile.new()
+		if coins != null:
+			previous.parse(coins)
+		next.parse(value)
+		if previous.get_value("wallet", "chest_rewards", {}) != next.get_value("wallet", "chest_rewards", {}):
+			coin_quote_writes += 1
+		if previous.get_value("wallet", "receipts", {}) != next.get_value("wallet", "receipts", {}):
+			coin_payment_writes += 1
 		coins = value
 		coin_writes += 1
 		return true
@@ -202,9 +213,12 @@ func check_arrival(app, expected: int) -> void:
 func check_single(mode: String) -> void:
 	var app = await make_app(mode)
 	var tier: int = RewardProgress.THEMES.size() if mode == "memory" else 1
-	var expected: int = tier * 50
 	app.choose_theme("space")
 	finish_single(app)
+	var quote: Dictionary = app.coin_wallet.chest_reward(app._single_chest_receipt())
+	var expected: int = int(quote.total)
+	check(quote.base == tier * 50 and expected == int(quote.base) + int(quote.bonus),
+		"The single chest preserves its fixed base and freezes any Pip bonus earned during the real lesson")
 	if mode in ["match", "memory"]:
 		check(app.chest.theme_id == RewardProgress.theme_for_tier(tier), "Pair opening uses the earned tier independently of the selected theme")
 		if mode == "match":
@@ -257,19 +271,20 @@ func check_save_retry(mode: String, fail_coins: bool) -> void:
 	storage.coin_writable = true
 	storage.reward_writable = true
 	room.retry_save()
-	check(not room._save_failed and room.rewards.entries[0].opened and app.coin_wallet.balance == 150 and storage.coin_writes == 1,
-		"Retry completes consumption with one durable payout, including duplicate-credit recovery")
+	check(not room._save_failed and room.rewards.entries[0].opened and app.coin_wallet.balance == 150
+		and storage.coin_writes == 2 and storage.coin_quote_writes == 1 and storage.coin_payment_writes == 1,
+		"Retry completes consumption with one reserved quote and one durable payout, including duplicate-credit recovery")
 	check_arrival(app, 150)
 	room.retry_save()
-	check(app.coin_wallet.balance == 150 and storage.coin_writes == 1 and not app._coin_flight.snapshot().active,
+	check(app.coin_wallet.balance == 150 and storage.coin_writes == 2 and storage.coin_payment_writes == 1 and not app._coin_flight.snapshot().active,
 		"A second retry cannot reopen or reanimate its receipt")
 	await dispose(app)
 
 
 func check_single_retry(mode: String, fail_coins: bool, reconcile_in_background: bool = false) -> void:
 	var app = await make_app(mode)
-	var expected: int = RewardProgress.THEMES.size() * 50 if mode == "memory" else 50
 	finish_single(app)
+	var expected: int = int(app.coin_wallet.chest_reward(app._single_chest_receipt()).total)
 	var storage = app.get_meta("coin_test_storage")
 	storage.coin_writable = not fail_coins
 	storage.medal_writable = fail_coins
@@ -288,8 +303,9 @@ func check_single_retry(mode: String, fail_coins: bool, reconcile_in_background:
 	storage.coin_writable = true
 	storage.medal_writable = true
 	app._retry_reward_save()
-	check(not app._save_error and app.coin_wallet.balance == expected and storage.coin_writes == 1,
-		"Single-chest retry completes the same receipt without issuing a second payout")
+	check(not app._save_error and app.coin_wallet.balance == expected and storage.coin_writes == 2
+		and storage.coin_quote_writes == 1 and storage.coin_payment_writes == 1,
+		"Single-chest retry keeps one reservation and completes the same receipt without issuing a second payout")
 	if reconcile_in_background:
 		var state: Dictionary = app._coin_flight.snapshot()
 		check(not state.active and state.target == expected and state.displayed == float(expected),
@@ -300,7 +316,7 @@ func check_single_retry(mode: String, fail_coins: bool, reconcile_in_background:
 	else:
 		check_arrival(app, expected)
 	app._commit_fragment()
-	check(storage.coin_writes == 1 and not app._coin_flight.snapshot().active, "Single-chest retry completion remains idempotent")
+	check(storage.coin_writes == 2 and storage.coin_payment_writes == 1 and not app._coin_flight.snapshot().active, "Single-chest retry completion remains idempotent")
 	await dispose(app)
 
 
@@ -329,12 +345,13 @@ func check_interruption(kind: String) -> void:
 func check_reduced() -> void:
 	var app = await make_app("phrase")
 	finish_single(app)
+	var expected: int = int(app.coin_wallet.chest_reward(app._single_chest_receipt()).total)
 	app.set_reduced_motion(true)
 	open_single(app)
-	check(app.coin_wallet.balance == 50 and app._coin_flight.snapshot().target == 0, "Reduced motion retains a short static reward acknowledgement")
+	check(app.coin_wallet.balance == expected and app._coin_flight.snapshot().target == 0, "Reduced motion retains a short static reward acknowledgement")
 	app._coin_flight.advance(0.25)
-	check(not app._coin_flight.snapshot().active and app._coin_flight.snapshot().target == 50
-		and app._coin_flight.snapshot().displayed == 50.0, "The first reduced-motion update crossing arrival settles immediately without a number roll")
+	check(not app._coin_flight.snapshot().active and app._coin_flight.snapshot().target == expected
+		and app._coin_flight.snapshot().displayed == float(expected), "The first reduced-motion update crossing arrival settles immediately without a number roll")
 	await dispose(app)
 
 
@@ -354,7 +371,8 @@ func check_pending_reload() -> void:
 		"Startup silently settles the preserved earned chest into one wallet receipt")
 	await dispose(app)
 	app = await make_app("match", storage)
-	check(app.coin_wallet.balance == 50 and storage.coin_writes == 1, "A second startup cannot retroactively credit the settled chest again")
+	check(app.coin_wallet.balance == 50 and storage.coin_writes == 2 and storage.coin_quote_writes == 1 and storage.coin_payment_writes == 1,
+		"A second startup cannot repeat the quote reservation or retroactively credit the settled chest again")
 	await dispose(app)
 
 
@@ -373,7 +391,8 @@ func check_startup_pending_memory_retry() -> void:
 	check(not app._progress_ready and app._save_error and not app._pair_save_failed,
 		"A pending Memory coin-write failure reaches the generic startup retry path in another mode")
 	check(not app.medal_progress.pair_round("memory").settled and app.coin_wallet.balance == 0
-		and storage.coin_writes == 0 and app.medal_progress.count_for(fragment.medal_id) == int(fragment.before),
+		and storage.coin_writes == 1 and storage.coin_quote_writes == 1 and storage.coin_payment_writes == 0
+		and app.medal_progress.count_for(fragment.medal_id) == int(fragment.before),
 		"Failed startup credit preserves both the Memory chest and its unclaimed contents")
 	check(app._storage_retry_button.is_visible_in_tree() and not app._storage_retry_button.disabled,
 		"The in-session generic retry control is available after startup recovery fails")
@@ -384,7 +403,8 @@ func check_startup_pending_memory_retry() -> void:
 	app._storage_retry_button.pressed.emit()
 	check(app._progress_ready and not app._save_error and not app._pair_save_failed,
 		"The same generic retry completes startup recovery without reloading the scene")
-	check(app.coin_wallet.balance == RewardProgress.THEMES.size() * 50 and storage.coin_writes == 1 and app.coin_wallet._receipts.has(receipt)
+	check(app.coin_wallet.balance == RewardProgress.THEMES.size() * 50 and storage.coin_writes == 2
+		and storage.coin_quote_writes == 1 and storage.coin_payment_writes == 1 and app.coin_wallet._receipts.has(receipt)
 		and app.medal_progress.pair_round("memory").settled,
 		"Startup retry credits the original Memory receipt once and settles its pending chest")
 	check(app.medal_progress.count_for(fragment.medal_id) == int(fragment.after)
@@ -402,7 +422,7 @@ func check_startup_pending_memory_retry() -> void:
 	app._memory.card_buttons[0].pressed.emit()
 	check(app._memory.memory.selected_indices.size() == 1,
 		"The recovered Memory board accepts its first real card input")
-	check(app.coin_wallet.balance == RewardProgress.THEMES.size() * 50 and storage.coin_writes == 1
+	check(app.coin_wallet.balance == RewardProgress.THEMES.size() * 50 and storage.coin_writes == 2 and storage.coin_payment_writes == 1
 		and app.medal_progress.count_for(fragment.medal_id) == int(fragment.after)
 		and not app._coin_flight.snapshot().active,
 		"Repeated retry and mode switching cannot duplicate the recovered coins or chest contents")

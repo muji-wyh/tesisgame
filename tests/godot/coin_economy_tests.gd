@@ -4,6 +4,7 @@ const Economy = preload("res://scripts/coin_economy.gd")
 const Wallet = preload("res://scripts/coin_wallet.gd")
 const Jelly = preload("res://scripts/word_jelly_model.gd")
 const Report = preload("res://tools/coin-economy-report.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -36,8 +37,10 @@ func check(value: bool, message: String) -> void:
 
 func _run() -> void:
 	_test_economy_ladder()
+	_test_pip_chest_rewards()
 	_test_supply_and_budget()
 	_test_treasure_cannot_self_fund()
+	_test_max_pip_treasure_sink()
 	_test_paid_model_and_wallet()
 	_test_real_lucky_collection()
 	print("Coin economy: %d checks, %d failures" % [checks, failures])
@@ -75,6 +78,44 @@ func _test_economy_ladder() -> void:
 		"Reward lookup uses bounded merged levels and never infers a reward from mass")
 	check(Economy.chest_coins(0) == 50 and Economy.chest_coins(1) == 50 and Economy.chest_coins(6) == 300,
 		"Ordinary and existing levelled chest rewards keep their saved meaning")
+
+
+func _test_pip_chest_rewards() -> void:
+	var totals: Dictionary = {-10: 50, 0: 50, 1: 51, 4: 51, 5: 52, 20: 55, 96: 74, 97: 75, 99: 75, 1000: 75}
+	for level: int in totals:
+		var reward: Dictionary = Economy.chest_reward(1, level)
+		check(reward.total == totals[level] and reward.base == 50 and reward.bonus == int(totals[level]) - 50
+			and reward.pip_level == clampi(level, 0, 99) and reward.policy == Economy.CHEST_REWARD_POLICY,
+			"Pip Lv%d has the expected bounded ordinary-chest payout and visible breakdown" % level)
+	check(Economy.chest_reward(0, 5) == Economy.chest_reward(1, 5)
+		and Economy.chest_reward(-10, 5) == Economy.chest_reward(1, 5), "Untiered chest quotes use the ordinary tier")
+	check(Economy.chest_reward(6, 99) == {"policy": Economy.CHEST_REWARD_POLICY, "pip_level": 99,
+		"tier": 6, "base": 300, "bonus": 150, "total": 450}, "A highest-art-tier chest shows its full bounded Pip contribution")
+	for tier in [1, 2, 6, 50, 300]:
+		var previous: int = 0
+		for level in range(100):
+			var reward: Dictionary = Economy.chest_reward(tier, level)
+			check(reward.total >= previous and reward.total >= tier * 50 and reward.total <= tier * 75
+				and reward.base + reward.bonus == reward.total, "Pip advancement cannot reduce or overinflate a chest payout")
+			previous = reward.total
+	check(Economy.chest_coins(6) == 300 and Economy.jelly_bonus(2) == 50 and Economy.jelly_combo_bonus(10) == 3,
+		"Chest growth does not change fixed tier, random collection, or combo reward policies")
+
+
+func _test_max_pip_treasure_sink() -> void:
+	var largest_return: int = 0
+	for existing in range(101):
+		var before_tier: int = RewardProgress.reward_progress(existing).chest_tier
+		var before: int = Economy.chest_reward(before_tier, 99).total if before_tier > 0 else 0
+		for added in range(Economy.TREASURE_FRAGMENT_MIN, Economy.TREASURE_FRAGMENT_MAX + 1):
+			var after_tier: int = RewardProgress.reward_progress(existing + added).chest_tier
+			var after: int = Economy.chest_reward(after_tier, 99).total if after_tier > 0 else 0
+			var extra: int = after - before
+			largest_return = maxi(largest_return, extra)
+			check(extra <= 150 and extra < Economy.powerup_price("fragments", 0),
+				"Even maximum-Pip Treasure luck cannot refund the purchase that supplied its fragments")
+	check(largest_return == 150 and Economy.powerup_price("fragments", 0) - largest_return == 50,
+		"The maximum Pip bonus retains at least a fifty-coin cost for every Treasure purchase")
 
 
 func _test_supply_and_budget() -> void:

@@ -53,6 +53,7 @@ var _performance_emitted: bool = false
 var _reward_revealed: bool = false
 var _open_emitted: bool = false
 var _chest_count: int = 1
+var _chest_reward: Dictionary = {}
 var _chest_announced: bool = false
 var _chest_tier: int = 0
 var _score: int = -1
@@ -177,6 +178,11 @@ func set_narration_playing(value: bool) -> void:
 	_try_finish()
 
 
+func set_chest_reward(quote: Dictionary) -> void:
+	_chest_reward = quote.duplicate(true)
+	_layout()
+
+
 func set_reduced_motion(value: bool) -> void:
 	if _reduced_motion == value:
 		return
@@ -226,6 +232,7 @@ func stop() -> void:
 	_reward_revealed = false
 	_open_emitted = false
 	_round_id = ""
+	_chest_reward.clear()
 	_origin_frame = -1
 	pip.settle()
 	pip.set_idle_paused(true)
@@ -400,7 +407,7 @@ func _layout() -> void:
 	if size.x <= 0.0 or size.y <= 0.0:
 		return
 	var scale_factor: float = maxf(0.25, Style.ui_scale(self))
-	var layout: Dictionary = RewardLayout.measure(size, scale_factor, _chest_count > 0, false, _score >= 0)
+	var layout: Dictionary = RewardLayout.measure(size, scale_factor, _chest_count > 0, false, _score >= 0, not _chest_reward.is_empty())
 	for item: Array in [[_heading, "heading"], [_summary, "summary"], [_caption, "caption"], [pip, "pip"], [chest, "chest"],
 		[home_button, "home"], [action_button, "replay"], [replay_button, "replay"]]:
 		var control: Control = item[0]
@@ -436,6 +443,7 @@ func snapshot() -> Dictionary:
 		"paused": _paused, "automatic": _automatic, "elapsed": _elapsed, "duration": DURATION,
 		"narration_playing": _narration_playing, "reduced_motion": _reduced_motion,
 		"chest_count": _chest_count, "chest_tier": _chest_tier, "chest_visible": chest.is_visible_in_tree(), "chest_announced": _chest_announced,
+		"chest_reward": _chest_reward.duplicate(true),
 		"reward_revealed": _reward_revealed,
 		"cue_log": _cue_log.duplicate(),
 		"title": _heading.text, "caption": _caption.text, "summary": _summary.text, "score": _score,

@@ -18,6 +18,7 @@ const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const TreasureScroll = preload("res://scripts/treasure_scroll.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
 const RewardLayout = preload("res://scripts/round_reward_layout.gd")
+const CoinBreakdown = preload("res://scripts/chest_coin_breakdown.gd")
 const TREASURE_LIGHT = preload("res://assets/chests/particles/portal_glow.png")
 
 var rewards := State.new()
@@ -29,6 +30,8 @@ var page_size: int = 3
 var reduced_motion: bool = false
 var interaction_allowed: Callable
 var credit_coins: Callable
+var reserve_chest_reward: Callable
+var chest_reward: Callable
 var _cards: Array[Dictionary] = []
 var _manifest: Dictionary = {}
 var _configured_id: String = ""
@@ -193,6 +196,30 @@ func has_pending() -> bool:
 	if not rewards.ready and not rewards.load_state():
 		_save_failed = true
 	return _save_failed or _unsaved_index >= 0 or rewards.has_pending()
+
+
+func _saved_chest_reward(id: String) -> Dictionary:
+	return chest_reward.call(id) if chest_reward.is_valid() else {}
+
+
+func result_chest_reward() -> Dictionary:
+	var id: String = _result_reward_id
+	if id.is_empty() and not _cards.is_empty():
+		id = str(_cards[0].reward_id)
+	return _saved_chest_reward(id) if not id.is_empty() else {}
+
+
+func _prepare_chest_rewards() -> bool:
+	if not reserve_chest_reward.is_valid():
+		return true
+	for entry: Dictionary in _batch_entries():
+		if bool(entry.opened):
+			continue
+		var result: Dictionary = reserve_chest_reward.call(str(entry.reward_id), maxi(1, int(entry.get("tier", 0))))
+		if not bool(result.get("ok", false)):
+			rewards.error = str(result.get("error", "Could not save the chest reward. Please retry."))
+			return false
+	return true
 
 
 func set_result_context(result: Dictionary, earned_round_id: String = "") -> void:
@@ -367,6 +394,7 @@ func configure(id: String, chest_count: int, preferred_theme: String, manifest: 
 	_save_failed = not rewards.create_batch(id, _draft_themes, _draft_tiers)
 	if not _save_failed:
 		_sync_saved_batch()
+		_save_failed = not _prepare_chest_rewards()
 	_unsaved_index = -1
 	_build_cards()
 	resume()
@@ -394,6 +422,8 @@ func configure_saved(manifest: Dictionary, reduce: bool) -> bool:
 	if not _save_failed and rewards.entries.is_empty():
 		return false
 	_sync_saved_batch()
+	if not _save_failed:
+		_save_failed = not _prepare_chest_rewards()
 	_page_index = 0
 	for index in range(rewards.entries.size()):
 		if not bool(rewards.entries[index].opened):
@@ -490,8 +520,14 @@ func _build_cards() -> void:
 		caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		hint.add_child(caption)
+		var breakdown := CoinBreakdown.new()
+		hint.add_child(breakdown)
+		var quote: Dictionary = _saved_chest_reward(str(entry.get("reward_id", "")))
+		breakdown.set_reward(quote)
+		breakdown.hide()
 		_cards.append({"panel": panel, "light": light, "art": art, "entry_index": entry_index,
 			"button": button, "hint": hint, "caption": caption,
+			"breakdown": breakdown, "chest_reward": quote,
 			"theme": str(entry.theme), "tier": tier, "tier_label": tier_label,
 			"opened": bool(entry.opened), "announced": bool(entry.opened),
 			"reward_id": str(entry.get("reward_id", "")), "coin_reward": {}})
@@ -691,6 +727,8 @@ func _commit(index: int) -> bool:
 			return false
 		if int(credit.get("amount", 0)) > 0:
 			_cards[index].coin_reward = credit
+		_cards[index].chest_reward = credit.get("chest_reward", _saved_chest_reward(str(_cards[index].reward_id)))
+		_cards[index].breakdown.set_reward(_cards[index].chest_reward)
 	if rewards.mark_opened(_configured_id, int(_cards[index].entry_index)):
 		_cards[index].opened = true
 		if rewards.last_open_was_duplicate:
@@ -750,6 +788,7 @@ func retry_save() -> void:
 			_save_failed = not rewards.create_batch(_configured_id, _draft_themes, _draft_tiers)
 		if not _save_failed:
 			_sync_saved_batch()
+			_save_failed = not _prepare_chest_rewards()
 		_build_cards()
 		return
 	if _unsaved_index >= 0:
@@ -777,6 +816,7 @@ func retry_save() -> void:
 		_save_failed = not rewards.create_batch(_configured_id, _draft_themes, _draft_tiers)
 		if not _save_failed:
 			_sync_saved_batch()
+			_save_failed = not _prepare_chest_rewards()
 			_select_result_chest()
 			_build_cards()
 	_refresh()
@@ -858,6 +898,11 @@ func _refresh_captions() -> void:
 		if index == _active and not card.art.opening_committed():
 			card.button.accessibility_name += " Release to cancel."
 		card.caption.text = message
+		var show_reward: bool = bool(card.opened) and not _save_failed and not card.chest_reward.is_empty()
+		card.breakdown.visible = show_reward
+		card.caption.visible = not show_reward
+		if show_reward:
+			card.button.accessibility_name += " " + CoinBreakdown.description(card.chest_reward)
 		var active: bool = index == _active
 		var focused: bool = card.button.has_focus() and not card.button.disabled
 		var hovered: bool = card.button.is_hovered() and not card.button.disabled
@@ -978,11 +1023,14 @@ func _layout() -> void:
 	var columns: int = mini(count, 3 if w * s >= 960 else 2 if w * s >= 620 else 1)
 	var card_w: float = minf((600 if wide_single else 480 if count == 1 else 360) / s, (_scroll.size.x - gap * (columns - 1)) / columns)
 	var art_h: float = clampf(card_w * 0.82, 240 / s if count == 1 else 220 / s, (360 if count == 1 else 300) / s)
+	var has_reward: bool = _cards.any(func(card: Dictionary) -> bool: return not card.chest_reward.is_empty())
+	var hint_height: float = (CoinBreakdown.HEIGHT if has_reward else 28.0) / s
+	var caption_space: float = (CoinBreakdown.HEIGHT + 16.0 if has_reward else 56.0) / s
 	if compact or count == 1:
 		# A single restored chest must keep its hold hint inside the modal's
 		# viewport, including taller dialogs that use the regular heading size.
-		art_h = maxf(128 / s, minf(art_h, _scroll.size.y - heading_height - (0 if wide_single else 56 / s)))
-	var card_h: float = art_h + (0 if wide_single else 56 / s)
+		art_h = maxf(128 / s, minf(art_h, _scroll.size.y - heading_height - (0.0 if wide_single else caption_space)))
+	var card_h: float = art_h + (0.0 if wide_single else caption_space)
 	var rows: int = ceili(float(count) / columns)
 	var content_height: float = heading_height + card_h * rows + gap * (rows - 1)
 	# Let the viewport own width so a desktop layout can shrink to a phone.
@@ -1014,20 +1062,23 @@ func _layout() -> void:
 			card.art.size.y -= 24 / s
 		card.light.size = Vector2.ONE * minf(card_w, art_h * 1.15)
 		card.light.position = Vector2((card_w - card.light.size.x) * 0.5, art_h * 0.55 - card.light.size.y * 0.5)
-		var hint_width: float = minf(card_w, 184 / s)
+		var hint_width: float = minf(card_w, (280.0 if has_reward else 184.0) / s)
 		card.hint.position = Vector2((card_w - hint_width) * 0.5, art_h + 8 / s)
-		card.hint.size = Vector2(hint_width, 28 / s)
+		card.hint.size = Vector2(hint_width, hint_height)
 		card.caption.position = Vector2.ZERO
 		card.caption.add_theme_font_size_override("font_size", ceili(14 / s))
 		card.caption.size = card.hint.size
 		if wide_single:
 			# A short landscape screen places the instruction beside the chest.
-			card.art.size.x = card_w - 204 / s
+			card.art.size.x = card_w - hint_width - 20.0 / s
 			card.hint.position = Vector2(card_w - hint_width, (card_h - card.hint.size.y) * 0.5)
 			card.light.size = Vector2.ONE * art_h
 			card.light.position = Vector2((card.art.size.x - art_h) * 0.5, art_h * 0.05)
 		card.button.position = card.art.position
 		card.button.size = card.art.size
+		card.breakdown.position = Vector2.ZERO
+		card.breakdown.size = card.hint.size
+		card.breakdown._layout()
 	var button_y: float = h - 54 / s
 	_back.size = Vector2((132 if not _result_context.is_empty() else 104) / s, 46 / s)
 	_back.position = Vector2(margin if _save_failed else w - margin - _back.size.x, button_y)
@@ -1061,7 +1112,8 @@ func _layout_result_dialog(s: float, w: float, h: float) -> void:
 		Style.action_button(_previous_page, Style.GOOD)
 		Style.action_button(_next_page, Style.GOOD)
 		_back.set_meta("result_appearance", appearance)
-	var layout: Dictionary = RewardLayout.measure(Vector2(w, h), s, not _cards.is_empty(), _save_failed, true)
+	var has_reward: bool = _cards.any(func(card: Dictionary) -> bool: return not card.chest_reward.is_empty())
+	var layout: Dictionary = RewardLayout.measure(Vector2(w, h), s, not _cards.is_empty(), _save_failed, true, has_reward)
 	_heading.add_theme_font_size_override("font_size", layout.heading_size)
 	_result_score.add_theme_font_size_override("font_size", layout.summary_size)
 	_result_caption.add_theme_font_size_override("font_size", layout.caption_size)
@@ -1119,6 +1171,9 @@ func _layout_result_dialog(s: float, w: float, h: float) -> void:
 		card.caption.position = Vector2.ZERO
 		card.caption.add_theme_font_size_override("font_size", layout.caption_size)
 		card.caption.size = card.hint.size
+		card.breakdown.position = Vector2.ZERO
+		card.breakdown.size = card.hint.size
+		card.breakdown._layout()
 	_refresh_captions()
 	_update_navigation(1)
 
@@ -1186,6 +1241,7 @@ func snapshot() -> Dictionary:
 		entries.append({"index": card.entry_index, "reward_id": card.reward_id,
 			"theme": card.theme, "type": str(Data.THEMES[card.theme].chest), "opened": card.opened,
 			"tier": int(card.tier),
+			"chest_reward": card.chest_reward.duplicate(true), "coin_breakdown": card.breakdown.snapshot(),
 			"mode": card.art.mode, "progress": card.art.performance_progress(),
 			"rainbow_visible": card.art._rainbow_light.is_visible_in_tree(),
 			"phase": card.art.performance_phase(), "committed": card.art.opening_committed(),

@@ -45,7 +45,7 @@ async function expectFinishModal(page) {
   const state = await jelly(page), room = await treasure(page);
   expect(state.result).toEqual({ visible: false, retired: true });
   expect(state.game_over).toMatchObject({ visible: true, title: 'Round complete' });
-  expect(room).toMatchObject({ visible: true, heading: 'Round complete' });
+  expect(room).toMatchObject({ visible: true, heading: room.chest_count > 0 ? 'You earned a chest!' : 'Round complete' });
   expect(room.result_context).toMatchObject({ reason: 'finished', score: state.score,
     chest_count: state.chest_count, fragment_count: state.fragment_count });
   expect((await celebrationState(page)).active, 'Settlement has no interstitial celebration').toBe(false);
@@ -1432,6 +1432,9 @@ test('Play again settles unopened treasure once before starting a fresh board', 
   const firstResult = await jelly(page);
   expect(firstModal.result_context).toMatchObject({ score: earned.score, chest_tier: 1 });
   expect(firstModal.opened_count).toBe(0);
+  const quotedReward = firstModal.chests[0].chest_reward;
+  expect(quotedReward).toMatchObject({ tier: 1, base: 50 });
+  expect(quotedReward.total).toBe(quotedReward.base + quotedReward.bonus);
   const savedTreasure = await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS);
   expect(savedTreasure).toContain(firstResult.round_id);
 
@@ -1450,7 +1453,7 @@ test('Play again settles unopened treasure once before starting a fresh board', 
   expect(replay.chest_tier).toBe(0);
   expect(replay.chest_count).toBe(0);
   await expect.poll(async () => (await wallet(page)).balance,
-    { message: 'Replay settles the tier-one chest exactly once' }).toBe(startingCoins + 50);
+    { message: 'Replay settles the quoted tier-one chest exactly once' }).toBe(startingCoins + quotedReward.total);
   const settledTreasure = await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS);
   expect(settledTreasure).not.toBe(savedTreasure);
   expect(settledTreasure).toContain(firstResult.round_id);
@@ -1471,7 +1474,7 @@ test('Play again settles unopened treasure once before starting a fresh board', 
   expect(secondModal).toMatchObject({ score_text: '0', chest_count: 0, empty_result: true });
   expect(secondModal.pending).toBe(false);
   expect(await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS)).toBe(settledTreasure);
-  expect((await wallet(page)).balance, 'A later empty round cannot award the earlier chest again').toBe(startingCoins + 50);
+  expect((await wallet(page)).balance, 'A later empty round cannot award the earlier chest again').toBe(startingCoins + quotedReward.total);
   await page.screenshot({ path: info.outputPath('jelly-empty-finish-settlement.png'), scale: 'css' });
   expect(errors).toEqual([]);
 });

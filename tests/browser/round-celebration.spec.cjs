@@ -439,13 +439,19 @@ for (const mode of ['match', 'memory']) {
     if (mode === 'match' && browserName === 'chromium' && !info.project.use.isMobile) {
       await captureReadyLayouts(page, info, earned);
     }
+    const quotedReward = earned ? (await metrics(page)).growth.result.coin_breakdown.reward : null;
+    if (earned) expect(quotedReward).toMatchObject({ tier: mode === 'memory' ? 6 : 1,
+      base: mode === 'memory' ? 300 : 50 });
     await openModeMenu(page);
-    const expectedBalance = startingBalance + (earned ? (mode === 'memory' ? 300 : 50) : 0);
+    const expectedBalance = startingBalance + (quotedReward?.total || 0);
     await expect.poll(() => page.locator('#coin-status').evaluate(element => JSON.parse(element.dataset.snapshot).balance),
       { message: 'Home settles the one earned chest exactly once' }).toBe(expectedBalance);
     const walletAfterHome = await page.evaluate(() => localStorage.getItem('growWithPip.coinWallet.v1') || '');
-    if (earned) expect(walletAfterHome.split(`pair:${mode}:${completedId}`).length - 1,
-      'The completed chest has one durable wallet receipt').toBe(1);
+    if (earned) {
+      const receipts = JSON.parse(walletAfterHome.match(/^receipts=(\{[^}]*\})/m)[1]);
+      expect(receipts[`pair:${mode}:${completedId}`],
+        'The completed chest has its exact quoted amount in the durable receipt ledger').toBe(quotedReward.total);
+    }
     const settled = await savedPairProgress(page);
     expect(settled.counts, 'Home saves exactly the captured medal fragment').toEqual(expectedCounts);
     expect(settled.pairs[mode].round.settled).toBe(earned);

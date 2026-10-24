@@ -331,6 +331,14 @@ three-second celebration inside the dialog. If a chest was earned, **Open chest*
 appears only after the performance and final pronunciation finish, then reveals
 the hold-to-open chest in the same dialog.
 
+Chest coins also grow with Pip's earned level shown in the header, using the
+current career's progress during professional vocabulary. Each chest tier pays 50 base coins
+plus one bonus coin per four Pip levels, rounded up, for a maximum 50% bonus at
+Lv99. Settlement shows the base reward, the saved Pip-level bonus and the total
+after opening. The amount is saved when settlement first prepares the chest, so
+retries, Home, replay and reload use the same reward. Previously paid chests keep
+their original amounts. See [coin rewards](coin-rewards.md) for the full policy.
+
 **Home** and **Play again** occupy the dialog footer. Both actions automatically
 save and collect any remaining earned chest rewards, including an unfinished
 opening. Save failures expose **Retry save** and block navigation until the reward

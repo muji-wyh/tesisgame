@@ -14,8 +14,11 @@ class Catalog extends RefCounted:
 	func load_index() -> bool: return true
 	func courses() -> Array: return [{"id": "retail", "title": "Fixture Retail", "description": "Fixture workplace.", "theme_id": "professional_retail"}, {"id": "nursing", "title": "Fixture Nursing", "description": "Fixture care.", "theme_id": "professional_nursing"}]
 	func course(id: String) -> Dictionary:
+		var ids: Array[String] = []
+		for index in range(50):
+			ids.append("fixture.sense.%d" % index)
 		return {"id": id, "title": "Fixture " + id, "curriculum_revision": "v1", "theme_id": "professional_" + id,
-			"modules": [{"id": "module03", "title": "Fixture equipment", "status": "ready"}]}
+			"modules": [{"id": "module03", "title": "Fixture equipment", "status": "ready", "lexeme_ids": ids}]}
 	func theme_profile(id: String) -> Dictionary:
 		var palette: Dictionary = {}
 		if id == "professional_retail":

@@ -1,6 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const {
-  openGame, metrics, tap, rendered, chooseMode, openModeMenu, headerPoint,
+  openGame, enterGame, metrics, tap, rendered, chooseMode, openModeMenu, headerPoint,
   discoverMatchCards, boardPoint, resultPoint, celebrationState, acceptCelebration
 } = require('./game-ui.cjs');
 const { startMemory, completeRememberedBoard } = require('./memory-flow.cjs');
@@ -16,8 +16,10 @@ test.beforeEach(async ({ page }) => {
   // Match's existing dry rounds invoke its pity rule. Memory earns its highest
   // chest by completing the observed board without mistakes.
   await page.addInitScript(key => {
+    if (sessionStorage.getItem('settlement-medals-seeded')) return;
     localStorage.setItem(key, '[medals]\nversion=1\ncounts={}\n[pair_chests]\nversion=1\n' +
       'state={"match":{"dry_rounds":2,"round":{}},"memory":{"dry_rounds":0,"round":{}}}\n');
+    sessionStorage.setItem('settlement-medals-seeded', 'true');
   }, MEDAL_KEY);
 });
 
@@ -145,6 +147,10 @@ for (const mode of ['match', 'memory', 'phrase']) {
       await complete(page);
       await acceptCelebration(page);
       let state = await checkModal(page, info, `${mode}-closed-chest-dialog`);
+      const quotedReward = state.result.coin_breakdown.reward;
+      expect(quotedReward).toMatchObject({ tier: mode === 'memory' ? 6 : 1,
+        base: mode === 'memory' ? 300 : 50 });
+      expect(quotedReward.total).toBe(quotedReward.base + quotedReward.bonus);
       expect(state.result.visible).toBe(true);
       expect((await celebrationState(page)).active, 'The performance hands off directly to the real chest.').toBe(false);
       expect((await celebrationState(page)).action.visible, 'No intermediary Open chest button is shown.').toBe(false);
@@ -175,7 +181,7 @@ for (const mode of ['match', 'memory', 'phrase']) {
       const initialBounds = await metrics(page), initialChest = resultPoint(initialBounds, 'chest');
       await page.mouse.click(initialBounds.x + initialChest.x * initialBounds.scale,
         initialBounds.y + initialChest.y * initialBounds.scale, { delay: 140 });
-      await expect(page.locator('#game-status')).toHaveText('Round complete Hold the chest to open');
+      await expect(page.locator('#game-status')).toHaveText('You earned a chest! Hold the chest to open');
       expect(await pieceCount(page), 'Releasing a short hold leaves the chest unclaimed.').toBe(beforePieces);
       expect((await wallet(page)).balance).toBe(beforeCoins);
       if (geometry.name === 'phone') {
@@ -187,7 +193,7 @@ for (const mode of ['match', 'memory', 'phrase']) {
         await tap(page, replay.x, replay.y);
       }
       await expect.poll(async () => pieceCount(page)).toBe(beforePieces + 1);
-      await expect.poll(async () => (await wallet(page)).balance).toBe(beforeCoins + (mode === 'memory' ? 300 : 50));
+      await expect.poll(async () => (await wallet(page)).balance).toBe(beforeCoins + quotedReward.total);
       const earnedCoins = (await wallet(page)).balance;
       await page.emulateMedia({ reducedMotion: 'reduce' });
       expect((await metrics(page)).growth.settlement.visible).toBe(false);
@@ -208,4 +214,64 @@ for (const mode of ['match', 'memory', 'phrase']) {
       expect(errors).toEqual([]);
     });
   }
+}
+
+for (const geometry of [
+  { name: 'desktop', width: 1366, height: 768 },
+  { name: 'phone', width: 393, height: 852 }
+]) {
+  test(`Pip Lv99 chest breakdown fits ${geometry.name} and its complete reward survives reload`, async ({ page }, info) => {
+    test.setTimeout(180000);
+    await page.setViewportSize({ width: geometry.width, height: geometry.height });
+    const masteredWords = require('../../words.json').map(word => word.id);
+    await page.addInitScript(masteredWords => {
+      if (sessionStorage.getItem('pip-chest-growth-seeded')) return;
+      localStorage.setItem('growWithPip.growth.v1',
+        `[growth]\nversion=4\nlevel=99\nage=0\nstreaks={}\nmastered_words=${JSON.stringify(masteredWords)}\nreceipts=[]\n`);
+      sessionStorage.setItem('pip-chest-growth-seeded', 'true');
+    }, masteredWords);
+    const errors = await openGame(page, { mode: 'memory' });
+    const before = await wallet(page);
+    expect(before.balance, 'The isolated learner has no starting coins.').toBe(0);
+    await completeMemory(page);
+    await acceptCelebration(page);
+    let state = await checkModal(page, info, `pip-lv99-${geometry.name}-closed-chest`);
+    const quote = state.result.coin_breakdown.reward;
+    expect(quote).toMatchObject({ pip_level: 99, tier: 6, base: 300, bonus: 150, total: 450 });
+    expect(state.result.coin_breakdown.visible, 'The unopened chest retains its hold instruction.').toBe(false);
+    expect((await wallet(page)).balance, 'Preparing the quote does not credit coins.').toBe(0);
+    const bounds = await metrics(page), point = resultPoint(bounds, 'chest');
+    await page.mouse.move(bounds.x + point.x * bounds.scale, bounds.y + point.y * bounds.scale);
+    await page.mouse.down();
+    try {
+      await expect.poll(async () => (await metrics(page)).growth.result.coin_breakdown.visible,
+        { message: 'The actual chest hold reveals its saved reward breakdown.' }).toBe(true);
+    } finally {
+      await page.mouse.up();
+    }
+    await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(450);
+    await expect.poll(async () => (await wallet(page)).active).toBe(false);
+    state = await checkModal(page, info, `pip-lv99-${geometry.name}-opened-chest`);
+    expect(state.result.coin_breakdown).toMatchObject({ visible: true, reward: quote,
+      detail_text: 'Chest 300 + Pip Lv99 bonus 150', total_text: 'Total 450 coins' });
+    const [left, top, width, height] = state.result.coin_breakdown.rect;
+    const [panelLeft, panelTop, panelWidth, panelHeight] = state.settlement.panel_rect;
+    expect(left).toBeGreaterThanOrEqual(panelLeft);
+    expect(top).toBeGreaterThanOrEqual(panelTop);
+    expect(left + width).toBeLessThanOrEqual(panelLeft + panelWidth);
+    expect(top + height).toBeLessThanOrEqual(panelTop + panelHeight);
+    const paidSave = await page.evaluate(() => localStorage.getItem('growWithPip.coinWallet.v1'));
+    await openModeMenu(page);
+    expect((await wallet(page)).balance, 'Home does not credit the opened chest again.').toBe(450);
+    await page.reload();
+    await enterGame(page, { home: true });
+    await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(450);
+    expect(await page.evaluate(() => localStorage.getItem('growWithPip.coinWallet.v1')),
+      'The paid receipt and its quote survive reload unchanged.').toBe(paidSave);
+    await info.attach(`pip-lv99-${geometry.name}-reward`, {
+      body: JSON.stringify({ quote, displayed: state.result.coin_breakdown, wallet: await wallet(page) }, null, 2),
+      contentType: 'application/json'
+    });
+    expect(errors).toEqual([]);
+  });
 }

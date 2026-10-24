@@ -139,6 +139,7 @@ var _pair_words: Array[String] = []
 var _pair_proposed_pair: int = 0
 var _pair_save_failed: bool = false
 var _pair_settlement_pending: bool = false
+var _chest_quote_failed: bool = false
 var duck: Mascot
 var _header_duck_slot: Panel
 var _header_duck_art_slot: Control
@@ -819,7 +820,9 @@ func _build_controls() -> void:
 	column.add_child(_pop)
 	_pop._reward_presentation.confetti_requested.connect(_fragment_confetti_requested.bind("pop"))
 	_pop_rewards = PopRewardRoom.new()
-	_pop_rewards.credit_coins = _credit_coins
+	_pop_rewards.credit_coins = _credit_chest_coins
+	_pop_rewards.reserve_chest_reward = _reserve_chest_reward
+	_pop_rewards.chest_reward = _chest_reward
 	_pop_rewards.coins_released.connect(_present_room_coins)
 	_pop_rewards.name = "PopRewardRoom"
 	_pop_rewards.max_chests = 0
@@ -839,6 +842,7 @@ func _build_controls() -> void:
 	_pop_rewards.changed.connect(_publish_pop_rewards)
 	_pop_rewards.hide()
 	column.add_child(_pop_rewards)
+	_pop_rewards._retry.pressed.connect(_retry_chest_professional_progress)
 	_jelly = JellyMatch.new()
 	_jelly.name = "JellyMatch"
 	_jelly.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -879,7 +883,9 @@ func _build_controls() -> void:
 	_word_jelly.finish_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 	_word_jelly._reward_presentation.confetti_requested.connect(_fragment_confetti_requested.bind("word_jelly"))
 	_jelly_rewards = PopRewardRoom.new()
-	_jelly_rewards.credit_coins = _credit_coins
+	_jelly_rewards.credit_coins = _credit_chest_coins
+	_jelly_rewards.reserve_chest_reward = _reserve_chest_reward
+	_jelly_rewards.chest_reward = _chest_reward
 	_jelly_rewards.coins_released.connect(_present_room_coins)
 	_jelly_rewards.name = "JellyRewardRoom"
 	_jelly_rewards.storage_kind = "jelly"
@@ -897,6 +903,7 @@ func _build_controls() -> void:
 	_jelly_rewards.changed.connect(_publish_jelly_rewards)
 	_jelly_rewards.hide()
 	column.add_child(_jelly_rewards)
+	_jelly_rewards._retry.pressed.connect(_retry_chest_professional_progress)
 	_jelly_rewards_parent = column
 	_settlement_dialog = SettlementDialog.new()
 	add_child(_settlement_dialog)
@@ -1126,6 +1133,8 @@ func _current_round_ended() -> bool:
 		return is_instance_valid(_active_jelly()) and _active_jelly().game.phase == "finished"
 	if _mode_id == "pop":
 		return is_instance_valid(_pop) and _pop.game.phase == "finished"
+	if _mode_id == "phrase" and is_instance_valid(_phrase) and _phrase.completion_pending:
+		return true
 	return _mode_id in ["match", "memory", "phrase"] and model.phase == "won"
 
 
@@ -1162,6 +1171,11 @@ func _home_mode_available() -> bool:
 func _settle_completed_round_rewards() -> bool:
 	if not _current_round_ended():
 		return true
+	if _mode_id == "phrase" and _phrase.completion_pending and _professional_input_blocked():
+		_defer_professional_phrase_completion()
+		_refresh()
+		_announce_status("Your professional progress is waiting to be saved. Choose Retry saving.")
+		return false
 	# Home and replay share the same durable receipts as opening by hand.
 	# Settle an in-flight opening before leaving, including an incomplete hold.
 	if _is_jelly_mode():
@@ -1179,7 +1193,14 @@ func _settle_completed_round_rewards() -> bool:
 			_announce_status("Your coins are waiting to be saved. Choose Retry save.")
 			return false
 	else:
+		if model.chest_earned and not _prepare_single_chest_reward():
+			_refresh()
+			return false
 		_stop_round_celebration()
+		if _mode_id == "phrase" and _phrase.completion_pending:
+			_phrase.accept_completion()
+			if model.phase != "won":
+				return false
 		_settling_chest = true
 		audio.stop_chest_performance()
 		if model.chest_earned and model.chest_state == "closed":
@@ -1343,6 +1364,7 @@ func _professional_changed(state: Dictionary) -> void:
 		feedback_timer.paused = true
 		_memory.pause(true)
 		_pause_phrase()
+		_defer_professional_phrase_completion()
 		_pop.pause()
 		_stop_pop_listening()
 		_sync_jelly()
@@ -1355,6 +1377,13 @@ func _professional_changed(state: Dictionary) -> void:
 		and professional.can_play(_round_id) and _mode_menu_open():
 		_resume_professional_source = ""
 		choose_mode.call_deferred(_mode_id)
+	if not _professional_input_blocked():
+		if _chest_quote_failed:
+			_retry_reward_save.call_deferred()
+		if _mode_id == "pop" and _pop_rewards._save_failed:
+			_pop_rewards.retry_save.call_deferred()
+		elif _is_jelly_mode() and _jelly_rewards._save_failed:
+			_jelly_rewards.retry_save.call_deferred()
 	_refresh.call_deferred()
 
 
@@ -1438,6 +1467,19 @@ func _retry_professional() -> void:
 		_professional_round_ready(professional.pending.selection, professional.pending.content, professional.pending.source)
 	else:
 		professional.retry()
+
+
+func _retry_chest_professional_progress() -> void:
+	if _round_context.get("track") == "professional" and (professional.phase == "failed" or professional.session.snapshot().blocked):
+		_retry_professional()
+
+
+func _defer_professional_phrase_completion() -> void:
+	if _mode_id == "phrase" and _phrase.completion_pending:
+		# Keep the accepted final answer pending while exposing the shared storage
+		# retry outside the celebration. Recovery will replay its invitation.
+		_stop_round_celebration()
+		_celebration_seen_id = ""
 
 
 func _cancel_professional() -> void:
@@ -1972,6 +2014,7 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	_pair_proposed_pair = model.chest_reward_pair
 	_pair_save_failed = false
 	_pair_settlement_pending = false
+	_chest_quote_failed = false
 	_pair_reward.clear()
 	_memory_reward.reset()
 	if _mode_id == "memory":
@@ -2870,6 +2913,10 @@ func _begin_round_celebration(chest_count: int) -> void:
 	if _mode_id not in ["match", "memory", "phrase", "pop", "jelly", "word_jelly"] \
 		or (chest_count <= 0 and _mode_id not in ["match", "memory"]) or _round_id.is_empty() or _celebration_seen_id == _round_id:
 		return
+	if _mode_id == "phrase" and _professional_input_blocked():
+		return
+	if chest_count > 0 and _mode_id in ["match", "memory", "phrase"] and not _prepare_single_chest_reward():
+		return
 	_celebration_seen_id = _round_id
 	_celebration_suspended = false
 	_stop_controller_actions()
@@ -2894,6 +2941,11 @@ func _begin_round_celebration(chest_count: int) -> void:
 	if not _mode_menu_open() and not collection_page.visible and not _page_hidden:
 		_settlement_dialog.open(true)
 	_round_celebration.begin(_round_id, theme_id, data.chests, chest_count, reduced_motion, false, score, tier, chest_announced, summary, _mode_id == "memory")
+	var quote: Dictionary = {}
+	if chest_count > 0:
+		quote = _pop_rewards.result_chest_reward() if _mode_id == "pop" else \
+			_jelly_rewards.result_chest_reward() if _is_jelly_mode() else _chest_reward(_single_chest_receipt())
+	_round_celebration.set_chest_reward(quote)
 	_round_celebration.set_narration_playing(audio.voice.playing and not audio.muted and audio.available)
 	if _round_celebration_allowed():
 		_start_round_celebration_audio()
@@ -2966,6 +3018,10 @@ func _on_round_celebration_finished(round_id: String) -> void:
 
 func _accept_round_chest(round_id: String) -> void:
 	if round_id != _round_id or not _round_celebration_allowed() or not _round_celebration.is_ready():
+		return
+	if _mode_id == "phrase" and _professional_input_blocked():
+		_defer_professional_phrase_completion()
+		_refresh()
 		return
 	if _mode_id in ["match", "memory"] and not model.chest_earned:
 		_play_ui_click()
@@ -3225,6 +3281,8 @@ func _memory_prompt() -> void:
 func _refresh() -> void:
 	if _rebuilding:
 		return
+	if _mode_id == "phrase" and _phrase.completion_pending and not _save_error and not _settling_chest and not _professional_input_blocked():
+		_begin_round_celebration(1)
 	if _mode_id in ["match", "memory"] and model.phase == "won" and not _settling_chest and not _pair_save_failed:
 		_sync_pair_reward()
 	var pair_revealing: bool = _pair_reward_revealing()
@@ -3343,6 +3401,10 @@ func _refresh() -> void:
 	var result_message: String = ""
 	if model.chest_state == "opening":
 		result_message = "Your chest is open. You can let go!" if chest.opening_committed() else "Keep holding to open. Release to cancel."
+	if earned_chest and _mode_id in ["match", "memory", "phrase"]:
+		_prepare_single_chest_reward()
+	else:
+		_single_result.set_chest_reward({})
 	_single_result.configure(palette, earned_chest, saving_reward, _save_error, model.chest_state == "opened", result_message)
 	_single_result.retry_button.set("accessibility_description", medal_progress.error if _save_error else "")
 	var actions_blocked: bool = saving_reward or _save_error
@@ -4189,13 +4251,71 @@ func _credit_coins(id: String, tier: int) -> Dictionary:
 	if not coin_wallet.ready or not coin_wallet.error.is_empty():
 		coin_wallet.load_state()
 	var result: Dictionary = coin_wallet.credit(id, tier)
+	_update_coin_credit_status(result)
+	return result
+
+
+func _chest_reward(id: String) -> Dictionary:
+	return coin_wallet.chest_reward(id)
+
+
+func _reserve_chest_reward(id: String, tier: int) -> Dictionary:
+	if not coin_wallet.ready or not coin_wallet.error.is_empty():
+		coin_wallet.load_state()
+	var pip_level: int = growth.level
+	if not coin_wallet.has_chest_reward_context(id):
+		if _round_context.get("track") == "professional":
+			var career: Dictionary = _professional_profile_for(_round_context)
+			if not career.get("ready", false):
+				return {"ok": false, "reward": {}, "error": "Load Pip's professional progress before saving this chest reward."}
+			pip_level = int(career.level)
+		else:
+			# Startup recovery can precede an active course context. Existing
+			# quotes and receipts above retain their original policy and amount.
+			if not growth.ready:
+				_growth_save_failed = not growth.load_state()
+				if not growth.ready:
+					return {"ok": false, "reward": {}, "error": "Load Pip's learning progress before saving this chest reward."}
+			pip_level = growth.level
+	var result: Dictionary = coin_wallet.reserve_chest(id, tier, pip_level)
+	_coin_counter.available = coin_wallet.ready and bool(result.get("ok", false))
+	_coin_counter._update_description()
+	_coin_counter.queue_redraw()
+	return result
+
+
+func _credit_chest_coins(id: String, tier: int) -> Dictionary:
+	var reserved: Dictionary = _reserve_chest_reward(id, tier)
+	if not bool(reserved.get("ok", false)):
+		return {"ok": false, "duplicate": false, "amount": 0, "balance": coin_wallet.balance,
+			"error": str(reserved.get("error", "This chest reward could not be saved."))}
+	var result: Dictionary = coin_wallet.credit_chest(id, tier, int(reserved.reward.pip_level))
+	_update_coin_credit_status(result)
+	return result
+
+
+func _update_coin_credit_status(result: Dictionary) -> void:
 	_coin_counter.available = coin_wallet.ready and bool(result.ok)
 	_coin_counter._update_description()
 	_coin_counter.queue_redraw()
 	if result.ok and result.duplicate and not _coin_flight.snapshot().active \
 		and _pending_coin_reward.is_empty() and not _pop_rewards_shown and not _jelly_rewards_shown:
 		_coin_flight.sync(coin_wallet.balance)
-	return result
+
+
+func _prepare_single_chest_reward() -> bool:
+	var id: String = _single_chest_receipt()
+	var quote: Dictionary = _chest_reward(id)
+	if quote.is_empty():
+		var result: Dictionary = _reserve_chest_reward(id, _single_reward_tier())
+		if not bool(result.get("ok", false)):
+			_chest_quote_failed = true
+			_save_error = true
+			_single_result.set_chest_reward({})
+			return false
+		quote = result.reward
+	_single_result.set_chest_reward(quote)
+	return true
 
 
 func _present_room_coins(id: String, reward: Dictionary, origin: Vector2, animate: bool) -> void:
@@ -4217,7 +4337,7 @@ func _commit_fragment(explicit_retry: bool = false) -> void:
 	if _mode_id == "memory" and tier == 0:
 		return
 	var receipt: String = _single_chest_receipt()
-	var credit: Dictionary = _credit_coins(receipt, tier)
+	var credit: Dictionary = _credit_chest_coins(receipt, tier)
 	if not credit.ok:
 		_save_error = true
 		_refresh()
@@ -4232,6 +4352,7 @@ func _commit_fragment(explicit_retry: bool = false) -> void:
 		_refresh()
 		return
 	_save_error = false
+	_chest_quote_failed = false
 	if not _chest_reward_announced:
 		_chest_reward_announced = true
 		_present_coins(receipt, _pending_coin_reward, chest.get_global_transform() * chest._cavity_origin(), not _settling_chest)
@@ -4248,6 +4369,20 @@ func _commit_fragment(explicit_retry: bool = false) -> void:
 func _retry_reward_save() -> void:
 	if not _save_error or collection_page.visible:
 		return
+	_retry_chest_professional_progress()
+	if _professional_input_blocked():
+		_refresh()
+		return
+	if _chest_quote_failed:
+		if not _prepare_single_chest_reward():
+			_refresh()
+			return
+		_chest_quote_failed = false
+		# Recovering the quote must not hide another unfinished reward save.
+		_save_error = _pair_save_failed or not _progress_ready or model.chest_state == "opened"
+		if not _save_error:
+			_refresh()
+			return
 	if _pair_save_failed:
 		if not _progress_ready:
 			_load_collected_rewards()
@@ -5591,7 +5726,7 @@ func _load_collected_rewards() -> void:
 		for mode in ["match", "memory"]:
 			var pair: Dictionary = medal_progress.pair_round(mode)
 			if pair.get("awarded", false) and not pair.get("settled", false):
-				var credit: Dictionary = _credit_coins("pair:" + mode + ":" + str(pair.id), int(pair.get("tier", 1)))
+				var credit: Dictionary = _credit_chest_coins("pair:" + mode + ":" + str(pair.id), int(pair.get("tier", 1)))
 				_progress_ready = credit.ok and medal_progress.settle_pair_reward(mode, pair.id)
 				if not _progress_ready:
 					break
@@ -5794,7 +5929,7 @@ func _settle_pair_reward() -> bool:
 	var pair: Dictionary = medal_progress.pair_round(_mode_id)
 	if pair.get("id", "") == _round_id and pair.get("awarded", false):
 		_pair_settlement_pending = true
-		var credit: Dictionary = _credit_coins(_single_chest_receipt(), int(pair.get("tier", 1)))
+		var credit: Dictionary = _credit_chest_coins(_single_chest_receipt(), int(pair.get("tier", 1)))
 		if not credit.ok or not medal_progress.settle_pair_reward(_mode_id, _round_id):
 			_pair_save_failed = true
 			_save_error = true
@@ -5974,6 +6109,7 @@ func _publish_growth_view() -> void:
 	var state := {"visible": collection_page.visible, "controls": controls}
 	state["game_area"] = _growth_control(_content_margins)
 	state["result"] = _growth_control(_single_result)
+	state.result["coin_breakdown"] = _single_result.coin_breakdown.snapshot()
 	state.result["controls"] = []
 	for control: Control in [chest_button, _single_result.retry_button, _single_result.replay_button, _single_result.home_button]:
 		state.result.controls.append(_growth_control(control))

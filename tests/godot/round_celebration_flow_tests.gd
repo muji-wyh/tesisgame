@@ -490,11 +490,23 @@ func check_interruption_and_replacement(app) -> void:
 		var identity: String = view.snapshot().round_id
 		view.advance(1.9)
 		check_fullscreen_confetti(app, kind + " interruption")
+		var coins_before: int = app.coin_wallet.balance
+		var quote: Dictionary = app.coin_wallet.chest_reward(app._single_chest_receipt())
 		await cover(app, kind, true)
 		var paper: Dictionary = app._reward_confetti.snapshot()
 		app._advance_ui(4.0)
 		view.advance(4.0)
 		view.action_button.pressed.emit()
+		if kind == "menu":
+			check(app._mode_menu_open() and not view.is_active() and not app._phrase.completion_pending
+				and not app._settlement_dialog_open() and app.coin_wallet.balance == coins_before + int(quote.total),
+				"Home accepts the pending Phrase completion and settles its frozen chest once")
+			await cover(app, kind, false)
+			check(app._round_id != identity and not view.is_active() and not app._phrase.completion_pending
+				and app._phrase.game.phase != "finished" and not app._settlement_dialog_open()
+				and app.coin_wallet.balance == coins_before + int(quote.total),
+				"Reentering Phrase after Home starts a fresh game without replaying the old reward")
+			continue
 		check(view.snapshot().paused and not view.snapshot().ready and app._phrase.completion_pending
 			and not app._reward_confetti.snapshot().visible
 			and app._reward_confetti.snapshot().ages == paper.ages,
@@ -515,15 +527,10 @@ func check_interruption_and_replacement(app) -> void:
 		view.action_button.pressed.emit()
 		await cover(app, kind, false)
 		view.set_process(false)
-		if kind == "menu":
-			check(not view.is_active() and app._round_id != identity and app._phrase.game.phase != "finished"
-				and not app._settlement_dialog_open(),
-				"Home settles the ended Phrase result and reentry starts a fresh round")
-		else:
-			check(not view.is_active() and app._round_id == identity and app._phrase.game.phase == "finished"
-				and app.chest_button.is_visible_in_tree() and app.model.chest_state == "closed"
-				and app._reward_confetti.snapshot().keys == paper.keys,
-				kind + " restores the same direct chest without replaying or opening it")
+		check(not view.is_active() and app._round_id == identity and app._phrase.game.phase == "finished"
+			and app.chest_button.is_visible_in_tree() and app.model.chest_state == "closed"
+			and app._reward_confetti.snapshot().keys == paper.keys,
+			kind + " restores the same direct chest without replaying or opening it")
 	var old_id: String = app._round_id
 	var before: int = pieces(app)
 	check(app.new_round(991, false, "", "phrase"), "A replacement game settles the earned Phrase chest")
@@ -830,6 +837,7 @@ func check_entrance_home_exit(app, mode: String) -> void:
 	var identity: String = app._round_id
 	var room = app._pop_rewards if mode == "pop" else app._jelly_rewards
 	var before: int = app.coin_wallet.balance
+	var reward_total: int = int(room.result_chest_reward().total)
 	check(view.is_active() and not view.is_ready(), mode + ": the earned result starts its entrance before Home")
 	if not view.is_active():
 		return
@@ -839,7 +847,7 @@ func check_entrance_home_exit(app, mode: String) -> void:
 		mode + ": Home stays available during the entrance while replay and chest input wait")
 	view.home_button.pressed.emit()
 	check(app._mode_menu_open() and not view.is_active() and not app._settlement_dialog_open()
-		and room.snapshot().opened_count == 1 and not room.has_pending() and app.coin_wallet.balance == before + 100,
+		and room.snapshot().opened_count == 1 and not room.has_pending() and app.coin_wallet.balance == before + reward_total,
 		mode + ": Home immediately leaves the entrance and durably settles the final chest once")
 	var path: String = app.pop_reward_save_path if mode == "pop" else app.jelly_reward_save_path
 	var saved: String = FileAccess.get_file_as_string(path)
@@ -847,10 +855,10 @@ func check_entrance_home_exit(app, mode: String) -> void:
 	view.performance_finished.emit(identity)
 	view.open_requested.emit(identity)
 	view.home_button.pressed.emit()
-	check(app._mode_menu_open() and not view.is_active() and app.coin_wallet.balance == before + 100
+	check(app._mode_menu_open() and not view.is_active() and app.coin_wallet.balance == before + reward_total
 		and FileAccess.get_file_as_string(path) == saved,
 		mode + ": late entrance actions cannot reopen the old room or pay its chest again")
 	app.choose_mode(mode)
 	check(app._round_id != identity and not app._mode_menu_open() and not app._settlement_dialog_open()
-		and app.coin_wallet.balance == before + 100,
+		and app.coin_wallet.balance == before + reward_total,
 		mode + ": returning from Home starts a fresh round with the settled wallet")

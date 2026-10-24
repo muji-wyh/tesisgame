@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Wallet = preload("res://scripts/coin_wallet.gd")
+const Economy = preload("res://scripts/coin_economy.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -10,6 +11,7 @@ class BrowserStorage extends RefCounted:
 	var text: Variant = null
 	var fail_write: bool = false
 	var fail_read: bool = false
+	var lose_ack_once: bool = false
 	var conflict_text: Variant = null
 	var writes: int = 0
 	var calls: int = 0
@@ -26,6 +28,9 @@ class BrowserStorage extends RefCounted:
 			return false
 		text = value
 		writes += 1
+		if lose_ack_once:
+			lose_ack_once = false
+			return false
 		return true
 
 
@@ -57,6 +62,13 @@ func _load_corrupt(wallet) -> bool:
 	return loaded
 
 
+func _save_quotes(balance_value: Variant, receipts: Variant, rewards: Variant) -> String:
+	var config := ConfigFile.new()
+	config.parse(_save(balance_value, receipts, Wallet.VERSION))
+	config.set_value("wallet", "chest_rewards", rewards)
+	return config.encode_to_text()
+
+
 func _run() -> void:
 	_test_rewards_and_receipts()
 	_test_retry_and_conflicts()
@@ -67,9 +79,14 @@ func _run() -> void:
 	_test_exact_credit_migration()
 	_test_exact_credit_retry_and_conflicts()
 	_test_exact_credit_validation()
+	_test_chest_reservations()
+	_test_chest_retry_and_conflicts()
+	_test_chest_legacy_receipts()
+	_test_chest_validation_and_limits()
 	_test_native_durability()
 	_test_native_spending()
 	_test_native_exact_credit()
+	_test_native_chest_quotes()
 	print("Coin wallet: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -366,9 +383,9 @@ func _test_exact_credit_migration() -> void:
 			"after": original_balance + 3, "error": ""}, "A small reward saves its exact integer amount and balance delta")
 		var config := ConfigFile.new()
 		legacy["combo:first"] = 3
-		check(config.parse(storage.text) == OK and config.get_value("wallet", "version") == 3
+		check(config.parse(storage.text) == OK and config.get_value("wallet", "version") == Wallet.VERSION
 			and config.get_value("wallet", "receipts") == legacy,
-			"The first exact credit migrates v1 or v2 to v3 while preserving every old signed receipt")
+			"The first exact credit migrates old wallets while preserving every old signed receipt")
 		var saved: String = storage.text
 		var writes: int = storage.writes
 		check(wallet.credit_amount("combo:first", 3).duplicate and storage.writes == writes and storage.text == saved,
@@ -462,6 +479,244 @@ func _test_exact_credit_validation() -> void:
 		"A maximum exact balance still spends only a supported 50-coin price")
 	check(wallet.load_state() and wallet.balance == Wallet.MAX_BALANCE % 50,
 		"The maximum signed history reconstructs its small remainder without precision loss")
+
+
+func _test_chest_reservations() -> void:
+	var storage := BrowserStorage.new()
+	var wallet := Wallet.new("user://unused-chest-quotes.cfg", storage)
+	check(not wallet.reserve_chest("chest:unloaded", 1, 5).ok
+		and not wallet.credit_chest("chest:unloaded", 1, 5).ok and storage.calls == 0,
+		"Chest reservations and payment require a loaded wallet")
+	check(wallet.load_state() and wallet.chest_reward("chest:first").is_empty()
+		and not wallet.has_chest_reward_context("chest:first"), "A new chest has no invented durable quote or payout context")
+	var reserved: Dictionary = wallet.reserve_chest("chest:first", 3, 20)
+	var expected: Dictionary = Economy.chest_reward(3, 20)
+	check(reserved.ok and reserved.reward == expected and wallet.balance == 0 and wallet._receipts.is_empty()
+		and storage.writes == 1, "Settlement durably freezes base, Pip bonus, and total before any coins are paid")
+	check(wallet.has_chest_reward_context("chest:first") and storage.writes == 1,
+		"A durable reservation supplies payout context without another read or write")
+	reserved.reward.total = 999
+	var returned: Dictionary = wallet.chest_reward("chest:first")
+	returned.pip_level = 99
+	check(wallet.chest_reward("chest:first") == expected, "Returned quote dictionaries cannot mutate the wallet's frozen reward")
+	check(wallet.reserve_chest("chest:first", 3, 99).reward == expected and storage.writes == 1,
+		"Later Pip levels preserve a saved quote without another write")
+	check(not wallet.reserve_chest("chest:first", 4, 20).ok and storage.writes == 1,
+		"A chest ID cannot be reused for another tier")
+	check(not wallet.credit("chest:first", 3).ok and not wallet.credit_amount("chest:first", 164).ok
+		and not wallet.spend("chest:first", 50).ok and storage.writes == 1,
+		"Fixed credits and purchases cannot reinterpret a reserved chest's identity or amount")
+	var credited: Dictionary = wallet.credit_chest("chest:first", 3, 99)
+	check(credited.ok and not credited.duplicate and credited.amount == 165 and credited.chest_reward == expected
+		and wallet.balance == 165 and storage.writes == 2, "The frozen chest total credits exactly once after its reservation")
+	check(wallet.credit_amount("combo:one", 3).amount == 3 and wallet.credit("collection:fixed", 2).amount == 100
+		and wallet.spend("power:one", 50).amount == -50, "Fixed collections, combo coins, and purchases retain their existing amounts")
+	var reloaded := Wallet.new("user://unused-chest-quotes.cfg", storage)
+	check(reloaded.load_state() and reloaded.balance == 218 and reloaded.chest_reward("chest:first") == expected,
+		"Every wallet operation preserves saved chest quotes through reload")
+	var writes: int = storage.writes
+	var duplicate: Dictionary = reloaded.credit_chest("chest:first", 3, 0)
+	check(duplicate.ok and duplicate.duplicate and duplicate.amount == 0 and duplicate.chest_reward.total == 165
+		and storage.writes == writes, "Reward acknowledgment retries expose the original settlement total without another payment")
+	check(not reloaded.credit_chest("chest:first", 2, 99).ok and storage.writes == writes,
+		"Even paid chest identities reject a changed tier")
+
+
+func _test_chest_retry_and_conflicts() -> void:
+	var storage := BrowserStorage.new()
+	var wallet := Wallet.new("user://unused-chest-retry.cfg", storage)
+	wallet.load_state()
+	storage.fail_write = true
+	var failed: Dictionary = wallet.reserve_chest("chest:draft", 2, 5)
+	check(not failed.ok and failed.reward.total == 104 and wallet.balance == 0
+		and wallet.chest_reward("chest:draft").is_empty() and storage.text == null,
+		"A failed quote save changes no durable state and returns its retryable draft")
+	check(wallet.has_chest_reward_context("chest:draft"), "A frozen draft supplies its known payout even before reservation saves")
+	failed.reward.pip_level = 99
+	storage.fail_read = true
+	check(not wallet.load_state() and not wallet.has_chest_reward_context("chest:draft"),
+		"An unavailable wallet cannot confirm draft payout context")
+	storage.fail_read = false
+	check(wallet.load_state() and wallet.has_chest_reward_context("chest:draft")
+		and not wallet.reserve_chest("chest:draft", 3, 99).ok,
+		"A failed draft retains its tier across failed and successful reloads")
+	storage.fail_write = false
+	check(wallet.reserve_chest("chest:draft", 2, 99).reward == Economy.chest_reward(2, 5)
+		and wallet.chest_reward("chest:draft").pip_level == 5, "Same-session retry keeps the first Pip level after reloading storage")
+	storage.fail_write = true
+	check(not wallet.credit_chest("chest:draft", 2, 99).ok and wallet.balance == 0
+		and wallet.chest_reward("chest:draft").total == 104, "Failed payment preserves the already-saved entitlement")
+	storage.fail_write = false
+	check(wallet.load_state() and wallet.credit_chest("chest:draft", 2, 0).amount == 104,
+		"Payment retry after reload credits the original quote")
+	var writes: int = storage.writes
+	var recovered := Wallet.new("user://unused-chest-retry.cfg", storage)
+	check(recovered.load_state() and recovered.credit_chest("chest:draft", 2, 99).duplicate
+		and recovered.balance == 104 and storage.writes == writes,
+		"Interrupted chest consumption acknowledgment cannot pay again after wallet success")
+	storage.lose_ack_once = true
+	var lost_quote: Dictionary = recovered.reserve_chest("chest:lost-quote", 1, 1)
+	check(not lost_quote.ok and lost_quote.reward.total == 51 and recovered.chest_reward("chest:lost-quote").is_empty(),
+		"A lost quote-save acknowledgment is not reported as confirmed")
+	writes = storage.writes
+	check(recovered.load_state() and recovered.reserve_chest("chest:lost-quote", 1, 99).reward.total == 51
+		and storage.writes == writes, "Reload recovers a saved quote after its acknowledgment was lost")
+	storage.lose_ack_once = true
+	check(not recovered.credit_chest("chest:lost-quote", 1, 99).ok and recovered.balance == 104,
+		"A lost payment acknowledgment preserves the last confirmed in-memory balance")
+	writes = storage.writes
+	check(recovered.load_state() and recovered.credit_chest("chest:lost-quote", 1, 99).duplicate
+		and recovered.balance == 155 and storage.writes == writes,
+		"Reload finds a payment committed before its acknowledgment was lost")
+	var stale := Wallet.new("user://unused-chest-retry.cfg", storage)
+	check(stale.load_state() and recovered.reserve_chest("chest:race", 1, 9).ok,
+		"Two sessions can observe the same wallet before one reserves a chest")
+	var saved: String = storage.text
+	var calls: int = storage.calls
+	check(not stale.reserve_chest("chest:race", 1, 99).ok and storage.calls == calls and storage.text == saved,
+		"A stale session cannot overwrite a different session's saved quote")
+	check(stale.load_state() and stale.reserve_chest("chest:race", 1, 99).reward.pip_level == 9,
+		"The durable quote wins over a stale session's local draft")
+	var concurrent_quotes: Dictionary = stale._chest_rewards.duplicate(true)
+	concurrent_quotes["chest:write-race"] = Economy.chest_reward(2, 12)
+	storage.conflict_text = _save_quotes(stale.balance, stale._receipts, concurrent_quotes)
+	check(not stale.reserve_chest("chest:write-race", 2, 99).ok and stale.chest_reward("chest:write-race").is_empty(),
+		"A write-time compare-and-swap conflict cannot confirm an overwritten quote")
+	check(stale.load_state() and stale.credit_chest("chest:write-race", 2, 99).amount == 106,
+		"Write-conflict recovery pays the winning stored quote")
+	check(not recovered.credit_chest("chest:draft", 2, 5).ok,
+		"Even duplicate chest acknowledgments require a current wallet snapshot")
+
+
+func _test_chest_legacy_receipts() -> void:
+	for version: int in [1, 2, 3]:
+		var storage := BrowserStorage.new()
+		var receipts: Dictionary = {"chest:paid": 100}
+		if version >= 2:
+			receipts["power:old"] = -50
+		if version == 3:
+			receipts["combo:old"] = 3
+		var original_balance: int = 100 if version == 1 else 53 if version == 3 else 50
+		storage.text = _save(original_balance, receipts, version)
+		var wallet := Wallet.new("user://unused-legacy-quotes.cfg", storage)
+		check(wallet.load_state() and wallet.chest_reward("chest:paid").is_empty(), "An old wallet loads without inventing quote history")
+		check(wallet.has_chest_reward_context("chest:paid") and storage.calls == 0
+			and not wallet.has_chest_reward_context("chest:unclaimed"),
+			"A positive old receipt supplies its original payout without loading growth or rewriting history")
+		storage.fail_write = true
+		check(not wallet.reserve_chest("chest:paid", 2, 99).ok and wallet.load_state()
+			and not wallet.reserve_chest("chest:paid", 3, 99).ok,
+			"Failed legacy quote migration preserves its reserved tier across reload")
+		storage.fail_write = false
+		var paid: Dictionary = wallet.credit_chest("chest:paid", 2, 99)
+		check(paid.ok and paid.duplicate and paid.amount == 0 and paid.chest_reward.base == 100
+			and paid.chest_reward.bonus == 0 and paid.chest_reward.total == 100
+			and paid.chest_reward.policy == Economy.LEGACY_CHEST_REWARD_POLICY and wallet.balance == original_balance,
+			"A paid legacy chest keeps its original amount without a retroactive Pip bonus")
+		check(wallet.credit_chest("chest:unclaimed", 2, 99).amount == 150,
+			"An unclaimed legacy-era chest receives a current-level quote on its first presentation or claim")
+		check(wallet.credit("collection:unchanged", 2).amount == 100 and wallet.credit_amount("combo:new", 1).amount == 1,
+			"Migrating chest metadata does not change fixed or exact credits")
+		var reloaded := Wallet.new("user://unused-legacy-quotes.cfg", storage)
+		check(reloaded.load_state() and reloaded.chest_reward("chest:paid").total == 100
+			and reloaded.chest_reward("chest:unclaimed").total == 150
+			and reloaded.balance == original_balance + 251, "Legacy and new chest policies survive the same v4 save")
+		if version == 3:
+			check(reloaded.credit_amount("combo:old", 3).duplicate
+				and reloaded.chest_reward("combo:old").is_empty(), "Existing v3 combo receipts remain exact and are not promoted to chest rewards")
+		if version >= 2:
+			check(not reloaded.has_chest_reward_context("power:old") and not reloaded.reserve_chest("power:old", 1, 99).ok,
+				"A legacy purchase receipt cannot become a chest entitlement")
+
+
+func _test_chest_validation_and_limits() -> void:
+	var valid: Dictionary = Economy.chest_reward(2, 9)
+	var invalid: Array = [null, [], {"chest:test": []}]
+	for field: String in ["policy", "pip_level", "tier", "base", "bonus", "total"]:
+		var missing: Dictionary = valid.duplicate()
+		missing.erase(field)
+		invalid.append({"chest:test": missing})
+	for field: String in ["pip_level", "tier", "base", "bonus", "total"]:
+		for value: Variant in [false, 1.0, "1"]:
+			var wrong_type: Dictionary = valid.duplicate()
+			wrong_type[field] = value
+			invalid.append({"chest:test": wrong_type})
+	for change: Dictionary in [{"policy": "future"}, {"pip_level": -1}, {"pip_level": 100}, {"tier": 0},
+		{"tier": Wallet.MAX_TIER + 1}, {"base": 99}, {"bonus": 7}, {"total": 107}, {"extra": 0},
+		{"base": Wallet.MAX_BALANCE, "bonus": 1}, {"policy": Economy.LEGACY_CHEST_REWARD_POLICY, "pip_level": 0, "bonus": 0, "total": 100}]:
+		var malformed: Dictionary = valid.duplicate()
+		malformed.merge(change, true)
+		invalid.append({"chest:test": malformed})
+	invalid.append({"bad\nid": valid})
+	for rewards: Variant in invalid:
+		var storage := BrowserStorage.new()
+		storage.text = _save_quotes(0, {}, rewards)
+		var original: String = storage.text
+		var wallet := Wallet.new("user://unused-invalid-quotes.cfg", storage)
+		check(not wallet.load_state() and not wallet.ready and storage.text == original and storage.calls == 0,
+			"Malformed chest metadata cannot be loaded or rewrite its original save")
+	for receipt: int in [100, -50]:
+		var storage := BrowserStorage.new()
+		storage.text = _save_quotes(maxi(0, receipt), {"chest:test": receipt} if receipt > 0 else {"funding": 50, "chest:test": -50}, {"chest:test": valid})
+		check(not Wallet.new("user://unused-invalid-quotes.cfg", storage).load_state(),
+			"A chest quote must agree with its receipt and cannot belong to a debit")
+	var storage := BrowserStorage.new()
+	var wallet := Wallet.new("user://unused-quote-limits.cfg", storage)
+	wallet.load_state()
+	for id: String in ["", " ", "bad\nreceipt", " leading", "x".repeat(513)]:
+		check(not wallet.reserve_chest(id, 1, 0).ok and storage.calls == 0, "Chest quote IDs obey permanent receipt identity validation")
+	for tier: int in [-1, Wallet.MAX_TIER + 1, Wallet.MAX_TIER]:
+		check(not wallet.reserve_chest("chest:too-large", tier, 99).ok and storage.calls == 0,
+			"Unsupported scaled payouts fail before integer multiplication or persistence")
+	@warning_ignore("integer_division")
+	var largest_tier: int = Wallet.MAX_BALANCE / 75
+	var largest: int = largest_tier * 75
+	check(wallet.credit_chest("chest:maximum", largest_tier, 99).amount == largest,
+		"The largest maximum-Pip tier remains exact within the supported balance")
+	check(wallet.reserve_chest("chest:overflow", 1, 99).ok and not wallet.credit_chest("chest:overflow", 1, 99).ok
+		and wallet.chest_reward("chest:overflow").total == 75 and not wallet._receipts.has("chest:overflow"),
+		"Balance overflow preserves the reserved reward without consuming its payment receipt")
+	check(wallet.spend("power:make-room", 100).ok and wallet.credit_chest("chest:overflow", 1, 0).amount == 75,
+		"A reserved payout remains collectible after spending creates enough room")
+	var reloaded := Wallet.new("user://unused-quote-limits.cfg", storage)
+	check(reloaded.load_state() and reloaded.balance == largest - 25
+		and reloaded.credit_chest("chest:maximum", largest_tier, 0).duplicate,
+		"Large scaled quotes and signed receipts reload without precision loss")
+	storage = BrowserStorage.new()
+	wallet = Wallet.new("user://unused-quote-size.cfg", storage)
+	wallet.load_state()
+	for index in range(Wallet.MAX_RECEIPTS):
+		wallet._chest_rewards["chest:%d" % index] = valid
+	check(not wallet.reserve_chest("chest:over-count", 1, 0).ok and storage.calls == 0,
+		"The quote count guard rejects a new reservation before writing")
+	wallet._chest_rewards.clear()
+	for index in range(10000):
+		wallet._chest_rewards[("chest:%d:" % index) + "x".repeat(480)] = valid
+	check(not wallet.reserve_chest("chest:over-bytes", 1, 0).ok and storage.calls == 0 and storage.text == null,
+		"Serialized quote metadata shares the wallet's existing four-megabyte size guard")
+
+
+func _test_native_chest_quotes() -> void:
+	var directory: String = "user://coin-quotes-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
+	check(DirAccess.make_dir_recursive_absolute(directory) == OK, "Create isolated native chest quote storage")
+	var path: String = directory + "/wallet.cfg"
+	var wallet := Wallet.new(path)
+	check(wallet.load_state() and DirAccess.make_dir_absolute(path + ".pending") == OK, "Block native quote staging")
+	check(not wallet.reserve_chest("chest:native", 3, 9).ok and not FileAccess.file_exists(path),
+		"A failed native quote save creates no durable entitlement or balance")
+	check(DirAccess.remove_absolute(path + ".pending") == OK and wallet.load_state()
+		and wallet.reserve_chest("chest:native", 3, 99).reward.pip_level == 9,
+		"Native quote retry preserves its first level across load_state")
+	check(DirAccess.rename_absolute(path, path + ".previous") == OK, "Interrupt native quote persistence between renames")
+	var recovered := Wallet.new(path)
+	check(recovered.load_state() and recovered.chest_reward("chest:native").total == 159 and recovered.balance == 0,
+		"Native journal recovery restores an unpaid quote without granting coins")
+	check(recovered.credit_chest("chest:native", 3, 99).amount == 159, "Native recovery pays the saved quote")
+	var reloaded := Wallet.new(path)
+	check(reloaded.load_state() and reloaded.credit_chest("chest:native", 3, 0).duplicate
+		and reloaded.balance == 159, "Native quote and receipt survive payment and reload together")
+	DirAccess.remove_absolute(path)
+	DirAccess.remove_absolute(directory)
 
 
 func _test_native_durability() -> void:

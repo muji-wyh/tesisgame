@@ -1,6 +1,9 @@
 extends SceneTree
 
 const Celebration = preload("res://scripts/round_celebration.gd")
+const Settlement = preload("res://scripts/round_settlement.gd")
+const SettlementDialog = preload("res://scripts/settlement_dialog.gd")
+const CoinBreakdown = preload("res://scripts/chest_coin_breakdown.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
 const Data = preload("res://scripts/game_data.gd")
 const THEMES := ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]
@@ -55,8 +58,11 @@ func _run() -> void:
 	_check_theme_updates(view, data.chests)
 	_check_reduced_and_stalls(view, data.chests)
 	_check_layouts(view, data.chests)
+	await _check_chest_reward_layout(view, data.chests)
 	if DisplayServer.get_name() != "headless":
 		await _render_review(view, data.chests)
+		view.hide()
+		await _render_chest_reward_review(data.chests)
 	view.stop()
 	view.free()
 	print("Round celebration: %d assertions, %d failures" % [checks, failures])
@@ -548,6 +554,69 @@ func _capture(path: String) -> void:
 	check(root.get_texture().get_image().save_png(path) == OK, "Rendered review saved: " + path.get_file())
 
 
+func _check_chest_reward_layout(view, manifest: Dictionary) -> void:
+	var quote := {"policy": CoinBreakdown.Economy.CHEST_REWARD_POLICY, "tier": 14, "pip_level": 99, "base": 700, "bonus": 350, "total": 1050}
+	var result := Settlement.new()
+	root.add_child(result)
+	result.position = view.position
+	result.set_chest_reward(quote)
+	for dimensions: Vector2 in [Vector2(448, 436), Vector2(337, 436), Vector2(536, 314), Vector2(264, 200)]:
+		view.size = dimensions
+		result.size = dimensions
+		_begin(view, manifest, "reward-layout-%s" % str(dimensions), true)
+		view.set_chest_reward(quote)
+		_step(view, 3.01)
+		result.configure(Data.theme("spring"), true, false, false, false)
+		await process_frame
+		check(result.caption.visible and result.caption.text == "Hold the chest to open" and not result.coin_breakdown.visible,
+			"The locked coin quote preserves the opening instruction at " + str(dimensions))
+		check(result.chest.get_rect().is_equal_approx(view.chest.get_rect())
+			and result.pip.get_rect().is_equal_approx(view.pip.get_rect())
+			and result.caption.get_rect().is_equal_approx(view._caption.get_rect()),
+			"Reward space stays identical across the Pip handoff at " + str(dimensions))
+		var closed_chest: Rect2 = result.chest.get_rect()
+		result.configure(Data.theme("spring"), true, false, false, true)
+		await process_frame
+		var receipt: Dictionary = result.snapshot().coin_breakdown
+		check(receipt.visible and receipt.reward == quote
+			and receipt.detail_text == "Chest 700 + Pip Lv99 bonus 350" and receipt.total_text == "Total 1050 coins",
+			"Opened settlement shows the saved base, Pip level bonus, and exact total")
+		check(not result.caption.visible and result.chest.get_rect().is_equal_approx(closed_chest),
+			"Revealing the coin receipt never moves the opened chest")
+		var frame := Rect2(Vector2.ZERO, dimensions)
+		check(frame.encloses(result.heading.get_rect()) and not result.heading.get_rect().intersects(result.chest.get_rect()),
+			"The heading reflows above the artwork after the first phone layout at " + str(dimensions))
+		check(frame.encloses(result.coin_breakdown.get_rect())
+			and not result.coin_breakdown.get_rect().intersects(result.replay_button.get_rect())
+			and not result.coin_breakdown.get_rect().intersects(result.chest.get_rect()),
+			"The complete coin receipt stays clear of the chest and actions at " + str(dimensions))
+		for label: Label in [result.coin_breakdown.detail, result.coin_breakdown.total]:
+			check(label.get_theme_font("font").get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1,
+				label.get_theme_font_size("font_size")).x <= label.size.x + 0.5
+				and label.get_line_height() <= label.size.y + 0.5,
+				"Every receipt line fits without clipping at " + str(dimensions))
+		view.stop()
+	result.configure({}, true, true, false, true)
+	check(result.caption.visible and not result.coin_breakdown.visible and result.caption.text == "Saving your treasure...",
+		"An unconfirmed save keeps its saving status in place of a collected receipt")
+	result.configure({}, true, false, true, true)
+	check(result.caption.visible and not result.coin_breakdown.visible and result.retry_button.visible,
+		"Failed reward saves keep their retry instruction visible")
+	result.set_chest_reward({})
+	result.configure({}, false, false, false, false)
+	check(not result.coin_breakdown.visible and result.coin_breakdown.total.text.is_empty()
+		and view.snapshot().chest_reward.is_empty(), "New rounds clear prior reward details from both settlement surfaces")
+	check(CoinBreakdown.description(quote) == "Chest: 700 coins. Pip level 99 bonus: 350 coins. Total: 1050 coins.",
+		"Accessible reward copy contains every part of the saved reward")
+	var legacy := {"policy": CoinBreakdown.Economy.LEGACY_CHEST_REWARD_POLICY, "tier": 1, "pip_level": 0, "base": 50, "bonus": 0, "total": 50}
+	result.set_chest_reward(legacy)
+	check(result.coin_breakdown.detail.text == "Previously saved chest reward"
+		and CoinBreakdown.description(legacy) == "Previously saved chest reward. Total: 50 coins.",
+		"Previously paid rewards never invent a historical Pip level")
+	result.free()
+	view.size = Vector2(912, 572)
+
+
 func _render_review(view, manifest: Dictionary) -> void:
 	var output: String = ProjectSettings.globalize_path("res://build/round-celebration")
 	check(DirAccess.make_dir_recursive_absolute(output) == OK, "The rendered review directory is available")
@@ -574,3 +643,27 @@ func _render_review(view, manifest: Dictionary) -> void:
 		_step(view, 0.93)
 		await _capture(output + "/" + str(dimensions.x) + "x" + str(dimensions.y) + ".png")
 		view.stop()
+
+
+func _render_chest_reward_review(manifest: Dictionary) -> void:
+	var output: String = ProjectSettings.globalize_path("res://build/pip-chest-reward")
+	check(DirAccess.make_dir_recursive_absolute(output) == OK, "The Pip coin receipt review directory is available")
+	var dialog := SettlementDialog.new()
+	root.add_child(dialog)
+	dialog.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var result := Settlement.new()
+	dialog.panel.add_child(result)
+	result.chest.configure_skin(Data.theme("spring"), manifest)
+	result.chest.reduced_motion = true
+	result.chest.mode = "opening"
+	result.chest.finish_immediately()
+	result.pip.set_growth_age(99)
+	result.set_chest_reward({"policy": CoinBreakdown.Economy.CHEST_REWARD_POLICY, "tier": 14, "pip_level": 99, "base": 700, "bonus": 350, "total": 1050})
+	result.configure(Data.theme("spring"), true, false, false, true)
+	for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(844, 390)]:
+		root.size = dimensions
+		dialog.configure(result, Data.theme("spring"), true, true, "Round complete")
+		dialog.open(false)
+		await process_frame
+		await _capture(output + "/receipt-%dx%d.png" % [dimensions.x, dimensions.y])
+	dialog.free()

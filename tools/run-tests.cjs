@@ -10,7 +10,7 @@ const groups = {
       'professional_media_tests', 'professional_approved_audio_tests', 'professional_retail_morphology_tests', 'professional_retail04_morphology_tests',
       'professional_foundation02_morphology_tests', 'professional_media_bundles_tests',
       'professional_progress_tests', 'professional_pip_progress_tests', 'professional_pip_tests', 'presentation_vocabulary_tests', 'professional_domain_owner_tests', 'professional_round_loader_tests', 'professional_store_tests',
-      'professional_session_tests', 'professional_play_tests', 'professional_application_flow_tests', 'unified_word_library_tests', 'professional_scene_disposal_tests',
+      'professional_session_tests', 'professional_play_tests', 'professional_application_flow_tests', 'professional_pip_chest_reward_tests', 'unified_word_library_tests', 'professional_scene_disposal_tests',
       'professional_scene_modes_disposal_tests', 'professional_view_teardown_tests', 'professional_word_library_tests', 'professional_held_six_routes_tests'],
     node: ['vocabulary-loader', 'vocabulary-packs', 'professional-content', 'professional-approved-audio', 'professional-retail-morphology', 'professional-retail04-morphology',
       'professional-foundation02-morphology',
@@ -24,7 +24,7 @@ const groups = {
     godot: [
       'run_tests', 'match_hint_payment_tests', 'adventure_model_tests', 'adventure_scene_tests', 'settlement_modal_tests', 'medal_progress_tests',
       'pair_chest_progress_tests', 'pair_chest_reward_tests', 'pair_chest_flow_tests',
-      'coin_wallet_tests', 'coin_economy_tests', 'pop_reward_identity_tests', 'coin_reward_flow_tests', 'coin_audio_tests',
+      'coin_wallet_tests', 'coin_economy_tests', 'pop_reward_identity_tests', 'coin_reward_flow_tests', 'pip_chest_reward_flow_tests', 'coin_audio_tests',
       'medal_scene_tests', 'voice_model_tests', 'match_voice_feedback_tests', 'mascot_tests', 'mascot_redraw_tests', 'playful_controls_tests',
       'expansion_scene_tests', 'lesson_scene_tests',
       'lesson_navigation_tests', 'memory_model_tests', 'memory_garden_tests',

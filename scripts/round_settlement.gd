@@ -10,6 +10,7 @@ const ChestView = preload("res://scripts/chest_view.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
 const RewardLayout = preload("res://scripts/round_reward_layout.gd")
+const CoinBreakdown = preload("res://scripts/chest_coin_breakdown.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
 const TREASURE_LIGHT = preload("res://assets/chests/particles/portal_glow.png")
 
@@ -21,6 +22,7 @@ var replay_button: Button
 var home_button: Button
 var heading: Label
 var caption: Label
+var coin_breakdown: CoinBreakdown
 
 var _palette: Dictionary = {}
 var _has_chest: bool = false
@@ -30,6 +32,7 @@ var _opened: bool = false
 var _compact: bool = false
 var _appearance: Array = []
 var _chest_light := TextureRect.new()
+var _chest_reward: Dictionary = {}
 
 
 func _init() -> void:
@@ -40,14 +43,20 @@ func _init() -> void:
 	heading.add_theme_font_override("font", Style.HEADING_FONT)
 	heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	heading.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	heading.minimum_size_changed.connect(_layout.call_deferred)
 	add_child(heading)
 	caption = Style.label("", 14)
 	caption.name = "SettlementCaption"
 	caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	caption.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	caption.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	caption.max_lines_visible = 3
+	caption.minimum_size_changed.connect(_layout.call_deferred)
 	add_child(caption)
+	coin_breakdown = CoinBreakdown.new()
+	coin_breakdown.hide()
+	add_child(coin_breakdown)
 	pip = Mascot.new()
 	pip.name = "SettlementPip"
 	pip.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -145,7 +154,21 @@ func configure(palette: Dictionary, has_chest: bool, saving: bool, save_failed: 
 	home_button.disabled = saving or save_failed
 	replay_button.disabled = saving or save_failed
 	_sync_companion()
+	_sync_chest_reward()
 	_layout()
+
+
+func set_chest_reward(quote: Dictionary) -> void:
+	_chest_reward = quote.duplicate(true)
+	coin_breakdown.set_reward(quote)
+	_sync_chest_reward()
+	_layout()
+
+
+func _sync_chest_reward() -> void:
+	coin_breakdown.visible = _has_chest and _opened and not _saving and not _save_failed and not _chest_reward.is_empty()
+	caption.visible = not coin_breakdown.visible
+	caption.set("accessibility_description", CoinBreakdown.description(_chest_reward) if coin_breakdown.visible else caption.text)
 
 
 func _refresh_chest_focus() -> void:
@@ -178,9 +201,9 @@ func _layout() -> void:
 		_appearance = [s, accent]
 	if size.x <= 0.0 or size.y <= 0.0:
 		return
-	var layout: Dictionary = RewardLayout.measure(size, s, _has_chest, _save_failed)
+	var layout: Dictionary = RewardLayout.measure(size, s, _has_chest, _save_failed, false, not _chest_reward.is_empty())
 	_compact = layout.compact
-	for item: Array in [[heading, "heading"], [caption, "caption"], [pip, "pip"], [chest, "chest"],
+	for item: Array in [[heading, "heading"], [caption, "caption"], [coin_breakdown, "caption"], [pip, "pip"], [chest, "chest"],
 		[home_button, "home"], [replay_button, "replay"], [retry_button, "retry"]]:
 		var control: Control = item[0]
 		var rect: Rect2 = layout[item[1]]
@@ -189,6 +212,7 @@ func _layout() -> void:
 		control.size = rect.size
 	heading.add_theme_font_size_override("font_size", layout.heading_size)
 	caption.add_theme_font_size_override("font_size", layout.caption_size)
+	coin_breakdown._layout()
 	chest_button.position = chest.position
 	chest_button.size = chest.size
 	_chest_light.size = Vector2.ONE * minf(chest.size.x, chest.size.y * 1.15)
@@ -220,6 +244,7 @@ func snapshot() -> Dictionary:
 		"heading": heading.text, "caption": caption.text, "pip_rect": _rect(pip.get_global_rect()),
 		"has_chest": _has_chest, "saving": _saving, "save_failed": _save_failed,
 		"opened": _opened, "compact": _compact,
+		"coin_breakdown": coin_breakdown.snapshot(),
 		"chest": {"visible": chest.is_visible_in_tree(), "rect": _rect(chest.get_global_rect())},
 		"chest_button": _button_snapshot(chest_button),
 		"retry": _button_snapshot(retry_button), "replay": _button_snapshot(replay_button),

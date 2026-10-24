@@ -19,6 +19,7 @@ class Storage extends RefCounted:
 	var coin_writable: bool = true
 	var reward_writable: bool = true
 	var coin_writes: int = 0
+	var coin_payment_writes: int = 0
 
 	func coinWalletState() -> Variant:
 		return coins
@@ -26,6 +27,13 @@ class Storage extends RefCounted:
 	func saveCoinWalletState(value: String, expected: Variant) -> bool:
 		if not coin_writable or expected != coins:
 			return false
+		var previous := ConfigFile.new()
+		var next := ConfigFile.new()
+		if coins != null:
+			previous.parse(coins)
+		next.parse(value)
+		if previous.get_value("wallet", "receipts", {}) != next.get_value("wallet", "receipts", {}):
+			coin_payment_writes += 1
 		coins = value
 		coin_writes += 1
 		return true
@@ -221,7 +229,7 @@ func check_interactive_result(tier: int) -> void:
 		"The complete result flight finishes at the durable coin balance")
 	room._finished(0)
 	room._announce(0)
-	check(app.get_meta("result_test_storage").coin_writes == 1 and not app._coin_flight.snapshot().active,
+	check(app.get_meta("result_test_storage").coin_payment_writes == 1 and not app._coin_flight.snapshot().active,
 		"Repeated result opening callbacks cannot pay or animate an already opened chest again")
 	var old_round: String = app._round_id
 	room._back.pressed.emit()
@@ -259,13 +267,13 @@ func check_replay_during_opening(stage: String, home: bool = false) -> void:
 		check(app._mode_panel.snapshot().current.is_empty(), "Home never labels an ended game as Continue")
 		room._home.pressed.emit()
 		room._back.pressed.emit()
-		check(app._round_id == old_round and app.get_meta("result_test_storage").coin_writes == 1,
+		check(app._round_id == old_round and app.get_meta("result_test_storage").coin_payment_writes == 1,
 			"Repeated hidden result actions cannot replace the Home screen or pay again")
 		app.choose_mode("jelly")
 	else:
 		room._back.pressed.emit()
 	check_new_board(app, old_round, 50)
-	check(app.get_meta("result_test_storage").coin_writes == 1, "Every replay opening stage yields exactly one durable payout")
+	check(app.get_meta("result_test_storage").coin_payment_writes == 1, "Every replay opening stage yields exactly one durable payout")
 	await dispose(app)
 
 
@@ -297,7 +305,7 @@ func check_reduced_result() -> void:
 	check_result_context(app, int(app._round_result.score), 1)
 	room._back.pressed.emit()
 	check_new_board(app, old_round, 50)
-	check(app.reduced_motion and app.get_meta("result_test_storage").coin_writes == 1,
+	check(app.reduced_motion and app.get_meta("result_test_storage").coin_payment_writes == 1,
 		"Reduced-motion replay preserves the preference and the single saved chest receipt")
 	await dispose(app)
 
@@ -331,7 +339,7 @@ func check_replay_save_retry(fail_coins: bool, home: bool = false) -> void:
 		else:
 			room._back.pressed.emit()
 	check_new_board(app, old_round, 50)
-	check(storage.coin_writes == 1, "Retry after either store failure settles one receipt without a reload or duplicate payout")
+	check(storage.coin_payment_writes == 1, "Retry after either store failure settles one receipt without a reload or duplicate payout")
 	await dispose(app)
 
 
@@ -357,7 +365,7 @@ func check_retained_inventory() -> void:
 	var old_round: String = app._round_id
 	room._back.pressed.emit()
 	check_new_board(app, old_round, 550)
-	check(storage.coin_writes == 5 and app.coin_wallet._receipts.size() == 5,
+	check(storage.coin_payment_writes == 5 and app.coin_wallet._receipts.size() == 5,
 		"Replay settles every retained and current chest exactly once, including off-page inventory")
 	for receipt in old_receipts:
 		check(app.coin_wallet._receipts.has(receipt), "Retained treasure keeps its original wallet receipt identity")
@@ -382,7 +390,7 @@ func check_menu_and_background() -> void:
 	app._hide_mode_menu()
 	app._controller_back()
 	check(app._mode_menu_open() and app._round_id == old_round and app._jelly.game.phase == "finished"
-		and app.coin_wallet.balance == 50 and app.get_meta("result_test_storage").coin_writes == 1,
+		and app.coin_wallet.balance == 50 and app.get_meta("result_test_storage").coin_payment_writes == 1,
 		"Controller Back repeats Home without duplicating the settled chest")
 	app._hide_mode_menu()
 	check_result_context(app, score, 1)
@@ -401,7 +409,7 @@ func check_menu_and_background() -> void:
 	app._hide_mode_menu()
 	app.on_page_hidden()
 	app.on_page_visible()
-	check(app.get_meta("result_test_storage").coin_writes == 1 and not app._round_celebration.is_active()
+	check(app.get_meta("result_test_storage").coin_payment_writes == 1 and not app._round_celebration.is_active()
 		and not app._coin_flight.snapshot().active,
 		"Repeated menu and background resumes duplicate neither rewards nor result celebrations")
 	room._back.pressed.emit()

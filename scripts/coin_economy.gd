@@ -2,6 +2,8 @@ extends RefCounted
 ## Shared future reward and purchase values; saved wallet receipts keep their amounts.
 
 const COINS_PER_TIER: int = 50
+const CHEST_REWARD_POLICY: String = "pip-chest-v1"
+const LEGACY_CHEST_REWARD_POLICY: String = "legacy-chest-v1"
 const MATCH_HINT_PRICES: Array[int] = [100, 150, 200]
 const MEMORY_PEEK_PRICES: Array[int] = [0, 100, 200, 300]
 const POWERUP_BASE_PRICES: Dictionary = {"auto_merge": 600, "fragments": 200}
@@ -42,3 +44,12 @@ static func jelly_combo_bonus(count: int) -> int:
 
 static func chest_coins(tier: int) -> int:
 	return maxi(1, tier) * COINS_PER_TIER
+
+
+static func chest_reward(tier: int, pip_level: int) -> Dictionary:
+	var reward_tier: int = maxi(1, tier)
+	var level: int = clampi(pip_level, 0, 99)
+	var base: int = reward_tier * COINS_PER_TIER
+	var bonus: int = reward_tier * ceili(level / 4.0)
+	return {"policy": CHEST_REWARD_POLICY, "pip_level": level, "tier": reward_tier,
+		"base": base, "bonus": bonus, "total": base + bonus}
