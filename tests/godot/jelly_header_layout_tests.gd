@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
+const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const SIZES: Array[Vector2i] = [Vector2i(320, 480), Vector2i(393, 852), Vector2i(624, 1119),
 	Vector2i(768, 1024), Vector2i(834, 1194), Vector2i(1024, 1366), Vector2i(568, 320),
 	Vector2i(844, 390), Vector2i(1024, 768), Vector2i(1366, 768), Vector2i(1473, 1175)]
@@ -84,6 +85,61 @@ func check_geometry(app, view, dimensions: Vector2i) -> void:
 		check(app._content_margins.size.y * s > 1100.0,
 			context + " uses portrait height instead of the old desktop cap")
 
+func check_chest_levels(app, view, dimensions: Vector2i) -> void:
+	var before: Dictionary = view.game.snapshot()
+	var displayed_before: int = view._displayed_chest_tier
+	var s: float = app.Style.ui_scale(app)
+	var dock_before: Rect2 = view._header_chest_host.get_global_rect()
+	var icon_before: Rect2 = view._loot_icon.get_global_rect()
+	var label: Label = view._header_chest_level
+	for tier: int in [0, 1, 10, 99, 999]:
+		# Seed completed reward progress without creating pending celebration events.
+		var fragments: int = 0 if tier == 0 else 4 + (tier - 1) * 5
+		var progress: Dictionary = RewardProgress.reward_progress(fragments)
+		view.game.fragment_count = fragments
+		view.game.chest_tier = int(progress.chest_tier)
+		view.game.chest_count = int(progress.chest_count)
+		view._displayed_chest_tier = int(progress.chest_tier)
+		view._refresh_hud()
+		view._loot_meter.settle()
+		var context: String = "%s Lv%d at %s" % [app._mode_id, tier, dimensions]
+		var badge: Rect2 = label.get_global_rect()
+		var font: Font = label.get_theme_font("font")
+		var pixels: int = label.get_theme_font_size("font_size")
+		var surface: StyleBox = label.get_theme_stylebox("normal")
+		var ink: Vector2 = Vector2(font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x,
+			font.get_height(pixels))
+		var available: Vector2 = label.size - surface.get_minimum_size()
+		check(label.is_visible_in_tree() and label.get_parent() == view._header_chest_host
+			and label.text == "Lv%d" % tier, context + " visibly identifies the earned chest level")
+		check(dock_before.grow(0.1).encloses(badge) and badge.has_area()
+			and badge.end.distance_to(dock_before.end) < 0.1,
+			context + " contains the complete badge at the dock's lower-right corner")
+		check(ink.x <= available.x + 0.1 and ink.y <= available.y + 0.1,
+			context + " fits every level character and the full font height without clipping: ink=%s available=%s" % [ink, available])
+		check(font == app.Style.HEADING_FONT and pixels == ceili(12.0 / s),
+			context + " retains the bold twelve-pixel reading size")
+		check(label.mouse_filter == Control.MOUSE_FILTER_IGNORE and label.focus_mode == Control.FOCUS_NONE,
+			context + " passes pointer and keyboard input to the existing chest action")
+		check(label.z_index > view._chest_tap.z_index,
+			context + " keeps the level readable over the chest tap response")
+		check(view._header_chest_host.get_global_rect().is_equal_approx(dock_before)
+			and view._loot_icon.get_global_rect().is_equal_approx(icon_before)
+			and view._chest_tap.get_global_rect().is_equal_approx(dock_before)
+			and (dock_before.size * s).is_equal_approx(Vector2(44, 44)),
+			context + " preserves the existing chest artwork and forty-four-pixel header target")
+		var state: Dictionary = view.snapshot().loot
+		check(state.displayed_tier == tier and state.level_label.text == label.text and state.level_label.visible,
+			context + " publishes the same visible level for browser verification")
+	view.game.fragment_count = int(before.fragment_count)
+	view.game.chest_tier = int(before.chest_tier)
+	view.game.chest_count = int(before.chest_count)
+	view._displayed_chest_tier = displayed_before
+	view._refresh_hud()
+	view._loot_meter.settle()
+	check(view.game.snapshot() == before and label.text == "Lv%d" % displayed_before,
+		"The chest-level layout fixture restores the original round and displayed level at %s" % dimensions)
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(393, 852)
@@ -106,6 +162,7 @@ func _run() -> void:
 			root.size = dimensions
 			await settle()
 			check_geometry(app, view, dimensions)
+			check_chest_levels(app, view, dimensions)
 		root.size = Vector2i(393, 852)
 		await settle()
 		var before: Dictionary = view.game.snapshot()
@@ -114,14 +171,23 @@ func _run() -> void:
 		check(view.game.snapshot() == before and view._pointer == view.NO_POINTER,
 			mode + " chest sparkle neither grabs a jelly nor changes game state")
 		view._chest_tap.clear()
+		view._sync_chest_tap()
+		await tap(view._header_chest_level)
+		check(view._chest_tap.is_active() and view._header_chest_level.is_visible_in_tree(),
+			mode + " a real pointer tap over the level badge reaches the chest action")
+		check(view.game.snapshot() == before and view._pointer == view.NO_POINTER,
+			mode + " tapping the level badge preserves rewards and does not grab a jelly")
+		view._chest_tap.clear()
 		app._show_mode_menu()
 		await settle()
 		check(not view._header_chest_host.is_visible_in_tree() and not view.finish_button.is_visible_in_tree(),
 			mode + " hides both externally hosted controls while Home owns input")
+		check(not view._header_chest_level.is_visible_in_tree(), mode + " hides its chest level behind Home")
 		app._hide_mode_menu()
 		await settle()
 		check(view._header_chest_host.is_visible_in_tree() and view.finish_button.is_visible_in_tree(),
 			mode + " restores its hosted controls when gameplay resumes")
+		check(view._header_chest_level.is_visible_in_tree(), mode + " restores the chest level with its dock")
 		await tap(view.finish_button)
 		check(not app._finish_confirmation_open() and view.game.phase == "playing",
 			mode + " a simple header Finish tap cannot end a round or open a pointer dialog")

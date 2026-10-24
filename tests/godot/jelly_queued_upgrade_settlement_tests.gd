@@ -199,6 +199,20 @@ func check_current_card(app, reward_id: String, label: String) -> bool:
 	return matches
 
 
+func check_level_badge(view, tier: int, visible: bool, label: String) -> void:
+	var loot: Dictionary = view.snapshot().loot
+	var badge: Dictionary = loot.get("level_label", {})
+	var text: String = "Lv%d" % tier
+	check(loot.get("displayed_tier", -1) == tier and loot.tier == view.game.chest_tier,
+		label + ": the published displayed level stays distinct from the earned model tier")
+	check(is_instance_valid(view._header_chest_level) and view._header_chest_level.text == text
+		and badge.get("text", "") == text,
+		label + ": the actual header badge and its snapshot both show " + text)
+	check(is_instance_valid(view._header_chest_level) and view._header_chest_level.is_visible_in_tree() == visible
+		and badge.get("visible", not visible) == visible,
+		label + ": the badge follows gameplay header visibility")
+
+
 func check_queued_finish(mode: String, retained: bool, fail_first_save: bool) -> void:
 	var label: String = mode + (" retained" if retained else " fresh") + (" retry" if fail_first_save else "")
 	var app = await make_app(mode)
@@ -207,6 +221,7 @@ func check_queued_finish(mode: String, retained: bool, fail_first_save: bool) ->
 	var game = view.game
 	var room = app._jelly_rewards
 	var old_entry: Dictionary = {}
+	check_level_badge(view, 0, true, label + " initial")
 	if retained:
 		# Another pending reward can coexist with this in-progress round. Use the
 		# real inventory API so its identity and earlier index are both preserved.
@@ -218,10 +233,12 @@ func check_queued_finish(mode: String, retained: bool, fail_first_save: bool) ->
 	if not earn_fragments(app, mode, 4):
 		await dispose(app)
 		return
+	check_level_badge(view, 0, true, label + " pending synthesis")
 	if retained:
 		view.advance_reward_presentation(Celebration.ARRIVAL_SECONDS + Celebration.PERFORMANCE_SECONDS + 0.01)
 		check(not view._reward_presentation.is_active() and view._displayed_chest_tier == 1,
 			label + ": synthesis completes before the first upgrade begins")
+		check_level_badge(view, 1, true, label + " completed synthesis")
 		if not earn_fragments(app, mode, 9):
 			await dispose(app)
 			return
@@ -235,9 +252,21 @@ func check_queued_finish(mode: String, retained: bool, fail_first_save: bool) ->
 		label + ": later earned upgrades remain queued behind the visibly active earlier chest")
 	check(game.chest_tier == FINAL_TIER and game.chest_count == 1 and view._displayed_chest_tier < FINAL_TIER,
 		label + ": the completed model reward has reached tier 4 ahead of presentation")
+	var previous_tier: int = 1 if retained else 0
+	check_level_badge(view, previous_tier, true, label + " queued upgrades")
+	view.advance_reward_presentation(Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS
+		- float(presentation.elapsed) - 0.001)
+	check(not view._reward_presentation.snapshot().revealed,
+		label + ": the earlier chest has not revealed just before its reward cue")
+	check_level_badge(view, previous_tier, true, label + " before reveal")
+	view.advance_reward_presentation(0.002)
+	check(view._reward_presentation.snapshot().revealed and game.chest_tier == FINAL_TIER,
+		label + ": one reveal leaves the later earned upgrades queued")
+	check_level_badge(view, previous_tier + 1, true, label + " after reveal")
 	var round_id: String = app._round_id
 	var reward_id: String = "jelly:" + round_id + ":0"
 	var coins_before: int = app.coin_wallet.balance
+	var chest_payout: int = int(Economy.chest_reward(FINAL_TIER, app.growth.level).total)
 	var saves_before: int = storage.reward_writes
 	storage.reward_writable = not fail_first_save
 	view.finish_button.accessibility_requested.emit()
@@ -249,6 +278,7 @@ func check_queued_finish(mode: String, retained: bool, fail_first_save: bool) ->
 		label + ": confirmed Finish settles every earned fragment despite the unfinished animation")
 	check(not view._reward_presentation.is_active() and view._displayed_chest_tier == FINAL_TIER,
 		label + ": finishing clears obsolete animation events and reconciles the displayed tier")
+	check_level_badge(view, FINAL_TIER, false, label + " finished")
 	if fail_first_save:
 		check(room._save_failed and room._retry.is_visible_in_tree() and storage.reward_writes == saves_before,
 			label + ": a failed batch write remains retryable without replacing old treasure")
@@ -302,7 +332,7 @@ func check_queued_finish(mode: String, retained: bool, fail_first_save: bool) ->
 	room.begin_hold(card.button)
 	room.advance_hold(Feel.HOLD_SECONDS)
 	card.art._advance_animation(Feel.OPEN_SECONDS + 0.01)
-	check(app.coin_wallet.balance == coins_before + Economy.chest_coins(FINAL_TIER)
+	check(app.coin_wallet.balance == coins_before + chest_payout
 		and releases == [reward_id], label + ": opening releases the final tier's coins under its own identity exactly once")
 	saved = load_saved(app, storage)
 	current = entry_for(saved, reward_id)
@@ -323,9 +353,18 @@ func check_queued_finish(mode: String, retained: bool, fail_first_save: bool) ->
 	app.on_page_visible()
 	await settle()
 	check_current_card(app, reward_id, label + " opened restoration")
-	check(room._cards[0].opened and app.coin_wallet.balance == coins_before + Economy.chest_coins(FINAL_TIER)
+	check(room._cards[0].opened and app.coin_wallet.balance == coins_before + chest_payout
 		and storage.coin_writes == coin_writes and releases == [reward_id],
 		label + ": restoring the opened result does not replay the payout or substitute the older chest")
+	room._back.pressed.emit()
+	await settle()
+	freeze_clocks(app)
+	# The fixture freezes presentation clocks, so supply the normal first HUD frame.
+	view._process(0.0)
+	check(app._round_id != round_id and view.game.phase == "playing" and view.game.fragment_count == 0
+		and not view._reward_presentation.is_active(),
+		label + ": Play again starts a fresh round without the finished upgrade queue")
+	check_level_badge(view, 0, true, label + " restarted")
 	await dispose(app)
 
 

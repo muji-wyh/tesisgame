@@ -78,6 +78,7 @@ var _loot_icon: TextureRect
 var _loot_meter: LootMeter
 var _chest_tap: ChestTap
 var _header_chest_host: Control
+var _header_chest_level: Label
 var _loot_detail: Label
 var _reward_presentation: ChestCelebration
 var _displayed_chest_tier: int = 0
@@ -282,6 +283,11 @@ func host_header_chest(header: Control) -> void:
 	header.add_child(_header_chest_host)
 	for control: Control in [_loot_meter, _loot_icon, _chest_tap]:
 		control.reparent(_header_chest_host, false)
+	_header_chest_level = _label(_header_chest_host, "Lv%d" % _displayed_chest_tier, 12)
+	_header_chest_level.name = "JellyChestLevel"
+	_header_chest_level.add_theme_font_override("font", Style.HEADING_FONT)
+	_header_chest_level.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_header_chest_level.z_index = _chest_tap.z_index + 1
 	_header_chest_host.resized.connect(layout_header_chest)
 	_header_chest_host.item_rect_changed.connect(_sync_header_chest_anchor)
 	item_rect_changed.connect(_sync_header_chest_anchor)
@@ -301,9 +307,30 @@ func layout_header_chest() -> bool:
 	_loot_icon.position = (_header_chest_host.size - _loot_icon.size) * 0.5
 	_chest_tap.position = _loot_meter.position
 	_chest_tap.size = _loot_meter.size
+	_layout_header_chest_level()
 	_loot_detail.hide()
 	_sync_header_chest_anchor()
 	return true
+
+func _layout_header_chest_level() -> void:
+	if not has_header_chest() or not is_instance_valid(_header_chest_level):
+		return
+	var s: float = Style.ui_scale(self)
+	var pixels: int = ceili(12.0 / s)
+	var width: float = _header_chest_host.size.x
+	while pixels > 1 and Style.HEADING_FONT.get_string_size(_header_chest_level.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x + 8.0 / s > width:
+		pixels -= 1
+	_header_chest_level.add_theme_font_size_override("font_size", pixels)
+	_header_chest_level.add_theme_color_override("font_color", Color("#65431f") if _displayed_chest_tier > 0 else Style.MUTED)
+	var surface := Style.box(Color("#fff7df"), Color("#c79c51"), ceili(7.0 / s), maxi(1, roundi(1.0 / s)))
+	surface.content_margin_left = 4.0 / s
+	surface.content_margin_right = 4.0 / s
+	surface.content_margin_top = 0.0
+	surface.content_margin_bottom = 0.0
+	_header_chest_level.add_theme_stylebox_override("normal", surface)
+	var text_width: float = Style.HEADING_FONT.get_string_size(_header_chest_level.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
+	_header_chest_level.size = Vector2(minf(width, maxf(30.0 / s, text_width + 8.0 / s)), _header_chest_level.get_minimum_size().y)
+	_header_chest_level.position = _header_chest_host.size - _header_chest_level.size
 
 func chest_anchor_rect() -> Rect2:
 	return get_global_transform().affine_inverse() * _loot_icon.get_global_rect()
@@ -1230,6 +1257,7 @@ func _finished(result: Dictionary) -> void:
 	cancel_input()
 	_reward_presentation.clear()
 	_displayed_chest_tier = game.chest_tier
+	_refresh_hud()
 	_clear_fusion_visuals()
 	_refresh_controls()
 	round_finished.emit(result.duplicate(true))
@@ -1270,6 +1298,11 @@ func _refresh_hud() -> void:
 	var base: int = 4 + (displayed_tier - 1) * 5 if displayed_tier > 0 else 0
 	_loot_meter.set_progress(maxi(0, arrived - base), 5 if displayed_tier > 0 else 4, reduced_motion)
 	_loot_detail.text = "Upgrade chest" if displayed_tier > 0 else "Unlock chest"
+	if is_instance_valid(_header_chest_level):
+		var level_text: String = "Lv%d" % displayed_tier
+		if _header_chest_level.text != level_text:
+			_header_chest_level.text = level_text
+			_layout_header_chest_level()
 	_loot_meter.set("accessibility_name", "%d fragments. Chest level %d. %d of %d toward the next reward." % [game.fragment_count, game.chest_tier, progress.fragments_toward_next, progress.fragments_required])
 	_loot_icon.texture = _reward_texture(displayed_tier)
 	_loot_icon.modulate.a = 1.0 if displayed_tier > 0 else 0.72
@@ -1554,6 +1587,10 @@ func snapshot() -> Dictionary:
 	result["loot"] = {"count": game.chest_count, "rect": _rect(_loot_icon.get_global_rect()), "flights": _loot_flights.size()}
 	result["loot"]["fragments"] = game.fragment_count
 	result["loot"]["tier"] = game.chest_tier
+	result["loot"]["displayed_tier"] = _displayed_chest_tier
+	if is_instance_valid(_header_chest_level):
+		result["loot"]["level_label"] = {"text": _header_chest_level.text,
+			"visible": _header_chest_level.is_visible_in_tree(), "rect": _rect(_header_chest_level.get_global_rect())}
 	result["loot"]["progress_text"] = _loot_detail.text
 	result["loot"]["progress"] = _loot_meter.snapshot()
 	result["loot"]["progress"]["rect"] = _rect(_loot_meter.get_global_rect())

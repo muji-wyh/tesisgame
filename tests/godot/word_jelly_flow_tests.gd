@@ -831,6 +831,7 @@ func _run() -> void:
 	check(not view.finish_button.is_visible_in_tree(), "The treasure room and the other Jelly mode cannot expose Jelly Words Finish")
 	check(app._jelly_rewards.rewards.entries[0].tier == 2 and app._jelly_rewards.rewards.round_id == earned_round
 		and app._jelly_rewards.rewards.entries[0].reward_id == "jelly:" + earned_round + ":0", "The saved reward retains the exact upgraded tier and mode namespace")
+	var earned_chest_reward: Dictionary = app.coin_wallet.chest_reward("jelly:" + earned_round + ":0").duplicate(true)
 	growth_before = app.growth.snapshot().streaks.duplicate()
 	view.word_attempted.emit("hidden-words", [str(word.id)] as Array[String], true)
 	check(app.growth.snapshot().streaks == growth_before, "A stopped Jelly Words callback cannot credit Jelly Match")
@@ -871,9 +872,10 @@ func _run() -> void:
 		"Controller Back cancels an incomplete restored chest hold without claiming or closing the modal")
 	room.begin_hold(room._cards[0].button)
 	room.advance_hold(Feel.HOLD_SECONDS)
-	check(not room.has_pending() and app.coin_wallet.balance == 350 + earned_combo_balance
-		and room.rewards.entries[0].reward_id == "jelly:" + earned_round + ":0",
-		"The restored tier-two chest keeps its original receipt and credits one hundred coins")
+	check(not room.has_pending() and app.coin_wallet.balance == 250 + earned_combo_balance + int(earned_chest_reward.get("total", -1))
+		and room.rewards.entries[0].reward_id == "jelly:" + earned_round + ":0"
+		and app.coin_wallet.chest_reward("jelly:" + earned_round + ":0") == earned_chest_reward,
+		"The restored tier-two chest keeps its original receipt and credits its reserved Pip-adjusted amount")
 	controller_back_event()
 	check(not app._settlement_dialog.is_visible_in_tree() and not app._jelly_rewards_shown
 		and not app._mode_menu_open() and view.is_visible_in_tree() and not view.game.paused
