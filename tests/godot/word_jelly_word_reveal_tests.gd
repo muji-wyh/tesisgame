@@ -36,6 +36,9 @@ func _run() -> void:
 	_check_reduced_motion(reveal)
 	_check_level_effects(reveal)
 	_check_level_lifetimes(reveal)
+	_check_separate_firework_area(reveal)
+	_check_firework_trajectories()
+	_check_firework_stamp_exclusions()
 	await _check_delayed_reveal(reveal)
 	reveal.reset()
 	reveal.present({"id": "image-free", "text": "on"}, null, Color.WHITE)
@@ -353,6 +356,121 @@ func _check_level_lifetimes(reveal) -> void:
 				"an already-expired Lv6 catch-up cannot replay its showcase")
 
 
+func _check_separate_firework_area(reveal) -> void:
+	var reading_area := Rect2(24, 18, 760, 190)
+	var effect_area := Rect2(24, 18, 760, 360)
+	var exclusions: Array[Rect2] = [Rect2(26, 20, 60, 42), Rect2(700, 26, 76, 44)]
+	for level: int in [3, 4, 5, 6]:
+		for batch: bool in [false, true]:
+			for reduced: bool in [false, true]:
+				reveal.reset()
+				reveal.set_reduced_motion(reduced)
+				reveal.configure_layout(reading_area, 1.0, exclusions)
+				reveal._rng.seed = 5831
+				_present(reveal, "cat", cat, batch, level)
+				reveal.advance(0.20)
+				var original: Dictionary = reveal.snapshot()
+				reveal.reset()
+				reveal.configure_layout(reading_area, 1.0, exclusions, effect_area)
+				reveal._rng.seed = 5831
+				_present(reveal, "cat", cat, batch, level)
+				reveal.advance(0.20)
+				var expanded: Dictionary = reveal.snapshot()
+				for key: String in ["rect", "resting_rect", "picture_rect", "spelling_rect", "font_size",
+					"animated_scale", "variant_scale", "elapsed", "duration", "content_alpha"]:
+					check(expanded[key] == original[key],
+						"Extra room for falling fireworks preserves the original reading card's " + key)
+				if level >= 4:
+					check(_rect(expanded.effects.rect).is_equal_approx(effect_area),
+						"High-level fireworks use the separately bounded falling area")
+				else:
+					check(expanded.effects.rect == original.effects.rect,
+						"The wider firework canvas does not change ordinary collection effects")
+				var card = reveal._entries[0]
+				check(card._level_effects.z_index < card._visual.z_index,
+					"Concurrent fireworks remain behind every card's reading surface")
+				_check_bounds(reveal, reading_area, effect_area)
+				_check_input(reveal)
+				var before: Array = expanded.entries.duplicate(true)
+				reveal.configure_layout(reading_area, 1.0, exclusions, effect_area)
+				check(reveal.snapshot().entries == before,
+					"Repeating both layout regions leaves placement and every effect clock untouched")
+				if reduced:
+					reveal.advance(0.10)
+					var still: Dictionary = reveal.snapshot()
+					check(still.rect == expanded.rect and still.effects.rect == expanded.effects.rect,
+						"Reduced-motion cards and their wider effect footprint remain stationary")
+
+
+func _check_firework_trajectories() -> void:
+	var effects := Reveal.Card.LevelEffects.new()
+	for batch: bool in [false, true]:
+		effects.configure(Vector2(180, 90), 1.0, 6, Color.WHITE, batch, 60.0)
+		var origin := Vector2(210, 130)
+		var reach: float = 60.0
+		for direction: Vector2 in [Vector2.UP, Vector2(-0.6, -0.8), Vector2(0.6, -0.8)]:
+			var rising: Vector2 = effects._firework_point(origin, direction, reach, 0.20, 1.0)
+			var opening: Vector2 = effects._firework_point(origin, direction, reach, 0.45, 1.0)
+			var falling: Vector2 = effects._firework_point(origin, direction, reach, 0.90, 1.0)
+			check(rising.y < origin.y and opening.y < origin.y,
+				"Upward firework spokes first open above their own origin")
+			check(falling.y - opening.y > reach * 0.25,
+				"Even upward spokes turn into a clearly descending tail before fading")
+		var early: Vector2 = effects._firework_point(origin, Vector2.RIGHT, reach, 0.30, 1.0)
+		var middle: Vector2 = effects._firework_point(origin, Vector2.RIGHT, reach, 0.60, 1.0)
+		var late: Vector2 = effects._firework_point(origin, Vector2.RIGHT, reach, 0.90, 1.0)
+		check(early.x - origin.x > reach * 0.75,
+			"The initial firework release opens decisively across its available reach")
+		check(late.x - middle.x < middle.x - early.x and late.y > middle.y,
+			"Radial movement slows while the late trail continues falling")
+	effects.free()
+
+
+func _check_firework_stamp_exclusions() -> void:
+	var effects := Reveal.Card.LevelEffects.new()
+	effects.configure(Vector2(180, 90), 1.0, 6, Color.WHITE, false, 60.0)
+	var available := Rect2(-30, -10, 420, 260)
+	var blocked := Rect2(110, 80, 90, 65)
+	effects.fit_area(available, [blocked])
+	var canvas := Rect2(Vector2.ZERO, available.size)
+	var local_blocked := Rect2(blocked.position - available.position, blocked.size)
+	check(effects.position + effects._card.position == Vector2.ZERO
+		and effects._card.size == Vector2(180, 90),
+		"Expanding the effect canvas preserves the card's original position and size")
+	check(is_zero_approx(effects._stamp_fit(local_blocked.get_center(), Vector2(80, 18), PI / 4.0)),
+		"A sparkle centered inside a live control is suppressed completely")
+	check(is_equal_approx(effects._stamp_fit(Vector2(70, 40), Vector2(24, 14), PI / 4.0), 1.0),
+		"A clear sparkle retains its full production-artwork size")
+	var partial: float = effects._stamp_fit(Vector2(local_blocked.position.x - 8, local_blocked.get_center().y),
+		Vector2(80, 18), PI / 4.0)
+	check(partial > 0.0 and partial < 1.0,
+		"A sparkle near a control shrinks to the remaining space instead of covering it")
+	var blocked_polygon := PackedVector2Array([local_blocked.position, Vector2(local_blocked.end.x, local_blocked.position.y),
+		local_blocked.end, Vector2(local_blocked.position.x, local_blocked.end.y)])
+	for point: Vector2 in [Vector2(2, 2), Vector2(418, 258), Vector2(70, 40),
+		Vector2(130, 120), Vector2(185, 80), Vector2(240, 120), Vector2(185, 165),
+		Vector2(132, 82), Vector2(238, 163)]:
+		for angle: float in [0.0, PI / 6.0, PI / 4.0, PI / 2.0]:
+			var extent := Vector2(80, 18)
+			var fit: float = effects._stamp_fit(point, extent, angle)
+			check(fit > 0.0 and fit <= 1.0, "A nonblocked spark receives a valid visible fit")
+			var polygon := PackedVector2Array()
+			for corner: Vector2 in [Vector2(-0.5, -0.5), Vector2(0.5, -0.5), Vector2(0.5, 0.5), Vector2(-0.5, 0.5)]:
+				var painted_corner: Vector2 = point + (corner * extent * fit).rotated(angle)
+				polygon.append(painted_corner)
+				check(canvas.grow(0.01).has_point(painted_corner),
+					"Every rotated texture corner stays inside the effect canvas")
+			var overlaps: Array[PackedVector2Array] = Geometry2D.intersect_polygons(polygon, blocked_polygon)
+			var overlap_area: float = 0.0
+			for overlap: PackedVector2Array in overlaps:
+				var twice_area: float = 0.0
+				for index in range(overlap.size()):
+					twice_area += overlap[index].cross(overlap[(index + 1) % overlap.size()])
+				overlap_area += absf(twice_area) * 0.5
+			check(overlap_area < 0.01, "The actual rotated artwork polygon remains clear of the live control")
+	effects.free()
+
+
 func _check_delayed_reveal(reveal) -> void:
 	for level: int in [1, 3, 4, 6]:
 		for batch: bool in [false, true]:
@@ -462,7 +580,7 @@ func _check_charge_case(reveal, level: int, batch: bool, reduced: bool) -> void:
 		"pause or exit cleanup cancels charged cards without a later callback")
 
 
-func _check_bounds(reveal, area: Rect2) -> void:
+func _check_bounds(reveal, area: Rect2, effect_area: Rect2 = Rect2()) -> void:
 	var state: Dictionary = reveal.snapshot()
 	check(int(state.active_count) == state.entries.size(), "the active count matches all rendered reveal entries")
 	for entry: Dictionary in state.entries:
@@ -473,9 +591,10 @@ func _check_bounds(reveal, area: Rect2) -> void:
 				entry.spelling, entry.elapsed, panel, _rect(entry.picture_rect), _rect(entry.spelling_rect)])
 		check(_rect(entry.picture_rect).end.x <= _rect(entry.spelling_rect).position.x,
 			"artwork and spelling retain separate reading space")
-		check(area.grow(0.1).encloses(_rect(entry.effects.rect)),
+		var effect_bounds: Rect2 = effect_area if effect_area.has_area() and int(entry.merge_level) >= 4 else area
+		check(effect_bounds.grow(0.1).encloses(_rect(entry.effects.rect)),
 			"the full effect footprint remains inside the available reading region: area %s effect %s card %s level %d age %.3f" % [
-				area, _rect(entry.effects.rect), _rect(entry.resting_rect), int(entry.merge_level), float(entry.elapsed)])
+				effect_bounds, _rect(entry.effects.rect), _rect(entry.resting_rect), int(entry.merge_level), float(entry.elapsed)])
 		var json: Dictionary = JSON.parse_string(JSON.stringify(entry))
 		check(json.rect is Array and json.picture_rect is Array and json.spelling_rect is Array and json.resting_rect is Array,
 			"each entry exposes numeric rectangle coordinates to the browser")

@@ -12,6 +12,7 @@ var _serial: int = 0
 var _reduced_motion: bool = false
 var _ui_scale: float = 1.0
 var _exclusions: Array[Rect2] = []
+var _effect_area := Rect2()
 
 
 func _init() -> void:
@@ -23,14 +24,16 @@ func _init() -> void:
 	hide()
 
 
-func configure_layout(available: Rect2, ui_scale: float, exclusions: Array[Rect2] = []) -> void:
+func configure_layout(available: Rect2, ui_scale: float, exclusions: Array[Rect2] = [], effect_available: Rect2 = Rect2()) -> void:
 	var next_scale: float = maxf(0.5, ui_scale)
-	if get_rect() == available and _ui_scale == next_scale and _exclusions == exclusions:
+	var next_effect_area: Rect2 = effect_available if effect_available.has_area() else available
+	if get_rect() == available and _ui_scale == next_scale and _exclusions == exclusions and _effect_area == next_effect_area:
 		return
 	position = available.position
 	size = available.size.max(Vector2.ZERO)
 	_ui_scale = next_scale
 	_exclusions = exclusions.duplicate()
+	_effect_area = next_effect_area
 	var placed: Array[Card] = []
 	for entry: Card in _entries:
 		entry.fit_content(size, _ui_scale)
@@ -114,6 +117,10 @@ func _place(entry: Card, occupied: Array[Card]) -> void:
 		if excluded_area <= 0.0 and score <= 0.0:
 			break
 	entry.rest_position = best.get_center() - entry.size * 0.5
+	var effect_exclusions: Array[Rect2] = []
+	for exclusion: Rect2 in _exclusions:
+		effect_exclusions.append(Rect2(exclusion.position - position - entry.rest_position, exclusion.size))
+	entry.fit_effect_area(Rect2(_effect_area.position - position - entry.rest_position, _effect_area.size), effect_exclusions)
 
 
 func advance(delta: float) -> void:

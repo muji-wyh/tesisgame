@@ -74,6 +74,22 @@ opacity and timing changed; their source, creator, license and acquisition
 status remain in the table below. The core glow, inward streams and outward
 trails are runtime animation of these static production textures.
 
+The wider Lv4-Lv6 popup fireworks use a separate cosmetic canvas, leaving card
+size, placement and reading time intact. Blossom radii are about 1.7 times the
+previous size, with a wider horizontal spread. Drag slows the outward release
+before gravity bends even the upward spokes down; short samples of that path
+form tapered trails instead of keeping each ember tied to its burst origin.
+The manual ember lifetime extends up to 1.72 seconds within the existing card
+lifetime. A later fade keeps the descent visible. Batch tails stay compact.
+
+The cosmetic canvas extends toward the middle of the playfield, up to 58 percent
+of its height or 440 display pixels; short landscape layouts retain at least
+their reading region. This gives lower blossoms room to fall past the old card
+halo. Every rotated texture stamp respects the existing control exclusions,
+and all fireworks draw behind all live reading surfaces during rapid pickups.
+Reduced motion keeps the existing still light and stars. Board effects, source
+textures, sound, collection cadence and reward rules are unchanged.
+
 ## Acquired material
 
 The three existing production particle textures were inspected in a local source

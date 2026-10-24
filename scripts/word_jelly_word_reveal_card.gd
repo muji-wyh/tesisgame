@@ -159,6 +159,10 @@ func effect_margin() -> float:
 		minf(_available.x, _available.y) * 0.20)
 
 
+func fit_effect_area(available: Rect2, exclusions: Array[Rect2]) -> void:
+	_level_effects.fit_area(available, exclusions)
+
+
 func charge_progress() -> float:
 	return clampf(1.0 + elapsed / anticipation_seconds, 0.0, 1.0) if anticipation_seconds > 0.0 else 0.0
 

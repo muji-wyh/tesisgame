@@ -1675,10 +1675,22 @@ additiveTest('different merged levels add up to six and an over-limit same-word 
   await page.evaluate(() => {
     const status = document.getElementById('game-status');
     window.sixLevelCollection = [];
+    window.sixLevelTailSnapshot = null;
     window.sixLevelCollectionObserver = new MutationObserver(() => {
       const current = JSON.parse(status.dataset.jelly || '{}');
       window.sixLevelCollection.push({ fusions: current.fusions, effects: current.collection_effects,
         reveal: current.word_reveal, cleared: current.cleared_pairs });
+      const tail = current.word_reveal.entries.find(entry => entry.merge_level === 6 && entry.visible &&
+        entry.elapsed >= 1.1 && entry.elapsed < entry.duration && entry.effects.pattern === 'bouquet');
+      if (tail && !window.sixLevelTailSnapshot) {
+        const canvas = document.getElementById('canvas'), bounds = canvas.getBoundingClientRect();
+        const snapshot = document.createElement('canvas');
+        snapshot.width = Math.round(bounds.width);
+        snapshot.height = Math.round(bounds.height);
+        snapshot.getContext('2d').drawImage(canvas, 0, 0, snapshot.width, snapshot.height);
+        window.sixLevelTailSnapshot = { entry: tail, at: performance.now(),
+          image: snapshot.toDataURL('image/png').split(',')[1] };
+      }
     });
     window.sixLevelCollectionObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
   });
@@ -1688,18 +1700,28 @@ additiveTest('different merged levels add up to six and an over-limit same-word 
     await pressRect(page, collectible.rect);
     await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(1);
     await expect.poll(() => page.evaluate(() => window.sixLevelCollection.some(frame =>
-      frame.reveal.entries.some(entry => entry.merge_level === 6 && entry.visible && entry.content_alpha > 0.9))),
-    { message: 'The observed collection reaches a visible full-opacity Lv6 reading card' }).toBe(true);
+      frame.reveal.entries.some(entry => entry.merge_level === 6 && entry.elapsed >= 0.1 &&
+        entry.visible && entry.content_alpha > 0.9))),
+    { message: 'The released collection reaches a visible full-opacity Lv6 reading card' }).toBe(true);
+    await expect.poll(() => page.evaluate(() => Boolean(window.sixLevelTailSnapshot)),
+      { message: 'The Lv6 top fireworks retain rendered tail evidence after 1.1 seconds' }).toBe(true);
   } finally {
-    timeline = await page.evaluate(() => {
+    const evidence = await page.evaluate(() => {
       window.sixLevelCollectionObserver.disconnect();
-      return window.sixLevelCollection;
+      return { timeline: window.sixLevelCollection, tail: window.sixLevelTailSnapshot };
     });
+    timeline = evidence.timeline;
     fs.writeFileSync(info.outputPath('word-jelly-six-level-collection.json'), JSON.stringify(timeline, null, 2));
+    if (evidence.tail) {
+      const { image, ...snapshot } = evidence.tail;
+      fs.writeFileSync(info.outputPath('word-jelly-six-level-top-tail.png'), Buffer.from(image, 'base64'));
+      fs.writeFileSync(info.outputPath('word-jelly-six-level-top-tail.json'), JSON.stringify(snapshot, null, 2));
+    }
   }
   expect(timeline.some(frame => frame.reveal.entries.some(entry =>
-    entry.merge_level === 6 && entry.elapsed < 0 && !entry.visible && entry.content_alpha === 0)),
-  'The reading card waits invisibly while the real Lv6 jelly charges').toBe(true);
+    entry.merge_level === 6 && entry.elapsed < 0 && entry.visible && entry.effects.phase === 'charging' &&
+    entry.animated_scale.every(scale => scale < 0.9))),
+  'The visible reading card contracts while the real Lv6 jelly charges').toBe(true);
   expect(timeline.some(frame => frame.reveal.entries.some(entry =>
     entry.merge_level === 6 && entry.visible && entry.effects.pattern === 'bouquet')),
   'The final level releases its prismatic reading-card echo').toBe(true);

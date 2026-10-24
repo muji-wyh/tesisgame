@@ -11,6 +11,7 @@ clean checkout, and historical export hashes must not be used as release targets
 
 | Record | What it establishes at that revision |
 | --- | --- |
+| [Wider top Jelly fireworks](2026-10-24-jelly-firework-fall.md) | Broader blossoms, longer descending trails, protected card text and controls, and matched native regression evidence |
 | [Runtime and export cleanup](2026-10-24-unused-runtime-cleanup.md) | Source-only resource exclusions, dead-code removal, measured pack reduction, focused regression checks and inherited core-suite failures |
 | [Grow with Pip](2026-10-09-growth-system.md) | Shared word mastery, permanent levels, ten Pip stages, researched ESL vocabulary, retired identity/room systems and release regression evidence |
 | [Repository cleanup](2026-10-07-repository-cleanup.md) | Unused runtime helpers, retired chest and save-mutation paths, and source-only asset copies removed from the pack |

@@ -1857,9 +1857,12 @@ func _layout() -> void:
 		# Short landscape screens need two compact rows for distinct collection beats.
 		var reveal_fraction: float = 0.60 if size.x > size.y * 1.4 and size.y * s < 350.0 else 0.40
 		var finish_rect: Rect2 = get_global_transform().affine_inverse() * finish_button.get_global_rect()
+		# Falling embers get room below the reading cards without moving or resizing them.
+		var firework_area := Rect2(Vector2.ONE * edge,
+			Vector2(size.x - edge * 2.0, minf(440.0 / s, size.y * maxf(0.58, reveal_fraction)) - edge))
 		_word_reveal.configure_layout(Rect2(Vector2.ONE * edge,
 			Vector2(size.x - edge * 2.0, minf(280.0 / s, size.y * reveal_fraction) - edge)), s,
-			[chest_meter_rect().grow(10.0 / s), collect_button.get_rect().grow(8.0 / s), finish_rect.grow(8.0 / s)])
+			[chest_meter_rect().grow(10.0 / s), collect_button.get_rect().grow(8.0 / s), finish_rect.grow(8.0 / s)], firework_area)
 	_sync_positions()
 	_refresh_fusion()
 	_refresh_hud()

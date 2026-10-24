@@ -10,11 +10,11 @@ const PROFILES: Array[Dictionary] = [
 	{"name": "Crystal ripple", "pattern": "ripple", "sparks": 20, "bursts": 2, "hue": 0.51, "margin": 23.0},
 	{"name": "Sapphire spiral", "pattern": "spiral", "sparks": 32, "bursts": 1, "hue": 0.65, "margin": 32.0},
 	{"name": "Golden fireworks", "pattern": "fireworks", "sparks": 48, "bursts": 3, "hue": 0.11, "margin": 44.0,
-		"trails": 3},
-	{"name": "Double cascade", "pattern": "cascade", "sparks": 72, "bursts": 4, "hue": 0.93, "margin": 56.0,
-		"trails": 3},
-	{"name": "Prismatic bouquet", "pattern": "bouquet", "sparks": 120, "bursts": 6, "hue": 0.10, "margin": 72.0,
 		"trails": 5},
+	{"name": "Double cascade", "pattern": "cascade", "sparks": 72, "bursts": 4, "hue": 0.93, "margin": 56.0,
+		"trails": 6},
+	{"name": "Prismatic bouquet", "pattern": "bouquet", "sparks": 120, "bursts": 6, "hue": 0.10, "margin": 72.0,
+		"trails": 7},
 ]
 
 var level: int = 1
@@ -27,6 +27,7 @@ var _ui_scale: float = 1.0
 var _margin: float = 6.0
 var _card := Rect2()
 var _accent := Color.WHITE
+var _exclusions: Array[Rect2] = []
 
 
 func _init() -> void:
@@ -34,6 +35,8 @@ func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	focus_mode = Control.FOCUS_NONE
 	clip_contents = true
+	# All concurrent reading surfaces stay above every card's wider fireworks.
+	z_index = -1
 
 
 static func profile(value: int) -> Dictionary:
@@ -53,6 +56,20 @@ func configure(card_size: Vector2, ui_scale: float, value: int, accent: Color, b
 	position = -Vector2.ONE * _margin
 	size = card_size + Vector2.ONE * _margin * 2.0
 	_card = Rect2(Vector2.ONE * _margin, card_size)
+	_exclusions.clear()
+	queue_redraw()
+
+
+func fit_area(available: Rect2, exclusions: Array[Rect2]) -> void:
+	if level < 4:
+		return
+	# Fireworks can use the reading region without shrinking the word to buy space.
+	position = available.position
+	size = available.size
+	_card.position = -position
+	_exclusions.clear()
+	for exclusion: Rect2 in exclusions:
+		_exclusions.append(Rect2(exclusion.position - position, exclusion.size))
 	queue_redraw()
 
 
@@ -78,17 +95,30 @@ func color_at(index: int = 0) -> Color:
 func _stamp(texture: Texture2D, point: Vector2, extent: Vector2, color: Color, angle: float = 0.0) -> void:
 	if color.a <= 0.002 or extent.x <= 0.0 or extent.y <= 0.0:
 		return
+	var fit: float = _stamp_fit(point, extent, angle)
+	if fit <= 0.0:
+		return
+	var fitted: Vector2 = extent * fit
+	draw_set_transform(point, angle)
+	draw_texture_rect(texture, Rect2(fitted * -0.5, fitted), false, color)
+
+
+func _stamp_fit(point: Vector2, extent: Vector2, angle: float) -> float:
 	# Fit the rotated artwork itself, including its corners, to the reserved halo.
 	var half: Vector2 = extent * 0.5
 	var rotated := Vector2(absf(cos(angle)) * half.x + absf(sin(angle)) * half.y,
 		absf(sin(angle)) * half.x + absf(cos(angle)) * half.y)
 	var room: Vector2 = point.min(size - point).max(Vector2.ZERO)
 	var fit: float = minf(1.0, minf(room.x / maxf(rotated.x, 0.001), room.y / maxf(rotated.y, 0.001)))
-	if fit <= 0.0:
-		return
-	var fitted: Vector2 = extent * fit
-	draw_set_transform(point, angle)
-	draw_texture_rect(texture, Rect2(fitted * -0.5, fitted), false, color)
+	for exclusion: Rect2 in _exclusions:
+		if exclusion.has_point(point):
+			return 0.0
+		# Keep the entire rotated stamp clear of Finish and other live controls.
+		var gap := Vector2(maxf(exclusion.position.x - point.x, point.x - exclusion.end.x),
+			maxf(exclusion.position.y - point.y, point.y - exclusion.end.y))
+		var clearance: float = maxf(gap.x / maxf(rotated.x, 0.001), gap.y / maxf(rotated.y, 0.001))
+		fit = minf(fit, clearance)
+	return clampf(fit, 0.0, 1.0)
 
 
 func _rim(angle: float, offset: float = 0.0) -> Vector2:
@@ -251,26 +281,30 @@ func _draw_celebration(fade: float) -> void:
 
 
 func _firework_point(origin: Vector2, direction: Vector2, reach: float, age: float, life: float) -> Vector2:
-	# A firework opens from one point, slows in air, then lets its embers fall.
+	# Radial drag opens a broad flower; gravity overtakes even its upward spokes.
 	var time: float = clampf(age / life, 0.0, 1.0)
 	var travel: float = (1.0 - exp(-time * 4.5)) / (1.0 - exp(-4.5))
-	return origin + direction * reach * travel + Vector2(0.0, reach * 0.30 * time * time)
+	var falling: float = maxf(0.0, (time - 0.08) / 0.92)
+	var spread: Vector2 = direction * Vector2(1.16, 0.88) * reach * travel
+	var drop: float = reach * (0.95 if _batch else 1.40) * falling * falling
+	return origin + spread + Vector2(direction.x * reach * 0.045 * time * time, drop)
 
 
 func _draw_explosion(fade: float) -> void:
 	var selected: Dictionary = PROFILES[level - 1]
 	var groups: int = int(selected.bursts)
 	var span: float = _emission_span()
-	var life: float = minf(0.36, duration - span) if _batch else 1.32
 	var count: int = _spark_count()
 	var trails: int = _trail_count()
 	for group in range(groups):
 		var spokes: int = count / groups + (1 if group < count % groups else 0)
-		var age: float = elapsed - span * float(group) / float(maxi(1, groups - 1))
+		var delay: float = span * float(group) / float(maxi(1, groups - 1))
+		var age: float = elapsed - delay
+		var life: float = minf(0.36, duration - span) if _batch else minf(1.72, duration - delay - 0.08)
 		if age <= 0.0 or age >= life:
 			continue
 		var origin: Vector2 = _burst_origin(group)
-		var radius: float = _margin * (0.57 + float(group % 2) * 0.03)
+		var radius: float = _margin * (0.96 + float(group % 2) * 0.06)
 		var tint: Color = color_at(group)
 		var opening: float = smoothstep(0.0, 0.012, age) * (1.0 - smoothstep(0.025, life * 0.27, age))
 		_stamp(GLOW, origin, Vector2.ONE * radius * 1.5, Color(tint, opening * fade * 0.55))
@@ -283,23 +317,23 @@ func _draw_explosion(fade: float) -> void:
 			# The alternating inner and outer petals share one unmistakable origin.
 			var reach: float = radius * (0.72 + phase * 0.28)
 			var point: Vector2 = _firework_point(origin, direction, reach, age, life)
-			var opacity: float = fade * smoothstep(0.0, 0.015, age) * (1.0 - smoothstep(life * 0.55, life, age))
+			var opacity: float = fade * smoothstep(0.0, 0.015, age) * (1.0 - smoothstep(life * 0.68, life, age))
 			var edge: float = minf((9.0 + level * 0.75 + phase * 3.5) / _ui_scale, radius * 0.38)
 			var ember: Color = tint.lerp(Color(1.0, 0.78, 0.32), smoothstep(life * 0.5, life, age) * 0.55)
-			var stem: Vector2 = _firework_point(origin, direction, reach, age * 0.32, life)
-			var streak: Vector2 = point - stem
-			_stamp(STAR, stem.lerp(point, 0.5), Vector2(streak.length() * 1.6, edge * 0.70),
-				Color(ember, opacity * 0.9), streak.angle())
+			# Consecutive trajectory samples bend the tail with the falling tip;
+			# a line back toward the burst would pin late embers into radial spokes.
 			for tail in range(trails, 0, -1):
-				var previous_age: float = age - float(tail) * life * 0.035
+				var previous_age: float = age - float(tail) * life * 0.045
 				if previous_age <= 0.0:
 					continue
 				var behind: Vector2 = _firework_point(origin, direction, reach, previous_age, life)
+				var ahead: Vector2 = _firework_point(origin, direction, reach, previous_age + life * 0.045, life)
 				var strength: float = 1.0 - float(tail) / float(trails + 1)
-				var tangent: Vector2 = point - behind
-				_stamp(STAR, behind, Vector2(edge * (0.55 + strength), edge * 0.42),
-					Color(ember, opacity * strength * 0.72), tangent.angle())
-			var shrink: float = lerpf(1.0, 0.40, smoothstep(life * 0.2, life, age))
+				var tangent: Vector2 = ahead - behind
+				_stamp(STAR, behind.lerp(ahead, 0.5),
+					Vector2(tangent.length() * 1.65 + edge * 0.30, edge * (0.25 + strength * 0.26)),
+					Color(ember, opacity * strength * 0.86), tangent.angle())
+			var shrink: float = lerpf(1.0, 0.56, smoothstep(life * 0.2, life, age))
 			_stamp(STAR, point, Vector2.ONE * edge * shrink, Color(ember, opacity), angle)
 			_stamp(STAR, point, Vector2.ONE * edge * shrink * 0.32, Color(1.0, 0.99, 0.86, opacity))
 

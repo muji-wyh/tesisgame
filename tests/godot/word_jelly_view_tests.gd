@@ -1493,14 +1493,24 @@ func _check_word_reveal_control_clearance(view) -> void:
 		view._collect_all()
 		var protected: Array[Rect2] = [view.finish_button.get_global_rect(), view.collect_button.get_global_rect(),
 			view.get_global_transform() * view.chest_meter_rect()]
+		var checked_effects: Dictionary = {}
 		for tick in range(17):
 			view._process(0.05)
 			for entry: Dictionary in view.snapshot().word_reveal.entries:
 				var panel: Rect2 = _snapshot_rect(entry.rect)
 				var effects: Rect2 = _snapshot_rect(entry.effects.rect)
+				check(view.get_global_rect().grow(0.1).encloses(effects),
+					"The larger falling-firework canvas remains bounded by the game viewport")
 				for control: Rect2 in protected:
-					check(not panel.intersects(control) and not effects.intersects(control),
-						"collection cards and their high-level halos leave Finish, chest and Collect readable at %s" % dimensions)
+					check(not panel.intersects(control),
+						"Collection cards leave Finish, chest and Collect readable at %s" % dimensions)
+					if int(entry.merge_level) < 4:
+						check(not effects.intersects(control), "Ordinary collection halos remain clear of live controls")
+				if int(entry.merge_level) >= 4 and not checked_effects.has(entry.entry_id):
+					for card in view._word_reveal._entries:
+						if card.entry_id == int(entry.entry_id):
+							_check_firework_control_stamps(card._level_effects, protected)
+					checked_effects[entry.entry_id] = true
 		var state: Dictionary = view.snapshot()
 		# Stay between release-based expiry boundaries on both compact layouts.
 		var visible_count: int = _batch_reveal_count(4, 0.85, float(state.word_reveal.duration))
@@ -1509,6 +1519,28 @@ func _check_word_reveal_control_clearance(view) -> void:
 		if dimensions == Vector2(1000, 720):
 			check(visible_count == 4, "the full reading region supports four concurrent collection pops before their first expiry")
 	view.size = Vector2(1000, 720)
+
+
+func _check_firework_control_stamps(effects, protected: Array[Rect2]) -> void:
+	for control: Rect2 in protected:
+		var local_control: Rect2 = effects.get_global_transform().affine_inverse() * control
+		var excluded: bool = false
+		for exclusion: Rect2 in effects._exclusions:
+			excluded = excluded or exclusion.grow(0.01).encloses(local_control)
+		check(excluded, "Each live control is mapped into every high-level firework's exclusion space")
+		for horizontal: float in [-0.15, 0.15, 0.50, 0.85, 1.15]:
+			for vertical: float in [-0.15, 0.15, 0.50, 0.85, 1.15]:
+				var point: Vector2 = local_control.position + local_control.size * Vector2(horizontal, vertical)
+				for angle: float in [0.0, PI / 4.0, PI / 3.0]:
+					var extent := Vector2(36, 12)
+					var fit: float = effects._stamp_fit(point, extent, angle)
+					if fit <= 0.0:
+						continue
+					var painted := Rect2(point, Vector2.ZERO)
+					for corner: Vector2 in [Vector2(-0.5, -0.5), Vector2(0.5, -0.5), Vector2(0.5, 0.5), Vector2(-0.5, 0.5)]:
+						painted = painted.expand(point + (corner * extent * fit).rotated(angle))
+					check(not painted.grow(-0.01).intersects(local_control),
+						"Rotated fireworks near live controls keep all painted corners outside the control")
 
 
 func _check_word_reveal_lifecycle(view) -> void:
