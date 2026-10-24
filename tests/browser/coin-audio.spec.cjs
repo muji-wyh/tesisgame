@@ -1,7 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const {
-  openGame, enterGame, openModeMenu, chooseMode, activateLibraryControl, metrics, tap
+  openGame, enterGame, openModeMenu, chooseMode, activateLibraryControl, metrics, tap, seedPipLevel
 } = require('./game-ui.cjs');
 const {
   watchAudioRequests, observeOutputAudio, expectRecording, recordingTiming
@@ -27,11 +27,7 @@ async function pressRect(page, rect) {
 async function start(page, reducedMotion) {
   // Each Playwright context owns an isolated save. Keep the same current-age
   // vocabulary while exercising the production merge and wallet paths.
-  await page.addInitScript(() => {
-    const key = 'growWithPip.growth.v1';
-    if (localStorage.getItem(key) === null) localStorage.setItem(key,
-      '[growth]\nversion=3\nlevel=0\nage=0\nstreaks={}\nmastered_words=[]\nreceipts=[]\n');
-  });
+  await seedPipLevel(page, 3);
   const errors = await openGame(page, { reducedMotion, mode: 'word_jelly' });
   await settled(page);
   return errors;

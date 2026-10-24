@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test');
-const { openGame, openModeMenu, chooseMode, activateLibraryControl, metrics, tap, rendered } = require('./game-ui.cjs');
+const { openGame, openModeMenu, chooseMode, activateLibraryControl, metrics, tap, rendered, seedPipLevel } = require('./game-ui.cjs');
 const { watchAudioRequests, observeOutputAudio, expectOutputEnergy, expectRecording, recordingTiming } = require('./bundled-audio.cjs');
 
 const CLIPS = {
@@ -478,11 +478,7 @@ test('Jelly Words reuses one fixed bubble pop per manual or batch collection and
   const requests = watchAudioRequests(page), evidence = { source: COLLECTION_CLIP };
   await observeOutputAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5, trackSourceLifecycle: true });
   // Keep the saved learner used by the authored suite while following live stage supply.
-  await page.addInitScript(age => {
-    const key = 'growWithPip.growth.v1';
-    if (!localStorage.getItem(key)) localStorage.setItem(key,
-      `[growth]\nversion=3\nlevel=0\nage=${age - 1}\nstreaks={}\nmastered_words=[]\nreceipts=[]\n`);
-  }, LEARNER_AGE);
+  await seedPipLevel(page, 3, { age: LEARNER_AGE - 1 });
   const errors = await openGame(page, { mode: 'word_jelly', reducedMotion: 'no-preference' });
   const available = await page.evaluate(() => window.audioObservation.available);
   if (browserName === 'chromium') expect(available).toBe(true);

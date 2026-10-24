@@ -6066,6 +6066,8 @@ func _refresh_growth() -> void:
 		return
 	var state: Dictionary = growth.snapshot()
 	var career: Dictionary = _professional_profile_for(_round_context)
+	var active_pip: Dictionary = career if not career.is_empty() else state
+	_word_jelly.set_pip_level(int(active_pip.get("level", 0)) if active_pip.get("ready", false) else 0)
 	_mode_panel.configure_growth(state)
 	_mode_panel.configure_professional(_professional_profile_for(_home_context))
 	for mascot in [duck, _phrase.pip, _round_celebration.pip, _single_result.pip]:
@@ -6075,7 +6077,7 @@ func _refresh_growth() -> void:
 	for room in [_pop_rewards, _jelly_rewards]:
 		room.set_companion(room.pip.theme_id, growth.age)
 		room.pip.set_professional_profile(career)
-	_growth_button.configure(career if not career.is_empty() else state)
+	_growth_button.configure(active_pip)
 	_growth_button.show()
 	_professional_button.hide()
 	_pip_age_description = ("%s · %s" % [career.course_title, career.label] if career.get("ready", false)

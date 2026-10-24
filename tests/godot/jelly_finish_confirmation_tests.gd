@@ -274,6 +274,7 @@ func check_danger(app, mode: String) -> void:
 
 func check_collection_batch(app) -> void:
 	fresh_round(app, "word_jelly")
+	Fixture.unlock_auto_collect(app)
 	var view = app._word_jelly
 	var word: Dictionary = app._learning_words().filter(func(candidate: Dictionary) -> bool:
 		return str(candidate.text).length() >= 2 and str(candidate.text).length() <= 6 \

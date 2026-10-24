@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
-const { openGame, openModeMenu, chooseMode, metrics, tap, rendered, enterGame, observeAudio, seedGrowth } = require('./game-ui.cjs');
+const { openGame, openModeMenu, chooseMode, metrics, tap, rendered, enterGame, observeAudio, seedGrowth, seedPipLevel } = require('./game-ui.cjs');
 const { recordingTiming, expectRecording } = require('./bundled-audio.cjs');
 const { collectionCoins, expectCollectionReward } = require('./word-jelly-rewards.cjs');
 const vocabulary = require('../../words.json');
@@ -39,13 +39,9 @@ async function pressRect(page, rect) {
   await rendered(page);
 }
 
-async function startWordJelly(page, { age = COMPOSITION_AGE, reducedMotion = 'no-preference', preseededGrowth = false } = {}) {
+async function startWordJelly(page, { age = COMPOSITION_AGE, reducedMotion = 'no-preference', preseededGrowth = false, pipLevel = 0 } = {}) {
   const earnedAge = age === 3 ? 0 : age - 1;
-  if (!preseededGrowth) await page.addInitScript(earnedAge => {
-    const key = 'growWithPip.growth.v1';
-    if (!localStorage.getItem(key)) localStorage.setItem(key,
-      `[growth]\nversion=3\nlevel=0\nage=${earnedAge}\nstreaks={}\nmastered_words=[]\nreceipts=[]\n`);
-  }, earnedAge);
+  if (!preseededGrowth) await seedPipLevel(page, pipLevel, { age: earnedAge });
   const errors = await openGame(page, { reducedMotion });
   await openModeMenu(page);
   const control = (await metrics(page)).library.controls.find(item => item.name === 'Mode_word_jelly');
@@ -2030,9 +2026,49 @@ test('five columns build a pictured word and a deliberate tap collects Lv1 witho
   expect(errors).toEqual([]);
 });
 
+for (const { pipLevel, reducedMotion } of [
+  { pipLevel: 0, reducedMotion: 'no-preference' },
+  { pipLevel: 2, reducedMotion: 'no-preference' },
+  { pipLevel: 2, reducedMotion: 'reduce' },
+  { pipLevel: 3, reducedMotion: 'no-preference' }
+]) test(`Auto Collect respects Pip Lv${pipLevel} unlock with ${reducedMotion} motion`, async ({ page }, info) => {
+  test.setTimeout(120000);
+  const errors = await startWordJelly(page, { pipLevel, reducedMotion });
+  expect((await growth(page)).level, 'The fixture has validated durable Pip mastery').toBe(pipLevel);
+  const opening = await jelly(page), locked = pipLevel < 3;
+  expect(opening.pip_level).toBe(pipLevel);
+  expect(opening.auto_collect_unlocked).toBe(!locked);
+  expect(opening.collect_button).toMatchObject({ locked, pip_level: pipLevel, unlock_level: 3, visible: true });
+  const candidate = Array.from({ length: 10 }, (_, index) => suppliedWords(opening, index + 3)).flat()[0];
+  expect(candidate, 'The opening supplies a complete word to merge with ordinary input').toBeTruthy();
+  const merged = await completeSuppliedWord(page, candidate);
+  await expect.poll(async () => (await jelly(page)).collect_button.count).toBeGreaterThan(0);
+  const ready = await jelly(page), button = ready.collect_button;
+  expect(button.enabled).toBe(!locked);
+  expect(button.rect, 'Unlock state keeps the same reachable button target').toEqual(opening.collect_button.rect);
+  await capture(page, info, `auto-collect-pip-${pipLevel}-${reducedMotion}`);
+  fs.writeFileSync(info.outputPath('auto-collect-unlock.json'), JSON.stringify({ opening, ready }, null, 2));
+  if (locked) {
+    expect(button.charge).toBe(0);
+    expect(button.sparkle_count).toBe(0);
+    await pressRect(page, button.rect);
+    expect((await jelly(page)).collection_batch.active).toBe(false);
+    expect((await jelly(page)).cleared_pairs).toBe(ready.cleared_pairs);
+    await pressRect(page, (await jelly(page)).tiles.find(tile => tile.id === merged.id).rect);
+    await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(ready.cleared_pairs + 1);
+    expect((await jelly(page)).collect_button.locked, 'Manual collection stays available before unlock').toBe(true);
+  } else {
+    await pressRect(page, button.rect);
+    await expect.poll(async () => (await jelly(page)).collection_batch.completed).toBeGreaterThan(0);
+    await expect.poll(async () => (await jelly(page)).collection_batch.active).toBe(false);
+    expect((await jelly(page)).cleared_pairs).toBeGreaterThan(ready.cleared_pairs);
+  }
+  expect(errors).toEqual([]);
+});
+
 test('collect button grows with completed words and collects a rhythmic batch once', async ({ page }, info) => {
   test.setTimeout(240000);
-  const errors = await startWordJelly(page);
+  const errors = await startWordJelly(page, { pipLevel: 3 });
   const availableStageWord = async (markedOnly = false) => {
     await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
     const state = await jelly(page);

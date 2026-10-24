@@ -6,6 +6,8 @@ const GEL = preload("res://assets/images/jelly-match/gel-mint.png")
 const SKY = preload("res://assets/images/jelly-match/gel-sky.png")
 const LILAC = preload("res://assets/images/jelly-match/gel-lilac.png")
 const WORD_PICTURE = preload("res://assets/images/ui/modes/cat.webp")
+const LOCK = preload("res://assets/images/ui/controls/lock.svg")
+const UNLOCK_LEVEL: int = 3
 const GEL_REGION := Rect2(11, 34, 298, 252)
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const RAYS = preload("res://assets/chests/milestone/rays.png")
@@ -28,6 +30,8 @@ var _growth_strength: float = 0.0
 var _beat_elapsed: float = BEAT_SECONDS
 var _beat_count: int = 0
 var _reduced_motion: bool = false
+var _pip_level: int = 0
+var _locked: bool = true
 var _ui_scale: float = 1.0
 var _panel := StyleBoxFlat.new()
 var _focus := StyleBoxFlat.new()
@@ -37,7 +41,7 @@ func _init() -> void:
 	name = "CollectWords"
 	text = ""
 	focus_mode = Control.FOCUS_ALL
-	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	mouse_default_cursor_shape = Control.CURSOR_ARROW
 	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
 		add_theme_stylebox_override(state, StyleBoxEmpty.new())
 	resized.connect(queue_redraw)
@@ -61,8 +65,8 @@ func set_state(count: int, active: bool, remaining: int, total: int) -> void:
 		_batch_charge = maxi(_batch_charge, _total)
 	else:
 		_batch_charge = 0
-	_active = active
-	var next_charge: float = minf(MAX_CHARGE, float(_batch_charge if _active else _count))
+	_active = active and not _locked
+	var next_charge: float = 0.0 if _locked else minf(MAX_CHARGE, float(_batch_charge if _active else _count))
 	if next_charge > _target_charge:
 		_growth_elapsed = 0.0
 		_growth_strength = minf(1.0, 0.45 + (next_charge - _target_charge) * 0.12)
@@ -70,6 +74,21 @@ func set_state(count: int, active: bool, remaining: int, total: int) -> void:
 	if _reduced_motion:
 		_charge = _target_charge
 		_growth_elapsed = GROW_SECONDS
+	_update_accessibility()
+	queue_redraw()
+
+
+func set_pip_level(level: int) -> void:
+	_pip_level = maxi(0, level)
+	var next_locked: bool = _pip_level < UNLOCK_LEVEL
+	mouse_default_cursor_shape = Control.CURSOR_ARROW if next_locked else Control.CURSOR_POINTING_HAND
+	if next_locked != _locked:
+		_locked = next_locked
+		_charge = 0.0
+		_target_charge = 0.0
+		_growth_elapsed = GROW_SECONDS
+		_beat_elapsed = BEAT_SECONDS
+		set_state(_count, _active, _remaining, _total)
 	_update_accessibility()
 	queue_redraw()
 
@@ -90,7 +109,7 @@ func set_ui_scale(value: float) -> void:
 
 
 func advance(delta: float) -> void:
-	if _reduced_motion or not is_finite(delta) or delta <= 0.0:
+	if _locked or _reduced_motion or not is_finite(delta) or delta <= 0.0:
 		return
 	_elapsed += delta
 	_charge = lerpf(_charge, _target_charge, 1.0 - exp(-delta / CHARGE_SECONDS))
@@ -102,6 +121,8 @@ func advance(delta: float) -> void:
 
 
 func beat() -> void:
+	if _locked:
+		return
 	_beat_count += 1
 	if not _reduced_motion:
 		_beat_elapsed = 0.0
@@ -127,7 +148,9 @@ func reset() -> void:
 
 func _update_accessibility() -> void:
 	var description: String = "Collect %d completed words" % _count
-	if _active:
+	if _locked:
+		description = "Auto Collect locked. Reach Pip Lv%d to unlock" % UNLOCK_LEVEL
+	elif _active:
 		description = "Collecting words. %d of %d remaining" % [_remaining, _total]
 	elif _count == 0:
 		description = "Collect completed words. Join word parts to complete more words"
@@ -173,16 +196,16 @@ func _draw() -> void:
 		return
 	var pose: Dictionary = _sample()
 	var unit: float = 1.0 / _ui_scale
-	var ready: bool = _count > 0 or _active
+	var ready: bool = not _locked and (_count > 0 or _active)
 	var available: bool = ready and (not disabled or _active)
-	var press: float = 1.0 if is_pressed() and not disabled else 0.0
+	var press: float = 1.0 if is_pressed() and not disabled and not _locked else 0.0
 	var strength: float = float(pose.strength)
 	# Keep the title, frame and count aligned with Auto merge and Treasure.
 	# The acquired jelly illustration carries the growing collection charge.
 	var bounds := Rect2(Vector2.ONE * unit, size - Vector2.ONE * 2.0 * unit)
 	var radius: int = maxi(1, roundi(13.0 * unit))
 	var fill := Color("#f5fbf4").lerp(Color("#e9f6e8"), strength) if available else Color("#f0f1eb")
-	if is_hovered() and not disabled:
+	if is_hovered() and not disabled and not _locked:
 		fill = fill.lightened(0.10)
 	_panel.bg_color = fill
 	_panel.border_color = Color("#c7dfcc") if available else Color("#d5d9d0")
@@ -198,6 +221,10 @@ func _draw() -> void:
 		_focus.set_border_width_all(maxi(2, roundi(2.0 * unit)))
 		_focus.set_corner_radius_all(radius + roundi(2.0 * unit))
 		draw_style_box(_focus, bounds.grow(2.0 * unit))
+	if _locked:
+		_draw_locked_detail(unit)
+		_draw_caption(false, unit)
+		return
 	var icon_edge: float = minf(27.0 * unit, size.x * 0.27) * float(pose.visual_scale)
 	var icon_center := Vector2(7.0 * unit + icon_edge * 0.5, size.y - 17.0 * unit)
 	var halo_edge: float = icon_edge * 1.28
@@ -269,6 +296,8 @@ func _draw_caption(available: bool, unit: float) -> void:
 	var baseline: float = area.get_center().y + (font.get_ascent(font_size) - font.get_descent(font_size)) * 0.5
 	draw_string(font, Vector2(area.get_center().x - extent.x * 0.5, baseline), caption,
 		HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Style.INK if available else Color("#64736b"))
+	if _locked:
+		return
 	var count: int = _remaining if _active else _count
 	var detail: String = "%d left" % count if _active else "%d word%s" % [count, "" if count == 1 else "s"]
 	area = Rect2(Vector2(minf(40.0 * unit, size.x * 0.40), 0.0), Vector2(maxf(1.0, size.x - minf(40.0 * unit, size.x * 0.40) - 6.0 * unit), size.y))
@@ -282,9 +311,27 @@ func _draw_caption(available: bool, unit: float) -> void:
 		HORIZONTAL_ALIGNMENT_LEFT, -1, detail_size, Color("#2f6d59") if available else Color("#718e80"))
 
 
+func _draw_locked_detail(unit: float) -> void:
+	var font: Font = Style.HEADING_FONT
+	var font_size: int = maxi(1, roundi(12.0 * unit))
+	var detail: String = "Lv%d" % UNLOCK_LEVEL
+	var text_width: float = font.get_string_size(detail, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+	var icon_edge: float = minf(22.0 * unit, maxf(16.0 * unit, size.y - 28.0 * unit))
+	var gap: float = 4.0 * unit
+	var row_width: float = icon_edge + gap + text_width
+	var row_x: float = (size.x - row_width) * 0.5
+	var center_y: float = size.y - 15.0 * unit
+	var tint := Color("#64736b")
+	_draw_art(LOCK, Vector2(row_x + icon_edge * 0.5, center_y), Vector2.ONE * icon_edge, tint)
+	var baseline: float = center_y + (font.get_ascent(font_size) - font.get_descent(font_size)) * 0.5
+	draw_string(font, Vector2(row_x + icon_edge + gap, baseline), detail,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, tint)
+
+
 func snapshot() -> Dictionary:
 	var pose: Dictionary = _sample()
 	return {
+		"pip_level": _pip_level, "unlock_level": UNLOCK_LEVEL, "locked": _locked,
 		"count": _count, "active": _active, "remaining": _remaining, "total": _total,
 		"target_charge": _target_charge, "charge": _charge, "stage": int(pose.stage), "surplus": pose.surplus,
 		"visual_scale": pose.visual_scale, "growth": pose.growth,

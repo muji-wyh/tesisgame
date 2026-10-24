@@ -166,7 +166,7 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   assert.equal(controls.license, 'MIT');
   assert.ok(fs.existsSync(path.join(root, controls.license_file)));
   assert.deepEqual(controls.assets.map(asset => asset.id).sort(),
-    ['menu', 'microphone', 'microphone-active', 'bulb', 'eye', 'eye-closed', 'chevron-left', 'chevron-right', 'home'].sort());
+    ['menu', 'microphone', 'microphone-active', 'bulb', 'eye', 'eye-closed', 'chevron-left', 'chevron-right', 'home', 'refresh', 'lock'].sort());
   for (const asset of controls.assets) {
     assert.equal(asset.file, `assets/images/ui/controls/${asset.id}.svg`);
     assert.equal(sha256(fs.readFileSync(path.join(root, asset.file))), asset.integrated_sha256, asset.file);
@@ -175,8 +175,14 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   const controlImports = new Set(controls.assets.map(asset => path.join(root, asset.file + '.import')));
   assert.deepEqual(textureImports.filter(filename => filename.startsWith(path.join(root, 'assets/images/ui/controls') + path.sep)).sort(),
     [...controlImports].sort(), 'Functional icons match the acquired and reviewed family exactly');
+  const careerArtwork = JSON.parse(fs.readFileSync(path.join(root, 'data/pip-professional.json'), 'utf8'));
+  const careerImports = new Set(careerArtwork.profiles.flatMap(profile => Object.values(profile.art))
+    .map(filename => path.join(root, filename + '.import')));
+  assert.equal(careerImports.size, 100, 'Twenty career wardrobes retain five source atlases each');
+  assert.deepEqual(textureImports.filter(filename => filename.startsWith(path.join(root, 'assets/images/mascots/professional') + path.sep)).sort(),
+    [...careerImports].sort(), 'Career imports match the existing wardrobe catalog exactly');
   // Preserved imports, vocabulary motion atlases, Baby Pip sheets and acquired reward textures.
-  assert.equal(textureImports.filter(filename => !addedImports.has(filename) && !reviewedImports.has(filename) && !controlImports.has(filename)).length,
+  assert.equal(textureImports.filter(filename => !addedImports.has(filename) && !reviewedImports.has(filename) && !controlImports.has(filename) && !careerImports.has(filename)).length,
     2862 + 1277 + 5 + 3);
   const jellyMaterials = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/jelly-material.json'), 'utf8'));
   const materialImports = new Set(jellyMaterials.images.map(file => path.join(root, file.import)));
@@ -198,13 +204,13 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
       assert.match(metadata, /^compress\/mode=0$/m, filename);
       assert.match(metadata, /^process\/fix_alpha_border=false$/m, filename);
       assert.match(metadata, /^process\/premult_alpha=false$/m, filename);
-    } else if (rewardImports.has(filename) || pipImports.has(filename)) {
+    } else if (rewardImports.has(filename) || pipImports.has(filename) || careerImports.has(filename)) {
       assert.match(metadata, /^compress\/mode=0$/m, filename);
       assert.match(metadata, /^process\/premult_alpha=false$/m, filename);
     } else {
       assert.match(metadata, /^compress\/mode=1$/m, filename);
     }
-    if (!pipImports.has(filename)) assert.match(metadata, /^compress\/lossy_quality=0\.85$/m, filename);
+    if (!pipImports.has(filename) && !careerImports.has(filename)) assert.match(metadata, /^compress\/lossy_quality=0\.85$/m, filename);
     assert.match(metadata, /^process\/size_limit=0$/m, filename);
     assert.match(metadata, /^mipmaps\/generate=false$/m, filename);
   }

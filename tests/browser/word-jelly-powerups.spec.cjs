@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
 const { collectionCoins, expectCollectionReward } = require('./word-jelly-rewards.cjs');
-const { openGame, openModeMenu, chooseMode, activateLibraryControl, metrics, tap, observeAudio } = require('./game-ui.cjs');
+const { openGame, openModeMenu, chooseMode, activateLibraryControl, metrics, tap, observeAudio, seedPipLevel } = require('./game-ui.cjs');
 const { expectRecording, recordingTiming } = require('./bundled-audio.cjs');
 const morphology = Array.from({ length: 10 }, (_, index) =>
   require(`../../data/vocabulary/morphology/age-${String(index + 3).padStart(2, '0')}.json`).entries).flat();
@@ -65,17 +65,16 @@ function expectFragmentBadge(tile) {
   expect(y + height, 'The chest stack stays inside its jelly').toBeLessThanOrEqual(tile.rect[3] + 0.5);
 }
 
-async function start(page, info, balance) {
+async function start(page, info, balance, pipLevel = 0) {
   const reducedMotion = info.project.use.reducedMotion || 'no-preference';
   await page.setViewportSize(/iphone|android|mobile/.test(info.project.name)
     ? { width: 393, height: 852 } : { width: 1473, height: 1175 });
   await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5, trackSourceLifecycle: true });
-  await page.addInitScript(({ balance, walletKey, growthKey }) => {
+  await seedPipLevel(page, pipLevel);
+  await page.addInitScript(({ balance, walletKey }) => {
     if (localStorage.getItem(walletKey) === null) localStorage.setItem(walletKey,
       `[wallet]\nversion=2\nbalance=${balance}\nreceipts=${JSON.stringify(balance ? { 'browser-opening-coins': balance } : {})}\n`);
-    if (localStorage.getItem(growthKey) === null) localStorage.setItem(growthKey,
-      '[growth]\nversion=3\nlevel=0\nage=0\nstreaks={}\nmastered_words=[]\nreceipts=[]\n');
-  }, { balance, walletKey: WALLET_KEY, growthKey: GROWTH_KEY });
+  }, { balance, walletKey: WALLET_KEY });
   const errors = await openGame(page, { reducedMotion, mode: 'word_jelly' });
   await expect.poll(async () => {
     const state = await jelly(page);
@@ -487,7 +486,7 @@ test('Treasure fragment stacks stay compact after many purchases', async ({ page
 
 test('paid Treasure arrives on the jellies and Auto merge moves every valid pair before a separate manual collection', async ({ page }, info) => {
   test.setTimeout(240000);
-  const { errors, reducedMotion, audioAvailable } = await start(page, info, 5000);
+  const { errors, reducedMotion, audioAvailable } = await start(page, info, 5000, 3);
   const opening = await jelly(page), growth = await savedGrowth(page);
   expectLayout(opening, await metrics(page), true);
   await capture(page, info, 'word-jelly-powerups-idle-funded');

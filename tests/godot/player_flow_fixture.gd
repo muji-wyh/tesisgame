@@ -21,6 +21,26 @@ static func enter_mode(app, id: String) -> void:
 	app.choose_mode(id)
 
 
+static func unlock_auto_collect(app) -> void:
+	# Batch-focused cases explicitly earn a durable Lv3; fresh-player setup stays Lv0.
+	# Keep active board words unmastered so the helper cannot retire its test supply.
+	assert(app.growth.ready, "Load the isolated learner before earning the Auto Collect unlock.")
+	var protected: Dictionary = {}
+	for word: Dictionary in app._word_jelly.game._words:
+		protected[str(word.id)] = true
+	for id: String in app.growth._word_ages:
+		if app.growth.level >= 3:
+			break
+		if protected.has(id) or app.growth.is_mastered(id) or int(app.growth._word_ages[id]) > app.growth.learning_age():
+			continue
+		for attempt in range(State.MASTERY_STREAK):
+			var result: Dictionary = app.growth.record_attempt("fixture:auto-collect-unlock:%s:%d" % [id, attempt], [id], true)
+			assert(bool(result.save_ok), "The explicit Auto Collect fixture mastery must persist.")
+	assert(app.growth.level >= 3, "Five independent mastered words must unlock Auto Collect.")
+	app._refresh_growth()
+	app._sync_jelly()
+
+
 static func reserve_pair_chest(app) -> void:
 	if app._mode_id == "memory":
 		# Memory earns the remaining tier on completion, with no lottery reservation.

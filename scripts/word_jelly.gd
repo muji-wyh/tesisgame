@@ -203,6 +203,13 @@ func _init() -> void:
 	_room_notice.hide()
 	add_child(_room_notice)
 
+func set_pip_level(level: int) -> void:
+	if game.pip_level == maxi(0, level):
+		return
+	game.set_pip_level(level)
+	_refresh_controls()
+	_publish()
+
 func stop() -> void:
 	_queued_collections.clear()
 	if _stage_banner != null:
@@ -701,7 +708,7 @@ func _drain_queued_collections() -> void:
 			return
 
 func _collect_all() -> void:
-	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling() or game.collection_batch_active():
+	if not game.auto_collect_unlocked() or not _can_play() or _pointer != NO_POINTER or _finish_is_pulling() or game.collection_batch_active():
 		return
 	cancel_input()
 	if game.start_collection_batch():
@@ -1789,7 +1796,8 @@ func _refresh_collect_button() -> void:
 	var count: int = game.collectable_ids().size() if _configured else 0
 	collect_button.visible = _configured and game.phase == "playing"
 	_action_divider.visible = collect_button.visible
-	collect_button.disabled = not _can_play() or _finish_is_pulling() or _pointer != NO_POINTER or bool(batch.active) or game.powerup_active() or count == 0
+	collect_button.disabled = not game.auto_collect_unlocked() or not _can_play() or _finish_is_pulling() or _pointer != NO_POINTER or bool(batch.active) or game.powerup_active() or count == 0
+	collect_button.set_pip_level(game.pip_level)
 	collect_button.set_reduced_motion(reduced_motion)
 	collect_button.set_state(count, _configured and bool(batch.active), int(batch.remaining) if _configured else 0, int(batch.total) if _configured else 0)
 

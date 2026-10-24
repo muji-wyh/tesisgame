@@ -20,6 +20,7 @@ func _fixture(dimensions: Vector2i, reduced: bool = false, batch: bool = false):
 		if str(word.id) in ["cat", "apple", "bird", "walk", "peach"]:
 			words.append(word)
 	view.configure(words, 3, Data.theme("spring"), data.chests, reduced, 42)
+	view.set_pip_level(3)
 	view.set_process(false)
 	view.game.spawn_interval = 10000.0
 	view.credit_collection = func(_id: String, _coins: int) -> Dictionary: return {"ok": true}

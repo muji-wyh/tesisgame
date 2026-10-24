@@ -441,6 +441,7 @@ func _check_application_routes() -> void:
 
 
 func _check_collect_application_route(app) -> void:
+	Fixture.unlock_auto_collect(app)
 	app.set_reduced_motion(false)
 	app.audio.interact(app.model.theme_id, false)
 	app.audio.stop_voice()

@@ -28,6 +28,7 @@ func _fixture(dimensions: Vector2i, level: int, reduced: bool = false, batch: bo
 			table = word
 	assert(not table.is_empty(), "The table fixture requires the production table word.")
 	view.configure(words, 4, Data.theme("spring"), data.chests, reduced, 42)
+	view.set_pip_level(3)
 	assert(view.game.phase == "playing", view.game.error)
 	view.set_process(false)
 	view.game.spawn_interval = 10000.0

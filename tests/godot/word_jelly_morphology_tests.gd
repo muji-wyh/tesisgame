@@ -667,6 +667,7 @@ func _test_collection_commit_lifecycle() -> void:
 
 func _test_collection_commit_batch() -> void:
 	var model = _model(_atomic())
+	model.set_pip_level(3)
 	for index in range(3):
 		var left: Dictionary = _sources(model, "MRI", 1)[0]
 		var right: Dictionary = _sources(model, "MRI")[0]

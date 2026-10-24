@@ -224,6 +224,7 @@ func _check_layout_and_navigation(view) -> void:
 
 func _check_collection_gate(view) -> void:
 	_reset(view)
+	view.set_pip_level(3)
 	view.game.cells.clear()
 	var tile: Dictionary = view.game._new_tile(str(words[0].text), 2, 0)
 	tile.column = 0

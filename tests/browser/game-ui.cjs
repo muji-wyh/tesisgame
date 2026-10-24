@@ -168,6 +168,21 @@ async function seedGrowth(page, level, { unmastered = null } = {}) {
   }, { level, streaks });
 }
 
+async function seedPipLevel(page, level, { age = 0 } = {}) {
+  const thresholds = [0, 1, 3, 5];
+  if (!Number.isInteger(level) || level < 0 || level >= thresholds.length)
+    throw new Error('This early-Pip fixture supports Lv0 through Lv3.');
+  // Use real mastery in a later cohort so the opening words remain unmastered.
+  const mastered = require('../../words.json').filter(word => word.min_age === 12)
+    .slice(0, thresholds[level]).map(word => word.id);
+  const streaks = Object.fromEntries(mastered.map(id => [id, 3]));
+  await page.addInitScript(({ level, age, mastered, streaks }) => {
+    const key = 'growWithPip.growth.v1';
+    if (localStorage.getItem(key) === null) localStorage.setItem(key,
+      `[growth]\nversion=4\nlevel=${level}\nage=${age}\nstreaks=${JSON.stringify(streaks)}\nmastered_words=${JSON.stringify(mastered)}\nreceipts=[]\n`);
+  }, { level, age, mastered, streaks });
+}
+
 async function growthState(page) {
   return page.locator('#growth-status').evaluate(element => JSON.parse(element.dataset.snapshot || '{}'));
 }
@@ -559,6 +574,6 @@ function resultPoint(bounds, key) {
 }
 
 module.exports = { THEME_NAMES, THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeRect, openModeMenu, libraryControl, activateLibraryControl, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,
-  openRewards, rewardState, growthView, growthState, seedGrowth, growthControl, activateGrowthControl, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
+  openRewards, rewardState, growthView, growthState, seedGrowth, seedPipLevel, growthControl, activateGrowthControl, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount,
   celebrationState, acceptCelebration };

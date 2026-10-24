@@ -41,6 +41,7 @@ const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
 const BATCH_BEAT_SECONDS: float = 0.14
 const BATCH_POP_SECONDS: float = 0.04
+const AUTO_COLLECT_UNLOCK_LEVEL: int = 3
 const INITIAL_SPAWN_INTERVAL: float = 20.0
 const MIN_SPAWN_INTERVAL: float = 10.0
 const CLEARS_PER_DIFFICULTY_STAGE: int = 4
@@ -90,6 +91,7 @@ var _finish_after_combo: bool = false
 var commit_collection: Callable
 var purchase_powerup: Callable
 var allow_cross_age: bool = false
+var pip_level: int = 0
 
 var _words: Array[Dictionary] = []
 var _word_lookup: Dictionary = {}
@@ -854,6 +856,8 @@ static func collection_seconds(level: int, batch: bool = false) -> float:
 
 
 func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
+	if batch_index > 0 and not auto_collect_unlocked():
+		return false
 	if phase != "playing" or paused or powerup_active() or not _combo_pending.is_empty() or is_fusing(tile_id):
 		return false
 	var tile: Dictionary = cell(tile_id)
@@ -922,6 +926,21 @@ func collectable_ids() -> Array[int]:
 	return ids
 
 
+func set_pip_level(level: int) -> void:
+	var next_level: int = maxi(0, level)
+	if pip_level == next_level:
+		return
+	pip_level = next_level
+	if not auto_collect_unlocked() and collection_batch_active():
+		cancel_collection_batch()
+	else:
+		changed.emit()
+
+
+func auto_collect_unlocked() -> bool:
+	return pip_level >= AUTO_COLLECT_UNLOCK_LEVEL
+
+
 func collection_batch_active() -> bool:
 	return _collection_batch_active
 
@@ -938,7 +957,7 @@ func collection_batch_snapshot() -> Dictionary:
 
 
 func start_collection_batch() -> bool:
-	if not _combo_pending.is_empty():
+	if not auto_collect_unlocked() or not _combo_pending.is_empty():
 		return false
 	if phase != "playing" or paused or powerup_active() or collection_batch_active() or _held_tile_id >= 0:
 		return false
@@ -978,6 +997,9 @@ func _reset_collection_batch() -> void:
 
 
 func _advance_collection_batch() -> void:
+	if not auto_collect_unlocked():
+		cancel_collection_batch()
+		return
 	if not collection_batch_active() or phase != "playing" or paused:
 		return
 	# Let existing motion finish once, then keep the captured bodies in place
@@ -1505,6 +1527,8 @@ func snapshot() -> Dictionary:
 		"full_remaining": maxf(0.0, FULL_SECONDS - full_elapsed) if full_elapsed >= 0.0 else -1.0,
 		"collectable_ids": collectable_ids(),
 		"collection_batch": collection_batch_snapshot(),
+		"pip_level": pip_level, "auto_collect_unlocked": auto_collect_unlocked(),
+		"auto_collect_unlock_level": AUTO_COLLECT_UNLOCK_LEVEL,
 		"powerup": powerup_snapshot(),
 		"powerup_uses": _powerup_uses.duplicate(),
 		"powerup_prices": {"auto_merge": powerup_price("auto_merge"), "fragments": powerup_price("fragments")},

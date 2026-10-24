@@ -10,6 +10,19 @@
   "animation": "Static source artwork; no animation clips.",
   "assets": [
     {
+      "id": "lock",
+      "file": "assets/images/ui/controls/lock.svg",
+      "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/lock.svg",
+      "source_sha256": "6e784f5b3c19a76909c2627fd4192bbf98c3eb3b277d2d685af14570a682fd7e",
+      "integrated_sha256": "01b867943ab95a9cd666b06598d6c0ccb15009e4f0771c47b496841062b0bea5",
+      "variant": "outline",
+      "acquired": "2026-10-25",
+      "status": "Acquired, source-scale inspected at 20 and 24 pixels, integrated, and visually verified in native phone, narrow-phone, and desktop Jelly Words views.",
+      "source_review": "build/qa/word-jelly-collect-unlock-2026-10-25/lock-source-review.png",
+      "runtime_review": "build/qa/word-jelly-collect-unlock-2026-10-25/README.md",
+      "animation": "Static closed-lock source artwork; no animation clips. The locked button remains still."
+    },
+    {
       "id": "menu",
       "file": "assets/images/ui/controls/menu.svg",
       "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/menu-2.svg",

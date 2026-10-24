@@ -52,6 +52,7 @@ func _run() -> void:
 	view.size = Vector2(1000, 720)
 	view._layout()
 	check(not view.snapshot().visible and view.game.phase == "finished", "unconfigured view can enter and lay out safely")
+	check(view.game.pip_level == 0 and not view.game.auto_collect_unlocked(), "An unconfigured view defaults to the locked new Pip")
 	view.word_requested.connect(func(word: Dictionary) -> void: heard.append(word))
 	view.audio_requested.connect(func(cue: String) -> void: cues.append(cue))
 	view.collected.connect(func(id: String, word: Dictionary, amount: int, fragments: int, origin: Vector2) -> void:
@@ -74,6 +75,7 @@ func _run() -> void:
 	await _check_fragment_badge_layout(view)
 	_check_ordinary_collection(view)
 	_check_collection_click_duration(view)
+	_check_auto_collect_unlock(view)
 	_check_collect_button_growth(view)
 	_check_batch_collection(view)
 	_check_coarse_frame_batch_reveals(view)
@@ -127,6 +129,8 @@ func _run() -> void:
 
 func _reset(view, reduced: bool = false, age: int = 3) -> void:
 	check(view.configure(words, age, Data.theme("spring"), data.chests, reduced, 42), "Word Jelly configures with real art")
+	# Existing batch presentation cases deliberately use a learner who earned Lv3.
+	view.set_pip_level(3)
 	view.set_process(false)
 	view.game.spawn_interval = 10000.0
 	# The first eligible Lv2 collection wins; Lv1 collections never roll for coins.
@@ -1032,6 +1036,59 @@ func _install_batch_words(view, count: int, retain_others: bool = false, eligibl
 	view._sync_tiles()
 	view._layout()
 	return ids
+
+
+func _check_auto_collect_unlock(view) -> void:
+	for dimensions: Vector2 in [Vector2(1000, 720), Vector2(393, 852)]:
+		for reduced: bool in [false, true]:
+			for level: int in [0, 1, 2]:
+				view.size = dimensions
+				_reset(view, reduced)
+				view.set_pip_level(level)
+				var ids: Array[int] = _install_batch_words(view, 2, true, false)
+				var state: Dictionary = view.snapshot()
+				var bounds: Rect2 = view.collect_button.get_rect()
+				check(state.pip_level == level and not state.auto_collect_unlocked
+					and state.auto_collect_unlock_level == 3 and state.collect_button.locked
+					and state.collect_button.pip_level == level and state.collect_button.unlock_level == 3,
+					"Model and button snapshots agree that the active Pip has not earned Lv3")
+				check(state.collect_button.visible and not state.collect_button.enabled
+					and int(state.collect_button.count) == 2 and not view.navigation_controls().has(view.collect_button),
+					"The locked action remains visible beside usable completed words and is skipped by keyboard navigation")
+				check(str(view.collect_button.get("accessibility_name")).contains("Lv3")
+					and str(view.collect_button.get("accessibility_name")).to_lower().contains("locked"),
+					"The locked action exposes the level requirement to assistive technology")
+				var root_tile: Dictionary = view.game.cells.filter(func(tile: Dictionary) -> bool:
+					return not view.game.is_valid_word(tile))[-1]
+				view._activate(int(root_tile.id))
+				var selected: int = view._keyboard_source
+				view._collect_all()
+				view.collect_button.pressed.emit()
+				check(selected >= 0 and view._keyboard_source == selected and view.game._held_tile_id == selected
+					and not view.game.collection_batch_active() and view.game.fusions.is_empty(),
+					"Direct calls and synthetic locked-button signals cannot cancel a selected root or start collection")
+				view.cancel_input()
+				view._activate(ids[0])
+				check(view.game.fusions.size() == 1 and not bool(view.game.fusion.batch),
+					"Keyboard activation still collects a completed word manually below Lv3")
+				_advance(view, Model.COLLECT_SECONDS + 0.05)
+				check(view.game.cleared_pairs == 1 and view.game.combo_count == 1,
+					"Locked Auto Collect leaves the manual pickup and combo intact")
+				view.set_pip_level(3)
+				state = view.snapshot()
+				check(not state.collect_button.locked and state.collect_button.enabled
+					and view.navigation_controls().has(view.collect_button)
+					and view.collect_button.get_rect().is_equal_approx(bounds),
+					"Reaching Pip Lv3 unlocks the same button immediately without moving its hit target")
+				view.collect_button.pressed.emit()
+				check(view.game.collection_batch_active(), "The newly unlocked button starts the ordinary collection batch")
+				view.set_pip_level(2)
+				check(view.snapshot().collect_button.locked and not view.game.collection_batch_active(),
+					"Changing to a lower-level Pip relocks the button and cancels future batch work immediately")
+				_advance(view, 1.0)
+				check(view.game.cleared_pairs == 2 and view.game.combo_count == 2,
+					"Relocking lets the started pickup finish once without changing combo behavior")
+	view.size = Vector2(1000, 720)
 
 
 func _check_collect_button_growth(view) -> void:

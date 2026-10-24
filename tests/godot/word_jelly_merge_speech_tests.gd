@@ -40,6 +40,7 @@ func settle() -> void:
 
 
 func _reset_view(view, pieces: Array[String], reduced: bool = false) -> Array[int]:
+	view.set_pip_level(3)
 	check(view.configure(words, 3, Data.theme("spring"), data.chests, reduced, 42),
 		"The speech fixture uses production vocabulary, artwork, and recordings")
 	view.set_process(false)
@@ -277,6 +278,7 @@ func _prepare_app(app) -> void:
 	Fixture.enter_mode(app, "word_jelly")
 	await settle()
 	_reset_view(app._word_jelly, ["cat-root", "cat-picture", "dog-root", "dog-picture"])
+	Fixture.unlock_auto_collect(app)
 	app._sync_jelly()
 	app.audio.set_muted(false)
 	app.audio.interact(app.model.theme_id, false)

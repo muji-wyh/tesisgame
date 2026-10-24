@@ -1,7 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { test, expect } = require('@playwright/test');
-const { openGame, metrics, tap } = require('./game-ui.cjs');
+const { openGame, metrics, tap, seedPipLevel } = require('./game-ui.cjs');
 const { observeOutputAudio, expectRecording, recordingTiming, watchAudioRequests } = require('./bundled-audio.cjs');
 const vocabulary = require('../../words.json');
 
@@ -89,12 +89,11 @@ async function observeRewardIdentity(page) {
 test.use({ deviceScaleFactor: 1, trace: 'off',
   launchOptions: { ignoreDefaultArgs: ['--autoplay-policy=no-user-gesture-required'] } });
 
-async function start(page, browserName) {
+async function start(page, browserName, pipLevel = 0) {
   await observeOutputAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 5, trackSourceLifecycle: true });
   await observeRewardIdentity(page);
+  await seedPipLevel(page, pipLevel);
   await page.addInitScript(() => {
-    localStorage.setItem('growWithPip.growth.v1',
-      '[growth]\nversion=3\nlevel=0\nage=0\nstreaks={}\nmastered_words=[]\nreceipts=[]\n');
     localStorage.setItem('growWithPip.coinWallet.v1',
       '[wallet]\nversion=2\nbalance=5000\nreceipts={"browser-opening-coins":5000}\n');
   });
@@ -341,7 +340,7 @@ test('Auto Merge completes its paid animated fusions without pronouncing words',
 
 test('Collect cancels manual merge pronunciation and keeps the whole batch silent', async ({ page, browserName }, info) => {
   test.setTimeout(120000);
-  const errors = await start(page, browserName), opening = await jelly(page), bounds = await metrics(page);
+  const errors = await start(page, browserName, 3), opening = await jelly(page), bounds = await metrics(page);
   await observeMerges(page);
   const from = await page.evaluate(() => window.mergeSpeechEvidence.from);
   await mergeNextPair(page);

@@ -20,6 +20,7 @@ func check(condition: bool, message: String) -> void:
 
 func _run() -> void:
 	_test_configuration()
+	_test_auto_collect_unlock()
 	_test_merging_and_collection()
 	_test_rare_coin_drop_boundary()
 	_test_collection_without_coin_drop()
@@ -128,6 +129,8 @@ func _word(text: String, age: int = 3, word_id: String = "") -> Dictionary:
 func _model(words: Array = [], force_coin_drop: bool = true) -> RefCounted:
 	var model := Model.new()
 	model.configure([_word("cat"), _word("caterpillar"), _word("sunflower")] if words.is_empty() else words, 3, 42)
+	# Batch mechanics use an explicitly unlocked learner; the gate has its own cases.
+	model.set_pip_level(3)
 	model.spawn_interval = 10000.0
 	if force_coin_drop:
 		# Existing wallet and gravity fixtures explicitly exercise the rare winning branch.
@@ -2692,6 +2695,79 @@ func _test_wallet_retry() -> void:
 	model.step(Model.COLLECT_SECONDS)
 	check(events.attempts.size() == 1, "repeated paused finish and later steps do not duplicate settled mastery")
 	model.credit_collection = Callable()
+
+
+func _test_auto_collect_unlock() -> void:
+	var model := Model.new()
+	check(model.pip_level == 0 and not model.auto_collect_unlocked()
+		and Model.AUTO_COLLECT_UNLOCK_LEVEL == 3, "A new model keeps Auto Collect locked until Pip Lv3")
+	check(model.configure([_word("advanced", 12)], 12, 42) and model.pip_level == 0
+		and not model.auto_collect_unlocked(), "Advanced vocabulary age cannot unlock a new Pip's Auto Collect")
+	model.configure([_word("cat")], 3, 42)
+	model.spawn_interval = 10000.0
+	_batch_board(model, 3)
+	var events: Dictionary = _observe(model)
+	for level: int in [-1, 0, 1, 2]:
+		model.set_pip_level(level)
+		var before: Dictionary = model.snapshot()
+		var rng_state: int = model._coin_rng.state
+		check(before.pip_level == maxi(0, level) and not before.auto_collect_unlocked
+			and before.auto_collect_unlock_level == 3, "Locked snapshots expose the current Pip level and exact unlock boundary")
+		check(not model.start_collection_batch() and not model._begin_collection(1000, 1),
+			"Every automatic collection entry refuses Pip below Lv3")
+		check(model.snapshot() == before and model._coin_rng.state == rng_state
+			and events.collections.is_empty(), "A locked attempt cannot reserve a word, roll coins, change combo, or start a batch")
+	check(model.collect(1000), "Pip Lv2 retains ordinary manual collection")
+	model.step(Model.collection_seconds(2))
+	check(model.cleared_pairs == 1 and model.fragment_count == 1 and model.combo_count == 1
+		and events.collections.size() == 1, "Manual collection below the unlock still grants its normal fragment and combo")
+	for level: int in [3, 4, 99]:
+		model = _model([_word("cat")], false)
+		model.set_pip_level(level)
+		_batch_board(model, 3)
+		check(model.auto_collect_unlocked() and model.start_collection_batch(), "Pip Lv%d can start Auto Collect" % level)
+		model.step(Model.BATCH_BEAT_SECONDS * 3.0)
+		check(model.cleared_pairs == 3 and model.combo_count == 3 and not model.collection_batch_active(),
+			"Unlocked Auto Collect keeps the normal three-word rhythm and combo")
+	model = _model([_word("cat")], false)
+	_batch_board(model, 3)
+	model.start_collection_batch()
+	model.step(0.03)
+	var receipt: String = str(model.fusion.attempt_id)
+	model.set_pip_level(2)
+	check(not model.collection_batch_active() and str(model.fusion.attempt_id) == receipt,
+		"Losing the unlock cancels queued words while preserving the started transaction")
+	model.step(2.0)
+	check(model.cleared_pairs == 1 and model.cells.size() == 2 and model.combo_count == 1,
+		"A downgrade settles only the already-started word and does not reset its combo")
+	model.set_pip_level(3)
+	check(not model.collection_batch_active() and model.start_collection_batch(),
+		"Regaining Lv3 requires a fresh explicit Auto Collect command")
+	model.step(2.0)
+	check(model.cleared_pairs == 3 and model.combo_count == 3, "A fresh unlocked command collects each remaining word once")
+	model = _model([_word("cat")], false)
+	_batch_board(model, 3)
+	model.start_collection_batch()
+	model.pip_level = 0
+	model.step(2.0)
+	check(model.cleared_pairs == 1 and not model.collection_batch_active(),
+		"The batch scheduler rechecks the unlock even when direct state mutation bypasses its setter")
+	model = _model([_word("cat")], false)
+	_batch_board(model, 3)
+	var pending: Array = []
+	model.commit_collection = func(payload: Dictionary) -> Dictionary:
+		pending.append(payload.duplicate(true))
+		return {"pending": true}
+	model.start_collection_batch()
+	model.step(1.0)
+	model.set_pip_level(0)
+	check(pending.size() == 1 and not model.collection_batch_active() and model.cleared_pairs == 0,
+		"A profile becoming unavailable preserves the pending save without starting another word")
+	model.resolve_collection_commit(str(pending[0].event_id), int(pending[0].generation), {"ok": true})
+	model.step(2.0)
+	check(model.cleared_pairs == 1 and model.cells.size() == 2 and model.combo_count == 1 and pending.size() == 1,
+		"A late save acknowledgment after locking settles the original word exactly once")
+	model.commit_collection = Callable()
 
 
 func _batch_board(model, count: int = 9) -> void:

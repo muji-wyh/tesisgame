@@ -39,6 +39,7 @@ func _prepare(app, pairs: int = 2) -> void:
 	check(fixture_words.size() == pairs, "Every automatic fixture pair has a distinct current-age word")
 	check(view.configure(fixture_words, app.growth.learning_age(), Data.theme(app.model.theme_id), app.data.chests, false, round_seed),
 		"The powerup board uses distinct pictured current-age words")
+	Fixture.unlock_auto_collect(app)
 	app._sync_jelly()
 	view.set_process(false)
 	var game = view.game

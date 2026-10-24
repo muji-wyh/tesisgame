@@ -64,6 +64,7 @@ func _fixture() -> Dictionary:
 	check(wallet.load_state(), "Load an isolated real wallet for combo persistence")
 	var model := Model.new()
 	check(model.configure([_word(), _word("dog")], 3, 71), "Configure real root and picture merging")
+	model.set_pip_level(3)
 	model.cells.clear()
 	model.spawn_interval = 10000.0
 	var payments: Array = []
@@ -533,6 +534,7 @@ func _test_game_ui_wallet() -> void:
 		if int(state.count) > 4:
 			observed_pulses.append(view._combo_hud.snapshot().pulse_serial))
 	var pulse_before: int = int(view._combo_hud.snapshot().pulse_serial)
+	PlayerFixture.unlock_auto_collect(app)
 	check(model.start_collection_batch(), "The real GameUI starts an automatic batch of three mastery-eligible words")
 	model.step(Model.BATCH_BEAT_SECONDS * 3.0 + 0.01)
 	check(model.combo_snapshot().count == 7 and app.coin_wallet.balance == 2,

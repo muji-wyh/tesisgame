@@ -2,8 +2,8 @@
 
 ## Shared controls
 
-The nine SVGs in `controls/` are acquired Tabler Icons v3.35.0 artwork by
-Paweł Kuna under the MIT License. They were downloaded on October 20, 2026,
+The SVGs in `controls/` are acquired Tabler Icons v3.35.0 artwork by
+Paweł Kuna under the MIT License. The initial set was downloaded on October 20, 2026,
 inspected at their 28px display size inside 44px light and dark controls, and
 integrated into the shared icon button. The Home icon also replaces the earlier
 Fluent illustration in game navigation. Vocabulary and game-preview illustrations
@@ -21,6 +21,14 @@ recorded in [controls/sources.json](controls/sources.json). The full
 [MIT license](LICENSE-Tabler.txt) is retained. Godot runtime review follows
 the shared control and page-layout checks; the acquisition record distinguishes
 it from the source-scale inspection.
+
+`controls/lock.svg` was acquired from the same v3.35.0 release on October 25,
+2026 for the Jelly Words Auto Collect unlock state. The original closed-lock
+source was inspected at 20 and 24 pixels before integration; it retains the
+source paths and uses the same white/theme-tint conversion. Its source and
+integrated hashes are recorded in `controls/sources.json`. It has no animation.
+The locked control pairs the static icon with "Lv3"; its ready artwork and
+effects are reserved for the unlocked state.
 
 ## Finish and mastery
 
