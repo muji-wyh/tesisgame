@@ -58,6 +58,8 @@ var _placement: Dictionary = {}
 var _completion_source: int = -1
 var _completion_elapsed: float = 0.0
 var _fusion_drag: Dictionary = {}
+var _fusion_tap: Dictionary = {}
+var _queued_collections: Dictionary = {}
 var _reveal_frame_end: float = -1.0
 var _reveal_frame_batch: int = -1
 var _reveal_frame_generation: int = -1
@@ -202,6 +204,7 @@ func _init() -> void:
 	add_child(_room_notice)
 
 func stop() -> void:
+	_queued_collections.clear()
 	if _stage_banner != null:
 		_stage_banner.reset()
 	_presentation_elapsed = 0.0
@@ -316,6 +319,7 @@ func _visibility_changed() -> void:
 	super._visibility_changed()
 
 func _finished(result: Dictionary) -> void:
+	_queued_collections.clear()
 	_combo_hud.reset()
 	_word_reveal.reset()
 	_collection_effects.reset()
@@ -324,6 +328,7 @@ func _finished(result: Dictionary) -> void:
 
 func cancel_input() -> void:
 	_end_view_update()
+	_fusion_tap.clear()
 	if not _fusion_drag.is_empty():
 		game.hold_merge_for_drag(str(_fusion_drag.event_id), false)
 		_fusion_drag.clear()
@@ -415,11 +420,15 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 		_gesture_serial += 1
 		_press_point = point
 		_drag_point = point
-		_tile_press_started_ms = -1
+		_tile_press_started_ms = Time.get_ticks_msec()
 		for fusion: Dictionary in game.fusions:
 			if str(fusion.attempt_id) == merging:
 				_fusion_drag = {"event_id": merging, "offset": Vector2.ZERO, "moved": false, "result": fusion.result}
 		_source = int(_fusion_drag.result.id)
+		if game.is_valid_word(_fusion_drag.result):
+			# Keep the captured lobe's identity if it moves away during the union.
+			_fusion_tap = {"event_id": merging, "result_id": _source,
+				"generation": _generation, "model_generation": game._generation}
 		_dragging = false
 		_target = -1
 		_contact_cue_target = -1
@@ -471,6 +480,10 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	return true
 
 func _move(global_point: Vector2) -> void:
+	if (get_global_transform().affine_inverse() * global_point).distance_to(_press_point) * Style.ui_scale(self) > 7.0:
+		_fusion_tap.clear()
+		# A deliberate drag supersedes a previously queued tap on this body.
+		_queued_collections.erase(_source)
 	if not _fusion_drag.is_empty():
 		_drag_point = get_global_transform().affine_inverse() * global_point
 		if _drag_point.distance_to(_press_point) * Style.ui_scale(self) > 7.0:
@@ -501,9 +514,21 @@ func _move(global_point: Vector2) -> void:
 	super._move(global_point)
 
 func _release(global_point: Vector2) -> void:
+	# Measure on release arrival, before motion rendering can turn a tap into a hold.
+	var collection_click: bool = _tile_press_started_ms >= 0 \
+		and Time.get_ticks_msec() - _tile_press_started_ms < COLLECTION_CLICK_MAX_MS
 	_consume_drag_motion()
-	if not _fusion_drag.is_empty():
+	if not _fusion_drag.is_empty() or not _fusion_tap.is_empty():
 		_move(global_point)
+	if not _fusion_tap.is_empty() and not _dragging and _pointer != NO_POINTER \
+		and collection_click \
+		and _can_play() and not _finish_is_pulling() and not game.collection_batch_active() and not game.powerup_active():
+		# Finish the original animation, then collect its exact result once.
+		_queued_collections[int(_fusion_tap.result_id)] = _fusion_tap.duplicate()
+		cancel_input()
+		_drain_queued_collections()
+		return
+	if not _fusion_drag.is_empty():
 		if not bool(_fusion_drag.moved):
 			cancel_input()
 			return
@@ -515,10 +540,8 @@ func _release(global_point: Vector2) -> void:
 			return
 	_read_hold_id = -1
 	_read_hold_elapsed = 0.0
-	# Use real elapsed time so a stalled frame cannot turn a hold into collection.
-	var collection_click: bool = _tile_press_started_ms >= 0 \
-		and Time.get_ticks_msec() - _tile_press_started_ms < COLLECTION_CLICK_MAX_MS
 	_tile_press_started_ms = -1
+	_fusion_tap.clear()
 	if _preview_first_id >= 0:
 		# A partial timed dispatch can leave the first slot unchanged while the
 		# pressed packet has already departed through its other open columns.
@@ -651,6 +674,31 @@ func _collect(id: int) -> void:
 	_refresh_controls()
 	_refresh_fusion()
 	_publish()
+
+func _drain_queued_collections() -> void:
+	for id: int in _queued_collections.keys():
+		if not _can_play() or _finish_is_pulling() or game.collection_batch_active() or game.powerup_active():
+			return
+		var request: Dictionary = _queued_collections[id]
+		if int(request.generation) != _generation or int(request.model_generation) != game._generation:
+			_queued_collections.erase(id)
+			continue
+		var tile: Dictionary = game.cell(id)
+		if tile.is_empty():
+			if game._fusion_index(str(request.event_id)) < 0:
+				_queued_collections.erase(id)
+			continue
+		if game.is_fusing(id) or not game.is_valid_word(tile):
+			# Another collection or merge already owns this exact body.
+			_queued_collections.erase(id)
+			continue
+		if not game.is_settled(tile) or game.is_lifted(id) or _pointer != NO_POINTER or _keyboard_source >= 0:
+			continue
+		# Consume before callbacks; a failed save keeps the ordinary explicit retry.
+		_queued_collections.erase(id)
+		_collect(id)
+		if int(request.generation) != _generation or int(request.model_generation) != game._generation:
+			return
 
 func _collect_all() -> void:
 	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling() or game.collection_batch_active():
@@ -1203,6 +1251,9 @@ func _process(delta: float) -> void:
 	super._process(delta)
 	_reveal_frame_end = -1.0
 	_powerup_frame_end = -1.0
+	# Dispatch outside the model step, including on a full board or landing frame.
+	if generation == _generation and delta <= 0.5:
+		_drain_queued_collections()
 	if generation != _generation or not _can_play() or game.full_elapsed >= 0.0 or _landing_cooldown > 0.0:
 		return
 	# A long frame can finish collection and pass the new fall's contact time.
@@ -1218,7 +1269,7 @@ func _refresh_marks() -> void:
 	var feedback_enabled: bool = _can_play()
 	var completing: bool = _contact_state().kind == "match"
 	for id: int in _tiles:
-		_tiles[id].set_marked(id == _target and completing, id == _source,
+		_tiles[id].set_marked(id == _target and completing, id == _source or _queued_collections.has(id),
 			feedback_enabled and not game.is_fusing(id), reduced_motion)
 	_refresh_contact()
 	_refresh_palette()
@@ -1415,8 +1466,15 @@ func _refresh_contact() -> void:
 		var visual: Dictionary = _fusion_visuals[event_id]
 		var held: bool = event_id == str(_fusion_drag.get("event_id", ""))
 		var kind: String = str(state.kind) if held else "none"
-		visual.merged.set_contact(kind, state.direction, float(state.strength), reduced_motion)
-		visual.art.set_contact(kind, state.direction, float(state.strength), reduced_motion)
+		var acknowledged: bool = _can_play() and (event_id == str(_fusion_tap.get("event_id", "")) \
+			or _queued_collections.has(int(visual.merged.tile_id)))
+		if kind == "none" and acknowledged:
+			# Reuse the neutral contact rim without deforming the ongoing union.
+			visual.merged.set_contact("touch", Vector2.ZERO, 0.0, reduced_motion)
+			visual.art.set_contact("touch", Vector2.ZERO, 0.0, reduced_motion)
+		else:
+			visual.merged.set_contact(kind, state.direction, float(state.strength), reduced_motion)
+			visual.art.set_contact(kind, state.direction, float(state.strength), reduced_motion)
 
 func _ensure_fusion_visual(fusion: Dictionary) -> Dictionary:
 	var id: String = str(fusion.attempt_id)

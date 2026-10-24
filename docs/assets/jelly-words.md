@@ -141,9 +141,16 @@ the body directly at its supported destination.
 A manual pair remains draggable during its fusion. Picking either visible lobe
 moves the whole joining pair while the existing merge clock continues. When the
 clock finishes, its single result inherits the same pointer and finger offset.
-Releasing earlier completes that already accepted pair once, then uses the
+Releasing a drag earlier completes that already accepted pair once, then uses the
 ordinary placement or merge rules for the resulting body. Canceling movement
-returns the animation to its reserved slot. Pressing a fusion never collects it.
+returns the animation to its reserved slot. A short tap on either lobe queues
+collection of its valid completed word, including when the union finishes under
+the finger. The existing neutral contact rim acknowledges the tap; collection
+starts after the original union and settling finish. Repeated taps coalesce into
+one collection. Moving more than seven displayed pixels or holding for at least
+500 ms does not queue collection. A later drag supersedes that body's queued
+tap. Pause defers accepted taps; leaving or restarting discards them. Failed
+reward saves retain the ordinary explicit retry and the original reward roll.
 
 While held, the reserved result supplies word-family guidance and merge
 eligibility before the fusion finishes. Contact follows both painted joining
