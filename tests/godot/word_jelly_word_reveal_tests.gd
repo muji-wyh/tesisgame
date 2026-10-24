@@ -354,56 +354,112 @@ func _check_level_lifetimes(reveal) -> void:
 
 
 func _check_delayed_reveal(reveal) -> void:
-	for reduced: bool in [false, true]:
-		reveal.reset()
-		reveal.configure_layout(Rect2(20, 12, 980, 260), 1.0)
-		reveal.set_reduced_motion(reduced)
-		reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, false, 0.0, 4, 0.66)
-		var waiting: Dictionary = reveal.snapshot()
-		check(not waiting.visible and waiting.entries.size() == 1 and not waiting.entries[0].visible
-			and is_zero_approx(float(waiting.content_alpha)),
-			"the reading card stays hidden while the board jelly charges")
-		check(is_equal_approx(float(waiting.elapsed), -0.66) and is_equal_approx(float(waiting.duration), Reveal.SECONDS),
-			"anticipation reserves a future reveal without consuming reading time")
-		await process_frame
-		await process_frame
-		check(reveal.snapshot() == waiting, "a paused collection clock cannot release a delayed card on its own")
-		reveal.configure_layout(Rect2(8, 6, 250, 115), 1.0)
-		check(not reveal.snapshot().visible and not reveal._entries[0].visible
-			and is_equal_approx(float(reveal.snapshot().elapsed), -0.66),
-			"layout changes cannot expose a waiting card or restart its delay")
-		reveal.advance(0.65)
-		check(not reveal.snapshot().visible and is_zero_approx(float(reveal.snapshot().content_alpha)),
-			"the complete anticipation remains free of opaque reading content")
-		reveal.advance(0.10)
-		check(reveal.snapshot().visible and is_equal_approx(float(reveal.snapshot().elapsed), 0.09)
-			and float(reveal.snapshot().content_alpha) > 0.9,
-			"crossing release starts the reading beat at the correct residual frame age")
-		reveal.advance(Reveal.SECONDS - 0.10)
-		check(reveal.snapshot().visible and float(reveal.snapshot().content_alpha) < 0.1,
-			"a delayed card retains its complete original reading lifetime")
-		reveal.advance(0.02)
-		check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
-			"a delayed card frees itself after its own full reading lifetime")
-		reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, false, 0.90, 4, 0.66)
-		check(reveal.snapshot().visible and is_equal_approx(float(reveal.snapshot().elapsed), 0.24),
-			"a late release catches up from the pop boundary without replaying anticipation")
-		reveal.reset()
-		reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, false, 0.66 + Reveal.SECONDS - 0.04, 4, 0.66)
-		check(reveal.snapshot().visible and float(reveal.snapshot().content_alpha) < 0.15,
-			"late delayed presentations retain only their existing fading tail")
-		reveal.advance(0.05)
-		reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, false, 0.66 + Reveal.SECONDS + 0.01, 4, 0.66)
-		check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
-			"an expired delayed presentation cannot replay its reading card")
-		reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, false, 0.0, 4, 0.66)
-		reveal.reset()
-		reveal.advance(3.0)
-		check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
-			"pause or exit cleanup cancels delayed cards without a later callback")
+	for level: int in [1, 3, 4, 6]:
+		for batch: bool in [false, true]:
+			for reduced: bool in [false, true]:
+				await _check_charge_case(reveal, level, batch, reduced)
+	reveal.reset()
+	reveal.configure_layout(Rect2(20, 12, 980, 260), 1.0)
+	reveal.set_reduced_motion(false)
+	reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, false, 0.40, 4, 0.66)
+	check(reveal.snapshot().phase == "charging" and float(reveal.snapshot().animated_scale[0]) < 0.75,
+		"a late frame inside anticipation resumes an already-compressed card")
+	reveal.set_reduced_motion(true)
+	var steady: Dictionary = reveal.snapshot()
+	reveal.advance(0.30)
+	check(steady.animated_scale == [1.0, 1.0] and reveal.snapshot().animated_scale == [1.0, 1.0]
+		and steady.rect == reveal.snapshot().rect and reveal.snapshot().phase != "charging",
+		"enabling reduced motion during charge restores a still card through the release")
+	reveal.reset()
 	for invalid: float in [NAN, INF]:
 		reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, false, 0.0, 4, invalid)
-	check(reveal.get_child_count() == 0, "invalid anticipation durations cannot retain a permanent hidden card")
+	check(reveal.get_child_count() == 0, "invalid anticipation durations cannot retain a permanent card")
+
+
+func _check_charge_case(reveal, level: int, batch: bool, reduced: bool) -> void:
+	reveal.reset()
+	reveal.configure_layout(Rect2(20, 12, 980, 260), 1.0)
+	reveal.set_reduced_motion(reduced)
+	var delay: float = Model.collection_pop_seconds(level, batch)
+	var seconds: float = Reveal.BATCH_SECONDS if batch else Reveal.SECONDS
+	reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, 0.0, level, delay)
+	var start: Dictionary = reveal.snapshot()
+	check(start.visible and start.entries.size() == 1 and start.entries[0].visible
+		and start.phase == "charging" and start.effects.phase == "charging",
+		"each manual and batch reading card appears in its charge phase before release")
+	check(is_equal_approx(float(start.elapsed), -delay) and is_equal_approx(float(start.anticipation_seconds), delay)
+		and is_equal_approx(float(start.duration), seconds),
+		"anticipation shares the model release boundary without consuming reading time")
+	await process_frame
+	await process_frame
+	check(reveal.snapshot() == start, "a paused collection clock cannot advance charge or release on its own")
+	reveal.advance(delay * 0.35)
+	var gathering: Dictionary = reveal.snapshot()
+	check(gathering.visible and gathering.phase == "charging" and gathering.effects.phase == "charging"
+		and float(gathering.charge_progress) > float(start.charge_progress),
+		"light gathers while the reading card remains in anticipation rather than starting its explosion")
+	if reduced:
+		check(gathering.animated_scale == [1.0, 1.0] and gathering.rect == start.rect,
+			"reduced-motion anticipation preserves the original readable card geometry")
+	else:
+		check(float(gathering.animated_scale[0]) < float(start.animated_scale[0])
+			and float(gathering.animated_scale[1]) < float(start.animated_scale[1]),
+			"the top reading card contracts in both dimensions while gathering energy")
+	var resized := Rect2(8, 6, 250, 115)
+	reveal.configure_layout(resized, 1.0)
+	check(reveal.snapshot().visible and reveal.snapshot().phase == "charging"
+		and is_equal_approx(float(reveal.snapshot().elapsed), float(gathering.elapsed)),
+		"resizing preserves a visible charging card and its existing clock")
+	_check_bounds(reveal, resized)
+	_check_input(reveal)
+	_check_labels(reveal)
+	reveal.advance(delay * 0.60)
+	var compressed: Dictionary = reveal.snapshot()
+	check(compressed.phase == "charging" and compressed.effects.phase == "charging"
+		and float(compressed.charge_progress) > float(gathering.charge_progress),
+		"the last pre-release sample is still gathering energy without explosive particles")
+	if reduced:
+		check(compressed.animated_scale == [1.0, 1.0], "reduced motion keeps full size at maximum charge")
+	else:
+		check(float(compressed.animated_scale[0]) < float(gathering.animated_scale[0])
+			and float(compressed.animated_scale[0]) < 0.60 and float(compressed.animated_scale[1]) < 0.65,
+			"the charge becomes visibly more compressed before the release")
+	_check_bounds(reveal, resized)
+	reveal.advance(delay * 0.05 + 0.09)
+	var released: Dictionary = reveal.snapshot()
+	check(released.visible and is_equal_approx(float(released.elapsed), 0.09)
+		and released.phase == "release" and released.effects.phase != "charging"
+		and float(released.content_alpha) > 0.9,
+		"crossing the shared release launches the burst at the correct residual frame age")
+	if not reduced:
+		check(float(released.animated_scale[0]) > 1.05
+			and float(released.animated_scale[0]) > float(compressed.animated_scale[0]) * 2.0,
+			"the compact energy core releases into a decisive elastic expansion")
+	_check_bounds(reveal, resized)
+	reveal.advance(seconds - 0.10)
+	check(reveal.snapshot().visible and float(reveal.snapshot().content_alpha) < 0.1,
+		"charge leaves the complete original reading lifetime available after release")
+	reveal.advance(0.02)
+	check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
+		"a charged card frees itself only after its own full reading lifetime")
+	reveal.configure_layout(Rect2(20, 12, 980, 260), 1.0)
+	reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, delay + 0.24, level, delay)
+	check(reveal.snapshot().visible and is_equal_approx(float(reveal.snapshot().elapsed), 0.24)
+		and reveal.snapshot().phase != "charging" and reveal.snapshot().effects.phase != "charging",
+		"a late release catches up from the pop boundary without replaying anticipation")
+	reveal.reset()
+	reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, delay + seconds - 0.04, level, delay)
+	check(reveal.snapshot().visible and float(reveal.snapshot().content_alpha) < 0.15,
+		"late charged presentations retain only their existing fading tail")
+	reveal.advance(0.05)
+	reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, delay + seconds + 0.01, level, delay)
+	check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
+		"an expired charged presentation cannot replay its reading card")
+	reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, 0.0, level, delay)
+	reveal.reset()
+	reveal.advance(3.0)
+	check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
+		"pause or exit cleanup cancels charged cards without a later callback")
 
 
 func _check_bounds(reveal, area: Rect2) -> void:

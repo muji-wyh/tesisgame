@@ -49,7 +49,7 @@ func present(word: Dictionary, picture: Texture2D, accent: Color, batch: bool = 
 		seconds = 0.62
 	if not is_finite(initial_age) or not is_finite(delay):
 		return
-	# Anticipation belongs to the board jelly; reading time starts on its release.
+	# Both jellies charge together; the full reading lifetime starts on release.
 	var age: float = maxf(0.0, initial_age) - maxf(0.0, delay)
 	if age >= seconds:
 		return
@@ -60,6 +60,7 @@ func present(word: Dictionary, picture: Texture2D, accent: Color, batch: bool = 
 	var entry := Card.new()
 	add_child(entry)
 	entry.configure(_serial, word, picture, accent, batch, variation, seconds, _reduced_motion, clampi(level, 1, WordModel.MAX_MERGE_LEVEL))
+	entry.anticipation_seconds = maxf(0.0, delay)
 	entry.fit_content(size, _ui_scale)
 	_place(entry, _entries)
 	entry.elapsed = age

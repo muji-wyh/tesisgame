@@ -666,7 +666,7 @@ func _collection_started(fusion: Dictionary) -> void:
 	if batch and _reveal_frame_end >= 0.0 and _reveal_frame_generation == _generation \
 		and int(fusion.get("batch_id", -1)) == _reveal_frame_batch:
 		initial_age = maxf(0.0, _reveal_frame_end - float(game.collection_batch_snapshot().elapsed))
-	var reveal_delay: float = float(fusion.pop_at) if not batch and merge_level >= 4 else 0.0
+	var reveal_delay: float = float(fusion.pop_at)
 	_word_reveal.present(word, _picture(word), _theme.get("accent", Style.GOOD), batch, initial_age, merge_level, reveal_delay)
 	_collection_effects.set_reduced_motion(reduced_motion)
 	_collection_effects.present(get_global_transform().affine_inverse() * origin,

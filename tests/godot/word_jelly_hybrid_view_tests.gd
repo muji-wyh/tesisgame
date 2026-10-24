@@ -162,9 +162,12 @@ func _check_charge(view, cat: Dictionary, data, reduced: bool) -> void:
 	view.game.spawn_interval = 10000.0
 	var visual: Dictionary = _begin_charge(view, cat)
 	var card = view._word_reveal._entries[0]
-	check(not card.visible and not view._word_reveal.snapshot().visible,
-		"The reading card remains hidden while the original Lv4 Jelly charges")
+	check(card.visible and view._word_reveal.snapshot().visible
+		and card.snapshot().phase == "charging" and card.snapshot().effects.phase == "charging",
+		"The top reading card gathers energy alongside the original Lv4 Jelly")
 	_advance(view, 0.22)
+	check(card._visual.scale.is_equal_approx(Vector2.ONE) if reduced else card._visual.scale.x < 0.95,
+		"The top reading card also contracts during charge and honors reduced motion")
 	check(visual.merged.scale.is_equal_approx(Vector2.ONE) if reduced else visual.merged.scale.x < 0.63,
 		"Lv4 visibly contracts before its firework, while reduced motion keeps the original size")
 	check(visual.merged.modulate.a == 1.0 and visual.collect_glow.visible,
@@ -185,11 +188,13 @@ func _check_charge(view, cat: Dictionary, data, reduced: bool) -> void:
 		check(visual.charge_sparks[0].get_rect().get_center().distance_to(visual.merged.get_rect().get_center()) < radius_before,
 			"The acquired sparkles travel inward toward the charging Jelly")
 	_advance(view, view.game.collection_pop_seconds(4) - 0.47 - 0.001)
-	check(not card.visible and not cues.has("jelly-collect-lv4") and view.game.cleared_pairs == 0,
-		"The last anticipation frame has no early card, burst sound, or collection credit")
+	check(card.visible and card.snapshot().phase == "charging" and card.snapshot().effects.phase == "charging"
+		and not cues.has("jelly-collect-lv4") and view.game.cleared_pairs == 0,
+		"The last anticipation frame keeps its charged card without an early burst sound or collection credit")
 	_advance(view, 0.002)
-	check(card.visible and cues.count("jelly-collect-lv4") == 1 and view.game.cleared_pairs == 0,
-		"The reading card and firework sound release together at the Lv4 pop boundary")
+	check(card.visible and card.snapshot().phase == "release" and card.snapshot().effects.phase != "charging"
+		and cues.count("jelly-collect-lv4") == 1 and view.game.cleared_pairs == 0,
+		"The reading card's explosion and firework sound release together at the Lv4 pop boundary")
 	_advance(view, 0.14)
 	check(visual.merged.modulate.a < 0.001 and not view.game.cells.is_empty(),
 		"The Jelly disappears into its burst before its reserved collection completes")
@@ -211,7 +216,7 @@ func _check_charge(view, cat: Dictionary, data, reduced: bool) -> void:
 			view.stop()
 		check(view._fusion_visuals.is_empty() and view._word_reveal.snapshot().entries.is_empty()
 			and view._collection_effects.snapshot().active_count == 0,
-			action + " clears charging Jellies, pending reading cards, and future firework tails")
+			action + " clears charging Jellies, charging reading cards, and future firework tails")
 		for node: Node in owned:
 			check(node.is_queued_for_deletion(), action + " releases every extra charge node")
 

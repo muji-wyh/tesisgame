@@ -10,6 +10,7 @@ const GLINT = preload("res://assets/chests/milestone/sparkle.png")
 
 var entry_id: int = 0
 var elapsed: float = 0.0
+var anticipation_seconds: float = 0.0
 var duration: float = 1.95
 var variant_scale: float = 1.0
 var reduced_motion: bool = false
@@ -27,6 +28,7 @@ var _aura: TextureRect
 var _picture: TextureRect
 var _spelling: Label
 var _glints: Array[TextureRect] = []
+var _charge_core: TextureRect
 
 
 func _init() -> void:
@@ -56,6 +58,10 @@ func _init() -> void:
 		var glint := _texture(GLINT)
 		glint.name = "WordGlint%d" % index
 		_glints.append(glint)
+	_charge_core = _texture(GLOW)
+	_charge_core.name = "CollectedWordEnergyCore"
+	# The converging light sits above the shrinking card, centered on its body.
+	_charge_core.reparent(self)
 
 
 func _texture(value: Texture2D) -> TextureRect:
@@ -153,23 +159,45 @@ func effect_margin() -> float:
 		minf(_available.x, _available.y) * 0.20)
 
 
+func charge_progress() -> float:
+	return clampf(1.0 + elapsed / anticipation_seconds, 0.0, 1.0) if anticipation_seconds > 0.0 else 0.0
+
+
+func phase() -> String:
+	if elapsed < 0.0:
+		return "charging"
+	if elapsed < 0.10:
+		return "release"
+	if elapsed < 0.47:
+		return "settling"
+	return "fading" if elapsed >= duration - (0.22 if _batch else 0.31) else "reading"
+
+
 func sync() -> void:
 	position = rest_position
-	_level_effects.sync(elapsed, duration, reduced_motion)
-	visible = elapsed >= 0.0
+	visible = elapsed >= -anticipation_seconds
+	_level_effects.sync(elapsed, duration, reduced_motion, anticipation_seconds)
 	if not visible:
 		_visual.modulate.a = 0.0
 		return
+	var charging: bool = elapsed < 0.0
+	var charge: float = charge_progress()
 	var fade_start: float = duration - (0.22 if _batch else 0.31)
 	var fade: float = smoothstep(fade_start, duration, elapsed)
-	_visual.modulate.a = smoothstep(0.0, 0.055, elapsed) * (1.0 - fade)
+	_visual.modulate.a = (1.0 if anticipation_seconds > 0.0 else smoothstep(0.0, 0.055, elapsed)) * (1.0 - fade)
 	_visual.position = Vector2.ZERO
 	_visual.scale = Vector2.ONE
 	if not reduced_motion:
-		# A quick stretched release, a soft compression, then a damped settle.
+		# Visible resistance, a decisive release, and a soft elastic recovery.
 		var stretch := Vector2.ONE
-		if elapsed < 0.10:
-			stretch = Vector2(0.46, 0.68).lerp(Vector2(1.17, 1.20),
+		if charging:
+			var compression: float = smoothstep(0.06, 1.0, charge)
+			stretch = Vector2.ONE.lerp(Vector2(0.40, 0.50), compression)
+			var tension: float = sin(charge * PI * 4.0) * sin(charge * PI) * 0.025
+			stretch += Vector2(tension, -tension)
+		elif elapsed < 0.10:
+			var origin := Vector2(0.40, 0.50) if anticipation_seconds > 0.0 else Vector2(0.46, 0.68)
+			stretch = origin.lerp(Vector2(1.17, 1.20),
 				1.0 - pow(1.0 - clampf(elapsed / 0.10, 0.0, 1.0), 3.0))
 		elif elapsed < 0.21:
 			stretch = Vector2(1.17, 1.20).lerp(Vector2(1.05, 0.91), smoothstep(0.10, 0.21, elapsed))
@@ -178,9 +206,16 @@ func sync() -> void:
 		elif elapsed < 0.47:
 			stretch = Vector2(0.98, 1.045).lerp(Vector2.ONE, smoothstep(0.33, 0.47, elapsed))
 		_visual.scale = stretch
-		_visual.position.y = (4.0 * (1.0 - smoothstep(0.0, 0.16, elapsed)) - fade * 4.0) / _ui_scale
+		_visual.position.y = -fade * 4.0 / _ui_scale
+	_surface.self_modulate = Color.WHITE.lerp(_level_effects.color_at().lightened(0.56),
+		charge * 0.30 if charging and not reduced_motion else 0.0)
+	var core: float = smoothstep(0.30, 1.0, charge) if charging else 1.0 - smoothstep(0.0, 0.13, elapsed)
+	_charge_core.visible = not reduced_motion and anticipation_seconds > 0.0 and core > 0.001
+	_charge_core.size = Vector2.ONE * minf(size.x, size.y) * (0.70 + core * 0.64)
+	_charge_core.position = (size - _charge_core.size) * 0.5
+	_charge_core.modulate = Color(_level_effects.color_at(1).lightened(0.28), core * 0.84)
 	_aura.visible = not reduced_motion and _picture.texture != null
-	_aura.modulate = Color(_accent.lightened(0.50), 0.50 * (1.0 - smoothstep(0.10, 0.48, elapsed)))
+	_aura.modulate = Color(_accent.lightened(0.50), (0.20 + charge * 0.35) if charging else 0.50 * (1.0 - smoothstep(0.10, 0.48, elapsed)))
 	for index in range(_glints.size()):
 		var age: float = elapsed - 0.07 - index * 0.075
 		var pulse: float = sin(clampf(age / 0.29, 0.0, 1.0) * PI)
@@ -195,6 +230,7 @@ func snapshot() -> Dictionary:
 		"merge_level": merge_level, "effects": _level_effects.snapshot(),
 		"picture": WordArt.source_path(_picture.texture), "spelling": _spelling.text, "visible": is_visible_in_tree(),
 		"elapsed": elapsed, "duration": duration, "batch": _batch, "variant_scale": variant_scale,
+		"anticipation_seconds": anticipation_seconds, "charge_progress": charge_progress(), "phase": phase(),
 		"animated_scale": [_visual.scale.x, _visual.scale.y], "font_size": _spelling.get_theme_font_size("font_size"),
 		"rect": _rect_data(_surface.get_global_rect()), "resting_rect": _rect_data(get_global_rect()),
 		"picture_rect": _rect_data(_picture.get_global_rect()), "spelling_rect": _rect_data(_spelling.get_global_rect()),

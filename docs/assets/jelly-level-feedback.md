@@ -36,27 +36,43 @@ cleanup; no particle timer advances gameplay.
 
 ## Collected-word popup
 
-The picture-and-spelling card shares the accepted collection event and displays
-one of six related frame effects. It retains its opaque reading surface and
-existing lifetime: 1.95 seconds individually, 0.86 seconds in batches, reduced
+The picture-and-spelling card appears as soon as collection is accepted. It
+visibly contracts toward a luminous core as colored sparkle streams converge,
+then opens into radial star trails and elastic overshoot at the same release
+boundary as the board Jelly and its sound. This applies to every level: a short
+180 ms anticipation for Lv1-Lv3, 660/720/780 ms for Lv4-Lv6, and a compact 40 ms
+squeeze during each automatic collection beat. The top card reaches 40 percent
+width and 50 percent height before its 100 ms outward release, then settles by
+470 ms. The complete picture and spelling return to their resting size.
+
+Each card displays one of six related frame effects. It retains its opaque
+reading surface and full post-release lifetime: 1.95 seconds individually,
+0.86 seconds in batches, reduced
 to 0.62 seconds on narrow screens or 0.48 seconds in short regions. The board
 owns the extended falling tails; the card can finish independently.
 
 | Level | Popup signature |
 | --- | --- |
-| 1 | Pearl greeting: mint glints and local light |
-| 2 | Crystal ripple: two cyan sparkle waves |
-| 3 | Sapphire spiral: blue stars around the reading card |
-| 4 | Golden fireworks: two gold blooms with short radial trails |
+| 1 | Pearl greeting: mint starburst, glints and local light |
+| 2 | Crystal ripple: radial release and two cyan sparkle waves |
+| 3 | Sapphire spiral: sapphire, cyan and rose star trails around the reading card |
+| 4 | Golden fireworks: three gold, cyan and rose blooms with radial trails |
 | 5 | Double cascade: four rose/gold blooms with falling embers |
 | 6 | Prismatic bouquet: six multicolor blossoms and the richest trails |
 
 Manual popup blossom releases span 0.16, 0.38 and 0.48 seconds at Lv4-Lv6.
 Batch releases use `0.075 + level * 0.007` seconds, at most 117 ms, preserving
 the 140 ms cadence. Each card reserves its own effect halo and respects the
-existing control exclusions. Reduced motion keeps static colored stars and
-light. Pause, late-frame catchup, resize and exit use the card's existing clock.
+existing control exclusions. Reduced motion keeps the full-sized card, static
+colored stars and continuous local light through charge and release. Pause,
+late-frame catchup, resize and exit use the card's existing clock.
 No additional artwork or audio was acquired for the six-level update.
+
+The top-card charge update reuses the same three acquired textures, re-inspected
+over a dark backing before implementation. Only texture placement, tint, scale,
+opacity and timing changed; their source, creator, license and acquisition
+status remain in the table below. The core glow, inward streams and outward
+trails are runtime animation of these static production textures.
 
 ## Acquired material
 
@@ -153,6 +169,23 @@ through ember descent, desktop, reduced motion and batch fixtures. It drives
 the actual collection clock with a deterministic board. Pending fireworks also
 follow layout changes during charge, without resetting their release clock;
 already released tails keep their existing position.
+
+The top-card anticipation study uses
+`tools/capture-word-jelly-top-charge.gd -- --frames` with the same native renderer
+options above. It writes to `build/qa/top-jelly-charge/after/`: 144 sampled states
+for Lv3 and Lv6 across desktop, portrait and landscape, manual/batch/reduced
+motion, plus two 91-frame portrait sequences at 30 fps. `--baseline` saves the
+currently loaded implementation in a separate baseline directory. For the
+2026-10-24 comparison, 144 true baseline states were rendered from isolated
+copies of revision `70498eac`; the current scripts stayed in place.
+
+The before/after charge and burst samples, batch layouts and reduced-motion
+layouts were inspected. Lv3 reaches 59 percent width at 120 ms and Lv6 reaches
+41 percent at 720 ms; both peak at 117 percent width and 120 percent height
+100 ms after release. Reduced-motion samples keep the original scale. These
+silent native samples verify composition and sampled timing, not physical-device
+performance or audio. The focused reveal, full view, hybrid view, application
+flow and level-audio suites passed after the update.
 
 ## Historical nine-level evidence
 

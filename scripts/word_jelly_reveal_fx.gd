@@ -6,19 +6,20 @@ const RAYS = preload("res://assets/chests/milestone/rays.png")
 const STAR = preload("res://assets/chests/milestone/sparkle.png")
 const WordModel = preload("res://scripts/word_jelly_model.gd")
 const PROFILES: Array[Dictionary] = [
-	{"name": "Pearl greeting", "pattern": "pearl", "sparks": 3, "bursts": 1, "hue": 0.43, "margin": 6.0},
-	{"name": "Crystal ripple", "pattern": "ripple", "sparks": 9, "bursts": 2, "hue": 0.51, "margin": 9.0},
-	{"name": "Sapphire spiral", "pattern": "spiral", "sparks": 18, "bursts": 1, "hue": 0.65, "margin": 12.0},
-	{"name": "Golden fireworks", "pattern": "fireworks", "sparks": 32, "bursts": 2, "hue": 0.11, "margin": 38.0,
-		"trails": 2},
-	{"name": "Double cascade", "pattern": "cascade", "sparks": 56, "bursts": 4, "hue": 0.93, "margin": 48.0,
+	{"name": "Pearl greeting", "pattern": "pearl", "sparks": 12, "bursts": 1, "hue": 0.43, "margin": 16.0},
+	{"name": "Crystal ripple", "pattern": "ripple", "sparks": 20, "bursts": 2, "hue": 0.51, "margin": 23.0},
+	{"name": "Sapphire spiral", "pattern": "spiral", "sparks": 32, "bursts": 1, "hue": 0.65, "margin": 32.0},
+	{"name": "Golden fireworks", "pattern": "fireworks", "sparks": 48, "bursts": 3, "hue": 0.11, "margin": 44.0,
 		"trails": 3},
-	{"name": "Prismatic bouquet", "pattern": "bouquet", "sparks": 120, "bursts": 6, "hue": 0.10, "margin": 68.0,
+	{"name": "Double cascade", "pattern": "cascade", "sparks": 72, "bursts": 4, "hue": 0.93, "margin": 56.0,
+		"trails": 3},
+	{"name": "Prismatic bouquet", "pattern": "bouquet", "sparks": 120, "bursts": 6, "hue": 0.10, "margin": 72.0,
 		"trails": 5},
 ]
 
 var level: int = 1
 var elapsed: float = 0.0
+var anticipation_seconds: float = 0.0
 var duration: float = 1.95
 var reduced_motion: bool = false
 var _batch: bool = false
@@ -55,8 +56,9 @@ func configure(card_size: Vector2, ui_scale: float, value: int, accent: Color, b
 	queue_redraw()
 
 
-func sync(age: float, seconds: float, steady: bool) -> void:
+func sync(age: float, seconds: float, steady: bool, anticipation: float = 0.0) -> void:
 	elapsed = age
+	anticipation_seconds = anticipation
 	duration = seconds
 	reduced_motion = steady
 	queue_redraw()
@@ -67,8 +69,10 @@ func color_at(index: int = 0) -> Color:
 	if level == WordModel.MAX_MERGE_LEVEL:
 		hue += [0.0, 0.39, 0.62, 0.85][posmod(index, 4)]
 	elif level >= 4:
-		hue += [0.0, -0.08, 0.13][posmod(index, 3)]
-	return Color.from_hsv(fposmod(hue, 1.0), 0.70, 1.0).lerp(_accent, 0.18 if level < 4 else 0.03)
+		hue += [0.0, 0.40, 0.78][posmod(index, 3)]
+	elif level == 3:
+		hue += [0.0, -0.16, 0.20][posmod(index, 3)]
+	return Color.from_hsv(fposmod(hue, 1.0), 0.78, 1.0).lerp(_accent, 0.12 if level < 4 else 0.03)
 
 
 func _stamp(texture: Texture2D, point: Vector2, extent: Vector2, color: Color, angle: float = 0.0) -> void:
@@ -117,14 +121,77 @@ func _edge_light(fade: float, clock: float) -> void:
 func _draw() -> void:
 	if _card.size.x <= 0.0 or duration <= 0.0:
 		return
-	var fade: float = smoothstep(0.0, 0.055, elapsed) * (1.0 - smoothstep(duration - (0.22 if _batch else 0.31), duration, elapsed))
+	if elapsed < 0.0:
+		if anticipation_seconds > 0.0 and elapsed >= -anticipation_seconds:
+			if reduced_motion:
+				_draw_steady(1.0)
+			else:
+				_draw_charge(clampf(1.0 + elapsed / anticipation_seconds, 0.0, 1.0))
+		draw_set_transform(Vector2.ZERO)
+		return
+	var fade: float = (1.0 if anticipation_seconds > 0.0 else smoothstep(0.0, 0.055, elapsed)) \
+		* (1.0 - smoothstep(duration - (0.22 if _batch else 0.31), duration, elapsed))
 	if fade <= 0.0:
 		return
 	if reduced_motion:
 		_draw_steady(fade)
 	else:
+		_draw_release(fade)
 		_draw_celebration(fade)
 	draw_set_transform(Vector2.ZERO)
+
+
+func _draw_charge(progress: float) -> void:
+	var contraction: float = smoothstep(0.06, 1.0, progress)
+	var center: Vector2 = _card.get_center()
+	var body: Vector2 = _card.size * Vector2.ONE.lerp(Vector2(0.40, 0.50), contraction)
+	var strength: float = smoothstep(0.0, 0.22, progress)
+	_stamp(GLOW, center, body + Vector2.ONE * _margin * (1.7 - contraction * 0.45),
+		Color(color_at(), strength * (0.46 + contraction * 0.38)), progress * 0.22)
+	# Staggered inward streams accelerate into a single bright core.
+	var count: int = 8 + level * 3 if not _batch else 8 + level
+	for index in range(count):
+		var phase: float = float(index % 4) * 0.055
+		var pull: float = smoothstep(phase, 1.0, progress)
+		var angle: float = TAU * float(index) / float(count) + pull * 0.55
+		var outside: Vector2 = _rim(angle, _margin * 0.65)
+		var point: Vector2 = center.lerp(outside, lerpf(1.0, 0.18, pull))
+		var edge: float = (8.0 + level * 0.8 + (index % 3) * 1.3) / _ui_scale
+		var tint: Color = color_at(index)
+		for tail in range(3, 0, -1):
+			var behind: Vector2 = center.lerp(outside, lerpf(1.0, 0.18, maxf(0.0, pull - tail * 0.045)))
+			_stamp(STAR, behind, Vector2(edge * (1.4 - tail * 0.23), edge * 0.38),
+				Color(tint, strength * (0.50 - tail * 0.10)), angle)
+		_stamp(STAR, point, Vector2.ONE * edge, Color(tint, strength * 0.95), angle + progress)
+	_stamp(RAYS, center, body + Vector2.ONE * _margin * 1.25,
+		Color(color_at(1), contraction * strength * 0.80), -progress * 0.32)
+
+
+func _draw_release(fade: float) -> void:
+	# The compact core opens into the reserved halo before the card settles.
+	var life: float = minf(0.30, duration * 0.64) if _batch else 0.64
+	if elapsed >= life:
+		return
+	var progress: float = clampf(elapsed / life, 0.0, 1.0)
+	var launch: float = 1.0 - pow(1.0 - clampf(elapsed / 0.17, 0.0, 1.0), 3.0)
+	var opacity: float = fade * (1.0 - smoothstep(0.20, 1.0, progress))
+	var center: Vector2 = _card.get_center()
+	_stamp(RAYS, center, (_card.size + Vector2.ONE * _margin * 1.9) * lerpf(0.40, 1.0, launch),
+		Color(color_at(1), opacity * 0.90), 0.12 + progress * 0.10)
+	_edge_light(opacity * (0.50 + level * 0.04), 0.0)
+	var count: int = 10 + level * 3 if not _batch else 8 + level
+	for index in range(count):
+		var angle: float = TAU * float(index) / float(count) - PI * 0.5
+		var target: Vector2 = _rim(angle, _margin * (0.55 + float(index % 3) * 0.08))
+		var point: Vector2 = center.lerp(target, lerpf(0.22, 1.0, launch))
+		var stem: Vector2 = center.lerp(target, lerpf(0.18, 0.88, launch))
+		var trail: Vector2 = point - stem
+		var edge: float = (8.5 + level * 0.8 + float(index % 3)) / _ui_scale
+		var tint: Color = color_at(index)
+		_stamp(STAR, stem.lerp(point, 0.5), Vector2(trail.length() * 1.7, edge * 0.56),
+			Color(tint, opacity * 0.86), angle)
+		_stamp(STAR, point, Vector2.ONE * edge * (1.0 - progress * 0.30), Color(tint, opacity), angle)
+		_stamp(STAR, point, Vector2.ONE * edge * 0.30, Color(1.0, 0.99, 0.91, opacity))
 
 
 func _draw_steady(fade: float) -> void:
@@ -175,11 +242,11 @@ func _draw_celebration(fade: float) -> void:
 	var count: int = _spark_count()
 	for index in range(count):
 		var phase: float = float(posmod(index * 7, 13)) / 13.0
-		var edge: float = (5.0 + level * 0.8 + phase * 3.8) / _ui_scale
+		var edge: float = (7.0 + level * 0.9 + phase * 3.8) / _ui_scale
 		var angle: float = TAU * float(index) / float(count) - PI * 0.5
 		var turn: float = clock * (1.15 if level == 3 else 0.60)
 		var point: Vector2 = _rim(angle + turn, _margin * (0.25 + phase * 0.47) * launch)
-		var opacity: float = fade * launch * (0.60 + 0.40 * sin(phase * TAU + clock * 4.0))
+		var opacity: float = fade * launch * (0.74 + 0.26 * sin(phase * TAU + clock * 4.0))
 		_stamp(STAR, point, Vector2.ONE * edge, Color(color_at(index), opacity), angle + turn)
 
 
@@ -241,6 +308,7 @@ func snapshot() -> Dictionary:
 	var selected: Dictionary = PROFILES[level - 1]
 	var rect: Rect2 = get_global_rect()
 	return {"level": level, "name": selected.name, "pattern": selected.pattern,
+		"phase": "charging" if elapsed < 0.0 else ("release" if elapsed < 0.10 else "settling"),
 		"spark_count": _spark_count(), "wave_count": selected.bursts,
 		"trail_count": _trail_count(), "emission_seconds": _emission_span() if level >= 4 else 0.0,
 		"burst_count": selected.bursts, "reduced_motion": reduced_motion,

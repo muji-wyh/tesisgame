@@ -1005,7 +1005,7 @@ func _check_ordinary_collection(view) -> void:
 func _batch_reveal_count(started: int, elapsed: float, duration: float) -> int:
 	var count: int = 0
 	for index in range(started):
-		if elapsed - index * Model.BATCH_BEAT_SECONDS < duration - 0.000001:
+		if elapsed - index * Model.BATCH_BEAT_SECONDS - Model.collection_pop_seconds(1, true) < duration - 0.000001:
 			count += 1
 	return count
 
@@ -1187,7 +1187,7 @@ func _check_batch_collection(view) -> void:
 			"all three reading cards retain their independent lifetimes after the faster batch completes")
 		for index in range(reveals.size()):
 			check(str(reveals[index].word_id) == "cat"
-				and is_equal_approx(float(reveals[index].elapsed), elapsed - (3 - surviving_count + index) * Model.BATCH_BEAT_SECONDS),
+				and is_equal_approx(float(reveals[index].elapsed), elapsed - (3 - surviving_count + index) * Model.BATCH_BEAT_SECONDS - Model.collection_pop_seconds(1, true)),
 				"repeated spellings retain separate reveal timelines at the 140 ms cadence")
 		for id: int in retained:
 			check(not view.game.cell(id).is_empty(), "unfinished merges and unmerged roots stay available after collecting")
@@ -1213,13 +1213,13 @@ func _check_coarse_frame_batch_reveals(view) -> void:
 			and state.collection_batch.active and int(state.collection_batch.completed) == 2,
 			"one coarse frame preserves all three reveals across two collection boundaries")
 		for index in range(entries.size()):
-			check(is_equal_approx(float(entries[index].elapsed), 0.30 - index * Model.BATCH_BEAT_SECONDS),
-				"coarse frames carry only the remaining frame time into each new collection reveal")
+			check(is_equal_approx(float(entries[index].elapsed), 0.30 - index * Model.BATCH_BEAT_SECONDS - Model.collection_pop_seconds(1, true)),
+				"coarse frames retain each reveal's actual charge or post-release age")
 		view._process(0.30)
 		entries = view.snapshot().word_reveal.entries
 		check(entries.size() == 3, "Three reading cards briefly coexist before their first expiry")
 		for index in range(entries.size()):
-			check(is_equal_approx(float(entries[index].elapsed), 0.60 - index * Model.BATCH_BEAT_SECONDS),
+			check(is_equal_approx(float(entries[index].elapsed), 0.60 - index * Model.BATCH_BEAT_SECONDS - Model.collection_pop_seconds(1, true)),
 				"the second coarse frame advances earlier reveals and creates the third at its exact beat")
 		view._process(0.40)
 		state = view.snapshot()
@@ -1231,7 +1231,7 @@ func _check_coarse_frame_batch_reveals(view) -> void:
 		entries = view.snapshot().word_reveal.entries
 		check(entries.size() == 1, "Coarse collection frames expire the first two reveals while the newest word remains")
 		for index in range(entries.size()):
-			check(is_equal_approx(float(entries[index].elapsed), 1.10 - (3 - entries.size() + index) * Model.BATCH_BEAT_SECONDS),
+			check(is_equal_approx(float(entries[index].elapsed), 1.10 - (3 - entries.size() + index) * Model.BATCH_BEAT_SECONDS - Model.collection_pop_seconds(1, true)),
 				"after a completed batch each independent reveal advances once per frame")
 		var before_pause: Array = entries.duplicate(true)
 		view._process(1.25)
@@ -1372,6 +1372,8 @@ func _check_reveal_content(view, expected: Dictionary) -> void:
 
 
 func _check_word_reveal(view) -> void:
+	var reading_age: float = 0.20
+	var collection_age: float = Model.collection_pop_seconds(1) + reading_age
 	for reduced: bool in [false, true]:
 		for dimensions: Vector2 in [Vector2(1000, 720), Vector2(768, 1024), Vector2(390, 700), Vector2(568, 260)]:
 			view.size = dimensions
@@ -1386,7 +1388,7 @@ func _check_word_reveal(view) -> void:
 			var point: Vector2 = _center(view, ids[0])
 			view._press(7, point)
 			view._release(point)
-			_advance(view, 0.20)
+			_advance(view, collection_age)
 			_check_reveal_content(view, words[0])
 			var first: Dictionary = view.snapshot().word_reveal
 			view._activate(ids[0])
@@ -1400,15 +1402,15 @@ func _check_word_reveal(view) -> void:
 					"reduced motion preserves a steady readable picture and spelling")
 			_advance(view, Model.COLLECT_SECONDS)
 			view._activate(ids[1])
-			_advance(view, 0.20)
+			_advance(view, collection_age)
 			_check_reveal_content(view, words[1])
 			var concurrent: Dictionary = view.snapshot().word_reveal
 			check(int(concurrent.active_count) == 2 and concurrent.entries.size() == 2 and heard.size() == 2,
 				"another individual collection immediately coexists with the first word")
 			check(str(concurrent.entries[0].word_id) == str(words[0].id)
 				and str(concurrent.entries[1].word_id) == str(words[1].id)
-				and is_equal_approx(float(concurrent.entries[0].elapsed), float(first.elapsed) + Model.COLLECT_SECONDS + 0.20)
-				and is_equal_approx(float(concurrent.entries[1].elapsed), 0.20),
+				and is_equal_approx(float(concurrent.entries[0].elapsed), float(first.elapsed) + Model.COLLECT_SECONDS + collection_age)
+				and is_equal_approx(float(concurrent.entries[1].elapsed), reading_age),
 				"both individual reveals retain the correct picture, spelling and independent collection age")
 			_advance(view, Model.COLLECT_SECONDS)
 			check(payouts.size() == 2 and view.game.collected_coins == 0 and cues.count("pop") == 2,
@@ -1458,10 +1460,12 @@ func _check_word_reveal_levels(view) -> void:
 				check(entry.word_id == "cat" and entry.spelling == "cat" and str(entry.picture).ends_with("cat.webp"),
 					"all collection levels retain the collected spelling and its production artwork")
 				var expected_age: float = 0.60 - index * Model.BATCH_BEAT_SECONDS if batch else (3 - index) * 0.10
-				if not batch and levels[index] >= 4:
-					expected_age -= Model.collection_pop_seconds(levels[index])
+				expected_age -= Model.collection_pop_seconds(levels[index], batch)
 				check(is_equal_approx(float(entry.elapsed), expected_age),
-					"collection levels honor delayed manual reveals and unchanged batch catch-up")
+					"all collection levels anchor their reading age to the accepted manual or batch release")
+				check(is_equal_approx(float(entry.anticipation_seconds), Model.collection_pop_seconds(levels[index], batch))
+					and entry.visible and ((entry.phase == "charging") == (expected_age < 0.0)),
+					"manual and batch cards visibly charge until the same release boundary as their Jelly")
 			check(entry_ids.size() == 3 and entry_ids[0] != entry_ids[1]
 				and entry_ids[1] != entry_ids[2] and entry_ids[0] != entry_ids[2],
 				"repeated words at different levels have independent presentation identities")
@@ -1489,7 +1493,7 @@ func _check_word_reveal_control_clearance(view) -> void:
 		view._collect_all()
 		var protected: Array[Rect2] = [view.finish_button.get_global_rect(), view.collect_button.get_global_rect(),
 			view.get_global_transform() * view.chest_meter_rect()]
-		for tick in range(16):
+		for tick in range(17):
 			view._process(0.05)
 			for entry: Dictionary in view.snapshot().word_reveal.entries:
 				var panel: Rect2 = _snapshot_rect(entry.rect)
@@ -1498,7 +1502,8 @@ func _check_word_reveal_control_clearance(view) -> void:
 					check(not panel.intersects(control) and not effects.intersects(control),
 						"collection cards and their high-level halos leave Finish, chest and Collect readable at %s" % dimensions)
 		var state: Dictionary = view.snapshot()
-		var visible_count: int = _batch_reveal_count(4, 0.80, float(state.word_reveal.duration))
+		# Stay between release-based expiry boundaries on both compact layouts.
+		var visible_count: int = _batch_reveal_count(4, 0.85, float(state.word_reveal.duration))
 		check(int(state.collection_batch.started) == 4 and int(state.word_reveal.active_count) == visible_count,
 			"the 140 ms cadence retains every unexpired collection pop after the fourth start")
 		if dimensions == Vector2(1000, 720):
@@ -1514,8 +1519,9 @@ func _check_word_reveal_lifecycle(view) -> void:
 		_advance(view, 0.2)
 		view._activate(ids[1])
 		_advance(view, 0.2)
-		check(not view.snapshot().word_reveal.visible and int(view.snapshot().word_reveal.active_count) == 2,
-			"lifecycle fixture begins with two reserved reading reveals during charge")
+		check(view.snapshot().word_reveal.visible and int(view.snapshot().word_reveal.active_count) == 2
+			and view.snapshot().word_reveal.entries.all(func(entry: Dictionary) -> bool: return entry.phase == "charging"),
+			"lifecycle fixture begins with two visible reading cards gathering energy")
 		match action:
 			"pause": view.pause(true)
 			"hide": view.hide()
