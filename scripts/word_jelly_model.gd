@@ -1939,12 +1939,6 @@ func _authored_auto_active() -> bool:
 	return powerup_active() and str(_powerup.get("kind", "")) == "auto_merge"
 
 
-func _parts_for_word(word: Dictionary) -> Array[String]:
-	# Only reviewed graphs may split a term. Legacy spelling chunks are not
-	# morphological evidence; unreviewed vocabulary starts as one whole root.
-	return [str(word.text)]
-
-
 func _new_tile(text: String, mass: int, fragments: int, allocate_id: bool = true) -> Dictionary:
 	var word: Dictionary = _word_lookup.get(normalize_word(text), {}) if mass > 1 else {}
 	if _authored_words.has(str(word.get("id", ""))):

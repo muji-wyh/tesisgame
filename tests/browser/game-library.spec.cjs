@@ -37,17 +37,20 @@ async function openHome(page, { reducedMotion = 'reduce' } = {}) {
   await page.emulateMedia({ reducedMotion });
   await page.goto('/');
   await enterGame(page, { home: true });
-  await expect.poll(async () => (await metrics(page)).library.learning.screen).toBe('paths');
-  await expect.poll(async () => (await metrics(page)).library.previews.every(item => !item.animating),
-    { message: 'Hidden game previews do not animate' }).toBe(true);
+  // Home opens with everyday games; vocabulary selection lives in Word Library.
+  await expect.poll(async () => {
+    const home = (await metrics(page)).library;
+    return home.visible && home.vocabulary?.kind === 'everyday';
+  }, { message: 'A new learner reaches Home with everyday vocabulary' }).toBe(true);
   const initial = (await metrics(page)).library;
-  expect(initial.controls.filter(item => item.name.startsWith('Mode_') && item.visible),
-    'A new learner chooses a path before seeing the games').toEqual([]);
-  await libraryControl(page, 'GrowthPath');
-  await libraryControl(page, 'ProfessionalPath');
-  await activateLibraryControl(page, 'GrowthPath');
-  await expect.poll(async () => (await metrics(page)).library.learning.screen).toBe('summary');
-  expect((await metrics(page)).library.learning.selection.track).toBe('growth');
+  expect(initial.controls.filter(item => item.name.startsWith('Mode_')).map(item => item.name),
+    'All six games are available directly from Home').toEqual(MODES.map(mode => `Mode_${mode}`));
+  expect(initial.controls.some(item => item.name.startsWith('Mode_') && item.visible),
+    'The first games are visible without choosing a learning path').toBe(true);
+  expect(initial.controls.find(item => item.name === 'HomeVocabulary')?.visible,
+    'Home exposes its current vocabulary and the Word Library entry').toBe(true);
+  expect(initial.controls.filter(item => ['GrowthPath', 'ProfessionalPath'].includes(item.name) && item.visible),
+    'Home has no separate learning-path gate').toEqual([]);
   return errors;
 }
 
@@ -299,7 +302,7 @@ for (const reducedMotion of ['reduce', 'no-preference']) {
       expect(footer.map(item => item.name), 'The Home footer contains only the word library and sound controls')
         .toEqual(['HomeCollection', 'LibrarySound']);
       expect(Math.abs(footer[0].rect[2] - footer[1].rect[2]), 'The two footer controls share the width equally').toBeLessThanOrEqual(1);
-      for (const name of ['ChangeLearningPath', 'ContinueLearningPath', ...names, 'HomeCollection', 'LibrarySound']) {
+      for (const name of ['HomeVocabulary', ...names, 'HomeCollection', 'LibrarySound']) {
         const control = await libraryControl(page, name), bounds = await metrics(page);
         const [x, y, w, h] = control.rect;
         expect(control.disabled, `${name} is enabled`).toBe(false);

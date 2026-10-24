@@ -45,30 +45,30 @@ root count, mass, word length, and carried fragments do not affect either.
 | 4 | 6% | 150 | 9 |
 | 5 | 10% | 200 | 20 |
 | 6 | 16% | 250 | 40 |
-| 7 | 28% | 300 | 84 |
-| 8 | 50% | 350 | 175 |
-| 9 | 80% | 450 | 360 |
 
 The expected values are averages over repeated independent collections, not a
 promise for any particular collection. Building higher levels consumes matching
 words, so this table does not imply an income rate or a typical player level mix.
 
-For a budget measured per source word, a LvN body represents `2^(N-1)` completed
-Lv1 words because every upgrade consumes two matching bodies of the same level.
-Divide each body's expected bonus by that source count. The maximum is Lv9:
-`360 / 256 = 1.40625` expected bonus coins per source word. This counts completed
-words, not their component roots, and does not award bonuses during upgrading.
+Identical words add their levels when merged, including different levels, provided
+the total is at most six. A LvN body therefore represents `N` completed Lv1 words,
+regardless of the merge order. Divide each body's expected bonus by that source
+count. The maximum is Lv6: `40 / 6`, approximately 6.67 expected bonus coins per
+source word. This counts completed words, not their component roots, and does not
+award bonuses during upgrading. Collect starts ready words at 140 ms intervals;
+its cadence does not change their reward probabilities.
 
 With every natural fragment retained and eventually collected, ordinary supply
 provides about five chest coins per source word in the long run. The modeled
 chest share of expected gross coins is therefore at least
-`5 / (5 + 1.40625)`, approximately 78.05%, across any mix of collection levels.
+`5 / (5 + 40 / 6)`, approximately 42.86%, across any mix of collection levels.
+At Lv6, expected collection bonuses can exceed chest income per source word.
 This is a long-run budget bound under perfect retention, not observed player income or a
 guarantee for one round; fragment thresholds, lost words, and purchase spending
 can change a particular round's result.
 
 Every accepted collection reserves one outcome under its existing collection
-receipt before persistence. Eligible Lv2-9 collections draw once from the separate
+receipt before persistence. Eligible Lv2-6 collections draw once from the separate
 coin random stream; Lv1 reserves zero without consuming a draw. A failed save,
 pause, batch retry, or repeated tap reuses that decision and amount. Successful
 commit pays at most once and leaves word, learning, and fragment settlement under

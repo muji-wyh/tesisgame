@@ -121,7 +121,9 @@ func _test_whole_and_picture() -> void:
 	var left: Dictionary = model._new_tile("c", 1, 0)
 	var right: Dictionary = model._new_tile("at", 1, 0)
 	check(not model.parts_compatible(left, right), "Arbitrary legacy letter chunks are not accepted as roots")
-	check(model._parts_for_word(word) == ["cat"], "Unreviewed words are supplied as one whole root")
+	var supplied_roots: Array = model.upcoming.filter(func(tile: Dictionary) -> bool: return tile.get("jelly_kind") == "root")
+	check(not supplied_roots.is_empty() and supplied_roots.all(func(tile: Dictionary) -> bool: return tile.text == "cat"),
+		"Unreviewed words reach the supply preview as whole roots")
 
 
 func _test_authored_spelling() -> void:

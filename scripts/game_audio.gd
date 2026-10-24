@@ -103,9 +103,6 @@ var current_theme: String = ""
 var cache: Dictionary = {}
 var available: bool = true
 var _playback_requests: Dictionary = {}
-var _voice_queue: Array[String] = []
-var _voice_queue_loading: bool = false
-var _voice_queue_generation: int = 0
 var _music_error: bool = false
 var _pop_slice_paths: Array[String] = []
 var _pop_slice_rng := RandomNumberGenerator.new()
@@ -191,7 +188,6 @@ func _ready() -> void:
 	effect = _player(0.24)
 	voice = _player(0.64)
 	voice.finished.connect(_voice_finished)
-	voice.finished.connect(_queued_voice_finished)
 	if OS.has_feature("web"):
 		available = bool(JavaScriptBridge.eval("Boolean(window.AudioContext || window.webkitAudioContext)"))
 
@@ -899,45 +895,9 @@ func stop_chest_performance() -> void:
 
 
 func say(path: String) -> void:
-	_clear_voice_queue()
 	if muted or not active:
 		return
 	_play(voice, path)
-
-
-func say_queued(path: String) -> void:
-	if muted or not active or not available:
-		return
-	_voice_queue.append(path)
-	_play_next_queued_word()
-
-
-func _clear_voice_queue() -> void:
-	_voice_queue_generation += 1
-	_voice_queue.clear()
-	_voice_queue_loading = false
-
-
-func _play_next_queued_word() -> void:
-	if _voice_queue.is_empty() or _voice_queue_loading or voice.playing:
-		return
-	var generation: int = _voice_queue_generation
-	_voice_queue_loading = true
-	await _play(voice, _voice_queue.pop_front())
-	if generation != _voice_queue_generation:
-		return
-	_voice_queue_loading = false
-	if not voice.playing:
-		# An unavailable recording must not hold up the following words.
-		_queued_voice_finished.call_deferred()
-
-
-func _queued_voice_finished() -> void:
-	# Only natural completion advances the queue; stopping speech cancels it.
-	if muted or not active or not available:
-		_clear_voice_queue()
-		return
-	_play_next_queued_word()
 
 
 func _play(player: AudioStreamPlayer, path: String, loop: bool = false) -> void:
@@ -1024,7 +984,6 @@ func stop_music() -> void:
 
 
 func stop_voice() -> void:
-	_clear_voice_queue()
 	if voice != null:
 		_stop(voice)
 

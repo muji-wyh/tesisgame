@@ -65,20 +65,6 @@ func _run() -> void:
 	_check_hold_bounds(data)
 	_check_opened_flourish(data)
 	_check_opened_flourish_bounds(data)
-	var medal_path := "res://scripts/medal_view.gd"
-	check(FileAccess.file_exists(medal_path), "The saved favorite medal view exists")
-	if FileAccess.file_exists(medal_path):
-		var medal = load(medal_path).new()
-		root.add_child(medal)
-		medal.size = Vector2(120, 90)
-		var texture: Texture2D = load("res://assets/images/rewards/spring-1.svg")
-		for count in range(4):
-			medal.configure(texture, count, Color("#438363"))
-			check(medal.pieces == count and medal.texture == texture,
-				"The shared medal view represents zero through three pieces")
-		medal.configure(null, 0, Color("#606a73"))
-		check(medal.texture == null and medal.pieces == 0, "Empty medals need no eagerly loaded image")
-		medal.free()
 	print("Chest reveal: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 

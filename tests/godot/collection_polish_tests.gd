@@ -99,14 +99,6 @@ func _run() -> void:
 	var counts: Dictionary = app.medal_progress.counts.duplicate(true)
 	app._play_duck()
 	check(app.medal_progress.counts == counts, "Playing with Pip does not grant a reward")
-	var decoration = load("res://scripts/medal_view.gd").new()
-	root.add_child(decoration)
-	decoration.scale = Vector2.ONE * 0.6
-	decoration.rotation = 0.2
-	decoration.size = Vector2.ONE * 48
-	check(decoration.scale == Vector2.ONE * 0.6 and is_equal_approx(decoration.rotation, 0.2),
-		"Medals outside the shelf keep transforms owned by their reward animations")
-	decoration.queue_free()
 	app.queue_free()
 	await process_frame
 	for filename in DirAccess.get_files_at(directory):

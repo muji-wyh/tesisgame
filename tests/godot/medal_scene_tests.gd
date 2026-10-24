@@ -27,9 +27,8 @@ func win(app) -> void:
 
 
 func check_no_collectible_presentation(app, phase: String) -> void:
-	var medal_script = load("res://scripts/medal_view.gd")
 	var stage_nodes: Array[Node] = app._single_result.find_children("*", "", true, false)
-	check(not stage_nodes.any(func(node: Node) -> bool: return node.get_script() == medal_script)
+	check(not stage_nodes.any(func(node: Node) -> bool: return node.get_script() != null and node.get_script().resource_path == "res://scripts/medal_view.gd")
 		and app.find_child("MedalFragment", true, false) == null
 		and app.find_child("RewardFlight", true, false) == null,
 		phase + " has no collectible art, assembly piece or toolbar flight")

@@ -143,14 +143,15 @@ Authored root tiles carry their semantic state in `composition`. Game tiles add
 `jelly_kind` (`root`, `picture`, or `merged`), `display_text`, `word_candidate`,
 `image_word`, `merge_level`, `mastery_eligible`, and `assisted`. Root captions
 add positional edge hyphens without changing the resolver's exact spelling.
-Only merged tiles have nonempty `word` and levels 1 through 9. Picture tiles
+Only merged tiles have nonempty `word` and levels 1 through 6. Picture tiles
 have `image_word` but no visible text. Completed pictured roots remain roots
 until they match that exact picture sense. Image-free complete words become
 merged immediately. All physical footprints remain one ordinary cell.
 
 The hybrid planner combines reviewed root paths, their final picture join, and
-same-sense, same-level upgrades. Lv9 cannot upgrade. Its queries neither mutate
-the board nor allocate identities. Fusion events carry `composition_status`
+same-sense upgrades that add the two input levels, including different levels.
+The combined level must not exceed six; Lv6 cannot upgrade. Its queries neither
+mutate the board nor allocate identities. Fusion events carry `composition_status`
 and `merge_kind` to distinguish roots, pictures, and upgrades. Root assembly
 waiting for a picture gives no completed-word speech or collection reward.
 Manual picture matches and composed image-free words become eligible for
@@ -158,10 +159,11 @@ learning evidence only on collection. Image-free atomic exposure and assisted
 completion remain collectable without mastery. Any assisted constituent keeps
 the upgraded result assisted. Levels do not multiply learning credit.
 
-All Word Jelly bonus wins use the
-legacy two-part category (50 coins), at the existing one-percent chance,
-independent of component count or footprint. Receipt reservation and retry
-continue to provide exactly-once settlement.
+Word Jelly collection bonuses depend on the merged level, independently of
+component count or footprint. Lv1 has no bonus. Lv2–6 respectively have a 2%,
+4%, 6%, 10%, or 16% chance of 50, 100, 150, 200, or 250 coins. Each eligible
+collection reserves one roll; receipt reservation and retry provide exactly-once
+settlement. Collect starts ready words at 140 ms intervals without pronunciation.
 
 An optional `commit_collection(payload)` callback gates every collection,
 including a zero-coin collection, on durable persistence. Its isolated payload

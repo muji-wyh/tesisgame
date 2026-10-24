@@ -3838,11 +3838,11 @@ func _test_all_age_complementary_supply() -> void:
 		for word: Dictionary in vocabulary:
 			if not model._eligible(word, age):
 				continue
-			check(model._parts_for_word(word) == [str(word.text)],
-				"Unreviewed production vocabulary remains an intact root: " + str(word.id))
 			model.cells.clear()
 			model.fusions.clear()
 			var root: Dictionary = model._new_word_root(word)
+			check(root.text == str(word.text),
+				"Unreviewed production vocabulary remains an intact root: " + str(word.id))
 			root.column = 0
 			model.cells.append(root)
 			if str(word.get("image", "")).is_empty():
@@ -3856,11 +3856,13 @@ func _test_all_age_complementary_supply() -> void:
 					"The exact production picture and root match in either direction: " + str(word.id))
 			audited += 1
 	check(audited > 100, "The audit exercises the complete eligible production vocabulary")
-	var model = _model()
 	for spelling: String in ["rainbow", "sunflower", "ice cream", "cat"]:
 		var word: Dictionary = _word(spelling)
 		word.jelly_parts = ["arbitrary", "chunks"]
-		check(model._parts_for_word(word) == [spelling], "Legacy chunk hints cannot substitute for reviewed morphology")
+		var model = _model([word])
+		var supplied_roots: Array = model.upcoming.filter(func(tile: Dictionary) -> bool: return tile.get("jelly_kind") == "root")
+		check(not supplied_roots.is_empty() and supplied_roots.all(func(tile: Dictionary) -> bool: return tile.text == spelling),
+			"Legacy chunk hints cannot split the actual supply preview without reviewed morphology")
 
 func _test_supply_preview_stability() -> void:
 	var model = _model([_curated_word("cat", ["cat", "picture:cat"]), _curated_word("sunflower", ["sun", "flow", "er"])])

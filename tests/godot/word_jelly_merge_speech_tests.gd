@@ -212,50 +212,41 @@ func _check_tile_taps() -> void:
 	view.free()
 
 
-func _check_audio_queue() -> void:
+func _check_immediate_audio() -> void:
 	var audio := Audio.new()
 	root.add_child(audio)
 	audio.interact("spring", false)
-	audio.say_queued(CAT)
+	audio.say(CAT)
 	check(audio.voice.playing and audio.voice.stream == load(CAT), "The first merged word begins immediately")
 	var request: int = int(audio._playback_requests[audio.voice])
-	audio.say_queued(DOG)
-	audio.say_queued(CAT)
-	check(audio.voice.stream == load(CAT) and int(audio._playback_requests[audio.voice]) == request
-		and audio._voice_queue == [DOG, CAT], "Rapid merges queue in order without restarting or truncating the current recording")
+	audio.say(DOG)
+	check(audio.voice.playing and audio.voice.stream == load(DOG)
+		and int(audio._playback_requests[audio.voice]) > request, "A new merged word immediately replaces the previous recording")
+	request = int(audio._playback_requests[audio.voice])
+	audio.say(DOG)
+	check(audio.voice.playing and audio.voice.stream == load(DOG)
+		and int(audio._playback_requests[audio.voice]) > request, "A separate merge of the same word restarts its pronunciation")
 	_finish_recording(audio)
-	check(audio.voice.playing and audio.voice.stream == load(DOG) and audio._voice_queue == [CAT],
-		"Natural completion starts the next queued word exactly once")
 	_finish_recording(audio)
-	check(audio.voice.playing and audio.voice.stream == load(CAT) and audio._voice_queue.is_empty(),
-		"Separate merges of the same word each retain their pronunciation")
-	_finish_recording(audio)
-	check(not audio.voice.playing and audio._voice_queue.is_empty(), "Finishing the queue leaves no replay")
-	for interruption: String in ["say", "stop", "halt", "mute"]:
+	check(not audio.voice.playing, "Natural completion and repeated finish signals cannot replay replaced words")
+	for interruption: String in ["stop", "halt", "mute"]:
 		audio.set_muted(false)
 		audio.interact("spring", false)
-		audio.say_queued(CAT)
-		audio.say_queued(CAT)
+		audio.say(CAT)
 		match interruption:
-			"say": audio.say(DOG)
 			"stop": audio.stop_voice()
 			"halt": audio.halt()
 			"mute": audio.set_muted(true)
-		check(audio._voice_queue.is_empty() and not audio._voice_queue_loading,
-			interruption + " discards pending merge speech")
-		if interruption == "say":
-			check(audio.voice.playing and audio.voice.stream == load(DOG), "An explicit word tap takes priority immediately")
-		else:
-			check(not audio.voice.playing, interruption + " stops the current recording")
+		check(not audio.voice.playing, interruption + " stops the current recording")
 		_finish_recording(audio)
-		check(not audio.voice.playing and audio._voice_queue.is_empty(), interruption + " cannot replay canceled words through a late finish")
-	audio.say_queued(CAT)
-	check(not audio.voice.playing and audio._voice_queue.is_empty(), "Muted events never enter the pronunciation queue")
+		check(not audio.voice.playing, interruption + " cannot replay canceled speech through a late finish")
+	audio.say(CAT)
+	check(not audio.voice.playing, "Muted events never start pronunciation")
 	audio.set_muted(false)
 	audio.interact("spring", false)
-	audio.say_queued("res://assets/audio/voice/missing-merge-test.wav")
-	audio.say_queued(DOG)
-	check(audio.voice.playing and audio.voice.stream == load(DOG), "A missing recording cannot block later valid words")
+	audio.say("res://assets/audio/voice/missing-merge-test.wav")
+	audio.say(DOG)
+	check(audio.voice.playing and audio.voice.stream == load(DOG), "A missing recording cannot block a later valid word")
 	audio.halt()
 	audio.free()
 
@@ -265,18 +256,17 @@ func _check_pending_audio() -> void:
 		var audio := DelayedAudio.new()
 		root.add_child(audio)
 		audio.interact("spring", false)
-		audio.say_queued(CAT)
-		audio.say_queued(DOG)
-		check(audio._voice_queue_loading and not audio.voice.playing,
-			"Loading a queued recording reserves its place without starting later speech")
+		audio.say(CAT)
+		var pending_request: int = int(audio._playback_requests[audio.voice])
+		check(not audio.voice.playing, "An asynchronous recording stays silent until its load finishes")
 		match interruption:
 			"stop": audio.stop_voice()
 			"halt": audio.halt()
 			"mute": audio.set_muted(true)
 			"say": audio.say(DOG)
+		check(int(audio._playback_requests[audio.voice]) > pending_request,
+			interruption + " invalidates the pending playback request")
 		audio.recording_loaded.emit()
-		check(audio._voice_queue.is_empty() and not audio._voice_queue_loading,
-			interruption + " invalidates both the loading request and its waiting words")
 		check(audio.voice.playing and audio.voice.stream == load(DOG) if interruption == "say" else not audio.voice.playing,
 			interruption + " prevents an old asynchronous load from replacing newer playback state")
 		audio.halt()
@@ -308,17 +298,16 @@ func _check_app_routes() -> void:
 		var tile: Dictionary = view.game.cells[source]
 		view._tap_tile(int(tile.id))
 		var word: Dictionary = tile.word_candidate if source == 0 else tile.image_word
-		check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + str(word.audio))
-			and app.audio._voice_queue.is_empty(), "Source spelling and picture taps route immediately to their exact recording")
+		check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + str(word.audio)), "Source spelling and picture taps route immediately to their exact recording")
 	app.audio.stop_voice()
 	var voice_request: int = int(app.audio._playback_requests.get(app.audio.voice, 0))
 	view._activate_powerup("auto_merge")
 	_advance(view, 4.0)
 	check(view.game.merged_count == 2 and not view.game.powerup_active() and view.game.cleared_pairs == 0,
 		"The application finishes both automatic fusions without collecting them")
-	check(not app.audio.voice.playing and app.audio._voice_queue.is_empty()
+	check(not app.audio.voice.playing
 		and int(app.audio._playback_requests.get(app.audio.voice, 0)) == voice_request,
-		"Auto Merge never starts or queues a word recording in the application")
+		"Auto Merge never requests a word recording in the application")
 	var completed: Dictionary = view.game.cell(view.game.collectable_ids()[0])
 	view._activate(int(completed.id))
 	check(app.audio.voice.playing and app.audio.voice.stream == load("res://" + str(completed.word.audio)),
@@ -327,35 +316,35 @@ func _check_app_routes() -> void:
 	var ids: Array[int] = _reset_view(view, ["cat-root", "cat-picture", "dog-root", "dog-picture"])
 	check(view.game.try_merge(ids[0], ids[1]) == "merged" and view.game.try_merge(ids[2], ids[3]) == "merged",
 		"The application accepts two independent word fusions")
-	check(app.audio.voice.playing and app.audio.voice.stream == load(DOG) and app.audio._voice_queue.is_empty(),
+	check(app.audio.voice.playing and app.audio.voice.stream == load(DOG),
 		"The latest accepted merge immediately replaces earlier speech instead of waiting in a queue")
 	var accepted_request: int = int(app.audio._playback_requests.get(app.audio.voice, 0))
 	_advance(view, view.game.FUSION_SECONDS + view.game.SETTLE_SECONDS * 3.0)
-	check(app.audio.voice.playing and app.audio.voice.stream == load(DOG) and app.audio._voice_queue.is_empty()
+	check(app.audio.voice.playing and app.audio.voice.stream == load(DOG)
 		and int(app.audio._playback_requests.get(app.audio.voice, 0)) == accepted_request,
 		"Fusion completion preserves current playback without restarting or duplicating speech")
 	view._collect_all()
-	check(view.game.collection_batch_active() and not app.audio.voice.playing and app.audio._voice_queue.is_empty(),
+	check(view.game.collection_batch_active() and not app.audio.voice.playing,
 		"Collect cancels residual merge narration before its first pickup")
 	_advance(view, 3.0)
 	_finish_recording(app.audio)
-	check(not app.audio.voice.playing and app.audio._voice_queue.is_empty(),
-		"The final batch pickup cannot replay a queued merge word")
+	check(not app.audio.voice.playing,
+		"The final batch pickup cannot replay canceled merge speech")
 	for interruption: String in ["home", "hidden", "finish", "mute"]:
 		await _prepare_app(app)
 		view.word_merged.emit(words[0])
 		view.word_merged.emit(words[1])
-		check(app.audio.voice.playing and app.audio.voice.stream == load(DOG) and app.audio._voice_queue.is_empty(),
+		check(app.audio.voice.playing and app.audio.voice.stream == load(DOG),
 			interruption + " starts with the latest merged word speaking and no delayed words")
 		match interruption:
 			"home": app._show_mode_menu()
 			"hidden": app.on_page_hidden()
 			"finish": view.finish_button.accessibility_requested.emit()
 			"mute": app.audio.set_muted(true)
-		check(not app.audio.voice.playing and app.audio._voice_queue.is_empty(),
-			interruption + " cancels spoken and queued merge words")
+		check(not app.audio.voice.playing,
+			interruption + " cancels the current merge pronunciation")
 		view.word_merged.emit(words[0])
-		check(not app.audio.voice.playing and app.audio._voice_queue.is_empty(),
+		check(not app.audio.voice.playing,
 			interruption + " rejects merge narration while gameplay is unavailable")
 		if interruption == "hidden":
 			app.on_page_visible()
@@ -363,7 +352,7 @@ func _check_app_routes() -> void:
 			app._cancel_jelly_finish()
 		elif interruption == "mute":
 			app.audio.set_muted(false)
-		check(not app.audio.voice.playing and app.audio._voice_queue.is_empty(),
+		check(not app.audio.voice.playing,
 			interruption + " restoration does not replay old pronunciations")
 	app.audio.halt()
 	app.queue_free()
@@ -385,7 +374,7 @@ func _run() -> void:
 	_check_merge_events()
 	_check_tile_taps()
 	_check_foundation01_speech_boundary()
-	_check_audio_queue()
+	_check_immediate_audio()
 	_check_pending_audio()
 	await _check_app_routes()
 	await settle()

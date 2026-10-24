@@ -5,6 +5,14 @@ retired. A recorded hash or source path is not, by itself, an active export
 requirement. The current exporters, resource loaders, and asset tests define
 what ships. Private source packs remain subject to their own licenses.
 
+The Web export omits Professional editorial provenance, schemas, source records,
+and policy authoring decisions. It also omits archived Jelly cues, Pip preview
+narration, original Pip authoring sheets superseded by generated wardrobes, and
+numbered legacy reward images. These inputs remain available to generators,
+previews, and tests. Runtime catalogs, generated Professional release resources,
+Pip appearances, and the eight unnumbered theme icons remain bundled. The pack
+verifier checks both source paths and their imported copies for excluded media.
+
 ## Current workflows
 
 | Reference | Purpose |

@@ -197,15 +197,18 @@ becomes merged as soon as its spelling is complete. Invalid combinations separat
 with elastic feedback and a negative sound, without creating a merged body.
 
 Merged Jellies show the word and its available picture, with a brighter rim and
-glints. Two merged Jellies of the same word and level combine into the next
-level, up to Lv9. Levels 2–9 have an upper-right numeral. Every level has a
-distinct collection effect and sound; Lv4 blooms like a firework. The complete
-[level feedback reference](assets/jelly-level-feedback.md) describes all nine.
+glints. Two merged Jellies of the same word add their levels, including different
+levels, up to Lv6. For example, Lv2 plus Lv3 becomes Lv5; a total above six stays
+separate. Levels 2–6 have an upper-right numeral. Each of the six levels has a
+distinct collection effect and sound; Lv4 contracts, gathers energy, bursts into
+colorful fireworks, and lets its glowing embers fall. The complete
+[level feedback reference](assets/jelly-level-feedback.md) describes these effects.
 
 Jellies can move to another position where they fit. Unsupported bodies fall
-vertically onto the next support or floor, including after a supporting word is
-collected or dragged away. Held bodies and active merges finish before their
-deferred fall. Roots, pictures and every merged level keep the same ordinary
+vertically onto the next support or floor. Bodies above a dragged-away jelly wait
+600 ms before falling; collecting a supporting word also releases them. Held
+bodies and active merges finish before their deferred fall. Roots, pictures and
+every merged level keep the same ordinary
 rounded-square cell with a 1:1 aspect ratio. The well holds 40 cells and opens
 with at most 15 jellies across three rows. Long labels use reviewed line breaks
 or an ellipsis; hold a clipped label, or focus it and press R, to pause and read
@@ -247,12 +250,9 @@ by a tap or Collect has one independent chance of a level-based bonus:
 | Lv4 | 6% | 150 |
 | Lv5 | 10% | 200 |
 | Lv6 | 16% | 250 |
-| Lv7 | 28% | 300 |
-| Lv8 | 50% | 350 |
-| Lv9 | 80% | 450 |
 
 Higher levels increase both the chance and the award; component count and footprint
-do not change that level's policy. Opening chests remains the main coin source.
+do not change that level's policy. Opening chests provides additional coins.
 Collection banks all carried fragments. A manually solved
 picture match or root composition records learning only on collection;
 automatic merges and image-free atomic exposure do not earn mastery.
@@ -264,8 +264,9 @@ Auto merge costs 600, 900, then 1200 coins for further uses in the same round;
 Treasure costs 200, 300, then 400. Each item has its own successful-use count,
 and its button displays the next price. Treasure still distributes 2–8 fragments;
 Auto merge follows validated paths of root joins, picture matches and
-equal-level upgrades. It launches an eligible pair every 200 ms, with each
-250 ms flight overlapping the following flight. A dependent step waits for its
+same-word upgrades whose combined level is at most six. It launches an eligible
+pair every 200 ms, with each 250 ms flight overlapping the following flight.
+A dependent step waits for its
 required result to settle; independent pairs can launch while earlier merges
 continue. It leaves merged words for manual collection. Failed payments
 do not advance a price. A fresh round resets prices. See the
@@ -277,7 +278,7 @@ Merge retains fusion sound effects without pronouncing its words. An accepted
 word tap also presents its picture and spelling above the board and pronounces
 it once. Picture-only jellies and complete spellings awaiting their picture also
 pronounce their word on a tap. Partial roots stay silent. Collect gathers ready
-words at 200 ms intervals without pronunciation. Each Auto Merge takes 250 ms
+words at 140 ms intervals without pronunciation. Each Auto Merge takes 250 ms
 to fly, 110 ms to fuse, and 30 ms to settle. Its 200 ms launch interval runs
 independently of that 390 ms sequence.
 Each reveal has its own randomly varied position and size, fits its picture and

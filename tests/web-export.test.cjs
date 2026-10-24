@@ -216,6 +216,40 @@ test('the Godot command runner waits for the engine and propagates its real fail
   );
 });
 
+test('source records and retired media stay reproducible outside the startup pack', () => {
+  const preset = fs.readFileSync(path.join(root, 'export_presets.cfg'), 'utf8');
+  const excluded = preset.match(/^exclude_filter="([^"]*)"$/m)[1].split(',');
+  const themes = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
+  const stages = JSON.parse(fs.readFileSync(path.join(root, 'data/pip-growth-stages.json'), 'utf8')).stages;
+  const archived = [
+    ...['provenance', 'schemas'].flatMap(directory => fs.readdirSync(path.join(root, 'data/professional', directory))
+      .map(name => `data/professional/${directory}/${name}`)),
+    'data/professional/sources.json', 'data/professional/domain-policy/decisions.json',
+    ...['collect-do', 'collect-re', 'collect-mi', 'collect-fa', 'collect-sol', 'collect-la', 'collect-ti',
+      'clear', 'merge', 'collect-lv7', 'collect-lv8', 'collect-lv9'].map(cue => `assets/audio/jelly-match/${cue}.wav`),
+    ...['pip-idle-actions', 'pip-expressions', 'pip-expression-heads'].map(sheet => `assets/images/mascots/${sheet}.svg`),
+    ...stages.map(stage => stage.newVoice.path).filter(source => source.startsWith('assets/audio/pip-growth/')),
+    ...fs.readdirSync(path.join(root, 'assets/images/rewards')).filter(name => /-\d+\.svg$/.test(name))
+      .map(name => `assets/images/rewards/${name}`)
+  ];
+  for (const source of archived) {
+    assert.ok(fs.statSync(path.join(root, source)).size > 0, `Preserve the authoring or test input: ${source}`);
+    assert.ok(excluded.some(pattern => path.matchesGlob(source, pattern)), `Keep the unused export copy out: ${source}`);
+  }
+  const active = ['data/professional/catalog.json', 'data/professional/themes.json',
+    'data/professional/courses/retail.json', 'data/professional/domain-policy/generated/release.json',
+    'data/professional/domain-policy/generated/index.json', 'data/professional/domain-policy/generated/themes.json',
+    'scripts/professional_domain_release.gd', 'assets/images/mascots/pip.svg', 'assets/images/mascots/pip-dance-parts.svg',
+    ...themes.map(theme => `assets/images/rewards/${theme}.svg`),
+    ...stages.flatMap(stage => Object.values(stage.art)),
+    ...['collect-pop', 'land', 'danger', 'collect-lv2', 'collect-lv3', 'collect-lv4', 'collect-lv5', 'collect-lv6']
+      .map(cue => `assets/audio/jelly-match/${cue}.wav`)
+  ];
+  for (const source of active) {
+    assert.equal(excluded.some(pattern => path.matchesGlob(source, pattern)), false, `Preserve runtime delivery: ${source}`);
+  }
+});
+
 test('accessible help describes current paid items, Home navigation and Jelly settlement', () => {
   const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8');
   const help = shell.match(/<p\b[^>]*id="help"[^>]*>([\s\S]*?)<\/p>/)?.[1];
@@ -241,13 +275,15 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /Merging and upgrading alone do not grant rewards or mastery/);
   assert.match(help, /Cat has one whole-word root and a separate cat picture/);
   assert.match(help, /Picture jellies show no word label/);
-  assert.match(help, /two identical words of the same level[\s\S]*up to Lv9/);
-  assert.match(help, /Lv4 blooms like a firework/);
+  assert.match(help, /two identical words, including different levels, to add their levels up to Lv6/);
+  assert.match(help, /If the total exceeds Lv6, both jellies stay separate/);
+  assert.match(help, /Lv4 contracts, gathers energy, explodes into colorful fireworks/);
   assert.match(help, /automatic merges and image-free atomic exposure do not/);
   assert.match(help, /Lv1 collections give no bonus coins/);
   assert.match(help, /Lv2 and higher increase both the chance and amount of bonus coins/);
   assert.match(help, /press R, to pause and read its full spelling/);
-  assert.match(help, /Collect gathers all ready words at 200 ms intervals without pronunciation/);
+  assert.match(help, /Collect gathers all ready words at 140 ms intervals without pronunciation/);
+  assert.doesNotMatch(help, /Lv[789]:|up to Lv9\b|two identical words of the same level/);
   assert.match(help, /Auto merge costs 600, 900, then 1200 coins/);
   assert.match(help, /Auto merge launches an eligible pair every 200 ms with a 250 ms flight, so consecutive flights overlap/);
   assert.match(help, /Treasure costs 200, 300, then 400 coins[\s\S]*2 to 8 chest fragments/);
@@ -261,11 +297,11 @@ test('Jelly collection help publishes every level reward and the real batch cade
   assert.ok(help);
   assert.match(help, /Lv1 collections give no bonus coins/);
   for (const [level, chance, coins] of [[2, 2, 50], [3, 4, 100], [4, 6, 150], [5, 10, 200],
-    [6, 16, 250], [7, 28, 300], [8, 50, 350], [9, 80, 450]]) {
+    [6, 16, 250]]) {
     assert.match(help, new RegExp(`Lv${level}: ${chance}% for ${coins} coins`));
   }
   assert.match(help, /Each eligible collection rolls once, and a failed save retains its original result for retry/);
-  assert.match(help, /Collect gathers all ready words at 200 ms intervals without pronunciation/);
+  assert.match(help, /Collect gathers all ready words at 140 ms intervals without pronunciation/);
   assert.doesNotMatch(help, /1% chance of 50 bonus coins|Extra parts or higher levels do not multiply coin rewards/);
 });
 
@@ -346,7 +382,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   fixture.writeImport('assets/audio/jelly-finish/ready.ogg');
   for (const cue of ['downgrade', 'lost']) fixture.writeImport(`assets/audio/memory-chest/${cue}.wav`);
   for (const cue of ['collect-pop', 'land', 'danger']) fixture.writeImport(`assets/audio/jelly-match/${cue}.wav`);
-  for (let level = 2; level <= 9; level++) fixture.writeImport(`assets/audio/jelly-match/collect-lv${level}.wav`);
+  for (let level = 2; level <= 6; level++) fixture.writeImport(`assets/audio/jelly-match/collect-lv${level}.wav`);
   for (const cue of ['contact', 'merge-together-v3']) fixture.writeImport(`assets/imported-audio/jelly-interaction/${cue}.wav`);
   require('./helpers/pair-feedback-assets.cjs').pairFeedbackFixture(fixture.directory, fixture.writeImport);
   require('./helpers/ui-click-assets.cjs').uiClickFixture(fixture.directory, fixture.writeImport);
@@ -356,17 +392,17 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 383);
+  assert.equal(required.length, 380);
   assert.equal(fs.existsSync(path.join(fixture.directory, 'assets/audio/chests')), false,
     'Packaging succeeds without the archived theme recordings');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/chests/')),
     'The reviewed shared bank replaces every former theme-specific chest cue');
-  assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction|jelly-finish)\//.test(asset.source)).length, 14,
+  assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction|jelly-finish)\//.test(asset.source)).length, 11,
     'Every Jelly cue is required in the startup pack');
   assert.deepEqual(required.filter(asset => asset.source.includes('/jelly-match/collect-')).map(asset => asset.source),
     ['res://assets/audio/jelly-match/collect-pop.wav',
-      ...Array.from({ length: 8 }, (_, index) => `res://assets/audio/jelly-match/collect-lv${index + 2}.wav`)],
-    'The approved pop and every higher-level recording are required in the startup pack');
+      ...Array.from({ length: 5 }, (_, index) => `res://assets/audio/jelly-match/collect-lv${index + 2}.wav`)],
+    'The approved pop and every playable higher-level recording are required in the startup pack');
   assert.ok(required.every(asset => asset.source !== 'res://assets/audio/jelly-match/clear.wav'),
     'The legacy collection source is no longer required at runtime');
   assert.deepEqual(required.slice(-4), reference);

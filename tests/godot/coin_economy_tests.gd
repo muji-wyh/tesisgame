@@ -65,10 +65,11 @@ func _test_economy_ladder() -> void:
 	check(Economy.powerup_price("unknown", 0) == 0, "Unknown item kinds have no purchasable price")
 	var chances: Array[float] = [0.0, 0.02, 0.04, 0.06, 0.10, 0.16, 0.28, 0.50, 0.80]
 	var amounts: Array[int] = [0, 50, 100, 150, 200, 250, 300, 350, 450]
+	# Historical lookup values remain available; the current report is capped at Lv6.
 	for level in range(1, 10):
 		check(is_equal_approx(Economy.jelly_bonus_chance(level), chances[level - 1])
 			and Economy.jelly_bonus(level) == amounts[level - 1],
-			"Collection odds and amounts follow the approved level %d table" % level)
+			"Collection odds and amounts preserve the recorded level %d table" % level)
 	check(Economy.jelly_bonus(0) == 0 and Economy.jelly_bonus(-1) == 0
 		and Economy.jelly_bonus(999) == 450 and is_equal_approx(Economy.jelly_bonus_chance(999), 0.80),
 		"Reward lookup uses bounded merged levels and never infers a reward from mass")
@@ -105,10 +106,16 @@ func _test_supply_and_budget() -> void:
 		if is_equal_approx(float(row.success_probability), 1.0):
 			check(is_equal_approx(float(row.free_play_total), int(row.supplied_words) * 5.0),
 				"Perfect Lv1 completion earns five chest coins per source word in full ten-word blocks")
-	check(report.upgraded_collections.size() == 9, "The report separates upgraded collection rewards from Lv1 source workloads")
+	check(report.upgraded_collections.size() == 6, "The report includes only the six playable merge levels")
+	var expected_per_source: Array[float] = [0.0, 0.5, 4.0 / 3.0, 2.25, 4.0, 40.0 / 6.0]
+	var source_counts: Array[int] = []
 	for row: Dictionary in report.upgraded_collections:
 		check(is_equal_approx(float(row.expected_bonus), Economy.jelly_bonus_chance(int(row.merge_level)) * Economy.jelly_bonus(int(row.merge_level))),
 			"Every upgrade scenario uses the exact level-dependent expectation")
+		source_counts.append(int(row.source_words))
+		check(is_equal_approx(float(row.expected_bonus_per_source_word), expected_per_source[int(row.merge_level) - 1]),
+			"The source-word budget accounts for additive merges instead of same-level doubling")
+	check(source_counts == [1, 2, 3, 4, 5, 6], "Each playable collection level retains its completed source-word count")
 	check(Report.purchase_total("auto_merge", 3) == 2700 and Report.purchase_total("fragments", 3) == 900,
 		"Constant-use scenarios include escalating prices rather than repeating the opening discount")
 

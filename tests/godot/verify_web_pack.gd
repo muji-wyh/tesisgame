@@ -479,8 +479,37 @@ func _verify_excluded_content_absent() -> int:
 	var failures := 0
 	var build_only_sources := ["res://assets/fonts/Nunito-600.ttf", "res://assets/fonts/Nunito-800.ttf",
 		"res://assets/images/mascots/outfits/wardrobe.svg", "res://assets/coins/prepare.py",
-		"res://assets/coins/manifest.json", "res://assets/coins/review-contact.png"]
+		"res://assets/coins/manifest.json", "res://assets/coins/review-contact.png",
+		"res://data/professional/sources.json", "res://data/professional/domain-policy/decisions.json",
+		"res://scripts/medal_view.gd", "res://scripts/medal_view.gdc", "res://scripts/medal_view.gd.remap"]
 	var build_only_imports := ["Nunito-600.ttf-", "Nunito-800.ttf-", "wardrobe.svg-", "review-contact.png-"]
+	var unused_media: Array[String] = []
+	for cue: String in ["collect-do", "collect-re", "collect-mi", "collect-fa", "collect-sol", "collect-la", "collect-ti",
+		"clear", "merge", "collect-lv7", "collect-lv8", "collect-lv9"]:
+		unused_media.append("res://assets/audio/jelly-match/%s.wav" % cue)
+	for sheet: String in ["pip-idle-actions", "pip-expressions", "pip-expression-heads"]:
+		unused_media.append("res://assets/images/mascots/%s.svg" % sheet)
+	var stages: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/pip-growth-stages.json"))
+	if not stages is Dictionary or not stages.get("stages") is Array or stages.stages.size() != 11:
+		printerr("A complete Pip age catalog is required to verify preview audio exclusion.")
+		return 1
+	for stage: Variant in stages.stages:
+		if not stage is Dictionary or not stage.get("newVoice") is Dictionary or not stage.newVoice.get("path") is String:
+			printerr("Pip preview audio metadata must remain available for source verification.")
+			return 1
+		var voice_path: String = "res://" + str(stage.newVoice.path)
+		if voice_path.begins_with("res://assets/audio/pip-growth/") and not unused_media.has(voice_path):
+			unused_media.append(voice_path)
+	var reward_data = load("res://scripts/game_data.gd")
+	for theme: String in reward_data.THEMES:
+		for reward: Dictionary in reward_data.rewards(theme):
+			unused_media.append(str(reward.symbol))
+	var unused_import_prefixes: Array[String] = []
+	for source_path: String in unused_media:
+		build_only_sources.append(source_path)
+		# Match the complete source-path hash, so a runtime asset can safely share
+		# a basename with an archived source. Cover all imported file extensions.
+		unused_import_prefixes.append(source_path.get_file() + "-" + source_path.md5_text() + ".")
 	var archived_chest_imports: Dictionary = {}
 	var chest_bank = load("res://scripts/chest_sound_bank.gd")
 	for theme: String in ["spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"]:
@@ -534,11 +563,15 @@ func _verify_excluded_content_absent() -> int:
 				or archived_chest_imports.has(path):
 				printerr("Archived chest audio or surprise artwork is still bundled: " + path)
 				failures += 1
-			var build_only: bool = build_only_sources.has(path.trim_suffix(".import")) or path.begins_with("res://assets/images/words/")
+			var build_only: bool = build_only_sources.has(path.trim_suffix(".import").trim_suffix(".remap")) or path.begins_with("res://assets/images/words/")
+			build_only = build_only or path.begins_with("res://data/professional/provenance/") \
+				or path.begins_with("res://data/professional/schemas/") or path.begins_with("res://assets/audio/pip-growth/")
 			if directory == "res://.godot/imported":
 				for prefix: String in build_only_imports:
 					build_only = build_only or file.begins_with(prefix)
 				build_only = build_only or historical_word_imports.has(path)
+				for prefix: String in unused_import_prefixes:
+					build_only = build_only or file.begins_with(prefix)
 			if build_only:
 				printerr("A build-only source or imported copy is still bundled: " + path)
 				failures += 1
@@ -576,9 +609,6 @@ func _verify_growth() -> int:
 			if not ResourceLoader.exists("res://" + str(source)):
 				printerr("Missing Pip growth art: " + str(source))
 				failures += 1
-		if not ResourceLoader.exists("res://" + str(stage.newVoice.path)):
-			printerr("Missing Pip growth voice: " + str(stage.newVoice.path))
-			failures += 1
 	if ages != [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
 		printerr("Pip artwork must follow the complete independent age sequence.")
 		failures += 1
