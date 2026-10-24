@@ -38,6 +38,16 @@ Manual collection requires a click or tap released in under 500 ms on the same
 merged jelly without dragging. Holding for 500 ms or longer never collects on
 release; the held jelly can still be dragged into another matching merged jelly.
 
+Picture clues use more of the gel face, including a larger, centered image below
+the compact fragment corner. Merged pictures fill the available space above the
+caption and between reward badges; the level numeral keeps its font size in a
+badge fitted to the digit. Captions retain their 13 displayed-pixel reading floor.
+The original acquired pictures, colors, aspect ratios and animation frames remain
+unchanged. A subtle darkened silhouette underneath shares the same animated
+texture to separate pale details from the gel, without cropping source frames or
+loading another animation. Readiness glints stay on the outer rim behind the
+learning faces. These changes leave tile positions and input bounds unchanged.
+
 Each level has distinct collection motion and audio. Lv1–3 use pearl, twin-ripple
 and spiral releases. Lv4 contracts and gathers light before its gold firework
 explodes, opens three colored blossoms, and drops fading embers. Lv5 adds a rose

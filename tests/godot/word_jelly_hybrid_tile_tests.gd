@@ -4,6 +4,7 @@ extends SceneTree
 const Tile = preload("res://scripts/word_jelly_tile.gd")
 const Model = preload("res://scripts/word_jelly_model.gd")
 const Style = preload("res://scripts/ui_style.gd")
+const WordArt = preload("res://scripts/word_art.gd")
 const SKIN = preload("res://assets/images/jelly-match/gel-mint.png")
 const PICTURE = preload("res://assets/images/ui/modes/cat.webp")
 const CHEST = preload("res://assets/chests/royal/closed.png")
@@ -29,6 +30,153 @@ func _cell(face_kind: String, spelling: String, display: String, level: int = 0,
 
 func _inside(tile: Control, rect: Rect2) -> bool:
 	return Rect2(Vector2.ZERO, tile.size).grow(0.1).encloses(rect)
+
+func _painted_rect(control: Control) -> Rect2:
+	return Rect2(control.position + control.pivot_offset * (Vector2.ONE - control.scale),
+		control.size * control.scale)
+
+func _check_picture_clarity() -> void:
+	var tile := Tile.new()
+	root.add_child(tile)
+	for side: float in [36.0, 44.0, 72.0, 100.0]:
+		tile.size = Vector2.ONE * side
+		for face: Dictionary in [{"kind": "picture", "level": 0}, {"kind": "merged", "level": 1},
+			{"kind": "merged", "level": Model.MAX_MERGE_LEVEL}]:
+			for fragments: int in [0, 1, 2, 8, 20]:
+				tile.set_fragment_arrival(-1.0, false)
+				tile.configure(_cell(face.kind, "cat", "cat", face.level, fragments), SKIN, PICTURE, CHEST, Color("#357d70"))
+				var context: String = "%s, level %d, %d fragments, %s px" % [face.kind, face.level, fragments, side]
+				var picture: Rect2 = tile._picture.get_rect()
+				var label: Rect2 = tile._label.get_rect()
+				var body: Rect2 = tile.get_rect()
+				var outline: PackedVector2Array = tile.contact_outline()
+				check(tile._picture.texture == PICTURE and tile._picture.scale == Vector2.ONE
+					and tile._picture.stretch_mode == TextureRect.STRETCH_KEEP_ASPECT_CENTERED,
+					context + ": the learning face keeps the exact source and undistorted aspect fitting")
+				check(picture.has_area() and _inside(tile, picture), context + ": the larger picture remains inside its body")
+				if face.kind == "picture":
+					# Reject the old 68%/58% clue faces without pinning the new layout constants.
+					var minimum_edge: float = side * (0.75 if fragments == 0 else 0.65)
+					check(picture.size.x >= minimum_edge and picture.size.y >= minimum_edge,
+						context + ": the picture gains useful area even when carrying treasure")
+				else:
+					check(not picture.intersects(label) and _inside(tile, label), context + ": the picture and readable caption keep separate space")
+					check(tile._label.get_theme_font_size("font_size") * Style.ui_scale(tile) >= 13.0,
+						context + ": larger artwork does not borrow from the caption's physical reading floor")
+					if side >= 72.0:
+						check(picture.size.x >= side * 0.38, context + ": merged artwork is no longer limited to the old small badge slot")
+					if tile._level_badge.visible:
+						check(not picture.intersects(tile._level_badge.get_rect()), context + ": the level numeral leaves the picture clear")
+					for elapsed: float in [0.0, 0.7, 1.4, 2.1, 2.8]:
+						tile.set_merged_presentation(elapsed, false)
+						for glint: TextureRect in tile._merged_glints:
+							check(not _painted_rect(glint).intersects(picture),
+								context + ": twinkling rim accents leave the picture unobstructed; glint %s, picture %s" % [_painted_rect(glint), picture])
+							check(glint.get_parent() == tile._picture.get_parent()
+								and glint.z_index <= tile._picture.z_index and glint.z_index <= tile._label.z_index
+								and glint.get_index() < tile._picture.get_index() and glint.get_index() < tile._label.get_index(),
+								context + ": rim accents paint behind both learning faces, including small caption edges")
+				if fragments > 0:
+					for age: float in [-1.0, 0.11]:
+						tile.set_fragment_arrival(age, false)
+						var reward: Rect2 = _painted_rect(tile._fragment_holder)
+						check(_inside(tile, reward) and not reward.intersects(picture),
+							context + ": the full fragment stack stays inside and clear of the picture at rest and peak bounce")
+						if tile._label.visible:
+							check(not reward.intersects(label), context + ": the fragment bounce leaves the caption clear")
+						if tile._level_badge.visible:
+							check(not reward.intersects(tile._level_badge.get_rect()), context + ": fragment bounce and level remain separate")
+					tile.set_fragment_arrival(-1.0, false)
+				for contact: String in ["match", "touch", "reject"]:
+					tile.set_contact(contact, Vector2.RIGHT, 0.6)
+					check(tile._picture.size.is_equal_approx(picture.size) and tile._label.size.is_equal_approx(label.size)
+						and (tile._label.position - tile._picture.position).distance_to(label.position - picture.position) < 0.01,
+						context + ": contact moves learning content together without resizing or crowding it")
+					check(tile.get_rect().is_equal_approx(body) and tile.contact_outline() == outline,
+						context + ": contact keeps the original drag and hit geometry")
+					tile.set_contact("none")
+					check(tile._picture.get_rect().is_equal_approx(picture) and tile._label.get_rect().is_equal_approx(label),
+						context + ": releasing contact restores the exact learning layout")
+				tile.set_completion_hint(true, 0.0, false)
+				tile.set_completion_hint(true, 1.3, false)
+				check(tile._picture.get_rect().is_equal_approx(picture) and tile._label.get_rect().is_equal_approx(label)
+					and tile.get_rect().is_equal_approx(body) and tile.contact_outline() == outline,
+					context + ": completion breathing preserves the larger learning face and hit geometry")
+				tile.set_completion_hint(false, 0.0, false)
+	tile.free()
+
+func _check_picture_motion_binding() -> void:
+	var source: String = "res://assets/images/word-library/cat.webp"
+	WordArt.set_reduced_motion(false)
+	var owners_before: int = int(WordArt.cache_snapshot().owners)
+	var picture: Texture2D = WordArt.texture(source)
+	var host := Control.new()
+	root.add_child(host)
+	var tile := Tile.new()
+	host.add_child(tile)
+	tile.size = Vector2.ONE * 72.0
+	tile.configure(_cell("picture", "cat", "", 0, 8), SKIN, picture, CHEST, Color("#357d70"))
+	check(picture is AtlasTexture and tile._picture.texture == picture and WordArt.source_path(picture) == source,
+		"The larger picture clue keeps the shared animation wrapper and its original source")
+	var picture_tint: Color = tile._picture.modulate
+	var picture_self_tint: Color = tile._picture.self_modulate
+	var shadow: TextureRect = tile._picture_shadow
+	check(shadow.visible and shadow.texture == picture and int(WordArt.cache_snapshot().owners) == owners_before + 1,
+		"The picture shadow shares the exact animation wrapper without registering another playback owner")
+	var offset: Vector2 = shadow.position - tile._picture.position
+	var extent: Vector2 = shadow.size - tile._picture.size
+	check(offset.length() * Style.ui_scale(tile) < 2.0 and extent.length() * Style.ui_scale(tile) < 2.0,
+		"The source-shaped shadow stays closely aligned with the picture in physical pixels")
+	var shadow_rect: Rect2 = shadow.get_rect()
+	tile.set_contact("match", Vector2.RIGHT, 0.6)
+	check((shadow.position - tile._picture.position).is_equal_approx(offset)
+		and (shadow.size - tile._picture.size).is_equal_approx(extent)
+		and shadow.z_index == tile._picture.z_index and shadow.get_index() < tile._picture.get_index(),
+		"Contact keeps the same small shadow offset and paints it behind the moving picture")
+	tile.set_contact("none")
+	check(shadow.get_rect().is_equal_approx(shadow_rect),
+		"Releasing contact restores the picture shadow to its exact resting alignment")
+	if picture is AtlasTexture:
+		var atlas := picture as AtlasTexture
+		WordArt.advance(0.1)
+		check(atlas.region.position != Vector2.ZERO and shadow.texture == atlas,
+			"The larger clue and its shadow advance together through one shared animation")
+		var frame: Rect2 = atlas.region
+		for hidden: Control in [tile, host]:
+			hidden.hide()
+			check(not shadow.visible and shadow.texture == null and tile._picture.texture == picture,
+				"Hiding the tile or its ancestor releases the shadow reference without changing the learning picture")
+			WordArt.advance(0.1)
+			check(atlas.region == frame, "Hidden picture shadows cannot keep vocabulary playback active")
+			hidden.show()
+			check(shadow.is_visible_in_tree() and shadow.texture == picture,
+				"Showing the tile or its ancestor restores the same live picture shadow")
+		tile.set_projection(true)
+		WordArt.advance(0.1)
+		check(not tile._picture.visible and atlas.region == frame and not shadow.visible and shadow.texture == null,
+			"A landing projection hides and freezes word art while releasing its shadow reference")
+		tile.set_projection(false)
+		check(shadow.visible and shadow.texture == picture, "Leaving projection restores the exact shared picture shadow")
+		tile.configure(_cell("root", "cat", "cat"), SKIN, picture, CHEST, Color("#357d70"))
+		check(not shadow.visible and shadow.texture == null and not tile._picture.visible,
+			"Reusing a picture tile as a root clears the shadow even when its old texture is supplied")
+		tile.hide()
+		tile.show()
+		check(not shadow.visible and shadow.texture == null, "Showing a root cannot revive an obsolete picture shadow")
+		tile.configure(_cell("merged", "cat", "cat", 6, 8), SKIN, picture, CHEST, Color("#357d70"))
+		tile.size = Vector2.ONE * 44.0
+		tile._layout()
+		check(tile._picture.texture == picture and shadow.texture == picture and atlas.region == frame,
+			"Reconfiguration and resizing preserve the exact live frame without replacing or cropping its wrapper")
+		WordArt.advance(0.1)
+		check(tile._picture.visible and tile._label.visible and atlas.region != frame,
+			"The merged picture continues the same animation alongside its readable caption")
+	check(tile._picture.modulate == picture_tint and tile._picture.self_modulate == picture_self_tint
+		and tile._picture.texture == picture and int(WordArt.cache_snapshot().owners) == owners_before + 1,
+		"Shadow lifecycle changes preserve the main picture's tint, texture, and sole playback owner")
+	host.free()
+	WordArt.set_reduced_motion(true)
+	WordArt.set_reduced_motion(false)
 
 func _check_completion_enlargement() -> void:
 	var tile := Tile.new()
@@ -221,7 +369,19 @@ func _run() -> void:
 			tile.configure(_cell("merged", "cat", "cat", requested), SKIN, PICTURE, CHEST, Color("#357d70"))
 			check(tile.merge_level == clampi(requested, 1, Model.MAX_MERGE_LEVEL),
 				"Legacy and invalid level inputs fit the six available tile presentations")
+	tile.size = Vector2.ONE * 53.5
+	tile.configure(_cell("merged", "cat", "cat", 6, 8), SKIN, PICTURE, CHEST, Color("#357d70"))
+	var numeral: Label = tile._level_badge
+	var numeral_font: Font = numeral.get_theme_font("font")
+	var numeral_pixels: int = numeral.get_theme_font_size("font_size")
+	var numeral_width: float = numeral_font.get_string_size(numeral.text, HORIZONTAL_ALIGNMENT_LEFT, -1, numeral_pixels).x
+	check((numeral.size.x - numeral_width) * Style.ui_scale(tile) >= 3.9
+		and numeral_font.get_height(numeral_pixels) <= numeral.size.y + 0.01
+		and numeral_pixels * Style.ui_scale(tile) >= 10.0,
+		"The compact level badge keeps its readable digit, full line height, and padded sides at a fractional phone tile size")
 	tile.free()
+	_check_picture_clarity()
+	_check_picture_motion_binding()
 	_check_completion_enlargement()
 	_check_match_dimming()
 	print("Word Jelly hybrid tile: %d checks, %d failures" % [checks, failures])

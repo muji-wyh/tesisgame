@@ -44,11 +44,17 @@ var _merged_pose_elapsed: float = -1.0
 var _merged_pose_reduced: bool = false
 var _merged_pose_id: int = -1
 var _level_badge: Label
+var _picture_shadow: TextureRect
 const MERGED_COLORS: Array[Color] = [Color("#f7c45c"), Color("#f7c45c"), Color("#9ee8f3"),
 	Color("#b6c3ff"), Color("#ffd16f"), Color("#ffb4dc"), Color("#f4daff")]
 
 func _init() -> void:
 	super()
+	_picture_shadow = _texture()
+	_picture_shadow.name = "WordPictureShadow"
+	_picture_shadow.self_modulate = Color(0.12, 0.18, 0.22, 0.56)
+	_visual.move_child(_picture_shadow, _picture.get_index())
+	visibility_changed.connect(_sync_picture_shadow)
 	_read_button.name = "ReadSpelling"
 	_read_button.text = "Read"
 	_read_button.focus_mode = Control.FOCUS_ALL
@@ -93,6 +99,7 @@ func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 			glint.stretch_mode = TextureRect.STRETCH_SCALE
 			glint.name = "MergedGlint%d" % index
 			glint.self_modulate.a = 0.25 if match_dimmed else 1.0
+			_visual.move_child(glint, _picture.get_index())
 			_merged_glints.append(glint)
 	if _merged_glow != null:
 		var ui_scale: float = Style.ui_scale(self)
@@ -115,7 +122,8 @@ func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 				glint.visible = active
 				glint.size = Vector2.ONE * minf(_unit * (0.19 if index == 0 else 0.15), 15.0 / ui_scale)
 				glint.pivot_offset = glint.size * 0.5
-				glint.position = size * (Vector2(0.47, 0.12) if index == 0 else Vector2(0.89, 0.76)) - glint.size * 0.5
+				# Readiness accents stay on the gel rim, behind the learning faces.
+				glint.position = size * (Vector2(0.04, 0.47) if index == 0 else Vector2(0.96, 0.47)) - glint.size * 0.5
 		if active and (geometry_changed or reduced != _merged_pose_reduced \
 			or not reduced and (elapsed != _merged_pose_elapsed or tile_id != _merged_pose_id)):
 			for index in range(_merged_glints.size()):
@@ -175,6 +183,26 @@ func set_projection(value: bool) -> void:
 
 func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
 	super.deform(amount, beat, stretch * completion_scale)
+
+func set_contact(kind_value: String, direction: Vector2 = Vector2.ZERO, strength: float = 0.0, reduced: bool = false) -> void:
+	super.set_contact(kind_value, direction, strength, reduced)
+	_sync_picture_shadow()
+
+func _sync_picture_shadow() -> void:
+	if _picture_shadow == null:
+		return
+	var active: bool = is_visible_in_tree() and _picture.visible and _picture.texture != null
+	# Share the exact animated atlas; hiding releases the extra reference too.
+	var source: Texture2D = _picture.texture if active else null
+	if _picture_shadow.texture != source:
+		_picture_shadow.texture = source
+	_picture_shadow.visible = active
+	if not active:
+		return
+	var pixel: float = 1.0 / Style.ui_scale(self)
+	_picture_shadow.size = _picture.size + Vector2.ONE * pixel * 0.7
+	_picture_shadow.position = _picture.position + Vector2(-0.35, 0.30) * pixel
+	_picture_shadow.z_index = _picture.z_index
 
 func set_palette(index: int, hue: float) -> void:
 	palette_index = index
@@ -260,10 +288,11 @@ func _layout() -> void:
 	_surface.stretch_mode = TextureRect.STRETCH_SCALE
 	_unit = minf(size.y, size.x)
 	_layout_fragment_badge()
+	_layout_level_badge()
 	_read_button.hide()
 	_layout_compact_label()
-	_layout_level_badge()
 	set_merged_presentation(_merged_elapsed, _reduced_motion)
+	_sync_picture_shadow()
 
 func _layout_compact_label() -> void:
 	var s: float = Style.ui_scale(self)
@@ -275,11 +304,12 @@ func _layout_compact_label() -> void:
 		requires_read = false
 		_label.text = ""
 		tooltip_text = "Match this picture to its word."
-		_picture.size = size * 0.68
+		_picture.size = size * 0.84
 		_picture.position = (size - _picture.size) * 0.5 - Vector2(0.0, size.y * 0.025)
 		if fragments > 0:
-			_picture.size = size * 0.58
-			_picture.position = Vector2(size.x * 0.36, size.y * 0.26) - Vector2(_picture.size.x * 0.12, 0.0)
+			# A compact reward corner leaves most of the clue's body available.
+			_picture.size = size * 0.74
+			_picture.position = Vector2(size.x * 0.13, size.y * 0.23)
 		_layout_corner_fragments()
 		return
 	_label.autowrap_mode = TextServer.AUTOWRAP_OFF
@@ -314,12 +344,19 @@ func _layout_compact_label() -> void:
 	_label.size = Vector2(label_size.x, maxf(label_size.y, font.get_height(pixels) * lines.size()))
 	if _label.get_rect().end.y > size.y * 0.89:
 		_label.position.y = maxf(size.y * 0.10, size.y * 0.89 - _label.size.y)
-	var picture_top: float = size.y * 0.12
-	var has_corner_badges: bool = fragments > 0 or merge_level > 1
-	var picture_edge: float = maxf(0.0, minf(size.x * (0.34 if has_corner_badges else 0.44), _label.position.y - picture_top - 1.0 / s))
-	_picture.size = Vector2.ONE * picture_edge
-	_picture.position = Vector2(size.x * (0.45 if merge_level > 1 else 0.50) - picture_edge * 0.5, picture_top)
 	_layout_corner_fragments()
+	var picture_top: float = size.y * 0.055
+	var picture_left: float = size.x * 0.08
+	var picture_right: float = size.x * 0.92
+	if fragments > 0 and _fragment_holder != null:
+		# Reserve the full receive bounce, not only the currently painted badge.
+		var extent: Vector2 = _fragment_holder.size * float(_fragment_holder.get_meta("fit", 1.0))
+		picture_left = size.x * 0.02 + extent.x * 1.06 + 1.0 / s
+	if merge_level > 1 and _level_badge != null:
+		picture_right = _level_badge.position.x - 1.0 / s
+	var picture_edge: float = maxf(0.0, minf(picture_right - picture_left, _label.position.y - picture_top - 1.0 / s))
+	_picture.size = Vector2.ONE * picture_edge
+	_picture.position = Vector2((picture_left + picture_right - picture_edge) * 0.5, picture_top)
 
 func _layout_corner_fragments() -> void:
 	if _fragment_holder == null or fragments <= 0:
@@ -327,8 +364,8 @@ func _layout_corner_fragments() -> void:
 	# The left corner remains separate from the level numeral on the right.
 	# Neither badge borrows the word caption's row or its centered picture.
 	var extent: Vector2 = _fragment_holder.size
-	var top: float = size.y * 0.08
-	var height: float = size.y * 0.21
+	var top: float = size.y * (0.02 if jelly_kind == "picture" else 0.08)
+	var height: float = size.y * (0.18 if jelly_kind == "picture" else 0.21)
 	if jelly_kind != "picture":
 		# Short landscape bodies lift the caption to preserve its reading floor.
 		# Reserve the same actual caption edge for the badge and its receive pop.
@@ -347,8 +384,10 @@ func _layout_level_badge() -> void:
 	var pixels: int = maxi(ceili(10.0 / ui_scale), roundi(minf(_unit * 0.20, 15.0 / ui_scale)))
 	_level_badge.add_theme_font_size_override("font_size", pixels)
 	var edge: float = maxf(Style.HEADING_FONT.get_height(pixels), minf(_unit * 0.28, 21.0 / ui_scale))
-	_level_badge.size = Vector2.ONE * edge
-	_level_badge.position = Vector2(size.x * 0.98 - edge, size.y * 0.08)
+	# A single numeral needs its glyph width and padding, not a full square.
+	var width: float = maxf(Style.HEADING_FONT.get_string_size(_level_badge.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x + 4.0 / ui_scale, edge * 0.70)
+	_level_badge.size = Vector2(width, edge)
+	_level_badge.position = Vector2(size.x * 0.98 - width, size.y * 0.08)
 	var badge := Style.box(Color("#4d4565"), MERGED_COLORS[clampi(merge_level, 1, WordModel.MAX_MERGE_LEVEL)], ceili(edge * 0.42), maxi(1, roundi(1.2 / ui_scale)))
 	badge.set_content_margin_all(0.0)
 	_level_badge.add_theme_stylebox_override("normal", badge)
