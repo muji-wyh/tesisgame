@@ -161,7 +161,7 @@ the upgraded result assisted. Levels do not multiply learning credit.
 
 Word Jelly collection bonuses depend on the merged level, independently of
 component count or footprint. Lv1 has no bonus. Lv2–6 respectively have a 2%,
-4%, 6%, 10%, or 16% chance of 50, 100, 150, 200, or 250 coins. Each eligible
+4%, 12%, 20%, or 30% chance of 50, 100, 150, 200, or 250 coins. Each eligible
 collection reserves one roll; receipt reservation and retry provide exactly-once
 settlement. Collect starts ready words at 140 ms intervals without pronunciation.
 

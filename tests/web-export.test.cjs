@@ -296,8 +296,8 @@ test('Jelly collection help publishes every level reward and the real batch cade
   const help = shell.match(/<p\b[^>]*id="help"[^>]*>([\s\S]*?)<\/p>/)?.[1];
   assert.ok(help);
   assert.match(help, /Lv1 collections give no bonus coins/);
-  for (const [level, chance, coins] of [[2, 2, 50], [3, 4, 100], [4, 6, 150], [5, 10, 200],
-    [6, 16, 250]]) {
+  for (const [level, chance, coins] of [[2, 2, 50], [3, 4, 100], [4, 12, 150], [5, 20, 200],
+    [6, 30, 250]]) {
     assert.match(help, new RegExp(`Lv${level}: ${chance}% for ${coins} coins`));
   }
   assert.match(help, /Each eligible collection rolls once, and a failed save retains its original result for retry/);

@@ -63,7 +63,7 @@ func _test_economy_ladder() -> void:
 	check(Economy.match_hint_price(-1) == 100 and Economy.memory_peek_price(-1) == 0
 		and Economy.powerup_price("auto_merge", -1) == 600, "Negative counters cannot discount a first purchase")
 	check(Economy.powerup_price("unknown", 0) == 0, "Unknown item kinds have no purchasable price")
-	var chances: Array[float] = [0.0, 0.02, 0.04, 0.06, 0.10, 0.16, 0.28, 0.50, 0.80]
+	var chances: Array[float] = [0.0, 0.02, 0.04, 0.12, 0.20, 0.30, 0.28, 0.50, 0.80]
 	var amounts: Array[int] = [0, 50, 100, 150, 200, 250, 300, 350, 450]
 	# Historical lookup values remain available; the current report is capped at Lv6.
 	for level in range(1, 10):
@@ -107,7 +107,7 @@ func _test_supply_and_budget() -> void:
 			check(is_equal_approx(float(row.free_play_total), int(row.supplied_words) * 5.0),
 				"Perfect Lv1 completion earns five chest coins per source word in full ten-word blocks")
 	check(report.upgraded_collections.size() == 6, "The report includes only the six playable merge levels")
-	var expected_per_source: Array[float] = [0.0, 0.5, 4.0 / 3.0, 2.25, 4.0, 40.0 / 6.0]
+	var expected_per_source: Array[float] = [0.0, 0.5, 4.0 / 3.0, 18.0 / 4.0, 40.0 / 5.0, 75.0 / 6.0]
 	var source_counts: Array[int] = []
 	for row: Dictionary in report.upgraded_collections:
 		check(is_equal_approx(float(row.expected_bonus), Economy.jelly_bonus_chance(int(row.merge_level)) * Economy.jelly_bonus(int(row.merge_level))),

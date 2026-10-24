@@ -1568,7 +1568,7 @@ func _test_merging_and_collection() -> void:
 
 
 func _test_rare_coin_drop_boundary() -> void:
-	var chances: Array[float] = [0.0, 0.02, 0.04, 0.06, 0.10, 0.16]
+	var chances: Array[float] = [0.0, 0.02, 0.04, 0.12, 0.20, 0.30]
 	var amounts: Array[int] = [0, 50, 100, 150, 200, 250]
 	var rejected_model = _model([_word("cat")], false)
 	_board(rejected_model, ["cat", "picture:cat"])
@@ -3044,8 +3044,8 @@ func _test_repeated_merge_cell_size() -> void:
 		_assert_board(model, "level %d ordinary geometry" % level)
 	check(current.width == 1 and current.height == 1 and current.merge_level == 6,
 		"The highest merged level keeps precisely the ordinary source size")
-	check(Model.coins_for_tile(current) == 250 and is_equal_approx(Model.coin_drop_chance_for_tile(current), 0.16),
-		"The real Lv6 upgrade chain retains its existing sixteen-percent, 250-coin reward")
+	check(Model.coins_for_tile(current) == 250 and is_equal_approx(Model.coin_drop_chance_for_tile(current), 0.30),
+		"The real Lv6 upgrade chain grants a thirty-percent chance of the unchanged 250-coin reward")
 
 func _test_target_placement() -> void:
 	var model = _model([_word("cat")])

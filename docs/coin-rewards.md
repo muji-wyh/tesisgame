@@ -4,8 +4,8 @@ The numerical policy, affordability targets and reproducible budget scenarios
 are documented in [Coin economy](coin-economy.md). Chest payouts and saved wallet
 balances retain their previous values. Future purchases use escalating per-round
 prices. Jelly Words collection bonuses now follow the merged-level table: Lv1
-has no bonus; Lv2-9 have increasing chances from 2% to 80% and winning amounts
-from 50 to 450 coins. Only collecting a valid merged word can award this bonus;
+has no bonus; Lv2-6 have respective chances of 2%, 4%, 12%, 20% and 30%, with
+winning amounts of 50, 100, 150, 200 and 250 coins. Only collecting a valid merged word can award this bonus;
 root count and mass do not determine it. The same reserved outcome and receipt
 survive persistence retries, preventing rerolls or duplicate payment.
 

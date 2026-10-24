@@ -1434,7 +1434,7 @@ func _check_word_reveal_levels(view) -> void:
 			var advertised: Array = view.snapshot().tiles
 			for index in range(ids.size()):
 				var reward: Dictionary = advertised.filter(func(tile: Dictionary) -> bool: return int(tile.id) == ids[index])[0]
-				check(is_equal_approx(float(reward.coin_drop_chance), [0.0, 0.06, 0.16][index])
+				check(is_equal_approx(float(reward.coin_drop_chance), [0.0, 0.12, 0.30][index])
 					and int(reward.coins) == [0, 150, 250][index],
 					"the view snapshot advertises exact Lv1, Lv4 and Lv6 collection odds and payouts")
 			if batch:

@@ -247,9 +247,9 @@ by a tap or Collect has one independent chance of a level-based bonus:
 | Lv1 | 0% | 0 |
 | Lv2 | 2% | 50 |
 | Lv3 | 4% | 100 |
-| Lv4 | 6% | 150 |
-| Lv5 | 10% | 200 |
-| Lv6 | 16% | 250 |
+| Lv4 | 12% | 150 |
+| Lv5 | 20% | 200 |
+| Lv6 | 30% | 250 |
 
 Higher levels increase both the chance and the award; component count and footprint
 do not change that level's policy. Opening chests provides additional coins.

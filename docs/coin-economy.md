@@ -42,9 +42,9 @@ root count, mass, word length, and carried fragments do not affect either.
 | 1 | 0% | 0 | 0 |
 | 2 | 2% | 50 | 1 |
 | 3 | 4% | 100 | 4 |
-| 4 | 6% | 150 | 9 |
-| 5 | 10% | 200 | 20 |
-| 6 | 16% | 250 | 40 |
+| 4 | 12% | 150 | 18 |
+| 5 | 20% | 200 | 40 |
+| 6 | 30% | 250 | 75 |
 
 The expected values are averages over repeated independent collections, not a
 promise for any particular collection. Building higher levels consumes matching
@@ -53,7 +53,7 @@ words, so this table does not imply an income rate or a typical player level mix
 Identical words add their levels when merged, including different levels, provided
 the total is at most six. A LvN body therefore represents `N` completed Lv1 words,
 regardless of the merge order. Divide each body's expected bonus by that source
-count. The maximum is Lv6: `40 / 6`, approximately 6.67 expected bonus coins per
+count. The maximum is Lv6: `75 / 6 = 12.5` expected bonus coins per
 source word. This counts completed words, not their component roots, and does not
 award bonuses during upgrading. Collect starts ready words at 140 ms intervals;
 its cadence does not change their reward probabilities.
@@ -61,7 +61,7 @@ its cadence does not change their reward probabilities.
 With every natural fragment retained and eventually collected, ordinary supply
 provides about five chest coins per source word in the long run. The modeled
 chest share of expected gross coins is therefore at least
-`5 / (5 + 40 / 6)`, approximately 42.86%, across any mix of collection levels.
+`5 / (5 + 75 / 6)`, approximately 28.57%, across any mix of collection levels.
 At Lv6, expected collection bonuses can exceed chest income per source word.
 This is a long-run budget bound under perfect retention, not observed player income or a
 guarantee for one round; fragment thresholds, lost words, and purchase spending
