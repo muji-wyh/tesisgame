@@ -2951,7 +2951,14 @@ func _check_preview_pull_handoff_at_rate(view, frame_rate: int) -> void:
 				view.size = dimensions
 				_reset(view, reduced)
 				view.game.spawn_interval = Model.INITIAL_SPAWN_INTERVAL
-				view.game.spawn_elapsed = view.game.spawn_interval - 0.001 if automatic else view.game.spawn_interval * 0.93
+				view.game.spawn_elapsed = view.game.spawn_interval - 1.3
+				view._sync_preview()
+				for preview in view._preview_tiles:
+					var quiet: Dictionary = _preview_skin_pose(preview)
+					check(absf(float(quiet.pressure)) <= 0.01 and absf(float(quiet.sway)) <= 0.006
+						and float(quiet.pull) <= 0.006,
+						"the Word tray remains quiet before the final anticipation begins")
+				view.game.spawn_elapsed = view.game.spawn_interval - (0.001 if automatic else 0.3)
 				view._sync_preview()
 				var packet: Array = view.game.upcoming.duplicate(true)
 				var poses: Dictionary = {}
@@ -2959,8 +2966,9 @@ func _check_preview_pull_handoff_at_rate(view, frame_rate: int) -> void:
 				for preview in view._preview_tiles:
 					poses[preview.tile_id] = _preview_skin_pose(preview)
 					feet[preview.tile_id] = _painted_preview_foot(preview)
-					check(is_zero_approx(float(poses[preview.tile_id].pull)) if reduced else float(poses[preview.tile_id].pull) > 0.20,
-						"the handoff starts from a loaded preview skin, or a neutral reduced-motion skin")
+					var pull: float = float(poses[preview.tile_id].pull)
+					check(is_zero_approx(pull) if reduced else pull > 0.06 and pull <= 0.090001,
+						"automatic and manual handoffs start within the small final anticipation load, or neutral reduced motion")
 				if automatic:
 					_advance(view, 0.001)
 				else:

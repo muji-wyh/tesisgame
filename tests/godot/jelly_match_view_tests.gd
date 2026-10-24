@@ -506,23 +506,6 @@ func _check_preview_controller(view) -> void:
 	_reset(view)
 
 
-func _preview_window(interval: float, start: float, finish: float) -> Dictionary:
-	var energy: float = 0.0
-	var pull: float = 0.0
-	var samples: int = 0
-	for index in range(WordModel.UPCOMING_COUNT):
-		for sample_index in range(81):
-			var progress: float = lerpf(start, finish, float(sample_index) / 80.0)
-			var pose: Dictionary = Motion.preview(progress * interval, interval, index)
-			energy += float(pose.pressure) * float(pose.pressure) + float(pose.sway) * float(pose.sway) + float(pose.pull) * float(pose.pull)
-			pull += float(pose.pull)
-			samples += 1
-	var first: Dictionary = Motion.preview(start * interval, interval, 0)
-	var last: Dictionary = Motion.preview(finish * interval, interval, 0)
-	return {"amplitude": sqrt(energy / samples), "pull": pull / samples,
-		"speed": (float(last.beat) - float(first.beat)) / ((finish - start) * interval)}
-
-
 func _check_preview_pose(view, reason: String) -> void:
 	var slots: Array = view.snapshot().preview.slots
 	var still: bool = view.reduced_motion or view.game.phase != "playing" or view.game.cells.size() >= view.game.CAPACITY
@@ -565,27 +548,16 @@ func _preview_content_transforms(view) -> Array:
 func _check_preview_motion(view) -> void:
 	for interval: float in [view.game.INITIAL_SPAWN_INTERVAL, view.game.MIN_SPAWN_INTERVAL,
 		WordModel.INITIAL_SPAWN_INTERVAL, WordModel.MIN_SPAWN_INTERVAL]:
-		var early: Dictionary = _preview_window(interval, 0.05, 0.20)
-		var middle: Dictionary = _preview_window(interval, 0.40, 0.55)
-		var late: Dictionary = _preview_window(interval, 0.84, 0.99)
-		check(float(early.amplitude) > 0.0 and float(middle.amplitude) > float(early.amplitude)
-			and float(late.amplitude) > float(middle.amplitude),
-			"The %.2f-second supply cycle builds material strain from early through middle to late release" % interval)
-		check(float(middle.pull) > float(early.pull) + 0.025
-			and float(late.pull) > float(middle.pull) + 0.08,
-			"The %.2f-second supply cycle visibly sags farther downward as release approaches" % interval)
-		check(float(middle.speed) > float(early.speed) and float(late.speed) > float(middle.speed),
-			"The %.2f-second supply cycle brings pressure pulses closer together as dispatch approaches" % interval)
 		var previous_intensity: float = 0.0
 		var different_slots: bool = false
 		for step in range(101):
 			var elapsed: float = interval * float(step) / 100.0
 			var pose: Dictionary = Motion.preview(elapsed, interval, 0)
 			check(float(pose.intensity) >= previous_intensity and float(pose.intensity) <= 1.0
-				and float(pose.pressure) >= -0.075 and float(pose.pressure) <= 0.23 and absf(float(pose.sway)) <= 0.075
-				and float(pose.pull) >= 0.0 and float(pose.pull) <= 0.35
+				and absf(float(pose.pressure)) <= 0.052 and absf(float(pose.sway)) <= 0.006
+				and float(pose.pull) >= 0.0 and float(pose.pull) <= 0.090001
 				and not pose.has("offset") and not pose.has("stretch") and not pose.has("bend"),
-				"Preview urgency stays within the expressive skin envelope without affine motion at %d percent" % step)
+				"Preview anticipation stays within a quiet skin envelope without affine motion at %d percent" % step)
 			previous_intensity = float(pose.intensity)
 			var still: Dictionary = Motion.preview(elapsed, interval, step % WordModel.UPCOMING_COUNT, true)
 			check(is_zero_approx(float(still.pressure)) and is_zero_approx(float(still.sway))
@@ -594,7 +566,7 @@ func _check_preview_motion(view) -> void:
 			for index in range(1, WordModel.UPCOMING_COUNT):
 				var other: Dictionary = Motion.preview(elapsed, interval, index)
 				different_slots = different_slots or not is_equal_approx(float(other.pressure), float(pose.pressure))
-		check(different_slots, "The supply retains staggered pressure impulses instead of moving as a rigid group")
+		check(different_slots, "The supply retains individual gentle breathing without moving as a rigid group")
 		for index in range(WordModel.UPCOMING_COUNT):
 			var reset: Dictionary = Motion.preview(0.0, interval, index)
 			check(is_zero_approx(float(reset.pressure)) and is_zero_approx(float(reset.sway)) and is_zero_approx(float(reset.pull)),
@@ -606,8 +578,14 @@ func _check_preview_motion(view) -> void:
 			var maximum_sway: float = 0.0
 			var minimum_pull: float = 0.0
 			var maximum_pull: float = 0.0
+			var quiet_pressure: float = 0.0
+			var quiet_sway: float = 0.0
+			var quiet_pull: float = 0.0
+			var loading_variation: float = 0.0
+			var monotonic_pull: bool = true
 			for sample_index in range(1, 2001):
-				var current: Dictionary = Motion.preview(interval * float(sample_index) / 2000.0, interval, index)
+				var elapsed: float = interval * float(sample_index) / 2000.0
+				var current: Dictionary = Motion.preview(elapsed, interval, index)
 				var rate := Vector3(absf(float(current.pressure) - float(previous.pressure)),
 					absf(float(current.sway) - float(previous.sway)), absf(float(current.pull) - float(previous.pull))) / (interval / 2000.0)
 				maximum_rate = maximum_rate.max(rate)
@@ -616,16 +594,31 @@ func _check_preview_motion(view) -> void:
 				maximum_sway = maxf(maximum_sway, absf(float(current.sway)))
 				minimum_pull = minf(minimum_pull, float(current.pull))
 				maximum_pull = maxf(maximum_pull, float(current.pull))
+				monotonic_pull = monotonic_pull and float(current.pull) >= float(previous.pull) - 0.000001
+				if elapsed <= interval - 1.2:
+					quiet_pressure = maxf(quiet_pressure, absf(float(current.pressure)))
+					quiet_sway = maxf(quiet_sway, absf(float(current.sway)))
+					quiet_pull = maxf(quiet_pull, float(current.pull))
+				else:
+					loading_variation += absf(float(current.pressure) - float(previous.pressure))
 				previous = current
-			check(minimum_pressure >= -0.075 and maximum_pressure <= 0.23 and maximum_sway <= 0.075
-				and minimum_pull >= 0.0 and maximum_pull <= 0.35,
-				"Preview %d stays inside the authored skin's safe envelope throughout the %.2f-second cycle" % [index + 1, interval])
-			check(maximum_pressure > 0.11 and maximum_sway > 0.018,
-				"Preview %d builds to a visibly exaggerated compression and sideways wobble in the %.2f-second cycle" % [index + 1, interval])
-			check(maximum_pull >= 0.25 and float(previous.pull) >= 0.25,
-				"Preview %d holds a clearly loaded downward pose until the %.2f-second cycle releases it" % [index + 1, interval])
-			check(minimum_pressure < 0.0 and maximum_pressure > 0.0 and maximum_rate.x < 5.0 and maximum_rate.y < 2.5 and maximum_rate.z < 2.5,
-				"Preview %d compresses, sags and elastically recovers through continuous bounded strain without a phase-boundary snap" % (index + 1))
+			check(minimum_pressure >= -0.01 and maximum_pressure <= 0.052 and maximum_sway <= 0.006
+				and minimum_pull >= 0.0 and maximum_pull <= 0.090001,
+				"Preview %d stays inside the subtle skin envelope throughout the %.2f-second cycle" % [index + 1, interval])
+			check(quiet_pressure > 0.0001 and quiet_pressure <= 0.01 and quiet_sway <= 0.006 and quiet_pull <= 0.006,
+				"Preview %d only breathes gently before the final 1.2 seconds of its %.2f-second cycle" % [index + 1, interval])
+			var leading: Dictionary = Motion.preview(interval - 0.9, interval, index)
+			var middle: Dictionary = Motion.preview(interval - 0.6, interval, index)
+			var trailing: Dictionary = Motion.preview(interval - 0.3, interval, index)
+			check(float(middle.pressure) >= 0.035 and float(middle.pressure) > float(leading.pressure) + 0.01
+				and float(middle.pressure) > float(trailing.pressure) + 0.01 and absf(float(previous.pressure)) < 0.002
+				and loading_variation < 0.12,
+				"Preview %d makes one smooth compression and relaxes before departure without repeated tugs" % (index + 1))
+			check(monotonic_pull and float(middle.pull) >= 0.03 and float(middle.pull) <= 0.06
+				and float(previous.pull) >= 0.07,
+				"Preview %d builds a small downward load only near release and carries it through departure" % (index + 1))
+			check(maximum_rate.x < 0.20 and maximum_rate.y < 0.04 and maximum_rate.z < 0.18,
+				"Preview %d changes pressure, lean and downward load continuously without a phase-boundary snap" % (index + 1))
 	_reset(view, false, false)
 	var first: Array = view.snapshot().preview.slots.duplicate(true)
 	var content: Array = _preview_content_transforms(view)
@@ -645,7 +638,7 @@ func _check_preview_motion(view) -> void:
 	view.hide()
 	_advance(view, 0.5)
 	view.show()
-	check(view.snapshot().preview.slots == late_slots, "A hidden board cannot continue pressure pulses or advance its preview clock")
+	check(view.snapshot().preview.slots == late_slots, "A hidden board cannot continue breathing or advance its preview clock")
 	var pair: Array[int] = _pair(view)
 	_drag_pair(view, pair[0], pair[1])
 	_advance(view, 0.4)
@@ -680,9 +673,9 @@ func _check_preview_motion(view) -> void:
 	_check_preview_pose(view, "A full board")
 	var full_slots: Array = view.snapshot().preview.slots.duplicate(true)
 	_advance(view, 0.2)
-	check(view.snapshot().preview.slots == full_slots, "Full-board danger cannot keep pulsing a batch that cannot fall")
+	check(view.snapshot().preview.slots == full_slots, "Full-board danger cannot keep animating a batch that cannot fall")
 	view.stop()
-	check(not bool(view.snapshot().preview.visible), "Stopping removes the pressure-pulse supply presentation")
+	check(not bool(view.snapshot().preview.visible), "Stopping removes the animated supply presentation")
 	for tile in view._preview_tiles:
 		check(not tile.visible, "No preview tile continues rendering after stop")
 	_reset(view)

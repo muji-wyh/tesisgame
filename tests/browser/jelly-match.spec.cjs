@@ -1020,10 +1020,11 @@ test.describe('manual jelly supply', () => {
   }
 });
 
-test('preview downward pull builds through fusion and pauses only with the menu', async ({ page }, info) => {
+test('preview stays quiet until its final anticipation and keeps moving through fusion', async ({ page }, info) => {
   test.setTimeout(90000);
   const errors = await startJelly(page, { reducedMotion: 'no-preference' });
   const poses = state => state.preview.slots.map(slot => ({ id: slot.id, rect: slot.rect, motion: slot.motion }));
+  await observeSupply(page);
   await expect.poll(async () => {
     const state = await jelly(page), progress = state.spawn_elapsed / state.spawn_interval;
     return progress >= 0.12 && progress <= 0.4;
@@ -1033,39 +1034,67 @@ test('preview downward pull builds through fusion and pauses only with the menu'
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.upcoming[0].id === early.upcoming[0].id && state.spawn_elapsed / state.spawn_interval >= 0.45;
-  }, { timeout: 7000, intervals: [50], message: 'Observe pressure building in the same upcoming batch' }).toBe(true);
+  }, { timeout: 7000, intervals: [50], message: 'Observe the quiet middle of the same upcoming batch' }).toBe(true);
   const middle = await jelly(page);
+  let late;
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.upcoming[0].id === early.upcoming[0].id && state.spawn_elapsed / state.spawn_interval >= 0.7;
-  }, { timeout: 7000, intervals: [50], message: 'The same upcoming batch approaches its actual dispatch time' }).toBe(true);
-  const late = await jelly(page);
+    const remaining = state.spawn_interval - state.spawn_elapsed;
+    if (state.upcoming[0].id !== early.upcoming[0].id || remaining > 0.65 || remaining < 0.15) return false;
+    late = state;
+    return true;
+  }, { timeout: 7000, intervals: [50], message: 'Observe the real final anticipation before the same batch dispatches' }).toBe(true);
   expectPreviewLayout(late, await metrics(page));
   for (let index = 0; index < 4; index++) {
     const before = early.preview.slots[index].motion;
     const between = middle.preview.slots[index].motion;
     const after = late.preview.slots[index].motion;
-    expect(between.intensity, 'Every preview builds pressure as its dispatch approaches').toBeGreaterThan(before.intensity);
-    expect(after.intensity, 'Pressure keeps building through the final part of the supply cycle').toBeGreaterThan(between.intensity);
-    expect(between.pull, 'Each queued skin sags farther downward as the supply clock advances').toBeGreaterThan(before.pull);
-    expect(after.pull, 'The late preview holds more downward tension than the middle of the cycle').toBeGreaterThan(between.pull);
-    expect(between.beat, 'The pulse phase follows the actual supply clock').toBeGreaterThan(before.beat);
+    for (const quiet of [before, between]) {
+      expect(Math.abs(quiet.pressure), 'Waiting jellies only breathe gently before anticipation').toBeLessThanOrEqual(0.01);
+      expect(quiet.pull, 'Waiting jellies retain their full silhouette until the final 1.2 seconds').toBeLessThanOrEqual(0.006);
+      expect(quiet.intensity).toBeLessThanOrEqual(0.01);
+    }
+    expect(after.intensity, 'Anticipation begins near the actual dispatch time').toBeGreaterThan(between.intensity);
+    expect(after.pull, 'The final anticipation gathers a small downward load').toBeGreaterThan(0.02);
+    expect(between.beat, 'Gentle breathing follows the actual supply clock').toBeGreaterThan(before.beat);
     expect(after.beat).toBeGreaterThan(between.beat);
     for (const state of [early, middle, late]) {
       const slot = state.preview.slots[index];
       expect(slot.rect, 'The queued tile keeps a fixed origin and hit rectangle').toEqual(early.preview.slots[index].rect);
       expect(Object.keys(slot.motion).sort()).toEqual(['beat', 'intensity', 'pressure', 'pull', 'sway']);
-      expect(slot.motion.pressure).toBeGreaterThanOrEqual(-0.075);
-      expect(slot.motion.pressure).toBeLessThanOrEqual(0.23);
+      expect(slot.motion.pressure).toBeGreaterThanOrEqual(-0.01);
+      expect(slot.motion.pressure).toBeLessThanOrEqual(0.052);
       expect(slot.motion.pull).toBeGreaterThanOrEqual(0);
-      expect(slot.motion.pull).toBeLessThanOrEqual(0.35);
-      expect(Math.abs(slot.motion.sway)).toBeLessThanOrEqual(0.075);
+      expect(slot.motion.pull).toBeLessThanOrEqual(0.090001);
+      expect(Math.abs(slot.motion.sway)).toBeLessThanOrEqual(0.006);
     }
     expect({ pressure: after.pressure, sway: after.sway, pull: after.pull }, 'The gel skin changes strain without moving its contents')
       .not.toEqual({ pressure: before.pressure, sway: before.sway, pull: before.pull });
   }
   expect(new Set(late.preview.slots.map(slot => JSON.stringify([slot.motion.pressure, slot.motion.sway]))).size,
-    'The four skins have staggered pressure impulses').toBeGreaterThan(1);
+    'The four skins retain individual gentle motion').toBeGreaterThan(1);
+  const waiting = (await page.evaluate(() => window.jellySupplyTimeline))
+    .filter(frame => frame.upcoming[0]?.id === early.upcoming[0].id);
+  expect(waiting.filter(frame => frame.spawnInterval - frame.spawnElapsed < 1.2).length,
+    'Several real published poses cover the final anticipation').toBeGreaterThanOrEqual(2);
+  for (let frameIndex = 0; frameIndex < waiting.length; frameIndex++) {
+    const frame = waiting[frameIndex], previous = waiting[frameIndex - 1];
+    for (let slotIndex = 0; slotIndex < frame.preview.length; slotIndex++) {
+      const pose = frame.preview[slotIndex].motion;
+      if (frame.spawnInterval - frame.spawnElapsed >= 1.2) {
+        expect(Math.abs(pose.pressure)).toBeLessThanOrEqual(0.01);
+        expect(pose.pull).toBeLessThanOrEqual(0.006);
+      }
+      const delta = previous ? frame.spawnElapsed - previous.spawnElapsed : 0;
+      if (delta <= 0) continue;
+      const last = previous.preview[slotIndex].motion;
+      expect(pose.pull, 'The final downward load never recoils before dispatch').toBeGreaterThanOrEqual(last.pull - 0.000001);
+      for (const [field, maximum] of [['pressure', 0.20], ['sway', 0.04], ['pull', 0.18]]) {
+        expect(Math.abs(pose[field] - last[field]) / delta,
+          `Published ${field} changes smoothly without a sudden tug`).toBeLessThan(maximum);
+      }
+    }
+  }
 
   await openModeMenu(page);
   await expect.poll(async () => (await jelly(page)).paused).toBe(true);
@@ -1086,7 +1115,6 @@ test('preview downward pull builds through fusion and pauses only with the menu'
   const resumed = await jelly(page);
   expect(poses(resumed), 'Preview motion resumes with the dispatch clock').not.toEqual(poses(paused));
 
-  await observeSupply(page);
   const tiles = await availablePair(page, { chest: false }), before = (await jelly(page)).cleared_pairs;
   await dragPair(page, tiles);
   await expectClear(page, before + 1, tiles);
@@ -1109,7 +1137,7 @@ test('preview downward pull builds through fusion and pauses only with the menu'
     early: { elapsed: early.spawn_elapsed, slots: poses(early) },
     middle: { elapsed: middle.spawn_elapsed, slots: poses(middle) },
     late: { elapsed: late.spawn_elapsed, slots: poses(late) },
-    paused: { elapsed: paused.spawn_elapsed, slots: poses(paused) }, fusion
+    paused: { elapsed: paused.spawn_elapsed, slots: poses(paused) }, waiting, fusion
   }, null, 2));
   await info.attach('jelly-preview-motion', { path: motionPath, contentType: 'application/json' });
   await page.screenshot({ path: info.outputPath('jelly-preview-after-fusion.png'), scale: 'css' });

@@ -23,7 +23,6 @@ const LootMeter = preload("res://scripts/jelly_loot_meter.gd")
 const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
 const ChestTap = preload("res://scripts/jelly_chest_tap.gd")
 const DangerFrame = preload("res://scripts/jelly_danger_frame.gd")
-const PREVIEW_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const LOOT_FLIGHT_SECONDS: float = ChestCelebration.ARRIVAL_SECONDS
 const SURFACES := ["coral", "mint", "sky", "lilac"]
 const NO_POINTER: int = -2147483648
@@ -116,7 +115,6 @@ func _init() -> void:
 	drop_button.set("accessibility_name", "Drop the next jellies")
 	drop_button.pressed.connect(_drop_next)
 	add_child(drop_button)
-	drop_button.draw.connect(_draw_preview_weight)
 	for index in range(JellyMatchModel.UPCOMING_COUNT):
 		var preview := Tile.new()
 		preview.name = "UpcomingJelly%d" % (index + 1)
@@ -879,7 +877,6 @@ func _sync_positions() -> void:
 	_refresh_contact()
 
 func _sync_preview() -> void:
-	drop_button.queue_redraw()
 	for index in range(_preview_tiles.size()):
 		var preview: Tile = _preview_tiles[index]
 		preview.visible = _configured and index < game.upcoming.size()
@@ -1323,23 +1320,6 @@ func navigation_controls() -> Array[Control]:
 func default_focus() -> Control:
 	var controls: Array[Control] = navigation_controls()
 	return controls[0] if not controls.is_empty() else self
-
-func _draw_preview_weight() -> void:
-	if not _configured:
-		return
-	# Warm light follows each hanging belly, never a separate warning timer.
-	for index in range(_preview_tiles.size()):
-		var tile: Tile = _preview_tiles[index]
-		if not tile.visible:
-			continue
-		var pull: float = float(_preview_pose(index).pull)
-		var strength: float = smoothstep(0.05, 0.32, pull) * tile.modulate.a
-		if strength <= 0.0:
-			continue
-		var foot := _preview_origins[index] - _preview_rect.position + tile.size * Vector2(0.5, Motion.FOOT_Y * (1.0 + pull))
-		var glow_size := tile.size * Vector2(1.25, 0.44 + pull * 0.8)
-		drop_button.draw_texture_rect(PREVIEW_GLOW, Rect2(foot - glow_size * Vector2(0.5, 0.30), glow_size), false,
-			Color(1.0, 0.69, 0.26, strength * 0.50))
 
 func _style_drop_button() -> void:
 	var s: float = Style.ui_scale(self)

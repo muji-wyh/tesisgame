@@ -34,38 +34,20 @@ static func preview(elapsed: float, interval: float, index: int, reduced: bool =
 	var duration: float = maxf(0.1, interval)
 	var progress: float = clampf(elapsed / duration, 0.0, 1.0)
 	var time: float = progress * duration
-	# The real supply clock loads the hanging belly, while alternating strain
-	# beats accelerate from a quiet wobble to a hurried attempt to hold on.
-	var acceleration: float = 3.05 / duration
-	var phase: float = 0.65 * time + 0.5 * acceleration * time * time
-	var stagger: float = 0.18 + float(index) * 0.095
-	var latest: int = floori(phase - stagger)
-	var pressure: float = 0.0
-	var sway: float = 0.0
-	for pulse in range(maxi(0, latest - 2), latest + 1):
-		var onset: float = (sqrt(0.65 * 0.65 + 2.0 * acceleration * (float(pulse) + stagger)) - 0.65) / acceleration
-		var age: float = maxf(0.0, time - onset)
-		var strength: float = lerpf(0.022, 0.17, pow(onset / duration, 1.8))
-		if age < 0.085:
-			pressure += strength * smoothstep(0.0, 0.085, age)
-		else:
-			var release: float = age - 0.085
-			# The belly rebounds first, with a slower side-to-side follow-through.
-			pressure += strength * exp(-7.8 * release) * (cos(19.0 * release) + 7.8 / 19.0 * sin(19.0 * release))
-			var lag: float = maxf(0.0, release - 0.025)
-			var direction: float = -1.0 if (pulse + index) % 2 == 0 else 1.0
-			sway += direction * strength * 0.70 * exp(-6.0 * lag) * sin(16.0 * lag)
-	# Release the crown squeeze into a long, loaded belly before departure.
-	# Each body leans its own way; Words carries this actual pose into the fall.
-	var gather_start: float = duration - minf(0.8 + float(index) * 0.025, duration * 0.35)
-	var gather: float = smoothstep(gather_start, duration - minf(0.07, duration * 0.05), time)
-	pressure = lerpf(pressure, 0.045 + float(index % 3) * 0.008, gather)
-	sway = lerpf(sway, -0.025 if index % 2 == 0 else 0.025, gather)
-	# A growing baseline makes urgency readable between the transient tugs.
-	var pull: float = 0.30 * pow(progress, 1.6)
-	pull += maxf(0.0, pressure) * 0.30 * smoothstep(0.25, 0.9, progress)
-	return {"pressure": pressure, "sway": sway, "pull": pull, "beat": phase * TAU,
-		"intensity": lerpf(0.12, 1.0, pow(progress, 1.8))}
+	# Keep the acquired silhouette full while waiting. Only the last moment
+	# gathers one soft squeeze into a small downward load, ready for release.
+	var lead: float = minf(1.2, duration * 0.35)
+	var anticipation: float = smoothstep(duration - lead, duration, time)
+	var phase: float = time * TAU * 0.42
+	var quiet: float = smoothstep(0.0, 0.35, time) * (1.0 - anticipation)
+	var squeeze: float = sin(PI * anticipation)
+	var pressure: float = 0.006 * sin(phase + float(index) * 0.55) * quiet + 0.042 * squeeze
+	var sway: float = 0.002 * sin(phase * 0.82 + float(index) * 0.71) * quiet
+	sway += (-0.003 if index % 2 == 0 else 0.003) * squeeze
+	# Words carries this exact skin pose into its fall; the label and hit area
+	# stay steady, and the restrained extension keeps them inside the body.
+	return {"pressure": pressure, "sway": sway, "pull": 0.09 * anticipation,
+		"beat": phase, "intensity": anticipation}
 
 
 static func sample(cell: Dictionary) -> Dictionary:
