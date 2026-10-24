@@ -38,6 +38,7 @@ func _run() -> void:
 	_check_level_lifetimes(reveal)
 	_check_batch_afterglow(reveal)
 	_check_separate_firework_area(reveal)
+	_check_firework_geometry(reveal)
 	_check_firework_trajectories()
 	_check_firework_stamp_exclusions()
 	await _check_delayed_reveal(reveal)
@@ -484,6 +485,66 @@ func _check_separate_firework_area(reveal) -> void:
 					var still: Dictionary = reveal.snapshot()
 					check(still.rect == expanded.rect and still.effects.rect == expanded.effects.rect,
 						"Reduced-motion cards and their wider effect footprint remain stationary")
+
+
+func _check_firework_geometry(reveal) -> void:
+	var no_exclusions: Array[Rect2] = []
+	var layouts: Array[Dictionary] = [
+		{"reading": Rect2(8, 8, 984, 272), "effects": Rect2(8, 8, 984, 410)},
+		{"reading": Rect2(8, 8, 374, 272), "effects": Rect2(8, 8, 374, 432)},
+		{"reading": Rect2(8, 8, 552, 184), "effects": Rect2(8, 8, 552, 184)},
+	]
+	var compact := Reveal.Card.LevelEffects.new()
+	for layout: Dictionary in layouts:
+		var display_radii: Dictionary = {}
+		for scale_factor: float in [0.75, 1.0, 1.5]:
+			var reading := Rect2(layout.reading.position / scale_factor, layout.reading.size / scale_factor)
+			var canvas := Rect2(layout.effects.position / scale_factor, layout.effects.size / scale_factor)
+			var manual_radii: Dictionary = {}
+			for batch: bool in [false, true]:
+				var previous_radius: float = 0.0
+				for level: int in [4, 5, 6]:
+					reveal.reset()
+					reveal.set_reduced_motion(false)
+					reveal.configure_layout(reading, scale_factor, no_exclusions, canvas)
+					_present(reveal, "cat", cat, batch, level)
+					var card = reveal._entries[0]
+					var effects = card._level_effects
+					var state: Dictionary = reveal.snapshot()
+					var radius: float = float(state.effects.bloom_radius)
+					check(radius > card.effect_margin() * 1.50 and radius * scale_factor >= 68.0,
+						"High-tier blooms stay materially larger than card padding even in short landscape")
+					check(radius > previous_radius, "Every high-level tier retains a larger bloom on each supported canvas")
+					previous_radius = radius
+					if batch:
+						check(is_equal_approx(radius, float(manual_radii[level])),
+							"Automatic pickups retain the manual bloom size despite their smaller reading cards")
+					else:
+						manual_radii[level] = radius
+						if display_radii.has(level):
+							check(is_equal_approx(radius * scale_factor, float(display_radii[level])),
+								"UI scaling preserves the fireworks' display size")
+						else:
+							display_radii[level] = radius * scale_factor
+					compact.configure(Vector2(36, 18), scale_factor, level, Color.WHITE, batch, 0.25)
+					compact.fit_area(Rect2(Vector2.ZERO, canvas.size), no_exclusions)
+					check(is_equal_approx(float(compact.snapshot().bloom_radius), radius),
+						"A tiny card and near-zero reading margin cannot shrink the same firework canvas")
+					var origin: Vector2 = effects._burst_origin(0)
+					var left: Vector2 = effects._firework_point(origin, Vector2.LEFT, radius, 0.85, 1.72)
+					var right: Vector2 = effects._firework_point(origin, Vector2.RIGHT, radius, 0.85, 1.72)
+					check(right.x - left.x > radius * 1.9,
+						"Short-screen fitting preserves a broad horizontal bloom instead of uniformly shrinking it")
+					if layout.effects.size.y < 200.0:
+						check(float(state.effects.vertical_scale) > 0.0 and float(state.effects.vertical_scale) < 1.0,
+							"Short landscape fits vertical travel independently of its full-width bloom")
+					for group in range(int(state.effects.burst_count)):
+						check(Rect2(Vector2.ZERO, canvas.size).has_point(effects._burst_origin(group)),
+							"Every enlarged bloom starts inside its bounded cosmetic canvas")
+					check(is_equal_approx(float(state.effect_duration), 1.95),
+						"A larger bloom keeps the complete existing manual and automatic firework lifetime")
+					_check_bounds(reveal, reading, canvas)
+	compact.free()
 
 
 func _check_firework_trajectories() -> void:

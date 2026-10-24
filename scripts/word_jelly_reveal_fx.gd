@@ -11,11 +11,11 @@ const PROFILES: Array[Dictionary] = [
 	{"name": "Crystal ripple", "pattern": "ripple", "sparks": 20, "bursts": 2, "hue": 0.51, "margin": 23.0},
 	{"name": "Sapphire spiral", "pattern": "spiral", "sparks": 32, "bursts": 1, "hue": 0.65, "margin": 32.0},
 	{"name": "Golden fireworks", "pattern": "fireworks", "sparks": 48, "bursts": 3, "hue": 0.11, "margin": 44.0,
-		"trails": 5},
+		"trails": 5, "radius": 72.0},
 	{"name": "Double cascade", "pattern": "cascade", "sparks": 72, "bursts": 4, "hue": 0.93, "margin": 56.0,
-		"trails": 6},
+		"trails": 6, "radius": 92.0},
 	{"name": "Prismatic bouquet", "pattern": "bouquet", "sparks": 120, "bursts": 6, "hue": 0.10, "margin": 72.0,
-		"trails": 7},
+		"trails": 7, "radius": 116.0},
 ]
 
 var level: int = 1
@@ -138,8 +138,24 @@ func _burst_angle(group: int) -> float:
 
 
 func _burst_origin(group: int) -> Vector2:
-	# Move each bloom into the halo so the reading surface cannot hide its peak.
-	return _rim(_burst_angle(group), _margin * 0.36)
+	var radius: float = _firework_radius()
+	var vertical: float = _firework_vertical_scale()
+	var point: Vector2 = _rim(_burst_angle(group), radius * 0.32)
+	# Keep the large flowers inside the cosmetic canvas, clear of its hard edges.
+	var start := Vector2(radius * 1.32, radius * vertical * 0.80)
+	var end := size - Vector2(radius * 1.32, radius * vertical * 1.65)
+	return point.clamp(start.min(size * 0.5), end.max(size * 0.5))
+
+
+func _firework_radius() -> float:
+	# Reading padding cannot cap the celebration or shrink automatic pickups.
+	var pixels: float = float(PROFILES[level - 1].get("radius", 0.0))
+	return minf(pixels / _ui_scale, size.x * 0.28)
+
+
+func _firework_vertical_scale() -> float:
+	# Short landscapes retain broad blooms while leaving room for their descent.
+	return minf(1.0, size.y / maxf(1.0, _firework_radius() * 3.3))
 
 
 func _edge_light(fade: float, clock: float) -> void:
@@ -291,7 +307,9 @@ func _firework_point(origin: Vector2, direction: Vector2, reach: float, age: flo
 	var falling: float = maxf(0.0, (time - 0.08) / 0.92)
 	var spread: Vector2 = direction * Vector2(1.16, 0.88) * reach * travel
 	var drop: float = reach * 1.40 * falling * falling
-	return origin + spread + Vector2(direction.x * reach * 0.045 * time * time, drop)
+	var offset: Vector2 = spread + Vector2(direction.x * reach * 0.045 * time * time, drop)
+	offset.y *= _firework_vertical_scale()
+	return origin + offset
 
 
 func _draw_explosion(fade: float) -> void:
@@ -308,7 +326,7 @@ func _draw_explosion(fade: float) -> void:
 		if age <= 0.0 or age >= life:
 			continue
 		var origin: Vector2 = _burst_origin(group)
-		var radius: float = _margin * (0.96 + float(group % 2) * 0.06)
+		var radius: float = _firework_radius() * (0.96 + float(group % 2) * 0.06)
 		var tint: Color = color_at(group)
 		var opening: float = smoothstep(0.0, 0.012, age) * (1.0 - smoothstep(0.025, life * 0.27, age))
 		_stamp(GLOW, origin, Vector2.ONE * radius * 1.5, Color(tint, opening * fade * 0.55))
@@ -322,7 +340,7 @@ func _draw_explosion(fade: float) -> void:
 			var reach: float = radius * (0.72 + phase * 0.28)
 			var point: Vector2 = _firework_point(origin, direction, reach, age, life)
 			var opacity: float = fade * smoothstep(0.0, 0.015, age) * (1.0 - smoothstep(life * 0.68, life, age))
-			var edge: float = minf((9.0 + level * 0.75 + phase * 3.5) / _ui_scale, radius * 0.38)
+			var edge: float = minf((9.0 + level * 0.75 + phase * 3.5) * 1.30 / _ui_scale, radius * 0.38)
 			var ember: Color = tint.lerp(Color(1.0, 0.78, 0.32), smoothstep(life * 0.5, life, age) * 0.55)
 			# Consecutive trajectory samples bend the tail with the falling tip;
 			# a line back toward the burst would pin late embers into radial spokes.
@@ -351,6 +369,8 @@ func snapshot() -> Dictionary:
 		"phase": "charging" if elapsed < 0.0 else ("release" if elapsed < 0.10 else "settling"),
 		"spark_count": _spark_count(), "wave_count": selected.bursts,
 		"trail_count": _trail_count(), "emission_seconds": _emission_span() if level >= 4 else 0.0,
+		"bloom_radius": _firework_radius() if level >= 4 else 0.0,
+		"vertical_scale": _firework_vertical_scale() if level >= 4 else 1.0,
 		"burst_count": selected.bursts, "reduced_motion": reduced_motion,
 		"input_transparent": mouse_filter == Control.MOUSE_FILTER_IGNORE,
 		"rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y]}

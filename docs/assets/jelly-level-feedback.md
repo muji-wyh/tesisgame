@@ -65,9 +65,11 @@ effect entry is removed. Lv1-Lv3 keep their existing compact batch effects.
 Popup blossom releases span 0.16, 0.38 and 0.48 seconds at Lv4-Lv6 for both manual
 and automatic collection. Their trails use five, six and seven trajectory samples
 respectively. Automatic collection keeps 62 percent of the manual spark count
-and its compact card dimensions and effect margins, so consecutive fireworks can
-overlap without shortening their bloom or descent. The 140 ms collection cadence
-is unchanged. Each effect respects the existing control exclusions. Reduced
+and its compact reading-card dimensions and margins. Lv4-Lv6 use the same bloom
+geometry in both collection modes, independently of those reading-card margins,
+so consecutive fireworks can overlap without shortening their bloom or descent.
+The 140 ms collection cadence is unchanged. Each effect respects the existing
+control exclusions. Reduced
 motion uses static colored stars and local light through the effect's lifetime;
 the reading card still fades on its own schedule. Pause, late-frame catchup,
 resize and exit use the existing presentation clock.
@@ -80,14 +82,20 @@ status remain in the table below. The core glow, inward streams and outward
 trails are runtime animation of these static production textures.
 
 The wider Lv4-Lv6 popup fireworks use a separate cosmetic canvas, leaving card
-size, placement and reading time intact. Blossom radii are about 1.7 times the
-previous size, with a wider horizontal spread. Drag slows the outward release
-before gravity bends even the upward spokes down; short samples of that path
-form tapered trails instead of keeping each ember tied to its burst origin.
+size, placement and reading time intact. Their blossom radii target 72, 92 and
+116 display pixels respectively, capped at 28 percent of the cosmetic canvas
+width. Manual and automatic collection share these radii; compact reading cards
+no longer reduce the firework's size. On short canvases, the vertical trajectory
+uses `min(1, canvas height / (bloom radius * 3.3))`, preserving the broad horizontal
+spread. Launch centers fit the canvas using the bloom radius and vertical scale.
+Spark tips and tapered trail stamps are 30 percent larger than the preceding
+fireworks version. Drag slows the outward release before gravity bends even the
+upward spokes down; short samples of that path form tapered trails instead of
+keeping each ember tied to its burst origin.
 Each ember lives for up to 1.72 seconds, limited by the remaining effect time
 after its blossom delay and an 80 ms end margin. Manual and automatic fireworks
 use the same descending path and later fade; only the automatic spark density
-and spatial footprint are reduced. This lets the falling tails finish after
+is reduced. The full 1.95-second effect lifetime lets falling tails finish after
 compact reading cards disappear.
 
 The cosmetic canvas extends toward the middle of the playfield, up to 58 percent
@@ -95,6 +103,7 @@ of its height or 440 display pixels; short landscape layouts retain at least
 their reading region. This gives lower blossoms room to fall past the old card
 halo. Every rotated texture stamp respects the existing control exclusions,
 and all fireworks draw behind all live reading surfaces during rapid pickups.
+The chest unlock prompt also stays above the enlarged fireworks.
 Reduced motion keeps the existing still light and stars. Board effects, source
 textures, sound, collection cadence and reward rules are unchanged.
 
@@ -225,6 +234,25 @@ regression in desktop Chromium and Android Chromium emulation. Both browser
 cases retained the Lv6 top tail after its reading card disappeared, then
 removed it without additional rewards; artifacts are in the study's `browser/`
 directory.
+
+The larger-bloom follow-up is saved under
+`build/qa/jelly-firework-scale-2026-10-25/`, with 174 matched native states per
+version. At release +1.1 seconds, the isolated Lv6 portrait automatic-firework
+mask grows from 254 by 173 to 296 by 289 pixels, with 2.17 times the painted
+pixels. Manual petals and cascade height also grow; fitted launch centers mean
+the complete bouquet is not uniformly wider in every layout. The same-input
+comparison preserves gameplay and reading-card geometry. Reduced-motion frames
+are unchanged, and the chest prompt remains above the enlarged fireworks.
+The focused reveal, view and collection-effect suites passed 33,130 checks;
+logs are in `build/qa/jelly-firework-size-2026-10-25/`. The capture report records
+the pixel-mask method and source hashes; these are silent native samples.
+The final Web build passed the existing Lv6 manual-collection regression in
+desktop Chromium and the Collect regression in Android Chromium emulation.
+Their inspected top-tail screenshots show the larger bouquets at about 1.17
+seconds. The automatic case still collects two words in 280 ms, retains the
+1.95-second effect lifetime and removes the effects without extra rewards.
+Browser screenshots and geometry snapshots are in the study's `browser/`
+directory, with `browser.log` and a compact `browser-summary.json` alongside it.
 
 ## Historical nine-level evidence
 

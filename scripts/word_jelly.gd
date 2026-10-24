@@ -132,6 +132,8 @@ func _init() -> void:
 	drop_button.set("accessibility_name", "Drop the next roots and pictures")
 	_word_reveal = WordReveal.new()
 	add_child(_word_reveal)
+	# Large blooms remain behind the compact chest prompt as well as word cards.
+	_loot_detail.z_index = _word_reveal.z_index + 1
 	_collection_effects = CollectionEffects.new()
 	add_child(_collection_effects)
 	_stage_banner = StageBanner.new()
