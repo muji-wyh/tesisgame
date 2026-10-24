@@ -38,7 +38,6 @@ var _sideways: float = 0.0
 var _velocity: float = 0.0
 var _threshold: float = 88.0
 var _max_pull: float = 116.0
-var _armed_once: bool = false
 var _hint_allowed: bool = true
 var _hint_elapsed: float = 0.0
 var _next_hint: float = 11.0
@@ -277,7 +276,6 @@ func _begin_pull(point: Vector2, pointer_id: int) -> void:
 		_suppress_emulated_mouse = true
 	_pulling = true
 	_armed = false
-	_armed_once = false
 	_returning = false
 	_tap_hint = false
 	_tap_elapsed = 0.0
@@ -305,8 +303,7 @@ func _move_pull(point: Vector2) -> void:
 	var was_armed: bool = _armed
 	_armed = _pull_distance >= _threshold and absf(local_delta.x) <= maxf(size.x, 84.0 / _ui_scale) * 1.35
 	_update_visual()
-	if _armed and not was_armed and not _armed_once:
-		_armed_once = true
+	if _armed and not was_armed:
 		threshold_reached.emit()
 
 
@@ -351,7 +348,6 @@ func cancel_pull(immediate: bool = false) -> void:
 	_armed = false
 	_pointer_id = -2
 	_pull_distance = 0.0
-	_armed_once = false
 	_tap_hint = false
 	_tap_elapsed = 0.0
 	_gesture_travel = 0.0

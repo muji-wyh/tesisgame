@@ -216,22 +216,40 @@ func check_component() -> void:
 		motion(start + Vector2(0, threshold * 0.3), touch)
 		check(not button.snapshot().armed, context + ": retreating below the threshold disarms the release")
 		motion(start + Vector2(0, threshold * 1.15), touch)
-		check(button.snapshot().armed and cues.size() == 1,
-			context + ": reentering the threshold restores the glow without repeating its sound")
+		check(button.snapshot().armed and button.snapshot().glow and cues.size() == 2,
+			context + ": the second threshold entry restores the glow and sounds ready again")
+		for repeat in range(4):
+			motion(start + Vector2(0, threshold * 1.3), touch)
+		check(cues.size() == 2 and commits.is_empty(),
+			context + ": repeated movement beyond the second entry stays silent")
+		motion(start + Vector2(0, threshold * 0.3), touch)
+		check(not button.snapshot().armed and not button.snapshot().glow and cues.size() == 2,
+			context + ": retreating clears readiness without another sound")
+		motion(start + Vector2(0, threshold * 1.15), touch)
+		check(button.snapshot().armed and button.snapshot().glow and cues.size() == 3,
+			context + ": a third threshold entry in the same gesture sounds ready once")
+		for repeat in range(4):
+			motion(start + Vector2(0, threshold * 1.3), touch)
+		check(cues.size() == 3 and commits.is_empty(),
+			context + ": holding after the third entry neither repeats the sound nor finishes")
 		motion(start + Vector2(0, threshold * 0.3), touch)
 		pointer(start + Vector2(0, threshold * 0.3), false, touch)
-		check(commits.is_empty(), context + ": retreat and release preserves the round")
+		check(commits.is_empty() and cues.size() == 3,
+			context + ": retreat and release preserves the round without a release sound")
 		relax(button)
-		cues.clear()
 		pointer(start, true, touch)
 		motion(start + Vector2(0, threshold * 1.15), touch)
+		check(button.snapshot().armed and cues.size() == 4,
+			context + ": a new gesture sounds ready after the previous gesture retreated and released")
 		button.cancel_pull()
 		pointer(start + Vector2(0, threshold * 1.15), false, touch)
-		check(commits.is_empty() and not button.is_pulling(), context + ": cancellation invalidates the later translated release")
+		check(commits.is_empty() and not button.is_pulling() and cues.size() == 4,
+			context + ": cancellation invalidates the later translated release without another sound")
 		relax(button)
-		cues.clear()
 		pointer(start, true, touch)
 		motion(start + Vector2(0, threshold * 1.15), touch)
+		check(button.snapshot().armed and cues.size() == 5,
+			context + ": a fresh gesture can sound ready again after explicit cancellation")
 		button.release_pointer(0 if touch else -1)
 		await process_frame
 		check(not button.is_pulling() and commits.is_empty(),
@@ -246,7 +264,8 @@ func check_component() -> void:
 		pointer(start + Vector2(0, threshold * 1.15), false, touch)
 		pointer(start + Vector2(0, threshold * 1.15), false, touch)
 		await process_frame
-		check(commits.size() == 1, context + ": an armed release commits exactly once even if release repeats")
+		check(commits.size() == 1 and cues.size() == 1,
+			context + ": an armed release commits once without replaying its crossing sound even if release repeats")
 		commits.clear()
 		cues.clear()
 		button.cancel_pull(true)
@@ -274,10 +293,27 @@ func check_component() -> void:
 		button.advance(1.0 / 60.0)
 		idle_peak = maxf(idle_peak, absf(float(button.snapshot().idle_cue)))
 	check(is_zero_approx(idle_peak), "Reduced motion suppresses idle invitation bounces")
-	pointer(start, true)
-	motion(start + Vector2(0, threshold * 1.15))
-	check(button.snapshot().armed, "Reduced motion preserves the explicit pull-and-release action")
-	button.cancel_pull(true)
+	for touch: bool in [false, true]:
+		var context: String = "Reduced-motion touch" if touch else "Reduced-motion mouse"
+		cues.clear()
+		pointer(start, true, touch)
+		for crossing in range(1, 4):
+			motion(start + Vector2(0, threshold * 1.15), touch)
+			check(button.snapshot().armed and button.snapshot().glow and cues.size() == crossing,
+				context + ": threshold entry %d keeps its explicit ready sound" % crossing)
+			for repeat in range(4):
+				motion(start + Vector2(0, threshold * 1.3), touch)
+			check(cues.size() == crossing and commits.is_empty(),
+				context + ": holding at entry %d stays silent and does not finish" % crossing)
+			if crossing < 3:
+				motion(start + Vector2(0, threshold * 0.3), touch)
+				check(not button.snapshot().armed and not button.snapshot().glow and cues.size() == crossing,
+					context + ": retreating disarms without sounding ready")
+		button.cancel_pull(true)
+		pointer(start + Vector2(0, threshold * 1.15), false, touch)
+		check(cues.size() == 3 and commits.is_empty(),
+			context + ": cancellation and a stale release preserve the three crossing sounds")
+	cues.clear()
 	button.configure(Color("e2a268"), 1.0, false)
 	button.set_hint_allowed(true)
 	idle_peak = 0.0
@@ -314,6 +350,9 @@ func check_gameplay(mode: String) -> void:
 	button.set_process(false)
 	var completions: Array[Dictionary] = []
 	view.round_finished.connect(func(result: Dictionary) -> void: completions.append(result))
+	var ready_cues: Array[String] = []
+	view.audio_requested.connect(func(cue: String) -> void:
+		if cue == "finish_ready": ready_cues.append(cue))
 	var tap_start: Vector2 = button.get_global_rect().get_center()
 	pointer(tap_start, true)
 	pointer(tap_start, false)
@@ -328,8 +367,17 @@ func check_gameplay(mode: String) -> void:
 	for interruption: String in ["home", "resize", "page_hidden", "host_cancel"]:
 		var start: Vector2 = button.get_global_rect().get_center()
 		var end: Vector2 = start + Vector2(0, float(button.snapshot().threshold) * 1.15)
+		var cues_before: int = ready_cues.size()
 		pointer(start, true)
 		motion(end)
+		check(ready_cues.size() == cues_before + 1,
+			mode + ": the fresh pull before " + interruption + " forwards one ready sound")
+		motion(start + Vector2(0, float(button.snapshot().threshold) * 0.3))
+		motion(end)
+		for repeat in range(4):
+			motion(end)
+		check(ready_cues.size() == cues_before + 2 and completions.is_empty(),
+			mode + ": reentering before " + interruption + " forwards one more sound without repeated-motion duplicates")
 		check(button.snapshot().armed and view._pointer == view.NO_POINTER and not view._dragging,
 			mode + ": Finish owns the gesture above the board during " + interruption)
 		var elapsed: float = view.game.spawn_elapsed
@@ -351,6 +399,8 @@ func check_gameplay(mode: String) -> void:
 		pointer(end, false)
 		check(view.game.phase == "playing" and completions.is_empty() and not button.is_pulling(),
 			mode + ": " + interruption + " cancels an armed pull without a result")
+		check(ready_cues.size() == cues_before + 2,
+			mode + ": " + interruption + " and its stale release cannot replay readiness")
 		match interruption:
 			"home": app._hide_mode_menu()
 			"resize": root.size = Vector2i(393, 852)
@@ -366,6 +416,7 @@ func check_gameplay(mode: String) -> void:
 	await settle()
 	var start: Vector2 = button.get_global_rect().get_center()
 	var end: Vector2 = start + Vector2(0, float(button.snapshot().threshold) * 1.15)
+	var cues_before: int = ready_cues.size()
 	pointer(start, true, true)
 	motion(end, true)
 	check(button.snapshot().armed and view.game.phase == "playing", mode + ": arming waits for the same finger's release")
@@ -374,6 +425,8 @@ func check_gameplay(mode: String) -> void:
 	await settle()
 	check(view.game.phase == "finished" and app._settlement_dialog.is_visible_in_tree() and not view.snapshot().result.visible and not app._finish_confirmation_open()
 		and completions.size() == 1, mode + ": deliberate touch release opens exactly one settlement modal directly")
+	check(ready_cues.size() == cues_before + 1,
+		mode + ": the final touch crossing sounds once and repeated release events stay silent")
 	check(not button.is_visible_in_tree() and not button.is_pulling(), mode + ": results hide and reset the external header action")
 	app.audio.halt()
 	app.queue_free()

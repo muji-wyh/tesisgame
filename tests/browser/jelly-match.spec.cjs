@@ -1,6 +1,8 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
 const { enterGame, openGame, openModeMenu, chooseMode, activateLibraryControl, metrics, tap, rendered, headerPoint, celebrationState, visibleColorCount } = require('./game-ui.cjs');
+const { watchAudioRequests, observeOutputAudio } = require('./bundled-audio.cjs');
+const FINISH_READY = require('../../docs/assets/jelly-finish.json').audio;
 
 const JELLY_REWARDS = 'growWithPip.jellyRewards.v1';
 const POP_REWARDS = 'wordBuddies.popRewards';
@@ -404,6 +406,110 @@ for (const mode of ['jelly', 'word_jelly']) {
     });
   }
 }
+
+test.describe('Finish ready sound', () => {
+  test.use({ deviceScaleFactor: 1 });
+
+  for (const mode of ['jelly', 'word_jelly']) {
+    test(`${mode} Finish ready sound replays after reentry and a canceled pull`, async ({ page }, info) => {
+      test.skip(info.project.name !== (mode === 'jelly' ? 'desktop-chromium' : 'android-chromium'),
+        'Desktop Jelly Match mouse and Android Jelly Words touch cover the shared control and actual audio.');
+      test.setTimeout(180000);
+      const requests = watchAudioRequests(page);
+      await observeOutputAudio(page, { fingerprintBuffers: true, trackSourceLifecycle: true });
+      const errors = await openGame(page, { reducedMotion: 'no-preference', mode });
+      await expect.poll(async () => {
+        const state = await jelly(page);
+        return state.mode === mode && state.phase === 'playing' &&
+          state.tiles?.length >= (mode === 'jelly' ? 12 : 15) && state.tiles.every(tile => tile.settled);
+      }).toBe(true);
+      expect(await page.evaluate(() => window.audioObservation.available), 'Chromium exposes actual WebAudio').toBe(true);
+      const before = await jelly(page), bounds = await metrics(page);
+      const from = center(before.finish.rect, bounds), distance = before.finish.pull.threshold * bounds.scale;
+      const audioFrom = await page.evaluate(() => window.audioObservation.playbacks.length);
+      const session = info.project.name === 'android-chromium' ? await page.context().newCDPSession(page) : null;
+      const points = factor => [{ x: from.x, y: from.y + factor * distance, id: 0, radiusX: 6, radiusY: 6, force: 1 }];
+      const evidence = { source: FINISH_READY.destination, pointer: session ? 'touch' : 'mouse', crossings: [] };
+      let fingerprint;
+      const readySounds = () => page.evaluate(({ audioFrom, seconds, fingerprint }) =>
+        window.audioObservation.playbacks.slice(audioFrom).filter(sound =>
+          !sound.loop && sound.contextState === 'running' &&
+          Math.abs(sound.duration - seconds) <= 2 / sound.sampleRate &&
+          (!fingerprint || sound.fingerprint === fingerprint)),
+      { audioFrom, seconds: FINISH_READY.seconds, fingerprint });
+      const move = async factor => {
+        if (session) await session.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: points(factor) });
+        else await page.mouse.move(from.x, from.y + factor * distance, { steps: 3 });
+        await rendered(page);
+      };
+      const begin = async () => {
+        if (session) await session.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: points(0) });
+        else { await page.mouse.move(from.x, from.y); await page.mouse.down(); }
+      };
+      const release = async () => {
+        if (session) await session.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+        else await page.mouse.up();
+      };
+      const expectHeld = async armed => {
+        const state = await jelly(page);
+        expect(state.finish.pull).toMatchObject({ pulling: true, armed });
+        expect(state.phase, 'Crossing or holding the ready threshold never finishes before release').toBe('playing');
+        expect(state.round_id).toBe(before.round_id);
+        expect(state.score).toBe(before.score);
+        expect(state.finish_confirmation.visible).toBe(false);
+        expect(state.drag.active, 'Finish retains the pointer instead of dragging a board tile').toBe(false);
+        return state.finish.pull;
+      };
+      try {
+        await begin();
+        await move(0.35);
+        await expectHeld(false);
+        expect(await readySounds(), 'A partial downward pull stays silent').toEqual([]);
+        for (let crossing = 1; crossing <= 3; crossing++) {
+          if (crossing > 1) {
+            await move(0.35);
+            await expectHeld(false);
+            expect(await readySounds(), 'Retreating below ready never emits another cue').toHaveLength(crossing - 1);
+            if (crossing === 3) {
+              await release();
+              await expect.poll(async () => (await jelly(page)).finish.pull.returning).toBe(false);
+              expect((await jelly(page)).phase, 'Releasing a withdrawn pull cancels without ending the round').toBe('playing');
+              expect((await jelly(page)).finish_confirmation.visible).toBe(false);
+              expect(await readySounds(), 'Canceling the pull adds no ready cue').toHaveLength(2);
+              await begin();
+            }
+          }
+          await move(1.15);
+          await expect.poll(async () => (await readySounds()).length,
+            { message: `Threshold crossing ${crossing} plays the bundled ready cue exactly once` }).toBe(crossing);
+          const sounds = await readySounds(), sound = sounds.at(-1);
+          expect(sound.fingerprint, 'The ready recording was decoded to observed PCM').toBeTruthy();
+          expect(sound.peak, 'The ready recording contains nonzero audio').toBeGreaterThan(0.01);
+          expect(sound.playbackRate).toBe(1);
+          fingerprint ||= sound.fingerprint;
+          evidence.crossings.push({ crossing, pull: await expectHeld(true), sound });
+          await move(1.35);
+          // Wait beyond the complete 322 ms one-shot to reject a repeated cue while held.
+          await page.waitForTimeout(400);
+          await expectHeld(true);
+          expect(await readySounds(), 'Holding and moving above ready does not replay the cue').toHaveLength(crossing);
+        }
+        await page.screenshot({ path: info.outputPath(`${mode}-finish-ready-third-crossing.png`), scale: 'css' });
+        await release();
+        await expect.poll(async () => (await jelly(page)).phase).toBe('finished');
+        await expectFinishModal(page);
+        expect(await readySounds(), 'The armed release finishes without a fourth ready cue').toHaveLength(3);
+        expect((await jelly(page)).round_id).toBe(before.round_id);
+        expect((await jelly(page)).score).toBe(before.score);
+        await info.attach('finish-ready-reentry-audio', { body: JSON.stringify(evidence, null, 2), contentType: 'application/json' });
+      } finally {
+        if (session) await session.detach();
+      }
+      expect(requests, 'Ready audio plays from the existing game bundle').toEqual([]);
+      expect(errors).toEqual([]);
+    });
+  }
+});
 
 for (const mode of ['jelly', 'word_jelly']) {
   test(`${mode} mobile pull Finish cancels resize before accepting a fresh release`, async ({ page }, info) => {

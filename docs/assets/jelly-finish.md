@@ -2,7 +2,8 @@
 
 The Finish control reuses the game's soft jelly artwork. Its upper shoulder stays
 in the header while the lower part stretches with a downward drag. Reaching the
-release threshold adds a local glow and one short ready cue; releasing commits
+release threshold adds a local glow and one short ready cue. Pulling back and
+reaching the threshold again replays the cue; holding past it stays silent. Releasing commits
 only while the threshold is reached. An early release returns the gel to its
 resting shape. These poses are authored by the game, not source animations.
 
