@@ -5,9 +5,9 @@ async function memoryState(page) {
   return (await metrics(page)).growth.memory;
 }
 
-async function pressMemoryRect(page, rect) {
+async function pressMemoryRect(page, rect, bounds) {
   const [x, y, width, height] = rect;
-  await tap(page, x + width / 2, y + height / 2);
+  await tap(page, x + width / 2, y + height / 2, bounds);
 }
 
 async function startObservation(page) {
@@ -25,10 +25,19 @@ async function startObservation(page) {
 }
 
 async function startMatching(page) {
-  const action = (await memoryState(page)).peek.countdown.action;
+  const state = await memoryState(page);
+  if (!state.peek.studying) {
+    expect(state, 'An elapsed observation has already opened matching')
+      .toMatchObject({ started: true, phase: 'waiting', peek: { remaining: 0 } });
+    return;
+  }
+  const action = state.peek.countdown.action;
   expect(action).toMatchObject({ text: 'Start matching', visible: true, disabled: false });
+  // If the countdown expires before this gesture, its reserved header area
+  // cannot select a card; matching must still begin with no pending choice.
   await pressMemoryRect(page, action.rect);
   await expect.poll(async () => (await memoryState(page)).peek.studying).toBe(false);
+  expect((await memoryState(page)).phase).toBe('waiting');
 }
 
 async function startMemory(page) {
@@ -38,9 +47,10 @@ async function startMemory(page) {
 }
 
 async function memoryCardTap(page, index) {
-  const card = (await memoryState(page)).cards.find(card => card.index === index);
+  const bounds = await metrics(page);
+  const card = bounds.growth.memory.cards.find(card => card.index === index);
   if (!card) throw new Error(`Memory card ${index} is missing`);
-  await pressMemoryRect(page, card.rect);
+  await pressMemoryRect(page, card.rect, bounds);
   await rendered(page);
 }
 

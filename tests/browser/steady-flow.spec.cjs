@@ -92,7 +92,7 @@ test(`Match keeps its board through automatic answers and the chest (${motion})`
   expect(errors).toEqual([]);
 });
 
-test(`Memory keeps remembered positions through automatic corrections and five numbered pairs (${motion})`, async ({ page }, testInfo) => {
+test(`Memory keeps remembered positions through mismatch dismissal and five numbered pairs (${motion})`, async ({ page }, testInfo) => {
   const errors = await start(page, motion);
   await chooseMode(page, 'memory');
   const beforeGeometry = await geometry(page), cards = await startMemory(page), bounds = await metrics(page);
@@ -107,7 +107,10 @@ test(`Memory keeps remembered positions through automatic corrections and five n
   await expect(page.locator('#game-status')).toContainText('Not a pair.');
   await shot(page, testInfo, 'memory-wrong');
   expect((await patch(page, stillPoint)).equals(still), 'Wrong feedback cannot remove or move hidden cards.').toBe(true);
+  expect((await memoryState(page)).phase, 'The mismatch waits for a card click while the board stays in place').toBe('feedback');
+  await memoryCardTap(page, word);
   await waitForMemoryInput(page);
+  expect(await memoryState(page)).toMatchObject({ attempts: 1, mistakes: 1, pairs: 0 });
   for (const [index, pair] of pairs.entries()) {
     await memoryCardTap(page, pair[0]);
     expect((await memoryState(page)).cards[pair[0]]).toMatchObject({ selected: true, face_up: false, word_id: '' });

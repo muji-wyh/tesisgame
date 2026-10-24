@@ -182,7 +182,8 @@ func _check_background_collection_close(app) -> void:
 					break
 		var state = app.model if mode == "match" else app._memory.memory
 		var timer: Timer = app.feedback_timer if mode == "match" else app._memory._feedback_timer
-		check(state.phase == "feedback" and not timer.is_stopped(), mode + " starts a real pending answer before the pause check")
+		check(state.phase == "feedback" and timer.is_stopped() == (mode == "memory"),
+			mode + " starts a pending answer with the appropriate automatic or click-driven continuation")
 		app._show_collection()
 		app.on_page_hidden()
 		app._hide_collection()
@@ -194,7 +195,10 @@ func _check_background_collection_close(app) -> void:
 		app.on_page_visible()
 		check(not timer.paused and not app._memory._paused, mode + " foreground return releases the remaining background pause")
 		await create_timer(0.85).timeout
-		check(state.phase == "waiting", mode + " feedback finishes normally after the page is visible again")
+		if mode == "memory":
+			check(state.phase == "feedback", "Memory keeps the mismatch visible after returning to the foreground")
+			app._memory.card_buttons[state.selected_indices[0]].pressed.emit()
+		check(state.phase == "waiting", mode + " feedback finishes through its normal continuation after the page is visible again")
 	app.new_round(43, true, "", "pop")
 	check(app._pop_rewards.configure("background-close", 1, "spring", app.data.chests, true),
 		"The background-close fixture has one real saved treasure chest")

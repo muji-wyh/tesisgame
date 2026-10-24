@@ -136,8 +136,8 @@ func _run() -> void:
 	view.card_buttons[wrong].pressed.emit()
 	check(view.memory.phase == "feedback" and view.memory.attempts == 1, "A mismatch submits exactly one attempt")
 	check(answers == [[[words[0], words[1]], false]], "Mismatch reports both real word associations in selection order")
-	check(view.study_button.visible and view.study_button.disabled and view.controls().is_empty() and not view.status_label.visible,
-		"Feedback blocks all card and eye targets until the result is resolved")
+	check(view.study_button.visible and view.study_button.disabled and view.controls().size() == 10 and not view.status_label.visible,
+		"Mismatch feedback keeps every card available to dismiss it while blocking the eye")
 	check(view.status_label.text == "Not a pair." and revealed.size() == 1
 		and view.card_buttons[first].face_up and view.card_buttons[wrong].face_up,
 		"Second-card commitment reveals both faces together and emits one attempt pronunciation")
@@ -146,21 +146,30 @@ func _run() -> void:
 	for index in [first, wrong]:
 		check(view.card_buttons[index].get_theme_stylebox("normal").border_color == Style.WRONG,
 			"The mismatched cards themselves retain wrong feedback frames")
-	await create_timer(0.35).timeout
-	check(view.memory.phase == "feedback" and endings.is_empty(), "Feedback remains visible for roughly 0.7 seconds")
+	await create_timer(0.85).timeout
+	view._feedback_timer.timeout.emit()
+	check(view.memory.phase == "feedback" and endings.is_empty() and view._feedback_timer.is_stopped(),
+		"A mismatch remains visible beyond the old deadline and ignores stale timer callbacks")
 	view.pause(true)
+	view.card_buttons[first].pressed.emit()
 	view.continue_feedback()
 	await create_timer(0.8).timeout
 	check(view.memory.phase == "feedback" and view.controls().is_empty(), "Pause suspends feedback and ignores explicit continuation")
 	view.pause(false)
 	view.hide()
+	view.card_buttons[wrong].pressed.emit()
 	view.continue_feedback()
 	await create_timer(0.8).timeout
 	check(view.memory.phase == "feedback" and view.controls().is_empty(), "A hidden board cannot finish a pending answer")
 	view.show()
 	await create_timer(0.8).timeout
-	check(view.memory.phase == "waiting" and endings.is_empty(), "Visible feedback continues automatically without a footer")
-	check(_positions(view) == positions and view.memory.cards == order, "Automatic feedback never shuffles or moves cards")
+	check(view.memory.phase == "feedback" and view.card_buttons[first].face_up and view.card_buttons[wrong].face_up,
+		"Returning to the visible board still waits for a card click")
+	await _mouse(view.card_buttons[first], true)
+	await _mouse(view.card_buttons[first], false)
+	check(view.memory.phase == "waiting" and view.memory.selected_indices.is_empty() and endings.is_empty(),
+		"Clicking an open mismatch card hides the pair without making a new selection")
+	check(_positions(view) == positions and view.memory.cards == order, "Dismissal never shuffles or moves cards")
 	_check_resting_faces(view)
 	for attempt in range(3):
 		view.card_buttons[first].pressed.emit()
@@ -246,12 +255,12 @@ func _run() -> void:
 	view.card_buttons[first].pressed.emit()
 	await create_timer(0.8).timeout
 	check(view.memory.phase == "matching" and view.memory.selected_indices == [first] and view.memory.attempts == 0,
-		"A restarted round cancels the old feedback deadline without disturbing its new first selection")
+		"A restarted round clears the old mismatch without disturbing its new first selection")
 	view.card_buttons[wrong].pressed.emit()
 	view.stop()
 	await create_timer(0.8).timeout
 	view.continue_feedback()
-	check(view.memory.phase == "stopped" and endings.size() == 1, "Stop cancels a pending timer without a stale result")
+	check(view.memory.phase == "stopped" and endings.size() == 1, "Stop clears a pending mismatch without a stale result")
 	view.start_round(words, Data.theme("spring"), 71)
 	_start_matching(view)
 	view.card_buttons[0].pressed.emit()
@@ -263,7 +272,7 @@ func _run() -> void:
 	check(view.memory.phase == "stopped" and view.memory.selected_indices.is_empty() and view.controls().is_empty(), "Stop cancels transient selections and rejects every input")
 	view.start_round([], Data.theme("spring"), 3)
 	check(view.card_buttons.is_empty() and view.controls().is_empty() and not view.status_label.text.is_empty(), "Invalid content explains the error and leaves no stale playable board")
-	await _check_feedback_lock(view, words)
+	await _check_feedback_continuation(view, words)
 	await _check_matched_fronts(view, words)
 	await _check_selection_and_hover(view, words)
 	await _check_catalog_text(view)
@@ -288,7 +297,7 @@ func _start_matching(view) -> void:
 	view.end_peek()
 
 
-func _check_feedback_lock(view, words: Array) -> void:
+func _check_feedback_continuation(view, words: Array) -> void:
 	view.size = Vector2(456, 200)
 	for outcome in ["wrong", "correct"]:
 		view.start_round(words, Data.theme("spring"), 71)
@@ -310,24 +319,52 @@ func _check_feedback_lock(view, words: Array) -> void:
 		var order: Array = view.memory.cards.duplicate(true)
 		var positions := _positions(view)
 		var reveal_count := revealed.size()
-		for index in [-1, first, second, target, 10]:
+		for index in [-1, 10]:
 			view._choose(index)
 		view.study_button.pressed.emit()
 		view.begin_peek()
-		await _mouse(view.card_buttons[target], true)
-		await _mouse(view.card_buttons[target], false)
-		check(view.memory.phase == "feedback" and view.controls().is_empty() and not view.memory.studying
-			and revealed.size() == reveal_count, outcome + ": repeated, extra, native and eye input cannot skip feedback")
+		check(view.memory.phase == "feedback" and not view.memory.studying and revealed.size() == reveal_count,
+			outcome + ": invalid indices and eye input cannot dismiss feedback")
+		if outcome == "correct":
+			for index in [first, second, target]:
+				view._choose(index)
+			await _mouse(view.card_buttons[target], true)
+			await _mouse(view.card_buttons[target], false)
+			check(view.controls().is_empty() and not view._feedback_timer.is_stopped(),
+				"Correct feedback keeps its timer and blocks card shortcuts")
+		else:
+			check(view.controls().size() == 10 and view._feedback_timer.is_stopped(),
+				"Wrong feedback exposes all card targets without scheduling a timeout")
 		check([view.memory.attempts, view.memory.mistakes, view.memory.matched_word_ids, answers.size(), progress.size(), endings.size()] == score,
 			outcome + ": blocked input cannot double-score or purchase an observation")
 		check(view.memory.cards == order and _positions(view) == positions, outcome + ": every target remains stationary")
-		await create_timer(0.8).timeout
-		check(view.memory.phase == "waiting" and view.memory.selected_indices.is_empty(), outcome + ": bounded feedback restores matching automatically")
+		await create_timer(0.85).timeout
+		if outcome == "wrong":
+			check(view.memory.phase == "feedback" and view.memory.selected_indices == [first, second]
+				and view.card_buttons[first].face_up and view.card_buttons[second].face_up,
+				"Waiting past the old feedback duration keeps the wrong pair exposed")
+			await _mouse(view.card_buttons[target], true)
+			await _hover(view.study_button, true)
+			await _mouse(view.study_button, false)
+			check(view.memory.phase == "feedback" and view.memory.selected_indices == [first, second],
+				"Releasing outside the pressed card cancels dismissal and keeps the wrong pair exposed")
+			await _hover(view.card_buttons[target])
+			await _mouse(view.card_buttons[target], true)
+			check(view.memory.phase == "feedback", "Pressing a new card waits for its completed click before hiding the mismatch")
+			await _mouse(view.card_buttons[target], false)
+		else:
+			check(view.memory.phase == "waiting" and view.memory.selected_indices.is_empty(),
+				"Correct feedback restores matching automatically")
+			view.card_buttons[target].pressed.emit()
 		for index in [first, second]:
 			check(view.card_buttons[index].face_up == (outcome == "correct"), outcome + ": only a correct pair remains face up")
-		view.card_buttons[target].pressed.emit()
 		check(view.memory.selected_indices == [target] and not view.card_buttons[target].face_up and revealed.size() == reveal_count,
-			outcome + ": the next first selection stays concealed after feedback")
+			outcome + ": the next card click becomes a concealed first selection")
+		check([view.memory.attempts, view.memory.mistakes, view.memory.matched_word_ids, answers.size(), progress.size(), endings.size()] == score,
+			outcome + ": continuing with a new card emits no additional score or answer feedback")
+		view.card_buttons[target].pressed.emit()
+		check(view.memory.phase == "waiting" and view.memory.selected_indices.is_empty(),
+			outcome + ": the newly selected card can be cancelled normally")
 
 
 func _check_matched_fronts(view, words: Array) -> void:
@@ -346,8 +383,19 @@ func _check_matched_fronts(view, words: Array) -> void:
 	view.card_buttons[_index(view, words[1].id, "word")].pressed.emit()
 	view.card_buttons[_index(view, words[2].id, "image")].pressed.emit()
 	await create_timer(1.0).timeout
-	check(view.memory.phase == "waiting" and view.memory.attempts == 2 and view.memory.mistakes == 1,
-		"A later wrong pair finishes its automatic feedback")
+	check(view.memory.phase == "feedback" and view.memory.attempts == 2 and view.memory.mistakes == 1,
+		"A later wrong pair stays exposed while preserving the planted pair")
+	var planted := _index(view, words[0].id, "image")
+	var score: Array = [answers.size(), revealed.size(), progress.size(), endings.size()]
+	check(not view.card_buttons[planted].disabled and view.controls().has(view.card_buttons[planted]),
+		"A planted card is available to dismiss a waiting mismatch")
+	await _mouse(view.card_buttons[planted], true)
+	await _mouse(view.card_buttons[planted], false)
+	await create_timer(0.25).timeout
+	check(view.memory.phase == "waiting" and view.memory.selected_indices.is_empty()
+		and view.card_buttons[planted].face_up and view.card_buttons[planted].disabled
+		and [answers.size(), revealed.size(), progress.size(), endings.size()] == score,
+		"Clicking a planted card only hides the wrong pair, preserving its own face and the score")
 	_check_resting_faces(view)
 	view.begin_peek()
 	await create_timer(0.25).timeout
@@ -456,10 +504,11 @@ func _highlighted_indices(view) -> Array:
 	return result
 
 
-func _hover(control: Control) -> void:
+func _hover(control: Control, pressed: bool = false) -> void:
 	var event := InputEventMouseMotion.new()
 	event.position = control.get_global_rect().get_center()
 	event.global_position = event.position
+	event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
 	root.push_input(event, true)
 	await _settle()
 

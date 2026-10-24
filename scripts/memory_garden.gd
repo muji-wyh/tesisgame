@@ -227,7 +227,7 @@ func _build() -> void:
 	_feedback_timer.name = "MemoryFeedbackTimer"
 	_feedback_timer.one_shot = true
 	_feedback_timer.wait_time = FEEDBACK_SECONDS
-	_feedback_timer.timeout.connect(continue_feedback)
+	_feedback_timer.timeout.connect(_on_feedback_timeout)
 	add_child(_feedback_timer)
 	resized.connect(_layout)
 	visibility_changed.connect(_visibility_changed)
@@ -384,6 +384,11 @@ func set_reduced_motion(value: bool) -> void:
 		button.set_reduced_motion(value or _paused or not is_visible_in_tree())
 
 
+func _on_feedback_timeout() -> void:
+	if memory.last_correct:
+		continue_feedback()
+
+
 func continue_feedback() -> void:
 	if _paused or not is_visible_in_tree() or memory.phase != "feedback":
 		return
@@ -404,6 +409,17 @@ func continue_feedback() -> void:
 func _choose(index: int) -> void:
 	if _paused or not is_visible_in_tree() or memory.studying or index < 0 or index >= memory.cards.size():
 		return
+	if _waiting_for_mismatch_click():
+		var dismiss_only: bool = memory.selected_indices.has(index) \
+			or memory.matched_word_ids.has(memory.cards[index].word.id)
+		_feedback_timer.stop()
+		memory.continue_feedback()
+		# A different concealed card starts the next choice in the same click.
+		# Publish only the final state so no intermediate prompt can replay audio.
+		if dismiss_only:
+			_refresh()
+			prompt_ready.emit()
+			return
 	if memory.matched_word_ids.has(memory.cards[index].word.id):
 		return
 	if not _can_play():
@@ -420,7 +436,7 @@ func _choose(index: int) -> void:
 	if result in ["correct", "wrong"]:
 		answer_chosen.emit(memory.feedback_words.duplicate(true), memory.last_correct)
 	card_buttons[index].play_press()
-	if result in ["correct", "wrong"]:
+	if result == "correct":
 		_feedback_timer.start()
 	if result in ["correct", "wrong"]:
 		progress_changed.emit(memory.matched_word_ids.size(), memory.attempts)
@@ -524,6 +540,10 @@ func _can_play() -> bool:
 	return memory.started and not memory.studying and not _paused and is_visible_in_tree() and memory.phase in ["waiting", "matching"]
 
 
+func _waiting_for_mismatch_click() -> bool:
+	return memory.started and memory.phase == "feedback" and not memory.last_correct
+
+
 func _input(event: InputEvent) -> void:
 	if _board == null or _paused or not is_visible_in_tree():
 		return
@@ -587,6 +607,7 @@ func _refresh() -> void:
 		return
 	var playing: bool = memory.phase in ["waiting", "matching"] and not card_buttons.is_empty()
 	var reviewing: bool = memory.phase == "feedback"
+	var waiting_for_card: bool = _waiting_for_mismatch_click()
 	var suspended: bool = _paused or not is_visible_in_tree()
 	if suspended:
 		_hovered_card_index = -1
@@ -632,7 +653,10 @@ func _refresh() -> void:
 		var pair_index: int = memory.matched_word_ids.find(card.word.id)
 		var pair_tint: Color = PairConnections.PAIR_COLORS[maxi(0, pair_index) % PairConnections.PAIR_COLORS.size()]
 		button.refresh(_palette, selected and not matched and not reviewing, matched, selected and reviewing and not memory.last_correct,
-			not playing or awaiting_start or suspended or memory.studying, false, pair_index, pair_tint)
+			not (playing or waiting_for_card) or awaiting_start or suspended or memory.studying, false, pair_index, pair_tint)
+		# Even a completed pair can dismiss a mismatch, without selecting it again.
+		if waiting_for_card and not suspended and not memory.studying:
+			button.disabled = false
 		button.set_face_up(revealed, not suspended and (playing or reviewing))
 		button.focus_mode = Control.FOCUS_NONE if button.disabled else Control.FOCUS_ALL
 		button.picture.modulate.a = 1.0

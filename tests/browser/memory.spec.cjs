@@ -6,6 +6,9 @@ const { memoryState, pressMemoryRect, startObservation, startMatching, memoryCar
 
 const WALLET_KEY = 'growWithPip.coinWallet.v1';
 
+// Capture the canvas at CSS resolution while retaining each phone's viewport and touch input.
+test.use({ deviceScaleFactor: 1 });
+
 async function fundPeeks(page, balance) {
   await page.addInitScript(({ key, balance }) => {
     if (localStorage.getItem(key) === null) localStorage.setItem(key,
@@ -143,9 +146,6 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
       const hit = index => { const [x, y, width, height] = bounds.growth.memory.cards[index].rect;
         return tap(page, x + width / 2, y + height / 2, bounds); };
       await hit(wrong.index);
-      // Dispatch the repeat without intervening DOM/audio queries, within the
-      // actual feedback window. Inspect the retained publication afterward.
-      await hit(first.index);
       await expect.poll(async () => (await memoryState(page)).reward.tier).toBe(tier);
       state = await page.evaluate(tier => window.memoryFlow.timeline.findLast(sample =>
         sample.state.phase === 'feedback' && sample.state.reward.tier === tier)?.state, tier);
@@ -157,9 +157,13 @@ for (const reducedMotion of ['no-preference', 'reduce']) {
       expect(state.reward.rect).toEqual(observation.reward.rect);
       expectStableBoard(observation.cards, state.cards);
       if (reducedMotion === 'reduce') expect(state.reward).toMatchObject({ animating: false, scale: 1, rotation: 0 });
-      expect((await memoryState(page)).mistakes, 'Feedback ignores repeated card input').toBe(6 - tier);
       if (tier === 5) await screenshot(page, info, 'memory-phone-second-selection');
+      await expect.poll(async () => (await memoryState(page)).reward.animating).toBe(false);
+      expect((await memoryState(page)).phase, 'The mismatch stays visible after the chest reaction ends').toBe('feedback');
+      await hit(tier % 2 ? first.index : wrong.index);
       await waitForMemoryInput(page);
+      expect(await memoryState(page), 'Dismissing either wrong card does not charge another attempt or mistake')
+        .toMatchObject({ attempts: 6 - tier, mistakes: 6 - tier, reward: { tier, change_count: 6 - tier } });
     }
     state = await memoryState(page);
     expect(state.reward).toMatchObject({ tier: 0, grey: true, text: 'No chest', change_count: 6 });
@@ -255,6 +259,68 @@ test('Memory replaces same-kind choices without revealing answers or charging a 
   expect(errors).toEqual([]);
 });
 
+test('Memory waits for a card click after a mismatch and carries a different concealed card into the next choice', async ({ page }, info) => {
+  test.setTimeout(180000);
+  const errors = await openGame(page, { mode: 'memory', reducedMotion: 'reduce' });
+  const board = await startObservation(page);
+  await startMatching(page);
+  const first = board.find(card => card.kind === 'word');
+  const wrong = board.find(card => card.kind === 'image' && card.word !== first.word);
+  const next = board.find(card => card.kind === 'word' && ![first.word, wrong.word].includes(card.word));
+  const partner = board.find(card => card.kind === 'image' && card.word === next.word);
+  let mistakes = 0;
+  const revealMismatch = async () => {
+    await memoryCardTap(page, first.index);
+    await memoryCardTap(page, wrong.index);
+    mistakes++;
+    await expect.poll(async () => (await memoryState(page)).phase).toBe('feedback');
+    expect(await memoryState(page)).toMatchObject({ mistakes, reward: { tier: 6 - mistakes, change_count: mistakes } });
+  };
+  for (const index of [first.index, wrong.index]) {
+    await revealMismatch();
+    // Exceed the former 0.7-second timer without sending another card gesture.
+    await page.waitForTimeout(1100);
+    const held = await memoryState(page);
+    expect(held).toMatchObject({ phase: 'feedback', attempts: mistakes, mistakes, pairs: 0 });
+    expect(held.cards.filter(card => card.face_up).map(card => card.index).sort((a, b) => a - b))
+      .toEqual([first.index, wrong.index].sort((a, b) => a - b));
+    await screenshot(page, info, `memory-mismatch-waits-${mistakes}`);
+    await memoryCardTap(page, index);
+    await waitForMemoryInput(page);
+    const dismissed = await memoryState(page);
+    expect(dismissed).toMatchObject({ attempts: mistakes, mistakes, pairs: 0,
+      reward: { tier: 6 - mistakes, change_count: mistakes } });
+    expect(dismissed.cards.every(card => !card.face_up && !card.word_id && !card.selected && !card.selection_visible),
+      'Clicking either revealed wrong card dismisses both without selecting a new card').toBe(true);
+    await expect(page.locator('#selection-status')).toBeEmpty();
+  }
+  await revealMismatch();
+  await memoryCardTap(page, next.index);
+  let state = await memoryState(page);
+  expect(state).toMatchObject({ phase: 'matching', attempts: 3, mistakes: 3, pairs: 0,
+    reward: { tier: 3, change_count: 3 } });
+  expect(state.cards.every(card => !card.face_up && !card.word_id), 'The next choice hides both wrong answers and stays concealed').toBe(true);
+  expect(state.cards.filter(card => card.selected).map(card => card.index)).toEqual([next.index]);
+  expect(state.cards[next.index].selection_visible).toBe(true);
+  await expect(page.locator('#selection-status')).toHaveText(`Memory card ${next.index + 1} selected. Choose one more card.`);
+  await screenshot(page, info, 'memory-mismatch-next-selection');
+  await memoryCardTap(page, partner.index);
+  await waitForMemoryInput(page);
+  state = await memoryState(page);
+  expect(state).toMatchObject({ attempts: 4, mistakes: 3, pairs: 1, reward: { tier: 3, change_count: 3 } });
+  for (const card of [next, partner]) expect(state.cards[card.index]).toMatchObject({ face_up: true, pair: 1, selected: false });
+
+  await revealMismatch();
+  await memoryCardTap(page, next.index);
+  await waitForMemoryInput(page);
+  state = await memoryState(page);
+  expect(state).toMatchObject({ attempts: 5, mistakes: 4, pairs: 1, reward: { tier: 2, change_count: 4 } });
+  expect(state.cards.every(card => !card.selected && !card.selection_visible)).toBe(true);
+  for (const card of [first, wrong]) expect(state.cards[card.index]).toMatchObject({ face_up: false, word_id: '' });
+  for (const card of [next, partner]) expect(state.cards[card.index]).toMatchObject({ face_up: true, pair: 1 });
+  expect(errors).toEqual([]);
+});
+
 test('Memory highlights both cards of a visible pair during observation and after matching', async ({ page }, info) => {
   test.skip(Boolean(info.project.use.isMobile), 'Pair hover is a desktop pointer interaction.');
   test.setTimeout(120000);
@@ -319,8 +385,7 @@ test('Memory refresh starts a clean round from observation, pending selection an
       }, [bounds.x + rx * bounds.scale, bounds.y + ry * bounds.scale,
         bounds.x + (rx + rw) * bounds.scale, bounds.y + (ry + rh) * bounds.scale]);
       const [x, y, width, height] = previous.cards[wrong.index].rect;
-      // Reuse the actual control coordinates. Canvas screenshots and repeated
-      // metrics queries can consume the whole 0.7-second feedback window.
+      // Refresh uses the same visible control while the mismatch waits for a card click.
       await tap(page, x + width / 2, y + height / 2, bounds);
       await page.waitForFunction(() => JSON.parse(document.getElementById('growth-status').dataset.view).memory.phase === 'feedback');
     }
@@ -328,8 +393,7 @@ test('Memory refresh starts a clean round from observation, pending selection an
     if (stage === 'feedback') expect(await page.evaluate(() => window.memoryRefreshInput),
       'The trusted refresh gesture arrives while the mismatch is still showing')
       .toMatchObject({ round_id: previous.round_id, phase: 'feedback', mistakes: 1, reward: { tier: 5 } });
-    // Allow the abandoned feedback timer to expire before proving it cannot
-    // reveal a card, resolve an attempt, or change the replacement round.
+    // The replacement round must stay clean beyond the former feedback deadline.
     if (stage === 'feedback') await page.waitForTimeout(850);
     expect(await memoryState(page)).toMatchObject({ round_id: fresh.round_id, started: false, phase: 'waiting',
       attempts: 0, mistakes: 0, pairs: 0, reward: { tier: 6, change_count: 0 } });

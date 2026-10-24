@@ -52,6 +52,8 @@ for (const mode of ['match', 'memory']) {
 
     for (const correct of [false, true]) {
       const second = correct ? partner : wrong;
+      const recording = mode === 'memory' && !correct ? 'assets/audio/memory-chest/downgrade.wav'
+        : `assets/imported-audio/pair-feedback/${correct ? 'right' : 'wrong'}.wav`;
       if (mode === 'memory') await waitForMemoryInput(page);
       await choose(first);
       if (mode === 'memory') {
@@ -64,7 +66,7 @@ for (const mode of ['match', 'memory']) {
         ? (correct ? 'Great match!' : 'Not a pair.') : (correct ? 'Great match!' : 'Not quite.'));
       const outcomeSounds = () => page.evaluate(start => audioObservation.playbacks.slice(start), from);
       if (audioAvailable) {
-        const sound = await expectRecording(page, from, `assets/imported-audio/pair-feedback/${correct ? 'right' : 'wrong'}.wav`);
+        const sound = await expectRecording(page, from, recording);
         expect(sound.contextState).toBe('running');
         expect(sound.fingerprint).toBeTruthy();
         expect(sound.peak).toBeGreaterThan(0.01);
@@ -80,13 +82,21 @@ for (const mode of ['match', 'memory']) {
         }
       }
       await page.screenshot({ path: info.outputPath(`${mode}-${correct ? 'happy' : 'sad'}.png`), scale: 'css' });
-      evidence.push({ correct, word: second.word, audio: await outcomeSounds() });
+      evidence.push({ correct, word: second.word, recording, audio: await outcomeSounds() });
+      if (mode === 'memory' && !correct) {
+        expect((await memoryState(page)).phase, 'Wrong Memory feedback stays visible until a card click').toBe('feedback');
+        const beforeDismiss = await page.evaluate(() => audioObservation.playbacks.length);
+        await choose(first);
+        await waitForMemoryInput(page);
+        if (audioAvailable) expect(await page.evaluate(from => audioObservation.playbacks.slice(from).filter(sound => !sound.loop), beforeDismiss),
+          'Dismissing a Memory mismatch is silent').toEqual([]);
+      }
       await expect(page.locator('#selection-status')).toBeEmpty();
       await page.waitForTimeout(100);
       if (audioAvailable) {
         const sounds = await outcomeSounds();
         expect(sounds.filter(isDuckCall), 'Match and Memory feedback never plays a duck call.').toEqual([]);
-        const timing = recordingTiming(`assets/imported-audio/pair-feedback/${correct ? 'right' : 'wrong'}.wav`);
+        const timing = recordingTiming(recording);
         expect(sounds.filter(sound => Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate),
           'Each outcome plays its reference recording exactly once.').toHaveLength(1);
       }

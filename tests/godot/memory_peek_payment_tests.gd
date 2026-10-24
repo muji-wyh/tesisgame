@@ -198,8 +198,8 @@ func _check_feedback_failure(app, storage: BrowserStorage) -> void:
 		check(_state(view) == before and storage.text == saved and app.coin_wallet.balance == balance
 			and storage.calls == calls and purchases.is_empty() and feedback.size() == 1,
 			"Committed correct or wrong feedback blocks eye input before any payment request or response")
-		check(not view._feedback_timer.is_stopped() and is_equal_approx(view._feedback_timer.time_left, timer_left),
-			"Blocked eye input does not dismiss or restart the active feedback timer")
+		check(view._feedback_timer.is_stopped() == (not correct) and is_equal_approx(view._feedback_timer.time_left, timer_left),
+			"Blocked eye input preserves timed correct feedback and untimed mismatch feedback")
 		check(app._coin_counter.available and app.coin_wallet.error.is_empty(),
 			"An eye tap during feedback cannot reach storage or make the wallet unavailable")
 		view.continue_feedback()

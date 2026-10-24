@@ -57,7 +57,7 @@ test('Memory keeps its concealed first choice silent and synchronizes feedback w
       'Selecting a concealed card never pronounces its hidden answer').toEqual([]);
   };
   const observations = [];
-  const revealPair = async (firstIndex, index, correct) => {
+  const revealPair = async (firstIndex, index, correct, nextIndex = null) => {
     const priorTier = (await memoryState(page)).reward.tier;
     const recording = correct ? 'assets/imported-audio/pair-feedback/right.wav'
       : priorTier > 1 ? 'assets/audio/memory-chest/downgrade.wav'
@@ -77,12 +77,30 @@ test('Memory keeps its concealed first choice silent and synchronizes feedback w
     expect(nonMusic(await page.evaluate(from => window.audioObservation.playbacks.slice(from), from)),
       'A tier loss replaces the ordinary wrong cue instead of stacking two effects').toHaveLength(1);
     observations.push({ firstIndex, index, correct, priorTier, recording, published, cue, revealed });
+    if (!correct) {
+      const beforeDismiss = await audioCount();
+      await memoryCardTap(page, nextIndex ?? firstIndex);
+      if (nextIndex !== null) {
+        await expect(page.locator('#selection-status')).toHaveText(`Memory card ${nextIndex + 1} selected. Choose one more card.`);
+        const state = await memoryState(page);
+        expect(state.phase).toBe('matching');
+        expect(state.cards[nextIndex]).toMatchObject({ selected: true, face_up: false, word_id: '' });
+        expect(state.cards.every(card => !card.face_up)).toBe(true);
+      } else {
+        await waitForMemoryInput(page);
+        await expect(page.locator('#selection-status')).toBeEmpty();
+      }
+      expect(nonMusic(await page.evaluate(from => window.audioObservation.playbacks.slice(from), beforeDismiss)),
+        'Dismissing a mismatch and starting a concealed choice never replay feedback or pronounce an answer').toEqual([]);
+      if (nextIndex !== null) await memoryCardTap(page, nextIndex);
+    }
     await waitForMemoryInput(page);
   };
   await context.setOffline(true);
   try {
     const first = board.find(card => card.kind === 'word');
     const wrong = board.find(card => card.kind === 'image' && card.word !== first.word);
+    const next = board.find(card => card.index !== first.index && card.index !== wrong.index);
     await silentFirst(first.index);
     const beforeCancel = await audioCount();
     await memoryCardTap(page, first.index);
@@ -91,7 +109,7 @@ test('Memory keeps its concealed first choice silent and synchronizes feedback w
     expect(nonMusic(await page.evaluate(from => window.audioObservation.playbacks.slice(from), beforeCancel)),
       'Cancelling the first choice is silent').toEqual([]);
     await silentFirst(first.index);
-    await revealPair(first.index, wrong.index, false);
+    await revealPair(first.index, wrong.index, false, next.index);
     for (let remaining = 5; remaining >= 0; remaining--) {
       await silentFirst(first.index);
       await revealPair(first.index, wrong.index, false);

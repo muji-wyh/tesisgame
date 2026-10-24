@@ -117,16 +117,21 @@ func _check_player_flow(app) -> void:
 		and view.memory.mistakes == 1 and app._memory_stage_label.text == "Not a pair.", "A wrong attempt reveals both cards together with gentle negative feedback")
 	check(app._memory_reward.snapshot().tier == RewardProgress.THEMES.size() - 1 and not app.model.chest_earned, "One mismatch lowers the potential reward by one level")
 	var attempts: int = view.memory.attempts
-	view.card_buttons[wrong[0]].pressed.emit()
 	view.study_button.pressed.emit()
 	check(view.memory.phase == "feedback" and view.memory.attempts == attempts and not view.memory.studying,
-		"Input cannot skip feedback or buy an observation during judgment")
+		"The eye cannot dismiss a mismatch or buy an observation during judgment")
 	app._show_collection()
+	view.card_buttons[wrong[0]].pressed.emit()
 	view.continue_feedback()
-	check(view.memory.phase == "feedback", "Collection pauses an active feedback interval")
+	check(view.memory.phase == "feedback", "Collection blocks card dismissal of a waiting mismatch")
 	app._hide_collection()
-	view.continue_feedback()
-	check(view.card_buttons.all(func(card: Button) -> bool: return not card.face_up), "Wrong cards turn back after feedback")
+	await create_timer(0.85).timeout
+	check(view.memory.phase == "feedback" and view.card_buttons[wrong[0]].face_up and view.card_buttons[wrong[1]].face_up,
+		"Returning from Collection keeps the wrong pair visible until another card click")
+	view.card_buttons[wrong[0]].pressed.emit()
+	check(view.memory.phase == "waiting" and view.memory.attempts == attempts and view.memory.selected_indices.is_empty()
+		and view.card_buttons.all(func(card: Button) -> bool: return not card.face_up),
+		"Clicking an exposed wrong card hides the pair without selecting it or changing the score")
 	_match(view, str(board[0].word.id))
 	var pair: Array = view.card_buttons.filter(func(card: Button) -> bool: return card.card_data.word.id == board[0].word.id)
 	check(pair.all(func(card: Button) -> bool: return card.face_up and card.match_mark.pair_number == 1)
@@ -363,6 +368,7 @@ func _check_responsive_header(app) -> void:
 		check(root.get_visible_rect().grow(1).encloses(board_bounds)
 			and board_bounds.encloses(view.start_button.get_global_rect()), "Board and Start fit the viewport")
 		view.start_button.pressed.emit()
+		await settle()
 		check(not app._memory_refresh.get_global_rect().intersects(view.study_button.get_global_rect())
 			and not app._memory_refresh.get_global_rect().intersects(app._mode_heading_button.get_global_rect()),
 			"Refresh stays separate from the eye and Home during observation")
@@ -372,7 +378,7 @@ func _check_responsive_header(app) -> void:
 		check(root.get_visible_rect().grow(1).encloses(area) and area.grow(0.5).encloses(clock.action_button.get_global_rect())
 			and not area.intersects(board_bounds) and not area.intersects(badge_bounds)
 			and not area.intersects(app._memory_refresh.get_global_rect()), "Countdown, skip, refresh and chest fit without covering cards")
-		view._advance_peek(6.25)
+		view._advance_peek(view.memory.peek_remaining - 3.75)
 		check(clock.seconds == 4 and is_equal_approx(clock.progress(), 0.375), "The clock follows the real remaining time")
 		view._advance_peek(view.memory.peek_remaining)
 		check(not clock.visible and not view.memory.studying and app._memory_stage_label.visible, "Expiry restores matching instructions")

@@ -152,9 +152,13 @@ func _run() -> void:
 		and memory.memory.is_revealed(a) and memory.memory.is_revealed(b),
 		"Memory reveals the attempt together with its descending chest cue and no word pronunciation")
 	await create_timer(0.8).timeout
-	check(memory.memory.phase == "waiting" and not app.audio.voice.playing
-		and not memory.memory.is_revealed(a) and not memory.memory.is_revealed(b),
-		"Automatic Memory continuation hides the wrong pair without starting speech")
+	check(memory.memory.phase == "feedback" and not app.audio.voice.playing
+		and memory.memory.is_revealed(a) and memory.memory.is_revealed(b) and memory._feedback_timer.is_stopped(),
+		"Memory keeps the wrong pair visible without starting speech or scheduling a timeout")
+	memory.card_buttons[a].pressed.emit()
+	check(memory.memory.phase == "waiting" and not memory.memory.is_revealed(a) and not memory.memory.is_revealed(b)
+		and not app.audio.voice.playing,
+		"Clicking an exposed Memory card hides the wrong pair without starting speech")
 	memory.card_buttons[a].pressed.emit()
 	memory.card_buttons[b].pressed.emit()
 	var next_card := -1
@@ -165,12 +169,11 @@ func _run() -> void:
 	var attempts: int = memory.memory.attempts
 	var cue_request: int = app.audio._playback_requests[app.audio.pair_feedback]
 	memory.card_buttons[next_card].pressed.emit()
-	check(memory.memory.phase == "feedback" and memory.memory.selected_indices == [a, b]
+	check(memory.memory.phase == "matching" and memory.memory.selected_indices == [next_card]
 		and memory.memory.attempts == attempts and not app.audio.voice.playing
+		and not memory.memory.is_revealed(a) and not memory.memory.is_revealed(b)
 		and app.audio._playback_requests[app.audio.pair_feedback] == cue_request,
-		"Extra Memory taps cannot skip feedback, pronounce a hidden answer or replay its cue")
-	memory.continue_feedback()
-	memory.card_buttons[next_card].pressed.emit()
+		"Clicking a hidden Memory card dismisses the wrong pair and selects silently without replaying its cue")
 	check(memory.memory.phase == "matching" and not memory.card_buttons[next_card].face_up and not app.audio.voice.playing,
 		"The first choice after feedback acknowledges selection while concealing its answer")
 	_enter_mode(app, "match")
@@ -426,16 +429,21 @@ func _check_memory_prompt_audio(app) -> void:
 		and events[0].face_up and events[1].face_up and view.card_buttons[other].face_up
 		and events.all(func(event: Dictionary) -> bool: return event.voice.is_empty())
 		and events[1].pair == "res://assets/audio/memory-chest/downgrade.wav"
-		and view.memory.attempts == 1 and view.memory.mistakes == 1 and not view._feedback_timer.is_stopped(),
+		and view.memory.attempts == 1 and view.memory.mistakes == 1 and view._feedback_timer.is_stopped(),
 		"A mismatched word and picture reveal together and issue one gentle miss cue without pronunciation")
 	events.clear()
-	view.card_buttons[first].pressed.emit()
-	view.card_buttons[partner].pressed.emit()
 	view.study_button.pressed.emit()
+	view._choose(-1)
+	view._feedback_timer.timeout.emit()
 	check(events.is_empty() and view.memory.phase == "feedback" and view.memory.attempts == 1,
-		"Committed Memory feedback rejects card and eye shortcuts without further audio")
-	view.continue_feedback()
+		"A mismatch ignores eye input, invalid indices and stale timer callbacks without further audio")
+	var cue_request: int = app.audio._playback_requests[app.audio.pair_feedback]
 	view.card_buttons[first].pressed.emit()
+	check(events.size() == 1 and events[0].event == "prompt" and events[0].voice.is_empty()
+		and view.memory.phase == "matching" and view.memory.selected_indices == [first]
+		and not view.card_buttons[first].face_up and not view.card_buttons[other].face_up and not view.card_buttons[partner].face_up
+		and view.memory.attempts == 1 and app.audio._playback_requests[app.audio.pair_feedback] == cue_request,
+		"A new card click dismisses the mismatch and publishes only its concealed selection without replaying audio")
 	events.clear()
 	view.card_buttons[partner].pressed.emit()
 	check(events.size() == 4 and events[1].event == "answer" and events[1].face_up
