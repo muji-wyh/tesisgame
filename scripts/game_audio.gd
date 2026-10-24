@@ -41,6 +41,9 @@ const JELLY_PATHS := {
 	"jelly-collect-lv4": "res://assets/audio/jelly-match/collect-lv4.wav",
 	"jelly-collect-lv5": "res://assets/audio/jelly-match/collect-lv5.wav",
 	"jelly-collect-lv6": "res://assets/audio/jelly-match/collect-lv6.wav",
+	"jelly-collect-lv7": "res://assets/audio/jelly-match/collect-lv7.wav",
+	"jelly-collect-lv8": "res://assets/audio/jelly-match/collect-lv8.wav",
+	"jelly-collect-lv9": "res://assets/audio/jelly-match/collect-lv9.wav",
 	"finish_ready": "res://assets/audio/jelly-finish/ready.ogg",
 	"pick": UI_CLICK_PATH,
 	"release": "res://assets/imported-audio/chest-reference/step.wav",
@@ -58,7 +61,8 @@ const JELLY_GAINS := {
 	"assemble": 0.28,
 	"jelly-collect-lv2": 0.90, "jelly-collect-lv3": 0.90,
 	"jelly-collect-lv4": 0.90, "jelly-collect-lv5": 0.90,
-	"jelly-collect-lv6": 0.90,
+	"jelly-collect-lv6": 0.90, "jelly-collect-lv7": 0.90,
+	"jelly-collect-lv8": 0.90, "jelly-collect-lv9": 0.90,
 }
 const JELLY_SECONDARY_CUES := ["pick", "release", "land", "contact"]
 const JELLY_SPEECH_DB: float = -6.0

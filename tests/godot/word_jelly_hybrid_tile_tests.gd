@@ -368,7 +368,7 @@ func _run() -> void:
 		for requested: int in [0, 7, 9, 20]:
 			tile.configure(_cell("merged", "cat", "cat", requested), SKIN, PICTURE, CHEST, Color("#357d70"))
 			check(tile.merge_level == clampi(requested, 1, Model.MAX_MERGE_LEVEL),
-				"Legacy and invalid level inputs fit the six available tile presentations")
+				"Legacy and invalid level inputs fit the nine available tile presentations")
 	tile.size = Vector2.ONE * 53.5
 	tile.configure(_cell("merged", "cat", "cat", 6, 8), SKIN, PICTURE, CHEST, Color("#357d70"))
 	var numeral: Label = tile._level_badge

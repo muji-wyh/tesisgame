@@ -9,7 +9,7 @@ const Backdrop = preload("res://scripts/jelly_backdrop.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const CAT = preload("res://assets/images/ui/modes/cat.webp")
 const APPLE = preload("res://assets/images/ui/modes/apple.webp")
-const OUTPUT: String = "res://build/jelly-reveal-feedback/six-levels"
+const OUTPUT: String = "res://build/jelly-reveal-feedback/nine-levels"
 
 var content: Control
 var backdrop: Control
@@ -105,14 +105,14 @@ func _comparison(prefix: String) -> void:
 
 
 func _levels() -> void:
-	await _resize(Vector2i(1440, 740))
+	await _resize(Vector2i(1440, 1040))
 	_label("Collected word celebration", Vector2(0, 8), Vector2(1440, 44), 30)
 	_label("Production popup cards at +0.30 seconds; identical word, scale and backdrop", Vector2(0, 50), Vector2(1440, 26), 17)
 	for level in range(1, Model.MAX_MERGE_LEVEL + 1):
 		var cell := Vector2((level - 1) % 3, (level - 1) / 3) * Vector2(480, 320) + Vector2(0, 80)
 		_card(cell + Vector2(240, 142), level, 0.30, Vector2(480, 320))
 		_label("Lv%d - %s" % [level, LevelEffects.profile(level).name], cell + Vector2(8, 266), Vector2(464, 36), 20)
-	await _capture("all-six-levels")
+	await _capture("all-nine-levels")
 	for level in [4, Model.MAX_MERGE_LEVEL]:
 		for age in [0.04, 0.12, 0.24, 0.40, 0.60, 0.90, 1.35, 1.80]:
 			await _resize(Vector2i(900, 600))

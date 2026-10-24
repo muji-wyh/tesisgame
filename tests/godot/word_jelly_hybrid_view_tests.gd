@@ -98,8 +98,21 @@ func _run() -> void:
 		"Dragging a Lv2 onto the same Lv3 word adds into Lv5")
 	merged = view.game.cells[0]
 	check(view._tiles[int(merged.id)].presentation_snapshot().level_badge == "5", "The summed result displays its Lv5 badge")
+	for expected_level: int in [7, 8, 9]:
+		second = merged.duplicate(true)
+		second.id = view.game._next_tile_id
+		view.game._next_tile_id += 1
+		second.merge_level = expected_level - int(merged.merge_level)
+		_install(view, [merged, second])
+		_drag(view, int(merged.id), int(second.id))
+		check(view.game.cells.size() == 1 and view.game.cells[0].merge_level == expected_level,
+			"Dragging compatible words reaches Lv%d" % expected_level)
+		merged = view.game.cells[0]
+		check(view._tiles[int(merged.id)].presentation_snapshot().level_badge == str(expected_level),
+			"The summed result displays its Lv%d badge" % expected_level)
+	check(attempts.is_empty(), "Upgrades through Lv9 do not prematurely grant mastery")
 	# The same actual tile is promoted for focused presentation checks; model
-	# tests separately prove every legal upgrade and the Lv6 cap.
+	# tests separately prove every legal upgrade and the Lv9 cap.
 	for level in range(1, view.game.MAX_MERGE_LEVEL + 1):
 		var tile: Dictionary = merged.duplicate(true)
 		tile.id = view.game._next_tile_id

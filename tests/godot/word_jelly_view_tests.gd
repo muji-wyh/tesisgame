@@ -2631,15 +2631,15 @@ func _check_repeat_merge_compact_body(view) -> void:
 	_assert_compact_label(view._tiles[id], "cat", "level-two word")
 	check(view._tiles[id].presentation_snapshot().level_badge == "2" and view._tiles[id].fragment_badge_snapshot().count_text == "5",
 		"level and exact fragment count remain independently visible")
-	var extra: Dictionary = _fixture_tile(view, "merged:cat:5", 2, 1)
+	var extra: Dictionary = _fixture_tile(view, "merged:cat:8", 2, 1)
 	extra.column = 0
 	extra.row = 0
 	view.game.cells.append(extra)
 	view._sync_tiles()
 	_drag(view, id, int(extra.id))
-	check(view.game.fusions.is_empty() and cues.count("wrong") == 1, "a sum above Lv6 rejects an upgrade")
+	check(view.game.fusions.is_empty() and cues.count("wrong") == 1, "a total of ten rejects an upgrade above Lv9")
 	_advance(view, 0.4)
-	check(view.game.cell(id).merge_level == 2 and view.game.cell(int(extra.id)).merge_level == 5,
+	check(view.game.cell(id).merge_level == 2 and view.game.cell(int(extra.id)).merge_level == 8,
 		"a rejected upgrade preserves both levels and their separate identities")
 	check(view._tiles[id]._picture.visible and view._tiles[id].fragment_badge_snapshot().count_text == "5"
 		and view._tiles[int(extra.id)].visible_fragment_badges() == 1, "upgrade rejection preserves pictures and each carried reward")

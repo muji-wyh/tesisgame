@@ -485,7 +485,7 @@ func _verify_excluded_content_absent() -> int:
 	var build_only_imports := ["Nunito-600.ttf-", "Nunito-800.ttf-", "wardrobe.svg-", "review-contact.png-"]
 	var unused_media: Array[String] = []
 	for cue: String in ["collect-do", "collect-re", "collect-mi", "collect-fa", "collect-sol", "collect-la", "collect-ti",
-		"clear", "merge", "collect-lv7", "collect-lv8", "collect-lv9"]:
+		"clear", "merge"]:
 		unused_media.append("res://assets/audio/jelly-match/%s.wav" % cue)
 	for sheet: String in ["pip-idle-actions", "pip-expressions", "pip-expression-heads"]:
 		unused_media.append("res://assets/images/mascots/%s.svg" % sheet)

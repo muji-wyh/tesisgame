@@ -87,7 +87,7 @@ function center(rect, bounds) {
 function authoredJoin(left, right) {
   if (!left || !right || left.id === right.id) return null;
   if (left.jelly_kind === 'merged' && right.jelly_kind === 'merged') {
-    if (left.word.id !== right.word.id || left.merge_level + right.merge_level > 6) return null;
+    if (left.word.id !== right.word.id || left.merge_level + right.merge_level > 9) return null;
     return { kind: 'upgrade', node: { surface: left.word.text }, complete: true, collectable: true,
       mergeLevel: left.merge_level + right.merge_level, masteryEligible: left.mastery_eligible || right.mastery_eligible };
   }
@@ -170,7 +170,7 @@ async function merge(page, sourceId, targetId) {
   const before = await jelly(page), bounds = await metrics(page);
   const source = before.tiles.find(tile => tile.id === sourceId), target = before.tiles.find(tile => tile.id === targetId);
   const authored = authoredJoin(source, target);
-  expect(authored, 'The drag follows a reviewed root join, matching picture, or same-word level sum up to six').toBeTruthy();
+  expect(authored, 'The drag follows a reviewed root join, matching picture, or same-word level sum up to nine').toBeTruthy();
   expect(source?.settled, 'The held jelly is ready').toBe(true);
   expect(target?.settled, 'The destination jelly is ready').toBe(true);
   const from = center(source.rect, bounds), to = center(target.rect, bounds);
@@ -1592,8 +1592,8 @@ for (const { layout, viewport, reducedMotion } of [
 const additiveTest = test.extend({ trace: 'off' });
 for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode === 'batch'
   ? 'Collect keeps high-level top fireworks alive after compact reading cards fade, then removes them cleanly'
-  : 'different merged levels add up to six and an over-limit same-word merge preserves both jellies', async ({ page }, info) => {
-  test.setTimeout(300000);
+  : 'different merged levels add up to nine and an over-limit same-word merge preserves both jellies', async ({ page }, info) => {
+  test.setTimeout(420000);
   const batchCollection = collectionMode === 'batch';
   // A real saved learner leaves one outstanding word; the ordinary supply keeps
   // producing its pictured word packets without adding a mutation-only test API.
@@ -1642,7 +1642,7 @@ for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode ==
     return result;
   };
   const singles = [];
-  for (let attempt = 0; singles.length < 7 && attempt < 16; attempt++) {
+  for (let attempt = 0; singles.length < 10 && attempt < 24; attempt++) {
     await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
     const current = await jelly(page);
     const candidate = suppliedWords(current, 3).find(item => item.word.id === 'cat');
@@ -1654,7 +1654,7 @@ for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode ==
     await pressRect(page, current.preview.rect);
     await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(current.generated_tiles);
   }
-  expect(singles, 'Seven genuine word-picture matches are ready for additive upgrades').toHaveLength(7);
+  expect(singles, 'Ten genuine word-picture matches are ready for additive upgrades').toHaveLength(10);
   const two = await joinLevels(singles[0].id, singles[1].id);
   expect(two.merge_level).toBe(2);
   const three = await joinLevels(two.id, singles[2].id);
@@ -1663,43 +1663,53 @@ for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode ==
   expect(four.merge_level, 'Lv1 plus Lv3 also adds the levels in the reverse direction').toBe(4);
   const secondTwo = await joinLevels(singles[4].id, singles[5].id);
   const six = await joinLevels(four.id, secondTwo.id);
-  expect(six.merge_level, 'Lv4 plus Lv2 reaches the sixth and final level').toBe(6);
+  expect(six.merge_level, 'Lv4 plus Lv2 reaches Lv6 without exhausting the new cap').toBe(6);
   expect(six.presentation.level_badge).toBe('6');
+  const seven = await joinLevels(six.id, singles[6].id);
+  expect(seven.merge_level).toBe(7);
+  expect(seven.presentation.level_badge).toBe('7');
+  const eight = await joinLevels(singles[7].id, seven.id);
+  expect(eight.merge_level).toBe(8);
+  expect(eight.presentation.level_badge).toBe('8');
+  const nine = await joinLevels(eight.id, singles[8].id);
+  expect(nine.merge_level, 'Lv8 plus Lv1 reaches the ninth and final level').toBe(9);
+  expect(nine.presentation.level_badge).toBe('9');
+  expect((await jelly(page)).max_merge_level).toBe(9);
   const beforeRejection = await jelly(page);
   expect(beforeRejection.cleared_pairs, 'Upgrades cannot consume a collection or award its reward').toBe(0);
-  const rejected = await rejectMerge(page, six.id, singles[6].id, {
+  const rejected = await rejectMerge(page, nine.id, singles[9].id, {
     info, label: 'word-jelly-level-sum-rejected', familyHint: true,
   });
-  expect(rejected.after.tiles.find(tile => tile.id === six.id).merge_level).toBe(6);
-  expect(rejected.after.tiles.find(tile => tile.id === singles[6].id).merge_level).toBe(1);
+  expect(rejected.after.tiles.find(tile => tile.id === nine.id).merge_level).toBe(9);
+  expect(rejected.after.tiles.find(tile => tile.id === singles[9].id).merge_level).toBe(1);
   expect(rejected.after.merged_count).toBe(beforeRejection.merged_count);
-  await capture(page, info, 'word-jelly-six-level-result');
+  await capture(page, info, 'word-jelly-nine-level-result');
 
   await page.evaluate(() => {
     const status = document.getElementById('game-status');
-    window.sixLevelCollection = [];
-    window.sixLevelTailSnapshot = null;
-    window.sixLevelCollectionObserver = new MutationObserver(() => {
+    window.nineLevelCollection = [];
+    window.nineLevelTailSnapshot = null;
+    window.nineLevelCollectionObserver = new MutationObserver(() => {
       const current = JSON.parse(status.dataset.jelly || '{}');
-      window.sixLevelCollection.push({ fusions: current.fusions, effects: current.collection_effects,
+      window.nineLevelCollection.push({ fusions: current.fusions, effects: current.collection_effects,
         reveal: current.word_reveal, cleared: current.cleared_pairs, batch: current.collection_batch,
         coins: current.collected_coins, fragments: current.fragment_count });
-      const tail = current.word_reveal.entries.find(entry => entry.merge_level === 6 && entry.visible &&
+      const tail = current.word_reveal.entries.find(entry => entry.merge_level === 9 && entry.visible &&
         entry.elapsed >= 1.1 && entry.elapsed < entry.effect_duration && entry.effects.visible &&
-        entry.effects.pattern === 'bouquet');
-      if (tail && !window.sixLevelTailSnapshot) {
+        entry.effects.pattern === 'grand_bouquet');
+      if (tail && !window.nineLevelTailSnapshot) {
         const canvas = document.getElementById('canvas'), bounds = canvas.getBoundingClientRect();
         const snapshot = document.createElement('canvas');
         snapshot.width = Math.round(bounds.width);
         snapshot.height = Math.round(bounds.height);
         snapshot.getContext('2d').drawImage(canvas, 0, 0, snapshot.width, snapshot.height);
-        window.sixLevelTailSnapshot = { entry: tail, at: performance.now(),
+        window.nineLevelTailSnapshot = { entry: tail, at: performance.now(),
           image: snapshot.toDataURL('image/png').split(',')[1] };
       }
     });
-    window.sixLevelCollectionObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+    window.nineLevelCollectionObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
   });
-  const collectible = rejected.after.tiles.find(tile => tile.id === six.id);
+  const collectible = rejected.after.tiles.find(tile => tile.id === nine.id);
   const beforeCollection = await jelly(page);
   const selected = batchCollection ? beforeCollection.tiles.filter(tile => tile.jelly_kind === 'merged') : [collectible];
   expect(selected).toHaveLength(batchCollection ? 2 : 1);
@@ -1720,14 +1730,14 @@ for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode ==
       expect(collected.collection_batch.active).toBe(false);
       expect(collected.collection_batch.elapsed, 'Two automatic collections still finish in 280 ms').toBeCloseTo(0.28, 6);
     }
-    await expect.poll(() => page.evaluate(() => window.sixLevelCollection.some(frame =>
-      frame.reveal.entries.some(entry => entry.merge_level === 6 && entry.elapsed >= 0.1 &&
+    await expect.poll(() => page.evaluate(() => window.nineLevelCollection.some(frame =>
+      frame.reveal.entries.some(entry => entry.merge_level === 9 && entry.elapsed >= 0.1 &&
         entry.visible && entry.content_alpha > 0.9))),
-    { message: 'The released collection reaches a visible full-opacity Lv6 reading card' }).toBe(true);
-    await expect.poll(() => page.evaluate(() => Boolean(window.sixLevelTailSnapshot)),
-      { message: 'The Lv6 top fireworks retain rendered tail evidence after 1.1 seconds' }).toBe(true);
+    { message: 'The released collection reaches a visible full-opacity Lv9 reading card' }).toBe(true);
+    await expect.poll(() => page.evaluate(() => Boolean(window.nineLevelTailSnapshot)),
+      { message: 'The Lv9 top fireworks retain rendered tail evidence after 1.1 seconds' }).toBe(true);
     if (batchCollection) {
-      const tail = await page.evaluate(() => window.sixLevelTailSnapshot.entry);
+      const tail = await page.evaluate(() => window.nineLevelTailSnapshot.entry);
       expect([0.48, 0.62, 0.86], 'The reading card keeps an existing compact batch lifetime').toContain(tail.duration);
       expect(tail.effect_duration).toBeCloseTo(1.95, 6);
       expect(tail.elapsed).toBeGreaterThan(tail.duration);
@@ -1747,29 +1757,29 @@ for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode ==
     }
   } finally {
     const evidence = await page.evaluate(() => {
-      window.sixLevelCollectionObserver.disconnect();
-      return { timeline: window.sixLevelCollection, tail: window.sixLevelTailSnapshot };
+      window.nineLevelCollectionObserver.disconnect();
+      return { timeline: window.nineLevelCollection, tail: window.nineLevelTailSnapshot };
     });
     timeline = evidence.timeline;
-    fs.writeFileSync(info.outputPath('word-jelly-six-level-collection.json'), JSON.stringify(timeline, null, 2));
+    fs.writeFileSync(info.outputPath('word-jelly-nine-level-collection.json'), JSON.stringify(timeline, null, 2));
     if (evidence.tail) {
       const { image, ...snapshot } = evidence.tail;
-      fs.writeFileSync(info.outputPath('word-jelly-six-level-top-tail.png'), Buffer.from(image, 'base64'));
-      fs.writeFileSync(info.outputPath('word-jelly-six-level-top-tail.json'), JSON.stringify(snapshot, null, 2));
+      fs.writeFileSync(info.outputPath('word-jelly-nine-level-top-tail.png'), Buffer.from(image, 'base64'));
+      fs.writeFileSync(info.outputPath('word-jelly-nine-level-top-tail.json'), JSON.stringify(snapshot, null, 2));
     }
   }
   if (!batchCollection) {
     expect(timeline.some(frame => frame.reveal.entries.some(entry =>
-      entry.merge_level === 6 && entry.elapsed < 0 && entry.visible && entry.effects.phase === 'charging' &&
+      entry.merge_level === 9 && entry.elapsed < 0 && entry.visible && entry.effects.phase === 'charging' &&
       entry.animated_scale.every(scale => scale < 0.9))),
-    'The visible reading card contracts while the real Lv6 jelly charges').toBe(true);
+    'The visible reading card contracts while the real Lv9 jelly charges').toBe(true);
   }
   expect(timeline.some(frame => frame.reveal.entries.some(entry =>
-    entry.merge_level === 6 && entry.visible && entry.effects.pattern === 'bouquet')),
+    entry.merge_level === 9 && entry.visible && entry.effects.pattern === 'grand_bouquet')),
   'The final level releases its prismatic reading-card echo').toBe(true);
   expect(timeline.some(frame => frame.effects.entries.some(entry =>
-    entry.level === 6 && entry.popped && entry.pattern === 'bouquet' && entry.duration >= (batchCollection ? 2.55 : 3))),
-  'The board releases a sustained Lv6 firework bouquet from the same collection').toBe(true);
+    entry.level === 9 && entry.popped && entry.pattern === 'grand_bouquet' && entry.duration >= (batchCollection ? 3 : 4))),
+  'The board releases a sustained Lv9 firework bouquet from the same collection').toBe(true);
   expect(errors).toEqual([]);
 });
 

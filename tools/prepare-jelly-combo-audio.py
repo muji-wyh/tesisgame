@@ -75,9 +75,9 @@ def profile(count):
     return list(LAYERS)[tier], 2 ** (1 - np.exp(-(count - 1) / 14)), GAINS[tier]
 
 
-def sequence(clips, count, spacing, with_collection=False):
+def sequence(clips, count, spacing, with_collection=False, collection_level=6):
     result = np.zeros(round((count * spacing + 1.5) * RATE))
-    collection, _ = sf.read(ROOT / "assets/audio/jelly-match/collect-lv6.wav")
+    collection, _ = sf.read(ROOT / f"assets/audio/jelly-match/collect-lv{collection_level}.wav")
     for index in range(count):
         name, pitch, gain = profile(index + 1)
         data = clips[name]
@@ -126,7 +126,8 @@ def generate():
                           "pitch_formula": "2 ^ (1 - exp(-(count - 1) / 14))", "pitch_ceiling": 2.0,
                           "channels": 3, "pronunciation_duck_db": -6, "batch_interval_seconds": .14},
               "mix_checks": {"24_combo_140ms": metrics(sequence(clips, 24, .14)),
-                             "24_combo_and_lv6_140ms": metrics(sequence(clips, 24, .14, True))},
+                             **{f"24_combo_and_lv{level}_140ms": metrics(sequence(clips, 24, .14, True, level))
+                                for level in range(4, 10)}},
               "review": "Original hashes, licenses, decoded waveform, full source tails, bounded peak and 140 ms repeated mixes checked. Listening preview provided; this environment did not support audio ingestion, so no auditory or physical-device mix judgment is claimed."}
     MANIFEST.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
     PREVIEW.mkdir(parents=True, exist_ok=True)
@@ -152,8 +153,11 @@ def verify():
         assert "compress/mode=0" in path.with_suffix(".wav.import").read_text(encoding="utf-8")
         clips[entry["name"]] = data
     assert np.max(np.abs(sequence(clips, 24, .14))) < .30
-    assert np.max(np.abs(sequence(clips, 24, .14, True))) < .95
-    print("Jelly combo audio: 2 source hashes, 3 PCM16 cues, bounded 140 ms combo/Lv6 mixes verified.")
+    for level in range(4, 10):
+        mixed = sequence(clips, 24, .14, True, level)
+        assert np.max(np.abs(mixed)) < .95, f"Combo and Lv{level} must preserve headroom"
+        assert metrics(mixed) == manifest["mix_checks"][f"24_combo_and_lv{level}_140ms"]
+    print("Jelly combo audio: 2 source hashes, 3 PCM16 cues, bounded 140 ms combo/Lv4-Lv9 mixes verified.")
 
 
 if __name__ == "__main__":

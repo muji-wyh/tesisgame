@@ -150,7 +150,7 @@ merged immediately. All physical footprints remain one ordinary cell.
 
 The hybrid planner combines reviewed root paths, their final picture join, and
 same-sense upgrades that add the two input levels, including different levels.
-The combined level must not exceed six; Lv6 cannot upgrade. Its queries neither
+The combined level must not exceed nine; Lv9 cannot upgrade. Its queries neither
 mutate the board nor allocate identities. Fusion events carry `composition_status`
 and `merge_kind` to distinguish roots, pictures, and upgrades. Root assembly
 waiting for a picture gives no completed-word speech or collection reward.
@@ -160,10 +160,11 @@ completion remain collectable without mastery. Any assisted constituent keeps
 the upgraded result assisted. Levels do not multiply learning credit.
 
 Word Jelly collection bonuses depend on the merged level, independently of
-component count or footprint. Lv1 has no bonus. Lv2–6 respectively have a 2%,
-4%, 12%, 20%, or 30% chance of 50, 100, 150, 200, or 250 coins. Each eligible
-collection reserves one roll; receipt reservation and retry provide exactly-once
-settlement. Collect starts ready words at 140 ms intervals without pronunciation.
+component count or footprint. Lv1 has no bonus. Lv2–9 respectively have a 2%,
+4%, 12%, 20%, 30%, 40%, 50%, or 80% chance of 50, 100, 150, 200, 250, 300,
+350, or 450 coins. Each eligible collection reserves one roll; receipt reservation
+and retry provide exactly-once settlement. Collect starts ready words at 140 ms
+intervals without pronunciation.
 
 An optional `commit_collection(payload)` callback gates every collection,
 including a zero-coin collection, on durable persistence. Its isolated payload

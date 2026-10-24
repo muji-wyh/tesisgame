@@ -198,8 +198,8 @@ with elastic feedback and a negative sound, without creating a merged body.
 
 Merged Jellies show the word and its available picture, with a brighter rim and
 glints. Two merged Jellies of the same word add their levels, including different
-levels, up to Lv6. For example, Lv2 plus Lv3 becomes Lv5; a total above six stays
-separate. Levels 2–6 have an upper-right numeral. Each of the six levels has a
+levels, up to Lv9. For example, Lv2 plus Lv7 becomes Lv9; a total above nine stays
+separate. Levels 2–9 have an upper-right numeral. Each of the nine levels has a
 distinct collection effect and sound; Lv4 contracts, gathers energy, bursts into
 colorful fireworks, and lets its glowing embers fall. The complete
 [level feedback reference](assets/jelly-level-feedback.md) describes these effects.
@@ -250,6 +250,9 @@ by a tap or Collect has one independent chance of a level-based bonus:
 | Lv4 | 12% | 150 |
 | Lv5 | 20% | 200 |
 | Lv6 | 30% | 250 |
+| Lv7 | 40% | 300 |
+| Lv8 | 50% | 350 |
+| Lv9 | 80% | 450 |
 
 Higher levels increase both the chance and the award; component count and footprint
 do not change that level's policy. Opening chests provides additional coins.
@@ -272,7 +275,7 @@ Auto merge costs 600, 900, then 1200 coins for further uses in the same round;
 Treasure costs 200, 300, then 400. Each item has its own successful-use count,
 and its button displays the next price. Treasure still distributes 2–8 fragments;
 Auto merge follows validated paths of root joins, picture matches and
-same-word upgrades whose combined level is at most six. It launches an eligible
+same-word upgrades whose combined level is at most nine. It launches an eligible
 pair every 200 ms, with each 250 ms flight overlapping the following flight.
 A dependent step waits for its
 required result to settle; independent pairs can launch while earlier merges

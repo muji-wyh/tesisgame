@@ -284,12 +284,14 @@ func _check_level_effects(reveal) -> void:
 		patterns.append(str(fx.pattern))
 		_check_bounds(reveal, Rect2(20, 12, 980, 260))
 		_check_input(reveal)
-	check(patterns.size() == 6, "All six merged-word levels receive a reading-pop treatment")
+	check(patterns.size() == 9, "All nine merged-word levels receive a reading-pop treatment")
 	for index in range(patterns.size()):
 		check(patterns.count(patterns[index]) == 1, "Every available level has a distinct collection-pop choreography")
 	check(str(profiles[3].pattern) == "fireworks", "Lv4 carries its fireworks identity into the reading pop")
 	check(str(profiles[4].pattern) == "cascade" and str(profiles[5].pattern) == "bouquet",
 		"Lv5 carries the double cascade and Lv6 carries the prismatic bouquet")
+	check(str(profiles[6].pattern) == "aurora" and str(profiles[7].pattern) == "constellation"
+		and str(profiles[8].pattern) == "grand_bouquet", "Lv7 through Lv9 have distinct crown, shower, and final bouquet treatments")
 	check(int(profiles[5].spark_count) > int(profiles[3].spark_count)
 		and int(profiles[3].spark_count) > int(profiles[0].spark_count),
 		"collection-pop sparkle density grows from Lv1 through Lv4 to Lv6")
@@ -503,7 +505,7 @@ func _check_firework_geometry(reveal) -> void:
 			var manual_radii: Dictionary = {}
 			for batch: bool in [false, true]:
 				var previous_radius: float = 0.0
-				for level: int in [4, 5, 6]:
+				for level: int in [4, 5, 6, 7, 8, 9]:
 					reveal.reset()
 					reveal.set_reduced_motion(false)
 					reveal.configure_layout(reading, scale_factor, no_exclusions, canvas)
@@ -514,7 +516,8 @@ func _check_firework_geometry(reveal) -> void:
 					var radius: float = float(state.effects.bloom_radius)
 					check(radius > card.effect_margin() * 1.50 and radius * scale_factor >= 68.0,
 						"High-tier blooms stay materially larger than card padding even in short landscape")
-					check(radius > previous_radius, "Every high-level tier retains a larger bloom on each supported canvas")
+					check(radius > previous_radius or is_equal_approx(radius, canvas.size.x * 0.28),
+						"High-level blooms grow until the shared safe canvas limit")
 					previous_radius = radius
 					if batch:
 						check(is_equal_approx(radius, float(manual_radii[level])),
@@ -617,7 +620,7 @@ func _check_firework_stamp_exclusions() -> void:
 
 
 func _check_delayed_reveal(reveal) -> void:
-	for level: int in [1, 3, 4, 6]:
+	for level: int in [1, 3, 4, 6, 7, 8, 9]:
 		for batch: bool in [false, true]:
 			for reduced: bool in [false, true]:
 				await _check_charge_case(reveal, level, batch, reduced)

@@ -1,7 +1,7 @@
 """Prepare deterministic level collection cues from acquired CC0 recordings.
 
-Lv1 remains the user's approved fixed bubble pop. Active Lv2-Lv6 and archived
-Lv7-Lv9 layer it with Kenney recordings, without generated oscillators.
+Lv1 remains the user's approved fixed bubble pop. Active Lv2-Lv9 layer it with
+Kenney recordings, without generated oscillators.
 Use --acquire-from with the local Kenney Audio directory to restore originals.
 """
 
@@ -216,7 +216,8 @@ def generate():
     audio_owned_fields = {"tool", "audio_sources", "base_pop", "processing", "audio", "runtime"}
     record.update({key: value for key, value in existing.items() if key not in audio_owned_fields})
     record["runtime"].update(existing.get("runtime", {}))
-    record["runtime"].update({"active_levels": list(range(1, 7)), "archived_audio_levels": [7, 8, 9]})
+    record["runtime"].update({"active_levels": list(range(1, 10)), "archived_audio_levels": []})
+    record["runtime"].pop("archive_note", None)
     MANIFEST.write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
     preview_dir = ROOT / "build/jelly-level-feedback"
     preview_dir.mkdir(parents=True, exist_ok=True)
@@ -233,8 +234,8 @@ def verify():
     read_sources()
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     assert [entry["level"] for entry in manifest["audio"]] == list(range(1, 10))
-    assert manifest["runtime"]["active_levels"] == list(range(1, 7))
-    assert manifest["runtime"]["archived_audio_levels"] == [7, 8, 9]
+    assert manifest["runtime"]["active_levels"] == list(range(1, 10))
+    assert manifest["runtime"]["archived_audio_levels"] == []
     hashes = set()
     for entry in manifest["audio"]:
         path = ROOT / entry["path"]
@@ -253,7 +254,7 @@ def verify():
         hashes.add(entry["sha256"])
     assert len(hashes) == 9, "Every level must have a distinct asset, with the approved pop unchanged."
     assert digest(DEST / "collect-pop.wav") == BASE_HASH
-    print("Verified 6 active and 3 archived level cues; approved Lv1 unchanged; all PCM16, prompt attacks and safe 120 ms batch headroom.")
+    print("Verified 9 active level cues; approved Lv1 unchanged; all PCM16, prompt attacks and safe 120 ms batch headroom.")
 
 
 if __name__ == "__main__":

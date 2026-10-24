@@ -46,7 +46,8 @@ var _merged_pose_id: int = -1
 var _level_badge: Label
 var _picture_shadow: TextureRect
 const MERGED_COLORS: Array[Color] = [Color("#f7c45c"), Color("#f7c45c"), Color("#9ee8f3"),
-	Color("#b6c3ff"), Color("#ffd16f"), Color("#ffb4dc"), Color("#f4daff")]
+	Color("#b6c3ff"), Color("#ffd16f"), Color("#ffb4dc"), Color("#f4daff"),
+	Color("#b3f1dd"), Color("#cbd9ff"), Color("#ffe397")]
 
 func _init() -> void:
 	super()

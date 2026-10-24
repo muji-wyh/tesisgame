@@ -87,15 +87,18 @@ root count, mass, word length, and carried fragments do not affect either.
 | 4 | 12% | 150 | 18 |
 | 5 | 20% | 200 | 40 |
 | 6 | 30% | 250 | 75 |
+| 7 | 40% | 300 | 120 |
+| 8 | 50% | 350 | 175 |
+| 9 | 80% | 450 | 360 |
 
 The expected values are averages over repeated independent collections, not a
 promise for any particular collection. Building higher levels consumes matching
 words, so this table does not imply an income rate or a typical player level mix.
 
 Identical words add their levels when merged, including different levels, provided
-the total is at most six. A LvN body therefore represents `N` completed Lv1 words,
+the total is at most nine. A LvN body therefore represents `N` completed Lv1 words,
 regardless of the merge order. Divide each body's expected bonus by that source
-count. The maximum is Lv6: `75 / 6 = 12.5` expected bonus coins per
+count. The maximum is Lv9: `360 / 9 = 40` expected bonus coins per
 source word. This counts completed words, not their component roots, and does not
 award bonuses during upgrading. Collect starts ready words at 140 ms intervals;
 its cadence does not change their reward probabilities.
@@ -103,15 +106,15 @@ its cadence does not change their reward probabilities.
 With every natural fragment retained and eventually collected, ordinary supply
 provides about five chest coins per source word in the long run. The modeled
 chest share of expected chest-plus-collection coins is therefore at least
-`5 / (5 + 75 / 6)`, approximately 28.57%, across any mix of collection levels.
-At Lv6, expected collection bonuses can exceed chest income per source word.
+`5 / (5 + 360 / 9)`, approximately 11.11%, across any mix of collection levels.
+At high levels, expected collection bonuses can exceed chest income per source word.
 This comparison excludes the combo income described below. It is a long-run
 budget bound under perfect retention, not observed player income or a guarantee
 for one round; fragment thresholds, lost words, and purchase spending
 can change a particular round's result.
 
 Every accepted collection reserves one outcome under its existing collection
-receipt before persistence. Eligible Lv2-6 collections draw once from the separate
+receipt before persistence. Eligible Lv2-9 collections draw once from the separate
 coin random stream; Lv1 reserves zero without consuming a draw. A failed save,
 pause, batch retry, or repeated tap reuses that decision and amount. Successful
 commit pays at most once and leaves word, learning, and fragment settlement under
@@ -179,14 +182,14 @@ combo coins per source word. With five expected chest coins, the long-run
 ceiling becomes eleven coins per ordinary source word, or 99-198 coins per
 minute at automatic supply speed and perfect retention. These are bounds,
 not measured earnings; early combos and mistakes pay less. Preview drops
-remain unlimited and require the same manual work. Six such words upgraded
-to Lv6 require seventeen merges, giving at most 8.5 combo coins per source
-word. The existing Lv6 collection bonus and chest income bring that modeled
-total to 26 coins per source word. Paid Auto Merge does not create combo
+remain unlimited and require the same manual work. Nine such words upgraded
+to Lv9 require twenty-six merges, giving at most 8.67 combo coins per source
+word. The Lv9 collection bonus and chest income bring that modeled
+total to 53.67 coins per source word. Paid Auto Merge does not create combo
 income, and Treasure does not create extra mergeable bodies or change rewards.
 At Pip Lv99, the corresponding ordinary-source bound is 13.5 coins per word
-(121.5-243 per minute at automatic supply speed), and the Lv6 source bound is
-28.5. Only the chest component increases; these remain perfect-retention bounds,
+(121.5-243 per minute at automatic supply speed), and the Lv9 source bound is
+56.17. Only the chest component increases; these remain perfect-retention bounds,
 not observed player income.
 
 ### Chest-only workload baselines

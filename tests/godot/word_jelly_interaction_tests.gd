@@ -43,10 +43,10 @@ func _run() -> void:
 
 func _check_cross_level_hints(view, reduced: bool) -> void:
 	_reset(view, reduced)
-	var ids: Array[int] = _completion_board(view, ["merged:cat:2", "merged:cat:2", "merged:cat:4", "merged:cat:6", "merged:apple:2"])
+	var ids: Array[int] = _completion_board(view, ["merged:cat:2", "merged:cat:2", "merged:cat:7", "merged:cat:9", "merged:apple:2"])
 	check(view._press(-1, _center(view, ids[0])), "A merged word can be selected")
 	_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "same-word levels")
-	check(view.game.can_merge(view.game.cell(ids[0]), view.game.cell(ids[2])), "Cross-level Lv2 and Lv4 words can merge into Lv6")
+	check(view.game.can_merge(view.game.cell(ids[0]), view.game.cell(ids[2])), "Cross-level Lv2 and Lv7 words can merge into Lv9")
 	check(not view.game.can_merge(view.game.cell(ids[0]), view.game.cell(ids[3])), "A family hint cannot authorize an over-cap upgrade")
 	view.cancel_input()
 	check(view._press(7, _center(view, ids[3])), "The maximum level remains selectable")
@@ -262,7 +262,7 @@ func _check_fusion_chain(view, reduced: bool) -> void:
 	check(upgraded == 1 and view.game.collected_coins == 0, "Chaining produces one level-two word and no collection payout")
 
 func _check_fusion_contact(view, reduced: bool) -> void:
-	for description: String in ["merged:cat:1", "merged:cat:4", "merged:cat:6", "picture:apple"]:
+	for description: String in ["merged:cat:1", "merged:cat:4", "merged:cat:8", "merged:cat:9", "picture:apple"]:
 		_reset(view, reduced)
 		var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", description])
 		_drag(view, ids[0], ids[1])
@@ -272,7 +272,7 @@ func _check_fusion_contact(view, reduced: bool) -> void:
 		var origin: Vector2 = view.get_global_transform() * view._tile_rect(fusion.result).get_center()
 		var partner: int = ids[2]
 		var destination: Vector2 = _center(view, partner)
-		var matching: bool = description in ["merged:cat:1", "merged:cat:4"]
+		var matching: bool = description in ["merged:cat:1", "merged:cat:4", "merged:cat:8"]
 		check(view._press(7, origin), "An active fusion can be held for contact feedback")
 		check(view._tiles[partner].completion_hint == description.begins_with("merged:cat"), "Pending words highlight their same-word family across levels")
 		var separated: Vector2 = _place_at_gap(view, partner, Vector2.UP, 8.0)
@@ -286,7 +286,7 @@ func _check_fusion_contact(view, reduced: bool) -> void:
 			overlaps = overlaps or not Geometry2D.intersect_polygons(outline, view._tiles[partner].contact_outline()).is_empty()
 		check(not overlaps, "Fusion approach guidance begins outside the painted bodies")
 		check(view._target == (partner if matching else -1), "Only a compatible pending result gets wider merge guidance")
-		check(view._contact_state().kind == ("match" if matching else "none"), "Approach feedback only advertises sums within the six-level cap")
+		check(view._contact_state().kind == ("match" if matching else "none"), "Approach feedback only advertises sums within the nine-level cap")
 		# Exercise the browser's coalesced pointer path as well as direct moves.
 		view._queue_drag_motion(destination - Vector2(0, view._pitch * 0.3))
 		_advance(view, 0.025)

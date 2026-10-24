@@ -22,8 +22,8 @@ func _run() -> void:
 	var previous_radius: float = 0.0
 	var previous_sparks: int = 0
 	var previous_seconds: float = 0.0
-	check(Effects.PROFILES.size() == 6, "Merged jellies have exactly six collection profiles")
-	for level in range(1, 7):
+	check(Effects.PROFILES.size() == 9, "Merged jellies have exactly nine collection profiles")
+	for level in range(1, 10):
 		var data: Dictionary = Effects.profile(level)
 		check(data.level == level, "Every level is addressable")
 		check(not patterns.has(data.pattern), "Every level has a distinct motion signature")
@@ -39,17 +39,17 @@ func _run() -> void:
 	check(Effects.profile(4).pattern == "firework", "Lv4 is specifically a firework bloom")
 	check(float(Effects.profile(4).seconds) >= 2.5, "Lv4 has time for a blossom and descending ember tail")
 	check(Effects.cue_for_level(1) == "pop", "Lv1 uses the approved fixed pop")
-	check(Effects.profile(-1).level == 1 and Effects.profile(99).level == 6, "Profiles clamp to the six supported levels")
-	check(Effects.cue_for_level(99) == "jelly-collect-lv6", "Out-of-range levels cannot play retired level cues")
+	check(Effects.profile(-1).level == 1 and Effects.profile(99).level == 9, "Profiles clamp to the nine supported levels")
+	check(Effects.cue_for_level(99) == "jelly-collect-lv9", "Out-of-range levels clamp to the final acquired cue")
 	var fx := Effects.new()
 	root.add_child(fx)
 	fx.configure_layout(Rect2(30.0, 50.0, 390.0, 700.0), 1.0)
 	check(fx.mouse_filter == Control.MOUSE_FILTER_IGNORE and fx.focus_mode == Control.FOCUS_NONE,
 		"Celebrations never own gameplay input or keyboard focus")
-	for level in range(1, 7):
+	for level in range(1, 10):
 		fx.present(Vector2(180.0, 300.0), level, Color("#4bafa3"), false, 0.0, 0.18)
 	var pending: Dictionary = fx.snapshot()
-	check(pending.active_count == 6, "Independent collections coexist")
+	check(pending.active_count == 9, "Independent collections coexist")
 	for state: Dictionary in pending.entries:
 		check(not state.popped and is_equal_approx(float(state.delay), 0.18), "Effects wait for the actual pop clock")
 		check(state.phase == "waiting", "The effects renderer leaves anticipation to the real jelly")
@@ -66,10 +66,10 @@ func _run() -> void:
 	fx.advance(0.0)
 	check(frozen == fx.snapshot(), "Invalid and paused clock advances do not move effects")
 	fx.advance(2.0)
-	check(fx.snapshot().active_count == 3, "The three firework profiles remain after the short pops finish")
+	check(fx.snapshot().active_count == 6, "The six firework profiles remain after the short pops finish")
 	for state: Dictionary in fx.snapshot().entries:
 		check(state.phase == "falling_embers", "Longer firework tails enter their final descending beat")
-	fx.advance(1.5)
+	fx.advance(2.1)
 	check(fx.snapshot().active_count == 0 and not fx.visible, "Every tail finishes without callbacks")
 	fx.present(Vector2(200.0, 350.0), 4, Color.GOLD, true, 0.10, 0.06)
 	check(fx.snapshot().entries[0].popped, "Late batch dispatch resumes at its real post-pop age")
@@ -97,10 +97,20 @@ func _run() -> void:
 	check(outward.x > 60.0, "Firework spokes make a decisive initial radial release")
 	check(ember.x - blossom.x < blossom.x - outward.x, "Radial velocity decays after the initial explosion")
 	check(ember.y - blossom.y > 20.0, "Embers descend rather than only fading in their expanded positions")
-	for level in range(4, 7):
+	for level in range(4, 10):
 		for group in range(1, int(Effects.profile(level).bursts)):
 			check(fx._firework_delay(level, group) > 0.0 and fx._firework_delay(level, group) < 0.46,
 				"Secondary blossoms follow the main release before the final descent")
+	for level in range(7, 10):
+		var centers: Array[Vector2] = []
+		for group in range(int(Effects.profile(level).bursts)):
+			var center: Vector2 = fx._firework_offset(level, group, 100.0)
+			check(not centers.has(center), "Higher-level blossoms have separate release origins")
+			centers.append(center)
+		fx.present(Vector2(180.0, 300.0), level, Color.GOLD, true)
+		check(is_equal_approx(float(fx.snapshot().entries.back().duration), float(Effects.profile(level).seconds) * 0.75),
+			"Higher automatic collections retain their complete scheduled board tail")
+	fx.reset()
 	for index in range(30):
 		fx.present(Vector2(180.0, 300.0), 6, Color.GOLD, true)
 	check(fx.snapshot().active_count == Effects.MAX_ACTIVE, "Repeated input has a bounded visual pool")

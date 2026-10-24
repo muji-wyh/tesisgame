@@ -208,7 +208,7 @@ func _test_levels_and_fragments() -> void:
 	model.word_attempted.connect(func(event: String, ids: Array[String], correct: bool): attempts.append([event, ids, correct]))
 	for level in range(2, Model.MAX_MERGE_LEVEL + 1):
 		var addition: Dictionary = _ready(model, word, 1, 1)
-		check(model.parts_compatible(current, addition), "A same-word Lv1 can add to every level below Lv6")
+		check(model.parts_compatible(current, addition), "A same-word Lv1 can add to every level below Lv9")
 		current = _join(model, current, addition)
 		check(current.merge_level == level and current.fragments == level, "Upgrades add levels and preserve both fragment stores")
 		check(attempts.is_empty(), "Level upgrades do not award mastery before collection")
@@ -217,16 +217,16 @@ func _test_levels_and_fragments() -> void:
 		model.cells.erase(other_word)
 	var max_twin: Dictionary = _ready(model, word, 1)
 	check(not model.parts_compatible(current, max_twin) and model.merge_candidate(current, max_twin).status == "invalid",
-		"Lv6 is a hard cap and cannot create Lv7")
+		"Lv9 is a hard cap and cannot create Lv10")
 	model.cells.erase(max_twin)
 	var payloads: Array = []
 	model.collection_started.connect(func(payload: Dictionary): payloads.append(payload))
 	check(model.collect(current.id), "Max-level merged words remain collectable")
-	model.step(Model.collection_pop_seconds(6))
-	check("jelly-collect-lv6" in cues and payloads[0].merge_level == 6 and payloads[0].mastery_eligible,
+	model.step(Model.collection_pop_seconds(9))
+	check("jelly-collect-lv9" in cues and payloads[0].merge_level == 9 and payloads[0].mastery_eligible,
 		"Collection exposes the level and plays its distinct sound at the pop boundary")
 	model.step(2.0)
-	check(attempts.size() == 1 and model.fragment_count == 6, "One collected high-level word records one learning event and all accumulated fragments")
+	check(attempts.size() == 1 and model.fragment_count == 9, "One collected high-level word records one learning event and all accumulated fragments")
 	for level in range(1, Model.MAX_MERGE_LEVEL + 1):
 		var pick: Dictionary = _ready(model, word, level)
 		cues.clear()
@@ -237,17 +237,17 @@ func _test_levels_and_fragments() -> void:
 		check(cues == ["pop" if level == 1 else "jelly-collect-lv%d" % level], "Every level chooses its dedicated collection sound")
 		model.step(2.0)
 	model = _model()
-	var a: Dictionary = _ready(model, word, 2, 2)
-	var b: Dictionary = _ready(model, word, 4, 3)
+	var a: Dictionary = _ready(model, word, 4, 2)
+	var b: Dictionary = _ready(model, word, 5, 3)
 	while model.cells.size() < Model.CAPACITY:
 		_put(model, model._new_tile("filler", 1, 0))
 	var upgraded: Dictionary = _join(model, a, b)
-	check(upgraded.merge_level == 6 and model.cells.size() == Model.CAPACITY - 1 and upgraded.fragments == 5,
+	check(upgraded.merge_level == 9 and model.cells.size() == Model.CAPACITY - 1 and upgraded.fragments == 5,
 		"A crowded board can upgrade in the consumed pair's ordinary cell")
 
 
 func _test_all_level_pairs() -> void:
-	check(Model.MAX_MERGE_LEVEL == 6, "Merged Jellies have exactly six supported levels")
+	check(Model.MAX_MERGE_LEVEL == 9, "Merged Jellies have exactly nine supported levels")
 	for left_level in range(1, Model.MAX_MERGE_LEVEL + 1):
 		for right_level in range(1, Model.MAX_MERGE_LEVEL + 1):
 			var model: RefCounted = _model()
@@ -277,6 +277,26 @@ func _test_all_level_pairs() -> void:
 				check(model.try_merge(left.id, right.id) == "wrong" and model.cells == cells_before
 					and model._next_tile_id == next_id and model._next_event_id == next_event and model.fusions.is_empty(),
 					label + " rejects atomically instead of clamping or consuming either Jelly")
+			var automatic: RefCounted = _model()
+			_ready(automatic, _word(), left_level, left_level + 1)
+			_ready(automatic, _word(), right_level, right_level + 2)
+			var purchases: Array = []
+			automatic.purchase_powerup = func(event: String, _kind: String, _price: int) -> Dictionary:
+				purchases.append(event)
+				return {"ok": true}
+			check(automatic.can_activate_powerup("auto_merge") == allowed
+				and automatic.activate_powerup("auto_merge") == allowed,
+				label + " uses the same cap when buying and executing Auto Merge")
+			automatic.finish_powerup(false)
+			if allowed:
+				check(purchases.size() == 1 and automatic.cells.size() == 1
+					and automatic.cells[0].merge_level == combined and automatic.cells[0].fragments == combined + 3
+					and not automatic.cells[0].mastery_eligible,
+					label + " automatically commits its exact level and fragments without claiming mastery")
+			else:
+				check(purchases.is_empty() and automatic.cells.size() == 2 and automatic.fusions.is_empty(),
+					label + " cannot spend coins or consume words above the cap")
+			automatic.purchase_powerup = Callable()
 	var model: RefCounted = _model()
 	var left: Dictionary = _ready(model, _word(), 2)
 	var right: Dictionary = _ready(model, _word(), 3)
@@ -287,27 +307,30 @@ func _test_all_level_pairs() -> void:
 	check(not model.parts_compatible(left, right) and model.merge_candidate(left, right).status == "invalid",
 		"A malformed level cannot create a valid upgrade")
 	model._set_merged_word(right, _word(), 99, true)
-	check(right.merge_level == 6, "Creating a merged word cannot expose unsupported higher levels")
+	check(right.merge_level == 9, "Creating a merged word cannot expose unsupported higher levels")
 
 
 func _test_collection_retry() -> void:
-	var model: RefCounted = _model()
-	var merged: Dictionary = _ready(model, _word(), 4, 3)
-	var commits: Array = []
-	var attempts: Array = []
-	model.commit_collection = func(payload: Dictionary) -> Dictionary:
-		commits.append(payload.duplicate(true))
-		return {"ok": commits.size() > 1}
-	model.word_attempted.connect(func(event: String, ids: Array[String], correct: bool): attempts.append([event, ids, correct]))
-	check(model.collect(merged.id), "A collection begins before persistence resolves")
-	model.step(2.0)
-	check(not model.cell(merged.id).is_empty() and model.fragment_count == 0 and attempts.is_empty(),
-		"A rejected save leaves the same upgraded Jelly and no learning reward")
-	check(model.collect(merged.id), "The failed collection is retryable")
-	model.step(2.0)
-	check(commits.size() == 2 and commits[0].attempt_id == commits[1].attempt_id
-		and commits[0].coins == commits[1].coins and commits[1].merge_level == 4
-		and attempts.size() == 1 and model.fragment_count == 3, "A retry preserves event identity, coin roll, level, and exactly-once rewards")
+	for level: int in [4, 7, 8, 9]:
+		var model: RefCounted = _model()
+		var merged: Dictionary = _ready(model, _word(), level, 3)
+		var commits: Array = []
+		var attempts: Array = []
+		model.commit_collection = func(payload: Dictionary) -> Dictionary:
+			commits.append(payload.duplicate(true))
+			return {"ok": commits.size() > 1}
+		model.word_attempted.connect(func(event: String, ids: Array[String], correct: bool): attempts.append([event, ids, correct]))
+		check(model.collect(merged.id), "A collection begins before persistence resolves")
+		model.step(2.0)
+		check(not model.cell(merged.id).is_empty() and model.fragment_count == 0 and attempts.is_empty(),
+			"A rejected save leaves the same upgraded Jelly and no learning reward")
+		var rng_state: int = model._coin_rng.state
+		check(model.collect(merged.id) and model._coin_rng.state == rng_state, "The failed high-level collection retries without rerolling")
+		model.step(2.0)
+		check(commits.size() == 2 and commits[0].attempt_id == commits[1].attempt_id
+			and commits[0].coins == commits[1].coins and commits[1].merge_level == level
+			and attempts.size() == 1 and model.fragment_count == 3, "A retry preserves event identity, coin roll, level, and exactly-once rewards")
+		model.commit_collection = Callable()
 
 
 func _test_assistance() -> void:
@@ -339,8 +362,8 @@ func _test_assistance() -> void:
 	check(model.cells.size() == 1 and model.cells[0].merge_level == 5 and model.cells[0].fragments == 5
 		and not model.cells[0].mastery_eligible, "Automatic upgrades conserve level and fragments without learning credit")
 	model = _model()
-	_ready(model, _word(), 4, 2)
-	_ready(model, _word(), 3, 3)
+	_ready(model, _word(), 6, 2)
+	_ready(model, _word(), 4, 3)
 	var purchases: Array = []
 	model.purchase_powerup = func(event: String, _kind: String, _price: int) -> Dictionary:
 		purchases.append(event)

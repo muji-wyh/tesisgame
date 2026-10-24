@@ -41,6 +41,7 @@ func _run() -> void:
 	_test_neutral_actions_and_invalid_merge()
 	_test_collection_batch_and_assistance()
 	_test_batch_cancel_and_upgrade()
+	_test_high_level_upgrade_combo()
 	_test_save_retry()
 	_test_lost_payment_acknowledgement()
 	_test_concurrent_merges()
@@ -248,6 +249,27 @@ func _test_batch_cancel_and_upgrade() -> void:
 	check(model.cell(upgraded_id).merge_level == 2 and model.combo_snapshot().count == 5 and fixture.wallet.balance == 1,
 		"A successful manual level upgrade counts and pays under the same rule as a root-picture merge")
 	model.credit_combo = Callable()
+
+
+func _test_high_level_upgrade_combo() -> void:
+	for level: int in [7, 8, 9]:
+		var fixture: Dictionary = _fixture()
+		var model: RefCounted = fixture.model
+		_seed_with_collections(model)
+		var left: Dictionary = _ready(model)
+		var right: Dictionary = _ready(model)
+		model._set_merged_word(left, _word(), level - 1, true)
+		check(model.try_merge(int(left.id), int(right.id)) == "merged", "A high-level additive upgrade remains an ordinary manual merge")
+		var result_id: int = int(model.fusion.result.id)
+		model.step(2.0)
+		check(model.cell(result_id).merge_level == level and model.combo_count == 3
+			and fixture.wallet.balance == 1 and fixture.payments.size() == 1,
+			"A Lv%d upgrade advances combo once and retains the existing one-coin tier" % level)
+		check(model.collect(result_id), "The high-level result remains manually collectable")
+		model.step(2.0)
+		check(model.combo_count == 4 and fixture.wallet.balance == 1 and fixture.payments.size() == 1,
+			"Collecting a Lv%d word advances combo once without paying another merge bonus" % level)
+		model.credit_combo = Callable()
 
 
 func _test_save_retry() -> void:

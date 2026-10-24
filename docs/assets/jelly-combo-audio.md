@@ -74,3 +74,9 @@ Both rendered HUD screenshots were inspected; browser evidence is under
 These measurements and tests verify timing, range, routing and cancellation.
 Audio ingestion was unavailable in the review environment, so the listening
 preview is provided without an auditory or physical-device mixing claim.
+
+
+The October 25 Lv9 extension rechecks the same 24-pickup, 140 ms combo mix
+against each acquired collection recording from Lv4 through Lv9. The recorded
+peaks are retained in `jelly-combo-audio.json`; all stay at or below -5.848 dBFS.
+The waveform sources, output bytes, gain and pitch behavior are unchanged.

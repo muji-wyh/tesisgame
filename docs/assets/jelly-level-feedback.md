@@ -1,10 +1,10 @@
 # Jelly Words level collection feedback
 
-Merged words have six levels and keep the ordinary one-cell Jelly body. Matching
-words add their levels, including unequal pairs; results greater than Lv6 are
+Merged words have nine levels and keep the ordinary one-cell Jelly body. Matching
+words add their levels, including unequal pairs; results greater than Lv9 are
 ineligible. Their collection feedback uses one accepted model release for the
 body disappearance, board effect and sound. Presentation never grants rewards.
-The existing Lv1-Lv6 recordings and reward values remain unchanged.
+All nine existing recordings remain byte-identical. Reward values are documented in the coin economy record.
 
 | Level | Board effect | Post-release lifetime | Existing audio signature |
 | --- | --- | --- | --- |
@@ -14,10 +14,13 @@ The existing Lv1-Lv6 recordings and reward values remain unchanged.
 | 4 | Firework bloom: gold spokes, three colored blossoms, descending embers | 2.80 s | Bubble pop, bell bloom and staggered glass crackles |
 | 5 | Rose cascade: staggered pink and gold blossoms in two descending pairs | 3.10 s | Two glass releases at different pitches |
 | 6 | Prismatic bouquet: a central release and six surrounding colored blossoms | 3.40 s | Rising accent, bell body and ascending glass details |
+| 7 | Aurora crown: violet and mint blossoms opening along an upper arc | 3.60 s | Confirmation chimes with contrasting glass pitches |
+| 8 | Constellation shower: four staggered pairs of gold and blue blossoms | 3.80 s | Bell body, rising chime steps and glass details |
+| 9 | Grand bouquet: a central release and nine multicolor blossoms | 4.00 s | Bell, rising accent, two chimes and ten glass details |
 
-Manual Lv1-Lv3 collections release at 180 ms. Lv4-Lv6 first contract the actual
-painted Jelly, gather light at its core and build to release at 660, 720 and
-780 ms respectively. Sound and board sparks share that exact release boundary.
+Manual Lv1-Lv3 collections release at 180 ms. Lv4-Lv9 first contract the actual
+painted Jelly, gather light at its core and build to release at 660, 720,
+780, 840, 900 and 960 ms respectively. Sound and board sparks share that exact release boundary.
 The collection transaction finishes 240 ms later, while its noninteractive
 sparks continue. Lv4's secondary blossoms open 280, 406 and 532 ms after the
 main explosion. Radial speed decays, then gravity visibly curves the sparkling
@@ -26,7 +29,7 @@ colored flowers readable against the bright sky and neighboring gel skins.
 
 The effects reuse the acquired particle artwork below. There is no opaque
 screen overlay, camera shake, new hit target or reward callback. Radius, spark
-count and composition increase through the six levels. Batch collection retains
+count and composition increase through the nine levels. Batch collection retains
 its 40 ms release within each 140 ms beat; board effects use 75 percent of their
 manual lifetime, 66 percent of their radius and, for fireworks, 45 percent of
 their sparks. At most twelve effects coexist. Older effects can be retired when
@@ -40,14 +43,14 @@ The picture-and-spelling card appears as soon as collection is accepted. It
 visibly contracts toward a luminous core as colored sparkle streams converge,
 then opens into radial star trails and elastic overshoot at the same release
 boundary as the board Jelly and its sound. This applies to every level: a short
-180 ms anticipation for Lv1-Lv3, 660/720/780 ms for Lv4-Lv6, and a compact 40 ms
+180 ms anticipation for Lv1-Lv3, 660/720/780/840/900/960 ms for Lv4-Lv9, and a compact 40 ms
 squeeze during each automatic collection beat. The top card reaches 40 percent
 width and 50 percent height before its 100 ms outward release, then settles by
 470 ms. The complete picture and spelling return to their resting size.
 
-Each card displays one of six related frame effects. Its reading surface lasts
+Each card displays one of nine related frame effects. Its reading surface lasts
 1.95 seconds individually or 0.86 seconds in batches, reduced to 0.62 seconds
-on narrow screens or 0.48 seconds in short regions. At Lv4-Lv6, automatic
+on narrow screens or 0.48 seconds in short regions. At Lv4-Lv9, automatic
 collection keeps the popup fireworks alive for 1.95 seconds after release,
 independently of the compact picture-and-spelling card. The text fades on its
 original schedule while the noninteractive sparks continue, then the retained
@@ -60,12 +63,16 @@ effect entry is removed. Lv1-Lv3 keep their existing compact batch effects.
 | 3 | Sapphire spiral: sapphire, cyan and rose star trails around the reading card |
 | 4 | Golden fireworks: three gold, cyan and rose blooms with radial trails |
 | 5 | Double cascade: four rose/gold blooms with falling embers |
-| 6 | Prismatic bouquet: six multicolor blossoms and the richest trails |
+| 6 | Prismatic bouquet: six multicolor blossoms and broad falling trails |
+| 7 | Aurora crown: seven violet and mint blooms across an upper arc |
+| 8 | Constellation shower: eight gold, cyan and rose blooms in staggered pairs |
+| 9 | Grand bouquet: nine multicolor blooms with the richest falling trails |
 
 Popup blossom releases span 0.16, 0.38 and 0.48 seconds at Lv4-Lv6 for both manual
 and automatic collection. Their trails use five, six and seven trajectory samples
-respectively. Automatic collection keeps 62 percent of the manual spark count
-and its compact reading-card dimensions and margins. Lv4-Lv6 use the same bloom
+respectively. Lv7-Lv9 release across 0.52, 0.57 and 0.62 seconds, using eight,
+eight and nine trail samples. Automatic collection keeps 62 percent of the manual spark count
+and its compact reading-card dimensions and margins. Lv4-Lv9 use the same bloom
 geometry in both collection modes, independently of those reading-card margins,
 so consecutive fireworks can overlap without shortening their bloom or descent.
 The 140 ms collection cadence is unchanged. Each effect respects the existing
@@ -73,7 +80,7 @@ control exclusions. Reduced
 motion uses static colored stars and local light through the effect's lifetime;
 the reading card still fades on its own schedule. Pause, late-frame catchup,
 resize and exit use the existing presentation clock.
-No additional artwork or audio was acquired for the six-level update.
+No additional artwork or audio was acquired for the Lv9 extension.
 
 The top-card charge update reuses the same three acquired textures, re-inspected
 over a dark backing before implementation. Only texture placement, tint, scale,
@@ -81,9 +88,9 @@ opacity and timing changed; their source, creator, license and acquisition
 status remain in the table below. The core glow, inward streams and outward
 trails are runtime animation of these static production textures.
 
-The wider Lv4-Lv6 popup fireworks use a separate cosmetic canvas, leaving card
-size, placement and reading time intact. Their blossom radii target 72, 92 and
-116 display pixels respectively, capped at 28 percent of the cosmetic canvas
+The wider Lv4-Lv9 popup fireworks use a separate cosmetic canvas, leaving card
+size, placement and reading time intact. Their blossom radii target 72, 92, 116,
+132, 148 and 164 display pixels respectively, capped at 28 percent of the cosmetic canvas
 width. Manual and automatic collection share these radii; compact reading cards
 no longer reduce the firework's size. On short canvases, the vertical trajectory
 uses `min(1, canvas height / (bloom radius * 3.3))`, preserving the broad horizontal
@@ -104,8 +111,8 @@ their reading region. This gives lower blossoms room to fall past the old card
 halo. Every rotated texture stamp respects the existing control exclusions,
 and all fireworks draw behind all live reading surfaces during rapid pickups.
 The chest unlock prompt also stays above the enlarged fireworks.
-Reduced motion keeps the existing still light and stars. Board effects, source
-textures, sound, collection cadence and reward rules are unchanged.
+Reduced motion keeps the existing still light and stars. The wider-canvas
+fitting changes no source texture, sound, collection cadence or reward rule.
 
 ## Acquired material
 
@@ -119,7 +126,7 @@ art, and no additional Unity package was acquired.
 | Portal wisps | `Particles/Textures/portal_glow.png` from Modern 2D Animated Chests Pack_FREE Demo 1.0.2, Bobardo; Standard Unity Asset Store EULA | Previously acquired and integrated. Static texture, reused for local light. Original mapping: `assets/chests/SOURCE.txt` and `assets/chests/manifest.json`; inherited source-rights record: [Jelly fragments](jelly-fragments.md). |
 | Radial rays and four-point sparkle | Toon FX 1.52, Kenneth Foldal Moe / Archanor VFX, [official product 25601](https://assetstore.unity.com/packages/vfx/particles/toon-fx-25601); [Standard Unity Asset Store EULA](https://unity.com/legal/as-terms) | Previously acquired private `glowlines.png` and `sparkle.png`, integrated byte-for-byte under `assets/chests/milestone/`. Static textures; trajectories are authored in the game. Source hashes and acquisition evidence remain in [Jelly fragments](jelly-fragments.md#extra-motion-textures). These private inputs ship only inside the compiled game. |
 | Fixed bubble pop | farfadet46, [bubbles 'pop'](https://opengameart.org/content/bubbles-pop), CC0 1.0 | Existing approved 100 ms `collect-pop.wav` remains byte-identical; the same sample is the transient in higher-level mixes. Original OGG, adaptation and source license are in [the collection manifest](jelly-collection-audio.json). |
-| Glass, confirmation and rise recordings | Kenney [Interface Sounds 1.0](https://kenney.nl/assets/interface-sounds), CC0 1.0 | Acquired from the user's existing local All-in-1 3.7.0 collection. Complete `glass_004.ogg`, `glass_006.ogg`, `confirmation_003.ogg` and `maximize_007.ogg` are preserved with the original license in `docs/assets/sources/jelly-level-feedback/`. Audio-only one-shots; adapted and layered into Lv2-Lv9 WAVs. Lv2-Lv6 remain active; Lv7-Lv9 recordings are retained as historical assets. |
+| Glass, confirmation and rise recordings | Kenney [Interface Sounds 1.0](https://kenney.nl/assets/interface-sounds), CC0 1.0 | Acquired from the user's existing local All-in-1 3.7.0 collection. Complete `glass_004.ogg`, `glass_006.ogg`, `confirmation_003.ogg` and `maximize_007.ogg` are preserved with the original license in `docs/assets/sources/jelly-level-feedback/`. Audio-only one-shots; adapted and layered into Lv2-Lv9 WAVs. All nine recordings are active; Lv7-Lv9 were reverified and reactivated without changing their bytes. |
 | Bell body | Kenney [Impact Sounds 1.0](https://kenney.nl/assets/impact-sounds), CC0 1.0 | Complete `impactBell_heavy_002.ogg` and the source license acquired from the same local collection and preserved with the other originals. Audio-only one-shot, adapted and layered into milestone cues. |
 
 Exact source hashes, output hashes, layer offsets, resampling ratios, source
@@ -137,11 +144,11 @@ Every level starts promptly, has zeroed boundaries, and is mono 44,100 Hz PCM16.
 The existing Lv1 pop retains its own approved peak; higher cues have a maximum
 solo peak of -8.5 dBFS and a repeated-batch ceiling below 0.78 at runtime gain 0.90.
 Active gameplay uses `pop` for Lv1 and `jelly-collect-lv2` through
-`jelly-collect-lv6` for the other five levels, at original runtime pitch 1.0.
+`jelly-collect-lv9` for the other eight levels, at original runtime pitch 1.0.
 Combo increments use a separate bounded pool of rising accents described in
 [Jelly Words combo audio](jelly-combo-audio.md); these level recordings are unchanged.
-Former Lv7-Lv9 recordings, layer recipes and hashes remain in the manifest as
-archived acquisition evidence; they are absent from the active Jelly cue registry. Eight protected higher-level audio
+Lv7-Lv9 retain their existing source layers and hashes and are included in the
+active registry and startup pack. Eight protected higher-level audio
 channels preserve the longest tail through 120 ms batch pickups; board contact
 and warning cues keep their existing separate three-channel pool. Both pools
 share the established stop, mute and pronunciation-duck behavior. The importer
@@ -157,31 +164,30 @@ node tools/run-godot.cjs --path . --rendering-method gl_compatibility --renderin
 node tools/run-godot.cjs --path . --script res://tools/capture-word-jelly-fireworks.gd
 ```
 
-The audio check validates all preserved source/output hashes: six active cues
-and three archived recordings. Running `tools/prepare-jelly-level-audio.py`
-without `--check` reproduces the original nine recordings and the historical
+The audio check validates all preserved source/output hashes for nine active cues. Running `tools/prepare-jelly-level-audio.py`
+without `--check` reproduces the original nine recordings and the
 `build/jelly-level-feedback/levels-1-through-9.wav` listening preview; it does
 not add levels to gameplay. The generator retains current runtime metadata.
 The Lv1 file remains byte-identical to the approved recording.
 
-The board harness writes to `build/jelly-level-feedback/six-levels/`. It renders
-a six-level sheet, nine Lv4 timeline samples through 2.75 seconds, three portrait
-phase samples, reduced motion and a six-release batch. `--frames` adds 105 silent
+The board harness writes to `build/jelly-level-feedback/nine-levels/`. It renders
+a nine-level sheet, nine Lv4 timeline samples through 2.75 seconds, three portrait
+phase samples, reduced motion and a nine-release batch. `--frames` adds 105 silent
 30 fps frames comparing Lv1, Lv4 and Lv6. The sheet deliberately retains the
 ordinary Jelly as a size reference; individual release samples remove it.
 These are native production-texture studies, separate from end-to-end input
 and audio evidence.
 
-The popup harness writes to `build/jelly-reveal-feedback/six-levels/` and uses
+The popup harness writes to `build/jelly-reveal-feedback/nine-levels/` and uses
 real `WordRevealCard`, `WordReveal` and `WordJelly` controls with the acquired
-cat/apple artwork and sky/garden backdrop. It records a six-level sheet, Lv4/Lv6
+cat/apple artwork and sky/garden backdrop. It records a nine-level sheet, Lv4/Lv9
 timelines, 1366 x 768 desktop, 390 x 844 portrait and 844 x 390 landscape fixtures,
 normal/reduced motion, and 140 ms batches. Its silent frames compare Lv1/Lv4/Lv6
-and all six batch releases. `--batch-only` renders just the four small-screen
+and all nine batch releases. `--batch-only` renders just the four small-screen
 batch studies. `--baseline` captures the currently checked-out version; capture
 it before edits or against an older revision for a true before/after comparison.
 
-The focused effect suite verifies six profiles, release synchronization,
+The focused effect suite verifies nine profiles, release synchronization,
 late-frame catchup, long firework phases, radial deceleration and ember descent,
 input transparency, bounded pooling, reduced motion and cleanup. The texture
 source sheet was re-inspected for this update. Automated audio measurements do
@@ -262,8 +268,37 @@ The former nine-level board and popup studies remain in their original output
 directories outside `six-levels/`. They include the original board suite's 87
 checks, the original audio suite's 104 checks, the 203-capture popup study and
 older 350, 250 and 200 ms batch studies. Their counts, nine-level labels and
-cadences describe those historical runs, not the current six-level game.
-Former Lv7-Lv9 recordings and their source/layer/hash records are retained in
-the JSON manifest as archived assets. No historical preview is presented as a
-new six-level screenshot, a current gameplay recording or a physical-device
-audio review.
+cadences describe those historical runs. The current nine-level extension
+uses the later broad falling fireworks and 140 ms batch timing. The same
+Lv7-Lv9 recordings are now active again; no historical preview is presented
+as new evidence or as a physical-device audio review.
+
+
+## Lv7-Lv9 verification, October 25, 2026
+
+The current extension preserves Lv6's existing four-hue popup palette and the
+broader radial release with downward-curving trails. Higher levels add distinct
+blossom arrangements and bounded detail. Bloom radius grows only until it reaches
+the existing cosmetic canvas limit; text, controls and touch targets do not move
+to make room. The top effect lasts 1.95 seconds after release in manual and
+automatic collection. Its card still fades on the original reading schedule.
+Board effects retain their bounded twelve-entry pool, so older local effects
+may retire when that pool fills; the top card fireworks and audio use separate
+lifetimes and pools.
+
+`tools/capture-word-jelly-fireworks.gd -- --high-levels` captures 74 native phases
+at 390 x 844 and 1000 x 720: Lv7, Lv8 and Lv9, plus a three-word automatic
+collection and reduced motion. Evidence is retained in
+`build/qa/jelly-lv9-2026-10-25/`. These are sampled native production views,
+not physical-device recordings. The source texture sheet was inspected before
+the existing portal, rays and sparkle artwork were reused.
+
+Focused native checks passed: 188 board-effect, 14,911 reading-popup, 105 level
+audio and 36 tile-performance assertions. All nine audio resources retain their
+recorded hashes. Lv7-Lv9 each peak at -8.5 dBFS solo; their repeated 120 ms mixes
+peak at -8.422, -9.244 and -9.415 dBFS. The longest tail is 0.937279 seconds,
+shorter than the protected channel's 1.12-second reuse interval during automatic
+collection. Combined 24-pickup/combo mixes at 140 ms were checked for every
+level from Lv4 through Lv9; the highest peak is -5.848 dBFS. No audio bytes,
+authored gain or pitch changed. These measurements do not establish subjective
+listening quality or physical-device mixing.

@@ -16,6 +16,12 @@ const PROFILES: Array[Dictionary] = [
 		"trails": 6, "radius": 92.0},
 	{"name": "Prismatic bouquet", "pattern": "bouquet", "sparks": 120, "bursts": 6, "hue": 0.10, "margin": 72.0,
 		"trails": 7, "radius": 116.0},
+	{"name": "Aurora crown", "pattern": "aurora", "sparks": 132, "bursts": 7, "hue": 0.72, "margin": 80.0,
+		"trails": 8, "radius": 132.0},
+	{"name": "Constellation shower", "pattern": "constellation", "sparks": 144, "bursts": 8, "hue": 0.12, "margin": 88.0,
+		"trails": 8, "radius": 148.0},
+	{"name": "Grand bouquet", "pattern": "grand_bouquet", "sparks": 162, "bursts": 9, "hue": 0.08, "margin": 96.0,
+		"trails": 9, "radius": 164.0},
 ]
 
 var level: int = 1
@@ -88,8 +94,12 @@ func sync(age: float, seconds: float, steady: bool, anticipation: float = 0.0) -
 
 func color_at(index: int = 0) -> Color:
 	var hue: float = float(PROFILES[level - 1].hue)
-	if level == WordModel.MAX_MERGE_LEVEL:
+	if level == 6 or level >= 9:
 		hue += [0.0, 0.39, 0.62, 0.85][posmod(index, 4)]
+	elif level == 7:
+		hue += [0.0, -0.28, -0.13, 0.08][posmod(index, 4)]
+	elif level == 8:
+		hue += [0.0, 0.40, 0.79, 0.56][posmod(index, 4)]
 	elif level >= 4:
 		hue += [0.0, 0.40, 0.78][posmod(index, 3)]
 	elif level == 3:
@@ -134,6 +144,11 @@ func _rim(angle: float, offset: float = 0.0) -> Vector2:
 
 
 func _burst_angle(group: int) -> float:
+	if level == 7:
+		return -PI * 0.95 + float(group) * PI * 0.90 / 6.0
+	if level == 8:
+		var side: float = -1.0 if group % 2 == 0 else 1.0
+		return Vector2(side, -0.90 + float(group / 2) * 0.60).angle()
 	return -PI * 0.75 + float(group) * TAU / float(PROFILES[level - 1].bursts)
 
 
@@ -269,7 +284,7 @@ func _trail_count() -> int:
 
 func _emission_span() -> float:
 	# Automatic collection keeps the full bloom and descent at a lighter density.
-	return [0.0, 0.0, 0.0, 0.16, 0.38, 0.48][level - 1]
+	return [0.0, 0.0, 0.0, 0.16, 0.38, 0.48, 0.52, 0.57, 0.62][level - 1]
 
 
 func _draw_celebration(fade: float) -> void:

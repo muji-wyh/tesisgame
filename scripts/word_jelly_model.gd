@@ -27,7 +27,7 @@ const LABEL_FONT = preload("res://assets/fonts/heading.tres")
 const COLUMNS: int = 5
 const ROWS: int = 8
 const CAPACITY: int = COLUMNS * ROWS
-const MAX_MERGE_LEVEL: int = 6
+const MAX_MERGE_LEVEL: int = 9
 const INITIAL_SETTLED_TILES: int = COLUMNS * 3
 const DROP_COUNT: int = COLUMNS
 const UPCOMING_COUNT: int = COLUMNS
@@ -846,6 +846,9 @@ static func collection_pop_seconds(level: int, batch: bool = false) -> float:
 		4: return 0.66
 		5: return 0.72
 		6: return 0.78
+		7: return 0.84
+		8: return 0.90
+		9: return 0.96
 	return POP_SECONDS
 
 
@@ -1527,6 +1530,7 @@ func snapshot() -> Dictionary:
 		"full_remaining": maxf(0.0, FULL_SECONDS - full_elapsed) if full_elapsed >= 0.0 else -1.0,
 		"collectable_ids": collectable_ids(),
 		"collection_batch": collection_batch_snapshot(),
+		"max_merge_level": MAX_MERGE_LEVEL,
 		"pip_level": pip_level, "auto_collect_unlocked": auto_collect_unlocked(),
 		"auto_collect_unlock_level": AUTO_COLLECT_UNLOCK_LEVEL,
 		"powerup": powerup_snapshot(),
@@ -1857,7 +1861,7 @@ static func _merged_upgrade_level(left: Dictionary, right: Dictionary) -> int:
 	var left_level: int = int(left.get("merge_level", 1))
 	var right_level: int = int(right.get("merge_level", 1))
 	var combined: int = left_level + right_level
-	# A full result must fit the six levels; never silently discard a level.
+	# A full result must fit the level cap; never silently discard a level.
 	return combined if left_level >= 1 and right_level >= 1 and combined <= MAX_MERGE_LEVEL else 0
 
 

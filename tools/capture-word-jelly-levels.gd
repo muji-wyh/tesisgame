@@ -8,7 +8,7 @@ const Backdrop = preload("res://scripts/jelly_backdrop.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const GEL = preload("res://assets/images/jelly-match/gel-mint.png")
 const CAT = preload("res://assets/images/ui/modes/cat.webp")
-const OUTPUT: String = "res://build/jelly-level-feedback/six-levels"
+const OUTPUT: String = "res://build/jelly-level-feedback/nine-levels"
 
 var content: Control
 var backdrop: Control
@@ -84,7 +84,7 @@ func _run() -> void:
 	backdrop = Backdrop.new()
 	root.add_child(backdrop)
 	backdrop.set_reduced_motion(true)
-	await _resize(Vector2i(1440, 740))
+	await _resize(Vector2i(1440, 1040))
 	_label("Jelly collection levels", Vector2(0, 8), Vector2(1440, 44), 30)
 	_label("Native effect study: ordinary 1 x 1 Jelly shown as a size reference", Vector2(0, 48), Vector2(1440, 26), 17)
 	for level in range(1, Model.MAX_MERGE_LEVEL + 1):
@@ -94,7 +94,7 @@ func _run() -> void:
 		var selected: Dictionary = Effects.profile(level)
 		_effect(Rect2(cell, Vector2(480, 320)), point, level, minf(0.65, float(selected.seconds) * 0.38))
 		_label("Lv%d - %s" % [level, selected.name], cell + Vector2(8, 268), Vector2(464, 36), 20)
-	await _capture("all-six-levels")
+	await _capture("all-nine-levels")
 	for age in [0.04, 0.12, 0.30, 0.55, 0.85, 1.30, 1.80, 2.40, 2.75]:
 		await _resize(Vector2i(900, 600))
 		_label("Lv4 - Firework bloom", Vector2(0, 20), Vector2(900, 40), 28)

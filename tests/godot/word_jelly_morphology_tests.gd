@@ -22,6 +22,7 @@ func _run() -> void:
 	_test_foundation01_current()
 	_test_foundation02_current()
 	_test_atomic_exposure_and_retry()
+	_test_atomic_level_cap()
 	_test_space_and_hints()
 	_test_auto_completion()
 	_test_auto_timing_and_lifecycle()
@@ -207,6 +208,27 @@ func _winning_seed() -> int:
 		if rng.randf() < 0.02:
 			return seed_value
 	return -1
+
+
+func _test_atomic_level_cap() -> void:
+	var model = _model(_atomic())
+	var whole: Dictionary = _sources(model, "MRI", 1)[0]
+	for level in range(2, Model.MAX_MERGE_LEVEL + 1):
+		var addition: Dictionary = _sources(model, "MRI", 1)[0]
+		whole = _merge(model, whole, addition)
+		check(whole.merge_level == level and whole.fragments == level and not whole.mastery_eligible,
+			"Image-free atomic vocabulary supports additive levels without inventing mastery")
+	var extra: Dictionary = _sources(model, "MRI")[0]
+	check(whole.merge_level == 9 and not model.parts_compatible(whole, extra)
+		and model.try_merge(int(whole.id), int(extra.id)) == "wrong",
+		"An authored atomic Lv9 also rejects a sum above the shared cap")
+	model.cells.erase(extra)
+	var attempts: Array = []
+	model.word_attempted.connect(func(event: String, ids: Array[String], correct: bool): attempts.append([event, ids, correct]))
+	check(model.collect(int(whole.id)), "An authored atomic Lv9 remains collectable after an over-cap attempt")
+	_settle(model)
+	check(model.cleared_pairs == 1 and model.fragment_count == 9 and attempts.is_empty(),
+		"The highest atomic level collects every fragment without changing its mastery policy")
 
 
 func _test_atomic_exposure_and_retry() -> void:

@@ -114,7 +114,7 @@
   "runtime": {
     "gain": 0.9,
     "pitch": 1.0,
-    "clock": "Accepted collection release: manual levels 1-3 at 0.18 seconds, levels 4-6 at 0.66/0.72/0.78 seconds; batch at 0.04 seconds in each 0.14-second beat.",
+    "clock": "Accepted collection release: manual levels 1-3 at 0.18 seconds, levels 4-9 at 0.66/0.72/0.78/0.84/0.90/0.96 seconds; batch at 0.04 seconds in each 0.14-second beat.",
     "concurrency": "Eight protected higher-level channels preserve tails at the current 140 ms batch spacing; shared mute/pause cleanup and no reward callback. Historical audio headroom verification used 120 ms spacing.",
     "active_levels": [
       1,
@@ -122,14 +122,12 @@
       3,
       4,
       5,
-      6
-    ],
-    "archived_audio_levels": [
+      6,
       7,
       8,
       9
     ],
-    "archive_note": "Audio entries for former levels 7 through 9 retain their acquired recordings, authored mixes and hashes for provenance. Active Jelly Words gameplay uses only levels 1 through 6; existing level 1 through 6 audio bytes and reward values are unchanged.",
+    "archived_audio_levels": [],
     "board_effects": {
       "profiles": [
         {
@@ -162,6 +160,21 @@
           "level": 6,
           "name": "Prismatic bouquet",
           "seconds_after_pop": 3.4
+        },
+        {
+          "level": 7,
+          "name": "Aurora crown",
+          "seconds_after_pop": 3.6
+        },
+        {
+          "level": 8,
+          "name": "Constellation shower",
+          "seconds_after_pop": 3.8
+        },
+        {
+          "level": 9,
+          "name": "Grand bouquet",
+          "seconds_after_pop": 4.0
         }
       ],
       "batch_duration_factor": 0.75,
@@ -169,7 +182,40 @@
       "batch_firework_spark_factor": 0.45,
       "maximum_active": 12,
       "reduced_motion_seconds": 0.42,
-      "asset_status": "Previously integrated authored portal, rays and sparkle textures re-inspected on 2026-10-24. No new artwork or audio acquired; runtime texture trajectories and timing updated."
+      "asset_status": "Existing acquired portal, rays and sparkle textures re-inspected on 2026-10-25. Lv7-Lv9 reuse these production textures. No artwork or audio bytes changed."
+    },
+    "activation_note": "Previously acquired Lv7-Lv9 recordings reactivated on 2026-10-25 without changing any audio bytes, layer recipes, pitch, or gain. All nine source/output hashes and PCM headroom were rechecked before activation.",
+    "top_fireworks": {
+      "seconds_after_pop": 1.95,
+      "automatic_seconds_after_pop": 1.95,
+      "reading_card_duration_unchanged": true,
+      "levels_7_to_9": [
+        {
+          "level": 7,
+          "pattern": "aurora",
+          "bursts": 7,
+          "sparks": 132,
+          "trails": 8,
+          "emission_seconds": 0.52
+        },
+        {
+          "level": 8,
+          "pattern": "constellation",
+          "bursts": 8,
+          "sparks": 144,
+          "trails": 8,
+          "emission_seconds": 0.57
+        },
+        {
+          "level": 9,
+          "pattern": "grand_bouquet",
+          "bursts": 9,
+          "sparks": 162,
+          "trails": 9,
+          "emission_seconds": 0.62
+        }
+      ],
+      "bounds": "The existing broad radial release, downward-curving trails, shared canvas fit and control exclusions are preserved. Lv6 retains its existing four-hue bouquet palette."
     }
   },
   "review": "Acquired texture source sheet visually inspected. Audio source format, identity, decoded waveform, onset, headroom and repeated batch mix checked; auditory taste and physical-device mixing require playback review.",

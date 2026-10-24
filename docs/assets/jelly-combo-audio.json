@@ -145,6 +145,41 @@
       "channels": 1,
       "pcm_bits": 16,
       "peak_dbfs": -6.95
+    },
+    "24_combo_and_lv4_140ms": {
+      "seconds": 4.86,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -7.105
+    },
+    "24_combo_and_lv5_140ms": {
+      "seconds": 4.86,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -5.848
+    },
+    "24_combo_and_lv7_140ms": {
+      "seconds": 4.86,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -6.201
+    },
+    "24_combo_and_lv8_140ms": {
+      "seconds": 4.86,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -7.024
+    },
+    "24_combo_and_lv9_140ms": {
+      "seconds": 4.86,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -6.33
     }
   },
   "review": "Original hashes, licenses, decoded waveform, full source tails, bounded peak and 140 ms repeated mixes checked. Listening preview provided; this environment did not support audio ingestion, so no auditory or physical-device mix judgment is claimed."

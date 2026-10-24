@@ -34,7 +34,7 @@ function validPair(source, target) {
   if (!source || !target || source.id === target.id) return false;
   if (source.jelly_kind === 'merged' && target.jelly_kind === 'merged')
     return Boolean(source.word?.id && source.word.id === target.word?.id &&
-      source.merge_level + target.merge_level <= 6);
+      source.merge_level + target.merge_level <= 9);
   const picture = source.jelly_kind === 'picture' ? source : target.jelly_kind === 'picture' ? target : null;
   if (picture) {
     const root = picture === source ? target : source;
@@ -245,7 +245,7 @@ function expectAutoMergeTimeline(evidence, completed) {
       expect(drag.started_at).toBeGreaterThanOrEqual(0);
       expect(drag.source_id).not.toBe(drag.target_id);
       expect(validPair(drag.source, drag.target),
-        'Every transfer follows a reviewed root join, matching picture, or same-word level sum up to six').toBe(true);
+        'Every transfer follows a reviewed root join, matching picture, or same-word level sum up to nine').toBe(true);
       for (const id of [drag.source_id, drag.target_id]) {
         expect(reserved.has(id), 'Overlapping transfers reserve distinct sources and targets').toBe(false);
         reserved.add(id);

@@ -123,7 +123,7 @@ static func build_report() -> Dictionary:
 			"Scenario inputs are modeled workloads, not measured players or session lengths.",
 			"Each supplied two-chunk word has an independent stated chance of being collected.",
 			"Source workloads collect ordinary Lv1 words, which have no coin bonus; upgraded collection rewards are reported separately.",
-			"Additive merges preserve source word count: a LvN body combines N completed Lv1 words, up to Lv6.",
+			"Additive merges preserve source word count: a LvN body combines N completed Lv1 words, up to Lv9.",
 			"All injected Treasure fragments are collected: this overestimates paid returns.",
 			"Net budgets assume enough previously saved coins to buy the specified items.",
 			"Auto Merge uses the same completed workload; no automatic collection or bonus income is assumed.",

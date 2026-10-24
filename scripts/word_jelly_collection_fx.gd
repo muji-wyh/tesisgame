@@ -12,10 +12,15 @@ const PROFILES: Array[Dictionary] = [
 	{"name": "Firework bloom", "pattern": "firework", "seconds": 2.80, "radius": 112.0, "sparks": 60, "bursts": 4, "hue": 0.10},
 	{"name": "Rose cascade", "pattern": "cascade", "seconds": 3.10, "radius": 134.0, "sparks": 80, "bursts": 5, "hue": 0.92},
 	{"name": "Prismatic bouquet", "pattern": "bouquet", "seconds": 3.40, "radius": 158.0, "sparks": 108, "bursts": 7, "hue": 0.53},
+	{"name": "Aurora crown", "pattern": "aurora", "seconds": 3.60, "radius": 178.0, "sparks": 124, "bursts": 8, "hue": 0.72},
+	{"name": "Constellation shower", "pattern": "constellation", "seconds": 3.80, "radius": 198.0, "sparks": 144, "bursts": 9, "hue": 0.12},
+	{"name": "Grand bouquet", "pattern": "grand_bouquet", "seconds": 4.00, "radius": 220.0, "sparks": 168, "bursts": 10, "hue": 0.08},
 ]
 const FIREWORK_PALETTE: Array[Color] = [Color("#efaf35"), Color("#23b8d2"), Color("#eb6ba8"), Color("#9274df")]
 const CASCADE_PALETTE: Array[Color] = [Color("#ed5b9a"), Color("#f3bd52"), Color("#b474db"), Color("#ee8754")]
 const BOUQUET_PALETTE: Array[Color] = [Color("#35bec1"), Color("#f0bc42"), Color("#ef6b9e"), Color("#8e82ee"), Color("#7bc77a"), Color("#57a5e3")]
+const AURORA_PALETTE: Array[Color] = [Color("#b68aeb"), Color("#55d5b8"), Color("#739be9"), Color("#dfb5ef")]
+const CONSTELLATION_PALETTE: Array[Color] = [Color("#f0bc42"), Color("#57bddd"), Color("#ef84bc"), Color("#b9a0ee")]
 
 var _entries: Array[Dictionary] = []
 var _reduced_motion: bool = false
@@ -146,8 +151,12 @@ func _radius(entry: Dictionary) -> float:
 func _palette(entry: Dictionary, index: int) -> Color:
 	var hue: float = float(entry.profile.hue)
 	var level: int = int(entry.profile.level)
-	if level == 6:
+	if level == 6 or level >= 9:
 		return BOUQUET_PALETTE[posmod(index, BOUQUET_PALETTE.size())]
+	if level == 8:
+		return CONSTELLATION_PALETTE[posmod(index, CONSTELLATION_PALETTE.size())]
+	if level == 7:
+		return AURORA_PALETTE[posmod(index, AURORA_PALETTE.size())]
 	if level == 5:
 		return CASCADE_PALETTE[posmod(index, CASCADE_PALETTE.size())]
 	if level == 4:
@@ -267,7 +276,7 @@ func _draw_fireworks(entry: Dictionary, progress: float) -> void:
 			var edge: float = (12.0 + phase * 4.0 + float(level - 4) * 0.8) / _ui_scale
 			edge *= lerpf(1.08, 0.62, clampf(age / life, 0.0, 1.0))
 			var spark_tint: Color = tint.lerp(_palette(entry, group + 1), 0.18 if index % 3 == 0 else 0.0)
-			var trail_count: int = 3 if bool(entry.batch) else 7 + level - 4
+			var trail_count: int = 3 if bool(entry.batch) else mini(10, 7 + level - 4)
 			for tail in range(trail_count, 0, -1):
 				var prior_age: float = age - float(tail) * 0.05
 				if prior_age < 0.0:
@@ -287,6 +296,9 @@ func _firework_delay(level: int, group: int) -> float:
 		4: return 0.10 + float(group - 1) * 0.045
 		5: return 0.10 + float(group - 1) * 0.075
 		6: return 0.08 + float(group - 1) * 0.043
+		7: return 0.07 + float(group - 1) * 0.037
+		8: return 0.055 + float(group - 1) * 0.038
+		9: return 0.05 + float(group - 1) * 0.038
 	return 0.0
 
 
@@ -302,6 +314,14 @@ func _firework_offset(level: int, group: int, radius: float) -> Vector2:
 			return Vector2(side * (0.51 - row * 0.12), -0.36 + row * 0.65) * radius
 		6:
 			return Vector2.from_angle(-PI * 0.5 + float(group - 1) * TAU / 6.0) * radius * 0.57
+		7:
+			return Vector2.from_angle(-PI * 0.95 + float(group - 1) * PI * 0.90 / 6.0) * radius * 0.64
+		8:
+			var side: float = -1.0 if group % 2 == 1 else 1.0
+			var row: int = (group - 1) / 2
+			return Vector2(side * (0.60 - row * 0.075), -0.52 + row * 0.34) * radius
+		9:
+			return Vector2.from_angle(-PI * 0.5 + float(group - 1) * TAU / 9.0) * radius * 0.64
 	return Vector2.ZERO
 
 

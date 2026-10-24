@@ -8,7 +8,7 @@ class DelayedLevelAudio extends "res://scripts/game_audio.gd":
 	var delay_level: bool = false
 
 	func _stream(path: String, loop: bool = false) -> AudioStream:
-		if delay_level and path == JELLY_PATHS["jelly-collect-lv6"]:
+		if delay_level and path == JELLY_PATHS["jelly-collect-lv9"]:
 			await level_loaded
 		return await super._stream(path, loop)
 
@@ -37,7 +37,7 @@ func _silent(audio) -> bool:
 func _run() -> void:
 	var audio := Audio.new()
 	root.add_child(audio)
-	audio.play_jelly_cue("jelly-collect-lv6")
+	audio.play_jelly_cue("jelly-collect-lv9")
 	check(audio._jelly_level_players.is_empty(), "Inactive level cues cannot allocate or queue playback")
 	audio.interact("spring", false)
 	for cue: String in ["danger", "merge", "pop"]:
@@ -70,8 +70,8 @@ func _run() -> void:
 		var hash: String = FileAccess.get_sha256(stream.resource_path)
 		check(hash == str(asset.sha256) and not hashes.has(hash), "Every higher level has a distinct verified asset")
 		hashes[hash] = true
-	check(hashes.size() == 5, "The six-level game retains five distinct higher-level recordings and its approved Lv1 pop")
-	for cue: String in ["jelly-collect-lv2", "jelly-collect-lv4", "jelly-collect-lv6"]:
+	check(hashes.size() == 8, "The nine-level game retains eight distinct higher-level recordings and its approved Lv1 pop")
+	for cue: String in ["jelly-collect-lv2", "jelly-collect-lv4", "jelly-collect-lv9"]:
 		audio.play_jelly_cue(cue)
 	check(audio._jelly_level_players.size() == 8 and audio._jelly_players.size() == 3,
 		"Eight protected level tails coexist with the original three-channel interaction pool")
@@ -93,7 +93,7 @@ func _run() -> void:
 	for player: AudioStreamPlayer in audio._jelly_level_players:
 		check(is_equal_approx(player.volume_db, linear_to_db(0.90) - 6.0), "Level tails duck six decibels beneath pronunciation")
 	var spoken: AudioStream = audio.voice.stream
-	audio.play_jelly_cue("jelly-collect-lv6")
+	audio.play_jelly_cue("jelly-collect-lv9")
 	check(audio.voice.playing and audio.voice.stream == spoken, "A new high-level cue preserves spoken vocabulary")
 	audio.stop_voice()
 	audio._process(0.01)
@@ -104,7 +104,7 @@ func _run() -> void:
 	for interruption: String in ["pause", "mute", "halt", "unavailable"]:
 		audio.interact("spring", false)
 		audio.available = true
-		audio.play_jelly_cue("jelly-collect-lv6")
+		audio.play_jelly_cue("jelly-collect-lv9")
 		match interruption:
 			"pause": audio.stop_jelly_sounds()
 			"mute": audio.set_muted(true)
@@ -114,7 +114,7 @@ func _run() -> void:
 				audio._process(0.01)
 		check(_silent(audio) and audio._jelly_level_next == 0, "%s clears every level tail and resets its pool" % interruption)
 		if interruption != "pause":
-			audio.play_jelly_cue("jelly-collect-lv6")
+			audio.play_jelly_cue("jelly-collect-lv9")
 			check(_silent(audio) and audio._jelly_level_next == 0, "Suppressed level events never enqueue playback")
 		audio.set_muted(false)
 		audio.available = true
@@ -139,7 +139,7 @@ func _pending() -> void:
 		root.add_child(audio)
 		audio.interact("spring", false)
 		audio.delay_level = true
-		audio.play_jelly_cue("jelly-collect-lv6")
+		audio.play_jelly_cue("jelly-collect-lv9")
 		check(_silent(audio), "Delayed level fixture is silent before resource preparation")
 		match interruption:
 			"pause": audio.stop_jelly_sounds()
@@ -152,9 +152,9 @@ func _pending() -> void:
 		audio.level_loaded.emit()
 		await process_frame
 		check(_silent(audio) and audio._jelly_cues.is_empty(), "A pending level recording cannot replay after %s" % interruption)
-		audio.play_jelly_cue("jelly-collect-lv6")
+		audio.play_jelly_cue("jelly-collect-lv9")
 		var player: AudioStreamPlayer = audio._jelly_level_players[0]
-		check(player.playing and player.stream.resource_path == Audio.JELLY_PATHS["jelly-collect-lv6"] and is_equal_approx(player.pitch_scale, 1.0),
+		check(player.playing and player.stream.resource_path == Audio.JELLY_PATHS["jelly-collect-lv9"] and is_equal_approx(player.pitch_scale, 1.0),
 			"A fresh high-level collection works after canceling the delayed request")
 		audio.halt()
 		audio.queue_free()
