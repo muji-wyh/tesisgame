@@ -45,11 +45,13 @@ squeeze during each automatic collection beat. The top card reaches 40 percent
 width and 50 percent height before its 100 ms outward release, then settles by
 470 ms. The complete picture and spelling return to their resting size.
 
-Each card displays one of six related frame effects. It retains its opaque
-reading surface and full post-release lifetime: 1.95 seconds individually,
-0.86 seconds in batches, reduced
-to 0.62 seconds on narrow screens or 0.48 seconds in short regions. The board
-owns the extended falling tails; the card can finish independently.
+Each card displays one of six related frame effects. Its reading surface lasts
+1.95 seconds individually or 0.86 seconds in batches, reduced to 0.62 seconds
+on narrow screens or 0.48 seconds in short regions. At Lv4-Lv6, automatic
+collection keeps the popup fireworks alive for 1.95 seconds after release,
+independently of the compact picture-and-spelling card. The text fades on its
+original schedule while the noninteractive sparks continue, then the retained
+effect entry is removed. Lv1-Lv3 keep their existing compact batch effects.
 
 | Level | Popup signature |
 | --- | --- |
@@ -60,12 +62,15 @@ owns the extended falling tails; the card can finish independently.
 | 5 | Double cascade: four rose/gold blooms with falling embers |
 | 6 | Prismatic bouquet: six multicolor blossoms and the richest trails |
 
-Manual popup blossom releases span 0.16, 0.38 and 0.48 seconds at Lv4-Lv6.
-Batch releases use `0.075 + level * 0.007` seconds, at most 117 ms, preserving
-the 140 ms cadence. Each card reserves its own effect halo and respects the
-existing control exclusions. Reduced motion keeps the full-sized card, static
-colored stars and continuous local light through charge and release. Pause,
-late-frame catchup, resize and exit use the card's existing clock.
+Popup blossom releases span 0.16, 0.38 and 0.48 seconds at Lv4-Lv6 for both manual
+and automatic collection. Their trails use five, six and seven trajectory samples
+respectively. Automatic collection keeps 62 percent of the manual spark count
+and its compact card dimensions and effect margins, so consecutive fireworks can
+overlap without shortening their bloom or descent. The 140 ms collection cadence
+is unchanged. Each effect respects the existing control exclusions. Reduced
+motion uses static colored stars and local light through the effect's lifetime;
+the reading card still fades on its own schedule. Pause, late-frame catchup,
+resize and exit use the existing presentation clock.
 No additional artwork or audio was acquired for the six-level update.
 
 The top-card charge update reuses the same three acquired textures, re-inspected
@@ -79,8 +84,11 @@ size, placement and reading time intact. Blossom radii are about 1.7 times the
 previous size, with a wider horizontal spread. Drag slows the outward release
 before gravity bends even the upward spokes down; short samples of that path
 form tapered trails instead of keeping each ember tied to its burst origin.
-The manual ember lifetime extends up to 1.72 seconds within the existing card
-lifetime. A later fade keeps the descent visible. Batch tails stay compact.
+Each ember lives for up to 1.72 seconds, limited by the remaining effect time
+after its blossom delay and an 80 ms end margin. Manual and automatic fireworks
+use the same descending path and later fade; only the automatic spark density
+and spatial footprint are reduced. This lets the falling tails finish after
+compact reading cards disappear.
 
 The cosmetic canvas extends toward the middle of the playfield, up to 58 percent
 of its height or 440 display pixels; short landscape layouts retain at least
@@ -202,6 +210,21 @@ layouts were inspected. Lv3 reaches 59 percent width at 120 ms and Lv6 reaches
 silent native samples verify composition and sampled timing, not physical-device
 performance or audio. The focused reveal, full view, hybrid view, application
 flow and level-audio suites passed after the update.
+
+The 2026-10-25 automatic-collection study is saved under
+`build/qa/jelly-auto-collect-fx-2026-10-25/`. It compares 138 matched native
+states per version across desktop, portrait and short landscape, including
+Lv4-Lv6 and twelve consecutive high-level pickups. Falling top tails remain
+visible at 1.5 seconds and leave no visible effect at 1.95 seconds. Gameplay,
+board effects, controls and shared reading-card geometry match the baseline.
+The reveal, view, hybrid, flow and model suites passed 145,071 checks; their
+logs are in `build/qa/jelly-batch-fireworks-2026-10-25/`. These are silent native
+samples, with no physical-device performance or audio-playback claim.
+The exported Web build also passed 43 export checks and the real-input Collect
+regression in desktop Chromium and Android Chromium emulation. Both browser
+cases retained the Lv6 top tail after its reading card disappeared, then
+removed it without additional rewards; artifacts are in the study's `browser/`
+directory.
 
 ## Historical nine-level evidence
 

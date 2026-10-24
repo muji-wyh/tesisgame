@@ -12,6 +12,7 @@ var entry_id: int = 0
 var elapsed: float = 0.0
 var anticipation_seconds: float = 0.0
 var duration: float = 1.95
+var effect_duration: float = 1.95
 var variant_scale: float = 1.0
 var reduced_motion: bool = false
 var rest_position := Vector2.ZERO
@@ -86,6 +87,7 @@ func configure(id: int, word: Dictionary, picture: Texture2D, accent: Color,
 	_batch = batch
 	variant_scale = variation
 	duration = seconds
+	effect_duration = LevelEffects.duration_for(seconds, merge_level)
 	reduced_motion = steady
 	set("accessibility_name", str(word.text))
 
@@ -168,6 +170,8 @@ func charge_progress() -> float:
 
 
 func phase() -> String:
+	if elapsed >= duration:
+		return "afterglow"
 	if elapsed < 0.0:
 		return "charging"
 	if elapsed < 0.10:
@@ -180,7 +184,9 @@ func phase() -> String:
 func sync() -> void:
 	position = rest_position
 	visible = elapsed >= -anticipation_seconds
-	_level_effects.sync(elapsed, duration, reduced_motion, anticipation_seconds)
+	_level_effects.sync(elapsed, effect_duration, reduced_motion, anticipation_seconds)
+	# The compact reading card can finish while its sibling fireworks fall away.
+	_visual.visible = visible and elapsed < duration
 	if not visible:
 		_visual.modulate.a = 0.0
 		return
@@ -233,7 +239,8 @@ func snapshot() -> Dictionary:
 	return {"entry_id": entry_id, "word_id": str(_word.get("id", "")), "word": _word.duplicate(true),
 		"merge_level": merge_level, "effects": _level_effects.snapshot(),
 		"picture": WordArt.source_path(_picture.texture), "spelling": _spelling.text, "visible": is_visible_in_tree(),
-		"elapsed": elapsed, "duration": duration, "batch": _batch, "variant_scale": variant_scale,
+		"elapsed": elapsed, "duration": duration, "effect_duration": effect_duration,
+		"content_visible": _visual.is_visible_in_tree(), "batch": _batch, "variant_scale": variant_scale,
 		"anticipation_seconds": anticipation_seconds, "charge_progress": charge_progress(), "phase": phase(),
 		"animated_scale": [_visual.scale.x, _visual.scale.y], "font_size": _spelling.get_theme_font_size("font_size"),
 		"rect": _rect_data(_surface.get_global_rect()), "resting_rect": _rect_data(get_global_rect()),

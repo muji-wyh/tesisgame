@@ -5,6 +5,7 @@ const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const RAYS = preload("res://assets/chests/milestone/rays.png")
 const STAR = preload("res://assets/chests/milestone/sparkle.png")
 const WordModel = preload("res://scripts/word_jelly_model.gd")
+const FIREWORK_SECONDS: float = 1.95
 const PROFILES: Array[Dictionary] = [
 	{"name": "Pearl greeting", "pattern": "pearl", "sparks": 12, "bursts": 1, "hue": 0.43, "margin": 16.0},
 	{"name": "Crystal ripple", "pattern": "ripple", "sparks": 20, "bursts": 2, "hue": 0.51, "margin": 23.0},
@@ -41,6 +42,10 @@ func _init() -> void:
 
 static func profile(value: int) -> Dictionary:
 	return PROFILES[clampi(value, 1, WordModel.MAX_MERGE_LEVEL) - 1].duplicate(true)
+
+
+static func duration_for(reading_seconds: float, value: int) -> float:
+	return maxf(reading_seconds, FIREWORK_SECONDS) if value >= 4 else reading_seconds
 
 
 static func margin_for(value: int, batch: bool, ui_scale: float) -> float:
@@ -160,7 +165,7 @@ func _draw() -> void:
 		draw_set_transform(Vector2.ZERO)
 		return
 	var fade: float = (1.0 if anticipation_seconds > 0.0 else smoothstep(0.0, 0.055, elapsed)) \
-		* (1.0 - smoothstep(duration - (0.22 if _batch else 0.31), duration, elapsed))
+		* (1.0 - smoothstep(duration - (0.22 if _batch and level < 4 else 0.31), duration, elapsed))
 	if fade <= 0.0:
 		return
 	if reduced_motion:
@@ -199,7 +204,7 @@ func _draw_charge(progress: float) -> void:
 
 func _draw_release(fade: float) -> void:
 	# The compact core opens into the reserved halo before the card settles.
-	var life: float = minf(0.30, duration * 0.64) if _batch else 0.64
+	var life: float = minf(0.30, duration * 0.64) if _batch and level < 4 else 0.64
 	if elapsed >= life:
 		return
 	var progress: float = clampf(elapsed / life, 0.0, 1.0)
@@ -243,13 +248,12 @@ func _spark_count() -> int:
 
 
 func _trail_count() -> int:
-	var count: int = int(PROFILES[level - 1].get("trails", 0))
-	return mini(count, 3) if _batch else count
+	return int(PROFILES[level - 1].get("trails", 0))
 
 
 func _emission_span() -> float:
-	# Echo the release quickly in batch cards; the board owns the extended tail.
-	return 0.075 + level * 0.007 if _batch else [0.0, 0.0, 0.0, 0.16, 0.38, 0.48][level - 1]
+	# Automatic collection keeps the full bloom and descent at a lighter density.
+	return [0.0, 0.0, 0.0, 0.16, 0.38, 0.48][level - 1]
 
 
 func _draw_celebration(fade: float) -> void:
@@ -286,7 +290,7 @@ func _firework_point(origin: Vector2, direction: Vector2, reach: float, age: flo
 	var travel: float = (1.0 - exp(-time * 4.5)) / (1.0 - exp(-4.5))
 	var falling: float = maxf(0.0, (time - 0.08) / 0.92)
 	var spread: Vector2 = direction * Vector2(1.16, 0.88) * reach * travel
-	var drop: float = reach * (0.95 if _batch else 1.40) * falling * falling
+	var drop: float = reach * 1.40 * falling * falling
 	return origin + spread + Vector2(direction.x * reach * 0.045 * time * time, drop)
 
 
@@ -300,7 +304,7 @@ func _draw_explosion(fade: float) -> void:
 		var spokes: int = count / groups + (1 if group < count % groups else 0)
 		var delay: float = span * float(group) / float(maxi(1, groups - 1))
 		var age: float = elapsed - delay
-		var life: float = minf(0.36, duration - span) if _batch else minf(1.72, duration - delay - 0.08)
+		var life: float = minf(1.72, duration - delay - 0.08)
 		if age <= 0.0 or age >= life:
 			continue
 		var origin: Vector2 = _burst_origin(group)
@@ -342,6 +346,8 @@ func snapshot() -> Dictionary:
 	var selected: Dictionary = PROFILES[level - 1]
 	var rect: Rect2 = get_global_rect()
 	return {"level": level, "name": selected.name, "pattern": selected.pattern,
+		"elapsed": elapsed, "duration": duration,
+		"visible": is_visible_in_tree() and elapsed >= -anticipation_seconds and elapsed < duration,
 		"phase": "charging" if elapsed < 0.0 else ("release" if elapsed < 0.10 else "settling"),
 		"spark_count": _spark_count(), "wave_count": selected.bursts,
 		"trail_count": _trail_count(), "emission_seconds": _emission_span() if level >= 4 else 0.0,

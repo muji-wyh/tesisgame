@@ -2,6 +2,7 @@ extends Control
 ## Independent reading bursts, advanced by the same clock as collection.
 
 const Card = preload("res://scripts/word_jelly_word_reveal_card.gd")
+const LevelEffects = preload("res://scripts/word_jelly_reveal_fx.gd")
 const WordModel = preload("res://scripts/word_jelly_model.gd")
 const SECONDS: float = 1.95
 const BATCH_SECONDS: float = 0.86
@@ -54,7 +55,8 @@ func present(word: Dictionary, picture: Texture2D, accent: Color, batch: bool = 
 		return
 	# Both jellies charge together; the full reading lifetime starts on release.
 	var age: float = maxf(0.0, initial_age) - maxf(0.0, delay)
-	if age >= seconds:
+	var merge_level: int = clampi(level, 1, WordModel.MAX_MERGE_LEVEL)
+	if age >= LevelEffects.duration_for(seconds, merge_level):
 		return
 	_serial += 1
 	var variation: float = _rng.randf_range(0.82, 1.18)
@@ -62,7 +64,7 @@ func present(word: Dictionary, picture: Texture2D, accent: Color, batch: bool = 
 		variation = 0.84 if _entries.back().variant_scale > 1.0 else 1.16
 	var entry := Card.new()
 	add_child(entry)
-	entry.configure(_serial, word, picture, accent, batch, variation, seconds, _reduced_motion, clampi(level, 1, WordModel.MAX_MERGE_LEVEL))
+	entry.configure(_serial, word, picture, accent, batch, variation, seconds, _reduced_motion, merge_level)
 	entry.anticipation_seconds = maxf(0.0, delay)
 	entry.fit_content(size, _ui_scale)
 	_place(entry, _entries)
@@ -98,6 +100,8 @@ func _place(entry: Card, occupied: Array[Card]) -> void:
 			var local := Rect2(exclusion.position - position, exclusion.size)
 			excluded_area += candidate.intersection(local).get_area()
 		for other: Card in occupied:
+			if other.elapsed >= other.duration:
+				continue
 			var other_margin := Vector2.ONE * other.effect_margin()
 			var bounds := Rect2(other.rest_position - other.size * 0.11 - other_margin,
 				other.size * 1.22 + other_margin * 2.0)
@@ -129,7 +133,7 @@ func advance(delta: float) -> void:
 	for index in range(_entries.size() - 1, -1, -1):
 		var entry: Card = _entries[index]
 		entry.elapsed += delta
-		if entry.elapsed >= entry.duration:
+		if entry.elapsed >= entry.effect_duration:
 			_entries.remove_at(index)
 			entry.free()
 		else:
@@ -157,7 +161,8 @@ func snapshot() -> Dictionary:
 		states.append(entry.snapshot())
 	var latest: Dictionary = states.back().duplicate(true) if not states.is_empty() else {
 		"word_id": "", "word": {}, "picture": "", "spelling": "", "elapsed": 0.0,
-		"duration": SECONDS, "rect": [], "resting_rect": [], "picture_rect": [],
+		"duration": SECONDS, "effect_duration": SECONDS, "content_visible": false,
+		"rect": [], "resting_rect": [], "picture_rect": [],
 		"spelling_rect": [], "content_alpha": 0.0, "reduced_motion": _reduced_motion,
 		"merge_level": 1, "effects": {}}
 	latest["visible"] = visible and states.any(func(entry: Dictionary) -> bool: return bool(entry.visible))

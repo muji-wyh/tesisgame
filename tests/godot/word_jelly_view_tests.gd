@@ -1472,6 +1472,19 @@ func _check_word_reveal_levels(view) -> void:
 			check(entries[0].effects.pattern != entries[1].effects.pattern
 				and entries[1].effects.pattern == "fireworks" and entries[1].effects.pattern != entries[2].effects.pattern,
 				"the collection pop distinguishes the ordinary, fireworks and highest-tier treatments")
+			if batch:
+				var completed: Dictionary = view.game.collection_batch_snapshot()
+				check(not completed.active and int(completed.completed) == 3
+					and is_equal_approx(float(completed.elapsed), 3.0 * Model.BATCH_BEAT_SECONDS),
+					"High-level fireworks leave all three collection payouts on the original 140 ms cadence")
+				_advance(view, 0.90)
+				var afterglows: Array = view.snapshot().word_reveal.entries
+				check(afterglows.size() == 2 and int(afterglows[0].merge_level) == 4
+					and int(afterglows[1].merge_level) == 6
+					and afterglows.all(_is_word_reveal_afterglow),
+					"Mixed automatic pickups retire the ordinary card while both high-level firework tails continue")
+				check(payouts.size() == 3 and attempts.size() == 3 and heard.is_empty(),
+					"Lingering automatic fireworks cannot add rewards, learning attempts, or delayed speech")
 			_advance(view, 3.0)
 			check(payouts.size() == 3 and attempts.size() == 3 and heard.size() == (0 if batch else 3),
 				"richer reading-pop effects preserve collection credit and manual-only pronunciation")
@@ -1479,7 +1492,11 @@ func _check_word_reveal_levels(view) -> void:
 				and cues.count("jelly-collect-lv6") == 1,
 				"each pickup emits its existing level sound once without extra reading-pop audio")
 			check(view.snapshot().word_reveal.entries.is_empty() and view._word_reveal.get_child_count() == 0,
-				"every level's collection-pop effect subtree expires with its original reading lifetime")
+				"Every collection-pop subtree expires after its complete reading and effect lifetimes")
+
+
+func _is_word_reveal_afterglow(entry: Dictionary) -> bool:
+	return not entry.content_visible and entry.phase == "afterglow" and entry.effects.visible
 
 
 func _check_word_reveal_control_clearance(view) -> void:
@@ -1514,8 +1531,9 @@ func _check_word_reveal_control_clearance(view) -> void:
 		var state: Dictionary = view.snapshot()
 		# Stay between release-based expiry boundaries on both compact layouts.
 		var visible_count: int = _batch_reveal_count(4, 0.85, float(state.word_reveal.duration))
-		check(int(state.collection_batch.started) == 4 and int(state.word_reveal.active_count) == visible_count,
-			"the 140 ms cadence retains every unexpired collection pop after the fourth start")
+		var reading_cards: Array = state.word_reveal.entries.filter(func(entry: Dictionary) -> bool: return entry.content_visible)
+		check(int(state.collection_batch.started) == 4 and reading_cards.size() == visible_count,
+			"The 140 ms cadence retains the original count of readable cards while fireworks may linger")
 		if dimensions == Vector2(1000, 720):
 			check(visible_count == 4, "the full reading region supports four concurrent collection pops before their first expiry")
 	view.size = Vector2(1000, 720)
@@ -1567,6 +1585,26 @@ func _check_word_reveal_lifecycle(view) -> void:
 		_advance(view, 0.1)
 		check(not view.snapshot().word_reveal.visible and view.snapshot().word_reveal.entries.is_empty(),
 			action + " never restores stale collected-word overlays")
+	for action: String in ["pause", "hide", "finish", "stop", "configure"]:
+		_reset(view)
+		_install(view, ["merged:cat:4", "merged:caterpillar:6"], [], [2, 2])
+		view._collect_all()
+		_advance(view, 1.10)
+		var afterglows: Array = view.snapshot().word_reveal.entries
+		check(afterglows.size() == 2 and afterglows.all(_is_word_reveal_afterglow),
+			"The interrupted batch fixture retains only its two completed-collection firework tails")
+		match action:
+			"pause": view.pause(true)
+			"hide": view.hide()
+			"finish": view._finish_round()
+			"stop": view.stop()
+			"configure": view.configure(words, 3, Data.theme("spring"), data.chests, false, 42)
+		check(not view.snapshot().word_reveal.visible and view._word_reveal.get_child_count() == 0,
+			action + " immediately releases lingering fireworks after their cards have disappeared")
+		view.show()
+		view.pause(false)
+		_advance(view, 0.10)
+		check(view.snapshot().word_reveal.entries.is_empty(), action + " cannot restore an interrupted firework tail")
 	_reset(view)
 	var ids: Array[int] = _install(view, ["merged:cat:6"], [], [2])
 	view._activate(ids[0])

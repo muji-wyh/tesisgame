@@ -36,6 +36,7 @@ func _run() -> void:
 	_check_reduced_motion(reveal)
 	_check_level_effects(reveal)
 	_check_level_lifetimes(reveal)
+	_check_batch_afterglow(reveal)
 	_check_separate_firework_area(reveal)
 	_check_firework_trajectories()
 	_check_firework_stamp_exclusions()
@@ -342,7 +343,8 @@ func _check_level_lifetimes(reveal) -> void:
 				"reset releases every effect node and removes the last tier from the empty state")
 			reveal.configure_layout(area, 1.0)
 			for level: int in levels:
-				reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, duration - 0.04, level)
+				var lifetime: float = Reveal.SECONDS if level >= 4 else duration
+				reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, lifetime - 0.04, level)
 			var late: Array = reveal.snapshot().entries
 			check(late.size() == 3, "a late frame creates the remaining tail for each live effect tier")
 			for index in range(late.size()):
@@ -351,9 +353,91 @@ func _check_level_lifetimes(reveal) -> void:
 			reveal.advance(0.05)
 			check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
 				"late effect tails expire without retaining a particle subtree")
-			reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, duration + 0.01, 6)
+			reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, Reveal.SECONDS + 0.01, 6)
 			check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
 				"an already-expired Lv6 catch-up cannot replay its showcase")
+
+
+func _check_batch_afterglow(reveal) -> void:
+	var no_exclusions: Array[Rect2] = []
+	var layouts: Array[Dictionary] = [
+		{"area": Rect2(20, 12, 980, 260), "reading_seconds": 0.86},
+		{"area": Rect2(14, 8, 362, 190), "reading_seconds": 0.62},
+		{"area": Rect2(12, 6, 820, 110), "reading_seconds": 0.48},
+	]
+	for layout: Dictionary in layouts:
+		for reduced: bool in [false, true]:
+			for level: int in [4, 5, 6]:
+				reveal.reset()
+				reveal.set_reduced_motion(reduced)
+				reveal.configure_layout(layout.area, 1.0)
+				_present(reveal, "cat", cat, false, level)
+				var manual: Dictionary = reveal.snapshot()
+				var manual_fall: Vector2 = reveal._entries[0]._level_effects._firework_point(
+					Vector2.ZERO, Vector2(0.6, -0.8), 60.0, 1.30, 1.72)
+				reveal.reset()
+				_present(reveal, "cat", cat, true, level)
+				var start: Dictionary = reveal.snapshot()
+				var reading_seconds: float = float(layout.reading_seconds)
+				check(is_equal_approx(float(start.duration), reading_seconds)
+					and is_equal_approx(float(start.effect_duration), float(manual.effect_duration)),
+					"Automatic fireworks keep the manual lifetime without extending the layout's reading beat")
+				check(start.effects.emission_seconds == manual.effects.emission_seconds
+					and start.effects.trail_count == manual.effects.trail_count
+					and int(start.effects.spark_count) < int(manual.effects.spark_count),
+					"Automatic collection keeps complete staggered blooms and trails at reduced spark density")
+				var batch_fall: Vector2 = reveal._entries[0]._level_effects._firework_point(
+					Vector2.ZERO, Vector2(0.6, -0.8), 60.0, 1.30, 1.72)
+				check(batch_fall.is_equal_approx(manual_fall),
+					"Automatic falling embers follow the full manual descent rather than a shortened path")
+				reveal.advance(reading_seconds - 0.02)
+				check(reveal.snapshot().content_visible and float(reveal.snapshot().content_alpha) < 0.15,
+					"The compact reading surface fades on its original layout-specific boundary")
+				reveal.advance(0.04)
+				var tail: Dictionary = reveal.snapshot()
+				check(tail.visible and tail.active_count == 1 and not tail.content_visible
+					and tail.phase == "afterglow" and tail.effects.visible and float(tail.content_alpha) == 0.0,
+					"After the reading card disappears, its high-level fireworks remain independently visible")
+				check(is_equal_approx(float(tail.effects.elapsed), float(tail.elapsed))
+					and is_equal_approx(float(tail.effects.duration), float(tail.effect_duration)),
+					"Lingering fireworks retain their original release age and full lifetime")
+				reveal.set_reduced_motion(true)
+				var still: Dictionary = reveal.snapshot()
+				reveal.advance(0.10)
+				var advanced: Dictionary = reveal.snapshot()
+				check(not advanced.content_visible and advanced.effects.reduced_motion
+					and advanced.rect == still.rect and advanced.effects.rect == still.effects.rect
+					and is_equal_approx(float(advanced.elapsed), float(still.elapsed) + 0.10),
+					"Reduced-motion afterglow remains stationary without restoring the expired reading card")
+				reveal.set_reduced_motion(false)
+				check(not reveal.snapshot().content_visible and reveal.snapshot().elapsed == advanced.elapsed,
+					"Restoring motion resumes the existing tail without a new card or clock")
+				var resized := Rect2(8, 6, 300, 125)
+				var effect_area := Rect2(8, 6, 300, 220)
+				reveal.configure_layout(resized, 1.0, no_exclusions, effect_area)
+				check(reveal.snapshot().entry_id == tail.entry_id and reveal.snapshot().elapsed == advanced.elapsed
+					and not reveal.snapshot().content_visible,
+					"Resizing an afterglow preserves identity and age without resurrecting its text")
+				_check_bounds(reveal, resized, effect_area)
+				_check_input(reveal)
+				reveal.advance(float(tail.effect_duration) - float(advanced.elapsed) - 0.01)
+				check(reveal.snapshot().effects.visible and not reveal.snapshot().content_visible,
+					"The presentation retains the final fade until the effect's own boundary")
+				reveal.advance(0.02)
+				check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
+					"The final afterglow releases its entire subtree at the effect boundary")
+				reveal.configure_layout(layout.area, 1.0)
+				var delay: float = Model.collection_pop_seconds(level, true)
+				var age: float = reading_seconds + 0.12
+				reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, true, delay + age, level, delay)
+				var caught_up: Dictionary = reveal.snapshot()
+				check(caught_up.visible and caught_up.effects.visible and not caught_up.content_visible
+					and caught_up.phase == "afterglow" and is_equal_approx(float(caught_up.effects.elapsed), age),
+					"A delayed frame after reading expiry catches up only the existing firework tail")
+				reveal.reset()
+				reveal.advance(3.0)
+				check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
+					"Reset cancels caught-up afterglows without a later callback")
 
 
 func _check_separate_firework_area(reveal) -> void:
@@ -502,6 +586,7 @@ func _check_charge_case(reveal, level: int, batch: bool, reduced: bool) -> void:
 	var seconds: float = Reveal.BATCH_SECONDS if batch else Reveal.SECONDS
 	reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, 0.0, level, delay)
 	var start: Dictionary = reveal.snapshot()
+	var effect_seconds: float = float(start.effect_duration)
 	check(start.visible and start.entries.size() == 1 and start.entries[0].visible
 		and start.phase == "charging" and start.effects.phase == "charging",
 		"each manual and batch reading card appears in its charge phase before release")
@@ -558,19 +643,24 @@ func _check_charge_case(reveal, level: int, batch: bool, reduced: bool) -> void:
 	check(reveal.snapshot().visible and float(reveal.snapshot().content_alpha) < 0.1,
 		"charge leaves the complete original reading lifetime available after release")
 	reveal.advance(0.02)
+	if effect_seconds > seconds:
+		check(reveal.snapshot().visible and not reveal.snapshot().content_visible
+			and reveal.snapshot().phase == "afterglow" and reveal.snapshot().effects.visible,
+			"A charged batch card expires on time while its complete firework tail continues")
+		reveal.advance(effect_seconds - seconds)
 	check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
-		"a charged card frees itself only after its own full reading lifetime")
+		"A charged presentation frees itself after its last reading or effect lifetime")
 	reveal.configure_layout(Rect2(20, 12, 980, 260), 1.0)
 	reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, delay + 0.24, level, delay)
 	check(reveal.snapshot().visible and is_equal_approx(float(reveal.snapshot().elapsed), 0.24)
 		and reveal.snapshot().phase != "charging" and reveal.snapshot().effects.phase != "charging",
 		"a late release catches up from the pop boundary without replaying anticipation")
 	reveal.reset()
-	reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, delay + seconds - 0.04, level, delay)
+	reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, delay + effect_seconds - 0.04, level, delay)
 	check(reveal.snapshot().visible and float(reveal.snapshot().content_alpha) < 0.15,
 		"late charged presentations retain only their existing fading tail")
 	reveal.advance(0.05)
-	reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, delay + seconds + 0.01, level, delay)
+	reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, delay + effect_seconds + 0.01, level, delay)
 	check(not reveal.snapshot().visible and reveal.get_child_count() == 0,
 		"an expired charged presentation cannot replay its reading card")
 	reveal.present({"id": "cat", "text": "cat"}, cat, Color.WHITE, batch, 0.0, level, delay)

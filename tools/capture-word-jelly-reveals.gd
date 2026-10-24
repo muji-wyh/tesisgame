@@ -186,7 +186,7 @@ func _frames() -> void:
 
 
 func _batch_frame_count() -> int:
-	return ceili(((Model.MAX_MERGE_LEVEL - 1) * Model.BATCH_BEAT_SECONDS + Reveal.BATCH_SECONDS) * 30.0) + 1
+	return ceili(((Model.MAX_MERGE_LEVEL - 1) * Model.BATCH_BEAT_SECONDS + Reveal.SECONDS) * 30.0) + 1
 
 
 func _batch_frame_directory() -> String:
