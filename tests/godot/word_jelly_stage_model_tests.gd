@@ -151,7 +151,7 @@ func _test_stage_waits_for_collection_commit() -> void:
 		pending.merge(payload, true)
 		return {"pending": true}
 	model.collect(int(tile.id))
-	model.step(Model.COLLECT_SECONDS)
+	model.step(Model.collection_seconds(4))
 	check(not pending.is_empty() and not model.stage_transition_ready()
 		and not model.replace_stage_words([_word(1)], 3) and model.fragment_count == 0,
 		"A pending durable collection must resolve before a stage can advance")
@@ -160,7 +160,7 @@ func _test_stage_waits_for_collection_commit() -> void:
 	check(model._words.size() == 1 and model.fragment_count == 0 and not model.cell(int(tile.id)).is_empty(),
 		"A failed collection leaves its word and reward available for retry")
 	model.collect(int(tile.id))
-	model.step(Model.COLLECT_SECONDS)
+	model.step(Model.collection_seconds(4))
 	check(model.resolve_collection_commit(str(pending.event_id), int(pending.generation), {"ok": true}),
 		"The original collection receipt can be saved successfully on retry")
 	model.retire_mastered_words([word.id])

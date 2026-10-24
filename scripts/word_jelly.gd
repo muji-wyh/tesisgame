@@ -16,6 +16,7 @@ const CollectButton = preload("res://scripts/word_jelly_collect_button.gd")
 const PowerupButton = preload("res://scripts/word_jelly_powerup_button.gd")
 const PowerupEffects = preload("res://scripts/word_jelly_powerup_effects.gd")
 const ReadPanel = preload("res://scripts/jelly_read_panel.gd")
+const ComboHUD = preload("res://scripts/word_jelly_combo.gd")
 const COLLECTION_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const POWERUP_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const WELL_CLOUDS = preload("res://assets/images/jelly-match/well/clouds.png")
@@ -46,6 +47,7 @@ var _palette_cache: Dictionary = {}
 var _arrival_origins: Dictionary = {}
 var _preview_generated: int = -1
 var _word_reveal: WordReveal
+var _combo_hud: ComboHUD
 var _collection_effects: CollectionEffects
 var _stage_banner: StageBanner
 var _presentation_elapsed: float = 0.0
@@ -114,6 +116,7 @@ func _init() -> void:
 	game.powerup_feedback.connect(_powerup_feedback)
 	game.powerup_fragment_arrived.connect(_powerup_fragment_arrived)
 	game.drag_blocked.connect(_drag_blocked)
+	game.combo_changed.connect(_combo_changed)
 	game.fusion_started.connect(_powerup_fusion_started)
 	for tile: Tile in _preview_tiles:
 		remove_child(tile)
@@ -132,6 +135,9 @@ func _init() -> void:
 	drop_button.set("accessibility_name", "Drop the next roots and pictures")
 	_word_reveal = WordReveal.new()
 	add_child(_word_reveal)
+	_combo_hud = ComboHUD.new()
+	_combo_hud.z_index = 60
+	add_child(_combo_hud)
 	# Large blooms remain behind the compact chest prompt as well as word cards.
 	_loot_detail.z_index = _word_reveal.z_index + 1
 	_collection_effects = CollectionEffects.new()
@@ -293,6 +299,7 @@ func _read_action_at(point: Vector2) -> bool:
 	return false
 
 func set_reduced_motion(value: bool) -> void:
+	_combo_hud.reduced_motion = value
 	_stage_banner.reduced_motion = value
 	_word_reveal.set_reduced_motion(value)
 	_collection_effects.set_reduced_motion(value)
@@ -309,6 +316,7 @@ func _visibility_changed() -> void:
 	super._visibility_changed()
 
 func _finished(result: Dictionary) -> void:
+	_combo_hud.reset()
 	_word_reveal.reset()
 	_collection_effects.reset()
 	_powerup_effects.hide()
@@ -1165,6 +1173,7 @@ func _process(delta: float) -> void:
 	_reveal_frame_end = -1.0
 	_powerup_frame_end = -1.0
 	if _can_play() and delta <= 0.5:
+		_combo_hud.advance(delta)
 		_stage_banner.advance(delta)
 		_presentation_elapsed += delta
 		_collection_effects.advance(delta)
@@ -1608,6 +1617,11 @@ func _landing_contact_at(cell: Dictionary) -> float:
 
 func _refresh_hud() -> void:
 	super._refresh_hud()
+	if _combo_hud != null:
+		# Learning callbacks can refresh the HUD before combo_changed. Consume
+		# increments only through that ordered signal so each keeps its flourish.
+		if game.phase != "playing" or game.combo_count == 0:
+			_combo_hud.set_state({})
 	_loot_detail.visible = _loot_detail.visible and _compact_hud and not has_header_chest()
 	var has_error: bool = not game.error.is_empty()
 	_notice.hide()
@@ -1618,6 +1632,18 @@ func _refresh_hud() -> void:
 		_error_notice_reserved = has_error
 		_layout.call_deferred()
 	_refresh_collect_button()
+
+func _can_play() -> bool:
+	return super._can_play() and not bool(game.combo_snapshot().pending)
+
+func _combo_changed(state: Dictionary) -> void:
+	if _combo_hud == null:
+		return
+	var increased: bool = int(state.count) > int(_combo_hud.snapshot().count)
+	_combo_hud.set_state(state, _can_play())
+	if increased and _can_play():
+		audio_requested.emit("jelly-combo-%d" % int(state.count))
+	_publish()
 
 func set_stage_progress(state: Dictionary, celebrate: bool = false) -> void:
 	var was_visible: bool = _stage_banner.visible
@@ -1827,6 +1853,30 @@ func _layout() -> void:
 	collect_button.set_ui_scale(s)
 	collect_button.size = Vector2(auto_merge.size.x, collect_height)
 	collect_button.position = Vector2(auto_merge.position.x, auto_merge.position.y - divider_gap - collect_button.size.y)
+	# Use existing header/footer/rail space, preserving the board's cell size.
+	var combo_bounds := Rect2(Vector2.ZERO, Vector2(180.0, 44.0) / s)
+	if local_finish or local_chest:
+		var left: float = chest_meter_rect().end.x + 8.0 / s if local_chest else edge
+		var right: float = finish_button.position.x - 8.0 / s if local_finish else size.x - edge
+		combo_bounds.size.x = minf(combo_bounds.size.x, maxf(0.0, right - left))
+		combo_bounds.position = Vector2((left + right - combo_bounds.size.x) * 0.5, 2.0 / s)
+	elif not side_hud:
+		var left: float = collect_button.get_rect().end.x + 12.0 / s
+		var right: float = hud_x + footer_width
+		combo_bounds.size.x = minf(combo_bounds.size.x, maxf(0.0, right - left))
+		combo_bounds.position = Vector2(right - combo_bounds.size.x,
+			collect_button.position.y + (collect_height - combo_bounds.size.y) * 0.5)
+	else:
+		var rail_top: float = content_top + (54.0 / s if stage_in_rail and _stage_banner.visible else 0.0)
+		var rail_space: float = collect_button.position.y - rail_top - 8.0 / s
+		if rail_space >= combo_bounds.size.y:
+			combo_bounds.size.x = minf(combo_bounds.size.x, hud_width)
+			combo_bounds.position = Vector2(hud_x, rail_top)
+		else:
+			combo_bounds.size.x = minf(combo_bounds.size.x, maxf(0.0, _board.position.x - edge * 2.0))
+			# Short landscape leaves its upper gutter to collected-word cards.
+			combo_bounds.position = Vector2(edge, maxf(content_top, _board.end.y - combo_bounds.size.y))
+	_combo_hud.configure(combo_bounds, s, reduced_motion)
 	_action_divider.size = Vector2(hud_width if side_hud else footer_width, 2.0 / s)
 	_action_divider.position = Vector2(hud_x, collect_button.get_rect().end.y + (divider_gap - _action_divider.size.y) * 0.5)
 	if _powerup_effects != null:
@@ -1864,7 +1914,8 @@ func _layout() -> void:
 			Vector2(size.x - edge * 2.0, minf(440.0 / s, size.y * maxf(0.58, reveal_fraction)) - edge))
 		_word_reveal.configure_layout(Rect2(Vector2.ONE * edge,
 			Vector2(size.x - edge * 2.0, minf(280.0 / s, size.y * reveal_fraction) - edge)), s,
-			[chest_meter_rect().grow(10.0 / s), collect_button.get_rect().grow(8.0 / s), finish_rect.grow(8.0 / s)], firework_area)
+			[chest_meter_rect().grow(10.0 / s), collect_button.get_rect().grow(8.0 / s), finish_rect.grow(8.0 / s),
+			_combo_hud.get_rect().grow(3.0 / s)], firework_area)
 	_sync_positions()
 	_refresh_fusion()
 	_refresh_hud()
@@ -1897,6 +1948,7 @@ func snapshot() -> Dictionary:
 	_preview_drop_available = _can_drop_preview()
 	var state: Dictionary = super.snapshot()
 	state["stage"] = _stage_banner.snapshot() if _stage_banner != null else {}
+	state["combo_hud"] = _combo_hud.snapshot() if _combo_hud != null else {"visible": false}
 	state["mode"] = "word_jelly"
 	state["columns"] = WordModel.COLUMNS
 	state["rows"] = WordModel.ROWS

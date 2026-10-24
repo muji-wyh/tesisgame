@@ -138,6 +138,8 @@ The existing Lv1 pop retains its own approved peak; higher cues have a maximum
 solo peak of -8.5 dBFS and a repeated-batch ceiling below 0.78 at runtime gain 0.90.
 Active gameplay uses `pop` for Lv1 and `jelly-collect-lv2` through
 `jelly-collect-lv6` for the other five levels, at original runtime pitch 1.0.
+Combo increments use a separate bounded pool of rising accents described in
+[Jelly Words combo audio](jelly-combo-audio.md); these level recordings are unchanged.
 Former Lv7-Lv9 recordings, layer recipes and hashes remain in the manifest as
 archived acquisition evidence; they are absent from the active Jelly cue registry. Eight protected higher-level audio
 channels preserve the longest tail through 120 ms batch pickups; board contact

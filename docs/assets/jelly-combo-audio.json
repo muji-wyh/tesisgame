@@ -1,0 +1,151 @@
+{
+  "version": 1,
+  "created_on": "2026-10-25",
+  "name": "Jelly Words combo accents",
+  "tool": "tools/prepare-jelly-combo-audio.py",
+  "runtime_script": "scripts/game_audio.gd",
+  "audio_sources": [
+    {
+      "id": "chime",
+      "creator": "Kenney",
+      "pack": "Interface Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_file": "docs/assets/sources/jelly-level-feedback/interface-sounds-license.txt",
+      "path": "docs/assets/sources/jelly-level-feedback/confirmation_003.ogg",
+      "sha256": "9cddaa348f8ba91a913dceb0f5b1b874379af0f5cce71a9df6cf2b744fbc60cd",
+      "status": "Previously acquired from the user's Kenney All-in-1 3.7.0 collection; complete original preserved and reused.",
+      "animations": "Not applicable; authored one-shot audio recording"
+    },
+    {
+      "id": "spark",
+      "creator": "Kenney",
+      "pack": "Interface Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_file": "docs/assets/sources/jelly-level-feedback/interface-sounds-license.txt",
+      "path": "docs/assets/sources/jelly-level-feedback/glass_006.ogg",
+      "sha256": "d1b959d0a8107b25d643fb3ab96fd6efd05d69ae142ecbea7097063de091b0ca",
+      "status": "Previously acquired from the user's Kenney All-in-1 3.7.0 collection; complete original preserved and reused.",
+      "animations": "Not applicable; authored one-shot audio recording"
+    }
+  ],
+  "audio": [
+    {
+      "name": "step",
+      "path": "assets/audio/jelly-combo/step.wav",
+      "sha256": "9a5eff62b4fd6a423574c61a739b6914dfe01878e61202765f9ebf315b6555dd",
+      "layers": [
+        {
+          "source": "chime",
+          "seconds": 0,
+          "gain": 0.72,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "spark",
+          "seconds": 0,
+          "gain": 0.12,
+          "pitch_ratio": 1
+        }
+      ],
+      "seconds": 0.322018,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -10.5
+    },
+    {
+      "name": "bright",
+      "path": "assets/audio/jelly-combo/bright.wav",
+      "sha256": "4853d70154d957650f66707cac8d77138f1108ca09b9d3a193aafe83be2d8a44",
+      "layers": [
+        {
+          "source": "chime",
+          "seconds": 0,
+          "gain": 0.78,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "spark",
+          "seconds": 0,
+          "gain": 0.26,
+          "pitch_ratio": 1
+        }
+      ],
+      "seconds": 0.322018,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -10.5
+    },
+    {
+      "name": "crown",
+      "path": "assets/audio/jelly-combo/crown.wav",
+      "sha256": "bc82ae35f0a25b40d3bdd76f9cef2b599d8feb3ed91fda5a95c6462d3389a260",
+      "layers": [
+        {
+          "source": "chime",
+          "seconds": 0,
+          "gain": 0.7,
+          "pitch_ratio": 1
+        },
+        {
+          "source": "chime",
+          "seconds": 0.008,
+          "gain": 0.25,
+          "pitch_ratio": 1.5
+        },
+        {
+          "source": "spark",
+          "seconds": 0,
+          "gain": 0.32,
+          "pitch_ratio": 1
+        }
+      ],
+      "seconds": 0.322018,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -10.5
+    }
+  ],
+  "processing": "Full-source mono 44.1 kHz decode, DC removal, smooth edge fades, deterministic layering and resampling; PCM16 normalized to -10.5 dBFS. No generated oscillator or third-party game audio.",
+  "runtime": {
+    "cue": "jelly-combo-N",
+    "tiers_begin": [
+      1,
+      3,
+      8
+    ],
+    "gains": [
+      0.4,
+      0.44,
+      0.48
+    ],
+    "pitch_formula": "2 ^ (1 - exp(-(count - 1) / 14))",
+    "pitch_ceiling": 2.0,
+    "channels": 3,
+    "pronunciation_duck_db": -6,
+    "batch_interval_seconds": 0.14
+  },
+  "mix_checks": {
+    "24_combo_140ms": {
+      "seconds": 4.86,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -16.294
+    },
+    "24_combo_and_lv6_140ms": {
+      "seconds": 4.86,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -6.95
+    }
+  },
+  "review": "Original hashes, licenses, decoded waveform, full source tails, bounded peak and 140 ms repeated mixes checked. Listening preview provided; this environment did not support audio ingestion, so no auditory or physical-device mix judgment is claimed."
+}

@@ -701,18 +701,23 @@ func _run() -> void:
 	app.audio.set_muted(true)
 	var game = view.game
 	game.spawn_interval = 10000.0
+	var prior_wallet_coins: int = app.coin_wallet.balance
+	var prior_combo_coins: int = game.combo_coins
 	var initial_streak: int = int(app.growth.snapshot().streaks.get(word.id, 0))
 	var merged: Dictionary = merged_word(view, word, 2, 2)
-	check(game.fragment_count == 0 and app.coin_wallet.balance == 0, "Merging keeps carried fragments and coins uncollected")
+	check(game.fragment_count == 0 and app.coin_wallet.balance == prior_wallet_coins + game.combo_coins - prior_combo_coins,
+		"Merging saves its exact combo coins while keeping carried fragments and collection bonuses uncollected")
 	check(game.collect(merged.id), "A valid word can be collected through the shared view model")
 	var receipt_event: String = str(game.fusions.back().attempt_id)
 	game.step(game.COLLECT_SECONDS)
-	check(game.cell(merged.id).is_empty() and app.coin_wallet.balance == 50, "A Lv2 word's reserved drop saves its fifty bonus coins immediately")
+	check(game.cell(merged.id).is_empty() and app.coin_wallet.balance == 50 + prior_wallet_coins + game.combo_coins - prior_combo_coins,
+		"A Lv2 word's reserved drop adds its fifty collection bonus coins to the saved combo rewards")
 	check(game.fragment_count == 2 and int(app.growth.snapshot().streaks.get(word.id, 0)) == initial_streak + 1, "The collection credits every carried fragment and one learning answer")
 	check(app._coin_flight.snapshot().active, "The rare coin drop launches the shared coin flight")
 	var duplicate: Dictionary = app._credit_word_jelly(receipt_event, 50)
 	app._word_jelly_collected(receipt_event, word, 50, 2, Vector2.ZERO)
-	check(duplicate.ok and duplicate.duplicate and app.coin_wallet.balance == 50, "A retried collection receipt cannot pay twice")
+	check(duplicate.ok and duplicate.duplicate and app.coin_wallet.balance == 50 + prior_wallet_coins + game.combo_coins - prior_combo_coins,
+		"A retried collection receipt cannot pay twice or repeat a combo reward")
 	var growth_before: Dictionary = app.growth.snapshot().streaks.duplicate()
 	app._jelly.word_attempted.emit("hidden-match", [str(word.id)] as Array[String], true)
 	app._jelly.round_finished.emit({"score": 900, "chest_count": 1, "chest_tier": 6})
@@ -723,7 +728,8 @@ func _run() -> void:
 	var paused_time: float = float(game.fusions.back().elapsed)
 	app._show_mode_menu()
 	game.step(2.0)
-	check(game.paused and app.coin_wallet.balance == 50 and is_equal_approx(float(game.fusions.back().elapsed), paused_time), "The library freezes a pending collection before its wallet commit")
+	check(game.paused and app.coin_wallet.balance == 50 + prior_wallet_coins + game.combo_coins - prior_combo_coins
+		and is_equal_approx(float(game.fusions.back().elapsed), paused_time), "The library freezes a pending collection before its wallet commit")
 	check(not view.finish_button.is_visible_in_tree(), "Home hides the hosted Finish action while the round is paused")
 	check_finish_visibility_stable(view, false, "on Home")
 	app._hide_mode_menu()
@@ -731,7 +737,9 @@ func _run() -> void:
 	check_finish_visibility_stable(view, true, "during play")
 	app.set_reduced_motion(false)
 	game.step(game.COLLECT_SECONDS)
-	check(not game.paused and game.fragment_count == 4 and game.chest_tier == 1 and app.coin_wallet.balance == 100, "Returning to play completes collection and unlocks the first chest")
+	check(not game.paused and game.fragment_count == 4 and game.chest_tier == 1
+		and app.coin_wallet.balance == 100 + prior_wallet_coins + game.combo_coins - prior_combo_coins,
+		"Returning to play completes collection and unlocks the first chest")
 	check(view._reward_presentation.snapshot().kind == "synthesis", "The first chest uses the shared fragment-synthesis presentation")
 	view.advance_reward_presentation(ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.REVEAL_SECONDS + 0.03)
 	check(app._reward_confetti.is_active() and app._reward_confetti.snapshot().keys.has(app._round_id + ":word_jelly:1"), "The new mode's chest acquisition launches screen confetti")
@@ -764,7 +772,8 @@ func _run() -> void:
 	check(game.collect(merged.id), "A word reserves its collection before storage is attempted")
 	var retry_event: String = str(game.fusions.back().attempt_id)
 	game.step(game.COLLECT_SECONDS)
-	check(not game.cell(merged.id).is_empty() and app.coin_wallet.balance == 100 and game.fragment_count == 4, "A failed wallet write keeps the word and its fragments recoverable")
+	check(not game.cell(merged.id).is_empty() and app.coin_wallet.balance == 100 + prior_wallet_coins + game.combo_coins - prior_combo_coins
+		and game.fragment_count == 4, "A failed wallet write keeps the word and its fragments recoverable")
 	view._process(0.0)
 	await settle()
 	var notice: Rect2 = view._notice.get_global_rect()
@@ -784,7 +793,8 @@ func _run() -> void:
 	app._refresh()
 	check(game.collect(merged.id) and str(game.fusions.back().attempt_id) == retry_event, "Retrying the same word keeps its original receipt identity")
 	game.step(game.COLLECT_SECONDS)
-	check(game.cell(merged.id).is_empty() and app.coin_wallet.balance == 150 and game.fragment_count == 5, "The successful retry credits coins and fragments once")
+	check(game.cell(merged.id).is_empty() and app.coin_wallet.balance == 150 + prior_wallet_coins + game.combo_coins - prior_combo_coins
+		and game.fragment_count == 5, "The successful retry credits coins and fragments once")
 	view._process(0.0)
 	await settle()
 	check(game.error.is_empty() and not view._notice.is_visible_in_tree(),
@@ -814,6 +824,7 @@ func _run() -> void:
 	view.advance_reward_presentation(ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.REVEAL_SECONDS + 0.03)
 	check(app._reward_confetti.snapshot().keys.has(app._round_id + ":word_jelly:2"), "The new chest tier launches its own single confetti burst")
 	var earned_round: String = app._round_id
+	var earned_combo_balance: int = prior_wallet_coins + game.combo_coins - prior_combo_coins
 	Fixture.enter_mode(app, "jelly")
 	await settle()
 	check(app._mode_id == "jelly" and app._jelly_rewards_shown and app._jelly_rewards.has_pending(), "Switching Jelly games preserves and opens the saved treasure room")
@@ -823,7 +834,8 @@ func _run() -> void:
 	growth_before = app.growth.snapshot().streaks.duplicate()
 	view.word_attempted.emit("hidden-words", [str(word.id)] as Array[String], true)
 	check(app.growth.snapshot().streaks == growth_before, "A stopped Jelly Words callback cannot credit Jelly Match")
-	check(app.coin_wallet.balance == 250, "Switching modes preserves every rare word bonus from the winning fixtures")
+	check(app.coin_wallet.balance == 250 + earned_combo_balance,
+		"Switching modes preserves every rare word bonus and exact combo coin from the winning fixtures")
 	Fixture.enter_mode(app, "word_jelly")
 	view.set_process(false)
 	await settle()
@@ -855,11 +867,11 @@ func _run() -> void:
 	controller_back_event()
 	check(not room.snapshot().holding and not app._controller_holding_jelly_chest
 		and app._settlement_dialog.is_visible_in_tree() and room.has_pending()
-		and app.coin_wallet.balance == 250,
+		and app.coin_wallet.balance == 250 + earned_combo_balance,
 		"Controller Back cancels an incomplete restored chest hold without claiming or closing the modal")
 	room.begin_hold(room._cards[0].button)
 	room.advance_hold(Feel.HOLD_SECONDS)
-	check(not room.has_pending() and app.coin_wallet.balance == 350
+	check(not room.has_pending() and app.coin_wallet.balance == 350 + earned_combo_balance
 		and room.rewards.entries[0].reward_id == "jelly:" + earned_round + ":0",
 		"The restored tier-two chest keeps its original receipt and credits one hundred coins")
 	controller_back_event()

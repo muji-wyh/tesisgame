@@ -860,6 +860,7 @@ func _build_controls() -> void:
 	_word_jelly.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_word_jelly.interaction_allowed = func() -> bool: return _mode_id == "word_jelly" and _jelly_interaction_allowed()
 	_word_jelly.credit_collection = _credit_word_jelly
+	_word_jelly.game.credit_combo = _credit_word_jelly_combo
 	_word_jelly.purchase_powerup = _purchase_word_jelly_powerup
 	_word_jelly.coin_balance = func() -> int: return coin_wallet.balance
 	_word_jelly.collected.connect(_word_jelly_collected)
@@ -2174,6 +2175,7 @@ func _active_jelly():
 
 func _jelly_interaction_allowed() -> bool:
 	return _is_jelly_mode() and not _jelly_rewards_shown and not _round_celebration_active() \
+		and not (_mode_id == "word_jelly" and _word_jelly != null and bool(_word_jelly.game.combo_snapshot().pending)) \
 		and not _professional_input_blocked() and not _rebuilding and not _page_hidden and not _speech_debug_active \
 		and not collection_page.visible and not _mode_menu_open() and not _finish_confirmation_open() and not _vocabulary_prompt.visible
 
@@ -2363,6 +2365,23 @@ func _credit_word_jelly(event_id: String, amount: int) -> Dictionary:
 	else:
 		_refresh()
 	return credit
+
+
+func _credit_word_jelly_combo(event_id: String, amount: int) -> Dictionary:
+	if _mode_id != "word_jelly" or _round_id.is_empty() or event_id.is_empty() or amount < 1 or amount > 3:
+		return {"ok": false, "error": "This combo reward is no longer active."}
+	if not coin_wallet.ready or not coin_wallet.error.is_empty():
+		coin_wallet.load_state()
+	var result: Dictionary = coin_wallet.credit_amount(_round_id + ":combo:" + event_id, amount)
+	_coin_counter.available = coin_wallet.ready and bool(result.get("ok", false))
+	if bool(result.get("ok", false)):
+		_coin_flight.sync(coin_wallet.balance)
+	_coin_counter._update_description()
+	_coin_counter.queue_redraw()
+	_publish_coins()
+	if not bool(result.get("ok", false)):
+		call_deferred("_refresh")
+	return result
 
 
 func _word_jelly_collected(event_id: String, _word: Dictionary, _amount: int, _fragments: int, origin: Vector2) -> void:
@@ -5443,6 +5462,8 @@ func _retry_storage() -> void:
 		coin_wallet.load_state()
 		_coin_counter.available = coin_wallet.ready
 		_coin_flight.sync(coin_wallet.balance)
+	if _mode_id == "word_jelly" and coin_wallet.ready and coin_wallet.error.is_empty():
+		_word_jelly.game.retry_combo_credit()
 	if _save_error:
 		_retry_reward_save()
 	if _journey_save_failed:

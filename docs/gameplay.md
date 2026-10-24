@@ -256,7 +256,15 @@ do not change that level's policy. Opening chests provides additional coins.
 Collection banks all carried fragments. A manually solved
 picture match or root composition records learning only on collection;
 automatic merges and image-free atomic exposure do not earn mastery.
-Merging and upgrading alone do not grant coins or mastery.
+Successful manual merges and collections build a visible combo. Invalid merges
+reset it; waiting, preview fast drops, pauses and stage transitions preserve it.
+Automatic Collect adds one per committed word, while paid Auto Merge stays
+neutral. Manual merges award one coin at combo 3-5, two at 6-9 and three at 10
+or above. Collection still uses its separate level-based coin chance. A rank
+badge advances through D/C/B/A/S/SS/SSS with sourced sparkle/ray flares and a
+rising accent on each increment. Reduced motion keeps a steady readable badge.
+Merging and upgrading alone do not grant mastery. Combo payment failures keep
+the merge inputs and original receipt for Retry saving without paying twice.
 Failed coin saves preserve the word and its original reward for retry;
 repeated input cannot reroll or award the same collection twice.
 

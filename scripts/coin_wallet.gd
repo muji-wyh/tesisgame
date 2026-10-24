@@ -1,7 +1,7 @@
 extends RefCounted
 ## Coin changes and their permanent receipts commit together.
 
-const VERSION: int = 2
+const VERSION: int = 3
 const Economy = preload("res://scripts/coin_economy.gd")
 const COINS_PER_TIER: int = Economy.COINS_PER_TIER
 const MAX_BALANCE: int = 9007199254740991
@@ -48,7 +48,7 @@ func load_state() -> bool:
 		var version: Variant = config.get_value("wallet", "version", null)
 		var saved_balance: Variant = config.get_value("wallet", "balance", null)
 		var receipts: Variant = config.get_value("wallet", "receipts", null)
-		if not version is int or version not in [1, VERSION]:
+		if not version is int or version not in [1, 2, VERSION]:
 			return _fail("This coin save needs a supported version.")
 		if not saved_balance is int or saved_balance < 0 or saved_balance > MAX_BALANCE \
 			or not receipts is Dictionary or receipts.size() > MAX_RECEIPTS:
@@ -58,7 +58,8 @@ func load_state() -> bool:
 		for id in receipts:
 			var amount: Variant = receipts[id]
 			if not _valid_id(id) or not amount is int or amount == 0 \
-				or amount < -MAX_BALANCE or amount > MAX_BALANCE or amount % COINS_PER_TIER != 0 \
+				or amount < -MAX_BALANCE or amount > MAX_BALANCE \
+				or ((version < 3 or amount < 0) and amount % COINS_PER_TIER != 0) \
 				or (version == 1 and amount < 0):
 				return _fail("Your coin save contains an invalid receipt.")
 			next_receipts[id] = amount
@@ -95,19 +96,34 @@ func credit(chest_id: String, tier: int) -> Dictionary:
 		return _rejected("This chest needs a valid reward ID and level.")
 	# Ordinary chests have no tier; both ordinary and tier-one chests pay 50.
 	var amount: int = Economy.chest_coins(tier)
+	return _credit_amount(chest_id, amount)
+
+
+func credit_amount(receipt_id: String, amount: Variant) -> Dictionary:
+	error = ""
+	if not ready:
+		return _rejected("Load your coins successfully before collecting this reward.")
+	# Validate before conversion so fractional, string, and boolean inputs cannot
+	# silently change the immutable amount attached to this receipt.
+	if not _valid_id(receipt_id) or not amount is int or amount <= 0 or amount > MAX_BALANCE:
+		return _rejected("This reward needs a valid ID and a positive whole coin amount.")
+	return _credit_amount(receipt_id, int(amount))
+
+
+func _credit_amount(receipt_id: String, amount: int) -> Dictionary:
 	if not _current_snapshot_matches():
 		return _outcome(false, false, 0, balance)
-	if _receipts.has(chest_id):
-		if int(_receipts[chest_id]) != amount:
-			return _rejected("This chest's saved coin reward has a different level.")
+	if _receipts.has(receipt_id):
+		if int(_receipts[receipt_id]) != amount:
+			return _rejected("This reward's saved coin amount is different.")
 		return _outcome(true, true, 0, balance)
 	if _receipts.size() >= MAX_RECEIPTS:
-		return _rejected("Your coin receipt storage is full. Your chest remains unopened.")
+		return _rejected("Your coin receipt storage is full. This reward has not been saved.")
 	if balance > MAX_BALANCE - amount:
-		return _rejected("This reward exceeds the supported coin balance. Your chest remains unopened.")
+		return _rejected("This reward exceeds the supported coin balance and has not been saved.")
 	var before: int = balance
 	var next_receipts: Dictionary = _receipts.duplicate()
-	next_receipts[chest_id] = amount
+	next_receipts[receipt_id] = amount
 	if not _persist(balance + amount, next_receipts):
 		return _outcome(false, false, 0, before)
 	balance += amount

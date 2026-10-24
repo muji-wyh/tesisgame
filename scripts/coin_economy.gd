@@ -34,5 +34,11 @@ static func jelly_bonus(merge_level: int) -> int:
 	return JELLY_BONUS_AMOUNTS[clampi(merge_level, 1, JELLY_BONUS_AMOUNTS.size()) - 1]
 
 
+static func jelly_combo_bonus(count: int) -> int:
+	if count < 3:
+		return 0
+	return 1 if count < 6 else (2 if count < 10 else 3)
+
+
 static func chest_coins(tier: int) -> int:
 	return maxi(1, tier) * COINS_PER_TIER

@@ -63,6 +63,13 @@ const JELLY_GAINS := {
 const JELLY_SECONDARY_CUES := ["pick", "release", "land", "contact"]
 const JELLY_SPEECH_DB: float = -6.0
 const JELLY_LEVEL_CHANNELS: int = 8
+const WORD_JELLY_COMBO_PATHS: Array[String] = [
+	"res://assets/audio/jelly-combo/step.wav",
+	"res://assets/audio/jelly-combo/bright.wav",
+	"res://assets/audio/jelly-combo/crown.wav",
+]
+const WORD_JELLY_COMBO_GAINS: Array[float] = [0.40, 0.44, 0.48]
+const WORD_JELLY_COMBO_CHANNELS: int = 3
 const ROUND_CELEBRATION_PATHS := {
 	"step": "res://assets/imported-audio/chest-reference/step.wav",
 	"step-detail": "res://assets/imported-audio/chest-reference/step-detail.wav",
@@ -135,6 +142,8 @@ var _round_celebration_gains: Dictionary = {}
 var _round_celebration_next_player: int = 0
 var _jelly_players: Array[AudioStreamPlayer] = []
 var _jelly_level_players: Array[AudioStreamPlayer] = []
+var _jelly_combo_players: Array[AudioStreamPlayer] = []
+var _jelly_combo_next: int = 0
 var _jelly_level_next: int = 0
 var _jelly_gains: Dictionary = {}
 var _jelly_cues: Dictionary = {}
@@ -150,6 +159,8 @@ func _ready() -> void:
 	set_process(false)
 	_pop_slice_rng.randomize()
 	_stream(JELLY_PATHS["pop"])
+	for path: String in WORD_JELLY_COMBO_PATHS:
+		_stream(path)
 	for path in POP_SLICE_PATHS:
 		if ResourceLoader.exists(path):
 			_pop_slice_paths.append(path)
@@ -371,6 +382,11 @@ func stop_pair_chest_discovery() -> void:
 
 
 func play_jelly_cue(cue_name: String) -> void:
+	if cue_name.begins_with("jelly-combo-"):
+		var count_text: String = cue_name.trim_prefix("jelly-combo-")
+		if count_text.is_valid_int():
+			play_word_jelly_combo(int(count_text))
+		return
 	if muted or not active or not available or not JELLY_PATHS.has(cue_name):
 		return
 	if cue_name.begins_with("jelly-collect-lv"):
@@ -405,6 +421,37 @@ func play_jelly_cue(cue_name: String) -> void:
 	set_process(true)
 
 
+static func word_jelly_combo_profile(count: int) -> Dictionary:
+	if count < 1:
+		return {}
+	var tier: int = 2 if count >= 8 else 1 if count >= 3 else 0
+	# Each increment rises toward one octave without running into a shrill range.
+	var pitch: float = pow(2.0, 1.0 - exp(-float(count - 1) / 14.0))
+	return {"count": count, "tier": tier, "path": WORD_JELLY_COMBO_PATHS[tier],
+		"gain": WORD_JELLY_COMBO_GAINS[tier], "pitch": pitch}
+
+
+func play_word_jelly_combo(count: int) -> void:
+	if count < 1 or muted or not active or not available:
+		return
+	var profile: Dictionary = word_jelly_combo_profile(count)
+	if _jelly_combo_players.is_empty():
+		for index in range(WORD_JELLY_COMBO_CHANNELS):
+			var channel: AudioStreamPlayer = _player(1.0)
+			channel.finished.connect(func() -> void: _jelly_cues.erase(channel))
+			_jelly_combo_players.append(channel)
+	# The three short accents have their own pool; combo beats cannot cut speech,
+	# collection fireworks, contact feedback or the danger countdown.
+	var player: AudioStreamPlayer = _jelly_combo_players[_jelly_combo_next]
+	_jelly_combo_next = (_jelly_combo_next + 1) % WORD_JELLY_COMBO_CHANNELS
+	_jelly_gains[player] = float(profile.gain)
+	_jelly_cues[player] = "jelly-combo-%d" % count
+	player.pitch_scale = float(profile.pitch)
+	_update_jelly_gain()
+	_play(player, str(profile.path))
+	set_process(true)
+
+
 func _play_jelly_level(cue_name: String) -> void:
 	# Eight independent tails cover overlapping level collection recordings.
 	# Board contact and warning cues cannot steal these accents.
@@ -427,7 +474,7 @@ func _update_jelly_gain() -> void:
 	var duck_db: float = JELLY_SPEECH_DB if voice != null and voice.playing else 0.0
 	if pair_chest_discovery != null:
 		pair_chest_discovery.volume_db = linear_to_db(PAIR_CHEST_DISCOVERY_GAIN) + duck_db
-	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players:
+	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players + _jelly_combo_players:
 		player.volume_db = linear_to_db(float(_jelly_gains.get(player, 1.0))) + duck_db
 
 
@@ -443,12 +490,13 @@ func stop_jelly_danger() -> void:
 
 func stop_jelly_sounds() -> void:
 	stop_fragment_sounds()
-	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players:
+	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players + _jelly_combo_players:
 		_stop(player)
 		player.stream = null
 	_jelly_cues.clear()
 	_jelly_next_player = 0
 	_jelly_level_next = 0
+	_jelly_combo_next = 0
 
 
 func begin_round_celebration(round_id: String) -> void:
@@ -502,7 +550,7 @@ func stop_round_celebration() -> void:
 		_stop(player)
 		player.stream = null
 		player.volume_db = linear_to_db(float(_round_celebration_gains.get(player, 1.0)))
-	set_process(not _jelly_players.is_empty() or not _jelly_level_players.is_empty() or not _coin_players.is_empty() or not _fragment_players.is_empty())
+	set_process(not _jelly_players.is_empty() or not _jelly_level_players.is_empty() or not _jelly_combo_players.is_empty() or not _coin_players.is_empty() or not _fragment_players.is_empty())
 	_update_music_gain()
 
 
@@ -522,7 +570,7 @@ func _process(_delta: float) -> void:
 		set_process(false)
 		return
 	var jelly_playing: bool = pair_chest_discovery != null and pair_chest_discovery.playing
-	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players:
+	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players + _jelly_combo_players:
 		jelly_playing = jelly_playing or player.playing
 	_update_jelly_gain()
 	var coin_playing: bool = false

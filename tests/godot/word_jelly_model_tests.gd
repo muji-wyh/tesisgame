@@ -1872,10 +1872,20 @@ func _test_rejected_merge_atomicity() -> void:
 		"rejection fixture retains its failed collection receipt and locked coin reward")
 	model.set_held_tile(int(word.id))
 	before = _rejection_state(model)
+	var prior_combo: Dictionary = before.snapshot.combo.duplicate(true)
+	before.snapshot.combo.count = 0
+	before.snapshot.combo.rank = "D"
+	before.snapshot.combo.tier = 0
+	before.snapshot.combo.bonus = 0
+	before.snapshot.combo.next_bonus = 0
+	before.snapshot.combo.event_id = ""
 	events = _observe(model)
 	check(model.try_merge(int(word.id), 1002, true) == "wrong" and _rejection_state(model) == before
 		and events.cues == ["wrong"] and events.attempts.is_empty(),
 		"rejected growth preserves a completed word, its retry receipt, held anchor, and every carried fragment")
+	check(int(prior_combo.count) > 0 and model.combo_snapshot().count == 0
+		and model.combo_snapshot().best == prior_combo.best and model.combo_snapshot().coins == prior_combo.coins,
+		"an actual rejected merge resets its active combo while preserving the round's best and saved coins")
 	model.credit_collection = Callable()
 	for replace_round: bool in [false, true]:
 		var lifecycle_model = _model([_word("cat")])

@@ -64,8 +64,12 @@ func _run() -> void:
 	_test_spending_and_migration()
 	_test_spending_retry_and_conflicts()
 	_test_signed_receipt_validation()
+	_test_exact_credit_migration()
+	_test_exact_credit_retry_and_conflicts()
+	_test_exact_credit_validation()
 	_test_native_durability()
 	_test_native_spending()
+	_test_native_exact_credit()
 	print("Coin wallet: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -156,7 +160,7 @@ func _test_retry_and_conflicts() -> void:
 func _test_validation_and_overflow() -> void:
 	var invalid: Array = [
 		false, 42, "", "[wallet", "[wallet]\nversion=1\nbalance=0\n",
-		_save(0, {}, 3), _save(0, {}, 1.0), _save(0.0, {}), _save(-1, {}),
+		_save(0, {}, 4), _save(0, {}, 1.0), _save(0.0, {}), _save(-1, {}),
 		_save(50, {}), _save(0, []), _save(50, {"": 50}),
 		_save(50, {"match:x": 50.0}), _save(25, {"match:x": 25}),
 		_save(50, {"match:x\n": 50}), _save(50, {" match:x": 50}),
@@ -207,7 +211,7 @@ func _test_spending_and_migration() -> void:
 	check(spent == {"ok": true, "duplicate": false, "amount": -1500, "before": 3000, "after": 1500, "error": ""},
 		"Auto merge charges its exact cost and returns a signed balance delta after saving")
 	var config := ConfigFile.new()
-	check(config.parse(storage.text) == OK and config.get_value("wallet", "version") == 2
+	check(config.parse(storage.text) == OK and config.get_value("wallet", "version") == Wallet.VERSION
 		and config.get_value("wallet", "balance") == 1500
 		and config.get_value("wallet", "receipts") == {"chest:one": 2000, "chest:two": 1000, "power:auto-merge:one": -1500},
 		"The first successful purchase atomically migrates v1 credits and adds one signed debit")
@@ -343,6 +347,123 @@ func _test_signed_receipt_validation() -> void:
 		"Serialized mixed-sign history survives another save and reload without overflow or precision loss")
 
 
+func _test_exact_credit_migration() -> void:
+	for version: int in [1, 2]:
+		var storage := BrowserStorage.new()
+		var legacy: Dictionary = {"chest:legacy": 100}
+		if version == 2:
+			legacy["power:legacy"] = -50
+		var original_balance: int = 100 if version == 1 else 50
+		storage.text = _save(original_balance, legacy, version)
+		var original: String = storage.text
+		var wallet := Wallet.new("user://unused-exact-coins.cfg", storage)
+		check(wallet.load_state() and wallet.balance == original_balance and storage.text == original and storage.writes == 0,
+			"Legacy wallets load without rewriting or reinterpreting their saved receipts")
+		check(wallet.credit_amount("chest:legacy", 100).duplicate and storage.text == original and storage.writes == 0,
+			"An exact-amount acknowledgement preserves an old chest's immutable amount without migrating")
+		var earned: Dictionary = wallet.credit_amount("combo:first", 3)
+		check(earned == {"ok": true, "duplicate": false, "amount": 3, "before": original_balance,
+			"after": original_balance + 3, "error": ""}, "A small reward saves its exact integer amount and balance delta")
+		var config := ConfigFile.new()
+		legacy["combo:first"] = 3
+		check(config.parse(storage.text) == OK and config.get_value("wallet", "version") == 3
+			and config.get_value("wallet", "receipts") == legacy,
+			"The first exact credit migrates v1 or v2 to v3 while preserving every old signed receipt")
+		var saved: String = storage.text
+		var writes: int = storage.writes
+		check(wallet.credit_amount("combo:first", 3).duplicate and storage.writes == writes and storage.text == saved,
+			"Repeated combo acknowledgement cannot pay twice or rewrite history")
+		check(not wallet.credit_amount("combo:first", 4).ok and not wallet.credit("combo:first", 1).ok
+			and not wallet.spend("combo:first", 50).ok and storage.text == saved and storage.writes == writes,
+			"A small reward receipt cannot be repriced, promoted to a chest, or reused as a purchase")
+		check(wallet.credit("chest:new", 1).amount == 50 and wallet.credit_amount("chest:new", 50).duplicate,
+			"The chest API keeps its 50-coin multiplier and shares exact receipt identity")
+		check(wallet.spend("power:new", 50).amount == -50,
+			"A v3 wallet can spend the usual price while retaining a non-multiple-of-50 remainder")
+		var reloaded := Wallet.new("user://unused-exact-coins.cfg", storage)
+		check(reloaded.load_state() and reloaded.balance == original_balance + 3
+			and reloaded.credit_amount("combo:first", 3).duplicate and reloaded.credit("chest:legacy", 2).duplicate
+			and reloaded.spend("power:new", 50).duplicate,
+			"Mixed old chests, exact rewards, and purchases reload with their precise balance and idempotence")
+
+
+func _test_exact_credit_retry_and_conflicts() -> void:
+	var storage := BrowserStorage.new()
+	storage.text = _save(100, {"chest:funding": 100}, 2)
+	var wallet := Wallet.new("user://unused-exact-coins.cfg", storage)
+	var stale := Wallet.new("user://unused-exact-coins.cfg", storage)
+	check(wallet.load_state() and stale.load_state(), "Two exact-credit clients load the same legacy snapshot")
+	var original: String = storage.text
+	storage.fail_write = true
+	for attempt in range(2):
+		check(not wallet.credit_amount("combo:retry", 1).ok and wallet.balance == 100
+			and not wallet._receipts.has("combo:retry") and storage.text == original and storage.writes == 0,
+			"A failed small-credit save changes neither the legacy file, balance, nor receipt")
+	storage.fail_write = false
+	check(wallet.credit_amount("combo:retry", 1).amount == 1 and wallet.balance == 101,
+		"Recovery pays the same small reward once and migrates in the same write")
+	var saved: String = storage.text
+	var calls: int = storage.calls
+	check(not stale.credit_amount("combo:stale", 2).ok and stale.balance == 100
+		and storage.text == saved and storage.calls == calls,
+		"A stale client cannot replace a small credited balance with its old snapshot")
+	check(stale.load_state() and stale.credit_amount("combo:retry", 1).duplicate and storage.calls == calls,
+		"Reload acknowledges a committed exact reward without another write")
+	storage.conflict_text = _save(104, {"chest:funding": 100, "combo:retry": 1, "combo:other": 3}, 3)
+	check(not wallet.credit_amount("combo:race", 2).ok and wallet.balance == 101
+		and not wallet._receipts.has("combo:race"), "A write-time conflict cannot consume an exact reward receipt")
+	check(wallet.load_state() and wallet.credit_amount("combo:race", 2).amount == 2 and wallet.balance == 106,
+		"Reload and retry preserve both concurrent small rewards without duplication")
+	saved = storage.text
+	calls = storage.calls
+	storage.fail_read = true
+	check(not wallet.credit_amount("combo:unreadable", 1).ok and wallet.balance == 106
+		and storage.text == saved and storage.calls == calls, "Read failure cannot invent or overwrite a small-credit save")
+	storage.fail_read = false
+	storage.text = null
+	check(not wallet.credit_amount("combo:deleted", 1).ok and wallet.balance == 106 and storage.calls == calls,
+		"Deleted shared storage cannot be rebuilt from an old exact-credit client")
+
+
+func _test_exact_credit_validation() -> void:
+	var storage := BrowserStorage.new()
+	var wallet := Wallet.new("user://unused-exact-coins.cfg", storage)
+	check(not wallet.credit_amount("combo:unloaded", 1).ok and storage.calls == 0,
+		"Exact rewards require a successfully loaded wallet")
+	check(wallet.load_state(), "Load an empty exact-credit validation fixture")
+	for amount: Variant in [null, false, true, 1.0, 1.5, NAN, INF, "3", {}, [], 0, -1, Wallet.MAX_BALANCE + 1]:
+		check(not wallet.credit_amount("combo:invalid", amount).ok and wallet.balance == 0
+			and wallet._receipts.is_empty() and storage.calls == 0,
+			"Exact credit accepts positive whole integer coins without coercion or overflow")
+	for id: String in ["", " ", "bad\nreceipt", " leading", "trailing ", "x".repeat(513)]:
+		check(not wallet.credit_amount(id, 1).ok and storage.calls == 0,
+			"Exact rewards use the same strict permanent receipt identity rules")
+	for version: int in [1, 2]:
+		storage.text = _save(1, {"combo:legacy": 1}, version)
+		check(not _load_corrupt(wallet) and storage.calls == 0,
+			"Legacy versions keep their original 50-coin receipt validation")
+	for invalid: String in [_save(1, {"combo:float": 1.0}, 3), _save(1, {"combo:zero": 0, "combo:one": 1}, 3),
+		_save(1, {"combo:credit": 2, "power:fraction": -1}, 3), _save(2, {"combo:one": 1}, 3)]:
+		storage.text = invalid
+		check(not _load_corrupt(wallet) and not wallet.ready and storage.text == invalid,
+			"V3 rejects non-integer credits, zero receipts, nonstandard debits, and inconsistent totals")
+	storage.text = null
+	check(wallet.load_state() and wallet.credit_amount("combo:maximum", Wallet.MAX_BALANCE).amount == Wallet.MAX_BALANCE,
+		"An exact credit may reach the largest safely represented whole balance")
+	var saved: String = storage.text
+	check(not wallet.credit_amount("combo:overflow", 1).ok and wallet.balance == Wallet.MAX_BALANCE
+		and storage.text == saved and not wallet._receipts.has("combo:overflow"),
+		"An extra coin beyond the supported balance cannot overflow or consume its receipt")
+	var reloaded := Wallet.new("user://unused-exact-coins.cfg", storage)
+	check(reloaded.load_state() and reloaded.balance == Wallet.MAX_BALANCE
+		and reloaded.credit_amount("combo:maximum", Wallet.MAX_BALANCE).duplicate,
+		"The exact maximum and its permanent reward identity survive serialization")
+	check(reloaded.spend("power:maximum", Wallet.MAX_TIER * 50).ok and reloaded.balance == Wallet.MAX_BALANCE % 50,
+		"A maximum exact balance still spends only a supported 50-coin price")
+	check(wallet.load_state() and wallet.balance == Wallet.MAX_BALANCE % 50,
+		"The maximum signed history reconstructs its small remainder without precision loss")
+
+
 func _test_native_durability() -> void:
 	var directory: String = "user://coin-wallet-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	check(DirAccess.make_dir_recursive_absolute(directory) == OK, "Create isolated native wallet storage")
@@ -418,5 +539,30 @@ func _test_native_spending() -> void:
 		"A native zero balance retains the last purchase receipt after reload")
 	check(not FileAccess.file_exists(path + ".pending") and not FileAccess.file_exists(path + ".previous"),
 		"Successful native spending clears staging and backup files")
+	DirAccess.remove_absolute(path)
+	DirAccess.remove_absolute(directory)
+
+
+func _test_native_exact_credit() -> void:
+	var directory: String = "user://coin-exact-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
+	check(DirAccess.make_dir_recursive_absolute(directory) == OK, "Create isolated native exact-credit storage")
+	var path: String = directory + "/wallet.cfg"
+	var wallet := Wallet.new(path)
+	check(wallet.load_state() and wallet.credit_amount("combo:native-one", 1).amount == 1,
+		"Native exact credit saves its first single coin")
+	var saved: String = FileAccess.get_file_as_string(path)
+	check(DirAccess.make_dir_absolute(path + ".pending") == OK, "Block native exact-credit staging")
+	check(not wallet.credit_amount("combo:native-retry", 3).ok and wallet.balance == 1
+		and not wallet._receipts.has("combo:native-retry") and FileAccess.get_file_as_string(path) == saved,
+		"A failed native write preserves the earlier single coin and leaves the new receipt retryable")
+	check(DirAccess.remove_absolute(path + ".pending") == OK, "Restore native exact-credit staging")
+	check(wallet.credit_amount("combo:native-retry", 3).amount == 3 and wallet.balance == 4,
+		"Native retry saves the exact unpaid reward once")
+	check(DirAccess.rename_absolute(path, path + ".previous") == OK, "Interrupt a native v3 save between renames")
+	var recovered := Wallet.new(path)
+	check(recovered.load_state() and recovered.balance == 4
+		and recovered.credit_amount("combo:native-one", 1).duplicate
+		and recovered.credit_amount("combo:native-retry", 3).duplicate,
+		"Native recovery restores exact coins and permanently acknowledges both receipts")
 	DirAccess.remove_absolute(path)
 	DirAccess.remove_absolute(directory)

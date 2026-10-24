@@ -163,6 +163,7 @@ function collectRequiredAudio(root) {
     ...['downgrade', 'lost'].map(id => `assets/audio/memory-chest/${id}.wav`),
     ...['collect-pop', 'land', 'danger'].map(id => `assets/audio/jelly-match/${id}.wav`),
     ...Array.from({ length: 5 }, (_, index) => `assets/audio/jelly-match/collect-lv${index + 2}.wav`),
+    ...['step', 'bright', 'crown'].map(id => `assets/audio/jelly-combo/${id}.wav`),
     ...['contact', 'merge-together-v3'].map(id => `assets/imported-audio/jelly-interaction/${id}.wav`),
     ...THEMES.map(id => `assets/audio/bgm/${id}.wav`),
     ...Object.keys(prompts).map(id => `assets/audio/voice/${id}.wav`),

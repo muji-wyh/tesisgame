@@ -13,6 +13,7 @@ const COMPOSITION_AGE = 8;
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
 const previewReady = state => state.upcoming.every((body, index) => !body.id || state.preview.slots[index].visible);
 const wallet = page => page.locator('#coin-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
+const comboCoinsSince = (state, before) => state.combo.coins - before.combo.coins;
 const growth = page => page.locator('#growth-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const normalize = text => text.trim().toLowerCase().replace(/\s+/g, ' ');
 const semanticSurface = text => text.replace(/^-+|-+$/g, '');
@@ -973,7 +974,8 @@ test('collecting a lower word makes the stack above it visibly fall onto support
   fs.writeFileSync(info.outputPath('word-jelly-stack-falling-midpoint.png'), Buffer.from(frame, 'base64'));
   await capture(page, info, 'word-jelly-stack-landed-after-collection');
   const earnedCoins = collectionCoins(after, before, [completed]);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + earnedCoins);
+  await expect.poll(async () => (await wallet(page)).balance)
+    .toBe(startingWallet.balance + earnedCoins + comboCoinsSince(after, opening));
   expect(after.fragment_count).toBe(before.fragment_count + completed.fragments);
   expect(errors).toEqual([]);
 });
@@ -1264,12 +1266,14 @@ test('released roots and merged words fall onto support and keep their contents 
     expect(content(retained), 'A rejected append preserves the relocated word and root').toEqual(content(original));
     expectSupportedChild(rejected.after, retained);
   }
-  expect((await wallet(page)).balance, 'Dragging and a rejected merge do not collect word coins').toBe(startingWallet.balance);
+  expect((await wallet(page)).balance, 'Relocation and rejection preserve the already-earned combo coins')
+    .toBe(startingWallet.balance + comboCoinsSince(rejected.after, opening));
   await pressRect(page, rejected.after.tiles.find(tile => tile.id === placed.id).rect);
   await expect.poll(async () => (await read()).cleared_pairs).toBe(opening.cleared_pairs + 1);
   const final = await read();
   const earnedCoins = collectionCoins(final, opening, [placed]);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + earnedCoins);
+  await expect.poll(async () => (await wallet(page)).balance)
+    .toBe(startingWallet.balance + earnedCoins + comboCoinsSince(final, opening));
   expect(final.cleared_pairs).toBe(opening.cleared_pairs + 1);
   expect(final.fragment_count).toBe(opening.fragment_count + placed.fragments);
   expect(errors).toEqual([]);
@@ -1773,6 +1777,127 @@ for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode ==
   expect(errors).toEqual([]);
 });
 
+additiveTest('combo coins start at three real merges, fast drop preserves the streak, and Collect increments without combo payouts', async ({ page, browserName }, info) => {
+  test.setTimeout(240000);
+  await seedGrowth(page, 12, { unmastered: ['cat'] });
+  await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 1, trackSourceLifecycle: true });
+  const errors = await startWordJelly(page, { age: 3, preseededGrowth: true });
+  const opening = await jelly(page), startingWallet = await wallet(page);
+  expect(opening.combo.count).toBe(0);
+  const audioAvailable = await page.evaluate(() => window.audioObservation.available);
+  if (browserName === 'chromium') expect(audioAvailable).toBe(true);
+  const evidence = { opening: opening.combo, merges: [], sounds: [] };
+  const save = () => fs.writeFileSync(info.outputPath('word-jelly-combo.json'), JSON.stringify(evidence, null, 2));
+  const mergedIds = [];
+  for (let count = 1; count <= 3; count++) {
+    let candidate;
+    for (let packet = 0; packet < 4; packet++) {
+      await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
+      const state = await jelly(page);
+      candidate = suppliedWords(state, 3).find(item => item.word.id === 'cat');
+      if (candidate) break;
+      expect(state.preview.enabled).toBe(true);
+      await pressRect(page, state.preview.rect);
+      await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(state.generated_tiles);
+      expect((await jelly(page)).combo.count, 'Supplying the next genuine pair preserves the combo').toBe(count - 1);
+    }
+    expect(candidate, 'The ordinary cat supply provides the next real picture match').toBeTruthy();
+    const audioFrom = await page.evaluate(() => window.audioObservation.playbacks.length);
+    const completed = await merge(page, candidate.roots[0].id, candidate.picture.id);
+    mergedIds.push(completed.id);
+    const current = await jelly(page);
+    expect(current.combo.count).toBe(count);
+    expect(current.combo.best).toBe(count);
+    expect(current.combo.bonus).toBe(count === 3 ? 1 : 0);
+    expect(current.combo.coins).toBe(count === 3 ? 1 : 0);
+    expect(current.combo.pending).toBe(false);
+    await expect.poll(async () => (await wallet(page)).balance)
+      .toBe(startingWallet.balance + current.combo.coins);
+    expect(current.combo_hud.visible).toBe(true);
+    expect(current.combo_hud.count).toBe(count);
+    expect(current.combo_hud.input_transparent).toBe(true);
+    evidence.merges.push({ id: completed.id, combo: current.combo, hud: current.combo_hud, wallet: await wallet(page) });
+    if (audioAvailable) {
+      const sound = await expectRecording(page, audioFrom, `assets/audio/jelly-combo/${count < 3 ? 'step' : 'bright'}.wav`);
+      expect(sound.playbackRate).toBeCloseTo(2 ** (1 - Math.exp(-(count - 1) / 14)), 5);
+      expect(sound.peak).toBeGreaterThan(0.01);
+      if (evidence.sounds.length) expect(sound.playbackRate).toBeGreaterThan(evidence.sounds.at(-1).playbackRate);
+      evidence.sounds.push(sound);
+    }
+    save();
+  }
+  if (audioAvailable) {
+    expect(evidence.sounds[0].fingerprint).toBe(evidence.sounds[1].fingerprint);
+    expect(evidence.sounds[2].fingerprint).not.toBe(evidence.sounds[1].fingerprint);
+  }
+  await capture(page, info, 'word-jelly-combo-three');
+  const beforeDrop = await jelly(page);
+  expect(beforeDrop.preview.enabled).toBe(true);
+  await pressRect(page, beforeDrop.preview.rect);
+  await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(beforeDrop.generated_tiles);
+  await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
+  const afterDrop = await jelly(page);
+  expect(afterDrop.combo).toEqual(beforeDrop.combo);
+  expect(afterDrop.combo_hud.pulse_serial).toBe(beforeDrop.combo_hud.pulse_serial);
+  evidence.fastDrop = { before: beforeDrop.combo, after: afterDrop.combo };
+  const beforeCollect = afterDrop;
+  const selected = beforeCollect.tiles.filter(tile => mergedIds.includes(tile.id));
+  expect(selected).toHaveLength(3);
+  expect(selected.every(tile => tile.merge_level === 1)).toBe(true);
+  expect(beforeCollect.collect_button.count).toBe(3);
+  const collectAudioFrom = await page.evaluate(() => window.audioObservation.playbacks.length);
+  await page.evaluate(() => {
+    const status = document.getElementById('game-status');
+    window.comboCollectionTimeline = [];
+    window.comboCollectionObserver = new MutationObserver(() => {
+      const state = JSON.parse(status.dataset.jelly || '{}');
+      window.comboCollectionTimeline.push({ combo: state.combo, batch: state.collection_batch });
+    });
+    window.comboCollectionObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+  });
+  try {
+    await pressRect(page, beforeCollect.collect_button.rect);
+    await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(beforeCollect.cleared_pairs + 3);
+    await expect.poll(async () => (await jelly(page)).collection_batch.active).toBe(false);
+    const collected = await jelly(page);
+    expect(collected.collection_batch.completed).toBe(3);
+    expect(collected.collection_batch.elapsed).toBeCloseTo(0.42, 6);
+    expect(collected.combo.count).toBe(6);
+    expect(collected.combo.best).toBe(6);
+    expect(collected.combo.rank).toBe('B');
+    expect(collected.combo.bonus).toBe(0);
+    expect(collected.combo.coins).toBe(beforeCollect.combo.coins);
+    const earnedCoins = collectionCoins(collected, beforeCollect, selected);
+    await expect.poll(async () => (await wallet(page)).balance)
+      .toBe(startingWallet.balance + collected.combo.coins + earnedCoins);
+    evidence.collected = { combo: collected.combo, batch: collected.collection_batch, hud: collected.combo_hud,
+      wallet: await wallet(page), collectedCoins: earnedCoins };
+    if (audioAvailable) {
+      const timing = recordingTiming('assets/audio/jelly-combo/bright.wav');
+      const collectSounds = () => page.evaluate(({ from, timing }) => window.audioObservation.playbacks.slice(from).filter(sound =>
+        sound.contextState === 'running' && Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate),
+      { from: collectAudioFrom, timing });
+      await expect.poll(async () => (await collectSounds()).length,
+        { message: 'Every automatic collection increment plays its own short combo accent' }).toBe(3);
+      evidence.collectionSounds = await collectSounds();
+      for (const [index, sound] of evidence.collectionSounds.entries())
+        expect(sound.playbackRate).toBeCloseTo(2 ** (1 - Math.exp(-(index + 3) / 14)), 5);
+    }
+    await capture(page, info, 'word-jelly-combo-after-collect');
+  } finally {
+    evidence.collectionTimeline = await page.evaluate(() => {
+      window.comboCollectionObserver.disconnect();
+      return window.comboCollectionTimeline;
+    });
+    save();
+  }
+  for (const frame of evidence.collectionTimeline) {
+    expect(frame.combo.count).toBe(beforeCollect.combo.count + frame.batch.completed);
+    expect(frame.combo.coins).toBe(beforeCollect.combo.coins);
+  }
+  expect(errors).toEqual([]);
+});
+
 test('merged word mastery is recorded only on collection and survives reload', async ({ page }) => {
   test.setTimeout(180000);
   const streaks = Object.fromEntries(jellyWordsForAge(COMPOSITION_AGE).map(word => [word.id, 2]));
@@ -1869,7 +1994,9 @@ test('five columns build a pictured word and a deliberate tap collects Lv1 witho
   expect(merged.picture_visible, 'The actual word art appears on the completed jelly').toBe(true);
   expect([merged.width, merged.height], 'The completed body keeps one normal square cell').toEqual([1, 1]);
   expect(merged.rect[2], 'The pictured word keeps square proportions').toBeCloseTo(merged.rect[3], 3);
-  expect((await wallet(page)).balance, 'A word can remain on the board without spending its reward').toBe(startingWallet.balance);
+  const earnedComboCoins = comboCoinsSince(await jelly(page), liveStage);
+  expect((await wallet(page)).balance, 'A waiting word has already committed only its merge combo coins')
+    .toBe(startingWallet.balance + earnedComboCoins);
   await capture(page, info, 'word-jelly-valid-pictured-word');
   await openModeMenu(page);
   await expect.poll(async () => (await jelly(page)).paused).toBe(true);
@@ -1889,16 +2016,17 @@ test('five columns build a pictured word and a deliberate tap collects Lv1 witho
   await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + 1);
   const collected = await jelly(page);
   const earnedCoins = collectionCoins(collected, before, [merged]);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + earnedCoins);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + earnedComboCoins + earnedCoins);
   expect(collected.tiles.some(tile => tile.id === merged.id)).toBe(false);
   expect(collected.fragment_count).toBe(before.fragment_count + merged.fragments);
   await openModeMenu(page);
   await chooseMode(page, 'match');
   await expect.poll(async () => (await metrics(page)).library.current).toBe('match');
-  expect((await wallet(page)).balance, 'Leaving the mode never pays the collected word again').toBe(startingWallet.balance + earnedCoins);
+  expect((await wallet(page)).balance, 'Leaving the mode never pays the collected word again')
+    .toBe(startingWallet.balance + earnedComboCoins + earnedCoins);
   await page.reload();
   await enterGame(page);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + earnedCoins);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + earnedComboCoins + earnedCoins);
   expect(errors).toEqual([]);
 });
 
@@ -2693,6 +2821,7 @@ for (const { age, parts, minimumLength } of [
   expect(after.fragment_count).toBe(before.fragment_count + completed.fragments);
   expect(after.tiles.some(tile => tile.id === completed.id)).toBe(false);
   const earnedCoins = collectionCoins(after, before, [completed]);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(startingWallet.balance + earnedCoins);
+  await expect.poll(async () => (await wallet(page)).balance)
+    .toBe(startingWallet.balance + earnedCoins + comboCoinsSince(after, beforeMerge));
   expect(errors).toEqual([]);
 });

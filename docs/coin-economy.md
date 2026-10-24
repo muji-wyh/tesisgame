@@ -5,7 +5,7 @@
 Coins remain saved help for a difficult moment. Ordinary play is free, the
 wallet starts at zero, and purchases never gate finishing or learning. Existing
 balances, saved receipts, chest payouts, item prices, and fragment rules are
-unchanged by the level-based Jelly collection bonus.
+unchanged by Jelly collection and combo bonuses.
 
 The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 
@@ -33,8 +33,9 @@ clicks cannot charge or extend a reveal.
 
 A coin bonus is considered only when collecting a valid merged word. Lv1 always
 pays zero bonus. Roots, picture pieces, partial spellings, and bodies without a
-valid word cannot earn one. Merging, dropping, selecting, or moving a Jelly never
-awards coins. The displayed merge level determines both probability and amount;
+valid word cannot earn one. This level bonus is separate from manual merge combo
+coins; dropping, selecting and moving a Jelly award neither. The displayed merge
+level determines both probability and amount;
 root count, mass, word length, and carried fragments do not affect either.
 
 | Merged level | Chance on collection | Coins on a successful drop | Expected bonus per collected body |
@@ -60,11 +61,12 @@ its cadence does not change their reward probabilities.
 
 With every natural fragment retained and eventually collected, ordinary supply
 provides about five chest coins per source word in the long run. The modeled
-chest share of expected gross coins is therefore at least
+chest share of expected chest-plus-collection coins is therefore at least
 `5 / (5 + 75 / 6)`, approximately 28.57%, across any mix of collection levels.
 At Lv6, expected collection bonuses can exceed chest income per source word.
-This is a long-run budget bound under perfect retention, not observed player income or a
-guarantee for one round; fragment thresholds, lost words, and purchase spending
+This comparison excludes the combo income described below. It is a long-run
+budget bound under perfect retention, not observed player income or a guarantee
+for one round; fragment thresholds, lost words, and purchase spending
 can change a particular round's result.
 
 Every accepted collection reserves one outcome under its existing collection
@@ -95,7 +97,7 @@ Match's expectation includes the three-round guarantee:
 whole round is completed; leaving an unfinished round earns nothing. Previously
 earned Memory chests retain their original payouts.
 
-Collecting ordinary Jelly words at Lv1 requires 38 source words to unlock the
+Using chest income alone, collecting ordinary Jelly words at Lv1 requires 38 source words to unlock the
 first 200-coin Treasure budget, or 118 for the first 600-coin Auto Merge budget,
 when every naturally marked half is collected in one round. Partial rounds can
 finish below a chest threshold, and upgraded bodies combine source words, so
@@ -107,16 +109,48 @@ collections reduce the next cycle's interval by two seconds; the interval is
 fixed at dispatch and never shortens the countdown already running. Merging,
 Auto Merge, and idle time do not advance that progression. At five chest coins
 per source word, perfect Lv1 collection gives a theoretical automatic-supply
-bound of 45-90 coins per minute. This excludes the opening board, assumes complete
+bound of 45-90 chest coins per minute. This excludes combo rewards and the opening board, assumes complete
 collection, and is not a measured earning rate. Preview taps can release supply
 early. No new cap or waiting gate is introduced.
 
 ## Reproducible workload scenarios
 
+### Combo income
+
+Successful manual merges and completed collections each add one to the Jelly
+combo. Only an invalid merge resets it; waiting, preview drops, pauses and stage
+changes preserve it. Paid Auto Merge neither advances nor resets the chain.
+Automatic Collect advances it once for each committed word, without a combo
+coin payout. Manual merges pay according to the count reached by that merge:
+
+| Combo count | Coins per manual merge |
+| --- | ---: |
+| 1-2 | 0 |
+| 3-5 | 1 |
+| 6-9 | 2 |
+| 10+ | 3 |
+
+The cap is independent of visual ranks, which continue through D/C/B/A/S/SS/SSS.
+Each paying action consumes two existing bodies and creates one, so extra
+income is bounded by three coins per body removed through manual merging.
+For ordinary two-part words plus their picture, two merges add at most six
+combo coins per source word. With five expected chest coins, the long-run
+ceiling becomes eleven coins per ordinary source word, or 99-198 coins per
+minute at automatic supply speed and perfect retention. These are bounds,
+not measured earnings; early combos and mistakes pay less. Preview drops
+remain unlimited and require the same manual work. Six such words upgraded
+to Lv6 require seventeen merges, giving at most 8.5 combo coins per source
+word. The existing Lv6 collection bonus and chest income bring that modeled
+total to 26 coins per source word. Paid Auto Merge does not create combo
+income, and Treasure does not create extra mergeable bodies or change rewards.
+
+### Chest-only workload baselines
+
 The report drains real source packets and models 20, 40, or 60 supplied two-chunk
 words with independent 60% or 100% collection success. Each source word is
-collected at Lv1, so these scenarios have zero coin bonuses and all income comes
-from chests. Upgraded collection probabilities and expectations appear in a
+collected at Lv1, so these scenarios have zero level-based collection bonuses.
+The table isolates chest income and excludes the separate manual combo rewards
+above. Upgraded collection probabilities and expectations appear in a
 separate report table. The source-normalized bound above assumes perfect
 retention; these finite workloads use their exact fragment-threshold distributions.
 
@@ -154,9 +188,13 @@ created by buying fragments.
 
 ## Saves and validation
 
-The wallet keeps its version, zero starting balance, 50-coin denomination,
-receipt identities, and atomic debit/credit behavior. Existing balances and
-receipts are not reset or recomputed. Pending saved chests keep their original
+Wallet version 3 adds exact positive whole-coin credits for merge combos while
+preserving v1/v2 balances and receipt identities. Chest rewards and purchase
+prices remain multiples of 50, and atomic debit/credit behavior is unchanged.
+Existing balances and
+receipts are not reset or recomputed. A combo payment saves before consuming
+the merge inputs or advancing its count; a failed save pauses new actions until
+Retry saving repeats the same receipt and amount. Pending saved chests keep their original
 tiers and payouts. Collection presentation never writes a second payment.
 
 Run the reproducible report:

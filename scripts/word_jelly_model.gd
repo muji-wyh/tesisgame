@@ -16,6 +16,7 @@ signal powerup_feedback(kind: String, success: bool)
 signal powerup_drag_started(payload: Dictionary)
 signal powerup_fragment_arrived(payload: Dictionary)
 signal drag_blocked(reason: String)
+signal combo_changed(state: Dictionary)
 
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
@@ -77,6 +78,15 @@ var spawn_elapsed: float = 0.0
 var full_elapsed: float = -1.0
 var error: String = ""
 var credit_collection: Callable
+var credit_combo: Callable
+var combo_count: int = 0
+var combo_best: int = 0
+var combo_coins: int = 0
+var _combo_bonus: int = 0
+var _combo_event: String = ""
+var _combo_pending: String = ""
+var _combo_committing: bool = false
+var _finish_after_combo: bool = false
 var commit_collection: Callable
 var purchase_powerup: Callable
 var allow_cross_age: bool = false
@@ -133,7 +143,7 @@ var _finish_after_collection_commit: bool = false
 
 
 func configure(words: Array, level: int, seed_value: int = -1) -> bool:
-	if _powerup_purchasing or _finishing_powerup:
+	if _powerup_purchasing or _finishing_powerup or _combo_committing:
 		return false
 	var previous_generation: int = _generation
 	finish_powerup()
@@ -165,6 +175,14 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	generated_tiles = 0
 	collected_coins = 0
 	merged_count = 0
+	combo_count = 0
+	combo_best = 0
+	combo_coins = 0
+	_combo_bonus = 0
+	_combo_event = ""
+	_combo_pending = ""
+	_combo_committing = false
+	_finish_after_combo = false
 	spawn_interval = INITIAL_SPAWN_INTERVAL
 	spawn_elapsed = 0.0
 	full_elapsed = -1.0
@@ -733,6 +751,8 @@ func _grant_powerup_fragment(tile: Dictionary) -> void:
 
 
 func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dictionary = {}) -> String:
+	if not _combo_pending.is_empty():
+		return "ignored"
 	if phase != "playing" or paused or collection_batch_active() or (powerup_active() and not _powerup_committing) or a_id == b_id or is_fusing(a_id) or is_fusing(b_id):
 		return "ignored"
 	var automatic: bool = _powerup_committing
@@ -748,6 +768,13 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dic
 	if candidate.status == "needs_room":
 		return "needs_room"
 	if not candidate.status in ["partial", "complete"]:
+		combo_count = 0
+		_combo_bonus = 0
+		_combo_event = ""
+		var generation: int = _generation
+		combo_changed.emit(combo_snapshot())
+		if generation != _generation:
+			return "wrong"
 		cue_requested.emit("wrong")
 		return "wrong"
 	var result: Dictionary = candidate.result
@@ -827,7 +854,7 @@ static func collection_seconds(level: int, batch: bool = false) -> float:
 
 
 func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
-	if phase != "playing" or paused or powerup_active() or is_fusing(tile_id):
+	if phase != "playing" or paused or powerup_active() or not _combo_pending.is_empty() or is_fusing(tile_id):
 		return false
 	var tile: Dictionary = cell(tile_id)
 	if tile.is_empty() or not is_settled(tile) or not is_valid_word(tile) or is_lifted(tile_id):
@@ -911,6 +938,8 @@ func collection_batch_snapshot() -> Dictionary:
 
 
 func start_collection_batch() -> bool:
+	if not _combo_pending.is_empty():
+		return false
 	if phase != "playing" or paused or powerup_active() or collection_batch_active() or _held_tile_id >= 0:
 		return false
 	var ids: Array[int] = collectable_ids()
@@ -1012,7 +1041,7 @@ func _reserved_for_collection(tile_id: int) -> bool:
 
 
 func step(delta: float) -> void:
-	if phase != "playing" or paused or _powerup_purchasing or not is_finite(delta) or delta <= 0.0:
+	if phase != "playing" or paused or _powerup_purchasing or not _combo_pending.is_empty() or not is_finite(delta) or delta <= 0.0:
 		return
 	var generation: int = _generation
 	var remaining: float = delta
@@ -1092,6 +1121,8 @@ func step(delta: float) -> void:
 					break
 			if float(active.elapsed) + EPSILON >= float(active.duration):
 				_complete_operation(str(active.attempt_id))
+			if not _combo_pending.is_empty():
+				return
 		if not _can_continue(generation):
 			break
 		_resume_pending_motion()
@@ -1132,7 +1163,7 @@ func set_paused(value: bool) -> void:
 
 
 func set_held_tile(tile_id: int = -1) -> void:
-	if powerup_active() or (collection_batch_active() and tile_id >= 0):
+	if powerup_active() or (not _combo_pending.is_empty() and tile_id >= 0) or (collection_batch_active() and tile_id >= 0):
 		return
 	var held_id: int = tile_id if _index_for_id(tile_id) >= 0 else -1
 	if _held_tile_id == held_id:
@@ -1149,7 +1180,7 @@ func set_held_tile(tile_id: int = -1) -> void:
 
 
 func begin_drag(tile_id: int) -> bool:
-	if phase != "playing" or paused or powerup_active() or collection_batch_active() \
+	if phase != "playing" or paused or not _combo_pending.is_empty() or powerup_active() or collection_batch_active() \
 		or tile_id != _held_tile_id or is_fusing(tile_id):
 		return false
 	if _dragged_tile_id == tile_id:
@@ -1316,7 +1347,7 @@ func _drag_return_after_motion(anchor: Dictionary, additional: Dictionary = {}) 
 
 
 func can_reposition(tile_id: int, column: int, row: int) -> bool:
-	if phase != "playing" or paused or powerup_active() or collection_batch_active() or is_fusing(tile_id):
+	if phase != "playing" or paused or not _combo_pending.is_empty() or powerup_active() or collection_batch_active() or is_fusing(tile_id):
 		return false
 	var tile: Dictionary = cell(tile_id)
 	if tile.is_empty() or (tile_id != _held_tile_id and not is_settled(tile)):
@@ -1371,7 +1402,7 @@ func reposition(tile_id: int, column: int, row: int) -> bool:
 
 
 func can_drop_now() -> bool:
-	return phase == "playing" and not paused and not powerup_active() and not collection_batch_active() and not _first_preview_tile().is_empty() and _has_free_cell()
+	return phase == "playing" and not paused and _combo_pending.is_empty() and not powerup_active() and not collection_batch_active() and not _first_preview_tile().is_empty() and _has_free_cell()
 
 
 func drop_now(expected_first_id: int = -1) -> bool:
@@ -1468,7 +1499,7 @@ func snapshot() -> Dictionary:
 		"cells": cells.duplicate(true), "upcoming": upcoming.duplicate(true),
 		"fusion": fusion.duplicate(true), "fusions": fusions.duplicate(true),
 		"phase": phase, "paused": paused, "cleared_pairs": cleared_pairs, "score": score(),
-		"collected_coins": collected_coins, "merged_count": merged_count,
+		"collected_coins": collected_coins, "merged_count": merged_count, "combo": combo_snapshot(),
 		"chest_count": chest_count, "generated_tiles": generated_tiles,
 		"spawn_interval": spawn_interval, "spawn_elapsed": spawn_elapsed, "full_elapsed": full_elapsed,
 		"full_remaining": maxf(0.0, FULL_SECONDS - full_elapsed) if full_elapsed >= 0.0 else -1.0,
@@ -1491,6 +1522,9 @@ func finish_round(reason: String = "finished") -> Dictionary:
 	# original ending cause until that round's final result has been emitted.
 	if _finish_reason.is_empty():
 		_finish_reason = reason
+	if _combo_committing:
+		_finish_after_combo = true
+		return _result.duplicate(true)
 	if _powerup_purchasing:
 		_finish_after_purchase = true
 		return _result.duplicate(true)
@@ -1526,7 +1560,9 @@ func finish_round(reason: String = "finished") -> Dictionary:
 	_drag_gravity_delays.clear()
 	for tile: Dictionary in cells:
 		tile.lifted = false
-	_result = {"reason": _finish_reason, "cleared_pairs": cleared_pairs, "score": score(), "coins": collected_coins, "words": []}
+	_combo_pending = ""
+	_result = {"reason": _finish_reason, "cleared_pairs": cleared_pairs, "score": score(), "coins": collected_coins + combo_coins,
+		"combo_coins": combo_coins, "best_combo": combo_best, "words": []}
 	_result.merge(reward_progress(fragment_count), true)
 	for word in _completed_words.values():
 		_result.words.append(word.duplicate(true))
@@ -2181,11 +2217,22 @@ func _spawn_tile(arrival: bool, arrival_index: int = 0) -> bool:
 
 
 func _complete_operation(event_id: String) -> void:
+	if not _combo_pending.is_empty():
+		return
 	var operation_index: int = _fusion_index(event_id)
 	if operation_index < 0:
 		return
 	var completed: Dictionary = fusions[operation_index].duplicate(true)
 	if str(completed.operation) == "merge":
+		if cell(int(completed.a_id)).is_empty() or cell(int(completed.b_id)).is_empty():
+			fusions.remove_at(operation_index)
+			return
+		if not bool(completed.get("automatic", false)) and not _credit_merge_combo(event_id):
+			return
+		operation_index = _fusion_index(event_id)
+		if operation_index < 0:
+			return
+		completed = fusions[operation_index].duplicate(true)
 		fusions.remove_at(operation_index)
 		_complete_merge(completed)
 	elif str(completed.operation) == "collect":
@@ -2316,7 +2363,15 @@ func _complete_merge(completed: Dictionary) -> void:
 	completed.result = cell(int(result.id))
 	completed.word = completed.result.word.duplicate(true)
 	var generation: int = _generation
+	if not bool(completed.get("automatic", false)):
+		_advance_combo(str(completed.attempt_id), int(completed.get("combo_bonus", 0)))
+		if generation != _generation:
+			return
 	fusion_completed.emit(completed, 0)
+	if generation == _generation and _finish_after_combo:
+		_finish_after_combo = false
+		finish_round(_finish_reason)
+		return
 	if _can_continue(generation):
 		changed.emit()
 
@@ -2356,11 +2411,17 @@ func _complete_collection(completed: Dictionary) -> void:
 			_collection_batch_next_in = 0.0
 	full_elapsed = -1.0
 	var generation: int = _generation
+	_advance_combo(str(completed.attempt_id), 0, false)
+	if generation != _generation:
+		return
 	# A committed pickup owns its learning evidence, including paused settlement.
 	# Record it before presentation callbacks can pause, end, or replace the round.
 	var word_ids: Array[String] = [str(completed.word.id)]
 	if bool(completed.get("mastery_eligible", completed.a.get("mastery_eligible", false))):
 		word_attempted.emit(str(completed.attempt_id), word_ids, true)
+	if generation != _generation:
+		return
+	combo_changed.emit(combo_snapshot())
 	if generation != _generation:
 		return
 	collected.emit(str(completed.attempt_id), completed.word.duplicate(true), coins, awarded)
@@ -2377,6 +2438,66 @@ func _complete_collection(completed: Dictionary) -> void:
 		cue_requested.emit("chest")
 	if _can_continue(generation):
 		changed.emit()
+
+
+func combo_snapshot() -> Dictionary:
+	var tier: int = 0
+	for threshold: int in [3, 6, 10, 15, 25, 40]:
+		if combo_count >= threshold:
+			tier += 1
+	return {"count": combo_count, "best": combo_best, "coins": combo_coins,
+		"rank": ["D", "C", "B", "A", "S", "SS", "SSS"][tier], "tier": tier,
+		"bonus": _combo_bonus, "next_bonus": CoinEconomy.jelly_combo_bonus(combo_count + 1),
+		"event_id": _combo_event, "pending": not _combo_pending.is_empty() and not _combo_committing}
+
+
+func _advance_combo(event_id: String, bonus: int, feedback: bool = true) -> void:
+	combo_count += 1
+	combo_best = maxi(combo_best, combo_count)
+	combo_coins += bonus
+	_combo_bonus = bonus
+	_combo_event = event_id
+	if feedback:
+		combo_changed.emit(combo_snapshot())
+
+
+func _credit_merge_combo(event_id: String) -> bool:
+	var index: int = _fusion_index(event_id)
+	var active: Dictionary = fusions[index]
+	if not active.has("combo_bonus"):
+		active.combo_bonus = CoinEconomy.jelly_combo_bonus(combo_count + 1)
+	if int(active.combo_bonus) == 0 or bool(active.get("combo_credited", false)) or not credit_combo.is_valid():
+		return true
+	var generation: int = _generation
+	_combo_pending = event_id
+	_combo_committing = true
+	var response: Variant = credit_combo.call(event_id, int(active.combo_bonus))
+	if generation != _generation or _fusion_index(event_id) < 0:
+		return false
+	_combo_committing = false
+	if not response is Dictionary or not bool(response.get("ok", false)):
+		error = "The combo coins could not be saved. Choose Retry saving to finish this merge."
+		if _finish_after_combo:
+			_finish_after_combo = false
+			fusions.remove_at(_fusion_index(event_id))
+			_combo_pending = ""
+			finish_round(_finish_reason)
+			return false
+		changed.emit()
+		return false
+	active.combo_credited = true
+	_combo_pending = ""
+	error = ""
+	return true
+
+
+func retry_combo_credit() -> void:
+	if _combo_pending.is_empty() or _combo_committing or phase != "playing":
+		return
+	var event_id: String = _combo_pending
+	_combo_pending = ""
+	_complete_operation(event_id)
+	changed.emit()
 
 
 func _restore_growth(excluded_id: int = -1) -> void:
