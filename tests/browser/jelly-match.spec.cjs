@@ -43,7 +43,7 @@ async function finishRound(page, control) {
 
 async function expectFinishModal(page) {
   await expect.poll(async () => (await treasure(page)).visible,
-    { message: 'Finish opens settlement directly over the frozen board' }).toBe(true);
+    { message: 'The end presentation hands off to settlement over the frozen board' }).toBe(true);
   const state = await jelly(page), room = await treasure(page);
   expect(state.result).toEqual({ visible: false, retired: true });
   expect(state.game_over).toMatchObject({ visible: true, title: 'Round complete' });
@@ -1567,7 +1567,7 @@ test('Play again settles unopened treasure once before starting a fresh board', 
   expect(firstModal.result_context).toMatchObject({ score: earned.score, chest_tier: 1 });
   expect(firstModal.opened_count).toBe(0);
   const quotedReward = firstModal.chests[0].chest_reward;
-  expect(quotedReward).toMatchObject({ tier: 1, base: 50 });
+  expect(quotedReward).toMatchObject({ tier: 1, base: 75 });
   expect(quotedReward.total).toBe(quotedReward.base + quotedReward.bonus);
   const savedTreasure = await page.evaluate(key => localStorage.getItem(key), JELLY_REWARDS);
   expect(savedTreasure).toContain(firstResult.round_id);

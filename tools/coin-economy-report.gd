@@ -46,7 +46,7 @@ static func supply_groups(count: int) -> Array[Dictionary]:
 
 static func chest_payout(fragments: int) -> int:
 	var tier: int = int(Jelly.reward_progress(fragments).chest_tier)
-	return Economy.chest_coins(tier) if tier > 0 else 0
+	return int(Economy.chest_reward(tier, 0).total) if tier > 0 else 0
 
 
 static func expected_chest(marked_groups: int, success: float, treasure_uses: int = 0) -> float:

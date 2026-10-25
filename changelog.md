@@ -5,6 +5,22 @@ Notable changes to Grow with Pip (formerly Pip and Words and Word Buddies), grou
 Entries describe behavior at their recorded revision, including features later
 removed. Use the [documentation index](docs/README.md) for current guidance.
 
+## 2026-10-25
+
+- Added level-specific Jelly Words collection blasts: random neighbors, columns,
+  crosses, surrounding rings and the full board can mark bodies for free
+  automatic matching. Flights preserve reviewed spelling, fragments and the
+  Lv9 cap, without automatically collecting results or awarding mastery.
+- Added an eight-second combo countdown and a larger, explicitly labelled gold
+  combo-coin acknowledgement. Pauses and automatic matching freeze the clock.
+- Moved Jelly Words confetti from chest reveals to durable stage completion,
+  with viewport-scaled paper covering the full screen, including the final stage.
+- Expanded the six higher-level popup firework compositions while retaining
+  distinct level colors, shapes, timings and reduced-motion alternatives.
+- Added a visual and sound end effect before either Jelly mode opens settlement.
+- Increased new chest quotes to 75 base coins per tier plus a Pip-level bonus
+  reaching 24 at Lv99. Previously saved quotes and paid receipts remain unchanged.
+
 ## 2026-10-09
 
 - Renamed the game Grow with Pip and added shared word mastery across Match,

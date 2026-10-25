@@ -196,8 +196,12 @@ func check_interrupted_confirmation_taps(app, mode: String) -> void:
 			mode + ": a fresh Finish tap after " + interruption + " still waits for release")
 		pointer_button(button, false)
 		check(view.game.phase == "finished" and not app._finish_confirmation_open() and not app._round_result.is_empty()
-			and app._settlement_dialog.is_visible_in_tree() and not app._active_jelly().snapshot().result.visible,
-			mode + ": a fresh ordinary tap after " + interruption + " confirms normally")
+			and app._round_end.is_active() and not app._settlement_dialog.is_visible_in_tree()
+			and not app._active_jelly().snapshot().result.visible,
+			mode + ": a fresh ordinary tap after " + interruption + " starts the end message before settlement")
+		Fixture.finish_celebration(app)
+		check(not app._round_end.is_active() and app._settlement_dialog.is_visible_in_tree(),
+			mode + ": the confirmed end message hands off to settlement exactly once")
 
 
 func start_merge(view) -> bool:
@@ -268,8 +272,12 @@ func check_danger(app, mode: String) -> void:
 	app._finish_confirmation.keep_playing_button.pressed.emit()
 	game.step(game.FULL_SECONDS)
 	check(game.phase == "finished" and not app._finish_confirmation_open() and not app._round_result.is_empty()
-		and app._settlement_dialog.is_visible_in_tree() and not app._active_jelly().snapshot().result.visible,
-		mode + ": automatic expiry still finishes directly after continuation")
+		and app._round_end.is_active() and app._round_end.snapshot().title == "Game over"
+		and not app._settlement_dialog.is_visible_in_tree() and not app._active_jelly().snapshot().result.visible,
+		mode + ": automatic expiry shows Game over before settlement after continuation")
+	Fixture.finish_celebration(app)
+	check(not app._round_end.is_active() and app._settlement_dialog.is_visible_in_tree(),
+		mode + ": the expired round settles only after its Game over message")
 
 
 func check_collection_batch(app) -> void:

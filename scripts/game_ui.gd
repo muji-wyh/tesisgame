@@ -29,6 +29,7 @@ const PhraseGame = preload("res://scripts/phrase_game.gd")
 const RoundCelebration = preload("res://scripts/round_celebration.gd")
 const PairChestReward = preload("res://scripts/pair_chest_reward.gd")
 const RewardConfetti = preload("res://scripts/reward_confetti.gd")
+const RoundEnd = preload("res://scripts/round_end_presentation.gd")
 const VoicePop = preload("res://scripts/voice_pop.gd")
 const JellyMatch = preload("res://scripts/jelly_match.gd")
 const WordJelly = preload("res://scripts/word_jelly.gd")
@@ -134,6 +135,7 @@ var _memory_peek_countdown: MemoryPeekCountdown
 var _memory_reward: MemoryRewardBadge
 var _memory_stage_label: Label
 var _reward_confetti: RewardConfetti
+var _round_end: RoundEnd
 var _confetti_reward_keys: Dictionary = {}
 var _pair_words: Array[String] = []
 var _pair_proposed_pair: int = 0
@@ -881,7 +883,6 @@ func _build_controls() -> void:
 	_word_jelly.host_header_chest(header)
 	_word_jelly.finish_button.reparent(_toolbar, false)
 	_word_jelly.finish_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
-	_word_jelly._reward_presentation.confetti_requested.connect(_fragment_confetti_requested.bind("word_jelly"))
 	_jelly_rewards = PopRewardRoom.new()
 	_jelly_rewards.credit_coins = _credit_chest_coins
 	_jelly_rewards.reserve_chest_reward = _reserve_chest_reward
@@ -908,6 +909,11 @@ func _build_controls() -> void:
 	_settlement_dialog = SettlementDialog.new()
 	add_child(_settlement_dialog)
 	_settlement_dialog.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_round_end = RoundEnd.new()
+	add_child(_round_end)
+	_round_end.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_round_end.completed.connect(_round_end_completed)
+	_round_end.cue_requested.connect(_round_end_cue)
 	_jelly_rewards.home_requested.connect(func() -> void: _settlement_dialog.home_requested.emit())
 	_settlement_dialog.home_requested.connect(_show_mode_menu)
 	_round_celebration = RoundCelebration.new()
@@ -2185,10 +2191,13 @@ func _advance_word_jelly_stages(delta: float) -> void:
 	if _jelly_stage_check_left <= 0.0:
 		_jelly_stage_check_left = 0.1
 		_refresh_jelly_stage_targets()
-	if not _word_jelly_stages.remaining.is_empty() or not _word_jelly.game.stage_transition_ready():
+	if not _word_jelly_stages.remaining.is_empty():
 		return
-	# Wait for all receipts and active operations before changing the supply.
 	if _growth_save_failed and _round_context.get("track") != "professional":
+		return
+	_request_word_jelly_stage_confetti()
+	# Wait for all receipts and active operations before changing the supply.
+	if not _word_jelly.game.stage_transition_ready():
 		return
 	var next_words: Array[Dictionary] = _word_jelly_stages.next_words()
 	if next_words.is_empty():
@@ -2217,7 +2226,7 @@ func _active_jelly():
 
 
 func _jelly_interaction_allowed() -> bool:
-	return _is_jelly_mode() and not _jelly_rewards_shown and not _round_celebration_active() \
+	return _is_jelly_mode() and not _jelly_rewards_shown and not _round_celebration_active() and not _round_end_active() \
 		and not (_mode_id == "word_jelly" and _word_jelly != null and bool(_word_jelly.game.combo_snapshot().pending)) \
 		and not _professional_input_blocked() and not _rebuilding and not _page_hidden and not _speech_debug_active \
 		and not collection_page.visible and not _mode_menu_open() and not _finish_confirmation_open() and not _vocabulary_prompt.visible
@@ -2301,6 +2310,7 @@ func _confirm_jelly_finish() -> void:
 func _sync_jelly() -> void:
 	if not is_instance_valid(_jelly):
 		return
+	_sync_round_end()
 	_sync_settlement_dialog()
 	var allowed: bool = _jelly_interaction_allowed()
 	_jelly.pause(not allowed or _mode_id != "jelly")
@@ -2458,9 +2468,46 @@ func _jelly_finished(result: Dictionary, source_mode: String = "") -> void:
 		_jelly_rewards.pause()
 	if _jelly_settling:
 		return
-	_show_jelly_rewards()
-	_announce_status(("Game over. " if str(result.get("reason", "")) == "danger" else "Round complete. ") + _jelly_result_summary())
+	_stop_controller_actions()
+	_controller_accept_needs_release = _controller_accept_is_pressed()
+	audio.halt()
+	_round_end.begin(_round_id, str(result.get("reason", "")) == "danger", reduced_motion)
+	_sync_round_end()
+	if _round_end.is_visible_in_tree():
+		_round_end.grab_focus()
+	_announce_status(("Game over. " if str(result.get("reason", "")) == "danger" else "Round complete. ") + "Preparing your results.")
 	_refresh()
+
+
+func _round_end_active() -> bool:
+	return is_instance_valid(_round_end) and _round_end.is_active()
+
+
+func _sync_round_end() -> void:
+	if not _round_end_active():
+		return
+	var allowed: bool = not _page_hidden and not _rebuilding and not _speech_debug_active \
+		and not collection_page.visible and not _mode_menu_open()
+	_round_end.reduced_motion = reduced_motion
+	_round_end.set_paused(not allowed)
+	if not allowed:
+		audio.stop_round_end()
+
+
+func _round_end_cue(round_id: String, failed: bool) -> void:
+	if round_id != _round_id or _page_hidden or _mode_menu_open() or collection_page.visible:
+		return
+	audio.interact(model.theme_id, false)
+	audio.play_round_end(failed)
+
+
+func _round_end_completed(round_id: String) -> void:
+	if round_id != _round_id or not _jelly_round_ended():
+		return
+	audio.stop_round_end()
+	_celebration_seen_id = round_id
+	_show_jelly_rewards()
+	_announce_status(_jelly_result_summary())
 
 
 func _jelly_result_summary() -> String:
@@ -2498,7 +2545,7 @@ func _settle_jelly_round() -> bool:
 
 func _replay_jelly() -> void:
 	if not _is_jelly_mode() or _active_jelly().game.phase != "finished" or _rebuilding \
-			or _round_celebration_active() or _page_hidden or _speech_debug_active \
+			or _round_celebration_active() or _round_end_active() or _page_hidden or _speech_debug_active \
 			or collection_page.visible or _mode_menu_open():
 		return
 	_controller_holding_jelly_chest = false
@@ -2511,7 +2558,7 @@ func _replay_jelly() -> void:
 
 
 func _show_jelly_rewards() -> void:
-	if not _is_jelly_mode() or _round_celebration_active() or collection_page.visible or _page_hidden:
+	if not _is_jelly_mode() or _round_celebration_active() or _round_end_active() or collection_page.visible or _page_hidden:
 		return
 	if int(_round_result.get("chest_count", 0)) > 0:
 		_save_jelly_round_reward()
@@ -2568,6 +2615,9 @@ func _settlement_dialog_open() -> bool:
 func _sync_settlement_dialog() -> void:
 	if not is_instance_valid(_settlement_dialog):
 		return
+	if _round_end_active():
+		_settlement_dialog.close()
+		return
 	var content: Control = null
 	var has_chest: bool = false
 	var title: String = "Round complete"
@@ -2620,6 +2670,7 @@ func _publish_jelly(state: Dictionary, source_mode: String = "") -> void:
 	value["round_id"] = _round_id
 	value["finish_confirmation"] = _finish_confirmation.snapshot() if is_instance_valid(_finish_confirmation) else {"visible": false}
 	value["game_over"] = _settlement_dialog.snapshot() if is_instance_valid(_settlement_dialog) else {"visible": false}
+	value["game_over_sequence"] = _round_end.snapshot() if is_instance_valid(_round_end) else {"active": false}
 	_host.jellyStatus(JSON.stringify(value))
 
 
@@ -2880,7 +2931,7 @@ func _request_reward_confetti(round_id: String, mode: String, tier: int) -> void
 
 
 func _fragment_confetti_requested(mode: String) -> void:
-	if mode != _mode_id or mode not in ["jelly", "word_jelly", "pop"]:
+	if mode != _mode_id or mode not in ["jelly", "pop"]:
 		return
 	var presentation: Dictionary = _active_jelly()._reward_presentation.snapshot() if mode in ["jelly", "word_jelly"] else _pop._reward_presentation.snapshot()
 	_request_reward_confetti(_round_id, mode, int(presentation.get("tier", 0)))
@@ -2892,11 +2943,23 @@ func _pair_confetti_requested(round_id: String) -> void:
 
 
 func _round_confetti_requested(round_id: String) -> void:
-	if _mode_id == "phrase" or not _round_celebration.is_active() or round_id != _round_celebration.current_round_id():
+	if _mode_id in ["phrase", "word_jelly"] or not _round_celebration.is_active() or round_id != _round_celebration.current_round_id():
 		return
 	var state: Dictionary = _round_celebration.snapshot()
 	if int(state.chest_count) > 0:
 		_request_reward_confetti(round_id, _mode_id, maxi(1, int(state.chest_tier)))
+
+
+func _request_word_jelly_stage_confetti() -> void:
+	if reduced_motion or _round_id.is_empty() or _word_jelly_stages.words.is_empty() \
+		or not _word_jelly_stages.remaining.is_empty() or not _reward_confetti_allowed():
+		return
+	var key: String = "%s:word_jelly:stage:%d" % [_round_id, _word_jelly_stages.number]
+	if _confetti_reward_keys.has(key):
+		return
+	_confetti_reward_keys[key] = true
+	_sync_reward_confetti()
+	_reward_confetti.burst(key)
 
 
 func _round_celebration_active() -> bool:
@@ -2985,12 +3048,15 @@ func _sync_round_celebration() -> void:
 
 
 func _stop_round_celebration() -> void:
+	if is_instance_valid(_round_end):
+		_round_end.stop()
 	if is_instance_valid(_round_celebration):
 		_round_celebration.stop()
 		_round_celebration.hide()
 	_celebration_suspended = false
 	if is_instance_valid(audio):
 		audio.stop_round_celebration()
+		audio.stop_round_end()
 	_publish_round_celebration()
 
 
@@ -4490,7 +4556,7 @@ func _restore_mode_music() -> void:
 	# the accepted Enter gesture, after the host reveals the game.
 	if OS.has_feature("web") and not _loading_revealed:
 		return
-	if _page_hidden or _voice_mode or _pop_speech_active or (is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible):
+	if _page_hidden or _round_end_active() or _voice_mode or _pop_speech_active or (is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible):
 		return
 	if _mode_id == "pop" and not collection_page.visible and not _mode_menu_open():
 		return
@@ -4559,6 +4625,9 @@ func _observe_activity(event: InputEvent) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if _round_end_active() and _round_end.is_visible_in_tree():
+		get_viewport().set_input_as_handled()
+		return
 	if _settlement_dialog_open():
 		if event.is_action_pressed("ui_cancel") or (event is InputEventJoypadButton and event.button_index == JOY_BUTTON_B and event.pressed):
 			if _is_jelly_mode() and _jelly_rewards_shown and _jelly_rewards._result_context.is_empty():
@@ -4587,7 +4656,7 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 	if _finish_confirmation_open():
-		if event.is_action_pressed("ui_cancel"):
+		if event.is_action_pressed("ui_cancel") or (event is InputEventJoypadButton and event.button_index == JOY_BUTTON_B and event.pressed):
 			_cancel_jelly_finish()
 			get_viewport().set_input_as_handled()
 			return
@@ -4905,6 +4974,8 @@ func _valid_focus(control: Control) -> bool:
 		return false
 	if _settlement_dialog_open():
 		return _settlement_dialog.is_ancestor_of(control)
+	if _round_end_active() and _round_end.is_visible_in_tree():
+		return control == _round_end
 	if _round_celebration_active() and not collection_page.visible:
 		return _round_celebration.is_ancestor_of(control) or _header.is_ancestor_of(control)
 	return true
@@ -4920,6 +4991,8 @@ func _default_focus() -> Control:
 		return current_mode_button if current_mode_button != null and current_mode_button.is_visible_in_tree() else _mode_panel.learning_focus()
 	if collection_page.visible:
 		return _collection_back
+	if _round_end_active() and _round_end.is_visible_in_tree():
+		return _round_end
 	if _round_celebration_active():
 		var target: Control = _round_celebration.default_focus()
 		return target if _valid_focus(target) else _settlement_dialog.panel
@@ -5472,7 +5545,11 @@ func _process(delta: float) -> void:
 
 
 func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
+	var was_ending: bool = _round_end_active()
+	_sync_round_end()
 	_advance_word_jelly_stages(delta)
+	if was_ending:
+		_round_end.advance(delta)
 	_sync_reward_confetti()
 	_reward_confetti.advance(delta)
 	_coin_flight.reduced_motion = reduced_motion

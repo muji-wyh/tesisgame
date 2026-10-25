@@ -3,14 +3,19 @@
 The combo HUD combines the model's rank and exact count with a brief local
 flourish on each increase. The rank letters use the existing Nunito heading
 font. Count and reward text stay above the artwork. A positive merge reward
-briefly adds the acquired gold coin and its exact increment; collection-only
-increments do not display a coin reward.
+adds a larger gold acknowledgement explicitly labelled **COMBO BONUS**, alongside
+the acquired gold coin and exact increment. A collection-only increment cannot
+erase a still-visible acknowledgement of a preceding paid merge.
 
 The component does not decide rank thresholds, award coins, reset the chain,
 play sound, or run a separate gameplay timer. Its owner supplies state and
 advances the presentation clock. Repeated state publication does not replay
-the flourish. Zero count hides the HUD. Reduced motion retains the same rank,
-count and reward readout with static artwork and no scaling or travel.
+the flourish. The model supplies an eight-second remaining-time value, rendered
+as a full-width countdown bar; expiry or a wrong merge clears the current chain.
+The bar turns warm red during the last quarter. Pause, saving waits and automatic
+matching freeze the authoritative clock. Zero count hides the HUD. Reduced motion
+retains the real countdown, rank, count and reward readout with static artwork
+and no scaling or travel.
 
 ## Acquired artwork
 
@@ -32,8 +37,12 @@ The energetic rank/count hierarchy is original interface presentation.
 The supplied HUD rectangle reserves the complete text pop, local rays and
 sparkles. The count changes immediately, grows briefly, and settles in 420ms;
 the artwork recovers within 560ms. Successive increments share a bounded
-flourish instead of accumulating emitters. The coin increment lasts at most
-1.05 seconds. Idle presentation is still and compact.
+flourish instead of accumulating emitters. The coin acknowledgement lasts at most
+1.8 seconds and has its own warm outlined reward band. Ordinary rail slots
+reserve 196 x 72 display pixels, with compact header/footer alternatives and
+font fitting for narrow layouts. The sourced coin face can reach 24 display
+pixels; the amount is independently fitted rather than relegated to the old
+twelve-pixel detail row. Idle artwork stays still while the time bar drains.
 
 The source textures receive runtime placement, tint, rotation, scale and
 opacity. No Unity prefab, script or source animation is executed. The whole
@@ -52,6 +61,8 @@ Integrated native fixtures additionally exercise local and hosted headers,
 phone/tablet/desktop sizes and short landscape with real merge and collection
 operations from seeded states. The owner uses an existing footer slot beside
 Collect, an open side-rail slot, or the lower left gutter on very short screens.
-The latter placement keeps collection cards above the badge. Final bounds,
-feedback and application checks are recorded in the
-[combo QA report](../qa/2026-10-25-jelly-combo.md).
+The latter placement keeps collection cards above the badge. The original badge
+study is retained in the [combo QA report](../qa/2026-10-25-jelly-combo.md).
+Current countdown, reward attribution and expiry regressions live in
+`tests/godot/word_jelly_combo_hud_tests.gd`, `word_jelly_combo_tests.gd` and the
+real browser combo journeys.

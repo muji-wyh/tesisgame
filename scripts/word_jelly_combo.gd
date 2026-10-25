@@ -7,7 +7,7 @@ const RAYS = preload("res://assets/chests/milestone/rays.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const COIN = preload("res://assets/coins/gold-coin.png")
 const POP_SECONDS: float = 0.56
-const BONUS_SECONDS: float = 1.05
+const BONUS_SECONDS: float = 1.80
 const RANKS: Array[String] = ["D", "C", "B", "A", "S", "SS", "SSS"]
 const COLORS: Array[Color] = [Color("#299d88"), Color("#258fc7"),
 	Color("#5368d6"), Color("#a44acc"), Color("#d84991"),
@@ -19,6 +19,9 @@ var _count: int = 0
 var _tier: int = 0
 var _rank: String = "D"
 var _bonus: int = 0
+var _shown_bonus: int = 0
+var _remaining: float = 0.0
+var _seconds: float = 1.0
 var _event_id: String = ""
 var _pop_elapsed: float = POP_SECONDS
 var _bonus_elapsed: float = BONUS_SECONDS
@@ -28,11 +31,16 @@ var _rank_label: Label
 var _count_label: Label
 var _caption: Label
 var _bonus_label: Label
+var _bonus_caption: Label
 var _coin := TextureRect.new()
+var _timer := ProgressBar.new()
+var _timer_track := StyleBoxFlat.new()
+var _timer_fill := StyleBoxFlat.new()
 var _body := Rect2()
 var _rank_region := Rect2()
 var _count_region := Rect2()
 var _detail_region := Rect2()
+var _reward_region := Rect2()
 
 
 func _init() -> void:
@@ -47,12 +55,25 @@ func _init() -> void:
 	_caption = _label("ComboCaption")
 	_caption.text = "COMBO"
 	_bonus_label = _label("ComboBonus")
+	_bonus_caption = _label("ComboBonusCaption")
+	_bonus_caption.text = "COMBO BONUS"
 	_coin.name = "ComboCoin"
 	_coin.texture = COIN
 	_coin.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_coin.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_coin.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_content.add_child(_coin)
+	_timer.name = "ComboCountdown"
+	_timer.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_timer.focus_mode = Control.FOCUS_NONE
+	_timer.show_percentage = false
+	_timer.step = 0.0
+	for surface: StyleBoxFlat in [_timer_track, _timer_fill]:
+		surface.set_corner_radius_all(3)
+	_timer.add_theme_stylebox_override("background", _timer_track)
+	_timer.add_theme_stylebox_override("fill", _timer_fill)
+	_timer.set("accessibility_name", "Combo time remaining")
+	_content.add_child(_timer)
 	resized.connect(_layout)
 	set("accessibility_name", "Combo 0")
 	hide()
@@ -82,6 +103,8 @@ func configure(bounds: Rect2, ui_scale: float, steady: bool = false) -> void:
 
 func set_state(state: Dictionary, celebrate: bool = false) -> void:
 	var next_count: int = maxi(0, int(state.get("count", 0)))
+	set_timer(float(state.get("remaining", 0.0)) if next_count > 0 else 0.0,
+		float(state.get("seconds", 1.0)))
 	var next_event: String = str(state.get("event_id", ""))
 	var next_tier: int = clampi(int(state.get("tier", 0)), 0, COLORS.size() - 1)
 	var next_rank: String = str(state.get("rank", RANKS[next_tier])).strip_edges()
@@ -101,18 +124,39 @@ func set_state(state: Dictionary, celebrate: bool = false) -> void:
 	if _count <= 0:
 		_pop_elapsed = POP_SECONDS
 		_bonus_elapsed = BONUS_SECONDS
+		_shown_bonus = 0
 	elif changed:
-		_bonus_elapsed = 0.0 if celebrate and increased and _bonus > 0 else BONUS_SECONDS
+		if celebrate and increased and _bonus > 0:
+			_shown_bonus = _bonus
+			_bonus_elapsed = 0.0
 		if celebrate and increased:
 			_pulse_serial += 1
 			_pop_elapsed = POP_SECONDS if reduced_motion else 0.0
 	_rank_label.text = _rank
 	_count_label.text = "×%d" % _count
-	_bonus_label.text = "+%d" % _bonus
+	_bonus_label.text = "+%d" % _shown_bonus
 	set("accessibility_name", "Combo %d. Rank %s.%s" % [_count, _rank,
-		" %d bonus coins." % _bonus if _bonus > 0 else ""])
+		" Combo bonus: %d coins." % _shown_bonus if _reward_visible() else ""])
 	_layout()
 	_refresh()
+
+
+func set_timer(remaining: float, seconds: float) -> void:
+	var next_seconds: float = maxf(0.001, seconds)
+	var next_remaining: float = clampf(remaining, 0.0, next_seconds)
+	if next_seconds == _seconds and next_remaining == _remaining:
+		return
+	_seconds = next_seconds
+	_remaining = next_remaining
+	_timer.max_value = _seconds
+	_timer.value = _remaining
+	var color: Color = Color("#d85b3b") if _remaining / _seconds <= 0.25 else COLORS[_tier]
+	if _timer_fill.bg_color != color:
+		_timer_fill.bg_color = color
+
+
+func _reward_visible() -> bool:
+	return _count > 0 and _shown_bonus > 0 and _bonus_elapsed < BONUS_SECONDS
 
 
 func advance(delta: float) -> void:
@@ -120,9 +164,13 @@ func advance(delta: float) -> void:
 		return
 	if _pop_elapsed >= POP_SECONDS and _bonus_elapsed >= BONUS_SECONDS:
 		return
+	var was_reward_visible: bool = _reward_visible()
 	_pop_elapsed = minf(POP_SECONDS, _pop_elapsed + delta)
 	_bonus_elapsed = minf(BONUS_SECONDS, _bonus_elapsed + delta)
-	_refresh()
+	if was_reward_visible != _reward_visible():
+		_layout()
+	else:
+		_refresh()
 
 
 func reset() -> void:
@@ -130,6 +178,9 @@ func reset() -> void:
 	_tier = 0
 	_rank = "D"
 	_bonus = 0
+	_shown_bonus = 0
+	_remaining = 0.0
+	_timer.value = 0.0
 	_event_id = ""
 	_pop_elapsed = POP_SECONDS
 	_bonus_elapsed = BONUS_SECONDS
@@ -162,26 +213,59 @@ func _layout() -> void:
 	_body = Rect2(_content.position, _content.size)
 	var inner := Rect2(Vector2(3.0, 0.0) / _ui_scale,
 		(_content.size - Vector2(6.0, 0.0) / _ui_scale).max(Vector2.ONE))
+	var timer_height: float = 6.0 / _ui_scale
+	_timer.position = inner.position + Vector2(4.0 / _ui_scale, inner.size.y - 9.0 / _ui_scale)
+	_timer.size = Vector2(maxf(1.0, inner.size.x - 8.0 / _ui_scale), timer_height)
+	inner.size.y = maxf(1.0, inner.size.y - 12.0 / _ui_scale)
+	var reward_visible: bool = _reward_visible()
+	var roomy: bool = _content.size.y * _ui_scale >= 50.0
+	_reward_region = Rect2()
+	if reward_visible and roomy:
+		var reward_height: float = minf(25.0 / _ui_scale, inner.size.y * 0.49)
+		_reward_region = Rect2(inner.position + Vector2(0.0, inner.size.y - reward_height),
+			Vector2(inner.size.x, reward_height))
+		inner.size.y -= reward_height + 2.0 / _ui_scale
 	var rank_width: float = inner.size.x * (0.44 if _rank.length() >= 3 else 0.38)
+	if reward_visible and not roomy:
+		rank_width = inner.size.x * 0.24
 	_rank_region = Rect2(inner.position, Vector2(rank_width, inner.size.y))
 	var right := Rect2(inner.position + Vector2(rank_width, 0.0),
 		Vector2(inner.size.x - rank_width, inner.size.y))
-	_count_region = Rect2(right.position, Vector2(right.size.x, right.size.y * 0.66))
-	_detail_region = Rect2(right.position + Vector2(0.0, right.size.y * 0.64),
-		Vector2(right.size.x, right.size.y * 0.36))
+	if reward_visible and roomy:
+		_count_region = Rect2(right.position, Vector2(right.size.x * 0.50, right.size.y))
+		_detail_region = Rect2(right.position + Vector2(right.size.x * 0.50, 0.0),
+			Vector2(right.size.x * 0.50, right.size.y))
+	else:
+		if reward_visible:
+			_reward_region = Rect2(right.position + Vector2(right.size.x * 0.38, 0.0),
+				Vector2(right.size.x * 0.62, right.size.y))
+			right.size.x *= 0.38
+		_count_region = Rect2(right.position, Vector2(right.size.x, right.size.y * 0.66))
+		_detail_region = Rect2(right.position + Vector2(0.0, right.size.y * 0.64),
+			Vector2(right.size.x, right.size.y * 0.36))
 	_fit_font(_rank_label, _rank_region, 43.0 / _ui_scale)
 	_fit_font(_count_label, _count_region, 36.0 / _ui_scale)
 	_fit_font(_caption, _detail_region, 11.0 / _ui_scale)
-	var coin_edge: float = minf(17.0 / _ui_scale, _detail_region.size.y)
-	var reward_pixels: int = maxi(1, roundi(12.0 / _ui_scale))
-	var bonus_width: float = minf(_detail_region.size.x - coin_edge - 3.0 / _ui_scale,
-		Style.HEADING_FONT.get_string_size(_bonus_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, reward_pixels).x + 6.0 / _ui_scale)
-	var combined: float = coin_edge + 2.0 / _ui_scale + maxf(1.0, bonus_width)
-	var bonus_start: Vector2 = _detail_region.position + Vector2((_detail_region.size.x - combined) * 0.5, 0.0)
-	_coin.position = bonus_start + Vector2(0.0, (_detail_region.size.y - coin_edge) * 0.5)
-	_coin.size = Vector2.ONE * coin_edge
-	_fit_font(_bonus_label, Rect2(bonus_start + Vector2(coin_edge + 2.0 / _ui_scale, 0.0),
-		Vector2(maxf(1.0, bonus_width), _detail_region.size.y)), 12.0 / _ui_scale)
+	if reward_visible:
+		var reward := Rect2(_reward_region.position + Vector2(3.0, 0.0) / _ui_scale,
+			(_reward_region.size - Vector2(6.0, 0.0) / _ui_scale).max(Vector2.ONE))
+		var caption_region: Rect2
+		var amount_region: Rect2
+		if roomy:
+			caption_region = Rect2(reward.position, Vector2(reward.size.x * 0.57, reward.size.y))
+			amount_region = Rect2(reward.position + Vector2(caption_region.size.x, 0.0),
+				Vector2(reward.size.x - caption_region.size.x, reward.size.y))
+		else:
+			caption_region = Rect2(reward.position, Vector2(reward.size.x, reward.size.y * 0.34))
+			amount_region = Rect2(reward.position + Vector2(0.0, caption_region.size.y),
+				Vector2(reward.size.x, reward.size.y - caption_region.size.y))
+		_fit_font(_bonus_caption, caption_region, (12.0 if roomy else 9.0) / _ui_scale)
+		var coin_edge: float = minf(24.0 / _ui_scale, minf(amount_region.size.y, amount_region.size.x * 0.43))
+		_coin.position = amount_region.position + Vector2(0.0, (amount_region.size.y - coin_edge) * 0.5)
+		_coin.size = Vector2.ONE * coin_edge
+		_fit_font(_bonus_label, Rect2(amount_region.position + Vector2(coin_edge + 2.0 / _ui_scale, 0.0),
+			Vector2(maxf(1.0, amount_region.size.x - coin_edge - 2.0 / _ui_scale), amount_region.size.y)),
+			26.0 / _ui_scale)
 	var outline: int = maxi(1, roundi(2.0 / _ui_scale))
 	for label: Label in [_rank_label, _count_label]:
 		label.add_theme_color_override("font_outline_color", Color("#fffdf2"))
@@ -207,14 +291,23 @@ func _refresh() -> void:
 	_rank_label.add_theme_color_override("font_color", tint.darkened(0.21))
 	_count_label.add_theme_color_override("font_color", Style.INK)
 	_caption.add_theme_color_override("font_color", tint.darkened(0.35))
-	_bonus_label.add_theme_color_override("font_color", Color("#865413"))
-	var reward_visible: bool = _count > 0 and _bonus > 0 and _bonus_elapsed < BONUS_SECONDS
+	_bonus_label.add_theme_color_override("font_color", Color("#7c4305"))
+	_bonus_caption.add_theme_color_override("font_color", Color("#865413"))
+	var reward_visible: bool = _reward_visible()
 	_coin.visible = reward_visible
 	_bonus_label.visible = reward_visible
-	_caption.visible = not reward_visible
-	var alpha: float = 1.0 if reduced_motion else 1.0 - smoothstep(0.76, BONUS_SECONDS, _bonus_elapsed)
+	_bonus_caption.visible = reward_visible
+	_caption.visible = true
+	_timer.visible = _count > 0
+	var timer_tint: Color = Color("#d85b3b") if _remaining / _seconds <= 0.25 else tint
+	if _timer_track.bg_color != tint.lightened(0.82):
+		_timer_track.bg_color = tint.lightened(0.82)
+	if _timer_fill.bg_color != timer_tint:
+		_timer_fill.bg_color = timer_tint
+	var alpha: float = 1.0 if reduced_motion else 1.0 - smoothstep(1.42, BONUS_SECONDS, _bonus_elapsed)
 	_coin.modulate.a = alpha
 	_bonus_label.modulate.a = alpha
+	_bonus_caption.modulate.a = alpha
 	queue_redraw()
 
 
@@ -246,6 +339,10 @@ func _draw() -> void:
 	panel.shadow_color = Color(tint.darkened(0.5), 0.14)
 	panel.shadow_size = maxi(1, roundi(2.0 / _ui_scale))
 	draw_style_box(panel, _body)
+	if _reward_visible() and _reward_region.has_area():
+		var reward_box := Style.box(Color("#fff0bb"), Color("#efba50"),
+			maxi(2, roundi(5.0 / _ui_scale)), maxi(1, roundi(1.0 / _ui_scale)))
+		draw_style_box(reward_box, Rect2(_body.position + _reward_region.position, _reward_region.size))
 	if flare <= 0.001:
 		_stamp(SPARKLE, Vector2(_body.end.x - 4.0 / _ui_scale, _body.position.y + 4.0 / _ui_scale),
 			Vector2.ONE * (5.0 + _tier * 0.8) / _ui_scale, Color(tint, 0.70))
@@ -270,7 +367,11 @@ func _rect_array(rect: Rect2) -> Array:
 func snapshot() -> Dictionary:
 	return {"visible": is_visible_in_tree(), "count": _count, "rank": _rank, "tier": _tier,
 		"bonus": _bonus, "event_id": _event_id, "count_text": _count_label.text,
-		"bonus_visible": _coin.visible and visible, "pulse_serial": _pulse_serial,
+		"bonus_visible": _coin.visible and visible, "bonus_text": _bonus_caption.text + " " + _bonus_label.text,
+		"bonus_font_size": _bonus_label.get_theme_font_size("font_size"),
+		"remaining": _remaining, "seconds": _seconds, "time_ratio": _remaining / _seconds,
+		"timer_visible": _timer.visible and visible, "timer_rect": _rect_array(_timer.get_global_rect()),
+		"pulse_serial": _pulse_serial,
 		"pulse_elapsed": _pop_elapsed, "pulse_active": visible and not reduced_motion and _pop_elapsed < POP_SECONDS,
 		"reduced_motion": reduced_motion, "input_transparent": mouse_filter == Control.MOUSE_FILTER_IGNORE,
 		"rect": _rect_array(get_global_rect()), "rank_rect": _rect_array(_rank_label.get_global_rect()),

@@ -45,6 +45,8 @@ const JELLY_PATHS := {
 	"jelly-collect-lv8": "res://assets/audio/jelly-match/collect-lv8.wav",
 	"jelly-collect-lv9": "res://assets/audio/jelly-match/collect-lv9.wav",
 	"finish_ready": "res://assets/audio/jelly-finish/ready.ogg",
+	"blast_wave": "res://assets/audio/jelly-combo/bright.wav",
+	"blast_mark": "res://assets/audio/jelly-combo/step.wav",
 	"pick": UI_CLICK_PATH,
 	"release": "res://assets/imported-audio/chest-reference/step.wav",
 	"land": "res://assets/audio/jelly-match/land.wav",
@@ -56,6 +58,7 @@ const JELLY_PATHS := {
 }
 const JELLY_GAINS := {
 	"finish_ready": 0.40,
+	"blast_wave": 0.32, "blast_mark": 0.22,
 	"pick": 0.64, "release": 0.38, "land": 0.35, "contact": 1.0,
 	"merge": 1.0, "pop": 0.90, "danger": 0.52, "reward": 0.36,
 	"assemble": 0.28,
@@ -64,7 +67,7 @@ const JELLY_GAINS := {
 	"jelly-collect-lv6": 0.90, "jelly-collect-lv7": 0.90,
 	"jelly-collect-lv8": 0.90, "jelly-collect-lv9": 0.90,
 }
-const JELLY_SECONDARY_CUES := ["pick", "release", "land", "contact"]
+const JELLY_SECONDARY_CUES := ["pick", "release", "land", "contact", "blast_mark"]
 const JELLY_SPEECH_DB: float = -6.0
 const JELLY_LEVEL_CHANNELS: int = 8
 const WORD_JELLY_COMBO_PATHS: Array[String] = [
@@ -74,6 +77,10 @@ const WORD_JELLY_COMBO_PATHS: Array[String] = [
 ]
 const WORD_JELLY_COMBO_GAINS: Array[float] = [0.40, 0.44, 0.48]
 const WORD_JELLY_COMBO_CHANNELS: int = 3
+const ROUND_END_PATHS: Dictionary = {
+	false: WORD_JELLY_COMBO_PATHS[2],
+	true: MEMORY_CHEST_LOSS_PATHS[true],
+}
 const ROUND_CELEBRATION_PATHS := {
 	"step": "res://assets/imported-audio/chest-reference/step.wav",
 	"step-detail": "res://assets/imported-audio/chest-reference/step-detail.wav",
@@ -102,6 +109,7 @@ signal status_changed(message: String)
 
 var music: AudioStreamPlayer
 var effect: AudioStreamPlayer
+var round_end: AudioStreamPlayer
 var voice: AudioStreamPlayer
 var pop_launch: AudioStreamPlayer
 var pair_feedback: AudioStreamPlayer
@@ -201,6 +209,9 @@ func _ready() -> void:
 	_stream(FRAGMENT_ARRIVE_PATH)
 	music = _player(0.12)
 	effect = _player(0.24)
+	round_end = _player(0.55)
+	for path: String in ROUND_END_PATHS.values():
+		_stream(path)
 	voice = _player(0.64)
 	voice.finished.connect(_voice_finished)
 	if OS.has_feature("web"):
@@ -231,6 +242,18 @@ func interact(theme_id: String, play_music: bool = true) -> void:
 		return
 	current_theme = theme_id
 	_play(music, "res://assets/audio/bgm/" + theme_id + ".wav", true)
+
+
+func play_round_end(failed: bool) -> void:
+	if muted or not active or not available:
+		return
+	_play(round_end, ROUND_END_PATHS[failed])
+
+
+func stop_round_end() -> void:
+	if round_end != null:
+		_stop(round_end)
+		round_end.stream = null
 
 
 func cue(effect_id: String = "", voice_id: String = "") -> void:
@@ -1051,6 +1074,7 @@ func halt(keep_pair_feedback: bool = false) -> void:
 	stop_jelly_sounds()
 	stop_coin_sounds()
 	stop_round_celebration()
+	stop_round_end()
 	stop_chest_performance()
 	stop_voice()
 	if music != null:

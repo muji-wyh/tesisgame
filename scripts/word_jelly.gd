@@ -1102,7 +1102,9 @@ func _pose_powerup() -> void:
 	var state: Dictionary = game.powerup_snapshot()
 	var stamps: Array[Dictionary] = []
 	var unit: float = maxf(8.0, _pitch)
-	if bool(state.get("active", false)) and str(state.get("kind", "")) == "auto_merge":
+	if bool(state.get("active", false)) and str(state.get("kind", "")) == "blast":
+		_pose_blast_marks(state, stamps, unit)
+	if bool(state.get("active", false)) and str(state.get("kind", "")) in ["auto_merge", "blast"]:
 		for drag: Dictionary in state.get("drags", []):
 			var source: Dictionary = drag.get("source", {})
 			var target: Dictionary = drag.get("target", {})
@@ -1154,6 +1156,41 @@ func _pose_powerup() -> void:
 			_powerup_stamp(stamps, POWERUP_SPARKLE, center + Vector2.from_angle(angle) * radius,
 				Vector2.ONE * unit * (0.18 if reduced_motion else 0.28 * envelope), Color(1.0, 0.94, 0.65, envelope), angle)
 	_powerup_effects.present(stamps)
+
+
+func _pose_blast_marks(state: Dictionary, stamps: Array[Dictionary], unit: float) -> void:
+	var blast: Dictionary = state.get("blast", {})
+	var ids: Array = blast.get("target_ids", [])
+	var group_size: int = maxi(1, int(blast.get("group_size", 1)))
+	for index in range(ids.size()):
+		var id: int = int(ids[index])
+		if not _tiles.has(id) or not blast.origins.has(id):
+			continue
+		var age: float = float(state.clock) - floorf(float(index) / group_size) * WordModel.BLAST_MARK_BEAT_SECONDS
+		if age < 0.0:
+			continue
+		var origin: Dictionary = blast.origins[id]
+		var level: int = int(origin.level)
+		var tint := Color.from_hsv(float(CollectionEffects.profile(level).hue), 0.62, 1.0)
+		var center: Vector2 = _tiles[id].get_rect().get_center()
+		var start: Vector2 = _tile_rect(origin).get_center()
+		var pulse: float = 1.0 - smoothstep(0.12, 0.46, age)
+		if not reduced_motion and age < 0.18:
+			var travel: float = smoothstep(0.0, 0.18, age)
+			var point: Vector2 = start.lerp(center, travel)
+			_powerup_stamp(stamps, COLLECTION_GLOW, point, Vector2.ONE * unit * 0.90, Color(tint, 0.64))
+			_powerup_stamp(stamps, POWERUP_SPARKLE, point, Vector2.ONE * unit * 0.36, Color(tint.lightened(0.40), 0.95))
+		var strength: float = 0.18 + pulse * 0.46
+		_powerup_stamp(stamps, COLLECTION_GLOW, center, Vector2.ONE * unit * 1.55, Color(tint, strength))
+		for spark in range(4):
+			var angle: float = spark * TAU / 4.0 + (0.0 if reduced_motion else age * 1.4)
+			var point: Vector2 = center + Vector2.from_angle(angle) * unit * 0.48
+			_powerup_stamp(stamps, POWERUP_SPARKLE, point, Vector2.ONE * unit * (0.16 + pulse * 0.08),
+				Color(tint.lightened(0.45), 0.54 + pulse * 0.42), angle)
+		if not reduced_motion and age < 0.40:
+			var squeeze: float = sin(clampf(age / 0.40, 0.0, 1.0) * PI) * 0.09
+			_tiles[id].deform(0.0, 0.0, Vector2(1.0 + squeeze, 1.0 - squeeze))
+
 
 func _sync_preview() -> void:
 	drop_button.queue_redraw()
@@ -1687,6 +1724,9 @@ func _refresh_hud() -> void:
 		# increments only through that ordered signal so each keeps its flourish.
 		if game.phase != "playing" or game.combo_count == 0:
 			_combo_hud.set_state({})
+		else:
+			var combo: Dictionary = game.combo_snapshot()
+			_combo_hud.set_timer(float(combo.remaining), float(combo.seconds))
 	_loot_detail.visible = _loot_detail.visible and _compact_hud and not has_header_chest()
 	var has_error: bool = not game.error.is_empty()
 	_notice.hide()
@@ -1920,13 +1960,15 @@ func _layout() -> void:
 	collect_button.size = Vector2(auto_merge.size.x, collect_height)
 	collect_button.position = Vector2(auto_merge.position.x, auto_merge.position.y - divider_gap - collect_button.size.y)
 	# Use existing header/footer/rail space, preserving the board's cell size.
-	var combo_bounds := Rect2(Vector2.ZERO, Vector2(180.0, 44.0) / s)
+	var combo_bounds := Rect2(Vector2.ZERO, Vector2(196.0, 72.0) / s)
 	if local_finish or local_chest:
+		combo_bounds.size.y = 44.0 / s
 		var left: float = chest_meter_rect().end.x + 8.0 / s if local_chest else edge
 		var right: float = finish_button.position.x - 8.0 / s if local_finish else size.x - edge
 		combo_bounds.size.x = minf(combo_bounds.size.x, maxf(0.0, right - left))
 		combo_bounds.position = Vector2((left + right - combo_bounds.size.x) * 0.5, 2.0 / s)
 	elif not side_hud:
+		combo_bounds.size.y = minf(combo_bounds.size.y, collect_height)
 		var left: float = collect_button.get_rect().end.x + 12.0 / s
 		var right: float = hud_x + footer_width
 		combo_bounds.size.x = minf(combo_bounds.size.x, maxf(0.0, right - left))
@@ -1935,6 +1977,7 @@ func _layout() -> void:
 	else:
 		var rail_top: float = content_top + (54.0 / s if stage_in_rail and _stage_banner.visible else 0.0)
 		var rail_space: float = collect_button.position.y - rail_top - 8.0 / s
+		combo_bounds.size.y = minf(combo_bounds.size.y, maxf(44.0 / s, rail_space))
 		if rail_space >= combo_bounds.size.y:
 			combo_bounds.size.x = minf(combo_bounds.size.x, hud_width)
 			combo_bounds.position = Vector2(hud_x, rail_top)
@@ -1977,11 +2020,12 @@ func _layout() -> void:
 		var finish_rect: Rect2 = get_global_transform().affine_inverse() * finish_button.get_global_rect()
 		# Falling embers get room below the reading cards without moving or resizing them.
 		var firework_area := Rect2(Vector2.ONE * edge,
-			Vector2(size.x - edge * 2.0, minf(440.0 / s, size.y * maxf(0.58, reveal_fraction)) - edge))
+			Vector2(size.x - edge * 2.0, minf(680.0 / s, size.y * maxf(0.86, reveal_fraction)) - edge))
 		_word_reveal.configure_layout(Rect2(Vector2.ONE * edge,
 			Vector2(size.x - edge * 2.0, minf(280.0 / s, size.y * reveal_fraction) - edge)), s,
 			[chest_meter_rect().grow(10.0 / s), collect_button.get_rect().grow(8.0 / s), finish_rect.grow(8.0 / s),
-			_combo_hud.get_rect().grow(3.0 / s)], firework_area)
+			_combo_hud.get_rect().grow(3.0 / s), powerup_buttons.auto_merge.get_rect().grow(5.0 / s),
+			powerup_buttons.fragments.get_rect().grow(5.0 / s)], firework_area)
 	_sync_positions()
 	_refresh_fusion()
 	_refresh_hud()

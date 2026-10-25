@@ -64,12 +64,18 @@ input lock, or automatic gameplay pause. Jelly dragging, merging, dropping,
 danger countdowns and Finish remain available; Voice Pop keeps its timer,
 targets and microphone running. Only actual menu, background and voice-session
 pauses freeze the effects. End-of-round results keep their existing flow.
-Synthesis and upgrades both play the full-screen burst when the chest appears.
+Jelly Match and Voice Pop synthesis and upgrades retain their full-screen
+chest burst. Jelly Words instead starts paper only when its current learning
+stage is durably completed, including the final partial stage; obtaining or
+upgrading its chest does not launch paper.
 The shared `reward_confetti.gd` renderer accompanies earned-chest reveals in
 Match, Memory, Voice Pop and Jelly Match. GameUI owns its
 dedicated viewport CanvasLayer, so arena clipping, layout bounds and the game
 header cannot cut off the paper. A reveal starts one independent 6.4-second
-burst of 162 paper pieces, keyed to the current round, mode and chest tier.
+burst of 384-1,200 paper pieces, scaled to viewport area and UI density. Chest
+bursts use the current round, mode and chest tier; Jelly Words stage bursts
+use the round and stage number. A stratified canopy distributes the paper
+through both the full width and height instead of a small local patch.
 Each paper strip is 1.5 times its base edge in length and 0.65 times in width,
 with its full rotated footprint kept inside the viewport sides. The chest and Pip retain
 their original completion gates while the paper continues over the current

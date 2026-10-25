@@ -83,6 +83,9 @@ func _run() -> void:
 		return
 	var first: Array = app._word_jelly_stages.snapshot().word_ids
 	check(first.size() == 10 and view.game._words.size() == 10, "The app scopes the initial board and supply to ten targets")
+	check(not app._reward_confetti.is_active(), "Opening a stage does not celebrate an unearned completion")
+	app._fragment_confetti_requested("word_jelly")
+	check(not app._reward_confetti.is_active(), "Chest acquisition and upgrades cannot request Jelly Words confetti")
 	await _capture("jelly-stage-opening")
 	var round_id: String = app._round_id
 	var context: Dictionary = app._round_context.duplicate(true)
@@ -99,6 +102,7 @@ func _run() -> void:
 		app._record_growth("unsaved-%d" % attempt, [first[8]], true)
 	check(app._growth_save_failed and app._word_jelly_stages.remaining.size() == 2,
 		"Failed saves never remove a target or advance the stage")
+	check(not app._reward_confetti.is_active(), "Failed mastery saves cannot celebrate a stage")
 	app.growth._path = original_path
 	app._retry_storage()
 	check(not app._growth_save_failed and app._word_jelly_stages.remaining.size() == 1,
@@ -109,6 +113,16 @@ func _run() -> void:
 		app._record_growth("last-%d" % attempt, [first[9]], true)
 	app._advance_word_jelly_stages(0.1)
 	check(app._word_jelly_stages.number == 2 and view.game._words.size() == 10, "The tenth mastery automatically starts stage two")
+	var stage_key: String = round_id + ":word_jelly:stage:1"
+	check(app._reward_confetti.is_active() and app._reward_confetti.snapshot().keys.has(stage_key),
+		"Completing the current stage launches confetti keyed to that stage, not its chest tier")
+	var bursts: int = app._reward_confetti.snapshot().ages.size()
+	app._advance_word_jelly_stages(0.1)
+	check(app._reward_confetti.snapshot().ages.size() == bursts,
+		"Refreshing or entering the next stage never repeats the completed stage's confetti")
+	app._fragment_confetti_requested("word_jelly")
+	check(app._reward_confetti.snapshot().ages.size() == bursts,
+		"Chest callbacks cannot add confetti after a stage celebration")
 	check(view.game.fragment_count == 3 and board_ids.all(func(id: int) -> bool: return not view.game.cell(id).is_empty()),
 		"Stage transition preserves board bodies and earned fragments")
 	check(app._round_id == round_id and app._round_context == context, "Stage changes retain reward receipts and frozen vocabulary context")
@@ -131,6 +145,14 @@ func _run() -> void:
 	view.pause(true)
 	check(not view.snapshot().stage.celebrating, "Pause dismisses stage motion without removing progress")
 	view.pause(false)
+	app._word_jelly_stages._pool = app._word_jelly_stages.words.duplicate(true)
+	for id: String in app._word_jelly_stages.snapshot().word_ids:
+		for attempt in range(3):
+			app._record_growth("final-%s-%d" % [id, attempt], [id], true)
+	app._advance_word_jelly_stages(0.1)
+	check(app._word_jelly_stages.completed and view.game.phase == "finished"
+		and app._reward_confetti.snapshot().keys.has(round_id + ":word_jelly:stage:2"),
+		"The final available stage also celebrates without requiring a next-stage supply")
 	view.stop()
 	check(not view.snapshot().stage.visible, "Leaving the round clears its stage presentation")
 	app.queue_free()

@@ -39,6 +39,8 @@ func check(condition: bool, message: String) -> void:
 func _run() -> void:
 	_test_manual_rewards()
 	_test_neutral_actions_and_invalid_merge()
+	_test_countdown()
+	_test_countdown_completion_order()
 	_test_collection_batch_and_assistance()
 	_test_batch_cancel_and_upgrade()
 	_test_high_level_upgrade_combo()
@@ -174,18 +176,21 @@ func _test_neutral_actions_and_invalid_merge() -> void:
 	model.set_held_tile()
 	check(model.reposition(int(root.id), 4, Model.ROWS - 1), "A neutral drag can reposition an ordinary body")
 	model.step(1.0)
+	var paused_combo: Dictionary = model.combo_snapshot()
 	model.set_paused(true)
 	model.step(100.0)
-	check(model.combo_snapshot() == before, "Selection, movement, and a long pause preserve the chain")
+	check(model.combo_snapshot() == paused_combo, "A long pause freezes both the chain and its countdown")
 	model.set_paused(false)
-	model.step(9.0)
-	check(model.combo_snapshot() == before, "The combo has no idle timeout")
+	model.step(1.0)
+	check(model.combo_count == int(before.count), "Neutral movement does not directly break the active chain")
+	before = model.combo_snapshot()
 	var generated: int = model.generated_tiles
 	check(model.drop_now() and model.generated_tiles > generated and model.combo_snapshot() == before,
 		"Fast-dropping the preview supplies new bodies without breaking or advancing the chain")
 	check(not model.drop_now(-99) and model.combo_snapshot() == before,
 		"A stale preview gesture is neutral")
 	model.step(2.0)
+	before = model.combo_snapshot()
 	check(model.replace_stage_words([_word(), _word("dog")], 3) and model.combo_snapshot() == before,
 		"A vocabulary stage transition preserves the current count, best, and reward state")
 	var wrong: Dictionary = _put(model, model._new_picture_tile(_word("dog"), 0))
@@ -194,6 +199,77 @@ func _test_neutral_actions_and_invalid_merge() -> void:
 		and model.combo_snapshot().coins == 0 and model.combo_snapshot().event_id == "",
 		"An invalid merge resets only the active chain, retaining the round's best and earned coins")
 	model.credit_combo = Callable()
+
+
+func _test_countdown() -> void:
+	var fixture: Dictionary = _fixture()
+	var model: RefCounted = fixture.model
+	_begin_pair(model)
+	model.step(Model.FUSION_SECONDS)
+	var fresh: Dictionary = model.combo_snapshot()
+	check(is_equal_approx(float(fresh.get("seconds", 0.0)), 8.0)
+		and is_equal_approx(float(fresh.get("remaining", 0.0)), 8.0),
+		"A committed success starts a full eight-second combo window")
+	model.step(3.0)
+	check(model.combo_count == 1 and is_equal_approx(float(model.combo_snapshot().get("remaining", 0.0)), 5.0),
+		"Active gameplay drains the model-owned countdown in real seconds")
+	var frozen: Dictionary = model.combo_snapshot()
+	for invalid: float in [0.0, -1.0, NAN, INF]:
+		model.step(invalid)
+	model.set_paused(true)
+	model.step(100.0)
+	check(model.combo_snapshot() == frozen, "Invalid deltas and pause cannot consume combo time")
+	model.set_paused(false)
+	var operation: Dictionary = _begin_pair(model)
+	model.step(Model.FUSION_SECONDS)
+	fresh = model.combo_snapshot()
+	check(model.combo_count == 2 and is_equal_approx(float(fresh.get("remaining", 0.0)), 8.0),
+		"A subsequent committed success refills rather than extends the countdown")
+	model.step(1.0)
+	var before_duplicate: Dictionary = model.combo_snapshot()
+	model._complete_operation(str(operation.attempt_id))
+	check(model.combo_snapshot() == before_duplicate, "Duplicate completion cannot refill an existing combo")
+	model.step(7.0)
+	var expired: Dictionary = model.combo_snapshot()
+	check(model.combo_count == 0 and expired.best == 2 and expired.coins == 0
+		and expired.bonus == 0 and expired.event_id == "" and float(expired.get("remaining", -1.0)) == 0.0,
+		"Reaching zero ends only the current chain, preserving its best result and earned coins")
+	check(fixture.changes.size() == 3 and fixture.changes.back().count == 0,
+		"Expiry emits one reset event instead of another successful increment")
+	model.step(20.0)
+	check(fixture.changes.size() == 3, "An expired chain cannot emit repeated timeout events")
+	_begin_pair(model)
+	model.step(Model.FUSION_SECONDS)
+	check(model.combo_count == 1 and fixture.wallet.balance == 0,
+		"The first success after expiry starts a new unrewarded chain")
+	model.credit_combo = Callable()
+
+
+func _test_countdown_completion_order() -> void:
+	for until_expiry: float in [0.40, Model.FUSION_SECONDS]:
+		var fixture: Dictionary = _fixture()
+		var model: RefCounted = fixture.model
+		_seed_with_collections(model)
+		var remaining: float = float(model.combo_snapshot().get("remaining", 8.0))
+		model.step(remaining - until_expiry)
+		_begin_pair(model)
+		model.step(Model.FUSION_SECONDS)
+		check(model.combo_count == 1 and model.combo_coins == 0 and fixture.wallet.balance == 0,
+			"A merge completed at or after the deadline starts a new chain without the old tier's payment")
+		check(is_equal_approx(float(model.combo_snapshot().get("remaining", 0.0)), 8.0),
+			"The new chain receives its full window even when one frame spans the old expiry and completion")
+		model.credit_combo = Callable()
+	var coarse: Dictionary = _fixture()
+	var fine: Dictionary = _fixture()
+	for fixture: Dictionary in [coarse, fine]:
+		_seed_with_collections(fixture.model, 3)
+	coarse.model.step(8.0)
+	for tick in range(80):
+		fine.model.step(0.10)
+	check(coarse.model.combo_snapshot() == fine.model.combo_snapshot(),
+		"Coarse and fine frames agree on expiry, best combo and credited coins")
+	coarse.model.credit_combo = Callable()
+	fine.model.credit_combo = Callable()
 
 
 func _test_collection_batch_and_assistance() -> void:

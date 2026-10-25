@@ -91,6 +91,9 @@ static func start_memory(app) -> void:
 static func finish_celebration(app) -> void:
 	# Chest/result-focused suites explicitly cross the shared presentation gate.
 	# Dedicated celebration suites exercise real timing, narration and cancellation.
+	var round_end = app.get("_round_end")
+	if round_end != null and round_end.is_active():
+		round_end.advance(float(round_end.snapshot().duration) + 0.01)
 	app._pair_reward.advance(app._pair_reward.REWARD_SECONDS + 0.01)
 	app.audio.stop_pair_chest_discovery()
 	app._refresh()

@@ -18,10 +18,10 @@ func _set_level(app, level: int) -> void:
 
 func _quote(app, id: String, tier: int, level: int) -> Dictionary:
 	var value: Dictionary = app.coin_wallet.chest_reward(id)
-	var bonus: int = tier * ceili(level / 4.0)
+	var bonus: int = tier * ceili(level * 24.0 / 99.0)
 	check(not value.is_empty() and value.get("pip_level", -1) == level and value.get("tier", -1) == tier
-		and value.get("base", -1) == tier * 50 and value.get("bonus", -1) == bonus
-		and value.get("total", -1) == tier * 50 + bonus,
+		and value.get("base", -1) == tier * 75 and value.get("bonus", -1) == bonus
+		and value.get("total", -1) == tier * 75 + bonus,
 		"The durable quote retains its earned tier, Pip level, base, bonus and total")
 	return value
 
@@ -67,15 +67,15 @@ func _single_quote(mode: String, action: String = "open") -> void:
 	app._refresh()
 	if action == "open":
 		open_single(app)
-		check_arrival(app, tier * 75)
+		check_arrival(app, tier * 99)
 		_breakdown(app._single_result.snapshot().coin_breakdown, quote, mode)
 		app._on_chest_opened()
 	else:
 		var button = app._single_result.home_button if action == "home" else app._single_result.replay_button
 		button.pressed.emit()
-		check(not app._settlement_dialog_open() and app.coin_wallet.balance == tier * 75,
+		check(not app._settlement_dialog_open() and app.coin_wallet.balance == tier * 99,
 			mode + ": " + action + " claims the unopened chest using its frozen quote")
-	check(app.coin_wallet.balance == tier * 75 and app.coin_wallet.chest_reward(id) == quote,
+	check(app.coin_wallet.balance == tier * 99 and app.coin_wallet.chest_reward(id) == quote,
 		mode + ": stale opening callbacks neither reprice nor repeat the reward")
 	await dispose(app)
 
@@ -93,24 +93,24 @@ func _room_quote(mode: String, action: String) -> void:
 		mode + ": wallet reload preserves the quote after Pip levels up")
 	if action == "open":
 		open_room(room)
-		check_arrival(app, 165)
+		check_arrival(app, 240)
 		_breakdown(room.snapshot().chests[0].get("coin_breakdown", {}), quote, mode)
 		room._build_cards()
 		_breakdown(room.snapshot().chests[0].get("coin_breakdown", {}), quote, mode + " rebuilt")
 	elif action == "home":
 		room._home.pressed.emit()
-		check(app._mode_menu_open() and app.coin_wallet.balance == 165 and not app._coin_flight.snapshot().active,
+		check(app._mode_menu_open() and app.coin_wallet.balance == 240 and not app._coin_flight.snapshot().active,
 			mode + ": Home settles the frozen total before leaving")
 	else:
 		var old_round: String = app._round_id
 		room._back.pressed.emit()
-		check(app._round_id != old_round and app.coin_wallet.balance == 165 and not app._coin_flight.snapshot().active,
+		check(app._round_id != old_round and app.coin_wallet.balance == 240 and not app._coin_flight.snapshot().active,
 			mode + ": Play again settles the frozen total before the fresh board")
-	check(app.coin_wallet._receipts.get(id, 0) == 165 and app.coin_wallet.chest_reward(id) == quote,
+	check(app.coin_wallet._receipts.get(id, 0) == 240 and app.coin_wallet.chest_reward(id) == quote,
 		mode + ": manual and automatic routes save the same quoted receipt")
 	await dispose(app)
 	app = await make_app(mode, storage)
-	check(app.coin_wallet.balance == 165 and app.coin_wallet.chest_reward(id) == quote,
+	check(app.coin_wallet.balance == 240 and app.coin_wallet.chest_reward(id) == quote,
 		mode + ": app reload restores the paid quote and complete balance without another payout")
 	await dispose(app)
 
@@ -138,7 +138,7 @@ func _pending_room_reload(mode: String) -> void:
 		and app.coin_wallet.chest_reward(id) == quote,
 		mode + ": the pending receipt keeps its original Lv20 quote in the Lv99 app")
 	open_room(room)
-	check(app.coin_wallet.balance == 165 and app.coin_wallet._receipts.get(id, 0) == 165,
+	check(app.coin_wallet.balance == 240 and app.coin_wallet._receipts.get(id, 0) == 240,
 		mode + ": opening after app reload pays the original quote exactly once")
 	_breakdown(room.snapshot().chests[0].get("coin_breakdown", {}), quote, mode + " reloaded")
 	await dispose(app)
@@ -155,13 +155,13 @@ func _single_retry(mode: String, fail_coins: bool) -> void:
 	storage.coin_writable = not fail_coins
 	storage.medal_writable = fail_coins
 	open_single(app)
-	check(app._save_error and app.coin_wallet.balance == (0 if fail_coins else tier * 55),
+	check(app._save_error and app.coin_wallet.balance == (0 if fail_coins else tier * 80),
 		mode + ": a failed single-chest save retains the exact committed portion")
 	_set_level(app, 99)
 	storage.coin_writable = true
 	storage.medal_writable = true
 	app._single_result.retry_button.pressed.emit()
-	check(not app._save_error and app.coin_wallet.balance == tier * 55
+	check(not app._save_error and app.coin_wallet.balance == tier * 80
 		and app.coin_wallet.chest_reward(id) == quote,
 		mode + ": the real Retry button completes its original quote after a level change")
 	_breakdown(app._single_result.snapshot().coin_breakdown, quote, mode + " retry")
@@ -179,18 +179,18 @@ func _room_retry(fail_coins: bool) -> void:
 	storage.reward_writable = fail_coins
 	open_room(room)
 	check(room._save_failed and not room.rewards.entries[0].opened
-		and app.coin_wallet.balance == (0 if fail_coins else 165),
+		and app.coin_wallet.balance == (0 if fail_coins else 240),
 		"A failed credit or reward acknowledgement retains the exact unpaid/paid portion")
 	_set_level(app, 99)
 	storage.coin_writable = true
 	storage.reward_writable = true
 	room._retry.pressed.emit()
-	check(not room._save_failed and room.rewards.entries[0].opened and app.coin_wallet.balance == 165,
+	check(not room._save_failed and room.rewards.entries[0].opened and app.coin_wallet.balance == 240,
 		"Retry claims the original amount even after Pip level changes")
 	_breakdown(room.snapshot().chests[0].get("coin_breakdown", {}), quote, "Retry")
 	var saved: Variant = storage.coins
 	room._retry.pressed.emit()
-	check(storage.coins == saved and app.coin_wallet.balance == 165,
+	check(storage.coins == saved and app.coin_wallet.balance == 240,
 		"A stale Retry click does not duplicate the quote or payout")
 	await dispose(app)
 
@@ -215,7 +215,7 @@ func _reservation_retry() -> void:
 	_quote(app, id, 1, 20)
 	check(not room._save_failed, "Retry saves the first displayed level rather than repricing the failed quote")
 	open_room(room)
-	check(app.coin_wallet.balance == 55, "Opening after quote retry pays the preserved draft amount")
+	check(app.coin_wallet.balance == 80, "Opening after quote retry pays the preserved draft amount")
 	await dispose(app)
 
 
@@ -233,12 +233,12 @@ func _pair_startup_retry() -> void:
 		"Startup retains the quoted Memory chest when its coin credit cannot save")
 	storage.coin_writable = true
 	app._storage_retry_button.pressed.emit()
-	check(app._progress_ready and not app._save_error and app.coin_wallet.balance == 450
+	check(app._progress_ready and not app._save_error and app.coin_wallet.balance == 594
 		and app.medal_progress.pair_round("memory").settled and app.coin_wallet.chest_reward(id) == quote,
 		"Startup Retry pays the saved Lv99 quote even with the new app's Lv0 growth")
 	await dispose(app)
 	app = await make_app("phrase", storage)
-	check(app.coin_wallet.balance == 450 and app.coin_wallet.chest_reward(id) == quote,
+	check(app.coin_wallet.balance == 594 and app.coin_wallet.chest_reward(id) == quote,
 		"A second startup cannot pay the recovered pair chest twice")
 	await dispose(app)
 
@@ -282,7 +282,7 @@ func _unready_growth_retry() -> void:
 	storage.coin_writable = false
 	var draft_id: String = "professional:known-chest-draft"
 	var draft: Dictionary = app._reserve_chest_reward(draft_id, 1)
-	check(not draft.ok and draft.reward.get("total", 0) == 55,
+	check(not draft.ok and draft.reward.get("total", 0) == 80,
 		"A failed quote write retains the known Lv20 draft")
 	_set_level(app, 99)
 	app.growth.ready = false
@@ -331,7 +331,7 @@ func _mixed_quote_and_medal_retry() -> void:
 	check(not app._save_error and not app._pair_save_failed and app.model.chest_state == "closed",
 		"The later medal retry finishes recovery without automatically opening the chest")
 	open_single(app)
-	check(app.coin_wallet.balance == 55, "Opening after both stores recover pays the single original quote")
+	check(app.coin_wallet.balance == 80, "Opening after both stores recover pays the single original quote")
 	await dispose(app)
 
 
@@ -357,7 +357,7 @@ func _phrase_quote_completion_retry(leave_pending: bool = false) -> void:
 	storage.coin_writable = true
 	if leave_pending:
 		app._show_mode_menu()
-		check(app._mode_menu_open() and not view.completion_pending and app.coin_wallet.balance == 55,
+		check(app._mode_menu_open() and not view.completion_pending and app.coin_wallet.balance == 80,
 			"Home accepts a pending Phrase completion and claims its recovered quote exactly once")
 		_quote(app, app._single_chest_receipt(), 1, 20)
 		await dispose(app)
@@ -372,7 +372,7 @@ func _phrase_quote_completion_retry(leave_pending: bool = false) -> void:
 		"The resumed celebration hands off to the real closed chest with no automatic claim")
 	_quote(app, app._single_chest_receipt(), 1, 20)
 	open_single(app)
-	check(app.coin_wallet.balance == 55, "A later deliberate Phrase chest hold pays the recovered quote once")
+	check(app.coin_wallet.balance == 80, "A later deliberate Phrase chest hold pays the recovered quote once")
 	await dispose(app)
 
 

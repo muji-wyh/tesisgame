@@ -39,6 +39,7 @@ func _run() -> void:
 	_check_batch_afterglow(reveal)
 	_check_separate_firework_area(reveal)
 	_check_firework_geometry(reveal)
+	_check_sky_firework_coverage(reveal)
 	_check_firework_trajectories()
 	_check_firework_stamp_exclusions()
 	await _check_delayed_reveal(reveal)
@@ -572,6 +573,46 @@ func _check_firework_trajectories() -> void:
 		check(late.x - middle.x < middle.x - early.x and late.y > middle.y,
 			"Radial movement slows while the late trail continues falling")
 	effects.free()
+
+
+func _check_sky_firework_coverage(reveal) -> void:
+	var no_exclusions: Array[Rect2] = []
+	for canvas: Rect2 in [Rect2(8, 8, 984, 600), Rect2(8, 8, 374, 570), Rect2(8, 8, 552, 220)]:
+		var reading := Rect2(canvas.position, Vector2(canvas.size.x, minf(190.0, canvas.size.y)))
+		for batch: bool in [false, true]:
+			var previous_radius: float = 0.0
+			for level in range(4, 10):
+				reveal.reset()
+				reveal.set_reduced_motion(false)
+				reveal.configure_layout(reading, 1.0, no_exclusions, canvas)
+				_present(reveal, "cat", cat, batch, level)
+				var effects = reveal._entries[0]._level_effects
+				var radius: float = float(effects.snapshot().bloom_radius)
+				var target: float = [116.0, 148.0, 184.0, 212.0, 244.0, 280.0][level - 4]
+				var minimum: float = minf(target, canvas.size.x * (0.30 + (level - 4) * 0.025))
+				check(radius >= minimum - 0.01,
+					"Lv%d popup flowers have a visibly larger, level-specific sky radius" % level)
+				check(radius > previous_radius,
+					"Even narrow screens retain a distinct bloom size for each firework level")
+				previous_radius = radius
+				var left: float = INF
+				var right: float = -INF
+				var top: float = INF
+				var bottom: float = -INF
+				var origins: Array[Vector2] = []
+				for group in range(int(effects.snapshot().burst_count)):
+					var origin: Vector2 = effects._burst_origin(group)
+					origins.append(origin)
+					left = minf(left, origin.x)
+					right = maxf(right, origin.x)
+					top = minf(top, origin.y)
+					bottom = maxf(bottom, origin.y)
+				check(origins.size() == int(effects.snapshot().burst_count)
+					and origins.all(func(origin: Vector2) -> bool: return origins.count(origin) == 1),
+					"Each tier's blossoms retain separate launch positions instead of collapsing around the reading card")
+				if level >= 6:
+					check(right - left >= canvas.size.x * 0.35 and bottom - top >= canvas.size.y * 0.22,
+						"High-tier fireworks launch across the sky rather than a small local popup halo")
 
 
 func _check_firework_stamp_exclusions() -> void:

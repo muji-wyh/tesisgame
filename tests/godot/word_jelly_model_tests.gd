@@ -1881,6 +1881,7 @@ func _test_rejected_merge_atomicity() -> void:
 	before.snapshot.combo.rank = "D"
 	before.snapshot.combo.tier = 0
 	before.snapshot.combo.bonus = 0
+	before.snapshot.combo.remaining = 0.0
 	before.snapshot.combo.next_bonus = 0
 	before.snapshot.combo.event_id = ""
 	events = _observe(model)
@@ -2130,12 +2131,17 @@ func _test_collection_gravity() -> void:
 	check(model.snapshot() == before, "pause freezes an in-progress collection fall")
 	model.set_paused(false)
 	model.step(Model.SETTLE_SECONDS)
-	check(model.is_settled(model.cell(1001)) and model.is_settled(model.cell(1002)) and not model._gravity_pending,
-		"landing returns both children to play and clears finished gravity work")
+	check(float(model.cell(1001).age) + Model.EPSILON >= model.settle_duration(model.cell(1001))
+		and float(model.cell(1002).age) + Model.EPSILON >= model.settle_duration(model.cell(1002)),
+		"both children reach their physical landing before the Lv2 blast can match them")
 	check(bool(model.cell(1001).falling) and model.cell(1001).falling_rows == 1,
 		"landing keeps its last fall provenance so the view cannot emit a second impact cue")
 	_assert_supported_tiles(model, [1001, 1002], "collected stack")
 	_assert_board(model, "collected stack")
+	model.step(1.0)
+	check(model.cell(1001).is_empty() and model.cell(1002).is_empty() and model.merged_count == 1
+		and not model._gravity_pending,
+		"the collected Lv2 word then matches its affected child with the landed partner and finishes gravity")
 
 
 func _test_gravity_partial_support() -> void:
@@ -4235,6 +4241,7 @@ func _test_pacing_boundary_determinism() -> void:
 		var snapshots: Array = [whole.snapshot(), sliced.snapshot()]
 		for state: Dictionary in snapshots:
 			state.spawn_elapsed = snappedf(float(state.spawn_elapsed), 0.000001)
+			state.combo.remaining = snappedf(float(state.combo.remaining), 0.000001)
 			for cell: Dictionary in state.cells:
 				cell.age = snappedf(float(cell.age), 0.000001)
 		check(snapshots[0] == snapshots[1] and whole.cleared_pairs == 4

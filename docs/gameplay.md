@@ -155,8 +155,10 @@ Progression and durable claims are described in
 
 Every game mode settles in a responsive modal over its completed board. Match,
 Memory and Phrase Builder retain their completion celebration inside that modal,
-then offer their existing chest and replay actions. Voice Pop and both Jelly modes
-show their result immediately. No mode opens a standalone settlement page.
+then offer their existing chest and replay actions. Voice Pop shows its result
+immediately. Both Jelly modes first show a 1.8-second end message over the frozen
+board, with a distinct acquired sound for danger expiry or ordinary completion,
+then open settlement. No mode opens a standalone settlement page.
 
 ## Shared Jelly controls and settlement
 
@@ -178,8 +180,12 @@ time does not raise difficulty; a new round restores the opening interval.
 Pull Finish downward until it glows and sounds, then release to finish. An early
 release springs back without ending play; tapping demonstrates the pull. Keyboard
 and controller activation use a Keep playing / Finish confirmation instead.
-Finishing or letting the full-board danger countdown expire opens settlement in
-a modal over the frozen board. The modal shows the score, completed words and
+Finishing or letting the full-board danger countdown expire first shows
+**Round complete** or **Game over**, respectively, with its own sound. This
+noninteractive 1.8-second effect precedes the settlement modal; held input cannot
+skip it. Backgrounding freezes its clock and stops its sound without replaying
+the cue on return. Reduced motion keeps the readable message without zoom or
+rotation. The modal then shows the score, completed words and
 earned chest, including an empty result. There is no standalone Jelly result
 page. Home and Play again save and collect pending treasure before leaving.
 Play again starts a fresh round, as does selecting the finished mode from Home.
@@ -259,17 +265,65 @@ do not change that level's policy. Opening chests provides additional coins.
 Collection banks all carried fragments. A manually solved
 picture match or root composition records learning only on collection;
 automatic merges and image-free atomic exposure do not earn mastery.
-Successful manual merges and collections build a visible combo. Invalid merges
-reset it; waiting, preview fast drops, pauses and stage transitions preserve it.
+Successful manual merges and collections build a visible combo and refill its
+eight-second countdown bar. The bar drains during active play; reaching zero
+or an invalid merge ends the current chain, without removing saved coins or its
+best count. A success completed at or after expiry starts a fresh chain.
+Preview drops and stage transitions do not directly reset or refill it.
+Pauses, saving waits and automatic matching sequences freeze its clock.
 Automatic Collect adds one per committed word, while paid Auto Merge stays
 neutral. Manual merges award one coin at combo 3-5, two at 6-9 and three at 10
 or above. Collection still uses its separate level-based coin chance. A rank
 badge advances through D/C/B/A/S/SS/SSS with sourced sparkle/ray flares and a
-rising accent on each increment. Reduced motion keeps a steady readable badge.
+rising accent on each increment. Earned merge coins display a larger gold
+**COMBO BONUS +N** acknowledgement for up to 1.8 seconds, including through an
+immediate bonus-free collection. The countdown turns warm red in its last
+quarter. Reduced motion keeps the real countdown and a steady readable badge.
 Merging and upgrading alone do not grant mastery. Combo payment failures keep
 the merge inputs and original receipt for Retry saving without paying twice.
 Failed coin saves preserve the word and its original reward for retry;
 repeated input cannot reroll or award the same collection twice.
+
+### Collection blast matching
+
+Each durably collected merged jelly keeps its existing level-specific explosion,
+then applies this footprint to current board bodies:
+
+| Collected level | Affected bodies |
+| --- | --- |
+| Lv1 | Direct collection only |
+| Lv2 | One randomly selected body among the eight neighboring cells |
+| Lv3 | Two randomly selected bodies among those eight cells |
+| Lv4 | Three randomly selected bodies among those eight cells |
+| Lv5 | All other bodies in the source column |
+| Lv6 | All other bodies in the source row and column |
+| Lv7 | The complete one-cell surrounding ring, at most eight bodies |
+| Lv8 | Two surrounding rings, capped at eight inner and fourteen outer bodies |
+| Lv9 | Every other available board body |
+
+Edges clip the footprint; absent neighbors are not replaced by distant bodies.
+Random selection does not favor bodies with a match and uses a separate stream
+from word supply and coin rolls. Held, already fusing and promised batch
+collection bodies are protected.
+
+The affected bodies receive traveling acquired light, sparkle marks, a brief
+elastic response and their own marking sound before matching. Each marked body
+with a legal partner flies to that partner anywhere on the board and merges.
+Reviewed spelling order is preserved even when the affected body is the suffix
+that flies toward its left-hand root. Identical words may upgrade only when their
+sum is at most Lv9. Unmatched marks fade without consuming a body or inventing a
+word. All carried fragments survive the automatic union.
+
+The free sequence reuses the automatic matching flight, fusion and settling
+clock; it never purchases an item or increases its repeat price. It does not
+collect its results, add combo increments or payments, or award independent
+mastery. Results remain assisted and available for later collection. Batch
+Collect finishes its captured pickups first, then coalesces overlapping blast
+marks into one bounded sequence so two explosions cannot consume the same
+endpoint twice. Failed collection saves do not trigger a blast; retry retains
+the original outcome and receipt. Pause freezes marks and flights, while leaving
+the round clears queued reactions and settles active automatic matching without
+collecting their results.
 
 Auto merge costs 600, 900, then 1200 coins for further uses in the same round;
 Treasure costs 200, 300, then 400. Each item has its own successful-use count,
@@ -305,13 +359,18 @@ The set remains fixed until all its words are mastered. Saved mastery immediatel
 removes a word from future supply and advertised previews. Existing board bodies,
 levels, fragments, and receipts survive a stage change. A permanent stage counter
 shows mastered targets, and a short light-and-sparkle banner announces each next
-stage. The final stage can contain fewer than ten available words; completing
-the whole eligible pool ends the round. Unsuccessful saves never advance a stage.
+stage. Completing the current stage also launches one full-screen confetti burst,
+keyed to that stage rather than a chest tier. This includes the last partial
+stage when no next-stage vocabulary remains. The final stage can contain fewer
+than ten available words; completing the whole eligible pool ends the round.
+Unsuccessful saves never advance or celebrate a stage.
 
 Chest fragments remain attached when either jelly is merged. Two marked pieces
 produce two visible markers, and collecting the complete word banks all of its
-fragments. Chest creation and upgrades use the shared enlarged, rotating reveal,
-light accents and paper confetti. The game menu, page hiding and word notebook
+fragments. Chest creation and upgrades retain the shared enlarged, rotating
+reveal and local light accents, but do not launch Jelly Words confetti. Stage
+paper scales from 384 to 1,200 pieces with the viewport and covers both its width
+and height rather than a small local patch. The game menu, page hiding and word notebook
 pause play; the existing Jelly reward room stores earned chests.
 
 ## Pip and completion
@@ -335,9 +394,10 @@ appears only after the performance and final pronunciation finish, then reveals
 the hold-to-open chest in the same dialog.
 
 Chest coins also grow with Pip's earned level shown in the header, using the
-current career's progress during professional vocabulary. Each chest tier pays 50 base coins
-plus one bonus coin per four Pip levels, rounded up, for a maximum 50% bonus at
-Lv99. Settlement shows the base reward, the saved Pip-level bonus and the total
+current career's progress during professional vocabulary. Each newly quoted
+chest tier pays 75 base coins plus `ceil(24 * clamp(Pip Lv, 0, 99) / 99)` bonus
+coins: 75 at Lv0, 80 at Lv20 and 99 at Lv99. Settlement shows the base reward,
+the saved Pip-level bonus and the total
 after opening. The amount is saved when settlement first prepares the chest, so
 retries, Home, replay and reload use the same reward. Previously paid chests keep
 their original amounts. See [coin rewards](coin-rewards.md) for the full policy.

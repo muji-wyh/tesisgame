@@ -441,7 +441,7 @@ for (const mode of ['match', 'memory']) {
     }
     const quotedReward = earned ? (await metrics(page)).growth.result.coin_breakdown.reward : null;
     if (earned) expect(quotedReward).toMatchObject({ tier: mode === 'memory' ? 6 : 1,
-      base: mode === 'memory' ? 300 : 50 });
+      base: mode === 'memory' ? 450 : 75 });
     await openModeMenu(page);
     const expectedBalance = startingBalance + (quotedReward?.total || 0);
     await expect.poll(() => page.locator('#coin-status').evaluate(element => JSON.parse(element.dataset.snapshot).balance),

@@ -279,6 +279,10 @@ func check_queued_finish(mode: String, retained: bool, fail_first_save: bool) ->
 	check(not view._reward_presentation.is_active() and view._displayed_chest_tier == FINAL_TIER,
 		label + ": finishing clears obsolete animation events and reconciles the displayed tier")
 	check_level_badge(view, FINAL_TIER, false, label + " finished")
+	check(app._round_end.is_active() and not app._settlement_dialog.is_visible_in_tree()
+		and not app._round_celebration.is_active(),
+		label + ": both saved rewards and failed saves first show the same end sequence without a chest dance")
+	Fixture.finish_celebration(app)
 	if fail_first_save:
 		check(room._save_failed and room._retry.is_visible_in_tree() and storage.reward_writes == saves_before,
 			label + ": a failed batch write remains retryable without replacing old treasure")
@@ -301,9 +305,8 @@ func check_queued_finish(mode: String, retained: bool, fail_first_save: bool) ->
 		label + ": persistence contains exactly one new unopened chest with the final tier and theme")
 	if retained:
 		check(saved.entries[0] == old_entry, label + ": appending the final reward preserves the older entry and its index")
-	check(app._round_celebration.is_active() == (not fail_first_save),
-		label + ": saved rewards use the entrance while save recovery remains immediately actionable")
-	Fixture.finish_celebration(app)
+	check(not app._round_end.is_active() and not app._round_celebration.is_active(),
+		label + ": settlement and save recovery remain actionable without a second entrance")
 	var card_matches: bool = check_current_card(app, reward_id, label)
 	check(room.snapshot().result_context == app._round_result and app.coin_wallet.balance == coins_before,
 		label + ": showing settlement keeps the final result and does not pay before opening")

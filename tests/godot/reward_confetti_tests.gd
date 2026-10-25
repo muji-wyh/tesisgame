@@ -31,6 +31,7 @@ func _run() -> void:
 		and (paper._surface.get_global_transform_with_canvas() * paper.screen_rect()).is_equal_approx(root.get_visible_rect()),
 		"Paper has its own full-viewport canvas despite an offset, scaled and clipped ancestor")
 	_check_lifecycle(paper)
+	_check_viewport_coverage(paper)
 	_check_burst_sampling()
 	_check_motion_variety(paper)
 	paper.burst("paths:earned-tier-three")
@@ -137,6 +138,33 @@ func _check_burst_sampling() -> void:
 		"Recreating the same reward identity reproduces its paper variation without dependence on earlier bursts")
 	coarse.free()
 	fine.free()
+
+
+func _check_viewport_coverage(paper) -> void:
+	var previous_count: int = 0
+	for dimensions: Vector2 in [Vector2(390, 844), Vector2(1366, 768), Vector2(2560, 1440), Vector2(3440, 1440)]:
+		var screen := Rect2(Vector2.ZERO, dimensions)
+		var count: int = Confetti.PAPER_COUNT
+		check(paper.has_method("_paper_count"), "Confetti density adapts to the actual viewport instead of a fixed particle count")
+		if paper.has_method("_paper_count"):
+			count = int(paper.call("_paper_count", screen, 1.0))
+		check(count >= 320 and count <= 1200 and count >= previous_count,
+			"Larger screens receive a dense but bounded full-screen paper population")
+		previous_count = count
+		for variation: float in [0.0, 0.43, 0.999999]:
+			var cells: Dictionary = {}
+			for index in range(count):
+				var state: Dictionary = paper._paper_state(index, screen, 1.0, 1.25, variation)
+				if state.is_empty() or not screen.has_point(state.position):
+					continue
+				var column: int = clampi(int(state.position.x / dimensions.x * 6.0), 0, 5)
+				var row: int = clampi(int(state.position.y / dimensions.y * 5.0), 0, 4)
+				var key := Vector2i(column, row)
+				cells[key] = int(cells.get(key, 0)) + 1
+			check(cells.size() == 30, "The celebration reaches every cell of a six-by-five full-screen coverage grid")
+			check(cells.values().all(func(amount: int) -> bool: return amount >= 2),
+				"Every screen region contains multiple papers at %s, variation %.3f: %s" %
+					[dimensions, variation, cells])
 
 
 func _check_motion_variety(paper) -> void:

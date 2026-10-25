@@ -189,6 +189,12 @@ func check_input_focus(app) -> void:
 
 func merged_word(view, word: Dictionary, fragments: int = 0, level: int = 1) -> Dictionary:
 	var game = view.game
+	for frame in range(400):
+		if not game.powerup_active() and game._blast_queue.is_empty():
+			break
+		view._process(0.04)
+	check(not game.powerup_active() and game._blast_queue.is_empty(),
+		"The preceding collection's free matching settles before another manual word is built")
 	# Existing persistence fixtures deliberately exercise the rare winning branch.
 	game._coin_rng.seed = COIN_REWARD_SEED
 	game.step(0.4)
@@ -362,8 +368,11 @@ func check_finish_header(app, view) -> void:
 		"A deliberate header Finish pauses the round for confirmation")
 	app._finish_confirmation.finish_button.pressed.emit()
 	await settle()
+	check(view.game.phase == "finished" and app._round_end.is_active() and not app._settlement_dialog.is_visible_in_tree(),
+		"Confirming Finish first presents the end effect over the frozen word board")
+	Fixture.finish_celebration(app)
 	check(view.game.phase == "finished" and app._settlement_dialog.is_visible_in_tree() and not view.snapshot().result.visible and not view.finish_button.is_visible_in_tree(),
-		"Confirming Finish opens the settlement modal and removes the round action")
+		"The completed end effect opens settlement and removes the round action")
 	app._jelly_rewards._back.pressed.emit()
 	await settle()
 	view._process(0.0)
@@ -412,8 +421,11 @@ func check_size_paused_finish(app, view) -> void:
 		"The size-paused Finish pull remains armed across frames while board state stays unchanged")
 	await pointer_event(end, false)
 	await settle()
+	check(view.game.phase == "finished" and app._round_end.is_active() and not app._settlement_dialog.is_visible_in_tree(),
+		"A size-paused Finish still presents its end effect before settlement")
+	Fixture.finish_celebration(app)
 	check(view.game.phase == "finished" and app._settlement_dialog.is_visible_in_tree() and not button.is_pulling(),
-		"Releasing an armed Finish pull during a size-only pause opens the settlement modal")
+		"The size-paused end effect hands off to settlement")
 	root.size = original_size
 	app._jelly_rewards._back.pressed.emit()
 	await settle()
@@ -533,6 +545,7 @@ func check_rejected_drop_flow(app, view, word: Dictionary) -> void:
 			"round_end":
 				check(game.phase == "finished" and not app._round_result.is_empty(),
 					"Ending the round routes through the application result before silencing feedback")
+				Fixture.finish_celebration(app)
 				app._jelly_rewards._back.pressed.emit()
 				view.set_process(false)
 		check(game.phase == "playing" and not game.paused, interruption + ": continuing returns to the same playable word round")
@@ -742,7 +755,7 @@ func _run() -> void:
 		"Returning to play completes collection and unlocks the first chest")
 	check(view._reward_presentation.snapshot().kind == "synthesis", "The first chest uses the shared fragment-synthesis presentation")
 	view.advance_reward_presentation(ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.REVEAL_SECONDS + 0.03)
-	check(app._reward_confetti.is_active() and app._reward_confetti.snapshot().keys.has(app._round_id + ":word_jelly:1"), "The new mode's chest acquisition launches screen confetti")
+	check(not app._reward_confetti.is_active(), "Chest acquisition keeps its reveal without launching stage confetti")
 	var reward_elapsed: float = float(view._reward_presentation.snapshot().elapsed)
 	app._show_mode_menu()
 	check(game.paused and not view._reward_presentation._flight_surface.is_visible_in_tree(),
@@ -822,7 +835,7 @@ func _run() -> void:
 	check(game.fragment_count == 9 and game.chest_tier == 2, "Additional collections upgrade the earned chest")
 	check(view._reward_presentation.snapshot().kind == "upgrade", "The next chest tier uses the enlarged spinning upgrade presentation")
 	view.advance_reward_presentation(ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.REVEAL_SECONDS + 0.03)
-	check(app._reward_confetti.snapshot().keys.has(app._round_id + ":word_jelly:2"), "The new chest tier launches its own single confetti burst")
+	check(not app._reward_confetti.is_active(), "Chest upgrades do not launch stage confetti")
 	var earned_round: String = app._round_id
 	var earned_combo_balance: int = prior_wallet_coins + game.combo_coins - prior_combo_coins
 	Fixture.enter_mode(app, "jelly")

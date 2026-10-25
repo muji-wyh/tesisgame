@@ -41,6 +41,8 @@ const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
 const BATCH_BEAT_SECONDS: float = 0.14
 const BATCH_POP_SECONDS: float = 0.04
+const COMBO_SECONDS: float = 8.0
+const BLAST_MARK_BEAT_SECONDS: float = 0.06
 const AUTO_COLLECT_UNLOCK_LEVEL: int = 3
 const INITIAL_SPAWN_INTERVAL: float = 20.0
 const MIN_SPAWN_INTERVAL: float = 10.0
@@ -84,6 +86,7 @@ var combo_count: int = 0
 var combo_best: int = 0
 var combo_coins: int = 0
 var _combo_bonus: int = 0
+var _combo_remaining: float = 0.0
 var _combo_event: String = ""
 var _combo_pending: String = ""
 var _combo_committing: bool = false
@@ -131,6 +134,8 @@ var _collection_batch_event_id: String = ""
 var _collection_batch_serial: int = 0
 var _rng := RandomNumberGenerator.new()
 var _coin_rng := RandomNumberGenerator.new()
+var _blast_rng := RandomNumberGenerator.new()
+var _blast_queue: Array[Dictionary] = []
 var _powerup: Dictionary = {}
 var _powerup_uses: Dictionary = {"auto_merge": 0, "fragments": 0}
 var _powerup_ids: Array[int] = []
@@ -148,6 +153,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	if _powerup_purchasing or _finishing_powerup or _combo_committing:
 		return false
 	var previous_generation: int = _generation
+	_blast_queue.clear()
 	finish_powerup()
 	if previous_generation != _generation:
 		return false
@@ -181,6 +187,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	combo_best = 0
 	combo_coins = 0
 	_combo_bonus = 0
+	_combo_remaining = 0.0
 	_combo_event = ""
 	_combo_pending = ""
 	_combo_committing = false
@@ -209,10 +216,12 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	if seed_value < 0:
 		_rng.randomize()
 		_coin_rng.randomize()
+		_blast_rng.randomize()
 	else:
 		_rng.seed = seed_value
 		# Coin rolls must not alter word supply, fragments, or automatic matching.
 		_coin_rng.seed = seed_value ^ 0x434F494E
+		_blast_rng.seed = seed_value ^ 0x424C4153
 	var ids: Dictionary = {}
 	var analyses: Array = []
 	for candidate in words:
@@ -263,7 +272,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 func stage_transition_ready() -> bool:
 	return phase == "playing" and not powerup_active() and not collection_batch_active() \
 		and fusions.is_empty() and _held_tile_id < 0 and _dragged_tile_id < 0 \
-		and not _powerup_activating and not _powerup_committing and not _finishing_powerup
+		and not _powerup_activating and not _powerup_committing and not _finishing_powerup and _blast_queue.is_empty()
 
 
 func retire_mastered_words(word_ids: Array) -> void:
@@ -372,7 +381,7 @@ func can_activate_powerup(kind: String) -> bool:
 	if not POWERUP_PRICES.has(kind) or phase != "playing" or paused or _powerup_purchasing \
 		or (powerup_active() and not repeat_treasure) \
 		or _finishing_powerup or collection_batch_active() or _held_tile_id >= 0 \
-		or not fusions.is_empty() or _settling_remaining() > EPSILON or cells.is_empty():
+		or not fusions.is_empty() or not _blast_queue.is_empty() or _settling_remaining() > EPSILON or cells.is_empty():
 		return false
 	return kind == "fragments" or not _powerup_pair(false).is_empty()
 
@@ -418,14 +427,7 @@ func _purchase_powerup(kind: String) -> bool:
 	# Commit the next price before feedback or lifecycle callbacks can reenter.
 	_powerup_uses[kind] = int(_powerup_uses.get(kind, 0)) + 1
 	if not bool(_powerup.get("active", false)):
-		_powerup_ids.clear()
-		for tile: Dictionary in cells:
-			_powerup_ids.append(int(tile.id))
-		_powerup = {"active": true, "kind": kind, "receipt_id": receipt_id, "stage": "ready",
-			"elapsed": 0.0, "duration": 0.0, "source_id": -1, "target_id": -1,
-			"source": {}, "target": {}, "completed": 0, "total": 0, "arrivals": [], "drags": [],
-			"plans": [], "next_plan_id": 0,
-			"clock": 0.0, "started_at": 0.0, "next_launch_at": 0.0, "contact_played": false, "contact_pending": false}
+		_begin_powerup_timeline(kind, receipt_id)
 	var timeline_id: String = str(_powerup.receipt_id)
 	if kind == "fragments":
 		_prepare_powerup_fragments(receipt_id)
@@ -445,6 +447,122 @@ func _purchase_powerup(kind: String) -> bool:
 	if _same_powerup(generation, timeline_id) and not paused:
 		_advance_powerup()
 	return true
+
+
+func _begin_powerup_timeline(kind: String, receipt_id: String) -> void:
+	_powerup_ids.clear()
+	for tile: Dictionary in cells:
+		_powerup_ids.append(int(tile.id))
+	_powerup = {"active": true, "kind": kind, "receipt_id": receipt_id, "stage": "ready",
+		"elapsed": 0.0, "duration": 0.0, "source_id": -1, "target_id": -1,
+		"source": {}, "target": {}, "completed": 0, "total": 0, "arrivals": [], "drags": [],
+		"plans": [], "next_plan_id": 0, "clock": 0.0, "started_at": 0.0,
+		"next_launch_at": 0.0, "contact_played": false, "contact_pending": false}
+
+
+func _blast_target_ids(origin: Dictionary, level: int) -> Array[int]:
+	var inner: Array[int] = []
+	var outer: Array[int] = []
+	var selected: Array[int] = []
+	if level <= 1:
+		return selected
+	for tile: Dictionary in cells:
+		var id: int = int(tile.id)
+		if id == int(origin.get("id", -1)) or id in [_held_tile_id, _dragged_tile_id] \
+			or is_fusing(id) or is_lifted(id) or _reserved_for_collection(id) or _reserved_for_powerup(id):
+			continue
+		var dx: int = absi(int(tile.column) - int(origin.column))
+		var dy: int = absi(int(tile.row) - int(origin.row))
+		var distance: int = maxi(dx, dy)
+		if level >= 9 or (level == 5 and dx == 0) or (level == 6 and (dx == 0 or dy == 0)):
+			selected.append(id)
+		elif distance == 1:
+			inner.append(id)
+		elif distance == 2:
+			outer.append(id)
+	if level in [5, 6, 9]:
+		return selected
+	if level <= 4:
+		_shuffle_blast_ids(inner)
+		selected.assign(inner.slice(0, mini(level - 1, inner.size())))
+		return selected
+	selected = inner
+	if level == 8:
+		_shuffle_blast_ids(outer)
+		selected.append_array(outer.slice(0, mini(14, outer.size())))
+	return selected
+
+
+func _shuffle_blast_ids(ids: Array[int]) -> void:
+	for index in range(ids.size() - 1, 0, -1):
+		var other: int = _blast_rng.randi_range(0, index)
+		var saved: int = ids[index]
+		ids[index] = ids[other]
+		ids[other] = saved
+
+
+func _queue_collection_blast(completed: Dictionary) -> void:
+	var level: int = clampi(int(completed.get("merge_level", 1)), 1, MAX_MERGE_LEVEL)
+	if level <= 1 or not _finish_reason.is_empty():
+		return
+	var targets: Array[int] = _blast_target_ids(completed.a, level)
+	if targets.is_empty():
+		return
+	var origin: Dictionary = {"column": completed.a.column, "row": completed.a.row,
+		"width": 1, "height": 1, "level": level}
+	_blast_queue.append({"event_id": str(completed.attempt_id), "level": level,
+		"origin": origin, "target_ids": targets})
+
+
+func _start_pending_blast() -> void:
+	if _blast_queue.is_empty() or powerup_active() or collection_batch_active() or not fusions.is_empty() \
+		or _held_tile_id >= 0 or _dragged_tile_id >= 0 or paused or phase != "playing":
+		return
+	var origins: Dictionary = {}
+	var targets: Array[int] = []
+	var level: int = 1
+	var event_id: String = str(_blast_queue[0].event_id)
+	# Batch pickups keep their accepted bodies; overlapping blasts share one
+	# bounded marking beat and consume each captured body at most once.
+	for blast: Dictionary in _blast_queue:
+		level = maxi(level, int(blast.level))
+		for id: int in blast.target_ids:
+			if cell(id).is_empty():
+				continue
+			if not origins.has(id):
+				targets.append(id)
+			if not origins.has(id) or int(origins[id].level) < int(blast.level):
+				origins[id] = blast.origin.duplicate()
+	_blast_queue.clear()
+	if targets.is_empty():
+		return
+	_begin_powerup_timeline("blast", "blast:" + event_id)
+	var group_size: int = maxi(1, ceili(targets.size() / 6.0))
+	var groups: int = ceili(float(targets.size()) / group_size)
+	_powerup.stage = "mark"
+	_powerup.duration = maxf(0.24, (groups - 1) * BLAST_MARK_BEAT_SECONDS + 0.15)
+	_powerup.blast = {"level": level, "target_ids": targets, "origins": origins,
+		"marked": 0, "group_size": group_size, "next_mark_at": 0.0, "used_ids": {}}
+	cue_requested.emit("blast_wave")
+
+
+func _next_blast_merge() -> Dictionary:
+	for id: int in _powerup.blast.target_ids:
+		if _powerup.blast.used_ids.has(id):
+			continue
+		var source: Dictionary = cell(id)
+		if source.is_empty() or not is_settled(source) or is_fusing(id) or is_lifted(id) or _reserved_for_powerup(id):
+			continue
+		for target: Dictionary in cells:
+			var target_id: int = int(target.id)
+			if target_id == id or not _powerup_ids.has(target_id) or not is_settled(target) \
+				or is_fusing(target_id) or is_lifted(target_id) or _reserved_for_powerup(target_id):
+				continue
+			if parts_compatible(source, target) and can_merge(source, target):
+				return {"source_id": id, "target_id": target_id, "reverse": false}
+			if parts_compatible(target, source) and can_merge(target, source):
+				return {"source_id": id, "target_id": target_id, "reverse": true}
+	return {}
 
 
 func finish_powerup(silent: bool = true) -> void:
@@ -486,6 +604,8 @@ func _powerup_pair(captured_only: bool = true) -> Array[int]:
 
 
 func _next_powerup_merge() -> Dictionary:
+	if str(_powerup.kind) == "blast":
+		return _next_blast_merge()
 	# Independent paths may overlap, while each path keeps its future roots and
 	# picture reserved until its final result exists. Prefer ready continuations.
 	for plan: Dictionary in _powerup.plans:
@@ -537,7 +657,7 @@ func _plan_tile_id(plan: Dictionary, reference: String) -> int:
 
 
 func _reserved_for_powerup(tile_id: int) -> bool:
-	if not bool(_powerup.get("active", false)) or str(_powerup.get("kind", "")) != "auto_merge":
+	if not _authored_auto_active():
 		return false
 	for drag: Dictionary in _powerup.drags:
 		if tile_id in [int(drag.source_id), int(drag.target_id)]:
@@ -599,6 +719,20 @@ func _advance_powerup() -> void:
 		return
 	var generation: int = _generation
 	var receipt_id: String = str(_powerup.receipt_id)
+	if str(_powerup.kind) == "blast" and str(_powerup.stage) == "mark":
+		var blast: Dictionary = _powerup.blast
+		while int(blast.marked) < blast.target_ids.size() and float(_powerup.elapsed) + EPSILON >= float(blast.next_mark_at):
+			blast.marked = mini(blast.target_ids.size(), int(blast.marked) + int(blast.group_size))
+			blast.next_mark_at = float(blast.next_mark_at) + BLAST_MARK_BEAT_SECONDS
+			cue_requested.emit("blast_mark")
+			if not _same_powerup(generation, receipt_id) or paused:
+				return
+		if float(_powerup.elapsed) + EPSILON < float(_powerup.duration):
+			return
+		_powerup.stage = "ready"
+		_powerup.elapsed = 0.0
+		_powerup.duration = 0.0
+		_powerup.next_launch_at = float(_powerup.clock)
 	if str(_powerup.kind) == "fragments":
 		for arrival: Dictionary in _powerup.arrivals.duplicate():
 			if bool(arrival.arrived):
@@ -667,10 +801,16 @@ func _advance_powerup() -> void:
 		# becomes ready. Pause freezes this same model clock.
 		_powerup.next_launch_at = float(_powerup.next_launch_at) + POWERUP_MERGE_BEAT_SECONDS
 	if not job.is_empty() and launch_ready:
-		job.plan.launched_steps[int(job.step_index)] = true
+		var is_blast: bool = str(_powerup.kind) == "blast"
+		if is_blast:
+			_powerup.blast.used_ids[int(job.source_id)] = true
+			_powerup.blast.used_ids[int(job.target_id)] = true
+		else:
+			job.plan.launched_steps[int(job.step_index)] = true
 		var drag: Dictionary = {"source_id": int(job.source_id), "target_id": int(job.target_id),
 			"source": cell(int(job.source_id)), "target": cell(int(job.target_id)), "elapsed": 0.0,
-			"plan_id": int(job.plan.plan_id), "step_index": int(job.step_index),
+			"plan_id": -1 if is_blast else int(job.plan.plan_id), "step_index": -1 if is_blast else int(job.step_index),
+			"reverse": bool(job.get("reverse", false)),
 			"duration": POWERUP_DRAG_SECONDS, "started_at": float(_powerup.clock),
 			"contact_played": false, "contact_pending": false}
 		_powerup.drags.append(drag)
@@ -718,6 +858,11 @@ func _powerup_boundary() -> float:
 					next = minf(next, maxf(0.0, float(arrival.at) - POWERUP_FRAGMENT_FLIGHT - float(_powerup.elapsed)))
 				next = minf(next, maxf(0.0, float(arrival.at) - float(_powerup.elapsed)))
 		return next
+	if str(_powerup.kind) == "blast" and str(_powerup.stage) == "mark":
+		var boundary: float = maxf(0.0, float(_powerup.duration) - float(_powerup.elapsed))
+		if int(_powerup.blast.marked) < _powerup.blast.target_ids.size():
+			boundary = minf(boundary, maxf(0.0, float(_powerup.blast.next_mark_at) - float(_powerup.elapsed)))
+		return boundary
 	var boundary: float = INF
 	for drag: Dictionary in _powerup.drags:
 		boundary = minf(boundary, maxf(0.0, float(drag.duration) - float(drag.elapsed)))
@@ -766,15 +911,20 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dic
 	if a.is_empty() or b.is_empty() or (not held_source and not is_settled(a)) or not target_ready or is_lifted(b_id):
 		return "ignored"
 	# Validate spelling and the full result rectangle before consuming IDs.
-	var candidate: Dictionary = merge_candidate(a, b)
+	var reverse: bool = automatic and bool(powerup_job.get("reverse", false))
+	var candidate: Dictionary = merge_candidate(b, a, false) if reverse else merge_candidate(a, b)
+	if reverse and candidate.status in ["partial", "complete"]:
+		var destination: Vector2i = _drag_return_position(_occupied([a_id, b_id]), 1, 1, b)
+		if destination.x < 0:
+			candidate = {"status": "needs_room", "result": {}}
+		else:
+			candidate.result.column = destination.x
+			candidate.result.row = destination.y
 	if candidate.status == "needs_room":
 		return "needs_room"
 	if not candidate.status in ["partial", "complete"]:
-		combo_count = 0
-		_combo_bonus = 0
-		_combo_event = ""
 		var generation: int = _generation
-		combo_changed.emit(combo_snapshot())
+		_reset_combo()
 		if generation != _generation:
 			return "wrong"
 		cue_requested.emit("wrong")
@@ -1071,6 +1221,9 @@ func step(delta: float) -> void:
 	var generation: int = _generation
 	var remaining: float = delta
 	while remaining > EPSILON and _can_continue(generation):
+		_start_pending_blast()
+		if not _can_continue(generation):
+			break
 		_resume_pending_motion()
 		_advance_collection_batch()
 		_advance_powerup()
@@ -1079,7 +1232,10 @@ func step(delta: float) -> void:
 		if _finishing_powerup and not powerup_active():
 			break
 		var powerup_running: bool = powerup_active()
+		var combo_running: bool = combo_count > 0 and not powerup_running and not _has_pending_collection_commit()
 		var consumed: float = remaining
+		if combo_running:
+			consumed = minf(consumed, maxf(0.0, _combo_remaining))
 		consumed = minf(consumed, _collection_batch_boundary())
 		consumed = minf(consumed, _powerup_boundary())
 		consumed = minf(consumed, _next_drag_gravity_boundary())
@@ -1119,7 +1275,7 @@ func step(delta: float) -> void:
 		if powerup_running:
 			_powerup.elapsed = float(_powerup.elapsed) + consumed
 			_powerup.clock = float(_powerup.clock) + consumed
-			if str(_powerup.kind) == "auto_merge":
+			if _authored_auto_active():
 				for drag: Dictionary in _powerup.drags:
 					drag.elapsed = minf(float(drag.duration), float(drag.elapsed) + consumed)
 				_sync_powerup_drag()
@@ -1131,6 +1287,12 @@ func step(delta: float) -> void:
 		elif not full and not powerup_running and not ending_wait:
 			spawn_elapsed += consumed
 		remaining -= consumed
+		if combo_running:
+			_combo_remaining = maxf(0.0, _combo_remaining - consumed)
+			if _combo_remaining <= EPSILON:
+				_reset_combo()
+				if not _can_continue(generation):
+					break
 		for active in fusions.duplicate():
 			if not _can_continue(generation):
 				break
@@ -1534,6 +1696,7 @@ func snapshot() -> Dictionary:
 		"pip_level": pip_level, "auto_collect_unlocked": auto_collect_unlocked(),
 		"auto_collect_unlock_level": AUTO_COLLECT_UNLOCK_LEVEL,
 		"powerup": powerup_snapshot(),
+		"queued_blasts": _blast_queue.size(),
 		"powerup_uses": _powerup_uses.duplicate(),
 		"powerup_prices": {"auto_merge": powerup_price("auto_merge"), "fragments": powerup_price("fragments")},
 		"error": error, "result": _result.duplicate(true)
@@ -1560,6 +1723,7 @@ func finish_round(reason: String = "finished") -> Dictionary:
 		_finish_after_collection_commit = true
 		return _result.duplicate(true)
 	var generation: int = _generation
+	_blast_queue.clear()
 	finish_powerup()
 	if generation != _generation or phase == "finished":
 		return _result.duplicate(true)
@@ -1582,6 +1746,7 @@ func finish_round(reason: String = "finished") -> Dictionary:
 				return _result.duplicate(true)
 	_restore_dragged_tile()
 	phase = "finished"
+	_combo_remaining = 0.0
 	fusions.clear()
 	_dragged_tile_id = -1
 	_held_tile_id = -1
@@ -2000,7 +2165,7 @@ func _authored_spelling_plan(available: Array[Dictionary], pictures: Dictionary,
 
 
 func _authored_auto_active() -> bool:
-	return powerup_active() and str(_powerup.get("kind", "")) == "auto_merge"
+	return powerup_active() and str(_powerup.get("kind", "")) in ["auto_merge", "blast"]
 
 
 func _new_tile(text: String, mass: int, fragments: int, allocate_id: bool = true) -> Dictionary:
@@ -2370,7 +2535,7 @@ func _complete_merge(completed: Dictionary) -> void:
 	_restore_growth(int(result.id))
 	_gravity_pending = true
 	merged_count += 1
-	if bool(_powerup.get("active", false)) and str(_powerup.kind) == "auto_merge":
+	if _authored_auto_active():
 		for plan: Dictionary in _powerup.plans:
 			if int(plan.plan_id) != int(completed.get("powerup_plan_id", -1)):
 				continue
@@ -2439,6 +2604,7 @@ func _complete_collection(completed: Dictionary) -> void:
 			_collection_batch_next_in = 0.0
 	full_elapsed = -1.0
 	var generation: int = _generation
+	_queue_collection_blast(completed)
 	_advance_combo(str(completed.attempt_id), 0, false)
 	if generation != _generation:
 		return
@@ -2468,6 +2634,14 @@ func _complete_collection(completed: Dictionary) -> void:
 		changed.emit()
 
 
+func _reset_combo() -> void:
+	combo_count = 0
+	_combo_bonus = 0
+	_combo_remaining = 0.0
+	_combo_event = ""
+	combo_changed.emit(combo_snapshot())
+
+
 func combo_snapshot() -> Dictionary:
 	var tier: int = 0
 	for threshold: int in [3, 6, 10, 15, 25, 40]:
@@ -2476,6 +2650,7 @@ func combo_snapshot() -> Dictionary:
 	return {"count": combo_count, "best": combo_best, "coins": combo_coins,
 		"rank": ["D", "C", "B", "A", "S", "SS", "SSS"][tier], "tier": tier,
 		"bonus": _combo_bonus, "next_bonus": CoinEconomy.jelly_combo_bonus(combo_count + 1),
+		"remaining": _combo_remaining, "seconds": COMBO_SECONDS,
 		"event_id": _combo_event, "pending": not _combo_pending.is_empty() and not _combo_committing}
 
 
@@ -2484,6 +2659,7 @@ func _advance_combo(event_id: String, bonus: int, feedback: bool = true) -> void
 	combo_best = maxi(combo_best, combo_count)
 	combo_coins += bonus
 	_combo_bonus = bonus
+	_combo_remaining = COMBO_SECONDS
 	_combo_event = event_id
 	if feedback:
 		combo_changed.emit(combo_snapshot())

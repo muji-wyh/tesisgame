@@ -122,8 +122,10 @@ func fill_and_expire(app, mode: String, held_accept: bool = false) -> void:
 		var round_id: String = app._round_id
 		key(KEY_ENTER, true, false, true)
 		key(KEY_ENTER, false)
-		check(app._settlement_dialog.is_visible_in_tree() and app._round_id == round_id and not app._mode_menu_open(),
-			mode + ": an accept key held before timeout cannot activate the new dialog")
+		var sequence = app.get("_round_end")
+		check(sequence != null and sequence.is_active() and not app._settlement_dialog.is_visible_in_tree()
+			and app._round_id == round_id and not app._mode_menu_open(),
+			mode + ": an accept key held before timeout cannot skip the game-over presentation")
 
 
 func check_modal(app, mode: String, chests: int, reason: String = "danger") -> void:
@@ -132,7 +134,7 @@ func check_modal(app, mode: String, chests: int, reason: String = "danger") -> v
 	var room = app._jelly_rewards
 	var title: String = "Game over" if reason == "danger" else "Round complete"
 	check(modal.is_visible_in_tree() and modal.snapshot().visible and modal.snapshot().title == title,
-		mode + ": " + reason + " immediately opens its settlement dialog")
+		mode + ": " + reason + " opens its settlement dialog after the end presentation")
 	check(app._jelly_rewards_shown and room.is_visible_in_tree() and modal.is_ancestor_of(room)
 		and view.is_visible_in_tree() and not view.snapshot().result.visible and view.snapshot().result.retired,
 		mode + ": settlement stays inside the overlay above the frozen board")
@@ -240,6 +242,7 @@ func earn_chest(app, mode: String) -> void:
 func check_zero_result(mode: String, reason: String) -> void:
 	var app = await make_app(mode)
 	end_round(app, mode, reason, true)
+	complete_transition(app, mode, reason)
 	await settle()
 	check_modal(app, mode, 0, reason)
 	await check_keyboard(app, mode)
@@ -268,6 +271,7 @@ func check_earned_result(mode: String, reason: String) -> void:
 	earn_chest(app, mode)
 	storage.reward_writable = false
 	end_round(app, mode, reason)
+	complete_transition(app, mode, reason)
 	await settle()
 	var room = app._jelly_rewards
 	check(app._settlement_dialog.is_visible_in_tree() and room._save_failed and room._retry.is_visible_in_tree(),
@@ -285,7 +289,7 @@ func check_earned_result(mode: String, reason: String) -> void:
 	check_modal(app, mode, 1, reason)
 	await check_keyboard(app, mode + " earned chest")
 	await check_layout(app, mode + " earned chest")
-	var amount: int = int(app._round_result.chest_tier) * 50
+	var amount: int = int(app.coin_wallet.chest_reward(room._cards[0].reward_id).total)
 	var initial_coins: int = app.coin_wallet.balance
 	room.begin_hold(room._cards[0].button)
 	room.advance_hold(Feel.HOLD_SECONDS)
@@ -301,6 +305,7 @@ func check_earned_result(mode: String, reason: String) -> void:
 	check(app._round_id != old_round and app._active_jelly().game.phase == "playing"
 		and app.coin_wallet.balance == initial_coins + amount, mode + ": replay keeps the settled wallet")
 	end_round(app, mode, reason)
+	complete_transition(app, mode, reason)
 	await settle()
 	check_modal(app, mode, 0, reason)
 	check(room._cards.is_empty(), mode + ": a later empty result never resurrects an opened chest")
@@ -330,8 +335,38 @@ func end_round(app, mode: String, reason: String, held_accept: bool = false) -> 
 	var round_id: String = app._round_id
 	app._finish_confirmation.finish_button.pressed.emit()
 	view.game.finish_round()
-	check(app._round_id == round_id and app._settlement_dialog.is_visible_in_tree(),
-		mode + ": repeated completion cannot dismiss or replace the settlement modal")
+	var sequence = app.get("_round_end")
+	check(app._round_id == round_id and sequence != null and sequence.is_active()
+		and not app._settlement_dialog.is_visible_in_tree(),
+		mode + ": repeated completion cannot replace or skip the end presentation")
+
+
+func complete_transition(app, mode: String, reason: String) -> void:
+	var sequence = app.get("_round_end")
+	check(sequence != null and sequence.is_active() and not app._settlement_dialog.is_visible_in_tree(),
+		mode + ": the finished board first presents an end effect rather than a result popup")
+	if sequence == null:
+		return
+	check(sequence.snapshot().title == ("Game over" if reason == "danger" else "Round complete"),
+		mode + ": the end effect distinguishes a full-board timeout from a voluntary finish")
+	var round_id: String = app._round_id
+	app._advance_ui(0.60)
+	check(sequence.is_active() and not app._settlement_dialog.is_visible_in_tree(),
+		mode + ": the end message remains readable before settlement becomes available")
+	var frozen: Dictionary = sequence.snapshot()
+	app.on_page_hidden()
+	app._advance_ui(20.0)
+	check(sequence.is_active() and is_equal_approx(float(sequence.snapshot().elapsed), float(frozen.elapsed))
+		and not app._settlement_dialog.is_visible_in_tree(),
+		mode + ": background time cannot consume or skip the end presentation")
+	app.on_page_visible()
+	var remaining: float = float(sequence.snapshot().duration) - float(sequence.snapshot().elapsed)
+	app._advance_ui(remaining - 0.01)
+	check(sequence.is_active() and not app._settlement_dialog.is_visible_in_tree(),
+		mode + ": no settlement popup appears before the actual presentation deadline")
+	app._advance_ui(0.02)
+	check(not sequence.is_active() and app._settlement_dialog.is_visible_in_tree() and app._round_id == round_id,
+		mode + ": one completed end presentation hands off to the same round's settlement")
 
 
 func _run() -> void:

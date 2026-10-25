@@ -341,6 +341,7 @@ func check_manual_mode(app, mode: String) -> void:
 	app.set_reduced_motion(true)
 	app._controller_mode = true
 	app.chest_button.grab_focus()
+	var expected_coins: int = int(app.coin_wallet.chest_reward(app._single_chest_receipt()).total)
 	app._controller_accept()
 	app.set_process(false)
 	check(app._holding_chest and app._controller_holding_chest,
@@ -348,7 +349,6 @@ func check_manual_mode(app, mode: String) -> void:
 	app._advance_ui(Feel.HOLD_SECONDS)
 	check(app.model.chest_state == "opened" and pieces(app) == before + 1,
 		mode + " preserves the existing hold-to-open reward commitment")
-	var expected_coins: int = Economy.chest_coins(RewardProgress.THEMES.size()) if mode == "memory" else 50
 	check(app.coin_wallet.balance == coins_before + expected_coins and app._coin_flight.snapshot().active,
 		mode + " launches its saved tier's coin reward after the accepted chest opening")
 	view.open_requested.emit(identity)
@@ -694,6 +694,9 @@ func check_pop_result(app, fragments: int) -> void:
 
 
 func check_saved_chest_entrance(app, mode: String, interrupt: bool = false) -> void:
+	if mode in ["jelly", "word_jelly"]:
+		await check_jelly_end_sequence(app, mode, interrupt)
+		return
 	var view = app._round_celebration
 	var room = app._pop_rewards if mode == "pop" else app._jelly_rewards
 	var result: Dictionary = app._round_result.duplicate(true)
@@ -768,6 +771,56 @@ func check_saved_chest_entrance(app, mode: String, interrupt: bool = false) -> v
 	app._input(held)
 
 
+func check_jelly_end_sequence(app, mode: String, interrupt: bool) -> void:
+	var was_processing: bool = app.is_processing()
+	app.set_process(false)
+	var view = app._round_end
+	var room = app._jelly_rewards
+	var identity: String = app._round_id
+	var result: Dictionary = app._round_result.duplicate(true)
+	var durable: String = FileAccess.get_file_as_string(app.jelly_reward_save_path)
+	var wallet: int = app.coin_wallet.balance
+	check(view.is_active() and view.is_visible_in_tree() and not app._settlement_dialog_open()
+		and not room.is_visible_in_tree() and room.snapshot().paused,
+		mode + ": the end message precedes the modal and protects its saved chest")
+	check(not durable.is_empty() and room.rewards.entries.back().tier == int(result.chest_tier),
+		mode + ": the exact final tier is durable before the end effect")
+	room.begin_hold(room._cards[0].button)
+	room.advance_hold(Feel.HOLD_SECONDS)
+	room.replay_requested.emit()
+	check(view.is_active() and app._round_id == identity and room.snapshot().opened_count == 0
+		and app.coin_wallet.balance == wallet, mode + ": early chest and replay input cannot skip the end effect")
+	view.advance(0.55)
+	if interrupt:
+		var elapsed: float = float(view.snapshot().elapsed)
+		await cover(app, "background", true)
+		view.advance(6.0)
+		check(view.snapshot().paused and view.snapshot().elapsed == elapsed and app._round_result == result,
+			mode + ": backgrounding freezes rather than skips the end message")
+		await cover(app, "background", false)
+		check(view.is_active() and not view.snapshot().paused and view.snapshot().elapsed == elapsed,
+			mode + ": returning continues the same end effect without another reward write")
+	view.advance(float(view.snapshot().duration) - float(view.snapshot().elapsed) - 0.01)
+	check(view.is_active() and not app._settlement_dialog_open(), mode + ": settlement waits for the complete end effect")
+	app.force_accept_held = true
+	view.advance(0.02)
+	check(not view.is_active() and room.is_visible_in_tree() and not room.snapshot().paused
+		and app._settlement_dialog_open(), mode + ": the completed end effect reveals the real settlement")
+	check(app._round_result == result and app.coin_wallet.balance == wallet
+		and FileAccess.get_file_as_string(app.jelly_reward_save_path) == durable,
+		mode + ": the effect cannot duplicate or reprice its reward")
+	var held := InputEventJoypadButton.new()
+	held.button_index = JOY_BUTTON_A
+	held.pressed = true
+	app._input(held)
+	check(app._controller_accept_needs_release and not room.snapshot().holding,
+		mode + ": accept held across the end effect cannot start a new chest hold")
+	app.force_accept_held = false
+	held.pressed = false
+	app._input(held)
+	app.set_process(was_processing)
+
+
 func check_jelly_result(app, mode: String) -> void:
 	check(app._jelly_rewards.collect_all_coins(), mode + ": prior retained treasure is settled before the new fixture")
 	check(app.new_round(929, false, "", mode, "", false), mode + ": a host result fixture starts through GameUI")
@@ -806,6 +859,7 @@ func check_jelly_result(app, mode: String) -> void:
 	room._back.pressed.emit()
 	game_view.set_process(false)
 	game_view.game.finish_round()
+	Fixture.finish_celebration(app)
 	check(not app._round_celebration.is_active() and app._jelly_rewards_shown
 		and app._round_result.chest_count == 0 and room._cards.is_empty(),
 		mode + ": a following empty round skips the entrance and cannot resurrect the old chest")
@@ -838,17 +892,23 @@ func check_entrance_home_exit(app, mode: String) -> void:
 	var room = app._pop_rewards if mode == "pop" else app._jelly_rewards
 	var before: int = app.coin_wallet.balance
 	var reward_total: int = int(room.result_chest_reward().total)
-	check(view.is_active() and not view.is_ready(), mode + ": the earned result starts its entrance before Home")
-	if not view.is_active():
-		return
-	view.advance(0.8)
-	check(view.home_button.is_visible_in_tree() and not view.home_button.disabled
-		and not view.action_button.is_visible_in_tree() and not room.is_visible_in_tree(),
-		mode + ": Home stays available during the entrance while replay and chest input wait")
-	view.home_button.pressed.emit()
+	if mode == "pop":
+		check(view.is_active() and not view.is_ready(), mode + ": the earned result starts its entrance before Home")
+		if not view.is_active():
+			return
+		view.advance(0.8)
+		check(view.home_button.is_visible_in_tree() and not view.home_button.disabled
+			and not view.action_button.is_visible_in_tree() and not room.is_visible_in_tree(),
+			mode + ": Home stays available during the entrance while replay and chest input wait")
+		view.home_button.pressed.emit()
+	else:
+		check(app._round_end.is_active() and not app._settlement_dialog_open(),
+			mode + ": the noninteractive end effect comes before Home and settlement")
+		app._round_end.advance(1.81)
+		room._home.pressed.emit()
 	check(app._mode_menu_open() and not view.is_active() and not app._settlement_dialog_open()
 		and room.snapshot().opened_count == 1 and not room.has_pending() and app.coin_wallet.balance == before + reward_total,
-		mode + ": Home immediately leaves the entrance and durably settles the final chest once")
+		mode + ": Home leaves the finished presentation and durably settles the final chest once")
 	var path: String = app.pop_reward_save_path if mode == "pop" else app.jelly_reward_save_path
 	var saved: String = FileAccess.get_file_as_string(path)
 	view.advance(6.0)

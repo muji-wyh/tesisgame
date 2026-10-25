@@ -89,13 +89,17 @@ status remain in the table below. The core glow, inward streams and outward
 trails are runtime animation of these static production textures.
 
 The wider Lv4-Lv9 popup fireworks use a separate cosmetic canvas, leaving card
-size, placement and reading time intact. Their blossom radii target 72, 92, 116,
-132, 148 and 164 display pixels respectively, capped at 28 percent of the cosmetic canvas
-width. Manual and automatic collection share these radii; compact reading cards
+size, placement and reading time intact. Their blossom radii target 116, 148,
+184, 212, 244 and 280 display pixels respectively. Their responsive width caps
+are 30, 32.5, 35, 37.5, 40 and 42.5 percent, preserving a different bloom size
+for every tier even on phones. Manual and automatic collection share these radii; compact reading cards
 no longer reduce the firework's size. On short canvases, the vertical trajectory
-uses `min(1, canvas height / (bloom radius * 3.3))`, preserving the broad horizontal
-spread. Launch centers fit the canvas using the bloom radius and vertical scale.
-Spark tips and tapered trail stamps are 30 percent larger than the preceding
+uses `min(1, canvas height / (bloom radius * 2.4))`, preserving the broad horizontal
+spread. Separate launch sites occupy the sky rather than the small reading-card
+halo. Lv7 keeps its upper crown, Lv8 its four staggered pairs, and Lv9 a central
+release with eight surrounding blooms. Individual texture stamps still fit
+the canvas and live-control exclusions.
+Spark tips and tapered trail stamps use a 1.5 size multiplier over the original
 fireworks version. Drag slows the outward release before gravity bends even the
 upward spokes down; short samples of that path form tapered trails instead of
 keeping each ember tied to its burst origin.
@@ -105,14 +109,41 @@ use the same descending path and later fade; only the automatic spark density
 is reduced. The full 1.95-second effect lifetime lets falling tails finish after
 compact reading cards disappear.
 
-The cosmetic canvas extends toward the middle of the playfield, up to 58 percent
-of its height or 440 display pixels; short landscape layouts retain at least
+The cosmetic canvas extends through up to 86 percent
+of the playfield height or 680 display pixels; short landscape layouts retain at least
 their reading region. This gives lower blossoms room to fall past the old card
 halo. Every rotated texture stamp respects the existing control exclusions,
 and all fireworks draw behind all live reading surfaces during rapid pickups.
-The chest unlock prompt also stays above the enlarged fireworks.
+The chest unlock prompt also stays above the enlarged fireworks. Finish, Collect,
+the combo badge and both purchase buttons remain explicit effect exclusions.
 Reduced motion keeps the existing still light and stars. The wider-canvas
 fitting changes no source texture, sound, collection cadence or reward rule.
+
+## Collection blast marks and automatic flights
+
+The [gameplay footprint table](../gameplay.md#collection-blast-matching) defines
+Lv1 direct collection, random local Lv2-Lv4 targets, Lv5 column, Lv6 cross,
+Lv7 one ring, Lv8 capped two rings and Lv9 the board. Only a successfully saved
+collection queues the reaction. The model captures exact body IDs; missing,
+held, fusing and promised batch pickups are not cosmetic substitute targets.
+
+The same acquired portal light and four-point sparkle travel from the source
+to affected bodies. A 240-450 ms marking beat adds colored glints and a small
+elastic response before the automatic 250 ms journeys and ordinary short union.
+Reduced motion uses static marks and the established simplified flight.
+Batch pickups retain their 140 ms cadence and coalesce overlapping marks before
+matching; one bounded sequence consumes each original endpoint at most once.
+Neither the visual layer nor audio decides a match, pays coins, changes item
+prices or records learning.
+
+The wave reuses the acquired `jelly-combo/bright.wav` at gain 0.32, and marking
+groups reuse `jelly-combo/step.wav` at gain 0.22, both at original pitch. Their
+original sources are Kenney's full `confirmation_003.ogg` and `glass_006.ogg`
+recordings from Interface Sounds 1.0, licensed CC0 1.0, previously acquired and
+integrated. These are audio-only one-shots, not animation clips; source, creator,
+license, acquisition records and unchanged output hashes remain in
+[combo audio](jelly-combo-audio.md). Marking is a secondary cue and does not
+replace an occupied gameplay channel. No new artwork or audio was acquired.
 
 ## Acquired material
 

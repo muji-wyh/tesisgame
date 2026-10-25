@@ -187,9 +187,9 @@ func _run() -> void:
 	earn_fragments(app._jelly, 4)
 	var earned_score: int = game.cleared_pairs
 	game.finish_round()
-	check(app._round_celebration.is_active() and app._jelly.visible and app._settlement_dialog.is_visible_in_tree()
+	check(app._round_end.is_active() and app._jelly.visible and not app._settlement_dialog.is_visible_in_tree()
 		and not app._jelly_rewards_shown and app._jelly_rewards.snapshot().paused,
-		"An earned Finish begins Pip's shared entrance over the frozen board")
+		"An earned Finish presents its end effect before opening settlement over the frozen board")
 	check(app._jelly_backdrop.visible, "The settlement modal retains the woodland setting")
 	check(app._jelly_rewards.has_pending() and FileAccess.file_exists(app.jelly_reward_save_path), "Earned treasure is durable before its result action")
 	var receipt: String = app._round_id
@@ -221,6 +221,7 @@ func _run() -> void:
 	game = app._jelly.game
 	game.finish_round()
 	check(not app._round_celebration.is_active() and app._jelly.visible, "Zero loot shows a result without a false reward celebration")
+	Fixture.finish_celebration(app)
 	check(app._round_result.score == 0 and app._jelly_rewards._heading.text == "Round complete"
 		and app._jelly_rewards.snapshot().result_context.fragment_count == 0 and app._settlement_dialog.is_visible_in_tree(),
 		"A new zero-loot round reports its own zero totals without stale score or victory copy")
@@ -231,6 +232,7 @@ func _run() -> void:
 	game = app._jelly.game
 	earn_fragments(app._jelly, 3)
 	game.finish_round()
+	Fixture.finish_celebration(app)
 	check(app._round_result.fragment_count == 3 and app._round_result.chest_count == 0
 		and app._round_result.chest_tier == 0 and not app._round_celebration.is_active()
 		and not app._jelly_rewards.has_pending(),
@@ -273,9 +275,10 @@ func _run() -> void:
 	Fixture.enter_mode(app, "jelly")
 	_check_restored_treasure_modal(app)
 	var restored_board_id: String = app._round_id
+	var restored_total: int = int(app.coin_wallet.chest_reward(str(room._cards[0].reward_id)).total)
 	room.begin_hold(room._cards[0].button)
 	room.advance_hold(Feel.HOLD_SECONDS)
-	check(not room.has_pending() and app.coin_wallet.balance == restored_coins + 50,
+	check(not room.has_pending() and app.coin_wallet.balance == restored_coins + restored_total,
 		"The restored modal pays its original chest exactly once")
 	room._back.pressed.emit()
 	check(not app._jelly_rewards_shown and not app._settlement_dialog.is_visible_in_tree()
@@ -475,14 +478,14 @@ func _upgraded_reward_checks(directory: String) -> void:
 	var cleared: int = game.cleared_pairs
 	game.step(game.CAPACITY * game.spawn_interval + game.FULL_SECONDS + 1.0)
 	app._round_celebration.set_process(false)
-	var celebration: Dictionary = app._round_celebration.snapshot()
+	var ending: Dictionary = app._round_end.snapshot()
 	check(game.phase == "finished" and game.cleared_pairs == cleared and app._round_result.score == cleared
 		and app._round_result.chest_count == 1 and app._round_result.chest_tier == 4,
 		"A natural full-board timeout preserves the single final upgraded chest")
-	check(celebration.active and app._settlement_dialog.is_visible_in_tree()
-		and app._settlement_dialog.is_ancestor_of(app._round_celebration) and not app._jelly_rewards_shown
+	check(ending.active and ending.title == "Game over" and not app._settlement_dialog.is_visible_in_tree()
+		and not app._jelly_rewards_shown
 		and app._round_result.reason == "danger",
-		"Danger expiry begins the shared entrance for the one final upgraded chest")
+		"Danger expiry presents Game over before the one final upgraded chest's settlement")
 	var saved := RewardState.new(app.jelly_reward_save_path)
 	saved.storage_kind = "jelly"
 	saved.max_chests = 0
@@ -543,6 +546,12 @@ func _reward_conflict_checks(directory: String) -> void:
 		Fixture.finish_celebration(app)
 		var room = app._jelly_rewards
 		room.set_process(false)
+		var quoted_total: int = 0
+		for entry: Dictionary in room.rewards.entries:
+			if not entry.opened:
+				var quote: Dictionary = app.coin_wallet.chest_reward(str(entry.reward_id))
+				check(not quote.is_empty(), "Retained and current treasure each preserve a durable payout quote")
+				quoted_total += int(quote.get("total", 0))
 		check(external.load_state() and external.round_id == local_id and external.entries.size() == 2
 			and external.entries[0].theme == "spring" and not external.entries[0].has("tier")
 			and external.entries[1].theme == RewardProgress.theme_for_tier(2) and external.entries[1].tier == 2,
@@ -553,7 +562,7 @@ func _reward_conflict_checks(directory: String) -> void:
 			room._back.pressed.emit()
 			check(app._round_id != local_id and app._jelly.game.phase == "playing"
 				and app._jelly.visible and not app._jelly_rewards_shown and not app._jelly.game.paused
-				and not room.has_pending() and app.coin_wallet.balance == coins_before + 150,
+				and not room.has_pending() and app.coin_wallet.balance == coins_before + quoted_total,
 				"Play again collects the older and current chest coins before immediately starting a playable board")
 			var replay_id: String = app._round_id
 			app._jelly_rewards._back.pressed.emit()
@@ -561,6 +570,7 @@ func _reward_conflict_checks(directory: String) -> void:
 			check(app._round_id == replay_id, "Repeated replay activation cannot reset the new board")
 			app._jelly.set_process(false)
 			app._jelly.game.finish_round()
+			Fixture.finish_celebration(app)
 			await settle()
 			check(not app._round_celebration.is_active() and app._round_result.chest_count == 0
 				and room._cards.is_empty() and app._settlement_dialog.is_visible_in_tree() and not room.has_pending(),
@@ -579,7 +589,7 @@ func _reward_conflict_checks(directory: String) -> void:
 			and external.entries.all(func(entry: Dictionary) -> bool: return entry.opened)
 			and external._receipts.has(local_id) and external._receipts.has(foreign_id),
 			"Both saved rounds are consumed once and retain their durable receipts")
-		check(app.coin_wallet.balance == coins_before + 150, "Both settlement paths pay each retained and current chest once")
+		check(app.coin_wallet.balance == coins_before + quoted_total, "Both settlement paths pay each retained and current quoted chest once")
 		if app._jelly_rewards_shown:
 			app._hide_jelly_rewards()
 		check(app.new_round(94, false, "", "memory"), "A completed local reward permits the next game")
@@ -628,8 +638,9 @@ func _replay_reward_checks(directory: String) -> void:
 			and app._round_result.chest_tier == index + 1
 			and app._jelly_rewards.rewards.entries[0].tier == index + 1,
 			"Each consecutive result shows its own final chest after earlier treasure was collected")
+		var quoted_total: int = int(app._jelly_rewards.result_chest_reward().total)
 		app._jelly_rewards._back.pressed.emit()
-		expected_coins += 50 * (index + 1)
+		expected_coins += quoted_total
 		check(app._round_id != ids[index] and app._jelly.game.phase == "playing" and not app._jelly_rewards_shown
 			and not app._jelly_rewards.has_pending() and app.coin_wallet.balance == expected_coins
 			and not app._coin_flight.snapshot().active,

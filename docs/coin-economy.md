@@ -11,7 +11,7 @@ The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 
 | Event or item | Values |
 | --- | --- |
-| Ordinary / tier-one chest | 50 + ceil(Pip level / 4) coins |
+| Ordinary / tier-one chest | 75 + ceil(24 * Pip level / 99) coins |
 | Levelled chest | The ordinary payout multiplied by chest level |
 | Match Hint | 100, 150, then 200; no per-round use limit |
 | Memory observation | A free initial 10-second observation, then optional 5-second reveals costing 100, 200, 300, then 300 |
@@ -36,19 +36,21 @@ Everyday vocabulary uses `growth.level`; professional vocabulary uses the
 current career Pip level shown in the header. For chest tier `T` (ordinary
 chests use 1) and Pip level `L`:
 
-- Base: `50 * T`.
-- Pip bonus: `T * ceil(clamp(L, 0, 99) / 4)`.
+- Base: `75 * T`.
+- Pip bonus: `T * ceil(24 * clamp(L, 0, 99) / 99)`.
 - Total: base plus bonus.
 
 | Pip level | Ordinary chest | Tier-six chest |
 | ---: | ---: | ---: |
-| 0 | 50 + 0 = 50 | 300 + 0 = 300 |
-| 1-4 | 50 + 1 = 51 | 300 + 6 = 306 |
-| 20 | 50 + 5 = 55 | 300 + 30 = 330 |
-| 50 | 50 + 13 = 63 | 300 + 78 = 378 |
-| 99 | 50 + 25 = 75 | 300 + 150 = 450 |
+| 0 | 75 + 0 = 75 | 450 + 0 = 450 |
+| 1-4 | 75 + 1 = 76 | 450 + 6 = 456 |
+| 20 | 75 + 5 = 80 | 450 + 30 = 480 |
+| 50 | 75 + 13 = 88 | 450 + 78 = 528 |
+| 99 | 75 + 24 = 99 | 450 + 144 = 594 |
 
-All modes use this chest policy. The maximum bonus is 50% of base. Random Jelly
+All modes use this increased `pip-chest-v2` policy for new quotes. The maximum
+Pip bonus is 32% of the new base; absolute payouts are higher at every Pip level.
+Random Jelly
 collection bonuses, merge combo coins and professional learning-event credits
 keep their separate fixed policies. Treasure's price and fragment grant do not
 scale with Pip.
@@ -59,6 +61,9 @@ manual opening, Home and Play again reuse that quote. Reservation saves no coins
 payment commits the quote's exact total before reward consumption. An unpaid old
 chest without a quote uses the current Pip level on its first reservation. An
 already-paid legacy receipt keeps its original amount and receives no top-up.
+Saved `pip-chest-v1` quotes remain valid and keep their original `50 + ceil(L / 4)`
+per-tier amount, even if still unopened. Only a chest without an existing quote
+uses the new formula on first reservation.
 
 After opening, settlement shows the base, Pip level bonus and total. A duplicate
 payment returns zero newly credited coins, but the displayed entitlement still
@@ -67,7 +72,7 @@ saved rewards because their historical Pip level is unknown.
 
 The source-income and workload figures below use **Pip Lv0** unless stated
 otherwise. At higher levels multiply only the chest-income component by
-`(50 + ceil(L / 4)) / 50`, up to 1.5; fixed collection/combo coins and costs do
+`(75 + ceil(24 * L / 99)) / 75`, up to 1.32; fixed collection/combo coins and costs do
 not change.
 
 ## Jelly Words collection bonuses
@@ -104,9 +109,9 @@ award bonuses during upgrading. Collect starts ready words at 140 ms intervals;
 its cadence does not change their reward probabilities.
 
 With every natural fragment retained and eventually collected, ordinary supply
-provides about five chest coins per source word in the long run. The modeled
+provides about 7.5 chest coins per source word in the long run. The modeled
 chest share of expected chest-plus-collection coins is therefore at least
-`5 / (5 + 360 / 9)`, approximately 11.11%, across any mix of collection levels.
+`7.5 / (7.5 + 360 / 9)`, approximately 15.79%, across any mix of collection levels.
 At high levels, expected collection bonuses can exceed chest income per source word.
 This comparison excludes the combo income described below. It is a long-run
 budget bound under perfect retention, not observed player income or a guarantee
@@ -123,26 +128,26 @@ its obsolete pending collection receipt only when the merge commits.
 
 ## Ordinary source income and saving
 
-At Pip Lv0, chest rewards pay 50 coins per tier. Continuous modes unlock a chest at
+At Pip Lv0, new chest rewards pay 75 coins per tier. Continuous modes unlock a chest at
 four fragments and add one level per five further fragments. Below four fragments
-the payout is zero; otherwise it is `50 * floor((fragments + 1) / 5)`.
+the payout is zero; otherwise it is `75 * floor((fragments + 1) / 5)`.
 
 | Mode | Source rule | Useful source-count budget |
 | --- | --- | --- |
-| Match | 50% chest chance, guaranteed after two dry completed rounds | 28.57 coins per completed five-pair round on average |
-| Memory | Starts at the highest available chest level, currently 6; each mismatch removes one level down to zero | 300 coins for a perfect five-pair round, down to zero after six mistakes |
-| Phrase | One ordinary chest after three phrases | 50 coins per completed round |
-| Jelly Match | One fragment per three supplied word/picture pairs | About 3.33 chest coins per successfully collected pair in long runs |
-| Jelly Words, collected at Lv1 | One fragment per two supplied words; no Lv1 coin bonus | About 5 chest coins per successfully collected ordinary word in long runs |
-| Voice Pop | Each target has a 35% chest marker chance | Expected chest coins for 10 / 20 / 30 hits: 24.34 / 59.74 / 95.06 |
+| Match | 50% chest chance, guaranteed after two dry completed rounds | 42.86 coins per completed five-pair round on average |
+| Memory | Starts at the highest available chest level, currently 6; each mismatch removes one level down to zero | 450 coins for a perfect five-pair round, down to zero after six mistakes |
+| Phrase | One ordinary chest after three phrases | 75 coins per completed round |
+| Jelly Match | One fragment per three supplied word/picture pairs | About 5 chest coins per successfully collected pair in long runs |
+| Jelly Words, collected at Lv1 | One fragment per two supplied words; no Lv1 coin bonus | About 7.5 chest coins per successfully collected ordinary word in long runs |
+| Voice Pop | Each target has a 35% chest marker chance | Expected chest coins for 10 / 20 / 30 hits: 36.50 / 89.61 / 142.59 |
 
 Match's expectation includes the three-round guarantee:
-`50 / (1 + 0.5 + 0.25) = 28.57`. Memory grants its remaining chest only after the
+`75 / (1 + 0.5 + 0.25) = 42.86`. Memory grants its remaining chest only after the
 whole round is completed; leaving an unfinished round earns nothing. Previously
 earned Memory chests retain their original payouts.
 
-Using chest income alone, collecting ordinary Jelly words at Lv1 requires 38 source words to unlock the
-first 200-coin Treasure budget, or 118 for the first 600-coin Auto Merge budget,
+Using chest income alone, collecting ordinary Jelly words at Lv1 requires 28 source words to unlock the
+first 200-coin Treasure budget, or 78 for the first 600-coin Auto Merge budget,
 when every naturally marked half is collected in one round. Partial rounds can
 finish below a chest threshold, and upgraded bodies combine source words, so
 these are explicit planning units rather than observed player behavior.
@@ -151,9 +156,9 @@ Automatic supply provides three new source words every 20 seconds initially,
 down to every 10 seconds after twenty successful word collections. Every four
 collections reduce the next cycle's interval by two seconds; the interval is
 fixed at dispatch and never shortens the countdown already running. Merging,
-Auto Merge, and idle time do not advance that progression. At five chest coins
+Auto Merge, and idle time do not advance that progression. At 7.5 chest coins
 per source word, perfect Lv1 collection gives a theoretical automatic-supply
-bound of 45-90 chest coins per minute. This excludes combo rewards and the opening board, assumes complete
+bound of 67.5-135 chest coins per minute. This excludes combo rewards and the opening board, assumes complete
 collection, and is not a measured earning rate. Preview taps can release supply
 early. No new cap or waiting gate is introduced.
 
@@ -162,8 +167,11 @@ early. No new cap or waiting gate is introduced.
 ### Combo income
 
 Successful manual merges and completed collections each add one to the Jelly
-combo. Only an invalid merge resets it; waiting, preview drops, pauses and stage
-changes preserve it. Paid Auto Merge neither advances nor resets the chain.
+combo and refill its eight-second active-play window. An invalid merge or an
+expired countdown resets the current chain, not its best count or saved coins.
+Preview drops and stage changes do not directly alter it; pauses, save waits and
+automatic matching freeze its clock. Paid Auto Merge and free collection-blast
+matches neither advance nor pay the chain.
 Automatic Collect advances it once for each committed word, without a combo
 coin payout. Manual merges pay according to the count reached by that merge:
 
@@ -178,18 +186,18 @@ The cap is independent of visual ranks, which continue through D/C/B/A/S/SS/SSS.
 Each paying action consumes two existing bodies and creates one, so extra
 income is bounded by three coins per body removed through manual merging.
 For ordinary two-part words plus their picture, two merges add at most six
-combo coins per source word. With five expected chest coins, the long-run
-ceiling becomes eleven coins per ordinary source word, or 99-198 coins per
+combo coins per source word. With 7.5 expected chest coins, the long-run
+ceiling becomes 13.5 coins per ordinary source word, or 121.5-243 coins per
 minute at automatic supply speed and perfect retention. These are bounds,
 not measured earnings; early combos and mistakes pay less. Preview drops
 remain unlimited and require the same manual work. Nine such words upgraded
 to Lv9 require twenty-six merges, giving at most 8.67 combo coins per source
 word. The Lv9 collection bonus and chest income bring that modeled
-total to 53.67 coins per source word. Paid Auto Merge does not create combo
+total to 56.17 coins per source word. Paid Auto Merge does not create combo
 income, and Treasure does not create extra mergeable bodies or change rewards.
-At Pip Lv99, the corresponding ordinary-source bound is 13.5 coins per word
-(121.5-243 per minute at automatic supply speed), and the Lv9 source bound is
-56.17. Only the chest component increases; these remain perfect-retention bounds,
+At Pip Lv99, the corresponding ordinary-source bound is 15.9 coins per word
+(143.1-286.2 per minute at automatic supply speed), and the Lv9 source bound is
+58.57. Only the chest component increases; these remain perfect-retention bounds,
 not observed player income.
 
 ### Chest-only workload baselines
@@ -210,15 +218,15 @@ without treating convenience as new supply. One session is one fresh round.
 
 | Supplied words | Collection chance | No paid aid: expected coins | One Treasure: net coins | One Auto Merge: net coins | Three Treasure uses: net coins |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 20 | 60% | 49.58 | -99.90 | -550.42 | -699.99 |
-| 20 | 100% | 100.00 | -64.29 | -500.00 | -660.20 |
-| 40 | 60% | 109.70 | -39.93 | -490.30 | -640.00 |
-| 40 | 100% | 200.00 | 35.71 | -400.00 | -560.20 |
-| 60 | 60% | 170.00 | 20.00 | -430.00 | -580.00 |
-| 60 | 100% | 300.00 | 135.71 | -300.00 | -460.20 |
+| 20 | 60% | 74.37 | -49.85 | -525.63 | -599.99 |
+| 20 | 100% | 150.00 | 3.57 | -450.00 | -540.31 |
+| 40 | 60% | 164.55 | 40.10 | -435.45 | -509.99 |
+| 40 | 100% | 300.00 | 153.57 | -300.00 | -390.31 |
+| 60 | 60% | 255.00 | 130.00 | -345.00 | -420.00 |
+| 60 | 100% | 450.00 | 303.57 | -150.00 | -240.31 |
 
-The smallest workload no longer quite funds one Treasure every three fresh
-rounds on average after removing Lv1 bonuses; larger modeled workloads do.
+Even the smallest modeled workload can save while buying one Treasure every
+three fresh rounds on average under the increased chest policy.
 Repeated purchases still consume savings. Prices have not been changed to offset
 the new bonus policy. Three Treasure purchases cost 900; three Auto Merge uses
 cost 2700.
@@ -227,19 +235,20 @@ cost 2700.
 
 For every existing fragment total from 0 through 100, the regression suite checks
 all awards from 2 through 8. The largest extra chest payout is two levels, or
-100 coins at Pip Lv0 or 150 at Pip Lv99, below the first 200-coin price. Even
-perfect fragment luck consumes at least 50 saved coins at the maximum Pip bonus.
+150 coins at Pip Lv0 or 198 at Pip Lv99, below the first 200-coin price. Even
+perfect fragment luck consumes at least two saved coins at the maximum Pip bonus.
 Across all five upgrade offsets, uniformly distributed
-fragment awards return 50 coins on average. A particular offset gives
-28.57-71.43 expected extra coins. These calculations cover Treasure's injected
+fragment awards return 75 coins on average at Lv0. A particular offset gives
+42.86-107.14 expected extra coins. These calculations cover Treasure's injected
 fragments; independent level-based word collection bonuses are not a refund
 created by buying fragments.
 
 ## Saves and validation
 
 Wallet version 4 stores immutable chest quotes alongside exact positive coin
-credits, preserving v1-v3 balances and receipt identities. Chest bases and
-purchase prices remain multiples of 50; Pip and combo bonuses can be smaller.
+credits, preserving v1-v3 balances and receipt identities. New quotes use a
+75-coin per-tier base; legacy fixed credits and purchase prices retain their
+50-coin unit. Pip and combo bonuses can be smaller.
 Atomic debit/credit behavior is unchanged. Existing balances and
 receipts are not reset or recomputed. A combo payment saves before consuming
 the merge inputs or advancing its count; a failed save pauses new actions until

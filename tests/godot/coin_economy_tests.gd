@@ -85,21 +85,21 @@ func _test_economy_ladder() -> void:
 
 
 func _test_pip_chest_rewards() -> void:
-	var totals: Dictionary = {-10: 50, 0: 50, 1: 51, 4: 51, 5: 52, 20: 55, 96: 74, 97: 75, 99: 75, 1000: 75}
+	var totals: Dictionary = {-10: 75, 0: 75, 1: 76, 4: 76, 5: 77, 20: 80, 96: 99, 97: 99, 99: 99, 1000: 99}
 	for level: int in totals:
 		var reward: Dictionary = Economy.chest_reward(1, level)
-		check(reward.total == totals[level] and reward.base == 50 and reward.bonus == int(totals[level]) - 50
-			and reward.pip_level == clampi(level, 0, 99) and reward.policy == Economy.CHEST_REWARD_POLICY,
+		check(reward.total == totals[level] and reward.base == 75 and reward.bonus == int(totals[level]) - 75
+			and reward.pip_level == clampi(level, 0, 99) and reward.policy == "pip-chest-v2",
 			"Pip Lv%d has the expected bounded ordinary-chest payout and visible breakdown" % level)
 	check(Economy.chest_reward(0, 5) == Economy.chest_reward(1, 5)
 		and Economy.chest_reward(-10, 5) == Economy.chest_reward(1, 5), "Untiered chest quotes use the ordinary tier")
 	check(Economy.chest_reward(6, 99) == {"policy": Economy.CHEST_REWARD_POLICY, "pip_level": 99,
-		"tier": 6, "base": 300, "bonus": 150, "total": 450}, "A highest-art-tier chest shows its full bounded Pip contribution")
+		"tier": 6, "base": 450, "bonus": 144, "total": 594}, "A highest-art-tier chest shows its full bounded Pip contribution")
 	for tier in [1, 2, 6, 50, 300]:
 		var previous: int = 0
 		for level in range(100):
 			var reward: Dictionary = Economy.chest_reward(tier, level)
-			check(reward.total >= previous and reward.total >= tier * 50 and reward.total <= tier * 75
+			check(reward.total >= previous and reward.total >= tier * 75 and reward.total <= tier * 99
 				and reward.base + reward.bonus == reward.total, "Pip advancement cannot reduce or overinflate a chest payout")
 			previous = reward.total
 	check(Economy.chest_coins(6) == 300 and Economy.jelly_bonus(2) == 50 and Economy.jelly_combo_bonus(10) == 3,
@@ -116,10 +116,10 @@ func _test_max_pip_treasure_sink() -> void:
 			var after: int = Economy.chest_reward(after_tier, 99).total if after_tier > 0 else 0
 			var extra: int = after - before
 			largest_return = maxi(largest_return, extra)
-			check(extra <= 150 and extra < Economy.powerup_price("fragments", 0),
+			check(extra <= 198 and extra < Economy.powerup_price("fragments", 0),
 				"Even maximum-Pip Treasure luck cannot refund the purchase that supplied its fragments")
-	check(largest_return == 150 and Economy.powerup_price("fragments", 0) - largest_return == 50,
-		"The maximum Pip bonus retains at least a fifty-coin cost for every Treasure purchase")
+	check(largest_return == 198 and Economy.powerup_price("fragments", 0) - largest_return == 2,
+		"Higher chest payouts still cannot refund or profit from their own Treasure purchase")
 
 
 func _test_supply_and_budget() -> void:
@@ -130,10 +130,10 @@ func _test_supply_and_budget() -> void:
 		check(int(group.chunks) == 2, "Natural source words still consist of complete two-chunk pairs")
 		fragments += int(group.fragments)
 	check(fragments == 30, "The budget uses actual natural supply: thirty fragments per sixty source words")
-	check(Report.chest_payout(3) == 0 and Report.chest_payout(4) == 50
-		and Report.chest_payout(8) == 50 and Report.chest_payout(9) == 100,
+	check(Report.chest_payout(3) == 0 and Report.chest_payout(4) == 75
+		and Report.chest_payout(8) == 75 and Report.chest_payout(9) == 150,
 		"Budget calculations observe real chest unlock and upgrade thresholds")
-	check(is_equal_approx(Report.expected_chest(10, 0.6), 49.579776),
+	check(is_equal_approx(Report.expected_chest(10, 0.6), 74.369664),
 		"Partial success uses the exact threshold distribution instead of rounding mean fragments")
 	var report: Dictionary = Report.build_report()
 	check(report == Report.build_report(), "Economy reports reproduce exactly from the fixed supply seed")
@@ -149,8 +149,8 @@ func _test_supply_and_budget() -> void:
 		check(float(row.three_treasure_net) < 0.0,
 			"Three Treasure purchases cannot sustain themselves even when every paid fragment is retained")
 		if is_equal_approx(float(row.success_probability), 1.0):
-			check(is_equal_approx(float(row.free_play_total), int(row.supplied_words) * 5.0),
-				"Perfect Lv1 completion earns five chest coins per source word in full ten-word blocks")
+			check(is_equal_approx(float(row.free_play_total), int(row.supplied_words) * 7.5),
+				"Perfect Lv1 completion earns 7.5 chest coins per source word in full ten-word blocks")
 	check(report.upgraded_collections.size() == 9, "The report includes all nine playable merge levels")
 	var expected_per_source: Array[float] = [0.0, 0.5, 4.0 / 3.0, 18.0 / 4.0, 40.0 / 5.0, 75.0 / 6.0,
 		120.0 / 7.0, 175.0 / 8.0, 360.0 / 9.0]
@@ -172,16 +172,16 @@ func _test_treasure_cannot_self_fund() -> void:
 		for added in range(Economy.TREASURE_FRAGMENT_MIN, Economy.TREASURE_FRAGMENT_MAX + 1):
 			var extra: int = Report.chest_payout(existing + added) - Report.chest_payout(existing)
 			largest_return = maxi(largest_return, extra)
-			check(extra <= 100 and extra < Economy.powerup_price("fragments", 0),
+			check(extra <= 150 and extra < Economy.powerup_price("fragments", 0),
 				"Every fragment threshold and two-to-eight outcome is strictly cheaper to earn than to buy")
-	check(largest_return == 100, "The exhaustive Treasure ceiling is two chest levels or one hundred coins")
+	check(largest_return == 150, "The exhaustive Lv0 Treasure ceiling is two chest levels or one hundred fifty coins")
 	var average_over_offsets: float = 0.0
 	for existing in range(5, 10):
 		for added in range(2, 9):
 			average_over_offsets += (Report.chest_payout(existing + added) - Report.chest_payout(existing)) / 35.0
-	check(is_equal_approx(average_over_offsets, 50.0), "Across all five upgrade offsets, average Treasure return is fifty coins")
-	check(Economy.powerup_price("fragments", 0) - largest_return >= 100,
-		"Even perfect Treasure luck consumes at least one hundred previously earned coins")
+	check(is_equal_approx(average_over_offsets, 75.0), "Across all five upgrade offsets, average Lv0 Treasure return is seventy-five coins")
+	check(Economy.powerup_price("fragments", 0) - largest_return >= 50,
+		"Even perfect Lv0 Treasure luck consumes at least fifty previously earned coins")
 
 
 func _test_paid_model_and_wallet() -> void:

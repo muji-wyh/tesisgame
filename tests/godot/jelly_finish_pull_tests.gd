@@ -423,8 +423,13 @@ func check_gameplay(mode: String) -> void:
 	pointer(end, false, true)
 	pointer(end, false, true)
 	await settle()
-	check(view.game.phase == "finished" and app._settlement_dialog.is_visible_in_tree() and not view.snapshot().result.visible and not app._finish_confirmation_open()
-		and completions.size() == 1, mode + ": deliberate touch release opens exactly one settlement modal directly")
+	check(view.game.phase == "finished" and app._round_end.is_active()
+		and not app._settlement_dialog.is_visible_in_tree() and not view.snapshot().result.visible
+		and not app._finish_confirmation_open() and completions.size() == 1,
+		mode + ": deliberate touch release starts exactly one end sequence before settlement")
+	Fixture.finish_celebration(app)
+	check(app._settlement_dialog.is_visible_in_tree() and not app._round_end.is_active() and completions.size() == 1,
+		mode + ": the completed end sequence opens one settlement without finishing the round again")
 	check(ready_cues.size() == cues_before + 1,
 		mode + ": the final touch crossing sounds once and repeated release events stay silent")
 	check(not button.is_visible_in_tree() and not button.is_pulling(), mode + ": results hide and reset the external header action")

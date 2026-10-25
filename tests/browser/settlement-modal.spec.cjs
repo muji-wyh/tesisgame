@@ -149,7 +149,7 @@ for (const mode of ['match', 'memory', 'phrase']) {
       let state = await checkModal(page, info, `${mode}-closed-chest-dialog`);
       const quotedReward = state.result.coin_breakdown.reward;
       expect(quotedReward).toMatchObject({ tier: mode === 'memory' ? 6 : 1,
-        base: mode === 'memory' ? 300 : 50 });
+        base: mode === 'memory' ? 450 : 75 });
       expect(quotedReward.total).toBe(quotedReward.base + quotedReward.bonus);
       expect(state.result.visible).toBe(true);
       expect((await celebrationState(page)).active, 'The performance hands off directly to the real chest.').toBe(false);
@@ -237,7 +237,7 @@ for (const geometry of [
     await acceptCelebration(page);
     let state = await checkModal(page, info, `pip-lv99-${geometry.name}-closed-chest`);
     const quote = state.result.coin_breakdown.reward;
-    expect(quote).toMatchObject({ pip_level: 99, tier: 6, base: 300, bonus: 150, total: 450 });
+    expect(quote).toMatchObject({ policy: 'pip-chest-v2', pip_level: 99, tier: 6, base: 450, bonus: 144, total: 594 });
     expect(state.result.coin_breakdown.visible, 'The unopened chest retains its hold instruction.').toBe(false);
     expect((await wallet(page)).balance, 'Preparing the quote does not credit coins.').toBe(0);
     const bounds = await metrics(page), point = resultPoint(bounds, 'chest');
@@ -249,11 +249,11 @@ for (const geometry of [
     } finally {
       await page.mouse.up();
     }
-    await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(450);
+    await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(594);
     await expect.poll(async () => (await wallet(page)).active).toBe(false);
     state = await checkModal(page, info, `pip-lv99-${geometry.name}-opened-chest`);
     expect(state.result.coin_breakdown).toMatchObject({ visible: true, reward: quote,
-      detail_text: 'Chest 300 + Pip Lv99 bonus 150', total_text: 'Total 450 coins' });
+      detail_text: 'Chest 450 + Pip Lv99 bonus 144', total_text: 'Total 594 coins' });
     const [left, top, width, height] = state.result.coin_breakdown.rect;
     const [panelLeft, panelTop, panelWidth, panelHeight] = state.settlement.panel_rect;
     expect(left).toBeGreaterThanOrEqual(panelLeft);
@@ -262,10 +262,10 @@ for (const geometry of [
     expect(top + height).toBeLessThanOrEqual(panelTop + panelHeight);
     const paidSave = await page.evaluate(() => localStorage.getItem('growWithPip.coinWallet.v1'));
     await openModeMenu(page);
-    expect((await wallet(page)).balance, 'Home does not credit the opened chest again.').toBe(450);
+    expect((await wallet(page)).balance, 'Home does not credit the opened chest again.').toBe(594);
     await page.reload();
     await enterGame(page, { home: true });
-    await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(450);
+    await expect.poll(async () => (await wallet(page)).arrived_balance).toBe(594);
     expect(await page.evaluate(() => localStorage.getItem('growWithPip.coinWallet.v1')),
       'The paid receipt and its quote survive reload unchanged.').toBe(paidSave);
     await info.attach(`pip-lv99-${geometry.name}-reward`, {

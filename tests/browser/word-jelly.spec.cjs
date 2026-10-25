@@ -14,6 +14,7 @@ const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(n
 const previewReady = state => state.upcoming.every((body, index) => !body.id || state.preview.slots[index].visible);
 const wallet = page => page.locator('#coin-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const comboCoinsSince = (state, before) => state.combo.coins - before.combo.coins;
+const comboIdentity = ({ remaining, ...state }) => state;
 const growth = page => page.locator('#growth-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const normalize = text => text.trim().toLowerCase().replace(/\s+/g, ' ');
 const semanticSurface = text => text.replace(/^-+|-+$/g, '');
@@ -116,7 +117,8 @@ function authoredJoin(left, right) {
 function suppliedWords(state, age) {
   const words = new Map(jellyWordsForAge(age).map(word => [word.id, word]));
   const groups = new Map();
-  for (const tile of state.tiles.filter(tile => tile.visible && tile.settled && tile.mass === 1 && tile.supply_group)) {
+  for (const tile of state.tiles.filter(tile => (tile.visible || state.paused) &&
+    tile.settled && tile.mass === 1 && tile.supply_group)) {
     if (!groups.has(tile.supply_group)) groups.set(tile.supply_group, []);
     groups.get(tile.supply_group).push(tile);
   }
@@ -164,6 +166,65 @@ async function availableWord(page, age, count, { markedOnly = false, invalidReve
     await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(state.generated_tiles);
   }
   throw new Error(`The current age ${age} supply did not provide a ${count}-part word.`);
+}
+
+async function matchCat(page) {
+  let candidate;
+  await expect.poll(async () => {
+    candidate = suppliedWords(await jelly(page), 3).find(item => item.word.id === 'cat');
+    return Boolean(candidate?.picture);
+  }, { intervals: [25], message: 'A real settled cat packet is ready for a prompt timed gesture' }).toBe(true);
+  return (await timedMerge(page, candidate.roots[0].id, candidate.picture.id)).result;
+}
+
+async function resumeTimedRound(page, roundId) {
+  const point = await page.locator('#canvas').evaluate(canvas => {
+    const rect = canvas.getBoundingClientRect(), scale = Math.min(rect.width, rect.height) / 480;
+    const library = JSON.parse(document.getElementById('game-status').dataset.library || '{}');
+    const control = library.controls.find(item => item.name === 'ContinueCurrentRound' && item.visible && !item.disabled);
+    if (!control) throw new Error('The paused round must expose its actual Resume your round control.');
+    return { x: rect.x + (control.rect[0] + control.rect[2] / 2) * scale,
+      y: rect.y + (control.rect[1] + control.rect[3] / 2) * scale };
+  });
+  await page.mouse.click(point.x, point.y);
+  await page.waitForFunction(id => {
+    const state = JSON.parse(document.getElementById('game-status').dataset.jelly || '{}');
+    return state.round_id === id && !state.paused && !state.game_over_sequence?.active;
+  }, roundId, { polling: 'raf' });
+}
+
+async function timedMerge(page, sourceId, targetId, prepared = null) {
+  const before = prepared?.state || await jelly(page), bounds = prepared?.bounds || await metrics(page);
+  const source = before.tiles.find(tile => tile.id === sourceId), target = before.tiles.find(tile => tile.id === targetId);
+  expect(source?.settled && target?.settled).toBe(true);
+  const authored = authoredJoin(source, target);
+  expect(authored).toBeTruthy();
+  const from = center(source.rect, bounds), to = center(target.rect, bounds);
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  try {
+    await page.mouse.move(from.x, from.y - 16);
+    await page.mouse.move(to.x, to.y, { steps: 3 });
+    await expect.poll(async () => (await jelly(page)).drag.source, { intervals: [25] }).toBe(sourceId);
+    await expect.poll(async () => {
+      const state = await jelly(page), liveTarget = state.tiles.find(tile => tile.id === targetId);
+      if (!liveTarget?.settled) return false;
+      if (state.drag.target === targetId) return true;
+      const point = center(liveTarget.rect, bounds);
+      await page.mouse.move(point.x, point.y, { steps: 3 });
+      return false;
+    }, { intervals: [25], message: 'The held source contacts the real target after support removal' }).toBe(true);
+  } finally {
+    await page.mouse.up();
+  }
+  let state, result;
+  await expect.poll(async () => {
+    state = await jelly(page);
+    result = state.tiles.find(tile => !before.tiles.some(old => old.id === tile.id) &&
+      tile.text === semanticSurface(authored.node.surface) && tile.mass === source.mass + target.mass);
+    return state.merged_count === before.merged_count + 1 && Boolean(result);
+  }, { intervals: [25], message: 'The prompt gesture commits its actual merge before inspecting temporal feedback' }).toBe(true);
+  return { result, state };
 }
 
 async function merge(page, sourceId, targetId) {
@@ -1589,7 +1650,7 @@ for (const { layout, viewport, reducedMotion } of [
   });
 }
 
-const additiveTest = test.extend({ trace: 'off' });
+const additiveTest = test.extend({ trace: 'off', deviceScaleFactor: 1 });
 for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode === 'batch'
   ? 'Collect keeps high-level top fireworks alive after compact reading cards fade, then removes them cleanly'
   : 'different merged levels add up to nine and an over-limit same-word merge preserves both jellies', async ({ page }, info) => {
@@ -1785,33 +1846,46 @@ for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode ==
 
 additiveTest('combo coins start at three real merges, fast drop preserves the streak, and Collect increments without combo payouts', async ({ page, browserName }, info) => {
   test.setTimeout(240000);
-  await seedGrowth(page, 12, { unmastered: ['cat'] });
+  await seedGrowth(page, 12, { unmastered: ['cat', 'dog'] });
   await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 1, trackSourceLifecycle: true });
   const errors = await startWordJelly(page, { age: 3, preseededGrowth: true });
   const opening = await jelly(page), startingWallet = await wallet(page);
   expect(opening.combo.count).toBe(0);
+  await page.evaluate(() => {
+    const status = document.getElementById('game-status');
+    window.comboGoldFrame = null;
+    window.comboGoldObserver = new MutationObserver(() => {
+      const state = JSON.parse(status.dataset.jelly || '{}');
+      if (!state.combo_hud?.bonus_visible || window.comboGoldFrame) return;
+      window.comboGoldFrame = document.getElementById('canvas').toDataURL('image/png').split(',')[1];
+      window.comboGoldObserver.disconnect();
+    });
+    window.comboGoldObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+  });
   const audioAvailable = await page.evaluate(() => window.audioObservation.available);
   if (browserName === 'chromium') expect(audioAvailable).toBe(true);
-  const evidence = { opening: opening.combo, merges: [], sounds: [] };
+  const evidence = { opening: opening.combo, roundId: opening.round_id, merges: [], sounds: [], preparations: [] };
   const save = () => fs.writeFileSync(info.outputPath('word-jelly-combo.json'), JSON.stringify(evidence, null, 2));
   const mergedIds = [];
+  await openModeMenu(page);
   for (let count = 1; count <= 3; count++) {
-    let candidate;
-    for (let packet = 0; packet < 4; packet++) {
-      await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
-      const state = await jelly(page);
-      candidate = suppliedWords(state, 3).find(item => item.word.id === 'cat');
-      if (candidate) break;
-      expect(state.preview.enabled).toBe(true);
-      await pressRect(page, state.preview.rect);
-      await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(state.generated_tiles);
-      expect((await jelly(page)).combo.count, 'Supplying the next genuine pair preserves the combo').toBe(count - 1);
-    }
-    expect(candidate, 'The ordinary cat supply provides the next real picture match').toBeTruthy();
+    const state = await jelly(page), bounds = await metrics(page);
+    expect(state.paused).toBe(true);
+    expect(state.combo.count).toBe(count - 1);
+    const candidate = suppliedWords(state, 3)[0];
+    expect(candidate?.picture, 'The frozen ordinary supply provides the next real picture match').toBeTruthy();
     const audioFrom = await page.evaluate(() => window.audioObservation.playbacks.length);
-    const completed = await merge(page, candidate.roots[0].id, candidate.picture.id);
+    evidence.preparations.push({ roundId: state.round_id, combo: state.combo });
+    // Selector and waveform work belongs outside the real eight-second play window.
+    await resumeTimedRound(page, opening.round_id);
+    const { result: completed, state: current } = await timedMerge(page, candidate.roots[0].id, candidate.picture.id,
+      { state, bounds });
     mergedIds.push(completed.id);
-    const current = await jelly(page);
+    // Keep assertion and waveform-inspection latency out of the active combo window.
+    await openModeMenu(page);
+    evidence.merges.push({ id: completed.id, combo: current.combo, hud: current.combo_hud, wallet: await wallet(page) });
+    save();
+    expect(current.round_id).toBe(opening.round_id);
     expect(current.combo.count).toBe(count);
     expect(current.combo.best).toBe(count);
     expect(current.combo.bonus).toBe(count === 3 ? 1 : 0);
@@ -1822,7 +1896,12 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
     expect(current.combo_hud.visible).toBe(true);
     expect(current.combo_hud.count).toBe(count);
     expect(current.combo_hud.input_transparent).toBe(true);
-    evidence.merges.push({ id: completed.id, combo: current.combo, hud: current.combo_hud, wallet: await wallet(page) });
+    expect(current.combo_hud.timer_visible).toBe(true);
+    expect(current.combo_hud.time_ratio).toBeGreaterThan(0);
+    if (count === 3) {
+      expect(current.combo_hud.bonus_visible).toBe(true);
+      expect(current.combo_hud.bonus_text).toBe('COMBO BONUS +1');
+    }
     if (audioAvailable) {
       const sound = await expectRecording(page, audioFrom, `assets/audio/jelly-combo/${count < 3 ? 'step' : 'bright'}.wav`);
       expect(sound.playbackRate).toBeCloseTo(2 ** (1 - Math.exp(-(count - 1) / 14)), 5);
@@ -1836,14 +1915,24 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
     expect(evidence.sounds[0].fingerprint).toBe(evidence.sounds[1].fingerprint);
     expect(evidence.sounds[2].fingerprint).not.toBe(evidence.sounds[1].fingerprint);
   }
-  await capture(page, info, 'word-jelly-combo-three');
-  const beforeDrop = await jelly(page);
-  expect(beforeDrop.preview.enabled).toBe(true);
-  await pressRect(page, beforeDrop.preview.rect);
-  await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(beforeDrop.generated_tiles);
-  await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
-  const afterDrop = await jelly(page);
-  expect(afterDrop.combo).toEqual(beforeDrop.combo);
+  const goldFrame = await page.evaluate(() => {
+    window.comboGoldObserver.disconnect();
+    return window.comboGoldFrame;
+  });
+  expect(goldFrame, 'A real rendered combo-coin acknowledgement is retained before it settles').toBeTruthy();
+  fs.writeFileSync(info.outputPath('word-jelly-combo-gold.png'), Buffer.from(goldFrame, 'base64'));
+  const beforeDrop = await jelly(page), bounds = await metrics(page);
+  const next = center(beforeDrop.preview.rect, bounds);
+  await resumeTimedRound(page, opening.round_id);
+  await page.mouse.click(next.x, next.y);
+  let afterDrop;
+  await expect.poll(async () => {
+    afterDrop = await jelly(page);
+    return afterDrop.generated_tiles > beforeDrop.generated_tiles;
+  }, { intervals: [25] }).toBe(true);
+  await openModeMenu(page);
+  expect(comboIdentity(afterDrop.combo)).toEqual(comboIdentity(beforeDrop.combo));
+  expect(afterDrop.combo.remaining).toBeLessThan(beforeDrop.combo.remaining);
   expect(afterDrop.combo_hud.pulse_serial).toBe(beforeDrop.combo_hud.pulse_serial);
   evidence.fastDrop = { before: beforeDrop.combo, after: afterDrop.combo };
   const beforeCollect = afterDrop;
@@ -1862,7 +1951,9 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
     window.comboCollectionObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
   });
   try {
-    await pressRect(page, beforeCollect.collect_button.rect);
+    const collect = center(beforeCollect.collect_button.rect, bounds);
+    await resumeTimedRound(page, opening.round_id);
+    await page.mouse.click(collect.x, collect.y);
     await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(beforeCollect.cleared_pairs + 3);
     await expect.poll(async () => (await jelly(page)).collection_batch.active).toBe(false);
     const collected = await jelly(page);
@@ -1900,6 +1991,174 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
   for (const frame of evidence.collectionTimeline) {
     expect(frame.combo.count).toBe(beforeCollect.combo.count + frame.batch.completed);
     expect(frame.combo.coins).toBe(beforeCollect.combo.coins);
+  }
+  expect(errors).toEqual([]);
+});
+
+additiveTest('combo countdown drains, freezes in Home and expires before a fresh unrewarded chain', async ({ page }, info) => {
+  test.setTimeout(150000);
+  await seedGrowth(page, 12, { unmastered: ['cat'] });
+  const errors = await startWordJelly(page, { age: 3, preseededGrowth: true });
+  await matchCat(page);
+  const fresh = await jelly(page), balance = (await wallet(page)).balance;
+  expect(fresh.combo).toMatchObject({ count: 1, seconds: 8, best: 1, coins: 0 });
+  expect(fresh.combo_hud).toMatchObject({ visible: true, timer_visible: true });
+  expect(fresh.combo_hud.time_ratio).toBeCloseTo(fresh.combo.remaining / 8, 4);
+  await expect.poll(async () => (await jelly(page)).combo.remaining).toBeLessThan(fresh.combo.remaining - 0.30);
+  await capture(page, info, 'word-jelly-combo-countdown');
+  await openModeMenu(page);
+  await expect.poll(async () => (await jelly(page)).paused).toBe(true);
+  const frozen = await jelly(page);
+  await page.waitForTimeout(500);
+  expect((await jelly(page)).combo).toEqual(frozen.combo);
+  await resumeTimedRound(page, fresh.round_id);
+  await expect.poll(async () => (await jelly(page)).paused).toBe(false);
+  expect((await jelly(page)).round_id).toBe(fresh.round_id);
+  await expect.poll(async () => (await jelly(page)).combo.count,
+    { timeout: 11000, intervals: [100, 250], message: 'The visible countdown reaches zero during genuine active gameplay' }).toBe(0);
+  const expired = await jelly(page);
+  expect(expired.combo).toMatchObject({ count: 0, remaining: 0, best: 1, coins: 0, bonus: 0 });
+  expect(expired.combo_hud.visible).toBe(false);
+  expect((await wallet(page)).balance).toBe(balance);
+  await matchCat(page);
+  const restarted = await jelly(page);
+  expect(restarted.combo).toMatchObject({ count: 1, best: 1, coins: 0, bonus: 0 });
+  expect(restarted.combo.remaining).toBeGreaterThan(6);
+  expect(restarted.combo_hud).toMatchObject({ count: 1, visible: true, timer_visible: true, bonus_visible: false });
+  await info.attach('combo-countdown-states', { body: JSON.stringify({ fresh: fresh.combo, frozen: frozen.combo,
+    expired: expired.combo, restarted: restarted.combo }), contentType: 'application/json' });
+  expect(errors).toEqual([]);
+});
+
+additiveTest('Lv2 collection marks a real neighbor, flies it into a partner and leaves one assisted merged word', async ({ page }, info) => {
+  test.setTimeout(180000);
+  await seedGrowth(page, 12, { unmastered: ['cat'] });
+  const errors = await startWordJelly(page, { age: 3, preseededGrowth: true });
+  const first = await matchCat(page), second = await matchCat(page);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return [first.id, second.id].every(id => state.tiles.some(tile => tile.id === id && tile.settled));
+  }, { intervals: [25] }).toBe(true);
+  const { result: upgraded } = await timedMerge(page, first.id, second.id);
+  expect(upgraded.merge_level).toBe(2);
+  await expect.poll(async () => (await jelly(page)).tiles.find(tile => tile.id === upgraded.id)?.settled,
+    { intervals: [25] }).toBe(true);
+  const before = await jelly(page), beforeWallet = await wallet(page), beforeGrowth = await growth(page);
+  expect(before.combo_hud.bonus_text).toBe('COMBO BONUS +1');
+  await page.evaluate(() => {
+    const status = document.getElementById('game-status');
+    window.jellyBlastFrames = [];
+    window.jellyBlastImages = {};
+    window.jellyBlastObserver = new MutationObserver(() => {
+      const state = JSON.parse(status.dataset.jelly || '{}'), powerup = state.powerup;
+      if (state.mode !== 'word_jelly') return;
+      window.jellyBlastFrames.push({ at: performance.now(), powerup, combo: state.combo,
+        cleared: state.cleared_pairs, merged: state.merged_count });
+      const phase = powerup?.active && powerup.kind === 'blast' ? powerup.stage : null;
+      if (phase && ['mark', 'drag'].includes(phase) && !window.jellyBlastImages[phase])
+        window.jellyBlastImages[phase] = document.getElementById('canvas').toDataURL('image/png').split(',')[1];
+    });
+    window.jellyBlastObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+  });
+  let evidence;
+  try {
+    await pressRect(page, upgraded.rect);
+    await expect.poll(async () => (await jelly(page)).merged_count,
+      { message: 'The collection blast performs an actual automatic union, not just a cosmetic highlight' }).toBe(before.merged_count + 1);
+    await expect.poll(async () => (await jelly(page)).powerup.active).toBe(false);
+    const after = await jelly(page);
+    expect(after.cleared_pairs).toBe(before.cleared_pairs + 1);
+    expect(after.tiles).toHaveLength(before.tiles.length - 2 + after.generated_tiles - before.generated_tiles);
+    const result = after.tiles.find(tile => !before.tiles.some(old => old.id === tile.id) &&
+      tile.jelly_kind === 'merged' && tile.assisted);
+    expect(result).toMatchObject({ jelly_kind: 'merged', merge_level: 1, assisted: true, mastery_eligible: false });
+    expect(result.word.id).toBe('cat');
+    expect(after.combo.count).toBe(before.combo.count + 1);
+    expect(after.combo.coins).toBe(before.combo.coins);
+    expect(after.powerup_uses).toEqual(before.powerup_uses);
+    await expect.poll(async () => (await wallet(page)).balance)
+      .toBe(beforeWallet.balance + after.collected_coins - before.collected_coins);
+    expect((await growth(page)).streaks.cat).toBe((beforeGrowth.streaks.cat || 0) + 1);
+    evidence = { before: { combo: before.combo, wallet: beforeWallet, growth: beforeGrowth.streaks.cat },
+      after: { combo: after.combo, wallet: await wallet(page), result, powerup: after.powerup } };
+    await capture(page, info, 'word-jelly-blast-assisted-result');
+  } finally {
+    const observed = await page.evaluate(() => {
+      window.jellyBlastObserver.disconnect();
+      return { frames: window.jellyBlastFrames, images: window.jellyBlastImages };
+    });
+    fs.writeFileSync(info.outputPath('word-jelly-blast-timeline.json'), JSON.stringify({ ...evidence, frames: observed.frames }, null, 2));
+    for (const [phase, bytes] of Object.entries(observed.images))
+      fs.writeFileSync(info.outputPath(`word-jelly-blast-${phase}.png`), Buffer.from(bytes, 'base64'));
+    expect(observed.frames.some(frame => frame.powerup?.kind === 'blast' && frame.powerup.stage === 'mark')).toBe(true);
+    expect(observed.frames.some(frame => frame.powerup?.kind === 'blast' && frame.powerup.drags?.length === 1)).toBe(true);
+  }
+  expect(errors).toEqual([]);
+});
+
+additiveTest('a finished Jelly round displays its end message and sound before opening settlement', async ({ page, browserName }, info) => {
+  test.setTimeout(120000);
+  await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 1, trackSourceLifecycle: true });
+  const errors = await startWordJelly(page);
+  const opening = await jelly(page), bounds = await metrics(page), control = opening.finish;
+  const audioFrom = await page.evaluate(() => window.audioObservation.playbacks.length);
+  await page.evaluate(() => {
+    const status = document.getElementById('game-status'), growthStatus = document.getElementById('growth-status');
+    window.jellyEndFrames = [];
+    window.jellyEndImage = null;
+    let beganAt = null;
+    const record = () => {
+      const game = JSON.parse(status.dataset.jelly || '{}');
+      const view = JSON.parse(growthStatus.dataset.view || '{}');
+      window.jellyEndFrames.push({ at: performance.now(), round: game.round_id,
+        sequence: game.game_over_sequence, dialog: Boolean(view.settlement?.visible) });
+      if (game.game_over_sequence?.active && beganAt === null) {
+        beganAt = performance.now();
+        setTimeout(() => {
+          const current = JSON.parse(growthStatus.dataset.view || '{}');
+          if (!current.settlement?.visible && !window.jellyEndImage)
+            window.jellyEndImage = document.getElementById('canvas').toDataURL('image/png').split(',')[1];
+        }, 300);
+      }
+      if (game.game_over_sequence?.active && !view.settlement?.visible && !window.jellyEndImage &&
+        beganAt !== null && performance.now() - beganAt >= 250)
+        window.jellyEndImage = document.getElementById('canvas').toDataURL('image/png').split(',')[1];
+    };
+    window.jellyEndObservers = [new MutationObserver(record), new MutationObserver(record)];
+    window.jellyEndObservers[0].observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+    window.jellyEndObservers[1].observe(growthStatus, { attributes: true, attributeFilter: ['data-view'] });
+    record();
+  });
+  try {
+    const from = center(control.rect, bounds);
+    await page.mouse.move(from.x, from.y);
+    await page.mouse.down();
+    try { await page.mouse.move(from.x, from.y + control.pull.threshold * bounds.scale + 10, { steps: 4 }); }
+    finally { await page.mouse.up(); }
+    let ending;
+    await expect.poll(async () => {
+      ending = await jelly(page);
+      return ending.game_over_sequence?.active;
+    }, { intervals: [25] }).toBe(true);
+    expect(ending).toMatchObject({ phase: 'finished', game_over: { visible: false },
+      game_over_sequence: { active: true, title: 'Round complete', duration: 1.8 } });
+    await page.keyboard.press('Enter');
+    if (browserName === 'chromium') await expectRecording(page, audioFrom, 'assets/audio/jelly-combo/crown.wav');
+    await expect.poll(async () => (await metrics(page)).growth.settlement.visible).toBe(true);
+    expect((await jelly(page)).round_id).toBe(opening.round_id);
+    expect((await jelly(page)).game_over_sequence.active).toBe(false);
+    const frames = await page.evaluate(() => window.jellyEndFrames);
+    const firstEffect = frames.find(frame => frame.sequence?.active), firstDialog = frames.find(frame => frame.dialog);
+    expect(firstEffect).toBeTruthy();
+    expect(firstDialog).toBeTruthy();
+    expect(firstDialog.at - firstEffect.at, 'Settlement waits for the readable end effect rather than opening immediately')
+      .toBeGreaterThanOrEqual(1600);
+    const image = await page.evaluate(() => window.jellyEndImage);
+    expect(image, 'The readable end message was really rendered before the settlement modal').toBeTruthy();
+    fs.writeFileSync(info.outputPath('word-jelly-round-end-before-settlement.png'), Buffer.from(image, 'base64'));
+    await info.attach('jelly-end-to-settlement', { body: JSON.stringify(frames, null, 2), contentType: 'application/json' });
+  } finally {
+    await page.evaluate(() => window.jellyEndObservers.forEach(observer => observer.disconnect()));
   }
   expect(errors).toEqual([]);
 });
@@ -2596,7 +2855,7 @@ test('ordinary collected fragments synthesize a chest and then celebrate its upg
       await expect.poll(async () => {
         const reward = (await jelly(page)).reward_presentation;
         return reward.kind === kind && reward.visible && reward.revealed;
-      }, { intervals: [50], message: `The ${kind} visibly reaches its flash and confetti reveal` }).toBe(true);
+      }, { intervals: [50], message: `The ${kind} visibly reaches its local light and chest reveal` }).toBe(true);
       const peak = await page.evaluate(kind => window.wordJellyMilestoneFrames[kind], kind);
       expect(peak, `The first rendered ${kind} reveal is captured before its flash fades`).toBeTruthy();
       fs.writeFileSync(info.outputPath(`word-jelly-chest-${kind}-reveal.png`), Buffer.from(peak, 'base64'));

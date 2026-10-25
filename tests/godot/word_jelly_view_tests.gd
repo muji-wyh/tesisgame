@@ -1687,7 +1687,8 @@ func _check_collection_stack_fall(view) -> void:
 			var lower: Dictionary = _fixture_tile(view, "root:cat", 1, 1)
 			lower.column = 1
 			lower.row = 6
-			var upper: Dictionary = _fixture_tile(view, "picture:cat", 1, 0)
+			# Keep this gravity study separate from the covered Lv2 matching chain.
+			var upper: Dictionary = _fixture_tile(view, "picture:caterpillar", 1, 0)
 			upper.column = 1
 			upper.row = 5
 			var neighbor: Dictionary = _fixture_tile(view, "stay", 1, 0)

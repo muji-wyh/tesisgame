@@ -9,12 +9,13 @@ winning amounts of 50, 100, 150, 200 and 250 coins. Only collecting a valid merg
 root count and mass do not determine it. The same reserved outcome and receipt
 survive persistence retries, preventing rerolls or duplicate payment.
 
-An ordinary chest has a **50-coin base** plus **ceil(Pip level / 4)** bonus coins.
+An ordinary newly quoted chest has a **75-coin base** plus
+**ceil(24 * Pip level / 99)** bonus coins.
 Pip's earned level is clamped to 0-99; age does not affect payment. Professional
 vocabulary uses the current career Pip level, matching the header. A tiered chest
-multiplies both base and bonus by its tier. For example, Pip Lv20 earns 55 coins
-from an ordinary chest or 330 from tier six; Pip Lv99 earns 75 or 450. The bonus
-stops at 50% of base. Match and Phrase use ordinary chests. Voice Pop and both
+multiplies both base and bonus by its tier. For example, Pip Lv20 earns 80 coins
+from an ordinary chest or 480 from tier six; Pip Lv99 earns 99 or 594. The bonus
+stops at 32% of the increased base. Match and Phrase use ordinary chests. Voice Pop and both
 Jelly modes use each earned chest's final tier. Memory begins at tier six and
 loses one tier per wrong pair; finishing all five pairs earns the remaining
 chest, while tier zero earns none. Existing drop and guarantee rules are unchanged.
@@ -24,15 +25,24 @@ The opening retains the existing chest performance. At completion, eight to four
 `CoinWallet` version 4 saves each chest's quote before payment: its original
 receipt ID, tier, Pip level, base, bonus and total. The first settlement
 presentation or claim locks this quote across level changes and reloads.
-Unpaid older chests can receive a new quote; paid legacy receipts retain their
-original amount without a top-up. Pop/Jelly entries keep their original reward
+An older chest without a quote receives the new `pip-chest-v2` policy. Already
+reserved `pip-chest-v1` quotes retain their original amounts even if unopened;
+paid legacy receipts also retain their original amount without a top-up.
+Pop/Jelly entries keep their original reward
 IDs across inventory batches. Coins are saved before chest consumption, so a
 partial save retries the same total without paying twice. Silent exit/recovery
 uses the same quote without replaying a flight.
 
 The wallet is authoritative; the header has a separate visual total while coins are travelling. Leaving the page, changing rounds, opening the catalog, or leaving the reward room reconciles that display to the saved total and discards old animation callbacks. A subsequent save retry cannot replay an already reconciled deposit. Coin-flight presentation never writes the wallet. Storage failures preserve the chest and expose the existing retry controls.
 
-All game modes settle in a modal over the completed board; standalone result pages are removed. Match, Memory and Phrase Builder retain their completion performance inside the modal, followed by their existing chest actions. Voice Pop and both Jelly modes show their results immediately, including rounds without a chest. Jelly Finish uses **Round complete**; full-board danger expiry uses **Game over**. Hold an earned chest to open it there and watch its coins fly into the header.
+All game modes settle in a modal over the completed board; standalone result
+pages are removed. Match, Memory and Phrase Builder retain their completion
+performance inside the modal, followed by their existing chest actions. Voice
+Pop shows its result immediately. Both Jelly modes first show a 1.8-second
+visual and sound cue, including rounds without a chest, before opening the
+modal. Jelly Finish uses **Round complete**; full-board danger expiry uses
+**Game over**. Hold an earned chest to open it there and watch its coins fly
+into the header.
 
 After opening, the settlement receipt shows **Chest base + Pip Lv bonus** and
 an emphasized **Total coins**. Its reserved space matches the preceding chest

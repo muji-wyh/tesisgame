@@ -141,7 +141,7 @@ func reserve_chest(id: String, tier: int, pip_level: int) -> Dictionary:
 		reward = _chest_drafts[id].duplicate(true)
 	else:
 		var level: int = clampi(pip_level, 0, 99)
-		var per_tier: int = COINS_PER_TIER + ceili(level / 4.0)
+		var per_tier: int = int(Economy.chest_reward(1, level).total)
 		@warning_ignore("integer_division")
 		var supported_tier: int = MAX_BALANCE / per_tier
 		if reward_tier > supported_tier:
@@ -189,12 +189,12 @@ func _valid_chest_reward(value: Variant, receipt: int) -> bool:
 		return false
 	if value.policy == Economy.LEGACY_CHEST_REWARD_POLICY:
 		return receipt == value.total and value.pip_level == 0 and value.bonus == 0
-	if value.policy != Economy.CHEST_REWARD_POLICY:
+	if value.policy not in [Economy.CHEST_REWARD_POLICY, Economy.PREVIOUS_CHEST_REWARD_POLICY]:
 		return false
-	var per_tier: int = COINS_PER_TIER + ceili(value.pip_level / 4.0)
+	var per_tier: int = int(Economy.chest_reward(1, value.pip_level, value.policy).total)
 	@warning_ignore("integer_division")
 	var supported_tier: int = MAX_BALANCE / per_tier
-	return value.tier <= supported_tier and value == Economy.chest_reward(value.tier, value.pip_level)
+	return value.tier <= supported_tier and value == Economy.chest_reward(value.tier, value.pip_level, value.policy)
 
 
 func credit(chest_id: String, tier: int) -> Dictionary:

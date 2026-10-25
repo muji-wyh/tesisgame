@@ -11,17 +11,17 @@ const PROFILES: Array[Dictionary] = [
 	{"name": "Crystal ripple", "pattern": "ripple", "sparks": 20, "bursts": 2, "hue": 0.51, "margin": 23.0},
 	{"name": "Sapphire spiral", "pattern": "spiral", "sparks": 32, "bursts": 1, "hue": 0.65, "margin": 32.0},
 	{"name": "Golden fireworks", "pattern": "fireworks", "sparks": 48, "bursts": 3, "hue": 0.11, "margin": 44.0,
-		"trails": 5, "radius": 72.0},
+		"trails": 5, "radius": 116.0},
 	{"name": "Double cascade", "pattern": "cascade", "sparks": 72, "bursts": 4, "hue": 0.93, "margin": 56.0,
-		"trails": 6, "radius": 92.0},
+		"trails": 6, "radius": 148.0},
 	{"name": "Prismatic bouquet", "pattern": "bouquet", "sparks": 120, "bursts": 6, "hue": 0.10, "margin": 72.0,
-		"trails": 7, "radius": 116.0},
+		"trails": 7, "radius": 184.0},
 	{"name": "Aurora crown", "pattern": "aurora", "sparks": 132, "bursts": 7, "hue": 0.72, "margin": 80.0,
-		"trails": 8, "radius": 132.0},
+		"trails": 8, "radius": 212.0},
 	{"name": "Constellation shower", "pattern": "constellation", "sparks": 144, "bursts": 8, "hue": 0.12, "margin": 88.0,
-		"trails": 8, "radius": 148.0},
+		"trails": 8, "radius": 244.0},
 	{"name": "Grand bouquet", "pattern": "grand_bouquet", "sparks": 162, "bursts": 9, "hue": 0.08, "margin": 96.0,
-		"trails": 9, "radius": 164.0},
+		"trails": 9, "radius": 280.0},
 ]
 
 var level: int = 1
@@ -155,22 +155,30 @@ func _burst_angle(group: int) -> float:
 func _burst_origin(group: int) -> Vector2:
 	var radius: float = _firework_radius()
 	var vertical: float = _firework_vertical_scale()
-	var point: Vector2 = _rim(_burst_angle(group), radius * 0.32)
-	# Keep the large flowers inside the cosmetic canvas, clear of its hard edges.
-	var start := Vector2(radius * 1.32, radius * vertical * 0.80)
-	var end := size - Vector2(radius * 1.32, radius * vertical * 1.65)
+	var center: Vector2 = size * Vector2(0.5, 0.43)
+	var spread: Vector2 = size * Vector2(0.38, 0.29)
+	spread *= [0.56, 0.72, 0.88, 1.0, 1.0, 1.0][level - 4]
+	var direction := Vector2.from_angle(_burst_angle(group))
+	if level == 8:
+		direction = Vector2(-0.92 if group % 2 == 0 else 0.92, -0.95 + float(group / 2) * 1.90 / 3.0)
+	elif level == 9:
+		direction = Vector2.ZERO if group == 0 else Vector2.from_angle(-PI * 0.5 + (group - 1) * TAU / 8.0)
+	var point: Vector2 = center + direction * spread
+	# Separate launch sites fill the sky; individual stamps still fit controls and edges.
+	var start := Vector2(radius * 0.35, radius * vertical * 0.35)
+	var end := size - Vector2(radius * 0.35, radius * vertical * 0.65)
 	return point.clamp(start.min(size * 0.5), end.max(size * 0.5))
 
 
 func _firework_radius() -> float:
 	# Reading padding cannot cap the celebration or shrink automatic pickups.
 	var pixels: float = float(PROFILES[level - 1].get("radius", 0.0))
-	return minf(pixels / _ui_scale, size.x * 0.28)
+	return minf(pixels / _ui_scale, size.x * (0.30 + (level - 4) * 0.025))
 
 
 func _firework_vertical_scale() -> float:
 	# Short landscapes retain broad blooms while leaving room for their descent.
-	return minf(1.0, size.y / maxf(1.0, _firework_radius() * 3.3))
+	return minf(1.0, size.y / maxf(1.0, _firework_radius() * 2.4))
 
 
 func _edge_light(fade: float, clock: float) -> void:
@@ -355,7 +363,7 @@ func _draw_explosion(fade: float) -> void:
 			var reach: float = radius * (0.72 + phase * 0.28)
 			var point: Vector2 = _firework_point(origin, direction, reach, age, life)
 			var opacity: float = fade * smoothstep(0.0, 0.015, age) * (1.0 - smoothstep(life * 0.68, life, age))
-			var edge: float = minf((9.0 + level * 0.75 + phase * 3.5) * 1.30 / _ui_scale, radius * 0.38)
+			var edge: float = minf((9.0 + level * 0.75 + phase * 3.5) * 1.50 / _ui_scale, radius * 0.38)
 			var ember: Color = tint.lerp(Color(1.0, 0.78, 0.32), smoothstep(life * 0.5, life, age) * 0.55)
 			# Consecutive trajectory samples bend the tail with the falling tip;
 			# a line back toward the burst would pin late embers into radial spokes.
