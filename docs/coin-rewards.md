@@ -1,4 +1,4 @@
-# Chest coins
+# Coin rewards
 
 The numerical policy, affordability targets and reproducible budget scenarios
 are documented in [Coin economy](coin-economy.md). Paid receipts and saved wallet
@@ -21,6 +21,22 @@ loses one tier per wrong pair; finishing all five pairs earns the remaining
 chest, while tier zero earns none. Existing drop and guarantee rules are unchanged.
 
 The opening retains the existing chest performance. At completion, eight to fourteen production coin sprites emerge from the measured chest cavity, rise briefly, and follow curved paths into the header's coin display. The first deposit arrives after 1.14 seconds; following coins arrive 45 milliseconds apart. Each arrival releases its exact share into a rolling counter. The particles represent the reward amount rather than one coin apiece. Reduced motion uses a short static acknowledgement and an immediate count update.
+
+## Jelly combo bonus
+
+Paying manual merges launch coins from the gold **COMBO BONUS** coin in the combo
+display, not from a collected jelly or a random screen position. The existing
+acquired gold atlas supplies one, two or three sprites for the exact one-, two-
+or three-coin reward. A compact lift leads into curved travel to the header's
+coin icon; the existing bonus caption stays at its source instead of duplicating
+a large floating amount.
+
+The wallet saves the immutable combo receipt first. Its display holds the old
+total while the sprites travel, then the same arrival-driven odometer rolls
+upward and the icon pulses. Pausing freezes both timelines. Leaving or hiding
+the game reconciles to the saved balance without replaying the payout. Failed
+saves and duplicate receipts never launch coins. Reduced motion keeps a short
+static acknowledgement and updates the exact total without flight or rolling.
 
 `CoinWallet` version 4 saves each chest's quote before payment: its original
 receipt ID, tier, Pip level, base, bonus and total. The first settlement

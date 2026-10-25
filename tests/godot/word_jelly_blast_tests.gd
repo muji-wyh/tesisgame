@@ -334,20 +334,21 @@ func _test_hit_stop_timeline() -> void:
 	var state: Dictionary = model.powerup_snapshot()
 	var slow: Dictionary = model.snapshot().get("hit_stop", {})
 	check(state.stage == "mark" and slow.get("active", false)
-		and is_equal_approx(float(slow.get("time_scale", 1.0)), 0.12) and int(state.blast.marked) == 0,
-		"A collected Jelly enters local 0.12-speed hit stop before releasing any mark")
+		and is_zero_approx(float(slow.get("time_scale", 1.0))) and int(state.blast.marked) == 0,
+		"A collected Jelly first holds a real local impact freeze before releasing any mark")
 	var before_age: float = float(model.cell(int(fixture.marked.id)).age)
 	var falling_age: float = float(model.cell(int(falling.id)).age)
 	var before_clock: float = float(state.clock)
 	var combo: Dictionary = model.combo_snapshot()
 	var spawn: float = model.spawn_elapsed
+	var motion_delta: float = model.presentation_delta(0.20)
 	model.step(0.20)
 	state = model.powerup_snapshot()
 	check(is_equal_approx(float(state.clock) - before_clock, 0.20)
-		and is_equal_approx(float(model.cell(int(fixture.marked.id)).age) - before_age, 0.024)
+		and is_equal_approx(float(model.cell(int(fixture.marked.id)).age) - before_age, motion_delta)
 		and bool(model.cell(int(falling.id)).falling)
-		and is_equal_approx(float(model.cell(int(falling.id)).age) - falling_age, 0.024),
-		"Outward marking uses real time while the board advances at exactly twelve percent")
+		and is_equal_approx(float(model.cell(int(falling.id)).age) - falling_age, motion_delta),
+		"Outward marking uses real time while the board first freezes and then advances at twelve percent")
 	check(int(state.blast.marked) == 0 and not fixture.cues.has("blast_mark")
 		and fixture.launches.is_empty() and model.combo_snapshot() == combo and model.spawn_elapsed == spawn,
 		"Travel cannot mark early, start matching, drain the combo or advance supply")
@@ -388,9 +389,14 @@ func _test_hit_stop_timeline() -> void:
 	for item: Dictionary in [coarse, fine]:
 		item.model.collect(int(item.source.id))
 		item.model.step(Model.collection_seconds(2))
-	coarse.model.step(0.40)
-	for frame in range(40):
-		fine.model.step(0.01)
+		item.model.step(0.001)
+	var crossing: float = float(coarse.model.powerup_snapshot().duration) - float(coarse.model.powerup_snapshot().elapsed) + 0.06
+	coarse.model.step(crossing)
+	var remaining: float = crossing
+	while remaining > 0.000001:
+		var delta: float = minf(0.01, remaining)
+		fine.model.step(delta)
+		remaining -= delta
 	check(not coarse.model.snapshot().hit_stop.active and not fine.model.snapshot().hit_stop.active
 		and coarse.launches.is_empty() and fine.launches.is_empty()
 		and is_equal_approx(float(coarse.model.cell(int(coarse.marked.id)).age),
@@ -415,6 +421,30 @@ func _test_unmatched_mark_impact() -> void:
 		"Unmatched impact recovery ends cleanly without inventing a match or an extra pickup")
 
 
+func _test_perceptible_hit_stop() -> void:
+	var fixture: Dictionary = _fixture()
+	var model: RefCounted = fixture.model
+	model.collect(int(fixture.source.id))
+	model.step(Model.collection_seconds(2))
+	model.step(0.001)
+	var hit: Dictionary = model.hit_stop_snapshot()
+	check(hit.get("phase", "") == "freeze" and is_zero_approx(model.gameplay_time_scale())
+		and float(model.powerup_snapshot().duration) >= 0.59,
+		"A real, readable impact freeze precedes at least six tenths of a second of source-to-target marking")
+	var age: float = float(model.cell(int(fixture.marked.id)).age)
+	model.step(0.08)
+	check(is_equal_approx(float(model.cell(int(fixture.marked.id)).age), age)
+		and fixture.cues.count("blast_mark") == 0,
+		"The impact hold truly freezes the world before the source begins releasing marks")
+	model.step(0.05)
+	check(model.hit_stop_snapshot().get("phase", "") == "slow"
+		and is_equal_approx(model.gameplay_time_scale(), 0.12),
+		"After the short freeze, visible outward marking runs over the slowed board")
+	_drain(model)
+	check(fixture.launches.size() == 1 and not model.hit_stop_snapshot().active and model.cleared_pairs == 1,
+		"Making the impact readable preserves exactly one automatic match and one collected word")
+
+
 func _run() -> void:
 	_test_footprints()
 	_test_flight_and_accounting()
@@ -426,5 +456,6 @@ func _run() -> void:
 	_test_pending_blast_purchase_guard()
 	_test_hit_stop_timeline()
 	_test_unmatched_mark_impact()
+	_test_perceptible_hit_stop()
 	print("Word Jelly blast: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

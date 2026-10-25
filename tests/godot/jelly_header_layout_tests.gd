@@ -189,11 +189,12 @@ func _run() -> void:
 			mode + " restores its hosted controls when gameplay resumes")
 		check(view._header_chest_level.is_visible_in_tree(), mode + " restores the chest level with its dock")
 		await tap(view.finish_button)
-		check(not app._finish_confirmation_open() and view.game.phase == "playing",
-			mode + " a simple header Finish tap cannot end a round or open a pointer dialog")
+		check(app._jelly_pause_open() and view.game.paused and view.game.phase == "playing",
+			mode + " tapping the original pull control pauses without ending the round")
+		app._jelly_pause_menu.keep_playing_button.pressed.emit()
 		view.finish_button.accessibility_requested.emit()
 		check(app._finish_confirmation_open() and view.game.phase == "playing",
-			mode + " keyboard Finish retains an accessible confirmation")
+			mode + " an explicit finish request retains its accessible confirmation")
 		app._finish_confirmation.keep_playing_button.pressed.emit()
 		await settle()
 		check(not app._finish_confirmation_open() and view._header_chest_host.is_visible_in_tree(),

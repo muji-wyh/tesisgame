@@ -177,9 +177,14 @@ interval for the following cycle, including a requested early batch. Completing
 matches or words never shortens the countdown already running in Next. Idle
 time does not raise difficulty; a new round restores the opening interval.
 
-Pull Finish downward until it glows and sounds, then release to finish. An early
-release springs back without ending play; tapping demonstrates the pull. Keyboard
-and controller activation use a Keep playing / Finish confirmation instead.
+The header's **Pause** control has two actions: tap to pause, or pull downward
+until it glows and sounds, then release to finish. A tap keeps the short downward
+teaching animation while the board is frozen. An early, incomplete pull springs
+back without pausing or ending play. The labels say **Pull to finish**, then
+**Release to finish** once armed. Keyboard/controller activation or P pauses;
+Resume, P, or Escape returns to the same round. The **Paused** menu provides
+**Resume** and an explicitly labelled **Finish round**, so finishing remains
+accessible without a pointer gesture.
 Finishing or letting the full-board danger countdown expire first shows
 **Round complete** or **Game over**, respectively, with its own sound. This
 noninteractive 1.8-second effect precedes the settlement modal; held input cannot
@@ -192,6 +197,27 @@ Play again starts a fresh round, as does selecting the finished mode from Home.
 A failed save keeps settlement open for retry.
 
 ## Jelly Words
+
+Jelly Words starts with three practice words in stage 1. Each completed stage
+adds one word to the next target set, up to eight: 3, 4, 5, 6, 7, 8, 8, and so
+on. A final partial stage uses only the available unmastered words. Existing
+board bodies and rewards remain when a stage changes. The practice panel shows
+every current-stage word, its acquired vocabulary illustration when available,
+and its saved correct-answer progress out of three. Every card's green background
+fills proportionally from empty to full as zero, one, two and three answers are
+saved. Sidebar cards also retain three mastery accents and a numeric badge.
+Failed saves do not fill the indicators. Desktop uses the
+empty side gutter next to the well; narrower screens show rounded illustrated
+carousel chips in the existing stage rail, without shrinking the well. Compact
+chips omit progress numbers: their green background fills from empty to full
+at zero, one, two, and three saved correct answers. The word and its illustration
+stay readable over the fill; desktop cards retain their full progress detail.
+
+Paying combo merges launch their earned coins from the gold **COMBO BONUS**
+display into the header wallet. Its saved total is authoritative immediately,
+but the displayed number rolls upward only as each coin arrives. One to three
+acquired sprites represent the exact bonus; manual pause freezes the flight and
+number roll. Save retries cannot duplicate the reward or its presentation.
 
 Join reviewed roots on a five-column, eight-row board, then match the complete
 spelling with its separate picture. Positional hyphens show the missing sides: `un-`,
@@ -223,6 +249,12 @@ rounded-square cell with a 1:1 aspect ratio. The well holds 40 cells and opens
 with at most 15 jellies across three rows. Long labels use reviewed line breaks
 or an ellipsis; hold a clipped label, or focus it and press R, to pause and read
 its full spelling.
+
+Both Jelly modes have a Pause control in the header. Pause, or P on a keyboard,
+opens Resume / Home and freezes supply, danger, combo and automatic matching
+clocks. Resume continues the same round; Escape or controller Back also resumes.
+Returning from a hidden tab does not dismiss an explicit pause. Active word
+popovers and marking effects keep their paused age instead of being deleted.
 
 At rest, compatible authored partners share a painted color, including partners
 in the upcoming preview. Other pairs use different hues. Picking up a part
@@ -310,9 +342,13 @@ Random selection does not favor bodies with a match and uses a separate stream
 from word supply and coin rolls. Held, already fusing and promised batch
 collection bodies are protected.
 
-After collection commits, a blast with affected bodies slows board motion to
-0.12 speed. An 80 ms source compression releases accelerating light with dense,
-tapered trails; each group travels for 260 ms on an independent real-time clock.
+After collection commits, a blast with affected bodies first holds the world
+still for 100 ms, then slows board motion, animated word art and garden light to
+0.12 speed. Normal-motion presentation gently darkens the well while the sourced
+energy at the collected body's center stays bright, making the stop visible
+even on a stationary board. A 180 ms source windup releases accelerating light
+with dense, tapered trails; each group travels for 420 ms on an independent
+real-time clock. The complete marking interval lasts 600-900 ms.
 Nearer bodies are marked first. A target is marked and sounds only when the
 outward energy reaches it, with a sharp planted squash and a damped rebound
 rather than floating motion. The last impact immediately restores normal board

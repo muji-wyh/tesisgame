@@ -202,7 +202,7 @@ test('opening and replay wait for the first batch while manual release stays ava
 });
 
 for (const mode of ['jelly', 'word_jelly']) {
-  test(`${mode} Finish tap demonstrates a downward tug and elastic return`, async ({ page }, info) => {
+  test(`${mode} tap Pause freezes play while demonstrating a downward tug and elastic return`, async ({ page }, info) => {
     test.skip(!['desktop-chromium', 'iphone-webkit'].includes(info.project.name),
       'A mouse click and native phone tap cover the shared Finish surface.');
     const errors = await openGame(page, { reducedMotion: 'no-preference', mode });
@@ -273,10 +273,14 @@ for (const mode of ['jelly', 'word_jelly']) {
     expect(after.score).toBe(before.score);
     expect(after.finish.rect, 'The button layout target never moves').toEqual(before.finish.rect);
     expect(after.drag.active, 'The Finish demonstration never drags a board tile').toBe(false);
+    expect(after.pause_menu.visible).toBe(true);
+    expect(after.paused).toBe(true);
     const timelinePath = info.outputPath(`${mode}-finish-tap-timeline.json`);
     fs.writeFileSync(timelinePath, JSON.stringify(observed.timeline, null, 2));
     await info.attach('finish-tap-timeline', { path: timelinePath, contentType: 'application/json' });
     await page.screenshot({ path: info.outputPath(`${mode}-finish-tap-settled.png`), scale: 'css' });
+    await pressControl(page, after.pause_menu.keep_playing);
+    await expect.poll(async () => (await jelly(page)).paused).toBe(false);
     await finishRound(page);
     await expectFinishModal(page);
     expect((await jelly(page)).finish_confirmation.visible,
@@ -304,6 +308,9 @@ for (const mode of ['jelly', 'word_jelly']) {
       await pressControl(page, before.finish);
       expect((await jelly(page)).finish_confirmation.visible, 'An ordinary tap never opens a pointer dialog').toBe(false);
       expect((await jelly(page)).phase).toBe('playing');
+      expect((await jelly(page)).pause_menu.visible).toBe(true);
+      await pressControl(page, (await jelly(page)).pause_menu.keep_playing);
+      await expect.poll(async () => (await jelly(page)).paused).toBe(false);
       const session = pointer === 'touch' ? await page.context().newCDPSession(page) : null;
       const points = point => [{ x: point.x, y: point.y, id: 0, radiusX: 6, radiusY: 6, force: 1 }];
       let from, distance;

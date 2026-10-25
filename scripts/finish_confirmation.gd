@@ -83,6 +83,15 @@ func configure(palette: Dictionary, reduced_motion: bool) -> void:
 	_layout()
 
 
+func set_labels(heading: String, caption: String, primary: String, secondary: String) -> void:
+	_heading.text = heading
+	_caption.text = caption
+	keep_playing_button.text = primary
+	finish_button.text = secondary
+	keep_playing_button.set("accessibility_name", primary)
+	finish_button.set("accessibility_name", secondary)
+
+
 func open() -> void:
 	show()
 	_layout()

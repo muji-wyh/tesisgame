@@ -268,7 +268,10 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /Open Word Library to choose Everyday English or Professional English/);
   assert.match(help, /Your selected career has its own Pip outfit and mastery level/);
   assert.match(help, /fresh round in the same game: Match, Memory, or Phrase Builder/);
-  assert.match(help, /Keyboard or controller activation opens a Keep playing \/ Finish confirmation/);
+  assert.match(help, /Keyboard or controller activation opens Paused with Resume and Finish round actions/);
+  assert.match(help, /tapping pauses and demonstrates the downward pull/);
+  assert.match(help, /green card backgrounds fill with mastery instead of displaying progress numbers/);
+  assert.match(help, /coins fly from that bonus to the header wallet; its digits roll upward as each coin arrives/);
   assert.match(help, /Round complete or Game over message with its own sound for 1\.8 seconds, then open settlement over the frozen board, even when no chest was earned/);
   assert.doesNotMatch(help, /ca onto t|letter parts fall|choose Spring, Summer|50 for two original parts or 100/);
   assert.match(help, /un-, -believe-, and -able/);

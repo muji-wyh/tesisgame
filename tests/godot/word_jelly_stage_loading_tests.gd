@@ -73,10 +73,10 @@ func _make_app(mixed_ages: bool = false):
 		check(app.data.load_all() and app.growth.configure(app.data.words) and app.growth.load_state(),
 			"Load real vocabulary before seeding two nearly mastered cohorts")
 		for age in [3, 4]:
-			var learned: Array = _cohort(app, age).slice(5)
+			var learned: Array = _cohort(app, age).slice(1 if age == 3 else 2)
 			for attempt in range(Growth.MASTERY_STREAK):
 				check(app.growth.record_attempt("seed-%d-%d" % [age, attempt], learned, true, true).save_ok,
-					"Seed durable mastery while leaving five targets in each age")
+					"Leave one younger target and two next-age targets for a mixed three-word opening stage")
 	root.add_child(app)
 	await _settle()
 	app.audio.set_muted(true)
@@ -123,9 +123,9 @@ func _loading_and_background() -> void:
 		await _dispose(app)
 		return
 	var first: Array = app._word_jelly_stages.snapshot().word_ids
-	check(first.size() == 10 and app._word_jelly_stages.words.filter(
-		func(word: Dictionary) -> bool: return int(word.min_age) == 3).size() == 5,
-		"The actual initial board selects the remaining five words from each age")
+	check(first.size() == 3 and app._word_jelly_stages.words.filter(
+		func(word: Dictionary) -> bool: return int(word.min_age) == 3).size() == 1,
+		"The initial three-word stage selects the one remaining younger word and two next-age words")
 	var original_round: String = app._round_id
 	var original_context: Dictionary = app._round_context.duplicate(true)
 	app.vocabulary_loader.age_ready.emit(4)
@@ -223,7 +223,7 @@ func _post_settlement_selection() -> void:
 	check(app.new_round(904, false, "", "word_jelly", "", false),
 		"Starting another staged round settles the original accepted pickup")
 	check(app.growth.is_mastered(target.id) and not app._word_jelly_stages.snapshot().word_ids.has(target.id)
-		and app._word_jelly_stages.words.size() == 10,
+		and app._word_jelly_stages.words.size() == 3,
 		"Post-settlement selection replaces the newly mastered target before creating any board")
 	check(game.cells.all(func(body: Dictionary) -> bool: return str(body.get("source_word_id", "")) != str(target.id))
 		and game.upcoming.all(func(body: Dictionary) -> bool: return str(body.get("source_word_id", "")) != str(target.id)),

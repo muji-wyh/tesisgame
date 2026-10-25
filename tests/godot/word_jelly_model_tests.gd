@@ -2134,6 +2134,7 @@ func _test_collection_gravity() -> void:
 	check(float(model.cell(1001).age) < model.settle_duration(model.cell(1001))
 		and float(model.cell(1002).age) < model.settle_duration(model.cell(1002)) and model.merged_count == 0,
 		"the collected stack genuinely falls in slow motion while outward marks land")
+	model.step(float(model.hit_stop_snapshot().remaining))
 	model.step(maxf(model.settle_duration(model.cell(1001)) - float(model.cell(1001).age),
 		model.settle_duration(model.cell(1002)) - float(model.cell(1002).age)))
 	check(float(model.cell(1001).age) + Model.EPSILON >= model.settle_duration(model.cell(1001))

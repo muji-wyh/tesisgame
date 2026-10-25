@@ -10,6 +10,17 @@
   "animation": "Static source artwork; no animation clips.",
   "assets": [
     {
+      "id": "player-pause",
+      "file": "assets/images/ui/controls/player-pause.svg",
+      "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/player-pause.svg",
+      "source_sha256": "f6f399099fa84a93fa42e0bc5ae25d85d8e89f45025c228a1c271b6115962cf6",
+      "integrated_sha256": "233140e384851d181dc1f35012bf975e6514af6584b0482889bf7d983dc13801",
+      "variant": "outline",
+      "acquired": "2026-10-25",
+      "status": "Acquired, source-render inspected before integration and visually verified in native desktop, portrait and landscape Jelly Pause captures. Source paths unchanged; currentColor replaced with white for runtime tint.",
+      "animation": "Static authored pause icon; no animation clips."
+    },
+    {
       "id": "lock",
       "file": "assets/images/ui/controls/lock.svg",
       "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/lock.svg",

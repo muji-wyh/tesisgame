@@ -60,7 +60,7 @@ for (const mode of ['jelly', 'word_jelly']) {
           await page.mouse.move(to.x, to.y, { steps: 4 });
         }
         await expect.poll(async () => (await jelly(page)).finish.pull.armed).toBe(true);
-        expect((await jelly(page)).finish.pull.label_text).toBe('Drag to\nfinish');
+        expect((await jelly(page)).finish.pull.label_text).toBe('Pull to\nfinish');
         expect((await jelly(page)).phase, 'An armed pull waits for release').toBe('playing');
       } finally {
         if (session) {

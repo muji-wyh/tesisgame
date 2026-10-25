@@ -11,6 +11,7 @@ const FOLIAGE = preload("res://assets/images/jelly-match/garden/foliage.png")
 
 var _header_wash := GradientTexture2D.new()
 var _elapsed: float = 0.0
+var motion_scale: float = 1.0
 var _ambient_active: bool = false
 var _reduced_motion: bool = false
 var _sky: TextureRect
@@ -69,7 +70,7 @@ func _sync_motion() -> void:
 func _process(delta: float) -> void:
 	if not is_finite(delta) or delta <= 0.0:
 		return
-	_elapsed = fmod(_elapsed + delta, 360.0)
+	_elapsed = fmod(_elapsed + delta * clampf(motion_scale, 0.0, 1.0), 360.0)
 	_update_daylight()
 
 

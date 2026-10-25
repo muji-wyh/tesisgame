@@ -96,15 +96,18 @@ func _run() -> void:
 			var target_center: Vector2 = view._tiles[int(fixture.marked.id)].get_rect().get_center()
 			var ambient: float = view._presentation_elapsed
 			var board_age: float = float(view.game.cell(int(fixture.marked.id)).age)
-			view._process(0.10)
+			var motion_delta: float = view.game.presentation_delta(0.23)
+			_advance(view, 0.23)
 			check(view.game.powerup_snapshot().kind == "blast" and view.game.powerup_snapshot().stage == "mark"
 				and view.snapshot().get("hit_stop", {}).get("active", false)
 				and not view._powerup_effects.stamps.is_empty() and not cues.has("blast_mark"),
 				"The source releases a visible marking wave inside real local slow motion, before impact")
-			check(is_equal_approx(view._presentation_elapsed - ambient, 0.012)
-				and is_equal_approx(float(view.game.cell(int(fixture.marked.id)).age) - board_age, 0.012)
+			check(is_equal_approx(view._presentation_elapsed - ambient, motion_delta)
+				and is_equal_approx(float(view.game.cell(int(fixture.marked.id)).age) - board_age, motion_delta)
 				and is_equal_approx(Engine.time_scale, 1.0),
 				"Board bodies and ambient Jelly motion slow without changing the engine, UI or audio clock")
+			check(view.snapshot().hit_stop.visible == (not steady),
+				"A normal-motion board visibly focuses the collected source even when all other Jellies are stationary")
 			check(view._powerup_effects.stamps.any(func(stamp: Dictionary) -> bool:
 				return stamp.texture == view.COLLECTION_GLOW and Vector2(stamp.center).is_equal_approx(source_center)),
 				"The collected Jelly's actual board position remains the outgoing energy source")
@@ -122,7 +125,7 @@ func _run() -> void:
 			check(view.game.powerup_snapshot() == frozen and not view._powerup_effects.is_visible_in_tree(),
 				"Pause freezes the mark and hides its cosmetic layer")
 			view.pause(false)
-			view._process(float(view.game.powerup_snapshot().duration)
+			_advance(view, float(view.game.powerup_snapshot().duration)
 				- float(view.game.powerup_snapshot().elapsed) + 0.035)
 			check(cues.has("blast_mark") and not view.snapshot().get("hit_stop", {}).get("active", true)
 				and view.game.powerup_snapshot().drags.is_empty(),

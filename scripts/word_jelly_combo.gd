@@ -364,6 +364,10 @@ func _rect_array(rect: Rect2) -> Array:
 	return [rect.position.x, rect.position.y, rect.size.x, rect.size.y]
 
 
+func coin_origin() -> Vector2:
+	return _coin.get_global_rect().get_center()
+
+
 func snapshot() -> Dictionary:
 	return {"visible": is_visible_in_tree(), "count": _count, "rank": _rank, "tier": _tier,
 		"bonus": _bonus, "event_id": _event_id, "count_text": _count_label.text,
@@ -376,5 +380,6 @@ func snapshot() -> Dictionary:
 		"reduced_motion": reduced_motion, "input_transparent": mouse_filter == Control.MOUSE_FILTER_IGNORE,
 		"rect": _rect_array(get_global_rect()), "rank_rect": _rect_array(_rank_label.get_global_rect()),
 		"count_rect": _rect_array(_count_label.get_global_rect()), "bonus_rect": _rect_array(_bonus_label.get_global_rect()),
+		"coin_rect": _rect_array(_coin.get_global_rect()),
 		"rank_font_size": _rank_label.get_theme_font_size("font_size"),
 		"count_font_size": _count_label.get_theme_font_size("font_size"), "pop_scale": _pop_scale()}

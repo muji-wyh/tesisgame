@@ -158,9 +158,11 @@ func check_component() -> void:
 	var cues: Array[int] = []
 	var commits: Array[int] = []
 	var requests: Array[int] = []
+	var pauses: Array[int] = []
 	button.threshold_reached.connect(func() -> void: cues.append(1))
 	button.finish_committed.connect(func() -> void: commits.append(1))
 	button.accessibility_requested.connect(func() -> void: requests.append(1))
+	button.pause_requested.connect(func() -> void: pauses.append(1))
 	await settle()
 	var start: Vector2 = button.get_global_rect().get_center()
 	var threshold: float = float(button.snapshot().threshold)
@@ -169,11 +171,13 @@ func check_component() -> void:
 		var context: String = "touch" if touch else "mouse"
 		pointer(start, true, touch)
 		check(button.is_pulling(), context + ": the header target owns a real pointer press")
-		check(button.snapshot().label_text == "Drag to\nfinish", context + ": pressing shows the two-line drag instruction")
+		check(button.snapshot().label_text == "Pull to\nfinish", context + ": pressing shows the two-line downward instruction")
+		var pauses_before: int = pauses.size()
 		pointer(start, false, touch)
-		check(commits.is_empty() and requests.is_empty(), context + ": a tap neither finishes nor opens keyboard confirmation")
+		check(commits.is_empty() and requests.is_empty() and pauses.size() == pauses_before + 1,
+			context + ": a tap requests one pause, never a destructive finish")
 		check_tap_response(button, context, cues, commits, requests)
-		check(button.snapshot().label_text == "Finish", context + ": the resting label returns after tap feedback")
+		check(button.snapshot().label_text == "Pause", context + ": the resting label describes the safe tap action")
 		pointer(start, true, touch)
 		motion(start - Vector2(0, threshold * 0.2), touch)
 		check(not button.snapshot().armed and float(button.snapshot().progress) <= 0.01,
@@ -184,7 +188,7 @@ func check_component() -> void:
 		motion(start + Vector2(0, threshold * 0.4), touch)
 		button.advance(0.08)
 		var short_pull: Dictionary = button.snapshot()
-		check(short_pull.label_text == "Drag to\nfinish", context + ": dragging retains the wrapped instruction")
+		check(short_pull.label_text == "Pull to\nfinish", context + ": dragging retains the wrapped instruction")
 		check(short_pull.pulling and not short_pull.armed and float(short_pull.visual_pull) > 0.0,
 			context + ": a partial drag deforms the jelly while remaining reversible")
 		motion(start + Vector2(0, threshold * 0.8), touch)
@@ -279,8 +283,10 @@ func check_component() -> void:
 	check(not button.is_pulling() and commits.is_empty(), "Disabled Finish cannot capture or commit a gesture")
 	button.disabled = false
 	button.grab_focus()
+	var pauses_before_key: int = pauses.size()
 	key_accept()
-	check(requests.size() == 1 and commits.is_empty(), "Keyboard activation requests the accessible safe confirmation")
+	check(pauses.size() == pauses_before_key + 1 and requests.is_empty() and commits.is_empty(),
+		"Keyboard activation pauses just like a pointer tap; it never commits Finish")
 	button.configure(Color("e2a268"), 1.0, true)
 	button.set_hint_allowed(true)
 	pointer(start, true)
@@ -359,10 +365,11 @@ func check_gameplay(mode: String) -> void:
 	button.advance(0.1)
 	var before_demo: float = view.game.spawn_elapsed
 	view._process(0.2)
-	check(button.snapshot().tap_hint and not button.is_pulling() and view.game.spawn_elapsed > before_demo,
-		mode + ": the tap demonstration teaches pulling without freezing board simulation")
-	check(view.game.phase == "playing" and completions.is_empty() and not app._finish_confirmation_open(),
-		mode + ": a teaching tap preserves the game without opening confirmation")
+	check(button.snapshot().tap_hint and not button.is_pulling() and is_equal_approx(view.game.spawn_elapsed, before_demo),
+		mode + ": the downward teaching cue remains animated while the board is paused")
+	check(view.game.phase == "playing" and completions.is_empty() and app._jelly_pause_open(),
+		mode + ": tapping pauses the same unfinished round rather than opening destructive confirmation")
+	app._jelly_pause_menu.keep_playing_button.pressed.emit()
 	button.cancel_pull(true)
 	for interruption: String in ["home", "resize", "page_hidden", "host_cancel"]:
 		var start: Vector2 = button.get_global_rect().get_center()
@@ -410,9 +417,9 @@ func check_gameplay(mode: String) -> void:
 		relax(button)
 	button.grab_focus()
 	key_accept()
-	check(app._finish_confirmation_open() and view.game.phase == "playing" and view.game.paused,
-		mode + ": actual keyboard activation retains the safe accessible decision")
-	app._finish_confirmation.keep_playing_button.pressed.emit()
+	check(app._jelly_pause_open() and view.game.phase == "playing" and view.game.paused,
+		mode + ": actual keyboard activation provides the same accessible pause decision")
+	app._jelly_pause_menu.keep_playing_button.pressed.emit()
 	await settle()
 	var start: Vector2 = button.get_global_rect().get_center()
 	var end: Vector2 = start + Vector2(0, float(button.snapshot().threshold) * 1.15)

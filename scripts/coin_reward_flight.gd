@@ -54,7 +54,7 @@ func spend(receipt: Dictionary, destination: Vector2) -> void:
 	queue_redraw()
 
 
-func present(id: String, reward: Dictionary, source: Vector2, with_release_sound: bool = false) -> void:
+func present(id: String, reward: Dictionary, source: Vector2, with_release_sound: bool = false, kind: String = "reward") -> void:
 	if _seen.has(id) or int(reward.get("amount", 0)) <= 0:
 		return
 	_seen[id] = true
@@ -65,9 +65,9 @@ func present(id: String, reward: Dictionary, source: Vector2, with_release_sound
 	if _events.is_empty():
 		_visual_total = int(reward.before)
 		counter.sync(_visual_total)
-	var count: int = clampi(7 + int(reward.amount) / 50, 8, 14)
+	var count: int = clampi(int(reward.amount), 1, 3) if kind == "combo" else clampi(7 + int(reward.amount) / 50, 8, 14)
 	_events.append({"id": id, "amount": int(reward.amount), "source": source,
-		"elapsed": 0.0, "count": count, "arrivals": 0, "release_pending": with_release_sound})
+		"kind": kind, "elapsed": 0.0, "count": count, "arrivals": 0, "release_pending": with_release_sound})
 	queue_redraw()
 
 
@@ -119,7 +119,14 @@ func advance(delta: float) -> void:
 
 
 func snapshot() -> Dictionary:
+	var events: Array[Dictionary] = []
+	for event: Dictionary in _events:
+		events.append({"id": event.id, "kind": event.kind, "amount": event.amount,
+			"count": event.count, "arrivals": event.arrivals, "elapsed": event.elapsed,
+			"source": [event.source.x, event.source.y]})
+	var destination: Vector2 = counter.icon_center() if is_instance_valid(counter) else Vector2.ZERO
 	return {"active": not _events.is_empty() or not _debit.is_empty(), "flights": _events.size(),
+		"events": events, "destination": [destination.x, destination.y],
 		"debit_active": not _debit.is_empty(), "debit_amount": int(_debit.get("amount", 0)),
 		"arrived_balance": _visual_total, "displayed": counter.displayed if is_instance_valid(counter) else 0.0,
 		"target": counter.target if is_instance_valid(counter) else 0}
@@ -134,18 +141,23 @@ func _draw() -> void:
 	for event in _events:
 		var source: Vector2 = event.source - global_position
 		var age: float = event.elapsed
+		var combo: bool = event.kind == "combo"
 		var amount_alpha: float = clampf(age / 0.14, 0.0, 1.0) * clampf((1.25 - age) / 0.28, 0.0, 1.0)
 		var label_at: Vector2 = source + Vector2(0, -114 / s)
 		if not reduced_motion:
 			label_at.y -= 14 / s * minf(1.0, age)
-		draw_string_outline(Style.HEADING_FONT, label_at - Vector2(90 / s, 0), "+%d" % event.amount,
-			HORIZONTAL_ALIGNMENT_CENTER, 180 / s, ceili(28 / s), ceili(4 / s), Color("#fff6da", amount_alpha))
-		draw_string(Style.HEADING_FONT, label_at - Vector2(90 / s, 0), "+%d" % event.amount,
-			HORIZONTAL_ALIGNMENT_CENTER, 180 / s, ceili(28 / s), Color("#b17516", amount_alpha))
+		if not combo:
+			draw_string_outline(Style.HEADING_FONT, label_at - Vector2(90 / s, 0), "+%d" % event.amount,
+				HORIZONTAL_ALIGNMENT_CENTER, 180 / s, ceili(28 / s), ceili(4 / s), Color("#fff6da", amount_alpha))
+			draw_string(Style.HEADING_FONT, label_at - Vector2(90 / s, 0), "+%d" % event.amount,
+				HORIZONTAL_ALIGNMENT_CENTER, 180 / s, ceili(28 / s), Color("#b17516", amount_alpha))
 		for index in range(int(event.arrivals), int(event.count)):
 			var local_age: float = maxf(0.0, age - index * 0.045)
 			var spread := Vector2((float(index) / maxf(1, event.count - 1) - 0.5) * 142 / s,
 				-(65.0 + sin(index * 2.4) * 18.0) / s)
+			if combo:
+				spread = Vector2((float(index) - (event.count - 1) * 0.5) * 16.0,
+					-18.0 - sin(index * 2.4) * 4.0) / s
 			var launch: Vector2 = source + spread
 			var point: Vector2
 			var scale_factor: float = 1.0
@@ -160,9 +172,11 @@ func _draw() -> void:
 				var p: float = clampf((local_age - BURST_SECONDS) / TRAVEL_SECONDS, 0, 1)
 				var eased: float = p * p * (3.0 - 2.0 * p)
 				var bend := Vector2(launch.x + (destination.x - launch.x) * 0.12, minf(launch.y, destination.y) - 70 / s)
+				if combo:
+					bend.y = maxf(12.0 / s, minf(launch.y, destination.y) - 30.0 / s)
 				point = launch.lerp(bend, eased).lerp(bend.lerp(destination, eased), eased)
 				scale_factor = lerpf(1.0, 0.56, p)
-			var side: float = 33 / s * scale_factor
+			var side: float = (26.0 if combo else 33.0) / s * scale_factor
 			# Authored views are distinct perspectives, not sequential spin frames.
 			var frame: int = index % 4 if not reduced_motion else 0
 			var region := Rect2(Vector2(frame % 2, frame / 2) * 128, Vector2.ONE * 128)

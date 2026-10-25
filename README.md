@@ -20,7 +20,13 @@ handles loading, accessibility, audio recovery, and speech recognition.
 - **Settings and treasure:** the selected vocabulary supplies the garden or workplace setting. Three-second round celebrations and existing chest rewards remain available. Usernames, identity avatars, leaderboards and Pip's room have been retired.
 
 Both Jelly modes show a brief end message and a distinct sound before opening
-settlement. New chest quotes across all modes pay `75 + ceil(24 * Pip Lv / 99)`
+settlement. Tap the header's Pause control (or press P) to pause and Resume to
+continue; pull the same control down to finish. Its small tug teaches that gesture.
+Jelly Words stages practise 3, 4, 5, 6, 7, then at most 8 words, with a current-word
+mastery list in the side gutter or compact stage rail. Narrow screens use card
+background fill instead of per-word progress numbers. Collection blasts visibly
+hold for 100 ms and slow the world until their outward marks finish.
+New chest quotes across all modes pay `75 + ceil(24 * Pip Lv / 99)`
 coins per chest tier; previously reserved quotes and paid receipts keep their
 original amounts.
 

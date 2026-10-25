@@ -166,7 +166,7 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   assert.equal(controls.license, 'MIT');
   assert.ok(fs.existsSync(path.join(root, controls.license_file)));
   assert.deepEqual(controls.assets.map(asset => asset.id).sort(),
-    ['menu', 'microphone', 'microphone-active', 'bulb', 'eye', 'eye-closed', 'chevron-left', 'chevron-right', 'home', 'refresh', 'lock'].sort());
+    ['menu', 'microphone', 'microphone-active', 'bulb', 'eye', 'eye-closed', 'chevron-left', 'chevron-right', 'home', 'refresh', 'lock', 'player-pause'].sort());
   for (const asset of controls.assets) {
     assert.equal(asset.file, `assets/images/ui/controls/${asset.id}.svg`);
     assert.equal(sha256(fs.readFileSync(path.join(root, asset.file))), asset.integrated_sha256, asset.file);

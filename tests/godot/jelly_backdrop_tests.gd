@@ -90,6 +90,16 @@ func check_standalone() -> void:
 	await check_frozen(backdrop, "An inactive garden")
 	backdrop.set_ambient_active(true)
 	await check_advances(backdrop, "An active garden")
+	backdrop.set_process(false)
+	var held_elapsed: float = backdrop._elapsed
+	backdrop.motion_scale = 0.0
+	backdrop._process(0.10)
+	check(backdrop._elapsed == held_elapsed, "Impact hit stop holds the real garden light clock still")
+	backdrop.motion_scale = 0.12
+	backdrop._process(0.50)
+	check(is_equal_approx(backdrop._elapsed - held_elapsed, 0.06), "The garden follows the same twelve-percent slow-motion clock")
+	backdrop.motion_scale = 1.0
+	backdrop.set_ambient_active(true)
 	if DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
 		var initial_redraws: int = redraws[0]
@@ -264,6 +274,7 @@ func check_application(mode: String) -> void:
 	app._finish_confirmation.finish_button.pressed.emit()
 	check(view.game.phase == "finished", mode + ": Finish ends the active round")
 	await check_frozen(backdrop, mode + " finished round")
+	Fixture.finish_celebration(app)
 	app._jelly_rewards._back.pressed.emit()
 	view.set_process(false)
 	check(view.game.phase == "playing", mode + ": Play again starts a new round")

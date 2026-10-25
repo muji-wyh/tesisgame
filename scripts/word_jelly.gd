@@ -5,6 +5,7 @@ extends "res://scripts/jelly_match.gd"
 signal collected(event_id: String, word: Dictionary, amount: int, fragments: int, origin: Vector2)
 signal word_merged(word: Dictionary)
 signal batch_collection_started
+signal combo_coins_earned(event_id: String, origin: Vector2)
 
 const WordModel = preload("res://scripts/word_jelly_model.gd")
 const WordTile = preload("res://scripts/word_jelly_tile.gd")
@@ -12,6 +13,7 @@ const Palette = preload("res://scripts/word_jelly_palette.gd")
 const WordReveal = preload("res://scripts/word_jelly_word_reveal.gd")
 const CollectionEffects = preload("res://scripts/word_jelly_collection_fx.gd")
 const StageBanner = preload("res://scripts/word_jelly_stage_banner.gd")
+const PracticePanel = preload("res://scripts/word_jelly_practice.gd")
 const CollectButton = preload("res://scripts/word_jelly_collect_button.gd")
 const PowerupButton = preload("res://scripts/word_jelly_powerup_button.gd")
 const PowerupEffects = preload("res://scripts/word_jelly_powerup_effects.gd")
@@ -34,6 +36,7 @@ var purchase_powerup: Callable:
 var coin_balance: Callable
 var powerup_buttons: Dictionary = {}
 var _powerup_effects: PowerupEffects
+var _hit_stop_shade := ColorRect.new()
 var _powerup_arrivals: Array[Dictionary] = []
 var _powerup_frame_end: float = -1.0
 var _powerup_frame_receipt: String = ""
@@ -51,6 +54,7 @@ var _word_reveal: WordReveal
 var _combo_hud: ComboHUD
 var _collection_effects: CollectionEffects
 var _stage_banner: StageBanner
+var _practice_panel: PracticePanel
 var _presentation_elapsed: float = 0.0
 var collect_button: CollectButton
 var _action_divider := ColorRect.new()
@@ -147,6 +151,8 @@ func _init() -> void:
 	add_child(_collection_effects)
 	_stage_banner = StageBanner.new()
 	add_child(_stage_banner)
+	_practice_panel = PracticePanel.new()
+	add_child(_practice_panel)
 	collect_button = CollectButton.new()
 	collect_button.name = "WordJellyCollectAll"
 	collect_button.pressed.connect(_collect_all)
@@ -167,6 +173,12 @@ func _init() -> void:
 	add_child(_action_divider)
 	_powerup_effects = PowerupEffects.new()
 	add_child(_powerup_effects)
+	_hit_stop_shade.name = "HitStopFocus"
+	_hit_stop_shade.color = Color(0.05, 0.12, 0.18, 0.24)
+	_hit_stop_shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_hit_stop_shade.z_index = 40
+	_hit_stop_shade.hide()
+	add_child(_hit_stop_shade)
 	_placement_tile = WordTile.new()
 	_placement_tile.name = "WordJellyPlacement"
 	_placement_tile.disabled = true
@@ -215,7 +227,10 @@ func stop() -> void:
 	_queued_collections.clear()
 	if _stage_banner != null:
 		_stage_banner.reset()
+	if _practice_panel != null:
+		_practice_panel.set_stage({})
 	_presentation_elapsed = 0.0
+	_hit_stop_shade.hide()
 	if _collection_effects != null:
 		_collection_effects.reset()
 	_room_notice_remaining = 0.0
@@ -254,13 +269,13 @@ func stop() -> void:
 	_placement_tile._picture.texture = null
 	_placement_tile.hide()
 
-func pause(value: bool = true) -> void:
+func pause(value: bool = true, preserve_effects: bool = false) -> void:
 	if value and _stage_banner != null:
 		_stage_banner.dismiss()
 	_requested_pause = value
-	if value and _collection_effects != null:
+	if value and not preserve_effects and _collection_effects != null:
 		_collection_effects.reset()
-	if value and _word_reveal != null:
+	if value and not preserve_effects and _word_reveal != null:
 		_word_reveal.reset()
 	_apply_pause_reasons()
 	if _powerup_effects != null:
@@ -1101,6 +1116,10 @@ func _pose_powerup() -> void:
 		tile.set_fragment_arrival(-1.0, reduced_motion)
 	_powerup_effects.visible = _can_play()
 	var state: Dictionary = game.powerup_snapshot()
+	_hit_stop_shade.position = _board.position
+	_hit_stop_shade.size = _board.size
+	_hit_stop_shade.visible = _can_play() and not reduced_motion and bool(state.get("active", false)) \
+		and str(state.kind) == "blast" and str(state.stage) == "mark"
 	var stamps: Array[Dictionary] = []
 	var unit: float = maxf(8.0, _pitch)
 	if bool(state.get("active", false)) and str(state.get("kind", "")) == "blast":
@@ -1181,7 +1200,7 @@ func _pose_blast_marks(state: Dictionary, stamps: Array[Dictionary], unit: float
 			sources[source_key] = true
 			var charge: float = 1.0 if reduced_motion else smoothstep(0.0, WordModel.BLAST_MARK_WINDUP_SECONDS, clock)
 			var source_fade: float = 1.0 - smoothstep(last_launch, last_launch + 0.20, clock)
-			_powerup_stamp(stamps, COLLECTION_GLOW, start, Vector2.ONE * unit * (0.60 + charge * 0.80),
+			_powerup_stamp(stamps, COLLECTION_GLOW, start, Vector2.ONE * unit * (1.0 + charge * 1.10),
 				Color(tint, source_fade * 0.82))
 			_powerup_stamp(stamps, POWERUP_RAYS, start, Vector2.ONE * unit * (0.48 + charge * 0.72),
 				Color(tint.lightened(0.35), source_fade * 0.72))
@@ -1301,7 +1320,7 @@ func _process(delta: float) -> void:
 	_reveal_frame_end = -1.0
 	_powerup_frame_end = -1.0
 	if _can_play() and delta <= 0.5:
-		var board_delta: float = delta * game.gameplay_time_scale()
+		var board_delta: float = game.presentation_delta(delta)
 		_combo_hud.advance(delta)
 		_stage_banner.advance(delta)
 		_presentation_elapsed += board_delta
@@ -1785,13 +1804,19 @@ func _combo_changed(state: Dictionary) -> void:
 	_combo_hud.set_state(state, _can_play())
 	if increased and _can_play():
 		audio_requested.emit("jelly-combo-%d" % int(state.count))
+	if increased and int(state.get("bonus", 0)) > 0:
+		combo_coins_earned.emit(str(state.event_id), _combo_hud.coin_origin())
 	_publish()
 
 func set_stage_progress(state: Dictionary, celebrate: bool = false) -> void:
+	if _stage_banner._state == state and not celebrate:
+		return
 	var was_visible: bool = _stage_banner.visible
+	var previous_rows: int = _practice_panel._rows.size()
 	_stage_banner.reduced_motion = reduced_motion
 	_stage_banner.set_stage(state, celebrate)
-	if was_visible != _stage_banner.visible:
+	_practice_panel.set_stage(state)
+	if was_visible != _stage_banner.visible or previous_rows != _practice_panel._rows.size():
 		_layout()
 	_publish()
 
@@ -1962,6 +1987,14 @@ func _layout() -> void:
 		if stage_in_rail and side_hud:
 			badge = Rect2(Vector2(hud_x, content_top), Vector2(hud_width, 46.0 / s))
 		_stage_banner.configure_layout(badge, _board, s)
+		var sidebar_width: float = _board.position.x - edge * 2.0 - 12.0 / s
+		var sidebar: bool = sidebar_width * s >= 152.0 and _board.size.y * s >= 200.0
+		_stage_banner._label.visible = not _practice_panel.visible or sidebar
+		var practice_width: float = minf(232.0 / s, sidebar_width)
+		var practice_area: Rect2 = Rect2(Vector2(_board.position.x - practice_width - 18.0 / s, group_top),
+			Vector2(practice_width, minf(_board.size.y, (66.0 + _practice_panel._rows.size() * 60.0) / s))) \
+			if sidebar else badge
+		_practice_panel.configure_layout(practice_area, s, not sidebar)
 	if not layout_header_chest():
 		_loot_meter.position = Vector2(edge, 4.0 / s)
 		_loot_meter.size = Vector2.ONE * 44.0 / s
@@ -2058,11 +2091,14 @@ func _layout() -> void:
 		# Falling embers get room below the reading cards without moving or resizing them.
 		var firework_area := Rect2(Vector2.ONE * edge,
 			Vector2(size.x - edge * 2.0, minf(680.0 / s, size.y * maxf(0.86, reveal_fraction)) - edge))
+		var effect_exclusions: Array[Rect2] = [chest_meter_rect().grow(10.0 / s), collect_button.get_rect().grow(8.0 / s), finish_rect.grow(8.0 / s),
+			_combo_hud.get_rect().grow(3.0 / s), powerup_buttons.auto_merge.get_rect().grow(5.0 / s),
+			powerup_buttons.fragments.get_rect().grow(5.0 / s)]
+		if _practice_panel.visible:
+			effect_exclusions.append(_practice_panel.get_rect().grow(6.0 / s))
 		_word_reveal.configure_layout(Rect2(Vector2.ONE * edge,
 			Vector2(size.x - edge * 2.0, minf(280.0 / s, size.y * reveal_fraction) - edge)), s,
-			[chest_meter_rect().grow(10.0 / s), collect_button.get_rect().grow(8.0 / s), finish_rect.grow(8.0 / s),
-			_combo_hud.get_rect().grow(3.0 / s), powerup_buttons.auto_merge.get_rect().grow(5.0 / s),
-			powerup_buttons.fragments.get_rect().grow(5.0 / s)], firework_area)
+			effect_exclusions, firework_area)
 	_sync_positions()
 	_refresh_fusion()
 	_refresh_hud()
@@ -2095,6 +2131,7 @@ func snapshot() -> Dictionary:
 	_preview_drop_available = _can_drop_preview()
 	var state: Dictionary = super.snapshot()
 	state["stage"] = _stage_banner.snapshot() if _stage_banner != null else {}
+	state["practice"] = _practice_panel.snapshot() if _practice_panel != null else {"visible": false, "words": []}
 	state["combo_hud"] = _combo_hud.snapshot() if _combo_hud != null else {"visible": false}
 	state["mode"] = "word_jelly"
 	state["columns"] = WordModel.COLUMNS
@@ -2109,6 +2146,7 @@ func snapshot() -> Dictionary:
 	state["collect_button"] = collect_button.snapshot() if collect_button != null else {}
 	state["action_divider"] = {"rect": _rect(_action_divider.get_global_rect()), "visible": _action_divider.is_visible_in_tree()}
 	state["powerup"] = game.powerup_snapshot()
+	state["hit_stop"]["visible"] = _hit_stop_shade.is_visible_in_tree()
 	state["powerup_buttons"] = {}
 	for kind: String in powerup_buttons:
 		var button: PowerupButton = powerup_buttons[kind]

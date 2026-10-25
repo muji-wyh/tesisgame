@@ -1,7 +1,8 @@
 extends RefCounted
 ## A fixed set of learning targets that shrinks only after durable mastery.
 
-const WORDS_PER_STAGE: int = 10
+const FIRST_STAGE_WORDS: int = 3
+const MAX_STAGE_WORDS: int = 8
 var number: int = 0
 var words: Array[Dictionary] = []
 var remaining: Array[Dictionary] = []
@@ -45,7 +46,7 @@ func next_words() -> Array[Dictionary]:
 			continue
 		spellings[spelling] = true
 		result.append(word.duplicate(true))
-		if result.size() == WORDS_PER_STAGE:
+		if result.size() == mini(FIRST_STAGE_WORDS + number, MAX_STAGE_WORDS):
 			break
 	return result
 

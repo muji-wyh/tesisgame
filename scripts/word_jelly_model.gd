@@ -44,8 +44,9 @@ const BATCH_POP_SECONDS: float = 0.04
 const COMBO_SECONDS: float = 8.0
 const BLAST_MARK_BEAT_SECONDS: float = 0.06
 const BLAST_TIME_SCALE: float = 0.12
-const BLAST_MARK_WINDUP_SECONDS: float = 0.08
-const BLAST_MARK_FLIGHT_SECONDS: float = 0.26
+const BLAST_FREEZE_SECONDS: float = 0.10
+const BLAST_MARK_WINDUP_SECONDS: float = 0.18
+const BLAST_MARK_FLIGHT_SECONDS: float = 0.42
 const BLAST_MARK_RECOVERY_SECONDS: float = 0.10
 const AUTO_COLLECT_UNLOCK_LEVEL: int = 3
 const INITIAL_SPAWN_INTERVAL: float = 20.0
@@ -363,13 +364,24 @@ func powerup_active() -> bool:
 
 
 func gameplay_time_scale() -> float:
-	return BLAST_TIME_SCALE if bool(_powerup.get("active", false)) \
-		and str(_powerup.kind) == "blast" and str(_powerup.stage) == "mark" else 1.0
+	if bool(_powerup.get("active", false)) and str(_powerup.kind) == "blast" and str(_powerup.stage) == "mark":
+		return 0.0 if float(_powerup.elapsed) + EPSILON < BLAST_FREEZE_SECONDS else BLAST_TIME_SCALE
+	return 1.0
+
+
+func presentation_delta(delta: float) -> float:
+	if gameplay_time_scale() >= 1.0:
+		return delta
+	var elapsed: float = float(_powerup.elapsed)
+	var frozen: float = minf(delta, maxf(0.0, BLAST_FREEZE_SECONDS - elapsed))
+	var slowed: float = minf(delta - frozen, maxf(0.0, float(_powerup.duration) - elapsed - frozen))
+	return slowed * BLAST_TIME_SCALE + delta - frozen - slowed
 
 
 func hit_stop_snapshot() -> Dictionary:
 	var scale: float = gameplay_time_scale()
 	return {"active": scale < 1.0, "time_scale": scale, "paused": paused,
+		"phase": "freeze" if is_zero_approx(scale) else "slow" if scale < 1.0 else "",
 		"remaining": maxf(0.0, float(_powerup.duration) - float(_powerup.elapsed)) if scale < 1.0 else 0.0}
 
 
@@ -886,6 +898,8 @@ func _powerup_boundary() -> float:
 		return next
 	if str(_powerup.kind) == "blast" and str(_powerup.stage) == "mark":
 		var boundary: float = maxf(0.0, float(_powerup.duration) - float(_powerup.elapsed))
+		if float(_powerup.elapsed) + EPSILON < BLAST_FREEZE_SECONDS:
+			boundary = minf(boundary, BLAST_FREEZE_SECONDS - float(_powerup.elapsed))
 		if int(_powerup.blast.marked) < _powerup.blast.target_ids.size():
 			boundary = minf(boundary, maxf(0.0, float(_powerup.blast.next_mark_at) - float(_powerup.elapsed)))
 		return boundary
@@ -1265,18 +1279,20 @@ func step(delta: float) -> void:
 			consumed = minf(consumed, maxf(0.0, _combo_remaining))
 		consumed = minf(consumed, _collection_batch_boundary())
 		consumed = minf(consumed, _powerup_boundary())
-		consumed = minf(consumed, _next_drag_gravity_boundary() / time_scale)
-		if _growth_pending and _settling_remaining() > EPSILON:
-			consumed = minf(consumed, _settling_remaining() / time_scale)
-		if _gravity_pending and _next_settlement() > EPSILON:
-			consumed = minf(consumed, _next_settlement() / time_scale)
+		if time_scale > 0.0:
+			consumed = minf(consumed, _next_drag_gravity_boundary() / time_scale)
+			if _growth_pending and _settling_remaining() > EPSILON:
+				consumed = minf(consumed, _settling_remaining() / time_scale)
+			if _gravity_pending and _next_settlement() > EPSILON:
+				consumed = minf(consumed, _next_settlement() / time_scale)
 		for active in fusions:
 			if bool(active.get("commit_pending", false)):
 				continue
 			var boundary: float = float(active.duration)
 			if str(active.operation) == "collect" and not bool(active.popped):
 				boundary = float(active.pop_at)
-			consumed = minf(consumed, maxf(0.0, boundary - float(active.elapsed)) / time_scale)
+			if time_scale > 0.0:
+				consumed = minf(consumed, maxf(0.0, boundary - float(active.elapsed)) / time_scale)
 		var full: bool = not _has_free_cell()
 		var ending_wait: bool = _finish_after_collection_commit
 		var danger_running: bool = full and full_elapsed >= 0.0 and not powerup_running and not ending_wait

@@ -43,6 +43,8 @@ func _init() -> void:
 
 
 func set_stage(state: Dictionary, celebrate: bool = false) -> void:
+	if _state == state and not celebrate:
+		return
 	_state = state.duplicate(true)
 	visible = int(state.get("number", 0)) > 0
 	_update_label()

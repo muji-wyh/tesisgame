@@ -8,6 +8,7 @@ signal audio_requested(cue: String)
 signal word_attempted(event_id: String, word_ids: Array[String], correct: bool)
 signal round_finished(result: Dictionary)
 signal finish_requested
+signal pause_requested
 signal changed(state: Dictionary)
 
 const JellyMatchModel = preload("res://scripts/jelly_match_model.gd")
@@ -134,6 +135,7 @@ func _init() -> void:
 	finish_button = FinishButton.new()
 	finish_button.name = "JellyFinish"
 	finish_button.accessibility_requested.connect(_request_finish)
+	finish_button.pause_requested.connect(_request_pause)
 	finish_button.finish_committed.connect(_finish_round)
 	finish_button.threshold_reached.connect(_finish_pull_ready)
 	finish_button.pull_started.connect(_finish_pull_changed)
@@ -1281,6 +1283,11 @@ func _finish_pull_ready() -> void:
 func _request_finish() -> void:
 	if _can_play() and _pointer == NO_POINTER and not _finish_is_pulling():
 		finish_requested.emit()
+
+
+func _request_pause() -> void:
+	if _can_play() and _pointer == NO_POINTER and not _finish_is_pulling():
+		pause_requested.emit()
 
 func _finish_round() -> void:
 	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling():

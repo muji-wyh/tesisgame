@@ -584,8 +584,12 @@ func _test_game_ui_wallet() -> void:
 	var first_event: String = _game_ui_merge(view, word)
 	var first_receipt: String = app._round_id + ":combo:" + first_event
 	check(model.combo_snapshot().count == 3 and app.coin_wallet.balance == 1
-		and app.coin_wallet._receipts.get(first_receipt, 0) == 1 and app._coin_counter.target == 1,
-		"GameUI credits one exact coin under its round-scoped combo receipt and updates the visible balance")
+		and app.coin_wallet._receipts.get(first_receipt, 0) == 1 and app._coin_counter.target == 0
+		and app._coin_flight.snapshot().active,
+		"GameUI saves the round-scoped combo coin but holds its visible balance until arrival")
+	app._coin_flight.advance(2.0)
+	check(app._coin_counter.target == 1 and app._coin_counter.displayed == 1.0,
+		"The saved combo coin reaches the real header through its arrival-driven counter")
 	var wallet_path: String = app.coin_wallet._path
 	check(DirAccess.make_dir_absolute(wallet_path + ".pending") == OK, "Block the real wallet's next native staging write")
 	var retry_event: String = _game_ui_merge(view, word)
@@ -600,8 +604,11 @@ func _test_game_ui_wallet() -> void:
 	var retry_receipt: String = app._round_id + ":combo:" + retry_event
 	check(not model.combo_snapshot().pending and model.combo_snapshot().count == 4
 		and app.coin_wallet.balance == 2 and app.coin_wallet._receipts.get(retry_receipt, 0) == 1
-		and app._coin_counter.target == 2 and app._jelly_interaction_allowed(),
-		"The real Retry saving action reloads storage, pays once, completes the merge, and restores input")
+		and app._coin_counter.target == 1 and app._coin_flight.snapshot().active and app._jelly_interaction_allowed(),
+		"The real Retry saving action pays once, completes the merge, restores input and launches the recovered coin")
+	app._coin_flight.advance(2.0)
+	check(app._coin_counter.target == 2 and app._coin_counter.displayed == 2.0,
+		"The recovered saved reward increments the header only through the coin's arrival")
 	app._retry_storage()
 	check(model.combo_snapshot().count == 4 and app.coin_wallet.balance == 2,
 		"Repeated application retry cannot replay a committed combo")

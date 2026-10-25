@@ -18,7 +18,7 @@ is used.
 | Actual source | `Textures/coins.png`, 1024 x 1024 RGBA, texture GUID `1699dbd54fcee0a46856002fbff1b84a` |
 | Source SHA-256 | `ee6f261c5c0ef92aeef1f1885375336d472f166bd6835ee18957626f46a98077` |
 | Conversion status | Source inspected; two optimized PNG build inputs prepared and inspected over pale and dark backgrounds |
-| Runtime status | Integrated into the header wallet and arrival-driven chest payout; native captures reviewed at desktop, phone portrait and short landscape sizes |
+| Runtime status | Integrated into the header wallet, chest payout and arrival-driven Jelly combo bonuses; existing chest captures reviewed at desktop, phone portrait and short landscape sizes |
 
 The package README explicitly describes monochrome textures intended for vertex
 color and gradient recoloring. `Materials/Coins01.mat` references the inspected
@@ -57,6 +57,12 @@ reward timing belong to the game. A frame should retain its original proportions
 randomly switching these four views as an animation would introduce visible jumps.
 The HUD uses the front face without idle motion. Reduced motion can retain that
 same front face without flight or spin.
+
+Combo payouts reuse these already acquired runtime inputs without a new asset
+download. Their one to three coins originate at the combo reward icon and retain
+one authored perspective each while following the game's curved travel. The
+game owns that flight and the wallet's scrolling digits; neither is a supplied
+source animation. Chest payouts keep their larger eight-to-fourteen-coin burst.
 
 The common source-cell crop is `(48, 48, 464, 464)` within each 512px cell, followed
 by Lanczos downsampling to 128px. All four source silhouettes fit that crop. The

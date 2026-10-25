@@ -68,6 +68,9 @@ const groups = {
 
 const allGroups = Object.keys(groups);
 
+groups.jelly.godot.push('jelly_pause_tests');
+groups['word-jelly'].godot.push('jelly_pause_tests', 'word_jelly_practice_tests', 'coin_reward_flow_tests');
+
 function createPlan(names = ['all']) {
   const godot = new Set(), node = new Set();
   for (const name of names.flatMap(name => name === 'all' ? allGroups : [name])) {

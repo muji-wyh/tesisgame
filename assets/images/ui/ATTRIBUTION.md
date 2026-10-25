@@ -30,6 +30,21 @@ integrated hashes are recorded in `controls/sources.json`. It has no animation.
 The locked control pairs the static icon with "Lv3"; its ready artwork and
 effects are reserved for the unlocked state.
 
+`controls/player-pause.svg` was acquired from the same v3.35.0 release on October
+25, 2026 and rendered for source inspection before integration into the Jelly
+header. It keeps the original pause paths and existing white/theme-tint
+conversion; original and integrated hashes are in `controls/sources.json`.
+It is static MIT-licensed artwork, with no animation clips.
+
+Jelly Words' current-stage goal cards reuse the exact vocabulary artwork through
+`WordArt`; creator, source, per-word license and motion availability remain in
+[the word-library record](../../../docs/assets/word-library.md). Image-free
+terms retain text, with no substitute picture. Their goal header reuses
+`mastery-medal.webp` below, while the three mastery accents reuse the acquired
+static Toon FX sparkle documented in
+[Jelly level feedback](../../../docs/assets/jelly-level-feedback.md). No new
+illustration or effect asset was acquired for these cards.
+
 ## Finish and mastery
 
 `finish-flag.svg` is the `flag-check` icon from Tabler Icons v3.35.0 by

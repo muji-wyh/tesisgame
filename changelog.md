@@ -7,6 +7,17 @@ removed. Use the [documentation index](docs/README.md) for current guidance.
 
 ## 2026-10-25
 
+- Added combo-bonus coins flying from their gold acknowledgement to the header,
+  with arrival-driven scrolling digits and pause-safe, deduplicated payouts.
+- Made collection hit stop visible with a short world hold, well focus and a
+  longer outward marking release, including animated word art and daylight.
+- Made the original Jelly header control tap to Pause / Resume and pull down
+  to finish, with a retained downward teaching cue and clear action labels.
+  Manual pause preserves live operations and visual ages through tab interruptions.
+- Changed Jelly Words stages to three targets initially, adding one per stage
+  up to eight, with each current word's durable mastery progress displayed in
+  unused sidebar space or the existing compact stage rail. All word cards use
+  proportional green background fill; compact cards omit progress numbers.
 - Added local 0.12-speed hit stop between committed collection and the final
   outward marking impact, with source windup, accelerating light, planted
   compression/rebound and acquired material-impact audio.

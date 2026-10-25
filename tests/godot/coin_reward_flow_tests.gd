@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
+const Data = preload("res://scripts/game_data.gd")
 const Wallet = preload("res://scripts/coin_wallet.gd")
 const Progress = preload("res://scripts/medal_progress.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
@@ -435,6 +436,91 @@ func check_startup_pending_memory_retry() -> void:
 	await dispose(app)
 
 
+func check_combo_coins() -> void:
+	var app = await make_app("word_jelly")
+	var view = app._word_jelly
+	view.set_process(false)
+	var word: Dictionary = app.data.words.filter(func(item: Dictionary) -> bool: return str(item.id) == "cat")[0]
+	check(view.configure([word], app.growth.learning_age(), Data.theme(app.model.theme_id), app.data.chests, true, 405),
+		"The combo flight fixture uses a real current-age word and the normal wallet callback")
+	app._sync_jelly()
+	var expected: int = app.coin_wallet.balance
+	for count in range(1, 13):
+		view.game.cells.clear()
+		view.game.spawn_interval = 10000.0
+		for index in range(2):
+			var tile: Dictionary = view.game._new_word_root(word, 0) if index == 0 else view.game._new_picture_tile(word, 0)
+			tile.column = index
+			tile.row = 7
+			tile.age = 100.0
+			tile.settling = false
+			tile.arrival = false
+			tile.falling = false
+			view.game.cells.append(tile)
+		check(view.game.try_merge(int(view.game.cells[0].id), int(view.game.cells[1].id)) == "merged",
+			"A real root-picture merge starts combo %d" % count)
+		var event_id: String = str(view.game.fusions.back().attempt_id)
+		var bonus: int = Economy.jelly_combo_bonus(count)
+		var storage = app.get_meta("coin_test_storage")
+		storage.coin_writable = count != 4
+		if count == 10:
+			app.set_reduced_motion(true)
+		view.game.step(1.0)
+		if count == 4:
+			check(view.game.combo_snapshot().pending and not app._coin_flight.snapshot().active
+				and app.coin_wallet.balance == expected,
+				"A failed combo save cannot launch coins or advance the header")
+			storage.coin_writable = true
+			check(app.coin_wallet.load_state(), "The failed combo wallet can recover")
+			view.game.retry_combo_credit()
+		check(view.game.combo_count == count and app.coin_wallet.balance == expected + bonus,
+			"Combo %d persists its exact reward once before presentation" % count)
+		if bonus == 0:
+			check(not app._coin_flight.snapshot().active,
+				"Unrewarded opening combos do not invent flying coins")
+			continue
+		var events: Array = app._coin_flight._events
+		check(events.size() == 1 and events[0].get("kind") == "combo"
+			and events[0].count == bonus and events[0].amount == bonus,
+			"One to three acquired coin sprites represent the actual combo award, not a chest burst")
+		if not events.is_empty():
+			check(events[0].source.distance_to(view._combo_hud._coin.get_global_rect().get_center()) < 0.01,
+				"Combo coins originate at the visible bonus coin, not the collected jelly or screen center")
+		check(app._coin_counter.target == expected and app._coin_counter.displayed == float(expected),
+			"The saved combo reward stays out of the displayed balance until its coins arrive")
+		if count == 3:
+			app._coin_flight.advance(0.2)
+			app._pause_jelly()
+			var paused_events: Array = app._coin_flight._events.duplicate(true)
+			app._process(0.3)
+			check(app._coin_flight._events == paused_events and app._coin_counter.target == expected,
+				"Manual Pause freezes the flight and rolling-counter timeline without destroying the reward")
+			app._jelly_pause_menu.keep_playing_button.pressed.emit()
+			app._coin_flight.advance(Flight.BURST_SECONDS + Flight.TRAVEL_SECONDS - 0.22)
+		elif count >= 10:
+			app._coin_flight.advance(0.25)
+		else:
+			app._coin_flight.advance(Flight.BURST_SECONDS + Flight.TRAVEL_SECONDS - 0.02)
+		if count < 10:
+			check(app._coin_counter.target == expected,
+				"No combo number increment occurs before the first sprite reaches the wallet")
+			app._coin_flight.advance(0.03)
+			check(app._coin_counter.target > expected and app._coin_counter.displayed > float(expected)
+				and app._coin_counter.displayed < float(app._coin_counter.target),
+				"Arriving combo coins visibly roll the displayed digits instead of jumping immediately")
+		app._coin_flight.advance(2.0)
+		expected += bonus
+		check(not app._coin_flight.snapshot().active and app._coin_counter.target == expected
+			and app._coin_counter.displayed == float(expected),
+			"Every arrival converges to the exact durable combo balance, including reduced motion")
+		var duplicate: Dictionary = app._credit_word_jelly_combo(event_id, bonus)
+		view.game.retry_combo_credit()
+		check(duplicate.ok and duplicate.duplicate and app.coin_wallet.balance == expected
+			and not app._coin_flight.snapshot().active and app._word_jelly_credits.is_empty(),
+			"A replayed combo receipt cannot pay again, relaunch a flight, or retain a stale presentation")
+	await dispose(app)
+
+
 func check_header() -> void:
 	var app = await make_app("match")
 	for high_balance in [false, true]:
@@ -483,6 +569,7 @@ func _run() -> void:
 	await check_reduced()
 	await check_pending_reload()
 	await check_startup_pending_memory_retry()
+	await check_combo_coins()
 	await check_header()
 	print("Coin reward flow: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

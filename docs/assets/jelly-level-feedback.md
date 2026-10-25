@@ -130,9 +130,11 @@ collection queues the reaction. The model captures exact body IDs; missing,
 held, fusing and promised batch pickups are not cosmetic substitute targets.
 
 The acquired portal light, radial rays and four-point sparkle gather at the
-collected body's actual position. Board motion and ambient Jelly effects run at
-0.12 speed during marking; no global engine time scale is changed. An 80 ms
-windup precedes accelerating 260 ms outward bolts with five tapered texture
+collected body's actual position. A 100 ms world hold precedes local 0.12-speed
+board motion, word artwork and ambient light; no global engine time scale is
+changed. A normal-motion well-only focus shade leaves the acquired source
+energy bright even on an otherwise stationary board; reduced motion omits that
+focus transition. A 180 ms windup precedes accelerating 420 ms outward bolts with five tapered texture
 samples. Up to six groups launch 60 ms apart, nearer bodies first. Each impact
 marks its body and requests audio on arrival, never at launch. The last impact
 ends slow motion immediately, followed by a 100 ms normal-speed planted recovery

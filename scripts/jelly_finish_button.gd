@@ -6,12 +6,13 @@ signal pull_canceled
 signal threshold_reached
 signal finish_committed
 signal accessibility_requested
+signal pause_requested
 
 const Style = preload("res://scripts/ui_style.gd")
 const Surface = preload("res://scripts/jelly_finish_surface.gdshader")
 const GEL = preload("res://assets/images/jelly-match/gel-coral.png")
 const SHAPE_SDF = preload("res://assets/images/jelly-match/gel-coral-material.png")
-const FLAG = preload("res://assets/images/ui/finish-flag.svg")
+const PAUSE = preload("res://assets/images/ui/controls/player-pause.svg")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const TAP_SLOP_PX: float = 8.0
@@ -25,6 +26,7 @@ var _pulling: bool = false
 var _armed: bool = false
 var _returning: bool = false
 var _tap_hint: bool = false
+var _paused_hint: bool = false
 var _tap_elapsed: float = 0.0
 var _tap_start_pull: float = 0.0
 var _gesture_travel: float = 0.0
@@ -54,7 +56,8 @@ var _gel := ShaderMaterial.new()
 
 
 func _init() -> void:
-	text = "Finish"
+	text = "Pause"
+	tooltip_text = "Tap to pause. Pull down to finish."
 	focus_mode = Control.FOCUS_ALL
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	mouse_default_cursor_shape = Control.CURSOR_DRAG
@@ -68,7 +71,7 @@ func _init() -> void:
 	add_theme_color_override("font_outline_color", Color.TRANSPARENT)
 	add_theme_constant_override("outline_size", 0)
 	add_theme_font_size_override("font_size", 1)
-	set("accessibility_name", "Finish game. Pull downward until it lights up, then release. Press Enter for confirmation.")
+	set("accessibility_name", "Pause game. Tap or press Enter to pause. Pull down until it lights up, then release to finish.")
 	for image: TextureRect in [_glow, _surface, _flag]:
 		_prepare_texture(image)
 		add_child(image)
@@ -77,7 +80,7 @@ func _init() -> void:
 	_gel.shader = Surface
 	_gel.set_shader_parameter("shape_sdf", SHAPE_SDF)
 	_surface.material = _gel
-	_flag.texture = FLAG
+	_flag.texture = PAUSE
 	_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_label.add_theme_font_override("font", Style.HEADING_FONT)
 	_label.add_theme_color_override("font_color", Color("#643f3d"))
@@ -91,7 +94,7 @@ func _init() -> void:
 		sparkle.texture = SPARKLE
 		add_child(sparkle)
 		_sparkles.append(sparkle)
-	pressed.connect(_request_accessible_finish)
+	pressed.connect(_request_accessible_pause)
 	resized.connect(_on_resized)
 	visibility_changed.connect(_on_visibility_changed)
 	focus_exited.connect(_on_focus_exited)
@@ -149,6 +152,19 @@ func set_hint_allowed(value: bool) -> void:
 			_update_visual()
 
 
+func show_tap_hint(while_paused: bool = false) -> void:
+	if _reduced_motion:
+		return
+	_paused_hint = while_paused
+	_tap_hint = true
+	_tap_elapsed = 0.0
+	_tap_start_pull = _visual_pull
+	_returning = false
+	_velocity = 0.0
+	_sideways = 0.0
+	_update_visual()
+
+
 func _process(delta: float) -> void:
 	advance(delta)
 
@@ -158,9 +174,9 @@ func advance(delta: float) -> void:
 		return
 	if disabled != _was_disabled:
 		_was_disabled = disabled
-		if disabled:
+		if disabled and not _paused_hint:
 			cancel_pull(true)
-	if not is_visible_in_tree() or disabled:
+	if not is_visible_in_tree() or (disabled and not _paused_hint):
 		return
 	_clock += delta
 	var return_delta: float = delta
@@ -178,6 +194,7 @@ func advance(delta: float) -> void:
 			_visual_pull = 0.0
 			_returning = false
 			_tap_hint = false
+			_paused_hint = false
 		else:
 			var remaining: float = minf(return_delta, 0.5)
 			while remaining > 0.0:
@@ -216,7 +233,7 @@ func advance(delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if not is_visible_in_tree() or disabled:
-		if _pulling or _tap_hint:
+		if _pulling or (_tap_hint and not _paused_hint):
 			cancel_pull(true)
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -331,14 +348,11 @@ func _release_pull(point: Vector2) -> void:
 		if tapped and not _reduced_motion:
 			# Demonstrate the gesture without owning input or advancing Finish.
 			# The same anchored skin and spring as a real pull teach its direction.
-			_tap_hint = true
-			_tap_elapsed = 0.0
-			_tap_start_pull = _visual_pull
-			_returning = false
-			_velocity = 0.0
-			_sideways = 0.0
+			show_tap_hint()
 		_update_visual()
 		pull_canceled.emit()
+		if tapped:
+			pause_requested.emit()
 
 
 func cancel_pull(immediate: bool = false) -> void:
@@ -349,6 +363,7 @@ func cancel_pull(immediate: bool = false) -> void:
 	_pointer_id = -2
 	_pull_distance = 0.0
 	_tap_hint = false
+	_paused_hint = false
 	_tap_elapsed = 0.0
 	_gesture_travel = 0.0
 	_hint_elapsed = 0.0
@@ -374,10 +389,10 @@ func _cancel_missing_release(pointer: int, serial: int) -> void:
 		cancel_pull()
 
 
-func _request_accessible_finish() -> void:
+func _request_accessible_pause() -> void:
 	if not disabled and is_visible_in_tree() and not _pulling:
 		cancel_pull(true)
-		accessibility_requested.emit()
+		pause_requested.emit()
 
 
 func _on_resized() -> void:
@@ -434,7 +449,7 @@ func _update_visual() -> void:
 	if _visual_pull < 0.0:
 		text_y = (size.y + _visual_pull) * caption_t
 	var text_center := Vector2(size.x * 0.5 + _sideways, text_y)
-	_label.text = "Drag to\nfinish" if instructing else text
+	_label.text = ("Release to\nfinish" if _armed else "Pull to\nfinish") if instructing else text
 	_label.add_theme_font_size_override("font_size", maxi(1, roundi(12.0 * unit)))
 	var label_width: float = Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, maxi(1, roundi(12.0 * unit))).x + 2.0 * unit
 	var flag_edge: float = 15.0 * unit

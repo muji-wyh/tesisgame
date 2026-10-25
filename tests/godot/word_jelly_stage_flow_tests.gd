@@ -32,29 +32,33 @@ func _capture(filename: String) -> void:
 func _selection() -> void:
 	var pool: Array[Dictionary] = []
 	var mastered: Dictionary = {"word0": true}
-	for index in range(24):
+	for index in range(80):
 		pool.append({"id": "word%d" % index, "text": "word%d" % index, "min_age": 3 if index < 6 else 4})
 	var stages := Stages.new()
 	stages.configure(pool, func(word: Dictionary) -> bool: return mastered.has(str(word.id)), 37)
-	check(stages.number == 1 and stages.words.size() == 10, "A stage selects exactly ten distinct unmastered targets")
+	check(stages.number == 1 and stages.words.size() == 3, "Stage one selects exactly three distinct unmastered targets")
 	check(not stages.snapshot().word_ids.has("word0"), "Previously mastered words never enter a new stage")
-	check(stages.words.filter(func(word: Dictionary) -> bool: return word.min_age == 3).size() == 5,
-		"Five remaining younger words combine with five next-age words")
+	check(stages.words.all(func(word: Dictionary) -> bool: return word.min_age == 3),
+		"The first three targets come from the earliest outstanding age")
 	var first: Array = stages.snapshot().word_ids
-	for index in range(8):
-		mastered[first[index]] = true
-	check(stages.refresh().size() == 8 and stages.remaining.size() == 2 and stages.words.size() == 10,
-		"Mastering eight shrinks supply to two while keeping this stage's ten targets fixed")
-	for id: String in first:
-		mastered[id] = true
-	stages.refresh()
-	check(stages.begin_next() and stages.number == 2 and stages.words.size() == 10,
-		"Completing ten opens the next ten-word stage")
-	for id: String in stages.snapshot().word_ids:
-		check(not first.has(id), "The next stage never repeats a mastered target")
-		mastered[id] = true
-	stages.refresh()
-	check(stages.begin_next() and stages.words.size() == 3, "The last partial stage uses only the remaining available words")
+	mastered[first[0]] = true
+	check(stages.refresh().size() == 1 and stages.remaining.size() == 2 and stages.words.size() == 3,
+		"Mastery shrinks supply without changing this stage's original three targets")
+	var seen: Dictionary = {}
+	for expected: int in [3, 4, 5, 6, 7, 8, 8, 8]:
+		check(stages.words.size() == expected, "Each completed stage increases the target count by one, capped at eight")
+		for id: String in stages.snapshot().word_ids:
+			check(not seen.has(id), "New stages never repeat a mastered target")
+			seen[id] = true
+			mastered[id] = true
+		stages.refresh()
+		check(stages.begin_next(), "Outstanding targets start another progressive stage")
+	while stages.words.size() == 8:
+		for id: String in stages.snapshot().word_ids:
+			mastered[id] = true
+		stages.refresh()
+		check(stages.begin_next(), "The remaining real words continue without padding the stage")
+	check(stages.words.size() == 6, "The final partial stage uses only the six available words")
 	for word: Dictionary in stages.words:
 		mastered[word.id] = true
 	stages.refresh()
@@ -82,26 +86,62 @@ func _run() -> void:
 		quit(1)
 		return
 	var first: Array = app._word_jelly_stages.snapshot().word_ids
-	check(first.size() == 10 and view.game._words.size() == 10, "The app scopes the initial board and supply to ten targets")
+	check(first.size() == 3 and view.game._words.size() == 3, "The app scopes the initial board and supply to three targets")
+	if first.size() != 3:
+		app.free()
+		quit(1)
+		return
+	var saved_words: Array = app._word_jelly_stages.words.duplicate(true)
+	var saved_remaining: Array = app._word_jelly_stages.remaining.duplicate(true)
+	var saved_skills: Dictionary = app._jelly_stage_professional_skills.duplicate(true)
+	var professional_word: Dictionary = {"id": "practice:professional", "text": "warehouse", "track": "professional"}
+	app._word_jelly_stages.words.assign([professional_word])
+	app._word_jelly_stages.remaining.assign([professional_word])
+	app._jelly_stage_professional_skills = {"practice:professional": {
+		"read": {"streak": 1, "earned": false}, "match": {"streak": 2, "earned": false}}}
+	check(app._jelly_stage_snapshot().practice[0].current == 2
+		and not app._jelly_stage_snapshot().practice[0].mastered,
+		"Professional practice displays the strongest current skill streak without combining unrelated answers")
+	app._jelly_stage_professional_skills["practice:professional"].read = {"streak": 0, "earned": true}
+	check(app._jelly_stage_snapshot().practice[0].current == 3
+		and app._jelly_stage_snapshot().practice[0].mastered,
+		"Already earned professional mastery stays complete even after its current streak changes")
+	app._word_jelly_stages.words.assign(saved_words)
+	app._word_jelly_stages.remaining.assign(saved_remaining)
+	app._jelly_stage_professional_skills = saved_skills
+	check(view.snapshot().get("practice", {}).get("words", []).size() == 3,
+		"The real game displays each current stage word and its individual practice progress")
 	check(not app._reward_confetti.is_active(), "Opening a stage does not celebrate an unearned completion")
 	app._fragment_confetti_requested("word_jelly")
 	check(not app._reward_confetti.is_active(), "Chest acquisition and upgrades cannot request Jelly Words confetti")
 	await _capture("jelly-stage-opening")
 	var round_id: String = app._round_id
 	var context: Dictionary = app._round_context.duplicate(true)
-	for index in range(8):
-		for attempt in range(3):
-			app._record_growth("stage-test-%d-%d" % [index, attempt], [first[index]], true)
+	app._record_growth("stage-first-success", [first[0]], true)
+	var practice: Array = view.snapshot().get("practice", {}).get("words", [])
+	check(practice.any(func(item: Dictionary) -> bool: return item.id == first[0] and item.current == 1 and item.required == 3),
+		"One durably saved correct answer updates the matching practice row to one of three")
+	app._record_growth("stage-wrong-answer", [first[0]], false)
+	check(view.snapshot().practice.words.any(func(item: Dictionary) -> bool: return item.id == first[0] and item.current == 0),
+		"A saved wrong answer resets only its word's displayed practice streak")
+	for attempt in range(3):
+		app._record_growth("stage-test-0-%d" % attempt, [first[0]], true)
+	check(view.snapshot().practice.words.any(func(item: Dictionary) -> bool:
+		return item.id == first[0] and item.current == 3 and item.mastered),
+		"A mastered word remains visibly complete in this stage's practice list")
 	check(app._word_jelly_stages.remaining.size() == 2 and view.game._words.size() == 2,
-		"Eight saved mastered targets leave only two supply words")
+		"One saved mastered target leaves only the two remaining stage words in supply")
 	for tile: Dictionary in view.game.upcoming:
-		check(not first.slice(0, 8).has(str(tile.get("source_word_id", ""))), "Advertised supply removes already-mastered targets")
+		check(str(tile.get("source_word_id", "")) != str(first[0]), "Advertised supply removes already-mastered targets")
 	var original_path: String = app.growth._path
 	app.growth._path = directory + "/missing/growth.cfg"
 	for attempt in range(3):
-		app._record_growth("unsaved-%d" % attempt, [first[8]], true)
+		app._record_growth("unsaved-%d" % attempt, [first[1]], true)
 	check(app._growth_save_failed and app._word_jelly_stages.remaining.size() == 2,
 		"Failed saves never remove a target or advance the stage")
+	check(view.snapshot().practice.words.any(func(item: Dictionary) -> bool:
+		return item.id == first[1] and item.current == 0 and not item.mastered),
+		"A failed progress save cannot claim mastery or fill a practice bar")
 	check(not app._reward_confetti.is_active(), "Failed mastery saves cannot celebrate a stage")
 	app.growth._path = original_path
 	app._retry_storage()
@@ -110,9 +150,9 @@ func _run() -> void:
 	var board_ids: Array = view.game.cells.map(func(tile: Dictionary) -> int: return int(tile.id))
 	view.game.fragment_count = 3
 	for attempt in range(3):
-		app._record_growth("last-%d" % attempt, [first[9]], true)
+		app._record_growth("last-%d" % attempt, [first[2]], true)
 	app._advance_word_jelly_stages(0.1)
-	check(app._word_jelly_stages.number == 2 and view.game._words.size() == 10, "The tenth mastery automatically starts stage two")
+	check(app._word_jelly_stages.number == 2 and view.game._words.size() == 4, "Three mastered words automatically start a four-word stage two")
 	var stage_key: String = round_id + ":word_jelly:stage:1"
 	check(app._reward_confetti.is_active() and app._reward_confetti.snapshot().keys.has(stage_key),
 		"Completing the current stage launches confetti keyed to that stage, not its chest tier")
