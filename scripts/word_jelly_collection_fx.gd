@@ -251,15 +251,14 @@ func _draw_fireworks(entry: Dictionary, progress: float) -> void:
 		count = roundi(float(count) * 0.45)
 	var main_count: int = roundi(float(count) * (0.50 if level == 4 else 0.34))
 	var secondary_count: int = maxi(5, (count - main_count) / (group_count - 1))
-	# The central gold release opens first; distinct colored blossoms open along
-	# its outward path. A long dim ember tail preserves the space after the peak.
+	# Every colored layer launches from the collected body, including delayed blooms.
 	for group in range(group_count):
 		var delay: float = _firework_delay(level, group)
 		var age: float = (progress - delay) * float(entry.profile.seconds)
 		if age < 0.0:
 			continue
 		var life: float = (1.0 - delay) * float(entry.profile.seconds)
-		var base: Vector2 = entry.origin + _firework_offset(level, group, radius)
+		var base: Vector2 = entry.origin
 		var reach: float = radius * _firework_reach(level, group)
 		var spokes: int = main_count if group == 0 else secondary_count
 		var tint: Color = _palette(entry, group)
@@ -300,29 +299,6 @@ func _firework_delay(level: int, group: int) -> float:
 		8: return 0.055 + float(group - 1) * 0.038
 		9: return 0.05 + float(group - 1) * 0.038
 	return 0.0
-
-
-func _firework_offset(level: int, group: int, radius: float) -> Vector2:
-	if group == 0:
-		return Vector2.ZERO
-	match level:
-		4:
-			return Vector2.from_angle(-PI * 0.5 + float(group - 1) * TAU / 3.0) * radius * 0.62
-		5:
-			var side: float = -1.0 if group % 2 == 1 else 1.0
-			var row: int = (group - 1) / 2
-			return Vector2(side * (0.51 - row * 0.12), -0.36 + row * 0.65) * radius
-		6:
-			return Vector2.from_angle(-PI * 0.5 + float(group - 1) * TAU / 6.0) * radius * 0.57
-		7:
-			return Vector2.from_angle(-PI * 0.95 + float(group - 1) * PI * 0.90 / 6.0) * radius * 0.64
-		8:
-			var side: float = -1.0 if group % 2 == 1 else 1.0
-			var row: int = (group - 1) / 2
-			return Vector2(side * (0.60 - row * 0.075), -0.52 + row * 0.34) * radius
-		9:
-			return Vector2.from_angle(-PI * 0.5 + float(group - 1) * TAU / 9.0) * radius * 0.64
-	return Vector2.ZERO
 
 
 func _firework_reach(level: int, group: int) -> float:

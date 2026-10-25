@@ -19,6 +19,7 @@ const ReadPanel = preload("res://scripts/jelly_read_panel.gd")
 const ComboHUD = preload("res://scripts/word_jelly_combo.gd")
 const COLLECTION_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const POWERUP_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const POWERUP_RAYS = preload("res://assets/chests/milestone/rays.png")
 const WELL_CLOUDS = preload("res://assets/images/jelly-match/well/clouds.png")
 const WELL_SURFACE = preload("res://scripts/word_jelly_well.gdshader")
 
@@ -1162,34 +1163,69 @@ func _pose_blast_marks(state: Dictionary, stamps: Array[Dictionary], unit: float
 	var blast: Dictionary = state.get("blast", {})
 	var ids: Array = blast.get("target_ids", [])
 	var group_size: int = maxi(1, int(blast.get("group_size", 1)))
+	var clock: float = float(state.clock)
+	var last_launch: float = WordModel.BLAST_MARK_WINDUP_SECONDS \
+		+ floorf(float(maxi(0, ids.size() - 1)) / group_size) * WordModel.BLAST_MARK_BEAT_SECONDS
+	var sources: Dictionary = {}
 	for index in range(ids.size()):
 		var id: int = int(ids[index])
 		if not _tiles.has(id) or not blast.origins.has(id):
-			continue
-		var age: float = float(state.clock) - floorf(float(index) / group_size) * WordModel.BLAST_MARK_BEAT_SECONDS
-		if age < 0.0:
 			continue
 		var origin: Dictionary = blast.origins[id]
 		var level: int = int(origin.level)
 		var tint := Color.from_hsv(float(CollectionEffects.profile(level).hue), 0.62, 1.0)
 		var center: Vector2 = _tiles[id].get_rect().get_center()
 		var start: Vector2 = _tile_rect(origin).get_center()
-		var pulse: float = 1.0 - smoothstep(0.12, 0.46, age)
-		if not reduced_motion and age < 0.18:
-			var travel: float = smoothstep(0.0, 0.18, age)
-			var point: Vector2 = start.lerp(center, travel)
-			_powerup_stamp(stamps, COLLECTION_GLOW, point, Vector2.ONE * unit * 0.90, Color(tint, 0.64))
-			_powerup_stamp(stamps, POWERUP_SPARKLE, point, Vector2.ONE * unit * 0.36, Color(tint.lightened(0.40), 0.95))
-		var strength: float = 0.18 + pulse * 0.46
-		_powerup_stamp(stamps, COLLECTION_GLOW, center, Vector2.ONE * unit * 1.55, Color(tint, strength))
+		var source_key := Vector2i(int(origin.column), int(origin.row))
+		if not sources.has(source_key) and clock < last_launch + 0.20:
+			sources[source_key] = true
+			var charge: float = 1.0 if reduced_motion else smoothstep(0.0, WordModel.BLAST_MARK_WINDUP_SECONDS, clock)
+			var source_fade: float = 1.0 - smoothstep(last_launch, last_launch + 0.20, clock)
+			_powerup_stamp(stamps, COLLECTION_GLOW, start, Vector2.ONE * unit * (0.60 + charge * 0.80),
+				Color(tint, source_fade * 0.82))
+			_powerup_stamp(stamps, POWERUP_RAYS, start, Vector2.ONE * unit * (0.48 + charge * 0.72),
+				Color(tint.lightened(0.35), source_fade * 0.72))
+		var launch_at: float = WordModel.BLAST_MARK_WINDUP_SECONDS \
+			+ floorf(float(index) / group_size) * WordModel.BLAST_MARK_BEAT_SECONDS
+		var age: float = clock - launch_at
+		if age < 0.0:
+			continue
+		var impact_age: float = age - WordModel.BLAST_MARK_FLIGHT_SECONDS
+		if impact_age < 0.0:
+			if not reduced_motion:
+				var direction: Vector2 = center - start
+				var travel: float = pow(clampf(age / WordModel.BLAST_MARK_FLIGHT_SECONDS, 0.0, 1.0), 2.2)
+				var point: Vector2 = start.lerp(center, travel)
+				for tail in range(5, 0, -1):
+					var prior: float = maxf(0.0, age - tail * 0.018)
+					var behind: Vector2 = start.lerp(center, pow(prior / WordModel.BLAST_MARK_FLIGHT_SECONDS, 2.2))
+					var strength: float = 1.0 - tail / 6.0
+					_powerup_stamp(stamps, POWERUP_SPARKLE, behind,
+						Vector2(unit * (0.22 + strength * 0.22), unit * 0.12),
+						Color(tint, strength * 0.78), direction.angle())
+				_powerup_stamp(stamps, COLLECTION_GLOW, point, Vector2.ONE * unit * 0.72, Color(tint, 0.86))
+				_powerup_stamp(stamps, POWERUP_SPARKLE, point, Vector2(unit * 0.42, unit * 0.30),
+					Color(tint.lightened(0.50), 1.0), direction.angle())
+			continue
+		if index >= int(blast.marked):
+			continue
+		var pulse: float = 0.50 if reduced_motion else 1.0 - smoothstep(0.04, 0.26, impact_age)
+		_powerup_stamp(stamps, COLLECTION_GLOW, center, Vector2.ONE * unit * 1.55, Color(tint, 0.18 + pulse * 0.56))
+		if not reduced_motion and impact_age < 0.22:
+			_powerup_stamp(stamps, POWERUP_RAYS, center, Vector2.ONE * unit * (0.78 + impact_age * 2.2),
+				Color(tint.lightened(0.35), pulse * 0.78))
 		for spark in range(4):
-			var angle: float = spark * TAU / 4.0 + (0.0 if reduced_motion else age * 1.4)
-			var point: Vector2 = center + Vector2.from_angle(angle) * unit * 0.48
-			_powerup_stamp(stamps, POWERUP_SPARKLE, point, Vector2.ONE * unit * (0.16 + pulse * 0.08),
-				Color(tint.lightened(0.45), 0.54 + pulse * 0.42), angle)
-		if not reduced_motion and age < 0.40:
-			var squeeze: float = sin(clampf(age / 0.40, 0.0, 1.0) * PI) * 0.09
-			_tiles[id].deform(0.0, 0.0, Vector2(1.0 + squeeze, 1.0 - squeeze))
+			var angle: float = spark * TAU / 4.0
+			var point: Vector2 = center + Vector2.from_angle(angle) * unit * (0.43 + pulse * 0.08)
+			_powerup_stamp(stamps, POWERUP_SPARKLE, point, Vector2.ONE * unit * (0.14 + pulse * 0.14),
+				Color(tint.lightened(0.45), 0.48 + pulse * 0.48), angle)
+		if not reduced_motion and impact_age < 0.30:
+			var load: float = smoothstep(0.0, 0.035, impact_age) * (1.0 - smoothstep(0.055, 0.13, impact_age)) * 0.22
+			var rebound: float = sin(clampf((impact_age - 0.10) / 0.18, 0.0, 1.0) * PI) * 0.06
+			var squeeze: float = load - rebound
+			# The foot and shadow stay planted; only the acquired gel skin takes the load.
+			_tiles[id].deform(squeeze * 0.12, impact_age * 20.0, Vector2(1.0 + squeeze * 0.68, 1.0 - squeeze))
+			_tiles[id].set_support(0.0, maxf(0.0, squeeze) / 0.22)
 
 
 func _sync_preview() -> void:
@@ -1265,16 +1301,17 @@ func _process(delta: float) -> void:
 	_reveal_frame_end = -1.0
 	_powerup_frame_end = -1.0
 	if _can_play() and delta <= 0.5:
+		var board_delta: float = delta * game.gameplay_time_scale()
 		_combo_hud.advance(delta)
 		_stage_banner.advance(delta)
-		_presentation_elapsed += delta
-		_collection_effects.advance(delta)
+		_presentation_elapsed += board_delta
+		_collection_effects.advance(board_delta)
 		var powerup: Dictionary = game.powerup_snapshot()
 		if bool(powerup.active) and str(powerup.kind) == "fragments":
 			_powerup_frame_end = float(powerup.elapsed) + delta
 			_powerup_frame_receipt = str(powerup.receipt_id)
 			_powerup_frame_generation = _generation
-		_word_reveal.advance(delta)
+		_word_reveal.advance(board_delta)
 		if game.collection_batch_active():
 			# New cards keep their collection offsets even when a frame spans several beats.
 			_reveal_frame_end = float(game.collection_batch_snapshot().elapsed) + delta
@@ -1287,7 +1324,7 @@ func _process(delta: float) -> void:
 			arrival.elapsed += delta
 		_powerup_arrivals = _powerup_arrivals.filter(func(item: Dictionary) -> bool: return float(item.elapsed) < 0.48)
 		if _completion_source >= 0:
-			_completion_elapsed += delta
+			_completion_elapsed += board_delta
 	var generation: int = _generation
 	var previous_rows: Dictionary = {}
 	for cell: Dictionary in game.cells:

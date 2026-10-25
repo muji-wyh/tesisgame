@@ -2052,10 +2052,13 @@ additiveTest('Lv2 collection marks a real neighbor, flies it into a partner and 
     window.jellyBlastObserver = new MutationObserver(() => {
       const state = JSON.parse(status.dataset.jelly || '{}'), powerup = state.powerup;
       if (state.mode !== 'word_jelly') return;
-      window.jellyBlastFrames.push({ at: performance.now(), powerup, combo: state.combo,
+      window.jellyBlastFrames.push({ at: performance.now(), powerup, hitStop: state.hit_stop, combo: state.combo,
         cleared: state.cleared_pairs, merged: state.merged_count });
-      const phase = powerup?.active && powerup.kind === 'blast' ? powerup.stage : null;
-      if (phase && ['mark', 'drag'].includes(phase) && !window.jellyBlastImages[phase])
+      const phase = powerup?.active && powerup.kind === 'blast'
+        ? powerup.stage === 'mark' && powerup.clock >= 0.15 ? 'mark'
+          : powerup.stage === 'ready' && powerup.blast?.marked > 0 ? 'impact'
+            : powerup.stage === 'drag' ? 'drag' : null : null;
+      if (phase && !window.jellyBlastImages[phase])
         window.jellyBlastImages[phase] = document.getElementById('canvas').toDataURL('image/png').split(',')[1];
     });
     window.jellyBlastObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
@@ -2091,7 +2094,72 @@ additiveTest('Lv2 collection marks a real neighbor, flies it into a partner and 
     for (const [phase, bytes] of Object.entries(observed.images))
       fs.writeFileSync(info.outputPath(`word-jelly-blast-${phase}.png`), Buffer.from(bytes, 'base64'));
     expect(observed.frames.some(frame => frame.powerup?.kind === 'blast' && frame.powerup.stage === 'mark')).toBe(true);
+    const marking = observed.frames.filter(frame => frame.powerup?.active && frame.powerup.kind === 'blast' &&
+      frame.powerup.stage === 'mark');
+    expect(marking.length, 'Actual browser frames expose the source-to-target slow-motion interval').toBeGreaterThan(0);
+    for (const frame of marking) {
+      expect(frame.hitStop).toMatchObject({ active: true, time_scale: 0.12 });
+      expect(frame.powerup.blast.marked).toBe(0);
+      expect(frame.powerup.drags).toHaveLength(0);
+    }
+    const firstFlight = observed.frames.find(frame => frame.powerup?.kind === 'blast' && frame.powerup.drags?.length === 1);
+    expect(firstFlight, 'An actual automatic flight follows the completed outward marks').toBeTruthy();
+    expect(firstFlight.hitStop).toMatchObject({ active: false, time_scale: 1 });
+    expect(firstFlight.powerup.blast.marked).toBe(firstFlight.powerup.blast.target_ids.length);
     expect(observed.frames.some(frame => frame.powerup?.kind === 'blast' && frame.powerup.drags?.length === 1)).toBe(true);
+  }
+  expect(errors).toEqual([]);
+});
+
+additiveTest('large top-popover fireworks stay centered and preserve the existing collection sound', async ({ page }, info) => {
+  test.setTimeout(240000);
+  await seedGrowth(page, 12, { unmastered: ['cat'] });
+  await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 1, trackSourceLifecycle: true });
+  const errors = await startWordJelly(page, { age: 3, preseededGrowth: true });
+  const words = [];
+  for (let index = 0; index < 4; index++) words.push(await matchCat(page));
+  const upgrade = async (first, second) => {
+    await expect.poll(async () => {
+      const state = await jelly(page);
+      return [first.id, second.id].every(id => state.tiles.some(tile => tile.id === id && tile.settled));
+    }, { intervals: [25] }).toBe(true);
+    return (await timedMerge(page, first.id, second.id)).result;
+  };
+  const left = await upgrade(words[0], words[1]), right = await upgrade(words[2], words[3]);
+  const final = await upgrade(left, right);
+  expect(final.merge_level).toBe(4);
+  await expect.poll(async () => (await jelly(page)).tiles.find(tile => tile.id === final.id)?.settled,
+    { intervals: [25] }).toBe(true);
+  const before = await jelly(page), audioFrom = await page.evaluate(() => window.audioObservation.playbacks.length);
+  await page.evaluate(() => {
+    const status = document.getElementById('game-status');
+    window.topFireworkFrame = null;
+    window.topFireworkObserver = new MutationObserver(() => {
+      const state = JSON.parse(status.dataset.jelly || '{}');
+      const entry = state.word_reveal?.entries?.find(item => item.merge_level === 4 && item.elapsed >= 0 && item.elapsed < 0.30);
+      if (!entry || window.topFireworkFrame) return;
+      window.topFireworkFrame = { at: performance.now(), entry,
+        image: document.getElementById('canvas').toDataURL('image/png').split(',')[1] };
+    });
+    window.topFireworkObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+  });
+  try {
+    await pressRect(page, before.tiles.find(tile => tile.id === final.id).rect);
+    const lower = await expectRecording(page, audioFrom, 'assets/audio/jelly-match/collect-lv4.wav');
+    expect(lower.playbackRate).toBe(1);
+    await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + 1);
+    const frame = await page.evaluate(() => window.topFireworkFrame);
+    expect(frame, 'The real large top-popover burst stays on its own card center').toBeTruthy();
+    const { image, entry } = frame, [x, y, width, height] = entry.rect;
+    expect(entry.effects.origin[0]).toBeCloseTo(x + width / 2, 1);
+    expect(entry.effects.origin[1]).toBeCloseTo(y + height / 2, 1);
+    fs.writeFileSync(info.outputPath('top-popover-centered-firework.png'), Buffer.from(image, 'base64'));
+    fs.writeFileSync(info.outputPath('top-popover-centered-firework.json'), JSON.stringify({ lower, entry }, null, 2));
+    expect(await page.evaluate(({ from, fingerprint }) =>
+      window.audioObservation.playbacks.slice(from).filter(sound => sound.fingerprint === fingerprint).length,
+    { from: audioFrom, fingerprint: lower.fingerprint })).toBe(1);
+  } finally {
+    await page.evaluate(() => window.topFireworkObserver.disconnect());
   }
   expect(errors).toEqual([]);
 });

@@ -400,6 +400,8 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   }
   const required = collectRequiredAudio(fixture.directory);
   assert.equal(required.length, 386);
+  assert.ok(required.every(asset => !asset.source.includes('/jelly-fireworks/')),
+    'Deferred top-popover firework recordings are not added to the gameplay release');
   assert.equal(fs.existsSync(path.join(fixture.directory, 'assets/audio/chests')), false,
     'Packaging succeeds without the archived theme recordings');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/chests/')),

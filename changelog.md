@@ -7,6 +7,11 @@ removed. Use the [documentation index](docs/README.md) for current guidance.
 
 ## 2026-10-25
 
+- Added local 0.12-speed hit stop between committed collection and the final
+  outward marking impact, with source windup, accelerating light, planted
+  compression/rebound and acquired material-impact audio.
+- Centered every Jelly firework layer on its own collected board body or top
+  popover instead of distributing release origins across the screen.
 - Added level-specific Jelly Words collection blasts: random neighbors, columns,
   crosses, surrounding rings and the full board can mark bodies for free
   automatic matching. Flights preserve reviewed spelling, fragments and the

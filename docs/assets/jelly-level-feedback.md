@@ -12,9 +12,9 @@ All nine existing recordings remain byte-identical. Reward values are documented
 | 2 | Twin ripple: two concentric cyan releases | 1.10 s | Bubble pop with a short glass accent |
 | 3 | Spiral lift: rising sapphire curl | 1.45 s | Bubble pop, rising interface accent and glass tail |
 | 4 | Firework bloom: gold spokes, three colored blossoms, descending embers | 2.80 s | Bubble pop, bell bloom and staggered glass crackles |
-| 5 | Rose cascade: staggered pink and gold blossoms in two descending pairs | 3.10 s | Two glass releases at different pitches |
-| 6 | Prismatic bouquet: a central release and six surrounding colored blossoms | 3.40 s | Rising accent, bell body and ascending glass details |
-| 7 | Aurora crown: violet and mint blossoms opening along an upper arc | 3.60 s | Confirmation chimes with contrasting glass pitches |
+| 5 | Rose cascade: staggered pink and gold layers with descending embers | 3.10 s | Two glass releases at different pitches |
+| 6 | Prismatic bouquet: a central release and six colored radial layers | 3.40 s | Rising accent, bell body and ascending glass details |
+| 7 | Aurora crown: layered violet and mint radial blossoms | 3.60 s | Confirmation chimes with contrasting glass pitches |
 | 8 | Constellation shower: four staggered pairs of gold and blue blossoms | 3.80 s | Bell body, rising chime steps and glass details |
 | 9 | Grand bouquet: a central release and nine multicolor blossoms | 4.00 s | Bell, rising accent, two chimes and ten glass details |
 
@@ -95,10 +95,12 @@ are 30, 32.5, 35, 37.5, 40 and 42.5 percent, preserving a different bloom size
 for every tier even on phones. Manual and automatic collection share these radii; compact reading cards
 no longer reduce the firework's size. On short canvases, the vertical trajectory
 uses `min(1, canvas height / (bloom radius * 2.4))`, preserving the broad horizontal
-spread. Separate launch sites occupy the sky rather than the small reading-card
-halo. Lv7 keeps its upper crown, Lv8 its four staggered pairs, and Lv9 a central
-release with eight surrounding blooms. Individual texture stamps still fit
-the canvas and live-control exclusions.
+spread. All launch sites share the collected card's actual center: the wider
+canvas provides room for outward trails, not independent screen-space flowers.
+The board release likewise anchors every delayed layer to the collected body's
+center. Lv7 retains violet/mint layers, Lv8 four staggered color pairs, and Lv9
+nine rich multicolor layers. Individual texture stamps still fit the canvas and
+live-control exclusions.
 Spark tips and tapered trail stamps use a 1.5 size multiplier over the original
 fireworks version. Drag slows the outward release before gravity bends even the
 upward spokes down; short samples of that path form tapered trails instead of
@@ -127,23 +129,38 @@ Lv7 one ring, Lv8 capped two rings and Lv9 the board. Only a successfully saved
 collection queues the reaction. The model captures exact body IDs; missing,
 held, fusing and promised batch pickups are not cosmetic substitute targets.
 
-The same acquired portal light and four-point sparkle travel from the source
-to affected bodies. A 240-450 ms marking beat adds colored glints and a small
-elastic response before the automatic 250 ms journeys and ordinary short union.
-Reduced motion uses static marks and the established simplified flight.
+The acquired portal light, radial rays and four-point sparkle gather at the
+collected body's actual position. Board motion and ambient Jelly effects run at
+0.12 speed during marking; no global engine time scale is changed. An 80 ms
+windup precedes accelerating 260 ms outward bolts with five tapered texture
+samples. Up to six groups launch 60 ms apart, nearer bodies first. Each impact
+marks its body and requests audio on arrival, never at launch. The last impact
+ends slow motion immediately, followed by a 100 ms normal-speed planted recovery
+before the established automatic 250 ms journeys and ordinary short union.
+Targets compress by up to 22 percent around their existing foot pivot and
+support shadow, then rebound by up to six percent without bobbing or camera
+shake. Reduced motion uses still source/target marks, no traveling light or
+deformation, and the established simplified matching flight.
 Batch pickups retain their 140 ms cadence and coalesce overlapping marks before
 matching; one bounded sequence consumes each original endpoint at most once.
 Neither the visual layer nor audio decides a match, pays coins, changes item
 prices or records learning.
 
-The wave reuses the acquired `jelly-combo/bright.wav` at gain 0.32, and marking
-groups reuse `jelly-combo/step.wav` at gain 0.22, both at original pitch. Their
-original sources are Kenney's full `confirmation_003.ogg` and `glass_006.ogg`
-recordings from Interface Sounds 1.0, licensed CC0 1.0, previously acquired and
-integrated. These are audio-only one-shots, not animation clips; source, creator,
-license, acquisition records and unchanged output hashes remain in
-[combo audio](jelly-combo-audio.md). Marking is a secondary cue and does not
-replace an occupied gameplay channel. No new artwork or audio was acquired.
+The source wave reuses acquired `chest-kenney/settle.wav` at gain 0.55, and marking
+impacts reuse `chest-kenney/step-detail.wav` at gain 0.36, both at original pitch.
+Their recorded material attacks replace the light combo chimes without altering
+the collection or combo recordings. Kenney's `impactWood_medium_002.ogg` and
+`impactWood_light_004.ogg` are from Impact Sounds 1.0; the latter impact also
+contains `metalLatch.ogg` from RPG Audio. All are CC0 1.0, previously acquired
+from the user's local collection and already integrated. These are audio-only
+one-shots, not animation clips; sources, licenses, processing and unchanged
+output hashes remain in [the Kenney chest manifest](chest-kenney-audio.json).
+Marking is a secondary cue and does not replace an occupied gameplay channel.
+No new artwork or audio was acquired; the three actual textures were
+re-inspected together over a dark backing before this reuse.
+
+The centered-firework presentation keeps the existing collection sound bank.
+No additional top-popover firework recording or sound request is included.
 
 ## Acquired material
 

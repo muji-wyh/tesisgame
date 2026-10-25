@@ -207,7 +207,11 @@ glints. Two merged Jellies of the same word add their levels, including differen
 levels, up to Lv9. For example, Lv2 plus Lv7 becomes Lv9; a total above nine stays
 separate. Levels 2–9 have an upper-right numeral. Each of the nine levels has a
 distinct collection effect and sound; Lv4 contracts, gathers energy, bursts into
-colorful fireworks, and lets its glowing embers fall. The complete
+colorful fireworks, and lets its glowing embers fall. Every board and top-popover
+firework layer originates at that Jelly's own center, never an unrelated screen
+position. Larger levels retain broader, denser radial layers without changing
+the existing nine collection recordings or adding a separate popover sound.
+The complete
 [level feedback reference](assets/jelly-level-feedback.md) describes these effects.
 
 Jellies can move to another position where they fit. Unsupported bodies fall
@@ -306,8 +310,19 @@ Random selection does not favor bodies with a match and uses a separate stream
 from word supply and coin rolls. Held, already fusing and promised batch
 collection bodies are protected.
 
-The affected bodies receive traveling acquired light, sparkle marks, a brief
-elastic response and their own marking sound before matching. Each marked body
+After collection commits, a blast with affected bodies slows board motion to
+0.12 speed. An 80 ms source compression releases accelerating light with dense,
+tapered trails; each group travels for 260 ms on an independent real-time clock.
+Nearer bodies are marked first. A target is marked and sounds only when the
+outward energy reaches it, with a sharp planted squash and a damped rebound
+rather than floating motion. The last impact immediately restores normal board
+speed; a 100 ms grounded recovery precedes automatic matching. This local clock
+does not slow the interface, audio or other game modes, and the combo and supply
+clocks stay frozen throughout the automatic sequence. Lv1 and empty footprints
+do not start slow motion. Reduced motion retains still source/target highlights
+without the traveling light, deformation or flashes.
+
+Each marked body
 with a legal partner flies to that partner anywhere on the board and merges.
 Reviewed spelling order is preserved even when the affected body is the suffix
 that flies toward its left-hand root. Identical words may upgrade only when their

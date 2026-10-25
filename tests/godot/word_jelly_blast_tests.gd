@@ -148,8 +148,11 @@ func _test_flight_and_accounting() -> void:
 	check(model.cleared_pairs == 1 and model.fragment_count == 2 and model.cells.size() == 2,
 		"Only the collected source is removed and banked before the chain reaction")
 	model.step(0.12)
-	check(fixture.launches.is_empty() and fixture.cues.has("blast_wave") and fixture.cues.has("blast_mark"),
-		"Being affected has its own audible marking beat before the source flies")
+	check(fixture.launches.is_empty() and fixture.cues.has("blast_wave") and not fixture.cues.has("blast_mark"),
+		"The source sounds first while outward marks are still travelling")
+	model.step(float(model.powerup_snapshot().duration) - float(model.powerup_snapshot().elapsed) + 0.002)
+	check(fixture.launches.is_empty() and fixture.cues.has("blast_mark"),
+		"A marking impact sounds on arrival before the source flies")
 	_drain(model)
 	check(fixture.launches.size() == 1 and int(fixture.launches[0].source_id) == int(fixture.marked.id)
 		and int(fixture.launches[0].target_id) == int(fixture.partner.id),
@@ -270,7 +273,9 @@ func _test_batch_and_exit() -> void:
 	model = fixture.model
 	model.collect(int(fixture.source.id))
 	model.step(Model.collection_seconds(2))
-	model.step(0.36)
+	model.step(0.01)
+	model.step(float(model.powerup_snapshot().duration) - float(model.powerup_snapshot().elapsed)
+		+ Model.BLAST_MARK_RECOVERY_SECONDS + 0.10)
 	check(model.powerup_active() and not model.powerup_snapshot().drags.is_empty(),
 		"The exit fixture has a real automatic source in flight")
 	var result: Dictionary = model.finish_round("exit")
@@ -317,6 +322,99 @@ func _test_pending_blast_purchase_guard() -> void:
 	model.purchase_powerup = Callable()
 
 
+func _test_hit_stop_timeline() -> void:
+	var fixture: Dictionary = _fixture()
+	var model: RefCounted = fixture.model
+	var falling: Dictionary = _put(model, model._new_word_root(_word("dog")), 0, 6)
+	check(model.collect(int(fixture.source.id)), "Hit stop follows a real durable collection")
+	model.step(Model.collection_seconds(2) - 0.001)
+	check(not model.snapshot().get("hit_stop", {}).get("active", false),
+		"Collecting and saving finish before the marking slowdown begins")
+	model.step(0.002)
+	var state: Dictionary = model.powerup_snapshot()
+	var slow: Dictionary = model.snapshot().get("hit_stop", {})
+	check(state.stage == "mark" and slow.get("active", false)
+		and is_equal_approx(float(slow.get("time_scale", 1.0)), 0.12) and int(state.blast.marked) == 0,
+		"A collected Jelly enters local 0.12-speed hit stop before releasing any mark")
+	var before_age: float = float(model.cell(int(fixture.marked.id)).age)
+	var falling_age: float = float(model.cell(int(falling.id)).age)
+	var before_clock: float = float(state.clock)
+	var combo: Dictionary = model.combo_snapshot()
+	var spawn: float = model.spawn_elapsed
+	model.step(0.20)
+	state = model.powerup_snapshot()
+	check(is_equal_approx(float(state.clock) - before_clock, 0.20)
+		and is_equal_approx(float(model.cell(int(fixture.marked.id)).age) - before_age, 0.024)
+		and bool(model.cell(int(falling.id)).falling)
+		and is_equal_approx(float(model.cell(int(falling.id)).age) - falling_age, 0.024),
+		"Outward marking uses real time while the board advances at exactly twelve percent")
+	check(int(state.blast.marked) == 0 and not fixture.cues.has("blast_mark")
+		and fixture.launches.is_empty() and model.combo_snapshot() == combo and model.spawn_elapsed == spawn,
+		"Travel cannot mark early, start matching, drain the combo or advance supply")
+	var until_impact: float = float(state.duration) - float(state.elapsed)
+	model.step(until_impact - 0.001)
+	check(model.snapshot().get("hit_stop", {}).get("active", false)
+		and int(model.powerup_snapshot().blast.marked) == 0,
+		"Slow motion lasts until the final outward mark actually reaches its target")
+	model.step(0.002)
+	state = model.powerup_snapshot()
+	slow = model.snapshot().get("hit_stop", {})
+	check(not slow.get("active", true) and is_equal_approx(float(slow.get("time_scale", 0.0)), 1.0)
+		and int(state.blast.marked) == 1 and fixture.cues.count("blast_mark") == 1,
+		"The final marking impact restores full speed exactly once")
+	check(fixture.launches.is_empty(), "A planted impact is visible before automatic matching lifts its body")
+	before_age = float(model.cell(int(fixture.marked.id)).age)
+	model.step(0.04)
+	check(is_equal_approx(float(model.cell(int(fixture.marked.id)).age) - before_age, 0.04),
+		"Ordinary board time resumes during the short grounded impact recovery")
+	model.set_paused(true)
+	var frozen: Dictionary = model.snapshot()
+	model.step(10.0)
+	check(model.snapshot() == frozen, "Pausing during impact recovery cannot launch or replay the marking action")
+	model.set_paused(false)
+	_drain(model)
+	check(fixture.launches.size() == 1 and model.cleared_pairs == 1 and model.combo_count == 1
+		and not model.snapshot().get("hit_stop", {}).get("active", true),
+		"The weighted sequence keeps one assisted merge, one pickup and no lingering slowdown")
+	for level: int in [1, 2]:
+		model = _model()
+		var source: Dictionary = _ready(model, 2, 7, level)
+		model.collect(int(source.id))
+		model.step(Model.collection_seconds(level) + 0.20)
+		check(not model.snapshot().get("hit_stop", {}).get("active", false) and not model.powerup_active(),
+			"Lv1 and a blast with no affected body never create an empty slowdown")
+	var coarse: Dictionary = _fixture()
+	var fine: Dictionary = _fixture()
+	for item: Dictionary in [coarse, fine]:
+		item.model.collect(int(item.source.id))
+		item.model.step(Model.collection_seconds(2))
+	coarse.model.step(0.40)
+	for frame in range(40):
+		fine.model.step(0.01)
+	check(not coarse.model.snapshot().hit_stop.active and not fine.model.snapshot().hit_stop.active
+		and coarse.launches.is_empty() and fine.launches.is_empty()
+		and is_equal_approx(float(coarse.model.cell(int(coarse.marked.id)).age),
+			float(fine.model.cell(int(fine.marked.id)).age)),
+		"A frame crossing the final marking impact slows only its marking portion, never the normal-speed remainder")
+
+
+func _test_unmatched_mark_impact() -> void:
+	var model: RefCounted = _model()
+	var source: Dictionary = _ready(model, 2, 7, 2)
+	var target: Dictionary = _put(model, model._new_picture_tile(_word()), 1, 7)
+	model.collect(int(source.id))
+	model.step(Model.collection_seconds(2))
+	model.step(0.01)
+	model.step(float(model.powerup_snapshot().duration) - float(model.powerup_snapshot().elapsed) + 0.035)
+	check(model.powerup_active() and model.powerup_snapshot().stage == "ready"
+		and not model.snapshot().hit_stop.active and model.powerup_snapshot().blast.marked == 1,
+		"Even an unmatched target retains its visible planted impact after slow motion ends")
+	model.step(Model.BLAST_MARK_RECOVERY_SECONDS)
+	check(not model.powerup_active() and not model.cell(int(target.id)).is_empty()
+		and model.merged_count == 0 and model.cleared_pairs == 1,
+		"Unmatched impact recovery ends cleanly without inventing a match or an extra pickup")
+
+
 func _run() -> void:
 	_test_footprints()
 	_test_flight_and_accounting()
@@ -326,5 +424,7 @@ func _run() -> void:
 	_test_batch_and_exit()
 	_test_frame_subdivision()
 	_test_pending_blast_purchase_guard()
+	_test_hit_stop_timeline()
+	_test_unmatched_mark_impact()
 	print("Word Jelly blast: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

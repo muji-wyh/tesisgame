@@ -2131,6 +2131,11 @@ func _test_collection_gravity() -> void:
 	check(model.snapshot() == before, "pause freezes an in-progress collection fall")
 	model.set_paused(false)
 	model.step(Model.SETTLE_SECONDS)
+	check(float(model.cell(1001).age) < model.settle_duration(model.cell(1001))
+		and float(model.cell(1002).age) < model.settle_duration(model.cell(1002)) and model.merged_count == 0,
+		"the collected stack genuinely falls in slow motion while outward marks land")
+	model.step(maxf(model.settle_duration(model.cell(1001)) - float(model.cell(1001).age),
+		model.settle_duration(model.cell(1002)) - float(model.cell(1002).age)))
 	check(float(model.cell(1001).age) + Model.EPSILON >= model.settle_duration(model.cell(1001))
 		and float(model.cell(1002).age) + Model.EPSILON >= model.settle_duration(model.cell(1002)),
 		"both children reach their physical landing before the Lv2 blast can match them")
@@ -2138,7 +2143,10 @@ func _test_collection_gravity() -> void:
 		"landing keeps its last fall provenance so the view cannot emit a second impact cue")
 	_assert_supported_tiles(model, [1001, 1002], "collected stack")
 	_assert_board(model, "collected stack")
-	model.step(1.0)
+	for frame in range(100):
+		model.step(0.04)
+		if not model.powerup_active() and not model._gravity_pending:
+			break
 	check(model.cell(1001).is_empty() and model.cell(1002).is_empty() and model.merged_count == 1
 		and not model._gravity_pending,
 		"the collected Lv2 word then matches its affected child with the landed partner and finishes gravity")

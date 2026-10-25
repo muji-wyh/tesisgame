@@ -73,6 +73,14 @@ func _capture(name: String) -> void:
 		"Capture the real native blast presentation")
 
 
+func _advance(view, seconds: float) -> void:
+	var remaining: float = seconds
+	while remaining > 0.00001:
+		var delta: float = minf(0.04, remaining)
+		view._process(delta)
+		remaining -= delta
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	check(data.load_all(), "Load production assets for the blast rendering route")
@@ -84,17 +92,48 @@ func _run() -> void:
 			var view = fixture.view
 			view._process(0.42)
 			view._process(0.01)
+			var source_center: Vector2 = view._tile_rect(fixture.source).get_center()
+			var target_center: Vector2 = view._tiles[int(fixture.marked.id)].get_rect().get_center()
+			var ambient: float = view._presentation_elapsed
+			var board_age: float = float(view.game.cell(int(fixture.marked.id)).age)
 			view._process(0.10)
 			check(view.game.powerup_snapshot().kind == "blast" and view.game.powerup_snapshot().stage == "mark"
-				and not view._powerup_effects.stamps.is_empty() and cues.has("blast_mark"),
-				"Affected jellies receive visible sourced light and a real routed marking cue before flight")
+				and view.snapshot().get("hit_stop", {}).get("active", false)
+				and not view._powerup_effects.stamps.is_empty() and not cues.has("blast_mark"),
+				"The source releases a visible marking wave inside real local slow motion, before impact")
+			check(is_equal_approx(view._presentation_elapsed - ambient, 0.012)
+				and is_equal_approx(float(view.game.cell(int(fixture.marked.id)).age) - board_age, 0.012)
+				and is_equal_approx(Engine.time_scale, 1.0),
+				"Board bodies and ambient Jelly motion slow without changing the engine, UI or audio clock")
+			check(view._powerup_effects.stamps.any(func(stamp: Dictionary) -> bool:
+				return stamp.texture == view.COLLECTION_GLOW and Vector2(stamp.center).is_equal_approx(source_center)),
+				"The collected Jelly's actual board position remains the outgoing energy source")
+			check(view._tiles[int(fixture.marked.id)]._base_stretch.is_equal_approx(Vector2.ONE),
+				"A target cannot squash before its outward mark has reached it")
+			if not steady:
+				check(view._powerup_effects.stamps.any(func(stamp: Dictionary) -> bool:
+					var point: Vector2 = stamp.center
+					return (point.distance_to(source_center) > 0.1 and point.distance_to(target_center) > 0.1
+						and point.distance_to(source_center) < source_center.distance_to(target_center))),
+					"Acquired marker artwork really travels outward instead of appearing at the target")
 			var frozen: Dictionary = view.game.powerup_snapshot()
 			view.pause(true)
 			view._process(0.20)
 			check(view.game.powerup_snapshot() == frozen and not view._powerup_effects.is_visible_in_tree(),
 				"Pause freezes the mark and hides its cosmetic layer")
 			view.pause(false)
-			view._process(0.18)
+			view._process(float(view.game.powerup_snapshot().duration)
+				- float(view.game.powerup_snapshot().elapsed) + 0.035)
+			check(cues.has("blast_mark") and not view.snapshot().get("hit_stop", {}).get("active", true)
+				and view.game.powerup_snapshot().drags.is_empty(),
+				"The final impact ends slow motion before the planted body lifts into automatic matching")
+			var marked_tile = view._tiles[int(fixture.marked.id)]
+			check(marked_tile._base_stretch.is_equal_approx(Vector2.ONE) if steady else
+				marked_tile._base_stretch.x > 1.10 and marked_tile._base_stretch.y < 0.82,
+				"A sharp, grounded compression gives the hit weight; reduced motion keeps the body still")
+			check(marked_tile.position.is_equal_approx(view._tile_rect(view.game.cell(int(fixture.marked.id))).position),
+				"Mark impact stays planted on the original support rather than bobbing or floating")
+			view._process(0.12)
 			var state: Dictionary = view.game.powerup_snapshot()
 			check(state.drags.size() == 1 and int(state.drags[0].source_id) == int(fixture.marked.id),
 				"The actual marked tile becomes the automatic flight source")
@@ -116,14 +155,15 @@ func _run() -> void:
 			for level: int in [2, 5, 6, 7, 8, 9]:
 				var fixture: Dictionary = _prepare(dimensions, false, level, true)
 				var view = fixture.view
-				var remaining: float = view.game.collection_seconds(level) + 0.11
-				while remaining > 0.00001:
-					var delta: float = minf(0.04, remaining)
-					view._process(delta)
-					remaining -= delta
-				await _capture("blast-%dx%d-lv%d-mark" % [dimensions.x, dimensions.y, level])
-				for frame in range(8):
-					view._process(0.04)
+				_advance(view, view.game.collection_seconds(level) + 0.22)
+				await _capture("blast-%dx%d-lv%d-mark-wave" % [dimensions.x, dimensions.y, level])
+				_advance(view, 0.155)
+				await _capture("blast-%dx%d-lv%d-first-impact" % [dimensions.x, dimensions.y, level])
+				if view.game.gameplay_time_scale() < 1.0:
+					_advance(view, float(view.game.powerup_snapshot().duration)
+						- float(view.game.powerup_snapshot().elapsed) + 0.035)
+				await _capture("blast-%dx%d-lv%d-final-impact" % [dimensions.x, dimensions.y, level])
+				_advance(view, 0.12)
 				await _capture("blast-%dx%d-lv%d-flight" % [dimensions.x, dimensions.y, level])
 				if level >= 4:
 					for frame in range(8):

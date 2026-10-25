@@ -45,8 +45,8 @@ const JELLY_PATHS := {
 	"jelly-collect-lv8": "res://assets/audio/jelly-match/collect-lv8.wav",
 	"jelly-collect-lv9": "res://assets/audio/jelly-match/collect-lv9.wav",
 	"finish_ready": "res://assets/audio/jelly-finish/ready.ogg",
-	"blast_wave": "res://assets/audio/jelly-combo/bright.wav",
-	"blast_mark": "res://assets/audio/jelly-combo/step.wav",
+	"blast_wave": "res://assets/audio/chest-kenney/settle.wav",
+	"blast_mark": "res://assets/audio/chest-kenney/step-detail.wav",
 	"pick": UI_CLICK_PATH,
 	"release": "res://assets/imported-audio/chest-reference/step.wav",
 	"land": "res://assets/audio/jelly-match/land.wav",
@@ -58,7 +58,7 @@ const JELLY_PATHS := {
 }
 const JELLY_GAINS := {
 	"finish_ready": 0.40,
-	"blast_wave": 0.32, "blast_mark": 0.22,
+	"blast_wave": 0.55, "blast_mark": 0.36,
 	"pick": 0.64, "release": 0.38, "land": 0.35, "contact": 1.0,
 	"merge": 1.0, "pop": 0.90, "danger": 0.52, "reward": 0.36,
 	"assemble": 0.28,

@@ -99,6 +99,7 @@ func _exercise() -> void:
 	_check_interaction_audio(audio)
 	_check_warning_cancellation(audio)
 	_check_landing_audio(audio)
+	_check_blast_audio(audio)
 	audio.interact("spring", false)
 	audio.say("res://assets/audio/voice/word-cat.wav")
 	audio.play_jelly_cue("merge")
@@ -131,6 +132,24 @@ func _exercise() -> void:
 		check(not player.playing and player.stream == null, "Leaving a mode cancels reward tails")
 	audio.queue_free()
 	await create_timer(0.15).timeout
+
+
+func _check_blast_audio(audio) -> void:
+	audio.interact("spring", false)
+	for cue: String in ["blast_wave", "blast_mark"]:
+		audio.stop_jelly_sounds()
+		audio.play_jelly_cue(cue)
+		var player: AudioStreamPlayer = audio._jelly_players[posmod(audio._jelly_next_player - 1, 3)]
+		var expected: String = "res://assets/audio/chest-kenney/settle.wav" if cue == "blast_wave" \
+			else "res://assets/audio/chest-kenney/step-detail.wav"
+		check(player.playing and player.stream != null and player.stream.resource_path == expected,
+			"The %s marking event uses an acquired material impact rather than a light combo chime" % cue)
+		check(is_equal_approx(player.pitch_scale, 1.0),
+			"Slow motion preserves the impact recording's original pitch and the real-time sound clock")
+		var hash: String = "8ed9ee4e04bd5034fda0298c9df822092f7170c6433e47035fe5c74894d4b96b" if cue == "blast_wave" \
+			else "321770bcb24e69730ad280ce0613079cafb2c232f59951f7ec9724e14ec84caf"
+		check(FileAccess.get_sha256(expected) == hash, "The marking impact reuses the acquired full recording without changing its bytes")
+	audio.stop_jelly_sounds()
 
 
 func _check_collection_pop(audio) -> void:

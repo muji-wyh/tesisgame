@@ -43,6 +43,10 @@ const BATCH_BEAT_SECONDS: float = 0.14
 const BATCH_POP_SECONDS: float = 0.04
 const COMBO_SECONDS: float = 8.0
 const BLAST_MARK_BEAT_SECONDS: float = 0.06
+const BLAST_TIME_SCALE: float = 0.12
+const BLAST_MARK_WINDUP_SECONDS: float = 0.08
+const BLAST_MARK_FLIGHT_SECONDS: float = 0.26
+const BLAST_MARK_RECOVERY_SECONDS: float = 0.10
 const AUTO_COLLECT_UNLOCK_LEVEL: int = 3
 const INITIAL_SPAWN_INTERVAL: float = 20.0
 const MIN_SPAWN_INTERVAL: float = 10.0
@@ -358,6 +362,17 @@ func powerup_active() -> bool:
 	return _powerup_purchasing or bool(_powerup.get("active", false))
 
 
+func gameplay_time_scale() -> float:
+	return BLAST_TIME_SCALE if bool(_powerup.get("active", false)) \
+		and str(_powerup.kind) == "blast" and str(_powerup.stage) == "mark" else 1.0
+
+
+func hit_stop_snapshot() -> Dictionary:
+	var scale: float = gameplay_time_scale()
+	return {"active": scale < 1.0, "time_scale": scale, "paused": paused,
+		"remaining": maxf(0.0, float(_powerup.duration) - float(_powerup.elapsed)) if scale < 1.0 else 0.0}
+
+
 func powerup_price(kind: String) -> int:
 	return CoinEconomy.powerup_price(kind, int(_powerup_uses.get(kind, 0)))
 
@@ -536,13 +551,21 @@ func _start_pending_blast() -> void:
 	_blast_queue.clear()
 	if targets.is_empty():
 		return
+	var distances: Dictionary = {}
+	for id: int in targets:
+		var target: Dictionary = cell(id)
+		distances[id] = Vector2(float(target.column) - float(origins[id].column),
+			float(target.row) - float(origins[id].row)).length_squared()
+	targets.sort_custom(func(a: int, b: int) -> bool:
+		return a < b if is_equal_approx(float(distances[a]), float(distances[b])) else distances[a] < distances[b])
 	_begin_powerup_timeline("blast", "blast:" + event_id)
 	var group_size: int = maxi(1, ceili(targets.size() / 6.0))
 	var groups: int = ceili(float(targets.size()) / group_size)
+	var first_impact: float = BLAST_MARK_WINDUP_SECONDS + BLAST_MARK_FLIGHT_SECONDS
 	_powerup.stage = "mark"
-	_powerup.duration = maxf(0.24, (groups - 1) * BLAST_MARK_BEAT_SECONDS + 0.15)
+	_powerup.duration = first_impact + (groups - 1) * BLAST_MARK_BEAT_SECONDS
 	_powerup.blast = {"level": level, "target_ids": targets, "origins": origins,
-		"marked": 0, "group_size": group_size, "next_mark_at": 0.0, "used_ids": {}}
+		"marked": 0, "group_size": group_size, "next_mark_at": first_impact, "used_ids": {}}
 	cue_requested.emit("blast_wave")
 
 
@@ -731,8 +754,11 @@ func _advance_powerup() -> void:
 			return
 		_powerup.stage = "ready"
 		_powerup.elapsed = 0.0
-		_powerup.duration = 0.0
-		_powerup.next_launch_at = float(_powerup.clock)
+		_powerup.duration = BLAST_MARK_RECOVERY_SECONDS
+		_powerup.next_launch_at = float(_powerup.clock) + BLAST_MARK_RECOVERY_SECONDS
+	if str(_powerup.kind) == "blast" and str(_powerup.stage) == "ready" and int(_powerup.total) == 0 \
+		and float(_powerup.clock) + EPSILON < float(_powerup.next_launch_at):
+		return
 	if str(_powerup.kind) == "fragments":
 		for arrival: Dictionary in _powerup.arrivals.duplicate():
 			if bool(arrival.arrived):
@@ -1232,24 +1258,25 @@ func step(delta: float) -> void:
 		if _finishing_powerup and not powerup_active():
 			break
 		var powerup_running: bool = powerup_active()
+		var time_scale: float = gameplay_time_scale()
 		var combo_running: bool = combo_count > 0 and not powerup_running and not _has_pending_collection_commit()
 		var consumed: float = remaining
 		if combo_running:
 			consumed = minf(consumed, maxf(0.0, _combo_remaining))
 		consumed = minf(consumed, _collection_batch_boundary())
 		consumed = minf(consumed, _powerup_boundary())
-		consumed = minf(consumed, _next_drag_gravity_boundary())
+		consumed = minf(consumed, _next_drag_gravity_boundary() / time_scale)
 		if _growth_pending and _settling_remaining() > EPSILON:
-			consumed = minf(consumed, _settling_remaining())
+			consumed = minf(consumed, _settling_remaining() / time_scale)
 		if _gravity_pending and _next_settlement() > EPSILON:
-			consumed = minf(consumed, _next_settlement())
+			consumed = minf(consumed, _next_settlement() / time_scale)
 		for active in fusions:
 			if bool(active.get("commit_pending", false)):
 				continue
 			var boundary: float = float(active.duration)
 			if str(active.operation) == "collect" and not bool(active.popped):
 				boundary = float(active.pop_at)
-			consumed = minf(consumed, maxf(0.0, boundary - float(active.elapsed)))
+			consumed = minf(consumed, maxf(0.0, boundary - float(active.elapsed)) / time_scale)
 		var full: bool = not _has_free_cell()
 		var ending_wait: bool = _finish_after_collection_commit
 		var danger_running: bool = full and full_elapsed >= 0.0 and not powerup_running and not ending_wait
@@ -1260,8 +1287,10 @@ func step(delta: float) -> void:
 			consumed = minf(consumed, maxf(0.0, _settling_remaining()))
 		elif not powerup_running and not ending_wait:
 			consumed = minf(consumed, maxf(0.0, spawn_interval - spawn_elapsed))
+		# Mark impacts keep real-time deadlines while only the board's motion slows.
+		var motion_delta: float = consumed * time_scale
 		for tile in cells:
-			tile.age = float(tile.age) + consumed
+			tile.age = float(tile.age) + motion_delta
 			tile.settling = float(tile.age) + EPSILON < settle_duration(tile)
 			if tile.has("settle_seconds") and not bool(tile.settling):
 				# The short landing belongs only to this automatic merge. Later
@@ -1270,8 +1299,8 @@ func step(delta: float) -> void:
 				tile.age = maxf(float(tile.age), SETTLE_SECONDS)
 		for active in fusions:
 			if not bool(active.get("commit_pending", false)):
-				active.elapsed = float(active.elapsed) + consumed
-		_advance_drag_gravity_delays(consumed)
+				active.elapsed = float(active.elapsed) + motion_delta
+		_advance_drag_gravity_delays(motion_delta)
 		if powerup_running:
 			_powerup.elapsed = float(_powerup.elapsed) + consumed
 			_powerup.clock = float(_powerup.clock) + consumed
@@ -1696,6 +1725,7 @@ func snapshot() -> Dictionary:
 		"pip_level": pip_level, "auto_collect_unlocked": auto_collect_unlocked(),
 		"auto_collect_unlock_level": AUTO_COLLECT_UNLOCK_LEVEL,
 		"powerup": powerup_snapshot(),
+		"hit_stop": hit_stop_snapshot(),
 		"queued_blasts": _blast_queue.size(),
 		"powerup_uses": _powerup_uses.duplicate(),
 		"powerup_prices": {"auto_merge": powerup_price("auto_merge"), "fragments": powerup_price("fragments")},

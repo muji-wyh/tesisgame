@@ -143,31 +143,8 @@ func _rim(angle: float, offset: float = 0.0) -> Vector2:
 	return _card.get_center() + direction * (reach + offset)
 
 
-func _burst_angle(group: int) -> float:
-	if level == 7:
-		return -PI * 0.95 + float(group) * PI * 0.90 / 6.0
-	if level == 8:
-		var side: float = -1.0 if group % 2 == 0 else 1.0
-		return Vector2(side, -0.90 + float(group / 2) * 0.60).angle()
-	return -PI * 0.75 + float(group) * TAU / float(PROFILES[level - 1].bursts)
-
-
-func _burst_origin(group: int) -> Vector2:
-	var radius: float = _firework_radius()
-	var vertical: float = _firework_vertical_scale()
-	var center: Vector2 = size * Vector2(0.5, 0.43)
-	var spread: Vector2 = size * Vector2(0.38, 0.29)
-	spread *= [0.56, 0.72, 0.88, 1.0, 1.0, 1.0][level - 4]
-	var direction := Vector2.from_angle(_burst_angle(group))
-	if level == 8:
-		direction = Vector2(-0.92 if group % 2 == 0 else 0.92, -0.95 + float(group / 2) * 1.90 / 3.0)
-	elif level == 9:
-		direction = Vector2.ZERO if group == 0 else Vector2.from_angle(-PI * 0.5 + (group - 1) * TAU / 8.0)
-	var point: Vector2 = center + direction * spread
-	# Separate launch sites fill the sky; individual stamps still fit controls and edges.
-	var start := Vector2(radius * 0.35, radius * vertical * 0.35)
-	var end := size - Vector2(radius * 0.35, radius * vertical * 0.65)
-	return point.clamp(start.min(size * 0.5), end.max(size * 0.5))
+func _burst_origin(_group: int) -> Vector2:
+	return _card.get_center()
 
 
 func _firework_radius() -> float:
@@ -386,6 +363,7 @@ func _draw_explosion(fade: float) -> void:
 func snapshot() -> Dictionary:
 	var selected: Dictionary = PROFILES[level - 1]
 	var rect: Rect2 = get_global_rect()
+	var origin: Vector2 = get_global_transform() * _card.get_center()
 	return {"level": level, "name": selected.name, "pattern": selected.pattern,
 		"elapsed": elapsed, "duration": duration,
 		"visible": is_visible_in_tree() and elapsed >= -anticipation_seconds and elapsed < duration,
@@ -395,5 +373,6 @@ func snapshot() -> Dictionary:
 		"bloom_radius": _firework_radius() if level >= 4 else 0.0,
 		"vertical_scale": _firework_vertical_scale() if level >= 4 else 1.0,
 		"burst_count": selected.bursts, "reduced_motion": reduced_motion,
+		"origin": [origin.x, origin.y],
 		"input_transparent": mouse_filter == Control.MOUSE_FILTER_IGNORE,
 		"rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y]}

@@ -1,6 +1,14 @@
 extends SceneTree
 
 const Effects = preload("res://scripts/word_jelly_collection_fx.gd")
+
+class RecordedEffects extends "res://scripts/word_jelly_collection_fx.gd":
+	var centers: Array[Vector2] = []
+
+	func _stamp(texture: Texture2D, point: Vector2, _dimensions: Vector2, _color: Color, _angle: float = 0.0) -> void:
+		if texture in [GLOW, RAYS]:
+			centers.append(point)
+
 var checks: int = 0
 var failures: int = 0
 
@@ -101,15 +109,20 @@ func _run() -> void:
 		for group in range(1, int(Effects.profile(level).bursts)):
 			check(fx._firework_delay(level, group) > 0.0 and fx._firework_delay(level, group) < 0.46,
 				"Secondary blossoms follow the main release before the final descent")
-	for level in range(7, 10):
-		var centers: Array[Vector2] = []
-		for group in range(int(Effects.profile(level).bursts)):
-			var center: Vector2 = fx._firework_offset(level, group, 100.0)
-			check(not centers.has(center), "Higher-level blossoms have separate release origins")
-			centers.append(center)
+	var recorded := RecordedEffects.new()
+	recorded.configure_layout(Rect2(30.0, 50.0, 390.0, 700.0), 1.0)
+	for level in range(4, 10):
+		recorded.reset()
+		recorded.present(Vector2(180.0, 300.0), level, Color.GOLD)
+		recorded.centers.clear()
+		recorded._draw_fireworks(recorded._entries[0], 0.50)
+		check(recorded.centers.size() == int(Effects.profile(level).bursts) * 2
+			and recorded.centers.all(func(center: Vector2) -> bool: return center.is_equal_approx(Vector2(150, 250))),
+			"Every board firework blossom and flash shares the collected Jelly's actual center")
 		fx.present(Vector2(180.0, 300.0), level, Color.GOLD, true)
 		check(is_equal_approx(float(fx.snapshot().entries.back().duration), float(Effects.profile(level).seconds) * 0.75),
 			"Higher automatic collections retain their complete scheduled board tail")
+	recorded.free()
 	fx.reset()
 	for index in range(30):
 		fx.present(Vector2(180.0, 300.0), 6, Color.GOLD, true)
