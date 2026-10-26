@@ -251,9 +251,8 @@ func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: 
 	if valid_word:
 		var chance: float = WordModel.coin_drop_chance_for_tile(cell)
 		var reward: String = " No bonus coins at this level." if chance <= 0.0 else " %d%% chance of %d bonus coins." % [roundi(chance * 100.0), WordModel.coins_for_tile(cell)]
-		instruction = "Merged word, level %d. Press to collect.%s%s" % [merge_level, reward,
-			" Drag onto the same word to add their levels. The total must be %d or less." % WordModel.MAX_MERGE_LEVEL
-			if merge_level < WordModel.MAX_MERGE_LEVEL else " Maximum level reached."]
+		instruction = "Merged word, level %d. Press to collect.%s Drag onto the same word to add their levels, capped at %d." % [
+			merge_level, reward, WordModel.MAX_MERGE_LEVEL]
 	elif jelly_kind == "picture":
 		instruction = "Drag to its complete matching word to merge."
 	elif not cell.get("word_candidate", {}).is_empty():

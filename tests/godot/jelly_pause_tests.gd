@@ -36,7 +36,7 @@ func _capture(name: String) -> void:
 	await process_frame
 	await RenderingServer.frame_post_draw
 	check(root.get_texture().get_image().save_png("res://build/qa/jelly-pause/" + name + ".png") == OK,
-		"Capture the actual responsive pause menu")
+		"Capture the actual responsive inline pause state")
 
 
 func _check_mode(app, mode: String) -> void:
@@ -47,9 +47,9 @@ func _check_mode(app, mode: String) -> void:
 	view.game.spawn_interval = 10000.0
 	view.game.step(2.0)
 	var pause_button: Button = app.get("_jelly_pause_button")
-	var menu = app.get("_jelly_pause_menu")
-	check(pause_button != null and menu != null, mode + ": the real header exposes a Pause control and resume menu")
-	if pause_button == null or menu == null:
+	var shade = app.get("_jelly_pause_shade")
+	check(pause_button != null and shade != null, mode + ": the real header pauses inline with a screen shade")
+	if pause_button == null or shade == null:
 		return
 	for dimensions: Vector2i in [Vector2i(320, 480), Vector2i(393, 852), Vector2i(844, 390), Vector2i(1366, 768)]:
 		root.size = dimensions
@@ -60,25 +60,41 @@ func _check_mode(app, mode: String) -> void:
 			and app._header.get_global_rect().grow(0.1).encloses(button_rect)
 			and button_rect.size.x * s >= 43.9 and button_rect.size.y * s >= 43.9
 			and not button_rect.intersects(view._header_chest_host.get_global_rect())
-			and not button_rect.intersects(app._mode_heading.get_global_rect()),
+			and not button_rect.intersects(app._mode_heading.get_global_rect()) and pause_button.tooltip_text.is_empty(),
 			mode + ": the original pull control pauses on a tap without adding a second header button at " + str(dimensions))
 		var round_id: String = app._round_id
 		pause_button.pressed.emit()
 		check(app._jelly_pause_open() and view.game.paused and not app._jelly_interaction_allowed()
-			and menu._heading.text == "Paused" and menu.keep_playing_button.text == "Resume"
-			and menu.finish_button.text == "Finish round" and app._round_id == round_id,
+			and shade.is_visible_in_tree() and shade.color.a > 0.0 and shade.color.a < 0.5
+			and pause_button.text == "Resume" and not pause_button.disabled and app._round_id == round_id,
 			mode + ": Pause stops the same unfinished round without finishing or collecting anything")
-		check(view.finish_button.is_visible_in_tree() and view.finish_button.snapshot().tap_hint
-			and menu._caption.text.contains("Pull down"),
-			mode + ": the same button retains its downward teaching animation and explains the finish gesture")
-		check(root.gui_get_focus_owner() == menu.keep_playing_button and app._focus_candidates().size() == 2,
-			mode + ": pause focus stays on the two explicit menu actions")
+		check(view.finish_button.is_visible_in_tree() and app.find_child("JellyPauseMenu", true, false) == null
+			and not app._finish_confirmation_open(),
+			mode + ": pause never opens a dialog or its unwanted instruction caption")
+		check(root.gui_get_focus_owner() == pause_button and app._focus_candidates() == [pause_button],
+			mode + ": the active resume/pull button is the only paused focus target")
+		var peak: float = 0.0
+		var target_stable: bool = true
+		for frame in range(90):
+			pause_button.advance(1.0 / 60.0)
+			peak = maxf(peak, float(pause_button.snapshot().visual_pull) * s)
+			target_stable = target_stable and pause_button.get_global_rect().is_equal_approx(button_rect)
+		check(peak > 8.0 and peak < 40.0 and target_stable and not pause_button.snapshot().armed,
+			mode + ": paused gel repeatedly tugs downward without moving its click target or arming Finish")
+		var samples: Array[float] = []
+		var observe: Callable = func(state: Dictionary) -> void: samples.append(float(state.finish.pull.visual_pull))
+		view.changed.connect(observe)
+		for delta: float in [0.13, 0.33, 0.31]:
+			pause_button.advance(delta)
+			view._process(0.11)
+		view.changed.disconnect(observe)
+		check(samples.size() >= 3 and float(samples.max()) - float(samples.min()) > 0.5,
+			mode + ": paused publication follows the actual moving gel instead of freezing its visual state")
 		var before: Dictionary = view.game.snapshot()
 		var balance: int = app.coin_wallet.balance
 		for frame in range(12):
 			view._process(0.20)
 			app._advance_ui(0.20)
-		app._request_jelly_finish(mode)
 		app._show_collection()
 		app._show_mode_menu()
 		check(view.game.snapshot() == before and app.coin_wallet.balance == balance and app._jelly_pause_open()
@@ -88,19 +104,21 @@ func _check_mode(app, mode: String) -> void:
 		focus_next.action = "ui_focus_next"
 		focus_next.pressed = true
 		app._input(focus_next)
-		check(root.gui_get_focus_owner() == menu.finish_button, mode + ": Tab stays inside the pause menu")
-		app._input(focus_next)
-		check(root.gui_get_focus_owner() == menu.keep_playing_button, mode + ": pause focus wraps to Resume")
-		for button: Button in [menu.keep_playing_button, menu.finish_button]:
-			check(Rect2(Vector2.ZERO, app.size).grow(0.1).encloses(button.get_global_rect())
-				and button.size.y * s >= 43.9, mode + ": pause actions remain readable and tappable")
+		check(root.gui_get_focus_owner() == pause_button, mode + ": Tab cannot leave the inline resume control")
 		await _capture("%s-%dx%d" % [mode, dimensions.x, dimensions.y])
 		app.on_page_hidden()
-		menu.keep_playing_button.pressed.emit()
+		pause_button.pressed.emit()
 		check(app._jelly_pause_open() and view.game.paused, mode + ": a hidden page cannot consume Resume")
 		app.on_page_visible()
 		check(app._jelly_pause_open() and view.game.paused, mode + ": foregrounding does not silently unpause the game")
-		menu.keep_playing_button.pressed.emit()
+		for pressed: bool in [true, false]:
+			var resume_event := InputEventMouseButton.new()
+			resume_event.button_index = MOUSE_BUTTON_LEFT
+			resume_event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
+			resume_event.position = pause_button.get_global_rect().get_center()
+			resume_event.pressed = pressed
+			root.push_input(resume_event, true)
+			view._process(0.03)
 		check(not app._jelly_pause_open() and not view.game.paused and app._round_id == round_id,
 			mode + ": Resume restores the same round at the exact paused clock")
 		var elapsed: float = view.game.spawn_elapsed
@@ -112,9 +130,26 @@ func _check_mode(app, mode: String) -> void:
 	check(not app._jelly_pause_open() and not view.game.paused and not app._mode_menu_open(),
 		mode + ": Escape resumes rather than navigating away from pause")
 	pause_button.pressed.emit()
-	menu.finish_button.pressed.emit()
+	var start: Vector2 = pause_button.get_global_rect().get_center()
+	var end: Vector2 = start + Vector2(0, float(pause_button.snapshot().threshold) * 1.15)
+	var down := InputEventMouseButton.new()
+	down.button_index = MOUSE_BUTTON_LEFT
+	down.button_mask = MOUSE_BUTTON_MASK_LEFT
+	down.position = start
+	down.pressed = true
+	root.push_input(down, true)
+	view._process(1.0 / 60.0)
+	var move := InputEventMouseMotion.new()
+	move.button_mask = MOUSE_BUTTON_MASK_LEFT
+	move.position = end
+	root.push_input(move, true)
+	view._process(1.0 / 60.0)
+	var up := InputEventMouseButton.new()
+	up.button_index = MOUSE_BUTTON_LEFT
+	up.position = end
+	root.push_input(up, true)
 	check(view.game.phase == "finished" and not app._jelly_pause_open() and app._round_end.is_active(),
-		mode + ": the explicitly labelled Finish round action remains accessible without a pointer pull")
+		mode + ": the same paused control still finishes after a deliberate downward pull and release")
 	Fixture.finish_celebration(app)
 	check(app.new_round(4821, false, "", mode, "", false), mode + ": a new round follows the completed pause-menu finish")
 	view.set_process(false)
@@ -170,7 +205,7 @@ func _check_word_effect_pause(app) -> void:
 	app.on_page_visible()
 	check(view.game.snapshot() == game_before and view._word_reveal.snapshot() == effects,
 		"Backgrounding during manual pause retains the same frozen collected-word effect")
-	app._jelly_pause_menu.keep_playing_button.pressed.emit()
+	app._jelly_pause_button.pressed.emit()
 	for frame in range(100):
 		view._process(0.04)
 	check(not view.game.powerup_active() and not view.game.paused and view.game.merged_count == 1
@@ -192,7 +227,7 @@ func _run() -> void:
 	app.set_process(false)
 	for mode: String in ["jelly", "word_jelly"]:
 		await _check_mode(app, mode)
-	if app.get("_jelly_pause_button") != null:
+	if app.get("_jelly_pause_shade") != null:
 		_check_word_effect_pause(app)
 	app.audio.halt()
 	app.free()

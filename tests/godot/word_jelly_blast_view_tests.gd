@@ -108,6 +108,8 @@ func _run() -> void:
 				"Board bodies and ambient Jelly motion slow without changing the engine, UI or audio clock")
 			check(view.snapshot().hit_stop.visible == (not steady),
 				"A normal-motion board visibly focuses the collected source even when all other Jellies are stationary")
+			check(view.find_child("HitStopFocus", true, false) == null,
+				"Hit stop keeps its visible sourced wave without a dark overlay covering the well")
 			check(view._powerup_effects.stamps.any(func(stamp: Dictionary) -> bool:
 				return stamp.texture == view.COLLECTION_GLOW and Vector2(stamp.center).is_equal_approx(source_center)),
 				"The collected Jelly's actual board position remains the outgoing energy source")

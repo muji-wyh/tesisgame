@@ -233,14 +233,12 @@ func snapshot() -> Dictionary:
 func _prepare_chest() -> void:
 	if not is_inside_tree() or _manifest.is_empty() or _palette.is_empty():
 		return
-	chest.configure_skin(_palette, _manifest)
+	_model_tier = clampi(RewardProgress.THEMES.find(_theme_id) + 1, 1, RewardProgress.MAX_TIER)
+	chest.configure_tier(_model_tier, _palette, _manifest)
 	# No opening or mechanical clock belongs to this earned-chest preview.
 	chest.reduced_motion = true
 	chest.set_idle_paused(true)
 	chest.set_process(false)
-	_model_tier = RewardProgress.THEMES.find(_theme_id) + 1
-	if _model_tier > 4:
-		_model_tier = 0
 	if not _reduced_motion:
 		_models.prepare(_model_tier)
 	_warm_chest()

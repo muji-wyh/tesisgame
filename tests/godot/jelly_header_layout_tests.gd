@@ -92,10 +92,11 @@ func check_chest_levels(app, view, dimensions: Vector2i) -> void:
 	var dock_before: Rect2 = view._header_chest_host.get_global_rect()
 	var icon_before: Rect2 = view._loot_icon.get_global_rect()
 	var label: Label = view._header_chest_level
-	for tier: int in [0, 1, 10, 99, 999]:
+	for tier: int in [0, 1, 10, 29, 30, 99, 999]:
 		# Seed completed reward progress without creating pending celebration events.
 		var fragments: int = 0 if tier == 0 else 4 + (tier - 1) * 5
 		var progress: Dictionary = RewardProgress.reward_progress(fragments)
+		var expected_tier: int = mini(tier, RewardProgress.MAX_TIER)
 		view.game.fragment_count = fragments
 		view.game.chest_tier = int(progress.chest_tier)
 		view.game.chest_count = int(progress.chest_count)
@@ -111,7 +112,7 @@ func check_chest_levels(app, view, dimensions: Vector2i) -> void:
 			font.get_height(pixels))
 		var available: Vector2 = label.size - surface.get_minimum_size()
 		check(label.is_visible_in_tree() and label.get_parent() == view._header_chest_host
-			and label.text == "Lv%d" % tier, context + " visibly identifies the earned chest level")
+			and label.text == "Lv%d" % expected_tier, context + " visibly identifies the capped earned chest level")
 		check(dock_before.grow(0.1).encloses(badge) and badge.has_area()
 			and badge.end.distance_to(dock_before.end) < 0.1,
 			context + " contains the complete badge at the dock's lower-right corner")
@@ -129,7 +130,7 @@ func check_chest_levels(app, view, dimensions: Vector2i) -> void:
 			and (dock_before.size * s).is_equal_approx(Vector2(44, 44)),
 			context + " preserves the existing chest artwork and forty-four-pixel header target")
 		var state: Dictionary = view.snapshot().loot
-		check(state.displayed_tier == tier and state.level_label.text == label.text and state.level_label.visible,
+		check(state.displayed_tier == expected_tier and state.level_label.text == label.text and state.level_label.visible,
 			context + " publishes the same visible level for browser verification")
 	view.game.fragment_count = int(before.fragment_count)
 	view.game.chest_tier = int(before.chest_tier)
@@ -191,7 +192,7 @@ func _run() -> void:
 		await tap(view.finish_button)
 		check(app._jelly_pause_open() and view.game.paused and view.game.phase == "playing",
 			mode + " tapping the original pull control pauses without ending the round")
-		app._jelly_pause_menu.keep_playing_button.pressed.emit()
+		app._jelly_pause_button.pressed.emit()
 		view.finish_button.accessibility_requested.emit()
 		check(app._finish_confirmation_open() and view.game.phase == "playing",
 			mode + " an explicit finish request retains its accessible confirmation")

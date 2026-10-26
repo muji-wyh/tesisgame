@@ -495,7 +495,7 @@ func check_combo_coins() -> void:
 			app._process(0.3)
 			check(app._coin_flight._events == paused_events and app._coin_counter.target == expected,
 				"Manual Pause freezes the flight and rolling-counter timeline without destroying the reward")
-			app._jelly_pause_menu.keep_playing_button.pressed.emit()
+			app._jelly_pause_button.pressed.emit()
 			app._coin_flight.advance(Flight.BURST_SECONDS + Flight.TRAVEL_SECONDS - 0.22)
 		elif count >= 10:
 			app._coin_flight.advance(0.25)

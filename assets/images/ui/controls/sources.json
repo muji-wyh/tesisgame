@@ -10,6 +10,17 @@
   "animation": "Static source artwork; no animation clips.",
   "assets": [
     {
+      "id": "player-play",
+      "file": "assets/images/ui/controls/player-play.svg",
+      "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/player-play.svg",
+      "source_sha256": "9c30092ecfea4578ecf2669269ce4334a24d82667e61fabba7f6c552447d1c77",
+      "integrated_sha256": "04ca18c3f9d008fd09e255ad0bea69b0dd1db3c6977a0190a0fabb364ea7482e",
+      "variant": "outline",
+      "acquired": "2026-10-25",
+      "status": "Acquired and original SVG rendered and visually inspected on white; paths unchanged, currentColor replaced with white for runtime tint. Inline Pause/Resume integration is undergoing runtime verification.",
+      "animation": "Static authored play icon; paused gel motion is scripted UI feedback, not a source clip."
+    },
+    {
       "id": "player-pause",
       "file": "assets/images/ui/controls/player-pause.svg",
       "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/player-pause.svg",

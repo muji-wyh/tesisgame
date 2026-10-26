@@ -7,6 +7,7 @@ signal changed(state: Dictionary)
 signal chest_audio_requested(action: String, theme_id: String, progress: float)
 signal chest_cue_requested(theme_id: String, cue: String, step: int)
 signal coins_released(id: String, reward: Dictionary, origin: Vector2, animate: bool)
+signal settlement_retry_requested
 
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
@@ -20,8 +21,10 @@ const Mascot = preload("res://scripts/duck_mascot.gd")
 const RewardLayout = preload("res://scripts/round_reward_layout.gd")
 const CoinBreakdown = preload("res://scripts/chest_coin_breakdown.gd")
 const TREASURE_LIGHT = preload("res://assets/chests/particles/portal_glow.png")
+const RATING_STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 
 var rewards := State.new()
+var _settlement_error: String = ""
 var save_path: String = "user://pop-rewards-v1.cfg"
 var storage_kind: String = "pop"
 var max_chests: int = 3
@@ -71,6 +74,9 @@ var _companion_theme: String = ""
 var _companion_age: int = 0
 var _collecting: bool = false
 var _collect_pending: bool = false
+var _stage_rating: Control
+var _stage_stars: Array[TextureRect] = []
+var _stage_bonus_label: Label
 
 
 func _ready() -> void:
@@ -107,6 +113,20 @@ func _ready() -> void:
 	_result_score.reparent(_content)
 	_result_caption = _label("", 16)
 	_result_caption.reparent(_content)
+	_stage_rating = Control.new()
+	_stage_rating.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_content.add_child(_stage_rating)
+	for index in range(3):
+		var star := TextureRect.new()
+		star.texture = RATING_STAR
+		star.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		star.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_stage_rating.add_child(star)
+		_stage_stars.append(star)
+	_stage_bonus_label = _label("", 15)
+	_stage_bonus_label.reparent(_stage_rating)
+	_stage_bonus_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_stage_rating.hide()
 	_result_caption.hide()
 	pip = Mascot.new()
 	pip.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -146,7 +166,7 @@ func _ready() -> void:
 	_retry.text = "Retry save"
 	add_child(_retry)
 	Style.action_button(_retry, Style.GOOD, true)
-	_retry.pressed.connect(retry_save)
+	_retry.pressed.connect(_retry_result)
 	_previous_page = Button.new()
 	_previous_page.name = "TreasurePreviousPage"
 	_previous_page.text = "Previous"
@@ -226,6 +246,8 @@ func set_result_context(result: Dictionary, earned_round_id: String = "") -> voi
 	var previous_page_size: int = _effective_page_size()
 	var had_empty_result: bool = not _empty_result_id.is_empty()
 	var previous_reward_id: String = _result_reward_id
+	if _result_context != result:
+		_settlement_error = ""
 	_result_context = result.duplicate(true)
 	_result_reward_id = ""
 	if _is_result_dialog() and int(result.get("chest_count", 0)) > 0:
@@ -239,6 +261,20 @@ func set_result_context(result: Dictionary, earned_round_id: String = "") -> voi
 		_build_cards()
 		return
 	_refresh()
+
+
+func set_settlement_error(message: String) -> void:
+	if _settlement_error == message:
+		return
+	_settlement_error = message
+	_refresh()
+
+
+func _retry_result() -> void:
+	if _result_context.has("campaign"):
+		settlement_retry_requested.emit()
+	else:
+		retry_save()
 
 
 func _select_result_chest() -> void:
@@ -494,9 +530,12 @@ func _build_cards() -> void:
 		panel.add_child(light)
 		var art := Chest.new()
 		panel.add_child(art)
-		art.configure_skin(palette, _manifest)
-		art.reduced_motion = reduced_motion
 		var tier: int = int(entry.get("tier", 0))
+		if tier > 0:
+			art.configure_tier(clampi(tier, 1, JellyRewardProgress.MAX_TIER), palette, _manifest)
+		else:
+			art.configure_skin(palette, _manifest)
+		art.reduced_motion = reduced_motion
 		var tier_label := Style.label(JellyRewardProgress.title_for_tier(tier) if tier > 0 else "", 14)
 		tier_label.name = "ChestTier"
 		tier_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -918,14 +957,16 @@ func _refresh_captions() -> void:
 func _refresh() -> void:
 	if not is_instance_valid(_back):
 		return
+	var failed: bool = _save_failed or not _settlement_error.is_empty()
+	var failure: String = _settlement_error if not _settlement_error.is_empty() else rewards.error if _save_failed else ""
 	for index in range(_cards.size()):
 		var card: Dictionary = _cards[index]
-		card.button.disabled = _paused or _save_failed or card.opened or (_active >= 0 and _active != index)
-	_retry.visible = _save_failed
+		card.button.disabled = _paused or failed or card.opened or (_active >= 0 and _active != index)
+	_retry.visible = failed
 	_retry.text = "Resume saved treasure" if storage_kind != "jelly" and max_chests > 0 and rewards.has_pending() and rewards.round_id != _configured_id else "Retry save"
 	_retry.disabled = _opening
-	_notice.text = rewards.error if _save_failed else ""
-	_notice.visible = _save_failed and not _is_result_dialog()
+	_notice.text = failure
+	_notice.visible = failed and not _is_result_dialog()
 	var state: Dictionary = snapshot()
 	var result_mode: bool = not _result_context.is_empty()
 	var danger_result: bool = _is_danger_result()
@@ -934,15 +975,38 @@ func _refresh() -> void:
 	_back.text = "Play again" if result_mode else "Back"
 	_result_score.visible = result_mode
 	_progress.visible = not result_mode
-	_result_caption.visible = result_mode and (_cards.is_empty() or _save_failed)
+	_result_caption.visible = result_mode and (_cards.is_empty() or failed)
 	_sync_companion()
+	var campaign: Dictionary = _result_context.get("campaign", {})
+	var campaign_result: bool = campaign.get("kind", "") == "main"
+	_stage_rating.visible = campaign_result
+	if campaign_result:
+		pip.hide()
 	if result_mode:
 		var earned_count: int = maxi(0, int(_result_context.get("chest_count", 0)))
 		_heading.text = ("You earned a chest!" if earned_count == 1 else "You earned chests!") if earned_count > 0 else ("Game over" if danger_result else "Round complete")
 		_result_score.text = result_summary()
+		_result_caption.text = failure if failed else "No chest this round"
+		_result_caption.add_theme_color_override("font_color", Style.WRONG if failed else Style.MUTED)
+		if campaign_result:
+			var rating: int = int(campaign.get("stars", 0))
+			_heading.text = "Stage %d cleared!" % int(campaign.number) if rating > 0 else "Time's up" \
+				if campaign.get("outcome") == "timeout" else "Try again"
+			var quote: Dictionary = _result_context.get("stage_bonus", {})
+			var quoted: bool = bool(quote.get("ok", false))
+			_result_score.text = ("%d stars  ·  Clear reward x%s" % [rating, str(quote.factor)] if quoted \
+				else "%d stars  ·  Reward pending" % rating) if rating > 0 else "No clear bonus. Treasure is kept."
+			_stage_bonus_label.text = ("+%d clear coins" % int(quote.bonus) if quoted else "Waiting to save reward") \
+				if rating > 0 else "No clear bonus"
+			for index in range(3):
+				_stage_stars[index].modulate = Color.WHITE if index < rating else Color(0.4, 0.46, 0.42, 0.40)
+			if _cards.is_empty() and not failed:
+				_result_caption.text = "Saving your stars and returning to the map..."
+				_result_caption.visible = true
+		if _result_context.has("campaign"):
+			_back.hide()
+			_home.hide()
 		_result_score.accessibility_name = "Score: %d. %s" % [maxi(0, int(_result_context.get("score", 0))), _result_score.text]
-		_result_caption.text = rewards.error if _save_failed else "No chest this round"
-		_result_caption.add_theme_color_override("font_color", Style.WRONG if _save_failed else Style.MUTED)
 		var tier: int = maxi(0, int(_result_context.get("chest_tier", 0)))
 		var is_pop: bool = _result_context.has("hits")
 		var completed: int = maxi(0, int(_result_context.get("hits" if is_pop else "cleared_pairs", 0)))
@@ -1124,6 +1188,19 @@ func _layout_result_dialog(s: float, w: float, h: float) -> void:
 		control.custom_minimum_size = Vector2.ZERO
 		control.position = rect.position
 		control.size = rect.size
+	if _stage_rating != null and _stage_rating.visible:
+		var hero: Rect2 = layout.pip
+		_stage_rating.position = hero.position
+		_stage_rating.size = hero.size
+		var edge: float = minf(52.0 / s, hero.size.x / 3.2)
+		var total: float = edge * 3.0
+		for index in range(3):
+			_stage_stars[index].position = Vector2((hero.size.x - total) * 0.5 + index * edge, hero.size.y * 0.34)
+			_stage_stars[index].size = Vector2.ONE * edge
+		_stage_bonus_label.position = Vector2(0, hero.size.y * 0.34 + edge + 6.0 / s)
+		_stage_bonus_label.size = Vector2(hero.size.x, 40.0 / s)
+		_stage_bonus_label.add_theme_font_size_override("font_size", ceili(14.0 / s))
+		_stage_bonus_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	var gap: float = 8 / s
 	var footer_top: float = minf(_home.position.y, _retry.position.y) if _save_failed else _home.position.y
 	_scroll.position = Vector2.ZERO
@@ -1270,8 +1347,9 @@ func snapshot() -> Dictionary:
 		"scroll_offset": _scroll.scroll_vertical if is_instance_valid(_scroll) else 0,
 		"scroll_max": _scroll._maximum() if is_instance_valid(_scroll) else 0.0,
 		"chests": entries, "active": _active, "holding": _holding, "opening": _opening,
-		"pending": _unsaved_index >= 0 or rewards.has_pending(), "save_failed": _save_failed,
-		"error": rewards.error if _save_failed else "", "paused": _paused}
+		"pending": _unsaved_index >= 0 or rewards.has_pending(),
+		"save_failed": _save_failed or not _settlement_error.is_empty(),
+		"error": _settlement_error if not _settlement_error.is_empty() else rewards.error if _save_failed else "", "paused": _paused}
 
 
 func _exit_tree() -> void:

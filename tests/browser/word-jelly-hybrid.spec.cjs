@@ -85,7 +85,8 @@ test('whole-word roots match pictures and merged words remain compact and collec
   expect(before.stage.number).toBe(1);
   expect(before.stage.total).toBe(3);
   expect(before.stage.remaining_ids).toHaveLength(3);
-  expect(before.stage.label).toBe('Stage 1  ·  0 / 3 mastered');
+  expect(before.stage.label).toMatch(/Stage 1[\s\S]*\d+:\d{2}/);
+  expect(before.stage.stars_now).toBe(3);
   expect(before.practice.visible).toBe(true);
   expect(before.practice.words).toHaveLength(3);
   expect(before.tiles.every(tile => before.stage.word_ids.includes(tile.source_word_id))).toBe(true);

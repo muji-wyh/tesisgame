@@ -34,6 +34,7 @@ func _run() -> void:
 	_check_viewport_coverage(paper)
 	_check_burst_sampling()
 	_check_motion_variety(paper)
+	_check_small_stage_celebration(paper)
 	paper.burst("paths:earned-tier-three")
 	var variations: Array[float] = [0.0, float(paper._bursts[0].variation), 0.999999]
 	paper.clear()
@@ -48,6 +49,26 @@ func _run() -> void:
 	clip.free()
 	print("Reward confetti: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_small_stage_celebration(paper) -> void:
+	paper.clear()
+	check(paper.has_method("burst_small"), "A stage has a dedicated restrained one-third-screen paper preset")
+	if not paper.has_method("burst_small"):
+		return
+	check(bool(paper.call("burst_small", "stage:small")) and not bool(paper.call("burst_small", "stage:small")),
+		"The smaller stage celebration retains reward-key deduplication")
+	var snapshot: Dictionary = paper.snapshot()
+	check(int(snapshot.paper_count) <= Confetti.PAPER_COUNT / 3 and int(snapshot.paper_count) >= 24,
+		"A stage uses at most one-third of the old minimum particle count, rather than hundreds of papers")
+	var region_values: Array = snapshot.get("regions", [])[0]
+	var region := Rect2(region_values[0], region_values[1], region_values[2], region_values[3])
+	check(region.size.y <= paper.screen_rect().size.y / 3.0 + 0.01
+		and paper.screen_rect().encloses(region),
+		"The whole celebration is confined to the upper third of the viewport")
+	paper.advance(2.5)
+	check(not paper.is_active(), "A restrained stage celebration finishes promptly without a long full-screen tail")
+	paper.clear()
 
 func _check_lifecycle(paper) -> void:
 	check(not paper.burst("") and not paper.is_active(), "An empty reward identity cannot launch paper")

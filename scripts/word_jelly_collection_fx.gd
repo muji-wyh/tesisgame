@@ -26,6 +26,7 @@ var _entries: Array[Dictionary] = []
 var _reduced_motion: bool = false
 var _ui_scale: float = 1.0
 var _serial: int = 0
+var _board_pitch: float = 0.0
 
 
 func _init() -> void:
@@ -54,12 +55,23 @@ func configure_layout(available: Rect2, ui_scale: float = 1.0) -> void:
 	queue_redraw()
 
 
+func set_board_burst(cell_pitch: float) -> void:
+	if not is_finite(cell_pitch) or cell_pitch <= 0.0:
+		push_error("Board collection effects need a positive cell pitch.")
+		return
+	_board_pitch = cell_pitch
+	queue_redraw()
+
+
 func present(origin: Vector2, level: int, accent: Color, batch: bool = false,
 		initial_age: float = 0.0, delay: float = 0.0, anchor_id: String = "") -> void:
 	if not origin.is_finite() or not is_finite(initial_age) or not is_finite(delay):
 		return
 	var selected: Dictionary = profile(level)
 	var duration: float = float(selected.seconds)
+	var burst_only: bool = _board_pitch > 0.0 and int(selected.level) >= 4
+	if burst_only:
+		duration = 0.62 + float(int(selected.level) - 4) * 0.04
 	if batch:
 		duration *= 0.75
 	if _reduced_motion:
@@ -70,7 +82,7 @@ func present(origin: Vector2, level: int, accent: Color, batch: bool = false,
 	_serial += 1
 	_entries.append({"id": _serial, "origin": origin - position, "profile": selected,
 		"accent": accent, "batch": batch, "elapsed": maxf(0.0, initial_age),
-		"delay": wait, "duration": duration, "anchor_id": anchor_id})
+		"delay": wait, "duration": duration, "anchor_id": anchor_id, "burst_only": burst_only})
 	while _entries.size() > MAX_ACTIVE:
 		_entries.pop_front()
 	show()
@@ -121,6 +133,7 @@ func snapshot() -> Dictionary:
 			"elapsed": entry.elapsed, "delay": entry.delay, "popped": age >= 0.0,
 			"phase": _phase(entry, age),
 			"duration": entry.duration, "origin": [entry.origin.x + position.x, entry.origin.y + position.y],
+			"burst_only": bool(entry.burst_only), "radius": _radius(entry),
 			"reduced_motion": _reduced_motion})
 	return {"visible": visible and not states.is_empty(), "active_count": states.size(),
 		"entries": states, "reduced_motion": _reduced_motion, "input_transparent": mouse_filter == Control.MOUSE_FILTER_IGNORE}
@@ -145,6 +158,8 @@ func _radius(entry: Dictionary) -> float:
 	var requested: float = float(entry.profile.radius) / _ui_scale
 	if bool(entry.batch):
 		requested *= 0.66
+	if bool(entry.get("burst_only", false)):
+		requested = minf(requested, _board_pitch * (0.45 + float(int(entry.profile.level) - 4) * 0.015))
 	return minf(requested, minf(size.x, size.y) * 0.44)
 
 
@@ -173,6 +188,8 @@ func _phase(entry: Dictionary, age: float) -> String:
 	if int(entry.profile.level) < 4:
 		return "release" if age < float(entry.duration) * 0.42 else "settling"
 	var progress: float = age / float(entry.duration)
+	if bool(entry.get("burst_only", false)):
+		return "explosion" if progress < 0.18 else "blossom"
 	if progress < 0.11:
 		return "explosion"
 	return "blossom" if progress < 0.46 else "falling_embers"
@@ -247,6 +264,10 @@ func _draw_fireworks(entry: Dictionary, progress: float) -> void:
 	var level: int = int(entry.profile.level)
 	var group_count: int = int(entry.profile.bursts)
 	var count: int = int(entry.profile.sparks)
+	var burst_only: bool = bool(entry.get("burst_only", false))
+	if burst_only:
+		group_count = mini(group_count, 4)
+		count = roundi(float(count) * 0.45)
 	if bool(entry.batch):
 		count = roundi(float(count) * 0.45)
 	var main_count: int = roundi(float(count) * (0.50 if level == 4 else 0.34))
@@ -255,9 +276,13 @@ func _draw_fireworks(entry: Dictionary, progress: float) -> void:
 	for group in range(group_count):
 		var delay: float = _firework_delay(level, group)
 		var age: float = (progress - delay) * float(entry.profile.seconds)
+		if burst_only:
+			age = progress * float(entry.duration) - float(group) * 0.045
 		if age < 0.0:
 			continue
 		var life: float = (1.0 - delay) * float(entry.profile.seconds)
+		if burst_only:
+			life = float(entry.duration) - float(group) * 0.045
 		var base: Vector2 = entry.origin
 		var reach: float = radius * _firework_reach(level, group)
 		var spokes: int = main_count if group == 0 else secondary_count
@@ -268,19 +293,23 @@ func _draw_fireworks(entry: Dictionary, progress: float) -> void:
 		for index in range(spokes):
 			var phase: float = float(posmod(index * 7 + group * 3, 13)) / 13.0
 			var angle: float = TAU * float(index) / float(spokes) - PI * 0.5 + group * 0.38 + float(entry.id % 7) * 0.09
-			var point: Vector2 = base + _firework_trajectory(angle, age, phase, reach, level)
+			var point: Vector2 = base + _firework_trajectory(angle, age, phase, reach, level, burst_only)
 			var fade: float = 1.0 - smoothstep(life * (0.60 + phase * 0.10), life, age)
 			# Ember flicker changes luminance, not trajectory or visibility ownership.
 			var flicker: float = lerpf(1.0, 0.90 + 0.10 * sin(age * 12.0 + phase * TAU), smoothstep(0.55, 1.4, age))
 			var edge: float = (12.0 + phase * 4.0 + float(level - 4) * 0.8) / _ui_scale
+			if burst_only:
+				edge = minf(edge, _board_pitch * 0.18)
 			edge *= lerpf(1.08, 0.62, clampf(age / life, 0.0, 1.0))
 			var spark_tint: Color = tint.lerp(_palette(entry, group + 1), 0.18 if index % 3 == 0 else 0.0)
 			var trail_count: int = 3 if bool(entry.batch) else mini(10, 7 + level - 4)
+			if burst_only:
+				trail_count = 2
 			for tail in range(trail_count, 0, -1):
 				var prior_age: float = age - float(tail) * 0.05
 				if prior_age < 0.0:
 					continue
-				var behind: Vector2 = base + _firework_trajectory(angle, prior_age, phase, reach, level)
+				var behind: Vector2 = base + _firework_trajectory(angle, prior_age, phase, reach, level, burst_only)
 				var taper: float = 1.0 - float(tail) / float(trail_count + 1)
 				_stamp(SPARKLE, behind, Vector2.ONE * edge * (0.40 + taper * 0.50),
 					Color(spark_tint, fade * taper * 0.70), angle)
@@ -307,12 +336,14 @@ func _firework_reach(level: int, group: int) -> float:
 	return 0.43 if level == 4 else 0.49
 
 
-func _firework_trajectory(angle: float, age: float, phase: float, reach: float, level: int) -> Vector2:
+func _firework_trajectory(angle: float, age: float, phase: float, reach: float, level: int, burst_only: bool = false) -> Vector2:
 	# Fast release loses radial speed to drag. Gravity then wins, making the last
 	# beat visibly descend instead of merely fading an expanded star pattern.
 	var release: float = 1.0 - exp(-age * 5.0)
 	var direction: Vector2 = Vector2.from_angle(angle)
 	var spread: Vector2 = direction * reach * (0.72 + phase * 0.28) * release
+	if burst_only:
+		return spread
 	var falling_age: float = maxf(0.0, age - 0.16)
 	var drop: float = reach * falling_age * falling_age * (0.115 if level == 5 else 0.095)
 	var drift: float = sin(phase * TAU) * reach * 0.035 * falling_age

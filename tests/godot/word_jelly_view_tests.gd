@@ -221,7 +221,8 @@ func _check_opening_and_bounds(view) -> void:
 		var s: float = Style.ui_scale(view)
 		var bottom: float = maxf(view._board.end.y, view.collect_button.get_rect().end.y)
 		for button: Control in view.powerup_buttons.values():
-			bottom = maxf(bottom, button.get_rect().end.y)
+			if button.visible:
+				bottom = maxf(bottom, button.get_rect().end.y)
 		check(is_equal_approx(bottom, dimensions.y - 12.0 / s),
 			"game group at %s ends above twelve-pixel padding: actual %.3f, expected %.3f" % [dimensions, bottom, dimensions.y - 12.0 / s])
 		check(view._preview_rect.position.y >= 0 and view.finish_button.get_rect().end.y <= dimensions.y,
@@ -267,7 +268,8 @@ func _check_supply_layout(view) -> void:
 	var regions: Dictionary = {"well": board, "supply tray": tray, "chest meter": view.chest_meter_rect(),
 		"Finish": view.finish_button.get_rect(), "Collect words": view.collect_button.get_rect()}
 	for kind: String in view.powerup_buttons:
-		regions[kind + " powerup"] = view.powerup_buttons[kind].get_rect()
+		if view.powerup_buttons[kind].visible:
+			regions[kind + " powerup"] = view.powerup_buttons[kind].get_rect()
 	if view._loot_detail.visible:
 		regions["chest detail"] = view._loot_detail.get_rect()
 		var detail_font: Font = view._loot_detail.get_theme_font("font")
@@ -304,6 +306,8 @@ func _check_supply_layout(view) -> void:
 	check(view.chest_meter_rect().size.x * s >= 44.0 - 0.01 and view.chest_meter_rect().size.y * s >= 44.0 - 0.01,
 		"the standalone chest retains a forty-four-pixel target without covering the well" + context)
 	for button: Control in view.powerup_buttons.values():
+		if not button.visible:
+			continue
 		check(button.size.x * s >= 44.0 - 0.01 and button.size.y * s >= 44.0 - 0.01,
 			"each paid powerup retains its own forty-four-pixel target" + context)
 
@@ -1152,7 +1156,7 @@ func _check_collect_button_growth(view) -> void:
 
 
 func _check_batch_collection(view) -> void:
-	check(is_equal_approx(Model.BATCH_BEAT_SECONDS, 0.14), "Auto Collect starts each collection exactly 140 ms apart")
+	check(is_equal_approx(Model.BATCH_BEAT_SECONDS, 0.12), "Auto Collect starts each collection exactly 120 ms apart")
 	for reduced: bool in [false, true]:
 		_reset(view, reduced)
 		var ids: Array[int] = _install_batch_words(view, 3, true)
@@ -1207,7 +1211,7 @@ func _check_batch_collection(view) -> void:
 				"the rhythmic queue never overlaps reward transactions or disappearance poses")
 			var visible_reveals: int = _batch_reveal_count(now_started, elapsed, float(started.word_reveal.duration))
 			check(int(state.word_reveal.active_count) == visible_reveals and state.word_reveal.entries.size() == visible_reveals,
-				"each 140 ms pickup adds its own reveal and expired reading cards leave independently")
+				"each 120 ms pickup adds its own reveal and expired reading cards leave independently")
 			if now_started > previous_started:
 				start_times.append(float(state.collection_batch.elapsed))
 			if now_completed > previous_completed:
@@ -1219,15 +1223,15 @@ func _check_batch_collection(view) -> void:
 		var final: Dictionary = view.snapshot()
 		check(not final.collection_batch.active and int(final.collection_batch.completed) == 3
 			and int(final.collection_batch.started) == 3 and is_equal_approx(elapsed, 3.0 * Model.BATCH_BEAT_SECONDS),
-			"three words finish in exactly 420 ms through three sequential collection beats")
+			"three words finish in exactly 360 ms through three sequential collection beats")
 		check(start_times.size() == 3 and payout_times.size() == 3 and pop_times.size() == 3,
 			"each collected word has a separate visible start, payout and disappearance sound")
 		for index in range(start_times.size()):
 			check(is_equal_approx(start_times[index], index * Model.BATCH_BEAT_SECONDS)
 				and is_equal_approx(payout_times[index], (index + 1) * Model.BATCH_BEAT_SECONDS),
-				"ordinary and reduced-motion collection both preserve exact 140 ms start and payout spacing")
+				"ordinary and reduced-motion collection both preserve exact 120 ms start and payout spacing")
 			check(is_equal_approx(pop_times[index], index * Model.BATCH_BEAT_SECONDS + 0.04),
-				"the disappearance sound stays at 40 ms within every 140 ms beat")
+				"the disappearance sound stays at 40 ms within every 120 ms beat")
 		check(payouts.size() == 3 and credits.size() == 1 and attempts.size() == 3,
 			"batch collection records every word but only persists its one rare coin drop")
 		check(payouts[0].amount == 50 and payouts[1].amount == 0 and payouts[2].amount == 0,
@@ -1245,7 +1249,7 @@ func _check_batch_collection(view) -> void:
 		for index in range(reveals.size()):
 			check(str(reveals[index].word_id) == "cat"
 				and is_equal_approx(float(reveals[index].elapsed), elapsed - (3 - surviving_count + index) * Model.BATCH_BEAT_SECONDS - Model.collection_pop_seconds(1, true)),
-				"repeated spellings retain separate reveal timelines at the 140 ms cadence")
+				"repeated spellings retain separate reveal timelines at the 120 ms cadence")
 		for id: int in retained:
 			check(not view.game.cell(id).is_empty(), "unfinished merges and unmerged roots stay available after collecting")
 		check(not final.collect_button.enabled and int(final.collect_button.count) == 0,
@@ -1324,7 +1328,7 @@ func _check_batch_chest_queue(view) -> void:
 			"all nine fragments and the second chest tier commit before queued celebration begins")
 		check(payouts.size() == 9 and view.game.collected_coins == 50
 			and is_equal_approx(elapsed, 9.0 * Model.BATCH_BEAT_SECONDS),
-			"waiting chest artwork preserves nine collections and one rare coin reward across nine 140 ms beats")
+			"waiting chest artwork preserves nine collections and one rare coin reward across nine 120 ms beats")
 		var kinds: Dictionary = {}
 		for tick in range(320):
 			_advance(view, 0.025)
@@ -1533,7 +1537,7 @@ func _check_word_reveal_levels(view) -> void:
 				var completed: Dictionary = view.game.collection_batch_snapshot()
 				check(not completed.active and int(completed.completed) == 3
 					and is_equal_approx(float(completed.elapsed), 3.0 * Model.BATCH_BEAT_SECONDS),
-					"High-level fireworks leave all three collection payouts on the original 140 ms cadence")
+					"High-level fireworks leave all three collection payouts on the 120 ms cadence")
 				_advance(view, 0.90)
 				var afterglows: Array = view.snapshot().word_reveal.entries
 				check(afterglows.size() == 2 and int(afterglows[0].merge_level) == 4
@@ -1590,7 +1594,7 @@ func _check_word_reveal_control_clearance(view) -> void:
 		var visible_count: int = _batch_reveal_count(4, 0.85, float(state.word_reveal.duration))
 		var reading_cards: Array = state.word_reveal.entries.filter(func(entry: Dictionary) -> bool: return entry.content_visible)
 		check(int(state.collection_batch.started) == 4 and reading_cards.size() == visible_count,
-			"The 140 ms cadence retains the original count of readable cards while fireworks may linger")
+			"The 120 ms cadence retains the original count of readable cards while fireworks may linger")
 		if dimensions == Vector2(1000, 720):
 			check(visible_count == 4, "the full reading region supports four concurrent collection pops before their first expiry")
 	view.size = Vector2(1000, 720)
@@ -2643,13 +2647,21 @@ func _check_repeat_merge_compact_body(view) -> void:
 	extra.row = 0
 	view.game.cells.append(extra)
 	view._sync_tiles()
+	var expected_mass: int = int(cell.mass) + int(extra.mass)
+	var expected_fragments: int = int(cell.fragments) + int(extra.fragments)
 	_drag(view, id, int(extra.id))
-	check(view.game.fusions.is_empty() and cues.count("wrong") == 1, "a total of ten rejects an upgrade above Lv9")
-	_advance(view, 0.4)
-	check(view.game.cell(id).merge_level == 2 and view.game.cell(int(extra.id)).merge_level == 8,
-		"a rejected upgrade preserves both levels and their separate identities")
-	check(view._tiles[id]._picture.visible and view._tiles[id].fragment_badge_snapshot().count_text == "5"
-		and view._tiles[int(extra.id)].visible_fragment_badges() == 1, "upgrade rejection preserves pictures and each carried reward")
+	check(view.game.fusions.size() == 1 and cues.count("wrong") == 0,
+		"A total of ten accepts an identical-word upgrade clamped to Lv9")
+	var capped_id: int = int(view.game.fusions[0].result.id) if not view.game.fusions.is_empty() else -1
+	_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 2.0)
+	var capped: Dictionary = view.game.cell(capped_id)
+	check(capped.get("merge_level", 0) == 9 and capped.get("fragments", 0) == expected_fragments
+		and capped.get("mass", 0) == expected_mass and view.game.cell(id).is_empty() and view.game.cell(int(extra.id)).is_empty(),
+		"The capped result preserves both inputs' entire mass and fragments while consuming them once")
+	if view._tiles.has(capped_id):
+		check(view._tiles[capped_id]._picture.visible
+			and view._tiles[capped_id].fragment_badge_snapshot().count_text == "6",
+			"The capped result retains its picture and exact carried reward count")
 
 func _check_uniform_outline(view) -> void:
 	_reset(view, true)

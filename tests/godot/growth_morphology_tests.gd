@@ -251,13 +251,13 @@ func _test_bound_family_review_resolution() -> void:
 		check(phrase.ok and phrase.words[0] == word,
 			"Review resolution preserves original contextual word and media: " + id)
 		var composition: Dictionary = Content.resolve_growth(Context.growth(age, "word_jelly"), [word])
-		check(composition.ok == (id in ["separate", "multiply", "divide", "retire"]),
-			"Resolved reviews retain the original image eligibility: " + id)
+		check(composition.ok and composition.words[0].get("image", "") == word.get("image", ""),
+			"Reviewed spelling remains playable without inventing or replacing source artwork: " + id)
 	for id: String in ["attract", "connect", "include", "receive", "reflect", "adapt"]:
 		var word: Dictionary = _word(id)
 		var eligible: Dictionary = Content.resolve_growth(Context.growth(int(word.min_age), "word_jelly"), [word])
-		check(eligible.ok == (id in ["attract", "receive"]),
-			"Corrected graphs retain the original image eligibility: " + id)
+		check(eligible.ok and eligible.words[0].get("image", "") == word.get("image", ""),
+			"Corrected reviewed graphs preserve their original optional picture: " + id)
 	for age in range(3, 13):
 		check(Content.resolve_growth(Context.growth(age, "word_jelly"), words).ok,
 			"Every Growth age retains a playable composition pool: %d" % age)

@@ -169,7 +169,9 @@ func _sample() -> void:
 			shade = lerpf(darkest, 1.0, smoothstep(hold_until, CHANGE_SECONDS, _elapsed))
 		turn = -TAU * smoothstep(0.04, 0.68, _elapsed)
 	chest.scale = Vector2.ONE * extent
-	chest.rotation = turn
+	chest.rotation = 0.0
+	if is_instance_valid(chest._model_view):
+		chest._model_view.set_closed_turn(turn)
 	chest.modulate = Color(shade, shade, shade, 1.0)
 	_sync_processing()
 
@@ -181,7 +183,7 @@ func _prepare_chest() -> void:
 	if _theme_id != chosen:
 		_original_materials.clear()
 		_theme_id = chosen
-		chest.configure_skin(Data.theme(chosen), _manifest)
+		chest.configure_tier(clampi(_display_tier, 1, RewardProgress.MAX_TIER), Data.theme(chosen), _manifest)
 		chest.reduced_motion = true
 		_warm_chest()
 	# The closed production artwork remains recognizable when no chest remains.
@@ -259,7 +261,8 @@ func snapshot() -> Dictionary:
 	return {"visible": is_visible_in_tree(), "round_id": _round_id, "tier": _tier, "display_tier": _display_tier, "theme_id": _theme_id,
 		"text": tier_label.text, "grey": _tier == 0, "paused": _paused, "reduced_motion": _reduced_motion,
 		"animating": _animating, "elapsed": _elapsed, "change_count": _change_count,
-		"scale": chest.scale.x, "rotation": chest.rotation, "shade": chest.modulate.r, "chest_mode": chest.mode,
+		"scale": chest.scale.x, "rotation": chest._model_view._rig.rotation.y if is_instance_valid(chest._model_view) else 0.0,
+		"shade": chest.modulate.r, "chest_mode": chest.mode,
 		"anchor": [anchor.x, anchor.y], "art_center": [art.get_center().x, art.get_center().y],
 		"rect": [area.position.x, area.position.y, area.size.x, area.size.y],
 		"chest_rect": [art.position.x, art.position.y, art.size.x, art.size.y]}

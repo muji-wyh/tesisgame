@@ -23,6 +23,7 @@ const Motion = preload("res://scripts/jelly_motion.gd")
 const WordSampler = preload("res://scripts/word_sampler.gd")
 const CoinEconomy = preload("res://scripts/coin_economy.gd")
 const MorphologyResolver = preload("res://scripts/morphology_resolver.gd")
+const StageRun = preload("res://scripts/word_jelly_stage_run.gd")
 const LABEL_FONT = preload("res://assets/fonts/heading.tres")
 const COLUMNS: int = 5
 const ROWS: int = 8
@@ -39,7 +40,7 @@ const ARRIVAL_ORDER: Array[int] = [0, 3, 1, 4, 2]
 const FUSION_SECONDS: float = 0.76
 const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
-const BATCH_BEAT_SECONDS: float = 0.14
+const BATCH_BEAT_SECONDS: float = 0.12
 const BATCH_POP_SECONDS: float = 0.04
 const COMBO_SECONDS: float = 8.0
 const BLAST_MARK_BEAT_SECONDS: float = 0.06
@@ -152,6 +153,14 @@ var _finish_after_purchase: bool = false
 var _finish_reason: String = ""
 var _settle_after_purchase: bool = false
 var _finish_after_collection_commit: bool = false
+var stage_run: StageRun
+var fall_speed_scale: float = 1.0
+var _stage_ending: bool = false
+var _stage_finalizing: bool = false
+var _stage_spawn_interval: float = INITIAL_SPAWN_INTERVAL
+var _stage_pressure_level: int = 0
+var _stage_time_pending: String = ""
+var _stage_clear_feedback: float = 0.0
 
 
 func configure(words: Array, level: int, seed_value: int = -1) -> bool:
@@ -163,6 +172,13 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	if previous_generation != _generation:
 		return false
 	_generation += 1
+	stage_run = null
+	_stage_ending = false
+	_stage_finalizing = false
+	_stage_pressure_level = 0
+	_stage_time_pending = ""
+	_stage_clear_feedback = 0.0
+	fall_speed_scale = 1.0
 	cells.clear()
 	upcoming.clear()
 	fusions.clear()
@@ -280,23 +296,126 @@ func stage_transition_ready() -> bool:
 		and not _powerup_activating and not _powerup_committing and not _finishing_powerup and _blast_queue.is_empty()
 
 
+func bind_stage(plan: Dictionary) -> bool:
+	if not stage_transition_ready():
+		error = "Wait for the current Jelly operation before starting a stage."
+		return false
+	var attempt := StageRun.new()
+	if not attempt.configure(plan):
+		error = attempt.error
+		return false
+	stage_run = attempt
+	_stage_spawn_interval = float(plan.spawn_interval)
+	fall_speed_scale = float(plan.fall_speed_scale)
+	if stage_run.kind == "challenge":
+		_sync_challenge_pressure()
+	_schedule_spawn_interval()
+	spawn_elapsed = 0.0
+	error = ""
+	changed.emit()
+	return true
+
+
+func stage_ending() -> bool:
+	return _stage_ending
+
+
+func _stage_clock_running() -> bool:
+	return stage_run != null and not _stage_ending and not powerup_active() \
+		and not collection_batch_active() and not _has_pending_collection_commit() and error.is_empty()
+
+
+func _decide_stage(reason: String) -> void:
+	if stage_run == null or _stage_ending:
+		return
+	if stage_run.outcome.is_empty() and not stage_run.decide(reason):
+		error = stage_run.error
+		return
+	_stage_ending = true
+	_stage_clear_feedback = 0.62 if stage_run.outcome == "cleared" else 0.0
+	_restore_dragged_tile()
+	_held_tile_id = -1
+	_blast_queue.clear()
+	_pump_stage_finish()
+
+
+func _pump_stage_finish() -> void:
+	if not _stage_ending or phase != "playing" or paused or not error.is_empty() \
+		or powerup_active() or not fusions.is_empty() or collection_batch_active() \
+		or _has_pending_collection_commit() or not _combo_pending.is_empty():
+		return
+	if _settling_remaining() > EPSILON:
+		return
+	if not collectable_ids().is_empty():
+		start_collection_batch()
+		return
+	if _stage_clear_feedback > EPSILON:
+		return
+	_stage_finalizing = true
+	finish_round("cleared" if stage_run.outcome == "cleared" else "timeout" if stage_run.outcome == "timeout" \
+		else "danger" if stage_run.outcome == "blocked" else "finished")
+	_stage_finalizing = false
+
+
+func retry_stage_finish() -> void:
+	if stage_run == null or not _stage_ending or phase != "playing":
+		return
+	error = ""
+	_pump_stage_finish()
+	changed.emit()
+
+
+func settle_stage_finish() -> bool:
+	if stage_run == null or phase == "finished":
+		return true
+	if not _stage_ending:
+		_decide_stage("exit")
+	var was_paused: bool = paused
+	paused = false
+	for index in range(1200):
+		if phase == "finished" or not error.is_empty() or _has_pending_collection_commit():
+			break
+		step(0.05)
+	paused = was_paused
+	if phase != "finished" and error.is_empty() and not _has_pending_collection_commit():
+		error = "The remaining Jelly rewards could not finish. Choose Retry saving."
+	return phase == "finished"
+
+
+func _sync_challenge_pressure() -> void:
+	if stage_run == null or stage_run.kind != "challenge":
+		return
+	var pressure: Dictionary = stage_run.challenge_pressure()
+	if int(pressure.level) == _stage_pressure_level:
+		return
+	_stage_pressure_level = int(pressure.level)
+	_stage_spawn_interval = float(pressure.spawn_interval)
+	fall_speed_scale = float(pressure.fall_speed_scale)
+	for word: Dictionary in stage_run.words_for_pressure():
+		if not _words_by_id.has(str(word.id)):
+			_words_by_id[str(word.id)] = word.duplicate(true)
+			_word_lookup[normalize_word(str(word.text))] = word.duplicate(true)
+			if _reviewed_morphology(word):
+				_authored_words[str(word.id)] = str(word.morphology.id)
+	var analyses: Array = _words_by_id.values().filter(func(word: Dictionary) -> bool: return _reviewed_morphology(word)) \
+		.map(func(word: Dictionary) -> Dictionary: return word.morphology)
+	if not _morphology.configure(analyses):
+		error = "The next challenge vocabulary cannot be composed: " + _morphology.error
+		return
+	_sense_resolvers.clear()
+	_words.assign(stage_run.words_for_pressure())
+	_schedule_spawn_interval()
+
+
 func retire_mastered_words(word_ids: Array) -> void:
-	# Retirement changes future supply only. Existing bodies and their collection
-	# receipts keep their fragments, levels, and original learning context.
+	# Stop creating new packets, but finish every issued packet so a board root
+	# cannot lose its picture or remaining composition parts.
 	var retired: Dictionary = {}
 	for word_id: Variant in word_ids:
 		retired[str(word_id)] = true
 	if retired.is_empty():
 		return
 	_words = _words.filter(func(word: Dictionary) -> bool: return not retired.has(str(word.id)))
-	_supply = _supply.filter(func(tile: Dictionary) -> bool: return not retired.has(str(tile.get("source_word_id", ""))))
-	_supply_pending = _supply_pending.filter(func(tile: Dictionary) -> bool: return not retired.has(str(tile.get("source_word_id", ""))))
-	if authored_morphology:
-		for index in range(upcoming.size()):
-			if retired.has(str(upcoming[index].get("source_word_id", ""))):
-				_release_preview_slot(index)
-	else:
-		upcoming = upcoming.filter(func(tile: Dictionary) -> bool: return not retired.has(str(tile.get("source_word_id", ""))))
 	_fill_upcoming()
 	changed.emit()
 
@@ -343,9 +462,6 @@ func replace_stage_words(words: Array, level: int) -> bool:
 	_morphology = next_morphology
 	_sense_resolvers.clear()
 	authored_morphology = not analyses.is_empty()
-	_supply.clear()
-	_supply_pending.clear()
-	upcoming.clear()
 	_fill_upcoming()
 	spawn_elapsed = 0.0
 	full_elapsed = -1.0
@@ -404,6 +520,13 @@ func powerup_snapshot() -> Dictionary:
 
 
 func can_activate_powerup(kind: String) -> bool:
+	if _stage_ending:
+		return false
+	if kind == "extra_time":
+		return stage_run != null and stage_run.kind == "main" and stage_run.outcome.is_empty() \
+			and stage_run.can_add_time() \
+			and stage_run.remaining > EPSILON and phase == "playing" and not paused \
+			and not _powerup_purchasing and _combo_pending.is_empty()
 	var repeat_treasure: bool = kind == "fragments" and str(_powerup.get("kind", "")) == "fragments"
 	if not POWERUP_PRICES.has(kind) or phase != "playing" or paused or _powerup_purchasing \
 		or (powerup_active() and not repeat_treasure) \
@@ -419,11 +542,41 @@ func activate_powerup(kind: String) -> bool:
 	var generation: int = _generation
 	# Separate clicks may overlap flights; nested purchase callbacks may not pay again.
 	_powerup_activating = true
-	var purchased: bool = _purchase_powerup(kind)
+	var purchased: bool = _purchase_extra_time() if kind == "extra_time" else _purchase_powerup(kind)
 	if generation == _generation:
 		changed.emit()
 	_powerup_activating = false
 	return purchased
+
+
+func _purchase_extra_time() -> bool:
+	if _stage_time_pending.is_empty():
+		_stage_time_pending = _event_id("extra-time")
+	var receipt: String = _stage_time_pending
+	var generation: int = _generation
+	var price: int = powerup_price("extra_time")
+	_powerup_purchasing = true
+	var response: Variant = purchase_powerup.call(receipt, "extra_time", price) if purchase_powerup.is_valid() else {}
+	_powerup_purchasing = false
+	if generation != _generation:
+		return false
+	if not response is Dictionary or not bool(response.get("ok", false)):
+		error = str(response.get("error", "Extra time could not be saved. Please retry.")) if response is Dictionary \
+			else "Extra time could not be saved. Please retry."
+		powerup_feedback.emit("extra_time", false)
+		return false
+	if not stage_run.add_time(receipt):
+		error = stage_run.error
+		return false
+	_powerup_uses.extra_time = int(_powerup_uses.get("extra_time", 0)) + 1
+	_stage_time_pending = ""
+	error = ""
+	powerup_feedback.emit("extra_time", true)
+	cue_requested.emit("powerup_success")
+	if _finish_after_purchase:
+		_finish_after_purchase = false
+		finish_round()
+	return true
 
 
 func _purchase_powerup(kind: String) -> bool:
@@ -530,7 +683,7 @@ func _shuffle_blast_ids(ids: Array[int]) -> void:
 
 func _queue_collection_blast(completed: Dictionary) -> void:
 	var level: int = clampi(int(completed.get("merge_level", 1)), 1, MAX_MERGE_LEVEL)
-	if level <= 1 or not _finish_reason.is_empty():
+	if level <= 1 or not _finish_reason.is_empty() or _stage_ending:
 		return
 	var targets: Array[int] = _blast_target_ids(completed.a, level)
 	if targets.is_empty():
@@ -938,6 +1091,8 @@ func _grant_powerup_fragment(tile: Dictionary) -> void:
 
 
 func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dictionary = {}) -> String:
+	if _stage_ending and not _powerup_committing:
+		return "ignored"
 	if not _combo_pending.is_empty():
 		return "ignored"
 	if phase != "playing" or paused or collection_batch_active() or (powerup_active() and not _powerup_committing) or a_id == b_id or is_fusing(a_id) or is_fusing(b_id):
@@ -1024,7 +1179,7 @@ func complete_merge_drag(event_id: String) -> void:
 
 
 func collect(tile_id: int) -> bool:
-	if powerup_active() or collection_batch_active():
+	if _stage_ending or powerup_active() or collection_batch_active():
 		return false
 	return _begin_collection(tile_id)
 
@@ -1049,7 +1204,7 @@ static func collection_seconds(level: int, batch: bool = false) -> float:
 
 
 func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
-	if batch_index > 0 and not auto_collect_unlocked():
+	if batch_index > 0 and not auto_collect_unlocked() and not _stage_ending:
 		return false
 	if phase != "playing" or paused or powerup_active() or not _combo_pending.is_empty() or is_fusing(tile_id):
 		return false
@@ -1066,7 +1221,7 @@ func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
 		"a": tile.duplicate(true), "b": tile.duplicate(true), "result": {},
 		"word": tile.word.duplicate(true), "attempt_id": str(_collection_event_ids[tile_id]),
 		"merge_level": int(tile.get("merge_level", 1)),
-		"mastery_eligible": bool(tile.get("mastery_eligible", false)),
+		"mastery_eligible": _collection_mastery_eligible(tile),
 		"coins": int(_collection_coin_rewards[_collection_event_ids[tile_id]]), "fragments": int(tile.fragments),
 		"elapsed": 0.0, "duration": collection_seconds(int(tile.get("merge_level", 1)), batch_index > 0),
 		"pop_at": collection_pop_seconds(int(tile.get("merge_level", 1)), batch_index > 0),
@@ -1087,6 +1242,14 @@ func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
 	if _can_continue(generation):
 		changed.emit()
 	return true
+
+
+func _collection_mastery_eligible(tile: Dictionary) -> bool:
+	if bool(tile.get("mastery_eligible", false)):
+		return true
+	var word: Dictionary = tile.get("word", {})
+	return bool(tile.get("assisted", false)) and (_has_word_picture(word)
+		or str(word.get("morphology", {}).get("kind", "atomic")) != "atomic")
 
 
 func collectable_ids() -> Array[int]:
@@ -1150,7 +1313,7 @@ func collection_batch_snapshot() -> Dictionary:
 
 
 func start_collection_batch() -> bool:
-	if not auto_collect_unlocked() or not _combo_pending.is_empty():
+	if (not auto_collect_unlocked() and not _stage_ending) or not _combo_pending.is_empty():
 		return false
 	if phase != "playing" or paused or powerup_active() or collection_batch_active() or _held_tile_id >= 0:
 		return false
@@ -1190,7 +1353,7 @@ func _reset_collection_batch() -> void:
 
 
 func _advance_collection_batch() -> void:
-	if not auto_collect_unlocked():
+	if not auto_collect_unlocked() and not _stage_ending:
 		cancel_collection_batch()
 		return
 	if not collection_batch_active() or phase != "playing" or paused:
@@ -1261,6 +1424,9 @@ func step(delta: float) -> void:
 	var generation: int = _generation
 	var remaining: float = delta
 	while remaining > EPSILON and _can_continue(generation):
+		_pump_stage_finish()
+		if not _can_continue(generation) or (_stage_ending and not error.is_empty()):
+			break
 		_start_pending_blast()
 		if not _can_continue(generation):
 			break
@@ -1274,7 +1440,10 @@ func step(delta: float) -> void:
 		var powerup_running: bool = powerup_active()
 		var time_scale: float = gameplay_time_scale()
 		var combo_running: bool = combo_count > 0 and not powerup_running and not _has_pending_collection_commit()
+		var stage_clock: bool = _stage_clock_running()
 		var consumed: float = remaining
+		if stage_clock and stage_run.kind == "main":
+			consumed = minf(consumed, maxf(0.0, stage_run.remaining))
 		if combo_running:
 			consumed = minf(consumed, maxf(0.0, _combo_remaining))
 		consumed = minf(consumed, _collection_batch_boundary())
@@ -1294,13 +1463,15 @@ func step(delta: float) -> void:
 			if time_scale > 0.0:
 				consumed = minf(consumed, maxf(0.0, boundary - float(active.elapsed)) / time_scale)
 		var full: bool = not _has_free_cell()
-		var ending_wait: bool = _finish_after_collection_commit
-		var danger_running: bool = full and full_elapsed >= 0.0 and not powerup_running and not ending_wait
+		var ending_wait: bool = _finish_after_collection_commit or _stage_ending
+		var danger_running: bool = full and full_elapsed >= 0.0 and not powerup_running and not ending_wait and stage_run == null
 		var next_second: float = minf(FULL_SECONDS, floorf(full_elapsed + EPSILON) + 1.0)
 		if danger_running:
 			consumed = minf(consumed, maxf(0.0, next_second - full_elapsed))
 		elif full and not powerup_running and not ending_wait:
-			consumed = minf(consumed, maxf(0.0, _settling_remaining()))
+			var settling: float = _settling_remaining()
+			if stage_run == null or settling > EPSILON:
+				consumed = minf(consumed, maxf(0.0, settling))
 		elif not powerup_running and not ending_wait:
 			consumed = minf(consumed, maxf(0.0, spawn_interval - spawn_elapsed))
 		# Mark impacts keep real-time deadlines while only the board's motion slows.
@@ -1332,6 +1503,10 @@ func step(delta: float) -> void:
 		elif not full and not powerup_running and not ending_wait:
 			spawn_elapsed += consumed
 		remaining -= consumed
+		if _stage_ending:
+			_stage_clear_feedback = maxf(0.0, _stage_clear_feedback - consumed)
+		if stage_clock:
+			stage_run.advance(consumed)
 		if combo_running:
 			_combo_remaining = maxf(0.0, _combo_remaining - consumed)
 			if _combo_remaining <= EPSILON:
@@ -1357,12 +1532,23 @@ func step(delta: float) -> void:
 				return
 		if not _can_continue(generation):
 			break
+		if stage_run != null and not _stage_ending:
+			_resume_pending_motion()
+			if stage_run.outcome == "cleared":
+				_decide_stage("cleared")
+			elif stage_clock and stage_run.check_deadline():
+				_decide_stage("timeout")
+			elif not powerup_active() and not _has_free_cell() and _settling_remaining() <= EPSILON and fusions.is_empty():
+				_decide_stage("blocked")
+		_pump_stage_finish()
+		if not _can_continue(generation):
+			break
 		_resume_pending_motion()
 		_advance_collection_batch()
 		_advance_powerup()
 		if not _can_continue(generation):
 			break
-		if powerup_running or _finish_after_collection_commit:
+		if powerup_running or _finish_after_collection_commit or _stage_ending:
 			if _finishing_powerup and not powerup_active():
 				break
 			continue
@@ -1412,7 +1598,7 @@ func set_held_tile(tile_id: int = -1) -> void:
 
 
 func begin_drag(tile_id: int) -> bool:
-	if phase != "playing" or paused or not _combo_pending.is_empty() or powerup_active() or collection_batch_active() \
+	if _stage_ending or phase != "playing" or paused or not _combo_pending.is_empty() or powerup_active() or collection_batch_active() \
 		or tile_id != _held_tile_id or is_fusing(tile_id):
 		return false
 	if _dragged_tile_id == tile_id:
@@ -1579,7 +1765,7 @@ func _drag_return_after_motion(anchor: Dictionary, additional: Dictionary = {}) 
 
 
 func can_reposition(tile_id: int, column: int, row: int) -> bool:
-	if phase != "playing" or paused or not _combo_pending.is_empty() or powerup_active() or collection_batch_active() or is_fusing(tile_id):
+	if _stage_ending or phase != "playing" or paused or not _combo_pending.is_empty() or powerup_active() or collection_batch_active() or is_fusing(tile_id):
 		return false
 	var tile: Dictionary = cell(tile_id)
 	if tile.is_empty() or (tile_id != _held_tile_id and not is_settled(tile)):
@@ -1634,7 +1820,7 @@ func reposition(tile_id: int, column: int, row: int) -> bool:
 
 
 func can_drop_now() -> bool:
-	return phase == "playing" and not paused and _combo_pending.is_empty() and not powerup_active() and not collection_batch_active() and not _first_preview_tile().is_empty() and _has_free_cell()
+	return not _stage_ending and phase == "playing" and not paused and _combo_pending.is_empty() and not powerup_active() and not collection_batch_active() and not _first_preview_tile().is_empty() and _has_free_cell()
 
 
 func drop_now(expected_first_id: int = -1) -> bool:
@@ -1741,10 +1927,13 @@ func snapshot() -> Dictionary:
 		"pip_level": pip_level, "auto_collect_unlocked": auto_collect_unlocked(),
 		"auto_collect_unlock_level": AUTO_COLLECT_UNLOCK_LEVEL,
 		"powerup": powerup_snapshot(),
+		"campaign": stage_run.snapshot() if stage_run != null else {},
+		"stage_ending": _stage_ending, "fall_speed_scale": fall_speed_scale,
 		"hit_stop": hit_stop_snapshot(),
 		"queued_blasts": _blast_queue.size(),
 		"powerup_uses": _powerup_uses.duplicate(),
-		"powerup_prices": {"auto_merge": powerup_price("auto_merge"), "fragments": powerup_price("fragments")},
+		"powerup_prices": {"auto_merge": powerup_price("auto_merge"), "fragments": powerup_price("fragments"),
+			"extra_time": powerup_price("extra_time")},
 		"error": error, "result": _result.duplicate(true)
 	}
 	state.authored_morphology = authored_morphology
@@ -1753,6 +1942,15 @@ func snapshot() -> Dictionary:
 
 
 func finish_round(reason: String = "finished") -> Dictionary:
+	if stage_run != null and not _stage_finalizing and phase != "finished":
+		if _powerup_purchasing:
+			_finish_after_purchase = true
+			return _result.duplicate(true)
+		if _combo_committing:
+			_finish_after_combo = true
+			return _result.duplicate(true)
+		_decide_stage("blocked" if reason == "danger" else "timeout" if reason == "timeout" else "exit")
+		return _result.duplicate(true)
 	if phase == "finished" or _finishing_powerup:
 		return _result.duplicate(true)
 	# Payment and accepted-power settlement can reenter this method. Keep the
@@ -1803,6 +2001,8 @@ func finish_round(reason: String = "finished") -> Dictionary:
 	_result = {"reason": _finish_reason, "cleared_pairs": cleared_pairs, "score": score(), "coins": collected_coins + combo_coins,
 		"combo_coins": combo_coins, "best_combo": combo_best, "words": []}
 	_result.merge(reward_progress(fragment_count), true)
+	if stage_run != null:
+		_result["campaign"] = stage_run.snapshot()
 	for word in _completed_words.values():
 		_result.words.append(word.duplicate(true))
 	var result: Dictionary = _result.duplicate(true)
@@ -2071,9 +2271,9 @@ static func _merged_upgrade_level(left: Dictionary, right: Dictionary) -> int:
 		return 0
 	var left_level: int = int(left.get("merge_level", 1))
 	var right_level: int = int(right.get("merge_level", 1))
-	var combined: int = left_level + right_level
-	# A full result must fit the level cap; never silently discard a level.
-	return combined if left_level >= 1 and right_level >= 1 and combined <= MAX_MERGE_LEVEL else 0
+	if left_level < 1 or right_level < 1 or left_level > MAX_MERGE_LEVEL or right_level > MAX_MERGE_LEVEL:
+		return 0
+	return mini(left_level + right_level, MAX_MERGE_LEVEL)
 
 
 func parts_compatible(left: Dictionary, right: Dictionary) -> bool:
@@ -2305,6 +2505,9 @@ func preview_area() -> int:
 
 
 func _schedule_spawn_interval() -> void:
+	if stage_run != null:
+		spawn_interval = _stage_spawn_interval
+		return
 	var stage: int = floori(float(cleared_pairs) / CLEARS_PER_DIFFICULTY_STAGE)
 	var baseline: float = maxf(MIN_SPAWN_INTERVAL, INITIAL_SPAWN_INTERVAL - stage * SPEEDUP_PER_STAGE)
 	spawn_interval = baseline * maxf(1.0, float(preview_area()) / float(COLUMNS)) if authored_morphology else baseline
@@ -2448,6 +2651,9 @@ func _spawn_tile(arrival: bool, arrival_index: int = 0) -> bool:
 	tile.arrival = arrival
 	tile.arrival_index = arrival_index if arrival else 0
 	tile.arrival_delay = _scheduled_arrival_delay(arrival_index) if arrival else 0.0
+	if arrival and stage_run != null:
+		tile.arrival_delay = float(tile.arrival_delay) / fall_speed_scale
+		tile.motion_speed_scale = fall_speed_scale
 	tile.falling_rows = position.y + height if arrival else 0
 	cells.append(tile)
 	generated_tiles += 1
@@ -2602,10 +2808,9 @@ func _complete_merge(completed: Dictionary) -> void:
 	completed.result = cell(int(result.id))
 	completed.word = completed.result.word.duplicate(true)
 	var generation: int = _generation
-	if not bool(completed.get("automatic", false)):
-		_advance_combo(str(completed.attempt_id), int(completed.get("combo_bonus", 0)))
-		if generation != _generation:
-			return
+	_advance_combo(str(completed.attempt_id), int(completed.get("combo_bonus", 0)))
+	if generation != _generation:
+		return
 	fusion_completed.emit(completed, 0)
 	if generation == _generation and _finish_after_combo:
 		_finish_after_combo = false
@@ -2642,6 +2847,13 @@ func _complete_collection(completed: Dictionary) -> void:
 	chest_tier = int(reward.chest_tier)
 	chest_count = int(reward.chest_count)
 	_completed_words[str(completed.word.id)] = completed.word.duplicate(true)
+	if stage_run != null and not _stage_ending:
+		stage_run.record_collection(str(completed.attempt_id), str(completed.word.id))
+		if stage_run.kind == "challenge":
+			_sync_challenge_pressure()
+		elif stage_run.current.has(str(completed.word.id)) \
+			and int(stage_run.current[completed.word.id]) >= int(stage_run.goals[completed.word.id]):
+			_words = _words.filter(func(word: Dictionary) -> bool: return str(word.id) != str(completed.word.id))
 	if bool(completed.get("batch", false)) and int(completed.get("batch_id", -1)) == _collection_batch_serial:
 		_collection_batch_completed += 1
 		_collection_batch_event_id = ""

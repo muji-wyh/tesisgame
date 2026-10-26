@@ -227,8 +227,10 @@ func _check_original_styles(data) -> void:
 	for theme: String in ["spring", "summer", "winter"]:
 		chest.clear()
 		chest.configure_skin(data.theme(theme), data.chests)
-		check(chest.hold_effect_snapshot().get("live_model", {}).is_empty() and chest.piece_count() >= 4,
-			theme + " preserves its original layered artwork")
+		var model: Dictionary = chest.hold_effect_snapshot().get("live_model", {})
+		check(not model.is_empty() and model.available and model.mesh_count > 0
+			and model.closed_box.size.z > 0.0 and chest._pieces[0].node.texture is ViewportTexture,
+			theme + " replaces the flat legacy chest with real volumetric source geometry")
 	chest.free()
 
 

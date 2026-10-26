@@ -5,6 +5,8 @@ docs/qa/2026-10-03-performance-baseline-sparkle.patch text eol=lf -whitespace
 assets/audio/jelly-match/LICENSE-Kenney.txt -text -whitespace
 assets/images/jelly-match/garden/LICENSE-CC0.txt -text -whitespace
 assets/images/jelly-match/sky/LICENSE-CC0.txt -text -whitespace
+assets/images/jelly-campaign/LICENSE-CC0.txt -text -whitespace
+assets/chests/catalog-cc0/*/LICENSE.txt -whitespace
 
 # Keep authored Professional content and domain contracts stable across checkouts.
 data/professional/** text eol=lf

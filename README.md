@@ -13,7 +13,7 @@ handles loading, accessibility, audio recovery, and speech recognition.
 - **Phrase Builder:** listen, drag pictured or contextual word tiles into order, and complete three phrases to earn a chest. Everyday English uses the current learning age from a catalog of 330 recorded phrases; Professional English uses the selected module. Earlier everyday words appear only as prerequisites for those phrases. Retries are unlimited.
 - **Voice Pop:** speak visible words during a 50-second round. Marked targets supply fragments that unlock and upgrade one chest. Results retain scores, chest progress and word review.
 - **Jelly Match:** drag falling pictures onto their words in a four-column well. Matching jellies merge, bounce away, and credit one learning success. Make room before the eight-second full-board countdown ends; marked pairs earn chests. The pace increases as pairs are cleared. Earned treasure is saved when the round ends or you change modes.
-- **Jelly Words:** build words from reviewed roots, then match their pictures in a five-column, eight-row well. Image-free words become merged when complete. Merge identical words, including different levels, up to Lv9; larger totals stay separate. All bodies keep the ordinary square size. Nine levels have distinct collection effects and audio, with increasingly broad popup fireworks from Lv4. Collecting Lv2–9 also marks nearby jellies, a column, a cross or the whole board for free automatic matching; results stay on the board and do not earn independent mastery. An eight-second combo bar refills on successful manual merges and collections; paying merges show a gold **COMBO BONUS** acknowledgement. Lv1 has no random coin bonus; Lv2–9 increase the chance and amount from 2% for 50 coins to 80% for 450 coins. Collect keeps its 140 ms beat; automatic matches use overlapping 250 ms flights launched every 200 ms. Completing a learning stage, not obtaining or upgrading a chest, launches Jelly Words' full-screen confetti.
+- **Jelly Words:** explore a scenic 99-stage journey with fixed per-word collection goals, three-phase countdowns and best-star ratings. Complete and settle a stage to return to the map and unlock the next; replay cleared stages for better stars. An untimed challenge grows its word variety, supply frequency and actual fall speed. Build reviewed words and their pictures in a five-column, eight-row well; identical merged words add levels, capped at Lv9 while retaining fragments. Automatic matching and pickups extend the eight-second combo; paying manual merges show **COMBO BONUS** and coins flying into the rolling wallet. Auto Collect uses a 120 ms beat and records collection proficiency. Lv2–9 collection blasts mark and auto-match other bodies; hit stop holds/slows the world without dimming. Board explosions stay compact, while separate top-popover fireworks retain their large bloom.
 - **Growth:** everyone starts at Lv0 with Baby Pip. Each word needs three consecutive correct answers in any applicable mode. A wrong answer resets the involved words. First-time word mastery increases Lv up to Lv99; mastering the entire current age cohort grows Pip and unlocks the next cohort, through Age 12+. Earned levels and ages never decrease.
 - **Word Library:** Everyday English and Professional English share Grow with Pip. Select a career/module and use its vocabulary on the same Home, with a dedicated Pip outfit and a level based on earned mastery in that career. Switching back restores everyday Pip and progress. Modules still in preparation are clearly marked and cannot start a game. For everyday vocabulary, the progress bar opens all words in a selected age cohort, including saved mastery and pronunciation. Other ages load when viewed; the next age preloads at 90% mastery of the current cohort. Gameplay uses only current-age questions. Later ages can be previewed but cannot be selected to skip progression. The 1,550-word curriculum is an editorial English-as-a-second-language sequence, not a developmental assessment.
 - **Pip:** ten stage appearances and cumulative action repertoires accompany growth. Run `npm run preview:pip` to review the assets at [localhost](http://127.0.0.1:41774/). The asset preview is not published with the game.
@@ -21,14 +21,20 @@ handles loading, accessibility, audio recovery, and speech recognition.
 
 Both Jelly modes show a brief end message and a distinct sound before opening
 settlement. Tap the header's Pause control (or press P) to pause and Resume to
-continue; pull the same control down to finish. Its small tug teaches that gesture.
+continue; pull the same control down to finish. Pause uses only a mild shade, no
+dialog or tooltip, and a gentle continuous gel tug with a fixed hit target.
 Jelly Words stages practise 3, 4, 5, 6, 7, then at most 8 words, with a current-word
-mastery list in the side gutter or compact stage rail. Narrow screens use card
-background fill instead of per-word progress numbers. Collection blasts visibly
+goal list in the side gutter or compact stage rail. All cards use background
+progress, local increment/achievement feedback and a persistent Done check;
+narrow screens omit progress numbers. Collection blasts visibly
 hold for 100 ms and slow the world until their outward marks finish.
 New chest quotes across all modes pay `75 + ceil(24 * Pip Lv / 99)`
 coins per chest tier; previously reserved quotes and paid receipts keep their
 original amounts.
+Thirty increasingly ornate real-3D chest tiers use nine acquired box families
+and sourced three-dimensional fittings, not thirty native source meshes.
+New chest upgrades stop at Lv30. Campaign stars weight newly settled chest and
+clear rewards by 1x, 1.5x or 2x without multiplying already-paid pickup/combo coins.
 
 Voice Pop uses `SpeechRecognition` or `webkitSpeechRecognition` by default.
 Browser support, a secure page, microphone permission, and a functioning speech

@@ -1,10 +1,18 @@
 # Jelly Words level collection feedback
 
 Merged words have nine levels and keep the ordinary one-cell Jelly body. Matching
-words add their levels, including unequal pairs; results greater than Lv9 are
-ineligible. Their collection feedback uses one accepted model release for the
+words add their levels, including unequal pairs, with the output capped at Lv9.
+Their collection feedback uses one accepted model release for the
 body disappearance, board effect and sound. Presentation never grants rewards.
 All nine existing recordings remain byte-identical. Reward values are documented in the coin economy record.
+
+As of 2026-10-26, the **board-only Lv4–9 preset** is a short 0.62–0.82-second
+outward burst with radius bounded to 45–52.5 percent of its cell pitch. It has no
+gravity or falling-ember phase. The separate top-popover firework preset retains
+its full bloom and descending tails. Auto Collect now uses a 120 ms beat, with
+the same 40 ms release onset. Hit stop keeps its true hold/slow clocks without a
+dark overlay. Earlier full-lifetime board studies below are historical evidence,
+not the current board-only preset.
 
 | Level | Board effect | Post-release lifetime | Existing audio signature |
 | --- | --- | --- | --- |

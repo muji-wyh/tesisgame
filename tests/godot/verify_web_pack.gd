@@ -61,6 +61,33 @@ func _verify() -> void:
 		printerr("The startup pack must preserve the three original chest styles and five distinct live models.")
 		failures += 1
 	print("Treasure: %d chest types and %d live animated models checked in the startup pack." % [catalog.chests.styles.size(), chest_models])
+	var tiers = load("res://scripts/chest_tier_catalog.gd")
+	var tier_sources: Dictionary = {}
+	for number in range(1, 31):
+		var style: Dictionary = tiers.style(number, catalog.chests)
+		var path: String = str(style.get("model", ""))
+		if not path.begins_with("res://"):
+			path = "res://" + path
+		if style.is_empty() or not ResourceLoader.exists(path):
+			printerr("A real 3D chest tier is missing from the startup pack: %d" % number)
+			failures += 1
+			continue
+		tier_sources[path] = true
+		for fitting: Dictionary in style.get("decorations", []):
+			var source: String = str(fitting.model)
+			if not source.begins_with("res://"):
+				source = "res://" + source
+			if not ResourceLoader.exists(source):
+				printerr("A sourced chest fitting is missing from the startup pack: " + source)
+				failures += 1
+	if tier_sources.size() != 9:
+		printerr("Thirty chest assemblies must retain their nine genuine source base families.")
+		failures += 1
+	for path: String in ["res://assets/images/ui/jelly-goals/star.webp", "res://assets/images/ui/jelly-goals/clock.webp"]:
+		if not ResourceLoader.exists(path):
+			printerr("Campaign UI artwork must load before any age media pack: " + path)
+			failures += 1
+	print("Campaign: 99-stage catalog and 30 volumetric chest assemblies with nine base sources checked.")
 	var confetti := load("res://assets/images/jelly-match/confetti.png") as Texture2D
 	if confetti == null or confetti.get_size() != Vector2(512, 512):
 		printerr("The reviewed Jelly chest-upgrade confetti atlas is missing from the startup pack.")

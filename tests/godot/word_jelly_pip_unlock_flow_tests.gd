@@ -115,15 +115,48 @@ func _career_unlock() -> void:
 		and app._professional_profile_for(app._round_context).mastered == 5,
 		"Retry commits five career words and derives the same Lv3 threshold")
 	_assert_level(3, "Recovered career mastery")
-	await start_course("retail", "word_jelly")
+	await start_course("retail", "word_jelly", true)
 	_assert_level(3, "Starting Jelly Words with the earned career profile")
 	app._show_mode_menu()
 	app._select_learning_context(Context.growth(3, "word_jelly"))
-	app.choose_mode("word_jelly")
+	Fixture.enter_mode(app, "word_jelly")
 	await settle()
 	check(app._round_context.track == "growth" and app.growth.level == 3,
 		"Returning to everyday words restores its independent saved Pip")
 	_assert_level(3, "Returning from a career to everyday Jelly Words")
+
+
+func _career_campaign_recovery() -> void:
+	app._show_mode_menu()
+	app._select_learning_context(Context.professional("retail", "module03", "v1", "word_jelly"))
+	app.choose_mode("word_jelly")
+	check(app._campaign.map.visible, "The career opens its own independently saved campaign map")
+	var previous_round: String = app._round_id
+	app.professional.loader.catalog.reject = true
+	app._campaign.request_stage(1)
+	await settle()
+	check(app.professional.phase == "failed" and not app._campaign.starting
+		and app._campaign.map.snapshot().error.contains("unavailable"),
+		"A failed career preparation clears map loading and exposes its actual retryable error")
+	check(app._round_id == previous_round, "A failed campaign preparation retains the previous playable round")
+	app.professional.loader.catalog.reject = false
+	app._campaign.retry()
+	var selection: int = int(app.professional.pending.get("selection", -1))
+	var ready := false
+	for frame in range(120):
+		await process_frame
+		var preparation: Dictionary = app.professional.loader._preparation
+		if preparation.get("selection") == selection and preparation.get("phase") == "media":
+			ready = true
+			break
+	check(ready, "The campaign retry actually requests its original career media instead of only clearing the message")
+	if ready:
+		app.professional.loader.media.finish(app.professional.loader.media.generation)
+	await settle()
+	check(not app._campaign.map.visible and app._word_jelly.game.stage_run != null
+		and app._campaign.active_context_key == "professional:retail:module03",
+		"Successful preparation binds the requested career campaign and dismisses its loading map: %s / %s / %s"
+		% [app._campaign.error, app.professional.phase, app.professional.error])
 
 
 func _run() -> void:
@@ -132,6 +165,7 @@ func _run() -> void:
 	await _make_app()
 	await _everyday_unlock()
 	await _career_unlock()
+	await _career_campaign_recovery()
 	app.audio.halt()
 	app.queue_free()
 	await settle()

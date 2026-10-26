@@ -315,6 +315,10 @@ func check_earned_result(mode: String, reason: String) -> void:
 	var finished_round: String = app._round_id
 	app.choose_mode(mode)
 	await settle()
+	if mode == "word_jelly":
+		check(app._campaign.map.visible, "A completed Jelly Words round returns through its stage map")
+		app._campaign.request_stage(1)
+		await settle()
 	check(app._round_id != finished_round and not app._settlement_dialog.is_visible_in_tree()
 		and app._active_jelly().game.phase == "playing",
 		mode + ": choosing the same mode from Home starts a fresh playable round")

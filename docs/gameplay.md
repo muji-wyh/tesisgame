@@ -178,13 +178,14 @@ matches or words never shortens the countdown already running in Next. Idle
 time does not raise difficulty; a new round restores the opening interval.
 
 The header's **Pause** control has two actions: tap to pause, or pull downward
-until it glows and sounds, then release to finish. A tap keeps the short downward
-teaching animation while the board is frozen. An early, incomplete pull springs
+until it glows and sounds, then release to finish. Pause stays on the current
+screen with a mild shade, no dialog and no instruction tooltip. The button says
+**Resume** and its gel gently tugs up and down while its hit rectangle stays
+fixed. Reduced motion keeps it still. An early, incomplete pull springs
 back without pausing or ending play. The labels say **Pull to finish**, then
 **Release to finish** once armed. Keyboard/controller activation or P pauses;
-Resume, P, or Escape returns to the same round. The **Paused** menu provides
-**Resume** and an explicitly labelled **Finish round**, so finishing remains
-accessible without a pointer gesture.
+the same button, P, Escape or controller Back returns to the same round.
+Shift+Enter on the focused control opens the accessible finish confirmation.
 Finishing or letting the full-board danger countdown expire first shows
 **Round complete** or **Game over**, respectively, with its own sound. This
 noninteractive 1.8-second effect precedes the settlement modal; held input cannot
@@ -198,20 +199,60 @@ A failed save keeps settlement open for retry.
 
 ## Jelly Words
 
-Jelly Words starts with three practice words in stage 1. Each completed stage
-adds one word to the next target set, up to eight: 3, 4, 5, 6, 7, 8, 8, and so
-on. A final partial stage uses only the available unmastered words. Existing
-board bodies and rewards remain when a stage changes. The practice panel shows
-every current-stage word, its acquired vocabulary illustration when available,
-and its saved correct-answer progress out of three. Every card's green background
-fills proportionally from empty to full as zero, one, two and three answers are
-saved. Sidebar cards also retain three mastery accents and a numeric badge.
-Failed saves do not fill the indicators. Desktop uses the
-empty side gutter next to the well; narrower screens show rounded illustrated
-carousel chips in the existing stage rail, without shrinking the well. Compact
-chips omit progress numbers: their green background fills from empty to full
-at zero, one, two, and three saved correct answers. The word and its illustration
-stay readable over the fill; desktop cards retain their full progress detail.
+Jelly Words opens a scrollable **99-stage journey**, arranged as eleven scenic
+chapters of nine stages. Cleared stages can be replayed; only the next uncleared
+stage is available beyond them. Each map node prominently shows its best
+one-, two- or three-star rating. Replaying cannot downgrade it or skip an unlock.
+Progress and frozen word recipes are separate for Everyday English and each
+professional career/module. A recipe remains replayable after its words have
+been mastered, provided the original reviewed identities are still available.
+
+Stage 1 has three word goals, adding one per stage up to eight. Each attempt
+starts its counters at zero, separately from Pip's permanent three-answer
+mastery. One committed collection counts once, including **Auto Collect** and a
+later collection of a word constructed by automatic matching. Merely merging
+does not fill a collection goal. Words whose quota is satisfied stop creating
+new packets, but already issued roots, pictures and queued partners remain
+available: retiring a word must never strand an old piece.
+
+Difficulty follows a nine-stage wave: Discover, Practice, Build, Breather, Mix,
+Flow, Reward, Prepare and Finale. Chapter quotas gradually grow from one to six,
+with selected extra repetitions and chapter finales. Breather and Reward stages
+give more room instead of increasing pressure every time. Time budgets account
+for each reviewed word's real parts, picture matching and supply throughput;
+they are not a fixed subtraction from the preceding stage.
+
+The countdown has three star phases based on the **original active-play budget**:
+clearing before its first third earns three stars, before its second third earns
+two, and later earns one. Pauses, reading overlays, automatic sequences and
+pending saves do not consume active time. **+30 sec** costs 100 coins, then 150,
+200, 250 and so on per attempt; a saved purchase extends the deadline but never
+restores an expired star tier. A failed or duplicate purchase cannot charge twice.
+
+Completing every goal locks a clear. Timer expiry or a settled, blocked top
+locks a failure immediately. The remaining merged words are then automatically
+collected; these cleanup pickups cannot change the locked goals, outcome or
+star rating. Existing reward/save rules apply, with Retry saving on failure.
+After the end presentation, treasure opening and arrival-driven coins finish
+automatically, then the game saves the clear and returns to the map. A pending
+settlement survives reload and is recovered with its original receipt.
+Any older retained treasure is settled with its original quote before returning;
+it is not counted again in this attempt's star multiplier.
+
+The separate **Endless Challenge** has no countdown and no numbered clear/star
+bonus. Every ten committed collections increases its wave: the active word
+set grows from three up to sixteen, supply approaches a three-second minimum,
+and real incoming fall speed gradually rises to at most 2.2 times normal.
+It ends on a blocked top or an intentional Finish and remains available for
+earning the existing combo, rare-collection and chest coins.
+
+Illustrated goal cards use proportional green background fill. Each saved
+increase has a small card-local number/art pop; a newly completed item adds
+golden sparkle, one confirmation sound, then a persistent **Done** check.
+Reloaded completed items do not replay the celebration. Desktop retains exact
+fractions; compact carousel chips omit numbers. The same live scroll component
+clears only its cross-axis minimum when resized, preserving both gutter bounds
+and a genuine scroll range.
 
 Paying combo merges launch their earned coins from the gold **COMBO BONUS**
 display into the header wallet. Its saved total is authoritative immediately,
@@ -230,10 +271,11 @@ with elastic feedback and a negative sound, without creating a merged body.
 
 Merged Jellies show the word and its available picture, with a brighter rim and
 glints. Two merged Jellies of the same word add their levels, including different
-levels, up to Lv9. For example, Lv2 plus Lv7 becomes Lv9; a total above nine stays
-separate. Levels 2–9 have an upper-right numeral. Each of the nine levels has a
-distinct collection effect and sound; Lv4 contracts, gathers energy, bursts into
-colorful fireworks, and lets its glowing embers fall. Every board and top-popover
+levels, capped at Lv9. For example, Lv2 plus Lv7 and Lv7 plus Lv5 both produce
+Lv9; all input fragments and mass survive. Levels 2–9 have an upper-right numeral.
+Each of the nine levels has a distinct collection effect and sound. Board
+Lv4–9 pickups use a compact, short outward burst without falling embers; their
+separate top popovers retain the larger firework and falling tails. Every board and top-popover
 firework layer originates at that Jelly's own center, never an unrelated screen
 position. Larger levels retain broader, denser radial layers without changing
 the existing nine collection recordings or adding a separate popover sound.
@@ -251,7 +293,7 @@ or an ellipsis; hold a clipped label, or focus it and press R, to pause and read
 its full spelling.
 
 Both Jelly modes have a Pause control in the header. Pause, or P on a keyboard,
-opens Resume / Home and freezes supply, danger, combo and automatic matching
+switches that same control to Resume and freezes supply, danger, combo and automatic matching
 clocks. Resume continues the same round; Escape or controller Back also resumes.
 Returning from a hidden tab does not dismiss an explicit pause. Active word
 popovers and marking effects keep their paused age instead of being deleted.
@@ -344,9 +386,8 @@ collection bodies are protected.
 
 After collection commits, a blast with affected bodies first holds the world
 still for 100 ms, then slows board motion, animated word art and garden light to
-0.12 speed. Normal-motion presentation gently darkens the well while the sourced
-energy at the collected body's center stays bright, making the stop visible
-even on a stationary board. A 180 ms source windup releases accelerating light
+0.12 speed without darkening the well. The sourced energy remains centered on
+the collected body. A 180 ms source windup releases accelerating light
 with dense, tapered trails; each group travels for 420 ms on an independent
 real-time clock. The complete marking interval lasts 600-900 ms.
 Nearer bodies are marked first. A target is marked and sounds only when the
@@ -361,14 +402,16 @@ without the traveling light, deformation or flashes.
 Each marked body
 with a legal partner flies to that partner anywhere on the board and merges.
 Reviewed spelling order is preserved even when the affected body is the suffix
-that flies toward its left-hand root. Identical words may upgrade only when their
-sum is at most Lv9. Unmatched marks fade without consuming a body or inventing a
+that flies toward its left-hand root. Identical words add levels with the output
+capped at Lv9. Unmatched marks fade without consuming a body or inventing a
 word. All carried fragments survive the automatic union.
 
 The free sequence reuses the automatic matching flight, fusion and settling
 clock; it never purchases an item or increases its repeat price. It does not
-collect its results, add combo increments or payments, or award independent
-mastery. Results remain assisted and available for later collection. Batch
+collect its results or make an automatic combo coin payment. Each committed
+automatic match does extend the combo; collecting the resulting word later
+records its normal collection learning evidence. Results retain their original
+assisted-construction metadata. Batch
 Collect finishes its captured pickups first, then coalesces overlapping blast
 marks into one bounded sequence so two explosions cannot consume the same
 endpoint twice. Failed collection saves do not trigger a blast; retry retains
@@ -380,7 +423,7 @@ Auto merge costs 600, 900, then 1200 coins for further uses in the same round;
 Treasure costs 200, 300, then 400. Each item has its own successful-use count,
 and its button displays the next price. Treasure still distributes 2–8 fragments;
 Auto merge follows validated paths of root joins, picture matches and
-same-word upgrades whose combined level is at most nine. It launches an eligible
+same-word upgrades whose output is capped at nine. It launches an eligible
 pair every 200 ms, with each 250 ms flight overlapping the following flight.
 A dependent step waits for its
 required result to settle; independent pairs can launch while earlier merges
@@ -394,7 +437,7 @@ Merge retains fusion sound effects without pronouncing its words. An accepted
 word tap also presents its picture and spelling above the board and pronounces
 it once. Picture-only jellies and complete spellings awaiting their picture also
 pronounce their word on a tap. Partial roots stay silent. Collect gathers ready
-words at 140 ms intervals without pronunciation. Each Auto Merge takes 250 ms
+words at 120 ms intervals without pronunciation. Each Auto Merge takes 250 ms
 to fly, 110 ms to fuse, and 30 ms to settle. Its 200 ms launch interval runs
 independently of that 390 ms sequence.
 Each reveal has its own randomly varied position and size, fits its picture and
@@ -403,18 +446,11 @@ and fade independently instead of replacing one another. They do not intercept
 board input and clear on pause, exit or round completion. Reduced motion keeps
 the picture and spelling steady.
 
-Jelly Words selects ten unmastered, independently assessable words for each
-stage. Everyday English fills from the earliest unfinished ages, crossing age
-boundaries when needed; Professional English stays in the selected ready module.
-The set remains fixed until all its words are mastered. Saved mastery immediately
-removes a word from future supply and advertised previews. Existing board bodies,
-levels, fragments, and receipts survive a stage change. A permanent stage counter
-shows mastered targets, and a short light-and-sparkle banner announces each next
-stage. Completing the current stage also launches one full-screen confetti burst,
-keyed to that stage rather than a chest tier. This includes the last partial
-stage when no next-stage vocabulary remains. The final stage can contain fewer
-than ten available words; completing the whole eligible pool ends the round.
-Unsuccessful saves never advance or celebrate a stage.
+The numbered campaign uses current learning-age or ready-module vocabulary,
+favoring words still being practised. Earlier recipes rebind their exact saved
+words instead of silently changing a replay. Stage-clear confetti is restrained
+to the upper third of the screen with 24–72 papers and a short tail; it does not
+cover the whole well. Unsuccessful saves cannot unlock or celebrate another stage.
 
 Chest fragments remain attached when either jelly is merged. Two marked pieces
 produce two visible markers, and collecting the complete word banks all of its

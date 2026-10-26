@@ -47,7 +47,8 @@ func _check_cross_level_hints(view, reduced: bool) -> void:
 	check(view._press(-1, _center(view, ids[0])), "A merged word can be selected")
 	_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "same-word levels")
 	check(view.game.can_merge(view.game.cell(ids[0]), view.game.cell(ids[2])), "Cross-level Lv2 and Lv7 words can merge into Lv9")
-	check(not view.game.can_merge(view.game.cell(ids[0]), view.game.cell(ids[3])), "A family hint cannot authorize an over-cap upgrade")
+	check(view.game.can_merge(view.game.cell(ids[0]), view.game.cell(ids[3])),
+		"Same-word levels remain compatible when their result clamps to Lv9")
 	view.cancel_input()
 	check(view._press(7, _center(view, ids[3])), "The maximum level remains selectable")
 	_assert_completion_hints(view, [ids[0], ids[1], ids[2]], "maximum-level word family")
@@ -272,7 +273,7 @@ func _check_fusion_contact(view, reduced: bool) -> void:
 		var origin: Vector2 = view.get_global_transform() * view._tile_rect(fusion.result).get_center()
 		var partner: int = ids[2]
 		var destination: Vector2 = _center(view, partner)
-		var matching: bool = description in ["merged:cat:1", "merged:cat:4", "merged:cat:8"]
+		var matching: bool = description.begins_with("merged:cat:")
 		check(view._press(7, origin), "An active fusion can be held for contact feedback")
 		check(view._tiles[partner].completion_hint == description.begins_with("merged:cat"), "Pending words highlight their same-word family across levels")
 		var separated: Vector2 = _place_at_gap(view, partner, Vector2.UP, 8.0)
@@ -286,7 +287,8 @@ func _check_fusion_contact(view, reduced: bool) -> void:
 			overlaps = overlaps or not Geometry2D.intersect_polygons(outline, view._tiles[partner].contact_outline()).is_empty()
 		check(not overlaps, "Fusion approach guidance begins outside the painted bodies")
 		check(view._target == (partner if matching else -1), "Only a compatible pending result gets wider merge guidance")
-		check(view._contact_state().kind == ("match" if matching else "none"), "Approach feedback only advertises sums within the nine-level cap")
+		check(view._contact_state().kind == ("match" if matching else "none"),
+			"Approach feedback accepts matching words even when their result clamps to Lv9")
 		# Exercise the browser's coalesced pointer path as well as direct moves.
 		view._queue_drag_motion(destination - Vector2(0, view._pitch * 0.3))
 		_advance(view, 0.025)

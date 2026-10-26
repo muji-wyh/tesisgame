@@ -91,11 +91,14 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   }).filter(name => name.endsWith('.import')).map(name => path.join(root, 'assets', group, name)));
   const chestManifest = JSON.parse(fs.readFileSync(path.join(root, 'assets/chests/downloaded/manifest.json'), 'utf8'));
   const chestModels = Object.values(chestManifest.styles).map(style => style.model);
+  const cc0Manifest = JSON.parse(fs.readFileSync(path.join(root, 'assets/chests/catalog-cc0/sources.json'), 'utf8'));
+  const cc0Models = cc0Manifest.files.filter(file => file.kind === 'model').map(file => file.path);
   assert.equal(new Set(chestModels).size, 5, 'The five added chest designs use separate live models');
   assert.ok(imports.every(filename => !filename.startsWith(path.join(root, 'assets/chests/downloaded') + path.sep)),
     'Retired 320-pixel opening frames are not imported into the game');
   const modelImports = imports.filter(filename => filename.endsWith('.glb.import'));
-  assert.deepEqual(modelImports.sort(), chestModels.map(filename => path.join(root, filename + '.import')).sort());
+  assert.deepEqual(modelImports.sort(), [...chestModels, ...cc0Models]
+    .map(filename => path.join(root, filename + '.import')).sort());
   for (const filename of modelImports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     assert.match(metadata, /^type="PackedScene"$/m, filename);
@@ -119,7 +122,20 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     assert.match(metadata, /^process\/size_limit=0$/m, filename);
     assert.match(metadata, /^mipmaps\/generate=true$/m, `${image.path} retains mipmaps for stable 3D sampling`);
   }
-  const textureImports = imports.filter(filename => !filename.startsWith(path.join(root, 'assets/chests/models') + path.sep));
+  const textureImports = imports.filter(filename => !filename.endsWith('.glb.import')
+    && !filename.startsWith(path.join(root, 'assets/chests/models') + path.sep));
+  const cc0Images = cc0Models.flatMap(filename => {
+    const model = readModelContainer(path.join(root, filename));
+    return model.gltf.images?.some(image => Number.isInteger(image.bufferView))
+      ? embeddedModelImages(filename, model) : [];
+  });
+  for (const image of cc0Images) assert.deepEqual(fs.readFileSync(path.join(root, image.path)), image.bytes,
+    `${image.path} retains the original embedded CC0 texture bytes`);
+  const cc0Textures = [...cc0Manifest.files.filter(file => file.kind === 'texture').map(file => file.path),
+    ...cc0Images.map(image => image.path)];
+  const cc0EmbeddedImports = new Set(cc0Images.map(image => path.join(root, image.path + '.import')));
+  const campaignArt = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/jelly-campaign/sources.json'), 'utf8'));
+  const goalArt = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/ui/jelly-goals/sources.json'), 'utf8'));
   const sceneryImages = ['jelly-garden', 'jelly-sky'].flatMap(name =>
     JSON.parse(fs.readFileSync(path.join(root, `docs/assets/${name}.json`), 'utf8')).images);
   assert.equal(sceneryImages.length, 9, 'Eight preserved garden layers and one daytime panorama are imported');
@@ -134,10 +150,14 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     'assets/images/ui/modes/apple.webp',
     'assets/images/ui/modes/cat.webp',
     'assets/images/ui/modes/microphone.webp',
-    'assets/images/ui/jelly-powerups/auto-merge-wand.svg'
+    'assets/images/ui/jelly-powerups/auto-merge-wand.svg',
+    ...cc0Textures,
+    ...campaignArt.images.map(image => `assets/images/jelly-campaign/${image.path}`),
+    ...[...goalArt.assets, ...goalArt.shared_illustrations].map(image => image.file)
   ];
   const addedImports = new Set(addedArtwork.map(filename => path.join(root, filename + '.import')));
-  assert.equal(addedImports.size, 15, 'Scenery, Home previews, mastery and powerup artwork have separate imports');
+  assert.equal(addedImports.size, 32,
+    'Scenery, Home previews, mastery, tools, CC0 model atlases, campaign and goal artwork have separate imports');
   assert.deepEqual(textureImports.filter(filename => addedImports.has(filename)).sort(), [...addedImports].sort());
   for (const filename of addedArtwork) assert.ok(fs.existsSync(path.join(root, filename)), filename);
   const professionalPreviews = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/professional-themes.json'), 'utf8')).previews;
@@ -166,7 +186,7 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   assert.equal(controls.license, 'MIT');
   assert.ok(fs.existsSync(path.join(root, controls.license_file)));
   assert.deepEqual(controls.assets.map(asset => asset.id).sort(),
-    ['menu', 'microphone', 'microphone-active', 'bulb', 'eye', 'eye-closed', 'chevron-left', 'chevron-right', 'home', 'refresh', 'lock', 'player-pause'].sort());
+    ['menu', 'microphone', 'microphone-active', 'bulb', 'eye', 'eye-closed', 'chevron-left', 'chevron-right', 'home', 'refresh', 'lock', 'player-pause', 'player-play'].sort());
   for (const asset of controls.assets) {
     assert.equal(asset.file, `assets/images/ui/controls/${asset.id}.svg`);
     assert.equal(sha256(fs.readFileSync(path.join(root, asset.file))), asset.integrated_sha256, asset.file);
@@ -212,7 +232,8 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     }
     if (!pipImports.has(filename) && !careerImports.has(filename)) assert.match(metadata, /^compress\/lossy_quality=0\.85$/m, filename);
     assert.match(metadata, /^process\/size_limit=0$/m, filename);
-    assert.match(metadata, /^mipmaps\/generate=false$/m, filename);
+    assert.match(metadata, cc0EmbeddedImports.has(filename) ? /^mipmaps\/generate=true$/m
+      : /^mipmaps\/generate=false$/m, filename);
   }
 });
 
@@ -572,6 +593,22 @@ test('the library release check rejects a changed image and an untracked extra p
   });
   assert.throws(() => checkWordLibrary(root), /Orphan images/);
   listMock.mock.restore();
+});
+
+test('goal and campaign controls retain sourced check, star, clock and unchanged confirmation audio', () => {
+  const manifest = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/ui/jelly-goals/sources.json'), 'utf8'));
+  assert.equal(manifest.license, 'MIT');
+  assert.ok(fs.existsSync(path.join(root, manifest.license_file)));
+  for (const asset of [...manifest.assets, ...manifest.shared_illustrations]) {
+    assert.match(asset.source, /^https:\/\/raw\.githubusercontent\.com\/(?:tabler\/tabler-icons|microsoft\/fluentui-emoji)\//);
+    assert.match(asset.source_sha256, /^[a-f0-9]{64}$/);
+    assert.equal(sha256(fs.readFileSync(path.join(root, asset.file))), asset.integrated_sha256);
+    assert.ok(fs.existsSync(path.join(root, asset.file + '.import')));
+    if (asset.reused_from)
+      assert.deepEqual(fs.readFileSync(path.join(root, asset.file)), fs.readFileSync(path.join(root, asset.reused_from)));
+  }
+  assert.equal(manifest.reused_audio.license, 'CC0-1.0');
+  assert.equal(sha256(fs.readFileSync(path.join(root, manifest.reused_audio.file))), manifest.reused_audio.sha256);
 });
 
 test('voice prompts contain exactly eight world greetings', () => {

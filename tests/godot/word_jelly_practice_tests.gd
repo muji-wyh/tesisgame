@@ -27,6 +27,71 @@ func _capture(name: String) -> void:
 		"Capture actual responsive word progress outside the well")
 
 
+func _check_resize_history(panel) -> void:
+	for width: float in [232.0, 160.0, 200.0, 152.0, 232.0]:
+		panel.configure_layout(Rect2(16, 70, width, 310), 1.0, false)
+		await process_frame
+		await process_frame
+		var bounds: Rect2 = panel.get_global_rect()
+		var viewport: Rect2 = panel._scroll.get_global_rect()
+		check(bounds.grow(0.1).encloses(viewport),
+			"Resizing the same sidebar to %.0f keeps its scroll viewport inside the reserved gutter: panel=%s scroll=%s content_min=%s" % [
+				width, bounds, viewport, panel._content.custom_minimum_size])
+		check(panel._scroll.get_v_scroll_bar().max_value > panel._scroll.get_v_scroll_bar().page,
+			"A resized eight-word sidebar retains a real vertical scroll range after repeated refreshes")
+		for row: Dictionary in panel._rows:
+			var card: Rect2 = row.surface.get_global_rect()
+			check(card.position.x >= bounds.position.x and card.end.x <= bounds.end.x + 0.1,
+				"Resizing the same sidebar to %.0f never retains an earlier wider card (actual %.1f)" % [width, card.size.x])
+	for compact: bool in [true, false, true]:
+		var area := Rect2(16, 70, 300, 28) if compact else Rect2(16, 70, 160, 310)
+		panel.configure_layout(area, 1.0, compact)
+		await process_frame
+		await process_frame
+		check(panel.get_global_rect().grow(0.1).encloses(panel._scroll.get_global_rect()),
+			"Switching between carousel and sidebar clears the previous axis's content minimum")
+
+
+func _check_progress_feedback(panel) -> void:
+	check(panel.has_signal("word_progressed") and panel.has_method("advance"),
+		"Each saved word-progress transition has a bounded animation and completion event")
+	if not panel.has_signal("word_progressed") or not panel.has_method("advance"):
+		return
+	panel.configure_layout(Rect2(16, 70, 232, 310), 1.0, false)
+	var events: Array = []
+	panel.connect("word_progressed", func(id: String, complete: bool) -> void: events.append([id, complete]))
+	var state: Dictionary = panel._state.duplicate(true)
+	state.practice[0].current = 1
+	panel.set_stage(state)
+	panel.advance(0.09)
+	var row: Dictionary = panel._rows[0]
+	check(row.fraction.scale.x > 1.0 and row.gain_label.is_visible_in_tree()
+		and events == [[str(state.practice[0].id), false]],
+		"A saved increment pops its own fraction and +1, without declaring completion")
+	panel.set_stage(state)
+	check(events.size() == 1, "Refreshing unchanged progress cannot replay an increment")
+	state.practice[0].current = 3
+	state.practice[0].mastered = true
+	panel.set_stage(state)
+	panel.advance(0.1)
+	check(events.size() == 2 and events[1] == [str(state.practice[0].id), true]
+		and panel.snapshot().words[0].get("complete_active", false),
+		"Only the newly completed word emits its achievement event for visuals and audio")
+	panel.advance(1.2)
+	check(panel.snapshot().words[0].get("completed_marker_visible", false)
+		and not panel.snapshot().words[0].get("complete_active", false),
+		"A persistent completed badge follows the transient success animation")
+	panel.set_stage({})
+	panel.set_stage(state)
+	check(events.size() == 2 and panel.snapshot().words[0].get("completed_marker_visible", false)
+		and not panel.snapshot().words[0].get("complete_active", false),
+		"Reloading already completed targets shows their badge without replaying success")
+	panel.configure_layout(Rect2(16, 70, 300, 28), 1.0, true)
+	check(panel.snapshot().words[0].get("completed_marker_visible", false)
+		and not panel._rows[0].fraction.is_visible_in_tree(),
+		"A narrow completed chip keeps its sourced check but no progress numbers")
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	var data := Data.new()
@@ -76,7 +141,7 @@ func _run() -> void:
 					"The sidebar gives every illustrated word a readable, comfortably spaced card")
 			check(row.get("steps", []).size() == 3,
 				"Three sourced mastery accents replace the generic table-like progress line")
-			check(row.fraction.is_visible_in_tree() == (not state.compact),
+			check(row.fraction.is_visible_in_tree() == (not state.compact and not state.words[index].mastered),
 				"Compact practice cards never show progress numbers; desktop retains the readable fraction")
 			var background: ProgressBar = row.get("background_progress")
 			check(background != null and background.is_visible_in_tree()
@@ -94,6 +159,9 @@ func _run() -> void:
 		check(panel._rows[0].label.size.y <= panel._scroll.size.y + 0.1,
 			"The compact word font fits the visible stage strip without clipping its descenders")
 		await _capture("%dx%d-eight-words" % [dimensions.x, dimensions.y])
+		if dimensions == Vector2i(1366, 768):
+			await _check_resize_history(panel)
+			_check_progress_feedback(panel)
 		view.free()
 	await process_frame
 	print("Jelly stage practice: %d checks, %d failures" % [checks, failures])

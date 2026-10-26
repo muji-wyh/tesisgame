@@ -355,7 +355,7 @@ func _approximately_equal_state(left: Variant, right: Variant) -> bool:
 
 
 func _test_powerup_eligibility() -> void:
-	check(Model.POWERUP_PRICES == {"auto_merge": 600, "fragments": 200},
+	check(Model.POWERUP_PRICES == {"auto_merge": 600, "fragments": 200, "extra_time": 100},
 		"paid powers expose their first-purchase prices")
 	for kind: String in ["auto_merge", "fragments"]:
 		for blocked_by: String in ["paused", "held", "settling", "fusion", "collection", "batch", "finished", "empty"]:
@@ -650,15 +650,16 @@ func _test_powerup_auto_completion_during_drag() -> void:
 			and int(drag.source_id) != first_result_id and int(drag.target_id) != first_result_id,
 			"no launch can reuse the new result before its landing settles")
 	model.finish_powerup(true)
-	check(not model.powerup_active() and model.collectable_ids().size() >= 2 and payments.size() == 1,
+	check(not model.powerup_active() and model.collectable_ids().size() == 1 and payments.size() == 1,
 		"The paid stream completes picture matches and additive upgrades without another payment")
 	var represented_levels: int = 0
 	for tile: Dictionary in model.cells:
 		represented_levels += int(tile.merge_level)
 		check(int(tile.merge_level) <= Model.MAX_MERGE_LEVEL, "Automatic upgrades never exceed Lv9")
-	check(represented_levels == 12 and model.merged_count == 24 - model.cells.size() and model.collected_coins == 0
+	check(represented_levels == 9 and int(model.cells[0].mass) == 24
+		and model.merged_count == 24 - model.cells.size() and model.collected_coins == 0
 		and model.compatible_pairs().is_empty(),
-		"The exhausted stream preserves all twelve represented levels and stops at the nine-level cap")
+		"The exhausted stream preserves all source mass in a single capped Lv9 word")
 	_assert_board(model, "automatic picture-and-level stream")
 	model.purchase_powerup = Callable()
 
@@ -2013,7 +2014,7 @@ func _test_level_collection_anticipation() -> void:
 			and is_equal_approx(Model.collection_seconds(level), collection_times[level - 1]),
 			"Lv%d has its deliberate manual anticipation and unchanged post-pop reward interval" % level)
 		check(is_equal_approx(Model.collection_pop_seconds(level, true), 0.04)
-			and is_equal_approx(Model.collection_seconds(level, true), 0.14),
+			and is_equal_approx(Model.collection_seconds(level, true), 0.12),
 			"Lv%d keeps the existing batch pop and collection beat" % level)
 		var batch = _model([_word("cat")])
 		_board(batch, ["merged:cat:%d" % level], [3])
@@ -2024,11 +2025,11 @@ func _test_level_collection_anticipation() -> void:
 		batch.step(0.001)
 		check(batch_events.cues == ["pop" if level == 1 else "jelly-collect-lv%d" % level]
 			and batch.cleared_pairs == 0, "Each batch level pops at 40 ms without granting rewards early")
-		batch.step(0.099)
-		check(batch.cleared_pairs == 0, "Each batch level remains reserved until 140 ms")
+		batch.step(0.079)
+		check(batch.cleared_pairs == 0, "Each batch level remains reserved until 120 ms")
 		batch.step(0.001)
 		check(batch.cleared_pairs == 1 and batch.fragment_count == 3 and not batch.collection_batch_active(),
-			"Each batch level completes on the unchanged 140 ms beat")
+			"Each batch level completes on the requested 120 ms beat")
 		if level < 4:
 			continue
 		var model = _model([_word("cat")])
@@ -2859,9 +2860,9 @@ func _test_collection_batch_rhythm() -> void:
 	check(model.collected_coins == 450 and model.fragment_count == 9 and model.cleared_pairs == 9, "all coins and fragments use normal once-only collection rewards")
 	check(events.collections.size() == 9 and events.attempts.size() == 9 and events.cues.count("jelly-collect-lv2") == 9, "every word gets one collection, learning attempt and disappearance cue")
 	check(events.milestones == [[0, 1], [1, 2]], "batch fragments preserve normal chest unlock and upgrade milestones")
-	check(payouts.size() == 9 and is_equal_approx(float(payouts.back().time), 1.26)
-		and is_equal_approx(float(model.collection_batch_snapshot().elapsed), 1.26),
-		"nine words take 1.26 seconds with no acceleration or extra breathing gaps")
+	check(payouts.size() == 9 and is_equal_approx(float(payouts.back().time), 1.08)
+		and is_equal_approx(float(model.collection_batch_snapshot().elapsed), 1.08),
+		"Nine words use the exact faster 1.08-second batch without extra gaps")
 	var coin_total: int = model.collected_coins
 	model.step(1.0)
 	check(model.collected_coins == coin_total and not model.start_collection_batch(), "an empty batch has no repeat rewards")

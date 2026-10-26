@@ -47,6 +47,21 @@ illustration or effect asset was acquired for these cards.
 
 ## Finish and mastery
 
+`jelly-goals/completed.svg` and the inline Resume control's
+`controls/player-play.svg` are acquired Tabler Icons 3.35.0 by Paweł Kuna (MIT).
+The original SVGs were rendered and inspected before adapting only `currentColor`
+to white. Original/output hashes and source URLs are recorded in the respective
+`sources.json` files. They contain no source animation clips.
+
+Campaign rating stars and the extra-time clock reuse the exact acquired Microsoft
+Fluent Emoji 3D illustrations from the reviewed word library (Microsoft Corporation,
+MIT). Their unchanged copies live in `jelly-goals/` so they are available before
+any age media pack. Source/output hashes, rights and acquisition/integration state
+are recorded in `jelly-goals/sources.json`. Goal achievement reuses the existing
+licensed Toon FX static light/sparkle textures and Kenney CC0
+`confirmation_002.ogg`-derived receipt cue, not a new generated illustration or
+audio recording. Its card-local animation and the paused gel tug are game-authored.
+
 `finish-flag.svg` is the `flag-check` icon from Tabler Icons v3.35.0 by
 Paweł Kuna, licensed under the MIT License. The source SVG was downloaded on
 October 9, 2026, inspected, and integrated into Jelly Match's Finish button.

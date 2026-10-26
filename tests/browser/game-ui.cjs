@@ -110,6 +110,17 @@ async function chooseMode(page, name, options = {}) {
   modeRect(await metrics(page), name, options);
   await activateLibraryControl(page, `Mode_${name}`);
   await expect.poll(async () => (await metrics(page)).library?.visible).toBe(false);
+  if (name === 'word_jelly') {
+    const state = await page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
+    if (state.campaign_map?.visible) {
+      const map = state.campaign_map;
+      const target = options.challenge ? map.challenge : map.stage_nodes.find(node =>
+        node.number === (options.stage || map.stage_nodes.find(item => item.unlocked && !item.best_stars)?.number || 99));
+      if (!target) throw new Error('The requested campaign stage is unavailable.');
+      const rect = target.rect;
+      await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
+    }
+  }
   await expect.poll(async () => (await metrics(page)).library?.current).toBe(name);
 }
 

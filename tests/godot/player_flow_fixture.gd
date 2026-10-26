@@ -8,6 +8,7 @@ static func install(app, directory: String, filename: String = "growth.cfg") -> 
 	app.pop_reward_save_path = directory + "/pop-rewards.cfg"
 	app.jelly_reward_save_path = directory + "/jelly-rewards.cfg"
 	app.professional_save_path = directory + "/professional.json"
+	app.jelly_campaign_save_path = directory + "/campaign.cfg"
 	app.growth = State.new(directory + "/" + filename)
 
 
@@ -18,7 +19,13 @@ static func choose_pop_player(app) -> void:
 static func enter_mode(app, id: String) -> void:
 	# Gameplay fixtures use the same guarded Home route as a player.
 	app._show_mode_menu()
-	app.choose_mode(id)
+	if id == "word_jelly" and not (app._mode_id == id and app._home_can_continue()):
+		# Core board suites deliberately exercise an unbound round. Campaign
+		# suites drive the real map and its independently persisted quotas.
+		app._has_entered_game = true
+		app.new_round(-1, false, "", id)
+	else:
+		app.choose_mode(id)
 
 
 static func unlock_auto_collect(app) -> void:

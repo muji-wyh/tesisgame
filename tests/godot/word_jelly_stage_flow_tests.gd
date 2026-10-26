@@ -124,6 +124,7 @@ func _run() -> void:
 	app._record_growth("stage-wrong-answer", [first[0]], false)
 	check(view.snapshot().practice.words.any(func(item: Dictionary) -> bool: return item.id == first[0] and item.current == 0),
 		"A saved wrong answer resets only its word's displayed practice streak")
+	var issued_preview: Array = view.game.upcoming.map(func(tile: Dictionary) -> int: return int(tile.id))
 	for attempt in range(3):
 		app._record_growth("stage-test-0-%d" % attempt, [first[0]], true)
 	check(view.snapshot().practice.words.any(func(item: Dictionary) -> bool:
@@ -131,8 +132,8 @@ func _run() -> void:
 		"A mastered word remains visibly complete in this stage's practice list")
 	check(app._word_jelly_stages.remaining.size() == 2 and view.game._words.size() == 2,
 		"One saved mastered target leaves only the two remaining stage words in supply")
-	for tile: Dictionary in view.game.upcoming:
-		check(str(tile.get("source_word_id", "")) != str(first[0]), "Advertised supply removes already-mastered targets")
+	check(view.game.upcoming.map(func(tile: Dictionary) -> int: return int(tile.id)) == issued_preview,
+		"Retiring mastery preserves already-issued partners needed by older board roots")
 	var original_path: String = app.growth._path
 	app.growth._path = directory + "/missing/growth.cfg"
 	for attempt in range(3):
@@ -151,6 +152,7 @@ func _run() -> void:
 	view.game.fragment_count = 3
 	for attempt in range(3):
 		app._record_growth("last-%d" % attempt, [first[2]], true)
+	view._practice_panel.advance(1.40)
 	app._advance_word_jelly_stages(0.1)
 	check(app._word_jelly_stages.number == 2 and view.game._words.size() == 4, "Three mastered words automatically start a four-word stage two")
 	var stage_key: String = round_id + ":word_jelly:stage:1"
@@ -189,6 +191,7 @@ func _run() -> void:
 	for id: String in app._word_jelly_stages.snapshot().word_ids:
 		for attempt in range(3):
 			app._record_growth("final-%s-%d" % [id, attempt], [id], true)
+	view._practice_panel.advance(1.40)
 	app._advance_word_jelly_stages(0.1)
 	check(app._word_jelly_stages.completed and view.game.phase == "finished"
 		and app._reward_confetti.snapshot().keys.has(round_id + ":word_jelly:stage:2"),

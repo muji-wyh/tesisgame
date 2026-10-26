@@ -2093,7 +2093,7 @@ func _check_reduced_motion_and_cache(view) -> void:
 	check(view._chest_texture == texture, "Repeated theme refreshes share one live-rendered chest texture")
 	for index in range(7):
 		view._process(0.01)
-	var cache: Dictionary = view._chest_cache["spring"]
+	var cache: Dictionary = view._chest_cache["tier:1"]
 	check(cache.viewport.render_target_update_mode == SubViewport.UPDATE_DISABLED and not cache.art.is_processing(),
 		"Static theme chest previews stop rendering once their source pose is cached")
 	view.stop()

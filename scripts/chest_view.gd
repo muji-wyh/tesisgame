@@ -17,6 +17,7 @@ const OpeningEffect = preload("res://scripts/chest_opening_effect.gd")
 const SURFACE_LIGHT = preload("res://scripts/chest_surface.gdshader")
 const Style = preload("res://scripts/ui_style.gd")
 const ModelView = preload("res://scripts/chest_model_view.gd")
+const TierCatalog = preload("res://scripts/chest_tier_catalog.gd")
 
 var theme_id: String = ""
 var reduced_motion: bool = false
@@ -31,6 +32,9 @@ var _idle_time: float = 0.0
 var _idle_paused: bool = false
 var _tint: Color = Color.WHITE
 var _style: String = ""
+var _tier: int = 0
+var _preset_id: String = ""
+var _selection_key: String = ""
 var drag_offset: Vector2 = Vector2.ZERO
 var hold_progress: float = 0.0
 var _glint := Node2D.new()
@@ -133,24 +137,35 @@ func _ready() -> void:
 
 
 func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
-	if theme_id == palette.id:
+	var alias: String = str(palette.get("id", palette.get("chest", "")))
+	configure_tier(TierCatalog.theme_tier(alias), palette, manifest)
+
+
+func configure_tier(tier: int, palette: Dictionary, manifest: Dictionary) -> void:
+	var style: Dictionary = TierCatalog.style(tier, manifest)
+	var selection: String = JSON.stringify(style)
+	var unchanged: bool = not style.is_empty() and _tier == tier \
+		and _selection_key == selection and is_instance_valid(_model_view)
+	theme_id = str(palette.get("id", "spring"))
+	_feel = Feel.profile(theme_id)
+	_style = str(palette.get("chest", "royal"))
+	_glint_color = palette.get("light", Color.WHITE)
+	_charge_color = palette.get("accent", _glint_color)
+	_charge_spark = palette.get("spark", _glint_color).lightened(0.25)
+	_release_color = Feel.FLASH_COLORS.get(theme_id, _glint_color)
+	if unchanged:
 		return
 	_finish_flourish = false
 	stop_reaction()
-	theme_id = palette.id
-	_feel = Feel.profile(theme_id)
-	_style = palette.chest
-	# Above the inner lid/interior, below the solid front and floating facets.
-	_cavity_light.z_index = 0 if _style == "crystal" else 1
-	_tint = palette.tint
-	_glint_color = palette.light
-	_charge_color = palette.get("accent", _glint_color)
-	_charge_spark = palette.get("spark", _glint_color).lightened(0.25)
-	_release_color = Feel.FLASH_COLORS.get(theme_id, palette.light)
+	_tier = tier if not style.is_empty() else 0
+	_preset_id = str(style.get("preset_id", ""))
+	_selection_key = selection
+	_tint = palette.get("tint", Color.WHITE)
 	mode = "closed"
 	_elapsed = 0.0
 	_idle_time = 0.0
 	_model_time = 0.0
+	_model_rest_time = 0.0
 	_crystal_cavity = null
 	if is_instance_valid(_model_view):
 		_model_view.free()
@@ -161,20 +176,15 @@ func configure_skin(palette: Dictionary, manifest: Dictionary) -> void:
 	_lid_edges.clear()
 	_surface_light_active = false
 	_rigged = false
-	var style: Dictionary = manifest.styles[_style]
-	if style.has("model"):
-		_load_model(style)
-	elif _style == "crystal":
-		for part in style.parts:
-			var matrix: Array = part.transform
-			var pose := Transform2D(Vector2(matrix[0], matrix[1]), Vector2(matrix[2], matrix[3]), Vector2(matrix[4], matrix[5]))
-			_add_piece(part.texture, part.name, pose, Vector2(part.pivot[0], part.pivot[1]), int(part.order), part.flip_h, part.flip_v)
-		_crystal_cavity = Node2D.new()
-		_pieces[0].node.add_child(_crystal_cavity)
-		_crystal_cavity.draw.connect(_draw_crystal_cavity)
-	elif not _load_rig():
-		_add_piece(style.closed, "closed", Transform2D.IDENTITY, Vector2(0.5, 0.5))
-		_add_piece(style.open, "open", Transform2D.IDENTITY, Vector2(0.5, 0.5))
+	_bounds = Rect2()
+	_motion_bounds = Rect2()
+	_physical_pose.clear()
+	if style.is_empty():
+		return
+	_load_model(style)
+	if not is_instance_valid(_model_view):
+		_selection_key = ""
+		return
 	_measure_bounds()
 	_measure_motion_bounds()
 	_apply_pose(0.0)
@@ -185,7 +195,8 @@ func _load_model(style: Dictionary) -> void:
 	_model_view = ModelView.new()
 	add_child(_model_view)
 	if not _model_view.configure(style):
-		push_error("Unable to configure animated chest model: " + _style)
+		push_error("Unable to configure acquired 3D chest tier %d (%s): %s" % [
+			_tier, _preset_id, _model_view.last_error])
 		_model_view.free()
 		_model_view = null
 		return
@@ -825,6 +836,8 @@ func hold_effect_snapshot() -> Dictionary:
 		"text": "%s · %d%%" % [status, percent] if active else "", "status": status if active else "",
 		"animated": active and not reduced_motion,
 		"theme": theme_id, "style": _style, "material": _feel.material, "rigged": _rigged,
+		"chest_tier": _tier, "preset_id": _preset_id,
+		"available": is_instance_valid(_model_view),
 		"live_model": _model_view.snapshot() if is_instance_valid(_model_view) else {},
 		"opening_time": _elapsed, "cancel_remaining": _cancel_remaining,
 		"animation_origin_frame": _animation_origin_frame,
@@ -1618,6 +1631,9 @@ func clear() -> void:
 	_model_rest_time = 0.0
 	_animation_origin_frame = -1
 	theme_id = ""
+	_tier = 0
+	_preset_id = ""
+	_selection_key = ""
 	hold_progress = 0.0
 	drag_offset = Vector2.ZERO
 	_cue_log.clear()

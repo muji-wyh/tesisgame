@@ -102,6 +102,10 @@ func check_input_focus(app) -> void:
 	await pointer_event(mode_button.get_global_rect().get_center(), true)
 	await pointer_event(mode_button.get_global_rect().get_center(), false)
 	await settle()
+	check(app._campaign.map.visible, "A real mouse click opens the campaign map")
+	await pointer_event(app._campaign.map._challenge.get_global_rect().get_center(), true)
+	await pointer_event(app._campaign.map._challenge.get_global_rect().get_center(), false)
+	await settle()
 	var view = app._word_jelly
 	view.set_process(false)
 	check(app._mode_id == "word_jelly" and not app._mode_menu_open() and view.has_focus(),
@@ -161,6 +165,10 @@ func check_input_focus(app) -> void:
 	mode_button.grab_focus()
 	await key_event(KEY_ENTER)
 	await settle()
+	if app._campaign.map.visible:
+		app._campaign.map._challenge.grab_focus()
+		await key_event(KEY_ENTER)
+		await settle()
 	view.set_process(false)
 	check(app._mode_id == "word_jelly" and not app._mode_menu_open() and view.default_focus().has_focus(),
 		"Keyboard activation of a new Jelly Words round retains intentional tile focus")
@@ -259,7 +267,8 @@ func check_finish_header(app, view) -> void:
 			"The header keeps a full touch target and an unobstructed mode title" + context)
 		var bottom: float = maxf(view._global_rect(view._board).end.y, collect.end.y)
 		for button: Control in view.powerup_buttons.values():
-			bottom = maxf(bottom, button.get_global_rect().end.y)
+			if button.visible:
+				bottom = maxf(bottom, button.get_global_rect().end.y)
 		check(absf(bottom - (playfield.end.y - 12.0 / s)) < 0.1,
 			"The board and collection controls retain twelve-pixel bottom padding" + context)
 		var chest: Rect2 = view._global_rect(view.chest_meter_rect())
@@ -440,7 +449,8 @@ func _check_playfield_layout(view, s: float, context: String) -> void:
 	var regions: Dictionary = {"board": board, "supply tray": tray,
 		"Collect words": view.collect_button.get_global_rect()}
 	for kind: String in view.powerup_buttons:
-		regions[kind + " powerup"] = view.powerup_buttons[kind].get_global_rect()
+		if view.powerup_buttons[kind].visible:
+			regions[kind + " powerup"] = view.powerup_buttons[kind].get_global_rect()
 	var names: Array = regions.keys()
 	for index in range(names.size()):
 		var rectangle: Rect2 = regions[names[index]]
@@ -797,7 +807,8 @@ func _run() -> void:
 	var error_regions: Array[Rect2] = [view._global_rect(view._board), view.drop_button.get_global_rect(),
 		view.collect_button.get_global_rect()]
 	for button: Control in view.powerup_buttons.values():
-		error_regions.append(button.get_global_rect())
+		if button.visible:
+			error_regions.append(button.get_global_rect())
 	for region: Rect2 in error_regions:
 		check(not notice.intersects(region) and view.get_global_rect().grow(0.1).encloses(region),
 			"The failed-save instruction leaves incoming roots, the board, and actions visible and inside the short phone")

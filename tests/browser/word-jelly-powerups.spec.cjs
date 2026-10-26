@@ -33,8 +33,7 @@ const forwardPairs = state => state.tiles.flatMap(source => state.tiles.filter(t
 function validPair(source, target) {
   if (!source || !target || source.id === target.id) return false;
   if (source.jelly_kind === 'merged' && target.jelly_kind === 'merged')
-    return Boolean(source.word?.id && source.word.id === target.word?.id &&
-      source.merge_level + target.merge_level <= 9);
+    return Boolean(source.word?.id && source.word.id === target.word?.id);
   const picture = source.jelly_kind === 'picture' ? source : target.jelly_kind === 'picture' ? target : null;
   if (picture) {
     const root = picture === source ? target : source;
@@ -75,11 +74,13 @@ async function start(page, info, balance, pipLevel = 0) {
     if (localStorage.getItem(walletKey) === null) localStorage.setItem(walletKey,
       `[wallet]\nversion=2\nbalance=${balance}\nreceipts=${JSON.stringify(balance ? { 'browser-opening-coins': balance } : {})}\n`);
   }, { balance, walletKey: WALLET_KEY });
-  const errors = await openGame(page, { reducedMotion, mode: 'word_jelly' });
+  const errors = await openGame(page, { reducedMotion });
+  await chooseMode(page, 'word_jelly', { challenge: true });
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.visible && state.phase === 'playing' && state.tiles.length >= 15 &&
-      state.tiles.every(tile => tile.settled) && Object.keys(state.powerup_buttons || {}).length === 2;
+      state.tiles.every(tile => tile.settled) &&
+      Object.values(state.powerup_buttons || {}).filter(button => button.visible).length === 2;
   }, { timeout: 20000 }).toBe(true);
   await expect.poll(async () => (await wallet(page)).balance).toBe(balance);
   const audioAvailable = await page.evaluate(() => window.audioObservation.available);
@@ -687,7 +688,12 @@ test('paid Treasure arrives on the jellies and Auto merge moves every valid pair
     }
   }
   await page.evaluate(() => window.fragmentCollectionObserver.disconnect());
-  expect(await savedGrowth(page), 'Collecting automatically merged words does not grant mastery').toBe(growth);
+  expect(await savedGrowth(page), 'Collecting automatically merged words durably records learning').not.toBe(growth);
+  const learned = await page.locator('#growth-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
+  for (const id of new Set(completed.map(tile => tile.word.id))) {
+    expect(learned.streaks[id], 'Each committed automatic pickup counts once toward its word')
+      .toBe(Math.min(3, completed.filter(tile => tile.word.id === id).length));
+  }
   const finalSave = await storedWallet(page);
   expect(finalSave.balance).toBe(4200 + earnedCoins);
   expect(Object.values(finalSave.receipts).filter(amount => amount < 0).sort((a, b) => a - b)).toEqual([-600, -200]);

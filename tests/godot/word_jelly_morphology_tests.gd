@@ -218,16 +218,16 @@ func _test_atomic_level_cap() -> void:
 		whole = _merge(model, whole, addition)
 		check(whole.merge_level == level and whole.fragments == level and not whole.mastery_eligible,
 			"Image-free atomic vocabulary supports additive levels without inventing mastery")
-	var extra: Dictionary = _sources(model, "MRI")[0]
-	check(whole.merge_level == 9 and not model.parts_compatible(whole, extra)
-		and model.try_merge(int(whole.id), int(extra.id)) == "wrong",
-		"An authored atomic Lv9 also rejects a sum above the shared cap")
-	model.cells.erase(extra)
+	var extra: Dictionary = _sources(model, "MRI", 1)[0]
+	check(whole.merge_level == 9 and model.parts_compatible(whole, extra),
+		"An authored atomic Lv9 still accepts an identical word above the shared cap")
+	whole = _merge(model, whole, extra)
 	var attempts: Array = []
 	model.word_attempted.connect(func(event: String, ids: Array[String], correct: bool): attempts.append([event, ids, correct]))
-	check(model.collect(int(whole.id)), "An authored atomic Lv9 remains collectable after an over-cap attempt")
+	check(whole.merge_level == 9 and model.collect(int(whole.id)),
+		"An authored atomic over-cap merge clamps to Lv9 and remains collectable")
 	_settle(model)
-	check(model.cleared_pairs == 1 and model.fragment_count == 9 and attempts.is_empty(),
+	check(model.cleared_pairs == 1 and model.fragment_count == 10 and attempts.is_empty(),
 		"The highest atomic level collects every fragment without changing its mastery policy")
 
 
@@ -370,7 +370,9 @@ func _test_auto_completion() -> void:
 	_settle(model)
 	check(model.collect(int(model.cells[0].id)), "The settled assisted whole word remains collectable")
 	_settle(model)
-	check(model.cleared_pairs == 1 and attempts.is_empty() and purchases.size() == 1, "Collecting Auto's result does not manufacture unassisted mastery or another charge")
+	check(model.cleared_pairs == 1 and attempts.size() == 1 and attempts[0][1] == ["sense:unhelpful"]
+		and attempts[0][2] and purchases.size() == 1,
+		"Collecting Auto's assessable result records one correct collection without another charge")
 	model.purchase_powerup = Callable()
 
 
@@ -809,7 +811,8 @@ func _test_foundation01_current() -> void:
 	check(model.cells.size() == 1 and model.cells[0].text == "signature" and model.cells[0].composition.assisted and not model.cells[0].composition.mastery_eligible, "Automatic final spelling preserves assistance through the bound intermediate")
 	check(model.collect(int(model.cells[0].id)), "Assisted signature remains collectable")
 	_settle(model)
-	check(assisted_attempts.is_empty(), "Assisted signature cannot manufacture unassisted spelling mastery")
+	check(assisted_attempts.size() == 1 and assisted_attempts[0][1] == [entry.id] and assisted_attempts[0][2],
+		"Collected automatic signature records exactly one correct learning answer")
 	model.purchase_powerup = Callable()
 	model.credit_collection = Callable()
 
@@ -883,6 +886,7 @@ func _test_foundation02_current() -> void:
 		if model.cells.size() == 1:
 			check(model.collect(int(model.cells[0].id)), "Assisted current whole remains collectable: " + entry.text)
 		_settle(model)
-		check(attempts.is_empty(), "Assisted collection cannot manufacture independent mastery: " + entry.text)
+		check(attempts.size() == 1 and attempts[0][1] == [entry.id] and attempts[0][2],
+			"Collected automatic spelling records one correct learning answer: " + entry.text)
 		model.purchase_powerup = Callable()
 		model.credit_collection = Callable()

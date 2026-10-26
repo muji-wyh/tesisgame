@@ -38,6 +38,25 @@ the game reconciles to the saved balance without replaying the payout. Failed
 saves and duplicate receipts never launch coins. Reduced motion keeps a short
 static acknowledgement and updates the exact total without flight or rolling.
 
+## Campaign stars
+
+New numbered-stage settlements add a separate immutable clear receipt. The base
+is `75 + 15 * (chapter - 1)` coins. For one, two or three stars, the total of that
+base and the current stage's already-quoted chest is weighted by **1x, 1.5x or 2x**,
+rounding upward. The chest is still paid through its original receipt; the clear
+receipt pays only the difference. Already credited combo and rare-pickup coins
+are not multiplied again. Failures and untimed challenges earn no clear bonus.
+
+For example, stage 1 with no chest pays 75, 113 or 150 clear coins. A 75-coin
+chest plus a three-star stage-1 clear totals 300 settlement coins: 75 from the
+unchanged chest quote and 225 from the stage receipt. Replays have their own
+round receipt; retrying that same settlement cannot pay twice or downgrade stars.
+
+Newly earned chests stop upgrading at **Lv30**. Existing historical quotes and
+their paid receipts remain valid without silently changing their original tier
+or amount. Real 3D tier presentation is documented in
+[the chest catalog](../assets/chests/catalog-cc0/README.md).
+
 `CoinWallet` version 4 saves each chest's quote before payment: its original
 receipt ID, tier, Pip level, base, bonus and total. The first settlement
 presentation or claim locks this quote across level changes and reloads.

@@ -323,7 +323,13 @@ test('every chest image belongs to original art, derived rigs, verified mileston
   }
   const downloaded = JSON.parse(fs.readFileSync(path.join(chestRoot, 'downloaded', 'manifest.json'), 'utf8'));
   const modelImages = downloaded.assets.flatMap(asset => embeddedModelImages(asset.path, readGlb(asset.path)));
-  for (const image of modelImages) {
+  const cc0 = JSON.parse(fs.readFileSync(path.join(chestRoot, 'catalog-cc0', 'sources.json'), 'utf8'));
+  const cc0Images = cc0.files.filter(file => file.kind === 'model').flatMap(file => {
+    const model = readModelContainer(absolute(file.path));
+    return model.gltf.images?.some(image => Number.isInteger(image.bufferView))
+      ? embeddedModelImages(file.path, model) : [];
+  });
+  for (const image of [...modelImages, ...cc0Images]) {
     const actual = fs.readFileSync(absolute(image.path));
     assert.equal(sha256(actual), sha256(image.bytes), `${image.path} is the exact embedded source texture`);
     assert.deepEqual(imageDimensions(actual), imageDimensions(image.bytes), `${image.path} retains source dimensions`);
@@ -334,7 +340,8 @@ test('every chest image belongs to original art, derived rigs, verified mileston
   ]);
   assert.deepEqual(files.filter((file) => /\.(?:png|jpe?g)$/i.test(file)).sort(), [
     ...expectedFiles.map(({ path: filename }) => filename), ...parts.map((part) => part.texture),
-    ...modelImages.map(image => image.path), ...milestoneTextures.map(texture => texture.path)
+    ...modelImages.map(image => image.path), ...milestoneTextures.map(texture => texture.path),
+    ...cc0.files.filter(file => file.kind === 'texture').map(file => file.path), ...cc0Images.map(image => image.path)
   ].sort());
   assert.deepEqual(files.filter((file) => /\.(?:meta|prefab|anim|mat|cs)$/i.test(file)), []);
 });

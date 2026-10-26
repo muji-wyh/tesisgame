@@ -34,6 +34,8 @@ const VoicePop = preload("res://scripts/voice_pop.gd")
 const JellyMatch = preload("res://scripts/jelly_match.gd")
 const WordJelly = preload("res://scripts/word_jelly.gd")
 const WordJellyStages = preload("res://scripts/word_jelly_stages.gd")
+const JellyCampaign = preload("res://scripts/word_jelly_campaign.gd")
+const JellyFinishButton = preload("res://scripts/jelly_finish_button.gd")
 const FinishConfirmation = preload("res://scripts/finish_confirmation.gd")
 const SettlementDialog = preload("res://scripts/settlement_dialog.gd")
 const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
@@ -211,6 +213,8 @@ var _pop_settling: bool = false
 var _jelly: JellyMatch
 var _word_jelly: WordJelly
 var _word_jelly_stages: WordJellyStages
+var _campaign: JellyCampaign
+var jelly_campaign_save_path: String = "user://jelly-campaign-v1.cfg"
 var _jelly_stage_professional_skills: Dictionary = {}
 var _jelly_stage_check_left: float = 0.0
 var _finish_confirmation: FinishConfirmation
@@ -218,11 +222,11 @@ var _finish_confirmation_mode: String = ""
 var _finish_confirmation_round: String = ""
 var _finish_confirmation_generation: int = -1
 var _finish_confirmation_focus_modes: Dictionary = {}
-var _jelly_pause_button: Button:
+var _jelly_pause_button: JellyFinishButton:
 	get:
 		var active = _active_jelly()
 		return active.finish_button if is_instance_valid(active) else null
-var _jelly_pause_menu: FinishConfirmation
+var _jelly_pause_shade: ColorRect
 var _jelly_pause_round: String = ""
 var _jelly_pause_focus_modes: Dictionary = {}
 var _word_jelly_credits: Dictionary = {}
@@ -405,6 +409,8 @@ func _ready() -> void:
 	_pop_rewards.connect_storage(_host)
 	_jelly_rewards.save_path = jelly_reward_save_path
 	_jelly_rewards.connect_storage(_host)
+	_campaign = JellyCampaign.new()
+	_campaign.configure(self, jelly_campaign_save_path, _host)
 	process_mode = initial_process_mode
 	_vocabulary_catalog = JSON.parse_string(FileAccess.get_file_as_string("res://data/vocabulary-packs.json"))
 	add_child(vocabulary_loader)
@@ -528,6 +534,8 @@ func _cancel_vocabulary_round() -> void:
 	_pending_vocabulary_stage = false
 	_pending_vocabulary_age = 0
 	_close_vocabulary_prompt()
+	if _campaign != null and _campaign.starting:
+		_campaign.cancel_start()
 	if stage_wait:
 		_show_mode_menu()
 	_refresh()
@@ -865,6 +873,7 @@ func _build_controls() -> void:
 	_jelly.changed.connect(_publish_jelly.bind("jelly"))
 	_jelly.hide()
 	column.add_child(_jelly)
+	_jelly.finish_button.finish_committed.connect(_jelly_finish_pulled.bind("jelly"))
 	_jelly.host_header_chest(header)
 	_jelly.finish_button.reparent(_toolbar, false)
 	_jelly.finish_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -890,6 +899,7 @@ func _build_controls() -> void:
 	_word_jelly.changed.connect(_publish_jelly.bind("word_jelly"))
 	_word_jelly.hide()
 	column.add_child(_word_jelly)
+	_word_jelly.finish_button.finish_committed.connect(_jelly_finish_pulled.bind("word_jelly"))
 	_word_jelly.host_header_chest(header)
 	_word_jelly.finish_button.reparent(_toolbar, false)
 	_word_jelly.finish_button.size_flags_vertical = Control.SIZE_SHRINK_CENTER
@@ -912,6 +922,7 @@ func _build_controls() -> void:
 		if _jelly_rewards_shown and _is_jelly_mode() and not _page_hidden and not collection_page.visible and not _mode_menu_open():
 			audio.chest_cue(theme_id, cue, step))
 	_jelly_rewards.changed.connect(_publish_jelly_rewards)
+	_jelly_rewards.settlement_retry_requested.connect(_retry_storage)
 	_jelly_rewards.hide()
 	column.add_child(_jelly_rewards)
 	_jelly_rewards._retry.pressed.connect(_retry_chest_professional_progress)
@@ -1001,16 +1012,14 @@ func _build_controls() -> void:
 	_finish_confirmation.resized.connect(_publish_finish_confirmation.call_deferred)
 	_finish_confirmation.keep_playing_button.focus_entered.connect(_publish_finish_confirmation.call_deferred)
 	_finish_confirmation.finish_button.focus_entered.connect(_publish_finish_confirmation.call_deferred)
-	_jelly_pause_menu = FinishConfirmation.new()
-	_jelly_pause_menu.name = "JellyPauseMenu"
-	_jelly_pause_menu.set_labels("Paused", "Tap to pause. Pull down to finish.", "Resume", "Finish round")
-	add_child(_jelly_pause_menu)
-	_jelly_pause_menu.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_jelly_pause_menu.canceled.connect(_resume_jelly)
-	_jelly_pause_menu.confirmed.connect(_finish_paused_jelly)
-	_jelly_pause_menu.resized.connect(_publish_jelly_pause.call_deferred)
-	_jelly_pause_menu.keep_playing_button.focus_entered.connect(_publish_jelly_pause.call_deferred)
-	_jelly_pause_menu.finish_button.focus_entered.connect(_publish_jelly_pause.call_deferred)
+	_jelly_pause_shade = ColorRect.new()
+	_jelly_pause_shade.name = "JellyPauseShade"
+	_jelly_pause_shade.color = Color(Style.INK, 0.32)
+	_jelly_pause_shade.mouse_filter = Control.MOUSE_FILTER_STOP
+	_jelly_pause_shade.z_index = 100
+	add_child(_jelly_pause_shade)
+	_jelly_pause_shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_jelly_pause_shade.hide()
 	visibility_changed.connect(_sync_reward_confetti)
 	# Input is dispatched child-first; observe it before interactive descendants consume it.
 	var observer := InputActivityObserver.new()
@@ -1094,6 +1103,8 @@ func _play_ui_click(source: Control = null) -> void:
 
 
 func _show_mode_menu() -> void:
+	if _campaign != null and _campaign.settling:
+		return
 	if _mode_menu_open() or _finish_confirmation_open() or _jelly_pause_open() or _page_hidden or collection_page.visible \
 		or (_save_error and not _pending_fragment.is_empty()):
 		return
@@ -1174,7 +1185,8 @@ func _home_can_continue() -> bool:
 
 func _matches_current_learning_context(mode: String) -> bool:
 	var desired: Dictionary = _desired_learning_context(mode)
-	if mode == "word_jelly" and _word_jelly_stages != null and _round_context.get("track") == "growth" \
+	if mode == "word_jelly" and (_word_jelly_stages != null \
+		or (_word_jelly != null and _word_jelly.game.stage_run != null)) and _round_context.get("track") == "growth" \
 		and desired.get("track") == "growth":
 		# A staged game already spans ages. Pip growing must not reset its board
 		# when the player returns from Home; receipts keep the frozen round age.
@@ -1360,7 +1372,10 @@ func _professional_round_ready(_selection: int, content: Dictionary, source: Str
 			if _mode_id == "phrase":
 				_start_phrase_prompt()
 	else:
-		_announce_status("Your current round is safe. Finish saving its rewards, then retry.")
+		var message: String = "Your current round is safe. Finish saving its rewards, then retry."
+		if _campaign != null and _campaign.starting:
+			_campaign.start_failed(_campaign.error if not _campaign.error.is_empty() else message)
+		_announce_status(message)
 
 
 func _professional_input_blocked() -> bool:
@@ -1370,6 +1385,8 @@ func _professional_input_blocked() -> bool:
 func _professional_changed(state: Dictionary) -> void:
 	if _professional_callbacks_closed or not is_inside_tree() or _rebuilding:
 		return
+	if _campaign != null and _campaign.starting and not _campaign.requesting_preparation and state.phase == "failed":
+		_campaign.start_failed(str(state.error))
 	_career_profiles.clear()
 	var saved: Dictionary = state.session
 	if collection_page.visible and _collection_professional:
@@ -1554,7 +1571,7 @@ func _commit_professional_collection(payload: Dictionary) -> Dictionary:
 	var id: String = _round_id + ":" + local_id
 	var tile: Dictionary = payload.get("a", {})
 	var event: Dictionary = {"id": id, "sense_id": str(payload.word.id), "skill": "spelling",
-		"correct": true, "assisted": bool(tile.get("assisted", false)),
+		"correct": true, "assisted": not bool(payload.get("mastery_eligible", false)),
 		"atomic": payload.word.get("morphology", {}).get("kind") == "atomic" and str(payload.word.get("image", "")).is_empty()}
 	if int(payload.coins) > 0:
 		event.reward = {"operation": "credit", "payload": {"tier": int(payload.coins) / CoinWallet.COINS_PER_TIER}}
@@ -1888,6 +1905,8 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	if not MODES.has(requested_mode):
 		requested_mode = "match"
 	var next_context: Dictionary = _desired_learning_context(requested_mode) if prepared_content.is_empty() else prepared_content.context
+	if requested_mode == "word_jelly" and _campaign != null and _campaign.starting:
+		next_context = _campaign.request_context.duplicate(true)
 	var is_professional: bool = next_context.get("track") == "professional"
 	if is_professional and prepared_content.is_empty():
 		_pending_professional_round = [seed_value, repeat_lesson, adventure_id, requested_mode, required_word_id, resume_saved_treasure]
@@ -1925,16 +1944,26 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	if not _settle_pop_reward():
 		return false
 	var next_jelly_stages: WordJellyStages
+	var next_campaign: Dictionary = {}
 	if requested_mode == "word_jelly":
 		if seed_value < 0:
 			seed_value = int(randi())
 		_jelly_stage_professional_skills = professional.session.snapshot().get("progress", {}).get("skills", {}) if is_professional else {}
-		next_jelly_stages = WordJellyStages.new()
-		next_jelly_stages.configure(content.words.filter(_jelly_stage_assessable), _jelly_word_mastered, seed_value)
-		if next_jelly_stages.words.is_empty():
-			_announce_status("All available Jelly Words are mastered. Choose another vocabulary in Word Library.")
-			return false
-		var missing_age: int = _jelly_stage_missing_age(next_jelly_stages.words)
+		var stage_words: Array
+		if _campaign != null and _campaign.starting:
+			next_campaign = _campaign.prepare_plan(content.words.filter(_jelly_stage_assessable), seed_value)
+			if not next_campaign.get("ok", false):
+				_announce_status(str(next_campaign.error))
+				return false
+			stage_words = next_campaign.words
+		else:
+			next_jelly_stages = WordJellyStages.new()
+			next_jelly_stages.configure(content.words.filter(_jelly_stage_assessable), _jelly_word_mastered, seed_value)
+			if next_jelly_stages.words.is_empty():
+				_announce_status("All available Jelly Words are mastered. Choose another vocabulary in Word Library.")
+				return false
+			stage_words = next_jelly_stages.words
+		var missing_age: int = _jelly_stage_missing_age(stage_words)
 		if missing_age > 0:
 			_wait_for_vocabulary([seed_value, repeat_lesson, adventure_id, next_mode, required_word_id, resume_saved_treasure], missing_age)
 			return false
@@ -2088,15 +2117,29 @@ func new_round(seed_value: int = -1, repeat_lesson: bool = false, adventure_id: 
 	if _is_jelly_mode():
 		_active_jelly().game.practice_weight_for = _practice_weight
 		_word_jelly.game.allow_cross_age = true
-		var jelly_words: Array = next_jelly_stages.words if _mode_id == "word_jelly" else content.words
+		var jelly_words: Array = content.words
+		if _mode_id == "word_jelly":
+			if next_campaign.is_empty():
+				jelly_words = next_jelly_stages.words
+			else:
+				jelly_words = next_campaign.words.slice(0, 3) if next_campaign.kind == "challenge" else next_campaign.words
 		if not _active_jelly().configure(jelly_words, growth.learning_age(), Data.theme(model.theme_id), data.chests, reduced_motion, seed_value):
 			_rebuilding = false
 			_show_error(_active_jelly().game.error)
 			return false
 		if _mode_id == "word_jelly":
-			_word_jelly_stages = next_jelly_stages
-			_jelly_stage_check_left = 0.0
-			_word_jelly.set_stage_progress(_jelly_stage_snapshot())
+			if not next_campaign.is_empty():
+				if not _word_jelly.game.bind_stage(next_campaign):
+					_rebuilding = false
+					_show_error(_word_jelly.game.error)
+					return false
+				_campaign.round_started()
+				_word_jelly.set_stage_progress(_jelly_campaign_snapshot(), true)
+				_word_jelly._layout()
+			else:
+				_word_jelly_stages = next_jelly_stages
+				_jelly_stage_check_left = 0.0
+				_word_jelly.set_stage_progress(_jelly_stage_snapshot())
 		if resume_saved_treasure and _jelly_rewards.has_pending():
 			_jelly_rewards.configure_saved(data.chests, reduced_motion)
 			_jelly_rewards_shown = true
@@ -2113,6 +2156,10 @@ func choose_mode(id: String) -> void:
 	if not _mode_menu_open() or _page_hidden or not MODES.has(id) or collection_page.visible or model.chest_state == "opening" or (_save_error and not _pending_fragment.is_empty()):
 		return
 	_has_entered_game = true
+	if id == "word_jelly" and _campaign != null and (_mode_id != "word_jelly" \
+		or _current_round_ended() or not _matches_current_learning_context(id)):
+		_campaign.open_map()
+		return
 	if id == _mode_id and not _current_round_ended() and _matches_current_learning_context(id):
 		if _professional_input_blocked():
 			_resume_professional_source = _round_id
@@ -2188,8 +2235,13 @@ func _jelly_word_mastered(word: Dictionary) -> bool:
 
 func _jelly_stage_snapshot() -> Dictionary:
 	var state: Dictionary = _word_jelly_stages.snapshot()
+	state["practice"] = _jelly_practice(_word_jelly_stages.words)
+	return state
+
+
+func _jelly_practice(words: Array) -> Array[Dictionary]:
 	var practice: Array[Dictionary] = []
-	for word: Dictionary in _word_jelly_stages.words:
+	for word: Dictionary in words:
 		var mastered: bool = _jelly_word_mastered(word)
 		var current: int = 0
 		if word.get("track") == "professional":
@@ -2199,7 +2251,20 @@ func _jelly_stage_snapshot() -> Dictionary:
 			current = growth.streak(str(word.id))
 		practice.append({"id": str(word.id), "text": str(word.text), "image": str(word.get("image", "")), "mastered": mastered,
 			"current": GrowthState.MASTERY_STREAK if mastered else current, "required": GrowthState.MASTERY_STREAK})
-	state["practice"] = practice
+	return practice
+
+
+func _jelly_campaign_snapshot() -> Dictionary:
+	var state: Dictionary = _word_jelly.game.stage_run.snapshot()
+	if state.kind == "challenge":
+		var practice: Array[Dictionary] = _jelly_practice(_word_jelly.game._words)
+		state["practice"] = practice
+		state["word_ids"] = practice.map(func(word: Dictionary) -> String: return str(word.id))
+		state["total"] = practice.size()
+		state["mastered"] = practice.filter(func(word: Dictionary) -> bool: return word.mastered).size()
+		state["remaining_ids"] = practice.filter(func(word: Dictionary) -> bool: return not word.mastered).map(
+			func(word: Dictionary) -> String: return str(word.id))
+		state["remaining"] = state.remaining_ids.size()
 	return state
 
 
@@ -2211,10 +2276,13 @@ func _jelly_stage_missing_age(words: Array) -> int:
 
 
 func _refresh_jelly_stage_targets() -> void:
-	if _word_jelly_stages == null or _mode_id != "word_jelly" or _rebuilding:
-		return
 	if _round_context.get("track") == "professional":
 		_jelly_stage_professional_skills = professional.session.snapshot().get("progress", {}).get("skills", {})
+	if _mode_id == "word_jelly" and _word_jelly.game.stage_run != null and not _rebuilding:
+		_word_jelly.set_stage_progress(_jelly_campaign_snapshot())
+		return
+	if _word_jelly_stages == null or _mode_id != "word_jelly" or _rebuilding:
+		return
 	var retired: Array[String] = _word_jelly_stages.refresh()
 	if not retired.is_empty():
 		_word_jelly.game.retire_mastered_words(retired)
@@ -2222,6 +2290,13 @@ func _refresh_jelly_stage_targets() -> void:
 
 
 func _advance_word_jelly_stages(delta: float) -> void:
+	if _mode_id == "word_jelly" and _word_jelly.game.stage_run != null:
+		if _jelly_interaction_allowed():
+			_jelly_stage_check_left -= delta
+			if _jelly_stage_check_left <= 0.0:
+				_jelly_stage_check_left = 0.10
+				_refresh_jelly_stage_targets()
+		return
 	if _word_jelly_stages == null or _mode_id != "word_jelly" or _rebuilding \
 		or not _jelly_interaction_allowed() or _vocabulary_prompt.visible or _word_jelly.game.phase != "playing" or _word_jelly.game.paused:
 		return
@@ -2236,6 +2311,8 @@ func _advance_word_jelly_stages(delta: float) -> void:
 	_request_word_jelly_stage_confetti()
 	# Wait for all receipts and active operations before changing the supply.
 	if not _word_jelly.game.stage_transition_ready():
+		return
+	if _word_jelly._practice_panel.feedback_active():
 		return
 	var next_words: Array[Dictionary] = _word_jelly_stages.next_words()
 	if next_words.is_empty():
@@ -2265,6 +2342,7 @@ func _active_jelly():
 
 func _jelly_interaction_allowed() -> bool:
 	return _is_jelly_mode() and not _jelly_rewards_shown and not _round_celebration_active() and not _round_end_active() \
+		and not (_campaign != null and _campaign.is_open()) \
 		and not _jelly_pause_open() \
 		and not (_mode_id == "word_jelly" and _word_jelly != null and bool(_word_jelly.game.combo_snapshot().pending)) \
 		and not _professional_input_blocked() and not _rebuilding and not _page_hidden and not _speech_debug_active \
@@ -2272,15 +2350,16 @@ func _jelly_interaction_allowed() -> bool:
 
 
 func _jelly_pause_open() -> bool:
-	return is_instance_valid(_jelly_pause_menu) and _jelly_pause_menu.visible
+	return not _jelly_pause_round.is_empty()
 
 
 func _pause_jelly() -> void:
+	if _jelly_pause_open():
+		_resume_jelly()
+		return
 	if not _jelly_interaction_allowed() or _active_jelly().game.phase != "playing":
 		return
 	_jelly_pause_round = _round_id
-	_jelly_pause_menu.configure(_active_palette, reduced_motion)
-	_jelly_pause_menu.open()
 	_on_input_canceled()
 	_stop_controller_actions()
 	_controller_accept_needs_release = true
@@ -2290,11 +2369,10 @@ func _pause_jelly() -> void:
 	_sync_reward_confetti()
 	_jelly_pause_focus_modes.clear()
 	for control in find_children("*", "Control", true, false):
-		if not _jelly_pause_menu.is_ancestor_of(control):
+		if control != _jelly_pause_button and not _jelly_pause_button.is_ancestor_of(control):
 			_jelly_pause_focus_modes[control] = control.focus_mode
 			control.focus_mode = Control.FOCUS_NONE
-	_jelly_pause_menu.keep_playing_button.grab_focus()
-	_active_jelly().finish_button.show_tap_hint(true)
+	_jelly_pause_button.grab_focus()
 	_announce_status("Paused. Resume when you are ready.")
 	_publish_jelly_pause()
 
@@ -2303,8 +2381,10 @@ func _close_jelly_pause(resume_game: bool = true) -> void:
 	if not _jelly_pause_open():
 		return
 	var same_round: bool = _jelly_pause_round == _round_id
-	_jelly_pause_menu.close()
+	_jelly_pause_shade.hide()
 	_jelly_pause_round = ""
+	if is_instance_valid(_jelly_pause_button):
+		_jelly_pause_button.set_paused_state(false)
 	for control in _jelly_pause_focus_modes:
 		if is_instance_valid(control):
 			control.focus_mode = _jelly_pause_focus_modes[control]
@@ -2324,15 +2404,9 @@ func _resume_jelly() -> void:
 		_close_jelly_pause()
 
 
-func _finish_paused_jelly() -> void:
-	if _page_hidden or not _jelly_pause_open():
-		return
-	var same_round: bool = _is_jelly_mode() and _jelly_pause_round == _round_id
-	_close_jelly_pause(false)
-	if same_round and _jelly_interaction_allowed():
-		_active_jelly().game.finish_round()
-	else:
-		_sync_jelly()
+func _jelly_finish_pulled(source_mode: String) -> void:
+	if source_mode == _mode_id and _jelly_pause_open() and not _page_hidden:
+		_close_jelly_pause()
 
 
 func _publish_jelly_pause() -> void:
@@ -2350,6 +2424,8 @@ func _publish_finish_confirmation() -> void:
 
 
 func _request_jelly_finish(source_mode: String) -> void:
+	if source_mode == _mode_id and _jelly_pause_open() and not _page_hidden:
+		_close_jelly_pause()
 	if source_mode != _mode_id or not _jelly_interaction_allowed() \
 		or not (_word_jelly.can_finish_round() if _mode_id == "word_jelly" else _active_jelly()._can_play()) \
 		or _active_jelly()._pointer != JellyMatch.NO_POINTER:
@@ -2423,10 +2499,13 @@ func _sync_jelly() -> void:
 	var allowed: bool = _jelly_interaction_allowed()
 	_jelly.pause(not allowed or _mode_id != "jelly")
 	_word_jelly.pause(not allowed or _mode_id != "word_jelly", _jelly_pause_open())
+	_jelly.finish_button.set_paused_state(_jelly_pause_open() and _mode_id == "jelly")
+	_word_jelly.finish_button.set_paused_state(_jelly_pause_open() and _mode_id == "word_jelly")
 	_jelly_pause_button.visible = _is_jelly_mode() and _active_jelly().game.phase == "playing" \
 		and not collection_page.visible and not _mode_menu_open() and not _jelly_rewards_shown \
 		and not _finish_confirmation_open() and not _round_end_active()
-	_jelly_pause_button.disabled = not allowed
+	_jelly_pause_button.disabled = not allowed and not (_jelly_pause_open() and not _page_hidden and not _speech_debug_active)
+	_jelly_pause_shade.visible = _jelly_pause_open() and not _page_hidden and not _speech_debug_active
 	_jelly_backdrop.visible = _round_context.get("track") != "professional" and _is_jelly_mode() and (_active_jelly().visible or (_jelly_rewards_shown and not _jelly_rewards._result_context.is_empty())) and not _page_hidden and not collection_page.visible
 	_learning_backdrop.visible = _learning_backdrop.has_art() and not _page_hidden and not collection_page.visible and not _mode_menu_open()
 	var career_backdrop: bool = _round_context.get("track") == "professional" and _learning_backdrop.visible
@@ -2461,6 +2540,9 @@ func _word_jelly_merged(word: Dictionary) -> void:
 
 
 func _jelly_audio(cue: String, source_mode: String = "") -> void:
+	if cue == "finish_ready" and source_mode == _mode_id and _jelly_pause_open() and not _page_hidden:
+		audio.play_jelly_cue(cue)
+		return
 	if (not source_mode.is_empty() and source_mode != _mode_id) or not _jelly_interaction_allowed():
 		return
 	if cue == "danger_end":
@@ -2517,7 +2599,7 @@ func _jelly_growth_answer(id: String, words: Array[String], correct: bool, sourc
 
 
 func _credit_word_jelly(event_id: String, amount: int) -> Dictionary:
-	if _mode_id != "word_jelly" or not _jelly_interaction_allowed() or event_id.is_empty() \
+	if _mode_id != "word_jelly" or (not _jelly_interaction_allowed() and not _jelly_settling) or event_id.is_empty() \
 		or amount <= 0 or amount % CoinWallet.COINS_PER_TIER != 0:
 		return {"ok": false, "duplicate": false, "amount": 0, "error": "This word cannot be collected yet."}
 	var receipt: String = _round_id + ":" + event_id
@@ -2583,6 +2665,8 @@ func _jelly_finished(result: Dictionary, source_mode: String = "") -> void:
 	_round_result = result.duplicate(true)
 	var tier: int = int(result.get("chest_tier", 0))
 	_jelly_reward_theme = JellyRewardProgress.theme_for_tier(tier) if tier > 0 else model.theme_id
+	if result.has("campaign"):
+		_campaign.capture_result(result)
 	audio.stop_jelly_sounds()
 	if _mode_id == "word_jelly":
 		audio.stop_pair_feedback()
@@ -2596,11 +2680,12 @@ func _jelly_finished(result: Dictionary, source_mode: String = "") -> void:
 	_stop_controller_actions()
 	_controller_accept_needs_release = _controller_accept_is_pressed()
 	audio.halt()
-	_round_end.begin(_round_id, str(result.get("reason", "")) == "danger", reduced_motion)
+	var failed: bool = str(result.get("reason", "")) in ["danger", "timeout"]
+	_round_end.begin(_round_id, failed, reduced_motion)
 	_sync_round_end()
 	if _round_end.is_visible_in_tree():
 		_round_end.grab_focus()
-	_announce_status(("Game over. " if str(result.get("reason", "")) == "danger" else "Round complete. ") + "Preparing your results.")
+	_announce_status(("Game over. " if failed else "Round complete. ") + "Preparing your results.")
 	_refresh()
 
 
@@ -2631,6 +2716,11 @@ func _round_end_completed(round_id: String) -> void:
 		return
 	audio.stop_round_end()
 	_celebration_seen_id = round_id
+	if _round_result.has("campaign"):
+		if _round_result.campaign.outcome == "cleared" and not reduced_motion:
+			_reward_confetti.burst_small(round_id + ":campaign:clear")
+		_campaign.begin_settlement()
+		return
 	_show_jelly_rewards()
 	_announce_status(_jelly_result_summary())
 
@@ -2657,6 +2747,11 @@ func _settle_jelly_round() -> bool:
 	_jelly_settling = true
 	_active_jelly().cancel_input()
 	_active_jelly().game.finish_round()
+	if _mode_id == "word_jelly" and _word_jelly.game.stage_run != null:
+		if not _word_jelly.game.settle_stage_finish():
+			_jelly_settling = false
+			_announce_status(_word_jelly.game.error)
+			return false
 	_jelly_settling = false
 	var reward_saved: bool = _save_jelly_round_reward()
 	if not reward_saved or _jelly_rewards._save_failed or _jelly_rewards._unsaved_index >= 0:
@@ -2669,6 +2764,8 @@ func _settle_jelly_round() -> bool:
 
 
 func _replay_jelly() -> void:
+	if _campaign != null and _campaign.settling:
+		return
 	if not _is_jelly_mode() or _active_jelly().game.phase != "finished" or _rebuilding \
 			or _round_celebration_active() or _round_end_active() or _page_hidden or _speech_debug_active \
 			or collection_page.visible or _mode_menu_open():
@@ -2757,7 +2854,11 @@ func _sync_settlement_dialog() -> void:
 		title = "Your treasure"
 		if _jelly_round_ended():
 			has_chest = int(_round_result.get("chest_count", 0)) > 0
-			title = "Game over" if str(_round_result.get("reason", "")) == "danger" else "Round complete"
+			title = "Game over" if str(_round_result.get("reason", "")) in ["danger", "timeout"] else "Round complete"
+			if _round_result.has("campaign"):
+				title = "Stage %d cleared!" % int(_round_result.campaign.number) if _round_result.campaign.outcome == "cleared" \
+					else "Time's up" if _round_result.campaign.outcome == "timeout" else "Challenge complete" \
+					if _round_result.campaign.kind == "challenge" else "Try again"
 	elif _mode_id == "pop" and _pop_rewards_shown:
 		content = _pop_rewards
 		has_chest = not _pop_rewards._cards.is_empty()
@@ -2790,12 +2891,14 @@ func _publish_jelly(state: Dictionary, source_mode: String = "") -> void:
 	if _releasing_professional_views or _host == null or (not source_mode.is_empty() and source_mode != _mode_id):
 		return
 	var value: Dictionary = state.duplicate(true)
-	value["visible"] = _is_jelly_mode() and _active_jelly().is_visible_in_tree() and not _jelly_rewards_shown and not _round_celebration_active() and not collection_page.visible and not _page_hidden and not _mode_menu_open()
+	value["visible"] = _is_jelly_mode() and _active_jelly().is_visible_in_tree() and not _jelly_rewards_shown and not _round_celebration_active() and not collection_page.visible and not _page_hidden and not _mode_menu_open() and not (_campaign != null and _campaign.is_open())
 	value["mode"] = _mode_id
 	value["round_id"] = _round_id
 	value["finish_confirmation"] = _finish_confirmation.snapshot() if is_instance_valid(_finish_confirmation) else {"visible": false}
 	value["pause_button"] = value.get("finish", {}).duplicate(true)
-	value["pause_menu"] = _jelly_pause_menu.snapshot() if is_instance_valid(_jelly_pause_menu) else {"visible": false}
+	value["pause_menu"] = {"visible": false, "retired": true}
+	value["pause"] = {"active": _jelly_pause_open(), "shade_visible": _jelly_pause_shade.is_visible_in_tree()}
+	value["campaign_map"] = _campaign.snapshot() if _campaign != null else {"visible": false}
 	value["game_over"] = _settlement_dialog.snapshot() if is_instance_valid(_settlement_dialog) else {"visible": false}
 	value["game_over_sequence"] = _round_end.snapshot() if is_instance_valid(_round_end) else {"active": false}
 	_host.jellyStatus(JSON.stringify(value))
@@ -3086,7 +3189,7 @@ func _request_word_jelly_stage_confetti() -> void:
 		return
 	_confetti_reward_keys[key] = true
 	_sync_reward_confetti()
-	_reward_confetti.burst(key)
+	_reward_confetti.burst_small(key)
 
 
 func _round_celebration_active() -> bool:
@@ -3542,6 +3645,10 @@ func _refresh() -> void:
 	_storage_retry_button.text = "Retry rewards" if _save_error else "Retry saving"
 	_storage_retry_button.set("accessibility_description", coin_wallet.error if not coin_wallet.error.is_empty() else medal_progress.error if _save_error else growth.error)
 	_storage_retry_button.visible = (_save_error or _journey_save_failed or _growth_save_failed or not coin_wallet.ready or not coin_wallet.error.is_empty())
+	if _campaign != null and (not _campaign.error.is_empty() or _word_jelly.game.stage_ending() and not _word_jelly.game.error.is_empty()):
+		_storage_retry_button.visible = true
+		_storage_retry_button.set("accessibility_description",
+			_campaign.error if not _campaign.error.is_empty() else _word_jelly.game.error)
 	if professional.phase == "failed":
 		_storage_retry_button.visible = true
 		_storage_retry_button.set("accessibility_description", professional.error)
@@ -3609,7 +3716,7 @@ func _refresh() -> void:
 	if won:
 		var reward_id: String = JellyRewardProgress.theme_for_tier(_single_reward_tier()) if _mode_id in ["match", "memory"] else model.reward_theme if not model.reward_theme.is_empty() else model.theme_id
 		chest.reduced_motion = reduced_motion
-		chest.configure_skin(Data.theme(reward_id), data.chests)
+		chest.configure_tier(clampi(_single_reward_tier(), 1, JellyRewardProgress.MAX_TIER), Data.theme(reward_id), data.chests)
 		_single_result._sync_companion()
 	_sync_settlement_dialog()
 	if _last_phase != model.phase:
@@ -4365,7 +4472,7 @@ func _open_chest() -> void:
 		return
 	if saved_pair:
 		model.reward_theme = JellyRewardProgress.theme_for_tier(_single_reward_tier())
-		chest.configure_skin(Data.theme(model.reward_theme), data.chests)
+		chest.configure_tier(clampi(_single_reward_tier(), 1, JellyRewardProgress.MAX_TIER), Data.theme(model.reward_theme), data.chests)
 	_hold_elapsed = 0.0
 	_chest_reward_announced = false
 	if not _settling_chest:
@@ -4603,8 +4710,8 @@ func _retry_reward_save() -> void:
 
 
 func on_page_hidden() -> void:
-	if is_instance_valid(_jelly_pause_menu):
-		_jelly_pause_menu.cancel_input()
+	if is_instance_valid(_jelly_pause_button):
+		_jelly_pause_button.cancel_pull(true)
 	if is_instance_valid(_finish_confirmation):
 		_finish_confirmation.cancel_input()
 	_reward_confetti.set_paused(true)
@@ -4759,6 +4866,13 @@ func _observe_activity(event: InputEvent) -> void:
 
 
 func _input(event: InputEvent) -> void:
+	if _campaign != null and _campaign.is_open() and not _vocabulary_prompt.visible:
+		if event is InputEventJoypadButton and event.button_index == JOY_BUTTON_A:
+			return
+		if event.is_action_pressed("ui_cancel"):
+			_campaign._home()
+			get_viewport().set_input_as_handled()
+		return
 	if _jelly_pause_open():
 		if event.is_action_pressed("ui_cancel") or (event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_P) \
 			or (event is InputEventJoypadButton and event.pressed and event.button_index == JOY_BUTTON_B):
@@ -4766,9 +4880,7 @@ func _input(event: InputEvent) -> void:
 			get_viewport().set_input_as_handled()
 			return
 		if event.is_action_pressed("ui_focus_next") or event.is_action_pressed("ui_focus_prev"):
-			var next: Button = _jelly_pause_menu.finish_button if get_viewport().gui_get_focus_owner() == _jelly_pause_menu.keep_playing_button \
-				else _jelly_pause_menu.keep_playing_button
-			next.grab_focus()
+			_jelly_pause_button.grab_focus()
 			get_viewport().set_input_as_handled()
 			return
 		if event is InputEventJoypadButton:
@@ -5129,7 +5241,9 @@ func _valid_focus(control: Control) -> bool:
 		or (control is Button and (control as Button).disabled):
 		return false
 	if _jelly_pause_open():
-		return _jelly_pause_menu.is_ancestor_of(control)
+		return control == _jelly_pause_button
+	if _campaign != null and _campaign.is_open() and not _vocabulary_prompt.visible:
+		return _campaign.map.is_ancestor_of(control)
 	if _finish_confirmation_open():
 		return _finish_confirmation.is_ancestor_of(control)
 	if is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible:
@@ -5148,8 +5262,11 @@ func _valid_focus(control: Control) -> bool:
 
 
 func _default_focus() -> Control:
+	if _campaign != null and _campaign.is_open() and not _vocabulary_prompt.visible:
+		var controls: Array[Control] = _campaign.map.navigation_controls()
+		return controls.back() if not controls.is_empty() else _campaign.map
 	if _jelly_pause_open():
-		return _jelly_pause_menu.keep_playing_button
+		return _jelly_pause_button
 	if _finish_confirmation_open():
 		return _finish_confirmation.keep_playing_button
 	if is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible:
@@ -5447,8 +5564,8 @@ func _professional_closing() -> void:
 
 
 func _on_input_canceled(_arguments: Array = []) -> void:
-	if is_instance_valid(_jelly_pause_menu):
-		_jelly_pause_menu.cancel_input()
+	if is_instance_valid(_jelly_pause_button):
+		_jelly_pause_button.cancel_pull(true)
 	if is_instance_valid(_finish_confirmation):
 		_finish_confirmation.cancel_input()
 	_mode_menu_pointer = -2
@@ -5742,6 +5859,8 @@ func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
 		_refresh()
 	_sync_round_celebration()
 	_sync_settlement_dialog()
+	if _campaign != null:
+		_campaign.advance(delta)
 	_celebration_publish_left -= delta
 	if _celebration_publish_left <= 0.0:
 		_celebration_publish_left = 0.05
@@ -5849,6 +5968,8 @@ func _retry_storage() -> void:
 		_coin_flight.sync(coin_wallet.balance)
 	if _mode_id == "word_jelly" and coin_wallet.ready and coin_wallet.error.is_empty():
 		_word_jelly.game.retry_combo_credit()
+	if _campaign != null:
+		_campaign.retry()
 	if _save_error:
 		_retry_reward_save()
 	if _journey_save_failed:

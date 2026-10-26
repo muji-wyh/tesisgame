@@ -48,7 +48,7 @@ async function startWordJelly(page, { age = COMPOSITION_AGE, reducedMotion = 'no
   const control = (await metrics(page)).library.controls.find(item => item.name === 'Mode_word_jelly');
   expect(control, 'Word Jelly appears in the ordinary game library').toBeTruthy();
   expect(control.disabled).toBe(false);
-  await chooseMode(page, 'word_jelly');
+  await chooseMode(page, 'word_jelly', { challenge: true });
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.mode === 'word_jelly' && state.visible && state.phase === 'playing' &&
@@ -88,9 +88,9 @@ function center(rect, bounds) {
 function authoredJoin(left, right) {
   if (!left || !right || left.id === right.id) return null;
   if (left.jelly_kind === 'merged' && right.jelly_kind === 'merged') {
-    if (left.word.id !== right.word.id || left.merge_level + right.merge_level > 9) return null;
+    if (left.word.id !== right.word.id) return null;
     return { kind: 'upgrade', node: { surface: left.word.text }, complete: true, collectable: true,
-      mergeLevel: left.merge_level + right.merge_level, masteryEligible: left.mastery_eligible || right.mastery_eligible };
+      mergeLevel: Math.min(9, left.merge_level + right.merge_level), masteryEligible: left.mastery_eligible || right.mastery_eligible };
   }
   const picture = left.jelly_kind === 'picture' ? left : right.jelly_kind === 'picture' ? right : null;
   if (picture) {
@@ -1958,7 +1958,7 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
     await expect.poll(async () => (await jelly(page)).collection_batch.active).toBe(false);
     const collected = await jelly(page);
     expect(collected.collection_batch.completed).toBe(3);
-    expect(collected.collection_batch.elapsed).toBeCloseTo(0.42, 6);
+    expect(collected.collection_batch.elapsed).toBeCloseTo(0.36, 6);
     expect(collected.combo.count).toBe(6);
     expect(collected.combo.best).toBe(6);
     expect(collected.combo.rank).toBe('B');
@@ -2190,7 +2190,7 @@ for (const mode of ['word_jelly', 'jelly']) {
     expect(playing.pause_button.rect).toEqual(playing.finish.rect);
     expect(playing.finish.pull.label_text).toBe('Pause');
     await pressRect(page, playing.pause_button.rect);
-    await expect.poll(async () => (await jelly(page)).pause_menu.visible).toBe(true);
+    await expect.poll(async () => (await jelly(page)).pause.active).toBe(true);
     const paused = await jelly(page);
     expect(paused.paused).toBe(true);
     expect(paused.round_id).toBe(playing.round_id);
@@ -2200,19 +2200,21 @@ for (const mode of ['word_jelly', 'jelly']) {
     await page.waitForTimeout(900);
     expect(stable(await jelly(page))).toEqual(stable(paused));
     await capture(page, info, `${mode}-explicit-pause`);
-    await pressRect(page, paused.pause_menu.keep_playing.rect);
+    expect(paused.pause_menu.visible, 'Pause is inline, never a dialog').toBe(false);
+    expect(paused.finish.pull.label_text).toBe('Resume');
+    await pressRect(page, paused.pause_button.rect);
     await expect.poll(async () => (await jelly(page)).paused).toBe(false);
     expect((await jelly(page)).round_id).toBe(playing.round_id);
     await page.keyboard.press('p');
-    await expect.poll(async () => (await jelly(page)).pause_menu.visible).toBe(true);
+    await expect.poll(async () => (await jelly(page)).pause.active).toBe(true);
     await page.keyboard.press('Escape');
-    await expect.poll(async () => (await jelly(page)).pause_menu.visible).toBe(false);
+    await expect.poll(async () => (await jelly(page)).pause.active).toBe(false);
     expect((await jelly(page)).round_id).toBe(playing.round_id);
     expect(errors).toEqual([]);
   });
 }
 
-additiveTest('stage one displays three illustrated practice words and each saved answer updates its own mastery', async ({ page }, info) => {
+additiveTest('challenge starts with three outstanding illustrated words and displays their saved mastery', async ({ page }, info) => {
   test.setTimeout(210000);
   await seedGrowth(page, 12, { unmastered: ['cat', 'dog', 'duck'] });
   const errors = await startWordJelly(page, { age: 3, preseededGrowth: true });
@@ -2686,7 +2688,7 @@ test('collect button grows with completed words and collects a rhythmic batch on
   }
   expect(final.collection_batch.started).toBe(3);
   expect(final.collection_batch.completed).toBe(3);
-  expect(final.collection_batch.elapsed, 'Three 140 ms collections finish in 420 ms of game time').toBeCloseTo(0.42, 6);
+  expect(final.collection_batch.elapsed, 'Three 120 ms collections finish in 360 ms of game time').toBeCloseTo(0.36, 6);
   expect(entryStates.size, 'Each of the three collected words owns an independent reading card').toBe(3);
   const opaqueSeconds = Math.max(0, Math.min(...[...entryStates.values()].map(entry => entry.duration)) -
     readingTiming.entrance - readingTiming.fade);

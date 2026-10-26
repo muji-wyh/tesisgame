@@ -216,8 +216,8 @@ func _test_levels_and_fragments() -> void:
 		check(not model.parts_compatible(current, other_word), "Different word identities never upgrade together")
 		model.cells.erase(other_word)
 	var max_twin: Dictionary = _ready(model, word, 1)
-	check(not model.parts_compatible(current, max_twin) and model.merge_candidate(current, max_twin).status == "invalid",
-		"Lv9 is a hard cap and cannot create Lv10")
+	check(model.parts_compatible(current, max_twin) and model.merge_candidate(current, max_twin).result.merge_level == 9,
+		"Lv9 still accepts a same-word partner while keeping the output at its cap")
 	model.cells.erase(max_twin)
 	var payloads: Array = []
 	model.collection_started.connect(func(payload: Dictionary): payloads.append(payload))
@@ -254,7 +254,8 @@ func _test_all_level_pairs() -> void:
 			var left: Dictionary = _ready(model, _word(), left_level, left_level + 1)
 			var right: Dictionary = _ready(model, _word(), right_level, right_level + 2)
 			var combined: int = left_level + right_level
-			var allowed: bool = combined <= Model.MAX_MERGE_LEVEL
+			var allowed: bool = true
+			var capped: int = mini(combined, Model.MAX_MERGE_LEVEL)
 			var label: String = "Lv%d + Lv%d" % [left_level, right_level]
 			var cells_before: Array = model.cells.duplicate(true)
 			var next_id: int = model._next_tile_id
@@ -269,9 +270,9 @@ func _test_all_level_pairs() -> void:
 				and model._rng.state == supply_rng and model._coin_rng.state == coin_rng,
 				label + " preflight never mutates board, identity, or reward randomness")
 			if allowed:
-				check(plan.tile.merge_level == combined, label + " previews the exact level sum")
+				check(plan.tile.merge_level == capped, label + " previews the capped additive level")
 				var result: Dictionary = _join(model, left, right)
-				check(result.merge_level == combined and result.fragments == combined + 3 and result.mass == 2,
+				check(result.merge_level == capped and result.fragments == combined + 3 and result.mass == 2,
 					label + " commits the level sum with every carried fragment and source mass")
 			else:
 				check(model.try_merge(left.id, right.id) == "wrong" and model.cells == cells_before
@@ -290,7 +291,7 @@ func _test_all_level_pairs() -> void:
 			automatic.finish_powerup(false)
 			if allowed:
 				check(purchases.size() == 1 and automatic.cells.size() == 1
-					and automatic.cells[0].merge_level == combined and automatic.cells[0].fragments == combined + 3
+					and automatic.cells[0].merge_level == capped and automatic.cells[0].fragments == combined + 3
 					and not automatic.cells[0].mastery_eligible,
 					label + " automatically commits its exact level and fragments without claiming mastery")
 			else:
@@ -352,7 +353,8 @@ func _test_assistance() -> void:
 	model.word_attempted.connect(func(event: String, ids: Array[String], correct: bool): attempts.append([event, ids, correct]))
 	check(model.collect(model.cells[0].id), "Assisted words are still collectable")
 	model.step(2.0)
-	check(attempts.is_empty() and model.fragment_count == 4, "Assisted collection awards inventory without claiming independent mastery")
+	check(attempts.size() == 1 and model.fragment_count == 4,
+		"Actually collecting an automatically constructed word records one learning answer and every fragment")
 	model = _model()
 	_ready(model, _word(), 2, 2)
 	_ready(model, _word(), 3, 3)
@@ -368,9 +370,11 @@ func _test_assistance() -> void:
 	model.purchase_powerup = func(event: String, _kind: String, _price: int) -> Dictionary:
 		purchases.append(event)
 		return {"ok": true}
-	check(not model.can_activate_powerup("auto_merge") and not model.activate_powerup("auto_merge")
-		and purchases.is_empty() and model.cells.size() == 2,
-		"An over-cap pair never sells an unavailable Auto Merge or consumes either word")
+	check(model.can_activate_powerup("auto_merge") and model.activate_powerup("auto_merge"),
+		"An over-cap same-word pair is a valid automatic upgrade")
+	model.finish_powerup(false)
+	check(purchases.size() == 1 and model.cells.size() == 1 and model.cells[0].merge_level == 9
+		and model.cells[0].fragments == 5, "The automatic capped result preserves both fragment stores")
 
 
 func _test_supply_packets() -> void:

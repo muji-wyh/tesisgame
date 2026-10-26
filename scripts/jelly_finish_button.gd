@@ -13,6 +13,7 @@ const Surface = preload("res://scripts/jelly_finish_surface.gdshader")
 const GEL = preload("res://assets/images/jelly-match/gel-coral.png")
 const SHAPE_SDF = preload("res://assets/images/jelly-match/gel-coral-material.png")
 const PAUSE = preload("res://assets/images/ui/controls/player-pause.svg")
+const PLAY = preload("res://assets/images/ui/controls/player-play.svg")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const TAP_SLOP_PX: float = 8.0
@@ -26,7 +27,7 @@ var _pulling: bool = false
 var _armed: bool = false
 var _returning: bool = false
 var _tap_hint: bool = false
-var _paused_hint: bool = false
+var paused_state: bool = false
 var _tap_elapsed: float = 0.0
 var _tap_start_pull: float = 0.0
 var _gesture_travel: float = 0.0
@@ -57,7 +58,7 @@ var _gel := ShaderMaterial.new()
 
 func _init() -> void:
 	text = "Pause"
-	tooltip_text = "Tap to pause. Pull down to finish."
+	tooltip_text = ""
 	focus_mode = Control.FOCUS_ALL
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	mouse_default_cursor_shape = Control.CURSOR_DRAG
@@ -142,6 +143,18 @@ func is_pulling() -> bool:
 	return _pulling
 
 
+func set_paused_state(value: bool) -> void:
+	if paused_state == value:
+		return
+	cancel_pull(true)
+	paused_state = value
+	text = "Resume" if value else "Pause"
+	_flag.texture = PLAY if value else PAUSE
+	set("accessibility_name", "Paused. Tap or press Enter to resume. Pull down to finish, or Shift+Enter for confirmation."
+		if value else "Pause game. Tap or press Enter to pause. Pull down to finish, or Shift+Enter for confirmation.")
+	_update_visual()
+
+
 func set_hint_allowed(value: bool) -> void:
 	_hint_allowed = value
 	if not value:
@@ -152,10 +165,9 @@ func set_hint_allowed(value: bool) -> void:
 			_update_visual()
 
 
-func show_tap_hint(while_paused: bool = false) -> void:
+func show_tap_hint() -> void:
 	if _reduced_motion:
 		return
-	_paused_hint = while_paused
 	_tap_hint = true
 	_tap_elapsed = 0.0
 	_tap_start_pull = _visual_pull
@@ -174,11 +186,15 @@ func advance(delta: float) -> void:
 		return
 	if disabled != _was_disabled:
 		_was_disabled = disabled
-		if disabled and not _paused_hint:
+		if disabled:
 			cancel_pull(true)
-	if not is_visible_in_tree() or (disabled and not _paused_hint):
+	if not is_visible_in_tree() or disabled:
 		return
 	_clock += delta
+	if paused_state and not _pulling and not _returning:
+		_visual_pull = 0.0 if _reduced_motion else (1.0 - cos(_clock * TAU / 1.3)) * 9.0 / _ui_scale
+		_update_visual()
+		return
 	var return_delta: float = delta
 	if _tap_hint and not _returning:
 		var attack_delta: float = minf(delta, TAP_HINT_ATTACK_SECONDS - _tap_elapsed)
@@ -194,7 +210,6 @@ func advance(delta: float) -> void:
 			_visual_pull = 0.0
 			_returning = false
 			_tap_hint = false
-			_paused_hint = false
 		else:
 			var remaining: float = minf(return_delta, 0.5)
 			while remaining > 0.0:
@@ -233,8 +248,13 @@ func advance(delta: float) -> void:
 
 func _input(event: InputEvent) -> void:
 	if not is_visible_in_tree() or disabled:
-		if _pulling or (_tap_hint and not _paused_hint):
+		if _pulling or _tap_hint:
 			cancel_pull(true)
+		return
+	if event is InputEventKey and event.pressed and not event.echo and event.shift_pressed \
+		and event.keycode == KEY_ENTER and has_focus() and not _pulling:
+		accessibility_requested.emit()
+		get_viewport().set_input_as_handled()
 		return
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		# Native touch-to-mouse emulation must not start or finish a second pull.
@@ -363,7 +383,6 @@ func cancel_pull(immediate: bool = false) -> void:
 	_pointer_id = -2
 	_pull_distance = 0.0
 	_tap_hint = false
-	_paused_hint = false
 	_tap_elapsed = 0.0
 	_gesture_travel = 0.0
 	_hint_elapsed = 0.0
@@ -424,7 +443,7 @@ func _update_visual() -> void:
 		return
 	# A stretched header control crosses the preview without going behind its
 	# tiles. Confirmation and other modal layers still retain their higher level.
-	z_index = 85 if _pulling or _returning or _tap_hint or _idle_cue >= 0.0 else 0
+	z_index = 120 if paused_state else 85 if _pulling or _returning or _tap_hint or _idle_cue >= 0.0 else 0
 	var unit: float = 1.0 / maxf(0.1, _ui_scale)
 	var margin := Vector2(14.0, 12.0) * unit
 	_surface.position = -margin
@@ -486,7 +505,7 @@ func _update_visual() -> void:
 func snapshot() -> Dictionary:
 	return {
 		"pulling": _pulling, "armed": _armed, "returning": _returning,
-		"tap_hint": _tap_hint,
+		"tap_hint": _tap_hint, "paused_state": paused_state,
 		"progress": clampf(_pull_distance / maxf(1.0, _threshold), 0.0, 1.0),
 		"pull_distance": _pull_distance, "visual_pull": _visual_pull,
 		"threshold": _threshold, "max_pull": _max_pull, "ui_scale": _ui_scale,

@@ -633,32 +633,20 @@ func _check_crystal_mechanism(data) -> void:
 		check(chest.hold_effect_snapshot().interior_open == 0.0, theme + " has no open cavity while closed")
 		chest.start_open(false)
 		chest._advance_animation(Feel.PAUSE_START_TIME)
-		var armed_poses: Dictionary = {}
-		for piece in chest._pieces:
-			armed_poses[piece.role] = piece.node.transform
+		var armed_parts: Array = chest.hold_effect_snapshot().live_model.parts.duplicate(true)
 		chest._advance_animation(Feel.RELEASE_TIME - Feel.PAUSE_START_TIME - 0.001)
-		var mechanism_waits: bool = true
-		for piece in chest._pieces:
-			mechanism_waits = mechanism_waits and piece.node.transform == armed_poses[piece.role]
-		check(mechanism_waits and chest.hold_effect_snapshot().anticipation_held,
-			theme + " holds its central lock and all outer facets throughout the brief pause")
+		check(chest.hold_effect_snapshot().live_model.parts == armed_parts
+			and chest.hold_effect_snapshot().anticipation_held,
+			theme + " holds its real closed mechanism throughout the brief pause")
 		check(chest.hold_effect_snapshot().interior_open == 0.0, theme + " keeps the cavity sealed until the release beat")
 		chest._advance_animation(Feel.RELEASE_TIME + Feel.RELEASE_BLEND_SECONDS - chest.hold_effect_snapshot().opening_time)
-		var core_moves: bool = false
-		for piece in chest._pieces:
-			if piece.role == "01":
-				var armed: Transform2D = armed_poses[piece.role]
-				core_moves = piece.node.transform.origin.distance_to(armed.origin) > 5.0
-		check(core_moves, theme + " unlocks its central crystal as the held mechanism blends into release")
+		check(chest.hold_effect_snapshot().live_model.open_amount > 0.0
+			and chest.hold_effect_snapshot().live_model.parts != armed_parts,
+			theme + " opens its actual lid geometry as the held mechanism blends into release")
 		chest._advance_animation(Feel.RELEASE_TIME + 0.18 - chest.hold_effect_snapshot().opening_time)
-		var spreading_panels: int = 0
-		for piece in chest._pieces:
-			if piece.role not in ["chest", "01"]:
-				var armed: Transform2D = armed_poses[piece.role]
-				var actual: Transform2D = piece.node.transform
-				if actual.origin.distance_to(armed.origin) > 5.0:
-					spreading_panels += 1
-		check(spreading_panels >= 2, theme + " spreads its outer panels only after the release beat")
+		check(chest.hold_effect_snapshot().live_model.open_amount > 0.0
+			and chest.hold_effect_snapshot().live_model.parts != armed_parts,
+			theme + " continues moving genuine geometry after the release beat")
 		var cavity: float = chest.hold_effect_snapshot().interior_open
 		check(cavity > 0.0 and cavity < 1.0, theme + " reveals interior depth as the panels separate")
 		chest._advance_animation(0.3)
@@ -705,8 +693,8 @@ func _check_downloaded_mechanisms(data) -> void:
 		live = chest.hold_effect_snapshot().live_model
 		check(live.open_amount == 0.0 and live.parts == closed_parts,
 			theme + " resets all visible geometry before the next chest")
-	check(unique_styles.size() == data.THEMES.size() and downloaded_count == 5,
-		"Eight themes have eight designs, including five downloaded chest types")
+	check(unique_styles.size() == data.THEMES.size() and downloaded_count == data.THEMES.size(),
+		"All eight theme aliases have distinct acquired volumetric chest presentations")
 	chest.free()
 
 

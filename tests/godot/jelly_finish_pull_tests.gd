@@ -365,11 +365,11 @@ func check_gameplay(mode: String) -> void:
 	button.advance(0.1)
 	var before_demo: float = view.game.spawn_elapsed
 	view._process(0.2)
-	check(button.snapshot().tap_hint and not button.is_pulling() and is_equal_approx(view.game.spawn_elapsed, before_demo),
+	check(button.snapshot().paused_state and not button.is_pulling() and is_equal_approx(view.game.spawn_elapsed, before_demo),
 		mode + ": the downward teaching cue remains animated while the board is paused")
 	check(view.game.phase == "playing" and completions.is_empty() and app._jelly_pause_open(),
 		mode + ": tapping pauses the same unfinished round rather than opening destructive confirmation")
-	app._jelly_pause_menu.keep_playing_button.pressed.emit()
+	app._jelly_pause_button.pressed.emit()
 	button.cancel_pull(true)
 	for interruption: String in ["home", "resize", "page_hidden", "host_cancel"]:
 		var start: Vector2 = button.get_global_rect().get_center()
@@ -419,7 +419,7 @@ func check_gameplay(mode: String) -> void:
 	key_accept()
 	check(app._jelly_pause_open() and view.game.phase == "playing" and view.game.paused,
 		mode + ": actual keyboard activation provides the same accessible pause decision")
-	app._jelly_pause_menu.keep_playing_button.pressed.emit()
+	app._jelly_pause_button.pressed.emit()
 	await settle()
 	var start: Vector2 = button.get_global_rect().get_center()
 	var end: Vector2 = start + Vector2(0, float(button.snapshot().threshold) * 1.15)

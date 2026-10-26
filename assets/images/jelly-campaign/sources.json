@@ -1,0 +1,168 @@
+{
+  "version": 1,
+  "status": "acquired; integrated and native-render reviewed",
+  "acquired_on": "2026-10-26",
+  "source": {
+    "title": "Background Elements Remastered",
+    "url": "https://kenney.nl/assets/background-elements-remastered",
+    "creator": "Kenney",
+    "version": "1.0",
+    "local_directory": "Q:\\uwok\\Kenney Game Assets All-in-1 3.7.0\\2D assets\\Background Elements Remastered",
+    "acquisition": "Unmodified copies from the user-supplied, already-acquired local library; no download or purchase.",
+    "selection": "Parent-delegated autonomous acquisition after source inspection; not a user visual-concept sign-off.",
+    "type": "2D PNG artwork",
+    "animations": "Static artwork; no source animation clips."
+  },
+  "license": {
+    "id": "CC0-1.0",
+    "url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "path": "LICENSE-CC0.txt",
+    "source_relative_path": "License.txt",
+    "source_sha256": "618ad6b7a71d4fe2861829f0dce793eec43616a064e951ed34a517cf363f8fd7",
+    "output_sha256": "618ad6b7a71d4fe2861829f0dce793eec43616a064e951ed34a517cf363f8fd7"
+  },
+  "images": [
+    {
+      "path": "mountains.png",
+      "source_relative_path": "Backgrounds\\Elements\\mountains.png",
+      "width": 1024,
+      "height": 400,
+      "bytes": 5254,
+      "source_sha256": "33e787985553a8f9ade137d6bb7af563b63a272ce0c2a7d18f4f8481804fbe23",
+      "output_sha256": "33e787985553a8f9ade137d6bb7af563b63a272ce0c2a7d18f4f8481804fbe23",
+      "processing": "Unmodified original PNG bytes.",
+      "animation": "static; no source animation"
+    },
+    {
+      "path": "tree-pine.png",
+      "source_relative_path": "PNG\\Retina\\treePine.png",
+      "width": 212,
+      "height": 508,
+      "bytes": 4714,
+      "source_sha256": "a7314cedbba00c3d0e5259391d7339d12a21baadc9c72fbdf3ef3b773107e294",
+      "output_sha256": "a7314cedbba00c3d0e5259391d7339d12a21baadc9c72fbdf3ef3b773107e294",
+      "processing": "Unmodified original PNG bytes.",
+      "animation": "static; no source animation"
+    },
+    {
+      "path": "tree-orange.png",
+      "source_relative_path": "PNG\\Retina\\treeOrange.png",
+      "width": 202,
+      "height": 518,
+      "bytes": 5423,
+      "source_sha256": "d0c1bf4535472d8fa2694c94f5d7ff38ea2bd5e795437b1e18379840b7e6d5c5",
+      "output_sha256": "d0c1bf4535472d8fa2694c94f5d7ff38ea2bd5e795437b1e18379840b7e6d5c5",
+      "processing": "Unmodified original PNG bytes.",
+      "animation": "static; no source animation"
+    },
+    {
+      "path": "tree-snow.png",
+      "source_relative_path": "PNG\\Retina\\treeSnow.png",
+      "width": 202,
+      "height": 462,
+      "bytes": 6161,
+      "source_sha256": "9ffdc49074fb69c1638ef853a9a631989ca7e61209ca7cbc08ac9b6099bb5fb3",
+      "output_sha256": "9ffdc49074fb69c1638ef853a9a631989ca7e61209ca7cbc08ac9b6099bb5fb3",
+      "processing": "Unmodified original PNG bytes.",
+      "animation": "static; no source animation"
+    },
+    {
+      "path": "tree-pine-snow.png",
+      "source_relative_path": "PNG\\Retina\\treePineSnow.png",
+      "width": 212,
+      "height": 494,
+      "bytes": 5954,
+      "source_sha256": "ca544d1abe51f69108c6399cb9afeae0e81e27b6119041fe15c00753669576c3",
+      "output_sha256": "ca544d1abe51f69108c6399cb9afeae0e81e27b6119041fe15c00753669576c3",
+      "processing": "Unmodified original PNG bytes.",
+      "animation": "static; no source animation"
+    },
+    {
+      "path": "tree-palm.png",
+      "source_relative_path": "PNG\\Retina\\treePalm.png",
+      "width": 400,
+      "height": 476,
+      "bytes": 7972,
+      "source_sha256": "dbd582eec5a5323446ac54a44800e9a9c8482941ce7356d53aa79cce3fcc34ec",
+      "output_sha256": "dbd582eec5a5323446ac54a44800e9a9c8482941ce7356d53aa79cce3fcc34ec",
+      "processing": "Unmodified original PNG bytes.",
+      "animation": "static; no source animation"
+    },
+    {
+      "path": "cactus.png",
+      "source_relative_path": "PNG\\Retina\\cactus1.png",
+      "width": 192,
+      "height": 278,
+      "bytes": 2954,
+      "source_sha256": "43a58b9f2f2cd483056aef6fea3b26d3be1d2f70f77670d20852b95e632544c5",
+      "output_sha256": "43a58b9f2f2cd483056aef6fea3b26d3be1d2f70f77670d20852b95e632544c5",
+      "processing": "Unmodified original PNG bytes.",
+      "animation": "static; no source animation"
+    },
+    {
+      "path": "cottage.png",
+      "source_relative_path": "PNG\\Retina\\houseSmall1.png",
+      "width": 150,
+      "height": 100,
+      "bytes": 1743,
+      "source_sha256": "424a30b6d3d85bc6ad1aca52ec910099a89f32c80a338ca40478981234455ae6",
+      "output_sha256": "424a30b6d3d85bc6ad1aca52ec910099a89f32c80a338ca40478981234455ae6",
+      "processing": "Unmodified original PNG bytes.",
+      "animation": "static; no source animation"
+    },
+    {
+      "path": "castle.png",
+      "source_relative_path": "PNG\\Retina\\castleSmall.png",
+      "width": 216,
+      "height": 170,
+      "bytes": 2224,
+      "source_sha256": "821c3fffd43f9f33d529ba7de9890e41f37415423ccf01fc01f566cb74dca7ca",
+      "output_sha256": "821c3fffd43f9f33d529ba7de9890e41f37415423ccf01fc01f566cb74dca7ca",
+      "processing": "Unmodified original PNG bytes.",
+      "animation": "static; no source animation"
+    }
+  ],
+  "reuse": [
+    {
+      "path": "assets\\images\\jelly-match\\sky\\day.png",
+      "source_record": "docs\\assets\\jelly-sky.json"
+    },
+    {
+      "path": "assets\\images\\jelly-match\\garden\\hills.png",
+      "source_record": "docs\\assets\\jelly-garden.json"
+    },
+    {
+      "path": "assets\\images\\jelly-match\\garden\\tree.png",
+      "source_record": "docs\\assets\\jelly-garden.json"
+    },
+    {
+      "path": "assets\\images\\jelly-match\\garden\\tree-long.png",
+      "source_record": "docs\\assets\\jelly-garden.json"
+    },
+    {
+      "path": "assets\\images\\jelly-match\\garden\\foliage.png",
+      "source_record": "docs\\assets\\jelly-garden.json"
+    },
+    {
+      "path": "assets\\images\\jelly-match\\gel-coral.png",
+      "source_record": "docs\\assets\\jelly-match.json"
+    },
+    {
+      "path": "assets\\images\\jelly-match\\gel-mint.png",
+      "source_record": "docs\\assets\\jelly-match.json"
+    },
+    {
+      "path": "assets\\images\\jelly-match\\gel-sky.png",
+      "source_record": "docs\\assets\\jelly-match.json"
+    },
+    {
+      "path": "assets\\images\\jelly-match\\gel-lilac.png",
+      "source_record": "docs\\assets\\jelly-match.json"
+    }
+  ],
+  "review": {
+    "kind": "Source artwork inspected before integration; all eleven scenic chapters rendered and reviewed at desktop and phone sizes. Browser verification is recorded separately.",
+    "runtime_captures": "build/qa/jelly-campaign-map/",
+    "preview_directory": "C:\\Users\\yaohuiwang\\.copilot\\session-state\\34f93cb3-80c3-4f1d-8af6-6c5cca427309\\files\\campaign-art-review"
+  }
+}

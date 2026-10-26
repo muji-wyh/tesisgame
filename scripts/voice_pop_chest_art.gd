@@ -25,7 +25,8 @@ func texture(tier: int) -> Texture2D:
 			_fallback.region = Rect2(39, 309, 798, 596)
 		return _fallback
 	var id: String = Progress.theme_for_tier(tier)
-	if not _cache.has(id):
+	var key: String = str(clampi(tier, 1, Progress.MAX_TIER))
+	if not _cache.has(key):
 		var viewport := SubViewport.new()
 		viewport.size = Vector2i(768, 768)
 		viewport.transparent_bg = true
@@ -35,9 +36,9 @@ func texture(tier: int) -> Texture2D:
 		viewport.add_child(art)
 		art.size = Vector2(768, 768)
 		art.reduced_motion = true
-		art.configure_skin(Data.theme(id), _manifest)
-		_cache[id] = {"viewport": viewport, "art": art, "frames": 0, "texture": viewport.get_texture()}
-	return _cache[id].texture
+		art.configure_tier(clampi(tier, 1, Progress.MAX_TIER), Data.theme(id), _manifest)
+		_cache[key] = {"viewport": viewport, "art": art, "frames": 0, "texture": viewport.get_texture()}
+	return _cache[key].texture
 
 
 func _process(_delta: float) -> void:

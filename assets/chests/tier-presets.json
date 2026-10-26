@@ -1,0 +1,566 @@
+{
+  "version": 1,
+  "source_notes": {
+    "status": "integrated-native-four-view-reviewed",
+    "native_base_mesh_families": 9,
+    "modular_tier_count": 30,
+    "source_manifest": "assets/chests/catalog-cc0/sources.json",
+    "authorship": "Thirty proposed game-authored modular assemblies using nine acquired 3D base exteriors and six original CC0 ornament geometries. These are NOT thirty native source chest meshes.",
+    "material_styling": "declared-in-game-adaptation-not-source-authored",
+    "raw_asset_status": "CC0 inputs are byte-for-byte original GLBs, required palette textures and licenses. Existing five private GLBs are referenced only. No new texture remap, material override, opening animation, import or rendering has been applied.",
+    "visual_validation": "All thirty assemblies have actual front/side/back/opened native captures, measured volumetric geometry and sampled lid-sweep clearance. Those captures were inspected across all thirty tiers. Browser/phone integration and physical-device performance are separate checks.",
+    "opening": "open_animation names an actual existing clip, case sensitively. Kenney open is 0.3 seconds; existing private Open takes are game-authored 1-second curves. The KayKit family deliberately omits open_animation because its original GLB has only a separate static chest_lid; a future game-authored hinge is required.",
+    "decoration_transform_contract": {
+      "attachment_target": "body",
+      "coordinate_space": "Base-local after the caller normalizes and orients the actual source chest: +Y up, +Z front, +X right. Use the actual body bounds below the lid seam, excluding lid motion, handles and other protruding ornaments.",
+      "scale": "Positive scalar: desired largest ornament dimension as a fraction of the normalized chest width. Center the complete source ornament on its own 3D bounds, then uniformly scale it by chest_width * scale / ornament_largest_dimension. This is NOT an unnormalized multiplier on the original GLB units.",
+      "rotation_degrees": "XYZ Euler angles in degrees, applied to the centered, uniformly scaled source ornament in the base-local frame. A front attachment faces +Z; side attachments turn around Y.",
+      "placement": "At most one model per semantic anchor. Place the source mesh just outside the actual body surface without flattening it. Do not infer a safe surface or clearance from a bounding box alone. Keep attachments below the seam and with the body, not the lid.",
+      "slots": {
+        "front": "Center of the front body panel, below the actual lid seam.",
+        "left": "Center of the left side body panel, below the seam.",
+        "right": "Center of the right side body panel, below the seam.",
+        "front-left": "Left third of the front body panel, clear of its clasp, hinge and handles.",
+        "front-right": "Right third of the front body panel, mirrored from front-left."
+      }
+    },
+    "material_style_contract": {
+      "lookup": "material_style is an ID in material_styles below; the role values are proposed styling hints, not imported material names or already applied shader parameters.",
+      "color_space": "base_color is an sRGB #RRGGBB color. metallic and roughness are unit-interval PBR hints.",
+      "role_assignment": "Apply shell/trim/ornament_metal/gemstone hints only after identifying the corresponding original source regions. Keep source UVs, wood detail, inset structure and palette shading.",
+      "atlas_warning": "Kenney and KayKit use a single source atlas material with metallicFactor 0. A whole-model metallic or color override would incorrectly affect wood as well as trim. Role-specific atlas masks/remaps or verified material-region assignments are future integration work, not supplied source functionality.",
+      "ornaments": "Padlocks, framed shields and coins are real 3D source models. Shields are reused as escutcheons and coins as medallions; those placements and finishes are game adaptations. No procedural primitive, invented crown, sprite badge or additional native chest is implied."
+    },
+    "material_styles": {
+      "wood-iron": {
+        "preciousness_rank": 1,
+        "authorship": "proposed-game-adaptation",
+        "description": "Modest warm wood, dark worn iron and restrained fittings; low tiers stay largely undecorated.",
+        "roles": {
+          "shell": { "base_color": "#b67b4c", "metallic": 0.0, "roughness": 0.82 },
+          "trim": { "base_color": "#737b7c", "metallic": 0.18, "roughness": 0.68 },
+          "ornament_metal": { "base_color": "#8d8170", "metallic": 0.2, "roughness": 0.64 },
+          "gemstone": { "base_color": "#91b9bd", "metallic": 0.0, "roughness": 0.4 }
+        }
+      },
+      "bronze-bound": {
+        "preciousness_rank": 2,
+        "authorship": "proposed-game-adaptation",
+        "description": "Richer chestnut wood with broader bronze/brass framing and a clear, crafted front fitting.",
+        "roles": {
+          "shell": { "base_color": "#a9653d", "metallic": 0.0, "roughness": 0.72 },
+          "trim": { "base_color": "#bc8e50", "metallic": 0.32, "roughness": 0.56 },
+          "ornament_metal": { "base_color": "#d0a55f", "metallic": 0.38, "roughness": 0.5 },
+          "gemstone": { "base_color": "#84b7b0", "metallic": 0.02, "roughness": 0.34 }
+        }
+      },
+      "silver-bound": {
+        "preciousness_rank": 3,
+        "authorship": "proposed-game-adaptation",
+        "description": "Polished silver binding over deep wood; early framed plaques and small real jewels.",
+        "roles": {
+          "shell": { "base_color": "#986440", "metallic": 0.0, "roughness": 0.64 },
+          "trim": { "base_color": "#c4d1d5", "metallic": 0.48, "roughness": 0.45 },
+          "ornament_metal": { "base_color": "#d9e3e5", "metallic": 0.5, "roughness": 0.4 },
+          "gemstone": { "base_color": "#8ebbd8", "metallic": 0.04, "roughness": 0.3 }
+        }
+      },
+      "sterling": {
+        "preciousness_rank": 4,
+        "authorship": "proposed-game-adaptation",
+        "description": "Bright sterling framing and clean amber wood, followed by balanced medallions and jewel pairs.",
+        "roles": {
+          "shell": { "base_color": "#bc7f4f", "metallic": 0.0, "roughness": 0.58 },
+          "trim": { "base_color": "#e1e6e0", "metallic": 0.56, "roughness": 0.38 },
+          "ornament_metal": { "base_color": "#edf0e7", "metallic": 0.58, "roughness": 0.35 },
+          "gemstone": { "base_color": "#87cecf", "metallic": 0.04, "roughness": 0.26 }
+        }
+      },
+      "gilded-meadow": {
+        "preciousness_rank": 5,
+        "authorship": "proposed-game-adaptation",
+        "description": "The existing leafy chest gains gilded framing, emerald accents and substantial side escutcheons.",
+        "roles": {
+          "shell": { "base_color": "#659a75", "metallic": 0.02, "roughness": 0.5 },
+          "trim": { "base_color": "#e4c47b", "metallic": 0.62, "roughness": 0.34 },
+          "ornament_metal": { "base_color": "#efd596", "metallic": 0.66, "roughness": 0.31 },
+          "gemstone": { "base_color": "#74cfaa", "metallic": 0.06, "roughness": 0.24 }
+        }
+      },
+      "champagne-gold": {
+        "preciousness_rank": 6,
+        "authorship": "proposed-game-adaptation",
+        "description": "Warm amber and champagne gold; the source's already cleaned ornate body supports more prominent gem/frame combinations.",
+        "roles": {
+          "shell": { "base_color": "#c58c53", "metallic": 0.03, "roughness": 0.46 },
+          "trim": { "base_color": "#f0d083", "metallic": 0.7, "roughness": 0.3 },
+          "ornament_metal": { "base_color": "#f5dea3", "metallic": 0.72, "roughness": 0.28 },
+          "gemstone": { "base_color": "#9fcee1", "metallic": 0.07, "roughness": 0.23 }
+        }
+      },
+      "pearl-gold": {
+        "preciousness_rank": 7,
+        "authorship": "proposed-game-adaptation",
+        "description": "Pearl/aqua enamel, richer gold rims and graduated jewel/crystal ensembles on the lagoon source silhouette.",
+        "roles": {
+          "shell": { "base_color": "#b8e2df", "metallic": 0.06, "roughness": 0.4 },
+          "trim": { "base_color": "#f2d58b", "metallic": 0.76, "roughness": 0.27 },
+          "ornament_metal": { "base_color": "#f8e5b2", "metallic": 0.78, "roughness": 0.25 },
+          "gemstone": { "base_color": "#87dce4", "metallic": 0.08, "roughness": 0.21 }
+        }
+      },
+      "rose-gold-jewelled": {
+        "preciousness_rank": 8,
+        "authorship": "proposed-game-adaptation",
+        "description": "Rose enamel and polished rose/champagne gold with larger ruby-toned source gems and paired side framing.",
+        "roles": {
+          "shell": { "base_color": "#e5b0bb", "metallic": 0.07, "roughness": 0.35 },
+          "trim": { "base_color": "#f2c48f", "metallic": 0.82, "roughness": 0.24 },
+          "ornament_metal": { "base_color": "#ffe0b1", "metallic": 0.84, "roughness": 0.22 },
+          "gemstone": { "base_color": "#e998bd", "metallic": 0.09, "roughness": 0.19 }
+        }
+      },
+      "royal-white-gold": {
+        "preciousness_rank": 9,
+        "authorship": "proposed-game-adaptation",
+        "description": "The most premium existing gemstone vault, pearl-lilac enamel, white-gold frames and progressively larger aurora jewels. No unsourced crown mesh is implied.",
+        "roles": {
+          "shell": { "base_color": "#e0d7ed", "metallic": 0.1, "roughness": 0.3 },
+          "trim": { "base_color": "#f8e2a6", "metallic": 0.88, "roughness": 0.2 },
+          "ornament_metal": { "base_color": "#fff0c6", "metallic": 0.9, "roughness": 0.18 },
+          "gemstone": { "base_color": "#9ae4dc", "metallic": 0.1, "roughness": 0.17 }
+        }
+      }
+    }
+  },
+  "tiers": [
+    {
+      "level": 1,
+      "id": "tier-01-trailwood",
+      "name": "Trailwood Keepsake",
+      "base_model": "assets/chests/catalog-cc0/kenney-survival/chest.glb",
+      "base_source_id": "kenney-survival",
+      "material_style": "wood-iron",
+      "decorations": [],
+      "open_animation": "open"
+    },
+    {
+      "level": 2,
+      "id": "tier-02-little-lockbox",
+      "name": "Little Iron Lockbox",
+      "base_model": "assets/chests/catalog-cc0/kenney-survival/chest.glb",
+      "base_source_id": "kenney-survival",
+      "material_style": "wood-iron",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/lock.glb", "slot": "front", "scale": 0.12, "rotation_degrees": [0, 0, 0] }
+      ],
+      "open_animation": "open"
+    },
+    {
+      "level": 3,
+      "id": "tier-03-twin-fitting",
+      "name": "Twin-Fitting Keepsake",
+      "base_model": "assets/chests/catalog-cc0/kenney-survival/chest.glb",
+      "base_source_id": "kenney-survival",
+      "material_style": "wood-iron",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "left", "scale": 0.075, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "right", "scale": 0.075, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "open"
+    },
+    {
+      "level": 4,
+      "id": "tier-04-bronze-banded",
+      "name": "Bronze-Banded Chest",
+      "base_model": "assets/chests/catalog-cc0/kenney-platformer/chest.glb",
+      "base_source_id": "kenney-platformer",
+      "material_style": "bronze-bound",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/lock.glb", "slot": "front", "scale": 0.15, "rotation_degrees": [0, 0, 0] }
+      ],
+      "open_animation": "open"
+    },
+    {
+      "level": 5,
+      "id": "tier-05-bronze-framed",
+      "name": "Bronze Framed Chest",
+      "base_model": "assets/chests/catalog-cc0/kenney-platformer/chest.glb",
+      "base_source_id": "kenney-platformer",
+      "material_style": "bronze-bound",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-rectangle.glb", "slot": "front", "scale": 0.16, "rotation_degrees": [0, 0, 0] }
+      ],
+      "open_animation": "open"
+    },
+    {
+      "level": 6,
+      "id": "tier-06-brass-merchant",
+      "name": "Brass Merchant Chest",
+      "base_model": "assets/chests/catalog-cc0/kenney-platformer/chest.glb",
+      "base_source_id": "kenney-platformer",
+      "material_style": "bronze-bound",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/lock.glb", "slot": "front", "scale": 0.16, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "left", "scale": 0.1, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "right", "scale": 0.1, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "open"
+    },
+    {
+      "level": 7,
+      "id": "tier-07-silver-shield",
+      "name": "Silver Shield Chest",
+      "base_model": "assets/chests/catalog-cc0/kenney-mini-dungeon/chest.glb",
+      "base_source_id": "kenney-mini-dungeon",
+      "material_style": "silver-bound",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "front", "scale": 0.18, "rotation_degrees": [0, 0, 0] }
+      ],
+      "open_animation": "open"
+    },
+    {
+      "level": 8,
+      "id": "tier-08-silver-jewel",
+      "name": "Silver Jewel Chest",
+      "base_model": "assets/chests/catalog-cc0/kenney-mini-dungeon/chest.glb",
+      "base_source_id": "kenney-mini-dungeon",
+      "material_style": "silver-bound",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "front", "scale": 0.18, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-left", "scale": 0.11, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-right", "scale": 0.11, "rotation_degrees": [0, 0, 0] }
+      ],
+      "open_animation": "open"
+    },
+    {
+      "level": 9,
+      "id": "tier-09-silver-twin-frame",
+      "name": "Silver Twin-Frame Chest",
+      "base_model": "assets/chests/catalog-cc0/kenney-mini-dungeon/chest.glb",
+      "base_source_id": "kenney-mini-dungeon",
+      "material_style": "silver-bound",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/lock.glb", "slot": "front", "scale": 0.16, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "left", "scale": 0.18, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "right", "scale": 0.18, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "open"
+    },
+    {
+      "level": 10,
+      "id": "tier-10-sterling-traveller",
+      "name": "Sterling Traveller Chest",
+      "base_model": "assets/chests/catalog-cc0/kaykit-dungeon/chest.glb",
+      "base_source_id": "kaykit-dungeon-1.0",
+      "material_style": "sterling",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "front", "scale": 0.2, "rotation_degrees": [0, 0, 0] }
+      ]
+    },
+    {
+      "level": 11,
+      "id": "tier-11-sterling-medallion",
+      "name": "Sterling Medallion Chest",
+      "base_model": "assets/chests/catalog-cc0/kaykit-dungeon/chest.glb",
+      "base_source_id": "kaykit-dungeon-1.0",
+      "material_style": "sterling",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-rectangle.glb", "slot": "front", "scale": 0.22, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "front-left", "scale": 0.1, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "front-right", "scale": 0.1, "rotation_degrees": [0, 0, 0] }
+      ]
+    },
+    {
+      "level": 12,
+      "id": "tier-12-sterling-jewel",
+      "name": "Sterling Jewel Treasury",
+      "base_model": "assets/chests/catalog-cc0/kaykit-dungeon/chest.glb",
+      "base_source_id": "kaykit-dungeon-1.0",
+      "material_style": "sterling",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/lock.glb", "slot": "front", "scale": 0.2, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "left", "scale": 0.2, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "right", "scale": 0.2, "rotation_degrees": [0, 90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-left", "scale": 0.12, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-right", "scale": 0.12, "rotation_degrees": [0, 0, 0] }
+      ]
+    },
+    {
+      "level": 13,
+      "id": "tier-13-gilded-meadow",
+      "name": "Gilded Meadow Chest",
+      "base_model": "assets/chests/models/meadow-explorer.glb",
+      "base_source_id": "low-poly-chest-animated",
+      "material_style": "gilded-meadow",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-rectangle.glb", "slot": "front", "scale": 0.24, "rotation_degrees": [0, 0, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 14,
+      "id": "tier-14-emerald-meadow",
+      "name": "Emerald Meadow Chest",
+      "base_model": "assets/chests/models/meadow-explorer.glb",
+      "base_source_id": "low-poly-chest-animated",
+      "material_style": "gilded-meadow",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/lock.glb", "slot": "front", "scale": 0.2, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-left", "scale": 0.15, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-right", "scale": 0.15, "rotation_degrees": [0, 0, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 15,
+      "id": "tier-15-meadow-regent",
+      "name": "Meadow Regent Chest",
+      "base_model": "assets/chests/models/meadow-explorer.glb",
+      "base_source_id": "low-poly-chest-animated",
+      "material_style": "gilded-meadow",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-rectangle.glb", "slot": "front", "scale": 0.24, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "left", "scale": 0.2, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "right", "scale": 0.2, "rotation_degrees": [0, 90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-left", "scale": 0.13, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-right", "scale": 0.13, "rotation_degrees": [0, 0, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 16,
+      "id": "tier-16-champagne-gold",
+      "name": "Champagne Gold Chest",
+      "base_model": "assets/chests/models/harvest-keepsake.glb",
+      "base_source_id": "poly-style-fantasy-chest",
+      "material_style": "champagne-gold",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/lock.glb", "slot": "front", "scale": 0.22, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "left", "scale": 0.14, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "right", "scale": 0.14, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 17,
+      "id": "tier-17-golden-crest",
+      "name": "Golden Crest Treasury",
+      "base_model": "assets/chests/models/harvest-keepsake.glb",
+      "base_source_id": "poly-style-fantasy-chest",
+      "material_style": "champagne-gold",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "front", "scale": 0.26, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-left", "scale": 0.16, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-right", "scale": 0.16, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "left", "scale": 0.12, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "right", "scale": 0.12, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 18,
+      "id": "tier-18-golden-crystal",
+      "name": "Golden Crystal Treasury",
+      "base_model": "assets/chests/models/harvest-keepsake.glb",
+      "base_source_id": "poly-style-fantasy-chest",
+      "material_style": "champagne-gold",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-rectangle.glb", "slot": "front", "scale": 0.26, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "left", "scale": 0.17, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "right", "scale": 0.17, "rotation_degrees": [0, 90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-left", "scale": 0.15, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-right", "scale": 0.15, "rotation_degrees": [0, 0, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 19,
+      "id": "tier-19-pearl-jewel",
+      "name": "Pearl Jewel Treasury",
+      "base_model": "assets/chests/models/lagoon-pearl.glb",
+      "base_source_id": "poly-style-fantasy-chest",
+      "material_style": "pearl-gold",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front", "scale": 0.22, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "left", "scale": 0.14, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "right", "scale": 0.14, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 20,
+      "id": "tier-20-pearl-crystal",
+      "name": "Pearl Crystal Treasury",
+      "base_model": "assets/chests/models/lagoon-pearl.glb",
+      "base_source_id": "poly-style-fantasy-chest",
+      "material_style": "pearl-gold",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "front", "scale": 0.24, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "front-left", "scale": 0.18, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "front-right", "scale": 0.18, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "left", "scale": 0.15, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "right", "scale": 0.15, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 21,
+      "id": "tier-21-lagoon-jewel",
+      "name": "Lagoon Jewel Treasury",
+      "base_model": "assets/chests/models/lagoon-pearl.glb",
+      "base_source_id": "poly-style-fantasy-chest",
+      "material_style": "pearl-gold",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-rectangle.glb", "slot": "front", "scale": 0.26, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-left", "scale": 0.18, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-right", "scale": 0.18, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "left", "scale": 0.16, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "right", "scale": 0.16, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 22,
+      "id": "tier-22-lagoon-crystal-palace",
+      "name": "Lagoon Crystal Palace",
+      "base_model": "assets/chests/models/lagoon-pearl.glb",
+      "base_source_id": "poly-style-fantasy-chest",
+      "material_style": "pearl-gold",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "front", "scale": 0.28, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-left", "scale": 0.19, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-right", "scale": 0.19, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "left", "scale": 0.24, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "right", "scale": 0.24, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 23,
+      "id": "tier-23-rose-gold",
+      "name": "Rose Gold Treasury",
+      "base_model": "assets/chests/models/strawberry-bonbon.glb",
+      "base_source_id": "poly-style-fantasy-chest",
+      "material_style": "rose-gold-jewelled",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "front", "scale": 0.25, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-left", "scale": 0.17, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-right", "scale": 0.17, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "left", "scale": 0.15, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "right", "scale": 0.15, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 24,
+      "id": "tier-24-rose-crystal",
+      "name": "Rose Crystal Treasury",
+      "base_model": "assets/chests/models/strawberry-bonbon.glb",
+      "base_source_id": "poly-style-fantasy-chest",
+      "material_style": "rose-gold-jewelled",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-rectangle.glb", "slot": "front", "scale": 0.27, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "front-left", "scale": 0.2, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "front-right", "scale": 0.2, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "left", "scale": 0.16, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "right", "scale": 0.16, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 25,
+      "id": "tier-25-ruby-frame",
+      "name": "Ruby Frame Treasury",
+      "base_model": "assets/chests/models/strawberry-bonbon.glb",
+      "base_source_id": "poly-style-fantasy-chest",
+      "material_style": "rose-gold-jewelled",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/lock.glb", "slot": "front", "scale": 0.22, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-left", "scale": 0.21, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-right", "scale": 0.21, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-rectangle.glb", "slot": "left", "scale": 0.26, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-rectangle.glb", "slot": "right", "scale": 0.26, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 26,
+      "id": "tier-26-rose-regent",
+      "name": "Rose Regent Treasury",
+      "base_model": "assets/chests/models/strawberry-bonbon.glb",
+      "base_source_id": "poly-style-fantasy-chest",
+      "material_style": "rose-gold-jewelled",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front", "scale": 0.3, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "front-left", "scale": 0.22, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "front-right", "scale": 0.22, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "left", "scale": 0.27, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "right", "scale": 0.27, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 27,
+      "id": "tier-27-royal-moonstone",
+      "name": "Royal Moonstone Vault",
+      "base_model": "assets/chests/models/moonstone-vault.glb",
+      "base_source_id": "stylized-chests",
+      "material_style": "royal-white-gold",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "front", "scale": 0.24, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "left", "scale": 0.15, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "right", "scale": 0.15, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 28,
+      "id": "tier-28-royal-crystal",
+      "name": "Royal Crystal Vault",
+      "base_model": "assets/chests/models/moonstone-vault.glb",
+      "base_source_id": "stylized-chests",
+      "material_style": "royal-white-gold",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-rectangle.glb", "slot": "front", "scale": 0.28, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "front-left", "scale": 0.23, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "front-right", "scale": 0.23, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "left", "scale": 0.17, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb", "slot": "right", "scale": 0.17, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 29,
+      "id": "tier-29-royal-gem",
+      "name": "Royal Gem Treasury",
+      "base_model": "assets/chests/models/moonstone-vault.glb",
+      "base_source_id": "stylized-chests",
+      "material_style": "royal-white-gold",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "front", "scale": 0.31, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-left", "scale": 0.23, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front-right", "scale": 0.23, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-rectangle.glb", "slot": "left", "scale": 0.28, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-rectangle.glb", "slot": "right", "scale": 0.28, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "Open"
+    },
+    {
+      "level": 30,
+      "id": "tier-30-royal-aurora",
+      "name": "Royal Aurora Treasury",
+      "base_model": "assets/chests/models/moonstone-vault.glb",
+      "base_source_id": "stylized-chests",
+      "material_style": "royal-white-gold",
+      "decorations": [
+        { "model": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb", "slot": "front", "scale": 0.38, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "front-left", "scale": 0.27, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb", "slot": "front-right", "scale": 0.27, "rotation_degrees": [0, 0, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "left", "scale": 0.32, "rotation_degrees": [0, -90, 0] },
+        { "model": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb", "slot": "right", "scale": 0.32, "rotation_degrees": [0, 90, 0] }
+      ],
+      "open_animation": "Open"
+    }
+  ]
+}

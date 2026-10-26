@@ -539,11 +539,11 @@ func _check_closed_models() -> void:
 	check(models._pool.size() == 2 and models._pool.has(3) and models._pool.has(4),
 		"Advancing through four tiers retains only the latest two reusable model surfaces")
 	var before_invalid: Array = models._order.duplicate()
-	check(models.sample(0, 0.0).is_empty() and models.sample(5, 0.0).is_empty()
+	check(models.sample(0, 0.0).is_empty() and models.sample(31, 0.0).is_empty()
 		and models.sample(4, NAN).is_empty() and models.sample(4, INF).is_empty()
 		and models.sample(4, 0.0, NAN).is_empty() and models.sample(4, 0.0, INF).is_empty()
 		and models._order == before_invalid,
-		"Unsupported art and invalid angles use the static fallback without growing or mutating the pool")
+		"Unsupported tiers and invalid angles report failure without growing or mutating the pool")
 	models.set_active(true)
 	models.sample(4, 0.6)
 	var active = models._pool[4]

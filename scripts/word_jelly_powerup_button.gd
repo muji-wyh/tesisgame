@@ -6,6 +6,7 @@ const Model = preload("res://scripts/word_jelly_model.gd")
 const WAND = preload("res://assets/images/ui/jelly-powerups/auto-merge-wand.svg")
 const CHEST = preload("res://assets/chests/royal/closed.png")
 const COIN = preload("res://assets/coins/gold-coin.png")
+const CLOCK = preload("res://assets/images/ui/jelly-goals/clock.webp")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const SUCCESS_SECONDS: float = 0.62
@@ -56,10 +57,10 @@ func _init() -> void:
 
 
 func configure(kind: String, price: int, reduced_motion: bool) -> void:
-	_kind = "fragments" if kind in ["fragments", "treasure"] else "auto_merge"
+	_kind = "extra_time" if kind == "extra_time" else "fragments" if kind in ["fragments", "treasure"] else "auto_merge"
 	_price = maxi(0, price)
 	_reduced_motion = reduced_motion
-	name = "PowerupTreasure" if _kind == "fragments" else "PowerupAutoMerge"
+	name = "PowerupExtraTime" if _kind == "extra_time" else "PowerupTreasure" if _kind == "fragments" else "PowerupAutoMerge"
 	tooltip_text = ""
 	reset()
 	_layout()
@@ -138,7 +139,7 @@ func _duration() -> float:
 
 
 func _update_accessibility() -> void:
-	var title: String = "Treasure" if _kind == "fragments" else "Auto merge"
+	var title: String = "+30 sec" if _kind == "extra_time" else "Treasure" if _kind == "fragments" else "Auto merge"
 	var status: String = "Working" if _busy else "Unavailable right now" if not _available else "Not enough coins" if not _affordable else "Ready"
 	set("accessibility_name", "%s. %d coins. %s" % [title, _price, status])
 
@@ -150,7 +151,7 @@ func _layout() -> void:
 	_icon_rect = Rect2(Vector2(7.0 * unit, lower_center - edge * 0.5), Vector2.ONE * edge)
 	_title.position = Vector2(6.0 * unit, 3.0 * unit)
 	var title_size := Vector2(maxf(1.0, size.x - 12.0 * unit), maxf(1.0, 22.0 * unit))
-	var title: String = "Treasure" if _kind == "fragments" else "Auto merge"
+	var title: String = "+30 sec" if _kind == "extra_time" else "Treasure" if _kind == "fragments" else "Auto merge"
 	var font_size: int = maxi(1, roundi(12.0 * unit))
 	while font_size > 1 and (Style.HEADING_FONT.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > title_size.x \
 		or Style.HEADING_FONT.get_height(font_size) > title_size.y):
@@ -251,6 +252,8 @@ func _draw() -> void:
 	draw_set_transform(center, float(pose.rotation), Vector2.ONE * float(pose.scale) * press)
 	if _kind == "auto_merge":
 		draw_texture_rect(WAND, Rect2(-_icon_rect.size * 0.5, _icon_rect.size), false, tint)
+	elif _kind == "extra_time":
+		draw_texture_rect(CLOCK, Rect2(-_icon_rect.size * 0.5, _icon_rect.size), false, tint)
 	else:
 		# A newly allocated viewport can be blank until the owner caches its
 		# cropped render. Keep the acquired fallback visible during that warmup.

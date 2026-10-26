@@ -47,6 +47,7 @@ const JELLY_PATHS := {
 	"finish_ready": "res://assets/audio/jelly-finish/ready.ogg",
 	"blast_wave": "res://assets/audio/chest-kenney/settle.wav",
 	"blast_mark": "res://assets/audio/chest-kenney/step-detail.wav",
+	"goal_complete": "res://assets/audio/chest-kenney/reward.wav",
 	"pick": UI_CLICK_PATH,
 	"release": "res://assets/imported-audio/chest-reference/step.wav",
 	"land": "res://assets/audio/jelly-match/land.wav",
@@ -59,6 +60,7 @@ const JELLY_PATHS := {
 const JELLY_GAINS := {
 	"finish_ready": 0.40,
 	"blast_wave": 0.55, "blast_mark": 0.36,
+	"goal_complete": 0.42,
 	"pick": 0.64, "release": 0.38, "land": 0.35, "contact": 1.0,
 	"merge": 1.0, "pop": 0.90, "danger": 0.52, "reward": 0.36,
 	"assemble": 0.28,

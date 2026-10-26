@@ -36,7 +36,6 @@ var purchase_powerup: Callable:
 var coin_balance: Callable
 var powerup_buttons: Dictionary = {}
 var _powerup_effects: PowerupEffects
-var _hit_stop_shade := ColorRect.new()
 var _powerup_arrivals: Array[Dictionary] = []
 var _powerup_frame_end: float = -1.0
 var _powerup_frame_receipt: String = ""
@@ -152,6 +151,9 @@ func _init() -> void:
 	_stage_banner = StageBanner.new()
 	add_child(_stage_banner)
 	_practice_panel = PracticePanel.new()
+	_practice_panel.word_progressed.connect(func(_id: String, complete: bool) -> void:
+		if complete and _can_play():
+			audio_requested.emit("goal_complete"))
 	add_child(_practice_panel)
 	collect_button = CollectButton.new()
 	collect_button.name = "WordJellyCollectAll"
@@ -173,12 +175,6 @@ func _init() -> void:
 	add_child(_action_divider)
 	_powerup_effects = PowerupEffects.new()
 	add_child(_powerup_effects)
-	_hit_stop_shade.name = "HitStopFocus"
-	_hit_stop_shade.color = Color(0.05, 0.12, 0.18, 0.24)
-	_hit_stop_shade.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_hit_stop_shade.z_index = 40
-	_hit_stop_shade.hide()
-	add_child(_hit_stop_shade)
 	_placement_tile = WordTile.new()
 	_placement_tile.name = "WordJellyPlacement"
 	_placement_tile.disabled = true
@@ -230,7 +226,6 @@ func stop() -> void:
 	if _practice_panel != null:
 		_practice_panel.set_stage({})
 	_presentation_elapsed = 0.0
-	_hit_stop_shade.hide()
 	if _collection_effects != null:
 		_collection_effects.reset()
 	_room_notice_remaining = 0.0
@@ -325,6 +320,7 @@ func _read_action_at(point: Vector2) -> bool:
 	return false
 
 func set_reduced_motion(value: bool) -> void:
+	_practice_panel.reduced_motion = value
 	_combo_hud.reduced_motion = value
 	_stage_banner.reduced_motion = value
 	_word_reveal.set_reduced_motion(value)
@@ -402,7 +398,7 @@ func _input(event: InputEvent) -> void:
 		return
 	if _finish_is_pulling():
 		return
-	if game.collection_batch_active() or game.powerup_active():
+	if game.collection_batch_active() or game.powerup_active() or game.stage_ending():
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R \
 		and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and _can_play():
@@ -1116,10 +1112,6 @@ func _pose_powerup() -> void:
 		tile.set_fragment_arrival(-1.0, reduced_motion)
 	_powerup_effects.visible = _can_play()
 	var state: Dictionary = game.powerup_snapshot()
-	_hit_stop_shade.position = _board.position
-	_hit_stop_shade.size = _board.size
-	_hit_stop_shade.visible = _can_play() and not reduced_motion and bool(state.get("active", false)) \
-		and str(state.kind) == "blast" and str(state.stage) == "mark"
 	var stamps: Array[Dictionary] = []
 	var unit: float = maxf(8.0, _pitch)
 	if bool(state.get("active", false)) and str(state.get("kind", "")) == "blast":
@@ -1322,6 +1314,7 @@ func _process(delta: float) -> void:
 	if _can_play() and delta <= 0.5:
 		var board_delta: float = game.presentation_delta(delta)
 		_combo_hud.advance(delta)
+		_practice_panel.advance(delta)
 		_stage_banner.advance(delta)
 		_presentation_elapsed += board_delta
 		_collection_effects.advance(board_delta)
@@ -1835,7 +1828,7 @@ func _can_tap_chest() -> bool:
 
 func can_finish_round() -> bool:
 	# A size-only pause stops the board while retaining the header's exit action.
-	return _can_play() or (_layout_too_small and not _requested_pause and _read_cell.is_empty()
+	return _can_play() or _paused_finish_allowed() or (_layout_too_small and not _requested_pause and _read_cell.is_empty()
 		and _configured and game.phase == "playing" and is_visible_in_tree()
 		and (not interaction_allowed.is_valid() or bool(interaction_allowed.call())))
 
@@ -1873,7 +1866,7 @@ func _refresh_controls() -> void:
 	_refresh_preview_read_controls()
 	if collect_button == null:
 		return
-	if game.collection_batch_active() or game.powerup_active():
+	if game.collection_batch_active() or game.powerup_active() or game.stage_ending():
 		for tile: Tile in _tiles.values():
 			tile.disabled = true
 		drop_button.disabled = true
@@ -1886,7 +1879,8 @@ func _refresh_powerup_buttons() -> void:
 		var button: PowerupButton = powerup_buttons[kind]
 		var price: int = game.powerup_price(kind)
 		button.set_price(price)
-		button.visible = _configured and game.phase == "playing"
+		button.visible = _configured and game.phase == "playing" and (kind != "extra_time" \
+			or game.stage_run != null and game.stage_run.kind == "main")
 		var available: bool = game.can_activate_powerup(kind)
 		button.set_availability(_can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and _keyboard_source < 0 and available,
 			balance >= price, game.powerup_active() and not available)
@@ -1937,6 +1931,7 @@ func _layout() -> void:
 	var content_top: float = top_hud_height + (2.0 if authored else 12.0) / s
 	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - content_top)
 	var action_height: float = 56.0 / s
+	var tool_count: int = 3 if game.stage_run != null and game.stage_run.kind == "main" else 2
 	var collect_height: float = action_height
 	var divider_gap: float = 20.0 / s
 	var footer_height: float = action_height * 2.0 + divider_gap + edge
@@ -1948,7 +1943,7 @@ func _layout() -> void:
 	_compact_hud = side_hud
 	footer_height = 0.0 if side_hud else footer_height
 	if side_hud:
-		collect_height = clampf(available.y - action_height * 2.0 - divider_gap - 8.0 / s, 44.0 / s, action_height)
+		collect_height = clampf(available.y - action_height * tool_count - divider_gap - 8.0 / s, 44.0 / s, action_height)
 	_pitch = side_pitch if side_hud else bottom_pitch
 	var too_small: bool = authored and _pitch * s < 32.0
 	if too_small != _layout_too_small:
@@ -1979,7 +1974,7 @@ func _layout() -> void:
 	_falling_layer.position = _board.position
 	_falling_layer.size = _board.size
 	var footer_width: float = minf(size.x - edge * 2.0, 388.0 / s)
-	var item_width: float = clampf((footer_width - 132.0 / s) * 0.5, 88.0 / s, 112.0 / s)
+	var item_width: float = clampf((footer_width - (12.0 if tool_count == 3 else 132.0) / s) / tool_count, 88.0 / s, 112.0 / s)
 	var hud_x: float = _board.end.x + hud_gap if side_hud else (size.x - footer_width) * 0.5
 	if _stage_banner != null:
 		_stage_banner.size = size
@@ -2019,12 +2014,12 @@ func _layout() -> void:
 	if local_finish:
 		finish_button.size = Vector2(84.0, 44.0) / s
 		finish_button.position = Vector2(size.x - edge - finish_button.size.x, 4.0 / s)
-	for index in range(powerup_buttons.size()):
-		var button: PowerupButton = powerup_buttons["auto_merge" if index == 0 else "fragments"]
+	for index in range(tool_count):
+		var button: PowerupButton = powerup_buttons[["auto_merge", "fragments", "extra_time"][index]]
 		button.set_ui_scale(s)
 		button.size = Vector2(hud_width if side_hud else item_width, action_height)
-		button.position = Vector2(hud_x, _board.end.y - (2 - index) * (button.size.y + 8.0 / s) + 8.0 / s) if side_hud else \
-			Vector2(hud_x + (0.0 if index == 0 else footer_width - button.size.x), _board.end.y + edge + action_height + divider_gap)
+		button.position = Vector2(hud_x, _board.end.y - (tool_count - index) * (button.size.y + 8.0 / s) + 8.0 / s) if side_hud else \
+			Vector2(hud_x + index * (footer_width - button.size.x) / float(tool_count - 1), _board.end.y + edge + action_height + divider_gap)
 	var auto_merge: Rect2 = powerup_buttons.auto_merge.get_rect()
 	collect_button.set_ui_scale(s)
 	collect_button.size = Vector2(auto_merge.size.x, collect_height)
@@ -2079,6 +2074,7 @@ func _layout() -> void:
 	_reward_presentation.set_chest_anchor(chest_anchor_rect())
 	if _collection_effects != null:
 		_collection_effects.configure_layout(Rect2(Vector2.ZERO, size), s)
+		_collection_effects.set_board_burst(_pitch)
 		# A charging Jelly follows responsive board layout until its burst begins.
 		# Once released, the particle tail retains its own position and clock.
 		for fusion: Dictionary in game.fusions:
@@ -2146,7 +2142,8 @@ func snapshot() -> Dictionary:
 	state["collect_button"] = collect_button.snapshot() if collect_button != null else {}
 	state["action_divider"] = {"rect": _rect(_action_divider.get_global_rect()), "visible": _action_divider.is_visible_in_tree()}
 	state["powerup"] = game.powerup_snapshot()
-	state["hit_stop"]["visible"] = _hit_stop_shade.is_visible_in_tree()
+	state["hit_stop"]["visible"] = is_visible_in_tree() and _can_play() and not reduced_motion \
+		and bool(state.hit_stop.active) and _powerup_effects.is_visible_in_tree()
 	state["powerup_buttons"] = {}
 	for kind: String in powerup_buttons:
 		var button: PowerupButton = powerup_buttons[kind]

@@ -24,6 +24,7 @@ func _run() -> void:
 	_test_stage_waits_for_collection_commit()
 	_test_invalid_replacement_is_atomic()
 	_test_later_stage_same_spelling_sense()
+	_test_retired_word_packets_keep_their_partners()
 	print("Word Jelly stage model: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
@@ -66,6 +67,11 @@ func _test_retirement_and_exhaustion(reviewed: bool) -> void:
 	model.allow_cross_age = true
 	check(model.configure(_pool(reviewed), 3, 42), "The stage supply fixture configures")
 	var board: Array = model.cells.duplicate(true)
+	var issued: Dictionary = {}
+	for packet: Array in [model.upcoming, model._supply, model._supply_pending]:
+		for tile: Dictionary in packet:
+			if not tile.is_empty():
+				issued[int(tile.id)] = true
 	var retired: Array[String] = []
 	for index in range(8):
 		retired.append(str(_word(index).id))
@@ -74,15 +80,20 @@ func _test_retirement_and_exhaustion(reviewed: bool) -> void:
 		"Mastering eight words retains all existing bodies while narrowing future supply to two words")
 	for packet: Array in [model.upcoming, model._supply, model._supply_pending]:
 		for tile: Dictionary in packet:
-			check(not str(tile.get("source_word_id", "")) in retired,
-				"Mastered words leave visible preview and both internal supply queues immediately")
+			check(tile.is_empty() or issued.has(int(tile.id)),
+				"Retirement retains only already-issued partners and never invents a new mastered-word packet")
 	for drop in range(20):
 		model.cells.clear()
 		check(model.drop_now(), "The two remaining words can keep replenishing the board")
 		for tile: Dictionary in model.cells:
-			check(str(tile.get("source_word_id", "")) in [str(_word(8).id), str(_word(9).id)],
-				"Every subsequent body comes from the unmastered remainder of the same stage")
+			check(issued.has(int(tile.id)) or str(tile.get("source_word_id", "")) in [str(_word(8).id), str(_word(9).id)],
+				"Only issued old partners or newly sampled unmastered words can enter after retirement")
 	model.retire_mastered_words([str(_word(8).id), str(_word(9).id)])
+	for drop in range(10):
+		model.cells.clear()
+		if not model.can_drop_now():
+			break
+		model.drop_now()
 	check(model._words.is_empty() and model._supply.is_empty() and model._supply_pending.is_empty()
 		and model._first_preview_tile().is_empty() and not model.can_drop_now(),
 		"An exhausted stage supplies no stale words and disables further drops")
@@ -98,6 +109,32 @@ func _put(model: RefCounted, tile: Dictionary) -> Dictionary:
 	tile.row = position.y
 	model.cells.append(tile)
 	return tile
+
+
+func _test_retired_word_packets_keep_their_partners() -> void:
+	for reviewed: bool in [false, true]:
+		var model := Model.new()
+		model.allow_cross_age = true
+		var old_word: Dictionary = _word(0, reviewed)
+		check(model.configure([old_word], 3, 71), "Create the old train-shaped root/picture supply")
+		var board: Array = model.cells.duplicate(true)
+		var advertised: Array = model.upcoming.duplicate(true)
+		var queued: Array = model._supply.duplicate(true)
+		var pending: Array = model._supply_pending.duplicate(true)
+		var issued: int = board.size() + advertised.filter(func(tile: Dictionary) -> bool: return not tile.is_empty()).size() \
+			+ queued.size() + pending.size()
+		check(board.size() == 15 and issued % 2 == 0,
+			"The real starter leaves an odd number of board pieces whose partners are already issued")
+		model.retire_mastered_words([old_word.id])
+		check(model.cells == board and model.upcoming == advertised and model._supply == queued
+			and model._supply_pending == pending,
+			"Retiring a mastered word never deletes advertised or queued partners for its remaining roots")
+		check(model.replace_stage_words([_word(1, reviewed)], 3),
+			"The next stage can begin without clearing existing old-word pieces")
+		check(model.upcoming == advertised and model._supply == queued and model._supply_pending == pending,
+			"Stage replacement preserves the same in-flight word packets instead of stranding train")
+		check(model._words.size() == 1 and model._words[0].id == _word(1).id,
+			"Only the new stage can create new packets; draining old packets is not endless old-word spawning")
 
 
 func _test_stage_preserves_old_bodies_and_rewards() -> void:
@@ -134,7 +171,8 @@ func _test_stage_preserves_old_bodies_and_rewards() -> void:
 		"Collecting old carried fragments adds them once to the current round")
 	for tile: Dictionary in model.upcoming:
 		if tile.has("id"):
-			check(str(tile.source_word_id) == str(_word(11).id), "Only next-stage words appear in the new preview")
+			check(str(tile.source_word_id) in [str(word.id), str(_word(11).id)],
+				"The preview retains old completion partners while future generation belongs to the next stage")
 
 
 func _test_stage_waits_for_collection_commit() -> void:

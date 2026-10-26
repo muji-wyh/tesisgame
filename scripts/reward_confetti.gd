@@ -7,6 +7,7 @@ const DURATION: float = 6.4
 const PAPER_COUNT: int = 384
 const MAX_PAPER_COUNT: int = 1200
 const PAPER_SPACING: float = 42.0
+const SMALL_DURATION: float = 2.4
 const COLORS: Array[Color] = [Color("#ffcf63"), Color("#ff8396"), Color("#67dbbe"), Color("#83bdff"), Color("#cf9af1")]
 
 class PaperSurface extends Control:
@@ -33,10 +34,22 @@ func _init() -> void:
 
 
 func burst(key: String) -> bool:
+	return _start_burst(key, false)
+
+
+func burst_small(key: String) -> bool:
+	return _start_burst(key, true)
+
+
+func _start_burst(key: String, small: bool) -> bool:
 	if key.is_empty() or _seen_keys.has(key):
 		return false
 	_seen_keys[key] = true
-	_bursts.append({"key": key, "age": 0.0, "variation": fposmod(float(key.hash()), 1009.0) / 1009.0})
+	if small:
+		_bursts = _bursts.filter(func(item: Dictionary) -> bool: return not bool(item.small))
+	_bursts.append({"key": key, "age": 0.0, "small": small,
+		"duration": SMALL_DURATION if small else DURATION,
+		"variation": fposmod(float(key.hash()), 1009.0) / 1009.0})
 	_sync()
 	return true
 
@@ -46,7 +59,7 @@ func advance(delta: float) -> void:
 		return
 	for item: Dictionary in _bursts:
 		item.age += delta
-	_bursts = _bursts.filter(func(item: Dictionary) -> bool: return float(item.age) < DURATION)
+	_bursts = _bursts.filter(func(item: Dictionary) -> bool: return float(item.age) < float(item.duration))
 	_sync()
 
 
@@ -169,12 +182,38 @@ func _draw_strip(surface: Control, paper: Dictionary) -> void:
 		surface.draw_polygon(points, PackedColorArray([paper.color]), uvs, PAPER)
 
 
+func _burst_region(item: Dictionary, screen: Rect2) -> Rect2:
+	return Rect2(screen.position, Vector2(screen.size.x, screen.size.y / 3.0)) if item.small else screen
+
+
+func _burst_count(item: Dictionary, screen: Rect2, unit: float) -> int:
+	if not item.small:
+		return _paper_count(screen, unit)
+	var spacing: float = 80.0 * maxf(0.25, unit)
+	return clampi(ceili(_burst_region(item, screen).get_area() / (spacing * spacing)), 24, 72)
+
+
+func _burst_paper_state(item: Dictionary, index: int, screen: Rect2, unit: float) -> Dictionary:
+	var region: Rect2 = _burst_region(item, screen)
+	var paper: Dictionary = _paper_state(index, region, unit, float(item.age), float(item.variation))
+	if paper.is_empty() or not item.small:
+		return paper
+	var half: Vector2 = Vector2(paper.size) * 0.5
+	var angle: float = float(paper.rotation)
+	var extent := Vector2(absf(cos(angle)) * half.x + absf(sin(angle)) * half.y,
+		absf(sin(angle)) * half.x + absf(cos(angle)) * half.y)
+	if not region.encloses(Rect2(Vector2(paper.position) - extent, extent * 2.0)):
+		return {}
+	paper.color.a *= clampf((SMALL_DURATION - float(item.age)) / 0.4, 0.0, 1.0)
+	return paper
+
+
 func draw_paper(surface: Control) -> void:
 	var screen: Rect2 = screen_rect()
 	var unit: float = 1.0 / Style.ui_scale(surface)
 	for item: Dictionary in _bursts:
-		for index in range(_paper_count(screen, unit)):
-			var paper: Dictionary = _paper_state(index, screen, unit, float(item.age), float(item.variation))
+		for index in range(_burst_count(item, screen, unit)):
+			var paper: Dictionary = _burst_paper_state(item, index, screen, unit)
 			if paper.is_empty():
 				continue
 			surface.draw_set_transform(paper.position, paper.rotation)
@@ -184,7 +223,14 @@ func draw_paper(surface: Control) -> void:
 
 func snapshot() -> Dictionary:
 	var rect: Rect2 = screen_rect()
+	var regions: Array = []
+	var count: int = 0
+	for item: Dictionary in _bursts:
+		var region: Rect2 = _burst_region(item, rect)
+		regions.append([region.position.x, region.position.y, region.size.x, region.size.y])
+		count = maxi(count, _burst_count(item, rect, 1.0 / Style.ui_scale(_surface)))
 	return {"active": is_active(), "visible": visible, "paused": _paused,
-		"paper_count": _paper_count(rect, 1.0 / Style.ui_scale(_surface)),
+		"paper_count": count if is_active() else _paper_count(rect, 1.0 / Style.ui_scale(_surface)),
+		"regions": regions,
 		"ages": _bursts.map(func(item: Dictionary) -> float: return float(item.age)),
 		"keys": _seen_keys.keys(), "screen_rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y]}

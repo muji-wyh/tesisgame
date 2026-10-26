@@ -289,15 +289,15 @@ func _test_collection_batch_and_assistance() -> void:
 	model.purchase_powerup = func(_id: String, _kind: String, _price: int) -> Dictionary: return {"ok": true}
 	check(model.activate_powerup("auto_merge"), "A paid Auto Merge can complete the next pictured word")
 	model.finish_powerup(false)
-	check(model.combo_snapshot().count == 5 and fixture.payments.is_empty() and fixture.wallet.balance == 0,
-		"Paid Auto Merge neither increments nor pays the combo")
+	check(model.combo_snapshot().count == 6 and fixture.payments.is_empty() and fixture.wallet.balance == 0,
+		"Paid Auto Merge increments the combo on commit without inventing an automatic coin payout")
 	check(model.start_collection_batch(), "The assisted result remains collectable")
 	model.step(2.0)
-	check(model.combo_snapshot().count == 6 and fixture.wallet.balance == 0,
+	check(model.combo_snapshot().count == 7 and fixture.wallet.balance == 0,
 		"Collecting an assisted result still extends the chain without refunding its purchase")
 	_begin_pair(model)
 	model.step(2.0)
-	check(model.combo_snapshot().count == 7 and fixture.wallet.balance == 2,
+	check(model.combo_snapshot().count == 8 and fixture.wallet.balance == 2,
 		"The next manual merge receives the tier reached through automatic collection")
 	model.credit_combo = Callable()
 	model.purchase_powerup = Callable()

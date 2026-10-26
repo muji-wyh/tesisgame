@@ -168,7 +168,7 @@ func apply_theme(theme_id: String, chest_manifest: Dictionary) -> void:
 	_theme_id = theme_id if Data.THEMES.has(theme_id) else "spring"
 	_palette = Data.theme(_theme_id)
 	pip.set_outfit_theme(_theme_id)
-	chest.configure_skin(_palette, chest_manifest)
+	chest.configure_tier(clampi(_chest_tier, 1, 30), _palette, chest_manifest)
 	chest.set_process(false)
 	_layout()
 

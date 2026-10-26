@@ -73,7 +73,8 @@ func _run() -> void:
 		check(badge.snapshot().display_tier == tier + 1, "The previous chest stays visible until the contraction commits its replacement")
 		var art_center: Vector2 = badge.chest.get_global_transform() * badge.chest.closed_art_rect().get_center()
 		badge.advance(0.12)
-		check(badge.snapshot().animating and badge.chest.scale.x < 0.82 and badge.chest.rotation < -0.25
+		check(badge.snapshot().animating and badge.chest.scale.x < 0.82 and is_zero_approx(badge.chest.rotation)
+			and badge.chest._model_view.snapshot().model_rotation.y < -0.25
 			and badge.chest.modulate.r < 0.8,
 			"A decrement immediately compresses and darkens the chest while starting its reverse turn")
 		check((badge.chest.get_global_transform() * badge.chest.closed_art_rect().get_center()).distance_to(art_center) < 0.001,
@@ -87,7 +88,8 @@ func _run() -> void:
 		check(badge.snapshot().elapsed == elapsed, "Pause freezes the reaction without changing the earned tier")
 		badge.set_paused(false)
 		badge.advance(0.23)
-		check(badge.snapshot().display_tier == tier and badge.chest.scale.x < 0.45 and badge.chest.rotation < -2.9,
+		check(badge.snapshot().display_tier == tier and badge.chest.scale.x < 0.45 and is_zero_approx(badge.chest.rotation)
+			and (tier == 0 or badge.chest._model_view.snapshot().model_rotation.y < -2.9),
 			"The smaller chest replaces the previous tier at the contracted half turn")
 		check(badge.chest.scale.x < 0.2 if tier == 0 else badge.chest.scale.x >= 0.39,
 			"The final loss contracts visibly deeper than an ordinary one-tier downgrade")

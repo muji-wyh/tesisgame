@@ -101,7 +101,7 @@ func _master(app, ids: Array, prefix: String) -> void:
 func _loading_and_background() -> void:
 	var app = await _make_app(true)
 	var host = app.vocabulary_loader.downloads
-	app.choose_mode("word_jelly")
+	Fixture.enter_mode(app, "word_jelly")
 	check(host.requests.has(3) and app._vocabulary_prompt.visible and app._word_jelly_stages == null,
 		"Starting mixed-age Jelly waits for the first required media pack")
 	host.reply(3, "ready")
@@ -133,6 +133,7 @@ func _loading_and_background() -> void:
 	check(app._round_id == original_round and app._word_jelly_stages.number == 1,
 		"A duplicate media completion cannot recreate the started stage")
 	_master(app, first, "complete-mixed-stage")
+	view._practice_panel.advance(1.40)
 	check(app.growth.age == 4 and app.growth.learning_age() == 5,
 		"Completing the mixed stage recognizes both previously unfinished cohorts")
 	var board_ids: Array = view.game.cells.map(func(tile: Dictionary) -> int: return int(tile.id))
@@ -182,7 +183,7 @@ func _loading_and_background() -> void:
 
 func _post_settlement_selection() -> void:
 	var app = await _make_app()
-	app.choose_mode("word_jelly")
+	Fixture.enter_mode(app, "word_jelly")
 	app.vocabulary_loader.downloads.reply(3, "ready")
 	await _settle()
 	check(app.new_round(904, false, "", "word_jelly", "", false),
@@ -213,6 +214,9 @@ func _post_settlement_selection() -> void:
 		app._show_mode_menu()
 		return result
 	check(game.collect(int(tile.id)), "Collect the mastered composition through the real credit callback")
+	if game.fusions.is_empty():
+		await _dispose(app)
+		return
 	var receipt: String = app._round_id + ":" + str(game.fusions.back().attempt_id)
 	game.step(game.COLLECT_SECONDS)
 	check(game.fusions.size() == 1 and bool(game.fusions[0].credited) and game.paused

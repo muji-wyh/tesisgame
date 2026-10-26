@@ -8,7 +8,7 @@ const PREVIOUS_CHEST_REWARD_POLICY: String = "pip-chest-v1"
 const LEGACY_CHEST_REWARD_POLICY: String = "legacy-chest-v1"
 const MATCH_HINT_PRICES: Array[int] = [100, 150, 200]
 const MEMORY_PEEK_PRICES: Array[int] = [0, 100, 200, 300]
-const POWERUP_BASE_PRICES: Dictionary = {"auto_merge": 600, "fragments": 200}
+const POWERUP_BASE_PRICES: Dictionary = {"auto_merge": 600, "fragments": 200, "extra_time": 100}
 const JELLY_BONUS_CHANCES: Array[float] = [0.0, 0.02, 0.04, 0.12, 0.20, 0.30, 0.40, 0.50, 0.80]
 const JELLY_BONUS_AMOUNTS: Array[int] = [0, 50, 100, 150, 200, 250, 300, 350, 450]
 const TREASURE_FRAGMENT_MIN: int = 2
@@ -26,6 +26,8 @@ static func memory_peek_price(successful_uses: int) -> int:
 static func powerup_price(kind: String, successful_uses: int) -> int:
 	if not POWERUP_BASE_PRICES.has(kind):
 		return 0
+	if kind == "extra_time":
+		return 100 + 50 * clampi(successful_uses, 0, 4095)
 	var extra: int = 300 if kind == "auto_merge" else 100
 	return int(POWERUP_BASE_PRICES[kind]) + extra * clampi(successful_uses, 0, 2)
 

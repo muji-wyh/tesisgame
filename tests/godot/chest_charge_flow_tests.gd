@@ -1,4 +1,5 @@
 extends SceneTree
+const BASE_COINS: int = preload("res://scripts/coin_economy.gd").CHEST_BASE_COINS
 
 const Feel = preload("res://scripts/chest_feel.gd")
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
@@ -223,9 +224,9 @@ func _run() -> void:
 	app.chest.finish_immediately()
 	app.chest_button.button_up.emit()
 	check(app._coin_flight.snapshot().active and app._coin_flight.snapshot().flights == 1
-		and app._coin_flight._seen.size() == coin_receipts + 1 and app.coin_wallet.balance == 50
+		and app._coin_flight._seen.size() == coin_receipts + 1 and app.coin_wallet.balance == BASE_COINS
 		and app._coin_counter.target == 0 and not app.chest.hold_effect_snapshot().opened_effect.active,
-		"The completed opening saves 50 coins and launches one flight before the counter increases")
+		"The completed opening saves the base chest coins and launches one flight before the counter increases")
 	check(app.model.chest_state == "opened" and _pieces(app) == 1 and is_zero_approx(app.chest.hold_effect_snapshot().release_flash),
 		"Finishing the actual opening claims exactly one piece")
 	check(app.audio._chest_rewarded and app._chest_reward_announced,
@@ -239,14 +240,14 @@ func _run() -> void:
 	check(_pieces(app) == 1 and not app.chest.hold_effect_snapshot().active,
 		"Repeated opening callbacks and a hold on the opened chest cannot duplicate the reward")
 	check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == coin_receipts + 1
-		and app._coin_counter.target == 50 and app.coin_wallet.balance == 50,
+		and app._coin_counter.target == BASE_COINS and app.coin_wallet.balance == BASE_COINS,
 		"Arriving coins finish at the saved total without repeated callbacks adding another flight or payout")
 	var saved = progress_script.new(directory + "/medals.cfg", directory + "/legacy.cfg")
 	check(saved.load_progress() and saved.count_for("spring-1") == 1,
 		"The single earned piece survives reloading the real save")
 	var saved_coins := Wallet.new(directory + "/coins.cfg")
-	check(saved_coins.load_state() and saved_coins.balance == 50,
-		"The first chest's 50 coins survive reloading the isolated wallet")
+	check(saved_coins.load_state() and saved_coins.balance == BASE_COINS,
+		"The first chest's base coins survive reloading the isolated wallet")
 
 	_win(app, 82)
 	_begin(app)
@@ -449,19 +450,19 @@ func _run() -> void:
 	app.chest.finish_immediately()
 	check(app._save_error and _pieces(app) == 0 and not app._chest_reward_announced
 		and not app.audio._chest_rewarded, "A failed reward save never announces a saved reward")
-	check(not app._coin_flight.snapshot().active and app.coin_wallet.balance == coins_before_retry + 50
-		and app._pending_coin_reward.amount == 50 and storage.writes == reward_writes,
+	check(not app._coin_flight.snapshot().active and app.coin_wallet.balance == coins_before_retry + BASE_COINS
+		and app._pending_coin_reward.amount == BASE_COINS and storage.writes == reward_writes,
 		"A saved coin receipt waits for the remaining chest save before its flight is announced")
 	app._retry_reward_save()
 	check(storage.writes == reward_writes and not app.audio._chest_rewarded,
 		"Repeated failed retries do not play a success sound")
 	check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == flights_before_retry
-		and app.coin_wallet.balance == coins_before_retry + 50,
+		and app.coin_wallet.balance == coins_before_retry + BASE_COINS,
 		"Failed retries neither replay a coin flight nor credit the saved receipt again")
 	app.on_page_hidden()
 	app.chest._advance_animation(60.0)
 	check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == flights_before_retry
-		and app.coin_wallet.balance == coins_before_retry + 50 and storage.writes == reward_writes,
+		and app.coin_wallet.balance == coins_before_retry + BASE_COINS and storage.writes == reward_writes,
 		"Backgrounding preserves the saved coins without hidden flights while chest settlement remains pending")
 	app.on_page_visible()
 	app.audio.set_muted(true)
@@ -471,7 +472,7 @@ func _run() -> void:
 	check(storage.writes == reward_writes + 1 and _pieces(app) == 1 and app.audio._chest_rewarded,
 		"An explicit successful retry after background/mute saves and announces the waiting reward once")
 	check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == flights_before_retry + 1
-		and app.coin_wallet.balance == coins_before_retry + 50 and app._coin_counter.target == coins_before_retry + 50,
+		and app.coin_wallet.balance == coins_before_retry + BASE_COINS and app._coin_counter.target == coins_before_retry + BASE_COINS,
 		"Successful settlement acknowledges already counted coins without a backward counter jump or replay after backgrounding")
 	app._advance_ui(2.0)
 	check(not app._coin_flight.snapshot().active and app._coin_counter.target == app.coin_wallet.balance,
@@ -672,9 +673,9 @@ func _check_release_commitment(directory: String) -> void:
 			and app.chest.hold_effect_snapshot().opened_glow > 0.0,
 			"The released opening saves once at its original deadline and keeps its themed glow")
 		check(app._coin_flight.snapshot().active and app._coin_flight.snapshot().flights == 1
-			and app._coin_flight._seen.size() == flights + 1 and app.coin_wallet.balance == coins + 50
+			and app._coin_flight._seen.size() == flights + 1 and app.coin_wallet.balance == coins + BASE_COINS
 			and app._coin_counter.target == coins and app.growth.snapshot().streaks == growth_before,
-			"Completion saves 50 coins and launches them before counting, without another learning attempt")
+			"Completion saves the base chest coins and launches them before counting, without another learning attempt")
 		app.chest_button.button_up.emit()
 		app.chest.cancel_open(true)
 		app._on_chest_opened()
@@ -684,29 +685,29 @@ func _check_release_commitment(directory: String) -> void:
 			and app.chest.hold_effect_snapshot().opened_glow > 0.0,
 			"Repeated releases and old callbacks cannot retract or duplicate the opened reward")
 		check(app._coin_flight.snapshot().flights == 1 and app._coin_flight._seen.size() == flights + 1
-			and app.coin_wallet.balance == coins + 50,
+			and app.coin_wallet.balance == coins + BASE_COINS,
 			"Old release and completion callbacks cannot duplicate the in-flight coins")
 		app._advance_ui(2.0)
-		check(not app._coin_flight.snapshot().active and app._coin_counter.target == coins + 50
-			and app.coin_wallet.balance == coins + 50 and _pieces(app) == pieces + 1 and storage.writes == writes + 1
+		check(not app._coin_flight.snapshot().active and app._coin_counter.target == coins + BASE_COINS
+			and app.coin_wallet.balance == coins + BASE_COINS and _pieces(app) == pieces + 1 and storage.writes == writes + 1
 			and app.growth.snapshot().streaks == growth_before,
 			"Coin arrivals finish at the saved balance without another chest write or learning attempt")
 		var cue_count: int = cues.size()
 		app.on_page_hidden()
 		app.chest._advance_animation(60.0)
-		check(not app._coin_flight.snapshot().active and app._coin_counter.target == coins + 50
-			and app.coin_wallet.balance == coins + 50,
+		check(not app._coin_flight.snapshot().active and app._coin_counter.target == coins + BASE_COINS
+			and app.coin_wallet.balance == coins + BASE_COINS,
 			"Backgrounding keeps the earned total without hidden coin flights")
 		app.on_page_visible()
 		app.chest.set_process(false)
 		app.chest._advance_animation(60.0)
 		check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == flights + 1
-			and app.coin_wallet.balance == coins + 50 and cues.size() == cue_count
+			and app.coin_wallet.balance == coins + BASE_COINS and cues.size() == cue_count
 			and _pieces(app) == pieces + 1 and storage.writes == writes + 1,
 			"Returning to the result retains coins without replaying their flight, chest cues or writes")
 		app.set_reduced_motion(true)
 		app.chest._advance_animation(60.0)
-		check(not app._coin_flight.snapshot().active and app._coin_counter.target == coins + 50
+		check(not app._coin_flight.snapshot().active and app._coin_counter.target == coins + BASE_COINS
 			and app._coin_flight._seen.size() == flights + 1,
 			"Changing motion preference preserves the earned counter without replaying the coins")
 		app.set_reduced_motion(false)
@@ -734,8 +735,8 @@ func _check_release_commitment(directory: String) -> void:
 			and app.audio._chest_players.all(func(player): return not player.playing),
 			interruption + " silently saves the committed opening without replaying its remaining sounds")
 		check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == flights
-			and app.coin_wallet.balance == coins + 50 and app._coin_counter.target == coins + 50,
-			interruption + " settles 50 coins directly into the counter without a hidden flight")
+			and app.coin_wallet.balance == coins + BASE_COINS and app._coin_counter.target == coins + BASE_COINS,
+			interruption + " settles base coins directly into the counter without a hidden flight")
 		match interruption:
 			"background": app.on_page_visible()
 			"More": app._hide_collection()
@@ -747,7 +748,7 @@ func _check_release_commitment(directory: String) -> void:
 			and app.chest.hold_effect_snapshot().opened_glow > 0.0,
 			"Returning from " + interruption + " retains the saved light without a late sound or duplicate reward")
 		check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == flights
-			and app.coin_wallet.balance == coins + 50,
+			and app.coin_wallet.balance == coins + BASE_COINS,
 			"Returning from " + interruption + " cannot replay or credit silently settled coins")
 
 	for interruption in ["background", "More"]:
@@ -804,7 +805,7 @@ func _check_release_commitment(directory: String) -> void:
 	check(_pieces(app) == pieces + 1 and storage.writes == writes_after_restart,
 		"Late callbacks from the skipped opening cannot award the next round")
 	check(not app._coin_flight.snapshot().active and app._coin_flight._seen.size() == flights_before_skip
-		and app.coin_wallet.balance == coins_before_skip + 50 and app._coin_counter.target == coins_before_skip + 50,
+		and app.coin_wallet.balance == coins_before_skip + BASE_COINS and app._coin_counter.target == coins_before_skip + BASE_COINS,
 		"Skipping to another round credits the earned coins once without a late flight")
 	app.audio.halt()
 	app.free()

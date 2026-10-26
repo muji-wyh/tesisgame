@@ -43,9 +43,9 @@ The Lv bar measures first-time word mastery, not partial practice streaks or cur
 | Phrase Builder | Every unique target word | Target words plus selected wrong words | Dragging, reordering, incomplete checks, replay, unused distractors |
 | Voice Pop | A successfully spoken live target | Explicit final wrong answer attributed to a live target | Silence, expiry, unbound or failed recognition, pause, exit |
 | Jelly Match | A successfully merged word-picture pair | Both words in a deliberately submitted mismatched pair | Tapping, cancelled drags, waiting, falling blocks |
-| Jelly Words | Collecting an independently completed stage word, once per collection | None; joining pieces is exploratory | Merging, tapping incomplete words, cancelled drags, waiting, falling blocks |
+| Jelly Words | A committed assessable-word collection, including Auto Collect and later pickups of automatically matched words | None; joining pieces is exploratory | Construction alone, tapping incomplete words, cancelled drags, waiting, falling blocks |
 
-Jelly Words records an eligible merged word when its collection commits, before reward presentation can pause or leave the board. A collection without a coin bonus still counts. A failed or cancelled collection does not count; an already-paid collection settled while switching modes retains its original learning receipt. Repeated callbacks and save retries cannot add another attempt for that pickup. The third correct attempt grants mastery under the shared rule. Image-free atomic words and assisted compositions remain practice without mastery evidence.
+Jelly Words records an assessable merged word when its collection commits, before reward presentation can pause or leave the board. A collection without a coin bonus still counts. Auto Collect also counts, including words constructed by Auto merge or a blast; automatic construction alone does not. A failed or cancelled collection does not count; an already-paid collection settled while switching modes retains its original learning receipt. Repeated callbacks and save retries cannot add another attempt for that pickup. The third correct attempt grants mastery under the shared rule. Image-free atomic words remain exposure-only. Per-attempt campaign quotas are separate from these permanent three-answer streaks.
 
 Modes other than Jelly Words gently favor words still being learned: a currently mastered word has a relative sampling weight of **0.8**, compared with **1.0** for an unmastered word. Both remain eligible and can appear together; mastery never removes review words from play. A wrong answer restores the normal weight even if the word previously earned lifetime experience. Gameplay retains the current learning-age pool, including only explicit prerequisite words needed by current-age phrases.
 
@@ -79,9 +79,9 @@ Existing reward, medal and Voice Pop chest saves are preserved. Legacy age choic
 
 The developer-only asset preview at `http://127.0.0.1:41774/` presents Baby and ten age compositions using Pip's existing layered production artwork and expressions. Start it with `npm run preview:pip`; it is not included in the published game or linked from gameplay. Baby and Age 3 share the existing gentle wave and Sprout greeting; later ages add the existing cumulative motions and click-to-hear Ava lines. Gameplay keeps feedback, pronunciation, pause, mute, reduced motion and chest timing. Extra Pip speech is explicitly requested rather than played as guidance. Source, license, composition and voice settings are documented in `docs/assets/pip-growth.md`.
 
-Jelly Words selects up to ten unmastered, independently assessable words at a time,
+Legacy unbound Jelly Words fixtures select three to eight assessable words at a time,
 starting with unfinished younger vocabulary and filling across ages as necessary.
-Each saved mastery removes that target from future supply and previews. It opens
+Each saved mastery stops creating new packets but retains already-issued completion partners. It opens
 the next stage only after all selected targets are mastered; failed saves remain
 retryable without false stage advancement. Professional stages use earned skill
 evidence from the selected ready module and retain their independent profile.

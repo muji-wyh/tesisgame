@@ -214,16 +214,17 @@ func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
 func _prepare_chest() -> void:
 	if _theme.is_empty() or _manifest.is_empty() or not is_inside_tree():
 		return
-	var id: String = str(_theme.get("id", "spring"))
-	_apply_chest_texture(_chest_for_theme(id))
+	var id: String = RewardProgress.theme_for_tier(1)
+	_apply_chest_texture(_chest_for_theme(id, 1))
 	# Warm the first reward before its four pieces come together.
-	_chest_for_theme(RewardProgress.theme_for_tier(maxi(1, game.chest_tier)))
-	_chest_for_theme(RewardProgress.theme_for_tier(maxi(2, game.chest_tier + 1)))
+	_chest_for_theme(RewardProgress.theme_for_tier(maxi(1, game.chest_tier)), maxi(1, game.chest_tier))
+	_chest_for_theme(RewardProgress.theme_for_tier(maxi(2, game.chest_tier + 1)), mini(RewardProgress.MAX_TIER, maxi(2, game.chest_tier + 1)))
 
-func _chest_for_theme(id: String) -> Texture2D:
+func _chest_for_theme(id: String, tier: int = 0) -> Texture2D:
 	if _manifest.is_empty() or not is_inside_tree():
 		return null
-	if not _chest_cache.has(id):
+	var key: String = "tier:%d" % clampi(tier, 1, RewardProgress.MAX_TIER) if tier > 0 else id
+	if not _chest_cache.has(key):
 		var viewport := SubViewport.new()
 		viewport.name = "JellyChest_" + id
 		viewport.size = Vector2i(768, 768)
@@ -234,12 +235,16 @@ func _chest_for_theme(id: String) -> Texture2D:
 		viewport.add_child(art)
 		art.size = Vector2(768, 768)
 		art.reduced_motion = true
-		art.configure_skin(Data.theme(id), _manifest)
-		_chest_cache[id] = {"viewport": viewport, "art": art, "frames": 0, "texture": viewport.get_texture(), "cropped": false}
-	return _chest_cache[id].texture
+		if tier > 0:
+			art.configure_tier(clampi(tier, 1, RewardProgress.MAX_TIER), Data.theme(id), _manifest)
+		else:
+			art.configure_skin(Data.theme(id), _manifest)
+		_chest_cache[key] = {"viewport": viewport, "art": art, "frames": 0, "texture": viewport.get_texture(), "cropped": false}
+	return _chest_cache[key].texture
 
 func _reward_texture(tier: int = -1) -> Texture2D:
-	return _chest_for_theme(RewardProgress.theme_for_tier(game.chest_tier if tier < 0 else tier))
+	var selected: int = clampi(game.chest_tier if tier < 0 else tier, 1, RewardProgress.MAX_TIER)
+	return _chest_for_theme(RewardProgress.theme_for_tier(selected), selected)
 
 func _apply_chest_texture(texture: Texture2D) -> void:
 	_chest_texture = texture
@@ -988,8 +993,13 @@ func _process(delta: float) -> void:
 		_chest_tap.clear()
 		_sync_chest_tap()
 		_refresh_danger()
-		if _pointer != NO_POINTER or _finish_is_pulling():
+		var paused_finish: bool = delta <= 0.5 and _paused_finish_allowed()
+		if _pointer != NO_POINTER or (_finish_is_pulling() and not paused_finish):
 			cancel_input()
+		if paused_finish:
+			_publish_elapsed += delta
+			if _publish_elapsed >= 0.1:
+				_publish()
 		return
 	# Pulling Finish owns this interaction, including the falling-board clock.
 	# Its elastic return advances independently so an early release resumes play.
@@ -1239,7 +1249,7 @@ func _chest_milestone(previous_tier: int, tier: int) -> void:
 	_chest_tap.clear()
 	_reward_presentation.reduced_motion = reduced_motion
 	_reward_presentation.enqueue(previous_tier, tier, _reward_texture(previous_tier), _reward_texture(tier))
-	_chest_for_theme(RewardProgress.theme_for_tier(tier + 1))
+	_chest_for_theme(RewardProgress.theme_for_tier(tier + 1), mini(RewardProgress.MAX_TIER, tier + 1))
 	_refresh_hud()
 	_refresh_controls()
 	_publish()
@@ -1276,21 +1286,27 @@ func _finish_pull_changed() -> void:
 	_publish()
 
 func _finish_pull_ready() -> void:
-	if _can_play() and _finish_is_pulling():
+	if (_can_play() or _paused_finish_allowed()) and _finish_is_pulling():
 		audio_requested.emit("finish_ready")
 		_publish()
 
 func _request_finish() -> void:
-	if _can_play() and _pointer == NO_POINTER and not _finish_is_pulling():
+	if (_can_play() or _paused_finish_allowed()) and _pointer == NO_POINTER and not _finish_is_pulling():
 		finish_requested.emit()
 
 
 func _request_pause() -> void:
-	if _can_play() and _pointer == NO_POINTER and not _finish_is_pulling():
+	if (_can_play() or _paused_finish_allowed()) and _pointer == NO_POINTER and not _finish_is_pulling():
 		pause_requested.emit()
 
+
+func _paused_finish_allowed() -> bool:
+	return finish_button.paused_state and not finish_button.disabled and _configured and _paused \
+		and game.phase == "playing" and is_visible_in_tree()
+
+
 func _finish_round() -> void:
-	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling():
+	if (not _can_play() and not _paused_finish_allowed()) or _pointer != NO_POINTER or _finish_is_pulling():
 		return
 	cancel_input()
 	game.finish_round()
@@ -1305,6 +1321,8 @@ func _refresh_hud() -> void:
 	var base: int = 4 + (displayed_tier - 1) * 5 if displayed_tier > 0 else 0
 	_loot_meter.set_progress(maxi(0, arrived - base), 5 if displayed_tier > 0 else 4, reduced_motion)
 	_loot_detail.text = "Upgrade chest" if displayed_tier > 0 else "Unlock chest"
+	if displayed_tier >= RewardProgress.MAX_TIER:
+		_loot_detail.text = "Maximum chest"
 	if is_instance_valid(_header_chest_level):
 		var level_text: String = "Lv%d" % displayed_tier
 		if _header_chest_level.text != level_text:
@@ -1331,9 +1349,9 @@ func _refresh_controls() -> void:
 	for cell: Dictionary in game.cells:
 		if _tiles.has(int(cell.id)):
 			_tiles[int(cell.id)].disabled = not _can_play() or _finish_is_pulling() or not _settled(cell)
-	finish_button.visible = _can_play() if finish_button.get_parent() != self else \
+	finish_button.visible = (_can_play() or finish_button.paused_state) if finish_button.get_parent() != self else \
 		_configured and game.phase == "playing"
-	finish_button.disabled = not _can_play() or _pointer != NO_POINTER
+	finish_button.disabled = (not _can_play() and not finish_button.paused_state) or _pointer != NO_POINTER
 	drop_button.visible = _configured and game.phase == "playing"
 	drop_button.disabled = not _can_play() or _finish_is_pulling() or not _can_drop_preview() or (_pointer != NO_POINTER and _preview_first_id < 0)
 	if drop_button.disabled:

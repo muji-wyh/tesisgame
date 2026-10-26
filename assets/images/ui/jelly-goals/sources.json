@@ -1,0 +1,71 @@
+{
+  "project": "Tabler Icons",
+  "version": "3.35.0",
+  "creator": "Paweł Kuna",
+  "license": "MIT",
+  "license_file": "assets/images/ui/LICENSE-Tabler.txt",
+  "assets": [
+    {
+      "id": "completed",
+      "file": "assets/images/ui/jelly-goals/completed.svg",
+      "source": "https://raw.githubusercontent.com/tabler/tabler-icons/v3.35.0/icons/outline/circle-check.svg",
+      "source_sha256": "f0f158c6028e8de9560c183971f31c5c22bc31c073c5c7bc600cb93d1099a541",
+      "integrated_sha256": "b455e6961ed593d344b5b0dd90c0eda766a09d1a2b692e412e32d183e15d0503",
+      "acquired": "2026-10-25",
+      "status": "Original source acquired, rasterized and visually inspected on white before presentation; copied with only currentColor replaced by white. Runtime integration is recorded separately from this acquisition record.",
+      "animation": "Static authored check icon; progress and achievement movement is scripted UI motion."
+    }
+  ],
+  "shared_illustrations": [
+    {
+      "id": "star",
+      "file": "assets/images/ui/jelly-goals/star.webp",
+      "reused_from": "assets/images/word-library/star.webp",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Star/3D/star_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT",
+      "record": "docs/assets/word-library.json",
+      "source_sha256": "b935cdf502b69054bc2b08e7ba4e4eaba6499564a2041dd77d6291e21bf8cfe8",
+      "integrated_sha256": "cfbd55db7e7d74c5d68c4f881bbdb7102488ad67d5a24bafc897f2866532f100",
+      "status": "Previously acquired production illustration reused byte-for-byte in the core UI; actual map ratings visually inspected in native desktop and phone captures.",
+      "animation": "Static source illustration; no source animation clips."
+    },
+    {
+      "id": "clock",
+      "file": "assets/images/ui/jelly-goals/clock.webp",
+      "reused_from": "assets/images/word-library/clock.webp",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Mantelpiece%20clock/3D/mantelpiece_clock_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT",
+      "record": "docs/assets/word-library.json",
+      "source_sha256": "32a2d7613c4d1d1cc300731e6029d0f2e50e4b8fb28cf52fc43c1f8c94ac7efd",
+      "integrated_sha256": "7290063e88daa234a1ac5b0a6906672270ab7388c4ee65e0760811716a0fe631",
+      "status": "Previously acquired and source-inspected illustration copied unchanged into the core UI for the extra-time item.",
+      "animation": "Static source illustration; no source animation clips."
+    }
+  ],
+  "reused_effects": {
+    "files": [
+      "assets/chests/particles/portal_glow.png",
+      "assets/chests/milestone/sparkle.png"
+    ],
+    "creator": "Kenneth Foldal Moe / Archanor VFX",
+    "source": "https://assetstore.unity.com/packages/vfx/particles/toon-fx-25601",
+    "version": "1.52",
+    "license": "Standard Unity Asset Store EULA",
+    "status": "Existing acquired private runtime inputs; reused without new downloads or source-package redistribution.",
+    "animation": "Static particle textures; bounded card-local movement is authored by the game."
+  },
+  "reused_audio": {
+    "file": "assets/audio/chest-kenney/reward.wav",
+    "creator": "Kenney",
+    "source": "https://kenney.nl/assets/interface-sounds",
+    "original": "Interface Sounds/Audio/confirmation_002.ogg",
+    "license": "CC0-1.0",
+    "record": "docs/assets/chest-kenney-audio.json",
+    "sha256": "3b951e35c313a97a12530965a8021439bbabb247f7d424a4df01c0fe6edc7275",
+    "seconds": 0.56,
+    "status": "Existing acquired and processed mono recording reused unchanged. Metadata, envelope and peak were inspected; no direct auditory review is claimed.",
+    "animation": "Not applicable (audio)."
+  }
+}

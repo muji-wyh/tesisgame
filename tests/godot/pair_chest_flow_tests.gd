@@ -1,4 +1,5 @@
 extends SceneTree
+const BASE_COINS: int = preload("res://scripts/coin_economy.gd").CHEST_BASE_COINS
 
 const Progress = preload("res://scripts/medal_progress.gd")
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
@@ -212,10 +213,10 @@ func check_reward(mode: String, slot: int) -> void:
 	app.set_reduced_motion(true)
 	app._open_chest()
 	check(app.model.chest_state == "opened" and pieces(app) == 1, mode + " opens the one saved chest")
-	check(app.chest.theme_id == RewardProgress.theme_for_tier(1) and app.coin_wallet.balance == 50
-		and app._coin_flight.snapshot().active, mode + " opening saves 50 coins and starts their flight from the ordinary chest")
+	check(app.chest.theme_id == RewardProgress.theme_for_tier(1) and app.coin_wallet.balance == BASE_COINS
+		and app._coin_flight.snapshot().active, mode + " opening saves the base chest coins and starts their flight")
 	app._on_chest_opened()
-	check(pieces(app) == 1 and app.coin_wallet.balance == 50 and app._coin_flight.snapshot().flights == 1,
+	check(pieces(app) == 1 and app.coin_wallet.balance == BASE_COINS and app._coin_flight.snapshot().flights == 1,
 		mode + " duplicate opening cannot duplicate contents or the coin flight")
 	app.queue_free()
 	await settle()
@@ -249,7 +250,7 @@ func check_failure(mode: String) -> void:
 	storage.writable = true
 	app._retry_storage()
 	check(not app._pair_save_failed and not app._pair_settlement_pending and pieces(app) == 1, mode + " retry actually commits pending exit settlement")
-	check(app.coin_wallet.balance == 50 and not app._coin_flight.snapshot().active,
+	check(app.coin_wallet.balance == BASE_COINS and not app._coin_flight.snapshot().active,
 		mode + " exit retry settles the same coin receipt without a hidden flight")
 	check(app.new_round(2, false, "", "phrase") and pieces(app) == 1, mode + " leaving midround settles its earned chest once")
 	app.queue_free()
@@ -300,7 +301,7 @@ func check_reload(mode: String) -> void:
 	check(pieces(app) == 1 and not app.model.chest_earned, mode + " reload settles prior treasure before a fresh round")
 	check(not discovery_playing(app) and not app._pair_reward.snapshot().discovery_visible,
 		mode + " recovering a saved reward never replays its discovery sound or caption")
-	check(app.coin_wallet.balance == 50 and not app._coin_flight.snapshot().active,
+	check(app.coin_wallet.balance == BASE_COINS and not app._coin_flight.snapshot().active,
 		mode + " reload recovery credits one saved chest without replaying its coin animation")
 	app.queue_free()
 	await settle()

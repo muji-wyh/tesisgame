@@ -5,6 +5,28 @@ Notable changes to Grow with Pip (formerly Pip and Words and Word Buddies), grou
 Entries describe behavior at their recorded revision, including features later
 removed. Use the [documentation index](docs/README.md) for current guidance.
 
+## 2026-10-26
+
+- Added a 99-stage scenic Jelly journey, persistent unlocks/replays, per-run word
+  quotas, workload-calibrated timer waves and three-phase best-star ratings.
+- Added automatic end sweeps and settlement/map return, journaled save recovery,
+  star-weighted clear receipts, and escalating-price 30-second extensions.
+- Added an untimed challenge whose vocabulary variety, supply frequency and real
+  incoming speed grow with collected words.
+- Added thirty true-3D modular chest tiers from nine acquired box families and
+  genuine sourced fittings; newly earned chest upgrades stop at Lv30.
+- Fixed practice cards retaining an earlier wide minimum and losing scroll range,
+  and retained already-issued partners so retired words cannot become dead blocks.
+- Added per-word progress gains, a bounded goal-achieved sparkle/confirmation and
+  a persistent Done check. Auto Collect and collected automatic matches count.
+- Made automatic item/blast matches extend combos and allowed same-word upgrades
+  above the cap to merge into Lv9 without losing input fragments or mass.
+- Changed Auto Collect to a 120 ms beat. Hit stop keeps freeze/slow motion without
+  dimming. Board Lv4–9 pickup bursts are smaller and omit falling embers; separate
+  top-popover fireworks and collection recordings are unchanged.
+- Replaced the pause dialog with an inline shade and Resume button, continuous
+  gentle gel tug and fixed hit target; removed its instruction tooltip.
+
 ## 2026-10-25
 
 - Added combo-bonus coins flying from their gold acknowledgement to the header,
