@@ -17,6 +17,7 @@ signal powerup_drag_started(payload: Dictionary)
 signal powerup_fragment_arrived(payload: Dictionary)
 signal drag_blocked(reason: String)
 signal combo_changed(state: Dictionary)
+signal boss_changed
 
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
@@ -24,6 +25,7 @@ const WordSampler = preload("res://scripts/word_sampler.gd")
 const CoinEconomy = preload("res://scripts/coin_economy.gd")
 const MorphologyResolver = preload("res://scripts/morphology_resolver.gd")
 const StageRun = preload("res://scripts/word_jelly_stage_run.gd")
+const BossRun = preload("res://scripts/word_jelly_boss_run.gd")
 const LABEL_FONT = preload("res://assets/fonts/heading.tres")
 const COLUMNS: int = 5
 const ROWS: int = 8
@@ -59,8 +61,8 @@ const CHEST_UNLOCK_FRAGMENTS: int = RewardProgress.CHEST_UNLOCK_FRAGMENTS
 const CHEST_UPGRADE_FRAGMENTS: int = RewardProgress.CHEST_UPGRADE_FRAGMENTS
 const EPSILON: float = 0.000001
 const POWERUP_PRICES: Dictionary = CoinEconomy.POWERUP_BASE_PRICES
-const POWERUP_MERGE_BEAT_SECONDS: float = 0.20
-const POWERUP_DRAG_SECONDS: float = 0.25
+const POWERUP_MERGE_BEAT_SECONDS: float = 0.16
+const POWERUP_DRAG_SECONDS: float = 0.18
 const POWERUP_FUSION_SECONDS: float = 0.11
 const POWERUP_SETTLE_SECONDS: float = 0.03
 const POWERUP_FRAGMENT_FLIGHT: float = 0.42
@@ -161,6 +163,11 @@ var _stage_spawn_interval: float = INITIAL_SPAWN_INTERVAL
 var _stage_pressure_level: int = 0
 var _stage_time_pending: String = ""
 var _stage_clear_feedback: float = 0.0
+var finish_feedback_ready: Callable
+var boss := BossRun.new()
+var merged_level_limit: int = MAX_MERGE_LEVEL
+var _boss_returning: Array[Dictionary] = []
+var _campaign_level_rules: bool = false
 
 
 func configure(words: Array, level: int, seed_value: int = -1) -> bool:
@@ -173,6 +180,10 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 		return false
 	_generation += 1
 	stage_run = null
+	boss.configure({})
+	merged_level_limit = MAX_MERGE_LEVEL
+	_boss_returning.clear()
+	_campaign_level_rules = false
 	_stage_ending = false
 	_stage_finalizing = false
 	_stage_pressure_level = 0
@@ -305,6 +316,10 @@ func bind_stage(plan: Dictionary) -> bool:
 		error = attempt.error
 		return false
 	stage_run = attempt
+	merged_level_limit = clampi(int(plan.get("merged_level_limit", MAX_MERGE_LEVEL)), 1, MAX_MERGE_LEVEL)
+	_campaign_level_rules = plan.has("merged_level_limit")
+	boss.configure(plan.get("boss", {}), int(plan.get("seed", 0)))
+	stage_run.boss_objective = boss.active() and not bool(boss.definition.get("intro", false))
 	_stage_spawn_interval = float(plan.spawn_interval)
 	fall_speed_scale = float(plan.fall_speed_scale)
 	if stage_run.kind == "challenge":
@@ -332,6 +347,8 @@ func _decide_stage(reason: String) -> void:
 		error = stage_run.error
 		return
 	_stage_ending = true
+	if boss.active():
+		boss.begin_ending("defeated" if stage_run.boss_defeated and stage_run.outcome == "cleared" else stage_run.outcome)
 	_stage_clear_feedback = 0.62 if stage_run.outcome == "cleared" else 0.0
 	_restore_dragged_tile()
 	_held_tile_id = -1
@@ -351,6 +368,10 @@ func _pump_stage_finish() -> void:
 		return
 	if _stage_clear_feedback > EPSILON:
 		return
+	if not boss.presentation_ready():
+		return
+	if finish_feedback_ready.is_valid() and not bool(finish_feedback_ready.call()):
+		return
 	_stage_finalizing = true
 	finish_round("cleared" if stage_run.outcome == "cleared" else "timeout" if stage_run.outcome == "timeout" \
 		else "danger" if stage_run.outcome == "blocked" else "finished")
@@ -368,6 +389,8 @@ func retry_stage_finish() -> void:
 func settle_stage_finish() -> bool:
 	if stage_run == null or phase == "finished":
 		return true
+	var feedback: Callable = finish_feedback_ready
+	finish_feedback_ready = Callable()
 	if not _stage_ending:
 		_decide_stage("exit")
 	var was_paused: bool = paused
@@ -377,6 +400,7 @@ func settle_stage_finish() -> bool:
 			break
 		step(0.05)
 	paused = was_paused
+	finish_feedback_ready = feedback
 	if phase != "finished" and error.is_empty() and not _has_pending_collection_commit():
 		error = "The remaining Jelly rewards could not finish. Choose Retry saving."
 	return phase == "finished"
@@ -405,6 +429,50 @@ func _sync_challenge_pressure() -> void:
 	_sense_resolvers.clear()
 	_words.assign(stage_run.words_for_pressure())
 	_schedule_spawn_interval()
+
+
+func boss_interactable(id: int, allow_locks: bool = true) -> bool:
+	return not boss.frozen(id) and (allow_locks or boss.locks(id) == 0)
+
+
+func _boss_candidates() -> Array[Dictionary]:
+	var candidates: Array[Dictionary] = []
+	for tile: Dictionary in cells:
+		var id: int = int(tile.id)
+		if id not in [_held_tile_id, _dragged_tile_id] and is_settled(tile) and not is_fusing(id) \
+			and not _reserved_for_powerup(id) and not _reserved_for_collection(id):
+			candidates.append(tile)
+	return candidates
+
+
+func _advance_boss(delta: float, running: bool) -> void:
+	if not boss.active():
+		return
+	if running:
+		for returning: Dictionary in _boss_returning.duplicate():
+			returning.remaining = maxf(0.0, float(returning.remaining) - delta)
+			if float(returning.remaining) <= EPSILON:
+				_supply.push_front(returning.tile)
+				boss.restore_jelly(int(returning.tile.id))
+				_boss_returning.erase(returning)
+				_fill_upcoming()
+	var before: int = boss._next_id
+	var impacts: Array[Dictionary] = boss.advance(delta, _boss_candidates(), running)
+	for impact: Dictionary in impacts:
+		var id: int = int(impact.target)
+		var tile: Dictionary = cell(id)
+		if tile.is_empty() or is_valid_word(tile):
+			continue
+		_boss_returning.append({"tile": tile.duplicate(true), "remaining": 1.4})
+		cells.remove_at(_index_for_id(id))
+		boss.forget(id)
+		_gravity_pending = true
+		if _has_free_cell():
+			full_elapsed = -1.0
+	if not boss.error.is_empty():
+		error = boss.error
+	if boss._next_id != before:
+		boss_changed.emit()
 
 
 func retire_mastered_words(word_ids: Array) -> void:
@@ -644,12 +712,13 @@ func _blast_target_ids(origin: Dictionary, level: int) -> Array[int]:
 	var inner: Array[int] = []
 	var outer: Array[int] = []
 	var selected: Array[int] = []
-	if level <= 1:
+	if level <= 1 and not _campaign_level_rules:
 		return selected
 	for tile: Dictionary in cells:
 		var id: int = int(tile.id)
 		if id == int(origin.get("id", -1)) or id in [_held_tile_id, _dragged_tile_id] \
-			or is_fusing(id) or is_lifted(id) or _reserved_for_collection(id) or _reserved_for_powerup(id):
+			or is_fusing(id) or is_lifted(id) or _reserved_for_collection(id) or _reserved_for_powerup(id) \
+			or not boss_interactable(id, false):
 			continue
 		var dx: int = absi(int(tile.column) - int(origin.column))
 		var dy: int = absi(int(tile.row) - int(origin.row))
@@ -664,12 +733,13 @@ func _blast_target_ids(origin: Dictionary, level: int) -> Array[int]:
 		return selected
 	if level <= 4:
 		_shuffle_blast_ids(inner)
-		selected.assign(inner.slice(0, mini(level - 1, inner.size())))
+		var count: int = [0, 2, 4, 6, 8][level] if _campaign_level_rules else level - 1
+		selected.assign(inner.slice(0, mini(count, inner.size())))
 		return selected
 	selected = inner
-	if level == 8:
+	if level == 8 or _campaign_level_rules and level == 7:
 		_shuffle_blast_ids(outer)
-		selected.append_array(outer.slice(0, mini(14, outer.size())))
+		selected.append_array(outer.slice(0, mini(4 if level == 7 else 14, outer.size())))
 	return selected
 
 
@@ -1102,9 +1172,23 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dic
 	_powerup_committing = false
 	var a: Dictionary = cell(a_id)
 	var b: Dictionary = cell(b_id)
+	if boss.frozen(a_id) or boss.frozen(b_id):
+		return "blocked"
 	var target_ready: bool = is_settled(b) or (held_source and not automatic and is_contactable(b))
 	if a.is_empty() or b.is_empty() or (not held_source and not is_settled(a)) or not target_ready or is_lifted(b_id):
 		return "ignored"
+	var locked: bool = boss.locks(a_id) > 0 or boss.locks(b_id) > 0
+	if locked:
+		if automatic:
+			return "blocked"
+		if parts_compatible(a, b) or parts_compatible(b, a):
+			boss.unlock_pair(a_id, b_id)
+			_restore_dragged_tile()
+			_held_tile_id = -1
+			cue_requested.emit("boss-unlock")
+			boss_changed.emit()
+			changed.emit()
+			return "unlocked"
 	# Validate spelling and the full result rectangle before consuming IDs.
 	var reverse: bool = automatic and bool(powerup_job.get("reverse", false))
 	var candidate: Dictionary = merge_candidate(b, a, false) if reverse else merge_candidate(a, b)
@@ -1118,6 +1202,9 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dic
 	if candidate.status == "needs_room":
 		return "needs_room"
 	if not candidate.status in ["partial", "complete"]:
+		if candidate.status == "level_locked":
+			drag_blocked.emit("Defeat the next Boss to unlock a higher merged level.")
+			return "level_locked"
 		var generation: int = _generation
 		_reset_combo()
 		if generation != _generation:
@@ -1209,6 +1296,8 @@ func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
 	if phase != "playing" or paused or powerup_active() or not _combo_pending.is_empty() or is_fusing(tile_id):
 		return false
 	var tile: Dictionary = cell(tile_id)
+	if boss.frozen(tile_id) or boss.locks(tile_id) > 0:
+		return false
 	if tile.is_empty() or not is_settled(tile) or not is_valid_word(tile) or is_lifted(tile_id):
 		return false
 	if not _collection_event_ids.has(tile_id):
@@ -1257,7 +1346,8 @@ func collectable_ids() -> Array[int]:
 	if phase != "playing":
 		return []
 	for tile: Dictionary in cells:
-		if is_valid_word(tile) and not is_fusing(int(tile.id)) and int(tile.id) != _held_tile_id:
+		if is_valid_word(tile) and not is_fusing(int(tile.id)) and int(tile.id) != _held_tile_id \
+			and not boss.frozen(int(tile.id)) and boss.locks(int(tile.id)) == 0:
 			candidates.append(tile)
 	candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool:
 		if int(a.row) != int(b.row):
@@ -1433,6 +1523,7 @@ func step(delta: float) -> void:
 		_resume_pending_motion()
 		_advance_collection_batch()
 		_advance_powerup()
+		_advance_boss(0.0, _stage_clock_running())
 		if not _can_continue(generation):
 			break
 		if _finishing_powerup and not powerup_active():
@@ -1442,6 +1533,8 @@ func step(delta: float) -> void:
 		var combo_running: bool = combo_count > 0 and not powerup_running and not _has_pending_collection_commit()
 		var stage_clock: bool = _stage_clock_running()
 		var consumed: float = remaining
+		if stage_clock:
+			consumed = minf(consumed, boss.next_boundary())
 		if stage_clock and stage_run.kind == "main":
 			consumed = minf(consumed, maxf(0.0, stage_run.remaining))
 		if combo_running:
@@ -1464,13 +1557,19 @@ func step(delta: float) -> void:
 				consumed = minf(consumed, maxf(0.0, boundary - float(active.elapsed)) / time_scale)
 		var full: bool = not _has_free_cell()
 		var ending_wait: bool = _finish_after_collection_commit or _stage_ending
-		var danger_running: bool = full and full_elapsed >= 0.0 and not powerup_running and not ending_wait and stage_run == null
+		if full and full_elapsed < 0.0 and _settling_remaining() <= EPSILON and not powerup_running and not ending_wait:
+			full_elapsed = 0.0
+			cue_requested.emit("danger")
+			if not _can_continue(generation):
+				break
+		var danger_running: bool = full and full_elapsed >= 0.0 and not powerup_running and not ending_wait \
+			and (stage_run == null or not collection_batch_active() and not _has_pending_collection_commit())
 		var next_second: float = minf(FULL_SECONDS, floorf(full_elapsed + EPSILON) + 1.0)
 		if danger_running:
 			consumed = minf(consumed, maxf(0.0, next_second - full_elapsed))
 		elif full and not powerup_running and not ending_wait:
 			var settling: float = _settling_remaining()
-			if stage_run == null or settling > EPSILON:
+			if settling > EPSILON:
 				consumed = minf(consumed, maxf(0.0, settling))
 		elif not powerup_running and not ending_wait:
 			consumed = minf(consumed, maxf(0.0, spawn_interval - spawn_elapsed))
@@ -1507,6 +1606,7 @@ func step(delta: float) -> void:
 			_stage_clear_feedback = maxf(0.0, _stage_clear_feedback - consumed)
 		if stage_clock:
 			stage_run.advance(consumed)
+		_advance_boss(consumed, stage_clock)
 		if combo_running:
 			_combo_remaining = maxf(0.0, _combo_remaining - consumed)
 			if _combo_remaining <= EPSILON:
@@ -1538,8 +1638,6 @@ func step(delta: float) -> void:
 				_decide_stage("cleared")
 			elif stage_clock and stage_run.check_deadline():
 				_decide_stage("timeout")
-			elif not powerup_active() and not _has_free_cell() and _settling_remaining() <= EPSILON and fusions.is_empty():
-				_decide_stage("blocked")
 		_pump_stage_finish()
 		if not _can_continue(generation):
 			break
@@ -1581,6 +1679,8 @@ func set_paused(value: bool) -> void:
 
 
 func set_held_tile(tile_id: int = -1) -> void:
+	if tile_id >= 0 and not boss_interactable(tile_id):
+		return
 	if powerup_active() or (not _combo_pending.is_empty() and tile_id >= 0) or (collection_batch_active() and tile_id >= 0):
 		return
 	var held_id: int = tile_id if _index_for_id(tile_id) >= 0 else -1
@@ -1598,6 +1698,9 @@ func set_held_tile(tile_id: int = -1) -> void:
 
 
 func begin_drag(tile_id: int) -> bool:
+	if not boss_interactable(tile_id):
+		drag_blocked.emit("This jelly thaws in a moment.")
+		return false
 	if _stage_ending or phase != "playing" or paused or not _combo_pending.is_empty() or powerup_active() or collection_batch_active() \
 		or tile_id != _held_tile_id or is_fusing(tile_id):
 		return false
@@ -1765,6 +1868,8 @@ func _drag_return_after_motion(anchor: Dictionary, additional: Dictionary = {}) 
 
 
 func can_reposition(tile_id: int, column: int, row: int) -> bool:
+	if not boss_interactable(tile_id):
+		return false
 	if _stage_ending or phase != "playing" or paused or not _combo_pending.is_empty() or powerup_active() or collection_batch_active() or is_fusing(tile_id):
 		return false
 	var tile: Dictionary = cell(tile_id)
@@ -1854,7 +1959,7 @@ func is_settled(tile: Dictionary) -> bool:
 
 
 func is_contactable(tile: Dictionary) -> bool:
-	if tile.is_empty() or is_fusing(int(tile.id)) or is_lifted(int(tile.id)):
+	if tile.is_empty() or is_fusing(int(tile.id)) or is_lifted(int(tile.id)) or not boss_interactable(int(tile.id)):
 		return false
 	if is_settled(tile):
 		return true
@@ -1923,7 +2028,7 @@ func snapshot() -> Dictionary:
 		"full_remaining": maxf(0.0, FULL_SECONDS - full_elapsed) if full_elapsed >= 0.0 else -1.0,
 		"collectable_ids": collectable_ids(),
 		"collection_batch": collection_batch_snapshot(),
-		"max_merge_level": MAX_MERGE_LEVEL,
+		"max_merge_level": merged_level_limit, "boss": boss.snapshot(),
 		"pip_level": pip_level, "auto_collect_unlocked": auto_collect_unlocked(),
 		"auto_collect_unlock_level": AUTO_COLLECT_UNLOCK_LEVEL,
 		"powerup": powerup_snapshot(),
@@ -2003,6 +2108,7 @@ func finish_round(reason: String = "finished") -> Dictionary:
 	_result.merge(reward_progress(fragment_count), true)
 	if stage_run != null:
 		_result["campaign"] = stage_run.snapshot()
+		_result["boss"] = boss.snapshot()
 	for word in _completed_words.values():
 		_result.words.append(word.duplicate(true))
 	var result: Dictionary = _result.duplicate(true)
@@ -2225,6 +2331,8 @@ func _resolve_composition(left: Dictionary, right: Dictionary) -> Dictionary:
 func merge_candidate(left: Dictionary, right: Dictionary, check_space: bool = true) -> Dictionary:
 	if left.is_empty() or right.is_empty() or int(left.get("id", -1)) == int(right.get("id", -2)):
 		return {"status": "invalid", "result": {}}
+	if boss.frozen(int(left.get("id", -1))) or boss.frozen(int(right.get("id", -1))):
+		return {"status": "blocked", "result": {}}
 	var left_kind: String = str(left.get("jelly_kind", "root"))
 	var right_kind: String = str(right.get("jelly_kind", "root"))
 	var tile: Dictionary = {}
@@ -2233,6 +2341,8 @@ func merge_candidate(left: Dictionary, right: Dictionary, check_space: bool = tr
 		var level: int = _merged_upgrade_level(left, right)
 		if level == 0:
 			return {"status": "invalid", "result": {}}
+		if level > merged_level_limit:
+			return {"status": "level_locked", "result": {}}
 		tile = _joined_word_tile(left, right, left.word, level,
 			bool(left.get("mastery_eligible", false)) or bool(right.get("mastery_eligible", false)))
 		merge_kind = "upgrade"
@@ -2319,7 +2429,8 @@ func authored_completion_plan(captured_only: bool = false) -> Dictionary:
 	var available: Array[Dictionary] = []
 	for tile: Dictionary in cells:
 		if not is_settled(tile) or is_fusing(int(tile.id)) or is_lifted(int(tile.id)) \
-			or (captured_only and not _powerup_ids.has(int(tile.id))) or _reserved_for_powerup(int(tile.id)):
+			or (captured_only and not _powerup_ids.has(int(tile.id))) or _reserved_for_powerup(int(tile.id)) \
+			or not boss_interactable(int(tile.id), false):
 			continue
 		available.append(tile)
 	if available.size() < 2:
@@ -2601,11 +2712,15 @@ func _spawn_drop() -> void:
 			for column in range(int(tile.column), int(tile.column) + int(tile.width)):
 				column_delays[column] = maxf(float(column_delays.get(column, -INF)), clearance)
 			slot_delays[slot] = maxf(float(slot_delays.get(slot, -INF)), departure + ARRIVAL_SLOT_CLEARANCE)
+	var dispatched: int = 0
 	for index in range(DROP_COUNT):
+		if boss.broken_remaining > EPSILON and dispatched >= 2:
+			break
 		if not advertised.has(index) or int(upcoming[index].get("id", -1)) != int(advertised[index]):
 			continue
 		if not _spawn_tile(true, index):
 			continue
+		dispatched += 1
 		var tile: Dictionary = cells.back()
 		tile.arrival_delay = maxf(float(tile.arrival_delay), float(slot_delays.get(index, 0.0)))
 		for column in range(int(tile.column), int(tile.column) + int(tile.width)):
@@ -2764,6 +2879,9 @@ func _complete_merge(completed: Dictionary) -> void:
 		if int(cells[index].id) in [int(a.id), int(b.id)]:
 			cells.remove_at(index)
 	var result: Dictionary = completed.result.duplicate(true)
+	boss.forget(int(a.id))
+	boss.forget(int(b.id))
+	boss.charge_merge(bool(completed.get("automatic", false)), is_valid_word(result))
 	# The fusion already ends at this reserved rectangle. Allow its final wobble
 	# to settle before accepting another drag or collection.
 	var held_for_drag: bool = bool(completed.get("held_for_drag", false))
@@ -2851,7 +2969,7 @@ func _complete_collection(completed: Dictionary) -> void:
 		stage_run.record_collection(str(completed.attempt_id), str(completed.word.id))
 		if stage_run.kind == "challenge":
 			_sync_challenge_pressure()
-		elif stage_run.current.has(str(completed.word.id)) \
+		elif not stage_run.boss_objective and stage_run.current.has(str(completed.word.id)) \
 			and int(stage_run.current[completed.word.id]) >= int(stage_run.goals[completed.word.id]):
 			_words = _words.filter(func(word: Dictionary) -> bool: return str(word.id) != str(completed.word.id))
 	if bool(completed.get("batch", false)) and int(completed.get("batch_id", -1)) == _collection_batch_serial:
@@ -2864,6 +2982,13 @@ func _complete_collection(completed: Dictionary) -> void:
 	var generation: int = _generation
 	_queue_collection_blast(completed)
 	_advance_combo(str(completed.attempt_id), 0, false)
+	if not _stage_ending:
+		boss.collect_hit(str(completed.attempt_id), int(completed.get("merge_level", 1)), combo_count,
+			{"column": int(completed.a.column), "row": int(completed.a.row)})
+		boss.forget(int(completed.a_id))
+		if stage_run != null and stage_run.boss_objective and boss.health == 0:
+			stage_run.boss_defeated = true
+			stage_run.decide("cleared")
 	if generation != _generation:
 		return
 	# A committed pickup owns its learning evidence, including paused settlement.

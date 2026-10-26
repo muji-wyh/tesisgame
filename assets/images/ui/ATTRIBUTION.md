@@ -1,5 +1,16 @@
 # Interface icons
 
+## Jelly journey controls
+
+The stage medallions and nine-slice challenge frame in `jelly-map/` are unmodified
+128px PNGs from Kenney's acquired **UI Pack - Adventure 1.1**, under CC0 1.0.
+The actual source preview and selected originals were inspected before integration.
+Original paths, hashes and the byte-identical license are in
+`jelly-map/sources.json` and `jelly-map/LICENSE-CC0.txt`.
+These assets are static; map placement, focus and rating feedback are game-authored.
+The challenge reuses the existing acquired Toon FX gold coin, with source and
+rights unchanged in `assets/coins/manifest.json`. No private source package is copied.
+
 ## Shared controls
 
 The SVGs in `controls/` are acquired Tabler Icons v3.35.0 artwork by

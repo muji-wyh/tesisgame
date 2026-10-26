@@ -199,13 +199,103 @@ A failed save keeps settlement open for retry.
 
 ## Jelly Words
 
-Jelly Words opens a scrollable **99-stage journey**, arranged as eleven scenic
-chapters of nine stages. Cleared stages can be replayed; only the next uncleared
+Jelly Words opens a scrollable **99-stage journey**, climbing from stage 1 at
+the bottom to stage 99 at the top, across eleven scenic chapters of nine stages.
+Entry focuses the current frontier. Acquired adventure medallions keep numbers
+and their three rating stars separate; the challenge uses an upright coin and
+nine-slice adventure panel. Cleared stages can be replayed; only the next uncleared
 stage is available beyond them. Each map node prominently shows its best
 one-, two- or three-star rating. Replaying cannot downgrade it or skip an unlock.
 Progress and frozen word recipes are separate for Everyday English and each
 professional career/module. A recipe remains replayable after its words have
 been mastered, provided the original reviewed identities are still available.
+
+### Bramble and the stolen Word Compass
+
+Jelly World now follows **Bramble**, a smug, mischievous rabbit who steals Pip's
+Word Compass. The same rival returns with a new trick at each encounter, so the
+chase has a recognizable opponent rather than unrelated disposable enemies.
+His teasing targets the chase and stolen treasure, never the learner's
+intelligence, English mistakes or personal characteristics.
+
+On a new journey, stage 1 first teaches ordinary construction and collection.
+After its real word goals are completed, Bramble ambushes Pip, claims the compass,
+laughs and escapes toward stage 9. This is a **story defeat**, not a failed
+learning assessment: committed learning, coins and treasure remain safe, stage 2
+opens normally, and no Boss-victory medal or merged-level unlock is fabricated.
+Existing saves keep their frontier and do not replay an unavoidable opening loss.
+
+| Boss stage | New trick and story beat | First-victory merged cap | Retreat |
+| --- | --- | --- | --- |
+| 9 | Freeze; Pip catches the compass thief's trail | Lv2 | Scrambles away |
+| 18 | Ink; a new crossing reveals that the compass can open hidden routes | Lv3 | Distracts Pip and slips away |
+| 27 | Two-layer locks; matching words break Bramble's locked passage | Lv4 | Pretends it was only a warm-up |
+| 36 | Shadow doubles; two collected-word hits disperse the decoys | Lv5 | Panics when his real identity is found |
+| 45 | Giant kick; Pip repairs the broken sky and continues the chase | Lv6 | Promises a new surprise farther ahead |
+| 63 | Snatch; Bramble grabs a construction piece, flings it away, and loses it back into Next | Lv7 | Runs off without taking earned words |
+| 81 | Borrowed shield; two hits break his last defensive trick | Lv8 | Leaves a final challenge at the castle |
+| 99 | Mixed-color storm; all the learned tricks combine in the last rematch | Lv9 | Returns the compass and admits defeat |
+
+Only the next **future** Boss is marked on the map. Every already-unlocked
+Boss stage retains its marker for rematches; later locked Boss locations are
+not all revealed. The opening encounter is marked at stage 1 until the chase
+begins. The map also shows the current merged-level cap.
+
+**Attacking:** a successfully committed merged-word collection fires an attack.
+Lv1 already deals 14 base damage; Lv2–Lv9 deal 38, 72, 116, 176, 248, 344, 464
+and 620. Manual construction charges the next shot, and an active combo adds
+damage. A pending/failed save and duplicate acknowledgement cannot fire another
+attack. Automatic construction still earns no learning by itself; collecting
+its completed word uses the normal learning rules and can attack. Boss stages
+clear by defeating Bramble, not by exhausting practice quotas; their complete
+reviewed word packets continue supplying partners until the fight ends.
+
+**Counterplay:** attacks have a visible wind-up and distinct blue, purple and
+golden projectiles. Their paths use a fixed launch/landing position and a
+gravity-shaped arc. Moving a targeted body, holding it, or accepting an operation
+before impact makes an obsolete shot miss rather than hit a different word.
+
+- Blue freeze prevents selection, dragging, matching and collection for exactly
+  three active-play seconds. A clock/progress effect counts down; a sourced
+  thaw burst restores the original body and its contents.
+- Purple ink obscures the picture and spelling for five active-play seconds.
+  It changes only presentation, not identity, legal matching, rewards or
+  collection. It never changes the underlying learning answer.
+- Golden locks cap at two. One and two padlocks have distinct visible markers.
+  Dragging either legal matching direction removes one lock from each locked
+  participant without consuming the pair, scoring a merge, paying combo coins or
+  recording learning. The next gesture after the last lock performs the real
+  merge. Invalid matches cannot unlock a body; a third lock does nothing.
+- The giant kick is telegraphed before impact. Its damaged sky dispatches at most
+  two actual bodies per requested or automatic batch for eight active seconds.
+  Advertised waiting partners are retained. The ordinary five-slot supply
+  returns at the exact boundary with repair feedback.
+- Snatch avoids held, fusing and promised bodies and does not confiscate completed
+  merged words. The grabbed piece visibly leaves the screen, then returns to
+  the head of the ordinary supply with its original identity and fragments.
+  It cannot orphan its spelling/picture partner or manufacture learning credit.
+
+Manual pause, hidden pages, pending saves and automatic operation ownership keep
+combat/status clocks consistent with the existing active-play rules. Reduced
+motion retains readable targeting/status marks without leaps, spins or particle
+travel. Freeze and lock state is cleared for the already-established terminal
+collection sweep, so the final overlay cannot strand a remaining merged word.
+
+On a loss, Bramble taunts and leaves a renewed challenge. On a win, Pip celebrates,
+the characters exchange a short readable reply, and Bramble's escape uses its
+encounter's scramble, distraction, swagger or panic style. His final defeat
+returns the compass. These performances finish before the ordinary Round
+complete/settlement sequence; rewards still use their original saved receipts.
+The vocal reaction is an acquired human laugh with subtitle dialogue, not a
+claim that every written line has a corresponding spoken recording.
+
+Every **first** Boss victory unlocks one further merged level after durable
+settlement. Replays pay their existing clear reward but never farm new levels.
+Unlocks follow the same Everyday/professional-module context separation as the
+journey. Version-one saves migrate without resetting recipes, stars, pending
+settlements or progress, and without inventing Boss wins for old ordinary clears.
+Players may revisit those unlocked stages to earn their new Boss medals.
+See [Bramble's source and animation record](../assets/jelly-boss/SOURCE.md).
 
 Stage 1 has three word goals, adding one per stage up to eight. Each attempt
 starts its counters at zero, separately from Pip's permanent three-answer
@@ -227,17 +317,38 @@ clearing before its first third earns three stars, before its second third earns
 two, and later earns one. Pauses, reading overlays, automatic sequences and
 pending saves do not consume active time. **+30 sec** costs 100 coins, then 150,
 200, 250 and so on per attempt; a saved purchase extends the deadline but never
-restores an expired star tier. A failed or duplicate purchase cannot charge twice.
+restores an expired star tier. Each rating star sits over its own countdown
+segment. Crossing a star boundary produces a short sourced sparkle and fading
+star rather than silently changing the rating. Reduced motion updates it still.
+A saved extension refills the remaining-time bar independently of the rating:
+the bar uses remaining seconds, while lost stars stay lost.
+A failed or duplicate purchase cannot charge twice.
 
-Completing every goal locks a clear. Timer expiry or a settled, blocked top
-locks a failure immediately. The remaining merged words are then automatically
+Completing every goal locks a clear; timer expiry locks a failure. A settled,
+blocked top starts the original **ten-second flashing warning**, not an immediate
+failure. Clearing space cancels that warning; pause and automatic/pending
+transactions freeze it. Its expiry locks a failure. The remaining merged words are then automatically
 collected; these cleanup pickups cannot change the locked goals, outcome or
 star rating. Existing reward/save rules apply, with Retry saving on failure.
+The same sourced frame warns during the final ten seconds of a stage deadline,
+even on a non-full board. If both warnings apply, the more urgent clock owns one
+frame rather than stacking flashes. Added time above ten seconds clears the
+deadline warning without changing the saved star thresholds.
+The Round complete/Game over overlay waits for every merged pickup and all
+its board bursts, reading-pop tails, treasure arrivals and coin flights to finish.
 After the end presentation, treasure opening and arrival-driven coins finish
 automatically, then the game saves the clear and returns to the map. A pending
 settlement survives reload and is recovered with its original receipt.
 Any older retained treasure is settled with its original quote before returning;
 it is not counted again in this attempt's star multiplier.
+Settlement lights earned stars one by one, shows the base-and-star multiplication,
+and animates stars toward the clear-coin count before those saved coins fly to
+the wallet. Refreshes, retries and background interruptions cannot replay payment.
+
+The in-game **Home** action asks before leaving a live campaign. Keep playing
+resumes the same attempt; Exit runs the normal merged-word sweep and settlement,
+then returns Home only after saving succeeds. Entering Jelly Words again opens
+its stage map rather than resuming the abandoned board.
 
 The separate **Endless Challenge** has no countdown and no numbered clear/star
 bonus. Every ten committed collections increases its wave: the active word
@@ -270,8 +381,11 @@ becomes merged as soon as its spelling is complete. Invalid combinations separat
 with elastic feedback and a negative sound, without creating a merged body.
 
 Merged Jellies show the word and its available picture, with a brighter rim and
-glints. Two merged Jellies of the same word add their levels, including different
-levels, capped at Lv9. For example, Lv2 plus Lv7 and Lv7 plus Lv5 both produce
+glints. New Jelly World journeys start with only Lv1 unlocked. Two merged
+Jellies of the same word add their levels, including different levels; a result
+above the current Boss-earned cap is rejected without consuming either body.
+Once Lv9 is unlocked, the final cap retains the existing mass-preserving behavior.
+For example, Lv2 plus Lv7 and Lv7 plus Lv5 both produce
 Lv9; all input fragments and mass survive. Levels 2–9 have an upper-right numeral.
 Each of the nine levels has a distinct collection effect and sound. Board
 Lv4–9 pickups use a compact, short outward burst without falling embers; their
@@ -379,6 +493,15 @@ then applies this footprint to current board bodies:
 | Lv8 | Two surrounding rings, capped at eight inner and fourteen outer bodies |
 | Lv9 | Every other available board body |
 
+Jelly World's Boss-progression rules strengthen the early support footprint:
+Lv1 marks **two** adjacent bodies, Lv2 four, Lv3 six, and Lv4 the complete
+one-cell ring. Lv5 retains its column identity and Lv6 its cross; Lv7 adds up
+to four outer-ring bodies to the full inner ring, Lv8 retains its capped two
+rings, and Lv9 retains the board. Frozen/locked/reserved bodies are not consumed
+by a paid or automatic matching plan. The older unbound model reference above
+remains for compatibility tests; active campaign/challenge play uses these
+stronger footprints. Coin odds and immutable wallet quotes are unchanged.
+
 Edges clip the footprint; absent neighbors are not replaced by distant bodies.
 Random selection does not favor bodies with a match and uses a separate stream
 from word supply and coin rolls. Held, already fusing and promised batch
@@ -424,7 +547,7 @@ Treasure costs 200, 300, then 400. Each item has its own successful-use count,
 and its button displays the next price. Treasure still distributes 2–8 fragments;
 Auto merge follows validated paths of root joins, picture matches and
 same-word upgrades whose output is capped at nine. It launches an eligible
-pair every 200 ms, with each 250 ms flight overlapping the following flight.
+pair every 160 ms, with each 180 ms flight overlapping the following flight.
 A dependent step waits for its
 required result to settle; independent pairs can launch while earlier merges
 continue. It leaves merged words for manual collection. Failed payments
@@ -437,13 +560,14 @@ Merge retains fusion sound effects without pronouncing its words. An accepted
 word tap also presents its picture and spelling above the board and pronounces
 it once. Picture-only jellies and complete spellings awaiting their picture also
 pronounce their word on a tap. Partial roots stay silent. Collect gathers ready
-words at 120 ms intervals without pronunciation. Each Auto Merge takes 250 ms
-to fly, 110 ms to fuse, and 30 ms to settle. Its 200 ms launch interval runs
-independently of that 390 ms sequence.
+words at 120 ms intervals without pronunciation. Each Auto Merge takes 180 ms
+to fly, 110 ms to fuse, and 30 ms to settle. Its 160 ms launch interval runs
+independently of that 320 ms sequence.
 Each reveal has its own randomly varied position and size, fits its picture and
 spelling, and enters with elastic squash and stretch. Successive reveals coexist
 and fade independently instead of replacing one another. They do not intercept
-board input and clear on pause, exit or round completion. Reduced motion keeps
+board input. Pauses freeze them; normal campaign completion waits for their tails
+instead of clearing them early. Reduced motion keeps
 the picture and spelling steady.
 
 The numbered campaign uses current learning-age or ready-module vocabulary,

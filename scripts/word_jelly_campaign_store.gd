@@ -2,7 +2,8 @@ extends RefCounted
 ## Progression and unpaid settlement journal; never grants coins or changes mastery.
 
 const Catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
-const VERSION: int = 1
+const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
+const VERSION: int = 2
 const MAX_CONTEXTS: int = 256
 const MAX_COMPLETED: int = 64
 const MAX_RESULT_FIELDS: int = 32
@@ -10,7 +11,7 @@ const MAX_COMPLETED_WORDS: int = 128
 const MAX_ID_LENGTH: int = 512
 const MAX_SAVE_BYTES: int = 2 * 1024 * 1024
 const MAX_SCALAR: int = 9007199254740991
-const CONTEXT_KEYS: Array[String] = ["highest_cleared", "recipes", "ratings", "pending", "completed"]
+const CONTEXT_KEYS: Array[String] = ["highest_cleared", "recipes", "ratings", "pending", "completed", "boss_victories"]
 const RESULT_KEYS: Array[String] = ["kind", "number", "outcome", "stars"]
 const TIME_FIELDS: Array[String] = ["time_elapsed", "seconds_remaining", "seconds_total", "seconds_added"]
 const TRANSIENT_FIELDS: Array[String] = ["words", "practice", "image", "audio", "morphology",
@@ -48,9 +49,14 @@ func load_state() -> bool:
 			or not config.has_section("campaign") or config.get_section_keys("campaign").size() != 2:
 			return _fail("Your campaign save could not be understood. It has not been reset.")
 		var version: Variant = config.get_value("campaign", "version", null)
-		if not version is int or version != VERSION:
+		if not version is int or version not in [1, VERSION]:
 			return _fail("This campaign save needs a supported version.")
 		var contexts: Variant = config.get_value("campaign", "contexts", null)
+		if version == 1 and contexts is Dictionary:
+			contexts = contexts.duplicate(true)
+			for state: Variant in contexts.values():
+				if state is Dictionary and state.size() == 5 and not state.has("boss_victories"):
+					state["boss_victories"] = []
 		var validation_error: String = _contexts_error(contexts)
 		if not validation_error.is_empty():
 			return _fail(validation_error)
@@ -88,6 +94,16 @@ func best_stars(context: String, number: int) -> int:
 		_fail("Choose a main stage from 1 to 99 before reading its stars.")
 		return 0
 	return int(_context(context).ratings.get(str(number), 0))
+
+
+func boss_victories(context: String) -> Array:
+	if not _readable(context):
+		return []
+	return _context(context).boss_victories.duplicate()
+
+
+func merged_level(context: String) -> int:
+	return BossCatalog.merged_level(boss_victories(context))
 
 
 func recipe(context: String, number: int) -> Dictionary:
@@ -189,6 +205,9 @@ func complete_result(context: String, round_id: String) -> bool:
 		changed.highest_cleared = maxi(highest, number)
 		var key: String = str(number)
 		changed.ratings[key] = maxi(int(changed.ratings.get(key, 0)), int(result.stars))
+		if bool(result.get("boss_victory", false)) and int(result.boss_id) not in changed.boss_victories:
+			changed.boss_victories.append(int(result.boss_id))
+			changed.boss_victories.sort()
 	changed.completed.append({"round_id": round_id, "result_hash": _result_hash(result)})
 	while changed.completed.size() > MAX_COMPLETED:
 		changed.completed.pop_front()
@@ -326,7 +345,7 @@ func _can_add_context(context: String) -> bool:
 
 func _context(context: String) -> Dictionary:
 	return _contexts.get(context, {"highest_cleared": 0, "recipes": {}, "ratings": {},
-		"pending": {}, "completed": []})
+		"pending": {}, "completed": [], "boss_victories": []})
 
 
 func _contexts_error(value: Variant) -> String:
@@ -350,6 +369,14 @@ func _context_error(value: Variant) -> String:
 		or not value.completed is Array or value.completed.size() > MAX_COMPLETED \
 		or not value.pending is Dictionary:
 		return "Your campaign contains an invalid frontier, recipe collection, ratings or journal."
+	if not value.boss_victories is Array or value.boss_victories.size() > BossCatalog.STAGES.size():
+		return "Your campaign contains invalid Boss victory evidence."
+	var previous_boss: int = 0
+	for id: Variant in value.boss_victories:
+		if not id is int or id <= previous_boss or id > BossCatalog.STAGES.size() \
+			or BossCatalog.STAGES[id - 1] > int(value.highest_cleared):
+			return "Boss victories must be distinct, ordered and belong to cleared stages."
+		previous_boss = id
 	for key: Variant in value.recipes:
 		var number: int = _stage_key(key)
 		if number == 0 or number > mini(int(value.highest_cleared) + 1, Catalog.MAX_STAGE):
@@ -399,6 +426,11 @@ func _result_error(value: Variant, context: Dictionary) -> String:
 			return "A main settlement needs its unlocked, reserved stage recipe."
 		if (value.stars == 0 if value.outcome == "cleared" else value.stars != 0):
 			return "Only a cleared main stage earns one, two or three stars."
+	if value.get("boss_victory", false):
+		if not value.get("boss_victory") is bool or value.kind != "main" or value.outcome != "cleared" \
+			or not value.get("boss_id") is int or value.boss_id < 1 or value.boss_id > BossCatalog.STAGES.size() \
+			or BossCatalog.STAGES[value.boss_id - 1] != value.number:
+			return "A Boss unlock needs the original cleared Boss stage and its matching encounter identity."
 	for key: Variant in value:
 		if not key is String or key.is_empty() or key.length() > 64 or not _field_name(key):
 			return "Settlement field names must be bounded stable identifiers."

@@ -1,6 +1,6 @@
 const fs = require('node:fs');
 const { test, expect } = require('@playwright/test');
-const { openGame, enterGame, openModeMenu, activateLibraryControl, metrics, tap, seedPipLevel } = require('./game-ui.cjs');
+const { openGame, enterGame, openModeMenu, activateLibraryControl, waitForCampaignMap, metrics, tap, seedPipLevel } = require('./game-ui.cjs');
 const { seedCampaign } = require('./jelly-campaign-fixture.cjs');
 
 test.use({ trace: 'off' });
@@ -25,8 +25,7 @@ async function pressMapControl(page, control) {
 async function openMap(page) {
   await openModeMenu(page);
   await activateLibraryControl(page, 'Mode_word_jelly');
-  await expect.poll(async () => (await jelly(page)).campaign_map?.visible).toBe(true);
-  return (await jelly(page)).campaign_map;
+  return waitForCampaignMap(page);
 }
 
 async function startStage(page) {
@@ -93,7 +92,39 @@ async function waitForMap(page) {
 }
 
 async function capture(page, info, name) {
-  await page.screenshot({ path: info.outputPath(`${name}.png`) });
+  await page.screenshot({ path: info.outputPath(`${name}.png`), scale: 'css' });
+}
+
+async function observeFinish(page) {
+  await page.evaluate(() => {
+    const status = document.getElementById('game-status');
+    const reward = document.getElementById('jelly-reward-status');
+    window.campaignFinishFrames = [];
+    window.campaignFeedbackImages = {};
+    const record = () => {
+      const state = JSON.parse(status.dataset.jelly || '{}');
+      const room = JSON.parse(reward.dataset.snapshot || '{}');
+      const feedback = room.stage_feedback || {};
+      if (room.visible && feedback.phase === 'stars' && feedback.star_elapsed >= 0.35 &&
+          feedback.star_elapsed <= 0.7 && !window.campaignFeedbackImages.stars)
+        window.campaignFeedbackImages.stars = document.getElementById('canvas').toDataURL('image/png').split(',')[1];
+      if (room.visible && feedback.phase === 'bonus' && feedback.bonus_elapsed >= 0.16 &&
+          feedback.bonus_elapsed <= 0.5 && !window.campaignFeedbackImages.multiplier)
+        window.campaignFeedbackImages.multiplier = document.getElementById('canvas').toDataURL('image/png').split(',')[1];
+      window.campaignFinishFrames.push({
+        ending: state.game_over_sequence?.active || false,
+        effects: state.collection_effects?.active_count || 0,
+        reveals: state.word_reveal?.active_count || 0,
+        collectable: state.collectable_ids?.length || 0,
+        fusions: state.fusions?.length || 0,
+        feedback: room.stage_feedback || {}
+      });
+    };
+    window.campaignFinishObserver = new MutationObserver(record);
+    window.campaignFinishObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+    window.campaignFinishObserver.observe(reward, { attributes: true, attributeFilter: ['data-snapshot'] });
+    record();
+  });
 }
 
 test('campaign quotas clear, sweep leftovers, save stars and unlock the next stage', async ({ page }, info) => {
@@ -101,6 +132,7 @@ test('campaign quotas clear, sweep leftovers, save stars and unlock the next sta
   await seedCampaign(page);
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
   await startStage(page);
+  await observeFinish(page);
   const opening = await jelly(page);
   expect(opening.campaign.goals).toEqual({ cat: 1, dog: 1, duck: 1 });
   expect(opening.campaign.stars_now).toBe(3);
@@ -128,6 +160,11 @@ test('campaign quotas clear, sweep leftovers, save stars and unlock the next sta
   await capture(page, info, 'campaign-goal-done');
   await collect(page, await mergeWord(page, 'dog'));
   await collect(page, await mergeWord(page, 'duck'));
+  await expect.poll(() => page.evaluate(() => Boolean(window.campaignFeedbackImages.stars &&
+    window.campaignFeedbackImages.multiplier)), {
+    timeout: 45000, intervals: [25],
+    message: 'Capture both visible award phases in-page without screenshot latency skipping the short multiplier'
+  }).toBe(true);
   const map = await waitForMap(page), finished = await jelly(page), room = await rewards(page);
   expect(finished.campaign.outcome).toBe('cleared');
   expect(finished.cleared_pairs).toBe(4);
@@ -141,6 +178,24 @@ test('campaign quotas clear, sweep leftovers, save stars and unlock the next sta
   expect(quote.bonus).toBe((quote.chest_coins + 75) * 2 - quote.chest_coins);
   const coins = (await wallet(page)).balance;
   expect(coins).toBe(quote.total + finished.collected_coins + finished.combo.coins);
+  const { frames, images } = await page.evaluate(() => {
+    window.campaignFinishObserver.disconnect();
+    return { frames: window.campaignFinishFrames, images: window.campaignFeedbackImages };
+  });
+  expect(images.stars, 'The earned-star effect has real rendered evidence during its visible phase').toBeTruthy();
+  expect(images.multiplier, 'The multiplier glow and coin count-up have real rendered evidence before wallet flight').toBeTruthy();
+  for (const [name, image] of Object.entries(images))
+    fs.writeFileSync(info.outputPath(`settlement-${name}-effect.png`), Buffer.from(image, 'base64'));
+  expect(frames.some(frame => frame.feedback.phase === 'stars')).toBe(true);
+  expect(frames.some(frame => frame.feedback.phase === 'bonus')).toBe(true);
+  expect(frames.some(frame => frame.feedback.formula?.includes('×2'))).toBe(true);
+  expect(frames.some(frame => frame.ending), 'The normal end overlay still appears after the effects finish').toBe(true);
+  for (const frame of frames.filter(frame => frame.ending)) {
+    expect(frame.effects, 'Round complete cannot cover a remaining board effect').toBe(0);
+    expect(frame.reveals, 'Round complete cannot cut off a reading-pop firework').toBe(0);
+    expect(frame.collectable, 'Every merged word is collected before the end overlay').toBe(0);
+    expect(frame.fusions, 'No accepted collection is still waiting to commit').toBe(0);
+  }
   await capture(page, info, 'campaign-earned-stars-map');
   fs.writeFileSync(info.outputPath('campaign-clear.json'), JSON.stringify({ opening, finished, map, room, coins }, null, 2));
   await page.reload();
@@ -152,18 +207,87 @@ test('campaign quotas clear, sweep leftovers, save stars and unlock the next sta
   expect(errors).toEqual([]);
 });
 
+test('the map climbs upwards and Home confirms before collecting, settling and returning to the library', async ({ page }, info) => {
+  test.setTimeout(240000);
+  await seedCampaign(page, { quota: 2 });
+  const errors = await openGame(page, { reducedMotion: 'no-preference' });
+  const map = await openMap(page);
+  fs.writeFileSync(info.outputPath('map-entry-state.json'), JSON.stringify({ map, bounds: await metrics(page) }, null, 2));
+  for (let number = 2; number <= 99; number++) {
+    expect(stage(map, number).rect.y, 'Later stages are above earlier stages, including chapter boundaries')
+      .toBeLessThan(stage(map, number - 1).rect.y);
+  }
+  expect(map.heading_rect.x, 'The real Home icon leaves room for the complete title')
+    .toBeGreaterThanOrEqual(map.home.rect.x + map.home.rect.width);
+  await capture(page, info, 'ascending-map-new-controls');
+  await pressMapControl(page, stage(map, 1));
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.visible && state.tiles.length === 15 && state.tiles.every(tile => tile.settled);
+  }).toBe(true);
+  await mergeWord(page, 'cat');
+  await mergeWord(page, 'dog');
+  const before = await jelly(page);
+  expect(before.collectable_ids.length).toBeGreaterThanOrEqual(2);
+  const home = (await metrics(page)).growth.controls.find(control => control.name === 'Home' && control.visible);
+  expect(home).toBeTruthy();
+  await pressRect(page, home.rect);
+  await expect.poll(async () => (await jelly(page)).finish_confirmation.visible).toBe(true);
+  const paused = await jelly(page);
+  expect(paused.campaign.outcome).toBe('');
+  expect((await metrics(page)).library.visible).toBe(false);
+  await capture(page, info, 'jelly-exit-confirmation');
+  await pressRect(page, paused.finish_confirmation.keep_playing.rect);
+  await expect.poll(async () => (await jelly(page)).paused).toBe(false);
+  expect((await jelly(page)).round_id).toBe(before.round_id);
+  await observeFinish(page);
+  await pressRect(page, home.rect);
+  await expect.poll(async () => (await jelly(page)).finish_confirmation.visible).toBe(true);
+  await pressRect(page, (await jelly(page)).finish_confirmation.confirm.rect);
+  await expect.poll(async () => (await metrics(page)).library.visible, { timeout: 90000 }).toBe(true);
+  const finished = await jelly(page);
+  expect(finished.phase).toBe('finished');
+  expect(finished.campaign.outcome).toBe('exit');
+  expect(finished.cleared_pairs).toBeGreaterThanOrEqual(before.collectable_ids.length);
+  const frames = await page.evaluate(() => {
+    window.campaignFinishObserver.disconnect();
+    return window.campaignFinishFrames;
+  });
+  expect(frames.some(frame => frame.effects > 0 || frame.reveals > 0)).toBe(true);
+  expect(frames.some(frame => frame.ending)).toBe(true);
+  for (const frame of frames.filter(frame => frame.ending)) {
+    expect(frame.effects).toBe(0);
+    expect(frame.reveals).toBe(0);
+    expect(frame.collectable).toBe(0);
+    expect(frame.fusions).toBe(0);
+  }
+  await activateLibraryControl(page, 'Mode_word_jelly');
+  await expect.poll(async () => (await jelly(page)).campaign_map.visible).toBe(true);
+  expect((await jelly(page)).visible).toBe(false);
+  await capture(page, info, 'jelly-reentry-stage-map');
+  expect(errors).toEqual([]);
+});
+
 test('extra time escalates without restoring stars and a paused pull finishes its sweep', async ({ page }, info) => {
   test.setTimeout(180000);
   await seedCampaign(page, { seconds: 12, quota: 2, balance: 750 });
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
   await startStage(page);
   await expect.poll(async () => (await jelly(page)).campaign.stars_now).toBe(2);
+  await capture(page, info, 'extra-time-before-purchase');
   for (const [index, price] of [100, 150].entries()) {
     const state = await jelly(page);
     expect(state.powerup_buttons.extra_time.price).toBe(price);
     await pressRect(page, state.powerup_buttons.extra_time.rect);
     await expect.poll(async () => (await jelly(page)).campaign.seconds_added).toBe((index + 1) * 30);
-    expect((await jelly(page)).campaign.stars_now).toBeLessThanOrEqual(2);
+    if (state.stage.timer_ratio < 0.999) {
+      await expect.poll(async () => (await jelly(page)).stage.timer_ratio,
+        { message: 'Saved extra time visibly refills the remaining-time bar' }).toBeGreaterThan(state.stage.timer_ratio);
+    } else {
+      await expect.poll(async () => (await jelly(page)).stage.timer_ratio).toBe(1);
+    }
+    expect((await jelly(page)).campaign.stars_now).toBeLessThanOrEqual(state.campaign.stars_now);
+    await capture(page, info, `extra-time-refilled-${index + 1}`);
   }
   expect((await wallet(page)).balance).toBe(500);
   const merged = await mergeWord(page, 'cat');
@@ -190,12 +314,17 @@ test('extra time escalates without restoring stars and a paused pull finishes it
   expect(errors).toEqual([]);
 });
 
-test('a timeout cannot turn its cleanup pickup into goal credit or an unlock', async ({ page }) => {
+test('a timeout warns with the board border and cannot turn cleanup into goal credit or an unlock', async ({ page }, info) => {
   test.setTimeout(150000);
   await seedCampaign(page, { seconds: 20, quota: 2 });
   const errors = await openGame(page);
   await startStage(page);
   await mergeWord(page, 'cat');
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.campaign.seconds_remaining <= 10 && state.danger.active && state.danger.source === 'stage';
+  }, { timeout: 30000 }).toBe(true);
+  await capture(page, info, 'stage-final-ten-second-border');
   const map = await waitForMap(page), finished = await jelly(page);
   expect(finished.campaign.outcome).toBe('timeout');
   expect(finished.cleared_pairs).toBe(1);

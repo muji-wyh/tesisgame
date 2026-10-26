@@ -515,15 +515,15 @@ func _test_powerup_auto_timeline() -> void:
 	check(model.powerup_snapshot().source.text == "cat" and model.powerup_snapshot().drags[0].source.text == "cat"
 		and model.cell(1000).fragments == 2,
 		"presentation snapshots cannot mutate the captured power or live bodies")
-	check(is_equal_approx(Model.POWERUP_DRAG_SECONDS, 0.25), "each automatic drag uses the complete 250 ms transfer")
-	check(is_equal_approx(Model.POWERUP_MERGE_BEAT_SECONDS, 0.20), "Automatic launches follow the requested 200 ms beat")
+	check(is_equal_approx(Model.POWERUP_DRAG_SECONDS, 0.18), "Each automatic drag uses the complete 180 ms transfer")
+	check(is_equal_approx(Model.POWERUP_MERGE_BEAT_SECONDS, 0.16), "Automatic launches follow the faster 160 ms beat")
 	model.step(Model.POWERUP_DRAG_SECONDS - 0.001)
 	check(model.powerup_snapshot().stage == "drag" and model.fusions.is_empty() and model.cells.size() == 2,
 		"both bodies remain separate for the complete transfer before its final millisecond")
 	model.step(0.001)
 	check(model.powerup_snapshot().stage == "fusion" and model.fusions.size() == 1
 		and model.fusions[0].a_id == 1000 and model.fusions[0].b_id == 1001,
-		"250 ms starts the automatic fusion using the advertised ordered endpoints")
+		"180 ms starts the automatic fusion using the advertised ordered endpoints")
 	model.step(Model.POWERUP_FUSION_SECONDS - 0.001)
 	check(model.cells.size() == 2 and model.powerup_active(), "paid fusion keeps its complete 110 ms presentation")
 	model.step(0.001)
@@ -554,20 +554,20 @@ func _test_powerup_auto_rhythm() -> void:
 	check(model.activate_powerup("auto_merge"), "One saved purchase starts the first complete hybrid path")
 	model.step(Model.POWERUP_MERGE_BEAT_SECONDS - 0.001)
 	check(events.drags.size() == 1 and model.powerup_snapshot().drags.size() == 1,
-		"Auto keeps the next independent flight pending until its 200 ms launch boundary")
+		"Auto keeps the next independent flight pending until its 160 ms launch boundary")
 	model.step(0.001)
 	var overlapping: Dictionary = model.powerup_snapshot()
 	check(events.drags.size() == 2 and overlapping.drags.size() == 2 and model.fusions.is_empty(),
-		"the second independent flight starts at 200 ms while the first is still traveling")
+		"The second independent flight starts at 160 ms while the first is still traveling")
 	if overlapping.drags.size() == 2:
-		check(is_equal_approx(float(overlapping.drags[0].elapsed), 0.20)
+		check(is_equal_approx(float(overlapping.drags[0].elapsed), Model.POWERUP_MERGE_BEAT_SECONDS)
 			and is_zero_approx(float(overlapping.drags[1].elapsed)),
 			"overlapping flights retain independent elapsed times")
 	for frame in range(600):
 		model.step(0.01)
 		var active_drags: Array = model.powerup_snapshot().drags
 		check(model.fusions.size() <= 1 and active_drags.size() <= 2,
-			"the 200 ms beat allows two 250 ms flights while keeping each fusion independent")
+			"The 160 ms beat allows two overlapping 180 ms flights while keeping each fusion independent")
 		var reserved_ids: Array[int] = []
 		for drag: Dictionary in active_drags:
 			for id: int in [int(drag.source_id), int(drag.target_id)]:
@@ -585,9 +585,9 @@ func _test_powerup_auto_rhythm() -> void:
 		check(model.parts_compatible(drag.source, drag.target), "Every Auto launch is a valid whole-word picture pair")
 		check(model.is_settled(drag.source) and model.is_settled(drag.target),
 			"each launch captures settled endpoints before reserving them for its flight")
-		check(is_equal_approx(float(drag.started_at), index * 0.20)
-			and is_equal_approx(float(drag.duration), 0.25),
-			"the three independent flights start at 0, 200 and 400 ms and each lasts 250 ms")
+		check(is_equal_approx(float(drag.started_at), index * Model.POWERUP_MERGE_BEAT_SECONDS)
+			and is_equal_approx(float(drag.duration), Model.POWERUP_DRAG_SECONDS),
+			"The three independent flights start at 0, 160 and 320 ms and each lasts 180 ms")
 	check(_board_fragments(model) == 21 and regular_events.attempts.is_empty() and regular_events.collections.is_empty(),
 		"Automatic picture matching conserves every fragment without collecting or claiming mastery")
 	_assert_board(model, "overlapping automatic final board")
@@ -684,8 +684,8 @@ func _test_powerup_auto_chain() -> void:
 	for index in range(events.drags.size()):
 		var drag: Dictionary = events.drags[index]
 		check(model.is_settled(drag.source) and model.is_settled(drag.target)
-			and is_equal_approx(float(drag.started_at), index * 0.20),
-			"independent matches and the dependent level upgrade launch on the 200 ms grid with settled endpoints")
+			and is_equal_approx(float(drag.started_at), index * Model.POWERUP_MERGE_BEAT_SECONDS),
+			"Independent matches and the dependent level upgrade launch on the 160 ms grid with settled endpoints")
 	check(model.generated_tiles == generated and model.collected_coins == 0 and model.fragment_count == 0
 		and regular_events.collections.is_empty(), "automatic merging consumes only captured board pieces and never collects them")
 	_assert_board(model, "paid automatic chain")
@@ -742,26 +742,27 @@ func _test_powerup_auto_interleaved_authored_paths() -> void:
 	var first_word: String = str(events.drags[0].source.text) + str(events.drags[0].target.text)
 	check(pictures.has(first_word) and model._reserved_for_powerup(int(pictures.get(first_word, -1))),
 		"the first authored path reserves its future picture before the spelling has reached contact")
-	model.step(0.20)
+	model.step(Model.POWERUP_MERGE_BEAT_SECONDS)
 	check(events.drags.size() == 2 and model.powerup_snapshot().drags.size() == 2,
-		"an independent authored spelling begins at 200 ms before the first spelling finishes")
+		"An independent authored spelling begins at 160 ms before the first spelling finishes")
 	var spellings: Array[String] = []
 	for drag: Dictionary in events.drags:
 		spellings.append(str(drag.source.text) + str(drag.target.text))
 	spellings.sort()
 	check(spellings == ["rainbow", "sunflower"],
 		"a competing root pair cannot start another path using the already reserved picture")
-	model.step(0.19)
+	model.step(Model.POWERUP_DRAG_SECONDS + Model.POWERUP_FUSION_SECONDS + Model.POWERUP_SETTLE_SECONDS
+		- Model.POWERUP_MERGE_BEAT_SECONDS - 0.001)
 	check(events.drags.size() == 2 and regular_events.completed.size() == 1,
-		"the first spelling can finish landing at 390 ms without launching its dependent step early")
-	model.step(0.01)
-	model.step(0.20)
+		"The first spelling finishes its fusion without launching a dependent step before landing")
+	model.step(0.001)
+	model.step(Model.POWERUP_MERGE_BEAT_SECONDS)
 	check(events.drags.size() == 4 and regular_events.completed.size() == 2,
-		"both authored paths launch their own picture match on the 400 and 600 ms beats")
+		"Both authored paths launch their own picture matches on successive faster beats")
 	if events.drags.size() == 4 and regular_events.completed.size() == 2:
 		for index in range(4):
 			var drag: Dictionary = events.drags[index]
-			check(is_equal_approx(float(drag.started_at), index * 0.20)
+			check(is_equal_approx(float(drag.started_at), index * Model.POWERUP_MERGE_BEAT_SECONDS)
 				and model.is_settled(drag.source) and model.is_settled(drag.target),
 				"interleaved authored steps stay on the launch grid and never reuse an unsettled result")
 		for index in range(2):
@@ -1187,7 +1188,8 @@ func _test_powerup_pause_and_clocks() -> void:
 		var generated: int = model.generated_tiles
 		var upcoming: Array = model.upcoming.duplicate(true)
 		check(model.activate_powerup(kind), "paid sequence starts near the automatic supply deadline")
-		model.step(0.225 if kind == "auto_merge" else Model.POWERUP_DRAG_SECONDS * 0.5)
+		model.step((Model.POWERUP_MERGE_BEAT_SECONDS + Model.POWERUP_DRAG_SECONDS) * 0.5
+			if kind == "auto_merge" else Model.POWERUP_DRAG_SECONDS * 0.5)
 		model.set_paused(true)
 		var before: Dictionary = model.snapshot()
 		var active: Dictionary = model.powerup_snapshot()

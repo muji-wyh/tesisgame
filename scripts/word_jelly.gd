@@ -19,6 +19,7 @@ const PowerupButton = preload("res://scripts/word_jelly_powerup_button.gd")
 const PowerupEffects = preload("res://scripts/word_jelly_powerup_effects.gd")
 const ReadPanel = preload("res://scripts/jelly_read_panel.gd")
 const ComboHUD = preload("res://scripts/word_jelly_combo.gd")
+const BossView = preload("res://scripts/word_jelly_boss_view.gd")
 const COLLECTION_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const POWERUP_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const POWERUP_RAYS = preload("res://assets/chests/milestone/rays.png")
@@ -90,9 +91,11 @@ var _view_drop_available: bool = false
 var _view_palette_ready: bool = false
 var _view_hints_ready: bool = false
 var _view_hint_source: int = -1
+var _boss_view: BossView
 var _preview_drop_available: bool = false
 const READ_HOLD_SECONDS: float = 0.45
 const COLLECTION_CLICK_MAX_MS: int = 500
+const STAGE_WARNING_SECONDS: float = 10.0
 
 func _init() -> void:
 	super()
@@ -109,6 +112,7 @@ func _init() -> void:
 	add_child(_well_art)
 	move_child(_well_art, 0)
 	game = WordModel.new()
+	game.finish_feedback_ready = _finish_feedback_ready
 	_palette.compatibility = game.parts_compatible
 	game.word_attempted.connect(func(id: String, ids: Array[String], correct: bool) -> void:
 		word_attempted.emit(id, ids, correct))
@@ -123,6 +127,7 @@ func _init() -> void:
 	game.powerup_fragment_arrived.connect(_powerup_fragment_arrived)
 	game.drag_blocked.connect(_drag_blocked)
 	game.combo_changed.connect(_combo_changed)
+	game.boss_changed.connect(_sync_boss)
 	game.fusion_started.connect(_powerup_fusion_started)
 	for tile: Tile in _preview_tiles:
 		remove_child(tile)
@@ -151,10 +156,14 @@ func _init() -> void:
 	_stage_banner = StageBanner.new()
 	add_child(_stage_banner)
 	_practice_panel = PracticePanel.new()
+	_practice_panel.stage_timer = _stage_banner
 	_practice_panel.word_progressed.connect(func(_id: String, complete: bool) -> void:
 		if complete and _can_play():
 			audio_requested.emit("goal_complete"))
 	add_child(_practice_panel)
+	_boss_view = BossView.new()
+	_boss_view.audio_requested.connect(func(cue: String) -> void: audio_requested.emit(cue))
+	add_child(_boss_view)
 	collect_button = CollectButton.new()
 	collect_button.name = "WordJellyCollectAll"
 	collect_button.pressed.connect(_collect_all)
@@ -344,6 +353,13 @@ func _finished(result: Dictionary) -> void:
 	_collection_effects.reset()
 	_powerup_effects.hide()
 	super._finished(result)
+
+
+func _finish_feedback_ready() -> bool:
+	return _collection_effects._entries.is_empty() and _word_reveal._entries.is_empty() \
+		and _loot_flights.is_empty() and not _loot_meter.is_filling() \
+		and not _reward_presentation.is_active() and not _practice_panel.feedback_active() \
+		and not _stage_banner.rating_feedback_active()
 
 func cancel_input() -> void:
 	_end_view_update()
@@ -640,6 +656,8 @@ func _refresh_placement() -> void:
 	_placement_tile.show()
 
 func _activate(id: int) -> void:
+	if not game.boss_interactable(id):
+		return
 	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling() or not _settled(_cell(id)) or game.collection_batch_active() or game.powerup_active():
 		return
 	_rejection.clear()
@@ -803,7 +821,9 @@ func _configure_tile(tile: Tile, cell: Dictionary, combined: bool = false) -> vo
 	if cell.is_empty() or _surfaces.is_empty():
 		return
 	# Recolor one acquired painted skin, so matching hues also share shading.
-	tile.configure(cell, _surfaces[0], _picture(cell.get("image_word", cell.get("word", {}))), _chest_texture, _theme.get("accent", Style.GOOD), combined)
+	var presented: Dictionary = cell.duplicate()
+	presented["merged_level_limit"] = game.merged_level_limit
+	tile.configure(presented, _surfaces[0], _picture(cell.get("image_word", cell.get("word", {}))), _chest_texture, _theme.get("accent", Style.GOOD), combined)
 	tile.set_merged_presentation(_presentation_elapsed, reduced_motion)
 	_apply_palette(tile, int(cell.id))
 
@@ -927,8 +947,30 @@ func _sync_tiles() -> void:
 	_refresh_marks()
 	_sync_positions()
 	_refresh_controls()
+	_sync_boss()
 	if owns_update:
 		_end_view_update()
+
+func _sync_boss() -> void:
+	if not _configured:
+		return
+	if _boss_view == null:
+		if game.boss.active():
+			game.error = "Boss presentation could not load. Restore the approved artwork and retry this stage."
+			_requested_pause = true
+			_apply_pause_reasons()
+			push_error(game.error)
+		return
+	var rects: Dictionary = {}
+	for tile: Dictionary in game.cells:
+		rects[int(tile.id)] = _tile_rect(tile)
+	for id: int in _tiles:
+		_tiles[id].set_boss_status(game.boss.status(id), reduced_motion)
+	_boss_view.reduced_motion = reduced_motion
+	if not _boss_view.sync(game.boss.snapshot(), rects, _generation, _can_play(), _tiles):
+		game.error = _boss_view._actor.last_error
+		_requested_pause = true
+		_apply_pause_reasons()
 
 func _tile_rect(cell: Dictionary) -> Rect2:
 	return Rect2(_board.position + Vector2(int(cell.get("column", 0)), int(cell.get("row", 0))) * _pitch + Vector2.ONE * _gap * 0.5,
@@ -1316,6 +1358,7 @@ func _process(delta: float) -> void:
 		_combo_hud.advance(delta)
 		_practice_panel.advance(delta)
 		_stage_banner.advance(delta)
+		_practice_panel.queue_redraw()
 		_presentation_elapsed += board_delta
 		_collection_effects.advance(board_delta)
 		var powerup: Dictionary = game.powerup_snapshot()
@@ -1902,9 +1945,24 @@ func _reward_pickup_ready() -> bool:
 	# takes the screen's focal position. Fragment credit remains immediate.
 	return not game.collection_batch_active() and super._reward_pickup_ready()
 
+func danger_feedback() -> Dictionary:
+	var elapsed: float = float(game.full_elapsed)
+	var source: String = "full" if elapsed >= 0.0 else ""
+	if _configured and game.stage_run != null and game.stage_run.kind == "main" \
+		and game.stage_run.outcome.is_empty() and game.stage_run.remaining <= STAGE_WARNING_SECONDS:
+		var deadline_elapsed: float = STAGE_WARNING_SECONDS - game.stage_run.remaining
+		if deadline_elapsed > elapsed:
+			elapsed = deadline_elapsed
+			source = "stage"
+	var active: bool = _can_play() and not game.powerup_active() and not game.stage_ending() and elapsed >= 0.0
+	return {"active": active, "source": source, "elapsed": elapsed,
+		"strength": DangerFrame.primary_pulse(elapsed, reduced_motion) if active else 0.0}
+
+
 func _refresh_danger() -> void:
 	if _danger_frame != null:
-		_danger_frame.set_warning(_can_play() and not game.powerup_active() and float(game.full_elapsed) >= 0.0, float(game.full_elapsed), WordModel.FULL_SECONDS, reduced_motion)
+		var warning: Dictionary = danger_feedback()
+		_danger_frame.set_warning(bool(warning.active), float(warning.elapsed), WordModel.FULL_SECONDS, reduced_motion)
 
 func _layout() -> void:
 	if _loot_icon == null or size.x <= 0.0 or size.y <= 0.0:
@@ -1920,11 +1978,15 @@ func _layout() -> void:
 	var local_finish: bool = finish_button.get_parent() == self
 	var local_chest: bool = not has_header_chest()
 	var top_hud_height: float = (44.0 if authored else 52.0) / s if local_finish or local_chest else 0.0
+	var boss_y: float = top_hud_height
+	var boss_height: float = 84.0 / s if game.boss.active() else 0.0
+	top_hud_height += boss_height
 	var notice_y: float = top_hud_height
 	var stage_y: float = top_hud_height
 	var stage_in_rail: bool = size.x > size.y * 1.4 and size.y * s <= 400.0
+	var timed_stage: bool = _stage_banner != null and _stage_banner._state.get("kind") == "main"
 	if _stage_banner != null and _stage_banner.visible and not stage_in_rail:
-		top_hud_height += 34.0 / s
+		top_hud_height += (50.0 if timed_stage else 34.0) / s
 		notice_y = top_hud_height
 	if not game.error.is_empty():
 		top_hud_height += 42.0 / s
@@ -1965,6 +2027,10 @@ func _layout() -> void:
 		_reflow.clear()
 		_snapbacks.clear()
 	_board = next_board
+	_boss_view.size = size
+	_boss_view.layout_battle(Rect2(Vector2(_board.position.x, boss_y),
+		Vector2(_board.size.x, maxf(0.0, boss_height - 6.0 / s))), _board, s,
+		Rect2(Vector2(_board.position.x, group_top), Vector2(_board.size.x, preview_height)))
 	var well_bounds: Rect2 = _board.grow(-2.0 / s)
 	_well_art.position = well_bounds.position
 	_well_art.size = well_bounds.size
@@ -1978,7 +2044,7 @@ func _layout() -> void:
 	var hud_x: float = _board.end.x + hud_gap if side_hud else (size.x - footer_width) * 0.5
 	if _stage_banner != null:
 		_stage_banner.size = size
-		var badge := Rect2(Vector2(_board.position.x, stage_y), Vector2(_board.size.x, 28.0 / s))
+		var badge := Rect2(Vector2(_board.position.x, stage_y), Vector2(_board.size.x, (44.0 if timed_stage else 28.0) / s))
 		if stage_in_rail and side_hud:
 			badge = Rect2(Vector2(hud_x, content_top), Vector2(hud_width, 46.0 / s))
 		_stage_banner.configure_layout(badge, _board, s)
@@ -2127,6 +2193,7 @@ func snapshot() -> Dictionary:
 	_preview_drop_available = _can_drop_preview()
 	var state: Dictionary = super.snapshot()
 	state["stage"] = _stage_banner.snapshot() if _stage_banner != null else {}
+	state["boss_view"] = _boss_view.snapshot() if _boss_view != null else {}
 	state["practice"] = _practice_panel.snapshot() if _practice_panel != null else {"visible": false, "words": []}
 	state["combo_hud"] = _combo_hud.snapshot() if _combo_hud != null else {"visible": false}
 	state["mode"] = "word_jelly"

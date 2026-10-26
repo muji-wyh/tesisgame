@@ -160,6 +160,7 @@ function collectRequiredAudio(root) {
     'assets/audio/fragments/appear.wav',
     'assets/audio/fragments/arrive.wav',
     'assets/audio/jelly-finish/ready.ogg',
+    'assets/audio/jelly-boss/bramble-laugh.ogg',
     ...['downgrade', 'lost'].map(id => `assets/audio/memory-chest/${id}.wav`),
     ...['collect-pop', 'land', 'danger'].map(id => `assets/audio/jelly-match/${id}.wav`),
     ...Array.from({ length: 8 }, (_, index) => `assets/audio/jelly-match/collect-lv${index + 2}.wav`),

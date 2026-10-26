@@ -291,12 +291,24 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /same-word pairs remain mergeable even at Lv9/);
   assert.doesNotMatch(help, /up to Lv6\b|two identical words of the same level/);
   assert.match(help, /Auto merge costs 600, 900, then 1200 coins/);
-  assert.match(help, /Auto merge launches an eligible pair every 200 ms with a 250 ms flight, so consecutive flights overlap/);
+  assert.match(help, /Auto merge launches an eligible pair every 160 ms with a 180 ms flight, so consecutive flights overlap/);
   assert.match(help, /Treasure costs 200, 300, then 400 coins[\s\S]*2 to 8 chest fragments/);
   assert.match(help, /combos refill an eight-second progress bar[\s\S]*gold COMBO BONUS/);
-  assert.match(help, /Lv8 reaches two rings, at most eight inner and fourteen outer bodies; Lv9 reaches the whole board/);
+  assert.match(help, /Lv7 adds four outer-ring targets, Lv8 reaches its capped two rings and Lv9 reaches the board/);
+  assert.match(help, /New journeys start with only merged Lv1[\s\S]*first Boss victory durably unlocks one further level/);
+  assert.match(help, /stages 9, 18, 27, 36, 45, 63, 81 and 99/);
+  assert.match(help, /Blue attacks freeze a jelly for three active seconds[\s\S]*purple ink only obscures its contents/);
+  assert.match(help, /two bodies for eight active seconds[\s\S]*Snatched construction pieces return through Next/);
   assert.match(help, /Completing a Jelly Words stage launches a brief confetti burst in the upper third/);
   assert.match(help, /map has 99 stages[\s\S]*replay cleared stages or enter the next unlocked stage/);
+  assert.match(help, /stage 1 at the bottom to stage 99 at the top/);
+  assert.match(help, /Each star sits over its own progress segment/);
+  assert.match(help, /ten-second flashing countdown[\s\S]*clearing space cancels the warning/);
+  assert.match(help, /final ten seconds flash the board border even on a non-full board/);
+  assert.match(help, /refills the remaining-time progress bar, while lost stars stay grey/);
+  assert.match(help, /Home asks for confirmation[\s\S]*Entering Jelly Words again opens the stage map/);
+  assert.match(help, /Round complete waits until all merged words are collected and their effects have finished/);
+  assert.match(help, /Earned stars light up one by one[\s\S]*star multiplier then animates into the clear-coin amount/);
   assert.match(help, /first, middle or final third earns three, two or one stars/);
   assert.match(help, /best saved stars[\s\S]*automatically returns to the map/);
   assert.match(help, /Extra time adds 30 seconds for 100 coins, then 50 more coins for each later use/);
@@ -398,6 +410,7 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   fixture.writeImport('assets/audio/coins/collect.wav');
   fixture.writeImport('assets/audio/coins/release.wav');
   fixture.writeImport('assets/audio/jelly-finish/ready.ogg');
+  fixture.writeImport('assets/audio/jelly-boss/bramble-laugh.ogg');
   for (const cue of ['downgrade', 'lost']) fixture.writeImport(`assets/audio/memory-chest/${cue}.wav`);
   for (const cue of ['collect-pop', 'land', 'danger']) fixture.writeImport(`assets/audio/jelly-match/${cue}.wav`);
   for (let level = 2; level <= 9; level++) fixture.writeImport(`assets/audio/jelly-match/collect-lv${level}.wav`);
@@ -411,14 +424,14 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 386);
+  assert.equal(required.length, 387);
   assert.ok(required.every(asset => !asset.source.includes('/jelly-fireworks/')),
     'Deferred top-popover firework recordings are not added to the gameplay release');
   assert.equal(fs.existsSync(path.join(fixture.directory, 'assets/audio/chests')), false,
     'Packaging succeeds without the archived theme recordings');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/chests/')),
     'The reviewed shared bank replaces every former theme-specific chest cue');
-  assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction|jelly-finish|jelly-combo)\//.test(asset.source)).length, 17,
+  assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction|jelly-finish|jelly-combo|jelly-boss)\//.test(asset.source)).length, 18,
     'Every Jelly cue is required in the startup pack');
   assert.deepEqual(required.filter(asset => asset.source.includes('/jelly-match/collect-')).map(asset => asset.source),
     ['res://assets/audio/jelly-match/collect-pop.wav',

@@ -5,17 +5,19 @@ signal stage_selected(number: int)
 signal challenge_selected
 signal home_requested
 signal retry_requested
+signal changed
 
 const Style = preload("res://scripts/ui_style.gd")
 const Scroll = preload("res://scripts/result_scroll.gd")
 const Catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
+const Icons = preload("res://scripts/icon_button.gd")
 const STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 const SKY = preload("res://assets/images/jelly-match/sky/day.png")
-const GELS: Array[Texture2D] = [
-	preload("res://assets/images/jelly-match/gel-mint.png"),
-	preload("res://assets/images/jelly-match/gel-sky.png"),
-	preload("res://assets/images/jelly-match/gel-coral.png"),
-	preload("res://assets/images/jelly-match/gel-lilac.png")]
+const STAGE_OPEN = preload("res://assets/images/ui/jelly-map/stage-open.png")
+const STAGE_LOCKED = preload("res://assets/images/ui/jelly-map/stage-locked.png")
+const PANEL = preload("res://assets/images/ui/jelly-map/adventure-panel.png")
+const COIN = preload("res://assets/coins/gold-coin.png")
+const PLAY = preload("res://assets/images/ui/controls/player-play.svg")
 const SCENERY: Array[Texture2D] = [
 	preload("res://assets/images/jelly-match/garden/hills.png"),
 	preload("res://assets/images/jelly-match/garden/tree.png"),
@@ -43,9 +45,14 @@ var _status: Label
 var _home: Button
 var _challenge: Button
 var _retry: Button
+var _challenge_icon: TextureRect
+var _challenge_title: Label
+var _challenge_caption: Label
+var _challenge_frame: Panel
 var _nodes: Array[Dictionary] = []
 var _chapters: Array[Dictionary] = []
 var _scale: float = 1.0
+var _publish_pending: bool = false
 
 
 func _init() -> void:
@@ -62,10 +69,23 @@ func _init() -> void:
 	_subtitle = _label(self, "99 little adventures. Collect words, earn stars.", 14)
 	_wallet = _label(self, "", 16)
 	_wallet.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_home = _button("Home", "Back to game library")
+	_home = Icons.new()
+	_home.set("symbol", Icons.Symbol.HOME)
+	_home.accessibility_name = "Home. Back to game library"
+	_home.tooltip_text = "Home"
+	add_child(_home)
 	_home.pressed.connect(func() -> void: home_requested.emit())
-	_challenge = _button("Endless Challenge\nNo timer", "Endless challenge. No timer. Growing variety and speed.")
-	_challenge.add_theme_stylebox_override("normal", _gel_style(GELS[3]))
+	_challenge = _button("", "Endless challenge. No timer. Earn coins with growing variety and speed.")
+	_challenge_frame = Panel.new()
+	_challenge_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_challenge_frame.add_theme_stylebox_override("panel", _panel_style())
+	_challenge.add_child(_challenge_frame)
+	_challenge_icon = _image(_challenge, COIN)
+	_challenge_title = _label(_challenge, "Endless Challenge", 18)
+	_challenge_caption = _label(_challenge, "No timer · Earn coins", 12)
+	_challenge_caption.add_theme_color_override("font_color", Style.MUTED)
+	for signal_name: String in ["mouse_entered", "mouse_exited", "button_down", "button_up", "focus_entered", "focus_exited"]:
+		_challenge.connect(signal_name, _refresh_challenge_frame)
 	_challenge.pressed.connect(func() -> void:
 		if not _challenge.disabled:
 			challenge_selected.emit())
@@ -105,33 +125,39 @@ func _init() -> void:
 	for number in range(1, 100):
 		var button := Button.new()
 		button.name = "Stage%d" % number
-		button.text = str(number)
 		button.add_theme_font_override("font", Style.HEADING_FONT)
 		button.add_theme_color_override("font_color", Style.INK)
 		button.add_theme_color_override("font_disabled_color", Color("#6d7d7b"))
 		button.add_theme_color_override("font_hover_color", Style.INK)
 		button.add_theme_color_override("font_pressed_color", Style.GOOD)
 		button.focus_mode = Control.FOCUS_ALL
-		button.add_theme_stylebox_override("normal", _gel_style(GELS[(number - 1) / 9 % GELS.size()]))
-		button.add_theme_stylebox_override("hover", _gel_style(GELS[(number - 1) / 9 % GELS.size()]))
-		button.add_theme_stylebox_override("pressed", _gel_style(GELS[(number - 1) / 9 % GELS.size()]))
-		button.add_theme_stylebox_override("disabled", _gel_style(GELS[1], Color(0.67, 0.72, 0.73, 0.65)))
-		button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, Color("#fff5b9"), 20, 3))
+		for state: String in ["normal", "hover", "pressed", "disabled"]:
+			button.add_theme_stylebox_override(state, StyleBoxEmpty.new())
+		button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, Color("#719686"), 18, 2))
 		button.pressed.connect(_select.bind(number))
 		_content.add_child(button)
 		button.focus_entered.connect(_reveal_stage.bind(number))
+		var face: TextureRect = _image(button, STAGE_OPEN)
+		var label: Label = _label(button, str(number), 30)
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		var stars: Array[TextureRect] = []
 		for index in range(3):
 			stars.append(_image(button, STAR))
-		var next: Label = _label(button, "NEXT", 10)
-		next.add_theme_color_override("font_color", Color("#a26618"))
-		next.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_nodes.append({"number": number, "button": button, "stars": stars, "next": next})
+		var next: TextureRect = _image(button, PLAY)
+		next.modulate = Style.GOOD
+		var boss_label: Label = _label(button, "BOSS", 11)
+		boss_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		boss_label.add_theme_stylebox_override("normal", Style.box(Color("#f3ddef"), Color("#996b9d"), 8, 1))
+		boss_label.hide()
+		_nodes.append({"number": number, "button": button, "face": face, "label": label,
+			"stars": stars, "next": next, "boss": boss_label})
 	resized.connect(_layout)
 	visibility_changed.connect(func() -> void:
 		if not is_visible_in_tree():
 			_scroll.cancel_drag())
-	_scroll.get_v_scroll_bar().value_changed.connect(func(_value: float) -> void: queue_redraw())
+	_scroll.get_v_scroll_bar().value_changed.connect(func(_value: float) -> void:
+		queue_redraw()
+		_queue_changed())
 	set_process(false)
 	hide()
 
@@ -169,13 +195,34 @@ func _image(parent: Node, texture: Texture2D) -> TextureRect:
 	return image
 
 
-func _gel_style(texture: Texture2D, color: Color = Color.WHITE) -> StyleBoxTexture:
+func _panel_style(color: Color = Color.WHITE) -> StyleBoxTexture:
 	var surface := StyleBoxTexture.new()
-	surface.texture = texture
+	surface.texture = PANEL
 	surface.modulate_color = color
 	surface.set_content_margin_all(0.0)
-	surface.content_margin_bottom = 22.0
+	for side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
+		surface.set_texture_margin(side, 16.0)
 	return surface
+
+
+func _queue_changed() -> void:
+	if _publish_pending or not is_inside_tree():
+		return
+	_publish_pending = true
+	_publish_changed.call_deferred()
+
+
+func _publish_changed() -> void:
+	_publish_pending = false
+	if is_visible_in_tree():
+		changed.emit()
+
+
+func _refresh_challenge_frame() -> void:
+	_challenge_frame.self_modulate = Color("#ead5b6") if _challenge.is_pressed() else Color("#fff0d0") \
+		if _challenge.is_hovered() or _challenge.has_focus() else Color.WHITE
+	_challenge_icon.modulate.a = 0.45 if _challenge.disabled else 1.0
+	_challenge_title.add_theme_color_override("font_color", Style.MUTED if _challenge.disabled else Style.INK)
 
 
 func configure(state: Dictionary, _reduced_motion: bool = false) -> void:
@@ -189,9 +236,15 @@ func configure(state: Dictionary, _reduced_motion: bool = false) -> void:
 		item.button.focus_mode = Control.FOCUS_ALL if not item.button.disabled else Control.FOCUS_NONE
 		item.button.accessibility_name = "Stage %d. %d of 3 stars. %s." % [
 			number, stars, "Replay" if number <= highest else "Next" if number == highest + 1 else "Locked"]
+		var unlocked: bool = number <= mini(highest + 1, 99)
+		item.face.texture = STAGE_OPEN if unlocked else STAGE_LOCKED
+		item.label.add_theme_color_override("font_color", Style.INK if unlocked else Color("#cbd7da"))
 		for index in range(3):
 			item.stars[index].modulate = Color.WHITE if index < stars else Color(0.32, 0.41, 0.43, 0.48)
 		item.next.visible = number == highest + 1
+		item.boss.visible = number in state.get("boss_markers", [])
+		if item.boss.visible:
+			item.button.accessibility_name += " Bramble Boss encounter."
 	_challenge.disabled = blocked
 	_challenge.focus_mode = Control.FOCUS_NONE if blocked else Control.FOCUS_ALL
 	_wallet.text = "%d coins" % int(state.get("coins", 0))
@@ -200,6 +253,8 @@ func configure(state: Dictionary, _reduced_motion: bool = false) -> void:
 	_status.add_theme_color_override("font_color", Style.WRONG if not str(state.get("error", "")).is_empty() else Style.INK)
 	_retry.visible = not str(state.get("error", "")).is_empty()
 	_status.visible = not _status.text.is_empty()
+	if state.has("merged_level"):
+		_subtitle.text = "Chase Bramble · Merged Lv%d" % int(state.merged_level)
 	_layout()
 
 
@@ -275,27 +330,41 @@ func _layout() -> void:
 	var width: float = minf(size.x - 24.0 / s, 1000.0 / s)
 	var left: float = (size.x - width) * 0.5
 	var top: float = 14.0 / s
-	_home.custom_minimum_size = Vector2(0, ceilf(44.0 / s))
-	_home.add_theme_font_size_override("font_size", ceili(14.0 / s))
+	Style.square_icon_button(_home, Style.GOOD)
 	_home.position = Vector2(left, top)
-	_home.size = (Vector2(76, 44) / s).ceil()
-	_heading.position = Vector2(left + 88.0 / s, top)
-	_heading.size = Vector2(width - 88.0 / s, 38.0 / s)
-	_heading.add_theme_font_size_override("font_size", ceili((24.0 if narrow else 32.0) / s))
+	_home.size = Vector2.ONE * ceilf(44.0 / s)
+	_heading.position = Vector2(_home.get_rect().end.x + 14.0 / s, top)
+	_heading.size = Vector2(maxf(1.0, left + width - _heading.position.x - (162.0 / s if not narrow else 0.0)), 44.0 / s)
+	var heading_pixels: int = ceili((24.0 if narrow else 32.0) / s)
+	var heading_ink: float = Style.HEADING_FONT.get_string_size(_heading.text, HORIZONTAL_ALIGNMENT_LEFT, -1, heading_pixels).x
+	if heading_ink > _heading.size.x:
+		heading_pixels = maxi(1, floori(heading_pixels * _heading.size.x / heading_ink))
+	_heading.add_theme_font_size_override("font_size", heading_pixels)
 	_subtitle.position = Vector2(left, top + 48.0 / s)
 	_subtitle.size = Vector2(width, 30.0 / s)
-	_subtitle.text = "Collect words. Earn stars. Explore." if narrow else "99 little adventures. Collect words, earn stars."
+	_subtitle.text = "Chase Bramble · Merged Lv%d" % int(_state.merged_level) if _state.has("merged_level") \
+		else "Collect words. Earn stars. Explore." if narrow else "99 little adventures. Collect words, earn stars."
 	_subtitle.add_theme_font_size_override("font_size", ceili(14.0 / s))
 	_wallet.visible = not narrow
 	_wallet.position = Vector2(left + width - 150.0 / s, top)
 	_wallet.size = Vector2(150, 38) / s
 	_challenge.custom_minimum_size = Vector2.ZERO
 	for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
-		var surface: StyleBox = _challenge.get_theme_stylebox(state)
-		surface.set_content_margin_all(0.0)
-	_challenge.add_theme_font_size_override("font_size", ceili(15.0 / s))
-	_challenge.size = Vector2(minf(width, 232.0 / s), ceilf(62.0 / s))
-	_challenge.position = Vector2(left + width - _challenge.size.x, size.y - _challenge.size.y - 14.0 / s)
+		_challenge.add_theme_stylebox_override(state, StyleBoxEmpty.new())
+	_challenge.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, Style.GOOD, ceili(8.0 / s), ceili(2.0 / s)))
+	_challenge.size = Vector2(minf(width, 312.0 / s), ceilf(78.0 / s))
+	_challenge.position = Vector2((size.x - _challenge.size.x) * 0.5, size.y - _challenge.size.y - 14.0 / s)
+	_challenge_frame.scale = Vector2.ONE / s
+	_challenge_frame.size = _challenge.size * s
+	_challenge_icon.position = Vector2(18, 17) / s
+	_challenge_icon.size = Vector2.ONE * 44.0 / s
+	_challenge_title.position = Vector2(76, 16) / s
+	_challenge_title.size = Vector2(_challenge.size.x - 92.0 / s, 26.0 / s)
+	_challenge_title.add_theme_font_size_override("font_size", ceili(17.0 / s))
+	_challenge_caption.position = Vector2(76, 42) / s
+	_challenge_caption.size = Vector2(_challenge.size.x - 92.0 / s, 20.0 / s)
+	_challenge_caption.add_theme_font_size_override("font_size", ceili(12.0 / s))
+	_refresh_challenge_frame()
 	var status_height: float = 76.0 / s if _status.visible else 0.0
 	_status.position = Vector2(left, 90.0 / s)
 	_status.size = Vector2(width - (84.0 / s if _retry.visible else 0.0), status_height)
@@ -306,29 +375,29 @@ func _layout() -> void:
 	_scroll.position = Vector2(left, 88.0 / s + status_height)
 	_scroll.size = Vector2(width, maxf(1.0, _challenge.position.y - _scroll.position.y - 12.0 / s))
 	var chapter_height: float = 1160.0 / s
-	var node_size := Vector2(98, 92) / s
+	var node_size := Vector2(98, 104) / s
 	var amplitude: float = minf(width * 0.27, 240.0 / s)
 	for index in range(_chapters.size()):
 		var section: Dictionary = _chapters[index]
-		var y: float = index * chapter_height
-		section.number.position = Vector2(0, y + 20.0 / s)
+		var y: float = (10 - index) * chapter_height
+		section.number.position = Vector2(0, y + 1122.0 / s)
 		section.number.size = Vector2(width, 20.0 / s)
 		section.number.add_theme_font_size_override("font_size", ceili(11.0 / s))
-		section.title.position = Vector2(0, y + 40.0 / s)
+		section.title.position = Vector2(0, y + 1080.0 / s)
 		section.title.size = Vector2(width, 42.0 / s)
 		section.title.add_theme_font_size_override("font_size", ceili((23.0 if narrow else 30.0) / s))
 		var scenery_width: float = minf(width * 0.38, 270.0 / s)
-		section.left.position = Vector2(8.0 / s, y + 170.0 / s)
+		section.left.position = Vector2(8.0 / s, y + 760.0 / s)
 		section.left.size = Vector2(scenery_width, 230.0 / s)
 		section.left.modulate.a = 0.72
-		section.right.position = Vector2(width - scenery_width - 8.0 / s, y + 660.0 / s)
+		section.right.position = Vector2(width - scenery_width - 8.0 / s, y + 250.0 / s)
 		section.right.size = Vector2(scenery_width, 250.0 / s)
 		section.right.modulate.a = 0.82
-		section.hills.position = Vector2(0, y + 830.0 / s)
+		section.hills.position = Vector2(0, y + 70.0 / s)
 		section.hills.size = Vector2(width, 260.0 / s)
-		section.shrubs.position = Vector2(12.0 / s, y + 1030.0 / s)
+		section.shrubs.position = Vector2(12.0 / s, y + 55.0 / s)
 		section.shrubs.size = Vector2(width * 0.35, 75.0 / s)
-		section.grove.position = Vector2(width * 0.70, y + 440.0 / s)
+		section.grove.position = Vector2(width * 0.70, y + 510.0 / s)
 		section.grove.size = Vector2(minf(width * 0.25, 170.0 / s), 210.0 / s)
 		section.grove.modulate = Color(0.9, 1.0, 0.96, 0.50)
 	for item: Dictionary in _nodes:
@@ -336,23 +405,28 @@ func _layout() -> void:
 		var chapter: int = (number - 1) / 9
 		var step: int = (number - 1) % 9
 		var center := Vector2(width * 0.5 + sin(float(step) * PI * 0.5) * amplitude,
-			chapter * chapter_height + (136.0 + step * 116.0) / s)
+			(11 - chapter) * chapter_height - (136.0 + step * 116.0) / s)
 		var button: Button = item.button
 		button.position = center - node_size * 0.5
 		button.size = node_size
-		button.add_theme_font_size_override("font_size", ceili(28.0 / s))
-		item.next.position = Vector2(18, 5) / s
-		item.next.size = Vector2(62, 15) / s
-		item.next.add_theme_font_size_override("font_size", ceili(10.0 / s))
-		for name: String in ["normal", "hover", "pressed", "disabled"]:
-			button.get_theme_stylebox(name).content_margin_bottom = 25.0 / s
+		item.face.position = Vector2(11, 0) / s
+		item.face.size = Vector2.ONE * 76.0 / s
+		item.label.position = item.face.position
+		item.label.size = item.face.size
+		item.label.add_theme_font_size_override("font_size", ceili(30.0 / s))
+		item.next.position = Vector2(79, 31) / s
+		item.next.size = Vector2.ONE * 14.0 / s
+		item.boss.add_theme_font_size_override("font_size", ceili(11.0 / s))
+		item.boss.position = Vector2(15, -22) / s
+		item.boss.size = Vector2(68, 20) / s
 		for index in range(3):
 			var star: TextureRect = item.stars[index]
-			star.position = Vector2((14.0 + index * 24.0) / s, 61.0 / s)
+			star.position = Vector2((14.0 + index * 24.0) / s, 80.0 / s)
 			star.size = Vector2.ONE * 22.0 / s
 	_content.custom_minimum_size = Vector2(0.0, chapter_height * 11.0)
 	_content.size.x = width
 	_content.queue_redraw()
+	_queue_changed()
 
 
 func _draw_route() -> void:
@@ -361,7 +435,7 @@ func _draw_route() -> void:
 	var curve := Curve2D.new()
 	for index in range(_nodes.size()):
 		var center: Vector2 = _nodes[index].button.get_rect().get_center()
-		curve.add_point(center, Vector2(0, -40.0 / _scale), Vector2(0, 40.0 / _scale))
+		curve.add_point(center, Vector2(0, 40.0 / _scale), Vector2(0, -40.0 / _scale))
 	var points: PackedVector2Array = curve.get_baked_points()
 	if points.size() > 1:
 		_content.draw_polyline(points, Color(0.38, 0.55, 0.48, 0.15), 26.0 / _scale, true)
@@ -386,10 +460,15 @@ func snapshot() -> Dictionary:
 		stages.append({"number": number, "chapter": ceili(float(number) / 9.0),
 			"unlocked": number <= mini(highest + 1, 99),
 			"best_stars": int(_state.get("best_stars", {}).get(str(number), 0)),
+			"boss": item.boss.visible,
 			"rect": _rect(item.button.get_global_rect()),
 			"visible": is_visible_in_tree() and _scroll.get_global_rect().intersects(item.button.get_global_rect())})
 	return {"visible": is_visible_in_tree(), "map_rect": _rect(get_global_rect()),
+		"heading_rect": _rect(_heading.get_global_rect()),
 		"scroll_rect": _rect(_scroll.get_global_rect()), "scroll_offset": _scroll.scroll_vertical,
 		"stage_nodes": stages, "challenge": _control(_challenge), "home": _control(_home),
 		"retry": _control(_retry), "loading": bool(_state.get("loading", false)),
-		"error": str(_state.get("error", ""))}
+		"error": str(_state.get("error", "")),
+		"merged_level": int(_state.get("merged_level", 1)),
+		"boss_markers": _state.get("boss_markers", []).duplicate(),
+		"boss_victories": _state.get("boss_victories", []).duplicate()}

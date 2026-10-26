@@ -7,6 +7,17 @@ removed. Use the [documentation index](docs/README.md) for current guidance.
 
 ## 2026-10-26
 
+- Reoriented the journey from bottom to top and replaced squeezed map controls
+  with sourced adventure medallions/panels, a shared Home icon and clear star rows.
+- Added confirmed Home exit with normal sweep/settlement before leaving, and
+  always return to the stage map when entering the campaign again.
+- Restored the ten-second flashing full-board warning inside timed stages.
+  End overlays now wait for all merged pickups and their visual/reward tails.
+- Aligned rating stars with their timer thirds, animated star loss, and added
+  sequential earned-star and star-multiplier coin feedback in settlement.
+- Accelerated Auto merge to 160 ms launches and 180 ms transfers.
+- Added a final-ten-second stage-deadline rim warning, and made extra time refill
+  its remaining-time bar without restoring lost stars.
 - Added a 99-stage scenic Jelly journey, persistent unlocks/replays, per-run word
   quotas, workload-calibrated timer waves and three-phase best-star ratings.
 - Added automatic end sweeps and settlement/map return, journaled save recovery,
@@ -318,3 +329,16 @@ removed. Use the [documentation index](docs/README.md) for current guidance.
 ## 2026-09-06
 
 - Created the project, JSON vocabulary, and matching state machine.
+# Jelly World Boss chase
+
+- Added Bramble's stage-one compass theft, eight escalating rematches and
+  encounter-specific taunts, replies, victory feedback and escapes.
+- Added collection attacks, manual merge charge, combo damage, three-second
+  freeze, visual ink, two-layer matching locks, shadow doubles, telegraphed
+  eight-second supply damage, recoverable snatching, shields and mixed storms.
+- Added first-win-only merged-level unlocks from Lv1 through Lv9, next-Boss-only
+  future markers, context-safe version-one save migration and stronger early
+  merged support abilities without changing saved coin quotes.
+- Integrated an acquired licensed Bunny with explicitly game-authored skeletal
+  clips and a sourced CC0 human taunt recording; preserved source/license records
+  and private character inputs.

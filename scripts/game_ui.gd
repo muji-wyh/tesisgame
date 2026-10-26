@@ -221,6 +221,7 @@ var _finish_confirmation: FinishConfirmation
 var _finish_confirmation_mode: String = ""
 var _finish_confirmation_round: String = ""
 var _finish_confirmation_generation: int = -1
+var _finish_confirmation_home: bool = false
 var _finish_confirmation_focus_modes: Dictionary = {}
 var _jelly_pause_button: JellyFinishButton:
 	get:
@@ -884,6 +885,9 @@ func _build_controls() -> void:
 	_word_jelly.interaction_allowed = func() -> bool: return _mode_id == "word_jelly" and _jelly_interaction_allowed()
 	_word_jelly.credit_collection = _credit_word_jelly
 	_word_jelly.game.credit_combo = _credit_word_jelly_combo
+	_word_jelly.game.finish_feedback_ready = func() -> bool:
+		return _word_jelly._finish_feedback_ready() and not _coin_flight.snapshot().active \
+			and absf(_coin_counter.displayed - float(_coin_counter.target)) <= 0.001
 	_word_jelly.purchase_powerup = _purchase_word_jelly_powerup
 	_word_jelly.coin_balance = func() -> int: return coin_wallet.balance
 	_word_jelly.collected.connect(_word_jelly_collected)
@@ -1085,6 +1089,11 @@ func _mode_menu_open() -> bool:
 
 
 func _toggle_mode_menu() -> void:
+	if _campaign != null and _campaign.is_bound_round() and not _campaign.is_open() \
+		and _word_jelly.game.phase == "playing":
+		if not _word_jelly.game.stage_ending():
+			_request_jelly_finish("word_jelly", true)
+		return
 	var was_open: bool = _mode_menu_open()
 	_show_mode_menu()
 	if was_open != _mode_menu_open():
@@ -2157,7 +2166,7 @@ func choose_mode(id: String) -> void:
 		return
 	_has_entered_game = true
 	if id == "word_jelly" and _campaign != null and (_mode_id != "word_jelly" \
-		or _current_round_ended() or not _matches_current_learning_context(id)):
+		or _word_jelly.game.stage_run != null or _current_round_ended() or not _matches_current_learning_context(id)):
 		_campaign.open_map()
 		return
 	if id == _mode_id and not _current_round_ended() and _matches_current_learning_context(id):
@@ -2423,7 +2432,7 @@ func _publish_finish_confirmation() -> void:
 		_publish_jelly(_active_jelly().snapshot())
 
 
-func _request_jelly_finish(source_mode: String) -> void:
+func _request_jelly_finish(source_mode: String, return_home: bool = false) -> void:
 	if source_mode == _mode_id and _jelly_pause_open() and not _page_hidden:
 		_close_jelly_pause()
 	if source_mode != _mode_id or not _jelly_interaction_allowed() \
@@ -2433,7 +2442,12 @@ func _request_jelly_finish(source_mode: String) -> void:
 	_finish_confirmation_mode = _mode_id
 	_finish_confirmation_round = _round_id
 	_finish_confirmation_generation = _active_jelly()._generation
+	_finish_confirmation_home = return_home
 	_finish_confirmation.configure(Data.theme(model.theme_id), reduced_motion)
+	_finish_confirmation.set_labels("Leave Jelly Words?" if return_home else "Finish this round?",
+		"Collect merged jellies and save your rewards before going Home."
+		if return_home else "Your collected rewards will be kept.",
+		"Keep playing", "Exit" if return_home else "Finish")
 	_finish_confirmation.open()
 	_sync_reward_confetti()
 	_on_input_canceled()
@@ -2447,7 +2461,8 @@ func _request_jelly_finish(source_mode: String) -> void:
 			_finish_confirmation_focus_modes[control] = control.focus_mode
 			control.focus_mode = Control.FOCUS_NONE
 	_finish_confirmation.keep_playing_button.grab_focus()
-	_announce_status("Finish this round? Keep playing, or Finish to see your score. Your collected rewards will be kept.")
+	_announce_status("Leave Jelly Words? Keep playing, or Exit to collect and settle your rewards before returning Home."
+		if return_home else "Finish this round? Keep playing, or Finish to see your score. Your collected rewards will be kept.")
 	_publish_jelly(_active_jelly().snapshot())
 
 
@@ -2459,6 +2474,7 @@ func _close_finish_confirmation(resume_game: bool = true, restore_focus: bool = 
 	_finish_confirmation_mode = ""
 	_finish_confirmation_round = ""
 	_finish_confirmation_generation = -1
+	_finish_confirmation_home = false
 	for control in _finish_confirmation_focus_modes:
 		if is_instance_valid(control):
 			control.focus_mode = _finish_confirmation_focus_modes[control]
@@ -2483,10 +2499,14 @@ func _confirm_jelly_finish() -> void:
 	var same_round: bool = _is_jelly_mode() and _mode_id == _finish_confirmation_mode \
 		and _round_id == _finish_confirmation_round \
 		and _active_jelly()._generation == _finish_confirmation_generation
+	var return_home: bool = _finish_confirmation_home
 	_close_finish_confirmation(false, false)
 	if same_round and _jelly_interaction_allowed():
+		if _campaign != null and _campaign.is_bound_round():
+			_campaign.return_home_after_settlement = return_home
 		# Settle while paused so confirming cannot advance a queued motion or reward.
 		_active_jelly().game.finish_round()
+		_sync_jelly()
 	else:
 		_sync_jelly()
 
@@ -4634,7 +4654,8 @@ func _present_coins(id: String, reward: Dictionary, origin: Vector2, animate: bo
 	else:
 		_coin_flight.sync(coin_wallet.balance)
 	if int(reward.get("amount", 0)) > 0:
-		_announce_status("%d coins from your chest. Total: %d coins." % [reward.amount, coin_wallet.balance])
+		_announce_status(("%d star-weighted clear coins. Total: %d coins." if id.ends_with(":stage-clear")
+			else "%d coins from your chest. Total: %d coins.") % [reward.amount, coin_wallet.balance])
 
 
 func _commit_fragment(explicit_retry: bool = false) -> void:
@@ -5122,7 +5143,7 @@ func _controller_back() -> void:
 			_jelly_rewards._back.pressed.emit()
 		else:
 			_active_jelly().cancel_input()
-			_show_mode_menu()
+			_toggle_mode_menu()
 	elif _mode_id == "pop":
 		if _pop_rewards_shown:
 			_pop_rewards._back.pressed.emit()

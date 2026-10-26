@@ -6,10 +6,12 @@ const Store = preload("res://scripts/word_jelly_campaign_store.gd")
 const Catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
 const Context = preload("res://scripts/learning_context.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
+const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
 var map: Map
 var store: Store
 var starting: bool = false
 var settling: bool = false
+var return_home_after_settlement: bool = false
 var error: String = ""
 var pending_plan: Dictionary = {}
 var request_context: Dictionary = {}
@@ -39,6 +41,9 @@ func configure(app, path: String, host: Object = null) -> void:
 	map.challenge_selected.connect(request_challenge)
 	map.home_requested.connect(_home)
 	map.retry_requested.connect(retry)
+	map.changed.connect(func() -> void:
+		if _app._host != null and not _app._releasing_professional_views and is_instance_valid(_app._active_jelly()):
+			_app._publish_jelly(_app._active_jelly().snapshot()))
 
 
 func is_open() -> bool:
@@ -80,7 +85,10 @@ func _map_state() -> Dictionary:
 		ratings[str(number)] = store.best_stars(context_key, number)
 	return {"highest_cleared": highest, "best_stars": ratings, "frontier": mini(highest + 1, 99),
 		"coins": _app.coin_wallet.balance, "error": error,
-		"loading": starting, "pending_stage": selected_stage}
+		"loading": starting, "pending_stage": selected_stage,
+		"boss_markers": [1] if highest == 0 else BossCatalog.map_markers(mini(highest + 1, 99)),
+		"boss_victories": store.boss_victories(context_key) if store.ready else [],
+		"merged_level": store.merged_level(context_key) if store.ready else 1}
 
 
 func request_stage(number: int) -> void:
@@ -153,6 +161,12 @@ func prepare_plan(words: Array, seed: int) -> Dictionary:
 	if not challenge and not store.reserve_plan(context_key, result):
 		error = store.error
 		return {"ok": false, "error": error}
+	result["merged_level_limit"] = store.merged_level(context_key)
+	result["boss"] = BossCatalog.encounter(selected_stage, not challenge and selected_stage == 1 \
+		and store.highest_cleared(context_key) == 0)
+	if not result.boss.is_empty():
+		result.boss["unlock_level"] = mini(9, int(result.merged_level_limit) + 1) \
+			if int(result.boss.id) > 0 and int(result.boss.id) not in store.boss_victories(context_key) else 0
 	pending_plan = result.duplicate(true)
 	return result
 
@@ -163,6 +177,7 @@ func round_started() -> void:
 	_result_draft.clear()
 	_result_round = ""
 	_bonus_presented = false
+	return_home_after_settlement = false
 	error = ""
 	map.close()
 	pending_plan.clear()
@@ -196,6 +211,13 @@ func capture_result(result: Dictionary) -> bool:
 		"collection_count": stage.collection_count, "chest_count": result.chest_count,
 		"chest_tier": result.chest_tier, "chest_coins": chest_coins,
 		"bonus": quote.bonus, "completed_word_ids": []}
+	var boss: Dictionary = result.get("boss", {})
+	if bool(boss.get("active", false)):
+		_result_draft["boss_id"] = int(boss.definition.get("id", 0))
+		_result_draft["boss_victory"] = boss.get("outcome") == "defeated" and stage.outcome == "cleared"
+		_result_draft["boss_outcome"] = str(boss.get("outcome", ""))
+		if bool(_result_draft.boss_victory):
+			_app._round_result["merged_level_unlocked"] = int(boss.definition.get("unlock_level", 0))
 	for word: Dictionary in result.get("words", []):
 		_result_draft.completed_word_ids.append(str(word.id))
 	_app._round_result["stage_bonus"] = quote.duplicate(true)
@@ -218,6 +240,7 @@ func advance(delta: float) -> void:
 		or _app._round_end_active() or _app._round_celebration_active() or not is_finite(delta) or delta <= 0.0:
 		return
 	var room = _app._jelly_rewards
+	room.advance_stage_feedback(delta)
 	if not error.is_empty():
 		room.set_settlement_error(error)
 		return
@@ -251,7 +274,7 @@ func advance(delta: float) -> void:
 				error = room.rewards.error
 				room.set_settlement_error(error)
 		return
-	if room._opening or room._holding or _app._coin_flight.snapshot().active \
+	if room._opening or room._holding or room.stage_feedback_active() or _app._coin_flight.snapshot().active \
 		or absf(_app._coin_counter.displayed - float(_app._coin_counter.target)) > 0.001:
 		return
 	if not _bonus_presented:
@@ -272,7 +295,11 @@ func advance(delta: float) -> void:
 	_app._settlement_dialog.close()
 	_app._coin_flight.sync(_app.coin_wallet.balance)
 	_app.audio.stop_coin_sounds()
-	_show_map()
+	if return_home_after_settlement:
+		return_home_after_settlement = false
+		_app._show_mode_menu()
+	else:
+		_show_map()
 
 
 func _credit_bonus(result: Dictionary, round_id: String, animate: bool) -> bool:
@@ -284,8 +311,7 @@ func _credit_bonus(result: Dictionary, round_id: String, animate: bool) -> bool:
 		error = _app.coin_wallet.error
 		return false
 	if animate and not credited.duplicate:
-		_app._coin_flight.reduced_motion = _app.reduced_motion
-		_app._coin_flight.present(receipt, credited, _app.size * Vector2(0.5, 0.42), true)
+		_app._jelly_rewards.present_stage_bonus(receipt, credited)
 	else:
 		_app._coin_flight.sync(_app.coin_wallet.balance)
 	return true

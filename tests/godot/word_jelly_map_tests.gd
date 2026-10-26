@@ -204,6 +204,10 @@ func _art(view: Node) -> Array[Dictionary]:
 			var surface: StyleBox = button.get_theme_stylebox("normal")
 			if surface is StyleBoxTexture:
 				result.append({"node": button, "texture": (surface as StyleBoxTexture).texture})
+		elif child is Panel:
+			var surface: StyleBox = (child as Panel).get_theme_stylebox("panel")
+			if surface is StyleBoxTexture:
+				result.append({"node": child, "texture": (surface as StyleBoxTexture).texture})
 	return result
 
 
@@ -520,19 +524,19 @@ func _check_scenery(view: Control) -> void:
 	var artwork: Array[Dictionary] = _art(view)
 	var copy: String = _visible_copy(view)
 	var found_sky: bool = false
-	var found_gel: bool = false
+	var found_badge: bool = false
 	for entry: Dictionary in artwork:
 		found_sky = found_sky or _source(entry.texture) == "res://assets/images/jelly-match/sky/day.png"
-		found_gel = found_gel or _source(entry.texture).begins_with("res://assets/images/jelly-match/gel-")
-	check(found_sky and found_gel, "The route uses the acquired scenic sky and real gel stage artwork")
+		found_badge = found_badge or _source(entry.texture).begins_with("res://assets/images/ui/jelly-map/stage-")
+	check(found_sky and found_badge, "The route uses the acquired scenic sky and inspected adventure medallions")
 	check(is_equal_approx(float(view.get("_sky").modulate.a), 1.0),
 		"The scenic map is opaque so a finished board and its header cannot ghost through")
 	for index in range(CHAPTERS.size()):
 		check(copy.contains(CHAPTERS[index]), "The authored chapter heading is present: " + CHAPTERS[index])
 		var first: Rect2 = _rect(_stage(snapshot, index * 9 + 1).get("rect"))
 		var last: Rect2 = _rect(_stage(snapshot, index * 9 + 9).get("rect"))
-		var minimum_y: float = first.position.y - 180.0 / _pixel_scale()
-		var maximum_y: float = last.end.y + 180.0 / _pixel_scale()
+		var minimum_y: float = minf(first.position.y, last.position.y) - 180.0 / _pixel_scale()
+		var maximum_y: float = maxf(first.end.y, last.end.y) + 180.0 / _pixel_scale()
 		var found: bool = false
 		for entry: Dictionary in artwork:
 			var node: Control = entry.node
@@ -550,8 +554,8 @@ func _check_scenery(view: Control) -> void:
 			centers.append(current.get_center().x)
 			if number > index * 9 + 1:
 				var previous: Rect2 = _rect(_stage(snapshot, number - 1).get("rect"))
-				check(current.get_center().y > previous.get_center().y,
-					"Stage order travels down a storybook route instead of a flat button grid")
+				check(current.get_center().y < previous.get_center().y,
+					"Stage numbers climb upwards along the storybook route")
 				var delta: float = current.get_center().x - previous.get_center().x
 				if delta * previous_delta < 0.0:
 					reversals += 1
@@ -620,6 +624,27 @@ func _check_layout(view: Control, context: String) -> void:
 	check(_rect(snapshot.get("scroll_rect")).is_equal_approx(viewport)
 		and int(snapshot.get("scroll_offset", -1)) == scroll.scroll_vertical,
 		context + ": snapshots never retain stale pre-resize/pre-scroll geometry")
+	var home: BaseButton = _action_button(view, "home")
+	var heading: Label = view.get("_heading")
+	var wallet: Label = view.get("_wallet")
+	check(not home.get_global_rect().grow(6.0 / _pixel_scale()).intersects(heading.get_global_rect())
+		and (not wallet.visible or not wallet.get_global_rect().intersects(heading.get_global_rect())),
+		context + ": the actual Home control and wallet leave a separate title region")
+	var ink: Vector2 = heading.get_theme_font("font").get_string_size(heading.text, HORIZONTAL_ALIGNMENT_LEFT,
+		-1, heading.get_theme_font_size("font_size"))
+	check(ink.x <= heading.size.x + 0.1 and heading.get_line_count() == 1,
+		context + ": the complete map title fits on one line without going under Home")
+	var challenge: Button = _action_button(view, "challenge")
+	var frame: Panel = view.get("_challenge_frame") as Panel
+	check(frame != null, context + ": the nine-slice challenge frame has an independently pixel-scaled surface")
+	if frame != null:
+		check(frame.get_theme_stylebox("panel") is StyleBoxTexture
+			and frame.get_global_rect().is_equal_approx(challenge.get_global_rect()),
+			context + ": the sourced challenge frame aligns with the real button at every UI scale")
+		var paper: Rect2 = frame.get_global_rect().grow(-16.0 / _pixel_scale())
+		check(paper.grow(0.1).encloses(view.get("_challenge_title").get_global_rect())
+			and paper.grow(0.1).encloses(view.get("_challenge_caption").get_global_rect()),
+			context + ": both challenge labels stay on the paper instead of crossing the scaled wooden border")
 
 
 func _check_status_copy(view: Control, source: Dictionary, context: String) -> void:
@@ -768,18 +793,38 @@ func _check_actions_and_status(view: Control) -> void:
 
 
 func _check_endpoints_and_focus(view: Control) -> void:
+	var published: Array[Dictionary] = []
+	var observe: Callable = func() -> void: published.append(view.call("snapshot"))
+	check(view.has_signal("changed"), "Map geometry changes can publish fresh live input coordinates")
+	if view.has_signal("changed"):
+		view.connect("changed", observe)
 	view.call("open", _state(0), true)
 	await _settle()
 	_check_semantics(view, _state(0))
 	check(root.gui_get_focus_owner() == _stage_button(view, 1),
 		"A new campaign starts at stage one, not a locked stage or challenge")
+	var initial_scroll: ScrollContainer = _scroll(view)
+	check(initial_scroll.scroll_vertical > 0
+		and initial_scroll.get_global_rect().grow(0.5).encloses(_stage_button(view, 1).get_global_rect()),
+		"A fresh map opens at the bottom with stage one completely visible")
+	await _capture("entry-bottom-stage-1")
+	check(published.any(func(state: Dictionary) -> bool:
+		return _rect(state.scroll_rect).grow(0.5).encloses(_rect(_stage(state, 1).rect))),
+		"Opening an upward map publishes the revealed stage-one coordinates after its deferred scroll")
+	if view.has_signal("changed"):
+		view.disconnect("changed", observe)
+	var initial: Dictionary = _snapshot(view)
+	for number in range(2, 100):
+		check(_rect(_stage(initial, number).rect).get_center().y < _rect(_stage(initial, number - 1).rect).get_center().y,
+			"Ascending order continues across chapter boundaries at stage %d" % number)
 	var source: Dictionary = _state(98)
 	view.call("open", source, true)
 	await _settle()
 	var scroll: ScrollContainer = _scroll(view)
 	if scroll == null:
 		return
-	check(scroll.scroll_vertical > 0, "Open scrolls a late frontier into view automatically")
+	check(scroll.scroll_vertical < initial_scroll.get_v_scroll_bar().max_value - initial_scroll.get_v_scroll_bar().page,
+		"The final frontier is above the bottom of the route")
 	var final_button: BaseButton = _stage_button(view, 99)
 	check(final_button != null and root.gui_get_focus_owner() == final_button
 		and scroll.get_global_rect().grow(0.5).encloses(final_button.get_global_rect()),
@@ -798,7 +843,7 @@ func _check_endpoints_and_focus(view: Control) -> void:
 				scroll.get_v_scroll_bar().page, view.get("_state").get("loading", false)])
 		check(bool(_stage(_snapshot(view), number).get("visible", false)),
 			"Published visibility includes the genuinely revealed focused stage")
-	scroll.scroll_vertical = 0
+	scroll.scroll_vertical = roundi(scroll.get_v_scroll_bar().max_value - scroll.get_v_scroll_bar().page)
 	view.call("focus_frontier")
 	await _settle()
 	check(root.gui_get_focus_owner() == final_button

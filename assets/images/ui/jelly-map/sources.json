@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "source": {
+    "title": "UI Pack - Adventure",
+    "version": "1.1",
+    "creator": "Kenney",
+    "url": "https://kenney.nl/assets/ui-pack-adventure",
+    "license": "CC0-1.0",
+    "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "acquisition": "Original byte copies from the already-acquired Kenney Game Assets All-in-1 3.7.0 UI assets library.",
+    "review": "Actual original pack preview and each selected PNG inspected before integration.",
+    "animations": "Static interface artwork; no source animation clips."
+  },
+  "license": {
+    "file": "LICENSE-CC0.txt",
+    "original": "License.txt",
+    "sha256": "593b79956190ca70b37ce5d0d1c71dd4b5fb4027d4d1d29a91814e950a36e6bd"
+  },
+  "images": [
+    {
+      "file": "stage-open.png",
+      "original": "PNG/Double/round_brown.png",
+      "sha256": "d418543a4da683eb9322f8ee0f2856103ef07fdb9a25a38124fdc308e7433341",
+      "bytes": 2333,
+      "size": [128, 128],
+      "processing": "Unmodified original PNG; displayed as an upright aspect-preserved medallion."
+    },
+    {
+      "file": "stage-locked.png",
+      "original": "PNG/Double/round_grey_dark.png",
+      "sha256": "87720c433c2a33f88abb2e35c9d18efe724ce011332da0df6d6c97e216774a36",
+      "bytes": 1841,
+      "size": [128, 128],
+      "processing": "Unmodified original PNG; displayed as an upright aspect-preserved locked medallion."
+    },
+    {
+      "file": "adventure-panel.png",
+      "original": "PNG/Double/panel_brown.png",
+      "sha256": "e5bcda84c20a4d2f44082a9ab8094c959b339cfaffa21e67fcb6b4b6a7f09d36",
+      "bytes": 447,
+      "size": [128, 128],
+      "processing": "Unmodified original PNG; nine-slice layout preserves the original frame corners."
+    }
+  ],
+  "reuse": [
+    {
+      "file": "assets/coins/gold-coin.png",
+      "record": "assets/coins/manifest.json",
+      "creator": "Kenneth Foldal Moe / Archanor VFX",
+      "license": "Standard Unity Asset Store EULA",
+      "status": "Existing acquired production coin reused unchanged; original source package remains private."
+    },
+    {
+      "file": "assets/images/ui/controls/home.svg",
+      "record": "assets/images/ui/controls/sources.json",
+      "creator": "Paweł Kuna",
+      "license": "MIT",
+      "status": "Existing acquired Tabler icon reused through the shared IconButton."
+    }
+  ]
+}

@@ -140,3 +140,23 @@ test('the campaign directory excludes extra artwork and references existing sky,
     assert.ok(fs.existsSync(path.join(repoRoot, ...sourceRecord.split('\\'))), `${sourceRecord}: provenance exists`);
   }
 });
+
+test('map medallions and challenge panels preserve the inspected original CC0 UI artwork', () => {
+  const directory = path.join(repoRoot, 'assets', 'images', 'ui', 'jelly-map');
+  const data = JSON.parse(fs.readFileSync(path.join(directory, 'sources.json'), 'utf8'));
+  assert.equal(data.source.creator, 'Kenney');
+  assert.equal(data.source.license, 'CC0-1.0');
+  assert.equal(data.source.version, '1.1');
+  assert.match(data.source.animations, /Static/);
+  assert.deepEqual(data.images.map(image => image.file).sort(),
+    ['stage-open.png', 'stage-locked.png', 'adventure-panel.png'].sort());
+  for (const image of data.images) {
+    const bytes = fs.readFileSync(path.join(directory, image.file));
+    assert.equal(sha256(bytes), image.sha256, image.file);
+    assert.equal(bytes.length, image.bytes, image.file);
+    assert.deepEqual(dimensions(bytes, image.file), image.size);
+  }
+  const license = fs.readFileSync(path.join(directory, data.license.file));
+  assert.equal(sha256(license), data.license.sha256);
+  assert.match(license.toString('utf8'), /UI Pack - Adventure \(1\.1\)/);
+});

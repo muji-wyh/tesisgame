@@ -136,6 +136,7 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   const cc0EmbeddedImports = new Set(cc0Images.map(image => path.join(root, image.path + '.import')));
   const campaignArt = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/jelly-campaign/sources.json'), 'utf8'));
   const goalArt = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/ui/jelly-goals/sources.json'), 'utf8'));
+  const mapArt = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/ui/jelly-map/sources.json'), 'utf8'));
   const sceneryImages = ['jelly-garden', 'jelly-sky'].flatMap(name =>
     JSON.parse(fs.readFileSync(path.join(root, `docs/assets/${name}.json`), 'utf8')).images);
   assert.equal(sceneryImages.length, 9, 'Eight preserved garden layers and one daytime panorama are imported');
@@ -153,10 +154,11 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     'assets/images/ui/jelly-powerups/auto-merge-wand.svg',
     ...cc0Textures,
     ...campaignArt.images.map(image => `assets/images/jelly-campaign/${image.path}`),
+    ...mapArt.images.map(image => `assets/images/ui/jelly-map/${image.file}`),
     ...[...goalArt.assets, ...goalArt.shared_illustrations].map(image => image.file)
   ];
   const addedImports = new Set(addedArtwork.map(filename => path.join(root, filename + '.import')));
-  assert.equal(addedImports.size, 32,
+  assert.equal(addedImports.size, 35,
     'Scenery, Home previews, mastery, tools, CC0 model atlases, campaign and goal artwork have separate imports');
   assert.deepEqual(textureImports.filter(filename => addedImports.has(filename)).sort(), [...addedImports].sort());
   for (const filename of addedArtwork) assert.ok(fs.existsSync(path.join(root, filename)), filename);

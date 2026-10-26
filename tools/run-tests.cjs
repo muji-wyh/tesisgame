@@ -70,11 +70,12 @@ const allGroups = Object.keys(groups);
 
 groups.jelly.godot.push('jelly_pause_tests');
 groups['word-jelly'].godot.push('jelly_pause_tests', 'word_jelly_practice_tests', 'coin_reward_flow_tests',
+  'word_jelly_boss_tests', 'word_jelly_boss_progress_tests', 'word_jelly_boss_view_tests', 'word_jelly_boss_flow_tests',
   'word_jelly_rules_tests', 'word_jelly_board_burst_tests', 'word_jelly_collection_learning_tests',
   'word_jelly_campaign_domain_tests', 'word_jelly_campaign_model_tests', 'word_jelly_campaign_flow_tests',
   'word_jelly_map_tests', 'chest_tier_models_tests', 'chest_tier_progress_tests', 'chest_tier_consumers_tests');
 groups.core.godot.push('chest_tier_models_tests', 'chest_tier_progress_tests', 'chest_tier_consumers_tests');
-groups.jelly.node.push('jelly-campaign-art', 'jelly-campaign-host', 'chest-tier-art');
+groups.jelly.node.push('jelly-campaign-art', 'jelly-campaign-host', 'chest-tier-art', 'jelly-boss-art');
 
 function createPlan(names = ['all']) {
   const godot = new Set(), node = new Set();

@@ -68,6 +68,9 @@ func _test_capped_upgrades() -> void:
 
 
 func _test_auto_merge_and_collection_credit() -> void:
+	check(is_equal_approx(Model.POWERUP_MERGE_BEAT_SECONDS, 0.16)
+		and is_equal_approx(Model.POWERUP_DRAG_SECONDS, 0.18),
+		"Auto merge uses faster 160 ms launches and 180 ms transfers while retaining overlapping flights")
 	var model = _model()
 	var learning: Array = []
 	var payments: Array = []

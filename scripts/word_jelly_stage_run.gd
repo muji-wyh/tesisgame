@@ -20,6 +20,8 @@ var elapsed: float = 0.0
 var remaining: float = 0.0
 var outcome: String = ""
 var collection_count: int = 0
+var boss_objective: bool = false
+var boss_defeated: bool = false
 var _configured: bool = false
 var _chapter: int = 1
 var _title: String = ""
@@ -66,7 +68,7 @@ func record_collection(event_id: String, word_id: String) -> bool:
 	collection_count += 1
 	if kind == "main" and goals.has(word_id):
 		current[word_id] = mini(int(goals[word_id]), int(current[word_id]) + 1)
-		if _goals_met():
+		if _goals_met() and not boss_objective:
 			decide("cleared")
 	return true
 
@@ -101,7 +103,7 @@ func decide(reason: String) -> bool:
 		return _fail("Choose a supported attempt outcome.")
 	if not _active():
 		return false
-	if reason == "cleared" and (kind != "main" or not _goals_met()):
+	if reason == "cleared" and (kind != "main" or (not boss_defeated if boss_objective else not _goals_met())):
 		return _fail("Every main-stage collection goal must be committed before clearing the attempt.")
 	if reason == "timeout" and kind != "main":
 		return _fail("An untimed challenge has no timeout outcome.")
@@ -192,7 +194,8 @@ func snapshot() -> Dictionary:
 		"goals": goals.duplicate(true), "current": current.duplicate(true), "practice": practice,
 		"word_ids": ids, "remaining_ids": remaining_ids, "total": goals.size(), "mastered": mastered,
 		"remaining": remaining_ids.size(), "complete": outcome == "cleared",
-		"collection_count": collection_count, "pressure": challenge_pressure()}
+		"collection_count": collection_count, "pressure": challenge_pressure(),
+		"objective": "boss" if boss_objective else "words", "boss_defeated": boss_defeated}
 
 
 func _reset() -> void:
@@ -208,6 +211,8 @@ func _reset() -> void:
 	remaining = 0.0
 	outcome = ""
 	collection_count = 0
+	boss_objective = false
+	boss_defeated = false
 	_chapter = 1
 	_title = ""
 	_profile = ""

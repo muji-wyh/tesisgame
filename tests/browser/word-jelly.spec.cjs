@@ -177,16 +177,13 @@ async function matchCat(page) {
   return (await timedMerge(page, candidate.roots[0].id, candidate.picture.id)).result;
 }
 
+async function pauseTimedRound(page) {
+  if (!(await jelly(page)).pause?.active) await page.keyboard.press('p');
+  await expect.poll(async () => (await jelly(page)).pause.active).toBe(true);
+}
+
 async function resumeTimedRound(page, roundId) {
-  const point = await page.locator('#canvas').evaluate(canvas => {
-    const rect = canvas.getBoundingClientRect(), scale = Math.min(rect.width, rect.height) / 480;
-    const library = JSON.parse(document.getElementById('game-status').dataset.library || '{}');
-    const control = library.controls.find(item => item.name === 'ContinueCurrentRound' && item.visible && !item.disabled);
-    if (!control) throw new Error('The paused round must expose its actual Resume your round control.');
-    return { x: rect.x + (control.rect[0] + control.rect[2] / 2) * scale,
-      y: rect.y + (control.rect[1] + control.rect[3] / 2) * scale };
-  });
-  await page.mouse.click(point.x, point.y);
+  await page.keyboard.press('p');
   await page.waitForFunction(id => {
     const state = JSON.parse(document.getElementById('game-status').dataset.jelly || '{}');
     return state.round_id === id && !state.paused && !state.game_over_sequence?.active;
@@ -875,7 +872,7 @@ test('blocked preview lanes retain their roots while open columns release and re
   const after = await jelly(page);
   await page.evaluate(() => window.wordJellyLaneObserver.disconnect());
   // Freeze immediately: the partial release may have filled the final gaps.
-  await openModeMenu(page);
+  await pauseTimedRound(page);
   await expect.poll(async () => (await jelly(page)).paused).toBe(true);
   await expect.poll(() => page.evaluate(() => Boolean(window.wordJellyLaneEvidence.frame)),
     { message: 'The real partial release retains a rendered canvas frame' }).toBe(true);
@@ -1630,13 +1627,13 @@ for (const { layout, viewport, reducedMotion } of [
     expectQuiet(await jelly(page));
     await beginDrag(pair.roots[0]);
     try {
-      await openModeMenu(page);
+      await pauseTimedRound(page);
       await expect.poll(async () => (await jelly(page)).paused).toBe(true);
       expectQuiet(await jelly(page));
     } finally {
       await page.mouse.up();
     }
-    await chooseMode(page, 'word_jelly');
+    await resumeTimedRound(page, opening.round_id);
     await expect.poll(async () => (await jelly(page)).paused).toBe(false);
     expectQuiet(await jelly(page));
     await capture(page, info, 'word-jelly-completion-cleared');
@@ -1846,7 +1843,7 @@ for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode ==
 
 additiveTest('combo coins start at three real merges, fast drop preserves the streak, and Collect increments without combo payouts', async ({ page, browserName }, info) => {
   test.setTimeout(240000);
-  await seedGrowth(page, 12, { unmastered: ['cat', 'dog'] });
+  await seedPipLevel(page, 3);
   await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 1, trackSourceLifecycle: true });
   const errors = await startWordJelly(page, { age: 3, preseededGrowth: true });
   const opening = await jelly(page), startingWallet = await wallet(page);
@@ -1867,7 +1864,7 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
   const evidence = { opening: opening.combo, roundId: opening.round_id, merges: [], sounds: [], preparations: [] };
   const save = () => fs.writeFileSync(info.outputPath('word-jelly-combo.json'), JSON.stringify(evidence, null, 2));
   const mergedIds = [];
-  await openModeMenu(page);
+  await pauseTimedRound(page);
   for (let count = 1; count <= 3; count++) {
     const state = await jelly(page), bounds = await metrics(page);
     expect(state.paused).toBe(true);
@@ -1882,7 +1879,7 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
       { state, bounds });
     mergedIds.push(completed.id);
     // Keep assertion and waveform-inspection latency out of the active combo window.
-    await openModeMenu(page);
+    await pauseTimedRound(page);
     evidence.merges.push({ id: completed.id, combo: current.combo, hud: current.combo_hud, wallet: await wallet(page) });
     save();
     expect(current.round_id).toBe(opening.round_id);
@@ -1930,7 +1927,7 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
     afterDrop = await jelly(page);
     return afterDrop.generated_tiles > beforeDrop.generated_tiles;
   }, { intervals: [25] }).toBe(true);
-  await openModeMenu(page);
+  await pauseTimedRound(page);
   expect(comboIdentity(afterDrop.combo)).toEqual(comboIdentity(beforeDrop.combo));
   expect(afterDrop.combo.remaining).toBeLessThan(beforeDrop.combo.remaining);
   expect(afterDrop.combo_hud.pulse_serial).toBe(beforeDrop.combo_hud.pulse_serial);
@@ -2000,7 +1997,7 @@ additiveTest('combo coins fly from the bonus into the header and roll up only on
   await seedGrowth(page, 12, { unmastered: ['cat', 'dog'] });
   const errors = await startWordJelly(page, { age: 3, preseededGrowth: true });
   const opening = await jelly(page), before = await wallet(page);
-  await openModeMenu(page);
+  await pauseTimedRound(page);
   for (let count = 1; count <= 3; count++) {
     const state = await jelly(page), bounds = await metrics(page);
     const candidate = suppliedWords(state, 3)[0];
@@ -2025,7 +2022,7 @@ additiveTest('combo coins fly from the bonus into the header and roll up only on
     });
     await resumeTimedRound(page, opening.round_id);
     await timedMerge(page, candidate.roots[0].id, candidate.picture.id, { state, bounds });
-    if (count < 3) await openModeMenu(page);
+    if (count < 3) await pauseTimedRound(page);
   }
   await expect.poll(async () => page.evaluate(() => window.comboCoinFrames.some(frame =>
     frame.coins.displayed > frame.coins.balance - 1 && frame.coins.displayed < frame.coins.target)),
@@ -2067,7 +2064,7 @@ additiveTest('combo countdown drains, freezes in Home and expires before a fresh
   expect(fresh.combo_hud.time_ratio).toBeCloseTo(fresh.combo.remaining / 8, 4);
   await expect.poll(async () => (await jelly(page)).combo.remaining).toBeLessThan(fresh.combo.remaining - 0.30);
   await capture(page, info, 'word-jelly-combo-countdown');
-  await openModeMenu(page);
+  await pauseTimedRound(page);
   await expect.poll(async () => (await jelly(page)).paused).toBe(true);
   const frozen = await jelly(page);
   await page.waitForTimeout(500);
@@ -2468,19 +2465,19 @@ test('five columns build a pictured word and a deliberate tap collects Lv1 witho
   expect((await wallet(page)).balance, 'A waiting word has already committed only its merge combo coins')
     .toBe(startingWallet.balance + earnedComboCoins);
   await capture(page, info, 'word-jelly-valid-pictured-word');
-  await openModeMenu(page);
+  await pauseTimedRound(page);
   await expect.poll(async () => (await jelly(page)).paused).toBe(true);
   const paused = await jelly(page);
   await page.waitForTimeout(500);
   const stillPaused = await jelly(page);
-  expect(stillPaused.spawn_elapsed, 'The word supply clock pauses behind the menu').toBe(paused.spawn_elapsed);
+  expect(stillPaused.spawn_elapsed, 'The word supply clock freezes during explicit pause').toBe(paused.spawn_elapsed);
   expect(stillPaused.tiles.map(tile => tile.id)).toEqual(paused.tiles.map(tile => tile.id));
-  await chooseMode(page, 'word_jelly');
+  await resumeTimedRound(page, paused.round_id);
   await expect.poll(async () => (await jelly(page)).paused).toBe(false);
   await expect.poll(async () => (await jelly(page)).visible).toBe(true);
   const before = await jelly(page);
   const resumed = before.tiles.find(tile => tile.id === merged.id);
-  expect(resumed.picture_visible, 'The complete word survives opening and closing the menu').toBe(true);
+  expect(resumed.picture_visible, 'The complete word survives pausing and resuming').toBe(true);
   await pressRect(page, resumed.rect);
   await pressRect(page, resumed.rect);
   await expect.poll(async () => (await jelly(page)).cleared_pairs).toBe(before.cleared_pairs + 1);

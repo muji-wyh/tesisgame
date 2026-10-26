@@ -35,7 +35,31 @@ function modeRect(bounds, name) {
 }
 
 async function openModeMenu(page) {
-  const bounds = await metrics(page);
+  let bounds = await metrics(page);
+  let jelly = await page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
+  if (jelly.pause?.active) {
+    await page.keyboard.press('p');
+    await expect.poll(async () => page.locator('#game-status').evaluate(node =>
+      JSON.parse(node.dataset.jelly || '{}').pause?.active)).toBe(false);
+    bounds = await metrics(page);
+  }
+  if (jelly.mode === 'word_jelly' && jelly.campaign?.kind &&
+    (jelly.stage_ending || jelly.phase === 'finished') && !jelly.campaign_map?.visible && !bounds.library?.visible) {
+    await expect.poll(async () => {
+      const state = await page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
+      return state.campaign_map?.visible || (await metrics(page)).library?.visible;
+    }, { timeout: 90000 }).toBe(true);
+    bounds = await metrics(page);
+    jelly = await page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
+  }
+  if (!bounds.library?.visible && jelly.campaign_map?.visible) {
+    const rect = jelly.campaign_map.home.rect;
+    await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
+    await expect.poll(async () => (await metrics(page)).library?.visible).toBe(true);
+    await rendered(page);
+    return;
+  }
+  let confirmedExit = false;
   if (!bounds.library?.visible) {
     let home = headerPoint(bounds, 'mode');
     if (bounds.growth?.settlement?.visible) {
@@ -59,8 +83,19 @@ async function openModeMenu(page) {
       }
     }
     await tap(page, home.x, home.y);
+    await expect.poll(async () => {
+      const state = await page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
+      return state.finish_confirmation?.visible || (await metrics(page)).library?.visible;
+    }).toBe(true);
+    const state = await page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
+    if (state.finish_confirmation?.visible) {
+      const [x, y, width, height] = state.finish_confirmation.confirm.rect;
+      await tap(page, x + width / 2, y + height / 2);
+      confirmedExit = true;
+    }
   }
-  await expect.poll(async () => (await metrics(page)).library?.visible).toBe(true);
+  await expect.poll(async () => (await metrics(page)).library?.visible,
+    { timeout: confirmedExit ? 90000 : 10000 }).toBe(true);
   await rendered(page);
 }
 
@@ -101,6 +136,24 @@ async function activateLibraryControl(page, name) {
   await rendered(page);
 }
 
+async function waitForCampaignMap(page, options = {}) {
+  let map;
+  await expect.poll(async () => {
+    map = await page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}').campaign_map);
+    if (!map?.visible || map.loading) return false;
+    if (map.error) throw new Error(map.error);
+    const number = options.stage || map.stage_nodes.find(item => item.unlocked && !item.best_stars)?.number || 99;
+    const target = options.challenge ? map.challenge : map.stage_nodes.find(item => item.number === number);
+    if (!target || (!options.challenge && !target.unlocked)) throw new Error('The requested campaign stage is unavailable.');
+    const area = options.challenge ? map.map_rect : map.scroll_rect;
+    const rect = target.rect;
+    return target.visible && rect.x >= area.x - 0.5 && rect.y >= area.y - 0.5 &&
+      rect.x + rect.width <= area.x + area.width + 0.5 &&
+      rect.y + rect.height <= area.y + area.height + 0.5;
+  }, { timeout: 10000, message: 'The revealed map target has current onscreen input coordinates' }).toBe(true);
+  return map;
+}
+
 async function chooseMode(page, name, options = {}) {
   await openModeMenu(page);
   const paths = (await metrics(page)).library?.controls || [];
@@ -113,7 +166,7 @@ async function chooseMode(page, name, options = {}) {
   if (name === 'word_jelly') {
     const state = await page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
     if (state.campaign_map?.visible) {
-      const map = state.campaign_map;
+      const map = await waitForCampaignMap(page, options);
       const target = options.challenge ? map.challenge : map.stage_nodes.find(node =>
         node.number === (options.stage || map.stage_nodes.find(item => item.unlocked && !item.best_stars)?.number || 99));
       if (!target) throw new Error('The requested campaign stage is unavailable.');
@@ -584,7 +637,7 @@ function resultPoint(bounds, key) {
   return { x: x + width / 2, y: y + height / 2 };
 }
 
-module.exports = { THEME_NAMES, THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeRect, openModeMenu, libraryControl, activateLibraryControl, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,
+module.exports = { THEME_NAMES, THEME_IDS, THEME_COLORS, MODES, metrics, tap, uiScale, modeRect, openModeMenu, libraryControl, activateLibraryControl, waitForCampaignMap, chooseMode, chooseTheme, contentBounds, collectionBounds, collectionHeaderRect, worldIconRect, worldControl, ageButtonRect, ageControl, headerPoint, headerIconRect, pipHeaderRect,
   openRewards, rewardState, growthView, growthState, seedGrowth, seedPipLevel, growthControl, activateGrowthControl, rendered, observeAudio, enterGame, openGame, boardPoint, discoverMatchCards, matchWords,
   memoryMetrics, memoryLayout, memoryCardRect, memoryPoint, peekPoint, withMemoryPeek, resultPoint, visibleColorCount,
   celebrationState, acceptCelebration };

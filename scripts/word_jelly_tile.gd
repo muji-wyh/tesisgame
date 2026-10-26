@@ -45,6 +45,8 @@ var _merged_pose_reduced: bool = false
 var _merged_pose_id: int = -1
 var _level_badge: Label
 var _picture_shadow: TextureRect
+var _boss_status: Dictionary = {}
+var _boss_overlay := Control.new()
 const MERGED_COLORS: Array[Color] = [Color("#f7c45c"), Color("#f7c45c"), Color("#9ee8f3"),
 	Color("#b6c3ff"), Color("#ffd16f"), Color("#ffb4dc"), Color("#f4daff"),
 	Color("#b3f1dd"), Color("#cbd9ff"), Color("#ffe397")]
@@ -77,6 +79,48 @@ func _init() -> void:
 	_level_badge.z_index = 46
 	_visual.add_child(_level_badge)
 	_level_badge.hide()
+	_boss_overlay.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_boss_overlay.z_index = 55
+	_boss_overlay.draw.connect(_draw_boss_status)
+	add_child(_boss_overlay)
+
+
+func set_boss_status(state: Dictionary, reduced: bool) -> void:
+	_boss_status = state
+	var obscured: bool = float(state.get("ink", 0.0)) > 0.0
+	_label.modulate.a = 0.06 if obscured else 1.0
+	_picture.modulate.a = 0.06 if obscured else 1.0
+	_picture_shadow.modulate.a = 0.06 if obscured else 1.0
+	if float(state.get("freeze", 0.0)) > 0.0:
+		disabled = true
+		set_completion_hint(false, _merged_elapsed, reduced)
+	_boss_overlay.size = size
+	_boss_overlay.queue_redraw()
+
+
+func _draw_boss_status() -> void:
+	var s: float = Style.ui_scale(self)
+	var frozen: float = float(_boss_status.get("freeze", 0.0))
+	var locks: int = int(_boss_status.get("locks", 0))
+	var edge: float = minf(size.x * 0.33, 22.0 / s)
+	if float(_boss_status.get("ink", 0.0)) > 0.0:
+		_boss_overlay.draw_texture_rect(COMPLETION_GLOW, Rect2(Vector2.ZERO, size), false, Color("#794ea0"))
+		var mark: Texture2D = preload("res://assets/images/ui/controls/eye-closed.svg")
+		_boss_overlay.draw_texture_rect(mark, Rect2((size - Vector2.ONE * edge) * 0.5, Vector2.ONE * edge), false)
+	if frozen > 0.0:
+		_boss_overlay.draw_texture_rect(COMPLETION_GLOW, Rect2(-size * 0.12, size * 1.24), false, Color("#87dfff"))
+		var center: Vector2 = Vector2(size.x * 0.5, size.y * 0.47)
+		_boss_overlay.draw_texture_rect(preload("res://assets/images/ui/jelly-goals/clock.webp"),
+			Rect2(center - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false)
+		_boss_overlay.draw_arc(center, edge * 0.65, -PI * 0.5, -PI * 0.5 + TAU * frozen / 3.0,
+			32, Color("#e7fcff"), maxf(1.0, 2.0 / s), true)
+		_boss_overlay.draw_string(Style.HEADING_FONT, Vector2(size.x * 0.40, size.y * 0.88),
+			"%d" % ceili(frozen), HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(12 / s), Color("#194d67"))
+	for index in range(locks):
+		var at: Vector2 = Vector2(size.x - edge * (index + 1) - 2 / s, 2 / s)
+		var rect := Rect2(at, Vector2.ONE * edge)
+		_boss_overlay.draw_style_box(Style.box(Color("#fff0c3"), Color("#b98b38"), 5, 1), rect)
+		_boss_overlay.draw_texture_rect(preload("res://assets/images/ui/controls/lock.svg"), rect.grow(-2 / s), false)
 
 func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 	_merged_elapsed = elapsed
@@ -252,7 +296,7 @@ func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: 
 		var chance: float = WordModel.coin_drop_chance_for_tile(cell)
 		var reward: String = " No bonus coins at this level." if chance <= 0.0 else " %d%% chance of %d bonus coins." % [roundi(chance * 100.0), WordModel.coins_for_tile(cell)]
 		instruction = "Merged word, level %d. Press to collect.%s Drag onto the same word to add their levels, capped at %d." % [
-			merge_level, reward, WordModel.MAX_MERGE_LEVEL]
+			merge_level, reward, int(cell.get("merged_level_limit", WordModel.MAX_MERGE_LEVEL))]
 	elif jelly_kind == "picture":
 		instruction = "Drag to its complete matching word to merge."
 	elif not cell.get("word_candidate", {}).is_empty():

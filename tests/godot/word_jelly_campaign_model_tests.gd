@@ -169,9 +169,42 @@ func test_challenge_pressure_and_blocked_top() -> void:
 		tile.arrival = false
 		model.cells.append(tile)
 	model.step(0.01)
+	check(model.phase == "playing" and model.stage_run.outcome.is_empty() and model.full_elapsed >= 0.0,
+		"A full challenge starts the flashing danger countdown instead of failing immediately")
+	model.step(Model.FULL_SECONDS - 0.1)
+	check(model.phase == "playing" and model.stage_run.outcome.is_empty(),
+		"The board remains playable throughout the ten-second warning")
+	model.step(0.1)
 	check(model.phase == "finished" and model.stage_run.outcome == "blocked"
 		and model.finish_round().campaign.stars == 0,
-		"A settled blocked top ends immediately, not after the retired ten-second danger grace")
+		"An expired full-board countdown ends through the normal failed campaign sweep")
+
+
+func test_main_stage_full_warning() -> void:
+	var model = make_model()
+	for index in range(Model.CAPACITY):
+		var tile: Dictionary = model._new_word_root(model.stage_run.words[0])
+		tile.column = index % Model.COLUMNS
+		tile.row = index / Model.COLUMNS
+		tile.age = 100.0
+		tile.settling = false
+		model.cells.append(tile)
+	model.step(0.01)
+	check(model.phase == "playing" and model.stage_run.outcome.is_empty()
+		and model.full_elapsed >= 0.0 and model.stage_run.remaining < 90.0,
+		"A numbered stage keeps its independent countdown while the full-board warning starts")
+	model.step(3.0)
+	var warning: float = model.full_elapsed
+	var deadline: float = model.stage_run.remaining
+	model.set_paused(true)
+	model.step(20.0)
+	check(model.full_elapsed == warning and model.stage_run.remaining == deadline,
+		"Explicit pause freezes both the stage deadline and full-board warning")
+	model.set_paused(false)
+	model.cells.pop_front()
+	model.step(0.01)
+	check(model.full_elapsed < 0.0 and model.stage_run.outcome.is_empty(),
+		"Making room cancels the warning without ending the stage")
 
 
 func test_full_board_pending_collection() -> void:
@@ -222,6 +255,7 @@ func _run() -> void:
 	test_timeout_and_retry()
 	test_timer_pause_and_extra_time()
 	test_challenge_pressure_and_blocked_top()
+	test_main_stage_full_warning()
 	test_full_board_pending_collection()
 	print("Jelly campaign model: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

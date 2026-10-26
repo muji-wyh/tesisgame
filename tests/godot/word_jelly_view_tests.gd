@@ -438,7 +438,7 @@ func _check_concurrent_powerup_resize(view) -> void:
 		purchases.clear()
 		var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", "root:caterpillar", "picture:caterpillar"], [1, 2, 3, 4])
 		view._activate_powerup("auto_merge")
-		_advance(view, 0.225)
+		_advance(view, (Model.POWERUP_MERGE_BEAT_SECONDS + Model.POWERUP_DRAG_SECONDS) * 0.5)
 		var moving: Dictionary = view.game.powerup_snapshot()
 		check(moving.drags.size() == 2 and view.game.fusions.is_empty(), "two independent Auto flights overlap before the first reaches contact")
 		var bodies: Array = []

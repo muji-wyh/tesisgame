@@ -11,7 +11,7 @@ function canonical(value) {
   return JSON.stringify(value);
 }
 
-function recipe({ seconds = 180, quota = 1 } = {}) {
+function recipe({ seconds = 180, quota = 1, number = 1 } = {}) {
   const ids = ['cat', 'dog', 'duck'];
   const identities = Object.fromEntries(ids.map(id => {
     const word = words.find(item => item.id === id);
@@ -20,7 +20,11 @@ function recipe({ seconds = 180, quota = 1 } = {}) {
     const identity = canonical([id, word.text, morphology, Boolean(word.image)]);
     return [id, createHash('sha256').update(identity).digest('hex')];
   }));
-  return { version: 1, kind: 'main', number: 1, chapter: 1, title: 'Meadow', profile: 'Discover',
+  const chapters = ['Meadow', 'Grove', 'Pine Trail', 'Cottage Creek', 'Amber Orchard', 'Snowfields',
+    'Frost Pines', 'Palm Lagoon', 'Cactus Valley', 'High Peaks', 'Castle Gardens'];
+  const profiles = ['Discover', 'Practice', 'Build', 'Breather', 'Mix', 'Flow', 'Reward', 'Prepare', 'Finale'];
+  const chapter = Math.ceil(number / 9);
+  return { version: 1, kind: 'main', number, chapter, title: chapters[chapter - 1], profile: profiles[(number - 1) % 9],
     age: 3, seed: 71, word_ids: ids, identities, goals: Object.fromEntries(ids.map(id => [id, quota])),
     seconds, spawn_interval: 20, fall_speed_scale: 1 };
 }

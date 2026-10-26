@@ -27,6 +27,8 @@ assets/chests/downloaded/*/*.png
 assets/chests/downloaded/*/*.png.import
 # Licensed chest models and their source maps remain private build inputs.
 assets/chests/models/
+# Licensed Boss character inputs are embedded only in the compiled game.
+assets/jelly-boss/private/
 # Retired treasure-stage particles remain private archived inputs.
 assets/talk_quest/treasure/halo.png
 assets/talk_quest/treasure/halo.png.import

@@ -22,6 +22,10 @@ const RewardLayout = preload("res://scripts/round_reward_layout.gd")
 const CoinBreakdown = preload("res://scripts/chest_coin_breakdown.gd")
 const TREASURE_LIGHT = preload("res://assets/chests/particles/portal_glow.png")
 const RATING_STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
+const RATING_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const STAR_STEP_SECONDS: float = 0.18
+const STAR_APPEAR_SECONDS: float = 0.42
+const STAGE_BONUS_SECONDS: float = 0.70
 
 var rewards := State.new()
 var _settlement_error: String = ""
@@ -77,6 +81,12 @@ var _collect_pending: bool = false
 var _stage_rating: Control
 var _stage_stars: Array[TextureRect] = []
 var _stage_bonus_label: Label
+var _stage_feedback_round: String = ""
+var _stage_intro_elapsed: float = 1.0
+var _stage_bonus_elapsed: float = STAGE_BONUS_SECONDS
+var _stage_bonus_receipt: String = ""
+var _stage_bonus_reward: Dictionary = {}
+var _stage_publish_elapsed: float = 0.0
 
 
 func _ready() -> void:
@@ -116,6 +126,7 @@ func _ready() -> void:
 	_stage_rating = Control.new()
 	_stage_rating.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_content.add_child(_stage_rating)
+	_stage_rating.draw.connect(_draw_stage_feedback)
 	for index in range(3):
 		var star := TextureRect.new()
 		star.texture = RATING_STAR
@@ -126,6 +137,7 @@ func _ready() -> void:
 	_stage_bonus_label = _label("", 15)
 	_stage_bonus_label.reparent(_stage_rating)
 	_stage_bonus_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_stage_bonus_label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	_stage_rating.hide()
 	_result_caption.hide()
 	pip = Mascot.new()
@@ -246,6 +258,13 @@ func set_result_context(result: Dictionary, earned_round_id: String = "") -> voi
 	var previous_page_size: int = _effective_page_size()
 	var had_empty_result: bool = not _empty_result_id.is_empty()
 	var previous_reward_id: String = _result_reward_id
+	var feedback_round: String = earned_round_id if result.has("campaign") else ""
+	if feedback_round != _stage_feedback_round:
+		_release_stage_bonus(false)
+		_stage_feedback_round = feedback_round
+		_stage_intro_elapsed = 1.0 if reduced_motion else 0.0
+		_stage_bonus_receipt = ""
+		_stage_bonus_elapsed = STAGE_BONUS_SECONDS
 	if _result_context != result:
 		_settlement_error = ""
 	_result_context = result.duplicate(true)
@@ -261,6 +280,104 @@ func set_result_context(result: Dictionary, earned_round_id: String = "") -> voi
 		_build_cards()
 		return
 	_refresh()
+
+
+func stage_feedback_active() -> bool:
+	var rating: int = int(_result_context.get("campaign", {}).get("stars", 0))
+	return not _stage_bonus_reward.is_empty() or not reduced_motion \
+		and rating > 0 and _stage_intro_elapsed < (rating - 1) * STAR_STEP_SECONDS + STAR_APPEAR_SECONDS
+
+
+func present_stage_bonus(receipt: String, reward: Dictionary) -> void:
+	if receipt == _stage_bonus_receipt or reward.get("duplicate", false) or int(reward.get("amount", 0)) <= 0:
+		return
+	_stage_bonus_receipt = receipt
+	_stage_bonus_reward = reward.duplicate(true)
+	_stage_bonus_elapsed = 0.0
+	_pose_stage_feedback()
+
+
+func advance_stage_feedback(delta: float) -> void:
+	if _paused or not is_visible_in_tree() or not is_finite(delta) or delta <= 0.0 or not stage_feedback_active():
+		return
+	_stage_intro_elapsed += delta
+	if not _stage_bonus_reward.is_empty():
+		_stage_bonus_elapsed = STAGE_BONUS_SECONDS if reduced_motion else minf(STAGE_BONUS_SECONDS, _stage_bonus_elapsed + delta)
+		if _stage_bonus_elapsed >= STAGE_BONUS_SECONDS:
+			_release_stage_bonus(true)
+	_pose_stage_feedback()
+	_stage_publish_elapsed += delta
+	if _stage_publish_elapsed >= 0.08 or not stage_feedback_active():
+		_stage_publish_elapsed = 0.0
+		changed.emit(snapshot())
+
+
+func _release_stage_bonus(animate: bool) -> void:
+	if _stage_bonus_reward.is_empty():
+		return
+	var reward: Dictionary = _stage_bonus_reward
+	_stage_bonus_reward = {}
+	_stage_bonus_elapsed = STAGE_BONUS_SECONDS
+	var origin: Vector2 = _stage_bonus_label.get_global_rect().get_center()
+	coins_released.emit(_stage_bonus_receipt, reward, origin, animate)
+
+
+func _pose_stage_feedback() -> void:
+	if _stage_rating == null or not _stage_rating.visible:
+		return
+	var rating: int = int(_result_context.get("campaign", {}).get("stars", 0))
+	var boost: float = 0.0 if reduced_motion or _stage_bonus_reward.is_empty() \
+		else sin(PI * _stage_bonus_elapsed / STAGE_BONUS_SECONDS)
+	for index in range(3):
+		var p: float = 1.0 if reduced_motion else clampf(
+			(_stage_intro_elapsed - index * STAR_STEP_SECONDS) / STAR_APPEAR_SECONDS, 0.0, 1.0)
+		var earned: bool = index < rating
+		_stage_stars[index].scale = Vector2.ONE * ((0.60 + 0.40 * (1.0 - pow(1.0 - p, 3.0))
+			+ 0.12 * sin(p * PI) + 0.12 * boost) if earned else 1.0)
+		_stage_stars[index].modulate = Color(1, 1, 1, smoothstep(0.0, 0.22, p)) if earned \
+			else Color(0.4, 0.46, 0.42, 0.40)
+	var quote: Dictionary = _result_context.get("stage_bonus", {})
+	if quote.get("ok", false) and rating > 0:
+		var amount: int = int(quote.bonus)
+		if not _stage_bonus_reward.is_empty():
+			amount = roundi(amount * (1.0 - pow(1.0 - _stage_bonus_elapsed / STAGE_BONUS_SECONDS, 3.0)))
+		_stage_bonus_label.text = "+%d\nclear coins" % amount
+	_stage_bonus_label.scale = Vector2.ONE * (1.0 + 0.08 * boost)
+	_result_score.scale = Vector2.ONE * (1.0 + 0.06 * boost)
+	_stage_rating.queue_redraw()
+
+
+func _draw_stage_feedback() -> void:
+	if reduced_motion:
+		return
+	var s: float = Style.ui_scale(self)
+	var rating: int = int(_result_context.get("campaign", {}).get("stars", 0))
+	if not _stage_bonus_reward.is_empty():
+		var glow: float = sin(PI * _stage_bonus_elapsed / STAGE_BONUS_SECONDS)
+		var formula: Rect2 = _result_score.get_rect()
+		formula.position -= _stage_rating.position
+		_stage_rating.draw_texture_rect(TREASURE_LIGHT, formula.grow(12.0 / s),
+			false, Color(1.0, 0.82, 0.32, glow * 0.45))
+	for index in range(rating):
+		var star: TextureRect = _stage_stars[index]
+		var p: float = clampf((_stage_intro_elapsed - index * STAR_STEP_SECONDS) / STAR_APPEAR_SECONDS, 0.0, 1.0)
+		var center: Vector2 = star.position + star.size * 0.5
+		if p > 0.0 and p < 1.0:
+			var glow: float = sin(p * PI)
+			_stage_rating.draw_texture_rect(TREASURE_LIGHT, Rect2(center - star.size * 0.9, star.size * 1.8),
+				false, Color(1.0, 0.84, 0.35, glow * 0.58))
+			for mote in range(4):
+				var angle: float = TAU * float(mote) / 4.0
+				var at: Vector2 = center + Vector2(cos(angle), sin(angle)) * (star.size.x * 0.4 + p * 16.0 / s)
+				_stage_rating.draw_texture_rect(RATING_SPARKLE, Rect2(at - Vector2.ONE * 5.0 / s, Vector2.ONE * 10.0 / s),
+					false, Color(1.0, 0.87, 0.40, glow))
+		if not _stage_bonus_reward.is_empty():
+			var travel: float = clampf((_stage_bonus_elapsed / STAGE_BONUS_SECONDS - index * 0.08) / 0.75, 0.0, 1.0)
+			var at: Vector2 = center.lerp(_stage_bonus_label.get_rect().get_center(), travel)
+			at.y -= sin(travel * PI) * 18.0 / s
+			var edge: float = 16.0 / s * (1.0 - travel * 0.35)
+			_stage_rating.draw_texture_rect(RATING_STAR, Rect2(at - Vector2.ONE * edge * 0.5, Vector2.ONE * edge),
+				false, Color(1, 1, 1, sin(travel * PI)))
 
 
 func set_settlement_error(message: String) -> void:
@@ -862,6 +979,7 @@ func retry_save() -> void:
 
 
 func pause() -> void:
+	_release_stage_bonus(false)
 	_settling = true
 	cancel_input()
 	if _active >= 0 and _opening and _cards[_active].art.opening_committed():
@@ -974,6 +1092,7 @@ func _refresh() -> void:
 	_home.disabled = _paused
 	_back.text = "Play again" if result_mode else "Back"
 	_result_score.visible = result_mode
+	_result_score.scale = Vector2.ONE
 	_progress.visible = not result_mode
 	_result_caption.visible = result_mode and (_cards.is_empty() or failed)
 	_sync_companion()
@@ -992,16 +1111,23 @@ func _refresh() -> void:
 			var rating: int = int(campaign.get("stars", 0))
 			_heading.text = "Stage %d cleared!" % int(campaign.number) if rating > 0 else "Time's up" \
 				if campaign.get("outcome") == "timeout" else "Try again"
+			if _result_context.get("boss", {}).get("outcome") == "ambushed":
+				_heading.text = "The chase begins!"
 			var quote: Dictionary = _result_context.get("stage_bonus", {})
 			var quoted: bool = bool(quote.get("ok", false))
-			_result_score.text = ("%d stars  ·  Clear reward x%s" % [rating, str(quote.factor)] if quoted \
+			_result_score.text = ("%d stars  ·  %d ×%s = %d coins" % [rating,
+				int(quote.chest_coins) + int(quote.base), str(quote.factor).trim_suffix(".0"), int(quote.total)] if quoted \
 				else "%d stars  ·  Reward pending" % rating) if rating > 0 else "No clear bonus. Treasure is kept."
-			_stage_bonus_label.text = ("+%d clear coins" % int(quote.bonus) if quoted else "Waiting to save reward") \
-				if rating > 0 else "No clear bonus"
+			_stage_bonus_label.text = ("+%d\nclear coins" % int(quote.bonus) if quoted else "Reward\npending") \
+				if rating > 0 else "No clear\nbonus"
 			for index in range(3):
 				_stage_stars[index].modulate = Color.WHITE if index < rating else Color(0.4, 0.46, 0.42, 0.40)
 			if _cards.is_empty() and not failed:
 				_result_caption.text = "Saving your stars and returning to the map..."
+				if int(_result_context.get("merged_level_unlocked", 0)) > 0:
+					_result_caption.text = "New merged Lv%d! Saving..." % int(_result_context.merged_level_unlocked)
+				elif _result_context.get("boss", {}).get("outcome") == "ambushed":
+					_result_caption.text = "The chase begins. Find Bramble at stage 9!"
 				_result_caption.visible = true
 		if _result_context.has("campaign"):
 			_back.hide()
@@ -1025,6 +1151,7 @@ func _refresh() -> void:
 	_next_page.disabled = _paused or _holding or _opening or _save_failed or _page_index + 1 >= pages
 	_page_label.text = "%d / %d" % [_page_index + 1, pages]
 	_refresh_captions()
+	_pose_stage_feedback()
 	_layout()
 	changed.emit(snapshot())
 	_queue_layout()
@@ -1188,19 +1315,24 @@ func _layout_result_dialog(s: float, w: float, h: float) -> void:
 		control.custom_minimum_size = Vector2.ZERO
 		control.position = rect.position
 		control.size = rect.size
+	_result_score.pivot_offset = _result_score.size * 0.5
 	if _stage_rating != null and _stage_rating.visible:
 		var hero: Rect2 = layout.pip
 		_stage_rating.position = hero.position
 		_stage_rating.size = hero.size
-		var edge: float = minf(52.0 / s, hero.size.x / 3.2)
+		var edge: float = minf(48.0 / s, minf(hero.size.x / 3.2, hero.size.y * 0.36))
 		var total: float = edge * 3.0
+		var top: float = maxf(0.0, (hero.size.y - edge - 56.0 / s) * 0.5)
 		for index in range(3):
-			_stage_stars[index].position = Vector2((hero.size.x - total) * 0.5 + index * edge, hero.size.y * 0.34)
+			_stage_stars[index].position = Vector2((hero.size.x - total) * 0.5 + index * edge, top)
 			_stage_stars[index].size = Vector2.ONE * edge
-		_stage_bonus_label.position = Vector2(0, hero.size.y * 0.34 + edge + 6.0 / s)
-		_stage_bonus_label.size = Vector2(hero.size.x, 40.0 / s)
+			_stage_stars[index].pivot_offset = _stage_stars[index].size * 0.5
 		_stage_bonus_label.add_theme_font_size_override("font_size", ceili(14.0 / s))
-		_stage_bonus_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		_stage_bonus_label.update_minimum_size()
+		_stage_bonus_label.position = Vector2(0, top + edge + 4.0 / s)
+		_stage_bonus_label.size = Vector2(hero.size.x, 48.0 / s)
+		_stage_bonus_label.pivot_offset = _stage_bonus_label.size * 0.5
+		_pose_stage_feedback()
 	var gap: float = 8 / s
 	var footer_top: float = minf(_home.position.y, _retry.position.y) if _save_failed else _home.position.y
 	_scroll.position = Vector2.ZERO
@@ -1332,6 +1464,12 @@ func snapshot() -> Dictionary:
 	var viewport_rect: Rect2 = _scroll.get_global_rect() if is_instance_valid(_scroll) else Rect2()
 	var pip_rect: Rect2 = pip.get_global_rect() if is_instance_valid(pip) else Rect2()
 	return {"round_id": _empty_result_id if not _empty_result_id.is_empty() else _configured_id, "chest_count": batch.size(), "opened_count": opened,
+		"stage_feedback": {"phase": "bonus" if not _stage_bonus_reward.is_empty() else "stars" if stage_feedback_active() else "done",
+			"round_id": _stage_feedback_round, "star_elapsed": _stage_intro_elapsed,
+			"bonus_elapsed": _stage_bonus_elapsed, "formula": _result_score.text \
+				if int(_result_context.get("campaign", {}).get("stars", 0)) > 0 else "",
+			"stars": _stage_stars.map(func(star: TextureRect) -> Dictionary:
+				return {"alpha": star.modulate.a, "scale": star.scale.x})},
 		"result_context": _result_context.duplicate(true), "collect_pending": _collect_pending,
 		"empty_result": not _empty_result_id.is_empty(), "actions": actions,
 		"score_text": str(maxi(0, int(_result_context.get("score", 0)))) if not _result_context.is_empty() else "",

@@ -88,6 +88,28 @@ func _verify() -> void:
 			printerr("Campaign UI artwork must load before any age media pack: " + path)
 			failures += 1
 	print("Campaign: 99-stage catalog and 30 volumetric chest assemblies with nine base sources checked.")
+	var boss_model: PackedScene = load("res://assets/jelly-boss/private/bramble.glb")
+	if boss_model == null:
+		printerr("The acquired Bramble model must ship in the startup pack.")
+		failures += 1
+	else:
+		var boss: Node = boss_model.instantiate()
+		var players: Array[Node] = boss.find_children("*", "AnimationPlayer", true, false)
+		if players.is_empty():
+			printerr("The Boss character has no real animation player.")
+			failures += 1
+		else:
+			for clip: String in ["Idle", "Throw", "Kick", "Snatch", "Hit", "Taunt", "Celebrate", "Escape"]:
+				if not players[0].has_animation(clip):
+					printerr("The Boss character is missing its authored " + clip + " clip.")
+					failures += 1
+		boss.free()
+	print("Boss: acquired skinned Bramble and eight authored skeletal clips checked in startup.")
+	var boss_view: Script = load("res://scripts/word_jelly_boss_view.gd")
+	if boss_view == null or not boss_view.can_instantiate() \
+		or not ResourceLoader.exists("res://assets/jelly-boss/compass.webp"):
+		printerr("Boss presentation and its story compass must load without an age-twelve vocabulary pack.")
+		failures += 1
 	var confetti := load("res://assets/images/jelly-match/confetti.png") as Texture2D
 	if confetti == null or confetti.get_size() != Vector2(512, 512):
 		printerr("The reviewed Jelly chest-upgrade confetti atlas is missing from the startup pack.")

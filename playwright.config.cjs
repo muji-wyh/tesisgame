@@ -34,7 +34,7 @@ module.exports = defineConfig({
     { name: 'ipad-webkit', use: { ...devices['iPad Pro 11'], browserName: 'webkit' } },
     {
       name: 'android-chromium',
-      testMatch: ['learning-paths.spec.cjs', 'loading-theme.spec.cjs', 'game-library.spec.cjs', 'voice-pop.spec.cjs', 'voice.spec.cjs', 'match-audio-timing.spec.cjs', 'memory-audio-timing.spec.cjs', 'memory.spec.cjs', 'jelly-match.spec.cjs', 'word-jelly.spec.cjs', 'word-jelly-campaign.spec.cjs', 'word-jelly-hybrid.spec.cjs', 'word-jelly-fusion-tap.spec.cjs', 'word-jelly-powerups.spec.cjs', 'word-jelly-merge-audio.spec.cjs', 'settlement-modal.spec.cjs'],
+      testMatch: ['learning-paths.spec.cjs', 'loading-theme.spec.cjs', 'game-library.spec.cjs', 'voice-pop.spec.cjs', 'voice.spec.cjs', 'match-audio-timing.spec.cjs', 'memory-audio-timing.spec.cjs', 'memory.spec.cjs', 'jelly-match.spec.cjs', 'word-jelly.spec.cjs', 'word-jelly-campaign.spec.cjs', 'word-jelly-boss.spec.cjs', 'word-jelly-hybrid.spec.cjs', 'word-jelly-fusion-tap.spec.cjs', 'word-jelly-powerups.spec.cjs', 'word-jelly-merge-audio.spec.cjs', 'settlement-modal.spec.cjs'],
       use: { ...devices['Pixel 7'], browserName: 'chromium' }
     }
   ]

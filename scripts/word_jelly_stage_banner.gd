@@ -6,6 +6,7 @@ const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 const DURATION: float = 1.8
+const STAR_LOSS_SECONDS: float = 0.60
 var reduced_motion: bool = false
 var _state: Dictionary = {}
 var _label: Label
@@ -15,6 +16,7 @@ var _card := Control.new()
 var _badge := Rect2()
 var _scale: float = 1.0
 var _elapsed: float = DURATION
+var _star_loss_elapsed: Array[float] = [STAR_LOSS_SECONDS, STAR_LOSS_SECONDS, STAR_LOSS_SECONDS]
 
 
 func _init() -> void:
@@ -46,6 +48,13 @@ func _init() -> void:
 func set_stage(state: Dictionary, celebrate: bool = false) -> void:
 	if _state == state and not celebrate:
 		return
+	var same_stage: bool = not celebrate and state.get("kind") == "main" and _state.get("kind") == "main" \
+		and state.get("number") == _state.get("number")
+	if not same_stage or reduced_motion:
+		_star_loss_elapsed.fill(STAR_LOSS_SECONDS)
+	elif state.get("outcome", "") in ["", "timeout"]:
+		for index in range(clampi(int(state.get("stars_now", 0)), 0, 3), clampi(int(_state.get("stars_now", 0)), 0, 3)):
+			_star_loss_elapsed[index] = 0.0
 	_state = state.duplicate(true)
 	visible = int(state.get("number", 0)) > 0 or state.get("kind") == "challenge"
 	_update_label()
@@ -59,6 +68,9 @@ func set_stage(state: Dictionary, celebrate: bool = false) -> void:
 			_title.text = "All words mastered!" if state.get("complete", false) else "Stage %d" % state.number
 			_detail.text = "Beautiful work!" if state.get("complete", false) else "%d word goals" % state.total \
 				if state.get("kind") == "main" else "%d new words to master" % state.total
+			if state.get("objective", "") == "boss":
+				_title.text = "Boss battle"
+				_detail.text = "Collect words to defeat Bramble"
 	_refresh_motion()
 	queue_redraw()
 
@@ -66,6 +78,7 @@ func set_stage(state: Dictionary, celebrate: bool = false) -> void:
 func reset() -> void:
 	_state.clear()
 	_elapsed = DURATION
+	_star_loss_elapsed.fill(STAR_LOSS_SECONDS)
 	hide()
 	_card.hide()
 
@@ -76,21 +89,21 @@ func dismiss() -> void:
 
 
 func advance(delta: float) -> void:
-	if _elapsed >= DURATION or delta <= 0.0:
+	if not is_finite(delta) or delta <= 0.0:
 		return
-	_elapsed = minf(DURATION, _elapsed + delta)
-	_refresh_motion()
+	for index in range(3):
+		_star_loss_elapsed[index] = minf(STAR_LOSS_SECONDS, _star_loss_elapsed[index] + delta)
+	if _elapsed < DURATION:
+		_elapsed = minf(DURATION, _elapsed + delta)
+		_refresh_motion()
+	queue_redraw()
 
 
 func configure_layout(badge: Rect2, board: Rect2, ui_scale: float) -> void:
 	_scale = maxf(0.1, ui_scale)
 	_badge = badge
-	_update_label()
 	_label.add_theme_font_size_override("font_size", ceili(14.0 / _scale))
-	_label.position = badge.position
-	_label.size = badge.size
-	if _state.get("kind") == "main":
-		_label.size.x = maxf(1.0, badge.size.x - 68.0 / _scale)
+	_update_label()
 	_card.size = Vector2(minf(board.size.x - 16.0 / _scale, 320.0 / _scale), 104.0 / _scale)
 	_card.position = board.get_center() - _card.size * 0.5
 	_card.pivot_offset = _card.size * 0.5
@@ -117,27 +130,85 @@ func snapshot() -> Dictionary:
 	state["celebrating"] = visible and _elapsed < DURATION
 	state["elapsed"] = _elapsed
 	state["timer_ratio"] = _timer_ratio()
+	state["rating_segments"] = rating_geometry(_rating_bounds(), _scale)
+	state["star_loss_active"] = rating_feedback_active()
+	state["star_loss_elapsed"] = _star_loss_elapsed.duplicate()
 	state["rect"] = [_badge.position.x, _badge.position.y, _badge.size.x, _badge.size.y]
 	return state
+
+
+func rating_feedback_active() -> bool:
+	return not reduced_motion and _star_loss_elapsed.any(func(elapsed: float) -> bool: return elapsed < STAR_LOSS_SECONDS)
+
+
+func _rating_bounds() -> Rect2:
+	return Rect2(_badge.position + Vector2(8, 22) / _scale,
+		Vector2(maxf(1.0, _badge.size.x - 16.0 / _scale), 21.0 / _scale))
+
+
+func rating_geometry(bounds: Rect2, ui_scale: float, compact: bool = false) -> Array[Dictionary]:
+	var slots: Array[Dictionary] = []
+	var span: float = bounds.size.x / 3.0
+	var edge: float = (11.0 if compact else 16.0) / ui_scale
+	for index in range(3):
+		var star := Rect2(Vector2(bounds.position.x + (float(index) + 0.5) * span - edge * 0.5, bounds.position.y),
+			Vector2.ONE * edge)
+		var bar := Rect2(Vector2(bounds.position.x + float(index) * span, bounds.end.y - 3.0 / ui_scale),
+			Vector2(maxf(0.0, span - 2.0 / ui_scale), 3.0 / ui_scale))
+		slots.append({"star": [star.position.x, star.position.y, star.size.x, star.size.y],
+			"bar": [bar.position.x, bar.position.y, bar.size.x, bar.size.y]})
+	return slots
+
+
+func draw_rating(canvas: CanvasItem, bounds: Rect2, ui_scale: float, compact: bool = false) -> void:
+	var slots: Array[Dictionary] = rating_geometry(bounds, ui_scale, compact)
+	var colors: Array[Color] = [Color("#dc8b68"), Color("#59ab8b"), Color("#e5b247")]
+	for index in range(3):
+		var slot: Dictionary = slots[index]
+		var star := Rect2(slot.star[0], slot.star[1], slot.star[2], slot.star[3])
+		var bar := Rect2(slot.bar[0], slot.bar[1], slot.bar[2], slot.bar[3])
+		canvas.draw_style_box(Style.box(Color("#dbe5dd"), Color.TRANSPARENT, 2, 0), bar)
+		bar.size.x *= clampf(_timer_ratio() * 3.0 - float(index), 0.0, 1.0)
+		if bar.size.x > 0.0:
+			canvas.draw_style_box(Style.box(colors[index], Color.TRANSPARENT, 2, 0), bar)
+		canvas.draw_texture_rect(STAR, star, false,
+			Color.WHITE if index < int(_state.get("stars_now", 0)) else Color(0.35, 0.40, 0.38, 0.45))
+		if reduced_motion or _star_loss_elapsed[index] >= STAR_LOSS_SECONDS:
+			continue
+		var p: float = _star_loss_elapsed[index] / STAR_LOSS_SECONDS
+		var pulse: float = sin(p * PI)
+		var flying: Rect2 = star.grow(star.size.x * 0.14 * pulse)
+		flying.position.y -= 8.0 / ui_scale * pulse
+		canvas.draw_texture_rect(STAR, flying, false, Color(1, 1, 1, 1.0 - p))
+		for mote in range(4):
+			var angle: float = TAU * float(mote) / 4.0
+			var at: Vector2 = star.get_center() + Vector2(cos(angle), sin(angle)) * (6.0 + 15.0 * p) / ui_scale
+			var edge: float = (7.0 * (1.0 - p)) / ui_scale
+			canvas.draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * edge * 0.5, Vector2.ONE * edge),
+				false, Color(1.0, 0.86, 0.45, 1.0 - p))
 
 
 func _timer_ratio() -> float:
 	if _state.get("kind") != "main":
 		return 0.0
 	var total: float = maxf(0.001, float(_state.get("seconds_total", 0.0)))
-	return clampf(1.0 - float(_state.get("time_elapsed", 0.0)) / total, 0.0, 1.0)
+	return clampf(float(_state.get("seconds_remaining", 0.0)) / total, 0.0, 1.0)
 
 
 func _update_label() -> void:
 	if _state.is_empty():
 		return
+	_label.position = _badge.position
+	_label.size = _badge.size
 	var separator: String = "\n" if _badge.size.y * _scale >= 40.0 else "  ·  "
 	if _state.get("kind") == "challenge":
 		_label.text = "Challenge%sWave %d" % [separator, int(_state.get("pressure", {}).get("level", 1))]
 		return
 	if _state.get("kind") == "main":
 		var seconds: int = maxi(0, ceili(float(_state.get("seconds_remaining", 0.0))))
-		_label.text = "Stage %d%s%d:%02d" % [int(_state.number), separator, seconds / 60, seconds % 60]
+		_label.text = "Stage %d  ·  %d:%02d" % [int(_state.number), seconds / 60, seconds % 60]
+		_label.position = _badge.position + Vector2(8, 0) / _scale
+		_label.size = Vector2(maxf(1.0, _badge.size.x - 16.0 / _scale), 21.0 / _scale)
 		return
 	_label.text = "Stage %d%s%d / %d mastered" % [_state.number, separator, _state.mastered, _state.total]
 
@@ -155,25 +226,9 @@ func _draw() -> void:
 	if _state.is_empty():
 		return
 	draw_style_box(Style.box(Color("eef9ed"), Color("b8d6bf"), 12, 1), _badge)
-	if _state.get("kind") == "main" and _label.visible:
-		var stars: int = int(_state.get("stars_now", 0))
-		for index in range(3):
-			var edge: float = 18.0 / _scale
-			var at: Vector2 = _badge.position + Vector2(_badge.size.x - (64.0 - index * 20.0) / _scale,
-				(_badge.size.y - edge) * 0.5 - 2.0 / _scale)
-			draw_texture_rect(STAR, Rect2(at, Vector2.ONE * edge), false,
-				Color.WHITE if index < stars else Color(0.35, 0.40, 0.38, 0.45))
-		var ratio: float = _timer_ratio()
-		var colors: Array[Color] = [Color("#e5b247"), Color("#59ab8b"), Color("#dc8b68")]
-		var span: float = (_badge.size.x - 18.0 / _scale) / 3.0
-		for index in range(3):
-			var rect := Rect2(_badge.position + Vector2(8.0 / _scale + index * span, _badge.size.y - 5.0 / _scale),
-				Vector2(span - 2.0 / _scale, 3.0 / _scale))
-			draw_style_box(Style.box(Color("#dbe5dd"), Color.TRANSPARENT, 2, 0), rect)
-			var fill: float = clampf(ratio * 3.0 - float(index), 0.0, 1.0)
-			rect.size.x *= fill
-			if rect.size.x > 0.0:
-				draw_style_box(Style.box(colors[2 - index], Color.TRANSPARENT, 2, 0), rect)
+	if _state.get("kind") == "main":
+		if _label.visible:
+			draw_rating(self, _rating_bounds(), _scale)
 		return
 	var progress: float = float(_state.get("mastered", 0)) / maxf(1.0, float(_state.get("total", 10)))
 	var track := Rect2(_badge.position + Vector2(12.0 / _scale, _badge.size.y - 3.0 / _scale), Vector2((_badge.size.x - 24.0 / _scale) * progress, 2.0 / _scale))

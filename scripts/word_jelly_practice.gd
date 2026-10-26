@@ -5,16 +5,17 @@ signal word_progressed(word_id: String, complete: bool)
 
 const Style = preload("res://scripts/ui_style.gd")
 const Scroll = preload("res://scripts/review_scroll.gd")
+const StageTimer = preload("res://scripts/word_jelly_stage_banner.gd")
 const WordArt = preload("res://scripts/word_art.gd")
 const MEDAL = preload("res://assets/images/ui/mastery-medal.webp")
 const STAR = preload("res://assets/chests/milestone/sparkle.png")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const CHECK = preload("res://assets/images/ui/jelly-goals/completed.svg")
-const RATING_STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 const GAIN_SECONDS: float = 0.55
 const COMPLETE_SECONDS: float = 0.60
 const MARKER_HOLD: float = 0.7
 var reduced_motion: bool = false
+var stage_timer: StageTimer
 var _title: Label
 var _subtitle: Label
 var _medal := TextureRect.new()
@@ -250,6 +251,8 @@ func _layout() -> void:
 	add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	_title.add_theme_font_size_override("font_size", ceili((12.0 if _compact else 20.0) / s))
 	_title.text = "Stage %d" % int(_state.get("number", 1)) if _compact else "Word goals"
+	if not _compact and _state.get("objective", "") == "boss":
+		_title.text = "Attack words"
 	if _state.get("kind") == "challenge":
 		_title.text = "Wave %d" % int(_state.get("pressure", {}).get("level", 1)) if _compact else "Word practice"
 	var timed: bool = _state.get("kind") == "main"
@@ -260,16 +263,20 @@ func _layout() -> void:
 	_subtitle.text = "%d of %d mastered" % [int(_state.get("mastered", 0)), _rows.size()]
 	if timed:
 		_subtitle.text = "%d of %d goals done" % [int(_state.get("mastered", 0)), _rows.size()]
+	if _state.get("objective", "") == "boss":
+		_subtitle.text = "Collect words to attack"
 	_subtitle.add_theme_font_size_override("font_size", ceili(12.0 / s))
 	_medal.visible = not _compact
 	_medal.position = Vector2(0, 2.0) / s
 	_medal.size = Vector2(36, 40) / s
-	var stacked: bool = _compact and size.y * s >= 40.0
+	var stacked: bool = _compact and not timed and size.y * s >= 40.0
 	var title_height: float = 18.0 / s if stacked else size.y - padding * 2.0
 	_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_title.position = Vector2(padding if _compact else 46.0 / s, 0.0)
 	_title.size = Vector2(size.x - (padding * 2.0 if _compact else 46.0 / s) if stacked or not _compact else 62.0 / s,
 		(16.0 / s if timed and _compact else title_height) if _compact else 28.0 / s)
+	if timed and _compact:
+		_title.size.x = 76.0 / s
 	_subtitle.position = Vector2(46, 28) / s
 	_subtitle.size = Vector2(maxf(1.0, size.x - 46.0 / s), 20.0 / s)
 	_scroll.position = Vector2(padding if stacked or not _compact else (88.0 if timed else 70.0) / s,
@@ -349,10 +356,8 @@ func _layout() -> void:
 func _draw() -> void:
 	if not _compact or _state.get("kind") != "main":
 		return
-	var stars: int = int(_state.get("stars_now", 0))
-	for index in range(3):
-		draw_texture_rect(RATING_STAR, Rect2(Vector2(17 + index * 18, 15) / _scale, Vector2.ONE * 10.0 / _scale),
-			false, Color.WHITE if index < stars else Color(0.4, 0.45, 0.42, 0.45))
+	if stage_timer != null:
+		stage_timer.draw_rating(self, Rect2(Vector2(6, 18) / _scale, Vector2(72, 22) / _scale), _scale, true)
 
 
 func snapshot() -> Dictionary:
