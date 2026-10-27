@@ -343,10 +343,10 @@ test('a timeout warns with the board border and cannot turn cleanup into goal cr
 });
 
 test('Challenge completes a full goal stage, increases difficulty and restores its persisted best stage', async ({ page }, info) => {
-  test.setTimeout(360000);
+  test.setTimeout(600000);
   await seedPipLevel(page, 3);
   await seedCampaign(page, { balance: 12000 });
-  const errors = await openGame(page);
+  const errors = await openGame(page, { home: true, reducedMotion: 'no-preference' });
   const map = await openMap(page);
   await pressMapControl(page, map.challenge);
   await expect.poll(async () => {
@@ -371,7 +371,12 @@ test('Challenge completes a full goal stage, increases difficulty and restores i
     }
     await expect.poll(async () => (await jelly(page)).powerup_buttons.auto_merge.enabled).toBe(true);
     await pressRect(page, (await jelly(page)).powerup_buttons.auto_merge.rect);
-    await expect.poll(async () => (await jelly(page)).powerup.active, { timeout: 20000 }).toBe(false);
+    await expect.poll(async () => (await jelly(page)).powerup.active,
+      { timeout: info.project.name.includes('webkit') ? 60000 : 20000 }).toBe(false).catch(async error => {
+      fs.writeFileSync(info.outputPath('challenge-auto-failure.json'),
+        JSON.stringify({ state: await jelly(page), errors }, null, 2));
+      throw error;
+    });
     await expect.poll(async () => (await jelly(page)).collectable_ids.length).toBeGreaterThan(0);
     const ready = await jelly(page), before = ready.cleared_pairs;
     await pressRect(page, ready.collect_button.rect);
@@ -384,6 +389,7 @@ test('Challenge completes a full goal stage, increases difficulty and restores i
   expect(after.campaign.seconds_remaining).toBeLessThanOrEqual(90);
   expect(after.campaign.seconds_added).toBeGreaterThan(0);
   expect(after.stage.challenge_best_stage).toBeGreaterThanOrEqual(2);
+  expect(after.practice.record.value).toBe(after.stage.challenge_best_stage);
   expect(after.campaign.pressure.level).toBeGreaterThanOrEqual(2);
   expect(after.campaign.pressure.word_limit).toBeGreaterThan(3);
   expect(after.fall_speed_scale).toBeGreaterThan(opening.fall_speed_scale);
@@ -396,6 +402,33 @@ test('Challenge completes a full goal stage, increases difficulty and restores i
   expect(saved).toMatch(new RegExp(`"challenge_best_stage":\\s*${best}\\b`));
   await capture(page, info, 'challenge-growing-pressure');
   fs.writeFileSync(info.outputPath('challenge-pressure.json'), JSON.stringify({ opening, after }, null, 2));
+  await pressRect(page, (await jelly(page)).finish.rect);
+  await expect.poll(async () => (await jelly(page)).pause.active).toBe(true);
+  const paused = await jelly(page), bounds = await metrics(page), from = center(paused.finish.rect, bounds);
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  try {
+    await page.mouse.move(from.x, from.y + paused.finish.pull.threshold * bounds.scale + 12, { steps: 12 });
+    await expect.poll(async () => (await jelly(page)).finish.pull.armed).toBe(true);
+  } finally {
+    await page.mouse.up();
+  }
+  await expect.poll(async () => (await rewards(page)).challenge_return_ready, { timeout: 60000 }).toBe(true);
+  const result = await rewards(page);
+  expect(result.result_context.challenge_result).toMatchObject({
+    stage: after.campaign.challenge_stage, previous_best: 0, best, new_best: true, confirmed: true
+  });
+  expect(result.challenge_record.value).toBe(best);
+  expect(result.summary_text).toContain(`Reached Stage ${after.campaign.challenge_stage}`);
+  await page.waitForTimeout(3000);
+  expect((await jelly(page)).campaign_map.visible).toBe(false);
+  expect((await rewards(page)).visible).toBe(true);
+  await capture(page, info, 'challenge-saved-record-summary');
+  const back = (await rewards(page)).actions.find(action => action.text === 'Back to map' && action.visible);
+  expect(back?.disabled).toBe(false);
+  await pressRect(page, back.rect);
+  const settledMap = await waitForMap(page);
+  expect(stage(settledMap, 2).unlocked).toBe(false);
   await page.reload();
   await enterGame(page, { home: true });
   const restoredMap = await openMap(page);

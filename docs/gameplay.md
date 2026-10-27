@@ -358,8 +358,11 @@ See [Bramble's source and animation record](../assets/jelly-boss/SOURCE.md).
 
 Stage 1 has three word goals, adding one per stage up to eight. Each attempt
 starts its counters at zero, separately from Pip's permanent three-answer
-mastery. One committed collection counts once, including **Auto Collect** and a
-later collection of a word constructed by automatic matching. Merely merging
+mastery. A committed **LvN** collection contributes **N goal units**, including
+**Auto Collect** and a later collection of a word constructed by automatic
+matching. Quotas clamp at their required amount; overflow does not skip a later
+Challenge batch. The pickup, wallet receipt and learning attempt still happen
+only once. Merely merging
 does not fill a collection goal. Words whose quota is satisfied stop creating
 new packets, but already issued roots, pictures and queued partners remain
 available: retiring a word must never strand an old piece.
@@ -376,8 +379,9 @@ clearing before its first third earns three stars, before its second third earns
 two, and later earns one. Pauses, reading overlays, automatic sequences and
 pending saves do not consume active time. **+30 sec** costs 100 coins, then 150,
 200, 250 and so on per attempt; a saved purchase extends the deadline but never
-restores an expired star tier. Each rating star sits over its own countdown
-segment. Crossing a star boundary produces a short sourced sparkle and fading
+restores an expired star tier. Remaining time fills the progress background,
+with a right-aligned clock and larger acquired rating stars; the current Stage
+moves into the top game heading. Crossing a star boundary produces a short sourced sparkle and fading
 star rather than silently changing the rating. Reduced motion updates it still.
 A saved extension refills the remaining-time bar independently of the rating:
 the bar uses remaining seconds, while lost stars stay lost.
@@ -425,14 +429,28 @@ Stages also increase actual fall speed and supply pressure toward the establishe
 Each newly completed target grants ten seconds, capped at 90 remaining seconds.
 There are no random extra-time drops or paid Challenge time purchases.
 Pending/failed/duplicate collection receipts cannot grant time or advance a stage.
-The current stage, timer, target counts and historical **Best Stage** remain
-visible on desktop and compact phone layouts. The best is saved when a higher
+The top heading names **Challenge** and its current Stage. The timer and target
+counts remain visible; historical **Best Stage** is an acquired medal and a warm
+numeric badge, not a second title or a `Goals +10s` explanation. A newly saved
+record gives its number a short old-to-new lift, glow and sparkle response.
+Each completed target batch launches the shared smaller sourced-paper preset
+once, without stopping play. The best is saved when a higher
 stage is reached, separately per learning route; a lower replay cannot overwrite it.
 Version-three campaign saves read versions one and two without inventing a
 Challenge record or resetting existing stars, recipes or Boss victories.
 Pause, input interruptions and automatic collection preserve the active clock.
 Challenge can also end on a blocked top or intentional Finish and retains the
 existing combo, rare-collection and chest coins without unlocking a campaign stage.
+
+After Game over, Challenge stays on its result summary until the player chooses
+the highlighted **Back to map** button. It shows the reached Stage, level-weighted
+active collection total and saved record medal. The comparison freezes the old
+best before the first eager save of the run: saving the reached Stage early
+cannot suppress a genuine breakthrough. A new best adds the numeric medal
+animation and one reduced-count paper celebration after durable settlement.
+Lower or tied records do not replay it. Save failure exposes Retry save and
+keeps returning disabled; refreshes and retries do not restart an announced award.
+Reduced motion retains the medal, exact number and static return highlight.
 
 Illustrated goal cards use proportional green background fill. Each saved
 increase has a small card-local number/art pop; a newly completed item instead

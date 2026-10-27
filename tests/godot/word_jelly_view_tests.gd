@@ -26,6 +26,8 @@ func _initialize() -> void:
 
 func check(condition: bool, message: String) -> void:
 	checks += 1
+	if checks % 1000 == 0 and OS.get_cmdline_user_args().has("--progress"):
+		print("Word Jelly view progress: %d checks" % checks)
 	if not condition:
 		failures += 1
 		printerr("FAIL: " + message)
@@ -59,6 +61,35 @@ func _run() -> void:
 		payouts.append({"id": id, "word": word, "amount": amount, "fragments": fragments, "origin": origin}))
 	view.word_attempted.connect(func(id: String, ids: Array[String], correct: bool) -> void:
 		attempts.append({"id": id, "words": ids, "correct": correct}))
+	if OS.get_cmdline_user_args().has("--merge-tail-only"):
+		_check_drop_into_merging_result(view)
+		view.free()
+		print("Word Jelly merge-tail handoff: %d assertions, %d failures" % [checks, failures])
+		quit(1 if failures else 0)
+		return
+	if OS.get_cmdline_user_args().has("--feedback-only"):
+		_check_completion_hints(view)
+		_check_ordered_completion_contact(view)
+		_check_rejection_rim_reset(view)
+		_check_completion_hint_targets(view)
+		_check_completion_hint_lifecycle(view)
+		_check_completion_hint_reduced_motion(view)
+		view.free()
+		print("Word Jelly feedback: %d assertions, %d failures" % [checks, failures])
+		quit(1 if failures else 0)
+		return
+	if OS.get_cmdline_user_args().has("--automatic-only"):
+		_check_batch_collection(view)
+		_check_collection_visual_reuse(view)
+		_check_batch_lifecycle(view)
+		_check_batch_wallet_failure(view)
+		_check_word_reveal_levels(view)
+		_check_word_reveal_lifecycle(view)
+		_check_reduced_motion(view)
+		view.free()
+		print("Word Jelly automatic views: %d assertions, %d failures" % [checks, failures])
+		quit(1 if failures else 0)
+		return
 	_check_opening_and_bounds(view)
 	_check_paused_resize(view)
 	_check_powerup_paused_resize(view)
@@ -79,6 +110,7 @@ func _run() -> void:
 	_check_auto_collect_unlock(view)
 	_check_collect_button_growth(view)
 	_check_batch_collection(view)
+	_check_collection_visual_reuse(view)
 	_check_coarse_frame_batch_reveals(view)
 	_check_batch_chest_queue(view)
 	_check_batch_lifecycle(view)
@@ -478,31 +510,55 @@ func _check_concurrent_powerup_resize(view) -> void:
 	view.size = Vector2(1000, 720)
 
 
+func _check_collection_visual_reuse(view) -> void:
+	_reset(view)
+	var ids: Array[int] = _completion_board(view, ["merged:cat:1", "merged:cat:2"], [1, 2])
+	view._collect_all()
+	var shell: int = view._fusion_visuals.values()[0].merged.get_instance_id()
+	_advance(view, 0.13)
+	check(view._fusion_visuals.size() == 1 and view._fusion_visuals.values()[0].merged.get_instance_id() == shell,
+		"The next serial beat acquires the completed sourced shell before allocating another visual")
+	_advance(view, 0.04)
+	check(view._fusion_visuals.size() == 1 and view._fusion_visuals.values()[0].merged.get_instance_id() == shell
+		and view._fusion_visuals.values()[0].merged.tile_id == ids[1]
+		and view._fusion_visuals.values()[0].merged.merge_level == 2,
+		"The next pickup reuses its prepared nodes while refreshing the real identity and level artwork")
+	_advance(view, 0.30)
+	check(not view._idle_collection_visual.is_empty() and not view._idle_collection_visual.merged.visible,
+		"A finished batch retains at most one hidden sourced visual for later pickups")
+	view.stop()
+	check(view._idle_collection_visual.is_empty() and view._fusion_visuals.is_empty(),
+		"Round cleanup releases the retained shell and every live collection visual")
+
+
 func _check_drop_into_merging_result(view) -> void:
 	for pointer: int in [-1, 7]:
 		for steady: bool in [false, true]:
-			_reset(view, steady)
-			var ids: Array[int] = _completion_board(view, ["merged:cat:1", "merged:cat:1", "merged:cat:1"], [1, 2, 3])
-			_drag(view, ids[0], ids[1])
-			_advance(view, Model.FUSION_SECONDS * 0.30)
-			var first: Dictionary = view.game.fusions[0].duplicate(true)
-			var target: Vector2 = view._tile_rect(first.result).get_center()
-			_pointer_event(view, pointer, "down", _center(view, ids[2]))
-			_pointer_event(view, pointer, "move", target)
-			view._consume_drag_motion()
-			_advance(view, 0.001)
-			check(view._target == int(first.result.id) and view._contact_state().kind == "match",
-				"An incoming matching Jelly recognizes and highlights the still-merging result as a drop target: " \
-					+ JSON.stringify({"target": view._target, "expected": first.result.id,
-						"dragging": view._dragging, "contact": view._contact_state()}))
-			_pointer_event(view, pointer, "up", target)
-			check(view.game.fusions.size() == 1 and int(view.game.fusions[0].result.merge_level) == 3
-				and int(view.game.merged_count) == 1 and view._rejection.is_empty(),
-				"A drop hands off the original accepted union into its next merge without rejecting or waiting")
-			_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
-			check(view.game.cells.size() == 1 and view.game.cells[0].merge_level == 3
-				and view.game.cells[0].fragments == 6 and view.game.merged_count == 2,
-				"Mouse/touch and reduced-motion handoffs retain all three inputs and fragments exactly once")
+			for age: float in [Model.FUSION_SECONDS * 0.30, Model.FUSION_SECONDS - 0.001,
+				Model.FUSION_SECONDS, Model.FUSION_SECONDS + 0.001,
+				Model.FUSION_SECONDS + Model.SETTLE_SECONDS * 0.5]:
+				_reset(view, steady)
+				var ids: Array[int] = _completion_board(view, ["merged:cat:1", "merged:cat:1", "merged:cat:1"], [1, 2, 3])
+				_drag(view, ids[0], ids[1])
+				var first: Dictionary = view.game.fusions[0].duplicate(true)
+				_advance(view, age)
+				var target: Vector2 = view._tile_rect(first.result).get_center()
+				_pointer_event(view, pointer, "down", _center(view, ids[2]))
+				_pointer_event(view, pointer, "move", target)
+				view._consume_drag_motion()
+				_advance(view, 0.001)
+				check(view._target == int(first.result.id) and view._contact_state().kind == "match",
+					"A compatible drop remains highlighted before, at and after the fusion handoff: " \
+						+ JSON.stringify({"age": age, "target": view._target, "expected": first.result.id,
+							"dragging": view._dragging, "contact": view._contact_state()}))
+				_pointer_event(view, pointer, "up", target)
+				check(view.game.fusions.size() == 1 and int(view.game.fusions[0].result.merge_level) == 3
+					and int(view.game.merged_count) == 1 and view._rejection.is_empty(),
+					"The first valid release merges across the natural completion and final-wobble boundary")
+				_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+				check(view.game.cells.size() == 1 and view.game.cells[0].merge_level == 3
+					and view.game.cells[0].fragments == 6 and view.game.merged_count == 2,
+					"Mouse/touch and reduced-motion handoffs retain all three inputs and fragments exactly once")
 
 func _check_long_word_label_visibility(view) -> void:
 	var original_words: Array = words.duplicate(true)

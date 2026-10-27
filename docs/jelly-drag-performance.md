@@ -179,6 +179,78 @@ viewport resizing were blank beige. Post-resize interaction and layout-state
 assertions passed, but those captures do not establish visual correctness.
 Physical iOS Safari resize rendering and mobile frame pacing remain unverified.
 
+## Runtime follow-up on 2026-10-27
+
+The new full-board investigation starts at published commit
+`93874d3f203f72901860a3188b836709a49cfc13`. Its source is frozen in
+`build/performance/jelly-auto-baseline-93874d3f-20261027`; an exact 117-file Web
+snapshot is retained in `build/performance/web-before-93874d3f`. The latter keeps
+immutable, content-addressed binaries separately from the subsequently rebuilt
+entry page. Neither snapshot creates a Git branch or changes the user's HEAD.
+
+The implementation removes speculative complete-word construction from
+read-only match checks, avoids allocating a combo snapshot for each availability
+check, and coalesces callback-driven board refreshes/publications into the
+current presentation frame. Wallet and learning signals retain their original
+transaction boundaries. Hidden map diagnostics no longer rebuild all 99 node
+rectangles during gameplay; the host only shallow-copies a fresh presentation
+snapshot before assigning its top-level diagnostics.
+
+Web UI scale queries share the browser pixel-ratio read within an engine frame,
+refreshing it when the frame or window size changes. Ongoing matching hints
+still animate their material uniforms, without reapplying constant rim feedback.
+Neutral contacts do not repeatedly rebuild an unchanged picture shadow.
+Automatic actions keep bodies disabled instead of enabling/disabling the entire
+board on each pass. Serial pickups reuse one hidden, sourced visual shell;
+expired visuals retire before the next pickup acquires it. Stop/round cleanup
+releases that shell and its texture references.
+
+### Measurements and limits
+
+`word-jelly-auto-cpu-v1` adds two native headless scenarios: 35 real-art source
+bodies for actual Auto Merge, and 35 ready Lv1-Lv9 bodies for actual Auto Collect.
+It advances the normal model/view clocks, including intentional impact holds,
+and includes host-copy/JSON work. Carried fragments are zero to isolate board
+work from chest presentation. Raw per-frame action traces must match across
+the frozen baseline and candidate. This is not GPU, browser or device FPS.
+
+```powershell
+node tools/benchmark-word-jelly-drag.cjs --automatic --baseline build/performance/jelly-auto-baseline-93874d3f-20261027 --label jelly-auto-paired --repeats 3 --samples 600
+```
+
+The opt-in `word-jelly-browser-intervals-v1` journey fills the real board through
+normal preview controls. It measures desktop mouse dragging with 35 bodies,
+Auto Merge with 35, and Auto Collect with 34 live bodies plus one manually formed
+word. The native scenario separately covers the 35-target high-level batch.
+Set `JELLY_PERF_LABEL` to enable it; ordinary browser runs skip this timing suite.
+`JELLY_PERF_TRACE=1` captures a Chromium CPU profile and main-thread/GPU trace.
+`JELLY_PERF_REPEATS` defaults to three; a one-repeat trace is diagnostic only.
+
+The initial Windows-hosted Chromium 153 / SwiftShader mouse-drag observations,
+with 1366x768 viewport, normal motion and no deliberate CPU/network throttling,
+were:
+
+| Version | P95 interval, three separate repeats | Median |
+| --- | --- | --- |
+| Frozen published Web build | 366.6 / 416.6 / 333.3 ms | 366.6 ms |
+| Initial optimized Web build | 416.7 / 400.1 / 383.2 ms | 400.1 ms |
+
+These observations **do not establish a rendered-frame improvement or a
+60-FPS pass**. The shared host subsequently reported 100% CPU load. A diagnostic
+trace was main-thread/WebAssembly dominated; the release engine has no function
+name section, so its sampled Wasm indices cannot honestly be named as specific
+GDScript methods. Native inclusive method timers support source-level
+investigation, not a physical-device claim. A trial cross-frame static-body pose
+cache was removed because its benefit was not established.
+
+Raw CPU diagnostics are retained in
+`build/performance/jelly-drag-runtime-before-20261027/`; the interrupted first
+paired run is diagnostic and must not be presented as a completed paired
+acceptance result. Chromium and Windows WebKit device profiles verify only the
+available lab environment. Physical PC Chrome and iPad Chrome smoothness still
+require an idle, representative device measurement. In particular, an iPad
+viewport and WebKit user agent are not physical iPad performance evidence.
+
 Logs, screenshots, traces, and audio evidence are retained locally under:
 
 - `build/performance/browser-hybrid-20261022/` and its sibling `.log`

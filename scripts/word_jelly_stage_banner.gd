@@ -73,7 +73,7 @@ func set_stage(state: Dictionary, celebrate: bool = false) -> void:
 		_entry = not state.get("complete", false) and state.get("kind", "") in ["main", "challenge"]
 		if state.get("kind") == "challenge":
 			_title.text = "Challenge"
-			_detail.text = "Goals add time · Max 90s"
+			_detail.text = "Stage %d" % int(state.get("challenge_stage", 1))
 		else:
 			_title.text = "All words mastered!" if state.get("complete", false) else "Stage %d" % state.number
 			_detail.text = "Beautiful work!" if state.get("complete", false) else "%d word goals" % state.total \
@@ -186,14 +186,14 @@ func rating_feedback_active() -> bool:
 
 
 func _rating_bounds() -> Rect2:
-	return Rect2(_badge.position + Vector2(8, 22) / _scale,
-		Vector2(maxf(1.0, _badge.size.x - 16.0 / _scale), 21.0 / _scale))
+	return Rect2(_badge.position + Vector2(8, 7) / _scale,
+		Vector2(maxf(1.0, _badge.size.x - 104.0 / _scale), maxf(1.0, _badge.size.y - 14.0 / _scale)))
 
 
 func rating_geometry(bounds: Rect2, ui_scale: float, compact: bool = false) -> Array[Dictionary]:
 	var slots: Array[Dictionary] = []
 	var span: float = bounds.size.x / 3.0
-	var edge: float = (11.0 if compact else 16.0) / ui_scale
+	var edge: float = minf((20.0 if compact else 28.0) / ui_scale, span * 0.84)
 	for index in range(3):
 		var star := Rect2(Vector2(bounds.position.x + (float(index) + 0.5) * span - edge * 0.5, bounds.position.y),
 			Vector2.ONE * edge)
@@ -206,15 +206,9 @@ func rating_geometry(bounds: Rect2, ui_scale: float, compact: bool = false) -> A
 
 func draw_rating(canvas: CanvasItem, bounds: Rect2, ui_scale: float, compact: bool = false) -> void:
 	var slots: Array[Dictionary] = rating_geometry(bounds, ui_scale, compact)
-	var colors: Array[Color] = [Color("#dc8b68"), Color("#59ab8b"), Color("#e5b247")]
 	for index in range(3):
 		var slot: Dictionary = slots[index]
 		var star := Rect2(slot.star[0], slot.star[1], slot.star[2], slot.star[3])
-		var bar := Rect2(slot.bar[0], slot.bar[1], slot.bar[2], slot.bar[3])
-		canvas.draw_style_box(Style.box(Color("#dbe5dd"), Color.TRANSPARENT, 2, 0), bar)
-		bar.size.x *= clampf(_timer_ratio() * 3.0 - float(index), 0.0, 1.0)
-		if bar.size.x > 0.0:
-			canvas.draw_style_box(Style.box(colors[index], Color.TRANSPARENT, 2, 0), bar)
 		canvas.draw_texture_rect(STAR, star, false,
 			Color.WHITE if index < int(_state.get("stars_now", 0)) else Color(0.35, 0.40, 0.38, 0.45))
 		if reduced_motion or _star_loss_elapsed[index] >= STAR_LOSS_SECONDS:
@@ -244,18 +238,14 @@ func _update_label() -> void:
 		return
 	_label.position = _badge.position
 	_label.size = _badge.size
+	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	var separator: String = "\n" if _badge.size.y * _scale >= 40.0 else "  ·  "
-	if _state.get("kind") == "challenge":
+	if _state.get("kind") in ["main", "challenge"]:
 		var seconds: int = maxi(0, ceili(float(_state.get("seconds_remaining", 0.0))))
-		_label.text = "Stage %d · %d:%02d" % [int(_state.get("challenge_stage", 1)), seconds / 60, seconds % 60]
-		_label.position = _badge.position + Vector2(8, 0) / _scale
-		_label.size = Vector2(maxf(1.0, _badge.size.x - 16.0 / _scale), 21.0 / _scale)
-		return
-	if _state.get("kind") == "main":
-		var seconds: int = maxi(0, ceili(float(_state.get("seconds_remaining", 0.0))))
-		_label.text = "Stage %d  ·  %d:%02d" % [int(_state.number), seconds / 60, seconds % 60]
-		_label.position = _badge.position + Vector2(8, 0) / _scale
-		_label.size = Vector2(maxf(1.0, _badge.size.x - 16.0 / _scale), 21.0 / _scale)
+		_label.text = "%d:%02d" % [seconds / 60, seconds % 60]
+		_label.position = Vector2(_badge.end.x - 84.0 / _scale, _badge.position.y)
+		_label.size = Vector2(76.0 / _scale, _badge.size.y)
+		_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 		return
 	_label.text = "Stage %d%s%d / %d mastered" % [_state.number, separator, _state.mastered, _state.total]
 
@@ -278,11 +268,12 @@ func _draw() -> void:
 	if _state.is_empty():
 		return
 	draw_style_box(Style.box(Color("eef9ed"), Color("b8d6bf"), 12, 1), _badge)
+	if _label.visible and _state.get("kind") in ["main", "challenge"]:
+		var fill: Rect2 = _badge.grow(-1.0 / _scale)
+		fill.size.x *= _timer_ratio()
+		if fill.has_area():
+			draw_style_box(Style.box(Color("#c5e7cc"), Color.TRANSPARENT, 11, 0), fill)
 	if _state.get("kind") == "challenge":
-		var track := Rect2(_badge.position + Vector2(8, 27) / _scale,
-			Vector2((_badge.size.x - 16.0 / _scale) * _timer_ratio(), 7.0 / _scale))
-		if _label.visible:
-			draw_style_box(Style.box(Style.GOOD, Color.TRANSPARENT, 4, 0), track)
 		if _time_bonus_remaining > 0.0:
 			var at := Vector2(_badge.end.x - 64.0 / _scale,
 				_badge.position.y + (20.0 + 10.0 * _time_bonus_remaining) / _scale)

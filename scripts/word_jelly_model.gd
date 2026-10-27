@@ -2058,7 +2058,7 @@ func is_contactable(tile: Dictionary) -> bool:
 	# remain owned by the supply tray until their individual departure begins.
 	if bool(tile.get("arrival", false)):
 		return float(tile.age) + EPSILON >= arrival_delay(tile)
-	return bool(tile.get("falling", false))
+	return bool(tile.get("falling", false)) or tile.has("settle_seconds")
 
 
 static func arrival_contact_at(tile: Dictionary) -> float:
@@ -2502,7 +2502,11 @@ func parts_compatible(left: Dictionary, right: Dictionary) -> bool:
 
 
 func can_merge(left: Dictionary, right: Dictionary) -> bool:
-	return merge_candidate(left, right).status in ["partial", "complete"]
+	if not parts_compatible(left, right) or boss.frozen(int(left.id)) or boss.frozen(int(right.id)):
+		return false
+	# Feedback needs the same semantic and space decision, not a speculative
+	# result containing deep copies of the complete vocabulary records.
+	return _drag_return_position(_occupied([int(left.id), int(right.id)]), 1, 1, right).x >= 0
 
 
 func compatible_pairs(check_space: bool = true) -> Array[Dictionary]:
@@ -2976,12 +2980,11 @@ func _complete_merge(completed: Dictionary) -> void:
 	boss.forget(int(a.id))
 	boss.forget(int(b.id))
 	boss.charge_merge(bool(completed.get("automatic", false)), is_valid_word(result))
-	# The fusion already ends at this reserved rectangle. Allow its final wobble
-	# to settle before accepting another drag or collection.
+	# The final wobble still gates picking up or collecting this body, but a held
+	# matching drop can join it continuously across the fusion/settlement handoff.
 	var held_for_drag: bool = bool(completed.get("held_for_drag", false))
 	result.age = SETTLE_SECONDS if held_for_drag else 0.0
-	if bool(completed.get("automatic", false)):
-		result.settle_seconds = POWERUP_SETTLE_SECONDS
+	result.settle_seconds = POWERUP_SETTLE_SECONDS if bool(completed.get("automatic", false)) else SETTLE_SECONDS
 	result.settling = not held_for_drag
 	result.arrival = false
 	result.falling = false
@@ -3064,7 +3067,7 @@ func _complete_collection(completed: Dictionary) -> void:
 	_completed_words[str(completed.word.id)] = completed.word.duplicate(true)
 	if stage_run != null and not _stage_ending:
 		var before_stage: int = stage_run.challenge_stage
-		stage_run.record_collection(str(completed.attempt_id), str(completed.word.id))
+		stage_run.record_collection(str(completed.attempt_id), str(completed.word.id), int(completed.get("merge_level", 1)))
 		if stage_run.kind == "challenge":
 			added_time = stage_run.take_time_bonus()
 			_sync_challenge_pressure()

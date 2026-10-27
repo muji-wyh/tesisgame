@@ -1,5 +1,12 @@
 # Interface icons
 
+The Challenge record badge reuses the acquired Microsoft Fluent Sports medal
+below together with the existing licensed portal glow, Toon FX rays and sparkle
+documented in `docs/assets/jelly-fragments.md`. The inspected originals are
+already integrated assets, not new acquisitions or source animations. Numeric
+lift, award shimmer and the Back to map highlight are game-authored motion;
+there is no new medal-tier asset or invented bronze/silver/gold progression.
+
 ## Jelly journey controls
 
 The stage medallions and nine-slice challenge frame in `jelly-map/` are unmodified

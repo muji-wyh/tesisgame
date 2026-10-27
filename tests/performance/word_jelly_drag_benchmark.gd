@@ -8,12 +8,50 @@ const Model = preload("res://scripts/word_jelly_model.gd")
 class ObservedJelly extends "res://scripts/word_jelly.gd":
 	var position_passes: int = 0
 	var snapshots: int = 0
+	var cpu_us: Dictionary = {}
 	func _sync_positions() -> void:
+		var started: int = Time.get_ticks_usec()
 		position_passes += 1
 		super._sync_positions()
+		cpu_us["positions"] = int(cpu_us.get("positions", 0)) + Time.get_ticks_usec() - started
 	func snapshot() -> Dictionary:
+		var started: int = Time.get_ticks_usec()
 		snapshots += 1
-		return super.snapshot()
+		var state: Dictionary = super.snapshot()
+		cpu_us["snapshot"] = int(cpu_us.get("snapshot", 0)) + Time.get_ticks_usec() - started
+		return state
+	func _refresh_controls() -> void:
+		var started: int = Time.get_ticks_usec()
+		super._refresh_controls()
+		cpu_us["controls"] = int(cpu_us.get("controls", 0)) + Time.get_ticks_usec() - started
+	func _refresh_palette() -> void:
+		var started: int = Time.get_ticks_usec()
+		super._refresh_palette()
+		cpu_us["palette"] = int(cpu_us.get("palette", 0)) + Time.get_ticks_usec() - started
+	func _sync_boss() -> void:
+		var started: int = Time.get_ticks_usec()
+		super._sync_boss()
+		cpu_us["boss"] = int(cpu_us.get("boss", 0)) + Time.get_ticks_usec() - started
+	func _refresh_marks() -> void:
+		var started: int = Time.get_ticks_usec()
+		super._refresh_marks()
+		cpu_us["marks"] = int(cpu_us.get("marks", 0)) + Time.get_ticks_usec() - started
+	func _refresh_contact() -> void:
+		var started: int = Time.get_ticks_usec()
+		super._refresh_contact()
+		cpu_us["contact"] = int(cpu_us.get("contact", 0)) + Time.get_ticks_usec() - started
+	func _sync_preview() -> void:
+		var started: int = Time.get_ticks_usec()
+		super._sync_preview()
+		cpu_us["preview"] = int(cpu_us.get("preview", 0)) + Time.get_ticks_usec() - started
+	func _refresh_hud() -> void:
+		var started: int = Time.get_ticks_usec()
+		super._refresh_hud()
+		cpu_us["hud"] = int(cpu_us.get("hud", 0)) + Time.get_ticks_usec() - started
+	func _refresh_completion_hints() -> void:
+		var started: int = Time.get_ticks_usec()
+		super._refresh_completion_hints()
+		cpu_us["hints"] = int(cpu_us.get("hints", 0)) + Time.get_ticks_usec() - started
 
 var serialized_characters: int = 0
 
@@ -49,6 +87,7 @@ func _run() -> void:
 					if frame == warmup:
 						view.position_passes = 0
 						view.snapshots = 0
+						view.cpu_us.clear()
 						serialized_characters = 0
 					var started: int = Time.get_ticks_usec()
 					for sample in range(bursts):
@@ -67,6 +106,7 @@ func _run() -> void:
 				rows.append({"tiles": count, "contact": contact, "motion_events_per_frame": bursts,
 					"samples_us": times, "position_passes": view.position_passes, "snapshots": view.snapshots,
 					"serialized_characters": serialized_characters, "frames": samples,
+					"inclusive_cpu_us": view.cpu_us.duplicate(),
 					"contact_frames": contact_frames, "interaction_trace": interaction_trace})
 				view.free()
 				await process_frame

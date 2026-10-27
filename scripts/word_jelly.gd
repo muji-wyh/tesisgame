@@ -91,6 +91,10 @@ var _view_hint_source: int = -1
 var _boss_view: BossView
 var _merged_level_badge := LevelBadge.new()
 var _preview_drop_available: bool = false
+var _processing_generation: int = -1
+var _tiles_pending: bool = false
+var _publish_pending: bool = false
+var _idle_collection_visual: Dictionary = {}
 const READ_HOLD_SECONDS: float = 0.45
 const COLLECTION_CLICK_MAX_MS: int = 500
 const STAGE_WARNING_SECONDS: float = 10.0
@@ -908,6 +912,10 @@ func _refresh_palette() -> void:
 func _sync_tiles() -> void:
 	if not _configured:
 		return
+	if _processing_generation == _generation and not _view_update_active:
+		_tiles_pending = true
+		return
+	_tiles_pending = false
 	var owns_update: bool = not _view_update_active
 	if owns_update:
 		_begin_view_update()
@@ -1405,7 +1413,14 @@ func _process(delta: float) -> void:
 	var previous_rows: Dictionary = {}
 	for cell: Dictionary in game.cells:
 		previous_rows[int(cell.id)] = int(cell.row)
+	_processing_generation = _generation
 	super._process(delta)
+	_processing_generation = -1
+	if _tiles_pending and generation == _generation:
+		_sync_tiles()
+	if _publish_pending:
+		_publish_pending = false
+		_publish()
 	_powerup_frame_end = -1.0
 	# Dispatch outside the model step, including on a full board or landing frame.
 	if generation == _generation and delta <= 0.5:
@@ -1648,36 +1663,93 @@ func _ensure_fusion_visual(fusion: Dictionary) -> Dictionary:
 	var id: String = str(fusion.attempt_id)
 	if not _fusion_visuals.has(id):
 		_refresh_palette()
-		var art := FusionArt.new()
-		art.z_index = 25
-		add_child(art)
-		art.configure(SURFACES, 0, 0, _surfaces[0])
+		var recycled: Dictionary = _idle_collection_visual if str(fusion.operation) == "collect" else {}
+		if not recycled.is_empty():
+			_idle_collection_visual = {}
+		var art: Control = recycled.art if not recycled.is_empty() else FusionArt.new()
+		if recycled.is_empty():
+			art.z_index = 25
+			add_child(art)
+			art.configure(SURFACES, 0, 0, _surfaces[0])
 		var color_a: int = int(_palette_cache.get(int(fusion.a_id), 0))
 		var color_b: int = int(_palette_cache.get(int(fusion.b_id), 0))
 		art._gel.set_shader_parameter("palette_hue_a", Palette.hue(color_a))
 		art._gel.set_shader_parameter("palette_hue_b", Palette.hue(color_b))
-		var merged := WordTile.new()
-		merged.focus_mode = Control.FOCUS_NONE
-		merged.disabled = true
-		merged.z_index = 30
-		add_child(merged)
+		var merged: WordTile = recycled.merged if not recycled.is_empty() else WordTile.new()
+		if recycled.is_empty():
+			merged.focus_mode = Control.FOCUS_NONE
+			merged.disabled = true
+			merged.z_index = 30
+			add_child(merged)
 		_configure_tile(merged, fusion.result if str(fusion.operation) == "merge" else fusion.a)
+		merged.set_contact("none", Vector2.ZERO, 0.0, reduced_motion)
+		merged.set_completion_hint(false, 0.0, reduced_motion)
+		merged.set_match_dimmed(false)
+		merged.deform(0.0, 0.0)
+		merged.scale = Vector2.ONE
+		merged.rotation = 0.0
+		merged.modulate = Color.WHITE
+		merged._surface.modulate = Color.WHITE
 		_fusion_visuals[id] = {"art": art, "merged": merged,
 			"start": _tile_rect(fusion.a).get_center(), "direction": Vector2.RIGHT,
 			"origin_a": _tile_rect(fusion.a).get_center(), "origin_b": _tile_rect(fusion.b).get_center(),
 			"stretch_a": Vector2.ONE, "stretch_b": Vector2.ONE,
 			"palette_a": color_a, "palette_b": color_b}
+		for key: String in ["collect_glow", "charge_sparks"]:
+			if recycled.has(key):
+				_fusion_visuals[id][key] = recycled[key]
 	return _fusion_visuals[id]
 
 func _remove_fusion_visual(id: String) -> void:
-	var glow: TextureRect = _fusion_visuals[id].get("collect_glow")
+	var visual: Dictionary = _fusion_visuals[id]
+	# Completed word visuals already own the right artwork and material setup.
+	# Keep one hidden shell for the next serial pickup instead of allocating it
+	# on every 120 ms beat. Round cleanup still releases all texture references.
+	if _idle_collection_visual.is_empty() and visual.merged.valid_word and game.phase == "playing":
+		visual.art.hide()
+		visual.merged.hide()
+		var glow: TextureRect = visual.get("collect_glow")
+		if glow != null:
+			glow.hide()
+		for spark: TextureRect in visual.get("charge_sparks", []):
+			spark.hide()
+		_idle_collection_visual = visual
+	else:
+		_dispose_fusion_visual(visual)
+	_fusion_visuals.erase(id)
+
+func _dispose_fusion_visual(visual: Dictionary) -> void:
+	var glow: TextureRect = visual.get("collect_glow")
 	if glow != null:
 		glow.hide()
 		glow.queue_free()
-	for spark: TextureRect in _fusion_visuals[id].get("charge_sparks", []):
+	for spark: TextureRect in visual.get("charge_sparks", []):
 		spark.hide()
 		spark.queue_free()
-	super._remove_fusion_visual(id)
+	visual.merged._picture.texture = null
+	for node: Control in [visual.art, visual.merged]:
+		node.hide()
+		node.queue_free()
+
+func _clear_fusion_visuals() -> void:
+	super._clear_fusion_visuals()
+	if not _idle_collection_visual.is_empty():
+		_dispose_fusion_visual(_idle_collection_visual)
+		_idle_collection_visual = {}
+
+func _refresh_fusion() -> void:
+	if not _configured or game.phase != "playing":
+		_clear_fusion_visuals()
+		return
+	var live: Dictionary = {}
+	for fusion: Dictionary in game.fusions:
+		live[str(fusion.attempt_id)] = true
+	# Retire the prior beat before the next one acquires its prepared shell.
+	for id: String in _fusion_visuals.keys():
+		if not live.has(id):
+			_remove_fusion_visual(id)
+	for fusion: Dictionary in game.fusions:
+		_pose_fusion(fusion, _ensure_fusion_visual(fusion))
 
 func _collection_glow(visual: Dictionary) -> TextureRect:
 	if not visual.has("collect_glow"):
@@ -1863,7 +1935,14 @@ func _refresh_hud() -> void:
 	_refresh_collect_button()
 
 func _can_play() -> bool:
-	return super._can_play() and not bool(game.combo_snapshot().pending)
+	return super._can_play() and game._combo_pending.is_empty()
+
+
+func _publish() -> void:
+	if _processing_generation == _generation:
+		_publish_pending = true
+		return
+	super._publish()
 
 func _combo_changed(state: Dictionary) -> void:
 	if _combo_hud == null:
@@ -1932,14 +2011,20 @@ func _sync_chest_tap() -> void:
 func _refresh_controls() -> void:
 	_merged_level_badge.visible = _configured and game.stage_run != null
 	_merged_level_badge.set_level(game.merged_level_limit)
-	if _layout_too_small and can_finish_round():
+	var board_locked: bool = game.collection_batch_active() or game.powerup_active() or game.stage_ending()
+	if (_layout_too_small and can_finish_round()) or board_locked:
+		# Do not enable every body in the base pass just to disable it again:
+		# those native button/hover transitions are expensive on crowded boards.
 		# Do not briefly hide hosted Finish through the base gameplay guard:
 		# hiding it cancels the very header pull that remains available here.
 		_sync_chest_tap()
 		_refresh_danger()
 		for tile: Tile in _tiles.values():
 			tile.disabled = true
-		drop_button.visible = true
+		finish_button.visible = _configured and game.phase == "playing" if finish_button.get_parent() == self \
+			else _can_play() or finish_button.paused_state
+		finish_button.disabled = (not _can_play() and not finish_button.paused_state) or _pointer != NO_POINTER
+		drop_button.visible = _configured and game.phase == "playing"
 		drop_button.disabled = true
 		_set_preview_pressed(false)
 	else:
@@ -1950,10 +2035,6 @@ func _refresh_controls() -> void:
 	_refresh_preview_read_controls()
 	if collect_button == null:
 		return
-	if game.collection_batch_active() or game.powerup_active() or game.stage_ending():
-		for tile: Tile in _tiles.values():
-			tile.disabled = true
-		drop_button.disabled = true
 	_refresh_collect_button()
 	_refresh_powerup_buttons()
 

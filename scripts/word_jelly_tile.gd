@@ -203,7 +203,7 @@ func set_completion_hint(active: bool, elapsed: float, reduced: bool) -> void:
 	_surface.scale *= completion_scale / previous_scale
 	_set_surface_parameter(&"completion_strength", (0.82 if reduced else 0.7 + enter * 0.25) if completion_hint else 0.35 if valid_word and not _projection else 0.0)
 	_set_surface_parameter(&"completion_glint", -2.0 if reduced else -0.25 + fposmod(elapsed, 3.0) * 1.35)
-	if completion_hint or was_active:
+	if completion_hint != was_active:
 		_refresh_feedback()
 
 func set_match_dimmed(value: bool) -> void:
@@ -230,6 +230,8 @@ func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
 	super.deform(amount, beat, stretch * completion_scale)
 
 func set_contact(kind_value: String, direction: Vector2 = Vector2.ZERO, strength: float = 0.0, reduced: bool = false) -> void:
+	if kind_value == "none" and _contact_kind == "none":
+		return
 	super.set_contact(kind_value, direction, strength, reduced)
 	_sync_picture_shadow()
 

@@ -4,8 +4,8 @@ extends CanvasLayer
 const PAPER = preload("res://assets/images/jelly-match/confetti.png")
 const Style = preload("res://scripts/ui_style.gd")
 const DURATION: float = 6.4
-const PAPER_COUNT: int = 128
-const MAX_PAPER_COUNT: int = 400
+const PAPER_COUNT: int = 85
+const MAX_PAPER_COUNT: int = 267
 const PAPER_SPACING: float = 42.0
 const SMALL_DURATION: float = 2.4
 const COLORS: Array[Color] = [Color("#ffcf63"), Color("#ff8396"), Color("#67dbbe"), Color("#83bdff"), Color("#cf9af1")]
@@ -93,7 +93,8 @@ func _paper_count(screen: Rect2, unit: float) -> int:
 	if not screen.has_area():
 		return 0
 	var spacing: float = PAPER_SPACING * maxf(0.25, unit)
-	return clampi(roundi(ceili(screen.get_area() / (spacing * spacing)) / 3.0), PAPER_COUNT, MAX_PAPER_COUNT)
+	var previous: int = clampi(roundi(ceili(screen.get_area() / (spacing * spacing)) / 3.0), 128, 400)
+	return clampi(roundi(previous * 2.0 / 3.0), PAPER_COUNT, MAX_PAPER_COUNT)
 
 
 func _paper_state(index: int, screen: Rect2, unit: float, age: float, variation: float = 0.0) -> Dictionary:
@@ -113,7 +114,7 @@ func _paper_state(index: int, screen: Rect2, unit: float, age: float, variation:
 		return {}
 	var t: float = age - delay
 	var extent: Vector2 = screen.size
-	var paper_edge: float = lerpf(18.0, 28.0, seed_value) * unit
+	var paper_edge: float = lerpf(22.0, 34.0, seed_value) * unit
 	var paper_size := Vector2(paper_edge * 1.5, paper_edge * 0.65)
 	var sway: float = lerpf(20.0, 46.0, vertical_seed) * unit
 	var margin: float = paper_size.length() * 0.5 + 2.0 * unit
@@ -190,7 +191,8 @@ func _burst_count(item: Dictionary, screen: Rect2, unit: float) -> int:
 	if not item.small:
 		return _paper_count(screen, unit)
 	var spacing: float = 80.0 * maxf(0.25, unit)
-	return clampi(roundi(ceili(_burst_region(item, screen).get_area() / (spacing * spacing)) / 3.0), 8, 24)
+	var previous: int = clampi(roundi(ceili(_burst_region(item, screen).get_area() / (spacing * spacing)) / 3.0), 8, 24)
+	return roundi(previous * 2.0 / 3.0)
 
 
 func _burst_paper_state(item: Dictionary, index: int, screen: Rect2, unit: float) -> Dictionary:

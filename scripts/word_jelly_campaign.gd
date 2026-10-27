@@ -26,6 +26,10 @@ var _settlement_elapsed: float = 0.0
 var _bonus_presented: bool = false
 var _skill_presented: bool = false
 var _pending_challenge_record: int = 0
+var _challenge_previous_best: int = 0
+var _result_committed: bool = false
+var _challenge_summary_presented: bool = false
+var _challenge_returned: bool = false
 var _result_context_key: String = ""
 # Leaving the old session can synchronously publish its failure before the new request exists.
 var requesting_preparation: bool = false
@@ -181,10 +185,14 @@ func round_started() -> void:
 	_result_round = ""
 	_bonus_presented = false
 	_skill_presented = false
+	_result_committed = false
+	_challenge_summary_presented = false
+	_challenge_returned = false
 	return_home_after_settlement = false
 	error = ""
 	map.close()
 	pending_plan.clear()
+	_challenge_previous_best = store.challenge_best_stage(active_context_key)
 	if _app._word_jelly.game.stage_run.kind == "challenge":
 		record_challenge_stage(_app._word_jelly.game.stage_run.challenge_stage)
 
@@ -229,6 +237,12 @@ func capture_result(result: Dictionary) -> bool:
 		"bonus": quote.bonus, "completed_word_ids": []}
 	if stage.kind == "challenge":
 		_result_draft["challenge_stage"] = int(stage.get("challenge_stage", 1))
+		_result_draft["challenge_previous_best"] = _challenge_previous_best
+		_app._round_result["challenge_result"] = {
+			"stage": int(stage.get("challenge_stage", 1)),
+			"previous_best": _challenge_previous_best,
+			"best": maxi(int(stage.get("challenge_stage", 1)), store.challenge_best_stage(active_context_key)),
+			"collection_count": int(stage.collection_count), "new_best": false, "confirmed": false}
 	var boss: Dictionary = result.get("boss", {})
 	if bool(boss.get("active", false)):
 		_result_draft["boss_roster_version"] = 2
@@ -293,7 +307,7 @@ func advance(delta: float) -> void:
 				error = room.rewards.error
 				room.set_settlement_error(error)
 		return
-	if room._opening or room._holding or room.stage_feedback_active() or _app._coin_flight.snapshot().active \
+	if room._opening or room._holding or (room.stage_feedback_active() and not _challenge_returned) or _app._coin_flight.snapshot().active \
 		or absf(_app._coin_counter.displayed - float(_app._coin_counter.target)) > 0.001:
 		return
 	if not _bonus_presented:
@@ -314,9 +328,22 @@ func advance(delta: float) -> void:
 		_skill_presented = true
 		_app.audio.play_jelly_cue("goal_complete")
 		return
-	if not store.complete_result(_result_context_key, _result_round):
-		error = store.error
-		room.set_settlement_error(error)
+	if not _result_committed:
+		if not store.complete_result(_result_context_key, _result_round):
+			error = store.error
+			room.set_settlement_error(error)
+			return
+		_result_committed = true
+	if _result_draft.kind == "challenge" and not _challenge_returned:
+		if not _challenge_summary_presented:
+			_challenge_summary_presented = true
+			var best: int = store.challenge_best_stage(_result_context_key)
+			var reached: int = int(_result_draft.challenge_stage)
+			var summary := {"stage": reached, "previous_best": _challenge_previous_best, "best": best,
+				"collection_count": int(_result_draft.collection_count), "confirmed": true,
+				"new_best": reached > _challenge_previous_best and reached >= best}
+			_app._round_result["challenge_result"] = summary.duplicate(true)
+			room.present_challenge_result(summary)
 		return
 	settling = false
 	_app._jelly_rewards_shown = false
@@ -329,6 +356,14 @@ func advance(delta: float) -> void:
 		_app._show_mode_menu()
 	else:
 		_show_map()
+
+
+func accept_challenge_result() -> void:
+	if not settling or not _result_committed or not _challenge_summary_presented or not error.is_empty() \
+		or _app._page_hidden or _result_draft.get("kind") != "challenge":
+		return
+	_challenge_returned = true
+	return_home_after_settlement = false
 
 
 func _credit_bonus(result: Dictionary, round_id: String, animate: bool) -> bool:
@@ -394,7 +429,8 @@ func retry() -> void:
 				map.configure(_map_state(), _app.reduced_motion)
 			return
 	if settling:
-		if not _result_draft.is_empty() and not store.queue_result(_result_context_key, _result_round, _result_draft):
+		if not _result_committed and not _result_draft.is_empty() \
+			and not store.queue_result(_result_context_key, _result_round, _result_draft):
 			error = store.error
 			room.set_settlement_error(error)
 		return
@@ -440,7 +476,7 @@ func _home() -> void:
 
 
 func snapshot() -> Dictionary:
-	var state: Dictionary = map.snapshot()
+	var state: Dictionary = map.snapshot() if is_open() else {"visible": false}
 	state["settling"] = settling
 	state["context"] = context_key
 	state["error"] = error

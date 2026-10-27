@@ -58,25 +58,28 @@ func configure(plan: Dictionary) -> bool:
 	return true
 
 
-func record_collection(event_id: String, word_id: String) -> bool:
+func record_collection(event_id: String, word_id: String, units: int = 1) -> bool:
 	error = ""
 	if not _active():
 		return false
 	if not _valid_id(event_id) or not _valid_id(word_id):
 		return _fail("A committed collection needs valid receipt and word identities.")
+	if units < 1 or units > 9:
+		return _fail("A collected Jelly must contribute its actual level from one to nine.")
+	var receipt: Dictionary = {"word_id": word_id, "units": units}
 	if _collection_receipts.has(event_id):
-		if _collection_receipts[event_id] != word_id:
-			return _fail("This collection receipt already belongs to a different word.")
+		if _collection_receipts[event_id] != receipt:
+			return _fail("This collection receipt already belongs to a different word or Jelly level.")
 		return false
 	if _collection_receipts.size() >= MAX_RECEIPTS:
 		return _fail("This attempt's collection receipt limit has been reached. End the attempt before collecting more.")
-	_collection_receipts[event_id] = word_id
-	collection_count += 1
+	_collection_receipts[event_id] = receipt
+	collection_count += units
 	if kind == "challenge" and not _challenge_goals.is_empty():
 		for goal: Dictionary in _challenge_goals:
 			if int(goal.stage) != challenge_stage or bool(goal.mastered) or str(goal.word_id) != word_id:
 				continue
-			goal.current = mini(int(goal.required), int(goal.current) + 1)
+			goal.current = mini(int(goal.required), int(goal.current) + units)
 			if int(goal.current) == int(goal.required):
 				goal.mastered = true
 				_pending_time_bonus += grant_challenge_time(str(goal.id), 10)
@@ -86,7 +89,7 @@ func record_collection(event_id: String, word_id: String) -> bool:
 					_append_challenge_stage()
 			break
 	if kind == "main" and goals.has(word_id):
-		current[word_id] = mini(int(goals[word_id]), int(current[word_id]) + 1)
+		current[word_id] = mini(int(goals[word_id]), int(current[word_id]) + units)
 		if _goals_met() and (not boss_objective or boss_defeated):
 			decide("cleared")
 	return true

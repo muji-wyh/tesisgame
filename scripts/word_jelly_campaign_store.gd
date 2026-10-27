@@ -190,8 +190,13 @@ func queue_result(context: String, round_id: String, result: Dictionary) -> bool
 				return _fail("This completed round already has a different immutable result.")
 			return true
 	if not state.pending.is_empty():
-		if state.pending.round_id == round_id and state.pending.result == result:
-			return true
+		if state.pending.round_id == round_id:
+			var saved: Dictionary = _stored_result(state.pending.result)
+			var proposed: Dictionary = _stored_result(result)
+			if saved.is_empty() or proposed.is_empty():
+				return false
+			if saved == proposed:
+				return true
 		return _fail("Finish the saved settlement before queuing another or changing its result.")
 	if not _can_add_context(context):
 		return false
@@ -468,6 +473,9 @@ func _result_error(value: Variant, context: Dictionary) -> String:
 	if value.has("challenge_stage") and (value.kind != "challenge" or not value.challenge_stage is int \
 		or value.challenge_stage < 1 or value.challenge_stage > 16384):
 		return "A Challenge result needs its actual supported stage."
+	if value.has("challenge_previous_best") and (value.kind != "challenge" or not value.challenge_previous_best is int \
+		or value.challenge_previous_best < 0 or value.challenge_previous_best > 16384):
+		return "A Challenge comparison needs its actual nonnegative pre-run record."
 	for key: Variant in value:
 		if not key is String or key.is_empty() or key.length() > 64 or not _field_name(key):
 			return "Settlement field names must be bounded stable identifiers."
@@ -556,6 +564,22 @@ func _valid_hash(value: Variant) -> bool:
 
 func _result_hash(result: Dictionary) -> String:
 	return JSON.stringify(result).sha256_text()
+
+
+func _stored_result(result: Dictionary) -> Dictionary:
+	# ConfigFile bounds floating-point precision. Compare retries in that same
+	# storage representation, without rounding away changed integer rewards.
+	var config := ConfigFile.new()
+	config.set_value("settlement", "result", result)
+	var stored := ConfigFile.new()
+	if stored.parse(config.encode_to_text()) != OK:
+		_fail("The saved settlement comparison could not be encoded.")
+		return {}
+	var value: Variant = stored.get_value("settlement", "result")
+	if not value is Dictionary:
+		_fail("The saved settlement comparison is not a result dictionary.")
+		return {}
+	return value
 
 
 func _fail(message: String) -> bool:

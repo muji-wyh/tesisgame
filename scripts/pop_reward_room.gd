@@ -8,6 +8,8 @@ signal chest_audio_requested(action: String, theme_id: String, progress: float)
 signal chest_cue_requested(theme_id: String, cue: String, step: int)
 signal coins_released(id: String, reward: Dictionary, origin: Vector2, animate: bool)
 signal settlement_retry_requested
+signal challenge_result_accepted
+signal challenge_record_broken(round_id: String)
 
 const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
@@ -25,6 +27,7 @@ const RATING_STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 const RATING_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const SkillReveal = preload("res://scripts/word_jelly_skill_reveal.gd")
 const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
+const RecordBadge = preload("res://scripts/word_jelly_record_badge.gd")
 const STAR_STEP_SECONDS: float = 0.18
 const STAR_APPEAR_SECONDS: float = 0.42
 const STAGE_BONUS_SECONDS: float = 0.70
@@ -90,6 +93,11 @@ var _stage_bonus_receipt: String = ""
 var _stage_bonus_reward: Dictionary = {}
 var _stage_publish_elapsed: float = 0.0
 var _skill_reveal := SkillReveal.new()
+var _challenge_record := RecordBadge.new()
+var _challenge_return_ready: bool = false
+var _record_announced_round: String = ""
+var _return_elapsed: float = 0.0
+var _return_glow := TextureRect.new()
 
 
 func _ready() -> void:
@@ -155,6 +163,8 @@ func _ready() -> void:
 	_content.add_child(pip)
 	pip.name = "SettlementPip"
 	pip.hide()
+	_content.add_child(_challenge_record)
+	_challenge_record.hide()
 	_notice = _label("", 14)
 	_notice.add_theme_color_override("font_color", Style.WRONG)
 	_back = Button.new()
@@ -164,12 +174,24 @@ func _ready() -> void:
 	add_child(_back)
 	Style.action_button(_back, Style.GOOD)
 	_back.pressed.connect(func() -> void:
+		if _result_context.get("campaign", {}).get("kind") == "challenge":
+			if _challenge_return_ready and not _paused and not _save_failed and _settlement_error.is_empty() \
+				and (not interaction_allowed.is_valid() or interaction_allowed.call()):
+				challenge_result_accepted.emit()
+			return
 		if not _result_context.is_empty():
 			if not _paused and (not interaction_allowed.is_valid() or interaction_allowed.call()):
 				replay_requested.emit()
 			return
 		pause()
 		exit_requested.emit())
+	_return_glow.texture = TREASURE_LIGHT
+	_return_glow.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_return_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_return_glow.z_index = -1
+	_back.add_child(_return_glow)
+	_return_glow.hide()
+	_back.draw.connect(_draw_return_effect)
 	_home = Button.new()
 	UiClick.bind_button(_home)
 	_home.name = "GameOverHome"
@@ -275,6 +297,11 @@ func set_result_context(result: Dictionary, earned_round_id: String = "") -> voi
 		_stage_intro_elapsed = 1.0 if reduced_motion else 0.0
 		_stage_bonus_receipt = ""
 		_stage_bonus_elapsed = STAGE_BONUS_SECONDS
+		_challenge_return_ready = false
+		_record_announced_round = ""
+		_return_elapsed = 0.0
+		_back.scale = Vector2.ONE
+		_challenge_record.reset()
 	if _result_context != result:
 		_settlement_error = ""
 	_result_context = result.duplicate(true)
@@ -294,8 +321,23 @@ func set_result_context(result: Dictionary, earned_round_id: String = "") -> voi
 
 func stage_feedback_active() -> bool:
 	var rating: int = int(_result_context.get("campaign", {}).get("stars", 0))
-	return _skill_reveal.visible or not _stage_bonus_reward.is_empty() or not reduced_motion \
+	return _skill_reveal.visible or (_challenge_record.visible and _challenge_record.feedback_active()) \
+		or not _stage_bonus_reward.is_empty() or not reduced_motion \
 		and rating > 0 and _stage_intro_elapsed < (rating - 1) * STAR_STEP_SECONDS + STAR_APPEAR_SECONDS
+
+
+func present_challenge_result(summary: Dictionary) -> void:
+	if _result_context.get("campaign", {}).get("kind") != "challenge" or _challenge_return_ready:
+		return
+	_result_context["challenge_result"] = summary.duplicate(true)
+	_challenge_return_ready = true
+	_return_glow.modulate = Color(1.0, 0.84, 0.36, 0.30)
+	_refresh()
+	if bool(summary.get("new_best", false)) and _record_announced_round != _stage_feedback_round:
+		_record_announced_round = _stage_feedback_round
+		_challenge_record.set_record(int(summary.best), true, int(summary.previous_best))
+		challenge_record_broken.emit(_stage_feedback_round)
+	changed.emit(snapshot())
 
 
 func present_stage_bonus(receipt: String, reward: Dictionary) -> void:
@@ -316,8 +358,17 @@ func present_skill_unlock(level: int, word: Dictionary) -> bool:
 
 
 func advance_stage_feedback(delta: float) -> void:
-	if _paused or not is_visible_in_tree() or not is_finite(delta) or delta <= 0.0 or not stage_feedback_active():
+	if _paused or not is_visible_in_tree() or not is_finite(delta) or delta <= 0.0:
 		return
+	if _challenge_return_ready:
+		_return_elapsed += delta
+		var pulse: float = 0.0 if reduced_motion else sin(_return_elapsed * 2.8)
+		_back.scale = Vector2.ONE * (1.0 + 0.025 * pulse)
+		_return_glow.modulate = Color(1.0, 0.84, 0.36, 0.30 + 0.08 * pulse)
+		_back.queue_redraw()
+	if not stage_feedback_active():
+		return
+	_challenge_record.advance(delta)
 	_stage_intro_elapsed += delta
 	if _skill_reveal.visible:
 		_skill_reveal.advance(delta)
@@ -330,6 +381,19 @@ func advance_stage_feedback(delta: float) -> void:
 	if _stage_publish_elapsed >= 0.08 or not stage_feedback_active():
 		_stage_publish_elapsed = 0.0
 		changed.emit(snapshot())
+
+
+func _draw_return_effect() -> void:
+	if not _challenge_return_ready or reduced_motion:
+		return
+	var s: float = Style.ui_scale(self)
+	for index in range(4):
+		var p: float = _return_elapsed * 1.6 + float(index) * PI * 0.5
+		var edge: float = (7.0 + 3.0 * sin(p)) / s
+		var at := Vector2(_back.size.x * (0.08 if index % 2 == 0 else 0.92),
+			_back.size.y * (0.25 if index < 2 else 0.75))
+		_back.draw_texture_rect(RATING_SPARKLE, Rect2(at - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false,
+			Color(1.0, 0.92, 0.53, 0.65 + 0.25 * sin(p)))
 
 
 func _release_stage_bonus(animate: bool) -> void:
@@ -1122,8 +1186,11 @@ func _refresh() -> void:
 	_sync_companion()
 	var campaign: Dictionary = _result_context.get("campaign", {})
 	var campaign_result: bool = campaign.get("kind", "") == "main"
+	var challenge_result: bool = campaign.get("kind", "") == "challenge"
 	_stage_rating.visible = campaign_result
-	if campaign_result:
+	_challenge_record.visible = challenge_result
+	_return_glow.visible = challenge_result and _challenge_return_ready
+	if campaign_result or challenge_result:
 		pip.hide()
 	if result_mode:
 		var earned_count: int = maxi(0, int(_result_context.get("chest_count", 0)))
@@ -1131,6 +1198,15 @@ func _refresh() -> void:
 		_result_score.text = result_summary()
 		_result_caption.text = failure if failed else "No chest this round"
 		_result_caption.add_theme_color_override("font_color", Style.WRONG if failed else Style.MUTED)
+		if challenge_result:
+			var summary: Dictionary = _result_context.get("challenge_result", {})
+			var reached: int = int(summary.get("stage", campaign.get("challenge_stage", 1)))
+			_heading.text = "New best!" if _challenge_return_ready and summary.get("new_best", false) else "Challenge over"
+			_result_score.text = "Reached Stage %d · %d collected" % [reached, int(summary.get("collection_count", campaign.get("collection_count", 0)))]
+			_challenge_record.reduced_motion = reduced_motion
+			_challenge_record.set_record(int(summary.get("best", reached)))
+			_result_caption.text = failure if failed else "Your record is saved." if _challenge_return_ready else "Saving your results..."
+			_result_caption.visible = _cards.is_empty() or failed
 		if campaign_result:
 			var rating: int = int(campaign.get("stars", 0))
 			_heading.text = "Stage %d cleared!" % int(campaign.number) if rating > 0 else "Time's up" \
@@ -1154,7 +1230,9 @@ func _refresh() -> void:
 					_result_caption.text = "The chase begins. Find Bramble at stage %d!" % BossCatalog.STAGES[0]
 				_result_caption.visible = true
 		if _result_context.has("campaign"):
-			_back.hide()
+			_back.visible = challenge_result and _challenge_return_ready
+			_back.text = "Back to map" if challenge_result else _back.text
+			_back.disabled = _paused or failed or not _challenge_return_ready
 			_home.hide()
 		_result_score.accessibility_name = "Score: %d. %s" % [maxi(0, int(_result_context.get("score", 0))), _result_score.text]
 		var tier: int = maxi(0, int(_result_context.get("chest_tier", 0)))
@@ -1340,6 +1418,17 @@ func _layout_result_dialog(s: float, w: float, h: float) -> void:
 		control.position = rect.position
 		control.size = rect.size
 	_result_score.pivot_offset = _result_score.size * 0.5
+	if _challenge_record.visible:
+		_challenge_record.layout_badge(layout.pip, s)
+	if _challenge_return_ready:
+		var action: Rect2 = layout.replay
+		if not _save_failed and _settlement_error.is_empty():
+			action = Rect2(Vector2(4.0 / s, action.position.y), Vector2(w - 8.0 / s, action.size.y))
+		_back.position = action.position
+		_back.size = action.size
+		_back.pivot_offset = _back.size * 0.5
+		_return_glow.position = -Vector2.ONE * 12.0 / s
+		_return_glow.size = _back.size + Vector2.ONE * 24.0 / s
 	if _stage_rating != null and _stage_rating.visible:
 		var hero: Rect2 = layout.pip
 		_stage_rating.position = hero.position
@@ -1489,7 +1578,9 @@ func snapshot() -> Dictionary:
 	var pip_rect: Rect2 = pip.get_global_rect() if is_instance_valid(pip) else Rect2()
 	return {"round_id": _empty_result_id if not _empty_result_id.is_empty() else _configured_id, "chest_count": batch.size(), "opened_count": opened,
 		"skill_unlock": _skill_reveal.snapshot(),
-		"stage_feedback": {"phase": "skill" if _skill_reveal.visible else "bonus" if not _stage_bonus_reward.is_empty() \
+		"challenge_record": _challenge_record.snapshot(),
+		"challenge_return_ready": _challenge_return_ready,
+		"stage_feedback": {"phase": "record" if _challenge_record.visible and _challenge_record.feedback_active() else "skill" if _skill_reveal.visible else "bonus" if not _stage_bonus_reward.is_empty() \
 			else "stars" if stage_feedback_active() else "done",
 			"round_id": _stage_feedback_round, "star_elapsed": _stage_intro_elapsed,
 			"bonus_elapsed": _stage_bonus_elapsed, "formula": _result_score.text \

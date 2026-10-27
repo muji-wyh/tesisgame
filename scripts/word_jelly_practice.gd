@@ -12,6 +12,7 @@ const STAR = preload("res://assets/chests/milestone/sparkle.png")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const CHECK = preload("res://assets/images/ui/jelly-goals/completed.svg")
 const CHECK_REVEAL = preload("res://scripts/word_jelly_goal_check.gdshader")
+const RecordBadge = preload("res://scripts/word_jelly_record_badge.gd")
 const GAIN_SECONDS: float = 0.55
 const COMPLETE_SECONDS: float = 0.60
 const COMPLETED_HOLD_SECONDS: float = 3.0
@@ -21,6 +22,7 @@ var stage_timer: StageTimer
 var _title: Label
 var _subtitle: Label
 var _medal := TextureRect.new()
+var _record_badge := RecordBadge.new()
 var _scroll := Scroll.new()
 var _content := Control.new()
 var _rows: Array[Dictionary] = []
@@ -46,6 +48,8 @@ func _init() -> void:
 	_medal.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_medal.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_medal)
+	add_child(_record_badge)
+	_record_badge.hide()
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	add_child(_scroll)
@@ -55,6 +59,12 @@ func _init() -> void:
 
 func set_stage(state: Dictionary) -> void:
 	if _state == state:
+		return
+	if _state.get("kind") == state.get("kind") and _state.get("number") == state.get("number") \
+		and _state.get("practice") == state.get("practice"):
+		_state = state.duplicate(true)
+		_update_heading()
+		queue_redraw()
 		return
 	var previous: Dictionary = {}
 	if not _state.is_empty() and _state.get("kind") == state.get("kind") \
@@ -203,6 +213,7 @@ func set_stage(state: Dictionary) -> void:
 func advance(delta: float) -> void:
 	if not is_visible_in_tree() or not is_finite(delta) or delta <= 0.0:
 		return
+	_record_badge.advance(delta)
 	var reflow: bool = false
 	for row: Dictionary in _rows:
 		if float(row.gain_elapsed) >= GAIN_SECONDS \
@@ -291,6 +302,28 @@ func configure_layout(area: Rect2, ui_scale: float, compact: bool) -> void:
 	_layout()
 
 
+func _update_heading() -> void:
+	var challenge: bool = _state.get("kind") == "challenge"
+	_title.visible = not challenge or _compact
+	_subtitle.visible = not _compact and not challenge
+	_medal.visible = not _compact and not challenge
+	_record_badge.visible = challenge
+	if not challenge and _record_badge.value >= 0:
+		_record_badge.reset()
+	if challenge:
+		var best: int = int(_state.get("challenge_best_stage", 0))
+		_record_badge.reduced_motion = reduced_motion
+		_record_badge.set_record(best, _record_badge.value >= 0 and best > _record_badge.value)
+		_subtitle.text = ""
+	if _compact and _state.get("kind") in ["main", "challenge"]:
+		var remaining: int = maxi(0, ceili(float(_state.get("seconds_remaining", 0))))
+		_title.text = "%d:%02d" % [remaining / 60, remaining % 60]
+	else:
+		_title.text = "" if challenge else "Word goals"
+		_subtitle.text = "%d of %d goals done" % [int(_state.get("mastered", 0)), _rows.size()] \
+			if _state.get("kind") == "main" else "%d of %d mastered" % [int(_state.get("mastered", 0)), _rows.size()]
+
+
 func _layout() -> void:
 	if not visible:
 		return
@@ -298,24 +331,9 @@ func _layout() -> void:
 	var padding: float = 6.0 / s
 	add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	_title.add_theme_font_size_override("font_size", ceili((12.0 if _compact else 20.0) / s))
-	_title.text = "Stage %d" % int(_state.get("number", 1)) if _compact else "Word goals"
-	if _state.get("kind") == "challenge":
-		_title.text = "Stage %d" % int(_state.get("challenge_stage", 1)) if _compact \
-			else "Challenge · %d" % int(_state.get("challenge_stage", 1))
+	_update_heading()
 	var timed: bool = _state.get("kind") in ["main", "challenge"]
-	if timed and _compact:
-		var remaining: int = maxi(0, ceili(float(_state.get("seconds_remaining", 0))))
-		_title.text = "%d · %d:%02d" % [int(_state.number), remaining / 60, remaining % 60] \
-			if _state.kind == "main" else "%d · %d:%02d" % [int(_state.get("challenge_stage", 1)), remaining / 60, remaining % 60]
-	_subtitle.visible = not _compact or _state.get("kind") == "challenge"
-	_subtitle.text = "%d of %d mastered" % [int(_state.get("mastered", 0)), _rows.size()]
-	if _state.get("kind") == "challenge":
-		_subtitle.text = "Best stage %d" % int(_state.get("challenge_best_stage", 0)) if _compact \
-			else "Best Stage %d · Goals +10s" % int(_state.get("challenge_best_stage", 0))
-	if timed and _state.get("kind") == "main":
-		_subtitle.text = "%d of %d goals done" % [int(_state.get("mastered", 0)), _rows.size()]
 	_subtitle.add_theme_font_size_override("font_size", ceili(12.0 / s))
-	_medal.visible = not _compact
 	_medal.position = Vector2(0, 2.0) / s
 	_medal.size = Vector2(36, 40) / s
 	var stacked: bool = _compact and not timed and size.y * s >= 40.0
@@ -326,12 +344,15 @@ func _layout() -> void:
 		(16.0 / s if timed and _compact else title_height) if _compact else 28.0 / s)
 	if timed and _compact:
 		_title.size.x = 76.0 / s
+		_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	else:
+		_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_subtitle.position = Vector2(46, 28) / s
 	_subtitle.size = Vector2(maxf(1.0, size.x - 46.0 / s), 20.0 / s)
 	if _compact and _state.get("kind") == "challenge":
-		_subtitle.position = Vector2(6, 16) / s
-		_subtitle.size = Vector2(72, 16) / s
-		_subtitle.add_theme_font_size_override("font_size", ceili(10.0 / s))
+		_record_badge.layout_badge(Rect2(Vector2(6, 16) / s, Vector2(76, 28) / s), s)
+	elif _state.get("kind") == "challenge":
+		_record_badge.layout_badge(Rect2(Vector2.ZERO, Vector2(size.x, 52.0 / s)), s)
 	_scroll.position = Vector2(padding if stacked or not _compact else (88.0 if timed else 70.0) / s,
 		18.0 / s if stacked else 58.0 / s if not _compact else 0.0)
 	_scroll.horizontal = _compact
@@ -414,16 +435,15 @@ func _layout() -> void:
 func _draw() -> void:
 	if not _compact:
 		return
-	if _state.get("kind") == "challenge":
+	if _state.get("kind") in ["main", "challenge"]:
 		var ratio: float = clampf(float(_state.get("seconds_remaining", 0.0)) \
 			/ maxf(0.001, float(_state.get("seconds_total", 90.0))), 0.0, 1.0)
-		draw_style_box(Style.box(Style.GOOD, Color.TRANSPARENT, 3, 0),
-			Rect2(Vector2(6, 35) / _scale, Vector2(72.0 * ratio, 5.0) / _scale))
+		var fill := Rect2(Vector2.ZERO, Vector2(86.0 * ratio / _scale, size.y))
+		if fill.has_area():
+			draw_style_box(Style.box(Color("#c5e7cc"), Color.TRANSPARENT, 10, 0), fill)
+		if _state.get("kind") == "main" and stage_timer != null:
+			stage_timer.draw_rating(self, Rect2(Vector2(6, 18) / _scale, Vector2(72, 24) / _scale), _scale, true)
 		return
-	if _state.get("kind") != "main":
-		return
-	if stage_timer != null:
-		stage_timer.draw_rating(self, Rect2(Vector2(6, 18) / _scale, Vector2(72, 22) / _scale), _scale, true)
 
 
 func snapshot() -> Dictionary:
@@ -440,4 +460,5 @@ func snapshot() -> Dictionary:
 			if _rows[index].mastered and not _rows[index].retired else 0.0
 	var bounds: Rect2 = get_global_rect()
 	return {"visible": is_visible_in_tree(), "compact": _compact, "words": words,
+		"record": _record_badge.snapshot(),
 		"rect": [bounds.position.x, bounds.position.y, bounds.size.x, bounds.size.y]}

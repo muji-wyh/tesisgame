@@ -297,6 +297,49 @@ func test_challenge_goal_time() -> void:
 		"An expired Challenge really ends in Game Over without a stage clear or stars")
 
 
+func test_level_weighted_goals() -> void:
+	var model = make_model()
+	var word: Dictionary = model.stage_run.words[0]
+	model.stage_run.goals[str(word.id)] = 5
+	var evidence: Array[String] = []
+	var record: Callable = func(receipt: String, _ids: Array[String], _correct: bool) -> void:
+		evidence.append(receipt)
+	model.word_attempted.connect(record)
+	for level: int in [2, 3]:
+		var tile: Dictionary = ready_word(model, word, 0, level)
+		check(model.collect(int(tile.id)), "A level-weighted pickup uses the ordinary collection transaction")
+		model.step(Model.collection_seconds(level) + 0.01)
+		check(model.stage_run.current[str(word.id)] == (2 if level == 2 else 5),
+			"Lv2 contributes two goal units and Lv3 contributes three without exceeding the goal")
+	check(model.cleared_pairs == 2 and model.stage_run.collection_count == 5 and evidence.size() == 2,
+		"Weighted goal units do not duplicate physical pickups or learning evidence")
+	model.word_attempted.disconnect(record)
+	var attempt = model.stage_run
+	check(attempt.record_collection("weighted:repeat", str(word.id), 2), "A new receipt can count its actual level")
+	var before: Dictionary = attempt.snapshot()
+	check(not attempt.record_collection("weighted:repeat", str(word.id), 2) and attempt.snapshot() == before,
+		"A repeated weighted receipt cannot add goal or summary units again")
+	check(not attempt.record_collection("weighted:repeat", str(word.id), 3) and not attempt.error.is_empty()
+		and attempt.snapshot() == before, "A receipt cannot silently change its saved Jelly level")
+	for invalid: int in [-1, 0, 10]:
+		check(not attempt.record_collection("weighted:invalid:%d" % invalid, str(word.id), invalid)
+			and not attempt.error.is_empty() and attempt.snapshot() == before,
+			"Invalid collection levels cannot mutate objective progress")
+	var challenge = make_model(90.0, true)
+	attempt = challenge.stage_run
+	attempt.challenge_stage = 3
+	attempt._challenge_goals.clear()
+	attempt._append_challenge_stage()
+	attempt.advance(20.0)
+	var first: Dictionary = attempt.snapshot().practice[0]
+	check(attempt.record_collection("weighted:challenge", str(first.word_id), 3)
+		and attempt.snapshot().practice[0].current == 2 and attempt.snapshot().practice[0].mastered
+		and attempt.remaining == 80.0 and attempt.take_time_bonus() == 10.0,
+		"One higher-level Jelly completes its Challenge quota with only one ten-second target award")
+	check(attempt.challenge_stage == 3 and attempt.collection_count == 3,
+		"Excess units neither complete other words nor skip a Challenge batch")
+
+
 func test_challenge_feedback_generation() -> void:
 	for event: String in ["challenge_time_awarded", "challenge_stage_reached"]:
 		var model = make_model(90.0, true)
@@ -350,6 +393,11 @@ func _run() -> void:
 		print("Jelly pending collection: %d checks, %d failures" % [checks, failures])
 		quit(1 if failures else 0)
 		return
+	if OS.get_cmdline_user_args().has("--weighted-goals-only"):
+		test_level_weighted_goals()
+		print("Jelly weighted goals: %d checks, %d failures" % [checks, failures])
+		quit(1 if failures else 0)
+		return
 	test_clear_sweep()
 	test_timeout_and_retry()
 	test_timer_pause_and_extra_time()
@@ -359,5 +407,6 @@ func _run() -> void:
 	test_clear_slow_notice_then_sweep()
 	test_challenge_goal_time()
 	test_challenge_feedback_generation()
+	test_level_weighted_goals()
 	print("Jelly campaign model: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

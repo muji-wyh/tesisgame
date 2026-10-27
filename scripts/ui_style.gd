@@ -10,6 +10,9 @@ const SURFACE := Color("#fffdf7")
 const SOFT := Color("#edf2e9")
 const BODY_FONT = preload("res://assets/fonts/body.tres")
 const HEADING_FONT = preload("res://assets/fonts/heading.tres")
+static var _pixel_ratio_frame: int = -1
+static var _pixel_ratio_window := Vector2i.ZERO
+static var _pixel_ratio: float = 1.0
 
 
 static func hint_palette(palette: Dictionary) -> Dictionary:
@@ -110,7 +113,13 @@ static func ui_scale(control: Control) -> float:
 		return 1.0
 	var value: float = float(control.get_window().size.x) / control.get_viewport().get_visible_rect().size.x
 	if OS.has_feature("web"):
-		value /= float(JavaScriptBridge.get_interface("window").devicePixelRatio)
+		var frame: int = Engine.get_process_frames()
+		var window_size: Vector2i = control.get_window().size
+		if frame != _pixel_ratio_frame or window_size != _pixel_ratio_window:
+			_pixel_ratio_frame = frame
+			_pixel_ratio_window = window_size
+			_pixel_ratio = float(JavaScriptBridge.get_interface("window").devicePixelRatio)
+		value /= _pixel_ratio
 	return maxf(value, 2.0 / 3.0)
 
 

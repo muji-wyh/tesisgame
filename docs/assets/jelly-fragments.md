@@ -82,11 +82,12 @@ The shared `reward_confetti.gd` renderer accompanies earned-chest reveals in
 Match, Memory, Voice Pop and Jelly Match. GameUI owns its
 dedicated viewport CanvasLayer, so arena clipping, layout bounds and the game
 header cannot cut off the paper. A reveal starts one independent 6.4-second
-burst of 128-400 paper pieces, scaled to viewport area and UI density. This is
-one third of the previous population, rounded to the nearest whole paper for
-each viewport and UI scale. The smaller upper-third preset likewise drops from
-24-72 to 8-24 pieces. Texture size, two-edge launch, fall speed and lifetime are
-unchanged. Chest
+burst of 85-267 paper pieces, scaled to viewport area and UI density. This removes
+another third of the preceding 128-400 population, rounded to the nearest whole
+paper for each viewport and UI scale. The smaller upper-third preset likewise
+drops from 8-24 to 5-16 pieces. The same acquired atlas now uses a 22-34px base edge
+instead of 18-28px, making each paper about twenty percent larger. Two-edge launch,
+fall speed, bending and lifetime are unchanged. Chest
 bursts use the current round, mode and chest tier; Jelly Words stage bursts
 use the round and stage number. A stratified canopy distributes the paper
 through both the full width and height instead of a small local patch.

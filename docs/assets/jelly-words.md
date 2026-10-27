@@ -55,6 +55,10 @@ learning evidence; an upgrade does not multiply mastery or coin payouts.
 Manual collection requires a click or tap released in under 500 ms on the same
 merged jelly without dragging. Holding for 500 ms or longer never collects on
 release; the held jelly can still be dragged into another matching merged jelly.
+A receptive merge result remains a valid held-drop target throughout its final
+settling wobble, although picking up or collecting that result still waits for
+settlement. Main and Challenge objectives count the collected Jelly's actual
+level, while wallet, fragments and learning remain exactly-once transactions.
 
 Picture clues use more of the gel face, including a larger, centered image below
 the compact fragment corner. Merged pictures fill the available space above the

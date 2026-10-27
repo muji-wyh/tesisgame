@@ -769,6 +769,25 @@ func _test_pending_journal_and_recovery() -> void:
 		and recovered.complete_result(context, "round:challenge") and recovered.frontier(context) == 1
 		and recovered.highest_cleared(context) == 0 and recovered.best_stars(context, 1) == 0,
 		"Challenge settlement clears its journal without granting a numbered unlock or star reward")
+	var fractional: Dictionary = _result(challenge, "timeout", 0)
+	fractional["challenge_stage"] = 6
+	fractional["challenge_previous_best"] = 5
+	fractional["time_elapsed"] = 91.828454666666666
+	fractional["seconds_added"] = 1.828454666666666
+	fractional["seconds_remaining"] = 0.0
+	check(recovered.queue_result(context, "round:fractional", fractional),
+		"A capped fractional goal-time extension can be journaled before settlement")
+	var retry = _store(host)
+	check(retry.load_state(), "Reload the actual ConfigFile representation of fractional Challenge time")
+	writes = host.writes
+	check(retry.queue_result(context, "round:fractional", fractional) and host.writes == writes,
+		"The original retry remains identical after ConfigFile precision rounding, without a second write")
+	var altered: Dictionary = fractional.duplicate(true)
+	altered.collection_count = int(altered.collection_count) + 1
+	check(not retry.queue_result(context, "round:fractional", altered) and not retry.error.is_empty(),
+		"Storage-precision comparison never hides changed integer collection or reward data")
+	check(retry.complete_result(context, "round:fractional") and retry.challenge_best_stage(context) == 6,
+		"Fractional-time recovery saves the actual reached record and completes its original journal")
 
 
 func _test_failed_host_writes() -> void:

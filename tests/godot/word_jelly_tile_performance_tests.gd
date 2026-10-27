@@ -9,10 +9,18 @@ const BaseTile = preload("res://scripts/jelly_tile.gd")
 class ProbeTile:
 	extends "res://scripts/word_jelly_tile.gd"
 	var layout_count: int = 0
+	var feedback_count: int = 0
+	var shadow_sync_count: int = 0
 
 	func _layout() -> void:
 		layout_count += 1
 		super._layout()
+	func _refresh_feedback(reset_motion: bool = false) -> void:
+		feedback_count += 1
+		super._refresh_feedback(reset_motion)
+	func _sync_picture_shadow() -> void:
+		shadow_sync_count += 1
+		super._sync_picture_shadow()
 
 var checks: int = 0
 var failures: int = 0
@@ -58,6 +66,12 @@ func _run() -> void:
 	tile.configure(_cell(), SKIN, PICTURE, CHEST, Color("#357d70"))
 	tile.set_completion_hint(true, 0.0, false)
 	tile.set_completion_hint(true, 0.6, false)
+	var feedbacks: int = tile.feedback_count
+	var glint: float = float(tile._gel.get_shader_parameter("completion_glint"))
+	for index in range(60):
+		tile.set_completion_hint(true, 0.61 + float(index) / 60.0, false)
+	check(tile.feedback_count == feedbacks and float(tile._gel.get_shader_parameter("completion_glint")) != glint,
+		"Continuous hints advance their actual shimmer without rebuilding unchanged rim feedback")
 	tile.set_projection(true)
 	check(not tile._label.visible and not tile._picture.visible and not tile._level_badge.visible,
 		"Projection hides the learning face and level badge")
@@ -92,6 +106,11 @@ func _run() -> void:
 	tile.deform(0.02, 0.4, stretch)
 	check(tile._surface.scale.is_equal_approx(stretch), "An unchanged deformation restores the base transform after contact")
 	tile.set_contact("none")
+	var shadows: int = tile.shadow_sync_count
+	for index in range(60):
+		tile.set_contact("none")
+	check(tile.shadow_sync_count == shadows,
+		"Unrelated neutral tiles do not rebuild their unchanged picture shadow every contact pass")
 	check(tile._surface.position == Vector2.ZERO and tile._content_offset == Vector2.ZERO,
 		"Contact release restores the picture and caption offsets")
 	check(is_equal_approx(float(tile._gel.get_shader_parameter("bend")), 0.02)

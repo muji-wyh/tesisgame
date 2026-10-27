@@ -483,7 +483,7 @@ async function visibleColorCount(page, png) {
 }
 
 async function enterGame(scope, { home = false } = {}) {
-  await expect(scope.locator('#status')).toHaveAttribute('data-state', 'ready', { timeout: 60000 });
+  await expect(scope.locator('#status')).toHaveAttribute('data-state', 'ready', { timeout: home ? 180000 : 60000 });
   const enter = scope.locator('#enter-game');
   await expect(enter).toBeVisible();
   await expect(enter).toBeEnabled();
@@ -496,16 +496,16 @@ async function enterGame(scope, { home = false } = {}) {
   if (!home) await chooseMode(scope, 'match');
 }
 
-async function openGame(page, { reducedMotion = 'reduce', mode = 'match', expectedStatus = 'Find 5 word–picture pairs.' } = {}) {
+async function openGame(page, { reducedMotion = 'reduce', mode = 'match', expectedStatus = 'Find 5 word–picture pairs.', home = false } = {}) {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   await page.emulateMedia({ reducedMotion });
   await page.goto('/');
-  await enterGame(page);
-  await expect(page.locator('#game-status')).toContainText(expectedStatus);
+  await enterGame(page, { home });
+  if (!home) await expect(page.locator('#game-status')).toContainText(expectedStatus);
   await rendered(page);
-  if (mode !== 'match') await chooseMode(page, mode);
+  if (!home && mode !== 'match') await chooseMode(page, mode);
   return errors;
 }
 

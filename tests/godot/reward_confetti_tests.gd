@@ -58,13 +58,16 @@ func _check_density_reduction(paper) -> void:
 		var screen := Rect2(Vector2.ZERO, dimensions)
 		for unit: float in [0.25, 0.75, 1.0, 1.5, 2.0]:
 			var full_spacing: float = 42.0 * maxf(0.25, unit)
-			var previous_full: int = clampi(ceili(screen.get_area() / pow(full_spacing, 2)), 384, 1200)
-			check(paper._paper_count(screen, unit) == roundi(previous_full / 3.0),
-				"Full-screen paper is exactly the nearest whole one-third of its previous population at %s, scale %s" % [dimensions, unit])
+			var previous_full: int = roundi(clampi(ceili(screen.get_area() / pow(full_spacing, 2)), 384, 1200) / 3.0)
+			check(paper._paper_count(screen, unit) == roundi(previous_full * 2.0 / 3.0),
+				"Full-screen paper retains the nearest whole two-thirds of its previous population at %s, scale %s" % [dimensions, unit])
 			var small_spacing: float = 80.0 * maxf(0.25, unit)
-			var previous_small: int = clampi(ceili(screen.get_area() / 3.0 / pow(small_spacing, 2)), 24, 72)
-			check(paper._burst_count({"small": true}, screen, unit) == roundi(previous_small / 3.0),
-				"Small bursts also use one-third of their previous population instead of retaining the old minimum")
+			var previous_small: int = roundi(clampi(ceili(screen.get_area() / 3.0 / pow(small_spacing, 2)), 24, 72) / 3.0)
+			check(paper._burst_count({"small": true}, screen, unit) == roundi(previous_small * 2.0 / 3.0),
+				"Small bursts also remove one-third of the current population at every viewport and scale")
+	var larger: Dictionary = paper._paper_state(0, Rect2(0, 0, 960, 620), 1.0, 0.025)
+	check(float(larger.size.x) > 32.0 and float(larger.size.y) > 13.5,
+		"The actual source-textured paper is about twenty percent larger, not just assigned a larger particle budget")
 
 
 func _check_small_stage_celebration(paper) -> void:
@@ -75,8 +78,8 @@ func _check_small_stage_celebration(paper) -> void:
 	check(bool(paper.call("burst_small", "stage:small")) and not bool(paper.call("burst_small", "stage:small")),
 		"The smaller stage celebration retains reward-key deduplication")
 	var snapshot: Dictionary = paper.snapshot()
-	check(int(snapshot.paper_count) >= 8 and int(snapshot.paper_count) <= 24,
-		"A small stage burst uses eight to twenty-four papers after the one-third reduction")
+	check(int(snapshot.paper_count) >= 5 and int(snapshot.paper_count) <= 16,
+		"A small stage burst uses five to sixteen larger papers after the further one-third reduction")
 	var region_values: Array = snapshot.get("regions", [])[0]
 	var region := Rect2(region_values[0], region_values[1], region_values[2], region_values[3])
 	check(region.size.y <= paper.screen_rect().size.y / 3.0 + 0.01
@@ -185,7 +188,7 @@ func _check_viewport_coverage(paper) -> void:
 		check(paper.has_method("_paper_count"), "Confetti density adapts to the actual viewport instead of a fixed particle count")
 		if paper.has_method("_paper_count"):
 			count = int(paper.call("_paper_count", screen, 1.0))
-		check(count >= 128 and count <= 400 and count >= previous_count,
+		check(count >= 85 and count <= 267 and count >= previous_count,
 			"Larger screens retain adaptive coverage with a lighter, bounded paper population")
 		previous_count = count
 		for variation: float in [0.0, 0.43, 0.999999]:

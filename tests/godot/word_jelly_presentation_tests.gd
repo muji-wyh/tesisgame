@@ -224,6 +224,7 @@ func test_challenge_best_hud() -> void:
 		await process_frame
 	app.audio.set_muted(true)
 	app.set_process(false)
+	app.reduced_motion = false
 	app._show_mode_menu()
 	app.choose_mode("word_jelly")
 	for frame in range(6):
@@ -237,9 +238,10 @@ func test_challenge_best_hud() -> void:
 	for frame in range(40):
 		view._process(0.05)
 		app._advance_ui(0.05)
-	check(view.game.stage_run.challenge_stage == 1 and view._practice_panel._subtitle.text == "Best stage 5"
-		and view._practice_panel._subtitle.is_visible_in_tree() and view.game.stage_run.remaining > 0.0,
-		"Entering the real phone Challenge immediately shows current Stage 1 and its persisted historical best")
+	check(view.game.stage_run.challenge_stage == 1 and view._practice_panel._record_badge.value == 5
+		and view._practice_panel._record_badge.is_visible_in_tree() and not view._practice_panel._subtitle.visible
+		and app._mode_heading.text == "Challenge · 1" and view.game.stage_run.remaining > 0.0,
+		"The phone Challenge puts its mode/Stage at the top and the real best in a sourced medal number without Goals +10s")
 	await capture_ui("challenge-stage-1-best-5")
 	var goals: Array = view.game.stage_run.snapshot().practice.duplicate(true)
 	view.game.cells.clear()
@@ -261,6 +263,11 @@ func test_challenge_best_hud() -> void:
 	check(view.game.stage_run.challenge_stage == 2 and view.game.stage_run.snapshot().pressure.level == 2
 		and app._campaign.store.challenge_best_stage("growth") == 5,
 		"The full actual goal batch starts Stage 2 without overwriting a higher historical best")
+	var key: String = "%s:challenge:stage:1" % app._round_id
+	check(app._reward_confetti.snapshot().keys.count(key) == 1,
+		"The completed Challenge target batch launches exactly one reduced-count sourced paper celebration: " \
+			+ JSON.stringify({"key": key, "effect": app._reward_confetti.snapshot(), "reduced": app.reduced_motion,
+				"allowed": app._reward_confetti_allowed(), "stage": view.game.stage_run.challenge_stage}))
 	view._drop_next()
 	for frame in range(68):
 		view._process(0.05)
@@ -270,9 +277,154 @@ func test_challenge_best_hud() -> void:
 	app.free()
 
 
+func test_challenge_results() -> void:
+	for example: Dictionary in [
+		{"best": 5, "reached": 1, "record": false, "reduce": false},
+		{"best": 5, "reached": 5, "record": false, "reduce": false},
+		{"best": 5, "reached": 6, "record": true, "reduce": false},
+		{"best": 5, "reached": 6, "record": true, "reduce": false, "fail": true},
+		{"best": 0, "reached": 1, "record": true, "reduce": true}]:
+		if OS.get_cmdline_user_args().has("--results-retry-only") and not bool(example.get("fail", false)):
+			continue
+		if OS.get_cmdline_user_args().has("--progress"):
+			print("Challenge result scenario: " + JSON.stringify(example))
+		root.size = Vector2i(393, 852)
+		var directory: String = "user://challenge-result-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
+		check(DirAccess.make_dir_recursive_absolute(directory) == OK, "Challenge results use isolated real save storage")
+		var app = load("res://scenes/main.tscn").instantiate()
+		Fixture.install(app, directory)
+		app._presentation.path = directory + "/presentation.cfg"
+		root.add_child(app)
+		for frame in range(6):
+			await process_frame
+		app.audio.set_muted(true)
+		app.set_process(false)
+		app.reduced_motion = bool(example.reduce)
+		app._show_mode_menu()
+		app.choose_mode("word_jelly")
+		for frame in range(6):
+			await process_frame
+		if int(example.best) > 0:
+			check(app._campaign.store.record_challenge_stage("growth", int(example.best)), "Save the pre-run historical record")
+		app._campaign.request_challenge()
+		for frame in range(6):
+			await process_frame
+		var view = app._word_jelly
+		var room = app._jelly_rewards
+		view.set_process(false)
+		var notifications: Array[String] = []
+		room.challenge_record_broken.connect(func(id: String) -> void: notifications.append(id))
+		for frame in range(40):
+			view._process(0.05)
+			app._advance_ui(0.05)
+		check(app._campaign._challenge_previous_best == int(example.best),
+			"Entering freezes the genuine old record before the eager Stage 1 save")
+		view.game.cells.clear()
+		view.game.upcoming.clear()
+		view.game._supply.clear()
+		view.game._supply_pending.clear()
+		if int(example.reached) > 1:
+			# Begin at a late batch's last real target; the actual pickup earns the
+			# next Stage through the normal model and persistent owner signal.
+			var run = view.game.stage_run
+			run.challenge_stage = int(example.reached) - 1
+			run._challenge_goals.clear()
+			run._append_challenge_stage()
+			view.game._sync_challenge_pressure()
+			for index in range(run._challenge_goals.size() - 1):
+				run._challenge_goals[index].mastered = true
+				run._challenge_goals[index].current = run._challenge_goals[index].required
+			var last: Dictionary = run._challenge_goals.back()
+			var definition: Dictionary = run.words.filter(func(word: Dictionary) -> bool:
+				return str(word.id) == str(last.word_id))[0]
+			var tile: Dictionary = view.game._new_word_root(definition)
+			view.game._set_merged_word(tile, definition, int(last.required), true)
+			tile.fragments = 0
+			tile.chest = false
+			tile.column = 0
+			tile.row = 7
+			tile.age = 100.0
+			tile.settling = false
+			view.game.cells.append(tile)
+			view._sync_tiles()
+			view._collect(int(tile.id))
+			check(view.game.is_fusing(int(tile.id)), "The final weighted pickup really advances the prepared batch")
+			for frame in range(30):
+				view._process(0.05)
+				app._advance_ui(0.05)
+		check(view.game.stage_run.challenge_stage == int(example.reached)
+			and app._campaign.store.challenge_best_stage("growth") == maxi(int(example.best), int(example.reached)),
+			"The reached Stage is already saved before Game over compares it with the original record")
+		view.game.stage_run.advance(view.game.stage_run.remaining)
+		var saved_path: String = app._campaign.store._path
+		var blocked: bool = false
+		for frame in range(500):
+			view._process(0.05)
+			app._advance_ui(0.05)
+			if bool(example.get("fail", false)) and app._campaign.settling and not blocked:
+				blocked = true
+				app._campaign.store._path = directory + "/missing/campaign.cfg"
+			if blocked and not app._campaign.error.is_empty():
+				break
+			if room._challenge_return_ready:
+				break
+		if blocked:
+			check(not room._challenge_return_ready and not room._back.visible and room._retry.visible
+				and notifications.is_empty(), "A failed settlement cannot announce a new record or expose a discard button")
+			app._campaign.store._path = saved_path
+			app._campaign.retry()
+			for frame in range(150):
+				app._advance_ui(0.05)
+				if room._challenge_return_ready:
+					break
+			check(app._campaign.error.is_empty(), "Retry saves the same Challenge receipt and unblocks its original comparison: " \
+				+ JSON.stringify({"error": app._campaign.error, "store": app._campaign.store.error,
+					"pending": app._campaign.store.pending("growth"), "committed": app._campaign._result_committed}))
+		check(room._challenge_return_ready and app._campaign.settling and not app._campaign.map.visible
+			and app._settlement_dialog.is_visible_in_tree(), "Game over stops on a saved, explicitly acknowledged Challenge summary")
+		check(app._round_result.challenge_result.stage == int(example.reached)
+			and app._round_result.challenge_result.previous_best == int(example.best)
+			and app._round_result.challenge_result.new_best == bool(example.record)
+			and room._challenge_record.value == maxi(int(example.best), int(example.reached)),
+			"Lower, tied, higher and first records display truthful reached and historical Stages")
+		check(notifications.size() == (1 if bool(example.record) else 0),
+			"Only a genuinely surpassed old record emits the breakthrough effect once")
+		check(room._back.visible and not room._back.disabled and room._back.text == "Back to map"
+			and room._return_glow.visible, "The saved result exposes a sourced-glow Back to map button")
+		for frame in range(9):
+			app._advance_ui(0.05)
+		var age: float = room._challenge_record._elapsed
+		room.set_result_context(app._round_result, app._round_id)
+		room._refresh()
+		check(room._challenge_record._elapsed == age and notifications.size() == (1 if bool(example.record) else 0),
+			"Refreshing the result cannot restart its medal animation, record cue or paper")
+		if bool(example.record) and not bool(example.reduce):
+			for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(1366, 768)]:
+				root.size = dimensions
+				await capture_ui("challenge-record-%d" % dimensions.x)
+		for frame in range(120):
+			app._advance_ui(0.05)
+		check(app._campaign.settling and not app._campaign.map.visible and room.is_visible_in_tree(),
+			"An arbitrarily idle result never returns to the map by itself")
+		check(not bool(example.reduce) or room._back.scale == Vector2.ONE,
+			"Reduced motion retains the award and highlighted return without a moving button")
+		room._back.pressed.emit()
+		app._advance_ui(0.05)
+		check(app._campaign.map.visible and not app._campaign.settling and not app._settlement_dialog.visible,
+			"Only the player's explicit Back to map action closes the saved Challenge result")
+		app.audio.halt()
+		app.free()
+		await process_frame
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1000, 760)
+	if OS.get_cmdline_user_args().has("--results-only"):
+		await test_challenge_results()
+		print("Challenge results: %d checks, %d failures" % [checks, failures])
+		quit(1 if failures else 0)
+		return
 	var data := Data.new()
 	check(data.load_all(), "Presentation contracts use the real vocabulary and acquired artwork")
 	var words: Array = data.words.filter(func(word: Dictionary) -> bool: return Data.word_age(word) == 3) \
@@ -282,5 +434,6 @@ func _run() -> void:
 	test_skills(words[0])
 	await test_level_and_finale(data, words)
 	await test_challenge_best_hud()
+	await test_challenge_results()
 	print("Jelly presentation refinements: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

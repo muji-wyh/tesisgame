@@ -895,7 +895,7 @@ func _build_controls() -> void:
 	_word_jelly.word_merged.connect(_word_jelly_merged)
 	_word_jelly.combo_coins_earned.connect(_word_jelly_combo_earned)
 	_word_jelly.batch_collection_started.connect(func() -> void: audio.stop_voice())
-	_word_jelly.game.challenge_stage_reached.connect(func(stage: int) -> void: _campaign.record_challenge_stage(stage))
+	_word_jelly.game.challenge_stage_reached.connect(_challenge_stage_reached)
 	_word_jelly.stage_clear_announced.connect(func() -> void:
 		if _mode_id == "word_jelly" and not _page_hidden and not _mode_menu_open():
 			audio.play_round_end(false)
@@ -927,6 +927,14 @@ func _build_controls() -> void:
 	_jelly_rewards.interaction_allowed = func() -> bool: return _jelly_rewards_shown and _is_jelly_mode() and not collection_page.visible and not _page_hidden and not _mode_menu_open()
 	_jelly_rewards.exit_requested.connect(_hide_jelly_rewards)
 	_jelly_rewards.replay_requested.connect(_replay_jelly)
+	_jelly_rewards.challenge_result_accepted.connect(func() -> void: _campaign.accept_challenge_result())
+	_jelly_rewards.challenge_record_broken.connect(func(round_id: String) -> void:
+		if round_id != _round_id or _page_hidden or not _jelly_rewards_shown:
+			return
+		audio.play_jelly_cue("goal_complete")
+		if not reduced_motion and _reward_confetti_allowed():
+			_sync_reward_confetti()
+			_reward_confetti.burst(round_id + ":challenge-record"))
 	_jelly_rewards.chest_audio_requested.connect(_pop_chest_audio)
 	_jelly_rewards.chest_cue_requested.connect(func(theme_id: String, cue: String, step: int) -> void:
 		if _jelly_rewards_shown and _is_jelly_mode() and not _page_hidden and not collection_page.visible and not _mode_menu_open():
@@ -2276,6 +2284,30 @@ func _jelly_campaign_snapshot() -> Dictionary:
 	return state
 
 
+func _game_heading_text() -> String:
+	if _mode_id == "word_jelly" and is_instance_valid(_word_jelly) and _word_jelly.game.stage_run != null:
+		var run = _word_jelly.game.stage_run
+		return "Challenge · %d" % run.challenge_stage if run.kind == "challenge" else "Stage %d" % run.number
+	return str(MODES[_mode_id])
+
+
+func _sync_stage_heading() -> void:
+	if _mode_heading == null:
+		return
+	var text: String = _game_heading_text()
+	if _mode_heading.text != text:
+		_mode_heading.text = text
+		_layout_game_heading()
+
+
+func _challenge_stage_reached(stage: int) -> void:
+	_campaign.record_challenge_stage(stage)
+	_sync_stage_heading()
+	if stage > 1 and not reduced_motion and not _round_id.is_empty() and _reward_confetti_allowed():
+		_sync_reward_confetti()
+		_reward_confetti.burst_small("%s:challenge:stage:%d" % [_round_id, stage - 1])
+
+
 func _jelly_stage_missing_age(words: Array) -> int:
 	for word: Dictionary in words:
 		if word.get("track") != "professional" and not vocabulary_loader.is_ready(Data.word_age(word)):
@@ -2288,6 +2320,7 @@ func _refresh_jelly_stage_targets() -> void:
 		_jelly_stage_professional_skills = professional.session.snapshot().get("progress", {}).get("skills", {})
 	if _mode_id == "word_jelly" and _word_jelly.game.stage_run != null and not _rebuilding:
 		_word_jelly.set_stage_progress(_jelly_campaign_snapshot())
+		_sync_stage_heading()
 		return
 	if _word_jelly_stages == null or _mode_id != "word_jelly" or _rebuilding:
 		return
@@ -2918,7 +2951,7 @@ func _restore_jelly_reward_host() -> void:
 func _publish_jelly(state: Dictionary, source_mode: String = "") -> void:
 	if _releasing_professional_views or _host == null or (not source_mode.is_empty() and source_mode != _mode_id):
 		return
-	var value: Dictionary = state.duplicate(true)
+	var value: Dictionary = state.duplicate()
 	value["visible"] = _is_jelly_mode() and _active_jelly().is_visible_in_tree() and not _jelly_rewards_shown and not _round_celebration_active() and not collection_page.visible and not _page_hidden and not _mode_menu_open() and not (_campaign != null and _campaign.is_open())
 	value["mode"] = _mode_id
 	value["round_id"] = _round_id
@@ -4085,7 +4118,7 @@ func _fit_mode_buttons() -> void:
 		surface.set_content_margin_all(6.0 / css_scale)
 		surface.set_corner_radius_all(ceili(12.0 / css_scale))
 	_mode_heading_button.set("accessibility_name", "Home. Return home to choose a game")
-	_mode_heading.text = str(MODES[_mode_id])
+	_mode_heading.text = _game_heading_text()
 	_mode_heading.add_theme_font_size_override("font_size", ceili((20 if size.x * css_scale >= 680 else 16) / css_scale))
 	_layout_game_heading()
 	_mode_panel.configure(_mode_id if _home_can_continue() else "", audio.muted if audio != null else false, reduced_motion)

@@ -462,8 +462,9 @@ func _run() -> void:
 	check(view.game.stage_run.kind == "challenge" and view.game.stage_run.initial_seconds == 90.0
 		and view._stage_banner.snapshot().label.contains("1:30"),
 		"The Challenge entrance starts its real ninety-second Stage 1 rather than a numbered campaign stage")
-	check(view._stage_banner._title.text == "Ready?" and view._stage_banner._detail.text.contains("90s"),
-		"The challenge introduction never presents a fictitious stage zero or mastery quota")
+	check(view._stage_banner._title.text == "Ready?" and view._stage_banner._detail.text == "Stage 1"
+		and app._mode_heading.text == "Challenge · 1",
+		"The challenge introduction names its real Stage without the removed Goals +10s help")
 	check(view.snapshot().practice.words.size() == 3,
 		"Challenge shows its first batch of three explicit timed collection goals")
 	var active_ids: Array = view.game._words.map(func(word: Dictionary) -> String: return str(word.id))
@@ -474,10 +475,14 @@ func _run() -> void:
 	for frame in range(180):
 		view._process(0.05)
 		app._advance_ui(0.05)
-		if app._campaign.map.visible:
+		if app._jelly_rewards._challenge_return_ready:
 			break
+	check(not app._campaign.map.visible and app._jelly_rewards._challenge_return_ready,
+		"Challenge results wait for an explicit return instead of leaving their summary automatically")
+	app._jelly_rewards._back.pressed.emit()
+	app._advance_ui(0.05)
 	check(app._campaign.map.visible and app._campaign.store.highest_cleared("growth") == 1,
-		"An untimed challenge settles and returns to its map without unlocking a numbered stage")
+		"A confirmed Challenge return reaches its map without unlocking a numbered stage")
 	app._campaign.request_stage(1)
 	await settle()
 	view.set_process(false)
