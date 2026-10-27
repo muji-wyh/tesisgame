@@ -126,8 +126,8 @@ func test_levels_and_story() -> void:
 	model._set_merged_word(second, word, 1, true)
 	put(model, first, 0)
 	put(model, second, 1)
-	check(model.try_merge(int(first.id), int(second.id)) == "level_locked" and model.cells.size() == 2,
-		"Locked merged levels cannot consume their inputs, mass or carried treasure")
+	check(model.merge_candidate(first, second).result.merge_level == 1 and model.cells.size() == 2,
+		"An over-cap same-word sum clamps to the unlocked level without unlocking a higher tier")
 	model.boss.apply_status("lock", int(first.id))
 	check(model.try_merge(int(second.id), int(first.id)) == "unlocked"
 		and model.boss.locks(int(first.id)) == 0 and model.cells.size() == 2,
@@ -164,6 +164,53 @@ func test_snatch_recovery() -> void:
 		"Snatching and returning a construction piece cannot manufacture learning or rewards")
 
 
+func test_boss_word_requirements() -> void:
+	for boss_first: bool in [true, false]:
+		var model = make_model(7, 3)
+		if not boss_first:
+			model.boss.health = 100000
+		if boss_first:
+			for index in range(20):
+				if model.boss.health == 0:
+					break
+				var word: Dictionary = model.stage_run.words[0]
+				var tile: Dictionary = model._new_word_root(word)
+				model._set_merged_word(tile, word, 1, true)
+				put(model, tile, 0)
+				check(model.collect(int(tile.id)), "A real repeated pickup can defeat the Boss before other word goals")
+				model.step(Model.COLLECT_SECONDS)
+			check(model.boss.health == 0 and model.stage_run.snapshot().remaining > 0
+				and model.stage_run.outcome.is_empty() and not model.stage_ending()
+				and model.boss.phase == "exhausted" and model.boss.outcome.is_empty(),
+				"Defeating the Boss cannot clear or start victory/escape while any fixed word goal remains")
+			check(not model.boss.snapshot().events.any(func(event: Dictionary) -> bool: return event.kind == "victory"),
+				"No victory announcement or reward is fabricated before the necessary word goals")
+		for word: Dictionary in model.stage_run.words:
+			var missing: int = int(model.stage_run.goals[word.id]) - int(model.stage_run.current[word.id])
+			for index in range(missing):
+				if not model.stage_run.outcome.is_empty():
+					break
+				var tile: Dictionary = model._new_word_root(word)
+				model._set_merged_word(tile, word, 1, true)
+				put(model, tile, 0)
+				check(model.collect(int(tile.id)), "A missing required word remains collectible after the Boss is exhausted")
+				model.step(Model.COLLECT_SECONDS)
+		if not boss_first:
+			check(model.stage_run.snapshot().remaining == 0 and model.boss.health > 0
+				and model.stage_run.outcome.is_empty() and not model.stage_ending(),
+				"Finishing all words cannot clear while the Boss is still unbeaten")
+			model.boss.health = 1
+			var word: Dictionary = model.stage_run.words[0]
+			var tile: Dictionary = model._new_word_root(word)
+			model._set_merged_word(tile, word, 1, true)
+			put(model, tile, 0)
+			check(model.collect(int(tile.id)), "Reviewed word supply remains available to finish the remaining Boss objective")
+			model.step(Model.COLLECT_SECONDS)
+		check(model.stage_run.outcome == "cleared" and model.stage_run.snapshot().remaining == 0
+			and model.stage_run.boss_defeated and model.stage_ending(),
+			"Either completion order clears only once both all word quotas and the Boss defeat are genuinely satisfied")
+
+
 func _run() -> void:
 	var data := Data.new()
 	check(data.load_all(), "Load the real vocabulary for Boss integration")
@@ -173,5 +220,6 @@ func _run() -> void:
 	test_combat_clock_and_damage()
 	test_levels_and_story()
 	test_snatch_recovery()
+	test_boss_word_requirements()
 	print("Jelly Boss rules: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

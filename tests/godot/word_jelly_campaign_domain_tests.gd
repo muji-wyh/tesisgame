@@ -83,7 +83,7 @@ func _run() -> void:
 		_test_run_validation()
 		_test_original_budget_star_boundaries()
 		_test_deadline_ties_and_terminal_outcomes()
-		_test_untimed_pressure()
+		_test_challenge_pressure()
 		_test_snapshot_isolation()
 		_test_fresh_store_and_recipe_reservation()
 		_test_progress_replays_and_contexts()
@@ -364,7 +364,7 @@ func _test_exact_replay_recipes() -> void:
 	var challenge_replay: Dictionary = _catalog.rebuild_plan(challenge_recipe, pool)
 	check(challenge_replay.get("ok", false) and challenge_replay.kind == "challenge"
 		and challenge_replay.word_ids == challenge.word_ids and challenge_replay.goals.is_empty()
-		and float(challenge_replay.seconds) == 0.0, "Untimed candidate recipes also replay without inventing goals")
+		and float(challenge_replay.seconds) == 90.0, "Survival candidate recipes retain their ninety-second starting clock")
 
 
 func _test_star_weighted_clear_quotes() -> void:
@@ -521,50 +521,74 @@ func _test_deadline_ties_and_terminal_outcomes() -> void:
 		"Even a rejected late reason cannot replace an existing outcome")
 
 
-func _test_untimed_pressure() -> void:
+func _test_challenge_pressure() -> void:
 	var plan: Dictionary = _plan(0, true)
 	check(plan.get("ok", false) and plan.kind == "challenge" and plan.number == 0
-		and plan.words.size() == 16 and plan.goals.is_empty() and float(plan.seconds) == 0.0,
-		"Challenge recipes contain up to sixteen distinct candidates with no quota or deadline")
+		and plan.words.size() == 16 and plan.goals.is_empty() and float(plan.seconds) == 90.0,
+		"Challenge recipes contain sixteen candidates and a ninety-second starting deadline")
 	var run = _run_script.new()
-	check(run.configure(plan), "Configure the untimed challenge domain")
+	check(run.configure(plan), "Configure the timed Challenge domain")
 	var start: Dictionary = run.challenge_pressure()
 	check(start.level == 1 and start.word_limit == 3 and is_equal_approx(float(start.spawn_interval), 20.0)
 		and is_equal_approx(float(start.fall_speed_scale), 1.0) and run.words_for_pressure().size() == 3,
-		"Untimed play starts with three word kinds and genuinely gentle falls")
-	for index in range(9):
-		run.record_collection("pressure:%d" % index, str(plan.word_ids[index % 3]))
-	check(run.collection_count == 9 and run.challenge_pressure().level == 1,
-		"Pressure grows per ten committed pickups, not per frame, preview or pending save")
-	run.record_collection("pressure:9", str(plan.word_ids[0]))
+		"Challenge starts with three word kinds and genuinely gentle falls")
+	var receipt: int = 0
+	for goal: Dictionary in run.snapshot().practice:
+		run.record_collection("pressure:%d" % receipt, str(goal.word_id))
+		receipt += 1
+		if receipt < 3:
+			check(run.challenge_stage == 1, "A partial target batch cannot advance the Challenge stage")
 	var next: Dictionary = run.challenge_pressure()
 	check(next.level == 2 and next.word_limit == 4 and run.words_for_pressure().size() == 4
 		and float(next.spawn_interval) < float(start.spawn_interval)
 		and float(next.fall_speed_scale) > float(start.fall_speed_scale),
-		"The tenth pickup grows both active word variety and actual falling speed, not cadence alone")
+		"The complete first target batch grows active variety, actual falling speed and supply pressure")
 	var before: Dictionary = run.snapshot()
-	check(not run.record_collection("pressure:9", str(plan.word_ids[0])) and run.snapshot() == before,
+	check(not run.record_collection("pressure:0", str(plan.word_ids[0])) and run.snapshot() == before,
 		"A duplicate committed challenge pickup cannot raise pressure twice")
-	for index in range(10, 410):
-		run.record_collection("pressure:%d" % index, str(plan.word_ids[index % 16]))
+	for stage in range(2, 15):
+		var stage_goals: Array = run.snapshot().practice.filter(func(goal: Dictionary) -> bool: return int(goal.stage) == stage)
+		check(stage_goals.size() == mini(3 + stage - 1, 16)
+			and stage_goals.all(func(goal: Dictionary) -> bool: return int(goal.required) == 1 + floori(float(stage - 1) / 2.0)),
+			"Every Challenge stage owns a harder explicit batch, not a raw collection counter")
+		for goal: Dictionary in stage_goals:
+			for index in range(int(goal.required)):
+				run.record_collection("pressure:%d" % receipt, str(goal.word_id))
+				receipt += 1
+		check(run.challenge_stage == stage + 1, "Only the completed full batch advances exactly one stage")
 	var late: Dictionary = run.challenge_pressure()
-	check(late.level == 42 and late.word_limit == 16 and run.words_for_pressure().size() == 16
+	check(late.level == 15 and late.word_limit == 16 and run.words_for_pressure().size() == 16
 		and float(late.spawn_interval) >= 3.0 and float(late.spawn_interval) < float(next.spawn_interval)
 		and float(late.fall_speed_scale) <= 2.2 and float(late.fall_speed_scale) > float(next.fall_speed_scale),
-		"Long untimed play reaches bounded variety, faster supply and a safe real fall-speed ceiling")
+		"Later Challenge stages reach bounded variety, faster supply and a safe real fall-speed ceiling")
 	var state: Dictionary = run.snapshot()
-	check(int(state.get("collection_count", -1)) == 410 and state.get("pressure", {}) == late
+	check(int(state.get("collection_count", -1)) == receipt and state.get("pressure", {}) == late
 		and run.words_for_pressure() == plan.words.slice(0, 16),
 		"Challenge snapshots expose committed pickups and copied pressure alongside the exact active candidate prefix")
 	run.advance(5000.0)
-	check(run.outcome.is_empty() and not run.check_deadline() and run.remaining == 0.0
+	check(run.outcome.is_empty() and run.check_deadline() and run.outcome == "timeout" and run.remaining == 0.0
 		and run.stars_now() == 0 and run.snapshot().stars == 0,
-		"No elapsed duration or number of challenge pickups fabricates a clear, timer or star reward")
+		"The timed Challenge expires without fabricating a numbered clear or any star reward")
 	check(not run.add_time("challenge:purchase") and not run.error.is_empty(),
-		"An untimed challenge cannot consume a paid extension")
+		"A timed Challenge cannot consume a paid extension")
 	var small: Dictionary = _catalog.make_plan(0, _pool(2), 6, 31, true)
 	check(run.configure(small) and run.words_for_pressure().size() == 2,
 		"Challenge active prefixes respect a genuinely smaller current module")
+	check(run.configure(plan), "Start a late-stage difficulty boundary fixture")
+	run.challenge_stage = 31
+	run._append_challenge_stage()
+	var previous: int = 0
+	for stage in range(31, 34):
+		var batch: Array = run.snapshot().practice.filter(func(goal: Dictionary) -> bool: return int(goal.stage) == stage)
+		check(batch.size() == 16 and int(batch[0].required) > previous,
+			"Every later stage raises its real goal quota even when variety, fall speed and supply have capped")
+		previous = int(batch[0].required)
+		for goal: Dictionary in batch:
+			for index in range(int(goal.required)):
+				run.record_collection("late:%d" % receipt, str(goal.word_id))
+				receipt += 1
+		check(run.challenge_stage == stage + 1 and run.error.is_empty(),
+			"A complete late-stage batch still advances exactly one stage")
 
 
 func _test_snapshot_isolation() -> void:

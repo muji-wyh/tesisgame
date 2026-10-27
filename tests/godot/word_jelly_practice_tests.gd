@@ -79,6 +79,23 @@ func _check_progress_feedback(panel) -> void:
 	check(events.size() == 2 and events[1] == [str(state.practice[0].id), true]
 		and panel.snapshot().words[0].get("complete_active", false),
 		"Only the newly completed word emits its achievement event for visuals and audio")
+	check(row.complete_badge.find_children("*", "Label", true, false).is_empty()
+		and not row.fraction.is_visible_in_tree() and not row.gain_label.is_visible_in_tree(),
+		"A completed goal uses only its check animation, without Done, seconds, fractions or +1 text")
+	var check_material := row.complete_icon.material as ShaderMaterial
+	check(check_material != null and float(check_material.get_shader_parameter("check_progress")) > 0.0
+		and float(check_material.get_shader_parameter("check_progress")) < 1.0,
+		"The acquired check stroke is actually being revealed, not merely showing a static icon")
+	if check_material != null:
+		var check_progress: float = float(check_material.get_shader_parameter("check_progress"))
+		panel.set_stage(state)
+		panel.configure_layout(Rect2(16, 70, 300, 28), 1.0, true)
+		check(is_equal_approx(float(row.complete_elapsed), 0.1)
+			and is_equal_approx(float(check_material.get_shader_parameter("check_progress")), check_progress),
+			"Refresh and compact relayout preserve the same partial stroke and silent hold clock")
+		check(row.complete_icon.material != panel._rows[1].complete_icon.material,
+			"Each goal owns its own check stroke instead of animating every row together")
+		panel.configure_layout(Rect2(16, 70, 232, 310), 1.0, false)
 	panel.advance(1.2)
 	check(panel.snapshot().words[0].get("completed_marker_visible", false)
 		and not panel.snapshot().words[0].get("complete_active", false),
@@ -87,7 +104,7 @@ func _check_progress_feedback(panel) -> void:
 	panel.advance(1.699)
 	check(row.surface.visible and row.surface.modulate.a == 1.0
 		and panel.snapshot().words[0].dismiss_remaining > 0.0,
-		"Completion stays fully marked for the entire required three-second countdown")
+		"Completion stays fully marked for the entire silent three-second hold")
 	panel.advance(0.191)
 	check(row.surface.visible and row.surface.modulate.a > 0.0 and row.surface.modulate.a < 1.0
 		and panel._rows[1].surface.position.y < next_position.y,
@@ -106,6 +123,97 @@ func _check_progress_feedback(panel) -> void:
 	check(not panel.snapshot().words[0].get("completed_marker_visible", false)
 		and not panel._rows[0].fraction.is_visible_in_tree(),
 		"A narrow layout cannot resurrect retired completed chips")
+
+
+func _check_silent_check_lifecycle(panel) -> void:
+	var state: Dictionary = panel._state.duplicate(true)
+	for steady: bool in [false, true]:
+		for compact: bool in [false, true]:
+			panel.set_stage({})
+			panel.reduced_motion = steady
+			panel.configure_layout(Rect2(16, 70, 300, 28) if compact else Rect2(16, 70, 232, 310), 1.0, compact)
+			state.practice[0].current = 2
+			state.practice[0].mastered = false
+			panel.set_stage(state)
+			state.practice[0].current = 3
+			state.practice[0].mastered = true
+			panel.set_stage(state)
+			var row: Dictionary = panel._rows[0]
+			var material := row.complete_icon.material as ShaderMaterial
+			check(row.complete_badge.is_visible_in_tree() and row.complete_badge.size.x == row.complete_badge.size.y
+				and row.complete_badge.find_children("*", "Label", true, false).is_empty()
+				and not row.fraction.visible and not row.gain_label.visible,
+				"Both sidebar and compact completion marks are icon-only, never a Done/countdown pill")
+			if material == null:
+				check(false, "Each completion check has its source-stroke reveal material")
+				continue
+			check(is_equal_approx(float(material.get_shader_parameter("check_progress")), 1.0 if steady else 0.0),
+				"Reduced motion shows a full still check; normal motion begins with the tick undrawn")
+			panel.advance(0.20)
+			var progress: float = float(material.get_shader_parameter("check_progress"))
+			check(is_equal_approx(progress, 1.0) if steady else progress > 0.0 and progress < 1.0,
+				"Normal motion visibly writes the tick while reduced motion keeps it complete and still")
+			panel.hide()
+			panel.advance(20.0)
+			panel.show()
+			check(is_equal_approx(float(row.complete_elapsed), 0.20)
+				and is_equal_approx(float(material.get_shader_parameter("check_progress")), progress),
+				"Hiding or pausing the owner does not consume the silent hold or advance its tick")
+			panel.advance(2.799)
+			check(row.surface.visible and row.surface.modulate.a == 1.0
+				and is_equal_approx(float(material.get_shader_parameter("check_progress")), 1.0),
+				"The complete silent check remains fully visible until three active seconds")
+			panel.advance(0.002)
+			check(not row.surface.visible if steady else row.surface.visible and row.surface.modulate.a < 1.0,
+				"Only after three seconds does the row begin its exit, or retire directly in reduced motion")
+			panel.advance(panel.EXIT_SECONDS)
+			check(not row.surface.visible and row.retired and panel._rows[1].surface.position == Vector2.ZERO,
+				"Retirement removes the completed card and gives its slot to the next pending goal")
+	panel.reduced_motion = false
+
+
+func _check_rendered_check(panel) -> void:
+	if not OS.get_cmdline_user_args().has("--capture") or DisplayServer.get_name() == "headless":
+		return
+	var state: Dictionary = panel._state.duplicate(true)
+	panel.set_stage({})
+	panel.configure_layout(Rect2(16, 70, 232, 310), 1.0, false)
+	state.practice[0].current = 2
+	state.practice[0].mastered = false
+	panel.set_stage(state)
+	state.practice[0].current = 3
+	state.practice[0].mastered = true
+	panel.set_stage(state)
+	var row: Dictionary = panel._rows[0]
+	var area := Rect2i(row.surface.get_global_rect())
+	var sheet := Image.create(area.size.x * 3, area.size.y * 2, false, Image.FORMAT_RGBA8)
+	var white_counts: Array[int] = []
+	var elapsed: float = 0.0
+	for index in range(6):
+		var age: float = [0.0, 0.18, 0.60, 2.99, 3.19, 3.40][index]
+		if age > elapsed:
+			panel.advance(age - elapsed)
+		elapsed = age
+		await process_frame
+		await RenderingServer.frame_post_draw
+		var image: Image = root.get_texture().get_image()
+		sheet.blit_rect(image, area, Vector2i((index % 3) * area.size.x, (index / 3) * area.size.y))
+		if index >= 3:
+			continue
+		var icon: Rect2 = row.complete_icon.get_global_rect()
+		var tick := Rect2i(icon.position + icon.size * Vector2(0.32, 0.35), icon.size * Vector2(0.36, 0.30))
+		var white: int = 0
+		for y in range(tick.position.y, tick.end.y):
+			for x in range(tick.position.x, tick.end.x):
+				var color: Color = image.get_pixel(x, y)
+				if minf(color.r, minf(color.g, color.b)) > 0.85:
+					white += 1
+		white_counts.append(white)
+	check(white_counts.size() == 3 and white_counts[0] < white_counts[1] and white_counts[1] < white_counts[2],
+		"The actual rendered source tick grows from absent to partial to complete, not only a changing uniform: %s" % str(white_counts))
+	DirAccess.make_dir_recursive_absolute("res://build/qa/jelly-practice")
+	check(sheet.save_png("res://build/qa/jelly-practice/check-stroke-retirement.png") == OK,
+		"Capture the real completion stroke, silent hold, exit and reclaimed pending-goal slot")
 
 
 func _run() -> void:
@@ -178,6 +286,8 @@ func _run() -> void:
 		if dimensions == Vector2i(1366, 768):
 			await _check_resize_history(panel)
 			_check_progress_feedback(panel)
+			_check_silent_check_lifecycle(panel)
+			await _check_rendered_check(panel)
 		view.free()
 	await process_frame
 	print("Jelly stage practice: %d checks, %d failures" % [checks, failures])

@@ -22,7 +22,7 @@ func check(value: bool, message: String) -> void:
 
 func make_model(seconds: float = 90.0, challenge: bool = false):
 	var plan: Dictionary = Catalog.make_plan(0 if challenge else 1, words, 3, 71, challenge)
-	plan.seconds = 0.0 if challenge else seconds
+	plan.seconds = Catalog.CHALLENGE_SECONDS if challenge else seconds
 	var model = Model.new()
 	model.allow_cross_age = true
 	var selected: Array = plan.words.slice(0, 3) if challenge else plan.words
@@ -150,15 +150,18 @@ func test_timer_pause_and_extra_time() -> void:
 
 func test_challenge_pressure_and_blocked_top() -> void:
 	var model = make_model(0.0, true)
-	for index in range(10):
+	var goals: Array = model.stage_run.snapshot().practice
+	for goal: Dictionary in goals:
 		model.cells.clear()
-		var tile: Dictionary = ready_word(model, model.stage_run.words[0], 0)
-		check(model.collect(int(tile.id)), "Untimed challenge accepts a committed pickup")
+		var definition: Dictionary = model.stage_run.words.filter(func(word: Dictionary) -> bool:
+			return str(word.id) == str(goal.word_id))[0]
+		var tile: Dictionary = ready_word(model, definition, 0)
+		check(model.collect(int(tile.id)), "A timed Challenge accepts a committed pickup")
 		model.step(Model.COLLECT_SECONDS)
 	check(model.stage_run.outcome.is_empty() and model.stage_run.challenge_pressure().level == 2
 		and model._words.size() == 4 and model.fall_speed_scale > 1.0 and model.spawn_interval < 20.0,
-		"Challenge progression really changes active supply variety, incoming speed and cadence")
-	check(not model.can_activate_powerup("extra_time"), "A no-timer challenge cannot charge for extra time")
+		"Finishing the full Challenge stage changes active supply variety, incoming speed and cadence")
+	check(not model.can_activate_powerup("extra_time"), "Challenge goals, not purchases, grant extra time")
 	model.cells.clear()
 	for index in range(Model.CAPACITY):
 		var tile: Dictionary = model._new_word_root(model.stage_run.words[0])
@@ -227,6 +230,99 @@ func test_full_board_pending_collection() -> void:
 		"A full entrance advances its pending collection and rescuing gravity instead of freezing or failing early")
 
 
+func test_clear_slow_notice_then_sweep() -> void:
+	var model = make_model()
+	var notices: Array[int] = []
+	model.stage_clear_announced.connect(func() -> void: notices.append(1))
+	for index in range(model.stage_run.words.size()):
+		var tile: Dictionary = ready_word(model, model.stage_run.words[index], index)
+		model.collect(int(tile.id))
+		model.step(Model.COLLECT_SECONDS)
+	var extra: Dictionary = ready_word(model, model.stage_run.words[0], 4, 6)
+	var age: float = float(model.cell(int(extra.id)).age)
+	check(model.stage_ending() and model.snapshot().clear_phase == "slowdown"
+		and not model.collection_batch_active() and notices.is_empty(),
+		"A genuine clear first enters local slowdown, without announcing or sweeping the remaining high-level Jelly")
+	model.step(Model.STAGE_CLEAR_SLOW_SECONDS - 0.001)
+	check(model.snapshot().clear_phase == "slowdown" and notices.is_empty()
+		and is_equal_approx(float(model.cell(int(extra.id)).age) - age,
+			(Model.STAGE_CLEAR_SLOW_SECONDS - 0.001) * Model.BLAST_TIME_SCALE),
+		"The slow opening uses actual twelve-percent board motion before the announcement")
+	model.step(0.001)
+	check(model.snapshot().clear_phase == "announcement" and notices.size() == 1
+		and not model.collection_batch_active() and not model.cell(int(extra.id)).is_empty(),
+		"The clear notification happens before the leftover collection begins")
+	model.step(Model.STAGE_CLEAR_NOTICE_SECONDS + 0.001)
+	check(model.collection_batch_active() and model.is_fusing(int(extra.id)) and notices.size() == 1,
+		"Only after the notice does the forced high-level collection sweep take over")
+	advance_until_ended(model)
+	check(model.phase == "finished" and model.cleared_pairs == model.stage_run.words.size() + 1
+		and notices.size() == 1, "The remaining pickup finishes exactly once before settlement is eligible")
+
+
+func test_challenge_goal_time() -> void:
+	var model = make_model(90.0, true)
+	var attempt = model.stage_run
+	check(attempt.remaining == 90.0 and not attempt.can_add_time(),
+		"A survival Challenge starts at the hard ninety-second cap without a paid-time purchase")
+	attempt.advance(20.25)
+	var initial: Array = attempt.snapshot().practice
+	var first: Dictionary = initial[0]
+	check(initial.size() == 3 and first.required == 1 and not first.mastered,
+		"The first Challenge stage presents a complete batch of three one-word targets")
+	check(attempt.record_collection("goal:first", str(first.word_id)) and is_equal_approx(attempt.remaining, 79.75)
+		and is_equal_approx(attempt.take_time_bonus(), 10.0),
+		"Completing its actual word target grants exactly ten seconds instead of a random pickup roll")
+	check(not attempt.record_collection("goal:first", str(first.word_id))
+		and attempt.take_time_bonus() == 0.0 and is_equal_approx(attempt.remaining, 79.75),
+		"A repeated collection receipt cannot repeat the goal or its time reward")
+	check(attempt.challenge_stage == 1 and attempt.snapshot().pressure.level == 1,
+		"Completing just one target cannot skip to the next Challenge stage")
+	attempt.record_collection("goal:ordinary", str(first.word_id))
+	check(is_equal_approx(attempt.remaining, 79.75) and attempt.take_time_bonus() == 0.0,
+		"An already completed target cannot randomly grant time on further pickups")
+	attempt.record_collection("goal:second", str(initial[1].word_id))
+	check(is_equal_approx(attempt.remaining, 89.75) and attempt.challenge_stage == 1,
+		"Each completed target grants time but the stage still waits for the entire batch")
+	attempt.record_collection("goal:third", str(initial[2].word_id))
+	check(is_equal_approx(attempt.remaining, 90.0), "A target reward clamps remaining time instead of banking time above ninety seconds")
+	var next: Array = attempt.snapshot().practice.filter(func(goal: Dictionary) -> bool: return int(goal.stage) == 2)
+	check(attempt.challenge_stage == 2 and next.size() == 4 and attempt.challenge_pressure().fall_speed_scale > 1.0
+		and attempt.challenge_pressure().spawn_interval < 20.0,
+		"Only all three finished targets start Stage 2, which has more targets and harder actual supply")
+	attempt.advance(0.1)
+	check(is_equal_approx(attempt.remaining, 89.9), "The capped fractional extension survives the next timer tick exactly")
+	attempt.advance(89.9)
+	check(attempt.check_deadline() and attempt.outcome == "timeout" and attempt.stars_now() == 0,
+		"An expired Challenge really ends in Game Over without a stage clear or stars")
+
+
+func test_challenge_feedback_generation() -> void:
+	for event: String in ["challenge_time_awarded", "challenge_stage_reached"]:
+		var model = make_model(90.0, true)
+		var goals: Array = model.stage_run.snapshot().practice
+		var evidence: Array[String] = []
+		var record_word: Callable = func(receipt: String, _ids: Array[String], _correct: bool) -> void:
+			evidence.append(receipt)
+		model.word_attempted.connect(record_word)
+		for index in range(2):
+			var tile: Dictionary = ready_word(model, model.stage_run.words[index], index)
+			check(model.collect(int(tile.id)), "Prepare the first two actual Challenge goals")
+			model.step(Model.COLLECT_SECONDS)
+		model.stage_run.advance(5.0)
+		var replace_round: Callable = func(_value: float) -> void:
+			check(model.configure(words.slice(0, 3), 3, 73), "A feedback listener can replace its completed round")
+		model.connect(event, replace_round)
+		var last: Dictionary = ready_word(model, model.stage_run.words[2], 2)
+		check(model.collect(int(last.id)), "Commit the last goal before its feedback replaces the round")
+		model.step(Model.COLLECT_SECONDS)
+		check(evidence.size() == goals.size(), "Committed learning evidence precedes Challenge feedback callbacks")
+		check(model.stage_run == null and model.cleared_pairs == 0 and model.fragment_count == 0
+			and model.error.is_empty(), "An old Challenge callback cannot modify the replacement round")
+		model.disconnect(event, replace_round)
+		model.word_attempted.disconnect(record_word)
+
+
 func _run() -> void:
 	var probe = Model.new()
 	check(probe.has_method("bind_stage") and probe.has_method("retry_stage_finish"),
@@ -248,6 +344,9 @@ func _run() -> void:
 		"The real catalog accepts the same immutable reviewed identities as saved browser replay fixtures")
 	if OS.get_cmdline_user_args().has("--blocked-collection-only"):
 		test_full_board_pending_collection()
+		test_clear_slow_notice_then_sweep()
+		test_challenge_goal_time()
+		test_challenge_feedback_generation()
 		print("Jelly pending collection: %d checks, %d failures" % [checks, failures])
 		quit(1 if failures else 0)
 		return
@@ -257,5 +356,8 @@ func _run() -> void:
 	test_challenge_pressure_and_blocked_top()
 	test_main_stage_full_warning()
 	test_full_board_pending_collection()
+	test_clear_slow_notice_then_sweep()
+	test_challenge_goal_time()
+	test_challenge_feedback_generation()
 	print("Jelly campaign model: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

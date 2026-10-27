@@ -113,6 +113,8 @@ async function observeFinish(page) {
         window.campaignFeedbackImages.multiplier = document.getElementById('canvas').toDataURL('image/png').split(',')[1];
       window.campaignFinishFrames.push({
         ending: state.game_over_sequence?.active || false,
+        clear_phase: state.clear_phase || '',
+        batch: state.collection_batch?.active || false,
         effects: state.collection_effects?.active_count || 0,
         reveals: state.word_reveal?.active_count || 0,
         collectable: state.collectable_ids?.length || 0,
@@ -189,7 +191,12 @@ test('campaign quotas clear, sweep leftovers, save stars and unlock the next sta
   expect(frames.some(frame => frame.feedback.phase === 'stars')).toBe(true);
   expect(frames.some(frame => frame.feedback.phase === 'bonus')).toBe(true);
   expect(frames.some(frame => frame.feedback.formula?.includes('×2'))).toBe(true);
-  expect(frames.some(frame => frame.ending), 'The normal end overlay still appears after the effects finish').toBe(true);
+  const phases = frames.map(frame => frame.clear_phase);
+  expect(phases).toEqual(expect.arrayContaining(['slowdown', 'announcement', 'collecting', 'done']));
+  expect(phases.indexOf('slowdown')).toBeLessThan(phases.indexOf('announcement'));
+  expect(phases.indexOf('announcement')).toBeLessThan(phases.indexOf('collecting'));
+  expect(frames.filter(frame => frame.clear_phase === 'announcement').every(frame => !frame.batch)).toBe(true);
+  expect(frames.some(frame => frame.ending), 'Clear is announced before the sweep, without a second late end overlay').toBe(false);
   for (const frame of frames.filter(frame => frame.ending)) {
     expect(frame.effects, 'Round complete cannot cover a remaining board effect').toBe(0);
     expect(frame.reveals, 'Round complete cannot cut off a reading-pop firework').toBe(0);
@@ -335,7 +342,7 @@ test('a timeout warns with the board border and cannot turn cleanup into goal cr
   expect(errors).toEqual([]);
 });
 
-test('untimed challenge credits real Auto Collect and increases variety and incoming speed', async ({ page }, info) => {
+test('Challenge completes a full goal stage, increases difficulty and restores its persisted best stage', async ({ page }, info) => {
   test.setTimeout(360000);
   await seedPipLevel(page, 3);
   await seedCampaign(page, { balance: 12000 });
@@ -347,11 +354,13 @@ test('untimed challenge credits real Auto Collect and increases variety and inco
     return state.visible && state.campaign?.kind === 'challenge' && state.tiles.every(tile => tile.settled);
   }).toBe(true);
   const opening = await jelly(page);
-  expect(opening.campaign.seconds_total).toBe(0);
+  expect(opening.campaign.seconds_total).toBe(90);
+  expect(opening.campaign.challenge_stage).toBe(1);
+  expect(opening.stage.challenge_best_stage).toBeGreaterThanOrEqual(1);
   expect(opening.campaign.pressure.word_limit).toBe(3);
   expect(opening.practice.words).toHaveLength(3);
   expect(opening.powerup_buttons.extra_time.visible).toBe(false);
-  for (let batch = 0; batch < 10 && (await jelly(page)).cleared_pairs < 10; batch++) {
+  for (let batch = 0; batch < 10 && (await jelly(page)).campaign.challenge_stage < 2; batch++) {
     if (batch > 0) {
       for (let supply = 0; supply < 2; supply++) {
         const state = await jelly(page);
@@ -370,16 +379,29 @@ test('untimed challenge credits real Auto Collect and increases variety and inco
     await expect.poll(async () => (await jelly(page)).collection_batch.active).toBe(false);
   }
   const after = await jelly(page);
-  expect(after.cleared_pairs).toBeGreaterThanOrEqual(10);
+  expect(after.campaign.challenge_stage).toBeGreaterThanOrEqual(2);
+  expect(after.campaign.seconds_remaining).toBeGreaterThan(0);
+  expect(after.campaign.seconds_remaining).toBeLessThanOrEqual(90);
+  expect(after.campaign.seconds_added).toBeGreaterThan(0);
+  expect(after.stage.challenge_best_stage).toBeGreaterThanOrEqual(2);
   expect(after.campaign.pressure.level).toBeGreaterThanOrEqual(2);
   expect(after.campaign.pressure.word_limit).toBeGreaterThan(3);
   expect(after.fall_speed_scale).toBeGreaterThan(opening.fall_speed_scale);
   expect(after.spawn_interval).toBeLessThan(opening.spawn_interval);
   expect(after.combo.count).toBeGreaterThan(0);
   expect(after.practice.words.length).toBeGreaterThan(3);
-  const saved = await page.evaluate(() => localStorage.getItem('growWithPip.growth.v1'));
-  expect(saved).toMatch(/word_jelly:/);
+  const best = after.stage.challenge_best_stage;
+  const saved = await page.evaluate(() => localStorage.getItem('growWithPip.jellyCampaign.v1'));
+  expect(saved).toMatch(/version=3/);
+  expect(saved).toMatch(new RegExp(`"challenge_best_stage":\\s*${best}\\b`));
   await capture(page, info, 'challenge-growing-pressure');
   fs.writeFileSync(info.outputPath('challenge-pressure.json'), JSON.stringify({ opening, after }, null, 2));
+  await page.reload();
+  await enterGame(page, { home: true });
+  const restoredMap = await openMap(page);
+  await pressMapControl(page, restoredMap.challenge);
+  await expect.poll(async () => (await jelly(page)).campaign?.kind).toBe('challenge');
+  expect((await jelly(page)).campaign.challenge_stage).toBe(1);
+  expect((await jelly(page)).stage.challenge_best_stage).toBe(best);
   expect(errors).toEqual([]);
 });

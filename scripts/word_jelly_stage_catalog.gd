@@ -3,6 +3,7 @@ extends RefCounted
 
 const VERSION: int = 1
 const MAX_STAGE: int = 99
+const CHALLENGE_SECONDS: float = 90.0
 const MAX_MAIN_WORDS: int = 8
 const MAX_CHALLENGE_WORDS: int = 16
 const MAX_GOAL: int = 99
@@ -69,7 +70,7 @@ static func make_plan(number: int, pool: Array, age: int, seed: int,
 	var wave: int = 0 if challenge else (number - 1) % PROFILES.size()
 	var goals: Dictionary = {}
 	var cadence: float = 20.0
-	var seconds: float = 0.0
+	var seconds: float = CHALLENGE_SECONDS if challenge else 0.0
 	if not challenge:
 		var base: int = 1 + floori(float(chapter - 1) / 2.0)
 		var offset: int = rng.randi_range(0, words.size() - 1)
@@ -86,7 +87,7 @@ static func make_plan(number: int, pool: Array, age: int, seed: int,
 		seconds = clampf(ceilf(maxf(handling, supply) * MARGINS[wave] + 25.0), 90.0, 900.0)
 	return {"ok": true, "error": "", "kind": "challenge" if challenge else "main",
 		"number": 0 if challenge else number, "chapter": chapter,
-		"title": "Endless Challenge" if challenge else CHAPTERS[chapter - 1],
+		"title": "Survival Challenge" if challenge else CHAPTERS[chapter - 1],
 		"profile": "Challenge" if challenge else PROFILES[wave], "age": age, "seed": seed,
 		"words": words, "word_ids": ids, "goals": goals, "seconds": seconds,
 		"spawn_interval": cadence, "fall_speed_scale": 1.0}
@@ -187,7 +188,7 @@ static func recipe_error(value: Variant) -> String:
 		seen[id] = true
 		if not challenge and (not value.goals.get(id) is int or value.goals[id] < 1 or value.goals[id] > MAX_GOAL):
 			return "A recipe needs positive bounded whole collection goals."
-	if not _number_between(value.seconds, 0.0 if challenge else 0.001, 0.0 if challenge else 900.0) \
+	if not _number_between(value.seconds, CHALLENGE_SECONDS if challenge else 0.001, CHALLENGE_SECONDS if challenge else 900.0) \
 		or not _number_between(value.spawn_interval, 3.0, 60.0) \
 		or not _number_between(value.fall_speed_scale, 0.1, 2.2):
 		return "A recipe has an invalid timer, supply cadence or fall-speed scale."

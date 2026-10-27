@@ -446,6 +446,65 @@ func _test_perceptible_hit_stop() -> void:
 		"Making the impact readable preserves exactly one automatic match and one collected word")
 
 
+func _test_batch_release_hit_stop() -> void:
+	for level in range(1, 10):
+		var model: RefCounted = _model()
+		model.set_pip_level(3)
+		var source: Dictionary = _ready(model, 0, 7, level, 2)
+		_ready(model, 1, 7, 1, 3)
+		var pops: Array[String] = []
+		model.cue_requested.connect(func(cue: String) -> void:
+			if cue == "pop" or cue.begins_with("jelly-collect-lv"):
+				pops.append(cue))
+		check(model.start_collection_batch(), "Auto Collect accepts a real Lv%d source and its reserved next word" % level)
+		model.step(Model.BATCH_POP_SECONDS - 0.001)
+		check(not model.hit_stop_snapshot().active, "An automatic collection never freezes before its actual release")
+		model.step(0.001)
+		var impact: Dictionary = model.hit_stop_snapshot()
+		check(bool(impact.active) == (level >= 4),
+			"Lv4-Lv9 Auto Collect freezes at release even when every other body is reserved and no chain target exists")
+		if level < 4 or not impact.active:
+			continue
+		check(impact.get("source", "") == "auto_collect" and int(impact.get("level", 0)) == level
+			and is_zero_approx(model.gameplay_time_scale()) and not model.powerup_active()
+			and model.collection_batch_snapshot().started == 1,
+			"The impact belongs to the actual high-level pickup, not a delayed free powerup or the next word")
+		var age: float = float(model.cell(int(source.id)).age)
+		var fusion_age: float = float(model.fusions[0].elapsed)
+		model.set_paused(true)
+		var paused_state: Dictionary = model.snapshot()
+		model.step(10.0)
+		check(model.snapshot() == paused_state, "A pause freezes the automatic pickup's pending impact")
+		model.set_paused(false)
+		model.step(Model.BLAST_FREEZE_SECONDS - 0.001)
+		check(model.hit_stop_snapshot().active and is_equal_approx(float(model.cell(int(source.id)).age), age)
+			and is_equal_approx(float(model.fusions[0].elapsed), fusion_age)
+			and model.collection_batch_snapshot().started == 1 and pops.size() == 1,
+			"The entire impact interval holds the board, collection body and next launch without replaying sound")
+		model.step(0.001)
+		check(not model.hit_stop_snapshot().active, "The short automatic impact ends at exactly 100 active milliseconds")
+		_drain(model)
+		check(model.cleared_pairs == 2 and model.fragment_count == 5 and model.cells.is_empty()
+			and model.collection_batch_snapshot().completed == 2 and pops.size() == 2,
+			"The batch resumes and commits both original words and all carried fragments exactly once")
+	var coarse: RefCounted = _model()
+	var fine: RefCounted = _model()
+	for model: RefCounted in [coarse, fine]:
+		model.set_pip_level(3)
+		_ready(model, 0, 7, 1, 1)
+		_ready(model, 1, 7, 4, 2)
+		_ready(model, 2, 7, 9, 3)
+		model.start_collection_batch()
+	coarse.step(3.0 * Model.BATCH_BEAT_SECONDS + 2.0 * Model.BLAST_FREEZE_SECONDS)
+	for frame in range(56):
+		fine.step(0.01)
+	check(coarse.cleared_pairs == 3 and fine.cleared_pairs == 3 and coarse.fragment_count == 6 and fine.fragment_count == 6
+		and coarse.collection_batch_snapshot().completed == fine.collection_batch_snapshot().completed
+		and is_equal_approx(float(coarse.collection_batch_snapshot().elapsed), float(fine.collection_batch_snapshot().elapsed))
+		and not coarse.hit_stop_snapshot().active and not fine.hit_stop_snapshot().active,
+		"Coarse and fine frames finish a mixed-level batch with two exact extra holds and identical receipts")
+
+
 func _run() -> void:
 	_test_footprints()
 	_test_flight_and_accounting()
@@ -458,5 +517,6 @@ func _run() -> void:
 	_test_hit_stop_timeline()
 	_test_unmatched_mark_impact()
 	_test_perceptible_hit_stop()
+	_test_batch_release_hit_stop()
 	print("Word Jelly blast: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

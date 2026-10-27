@@ -565,9 +565,9 @@ func _check_scenery(view: Control) -> void:
 			CHAPTERS[index] + " has a genuinely winding route")
 	var challenge: BaseButton = _action_button(view, "challenge")
 	if challenge != null:
-		check(_normal(str(challenge.get("accessibility_name"))).contains("notimer")
-			and challenge.tooltip_text == "Endless Challenge",
-			"The compact challenge icon retains its explicit accessible no-timer description and tooltip")
+		check(challenge.text == "Challenge" and _normal(str(challenge.get("accessibility_name"))).contains("90seconds")
+			and challenge.tooltip_text.is_empty(),
+			"Challenge is permanently labeled with an accessible timed description, without the giant tooltip")
 		check(not _art(challenge).is_empty(), "The challenge entrance also uses sourced icon/gel artwork")
 
 
@@ -637,10 +637,12 @@ func _check_layout(view: Control, context: String) -> void:
 		context + ": the complete map title fits on one line without going under Home")
 	var challenge: Button = _action_button(view, "challenge")
 	var icon_pixels: Vector2 = challenge.get_global_rect().size * _pixel_scale()
-	check(icon_pixels.x >= 44.0 and icon_pixels.x <= 46.0 and icon_pixels.y >= 44.0 and icon_pixels.y <= 46.0
+	check(icon_pixels.x >= 132.0 and icon_pixels.x <= 134.0 and icon_pixels.y >= 44.0 and icon_pixels.y <= 46.0
 		and not challenge.get_global_rect().intersects(heading.get_global_rect())
 		and (not wallet.visible or not challenge.get_global_rect().intersects(wallet.get_global_rect())),
-		context + ": a compact upper-right challenge icon stays clear of the title and wallet")
+		context + ": the labeled Challenge entrance stays clear of the title and wallet: " \
+			+ JSON.stringify({"pixels": icon_pixels, "challenge": challenge.get_global_rect(),
+				"title": heading.get_global_rect(), "wallet": wallet.get_global_rect()}))
 	check(challenge.get_global_rect().end.y <= _scroll(view).get_global_rect().position.y,
 		context + ": the challenge entrance is in the header, not a large map footer")
 

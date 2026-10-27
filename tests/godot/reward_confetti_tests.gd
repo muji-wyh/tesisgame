@@ -30,6 +30,7 @@ func _run() -> void:
 	check(paper is CanvasLayer and paper.layer > 0
 		and (paper._surface.get_global_transform_with_canvas() * paper.screen_rect()).is_equal_approx(root.get_visible_rect()),
 		"Paper has its own full-viewport canvas despite an offset, scaled and clipped ancestor")
+	_check_density_reduction(paper)
 	_check_lifecycle(paper)
 	_check_viewport_coverage(paper)
 	_check_burst_sampling()
@@ -51,6 +52,21 @@ func _run() -> void:
 	quit(1 if failures else 0)
 
 
+func _check_density_reduction(paper) -> void:
+	for dimensions: Vector2 in [Vector2(320, 220), Vector2(390, 844), Vector2(960, 620),
+		Vector2(1366, 768), Vector2(1920, 1240), Vector2(3440, 1440)]:
+		var screen := Rect2(Vector2.ZERO, dimensions)
+		for unit: float in [0.25, 0.75, 1.0, 1.5, 2.0]:
+			var full_spacing: float = 42.0 * maxf(0.25, unit)
+			var previous_full: int = clampi(ceili(screen.get_area() / pow(full_spacing, 2)), 384, 1200)
+			check(paper._paper_count(screen, unit) == roundi(previous_full / 3.0),
+				"Full-screen paper is exactly the nearest whole one-third of its previous population at %s, scale %s" % [dimensions, unit])
+			var small_spacing: float = 80.0 * maxf(0.25, unit)
+			var previous_small: int = clampi(ceili(screen.get_area() / 3.0 / pow(small_spacing, 2)), 24, 72)
+			check(paper._burst_count({"small": true}, screen, unit) == roundi(previous_small / 3.0),
+				"Small bursts also use one-third of their previous population instead of retaining the old minimum")
+
+
 func _check_small_stage_celebration(paper) -> void:
 	paper.clear()
 	check(paper.has_method("burst_small"), "A stage has a dedicated restrained one-third-screen paper preset")
@@ -59,8 +75,8 @@ func _check_small_stage_celebration(paper) -> void:
 	check(bool(paper.call("burst_small", "stage:small")) and not bool(paper.call("burst_small", "stage:small")),
 		"The smaller stage celebration retains reward-key deduplication")
 	var snapshot: Dictionary = paper.snapshot()
-	check(int(snapshot.paper_count) <= Confetti.PAPER_COUNT / 3 and int(snapshot.paper_count) >= 24,
-		"A stage uses at most one-third of the old minimum particle count, rather than hundreds of papers")
+	check(int(snapshot.paper_count) >= 8 and int(snapshot.paper_count) <= 24,
+		"A small stage burst uses eight to twenty-four papers after the one-third reduction")
 	var region_values: Array = snapshot.get("regions", [])[0]
 	var region := Rect2(region_values[0], region_values[1], region_values[2], region_values[3])
 	check(region.size.y <= paper.screen_rect().size.y / 3.0 + 0.01
@@ -169,8 +185,8 @@ func _check_viewport_coverage(paper) -> void:
 		check(paper.has_method("_paper_count"), "Confetti density adapts to the actual viewport instead of a fixed particle count")
 		if paper.has_method("_paper_count"):
 			count = int(paper.call("_paper_count", screen, 1.0))
-		check(count >= 320 and count <= 1200 and count >= previous_count,
-			"Larger screens receive a dense but bounded full-screen paper population")
+		check(count >= 128 and count <= 400 and count >= previous_count,
+			"Larger screens retain adaptive coverage with a lighter, bounded paper population")
 		previous_count = count
 		for variation: float in [0.0, 0.43, 0.999999]:
 			var cells: Dictionary = {}
@@ -182,9 +198,15 @@ func _check_viewport_coverage(paper) -> void:
 				var row: int = clampi(int(state.position.y / dimensions.y * 5.0), 0, 4)
 				var key := Vector2i(column, row)
 				cells[key] = int(cells.get(key, 0)) + 1
-			check(cells.size() == 30, "The celebration reaches every cell of a six-by-five full-screen coverage grid")
-			check(cells.values().all(func(amount: int) -> bool: return amount >= 2),
-				"Every screen region contains multiple papers at %s, variation %.3f: %s" %
+			var occupied_columns: Dictionary = {}
+			var occupied_rows: Dictionary = {}
+			for cell: Vector2i in cells:
+				occupied_columns[cell.x] = true
+				occupied_rows[cell.y] = true
+			check(occupied_columns.size() == 6,
+				"The lighter canopy still reaches all six full-screen columns instead of becoming a local patch")
+			check(occupied_rows.size() == 5,
+				"The lighter canopy still spans all five vertical regions at %s, variation %.3f: %s" %
 					[dimensions, variation, cells])
 
 

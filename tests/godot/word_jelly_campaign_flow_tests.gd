@@ -459,13 +459,13 @@ func _run() -> void:
 	app._campaign.request_challenge()
 	await settle()
 	view.set_process(false)
-	check(view.game.stage_run.kind == "challenge" and view.game.stage_run.initial_seconds == 0.0
-		and view._stage_banner.snapshot().label.to_lower().contains("challenge"),
-		"The separate challenge entrance starts a real untimed board rather than a fake numbered stage")
-	check(view._stage_banner._title.text == "Ready?" and view._stage_banner._detail.text.contains("No timer"),
+	check(view.game.stage_run.kind == "challenge" and view.game.stage_run.initial_seconds == 90.0
+		and view._stage_banner.snapshot().label.contains("1:30"),
+		"The Challenge entrance starts its real ninety-second Stage 1 rather than a numbered campaign stage")
+	check(view._stage_banner._title.text == "Ready?" and view._stage_banner._detail.text.contains("90s"),
 		"The challenge introduction never presents a fictitious stage zero or mastery quota")
 	check(view.snapshot().practice.words.size() == 3,
-		"Challenge keeps the three active words' real saved learning progress visible")
+		"Challenge shows its first batch of three explicit timed collection goals")
 	var active_ids: Array = view.game._words.map(func(word: Dictionary) -> String: return str(word.id))
 	active_ids.sort()
 	check(active_ids == ["cat", "dog", "duck"],

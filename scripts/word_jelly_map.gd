@@ -11,11 +11,12 @@ const Style = preload("res://scripts/ui_style.gd")
 const Scroll = preload("res://scripts/result_scroll.gd")
 const Catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
 const Icons = preload("res://scripts/icon_button.gd")
+const LevelBadge = preload("res://scripts/word_jelly_level_badge.gd")
 const STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 const SKY = preload("res://assets/images/jelly-match/sky/day.png")
 const STAGE_OPEN = preload("res://assets/images/ui/jelly-map/stage-open.png")
 const STAGE_LOCKED = preload("res://assets/images/ui/jelly-map/stage-locked.png")
-const COIN = preload("res://assets/coins/gold-coin.png")
+const MEDAL = preload("res://assets/images/ui/mastery-medal.webp")
 const PLAY = preload("res://assets/images/ui/controls/player-play.svg")
 const LOCK = preload("res://assets/images/ui/controls/lock.svg")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
@@ -47,11 +48,11 @@ var _sky := TextureRect.new()
 var _heading: Label
 var _subtitle: Label
 var _wallet: Label
+var _merged_level_badge := LevelBadge.new()
 var _status: Label
 var _home: Button
 var _challenge: Button
 var _retry: Button
-var _challenge_icon: TextureRect
 var _nodes: Array[Dictionary] = []
 var _chapters: Array[Dictionary] = []
 var _scale: float = 1.0
@@ -77,20 +78,19 @@ func _init() -> void:
 	_subtitle = _label(self, "99 little adventures. Collect words, earn stars.", 14)
 	_wallet = _label(self, "", 16)
 	_wallet.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	add_child(_merged_level_badge)
 	_home = Icons.new()
 	_home.set("symbol", Icons.Symbol.HOME)
 	_home.accessibility_name = "Home. Back to game library"
 	_home.tooltip_text = "Home"
 	add_child(_home)
 	_home.pressed.connect(func() -> void: home_requested.emit())
-	_challenge = Icons.new()
-	_challenge.set("symbol", Icons.Symbol.REFRESH)
-	_challenge.accessibility_name = "Endless challenge. No timer. Earn coins with growing variety and speed."
-	_challenge.tooltip_text = "Endless Challenge"
+	_challenge = Button.new()
+	_challenge.text = "Challenge"
+	_challenge.icon = MEDAL
+	_challenge.expand_icon = true
+	_challenge.accessibility_name = "Survival Challenge. 90 seconds. Collect words for a chance of extra time."
 	add_child(_challenge)
-	_challenge_icon = _image(_challenge, COIN)
-	for signal_name: String in ["mouse_entered", "mouse_exited", "button_down", "button_up", "focus_entered", "focus_exited"]:
-		_challenge.connect(signal_name, _refresh_challenge_frame)
 	_challenge.pressed.connect(func() -> void:
 		if not _challenge.disabled:
 			challenge_selected.emit())
@@ -153,6 +153,12 @@ func _init() -> void:
 		var lock_glow: TextureRect = _image(button, GLOW)
 		lock_glow.modulate = Color(0.73, 0.86, 1.0, 0.24)
 		var padlock: TextureRect = _image(button, LOCK)
+		var boss_frame: TextureRect = _image(_content, STAGE_LOCKED)
+		boss_frame.modulate = Color("#71508d")
+		boss_frame.visible = number == 99
+		var boss_aura: TextureRect = _image(_content, RAYS)
+		boss_aura.modulate = Color(0.38, 0.16, 0.56, 0.74)
+		boss_aura.visible = number == 99
 		var boss_picture := TextureButton.new()
 		boss_picture.name = "BossPortrait%d" % number
 		boss_picture.texture_normal = BOSS_PORTRAIT
@@ -164,7 +170,8 @@ func _init() -> void:
 		_content.add_child(boss_picture)
 		boss_picture.hide()
 		_nodes.append({"number": number, "button": button, "face": face, "label": label,
-			"stars": stars, "next": next, "boss": boss_picture, "padlock": padlock, "lock_glow": lock_glow})
+			"stars": stars, "next": next, "boss": boss_picture, "boss_frame": boss_frame, "boss_aura": boss_aura,
+			"padlock": padlock, "lock_glow": lock_glow})
 	resized.connect(_layout)
 	visibility_changed.connect(func() -> void:
 		if not is_visible_in_tree():
@@ -223,10 +230,6 @@ func _publish_changed() -> void:
 		changed.emit()
 
 
-func _refresh_challenge_frame() -> void:
-	_challenge_icon.modulate.a = 0.45 if _challenge.disabled else 1.0
-
-
 func configure(state: Dictionary, reduced_motion: bool = false) -> void:
 	var previous: int = int(_state.get("highest_cleared", -1))
 	var highest: int = clampi(int(state.get("highest_cleared", 0)), 0, 99)
@@ -255,7 +258,7 @@ func configure(state: Dictionary, reduced_motion: bool = false) -> void:
 		for index in range(3):
 			item.stars[index].modulate = Color.WHITE if index < stars else Color(0.32, 0.41, 0.43, 0.48)
 		item.next.visible = number == highest + 1
-		item.boss.visible = number > 1 and number in state.get("boss_markers", [])
+		item.boss.visible = number == 99 or number > 1 and number in state.get("boss_markers", [])
 		item.boss.disabled = item.button.disabled
 		if item.boss.visible:
 			item.button.accessibility_name += " Bramble Boss encounter."
@@ -311,6 +314,9 @@ func _reveal_stage(number: int) -> void:
 	_scroll.ensure_control_visible(button)
 	var maximum: float = _scroll.get_v_scroll_bar().max_value - _scroll.get_v_scroll_bar().page
 	_scroll.scroll_vertical = roundi(clampf(button.position.y - (_scroll.size.y - button.size.y) * 0.45, 0.0, maximum))
+	if number == 99:
+		_scroll.scroll_vertical = mini(_scroll.scroll_vertical,
+			maxi(0, floori(_nodes[98].boss_frame.position.y - 8.0 / _scale)))
 
 
 func _input(event: InputEvent) -> void:
@@ -351,29 +357,42 @@ func _layout() -> void:
 	Style.square_icon_button(_home, Style.GOOD)
 	_home.position = Vector2(left, top)
 	_home.size = Vector2.ONE * ceilf(44.0 / s)
-	Style.square_icon_button(_challenge, Style.GOOD)
-	_challenge.position = Vector2(left + width - 44.0 / s, top)
-	_challenge.size = Vector2.ONE * ceilf(44.0 / s)
-	_challenge_icon.position = Vector2(27, 27) / s
-	_challenge_icon.size = Vector2.ONE * 18.0 / s
+	Style.action_button(_challenge, Style.GOOD)
+	_challenge.custom_minimum_size = Vector2.ZERO
+	_challenge.add_theme_font_size_override("font_size", ceili(14.0 / s))
+	_challenge.add_theme_constant_override("icon_max_width", ceili(24.0 / s))
+	for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+		var surface: StyleBox = _challenge.get_theme_stylebox(state)
+		surface.content_margin_left = 8.0 / s
+		surface.content_margin_right = 8.0 / s
+		surface.content_margin_top = 6.0 / s
+		surface.content_margin_bottom = 6.0 / s
+	_challenge.position = Vector2(left + width - 132.0 / s, top)
+	_challenge.size = Vector2(ceilf(132.0 / s), ceilf(44.0 / s))
 	_wallet.visible = not narrow
 	_wallet.position = Vector2(_challenge.position.x - 162.0 / s, top)
 	_wallet.size = Vector2(150, 38) / s
+	_wallet.add_theme_font_size_override("font_size", ceili(16.0 / s))
+	_wallet.size = Vector2(150, 38) / s
 	_heading.position = Vector2(_home.get_rect().end.x + 14.0 / s, top)
 	var title_end: float = (_wallet.position.x if not narrow else _challenge.position.x) - 12.0 / s
-	_heading.size = Vector2(maxf(1.0, title_end - _heading.position.x), 44.0 / s)
+	var title_width: float = maxf(1.0, title_end - _heading.position.x)
+	_heading.size = Vector2(title_width, 44.0 / s)
 	var heading_pixels: int = ceili((24.0 if narrow else 32.0) / s)
 	var heading_ink: float = Style.HEADING_FONT.get_string_size(_heading.text, HORIZONTAL_ALIGNMENT_LEFT, -1, heading_pixels).x
-	if heading_ink > _heading.size.x:
-		heading_pixels = maxi(1, floori(heading_pixels * _heading.size.x / heading_ink))
+	if heading_ink > title_width:
+		heading_pixels = maxi(1, floori(heading_pixels * title_width / heading_ink))
 	_heading.add_theme_font_size_override("font_size", heading_pixels)
+	_heading.size = Vector2(title_width, 44.0 / s)
 	_subtitle.position = Vector2(left, top + 48.0 / s)
-	_subtitle.size = Vector2(width, 30.0 / s)
-	_subtitle.text = (("Collect words" if int(_state.get("highest_cleared", 0)) == 0 else "Chase Bramble") \
-		+ " · Merged Lv%d" % int(_state.merged_level)) if _state.has("merged_level") \
+	var level_width: float = minf(width * 0.48, 142.0 / s)
+	_subtitle.size = Vector2(width - level_width - 8.0 / s, 30.0 / s)
+	_merged_level_badge.set_level(int(_state.get("merged_level", 1)))
+	_merged_level_badge.layout_badge(Rect2(Vector2(left + width - level_width, top + 48.0 / s),
+		Vector2(level_width, 28.0 / s)), s)
+	_subtitle.text = ("Collect words" if int(_state.get("highest_cleared", 0)) == 0 else "Chase Bramble") if _state.has("merged_level") \
 		else "Collect words. Earn stars. Explore." if narrow else "99 little adventures. Collect words, earn stars."
 	_subtitle.add_theme_font_size_override("font_size", ceili(14.0 / s))
-	_refresh_challenge_frame()
 	var status_height: float = 76.0 / s if _status.visible else 0.0
 	_status.position = Vector2(left, 90.0 / s)
 	_status.size = Vector2(width - (84.0 / s if _retry.visible else 0.0), status_height)
@@ -384,11 +403,12 @@ func _layout() -> void:
 	_scroll.position = Vector2(left, 88.0 / s + status_height)
 	_scroll.size = Vector2(width, maxf(1.0, size.y - _scroll.position.y - 12.0 / s))
 	var chapter_height: float = 1160.0 / s
+	var summit_space: float = 132.0 / s
 	var node_size := Vector2(98, 104) / s
 	var amplitude: float = minf(width * 0.27, 240.0 / s)
 	for index in range(_chapters.size()):
 		var section: Dictionary = _chapters[index]
-		var y: float = (10 - index) * chapter_height
+		var y: float = summit_space + (10 - index) * chapter_height
 		section.number.position = Vector2(0, y + 1122.0 / s)
 		section.number.size = Vector2(width, 20.0 / s)
 		section.number.add_theme_font_size_override("font_size", ceili(11.0 / s))
@@ -414,7 +434,7 @@ func _layout() -> void:
 		var chapter: int = (number - 1) / 9
 		var step: int = (number - 1) % 9
 		var center := Vector2(width * 0.5 + sin(float(step) * PI * 0.5) * amplitude,
-			(11 - chapter) * chapter_height - (136.0 + step * 116.0) / s)
+			summit_space + (11 - chapter) * chapter_height - (136.0 + step * 116.0) / s)
 		var button: Button = item.button
 		button.position = center - node_size * 0.5
 		button.size = node_size
@@ -431,13 +451,17 @@ func _layout() -> void:
 		item.padlock.position = Vector2(65, 52) / s
 		item.padlock.size = Vector2.ONE * 19.0 / s
 		item.padlock.pivot_offset = item.padlock.size * 0.5
-		item.boss.position = button.position + Vector2(15, -68) / s
-		item.boss.size = Vector2.ONE * 68.0 / s
+		item.boss.position = button.position + (Vector2(-13, -124) if number == 99 else Vector2(15, -68)) / s
+		item.boss.size = Vector2.ONE * (124.0 if number == 99 else 68.0) / s
+		item.boss_aura.position = item.boss.position - Vector2.ONE * 16.0 / s
+		item.boss_aura.size = item.boss.size + Vector2.ONE * 32.0 / s
+		item.boss_frame.position = item.boss.position - Vector2.ONE * 18.0 / s
+		item.boss_frame.size = item.boss.size + Vector2.ONE * 36.0 / s
 		for index in range(3):
 			var star: TextureRect = item.stars[index]
 			star.position = Vector2((14.0 + index * 24.0) / s, 80.0 / s)
 			star.size = Vector2.ONE * 22.0 / s
-	_content.custom_minimum_size = Vector2(0.0, chapter_height * 11.0)
+	_content.custom_minimum_size = Vector2(0.0, summit_space + chapter_height * 11.0)
 	_content.size.x = width
 	_content.queue_redraw()
 	_queue_changed()
@@ -550,6 +574,7 @@ func snapshot() -> Dictionary:
 			"lock_visible": item.padlock.visible,
 			"best_stars": int(_state.get("best_stars", {}).get(str(number), 0)),
 			"boss": item.boss.visible,
+			"final_boss": number == 99,
 			"boss_rect": _rect(item.boss.get_global_rect()) if item.boss.visible else {},
 			"boss_portrait": BOSS_PORTRAIT.resource_path if item.boss.visible else "",
 			"rect": _rect(item.button.get_global_rect()),
@@ -564,5 +589,7 @@ func snapshot() -> Dictionary:
 				else "node" if _unlock_elapsed < ROUTE_SECONDS + UNLOCK_SECONDS else "done"},
 		"error": str(_state.get("error", "")),
 		"merged_level": int(_state.get("merged_level", 1)),
+		"final_boss_stage": 99,
+		"merged_level_indicator": _merged_level_badge.snapshot(),
 		"boss_markers": _state.get("boss_markers", []).filter(func(number: int) -> bool: return number > 1),
 		"boss_victories": _state.get("boss_victories", []).duplicate()}

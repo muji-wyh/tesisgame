@@ -69,11 +69,26 @@ func defeat(app) -> void:
 		check(game.collect(int(tile.id)), "A real committed merged-word pickup attacks the Boss")
 		for frame in range(12):
 			advance(app, 0.05)
+	for required_word: Dictionary in game.stage_run.words:
+		var missing: int = int(game.stage_run.goals[required_word.id]) - int(game.stage_run.current[required_word.id])
+		for index in range(missing):
+			var tile: Dictionary = game._new_word_root(required_word)
+			game._set_merged_word(tile, required_word, 1, true)
+			tile.column = index % 5
+			tile.row = 7
+			tile.age = 100.0
+			tile.settling = false
+			game.cells.append(tile)
+			app._word_jelly._sync_tiles()
+			check(game.collect(int(tile.id)), "The Boss victory still needs every remaining word goal")
+			for frame in range(12):
+				advance(app, 0.05)
 	for frame in range(700):
 		advance(app, 0.05)
-		if app._round_end_active() and app._round_end._elapsed > 1.0 and not captured_ending:
+		if game.snapshot().clear_phase == "announcement" \
+			and game._stage_clear_feedback < 0.5 and not captured_ending:
 			captured_ending = true
-			await capture_frame("clear-cheer")
+			await capture_frame("clear-before-sweep")
 		var skill = app._jelly_rewards._skill_reveal
 		if skill.is_visible_in_tree() and not skill._continue.disabled:
 			check(skill.snapshot().level == 2 and skill.snapshot().description.contains("4 nearby"),

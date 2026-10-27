@@ -25,6 +25,7 @@ var _result_round: String = ""
 var _settlement_elapsed: float = 0.0
 var _bonus_presented: bool = false
 var _skill_presented: bool = false
+var _pending_challenge_record: int = 0
 var _result_context_key: String = ""
 # Leaving the old session can synchronously publish its failure before the new request exists.
 var requesting_preparation: bool = false
@@ -184,6 +185,18 @@ func round_started() -> void:
 	error = ""
 	map.close()
 	pending_plan.clear()
+	if _app._word_jelly.game.stage_run.kind == "challenge":
+		record_challenge_stage(_app._word_jelly.game.stage_run.challenge_stage)
+
+
+func record_challenge_stage(stage: int) -> void:
+	if store.record_challenge_stage(active_context_key, stage):
+		_pending_challenge_record = 0
+		return
+	_pending_challenge_record = stage
+	error = store.error
+	_app._word_jelly.game.error = error
+	_app._announce_status(error)
 
 
 func is_bound_round() -> bool:
@@ -214,6 +227,8 @@ func capture_result(result: Dictionary) -> bool:
 		"collection_count": stage.collection_count, "chest_count": result.chest_count,
 		"chest_tier": result.chest_tier, "chest_coins": chest_coins,
 		"bonus": quote.bonus, "completed_word_ids": []}
+	if stage.kind == "challenge":
+		_result_draft["challenge_stage"] = int(stage.get("challenge_stage", 1))
 	var boss: Dictionary = result.get("boss", {})
 	if bool(boss.get("active", false)):
 		_result_draft["boss_roster_version"] = 2
@@ -362,6 +377,11 @@ func retry() -> void:
 		map.configure(_map_state(), _app.reduced_motion)
 		return
 	error = ""
+	if _pending_challenge_record > 0:
+		record_challenge_stage(_pending_challenge_record)
+		if _pending_challenge_record > 0:
+			return
+		_app._word_jelly.game.error = ""
 	var room = _app._jelly_rewards
 	room.set_settlement_error("")
 	if room._save_failed or room._collect_pending or room._unsaved_index >= 0:

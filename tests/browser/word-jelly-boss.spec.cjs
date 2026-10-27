@@ -13,7 +13,7 @@ async function seed(page, number) {
   await seedPipLevel(page, 3);
   const recipes = {}, ratings = {};
   for (let stage = 1; stage <= number; stage++) {
-    recipes[stage] = recipe({ number: stage, seconds: 360, quota: number === 1 ? 1 : 5 });
+    recipes[stage] = recipe({ number: stage, seconds: 360, quota: number === 1 || number === 3 ? 1 : 5 });
     if (stage < number) ratings[stage] = 3;
   }
   const victories = bossStages.map((stage, index) => stage < number ? index + 1 : null).filter(id => id !== null);
@@ -118,6 +118,8 @@ test('a real first Boss victory celebrates, escapes, saves Lv2 and never duplica
   const finished = await jelly(page);
   expect(finished.boss.outcome).toBe('defeated');
   expect(finished.campaign.outcome).toBe('cleared');
+  expect(finished.campaign.word_goals_complete).toBe(true);
+  expect(finished.campaign.remaining).toBe(0);
   expect(finished.campaign_map.merged_level).toBe(2);
   expect(finished.campaign_map.boss_victories).toEqual([1]);
   expect(finished.campaign_map.boss_markers).toEqual([3, 5]);

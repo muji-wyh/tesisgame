@@ -49,10 +49,12 @@ from 1.98 to 2.65 seconds, reversing the same straight path and scale to recover
 the original position and size without
 fading the chest away. First-chest and pair rewards target a 176px silhouette;
 upgrades target 216px, fitted to the available viewport on small screens.
-When several earned tiers are queued, this is one continuous journey: the chest
-stays at its first fitting envelope in the upper screen, turns and reveals each
-successive material, then returns only after the last earned tier. Later steps
-begin at the existing top hold, not at another fragment-arrival/departure phase.
+When several earned tiers are queued, this is one continuous multi-revolution
+spin at the same upper-screen fitting envelope. The angle never resets or
+stops between tiers: every full 0.92-second revolution reveals exactly one
+successive material with its own sourced flash/rays and reward cue. Assembly
+plays once; the chest returns only after the final full turn. Multi-level jumps
+enqueue each real intermediate tier rather than substituting a single turn.
 A next pickup that has not visibly arrived holds the same chest at the top.
 Each earned tier keeps its own reveal sound and model-owned progress; presentation
 neither manufactures intermediate chests nor skips a final level. The source
@@ -80,7 +82,11 @@ The shared `reward_confetti.gd` renderer accompanies earned-chest reveals in
 Match, Memory, Voice Pop and Jelly Match. GameUI owns its
 dedicated viewport CanvasLayer, so arena clipping, layout bounds and the game
 header cannot cut off the paper. A reveal starts one independent 6.4-second
-burst of 384-1,200 paper pieces, scaled to viewport area and UI density. Chest
+burst of 128-400 paper pieces, scaled to viewport area and UI density. This is
+one third of the previous population, rounded to the nearest whole paper for
+each viewport and UI scale. The smaller upper-third preset likewise drops from
+24-72 to 8-24 pieces. Texture size, two-edge launch, fall speed and lifetime are
+unchanged. Chest
 bursts use the current round, mode and chest tier; Jelly Words stage bursts
 use the round and stage number. A stratified canopy distributes the paper
 through both the full width and height instead of a small local patch.

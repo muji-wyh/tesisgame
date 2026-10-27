@@ -177,6 +177,9 @@ func _pose() -> void:
 	var ending: bool = _state.phase in ["ending", "done"]
 	var ending_time: float = float(_state.ending_elapsed)
 	var clip: String = _gesture if elapsed - _gesture_at < 1.1 else "Taunt"
+	if _state.phase == "exhausted":
+		clip = "Hit"
+		_snatch.clear()
 	_character.position = _character_rect.position
 	_character.size = _character_rect.size
 	_character.modulate = Color.WHITE

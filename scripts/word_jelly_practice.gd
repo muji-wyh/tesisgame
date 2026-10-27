@@ -11,6 +11,7 @@ const MEDAL = preload("res://assets/images/ui/mastery-medal.webp")
 const STAR = preload("res://assets/chests/milestone/sparkle.png")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const CHECK = preload("res://assets/images/ui/jelly-goals/completed.svg")
+const CHECK_REVEAL = preload("res://scripts/word_jelly_goal_check.gdshader")
 const GAIN_SECONDS: float = 0.55
 const COMPLETE_SECONDS: float = 0.60
 const COMPLETED_HOLD_SECONDS: float = 3.0
@@ -127,20 +128,30 @@ func set_stage(state: Dictionary) -> void:
 		var check_icon := TextureRect.new()
 		check_icon.texture = CHECK
 		check_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		check_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		check_icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var check_material := ShaderMaterial.new()
+		check_material.shader = CHECK_REVEAL
+		check_icon.material = check_material
 		badge.add_child(check_icon)
-		var done: Label = Style.label("Done", 10)
-		done.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		done.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		done.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		done.add_theme_color_override("font_color", Color.WHITE)
-		badge.add_child(done)
 		_rows.append({"surface": surface, "background_progress": background, "label": label,
 			"fraction": fraction, "picture": picture, "steps": steps, "gain_label": gain,
 			"success_glow": glow, "success_sparkles": sparkles, "complete_badge": badge,
-			"complete_icon": check_icon, "done_label": done, "word_id": "",
+			"complete_icon": check_icon, "word_id": "",
 			"gain_elapsed": GAIN_SECONDS, "complete_elapsed": COMPLETED_HOLD_SECONDS + EXIT_SECONDS,
 			"gain_amount": 0, "mastered": false, "retired": false})
+	var ordered: Array[Dictionary] = []
+	var ids: Array = words.map(func(item: Dictionary) -> String: return str(item.id))
+	for item: Dictionary in words:
+		var matching: Array = _rows.filter(func(row: Dictionary) -> bool: return str(row.word_id) == str(item.id))
+		if not matching.is_empty():
+			ordered.append(matching[0])
+		else:
+			for row: Dictionary in _rows:
+				if not ordered.has(row) and str(row.word_id) not in ids:
+					ordered.append(row)
+					break
+	_rows = ordered
 	for index in range(words.size()):
 		var item: Dictionary = words[index]
 		var row: Dictionary = _rows[index]
@@ -165,7 +176,8 @@ func set_stage(state: Dictionary) -> void:
 			row.gain_elapsed = GAIN_SECONDS
 			row.complete_elapsed = COMPLETED_HOLD_SECONDS + EXIT_SECONDS
 			row.retired = row.mastered
-		row.label.text = str(item.text)
+		row.label.text = "%s %d/%d" % [item.text, int(item.current), int(item.required)] \
+			if _state.get("kind") == "challenge" and not item.mastered and _compact else str(item.text)
 		row.fraction.text = "%d/%d" % [int(item.current), int(item.required)]
 		row.background_progress.max_value = int(item.required)
 		row.background_progress.value = int(item.current)
@@ -225,18 +237,19 @@ func _pose_feedback(row: Dictionary) -> void:
 	var complete_p: float = clampf(float(row.complete_elapsed) / COMPLETE_SECONDS, 0.0, 1.0)
 	row.fraction.scale = Vector2.ONE * (1.0 + (0.18 * sin(p * PI) if gaining else 0.0))
 	row.picture.scale = Vector2.ONE * (1.0 + (0.12 * sin(p * PI) if gaining else 0.0))
-	row.gain_label.visible = gaining and not _compact
+	row.gain_label.visible = gaining and not _compact and not row.mastered
 	row.gain_label.text = "+%d" % int(row.gain_amount)
 	row.gain_label.modulate.a = 1.0 - smoothstep(0.45, 1.0, p)
 	row.gain_label.position = Vector2(row.surface.size.x - 42.0 / _scale, (8.0 - p * 8.0) / _scale)
 	row.label.size.x = maxf(1.0, row.surface.size.x - row.label.position.x
-		- (48.0 if gaining and not _compact else 10.0) / _scale)
-	row.fraction.visible = not _compact and (not row.mastered or completing)
+		- (40.0 if row.mastered and not _compact else 48.0 if gaining and not _compact else 10.0) / _scale)
+	row.fraction.visible = not _compact and not row.mastered
 	row.complete_badge.visible = row.mastered and not row.retired
 	row.complete_badge.scale = Vector2.ONE * (1.0 + 0.18 * sin(complete_p * PI) if completing else 1.0)
-	row.done_label.text = "Done %d" % maxi(1, ceili(COMPLETED_HOLD_SECONDS - float(row.complete_elapsed)))
+	row.complete_icon.material.set_shader_parameter("check_progress",
+		1.0 if reduced_motion else smoothstep(0.04, COMPLETE_SECONDS * 0.75, float(row.complete_elapsed)))
 	for star: TextureRect in row.steps:
-		star.visible = not _compact and not row.mastered and _state.get("kind", "") != "main"
+		star.visible = not _compact and not row.mastered and _state.get("kind", "") not in ["main", "challenge"]
 	row.success_glow.visible = completing
 	var glow_size := Vector2(52, 44) / _scale
 	var center: Vector2 = row.picture.position + row.picture.size * 0.5
@@ -286,20 +299,21 @@ func _layout() -> void:
 	add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	_title.add_theme_font_size_override("font_size", ceili((12.0 if _compact else 20.0) / s))
 	_title.text = "Stage %d" % int(_state.get("number", 1)) if _compact else "Word goals"
-	if not _compact and _state.get("objective", "") == "boss":
-		_title.text = "Attack words"
 	if _state.get("kind") == "challenge":
-		_title.text = "Wave %d" % int(_state.get("pressure", {}).get("level", 1)) if _compact else "Word practice"
-	var timed: bool = _state.get("kind") == "main"
+		_title.text = "Stage %d" % int(_state.get("challenge_stage", 1)) if _compact \
+			else "Challenge · %d" % int(_state.get("challenge_stage", 1))
+	var timed: bool = _state.get("kind") in ["main", "challenge"]
 	if timed and _compact:
 		var remaining: int = maxi(0, ceili(float(_state.get("seconds_remaining", 0))))
-		_title.text = "%d · %d:%02d" % [int(_state.number), remaining / 60, remaining % 60]
-	_subtitle.visible = not _compact
+		_title.text = "%d · %d:%02d" % [int(_state.number), remaining / 60, remaining % 60] \
+			if _state.kind == "main" else "%d · %d:%02d" % [int(_state.get("challenge_stage", 1)), remaining / 60, remaining % 60]
+	_subtitle.visible = not _compact or _state.get("kind") == "challenge"
 	_subtitle.text = "%d of %d mastered" % [int(_state.get("mastered", 0)), _rows.size()]
-	if timed:
+	if _state.get("kind") == "challenge":
+		_subtitle.text = "Best stage %d" % int(_state.get("challenge_best_stage", 0)) if _compact \
+			else "Best Stage %d · Goals +10s" % int(_state.get("challenge_best_stage", 0))
+	if timed and _state.get("kind") == "main":
 		_subtitle.text = "%d of %d goals done" % [int(_state.get("mastered", 0)), _rows.size()]
-	if _state.get("objective", "") == "boss":
-		_subtitle.text = "Collect words to attack"
 	_subtitle.add_theme_font_size_override("font_size", ceili(12.0 / s))
 	_medal.visible = not _compact
 	_medal.position = Vector2(0, 2.0) / s
@@ -314,6 +328,10 @@ func _layout() -> void:
 		_title.size.x = 76.0 / s
 	_subtitle.position = Vector2(46, 28) / s
 	_subtitle.size = Vector2(maxf(1.0, size.x - 46.0 / s), 20.0 / s)
+	if _compact and _state.get("kind") == "challenge":
+		_subtitle.position = Vector2(6, 16) / s
+		_subtitle.size = Vector2(72, 16) / s
+		_subtitle.add_theme_font_size_override("font_size", ceili(10.0 / s))
 	_scroll.position = Vector2(padding if stacked or not _compact else (88.0 if timed else 70.0) / s,
 		18.0 / s if stacked else 58.0 / s if not _compact else 0.0)
 	_scroll.horizontal = _compact
@@ -326,6 +344,12 @@ func _layout() -> void:
 	_scroll.size = (size - _scroll.position - Vector2(padding, 0.0 if _compact else padding)).max(Vector2.ONE)
 	var cursor: float = 0.0
 	for row: Dictionary in _rows:
+		if _state.get("kind") == "challenge":
+			for item: Dictionary in _state.get("practice", []):
+				if str(item.id) == str(row.word_id):
+					row.label.text = "%s %d/%d" % [item.text, int(item.current), int(item.required)] \
+						if _compact and not item.mastered else str(item.text)
+					break
 		var card: StyleBoxFlat = row.surface.get_theme_stylebox("panel")
 		card.set_corner_radius_all(ceili((10.0 if _compact else 14.0) / s))
 		card.shadow_size = ceili(3.0 / s)
@@ -364,17 +388,13 @@ func _layout() -> void:
 		row.gain_label.size = Vector2(34, 18) / s
 		row.gain_label.add_theme_font_size_override("font_size", ceili(13.0 / s))
 		row.complete_badge.add_theme_stylebox_override("panel",
-			Style.box(Style.GOOD, Color.TRANSPARENT, ceili(7.0 / s), 0))
-		row.complete_badge.position = row.picture.position + row.picture.size - Vector2.ONE * 12.0 / s if _compact \
-			else Vector2(width - 72.0 / s, 28.0 / s)
-		row.complete_badge.size = Vector2.ONE * 12.0 / s if _compact else Vector2(66, 20) / s
+			Style.box(Style.GOOD, Color.TRANSPARENT, ceili((7.0 if _compact else 14.0) / s), 0))
+		row.complete_badge.position = row.picture.position + row.picture.size - Vector2.ONE * 14.0 / s if _compact \
+			else Vector2(width - 34.0 / s, (height - 28.0 / s) * 0.5)
+		row.complete_badge.size = Vector2.ONE * (14.0 if _compact else 28.0) / s
 		row.complete_badge.pivot_offset = row.complete_badge.size * 0.5
-		row.complete_icon.position = Vector2.ONE / s if _compact else Vector2(3, 3) / s
-		row.complete_icon.size = Vector2.ONE * (10.0 if _compact else 14.0) / s
-		row.done_label.visible = not _compact
-		row.done_label.position = Vector2(18, 0) / s
-		row.done_label.size = Vector2(46, 20) / s
-		row.done_label.add_theme_font_size_override("font_size", ceili(10.0 / s))
+		row.complete_icon.position = Vector2.ONE * (1.0 if _compact else 2.0) / s
+		row.complete_icon.size = Vector2.ONE * (12.0 if _compact else 24.0) / s
 		for index in range(3):
 			var star: TextureRect = row.steps[index]
 			star.visible = not _compact
@@ -392,7 +412,15 @@ func _layout() -> void:
 
 
 func _draw() -> void:
-	if not _compact or _state.get("kind") != "main":
+	if not _compact:
+		return
+	if _state.get("kind") == "challenge":
+		var ratio: float = clampf(float(_state.get("seconds_remaining", 0.0)) \
+			/ maxf(0.001, float(_state.get("seconds_total", 90.0))), 0.0, 1.0)
+		draw_style_box(Style.box(Style.GOOD, Color.TRANSPARENT, 3, 0),
+			Rect2(Vector2(6, 35) / _scale, Vector2(72.0 * ratio, 5.0) / _scale))
+		return
+	if _state.get("kind") != "main":
 		return
 	if stage_timer != null:
 		stage_timer.draw_rating(self, Rect2(Vector2(6, 18) / _scale, Vector2(72, 22) / _scale), _scale, true)

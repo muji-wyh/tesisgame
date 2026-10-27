@@ -4,8 +4,8 @@ extends CanvasLayer
 const PAPER = preload("res://assets/images/jelly-match/confetti.png")
 const Style = preload("res://scripts/ui_style.gd")
 const DURATION: float = 6.4
-const PAPER_COUNT: int = 384
-const MAX_PAPER_COUNT: int = 1200
+const PAPER_COUNT: int = 128
+const MAX_PAPER_COUNT: int = 400
 const PAPER_SPACING: float = 42.0
 const SMALL_DURATION: float = 2.4
 const COLORS: Array[Color] = [Color("#ffcf63"), Color("#ff8396"), Color("#67dbbe"), Color("#83bdff"), Color("#cf9af1")]
@@ -93,7 +93,7 @@ func _paper_count(screen: Rect2, unit: float) -> int:
 	if not screen.has_area():
 		return 0
 	var spacing: float = PAPER_SPACING * maxf(0.25, unit)
-	return clampi(ceili(screen.get_area() / (spacing * spacing)), PAPER_COUNT, MAX_PAPER_COUNT)
+	return clampi(roundi(ceili(screen.get_area() / (spacing * spacing)) / 3.0), PAPER_COUNT, MAX_PAPER_COUNT)
 
 
 func _paper_state(index: int, screen: Rect2, unit: float, age: float, variation: float = 0.0) -> Dictionary:
@@ -190,7 +190,7 @@ func _burst_count(item: Dictionary, screen: Rect2, unit: float) -> int:
 	if not item.small:
 		return _paper_count(screen, unit)
 	var spacing: float = 80.0 * maxf(0.25, unit)
-	return clampi(ceili(_burst_region(item, screen).get_area() / (spacing * spacing)), 24, 72)
+	return clampi(roundi(ceili(_burst_region(item, screen).get_area() / (spacing * spacing)) / 3.0), 8, 24)
 
 
 func _burst_paper_state(item: Dictionary, index: int, screen: Rect2, unit: float) -> Dictionary:

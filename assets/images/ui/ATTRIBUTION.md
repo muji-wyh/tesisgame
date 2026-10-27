@@ -10,6 +10,10 @@ Original paths, hashes and the byte-identical license are in
 These assets are static; map placement, focus and rating feedback are game-authored.
 The challenge reuses the existing acquired Toon FX gold coin, with source and
 rights unchanged in `assets/coins/manifest.json`. No private source package is copied.
+The current compact Challenge entrance instead reuses the acquired Microsoft
+Fluent mastery medal described below and a permanent text label, not a refresh
+arrow or the former wooden footer. The Jelly-level badge reuses the integrated
+mint gel skin recorded in `docs/assets/jelly-words.md`; no replacement prop is drawn.
 
 ## Shared controls
 
@@ -63,6 +67,9 @@ illustration or effect asset was acquired for these cards.
 The original SVGs were rendered and inspected before adapting only `currentColor`
 to white. Original/output hashes and source URLs are recorded in the respective
 `sources.json` files. They contain no source animation clips.
+Completed Jelly goals animate a mask over the existing tick while keeping its
+source circle intact. The small pop, silent three-active-second hold and exit
+are game-authored presentation, not newly acquired animation or altered SVG paths.
 
 Campaign rating stars and the extra-time clock reuse the exact acquired Microsoft
 Fluent Emoji 3D illustrations from the reviewed word library (Microsoft Corporation,

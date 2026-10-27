@@ -3,7 +3,7 @@ extends RefCounted
 
 const Catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
 const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
-const VERSION: int = 2
+const VERSION: int = 3
 const MAX_CONTEXTS: int = 256
 const MAX_COMPLETED: int = 64
 const MAX_RESULT_FIELDS: int = 32
@@ -11,7 +11,8 @@ const MAX_COMPLETED_WORDS: int = 128
 const MAX_ID_LENGTH: int = 512
 const MAX_SAVE_BYTES: int = 2 * 1024 * 1024
 const MAX_SCALAR: int = 9007199254740991
-const CONTEXT_KEYS: Array[String] = ["highest_cleared", "recipes", "ratings", "pending", "completed", "boss_victories"]
+const CONTEXT_KEYS: Array[String] = ["highest_cleared", "recipes", "ratings", "pending", "completed",
+	"boss_victories", "challenge_best_stage"]
 const RESULT_KEYS: Array[String] = ["kind", "number", "outcome", "stars"]
 const TIME_FIELDS: Array[String] = ["time_elapsed", "seconds_remaining", "seconds_total", "seconds_added"]
 const TRANSIENT_FIELDS: Array[String] = ["words", "practice", "image", "audio", "morphology",
@@ -49,14 +50,16 @@ func load_state() -> bool:
 			or not config.has_section("campaign") or config.get_section_keys("campaign").size() != 2:
 			return _fail("Your campaign save could not be understood. It has not been reset.")
 		var version: Variant = config.get_value("campaign", "version", null)
-		if not version is int or version not in [1, VERSION]:
+		if not version is int or version not in [1, 2, VERSION]:
 			return _fail("This campaign save needs a supported version.")
 		var contexts: Variant = config.get_value("campaign", "contexts", null)
-		if version == 1 and contexts is Dictionary:
+		if version < VERSION and contexts is Dictionary:
 			contexts = contexts.duplicate(true)
 			for state: Variant in contexts.values():
-				if state is Dictionary and state.size() == 5 and not state.has("boss_victories"):
+				if version == 1 and state is Dictionary and state.size() == 5 and not state.has("boss_victories"):
 					state["boss_victories"] = []
+				if state is Dictionary and state.size() == 6 and not state.has("challenge_best_stage"):
+					state["challenge_best_stage"] = 0
 		var validation_error: String = _contexts_error(contexts)
 		if not validation_error.is_empty():
 			return _fail(validation_error)
@@ -104,6 +107,30 @@ func boss_victories(context: String) -> Array:
 
 func merged_level(context: String) -> int:
 	return BossCatalog.merged_level(boss_victories(context))
+
+
+func challenge_best_stage(context: String) -> int:
+	return int(_context(context).challenge_best_stage) if _readable(context) else 0
+
+
+func record_challenge_stage(context: String, stage: int) -> bool:
+	error = ""
+	if not _readable(context):
+		return false
+	if stage < 1 or stage > 16384:
+		return _fail("A Challenge record needs a supported positive stage.")
+	if not _current_snapshot_matches():
+		return false
+	var state: Dictionary = _context(context)
+	if stage <= int(state.challenge_best_stage):
+		return true
+	if not _can_add_context(context):
+		return false
+	var next: Dictionary = _contexts.duplicate(true)
+	var changed: Dictionary = state.duplicate(true)
+	changed.challenge_best_stage = stage
+	next[context] = changed
+	return _commit(next)
 
 
 func recipe(context: String, number: int) -> Dictionary:
@@ -208,6 +235,8 @@ func complete_result(context: String, round_id: String) -> bool:
 		if bool(result.get("boss_victory", false)) and int(result.boss_id) not in changed.boss_victories:
 			changed.boss_victories.append(int(result.boss_id))
 			changed.boss_victories.sort()
+	if result.kind == "challenge":
+		changed.challenge_best_stage = maxi(int(changed.challenge_best_stage), int(result.get("challenge_stage", 0)))
 	changed.completed.append({"round_id": round_id, "result_hash": _result_hash(result)})
 	while changed.completed.size() > MAX_COMPLETED:
 		changed.completed.pop_front()
@@ -345,7 +374,7 @@ func _can_add_context(context: String) -> bool:
 
 func _context(context: String) -> Dictionary:
 	return _contexts.get(context, {"highest_cleared": 0, "recipes": {}, "ratings": {},
-		"pending": {}, "completed": [], "boss_victories": []})
+		"pending": {}, "completed": [], "boss_victories": [], "challenge_best_stage": 0})
 
 
 func _contexts_error(value: Variant) -> String:
@@ -371,6 +400,8 @@ func _context_error(value: Variant) -> String:
 		return "Your campaign contains an invalid frontier, recipe collection, ratings or journal."
 	if not value.boss_victories is Array or value.boss_victories.size() > BossCatalog.STAGES.size():
 		return "Your campaign contains invalid Boss victory evidence."
+	if not value.challenge_best_stage is int or value.challenge_best_stage < 0 or value.challenge_best_stage > 16384:
+		return "Your Challenge best stage must be a supported nonnegative whole stage."
 	var previous_boss: int = 0
 	for id: Variant in value.boss_victories:
 		if not id is int or id <= previous_boss or id > BossCatalog.STAGES.size() \
@@ -417,8 +448,8 @@ func _result_error(value: Variant, context: Dictionary) -> String:
 		or not value.stars is int or value.stars < 0 or value.stars > 3:
 		return "A settlement has an invalid kind, stage, terminal outcome or whole star rating."
 	if value.kind == "challenge":
-		if value.number != 0 or value.stars != 0 or value.outcome in ["cleared", "timeout"]:
-			return "An untimed challenge cannot claim a numbered clear, timer ending or star reward."
+		if value.number != 0 or value.stars != 0 or value.outcome == "cleared":
+			return "A survival challenge cannot claim a numbered clear or star reward."
 	else:
 		if value.number < 1 or value.number > Catalog.MAX_STAGE \
 			or value.number > mini(int(context.highest_cleared) + 1, Catalog.MAX_STAGE) \
@@ -434,6 +465,9 @@ func _result_error(value: Variant, context: Dictionary) -> String:
 			return "A Boss unlock needs the original cleared Boss stage and its matching encounter identity."
 	if value.has("boss_roster_version") and (not value.boss_roster_version is int or value.boss_roster_version != 2):
 		return "The Boss settlement has an unsupported encounter roster."
+	if value.has("challenge_stage") and (value.kind != "challenge" or not value.challenge_stage is int \
+		or value.challenge_stage < 1 or value.challenge_stage > 16384):
+		return "A Challenge result needs its actual supported stage."
 	for key: Variant in value:
 		if not key is String or key.is_empty() or key.length() > 64 or not _field_name(key):
 			return "Settlement field names must be bounded stable identifiers."

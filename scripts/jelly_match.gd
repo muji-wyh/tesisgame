@@ -1250,7 +1250,8 @@ func _chest_milestone(previous_tier: int, tier: int) -> void:
 		return
 	_chest_tap.clear()
 	_reward_presentation.reduced_motion = reduced_motion
-	_reward_presentation.enqueue(previous_tier, tier, _reward_texture(previous_tier), _reward_texture(tier))
+	for next_tier in range(previous_tier + 1, tier + 1):
+		_reward_presentation.enqueue(next_tier - 1, next_tier, _reward_texture(next_tier - 1), _reward_texture(next_tier))
 	_chest_for_theme(RewardProgress.theme_for_tier(tier + 1), mini(RewardProgress.MAX_TIER, tier + 1))
 	_refresh_hud()
 	_refresh_controls()

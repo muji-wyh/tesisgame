@@ -54,6 +54,9 @@ The portrait is also a touch target for its unlocked stage. The stage numeral an
 earned stars remain separate; locked future portraits cannot start a stage.
 Stage 1 deliberately has no portrait marker or watching-visitor presentation
 before its actual story ambush.
+The stage-99 exception enlarges that same acquired portrait and frames it with
+the acquired Kenney medallion and Archanor rays, tinted dark purple. It is an
+in-game finale marker, not a new character acquisition or horror redesign.
 
 ## Interface and effects
 

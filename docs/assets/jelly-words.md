@@ -11,8 +11,10 @@ retirement reuse these integrated gel skins, actual vocabulary pictures and
 the same sourced portal/ray/sparkle textures. The skill preview is a view-only
 illustration of the real collection footprint, not a synthetic replacement
 Jelly or a second gameplay/reward model. Completion uses the existing sourced
-check mark; its check pop, three-second countdown and 380 ms exit are game-authored
-motion. The round-clear medal reuses Microsoft Fluent Emoji's acquired MIT
+Tabler check mark (Paweł Kuna, MIT); its source SVG paths stay unchanged.
+A game-authored mask progressively reveals the tick inside the source circle,
+followed by a silent three-active-second hold and 380 ms exit. There is no Done
+label, visible timer or completion count. The round-clear medal reuses Microsoft Fluent Emoji's acquired MIT
 mastery medal, whose original provenance remains in [Vocabulary mastery](vocabulary-mastery.md).
 The full two-edge paper fountain reuses the acquired Archanor Toon FX paper
 texture described in [Jelly fragments](jelly-fragments.md); no new artwork is
@@ -40,8 +42,12 @@ content stays whole; it is never cut into arbitrary letter groups. See the
 Merged jellies show the full word, its available picture, a warm rim, and sourced
 light accents. Two merged jellies with the same vocabulary identity combine by
 adding their levels, including different levels: Lv1 + Lv3 becomes Lv4 and
-Lv2 + Lv7 becomes Lv9. There are nine levels. A sum greater than nine cannot merge;
-the existing bodies and their rewards remain intact. Lv2–9 show their number at the upper-right;
+Lv2 + Lv7 becomes Lv9. There are nine levels, unlocked through Boss victories.
+Sums clamp to the learner's unlocked cap, so Lv2 + Lv3 becomes Lv4 when Lv4 is
+unlocked. All carried mass and fragments survive the union. A matching Jelly
+can also join the accepted result while its previous fusion is still animating.
+The map and active board name the available cap in their sourced Jelly LvN badge.
+Lv2–9 show their individual number at the upper-right;
 carried chest fragments use the opposite corner. All stages retain one ordinary
 cell. Joining, picture matching, and upgrading do not collect rewards or learning
 credit. Collection owns the existing reward transaction and eligible manual
@@ -69,7 +75,10 @@ for Lv1–3, then 660, 720, 780, 840, 900 and 960 ms for Lv4–9. The model's
 collection transaction finishes 240 ms after release. The separate board effects
 last 0.80, 1.10, 1.45, 2.80, 3.10, 3.40, 3.60, 3.80 and 4.00 seconds after
 release, remain input-transparent, and clear on pause or exit. Batch collection
-keeps its 40 ms release and 140 ms cadence,
+keeps its 40 ms release, 120 ms collection motion and 40 ms inter-pickup gap.
+Lv4–9 add an independent 100 ms impact hold at release, even when no later
+blast target survives. The batch clock includes that hold, without skipping
+or advancing its source-centered effects. Batch releases use
 with smaller and less dense effects at 75 percent of their manual lifetime.
 Reduced motion uses a compact still light accent.
 Profiles and acquired material are recorded in [Jelly level feedback](jelly-level-feedback.md).
@@ -123,8 +132,8 @@ roots remain silent.
 
 Two [coin powerups](jelly-powerups.md) share the board controls. Auto merge costs
 600 coins initially, then 900 and 1200 on further uses in the round. It joins
-compatible roots, finishes picture matching, or adds levels of matching words
-whose sum is at most nine.
+compatible roots, finishes picture matching, or adds levels of matching words,
+clamping the result to the same unlocked cap as manual merging.
 It leaves merged jellies on the board for ordinary collection. The planner checks
 an entire completion path and all intermediate rectangles before charging.
 Eligible pairs launch every 200 ms, each with a 250 ms flight, 110 ms fusion,

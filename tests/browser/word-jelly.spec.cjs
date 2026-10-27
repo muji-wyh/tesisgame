@@ -1650,7 +1650,7 @@ for (const { layout, viewport, reducedMotion } of [
 const additiveTest = test.extend({ trace: 'off', deviceScaleFactor: 1 });
 for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode === 'batch'
   ? 'Collect keeps high-level top fireworks alive after compact reading cards fade, then removes them cleanly'
-  : 'different merged levels add up to nine and an over-limit same-word merge preserves both jellies', async ({ page }, info) => {
+  : 'different merged levels add up to nine and over-limit same-word merges clamp without losing fragments', async ({ page }, info) => {
   test.setTimeout(420000);
   const batchCollection = collectionMode === 'batch';
   // A real saved learner leaves one outstanding word; the ordinary supply keeps
@@ -1700,7 +1700,7 @@ for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode ==
     return result;
   };
   const singles = [];
-  for (let attempt = 0; singles.length < 10 && attempt < 24; attempt++) {
+  for (let attempt = 0; singles.length < 11 && attempt < 24; attempt++) {
     await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
     const current = await jelly(page);
     const candidate = suppliedWords(current, 3).find(item => item.word.id === 'cat');
@@ -1712,7 +1712,7 @@ for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode ==
     await pressRect(page, current.preview.rect);
     await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(current.generated_tiles);
   }
-  expect(singles, 'Ten genuine word-picture matches are ready for additive upgrades').toHaveLength(10);
+  expect(singles, 'Eleven genuine word-picture matches are ready for capped upgrades and collection').toHaveLength(11);
   const two = await joinLevels(singles[0].id, singles[1].id);
   expect(two.merge_level).toBe(2);
   const three = await joinLevels(two.id, singles[2].id);
@@ -1729,18 +1729,15 @@ for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode ==
   const eight = await joinLevels(singles[7].id, seven.id);
   expect(eight.merge_level).toBe(8);
   expect(eight.presentation.level_badge).toBe('8');
-  const nine = await joinLevels(eight.id, singles[8].id);
+  let nine = await joinLevels(eight.id, singles[8].id);
   expect(nine.merge_level, 'Lv8 plus Lv1 reaches the ninth and final level').toBe(9);
   expect(nine.presentation.level_badge).toBe('9');
   expect((await jelly(page)).max_merge_level).toBe(9);
-  const beforeRejection = await jelly(page);
-  expect(beforeRejection.cleared_pairs, 'Upgrades cannot consume a collection or award its reward').toBe(0);
-  const rejected = await rejectMerge(page, nine.id, singles[9].id, {
-    info, label: 'word-jelly-level-sum-rejected', familyHint: true,
-  });
-  expect(rejected.after.tiles.find(tile => tile.id === nine.id).merge_level).toBe(9);
-  expect(rejected.after.tiles.find(tile => tile.id === singles[9].id).merge_level).toBe(1);
-  expect(rejected.after.merged_count).toBe(beforeRejection.merged_count);
+  const beforeCap = await jelly(page);
+  expect(beforeCap.cleared_pairs, 'Upgrades cannot consume a collection or award its reward').toBe(0);
+  nine = await joinLevels(nine.id, singles[9].id);
+  expect(nine.merge_level, 'An over-limit sum clamps to the actual unlocked cap').toBe(9);
+  expect(nine.fragments).toBe(beforeCap.tiles.find(tile => tile.merge_level === 9).fragments + singles[9].fragments);
   await capture(page, info, 'word-jelly-nine-level-result');
 
   await page.evaluate(() => {
@@ -1767,8 +1764,8 @@ for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode ==
     });
     window.nineLevelCollectionObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
   });
-  const collectible = rejected.after.tiles.find(tile => tile.id === nine.id);
   const beforeCollection = await jelly(page);
+  const collectible = beforeCollection.tiles.find(tile => tile.id === nine.id);
   const selected = batchCollection ? beforeCollection.tiles.filter(tile => tile.jelly_kind === 'merged') : [collectible];
   expect(selected).toHaveLength(batchCollection ? 2 : 1);
   let timeline;
@@ -1786,7 +1783,7 @@ for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode ==
     if (batchCollection) {
       expect(collected.collection_batch.completed).toBe(2);
       expect(collected.collection_batch.active).toBe(false);
-      expect(collected.collection_batch.elapsed, 'Two automatic collections still finish in 280 ms').toBeCloseTo(0.28, 6);
+      expect(collected.collection_batch.elapsed, 'Two pickups include the real 100 ms high-level impact hold').toBeCloseTo(0.38, 6);
     }
     await expect.poll(() => page.evaluate(() => window.nineLevelCollection.some(frame =>
       frame.reveal.entries.some(entry => entry.merge_level === 9 && entry.elapsed >= 0.1 &&
@@ -1811,7 +1808,7 @@ for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode ==
       expect(expired.cleared_pairs).toBe(collected.cleared_pairs);
       expect(expired.collected_coins, 'Finishing the cosmetic tail never issues another coin reward').toBe(collected.collected_coins);
       expect(expired.fragment_count).toBe(collected.fragment_count);
-      expect(expired.collection_batch.elapsed).toBeCloseTo(0.28, 6);
+      expect(expired.collection_batch.elapsed).toBeCloseTo(0.38, 6);
     }
   } finally {
     const evidence = await page.evaluate(() => {

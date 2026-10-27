@@ -20,7 +20,7 @@ func check(condition: bool, message: String) -> void:
 		printerr("FAIL: " + message)
 
 
-func _prepare(dimensions: Vector2i, steady: bool = false, level: int = 2, dense: bool = false):
+func _prepare(dimensions: Vector2i, steady: bool = false, level: int = 2, dense: bool = false, batch: bool = false):
 	root.size = dimensions
 	var view := Jelly.new()
 	root.add_child(view)
@@ -47,7 +47,11 @@ func _prepare(dimensions: Vector2i, steady: bool = false, level: int = 2, dense:
 	view._layout()
 	view.audio_requested.connect(func(cue: String) -> void: cues.append(cue))
 	cues.clear()
-	view._collect(int(source.id))
+	if batch:
+		view.game.set_pip_level(3)
+		view._collect_all()
+	else:
+		view._collect(int(source.id))
 	return {"view": view, "source": source, "marked": marked, "partner": partner}
 
 
@@ -63,7 +67,8 @@ func _put(view, tile: Dictionary, column: int, row: int) -> Dictionary:
 
 
 func _capture(name: String) -> void:
-	if not OS.get_cmdline_user_args().has("--capture") or DisplayServer.get_name() == "headless":
+	if not (OS.get_cmdline_user_args().has("--capture") or OS.get_cmdline_user_args().has("--capture-auto-impact")) \
+		or DisplayServer.get_name() == "headless":
 		return
 	var directory: String = "res://build/qa/jelly-feedback-2026-10-25"
 	DirAccess.make_dir_recursive_absolute(directory)
@@ -154,6 +159,38 @@ func _run() -> void:
 			check(not view.game.powerup_active() and view.game.cells.size() == 1
 				and view.game.cells[0].assisted and view._powerup_effects.stamps.is_empty(),
 				"The real view settles one assisted word and cleans up every marking and travel stamp")
+			view.free()
+	for dimensions: Vector2i in [Vector2i(1366, 768), Vector2i(390, 844)]:
+		for steady: bool in [false, true]:
+			var fixture: Dictionary = _prepare(dimensions, steady, 9, false, true)
+			var view = fixture.view
+			view._process(view.game.BATCH_POP_SECONDS)
+			var impact: Dictionary = view.snapshot().hit_stop
+			check(impact.active and impact.source == "auto_collect" and not view.game.powerup_active()
+				and view._collection_effects.snapshot().entries[0].popped,
+				"The actual automatic Lv9 burst freezes at its release before any queued chain begins")
+			var center: Vector2 = view._tile_rect(fixture.source).get_center()
+			check(view._powerup_effects.stamps.any(func(stamp: Dictionary) -> bool:
+				return stamp.texture == view.COLLECTION_GLOW and Vector2(stamp.center).is_equal_approx(center)),
+				"The independent hit-stop really displays sourced impact light at the collected high-level Jelly")
+			var ambient: float = view._presentation_elapsed
+			var effects: Dictionary = view._collection_effects.snapshot()
+			var age: float = float(view.game.cell(int(fixture.marked.id)).age)
+			view._process(0.09)
+			check(view._presentation_elapsed == ambient and view._collection_effects.snapshot() == effects
+				and float(view.game.cell(int(fixture.marked.id)).age) == age and is_equal_approx(Engine.time_scale, 1.0),
+				"World motion and released artwork actually freeze together without globally freezing interface or audio")
+			if not steady:
+				await _capture("auto-impact-%d-lv9" % dimensions.x)
+			view.pause(true, true)
+			var paused: Dictionary = view.game.snapshot()
+			view._process(0.4)
+			check(view.game.snapshot() == paused, "Pausing during the automatic impact preserves its exact pending interval")
+			view.pause(false)
+			_advance(view, 4.0)
+			check(view.game.cleared_pairs == 1 and not view.game.collection_batch_active()
+				and not view.game.hit_stop_snapshot().active,
+				"Resume finishes the exact original pickup and cleans up the independent impact")
 			view.free()
 	if OS.get_cmdline_user_args().has("--capture"):
 		for dimensions: Vector2i in [Vector2i(1366, 768), Vector2i(390, 844)]:

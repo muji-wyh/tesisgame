@@ -71,6 +71,7 @@ func _run() -> void:
 	_check_reposition_lifecycle(view)
 	_check_reposition_completed_word(view)
 	_check_merge_handover_stability(view)
+	_check_drop_into_merging_result(view)
 	_check_collect_and_fragments(view)
 	await _check_fragment_badge_layout(view)
 	_check_ordinary_collection(view)
@@ -475,6 +476,33 @@ func _check_concurrent_powerup_resize(view) -> void:
 			"overlapping resized routes finish both distinct words with all rewards carried and only one debit")
 	view.purchase_powerup = Callable()
 	view.size = Vector2(1000, 720)
+
+
+func _check_drop_into_merging_result(view) -> void:
+	for pointer: int in [-1, 7]:
+		for steady: bool in [false, true]:
+			_reset(view, steady)
+			var ids: Array[int] = _completion_board(view, ["merged:cat:1", "merged:cat:1", "merged:cat:1"], [1, 2, 3])
+			_drag(view, ids[0], ids[1])
+			_advance(view, Model.FUSION_SECONDS * 0.30)
+			var first: Dictionary = view.game.fusions[0].duplicate(true)
+			var target: Vector2 = view._tile_rect(first.result).get_center()
+			_pointer_event(view, pointer, "down", _center(view, ids[2]))
+			_pointer_event(view, pointer, "move", target)
+			view._consume_drag_motion()
+			_advance(view, 0.001)
+			check(view._target == int(first.result.id) and view._contact_state().kind == "match",
+				"An incoming matching Jelly recognizes and highlights the still-merging result as a drop target: " \
+					+ JSON.stringify({"target": view._target, "expected": first.result.id,
+						"dragging": view._dragging, "contact": view._contact_state()}))
+			_pointer_event(view, pointer, "up", target)
+			check(view.game.fusions.size() == 1 and int(view.game.fusions[0].result.merge_level) == 3
+				and int(view.game.merged_count) == 1 and view._rejection.is_empty(),
+				"A drop hands off the original accepted union into its next merge without rejecting or waiting")
+			_advance(view, Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+			check(view.game.cells.size() == 1 and view.game.cells[0].merge_level == 3
+				and view.game.cells[0].fragments == 6 and view.game.merged_count == 2,
+				"Mouse/touch and reduced-motion handoffs retain all three inputs and fragments exactly once")
 
 func _check_long_word_label_visibility(view) -> void:
 	var original_words: Array = words.duplicate(true)
@@ -1500,10 +1528,10 @@ func _check_word_reveal_levels(view) -> void:
 					"the view snapshot advertises exact Lv1, Lv4 and Lv6 collection odds and payouts")
 			if batch:
 				view._collect_all()
-				view._process(0.30)
+				view._process(0.40)
 				check(view.snapshot().word_reveal.entries.size() == 3,
 					"a late auto-collect frame keeps all three mixed-level pop entries alive")
-				view._process(0.30)
+				view._process(0.20)
 			else:
 				for id: int in ids:
 					view._activate(id)
@@ -1520,7 +1548,8 @@ func _check_word_reveal_levels(view) -> void:
 					"collection-pop effects follow the current motion preference and pass pointer input through")
 				check(entry.word_id == "cat" and entry.spelling == "cat" and str(entry.picture).ends_with("cat.webp"),
 					"all collection levels retain the collected spelling and its production artwork")
-				var expected_age: float = 0.60 - index * Model.BATCH_BEAT_SECONDS if batch else (3 - index) * 0.10
+				var expected_age: float = 0.60 - 2.0 * Model.BLAST_FREEZE_SECONDS - index * Model.BATCH_BEAT_SECONDS \
+					if batch else (3 - index) * 0.10
 				expected_age -= Model.collection_pop_seconds(levels[index], batch)
 				check(is_equal_approx(float(entry.elapsed), expected_age),
 					"all collection levels anchor their reading age to the accepted manual or batch release")
@@ -1536,8 +1565,8 @@ func _check_word_reveal_levels(view) -> void:
 			if batch:
 				var completed: Dictionary = view.game.collection_batch_snapshot()
 				check(not completed.active and int(completed.completed) == 3
-					and is_equal_approx(float(completed.elapsed), 3.0 * Model.BATCH_BEAT_SECONDS),
-					"High-level fireworks leave all three collection payouts on the 120 ms cadence")
+					and is_equal_approx(float(completed.elapsed), 3.0 * Model.BATCH_BEAT_SECONDS + 2.0 * Model.BLAST_FREEZE_SECONDS),
+					"High-level pickups preserve their motion cadence while adding their two actual impact holds")
 				_advance(view, 0.90)
 				var afterglows: Array = view.snapshot().word_reveal.entries
 				check(afterglows.size() == 2 and int(afterglows[0].merge_level) == 4
@@ -1591,10 +1620,10 @@ func _check_word_reveal_control_clearance(view) -> void:
 					checked_effects[entry.entry_id] = true
 		var state: Dictionary = view.snapshot()
 		# Stay between release-based expiry boundaries on both compact layouts.
-		var visible_count: int = _batch_reveal_count(4, 0.85, float(state.word_reveal.duration))
+		var visible_count: int = _batch_reveal_count(4, view._presentation_elapsed, float(state.word_reveal.duration))
 		var reading_cards: Array = state.word_reveal.entries.filter(func(entry: Dictionary) -> bool: return entry.content_visible)
 		check(int(state.collection_batch.started) == 4 and reading_cards.size() == visible_count,
-			"The 120 ms cadence retains the original count of readable cards while fireworks may linger")
+			"Readable cards use actual board time, including the deliberate high-level impact freezes")
 		if dimensions == Vector2(1000, 720):
 			check(visible_count == 4, "the full reading region supports four concurrent collection pops before their first expiry")
 	view.size = Vector2(1000, 720)
@@ -1650,7 +1679,7 @@ func _check_word_reveal_lifecycle(view) -> void:
 		_reset(view)
 		_install(view, ["merged:cat:4", "merged:caterpillar:6"], [], [2, 2])
 		view._collect_all()
-		_advance(view, 1.10)
+		_advance(view, 1.10 + 2.0 * Model.BLAST_FREEZE_SECONDS)
 		var afterglows: Array = view.snapshot().word_reveal.entries
 		check(afterglows.size() == 2 and afterglows.all(_is_word_reveal_afterglow),
 			"The interrupted batch fixture retains only its two completed-collection firework tails")

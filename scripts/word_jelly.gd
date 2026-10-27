@@ -5,6 +5,7 @@ extends "res://scripts/jelly_match.gd"
 signal collected(event_id: String, word: Dictionary, amount: int, fragments: int, origin: Vector2)
 signal word_merged(word: Dictionary)
 signal batch_collection_started
+signal stage_clear_announced
 signal combo_coins_earned(event_id: String, origin: Vector2)
 
 const WordModel = preload("res://scripts/word_jelly_model.gd")
@@ -20,6 +21,7 @@ const PowerupEffects = preload("res://scripts/word_jelly_powerup_effects.gd")
 const ReadPanel = preload("res://scripts/jelly_read_panel.gd")
 const ComboHUD = preload("res://scripts/word_jelly_combo.gd")
 const BossView = preload("res://scripts/word_jelly_boss_view.gd")
+const LevelBadge = preload("res://scripts/word_jelly_level_badge.gd")
 const COLLECTION_GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const POWERUP_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const POWERUP_RAYS = preload("res://assets/chests/milestone/rays.png")
@@ -65,9 +67,6 @@ var _completion_elapsed: float = 0.0
 var _fusion_drag: Dictionary = {}
 var _fusion_tap: Dictionary = {}
 var _queued_collections: Dictionary = {}
-var _reveal_frame_end: float = -1.0
-var _reveal_frame_batch: int = -1
-var _reveal_frame_generation: int = -1
 var _error_notice_reserved: bool = false
 var _well_art := TextureRect.new()
 var _read_panel: ReadPanel
@@ -90,6 +89,7 @@ var _view_palette_ready: bool = false
 var _view_hints_ready: bool = false
 var _view_hint_source: int = -1
 var _boss_view: BossView
+var _merged_level_badge := LevelBadge.new()
 var _preview_drop_available: bool = false
 const READ_HOLD_SECONDS: float = 0.45
 const COLLECTION_CLICK_MAX_MS: int = 500
@@ -126,6 +126,14 @@ func _init() -> void:
 	game.drag_blocked.connect(_drag_blocked)
 	game.combo_changed.connect(_combo_changed)
 	game.boss_changed.connect(_sync_boss)
+	game.motion_advanced.connect(_advance_board_presentation)
+	game.challenge_time_awarded.connect(func(seconds: float) -> void:
+		_stage_banner.present_time_bonus(seconds)
+		audio_requested.emit("goal_complete"))
+	game.stage_clear_announced.connect(func() -> void:
+		_stage_banner.present_stage_clear(WordModel.STAGE_CLEAR_NOTICE_SECONDS)
+		_layout()
+		stage_clear_announced.emit())
 	game.fusion_started.connect(_powerup_fusion_started)
 	for tile: Tile in _preview_tiles:
 		remove_child(tile)
@@ -162,6 +170,9 @@ func _init() -> void:
 	_boss_view = BossView.new()
 	_boss_view.audio_requested.connect(func(cue: String) -> void: audio_requested.emit(cue))
 	add_child(_boss_view)
+	_merged_level_badge.z_index = 36
+	add_child(_merged_level_badge)
+	_merged_level_badge.hide()
 	collect_button = CollectButton.new()
 	collect_button.name = "WordJellyCollectAll"
 	collect_button.pressed.connect(_collect_all)
@@ -557,6 +568,20 @@ func _release(global_point: Vector2) -> void:
 		if not _fusion_drag.is_empty() or _source < 0:
 			cancel_input()
 			return
+	if _dragging and _tiles.has(_source):
+		_drag_point = get_global_transform().affine_inverse() * global_point
+		_tiles[_source].position = _drag_point - _drag_offset
+		_sync_positions()
+	if _dragging and _target >= 0 and not game.merging_result(_target).is_empty():
+		var source: int = _source
+		var target: int = _target
+		var body: WordTile = _feedback_body()
+		var from: Vector2 = body.position
+		var held: Dictionary = {"origin_a": body.get_rect().get_center(),
+			"origin_b": _tile_rect(game.merging_result(target)).get_center()}
+		cancel_input()
+		_merge(source, target, from, held, true)
+		return
 	_read_hold_id = -1
 	_read_hold_elapsed = 0.0
 	_tile_press_started_ms = -1
@@ -741,16 +766,12 @@ func _collection_started(fusion: Dictionary) -> void:
 	var merge_level: int = clampi(int(fusion.get("merge_level", fusion.a.get("merge_level", 1))), 1, WordModel.MAX_MERGE_LEVEL)
 	_word_reveal.set_reduced_motion(reduced_motion)
 	var batch: bool = bool(fusion.get("batch", false))
-	var initial_age: float = 0.0
-	if batch and _reveal_frame_end >= 0.0 and _reveal_frame_generation == _generation \
-		and int(fusion.get("batch_id", -1)) == _reveal_frame_batch:
-		initial_age = maxf(0.0, _reveal_frame_end - float(game.collection_batch_snapshot().elapsed))
 	var reveal_delay: float = float(fusion.pop_at)
-	_word_reveal.present(word, _picture(word), _theme.get("accent", Style.GOOD), batch, initial_age, merge_level, reveal_delay)
+	_word_reveal.present(word, _picture(word), _theme.get("accent", Style.GOOD), batch, 0.0, merge_level, reveal_delay)
 	_collection_effects.set_reduced_motion(reduced_motion)
 	_collection_effects.present(get_global_transform().affine_inverse() * origin,
 		merge_level,
-		_theme.get("accent", Style.GOOD), batch, initial_age, float(fusion.pop_at), str(fusion.attempt_id))
+		_theme.get("accent", Style.GOOD), batch, 0.0, float(fusion.pop_at), str(fusion.attempt_id))
 	# Batch pickups keep their pop rhythm without additional pronunciation.
 	if not bool(fusion.get("batch", false)):
 		word_requested.emit(word)
@@ -1140,6 +1161,12 @@ func _pose_powerup() -> void:
 	var state: Dictionary = game.powerup_snapshot()
 	var stamps: Array[Dictionary] = []
 	var unit: float = maxf(8.0, _pitch)
+	var impact: Dictionary = game.hit_stop_snapshot()
+	if impact.get("source", "") == "auto_collect":
+		var origin: Vector2 = _tile_rect(impact.origin).get_center()
+		var tint := Color.from_hsv(float(CollectionEffects.profile(int(impact.level)).hue), 0.62, 1.0)
+		_powerup_stamp(stamps, COLLECTION_GLOW, origin, Vector2.ONE * unit * 1.20, Color(tint, 0.65))
+		_powerup_stamp(stamps, POWERUP_RAYS, origin, Vector2.ONE * unit * 0.80, Color(tint.lightened(0.35), 0.72))
 	if bool(state.get("active", false)) and str(state.get("kind", "")) == "blast":
 		_pose_blast_marks(state, stamps, unit)
 	if bool(state.get("active", false)) and str(state.get("kind", "")) in ["auto_merge", "blast"]:
@@ -1317,6 +1344,16 @@ func _refresh_preview_read_controls() -> void:
 func _preview_pose(index: int) -> Dictionary:
 	return Motion.preview(game.spawn_elapsed, game.spawn_interval, index, reduced_motion or game.phase != "playing" or not _preview_drop_available)
 
+func _advance_board_presentation(delta: float) -> void:
+	if not _configured or not _can_play() or not is_visible_in_tree():
+		return
+	_presentation_elapsed += delta
+	_collection_effects.advance(delta)
+	_word_reveal.advance(delta)
+	if _completion_source >= 0:
+		_completion_elapsed += delta
+
+
 func _process(delta: float) -> void:
 	if _stage_banner.ready_pending():
 		if not _configured or _requested_pause or _layout_too_small or not is_visible_in_tree() \
@@ -1344,42 +1381,31 @@ func _process(delta: float) -> void:
 			_publish()
 		else:
 			super._process(delta)
+			if game.stage_ending() and game._stage_clear_announced and game._stage_clear_feedback <= WordModel.EPSILON:
+				_stage_banner.dismiss()
 		return
-	_reveal_frame_end = -1.0
 	_powerup_frame_end = -1.0
 	if _can_play() and delta <= 0.5:
-		var board_delta: float = game.presentation_delta(delta)
 		_combo_hud.advance(delta)
 		_practice_panel.advance(delta)
 		_stage_banner.advance(delta)
 		_practice_panel.queue_redraw()
-		_presentation_elapsed += board_delta
-		_collection_effects.advance(board_delta)
 		var powerup: Dictionary = game.powerup_snapshot()
 		if bool(powerup.active) and str(powerup.kind) == "fragments":
 			_powerup_frame_end = float(powerup.elapsed) + delta
 			_powerup_frame_receipt = str(powerup.receipt_id)
 			_powerup_frame_generation = _generation
-		_word_reveal.advance(board_delta)
-		if game.collection_batch_active():
-			# New cards keep their collection offsets even when a frame spans several beats.
-			_reveal_frame_end = float(game.collection_batch_snapshot().elapsed) + delta
-			_reveal_frame_batch = game._collection_batch_serial
-			_reveal_frame_generation = _generation
 		collect_button.advance(delta)
 		for button: PowerupButton in powerup_buttons.values():
 			button.advance(delta)
 		for arrival: Dictionary in _powerup_arrivals:
 			arrival.elapsed += delta
 		_powerup_arrivals = _powerup_arrivals.filter(func(item: Dictionary) -> bool: return float(item.elapsed) < 0.48)
-		if _completion_source >= 0:
-			_completion_elapsed += board_delta
 	var generation: int = _generation
 	var previous_rows: Dictionary = {}
 	for cell: Dictionary in game.cells:
 		previous_rows[int(cell.id)] = int(cell.row)
 	super._process(delta)
-	_reveal_frame_end = -1.0
 	_powerup_frame_end = -1.0
 	# Dispatch outside the model step, including on a full board or landing frame.
 	if generation == _generation and delta <= 0.5:
@@ -1423,8 +1449,7 @@ func _refresh_completion_hints() -> void:
 		var same_word: bool = str(prefix.get("jelly_kind", "")) == "merged" \
 			and str(target.get("jelly_kind", "")) == "merged" and id != source \
 			and not prefix.get("word", {}).is_empty() \
-			and str(prefix.word.id) == str(target.get("word", {}).get("id", "")) \
-			and WordModel._merged_upgrade_level(prefix, target) <= game.merged_level_limit
+			and str(prefix.word.id) == str(target.get("word", {}).get("id", ""))
 		var eligible: bool = not prefix.is_empty() and (not _fusion_drag.is_empty() or _settled(prefix)) and game.is_contactable(target) \
 			and (same_word or _can_merge_for_feedback(prefix, target))
 		_tiles[id].set_completion_hint(eligible, _completion_elapsed, reduced_motion)
@@ -1468,6 +1493,11 @@ func _drag_target() -> int:
 				break
 	if nearest >= 0:
 		return nearest
+	var merging: String = _fusion_at(_drag_point)
+	if not merging.is_empty():
+		for fusion: Dictionary in game.fusions:
+			if str(fusion.attempt_id) == merging and game.can_merge_into_result(_source, int(fusion.result.id)):
+				return int(fusion.result.id)
 	return _touching_target(outlines, source)
 
 func _feedback_source() -> Dictionary:
@@ -1573,6 +1603,12 @@ func _contact_state() -> Dictionary:
 		state.merge({"kind": "mismatch", "source": int(_rejection.a), "target": int(_rejection.b),
 			"strength": sin(clampf(float(_rejection.elapsed) / 0.34, 0.0, 1.0) * PI), "direction": _rejection.direction}, true)
 		return state
+	if _dragging and game.can_merge_into_result(_source, _target):
+		var source: WordTile = _feedback_body()
+		var result: Dictionary = game.merging_result(_target)
+		state.merge({"kind": "match", "source": _source, "target": _target, "strength": 0.45,
+			"direction": (_tile_rect(result).get_center() - source.get_rect().get_center()).normalized()}, true)
+		return state
 	if not _dragging or _source < 0 or _target < 0 or not _tiles.has(_target):
 		return state
 	var source: Dictionary = _feedback_source()
@@ -1596,7 +1632,8 @@ func _refresh_contact() -> void:
 	for event_id: String in _fusion_visuals:
 		var visual: Dictionary = _fusion_visuals[event_id]
 		var held: bool = event_id == str(_fusion_drag.get("event_id", ""))
-		var kind: String = str(state.kind) if held else "none"
+		var targeted: bool = _dragging and int(visual.merged.tile_id) == _target and state.kind == "match"
+		var kind: String = str(state.kind) if held or targeted else "none"
 		var acknowledged: bool = _can_play() and (event_id == str(_fusion_tap.get("event_id", "")) \
 			or _queued_collections.has(int(visual.merged.tile_id)))
 		if kind == "none" and acknowledged:
@@ -1893,6 +1930,8 @@ func _sync_chest_tap() -> void:
 		_header_chest_host.show()
 
 func _refresh_controls() -> void:
+	_merged_level_badge.visible = _configured and game.stage_run != null
+	_merged_level_badge.set_level(game.merged_level_limit)
 	if _layout_too_small and can_finish_round():
 		# Do not briefly hide hosted Finish through the base gameplay guard:
 		# hiding it cancels the very header pull that remains available here.
@@ -1950,7 +1989,7 @@ func _reward_pickup_ready() -> bool:
 func danger_feedback() -> Dictionary:
 	var elapsed: float = float(game.full_elapsed)
 	var source: String = "full" if elapsed >= 0.0 else ""
-	if _configured and game.stage_run != null and game.stage_run.kind == "main" \
+	if _configured and game.stage_run != null \
 		and game.stage_run.outcome.is_empty() and game.stage_run.remaining <= STAGE_WARNING_SECONDS:
 		var deadline_elapsed: float = STAGE_WARNING_SECONDS - game.stage_run.remaining
 		if deadline_elapsed > elapsed:
@@ -1986,7 +2025,7 @@ func _layout() -> void:
 	var notice_y: float = top_hud_height
 	var stage_y: float = top_hud_height
 	var stage_in_rail: bool = size.x > size.y * 1.4 and size.y * s <= 400.0
-	var timed_stage: bool = _stage_banner != null and _stage_banner._state.get("kind") == "main"
+	var timed_stage: bool = _stage_banner != null and _stage_banner._state.get("kind") in ["main", "challenge"]
 	if _stage_banner != null and _stage_banner.visible and not stage_in_rail:
 		top_hud_height += (50.0 if timed_stage else 34.0) / s
 		notice_y = top_hud_height
@@ -2122,9 +2161,25 @@ func _layout() -> void:
 		else:
 			combo_bounds = Rect2(Vector2(_practice_panel.position.x, _board.end.y - 44.0 / s),
 				Vector2(minf(196.0 / s, _practice_panel.size.x), 44.0 / s))
+	var level_top: float = content_top + 54.0 / s if stage_in_rail else stage_y
+	var level_bounds := Rect2(Vector2(hud_x, level_top), Vector2(hud_width, 28.0 / s))
+	if not side_hud:
+		level_bounds = Rect2(Vector2(collect_button.get_rect().end.x + 6.0 / s,
+			collect_button.position.y + (collect_height - 28.0 / s) * 0.5), Vector2(100, 28) / s)
+	if _merged_level_badge.visible and combo_bounds.intersects(level_bounds):
+		if side_hud:
+			combo_bounds.position.y = level_bounds.end.y + 6.0 / s
+		else:
+			combo_bounds.position.x = level_bounds.end.x + 6.0 / s
+			combo_bounds.size.x = maxf(0.0, hud_x + footer_width - combo_bounds.position.x)
+	_merged_level_badge.layout_badge(level_bounds, s)
 	_combo_hud.configure(combo_bounds, s, reduced_motion)
 	_boss_view.size = size
 	var boss_top: float = content_top + (54.0 / s if stage_in_rail and _stage_banner.visible else 0.0)
+	if _merged_level_badge.visible and side_hud:
+		boss_top = maxf(boss_top, level_bounds.end.y + 6.0 / s)
+		if combo_bounds.position.x >= hud_x:
+			boss_top = maxf(boss_top, combo_bounds.end.y + 6.0 / s)
 	var boss_width: float = minf(maxf(1.0, size.x - hud_x - edge), maxf(hud_width, minf(240.0 / s, _board.size.y * 0.45)))
 	_boss_view.layout_battle(Rect2(Vector2(hud_x, boss_top),
 		Vector2(boss_width, maxf(1.0, collect_button.position.y - boss_top - 8.0 / s))), _board, s, _preview_rect)
@@ -2212,6 +2267,7 @@ func snapshot() -> Dictionary:
 	state["collection_effects"] = _collection_effects.snapshot() if _collection_effects != null else {"visible": false}
 	state["read_detail"] = _read_panel.snapshot() if _read_panel != null else {"visible": false}
 	state["layout_paused"] = _layout_too_small
+	state["merged_level_indicator"] = _merged_level_badge.snapshot()
 	state["cell_pitch_pixels"] = _pitch * Style.ui_scale(self)
 	state["collect_button"] = collect_button.snapshot() if collect_button != null else {}
 	state["action_divider"] = {"rect": _rect(_action_divider.get_global_rect()), "visible": _action_divider.is_visible_in_tree()}

@@ -45,7 +45,7 @@ is `75 + 15 * (chapter - 1)` coins. For one, two or three stars, the total of th
 base and the current stage's already-quoted chest is weighted by **1x, 1.5x or 2x**,
 rounding upward. The chest is still paid through its original receipt; the clear
 receipt pays only the difference. Already credited combo and rare-pickup coins
-are not multiplied again. Failures and untimed challenges earn no clear bonus.
+are not multiplied again. Failures and timed Challenges earn no clear bonus.
 
 For example, stage 1 with no chest pays 75, 113 or 150 clear coins. A 75-coin
 chest plus a three-star stage-1 clear totals 300 settlement coins: 75 from the

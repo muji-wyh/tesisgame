@@ -83,7 +83,7 @@ func charge_merge(automatic: bool, complete: bool) -> void:
 		charge = mini(20, charge + (3 if complete else 1))
 
 
-func collect_hit(receipt: String, level: int, combo: int, origin: Dictionary) -> bool:
+func collect_hit(receipt: String, level: int, combo: int, origin: Dictionary, wait_for_goals: bool = false) -> bool:
 	error = ""
 	if not fighting() or _receipts.has(receipt):
 		return false
@@ -103,7 +103,12 @@ func collect_hit(receipt: String, level: int, combo: int, origin: Dictionary) ->
 		health = maxi(0, health - damage)
 		_event("player_hit", {"damage": damage, "level": level, "origin": origin})
 		if health == 0:
-			begin_ending("defeated")
+			if wait_for_goals:
+				phase = "exhausted"
+				_clear_attacks()
+				_event("exhausted")
+			else:
+				begin_ending("defeated")
 	return true
 
 
@@ -147,6 +152,14 @@ func begin_ending(result: String) -> void:
 	outcome = "ambushed" if bool(definition.get("intro", false)) and result == "cleared" else result
 	phase = "ending"
 	ending_elapsed = 0.0
+	_clear_attacks()
+	_event("victory" if outcome == "defeated" else "taunt", {
+		"text": definition.escape if outcome in ["ambushed", "defeated"] else "The compass stays with me! Try my next trick!",
+		"reply": definition.reply if outcome in ["ambushed", "defeated"] else "We'll be back. Every word brings us closer.",
+		"retreat": definition.retreat})
+
+
+func _clear_attacks() -> void:
 	_projectiles.clear()
 	_specials.clear()
 	for id: int in _statuses:
@@ -156,10 +169,6 @@ func begin_ending(result: String) -> void:
 	broken_remaining = 0.0
 	clones = 0
 	ward = 0
-	_event("victory" if outcome == "defeated" else "taunt", {
-		"text": definition.escape if outcome in ["ambushed", "defeated"] else "The compass stays with me! Try my next trick!",
-		"reply": definition.reply if outcome in ["ambushed", "defeated"] else "We'll be back. Every word brings us closer.",
-		"retreat": definition.retreat})
 
 
 func presentation_ready() -> bool:

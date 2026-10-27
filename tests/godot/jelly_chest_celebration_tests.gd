@@ -39,6 +39,7 @@ func _run() -> void:
 	view.confetti_requested.connect(func() -> void: reveals.append(view.snapshot()))
 	_check_timeline(view)
 	_check_queue(view)
+	await _capture_multi_turn(view)
 	_check_reentry(view)
 	_check_reduced_motion(view)
 	_check_layouts(view)
@@ -59,6 +60,31 @@ func _begin(view, previous: int = 0, tier: int = 1, reduced: bool = false) -> vo
 	reveals.clear()
 	view.reduced_motion = reduced
 	view.enqueue(previous, tier, BEFORE, AFTER)
+
+
+func _capture_multi_turn(view) -> void:
+	if not OS.get_cmdline_user_args().has("--capture-multi") or DisplayServer.get_name() == "headless":
+		return
+	_begin(view, 1, 2)
+	view.enqueue(2, 3, BEFORE, AFTER)
+	view.enqueue(3, 4, BEFORE, AFTER)
+	view.advance(Celebration.ARRIVAL_SECONDS + Flight.TURN_START)
+	var sheet := Image.create(1500, 810, false, Image.FORMAT_RGBA8)
+	for index in range(12):
+		view.advance(Celebration.TURN_SECONDS * 0.25)
+		for frame in range(4):
+			await process_frame
+		await RenderingServer.frame_post_draw
+		var pose: Dictionary = view._motion(view._elapsed - Celebration.ARRIVAL_SECONDS)
+		for model in view._models._pool.values():
+			check(absf(angle_difference(float(model.snapshot().model_rotation.y), float(pose.yaw))) < 0.0001,
+				"The actual acquired 3D model follows the continuous rotation, not only a diagnostic angle")
+		var image: Image = root.get_texture().get_image()
+		image.resize(375, 270, Image.INTERPOLATE_LANCZOS)
+		sheet.blit_rect(image, Rect2i(0, 0, 375, 270), Vector2i((index % 4) * 375, (index / 4) * 270))
+	DirAccess.make_dir_recursive_absolute("res://build/qa/jelly-followup")
+	check(sheet.save_png("res://build/qa/jelly-followup/chest-three-turns.png") == OK,
+		"Capture the actual 3D chest after each half turn and every full-turn level-up")
 
 
 func _check_timeline(view) -> void:
@@ -108,26 +134,26 @@ func _check_queue(view) -> void:
 	view.enqueue(1, 2, BEFORE, AFTER)
 	check(view.snapshot().queued == 2 and view.snapshot().tier == 1,
 		"A later upgrade queues behind synthesis without replacing the earned first chest")
-	var first_hold: float = Celebration.ARRIVAL_SECONDS + Flight.RETURN_START
+	var first_hold: float = Celebration.ARRIVAL_SECONDS + Flight.TURN_END
 	view.advance(first_hold - 0.001)
 	var peak: Dictionary = view.snapshot().motion
 	view.advance(0.002)
 	check(view.snapshot().queued == 1 and view.snapshot().tier == 2 and view.snapshot().kind == "upgrade"
-		and is_equal_approx(float(view.snapshot().elapsed), Celebration.ARRIVAL_SECONDS + Flight.TOP_SECONDS + 0.001)
+		and is_equal_approx(float(view.snapshot().elapsed), Celebration.ARRIVAL_SECONDS + Flight.TURN_START + 0.001)
 		and Vector2(view.snapshot().motion.center[0], view.snapshot().motion.center[1]).is_equal_approx(
 			Vector2(peak.center[0], peak.center[1])) and is_equal_approx(float(view.snapshot().motion.scale), float(peak.scale)),
 		"The next upgrade continues at the same peak without returning, departing again or jumping in size")
-	check(heard.size() == 3 and heard[0].cue == "assemble" and heard[1].cue == "reward"
-		and heard[2].cue == "assemble", "Queue order preserves each chest's own sound sequence")
+	check(heard.size() == 2 and heard[0].cue == "assemble" and heard[1].cue == "reward",
+		"One continuous spin assembles once and upgrades at each completed full revolution")
 	view.advance(Celebration.PERFORMANCE_SECONDS)
-	check(not view.is_active() and heard.size() == 4 and heard[3].cue == "reward"
+	check(not view.is_active() and heard.size() == 3 and heard[2].cue == "reward"
 		and reveals.size() == 2 and reveals[0].tier == 1 and reveals[1].tier == 2,
 		"Each queued milestone completes exactly once")
 	_begin(view, 0, 1)
 	view.enqueue(1, 2, BEFORE, AFTER)
 	view.enqueue(2, 3, BEFORE, AFTER)
 	view.advance(Celebration.ARRIVAL_SECONDS, true)
-	view.advance(Flight.RETURN_START, false)
+	view.advance(Flight.TURN_END, false)
 	check(view.snapshot().tier == 1 and view.visible and view.snapshot().motion.phase == "celebrate",
 		"A not-yet-arrived next pickup keeps the same chest at the peak instead of retracting")
 	view.advance(0.001, true)
@@ -138,6 +164,21 @@ func _check_queue(view) -> void:
 	view.enqueue(3, 3, BEFORE, AFTER)
 	view.enqueue(3, 2, BEFORE, AFTER)
 	check(not view.is_active(), "Repeated or regressive tier transitions cannot start a presentation")
+	_begin(view, 1, 2)
+	view.enqueue(2, 3, BEFORE, AFTER)
+	view.enqueue(3, 4, BEFORE, AFTER)
+	view.advance(Celebration.ARRIVAL_SECONDS + Flight.TURN_START)
+	for turn in range(1, 4):
+		view.advance(Celebration.TURN_SECONDS * 0.5)
+		check(is_equal_approx(float(view.snapshot().motion.yaw), (turn - 0.5) * TAU)
+			and reveals.size() == turn - 1, "The chest keeps rotating through the middle of each turn without an early level-up")
+		view.advance(Celebration.TURN_SECONDS * 0.5)
+		check(is_equal_approx(float(view.snapshot().motion.yaw), turn * TAU) and reveals.size() == turn
+			and reveals.back().tier == turn + 1 and view.visible,
+			"Each uninterrupted full circle emits exactly one earned level-up and keeps the same chest on screen")
+	view.advance(Celebration.PERFORMANCE_SECONDS - Flight.TURN_END + 0.01)
+	check(not view.is_active() and heard.filter(func(item: Dictionary) -> bool: return item.cue == "assemble").size() == 1
+		and view.snapshot().completed_turns == 3, "The multi-level chest arrives once, turns three continuous circles and returns only once")
 
 
 func _check_reentry(view) -> void:

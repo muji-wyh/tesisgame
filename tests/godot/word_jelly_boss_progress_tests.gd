@@ -83,6 +83,21 @@ func _run() -> void:
 	invalid.boss_id = 2
 	check(not restored.queue_result("growth", "boss:wrong-identity", invalid),
 		"A stage-nine result cannot claim a different Boss unlock")
+	check(restored.challenge_best_stage("growth") == 0,
+		"Reading a legacy campaign does not invent a historical Challenge score")
+	check(restored.record_challenge_stage("growth", 5) and restored.record_challenge_stage("growth", 2)
+		and restored.challenge_best_stage("growth") == 5 and restored.highest_cleared("growth") == 9
+		and restored.boss_victories("growth") == [1],
+		"A best-stage record only increases and cannot change numbered clears or Boss-earned levels")
+	host.writable = false
+	check(not restored.record_challenge_stage("growth", 7) and restored.challenge_best_stage("growth") == 5,
+		"An unsaved score cannot pretend the new best was persisted")
+	host.writable = true
+	check(restored.record_challenge_stage("growth", 7), "The original new best can retry after storage recovers")
+	var score_reload := Store.new("user://boss-progress.cfg", host)
+	check(score_reload.load_state() and score_reload.challenge_best_stage("growth") == 7
+		and score_reload.challenge_best_stage("professional:retail:module01") == 0,
+		"Best stages survive reload and remain isolated by learning route")
 	for frontier in range(1, 100):
 		var markers: Array[int] = BossCatalog.map_markers(frontier)
 		var future: int = 0

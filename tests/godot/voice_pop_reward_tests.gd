@@ -238,9 +238,9 @@ func _test_live_queue_and_expiry() -> void:
 	check(view.game.fragment_count == 9 and view.game.chest_tier == 2
 		and int(view.snapshot().reward_presentation.queued) == 2 and view._listening,
 		"Continuous recognized words can queue the next chest upgrade during its unlock animation")
-	view.advance_reward_presentation(MILESTONE_REVEAL)
+	view.advance_reward_presentation(ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.Flight.TURN_END + 0.01)
 	view._advance_game(0.1)
-	check(view.game.phase == "running" and view.snapshot().reward_presentation.revealed,
+	check(view.game.phase == "running" and view._displayed_chest_tier == 1,
 		"Targets and the live clock continue under the queued milestone confetti")
 	var finished: Array[Dictionary] = []
 	view.round_finished.connect(func(result: Dictionary) -> void: finished.append(result))
@@ -307,7 +307,7 @@ func _test_continuous_upgrade_pickup_gate() -> void:
 	view.set_listening(true, true, "Listening.")
 	for index in range(9):
 		strike(view, true, "continuous-pickup-%d" % index)
-	view._reward_presentation.advance(ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.Flight.RETURN_START - 0.001)
+	view._reward_presentation.advance(ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.Flight.TURN_END - 0.001)
 	view.advance_reward_presentation(0.01)
 	check(view.snapshot().reward_presentation.tier == 1 and view.snapshot().reward_presentation.visible,
 		"The continuous Voice Pop chest stays at the peak until the next tier's real pickup arrives")

@@ -2033,8 +2033,12 @@ func _test_level_collection_anticipation() -> void:
 		batch.step(0.079)
 		check(batch.cleared_pairs == 0, "Each batch level remains reserved until 120 ms")
 		batch.step(0.001)
+		if level >= 4:
+			check(batch.hit_stop_snapshot().active and batch.cleared_pairs == 0,
+				"A high-level automatic release adds its real impact hold instead of silently omitting it")
+			batch.step(Model.BLAST_FREEZE_SECONDS)
 		check(batch.cleared_pairs == 1 and batch.fragment_count == 3 and not batch.collection_batch_active(),
-			"Each batch level completes on the requested 120 ms beat")
+			"Each batch level keeps its 120 ms collection motion plus the high-level 100 ms hold")
 		if level < 4:
 			continue
 		var model = _model([_word("cat")])

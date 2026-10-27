@@ -6,6 +6,7 @@ const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const RAYS = preload("res://assets/chests/milestone/rays.png")
 const STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
+const CLOCK = preload("res://assets/images/ui/jelly-goals/clock.webp")
 const DURATION: float = 1.8
 const READY_SECONDS: float = 0.82
 const STAR_LOSS_SECONDS: float = 0.60
@@ -18,7 +19,10 @@ var _card := Control.new()
 var _badge := Rect2()
 var _scale: float = 1.0
 var _elapsed: float = DURATION
+var _card_duration: float = DURATION
 var _entry: bool = false
+var _time_bonus_remaining: float = 0.0
+var _time_bonus: float = 0.0
 var _star_loss_elapsed: Array[float] = [STAR_LOSS_SECONDS, STAR_LOSS_SECONDS, STAR_LOSS_SECONDS]
 
 
@@ -32,6 +36,7 @@ func _init() -> void:
 	_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_label)
 	_card.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_card.z_index = 30
 	_card.draw.connect(_draw_card)
 	add_child(_card)
 	_title = Style.label("", 28)
@@ -64,16 +69,17 @@ func set_stage(state: Dictionary, celebrate: bool = false) -> void:
 	set("accessibility_name", _label.text)
 	if celebrate:
 		_elapsed = 0.0
+		_card_duration = DURATION
 		_entry = not state.get("complete", false) and state.get("kind", "") in ["main", "challenge"]
 		if state.get("kind") == "challenge":
 			_title.text = "Challenge"
-			_detail.text = "No timer  ·  Wave %d" % int(state.get("pressure", {}).get("level", 1))
+			_detail.text = "Goals add time · Max 90s"
 		else:
 			_title.text = "All words mastered!" if state.get("complete", false) else "Stage %d" % state.number
 			_detail.text = "Beautiful work!" if state.get("complete", false) else "%d word goals" % state.total \
 				if state.get("kind") == "main" else "%d new words to master" % state.total
 			if state.get("objective", "") == "boss":
-				_detail.text = "Stage %d" % int(state.number)
+				_detail.text = "Word goals + Boss"
 	_refresh_motion()
 	queue_redraw()
 
@@ -81,7 +87,9 @@ func set_stage(state: Dictionary, celebrate: bool = false) -> void:
 func reset() -> void:
 	_state.clear()
 	_elapsed = DURATION
+	_card_duration = DURATION
 	_entry = false
+	_time_bonus_remaining = 0.0
 	_star_loss_elapsed.fill(STAR_LOSS_SECONDS)
 	hide()
 	_card.hide()
@@ -104,11 +112,29 @@ func ready_pending() -> bool:
 func advance(delta: float) -> void:
 	if not is_finite(delta) or delta <= 0.0:
 		return
+	_time_bonus_remaining = maxf(0.0, _time_bonus_remaining - delta)
 	for index in range(3):
 		_star_loss_elapsed[index] = minf(STAR_LOSS_SECONDS, _star_loss_elapsed[index] + delta)
-	if _elapsed < DURATION:
-		_elapsed = minf(DURATION, _elapsed + delta)
+	if _elapsed < _card_duration:
+		_elapsed = minf(_card_duration, _elapsed + delta)
 		_refresh_motion()
+	queue_redraw()
+
+
+func present_time_bonus(seconds: float) -> void:
+	_time_bonus = seconds
+	_time_bonus_remaining = 1.0
+	queue_redraw()
+
+
+func present_stage_clear(seconds: float) -> void:
+	_entry = false
+	_elapsed = 0.0
+	_card_duration = seconds
+	_title.text = "Stage clear!"
+	_detail.text = "Wonderful work!"
+	_title.add_theme_color_override("font_color", Style.GOOD)
+	_refresh_motion()
 	queue_redraw()
 
 
@@ -142,10 +168,11 @@ func snapshot() -> Dictionary:
 	var state: Dictionary = _state.duplicate(true)
 	state["visible"] = is_visible_in_tree()
 	state["label"] = _label.text
-	state["celebrating"] = visible and _elapsed < DURATION
+	state["celebrating"] = visible and _elapsed < _card_duration
 	state["elapsed"] = _elapsed
 	state["ready_pending"] = ready_pending()
 	state["entry_phase"] = "ready" if ready_pending() else "go" if entry_active() else "done"
+	state["time_bonus"] = {"active": _time_bonus_remaining > 0.0, "seconds": _time_bonus}
 	state["timer_ratio"] = _timer_ratio()
 	state["rating_segments"] = rating_geometry(_rating_bounds(), _scale)
 	state["star_loss_active"] = rating_feedback_active()
@@ -206,7 +233,7 @@ func draw_rating(canvas: CanvasItem, bounds: Rect2, ui_scale: float, compact: bo
 
 
 func _timer_ratio() -> float:
-	if _state.get("kind") != "main":
+	if _state.get("kind") not in ["main", "challenge"]:
 		return 0.0
 	var total: float = maxf(0.001, float(_state.get("seconds_total", 0.0)))
 	return clampf(float(_state.get("seconds_remaining", 0.0)) / total, 0.0, 1.0)
@@ -219,7 +246,10 @@ func _update_label() -> void:
 	_label.size = _badge.size
 	var separator: String = "\n" if _badge.size.y * _scale >= 40.0 else "  ·  "
 	if _state.get("kind") == "challenge":
-		_label.text = "Challenge%sWave %d" % [separator, int(_state.get("pressure", {}).get("level", 1))]
+		var seconds: int = maxi(0, ceili(float(_state.get("seconds_remaining", 0.0))))
+		_label.text = "Stage %d · %d:%02d" % [int(_state.get("challenge_stage", 1)), seconds / 60, seconds % 60]
+		_label.position = _badge.position + Vector2(8, 0) / _scale
+		_label.size = Vector2(maxf(1.0, _badge.size.x - 16.0 / _scale), 21.0 / _scale)
 		return
 	if _state.get("kind") == "main":
 		var seconds: int = maxi(0, ceili(float(_state.get("seconds_remaining", 0.0))))
@@ -234,9 +264,9 @@ func _refresh_motion() -> void:
 	if entry_active():
 		_title.text = "Ready?" if ready_pending() else "Go!"
 		_title.add_theme_color_override("font_color", Style.INK if ready_pending() else Style.GOOD)
-	_card.visible = _elapsed < DURATION and visible
+	_card.visible = _elapsed < _card_duration and visible
 	var enter: float = clampf(_elapsed / 0.25, 0.0, 1.0)
-	var leave: float = clampf((DURATION - _elapsed) / 0.32, 0.0, 1.0)
+	var leave: float = clampf((_card_duration - _elapsed) / 0.32, 0.0, 1.0)
 	_card.modulate.a = minf(enter, leave)
 	var beat: float = clampf((_elapsed - READY_SECONDS) / 0.24, 0.0, 1.0)
 	_card.scale = Vector2.ONE if reduced_motion else Vector2.ONE * \
@@ -248,6 +278,19 @@ func _draw() -> void:
 	if _state.is_empty():
 		return
 	draw_style_box(Style.box(Color("eef9ed"), Color("b8d6bf"), 12, 1), _badge)
+	if _state.get("kind") == "challenge":
+		var track := Rect2(_badge.position + Vector2(8, 27) / _scale,
+			Vector2((_badge.size.x - 16.0 / _scale) * _timer_ratio(), 7.0 / _scale))
+		if _label.visible:
+			draw_style_box(Style.box(Style.GOOD, Color.TRANSPARENT, 4, 0), track)
+		if _time_bonus_remaining > 0.0:
+			var at := Vector2(_badge.end.x - 64.0 / _scale,
+				_badge.position.y + (20.0 + 10.0 * _time_bonus_remaining) / _scale)
+			draw_texture_rect(CLOCK, Rect2(at, Vector2.ONE * 18.0 / _scale), false)
+			draw_string(Style.HEADING_FONT, at + Vector2(20, 15) / _scale,
+				"+" + String.num(_time_bonus, 1).trim_suffix(".0") + "s",
+				HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(15.0 / _scale), Style.GOOD)
+		return
 	if _state.get("kind") == "main":
 		if _label.visible:
 			draw_rating(self, _rating_bounds(), _scale)

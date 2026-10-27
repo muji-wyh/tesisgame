@@ -30,6 +30,10 @@ var _added_seconds: int = 0
 var _final_stars: int = 0
 var _collection_receipts: Dictionary = {}
 var _time_receipts: Dictionary = {}
+var _challenge_added_seconds: float = 0.0
+var challenge_stage: int = 1
+var _challenge_goals: Array[Dictionary] = []
+var _pending_time_bonus: float = 0.0
 
 
 func configure(plan: Dictionary) -> bool:
@@ -49,6 +53,8 @@ func configure(plan: Dictionary) -> bool:
 	initial_seconds = float(recipe.seconds)
 	remaining = initial_seconds
 	_configured = true
+	if kind == "challenge":
+		_append_challenge_stage()
 	return true
 
 
@@ -66,10 +72,32 @@ func record_collection(event_id: String, word_id: String) -> bool:
 		return _fail("This attempt's collection receipt limit has been reached. End the attempt before collecting more.")
 	_collection_receipts[event_id] = word_id
 	collection_count += 1
+	if kind == "challenge" and not _challenge_goals.is_empty():
+		for goal: Dictionary in _challenge_goals:
+			if int(goal.stage) != challenge_stage or bool(goal.mastered) or str(goal.word_id) != word_id:
+				continue
+			goal.current = mini(int(goal.required), int(goal.current) + 1)
+			if int(goal.current) == int(goal.required):
+				goal.mastered = true
+				_pending_time_bonus += grant_challenge_time(str(goal.id), 10)
+				if _challenge_goals.all(func(item: Dictionary) -> bool:
+					return int(item.stage) != challenge_stage or bool(item.mastered)):
+					challenge_stage += 1
+					_append_challenge_stage()
+			break
 	if kind == "main" and goals.has(word_id):
 		current[word_id] = mini(int(goals[word_id]), int(current[word_id]) + 1)
-		if _goals_met() and not boss_objective:
+		if _goals_met() and (not boss_objective or boss_defeated):
 			decide("cleared")
+	return true
+
+
+func record_boss_defeat() -> bool:
+	if not _active() or not boss_objective or boss_defeated:
+		return false
+	boss_defeated = true
+	if _goals_met():
+		decide("cleared")
 	return true
 
 
@@ -84,15 +112,14 @@ func advance(delta: float) -> void:
 	if not outcome.is_empty():
 		return
 	elapsed += delta
-	if kind == "main":
-		remaining = maxf(0.0, initial_seconds + float(_added_seconds) - elapsed)
+	remaining = maxf(0.0, initial_seconds + float(_added_seconds) + _challenge_added_seconds - elapsed)
 
 
 func check_deadline() -> bool:
 	error = ""
 	if not _configured:
 		return _fail("Configure an attempt before checking its deadline.")
-	if not outcome.is_empty() or kind != "main" or remaining > 0.0:
+	if not outcome.is_empty() or remaining > 0.0:
 		return false
 	return decide("timeout")
 
@@ -103,10 +130,8 @@ func decide(reason: String) -> bool:
 		return _fail("Choose a supported attempt outcome.")
 	if not _active():
 		return false
-	if reason == "cleared" and (kind != "main" or (not boss_defeated if boss_objective else not _goals_met())):
-		return _fail("Every main-stage collection goal must be committed before clearing the attempt.")
-	if reason == "timeout" and kind != "main":
-		return _fail("An untimed challenge has no timeout outcome.")
+	if reason == "cleared" and (kind != "main" or not _goals_met() or boss_objective and not boss_defeated):
+		return _fail("Every main-stage word goal and its Boss objective must be completed before clearing.")
 	_final_stars = stars_now() if reason == "cleared" else 0
 	outcome = reason
 	return true
@@ -118,12 +143,47 @@ func can_add_time(seconds: int = 30) -> bool:
 		and _added_seconds <= MAX_ADDED_SECONDS - seconds
 
 
+func grant_challenge_time(receipt_id: String, seconds: int) -> float:
+	error = ""
+	if not _active():
+		return 0.0
+	if kind != "challenge" or not _valid_id(receipt_id) or seconds <= 0:
+		_fail("A Challenge goal needs a valid receipt and positive time reward.")
+		return 0.0
+	if _time_receipts.has(receipt_id):
+		return 0.0
+	var granted: float = minf(float(seconds), Catalog.CHALLENGE_SECONDS - remaining)
+	_time_receipts[receipt_id] = granted
+	_challenge_added_seconds += granted
+	remaining = minf(Catalog.CHALLENGE_SECONDS, remaining + granted)
+	return granted
+
+
+func _append_challenge_stage() -> void:
+	var available: Array[Dictionary] = words_for_pressure()
+	var variety_stages: int = Catalog.MAX_CHALLENGE_WORDS - 2
+	var quota: int = 1 + floori(float(mini(challenge_stage - 1, variety_stages - 1)) / 2.0) \
+		+ maxi(0, challenge_stage - variety_stages)
+	for word: Dictionary in available:
+		_challenge_goals.append({"id": "challenge:%d:%s" % [challenge_stage, word.id], "stage": challenge_stage,
+			"word_id": str(word.id), "text": str(word.text), "image": str(word.get("image", "")), "current": 0,
+			"required": quota, "mastered": false})
+	while _challenge_goals.size() > 32:
+		_challenge_goals.pop_front()
+
+
+func take_time_bonus() -> float:
+	var bonus: float = _pending_time_bonus
+	_pending_time_bonus = 0.0
+	return bonus
+
+
 func add_time(receipt_id: String, seconds: int = 30) -> bool:
 	error = ""
 	if not _active():
 		return false
 	if kind != "main":
-		return _fail("An untimed challenge cannot use an extra-time purchase.")
+		return _fail("Challenge time is earned by completing goals, not by a paid extension.")
 	if not _valid_id(receipt_id) or seconds <= 0 or seconds > MAX_ADDED_SECONDS:
 		return _fail("An extra-time purchase needs a valid receipt and a positive bounded duration.")
 	if _time_receipts.has(receipt_id):
@@ -153,8 +213,7 @@ func stars_now() -> int:
 func challenge_pressure() -> Dictionary:
 	if not _configured or kind != "challenge":
 		return {}
-	@warning_ignore("integer_division")
-	var level: int = 1 + collection_count / 10
+	var level: int = challenge_stage
 	return {"level": level, "word_limit": mini(3 + level - 1, Catalog.MAX_CHALLENGE_WORDS),
 		"spawn_interval": maxf(3.0, 20.0 * pow(0.93, level - 1)),
 		"fall_speed_scale": minf(2.2, 1.0 + 0.04 * float(level - 1))}
@@ -187,15 +246,24 @@ func snapshot() -> Dictionary:
 			remaining_ids.append(id)
 		practice.append({"id": id, "text": str(word.text), "image": str(word.get("image", "")),
 			"current": int(current[id]), "required": int(goals[id]), "mastered": complete})
+	if kind == "challenge":
+		practice = _challenge_goals.duplicate(true)
+		mastered = practice.filter(func(goal: Dictionary) -> bool: return bool(goal.mastered)).size()
+		for goal: Dictionary in practice:
+			if not goal.mastered:
+				remaining_ids.append(str(goal.id))
 	return {"kind": kind, "number": number, "chapter": _chapter, "title": _title,
 		"profile": _profile, "outcome": outcome, "stars_now": stars_now(),
 		"stars": _final_stars if outcome == "cleared" else 0, "time_elapsed": elapsed,
-		"seconds_remaining": remaining, "seconds_total": initial_seconds, "seconds_added": _added_seconds,
+		"seconds_remaining": remaining, "seconds_total": initial_seconds,
+		"seconds_added": float(_added_seconds) + _challenge_added_seconds if kind == "challenge" else _added_seconds,
 		"goals": goals.duplicate(true), "current": current.duplicate(true), "practice": practice,
 		"word_ids": ids, "remaining_ids": remaining_ids, "total": goals.size(), "mastered": mastered,
 		"remaining": remaining_ids.size(), "complete": outcome == "cleared",
 		"collection_count": collection_count, "pressure": challenge_pressure(),
-		"objective": "boss" if boss_objective else "words", "boss_defeated": boss_defeated}
+		"challenge_stage": challenge_stage if kind == "challenge" else 0,
+		"objective": "boss" if boss_objective else "words", "boss_defeated": boss_defeated,
+		"word_goals_complete": _goals_met()}
 
 
 func _reset() -> void:
@@ -220,6 +288,10 @@ func _reset() -> void:
 	_final_stars = 0
 	_collection_receipts.clear()
 	_time_receipts.clear()
+	_challenge_added_seconds = 0.0
+	challenge_stage = 1
+	_challenge_goals.clear()
+	_pending_time_bonus = 0.0
 
 
 func _active() -> bool:

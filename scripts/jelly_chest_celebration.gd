@@ -13,6 +13,7 @@ const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const ARRIVAL_SECONDS: float = 0.65
 const REVEAL_SECONDS: float = Flight.REVEAL_SECONDS
 const PERFORMANCE_SECONDS: float = Flight.PERFORMANCE_SECONDS
+const TURN_SECONDS: float = Flight.TURN_END - Flight.TURN_START
 
 var reduced_motion: bool = false:
 	set(value):
@@ -30,6 +31,10 @@ var _models: RewardModel
 var _model_sample: Dictionary = {}
 var _model_bounds := Rect2()
 var _journey_peak: float = 176.0
+var _continuous_turns: bool = false
+var _completed_turns: int = 0
+var _reveal_effect_elapsed: float = 10.0
+var _reveal_effect_tier: int = 0
 var _flight_layer := CanvasLayer.new()
 var _flight_surface := Node2D.new()
 
@@ -64,8 +69,13 @@ func enqueue(previous_tier: int, tier: int, before: Texture2D, after: Texture2D)
 		_started = false
 		_revealed = false
 		_journey_peak = 216.0 if previous_tier > 0 else 176.0
+		_continuous_turns = false
+		_completed_turns = 0
+		_reveal_effect_elapsed = 10.0
 		_prepare_models()
 		_sync()
+	elif _elapsed <= ARRIVAL_SECONDS + Flight.RETURN_START:
+		_continuous_turns = true
 
 
 func is_active() -> bool:
@@ -84,6 +94,9 @@ func clear() -> void:
 	_started = false
 	_revealed = false
 	_paused = false
+	_continuous_turns = false
+	_completed_turns = 0
+	_reveal_effect_elapsed = 10.0
 	_model_sample.clear()
 	_model_bounds = Rect2()
 	_models.clear()
@@ -98,10 +111,13 @@ func advance(delta: float, pickup_ready: bool = true) -> float:
 	var remaining: float = delta
 	while is_active() and remaining > 0.0 and generation == _serial:
 		var chained: bool = _events.size() > 1 and _elapsed <= ARRIVAL_SECONDS + Flight.RETURN_START
-		var finish: float = ARRIVAL_SECONDS + (Flight.RETURN_START if chained else PERFORMANCE_SECONDS)
-		var boundary: float = ARRIVAL_SECONDS if not _started else ARRIVAL_SECONDS + REVEAL_SECONDS if not _revealed else finish
+		var reveal_at: float = ARRIVAL_SECONDS + (Flight.TURN_END if _continuous_turns else REVEAL_SECONDS)
+		var finish: float = reveal_at if chained and _continuous_turns \
+			else ARRIVAL_SECONDS + (Flight.RETURN_START if chained else PERFORMANCE_SECONDS)
+		var boundary: float = ARRIVAL_SECONDS if not _started else reveal_at if not _revealed else finish
 		var consume: float = minf(remaining, maxf(0.0, boundary - _elapsed))
 		_elapsed += consume
+		_reveal_effect_elapsed += consume
 		remaining -= consume
 		if not _started and _elapsed >= ARRIVAL_SECONDS:
 			if not pickup_ready:
@@ -111,8 +127,10 @@ func advance(delta: float, pickup_ready: bool = true) -> float:
 			cue_requested.emit("assemble")
 			if generation != _serial or not is_active():
 				return 0.0
-		if not _revealed and _elapsed >= ARRIVAL_SECONDS + REVEAL_SECONDS:
+		if not _revealed and _elapsed >= reveal_at:
 			_revealed = true
+			_reveal_effect_elapsed = 0.0
+			_reveal_effect_tier = int(_events[0].tier)
 			if not reduced_motion:
 				confetti_requested.emit()
 				if generation != _serial or not is_active():
@@ -125,13 +143,18 @@ func advance(delta: float, pickup_ready: bool = true) -> float:
 				_sync()
 				return 0.0
 			_events.pop_front()
-			_elapsed = ARRIVAL_SECONDS + Flight.TOP_SECONDS
+			_elapsed = ARRIVAL_SECONDS + (Flight.TURN_START if _continuous_turns else Flight.TOP_SECONDS)
+			if _continuous_turns:
+				_completed_turns += 1
 			_revealed = false
 			_prepare_models()
-			cue_requested.emit("assemble")
-			if generation != _serial or not is_active():
-				return 0.0
+			if not _continuous_turns:
+				cue_requested.emit("assemble")
+				if generation != _serial or not is_active():
+					return 0.0
 		elif _elapsed >= ARRIVAL_SECONDS + PERFORMANCE_SECONDS:
+			if _continuous_turns and _revealed:
+				_completed_turns += 1
 			_events.pop_front()
 			_elapsed = 0.0
 			_started = false
@@ -205,8 +228,12 @@ func _motion(age: float) -> Dictionary:
 	var edge: float = minf(_anchor.size.x, _anchor.size.y)
 	var held_age: float = minf(age, Flight.RETURN_START - 0.000001) \
 		if _events.size() > 1 and age <= Flight.RETURN_START + 0.000001 else age
-	return Flight.sample(held_age, _anchor.get_center(), _flight_bounds(), edge,
+	var pose: Dictionary = Flight.sample(held_age, _anchor.get_center(), _flight_bounds(), edge,
 		_journey_peak / Style.ui_scale(self), true)
+	if _continuous_turns:
+		pose.yaw = (float(_completed_turns) + clampf((age - Flight.TURN_START) / TURN_SECONDS, 0.0, 1.0)) * TAU
+		pose.sprite_scale_x = cos(float(pose.yaw))
+	return pose
 
 
 func _placement(pose: Dictionary, edge: float, _center: Vector2) -> Dictionary:
@@ -231,9 +258,9 @@ func _draw_flight() -> void:
 			_flight_surface.draw_texture_rect(still, _texture_rect(still, center, edge), false)
 		return
 	var pose: Dictionary = _motion(age)
-	var accent: Color = _tier_color(int(event.tier))
+	var accent: Color = _tier_color(_reveal_effect_tier if _reveal_effect_elapsed < 0.85 else int(event.tier))
 	var fade: float = float(pose.emphasis)
-	var reveal_age: float = age - REVEAL_SECONDS
+	var reveal_age: float = _reveal_effect_elapsed if _reveal_effect_elapsed < 0.85 else -1.0
 	var placement: Dictionary = _placement(pose, edge, center)
 	var point: Vector2 = placement.center
 	var accent_edge: float = edge * float(placement.scale)
@@ -307,6 +334,8 @@ func snapshot() -> Dictionary:
 	return {"active": is_active(), "visible": visible, "elapsed": _elapsed,
 		"tier": int(_events[0].tier) if is_active() else 0,
 		"started": _started, "next_tier": int(_events[1].tier) if _events.size() > 1 else 0,
+		"continuous_turns": _continuous_turns,
+		"completed_turns": _completed_turns + (1 if _continuous_turns and _revealed else 0),
 		"kind": ("upgrade" if int(_events[0].previous_tier) > 0 else "synthesis") if is_active() else "none",
 		"revealed": _revealed, "queued": _events.size(), "reduced_motion": reduced_motion,
 		"motion": motion, "flight_bounds": [bounds.position.x, bounds.position.y, bounds.size.x, bounds.size.y],

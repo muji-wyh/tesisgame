@@ -18,6 +18,10 @@ signal powerup_fragment_arrived(payload: Dictionary)
 signal drag_blocked(reason: String)
 signal combo_changed(state: Dictionary)
 signal boss_changed
+signal motion_advanced(delta: float)
+signal challenge_time_awarded(seconds: float)
+signal challenge_stage_reached(stage: int)
+signal stage_clear_announced
 
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
@@ -51,6 +55,8 @@ const BLAST_FREEZE_SECONDS: float = 0.10
 const BLAST_MARK_WINDUP_SECONDS: float = 0.18
 const BLAST_MARK_FLIGHT_SECONDS: float = 0.42
 const BLAST_MARK_RECOVERY_SECONDS: float = 0.10
+const STAGE_CLEAR_SLOW_SECONDS: float = 0.35
+const STAGE_CLEAR_NOTICE_SECONDS: float = 1.0
 const AUTO_COLLECT_UNLOCK_LEVEL: int = 3
 const INITIAL_SPAWN_INTERVAL: float = 20.0
 const MIN_SPAWN_INTERVAL: float = 10.0
@@ -144,6 +150,7 @@ var _rng := RandomNumberGenerator.new()
 var _coin_rng := RandomNumberGenerator.new()
 var _blast_rng := RandomNumberGenerator.new()
 var _blast_queue: Array[Dictionary] = []
+var _collection_hit_stop: Dictionary = {}
 var _powerup: Dictionary = {}
 var _powerup_uses: Dictionary = {"auto_merge": 0, "fragments": 0}
 var _powerup_ids: Array[int] = []
@@ -163,6 +170,7 @@ var _stage_spawn_interval: float = INITIAL_SPAWN_INTERVAL
 var _stage_pressure_level: int = 0
 var _stage_time_pending: String = ""
 var _stage_clear_feedback: float = 0.0
+var _stage_clear_announced: bool = false
 var finish_feedback_ready: Callable
 var boss := BossRun.new()
 var merged_level_limit: int = MAX_MERGE_LEVEL
@@ -179,6 +187,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	if previous_generation != _generation:
 		return false
 	_generation += 1
+	_collection_hit_stop.clear()
 	stage_run = null
 	boss.configure({})
 	merged_level_limit = MAX_MERGE_LEVEL
@@ -189,6 +198,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_stage_pressure_level = 0
 	_stage_time_pending = ""
 	_stage_clear_feedback = 0.0
+	_stage_clear_announced = false
 	fall_speed_scale = 1.0
 	cells.clear()
 	upcoming.clear()
@@ -337,7 +347,8 @@ func stage_ending() -> bool:
 
 func _stage_clock_running() -> bool:
 	return stage_run != null and not _stage_ending and not powerup_active() \
-		and not collection_batch_active() and not _has_pending_collection_commit() and error.is_empty()
+		and not collection_batch_active() and _collection_hit_stop.is_empty() \
+		and not _has_pending_collection_commit() and error.is_empty()
 
 
 func _decide_stage(reason: String) -> void:
@@ -349,7 +360,8 @@ func _decide_stage(reason: String) -> void:
 	_stage_ending = true
 	if boss.active():
 		boss.begin_ending("defeated" if stage_run.boss_defeated and stage_run.outcome == "cleared" else stage_run.outcome)
-	_stage_clear_feedback = 0.62 if stage_run.outcome == "cleared" else 0.0
+	_stage_clear_feedback = STAGE_CLEAR_SLOW_SECONDS + STAGE_CLEAR_NOTICE_SECONDS if stage_run.outcome == "cleared" else 0.0
+	_stage_clear_announced = false
 	_restore_dragged_tile()
 	_held_tile_id = -1
 	_blast_queue.clear()
@@ -361,12 +373,12 @@ func _pump_stage_finish() -> void:
 		or powerup_active() or not fusions.is_empty() or collection_batch_active() \
 		or _has_pending_collection_commit() or not _combo_pending.is_empty():
 		return
+	if _stage_clear_feedback > EPSILON:
+		return
 	if _settling_remaining() > EPSILON:
 		return
 	if not collectable_ids().is_empty():
 		start_collection_batch()
-		return
-	if _stage_clear_feedback > EPSILON:
 		return
 	if not boss.presentation_ready():
 		return
@@ -548,12 +560,21 @@ func powerup_active() -> bool:
 
 
 func gameplay_time_scale() -> float:
+	if not _collection_hit_stop.is_empty():
+		return 0.0
+	if _stage_clear_feedback > STAGE_CLEAR_NOTICE_SECONDS + EPSILON:
+		return BLAST_TIME_SCALE
 	if bool(_powerup.get("active", false)) and str(_powerup.kind) == "blast" and str(_powerup.stage) == "mark":
 		return 0.0 if float(_powerup.elapsed) + EPSILON < BLAST_FREEZE_SECONDS else BLAST_TIME_SCALE
 	return 1.0
 
 
 func presentation_delta(delta: float) -> float:
+	if not _collection_hit_stop.is_empty():
+		return maxf(0.0, delta - float(_collection_hit_stop.remaining))
+	if _stage_clear_feedback > STAGE_CLEAR_NOTICE_SECONDS + EPSILON:
+		var slowed: float = minf(delta, _stage_clear_feedback - STAGE_CLEAR_NOTICE_SECONDS)
+		return slowed * BLAST_TIME_SCALE + delta - slowed
 	if gameplay_time_scale() >= 1.0:
 		return delta
 	var elapsed: float = float(_powerup.elapsed)
@@ -563,6 +584,14 @@ func presentation_delta(delta: float) -> float:
 
 
 func hit_stop_snapshot() -> Dictionary:
+	if not _collection_hit_stop.is_empty():
+		var impact: Dictionary = _collection_hit_stop.duplicate(true)
+		impact.merge({"active": true, "time_scale": 0.0, "phase": "freeze", "paused": paused,
+			"source": "auto_collect"})
+		return impact
+	if _stage_clear_feedback > STAGE_CLEAR_NOTICE_SECONDS + EPSILON:
+		return {"active": true, "time_scale": BLAST_TIME_SCALE, "phase": "slow", "paused": paused,
+			"source": "stage_clear", "remaining": _stage_clear_feedback - STAGE_CLEAR_NOTICE_SECONDS}
 	var scale: float = gameplay_time_scale()
 	return {"active": scale < 1.0, "time_scale": scale, "paused": paused,
 		"phase": "freeze" if is_zero_approx(scale) else "slow" if scale < 1.0 else "",
@@ -1165,6 +1194,24 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dic
 		return "ignored"
 	if not _combo_pending.is_empty():
 		return "ignored"
+	var pending_result: Dictionary = merging_result(b_id)
+	if not pending_result.is_empty():
+		if not can_merge_into_result(a_id, b_id):
+			return "ignored"
+		var event_id: String = ""
+		for pending: Dictionary in fusions:
+			if str(pending.operation) == "merge" and int(pending.result.id) == b_id:
+				event_id = str(pending.attempt_id)
+				break
+		var generation: int = _generation
+		if not hold_merge_for_drag(event_id, true):
+			return "ignored"
+		complete_merge_drag(event_id)
+		if generation != _generation or phase != "playing" or paused:
+			return "ignored"
+		if _fusion_index(event_id) >= 0:
+			hold_merge_for_drag(event_id, false)
+			return "ignored"
 	if phase != "playing" or paused or collection_batch_active() or (powerup_active() and not _powerup_committing) or a_id == b_id or is_fusing(a_id) or is_fusing(b_id):
 		return "ignored"
 	var automatic: bool = _powerup_committing
@@ -1202,9 +1249,6 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dic
 	if candidate.status == "needs_room":
 		return "needs_room"
 	if not candidate.status in ["partial", "complete"]:
-		if candidate.status == "level_locked":
-			drag_blocked.emit("Defeat the next Boss to unlock a higher merged level.")
-			return "level_locked"
 		var generation: int = _generation
 		_reset_combo()
 		if generation != _generation:
@@ -1246,6 +1290,24 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dic
 		if _can_continue(generation):
 			changed.emit()
 	return "merged"
+
+
+func merging_result(result_id: int) -> Dictionary:
+	for active: Dictionary in fusions:
+		if str(active.operation) == "merge" and not bool(active.get("automatic", false)) \
+			and int(active.result.id) == result_id:
+			return active.result.duplicate(true)
+	return {}
+
+
+func can_merge_into_result(source_id: int, result_id: int) -> bool:
+	if phase != "playing" or paused or _stage_ending or powerup_active() or collection_batch_active() \
+		or not _combo_pending.is_empty() or is_fusing(source_id) or not boss_interactable(source_id, false):
+		return false
+	var source: Dictionary = cell(source_id)
+	var target: Dictionary = merging_result(result_id)
+	return not source.is_empty() and not target.is_empty() and is_settled(source) \
+		and merge_candidate(source, target, false).status in ["partial", "complete"]
 
 
 func hold_merge_for_drag(event_id: String, held: bool) -> bool:
@@ -1446,7 +1508,8 @@ func _advance_collection_batch() -> void:
 	if not auto_collect_unlocked() and not _stage_ending:
 		cancel_collection_batch()
 		return
-	if not collection_batch_active() or phase != "playing" or paused:
+	if not collection_batch_active() or phase != "playing" or paused or not _collection_hit_stop.is_empty() \
+		or _stage_clear_feedback > EPSILON:
 		return
 	# Let existing motion finish once, then keep the captured bodies in place
 	# so later gravity or growth cannot stretch the collection beat.
@@ -1482,6 +1545,10 @@ func _advance_collection_batch() -> void:
 func _collection_batch_boundary() -> float:
 	if not collection_batch_active():
 		return INF
+	if _stage_clear_feedback > EPSILON:
+		return INF
+	if not _collection_hit_stop.is_empty():
+		return float(_collection_hit_stop.remaining)
 	if _collection_batch_started == 0:
 		var settling: float = _collection_batch_settling_remaining()
 		if settling > EPSILON:
@@ -1529,13 +1596,19 @@ func step(delta: float) -> void:
 		if _finishing_powerup and not powerup_active():
 			break
 		var powerup_running: bool = powerup_active()
+		var impact_running: bool = not _collection_hit_stop.is_empty()
 		var time_scale: float = gameplay_time_scale()
-		var combo_running: bool = combo_count > 0 and not powerup_running and not _has_pending_collection_commit()
+		var combo_running: bool = combo_count > 0 and not powerup_running and not impact_running and not _has_pending_collection_commit()
 		var stage_clock: bool = _stage_clock_running()
 		var consumed: float = remaining
+		if _stage_clear_feedback > EPSILON:
+			consumed = minf(consumed, _stage_clear_feedback - STAGE_CLEAR_NOTICE_SECONDS \
+				if _stage_clear_feedback > STAGE_CLEAR_NOTICE_SECONDS + EPSILON else _stage_clear_feedback)
+		if impact_running:
+			consumed = minf(consumed, float(_collection_hit_stop.remaining))
 		if stage_clock:
 			consumed = minf(consumed, boss.next_boundary())
-		if stage_clock and stage_run.kind == "main":
+		if stage_clock:
 			consumed = minf(consumed, maxf(0.0, stage_run.remaining))
 		if combo_running:
 			consumed = minf(consumed, maxf(0.0, _combo_remaining))
@@ -1557,21 +1630,21 @@ func step(delta: float) -> void:
 				consumed = minf(consumed, maxf(0.0, boundary - float(active.elapsed)) / time_scale)
 		var full: bool = not _has_free_cell()
 		var ending_wait: bool = _finish_after_collection_commit or _stage_ending
-		if full and full_elapsed < 0.0 and _settling_remaining() <= EPSILON and not powerup_running and not ending_wait:
+		if full and full_elapsed < 0.0 and _settling_remaining() <= EPSILON and not powerup_running and not impact_running and not ending_wait:
 			full_elapsed = 0.0
 			cue_requested.emit("danger")
 			if not _can_continue(generation):
 				break
-		var danger_running: bool = full and full_elapsed >= 0.0 and not powerup_running and not ending_wait \
+		var danger_running: bool = full and full_elapsed >= 0.0 and not powerup_running and not impact_running and not ending_wait \
 			and (stage_run == null or not collection_batch_active() and not _has_pending_collection_commit())
 		var next_second: float = minf(FULL_SECONDS, floorf(full_elapsed + EPSILON) + 1.0)
 		if danger_running:
 			consumed = minf(consumed, maxf(0.0, next_second - full_elapsed))
-		elif full and not powerup_running and not ending_wait:
+		elif full and not powerup_running and not impact_running and not ending_wait:
 			var settling: float = _settling_remaining()
 			if settling > EPSILON:
 				consumed = minf(consumed, maxf(0.0, settling))
-		elif not powerup_running and not ending_wait:
+		elif not powerup_running and not impact_running and not ending_wait:
 			consumed = minf(consumed, maxf(0.0, spawn_interval - spawn_elapsed))
 		# Mark impacts keep real-time deadlines while only the board's motion slows.
 		var motion_delta: float = consumed * time_scale
@@ -1587,6 +1660,10 @@ func step(delta: float) -> void:
 			if not bool(active.get("commit_pending", false)):
 				active.elapsed = float(active.elapsed) + motion_delta
 		_advance_drag_gravity_delays(motion_delta)
+		if impact_running:
+			_collection_hit_stop.remaining = maxf(0.0, float(_collection_hit_stop.remaining) - consumed)
+			if float(_collection_hit_stop.remaining) <= EPSILON:
+				_collection_hit_stop.clear()
 		if powerup_running:
 			_powerup.elapsed = float(_powerup.elapsed) + consumed
 			_powerup.clock = float(_powerup.clock) + consumed
@@ -1596,14 +1673,20 @@ func step(delta: float) -> void:
 				_sync_powerup_drag()
 		if collection_batch_active():
 			_collection_batch_elapsed += consumed
-			_collection_batch_next_in = maxf(0.0, _collection_batch_next_in - consumed)
+			_collection_batch_next_in = maxf(0.0, _collection_batch_next_in - (0.0 if impact_running else consumed))
 		if danger_running:
 			full_elapsed += consumed
-		elif not full and not powerup_running and not ending_wait:
+		elif not full and not powerup_running and not impact_running and not ending_wait:
 			spawn_elapsed += consumed
 		remaining -= consumed
 		if _stage_ending:
 			_stage_clear_feedback = maxf(0.0, _stage_clear_feedback - consumed)
+			if stage_run.outcome == "cleared" and not _stage_clear_announced \
+				and _stage_clear_feedback <= STAGE_CLEAR_NOTICE_SECONDS + EPSILON:
+				_stage_clear_announced = true
+				stage_clear_announced.emit()
+				if not _can_continue(generation):
+					break
 		if stage_clock:
 			stage_run.advance(consumed)
 		_advance_boss(consumed, stage_clock)
@@ -1613,6 +1696,10 @@ func step(delta: float) -> void:
 				_reset_combo()
 				if not _can_continue(generation):
 					break
+		if motion_delta > 0.0:
+			motion_advanced.emit(motion_delta)
+			if not _can_continue(generation):
+				break
 		for active in fusions.duplicate():
 			if not _can_continue(generation):
 				break
@@ -1623,6 +1710,10 @@ func step(delta: float) -> void:
 			if str(active.operation) == "collect" and not bool(active.popped) and float(active.elapsed) + EPSILON >= float(active.pop_at):
 				active.popped = true
 				var merge_level: int = clampi(int(active.get("merge_level", 1)), 1, MAX_MERGE_LEVEL)
+				if bool(active.get("batch", false)) and merge_level >= 4:
+					_collection_hit_stop = {"remaining": BLAST_FREEZE_SECONDS, "level": merge_level,
+						"event_id": str(active.attempt_id), "origin": {"column": active.a.column, "row": active.a.row,
+							"width": 1, "height": 1}}
 				cue_requested.emit("pop" if merge_level == 1 else "jelly-collect-lv%d" % merge_level)
 				if not _can_continue(generation):
 					break
@@ -1646,7 +1737,7 @@ func step(delta: float) -> void:
 		_advance_powerup()
 		if not _can_continue(generation):
 			break
-		if powerup_running or _finish_after_collection_commit or _stage_ending:
+		if powerup_running or impact_running or not _collection_hit_stop.is_empty() or _finish_after_collection_commit or _stage_ending:
 			if _finishing_powerup and not powerup_active():
 				break
 			continue
@@ -2034,6 +2125,10 @@ func snapshot() -> Dictionary:
 		"powerup": powerup_snapshot(),
 		"campaign": stage_run.snapshot() if stage_run != null else {},
 		"stage_ending": _stage_ending, "fall_speed_scale": fall_speed_scale,
+		"clear_phase": "done" if phase == "finished" and stage_run != null and stage_run.outcome == "cleared" \
+			else "slowdown" if _stage_clear_feedback > STAGE_CLEAR_NOTICE_SECONDS + EPSILON \
+			else "announcement" if _stage_clear_feedback > EPSILON else "collecting" if _stage_ending \
+				and stage_run != null and stage_run.outcome == "cleared" else "",
 		"hit_stop": hit_stop_snapshot(),
 		"queued_blasts": _blast_queue.size(),
 		"powerup_uses": _powerup_uses.duplicate(),
@@ -2072,6 +2167,7 @@ func finish_round(reason: String = "finished") -> Dictionary:
 		_finish_after_collection_commit = true
 		return _result.duplicate(true)
 	var generation: int = _generation
+	_collection_hit_stop.clear()
 	_blast_queue.clear()
 	finish_powerup()
 	if generation != _generation or phase == "finished":
@@ -2341,9 +2437,7 @@ func merge_candidate(left: Dictionary, right: Dictionary, check_space: bool = tr
 		var level: int = _merged_upgrade_level(left, right)
 		if level == 0:
 			return {"status": "invalid", "result": {}}
-		if level > merged_level_limit:
-			return {"status": "level_locked", "result": {}}
-		tile = _joined_word_tile(left, right, left.word, level,
+		tile = _joined_word_tile(left, right, left.word, mini(level, merged_level_limit),
 			bool(left.get("mastery_eligible", false)) or bool(right.get("mastery_eligible", false)))
 		merge_kind = "upgrade"
 	elif (left_kind == "root" and right_kind == "picture") or (left_kind == "picture" and right_kind == "root"):
@@ -2944,6 +3038,9 @@ func _discard_collection_reward(tile_id: int) -> void:
 
 
 func _complete_collection(completed: Dictionary) -> void:
+	var generation: int = _generation
+	var added_time: float = 0.0
+	var reached_challenge_stage: int = 0
 	var index: int = _index_for_id(int(completed.a_id))
 	if index < 0:
 		return
@@ -2966,9 +3063,13 @@ func _complete_collection(completed: Dictionary) -> void:
 	chest_count = int(reward.chest_count)
 	_completed_words[str(completed.word.id)] = completed.word.duplicate(true)
 	if stage_run != null and not _stage_ending:
+		var before_stage: int = stage_run.challenge_stage
 		stage_run.record_collection(str(completed.attempt_id), str(completed.word.id))
 		if stage_run.kind == "challenge":
+			added_time = stage_run.take_time_bonus()
 			_sync_challenge_pressure()
+			if stage_run.challenge_stage != before_stage:
+				reached_challenge_stage = stage_run.challenge_stage
 		elif not stage_run.boss_objective and stage_run.current.has(str(completed.word.id)) \
 			and int(stage_run.current[completed.word.id]) >= int(stage_run.goals[completed.word.id]):
 			_words = _words.filter(func(word: Dictionary) -> bool: return str(word.id) != str(completed.word.id))
@@ -2979,16 +3080,14 @@ func _complete_collection(completed: Dictionary) -> void:
 			_collection_batch_active = false
 			_collection_batch_next_in = 0.0
 	full_elapsed = -1.0
-	var generation: int = _generation
 	_queue_collection_blast(completed)
 	_advance_combo(str(completed.attempt_id), 0, false)
 	if not _stage_ending:
 		boss.collect_hit(str(completed.attempt_id), int(completed.get("merge_level", 1)), combo_count,
-			{"column": int(completed.a.column), "row": int(completed.a.row)})
+			{"column": int(completed.a.column), "row": int(completed.a.row)}, stage_run != null and stage_run.boss_objective)
 		boss.forget(int(completed.a_id))
-		if stage_run != null and stage_run.boss_objective and boss.health == 0:
-			stage_run.boss_defeated = true
-			stage_run.decide("cleared")
+		if stage_run != null and stage_run.boss_objective and boss.health == 0 and not stage_run.boss_defeated:
+			stage_run.record_boss_defeat()
 	if generation != _generation:
 		return
 	# A committed pickup owns its learning evidence, including paused settlement.
@@ -2998,6 +3097,14 @@ func _complete_collection(completed: Dictionary) -> void:
 		word_attempted.emit(str(completed.attempt_id), word_ids, true)
 	if generation != _generation:
 		return
+	if reached_challenge_stage > 0:
+		challenge_stage_reached.emit(reached_challenge_stage)
+		if generation != _generation:
+			return
+	if added_time > 0.0:
+		challenge_time_awarded.emit(added_time)
+		if generation != _generation:
+			return
 	combo_changed.emit(combo_snapshot())
 	if generation != _generation:
 		return

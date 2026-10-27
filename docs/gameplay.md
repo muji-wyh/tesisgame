@@ -209,9 +209,11 @@ A failed save keeps settlement open for retry.
 Jelly Words opens a scrollable **99-stage journey**, climbing from stage 1 at
 the bottom to stage 99 at the top, across eleven scenic chapters of nine stages.
 Entry focuses the current frontier. Acquired adventure medallions keep numbers
-and their three rating stars separate. Endless Challenge has a compact upper-right
-replay/coin icon, with a 44-pixel action and an accessible no-timer description;
-there is no large wooden footer taking space from the map.
+and their three rating stars separate. A permanently named **Challenge** action
+with the acquired mastery medal sits at the upper right, with a 44-pixel touch
+height. Its wallet font follows UI scale and its title fits the remaining header,
+so neither the action nor a giant tooltip covers the coin total. There is no
+large wooden footer taking space from the map.
 Cleared stages can be replayed; only the next uncleared
 stage is available beyond them. Each map node prominently shows its best
 one-, two- or three-star rating. Replaying cannot downgrade it or skip an unlock.
@@ -229,10 +231,12 @@ Each real round begins with a sourced, input-transparent Ready/Go flourish, not
 an opaque instruction dialog. Its first 820 ms reserve the stage and supply clock;
 the exact Go boundary enables play, and the remaining flourish fades away.
 Pause/backgrounding freezes that same entry rather than billing stage time.
-Completed word goals pop their sourced check and success light, remain marked
-with a three-second countdown, then fade/slide out and close their list space
+Completed word goals draw their sourced check with a small pop and success light,
+silently remain marked for three active seconds, then fade/slide out and close their list space
 over 380 ms. Pending goals move into the vacated slots; targets already completed
-when entering or reloading do not refill the list with Done cards.
+when entering or reloading do not refill the list. Completed rows show no Done
+label, countdown, fraction or increment text; reduced motion shows the full check
+without drawing or scaling it and retains the same silent three-second wait.
 
 ### Bramble and the stolen Word Compass
 
@@ -265,12 +269,16 @@ than the misleading, board-covering "Make room" panel.
 | 63 | Borrowed shield; two hits break his last defensive trick | Lv8 | Leaves a final challenge at the castle |
 | 99 | Mixed-color storm; all the learned tricks combine in the last rematch | Lv9 | Returns the compass and admits defeat |
 
-Only the next **future** Boss is marked on the map. Every already-unlocked
+Only the next **ordinary future** Boss is marked on the map. Every already-unlocked
 Boss stage retains its marker for rematches; later locked Boss locations are
-not all revealed. Stage 1 remains unmarked to preserve its surprise.
+not all revealed. The finale at stage 99 is an intentional exception: an enlarged
+actual Bramble portrait, dark-purple sourced rays and extra summit space make
+the final opponent visible and imposing without horror art. Its locked marker
+cannot start the stage. Stage 1 remains unmarked to preserve its surprise.
 Boss markers use Bramble's actual portrait rather than a `BOSS` text
 badge; the face can open its unlocked stage without covering the number or
-earned stars. The map also shows the current merged-level cap.
+earned stars. Both the map and active board show a separate acquired-Jelly
+**Jelly LvN** badge for the unlocked merged-level cap, not Pip's level or chest tier.
 The eight encounter identities remain stable after this schedule change, so
 previously earned levels remain earned. A pending old-roster victory can still
 finish its original journal; newly authored settlements identify the new roster.
@@ -295,8 +303,11 @@ and 620. Manual construction charges the next shot, and an active combo adds
 damage. A pending/failed save and duplicate acknowledgement cannot fire another
 attack. Automatic construction still earns no learning by itself; collecting
 its completed word uses the normal learning rules and can attack. Boss stages
-clear by defeating Bramble, not by exhausting practice quotas; their complete
-reviewed word packets continue supplying partners until the fight ends.
+require **both** Bramble's defeat and every fixed word quota. Finishing only one
+cannot announce a clear or grant a level. If Bramble is defeated first, he stays
+exhausted beside the board with no attacks, victory speech or retreat while
+the remaining word goals continue. Reviewed partners remain available when
+all words are done first but the Boss still needs hits.
 
 **Counterplay:** attacks have a visible wind-up and distinct blue, purple and
 golden projectiles. Their paths use a fixed launch/landing position and a
@@ -382,9 +393,13 @@ The same sourced frame warns during the final ten seconds of a stage deadline,
 even on a non-full board. If both warnings apply, the more urgent clock owns one
 frame rather than stacking flashes. Added time above ten seconds clears the
 deadline warning without changing the saved star thresholds.
-The Round complete/Game over overlay waits for every merged pickup and all
-its board bursts, reading-pop tails, treasure arrivals and coin flights to finish.
-After the end presentation, treasure opening and arrival-driven coins finish
+After a genuine clear, the board first runs at 0.12 speed for 350 ms, then shows
+the clear notice and cheer for one second. Only afterward does it automatically
+collect leftover merged Jellies, including their high-level impact freezes.
+Settlement waits for the full sweep and its board bursts, reading tails and
+treasure feedback. It does not repeat a second late clear announcement.
+Failure keeps its separate Game over handoff after safe cleanup.
+Treasure opening and arrival-driven coins then finish
 automatically, then the game saves the clear and returns to the map. A pending
 settlement survives reload and is recovered with its original receipt.
 Any older retained treasure is settled with its original quote before returning;
@@ -398,18 +413,34 @@ resumes the same attempt; Exit runs the normal merged-word sweep and settlement,
 then returns Home only after saving succeeds. Entering Jelly Words again opens
 its stage map rather than resuming the abandoned board.
 
-The separate **Endless Challenge** has no countdown and no numbered clear/star
-bonus. Every ten committed collections increases its wave: the active word
-set grows from three up to sixteen, supply approaches a three-second minimum,
-and real incoming fall speed gradually rises to at most 2.2 times normal.
-It ends on a blocked top or an intentional Finish and remains available for
-earning the existing combo, rare-collection and chest coins.
+The separate **Survival Challenge** starts with 90 seconds and ends in Game over
+at zero. It has its own stages, not numbered campaign clears or star bonuses.
+Stage 1 has a batch of up to three word targets, each requiring one committed
+collection. **All** targets must be completed before the next stage begins.
+Later stages add target variety up to sixteen and raise each target's quota
+every two early stages. After the variety limit is reached, each subsequent
+stage raises the quota, so difficulty still increases after the speed caps.
+Stages also increase actual fall speed and supply pressure toward the established
+2.2-speed and three-second limits.
+Each newly completed target grants ten seconds, capped at 90 remaining seconds.
+There are no random extra-time drops or paid Challenge time purchases.
+Pending/failed/duplicate collection receipts cannot grant time or advance a stage.
+The current stage, timer, target counts and historical **Best Stage** remain
+visible on desktop and compact phone layouts. The best is saved when a higher
+stage is reached, separately per learning route; a lower replay cannot overwrite it.
+Version-three campaign saves read versions one and two without inventing a
+Challenge record or resetting existing stars, recipes or Boss victories.
+Pause, input interruptions and automatic collection preserve the active clock.
+Challenge can also end on a blocked top or intentional Finish and retains the
+existing combo, rare-collection and chest coins without unlocking a campaign stage.
 
 Illustrated goal cards use proportional green background fill. Each saved
-increase has a small card-local number/art pop; a newly completed item adds
-golden sparkle, one confirmation sound, then a persistent **Done** check.
-Reloaded completed items do not replay the celebration. Desktop retains exact
-fractions; compact carousel chips omit numbers. The same live scroll component
+increase has a small card-local number/art pop; a newly completed item instead
+draws only its check, with golden sparkle and one confirmation sound.
+It silently waits three active seconds before exiting; reloaded completed items
+do not replay the celebration or reappear. Desktop retains exact fractions for
+pending goals; compact campaign chips omit numbers, while Challenge chips retain
+their stage-specific target counts. The same live scroll component
 clears only its cross-axis minimum when resized, preserving both gutter bounds
 and a genuine scroll range.
 
@@ -430,9 +461,10 @@ with elastic feedback and a negative sound, without creating a merged body.
 
 Merged Jellies show the word and its available picture, with a brighter rim and
 glints. New Jelly World journeys start with only Lv1 unlocked. Two merged
-Jellies of the same word add their levels, including different levels; a result
-above the current Boss-earned cap is rejected without consuming either body.
-Once Lv9 is unlocked, the final cap retains the existing mass-preserving behavior.
+Jellies of the same word add their levels, including different levels; the result
+clamps to the currently unlocked Boss-earned cap rather than rejecting an overflow.
+With Lv4 unlocked, Lv2 + Lv3 produces Lv4 in either direction, manually or through
+Auto merge. All input mass and carried fragments survive the clamp.
 For example, Lv2 plus Lv7 and Lv7 plus Lv5 both produce
 Lv9; all input fragments and mass survive. Levels 2–9 have an upper-right numeral.
 Each of the nine levels has a distinct collection effect and sound. Board
@@ -441,6 +473,10 @@ separate top popovers retain the larger firework and falling tails. Every board 
 firework layer originates at that Jelly's own center, never an unrelated screen
 position. Larger levels retain broader, denser radial layers without changing
 the existing nine collection recordings or adding a separate popover sound.
+An incoming matching Jelly can also be dropped onto a result still merging:
+the accepted first union hands off into the next animation using the existing
+drag handoff, rather than rejecting the result until its old animation ends.
+Semantic checks, failed combo saves and generation guards still protect every input.
 The complete
 [level feedback reference](assets/jelly-level-feedback.md) describes these effects.
 
@@ -589,6 +625,13 @@ endpoint twice. Failed collection saves do not trigger a blast; retry retains
 the original outcome and receipt. Pause freezes marks and flights, while leaving
 the round clears queued reactions and settles active automatic matching without
 collecting their results.
+High-level **Lv4-Lv9 Auto Collect** pickups independently hold the board for
+100 ms at their actual 40 ms release, even if every other Jelly is reserved for
+the batch or no later chain target exists. This impact is not deferred to the
+end-of-batch chain. Each pickup retains its 120 ms motion beat plus that hold;
+Lv1-Lv3 stay unchanged. Board effects, reading art and ambient motion use the
+model's actual consumed motion segments, so a coarse frame cannot skip the freeze.
+The interface/audio keep their own clocks and `Engine.time_scale` remains one.
 
 Auto merge costs 600, 900, then 1200 coins for further uses in the same round;
 Treasure costs 200, 300, then 400. Each item has its own successful-use count,

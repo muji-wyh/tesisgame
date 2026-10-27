@@ -67,6 +67,38 @@ func _test_capped_upgrades() -> void:
 			"Cap only the result level; preserve every input fragment and mass")
 
 
+func _test_unlocked_cap_upgrades() -> void:
+	for cap in range(1, 10):
+		var model = _model()
+		model.merged_level_limit = cap
+		for left_level in range(1, cap + 1):
+			for right_level in range(1, cap + 1):
+				model.cells.clear()
+				var left: Dictionary = _ready(model, left_level, 0, "cat", 3)
+				var right: Dictionary = _ready(model, right_level, 1, "cat", 4)
+				for reverse: bool in [false, true]:
+					var candidate: Dictionary = model.merge_candidate(right, left) if reverse else model.merge_candidate(left, right)
+					check(candidate.status == "complete" and candidate.result.merge_level == mini(cap, left_level + right_level)
+						and candidate.result.fragments == 7 and candidate.result.mass == left.mass + right.mass,
+						"Every same-word sum clamps to its actual unlocked cap in both directions while conserving contents")
+	for automatic: bool in [false, true]:
+		var model = _model()
+		model.merged_level_limit = 4
+		var left: Dictionary = _ready(model, 2, 0, "cat", 3)
+		var right: Dictionary = _ready(model, 3, 1, "cat", 4)
+		if automatic:
+			model.purchase_powerup = func(_id: String, _kind: String, _price: int) -> Dictionary: return {"ok": true}
+			check(model.activate_powerup("auto_merge"), "The automatic planner accepts Lv2 + Lv3 with Lv4 unlocked")
+			model.finish_powerup(false)
+			model.purchase_powerup = Callable()
+		else:
+			check(model.try_merge(int(left.id), int(right.id)) == "merged", "A real manual Lv2 + Lv3 match is accepted")
+			model.step(Model.FUSION_SECONDS + Model.SETTLE_SECONDS)
+		check(model.cells.size() == 1 and model.cells[0].merge_level == 4 and model.cells[0].fragments == 7
+			and model.cells[0].mass == 10 and model.merged_level_limit == 4,
+			"Manual and automatic paths both produce Lv4, not Lv5, without losing mass or granting an unlock")
+
+
 func _test_auto_merge_and_collection_credit() -> void:
 	check(is_equal_approx(Model.POWERUP_MERGE_BEAT_SECONDS, 0.10)
 		and is_equal_approx(Model.POWERUP_DRAG_SECONDS, 0.32),
@@ -140,6 +172,7 @@ func _test_batch_tempo() -> void:
 
 
 func _run() -> void:
+	_test_unlocked_cap_upgrades()
 	_test_capped_upgrades()
 	_test_auto_merge_and_collection_credit()
 	_test_blast_combo()

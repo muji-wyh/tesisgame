@@ -895,6 +895,12 @@ func _build_controls() -> void:
 	_word_jelly.word_merged.connect(_word_jelly_merged)
 	_word_jelly.combo_coins_earned.connect(_word_jelly_combo_earned)
 	_word_jelly.batch_collection_started.connect(func() -> void: audio.stop_voice())
+	_word_jelly.game.challenge_stage_reached.connect(func(stage: int) -> void: _campaign.record_challenge_stage(stage))
+	_word_jelly.stage_clear_announced.connect(func() -> void:
+		if _mode_id == "word_jelly" and not _page_hidden and not _mode_menu_open():
+			audio.play_round_end(false)
+			if not reduced_motion:
+				_reward_confetti.burst(_round_id + ":round-clear"))
 	_word_jelly.audio_requested.connect(_jelly_audio.bind("word_jelly"))
 	_word_jelly.word_attempted.connect(_jelly_growth_answer.bind("word_jelly"))
 	_word_jelly.round_finished.connect(_jelly_finished.bind("word_jelly"))
@@ -2266,14 +2272,7 @@ func _jelly_practice(words: Array) -> Array[Dictionary]:
 func _jelly_campaign_snapshot() -> Dictionary:
 	var state: Dictionary = _word_jelly.game.stage_run.snapshot()
 	if state.kind == "challenge":
-		var practice: Array[Dictionary] = _jelly_practice(_word_jelly.game._words)
-		state["practice"] = practice
-		state["word_ids"] = practice.map(func(word: Dictionary) -> String: return str(word.id))
-		state["total"] = practice.size()
-		state["mastered"] = practice.filter(func(word: Dictionary) -> bool: return word.mastered).size()
-		state["remaining_ids"] = practice.filter(func(word: Dictionary) -> bool: return not word.mastered).map(
-			func(word: Dictionary) -> String: return str(word.id))
-		state["remaining"] = state.remaining_ids.size()
+		state["challenge_best_stage"] = _campaign.store.challenge_best_stage(_campaign.active_context_key)
 	return state
 
 
@@ -2699,6 +2698,11 @@ func _jelly_finished(result: Dictionary, source_mode: String = "") -> void:
 		_save_jelly_round_reward()
 		_jelly_rewards.pause()
 	if _jelly_settling:
+		return
+	if result.has("campaign") and result.campaign.get("outcome", "") == "cleared":
+		_celebration_seen_id = _round_id
+		_campaign.begin_settlement()
+		_refresh()
 		return
 	_stop_controller_actions()
 	_controller_accept_needs_release = _controller_accept_is_pressed()

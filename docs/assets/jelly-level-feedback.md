@@ -151,8 +151,13 @@ Targets compress by up to 22 percent around their existing foot pivot and
 support shadow, then rebound by up to six percent without bobbing or camera
 shake. Reduced motion uses still source/target marks, no traveling light or
 deformation, and the established simplified matching flight.
-Batch pickups retain their 140 ms cadence and coalesce overlapping marks before
-matching; one bounded sequence consumes each original endpoint at most once.
+Batch pickups retain 120 ms of collection motion, with an independent 100 ms
+impact hold on Lv4-Lv9's actual release. The hold applies even when no eligible
+neighbor survives batch reservations; it does not depend on the delayed marking
+wave. The owning model supplies actual consumed motion segments to the view,
+keeping artwork and board bodies frozen together across coarse frames without
+changing the engine clock. Overlapping marks still coalesce before matching;
+one bounded sequence consumes each original endpoint at most once.
 Neither the visual layer nor audio decides a match, pays coins, changes item
 prices or records learning.
 
