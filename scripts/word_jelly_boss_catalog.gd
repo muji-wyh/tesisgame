@@ -1,7 +1,8 @@
 extends RefCounted
 ## One recurring trickster, eight earned rematches, and a nonpunitive opening ambush.
 
-const STAGES: Array[int] = [9, 18, 27, 36, 45, 63, 81, 99]
+const STAGES: Array[int] = [3, 5, 7, 9, 18, 36, 63, 99]
+const LEGACY_STAGES: Array[int] = [9, 18, 27, 36, 45, 63, 81, 99]
 const DAMAGE: Array[int] = [0, 14, 38, 72, 116, 176, 248, 344, 464, 620]
 const TITLES: Array[String] = [
 	"The Compass Thief", "Ink at the Crossing", "The Locksmith",
@@ -44,7 +45,7 @@ static func encounter(number: int, intro: bool = false) -> Dictionary:
 		return {"id": 0, "stage": 1, "intro": true, "name": "Bramble", "title": "A Sneaky Visitor",
 			"health": 98, "interval": 8.0, "abilities": ["freeze"], "new_ability": "freeze",
 			"retreat": "swagger", "entrance": "That Word Compass looks interesting!",
-			"escape": "The compass is mine! Catch me at stage 9!",
+			"escape": "The compass is mine! Catch me if you can!",
 			"reply": "We learned the words. Now let's get our compass back!"}
 	var index: int = STAGES.find(number)
 	if index < 0:

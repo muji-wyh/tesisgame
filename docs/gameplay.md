@@ -188,10 +188,17 @@ the same button, P, Escape or controller Back returns to the same round.
 Shift+Enter on the focused control opens the accessible finish confirmation.
 Finishing or letting the full-board danger countdown expire first shows
 **Round complete** or **Game over**, respectively, with its own sound. This
-noninteractive 1.8-second effect precedes the settlement modal; held input cannot
+noninteractive 3.2-second effect precedes the settlement modal; held input cannot
 skip it. Backgrounding freezes its clock and stops its sound without replaying
 the cue on return. Reduced motion keeps the readable message without zoom or
-rotation. The modal then shows the score, completed words and
+rotation. Light enters before the heading instead of replacing the board abruptly.
+A clear adds the acquired mastery medal, local sparkle reactions and the existing
+CC0 human group cheer. Failure uses a gentler cool-colored reaction and keeps
+earned treasure safe. The clear also launches the full viewport's two-sided
+confetti fountains: paper spreads, tumbles and drifts all the way below the screen
+bottom over 6.4 seconds, continuing independently over the ensuing result rather
+than being cut off at the well or the top third of the display.
+The modal then shows the score, completed words and
 earned chest, including an empty result. There is no standalone Jelly result
 page. Home and Play again save and collect pending treasure before leaving.
 Play again starts a fresh round, as does selecting the finished mode from Home.
@@ -202,13 +209,30 @@ A failed save keeps settlement open for retry.
 Jelly Words opens a scrollable **99-stage journey**, climbing from stage 1 at
 the bottom to stage 99 at the top, across eleven scenic chapters of nine stages.
 Entry focuses the current frontier. Acquired adventure medallions keep numbers
-and their three rating stars separate; the challenge uses an upright coin and
-nine-slice adventure panel. Cleared stages can be replayed; only the next uncleared
+and their three rating stars separate. Endless Challenge has a compact upper-right
+replay/coin icon, with a 44-pixel action and an accessible no-timer description;
+there is no large wooden footer taking space from the map.
+Cleared stages can be replayed; only the next uncleared
 stage is available beyond them. Each map node prominently shows its best
 one-, two- or three-star rating. Replaying cannot downgrade it or skip an unlock.
 Progress and frozen word recipes are separate for Everyday English and each
 professional career/module. A recipe remains replayable after its words have
 been mastered, provided the original reviewed identities are still available.
+After a new contiguous clear, sourced golden light travels along the route from
+the completed node to the next over 850 ms. That node then opens its padlock and
+pops into its available state over 650 ms. Every later locked node retains a
+padlock with restrained light. Reopening the map, replaying an old clear or
+changing learning context cannot replay a progression unlock. Reduced motion
+presents the final state directly; hidden/background maps stop their effect clock.
+
+Each real round begins with a sourced, input-transparent Ready/Go flourish, not
+an opaque instruction dialog. Its first 820 ms reserve the stage and supply clock;
+the exact Go boundary enables play, and the remaining flourish fades away.
+Pause/backgrounding freezes that same entry rather than billing stage time.
+Completed word goals pop their sourced check and success light, remain marked
+with a three-second countdown, then fade/slide out and close their list space
+over 380 ms. Pending goals move into the vacated slots; targets already completed
+when entering or reloading do not refill the list with Done cards.
 
 ### Bramble and the stolen Word Compass
 
@@ -220,26 +244,50 @@ intelligence, English mistakes or personal characteristics.
 
 On a new journey, stage 1 first teaches ordinary construction and collection.
 After its real word goals are completed, Bramble ambushes Pip, claims the compass,
-laughs and escapes toward stage 9. This is a **story defeat**, not a failed
+laughs and escapes toward the next encounter at stage 3. This is a **story defeat**, not a failed
 learning assessment: committed learning, coins and treasure remain safe, stage 2
 opens normally, and no Boss-victory medal or merged-level unlock is fabricated.
 Existing saves keep their frontier and do not replay an unavoidable opening loss.
+Before this ambush there is no stage-one Boss marker, watching-visitor message,
+character, health display or named chase hint. Ordinary word construction still
+produces collectible Lv1 Jelly; the cap restricts higher merged upgrades, not
+the root/picture match. Blocked gestures give a compact material response rather
+than the misleading, board-covering "Make room" panel.
 
 | Boss stage | New trick and story beat | First-victory merged cap | Retreat |
 | --- | --- | --- | --- |
-| 9 | Freeze; Pip catches the compass thief's trail | Lv2 | Scrambles away |
-| 18 | Ink; a new crossing reveals that the compass can open hidden routes | Lv3 | Distracts Pip and slips away |
-| 27 | Two-layer locks; matching words break Bramble's locked passage | Lv4 | Pretends it was only a warm-up |
-| 36 | Shadow doubles; two collected-word hits disperse the decoys | Lv5 | Panics when his real identity is found |
-| 45 | Giant kick; Pip repairs the broken sky and continues the chase | Lv6 | Promises a new surprise farther ahead |
-| 63 | Snatch; Bramble grabs a construction piece, flings it away, and loses it back into Next | Lv7 | Runs off without taking earned words |
-| 81 | Borrowed shield; two hits break his last defensive trick | Lv8 | Leaves a final challenge at the castle |
+| 3 | Freeze; Pip catches the compass thief's trail | Lv2 | Scrambles away |
+| 5 | Ink; a new crossing reveals that the compass can open hidden routes | Lv3 | Distracts Pip and slips away |
+| 7 | Two-layer locks; matching words break Bramble's locked passage | Lv4 | Pretends it was only a warm-up |
+| 9 | Shadow doubles; two collected-word hits disperse the decoys | Lv5 | Panics when his real identity is found |
+| 18 | Giant kick; Pip repairs the broken sky and continues the chase | Lv6 | Promises a new surprise farther ahead |
+| 36 | Snatch; Bramble grabs a construction piece, flings it away, and loses it back into Next | Lv7 | Runs off without taking earned words |
+| 63 | Borrowed shield; two hits break his last defensive trick | Lv8 | Leaves a final challenge at the castle |
 | 99 | Mixed-color storm; all the learned tricks combine in the last rematch | Lv9 | Returns the compass and admits defeat |
 
 Only the next **future** Boss is marked on the map. Every already-unlocked
 Boss stage retains its marker for rematches; later locked Boss locations are
-not all revealed. The opening encounter is marked at stage 1 until the chase
-begins. The map also shows the current merged-level cap.
+not all revealed. Stage 1 remains unmarked to preserve its surprise.
+Boss markers use Bramble's actual portrait rather than a `BOSS` text
+badge; the face can open its unlocked stage without covering the number or
+earned stars. The map also shows the current merged-level cap.
+The eight encounter identities remain stable after this schedule change, so
+previously earned levels remain earned. A pending old-roster victory can still
+finish its original journal; newly authored settlements identify the new roster.
+
+Bramble's full acquired, skinned body stands beside the well throughout battle
+and the ending; it never moves into an information bar or a giant story dialog.
+Game-authored bent-arm gestures, attacks and grounded reactions make him a
+visible opponent. Eight sourced purple energy glints and draining local light
+represent his health; there is no permanent name/instruction block or numeric HP
+rail. Taunts use bounded two-line subtitles. The ambush enters from the edge,
+and every retreat leaves from that same side-standing position.
+
+A distinct Boss first victory also presents **New skill unlocked** in settlement,
+with the earned Jelly, its level, the exact collection footprint and a view-only
+illustrated demonstration. Continue becomes available after the initial reveal,
+so held input cannot skip the explanation. Rematches do not show another unlock;
+the pending victory journal retains ownership of the earned level.
 
 **Attacking:** a successfully committed merged-word collection fires an attack.
 Lv1 already deals 14 base damage; Lv2–Lv9 deal 38, 72, 116, 176, 248, 344, 464
@@ -547,7 +595,9 @@ Treasure costs 200, 300, then 400. Each item has its own successful-use count,
 and its button displays the next price. Treasure still distributes 2–8 fragments;
 Auto merge follows validated paths of root joins, picture matches and
 same-word upgrades whose output is capped at nine. It launches an eligible
-pair every 160 ms, with each 180 ms flight overlapping the following flight.
+pair every 100 ms, while each 320 ms flight stays visibly in motion. Three
+independent paths can all be traveling before the first contact; a fuller board
+can have four staggered flights at once.
 A dependent step waits for its
 required result to settle; independent pairs can launch while earlier merges
 continue. It leaves merged words for manual collection. Failed payments
@@ -560,8 +610,8 @@ Merge retains fusion sound effects without pronouncing its words. An accepted
 word tap also presents its picture and spelling above the board and pronounces
 it once. Picture-only jellies and complete spellings awaiting their picture also
 pronounce their word on a tap. Partial roots stay silent. Collect gathers ready
-words at 120 ms intervals without pronunciation. Each Auto Merge takes 180 ms
-to fly, 110 ms to fuse, and 30 ms to settle. Its 160 ms launch interval runs
+words at 120 ms intervals without pronunciation. Each Auto Merge takes 320 ms
+to fly, 110 ms to fuse, and 30 ms to settle. Its 100 ms launch interval runs
 independently of that 320 ms sequence.
 Each reveal has its own randomly varied position and size, fits its picture and
 spelling, and enters with elastic squash and stretch. Successive reveals coexist

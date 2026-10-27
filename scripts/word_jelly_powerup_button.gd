@@ -21,6 +21,7 @@ var _busy: bool = false
 var _reduced_motion: bool = false
 var _paused: bool = false
 var _ui_scale: float = 1.0
+var _compact: bool = false
 var _feedback_active: bool = false
 var _feedback_success: bool = true
 var _feedback_elapsed: float = 0.0
@@ -67,9 +68,10 @@ func configure(kind: String, price: int, reduced_motion: bool) -> void:
 	_update_accessibility()
 
 
-func set_ui_scale(value: float) -> void:
+func set_ui_scale(value: float, compact: bool = false) -> void:
 	_ui_scale = maxf(0.1, value)
-	custom_minimum_size = Vector2(88.0, 56.0) / _ui_scale
+	_compact = compact
+	custom_minimum_size = Vector2(88.0, 44.0 if compact else 56.0) / _ui_scale
 	_layout()
 
 
@@ -146,11 +148,11 @@ func _update_accessibility() -> void:
 
 func _layout() -> void:
 	var unit: float = 1.0 / _ui_scale
-	var edge: float = minf(30.0 * unit, minf(size.y * 0.50, size.x * 0.27))
-	var lower_center: float = size.y - 17.0 * unit
+	var edge: float = minf((20.0 if _compact else 30.0) * unit, minf(size.y * 0.50, size.x * 0.27))
+	var lower_center: float = size.y - (12.0 if _compact else 17.0) * unit
 	_icon_rect = Rect2(Vector2(7.0 * unit, lower_center - edge * 0.5), Vector2.ONE * edge)
-	_title.position = Vector2(6.0 * unit, 3.0 * unit)
-	var title_size := Vector2(maxf(1.0, size.x - 12.0 * unit), maxf(1.0, 22.0 * unit))
+	_title.position = Vector2(6.0 * unit, (1.0 if _compact else 3.0) * unit)
+	var title_size := Vector2(maxf(1.0, size.x - 12.0 * unit), maxf(1.0, (18.0 if _compact else 22.0) * unit))
 	var title: String = "+30 sec" if _kind == "extra_time" else "Treasure" if _kind == "fragments" else "Auto merge"
 	var font_size: int = maxi(1, roundi(12.0 * unit))
 	while font_size > 1 and (Style.HEADING_FONT.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > title_size.x \

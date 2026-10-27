@@ -565,8 +565,9 @@ func _check_scenery(view: Control) -> void:
 			CHAPTERS[index] + " has a genuinely winding route")
 	var challenge: BaseButton = _action_button(view, "challenge")
 	if challenge != null:
-		check(_normal(_visible_copy(challenge) + _text(challenge)).contains("notimer"),
-			"The independent challenge entrance explicitly says No timer")
+		check(_normal(str(challenge.get("accessibility_name"))).contains("notimer")
+			and challenge.tooltip_text == "Endless Challenge",
+			"The compact challenge icon retains its explicit accessible no-timer description and tooltip")
 		check(not _art(challenge).is_empty(), "The challenge entrance also uses sourced icon/gel artwork")
 
 
@@ -614,7 +615,7 @@ func _check_layout(view: Control, context: String) -> void:
 			continue
 		var rect: Rect2 = button.get_global_rect()
 		check(bounds.grow(0.2).encloses(rect), context + ": " + key + " remains prominent and onscreen")
-		var minimum: float = 56.0 if key == "challenge" else 44.0
+		var minimum: float = 44.0
 		check(rect.size.x * _pixel_scale() >= minimum and rect.size.y * _pixel_scale() >= minimum,
 			context + ": " + key + " retains a usable displayed-pixel target")
 		check(not rect.intersects(viewport), context + ": prominent actions never cover the scroll viewport")
@@ -635,16 +636,13 @@ func _check_layout(view: Control, context: String) -> void:
 	check(ink.x <= heading.size.x + 0.1 and heading.get_line_count() == 1,
 		context + ": the complete map title fits on one line without going under Home")
 	var challenge: Button = _action_button(view, "challenge")
-	var frame: Panel = view.get("_challenge_frame") as Panel
-	check(frame != null, context + ": the nine-slice challenge frame has an independently pixel-scaled surface")
-	if frame != null:
-		check(frame.get_theme_stylebox("panel") is StyleBoxTexture
-			and frame.get_global_rect().is_equal_approx(challenge.get_global_rect()),
-			context + ": the sourced challenge frame aligns with the real button at every UI scale")
-		var paper: Rect2 = frame.get_global_rect().grow(-16.0 / _pixel_scale())
-		check(paper.grow(0.1).encloses(view.get("_challenge_title").get_global_rect())
-			and paper.grow(0.1).encloses(view.get("_challenge_caption").get_global_rect()),
-			context + ": both challenge labels stay on the paper instead of crossing the scaled wooden border")
+	var icon_pixels: Vector2 = challenge.get_global_rect().size * _pixel_scale()
+	check(icon_pixels.x >= 44.0 and icon_pixels.x <= 46.0 and icon_pixels.y >= 44.0 and icon_pixels.y <= 46.0
+		and not challenge.get_global_rect().intersects(heading.get_global_rect())
+		and (not wallet.visible or not challenge.get_global_rect().intersects(wallet.get_global_rect())),
+		context + ": a compact upper-right challenge icon stays clear of the title and wallet")
+	check(challenge.get_global_rect().end.y <= _scroll(view).get_global_rect().position.y,
+		context + ": the challenge entrance is in the header, not a large map footer")
 
 
 func _check_status_copy(view: Control, source: Dictionary, context: String) -> void:

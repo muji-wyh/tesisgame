@@ -298,6 +298,28 @@ func _test_listening_recovery() -> void:
 	await settle()
 
 
+func _test_continuous_upgrade_pickup_gate() -> void:
+	var view := PopView.new()
+	root.add_child(view)
+	view.size = Vector2(640, 480)
+	view.configure(WORDS, false, 7)
+	view.set_process(false)
+	view.set_listening(true, true, "Listening.")
+	for index in range(9):
+		strike(view, true, "continuous-pickup-%d" % index)
+	view._reward_presentation.advance(ChestCelebration.ARRIVAL_SECONDS + ChestCelebration.Flight.RETURN_START - 0.001)
+	view.advance_reward_presentation(0.01)
+	check(view.snapshot().reward_presentation.tier == 1 and view.snapshot().reward_presentation.visible,
+		"The continuous Voice Pop chest stays at the peak until the next tier's real pickup arrives")
+	view._process(ChestCelebration.ARRIVAL_SECONDS + 0.01)
+	view.advance_reward_presentation(0.001)
+	check(view.snapshot().reward_presentation.tier == 2 and view.snapshot().reward_presentation.motion.phase == "celebrate",
+		"Once those actual fragment flights land, the next tier continues without another departure")
+	view.stop()
+	view.queue_free()
+	await settle()
+
+
 func _reset_fragment_view(view, reduced: bool = false) -> void:
 	view.show()
 	view.interaction_allowed = Callable()
@@ -388,6 +410,7 @@ func _test_fragment_endpoint_cues() -> void:
 
 
 func _run() -> void:
+	await _test_continuous_upgrade_pickup_gate()
 	for dimensions in [Vector2i(320, 568), Vector2i(844, 390), Vector2i(1366, 768)]:
 		await _test_scene(dimensions)
 	await _test_interruption()

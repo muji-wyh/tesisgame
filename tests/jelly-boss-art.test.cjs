@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const crypto = require('node:crypto');
-const { readModelContainer, readFloatAccessor } = require('./helpers/chest-model-assets.cjs');
+const { readModelContainer, readFloatAccessor, imageDimensions } = require('./helpers/chest-model-assets.cjs');
 
 const root = path.resolve(__dirname, '..');
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'assets', 'jelly-boss', 'manifest.json'), 'utf8'));
@@ -58,4 +58,21 @@ test('the story compass is an exact startup UI copy, independent of deferred age
   assert.equal(sha(compass), '8223082a5d514861eebb194d815f634b821e0d6f64b19351e99467ec068762a8');
   assert.match(fs.readFileSync(path.join(root, 'scripts', 'word_jelly_boss_view.gd'), 'utf8'),
     /preload\("res:\/\/assets\/jelly-boss\/compass\.webp"\)/);
+});
+
+test('the map uses an actual transparent portrait rendered from the same acquired Boss', () => {
+  const portrait = manifest.portrait;
+  assert.ok(portrait, 'The map portrait has a source and acquisition record');
+  assert.equal(portrait.creator, manifest.source.creator);
+  assert.equal(portrait.license, manifest.source.license);
+  assert.equal(portrait.source_model_sha256, manifest.model.sha256);
+  assert.match(portrait.path, /^assets\/jelly-boss\/private\//);
+  const bytes = fs.readFileSync(path.join(root, portrait.path));
+  assert.equal(bytes.length, portrait.bytes);
+  assert.equal(sha(bytes), portrait.sha256);
+  assert.deepEqual(imageDimensions(bytes), { width: 256, height: 256 });
+  assert.equal(bytes[25], 6, 'The rendered PNG retains transparency, not a flat-color badge background');
+  const map = fs.readFileSync(path.join(root, 'scripts', 'word_jelly_map.gd'), 'utf8');
+  assert.match(map, /BOSS_PORTRAIT = preload\("res:\/\/assets\/jelly-boss\/private\/bramble-portrait\.png"\)/);
+  assert.doesNotMatch(map, /_label\(button, "BOSS"/);
 });

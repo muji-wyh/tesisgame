@@ -27,7 +27,7 @@ func _run() -> void:
 			audio.call("play_round_end", failed)
 			await process_frame
 			var player = audio.get("round_end")
-			var expected: String = Audio.MEMORY_CHEST_LOSS_PATHS[true] if failed else Audio.WORD_JELLY_COMBO_PATHS[2]
+			var expected: String = Audio.MEMORY_CHEST_LOSS_PATHS[true] if failed else Audio.PAIR_CHEST_DISCOVERY_PATH
 			check(player != null and player.playing and player.stream.resource_path == expected,
 				"Timeout and ordinary completion use different existing production recordings")
 			if player != null:

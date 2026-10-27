@@ -15,9 +15,15 @@ const STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 const SKY = preload("res://assets/images/jelly-match/sky/day.png")
 const STAGE_OPEN = preload("res://assets/images/ui/jelly-map/stage-open.png")
 const STAGE_LOCKED = preload("res://assets/images/ui/jelly-map/stage-locked.png")
-const PANEL = preload("res://assets/images/ui/jelly-map/adventure-panel.png")
 const COIN = preload("res://assets/coins/gold-coin.png")
 const PLAY = preload("res://assets/images/ui/controls/player-play.svg")
+const LOCK = preload("res://assets/images/ui/controls/lock.svg")
+const GLOW = preload("res://assets/chests/particles/portal_glow.png")
+const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const RAYS = preload("res://assets/chests/milestone/rays.png")
+const ROUTE_SECONDS: float = 0.85
+const UNLOCK_SECONDS: float = 0.65
+const BOSS_PORTRAIT = preload("res://assets/jelly-boss/private/bramble-portrait.png")
 const SCENERY: Array[Texture2D] = [
 	preload("res://assets/images/jelly-match/garden/hills.png"),
 	preload("res://assets/images/jelly-match/garden/tree.png"),
@@ -46,13 +52,15 @@ var _home: Button
 var _challenge: Button
 var _retry: Button
 var _challenge_icon: TextureRect
-var _challenge_title: Label
-var _challenge_caption: Label
-var _challenge_frame: Panel
 var _nodes: Array[Dictionary] = []
 var _chapters: Array[Dictionary] = []
 var _scale: float = 1.0
 var _publish_pending: bool = false
+var _reduced_motion: bool = false
+var _active: bool = true
+var _effect_elapsed: float = 0.0
+var _unlock_from: int = 0
+var _unlock_elapsed: float = ROUTE_SECONDS + UNLOCK_SECONDS
 
 
 func _init() -> void:
@@ -75,15 +83,12 @@ func _init() -> void:
 	_home.tooltip_text = "Home"
 	add_child(_home)
 	_home.pressed.connect(func() -> void: home_requested.emit())
-	_challenge = _button("", "Endless challenge. No timer. Earn coins with growing variety and speed.")
-	_challenge_frame = Panel.new()
-	_challenge_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_challenge_frame.add_theme_stylebox_override("panel", _panel_style())
-	_challenge.add_child(_challenge_frame)
+	_challenge = Icons.new()
+	_challenge.set("symbol", Icons.Symbol.REFRESH)
+	_challenge.accessibility_name = "Endless challenge. No timer. Earn coins with growing variety and speed."
+	_challenge.tooltip_text = "Endless Challenge"
+	add_child(_challenge)
 	_challenge_icon = _image(_challenge, COIN)
-	_challenge_title = _label(_challenge, "Endless Challenge", 18)
-	_challenge_caption = _label(_challenge, "No timer · Earn coins", 12)
-	_challenge_caption.add_theme_color_override("font_color", Style.MUTED)
 	for signal_name: String in ["mouse_entered", "mouse_exited", "button_down", "button_up", "focus_entered", "focus_exited"]:
 		_challenge.connect(signal_name, _refresh_challenge_frame)
 	_challenge.pressed.connect(func() -> void:
@@ -145,16 +150,26 @@ func _init() -> void:
 			stars.append(_image(button, STAR))
 		var next: TextureRect = _image(button, PLAY)
 		next.modulate = Style.GOOD
-		var boss_label: Label = _label(button, "BOSS", 11)
-		boss_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		boss_label.add_theme_stylebox_override("normal", Style.box(Color("#f3ddef"), Color("#996b9d"), 8, 1))
-		boss_label.hide()
+		var lock_glow: TextureRect = _image(button, GLOW)
+		lock_glow.modulate = Color(0.73, 0.86, 1.0, 0.24)
+		var padlock: TextureRect = _image(button, LOCK)
+		var boss_picture := TextureButton.new()
+		boss_picture.name = "BossPortrait%d" % number
+		boss_picture.texture_normal = BOSS_PORTRAIT
+		boss_picture.texture_disabled = BOSS_PORTRAIT
+		boss_picture.ignore_texture_size = true
+		boss_picture.stretch_mode = TextureButton.STRETCH_KEEP_ASPECT_CENTERED
+		boss_picture.focus_mode = Control.FOCUS_NONE
+		boss_picture.pressed.connect(_select.bind(number))
+		_content.add_child(boss_picture)
+		boss_picture.hide()
 		_nodes.append({"number": number, "button": button, "face": face, "label": label,
-			"stars": stars, "next": next, "boss": boss_label})
+			"stars": stars, "next": next, "boss": boss_picture, "padlock": padlock, "lock_glow": lock_glow})
 	resized.connect(_layout)
 	visibility_changed.connect(func() -> void:
 		if not is_visible_in_tree():
-			_scroll.cancel_drag())
+			_scroll.cancel_drag()
+		set_process(is_visible_in_tree() and _active and not _reduced_motion))
 	_scroll.get_v_scroll_bar().value_changed.connect(func(_value: float) -> void:
 		queue_redraw()
 		_queue_changed())
@@ -195,16 +210,6 @@ func _image(parent: Node, texture: Texture2D) -> TextureRect:
 	return image
 
 
-func _panel_style(color: Color = Color.WHITE) -> StyleBoxTexture:
-	var surface := StyleBoxTexture.new()
-	surface.texture = PANEL
-	surface.modulate_color = color
-	surface.set_content_margin_all(0.0)
-	for side in [SIDE_LEFT, SIDE_TOP, SIDE_RIGHT, SIDE_BOTTOM]:
-		surface.set_texture_margin(side, 16.0)
-	return surface
-
-
 func _queue_changed() -> void:
 	if _publish_pending or not is_inside_tree():
 		return
@@ -219,15 +224,23 @@ func _publish_changed() -> void:
 
 
 func _refresh_challenge_frame() -> void:
-	_challenge_frame.self_modulate = Color("#ead5b6") if _challenge.is_pressed() else Color("#fff0d0") \
-		if _challenge.is_hovered() or _challenge.has_focus() else Color.WHITE
 	_challenge_icon.modulate.a = 0.45 if _challenge.disabled else 1.0
-	_challenge_title.add_theme_color_override("font_color", Style.MUTED if _challenge.disabled else Style.INK)
 
 
-func configure(state: Dictionary, _reduced_motion: bool = false) -> void:
-	_state = state.duplicate(true)
+func configure(state: Dictionary, reduced_motion: bool = false) -> void:
+	var previous: int = int(_state.get("highest_cleared", -1))
 	var highest: int = clampi(int(state.get("highest_cleared", 0)), 0, 99)
+	_reduced_motion = reduced_motion
+	if previous >= 0 and highest == previous + 1 and highest < 99 \
+		and _state.get("context_key", "") == state.get("context_key", ""):
+		_unlock_from = highest
+		_unlock_elapsed = ROUTE_SECONDS + UNLOCK_SECONDS if reduced_motion else 0.0
+	elif highest != previous:
+		_unlock_from = 0
+		_unlock_elapsed = ROUTE_SECONDS + UNLOCK_SECONDS
+	if reduced_motion:
+		_unlock_elapsed = ROUTE_SECONDS + UNLOCK_SECONDS
+	_state = state.duplicate(true)
 	var blocked: bool = bool(state.get("loading", false)) or not str(state.get("error", "")).is_empty()
 	for item: Dictionary in _nodes:
 		var number: int = int(item.number)
@@ -242,9 +255,12 @@ func configure(state: Dictionary, _reduced_motion: bool = false) -> void:
 		for index in range(3):
 			item.stars[index].modulate = Color.WHITE if index < stars else Color(0.32, 0.41, 0.43, 0.48)
 		item.next.visible = number == highest + 1
-		item.boss.visible = number in state.get("boss_markers", [])
+		item.boss.visible = number > 1 and number in state.get("boss_markers", [])
+		item.boss.disabled = item.button.disabled
 		if item.boss.visible:
 			item.button.accessibility_name += " Bramble Boss encounter."
+			item.boss.accessibility_name = item.button.accessibility_name
+			item.boss.tooltip_text = "Bramble. Boss in stage %d" % number
 	_challenge.disabled = blocked
 	_challenge.focus_mode = Control.FOCUS_NONE if blocked else Control.FOCUS_ALL
 	_wallet.text = "%d coins" % int(state.get("coins", 0))
@@ -253,8 +269,8 @@ func configure(state: Dictionary, _reduced_motion: bool = false) -> void:
 	_status.add_theme_color_override("font_color", Style.WRONG if not str(state.get("error", "")).is_empty() else Style.INK)
 	_retry.visible = not str(state.get("error", "")).is_empty()
 	_status.visible = not _status.text.is_empty()
-	if state.has("merged_level"):
-		_subtitle.text = "Chase Bramble · Merged Lv%d" % int(state.merged_level)
+	_refresh_locks()
+	set_process(is_visible_in_tree() and _active and not _reduced_motion)
 	_layout()
 
 
@@ -267,6 +283,8 @@ func open(state: Dictionary, reduced_motion: bool = false) -> void:
 
 func close() -> void:
 	_scroll.cancel_drag()
+	_unlock_elapsed = ROUTE_SECONDS + UNLOCK_SECONDS
+	_refresh_locks()
 	hide()
 
 
@@ -333,8 +351,17 @@ func _layout() -> void:
 	Style.square_icon_button(_home, Style.GOOD)
 	_home.position = Vector2(left, top)
 	_home.size = Vector2.ONE * ceilf(44.0 / s)
+	Style.square_icon_button(_challenge, Style.GOOD)
+	_challenge.position = Vector2(left + width - 44.0 / s, top)
+	_challenge.size = Vector2.ONE * ceilf(44.0 / s)
+	_challenge_icon.position = Vector2(27, 27) / s
+	_challenge_icon.size = Vector2.ONE * 18.0 / s
+	_wallet.visible = not narrow
+	_wallet.position = Vector2(_challenge.position.x - 162.0 / s, top)
+	_wallet.size = Vector2(150, 38) / s
 	_heading.position = Vector2(_home.get_rect().end.x + 14.0 / s, top)
-	_heading.size = Vector2(maxf(1.0, left + width - _heading.position.x - (162.0 / s if not narrow else 0.0)), 44.0 / s)
+	var title_end: float = (_wallet.position.x if not narrow else _challenge.position.x) - 12.0 / s
+	_heading.size = Vector2(maxf(1.0, title_end - _heading.position.x), 44.0 / s)
 	var heading_pixels: int = ceili((24.0 if narrow else 32.0) / s)
 	var heading_ink: float = Style.HEADING_FONT.get_string_size(_heading.text, HORIZONTAL_ALIGNMENT_LEFT, -1, heading_pixels).x
 	if heading_ink > _heading.size.x:
@@ -342,28 +369,10 @@ func _layout() -> void:
 	_heading.add_theme_font_size_override("font_size", heading_pixels)
 	_subtitle.position = Vector2(left, top + 48.0 / s)
 	_subtitle.size = Vector2(width, 30.0 / s)
-	_subtitle.text = "Chase Bramble · Merged Lv%d" % int(_state.merged_level) if _state.has("merged_level") \
+	_subtitle.text = (("Collect words" if int(_state.get("highest_cleared", 0)) == 0 else "Chase Bramble") \
+		+ " · Merged Lv%d" % int(_state.merged_level)) if _state.has("merged_level") \
 		else "Collect words. Earn stars. Explore." if narrow else "99 little adventures. Collect words, earn stars."
 	_subtitle.add_theme_font_size_override("font_size", ceili(14.0 / s))
-	_wallet.visible = not narrow
-	_wallet.position = Vector2(left + width - 150.0 / s, top)
-	_wallet.size = Vector2(150, 38) / s
-	_challenge.custom_minimum_size = Vector2.ZERO
-	for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
-		_challenge.add_theme_stylebox_override(state, StyleBoxEmpty.new())
-	_challenge.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, Style.GOOD, ceili(8.0 / s), ceili(2.0 / s)))
-	_challenge.size = Vector2(minf(width, 312.0 / s), ceilf(78.0 / s))
-	_challenge.position = Vector2((size.x - _challenge.size.x) * 0.5, size.y - _challenge.size.y - 14.0 / s)
-	_challenge_frame.scale = Vector2.ONE / s
-	_challenge_frame.size = _challenge.size * s
-	_challenge_icon.position = Vector2(18, 17) / s
-	_challenge_icon.size = Vector2.ONE * 44.0 / s
-	_challenge_title.position = Vector2(76, 16) / s
-	_challenge_title.size = Vector2(_challenge.size.x - 92.0 / s, 26.0 / s)
-	_challenge_title.add_theme_font_size_override("font_size", ceili(17.0 / s))
-	_challenge_caption.position = Vector2(76, 42) / s
-	_challenge_caption.size = Vector2(_challenge.size.x - 92.0 / s, 20.0 / s)
-	_challenge_caption.add_theme_font_size_override("font_size", ceili(12.0 / s))
 	_refresh_challenge_frame()
 	var status_height: float = 76.0 / s if _status.visible else 0.0
 	_status.position = Vector2(left, 90.0 / s)
@@ -373,7 +382,7 @@ func _layout() -> void:
 	_retry.size = Vector2(78, 44) / s
 	_content.custom_minimum_size.x = 0.0
 	_scroll.position = Vector2(left, 88.0 / s + status_height)
-	_scroll.size = Vector2(width, maxf(1.0, _challenge.position.y - _scroll.position.y - 12.0 / s))
+	_scroll.size = Vector2(width, maxf(1.0, size.y - _scroll.position.y - 12.0 / s))
 	var chapter_height: float = 1160.0 / s
 	var node_size := Vector2(98, 104) / s
 	var amplitude: float = minf(width * 0.27, 240.0 / s)
@@ -411,14 +420,19 @@ func _layout() -> void:
 		button.size = node_size
 		item.face.position = Vector2(11, 0) / s
 		item.face.size = Vector2.ONE * 76.0 / s
+		item.face.pivot_offset = item.face.size * 0.5
 		item.label.position = item.face.position
 		item.label.size = item.face.size
 		item.label.add_theme_font_size_override("font_size", ceili(30.0 / s))
 		item.next.position = Vector2(79, 31) / s
 		item.next.size = Vector2.ONE * 14.0 / s
-		item.boss.add_theme_font_size_override("font_size", ceili(11.0 / s))
-		item.boss.position = Vector2(15, -22) / s
-		item.boss.size = Vector2(68, 20) / s
+		item.lock_glow.position = Vector2(56, 43) / s
+		item.lock_glow.size = Vector2.ONE * 36.0 / s
+		item.padlock.position = Vector2(65, 52) / s
+		item.padlock.size = Vector2.ONE * 19.0 / s
+		item.padlock.pivot_offset = item.padlock.size * 0.5
+		item.boss.position = button.position + Vector2(15, -68) / s
+		item.boss.size = Vector2.ONE * 68.0 / s
 		for index in range(3):
 			var star: TextureRect = item.stars[index]
 			star.position = Vector2((14.0 + index * 24.0) / s, 80.0 / s)
@@ -427,6 +441,53 @@ func _layout() -> void:
 	_content.size.x = width
 	_content.queue_redraw()
 	_queue_changed()
+
+
+func _process(delta: float) -> void:
+	if not _active or not is_visible_in_tree() or not is_finite(delta) or delta <= 0.0:
+		return
+	_effect_elapsed += delta
+	var unlocking: bool = _unlock_elapsed < ROUTE_SECONDS + UNLOCK_SECONDS
+	if unlocking:
+		_unlock_elapsed = minf(ROUTE_SECONDS + UNLOCK_SECONDS, _unlock_elapsed + delta)
+	_refresh_locks(true)
+	if unlocking:
+		_content.queue_redraw()
+		_queue_changed()
+
+
+func set_active(active: bool) -> void:
+	_active = active
+	set_process(is_visible_in_tree() and active and not _reduced_motion)
+	if not active:
+		_scroll.cancel_drag()
+
+
+func _notification(what: int) -> void:
+	if what in [NOTIFICATION_APPLICATION_FOCUS_OUT, NOTIFICATION_APPLICATION_PAUSED]:
+		set_active(false)
+	elif what in [NOTIFICATION_APPLICATION_FOCUS_IN, NOTIFICATION_APPLICATION_RESUMED]:
+		set_active(true)
+
+
+func _refresh_locks(visible_only: bool = false) -> void:
+	var highest: int = clampi(int(_state.get("highest_cleared", 0)), 0, 99)
+	for item: Dictionary in _nodes:
+		var number: int = int(item.number)
+		var arriving: bool = _unlock_from > 0 and number == _unlock_from + 1
+		if visible_only and not arriving and not _scroll.get_global_rect().intersects(item.button.get_global_rect()):
+			continue
+		var p: float = clampf((_unlock_elapsed - ROUTE_SECONDS) / UNLOCK_SECONDS, 0.0, 1.0) if arriving else 1.0
+		var locked: bool = number > mini(highest + 1, 99)
+		item.face.texture = STAGE_LOCKED if locked or (arriving and p <= 0.0) else STAGE_OPEN
+		item.face.scale = Vector2.ONE * (1.0 + 0.12 * sin(p * PI) if arriving and not _reduced_motion else 1.0)
+		item.padlock.visible = locked or (arriving and p < 1.0)
+		item.lock_glow.visible = item.padlock.visible
+		item.padlock.modulate = Color(0.89, 0.95, 1.0, 1.0 if locked else 1.0 - p)
+		item.padlock.scale = Vector2.ONE * (1.0 + 0.45 * p if arriving and not locked else 1.0)
+		item.padlock.rotation = sin(p * TAU * 2.0) * 0.22 * (1.0 - p) if arriving and not _reduced_motion else 0.0
+		item.lock_glow.modulate.a = (0.22 if _reduced_motion else 0.22 + 0.09 * sin(_effect_elapsed * 1.8 + number)) \
+			* (1.0 if locked else 1.0 - p)
 
 
 func _draw_route() -> void:
@@ -441,6 +502,33 @@ func _draw_route() -> void:
 		_content.draw_polyline(points, Color(0.38, 0.55, 0.48, 0.15), 26.0 / _scale, true)
 		_content.draw_polyline(points, Color("#fff6df"), 18.0 / _scale, true)
 		_content.draw_polyline(points, Color("#dccb99"), 2.0 / _scale, true)
+	if _unlock_from <= 0 or _unlock_elapsed >= ROUTE_SECONDS + UNLOCK_SECONDS:
+		return
+	var journey := Curve2D.new()
+	journey.add_point(_nodes[_unlock_from - 1].button.get_rect().get_center(),
+		Vector2.ZERO, Vector2(0, -40.0 / _scale))
+	journey.add_point(_nodes[_unlock_from].button.get_rect().get_center(),
+		Vector2(0, 40.0 / _scale), Vector2.ZERO)
+	var travel: float = clampf(_unlock_elapsed / ROUTE_SECONDS, 0.0, 1.0)
+	var trail := PackedVector2Array()
+	for index in range(33):
+		trail.append(journey.sample_baked(journey.get_baked_length() * travel * index / 32.0))
+	_content.draw_polyline(trail, Color(1.0, 0.78, 0.25, 0.28), 24.0 / _scale, true)
+	_content.draw_polyline(trail, Color("#ffe69b"), 12.0 / _scale, true)
+	var head: Vector2 = trail[trail.size() - 1]
+	var edge: float = 52.0 / _scale
+	_content.draw_texture_rect(GLOW, Rect2(head - Vector2.ONE * edge * 0.5, Vector2.ONE * edge),
+		false, Color(1.0, 0.85, 0.4, 0.8))
+	_content.draw_texture_rect(SPARKLE, Rect2(head - Vector2.ONE * edge * 0.22, Vector2.ONE * edge * 0.44),
+		false, Color("#fff4c4"))
+	if _unlock_elapsed > ROUTE_SECONDS:
+		var p: float = (_unlock_elapsed - ROUTE_SECONDS) / UNLOCK_SECONDS
+		_content.draw_texture_rect(RAYS, Rect2(head - Vector2.ONE * edge, Vector2.ONE * edge * 2),
+			false, Color(1.0, 0.85, 0.45, 1.0 - p))
+		for index in range(8):
+			var at: Vector2 = head + Vector2.from_angle(TAU * index / 8.0) * (18.0 + p * 54.0) / _scale
+			_content.draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * 6.0 / _scale, Vector2.ONE * 12.0 / _scale),
+				false, Color(1.0, 0.87, 0.45, 1.0 - p))
 
 
 func _rect(bounds: Rect2) -> Dictionary:
@@ -459,8 +547,11 @@ func snapshot() -> Dictionary:
 		var number: int = int(item.number)
 		stages.append({"number": number, "chapter": ceili(float(number) / 9.0),
 			"unlocked": number <= mini(highest + 1, 99),
+			"lock_visible": item.padlock.visible,
 			"best_stars": int(_state.get("best_stars", {}).get(str(number), 0)),
 			"boss": item.boss.visible,
+			"boss_rect": _rect(item.boss.get_global_rect()) if item.boss.visible else {},
+			"boss_portrait": BOSS_PORTRAIT.resource_path if item.boss.visible else "",
 			"rect": _rect(item.button.get_global_rect()),
 			"visible": is_visible_in_tree() and _scroll.get_global_rect().intersects(item.button.get_global_rect())})
 	return {"visible": is_visible_in_tree(), "map_rect": _rect(get_global_rect()),
@@ -468,7 +559,10 @@ func snapshot() -> Dictionary:
 		"scroll_rect": _rect(_scroll.get_global_rect()), "scroll_offset": _scroll.scroll_vertical,
 		"stage_nodes": stages, "challenge": _control(_challenge), "home": _control(_home),
 		"retry": _control(_retry), "loading": bool(_state.get("loading", false)),
+		"unlock": {"from": _unlock_from, "to": _unlock_from + 1 if _unlock_from > 0 else 0,
+			"elapsed": _unlock_elapsed, "phase": "route" if _unlock_elapsed < ROUTE_SECONDS \
+				else "node" if _unlock_elapsed < ROUTE_SECONDS + UNLOCK_SECONDS else "done"},
 		"error": str(_state.get("error", "")),
 		"merged_level": int(_state.get("merged_level", 1)),
-		"boss_markers": _state.get("boss_markers", []).duplicate(),
+		"boss_markers": _state.get("boss_markers", []).filter(func(number: int) -> bool: return number > 1),
 		"boss_victories": _state.get("boss_victories", []).duplicate()}

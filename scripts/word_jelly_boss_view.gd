@@ -1,5 +1,5 @@
 extends Control
-## Boss HUD, acquired character motion and sourced VFX. Gameplay remains in BossRun.
+## A side-standing acquired character and sourced energy effects; BossRun owns combat.
 
 signal audio_requested(cue: String)
 
@@ -20,11 +20,8 @@ var reduced_motion: bool = false
 var _actor := Actor.new()
 var _character := TextureRect.new()
 var _doubles: Array[TextureRect] = []
-var _heading: Label
-var _health: Label
-var _detail: Label
 var _dialogue: Label
-var _speaker: Label
+var _speaker_text: String = ""
 var _state: Dictionary = {}
 var _board := Rect2()
 var _preview := Rect2()
@@ -42,6 +39,9 @@ var _last_pose_frame: int = -1
 var _last_pose_clip: String = ""
 var _snatch: Dictionary = {}
 var _thrown: Array[Dictionary] = []
+var _health_from: float = 1.0
+var _health_to: float = 1.0
+var _health_at: float = 0.0
 
 
 func _init() -> void:
@@ -62,14 +62,14 @@ func _init() -> void:
 		clone.modulate = Color(0.64, 0.51, 0.85, 0.55)
 		add_child(clone)
 		_doubles.append(clone)
-	_heading = _label(16)
-	_health = _label(12)
-	_detail = _label(11)
-	_detail.add_theme_color_override("font_color", Style.MUTED)
-	_speaker = _label(14)
-	_dialogue = _label(15)
+	_dialogue = _label(13)
 	_dialogue.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_dialogue.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_dialogue.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_dialogue.max_lines_visible = 2
+	_dialogue.clip_text = true
+	_dialogue.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+	_dialogue.add_theme_color_override("font_outline_color", Color("#fffdf6"))
 	hide()
 
 
@@ -86,38 +86,45 @@ func layout_battle(hud: Rect2, board: Rect2, scale_factor: float, preview: Rect2
 	_scale = scale_factor
 	_preview = preview if preview.has_area() else Rect2(board.position - Vector2(0, 60) / _scale,
 		Vector2(board.size.x, 54 / _scale))
-	_heading.position = hud.position + Vector2(10, 3) / _scale
-	_heading.size = Vector2(maxf(1.0, hud.size.x - 118 / _scale), 25 / _scale)
-	_heading.add_theme_font_size_override("font_size", ceili(16 / _scale))
-	_health.position = hud.position + Vector2(10, 28) / _scale
-	_health.size = Vector2(maxf(1.0, hud.size.x - 118 / _scale), 20 / _scale)
-	_health.add_theme_font_size_override("font_size", ceili(12 / _scale))
-	_detail.position = hud.position + Vector2(10, 51) / _scale
-	_detail.size = Vector2(maxf(1.0, hud.size.x - 118 / _scale), 18 / _scale)
-	_detail.add_theme_font_size_override("font_size", ceili(11 / _scale))
-	_character_rect = Rect2(Vector2(hud.end.x - 104 / _scale, hud.position.y - 17 / _scale),
-		Vector2(112, 112) / _scale)
+	var height: float = minf(hud.size.y, hud.size.x * 1.5)
+	var dimensions := Vector2(height / 1.5, height).max(Vector2.ONE)
+	_character_rect = Rect2(Vector2(hud.position.x + (hud.size.x - dimensions.x) * 0.5,
+		hud.end.y - dimensions.y), dimensions)
 	_character.position = _character_rect.position
 	_character.size = _character_rect.size
-	_speaker.add_theme_font_size_override("font_size", ceili(14 / _scale))
-	_dialogue.add_theme_font_size_override("font_size", ceili(15 / _scale))
+	_dialogue.position = Vector2(board.position.x + 8 / _scale, board.end.y - 46 / _scale)
+	_dialogue.size = Vector2(maxf(1.0, board.size.x - 16 / _scale), 38 / _scale)
+	_dialogue.add_theme_font_size_override("font_size", ceili(13 / _scale))
+	_dialogue.add_theme_constant_override("outline_size", ceili(3 / _scale))
 	_pose()
 	queue_redraw()
 
 
 func sync(state: Dictionary, tiles: Dictionary, generation: int, active_clock: bool, visuals: Dictionary = {}) -> bool:
+	var previous_health: float = _energy_ratio()
+	var target_health: float = float(state.get("health", 0)) / maxf(1.0, float(state.get("max_health", 1)))
+	if generation != _generation:
+		_health_from = target_health
+		_health_to = target_health
+	elif not is_equal_approx(target_health, _health_to):
+		_health_from = previous_health
+		_health_to = target_health
+		_health_at = float(state.elapsed)
 	_state = state
 	_tile_rects = tiles
-	visible = bool(state.get("active", false))
+	visible = bool(state.get("active", false)) and (not bool(state.get("definition", {}).get("intro", false)) \
+		or state.get("phase") in ["ending", "done"])
 	if not visible:
 		return true
 	if not _actor.load_character():
-		_heading.text = _actor.last_error
 		return false
 	if generation != _generation:
 		_generation = generation
 		_last_event = 0
-		_gesture = "Idle"
+		_gesture = "Taunt"
+		_gesture_at = -100.0
+		_last_pose_frame = -1
+		_last_pose_clip = ""
 		_sparks.clear()
 		_snatch.clear()
 		_thrown.clear()
@@ -126,16 +133,7 @@ func sync(state: Dictionary, tiles: Dictionary, generation: int, active_clock: b
 			continue
 		_last_event = int(event.id)
 		_handle_event(event, active_clock, visuals)
-	_heading.text = "Bramble  ·  " + ("A sneaky visitor" if state.definition.get("intro", false) else "Boss %d" % int(state.definition.id))
-	_health.text = "A visitor is watching..." if state.definition.get("intro", false) \
-		else "%d / %d HP" % [int(state.health), int(state.max_health)]
-	_detail.text = "Merge to charge · %d / 20" % int(state.charge)
-	if int(state.clones) > 0:
-		_detail.text = "%d shadow doubles left" % int(state.clones)
-	elif int(state.ward) > 0:
-		_detail.text = "%d shield hits left" % int(state.ward)
-	elif float(state.broken_remaining) > 0.0:
-		_detail.text = "Two jellies · Repair %ds" % ceili(float(state.broken_remaining))
+	set("accessibility_name", "Bramble. %d percent energy remaining." % roundi(target_health * 100.0))
 	_pose()
 	return true
 
@@ -173,53 +171,44 @@ func _handle_event(event: Dictionary, audible: bool, visuals: Dictionary) -> voi
 
 
 func _pose() -> void:
-	if _state.is_empty():
+	if _state.is_empty() or not visible:
 		return
 	var elapsed: float = float(_state.elapsed)
 	var ending: bool = _state.phase in ["ending", "done"]
 	var ending_time: float = float(_state.ending_elapsed)
-	var clip: String = _gesture if elapsed - _gesture_at < 1.1 else "Idle"
+	var clip: String = _gesture if elapsed - _gesture_at < 1.1 else "Taunt"
+	_character.position = _character_rect.position
+	_character.size = _character_rect.size
+	_character.modulate = Color.WHITE
+	_character.rotation = 0.0
 	if ending:
 		clip = "Hit" if _state.outcome == "defeated" and ending_time < 1.2 else "Taunt" if ending_time < 5.0 else "Escape"
-		var panel: Rect2 = _ending_bounds()
-		var edge: float = minf(224 / _scale, minf(panel.size.x * 0.80, panel.size.y * 0.45))
-		_character.size = Vector2.ONE * edge
-		_character.position = Vector2(panel.get_center().x - edge * 0.5, panel.position.y + 8 / _scale)
 		var departure: float = clampf((ending_time - 5.0) / 2.0, 0.0, 1.0)
 		if not reduced_motion:
 			var style: String = str(_state.definition.retreat)
-			_character.position.x += departure * departure * (_board.size.x + 240 / _scale)
+			if bool(_state.definition.get("intro", false)):
+				var arrival: float = 1.0 - smoothstep(0.0, 0.7, ending_time)
+				_character.position.x += arrival * (size.x + _character.size.x - _character_rect.position.x)
+			_character.position.x += departure * departure * (size.x + _character.size.x - _character_rect.position.x)
 			_character.position.y -= sin(departure * PI) * (72.0 if style in ["panic", "scramble"] else 30.0) / _scale
 			_character.rotation = sin(departure * TAU * 2.0) * 0.12 if style == "panic" else -0.08 * departure if style == "swagger" else 0.0
 		_character.modulate.a = 1.0 - departure if reduced_motion or _state.definition.retreat == "trick" else 1.0
-		_speaker.text = "Pip" if ending_time >= 3.0 and ending_time < 4.8 else "Bramble"
+		_speaker_text = "Pip" if ending_time >= 3.0 and ending_time < 4.8 else "Bramble"
 		var end_event: Dictionary = {}
 		for event: Dictionary in _state.events:
 			if event.kind in ["victory", "taunt"]:
 				end_event = event
 		_dialogue.text = str(end_event.get("reply", "")) if ending_time >= 3.0 and ending_time < 4.8 else str(end_event.get("text", ""))
 		if _state.outcome == "defeated" and ending_time < 1.7:
-			_speaker.text = "Pip"
-			_dialogue.text = "We did it! Merged Lv%d is earned!" % int(_state.definition.unlock_level) \
-				if int(_state.definition.get("unlock_level", 0)) > 0 else "We did it! Bramble is defeated!"
-		_speaker.position = Vector2(panel.position.x + 12 / _scale, panel.position.y + edge + 18 / _scale)
-		_speaker.size = Vector2(panel.size.x - 24 / _scale, 22 / _scale)
-		_speaker.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		_dialogue.position = _speaker.position + Vector2(0, 24) / _scale
-		_dialogue.size = Vector2(_speaker.size.x, maxf(24 / _scale, panel.end.y - _dialogue.position.y - 10 / _scale))
+			_speaker_text = "Pip"
+			_dialogue.text = "We did it!"
 	else:
-		_character.position = _character_rect.position
-		_character.size = _character_rect.size
-		_character.modulate = Color.WHITE
-		_character.rotation = 0.0
 		if not reduced_motion:
-			_character.position.y -= sin(elapsed * 2.4) * 2.0 / _scale
 			if _gesture == "Kick" and elapsed - _gesture_at < 1.4:
 				var kick: float = sin(clampf((elapsed - _gesture_at) / 1.4, 0, 1) * PI)
-				var grow: Vector2 = _character_rect.size * kick * 0.65
-				_character.size += grow
-				var contact_travel: float = maxf(0.0, _preview.get_center().y - _character_rect.end.y)
-				_character.position += Vector2(-grow.x * 0.5, -grow.y + contact_travel * kick)
+				_character.size *= 1.0 + kick * 0.65
+				var contact: Vector2 = _preview.get_center() - _character.size * Vector2(0.5, Actor.FOOT_Y)
+				_character.position = _character_rect.position.lerp(contact, kick)
 			if not _snatch.is_empty():
 				var age: float = elapsed - float(_snatch.at)
 				var destination: Vector2 = _board.position + Vector2(float(_snatch.column) + 0.5,
@@ -235,12 +224,10 @@ func _pose() -> void:
 					_character.position.y -= sin(back * PI) * 54.0 / _scale
 					if back >= 1.0:
 						_snatch.clear()
-		_speaker.text = ""
-		_dialogue.position = Vector2(_board.position.x + 8 / _scale, _board.position.y + 4 / _scale)
-		_dialogue.size = Vector2(_board.size.x - 16 / _scale, 48 / _scale)
-	_speaker.visible = ending
-	_dialogue.visible = ending or elapsed < _dialogue_until
-	var sample: int = floori(elapsed * (12.0 if clip == "Idle" else 24.0))
+		_speaker_text = "Bramble"
+	_dialogue.visible = ((_state.phase == "ending" and ending_time < 6.4) \
+		or not ending and elapsed < _dialogue_until) and not _dialogue.text.is_empty()
+	var sample: int = floori(elapsed * 24.0)
 	if sample != _last_pose_frame or clip != _last_pose_clip:
 		_actor.pose(clip, elapsed - _gesture_at, reduced_motion)
 		_last_pose_frame = sample
@@ -249,25 +236,38 @@ func _pose() -> void:
 		var clone: TextureRect = _doubles[index]
 		clone.visible = not ending and int(_state.clones) > index
 		clone.size = _character.size * 0.8
-		clone.position = _character.position + Vector2((-1.0 if index == 0 else 0.4) * 56, 8) / _scale
+		clone.position = _character.position + Vector2((8.0 if index == 0 else _character.size.x * 0.24), 8.0 / _scale)
 	_sparks = _sparks.filter(func(item: Dictionary) -> bool: return float(item.until) > elapsed)
 	_thrown = _thrown.filter(func(item: Dictionary) -> bool: return elapsed - float(item.at) < 1.2)
 	queue_redraw()
 
-func _ending_bounds() -> Rect2:
-	return Rect2(_board.position + Vector2(0, _board.size.y * 0.05),
-		Vector2(_board.size.x, _board.size.y * 0.90))
+func _energy_ratio() -> float:
+	var elapsed: float = float(_state.get("elapsed", 0.0))
+	var p: float = 1.0 if reduced_motion else smoothstep(0.0, 0.42, elapsed - _health_at)
+	return clampf(lerpf(_health_from, _health_to, p), 0.0, 1.0)
 
 
 func _draw() -> void:
 	if not visible or _state.is_empty():
 		return
-	draw_style_box(Style.box(Color("#fff7e7"), Color("#b49bc2"), 14, 1), _hud)
-	var bar := Rect2(_hud.position + Vector2(10, 46) / _scale,
-		Vector2(maxf(1.0, _hud.size.x - 108 / _scale), 4 / _scale))
-	draw_style_box(Style.box(Color("#e1dce6"), Color.TRANSPARENT, 2, 0), bar)
-	bar.size.x *= float(_state.health) / maxf(1.0, float(_state.max_health))
-	draw_style_box(Style.box(Color("#b478a4"), Color.TRANSPARENT, 2, 0), bar)
+	var center: Vector2 = _character.position + _character.size * Vector2(0.5, 0.53)
+	var floor_point: Vector2 = _character.position + _character.size * Vector2(0.5, Actor.FOOT_Y)
+	draw_texture_rect(GLOW, Rect2(floor_point - _character.size * Vector2(0.35, 0.035),
+		_character.size * Vector2(0.70, 0.07)), false, Color(0.32, 0.22, 0.52, 0.42))
+	if _state.phase not in ["ending", "done"]:
+		var energy: float = _energy_ratio()
+		draw_texture_rect(GLOW, _character.get_rect().grow(-_character.size.x * 0.06),
+			false, Color(0.63, 0.41, 1.0, 0.13 + energy * 0.13))
+		for index in range(8):
+			var angle: float = lerpf(PI * 0.60, PI * 2.40, index / 7.0)
+			var point: Vector2 = center + Vector2(cos(angle), sin(angle)) * _character.size * Vector2(0.43, 0.38)
+			var filled: float = clampf(energy * 8.0 - index, 0.0, 1.0)
+			var pulse: float = 1.0 if reduced_motion else 1.0 + 0.09 * sin(float(_state.elapsed) * 2.0 + index)
+			var edge: float = minf(18.0 / _scale, _character.size.x * 0.14) * pulse
+			draw_texture_rect(GLOW, Rect2(point - Vector2.ONE * edge, Vector2.ONE * edge * 2.0),
+				false, Color(0.72, 0.52, 1.0, 0.45 * filled))
+			draw_texture_rect(SPARKLE, Rect2(point - Vector2.ONE * edge * 0.5, Vector2.ONE * edge),
+				false, Color(0.86, 0.72, 1.0, 0.10 + 0.90 * filled))
 	if float(_state.broken_remaining) > 0.0:
 		var rail_height: float = 7.0 / _scale
 		var half: float = _preview.size.x * 0.5 - 10 / _scale
@@ -275,9 +275,10 @@ func _draw() -> void:
 			Vector2(half, rail_height)), Rect2(0, 0, 64, 14), Color("#e2b58e"))
 		draw_texture_rect_region(WOOD, Rect2(_preview.position + Vector2(half + 20 / _scale, _preview.size.y - rail_height + 3 / _scale),
 			Vector2(half, rail_height)), Rect2(64, 0, 64, 14), Color("#e2b58e"))
-		draw_string(Style.HEADING_FONT, _preview.position + Vector2(8, -3) / _scale,
-			"SKY DAMAGED · 2 per drop · %ds" % ceili(float(_state.broken_remaining)),
-			HORIZONTAL_ALIGNMENT_LEFT, _preview.size.x, ceili(11 / _scale), Color("#9c4c35"))
+		draw_texture_rect(CLOCK, Rect2(_preview.position + Vector2(4, -20) / _scale,
+			Vector2.ONE * 16 / _scale), false)
+		draw_string(Style.HEADING_FONT, _preview.position + Vector2(23, -5) / _scale,
+			"%ds" % ceili(float(_state.broken_remaining)), HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(11 / _scale), Color("#9c4c35"))
 	for thrown: Dictionary in _thrown:
 		if reduced_motion:
 			continue
@@ -322,8 +323,6 @@ func _draw() -> void:
 			draw_string(Style.HEADING_FONT, target - Vector2(10, 12) / _scale,
 				"-%d" % int(event.get("damage", 0)), HORIZONTAL_ALIGNMENT_CENTER, -1, ceili(18 / _scale), Color("#75426f"))
 	if _state.phase in ["ending", "done"]:
-		var panel: Rect2 = _ending_bounds()
-		draw_style_box(Style.box(Color("#fff9ed"), Color("#cfbad6"), 22, 1), panel)
 		var compass_edge: float = 42 / _scale
 		var compass_target: Vector2 = _character.position + _character.size * Vector2(0.77, 0.62)
 		if _state.outcome == "ambushed":
@@ -341,7 +340,7 @@ func _draw() -> void:
 			var p: float = float(_state.ending_elapsed) / 2.0
 			for index in range(12):
 				var angle: float = TAU * index / 12.0
-				var at: Vector2 = panel.get_center() + Vector2(cos(angle), sin(angle)) * (40.0 + p * 100.0) / _scale
+				var at: Vector2 = center + Vector2(cos(angle), sin(angle)) * (40.0 + p * 100.0) / _scale
 				draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * 8 / _scale, Vector2.ONE * 16 / _scale),
 					false, Color(1, 0.86, 0.4, 1 - p))
 		return
@@ -387,7 +386,10 @@ func _draw() -> void:
 
 func snapshot() -> Dictionary:
 	return {"visible": is_visible_in_tree(), "rect": [_hud.position.x, _hud.position.y, _hud.size.x, _hud.size.y],
+		"base_character_rect": [_character_rect.position.x, _character_rect.position.y, _character_rect.size.x, _character_rect.size.y],
 		"character_rect": [_character.position.x, _character.position.y, _character.size.x, _character.size.y],
-		"clip": _last_pose_clip, "heading": _heading.text, "health_text": _health.text,
-		"dialogue": _dialogue.text if _dialogue.visible else "", "speaker": _speaker.text,
+		"presentation": "side_character", "clip": _last_pose_clip, "heading": "", "health_text": "",
+		"health_fraction": float(_state.get("health", 0)) / maxf(1.0, float(_state.get("max_health", 1))),
+		"energy_fraction": _energy_ratio(), "energy_segments": 8,
+		"dialogue": _dialogue.text if visible and _dialogue.visible else "", "speaker": _speaker_text if visible else "",
 		"animations": Array(_actor.animation_names()), "error": _actor.last_error}

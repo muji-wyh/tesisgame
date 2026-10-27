@@ -24,9 +24,36 @@
   not relabeled publisher clips. Actual native renders and desktop/phone browser
   journeys review deformation, extreme poses, the front face and phone framing.
   Conversion alone is not substituted for those presentation checks.
+  The revised `Taunt` poses the original upper arms and uses each posed parent's
+  transform to aim bent forearms into a playful raised-hand stance. This is an
+  authored rival gesture, not a newly acquired publisher animation. The tall
+  transparent battle viewport keeps the full body beside the board; its camera
+  includes the extreme hand poses rather than clipping them into a HUD portrait.
 
 Talk Quest remains retired. This reuses one separately acquired character, not
 the old mode, monster roster, environments, or gameplay.
+
+## Map portrait
+
+The Boss map marker is a real transparent portrait of Bramble, not a text capsule.
+`tools/render-jelly-boss-portrait.gd` samples the integrated model's authored
+`Idle` at 0.45 seconds, preserves the complete face and ears, and proportionally
+fits the actual rendered upper-body image into a 256-pixel transparent canvas.
+It is a static in-game portrait, distinct from the original source-listing preview.
+Creator and license are the same Wabu / Standard Unity Asset Store EULA recorded
+above. The image and import metadata remain private build inputs; `manifest.json`
+records their model-source hash, image hash, dimensions and acquisition status.
+
+Regenerate after restoring the acquired model:
+
+```powershell
+node tools\run-godot.cjs --path . --rendering-method gl_compatibility --script res://tools/render-jelly-boss-portrait.gd
+```
+
+The portrait is also a touch target for its unlocked stage. The stage numeral and
+earned stars remain separate; locked future portraits cannot start a stage.
+Stage 1 deliberately has no portrait marker or watching-visitor presentation
+before its actual story ambush.
 
 ## Interface and effects
 
@@ -48,6 +75,9 @@ Bobardo portal texture and Archanor Toon FX rays/sparkles. Source identities,
 licenses and private-input handling remain in
 [Jelly level feedback](../../docs/assets/jelly-level-feedback.md).
 These are static production textures with game-authored trajectories.
+The eight health-energy glints, hit depletion, side-dock light and retreat
+accents reuse these exact textures. There is no replacement geometric character,
+opaque battle information panel or board-sized ending dialog.
 
 ## Boss vocalization
 

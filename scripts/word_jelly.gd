@@ -78,8 +78,6 @@ var _preview_layout_generation: int = -1
 var _preview_layout_rows: int = 1
 var _size_cover: ColorRect
 var _size_message: Label
-var _room_notice: Label
-var _room_notice_remaining: float = 0.0
 var _read_hold_id: int = -1
 var _read_hold_elapsed: float = 0.0
 var _tile_press_started_ms: int = -1
@@ -210,16 +208,6 @@ func _init() -> void:
 		if not word.is_empty():
 			word_requested.emit(word.duplicate(true)))
 	add_child(_read_panel)
-	_room_notice = Style.label("Make room before moving this jelly.", 16)
-	_room_notice.name = "JellyRoomNotice"
-	_room_notice.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_room_notice.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_room_notice.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_room_notice.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	_room_notice.z_index = 50
-	_room_notice.add_theme_stylebox_override("normal", Style.box(Style.PAPER, Style.EDGE, 12, 1))
-	_room_notice.hide()
-	add_child(_room_notice)
 
 func set_pip_level(level: int) -> void:
 	if game.pip_level == maxi(0, level):
@@ -237,9 +225,6 @@ func stop() -> void:
 	_presentation_elapsed = 0.0
 	if _collection_effects != null:
 		_collection_effects.reset()
-	_room_notice_remaining = 0.0
-	if _room_notice != null:
-		_room_notice.hide()
 	_read_cell.clear()
 	_requested_pause = false
 	_layout_too_small = false
@@ -274,7 +259,7 @@ func stop() -> void:
 	_placement_tile.hide()
 
 func pause(value: bool = true, preserve_effects: bool = false) -> void:
-	if value and _stage_banner != null:
+	if value and _stage_banner != null and not _stage_banner.entry_active():
 		_stage_banner.dismiss()
 	_requested_pause = value
 	if value and not preserve_effects and _collection_effects != null:
@@ -288,7 +273,7 @@ func pause(value: bool = true, preserve_effects: bool = false) -> void:
 		button.pause_feedback(_paused)
 
 func _apply_pause_reasons() -> void:
-	super.pause(_requested_pause or _layout_too_small or not _read_cell.is_empty())
+	super.pause(_requested_pause or _layout_too_small or not _read_cell.is_empty() or _stage_banner.ready_pending())
 	# The reason can change while the combined pause remains true.
 	_refresh_controls()
 
@@ -376,8 +361,7 @@ func cancel_input() -> void:
 	super.cancel_input()
 
 func _drag_blocked(_reason: String) -> void:
-	_room_notice_remaining = 2.5
-	_room_notice.show()
+	_cue("contact")
 	_publish()
 
 func set_learning_backdrop(active: bool) -> void:
@@ -1334,6 +1318,19 @@ func _preview_pose(index: int) -> Dictionary:
 	return Motion.preview(game.spawn_elapsed, game.spawn_interval, index, reduced_motion or game.phase != "playing" or not _preview_drop_available)
 
 func _process(delta: float) -> void:
+	if _stage_banner.ready_pending():
+		if not _configured or _requested_pause or _layout_too_small or not is_visible_in_tree() \
+			or not is_finite(delta) or delta <= 0.0 or delta > 0.5:
+			return
+		var ready_delta: float = minf(delta, StageBanner.READY_SECONDS - _stage_banner._elapsed)
+		_stage_banner.advance(ready_delta)
+		delta -= ready_delta
+		if not _stage_banner.ready_pending():
+			_apply_pause_reasons()
+			audio_requested.emit("goal_complete")
+		_publish()
+		if delta <= 0.000001:
+			return
 	_consume_drag_motion()
 	if _read_hold_id >= 0 and _pointer != NO_POINTER and not _dragging and _can_play() and delta <= 0.5:
 		_read_hold_elapsed += delta
@@ -1341,9 +1338,6 @@ func _process(delta: float) -> void:
 			var id: int = _read_hold_id
 			_read_hold_id = -1
 			_show_read(id)
-	if _room_notice_remaining > 0.0:
-		_room_notice_remaining = maxf(0.0, _room_notice_remaining - delta)
-		_room_notice.visible = _room_notice_remaining > 0.0
 	if _finish_is_pulling():
 		if _layout_too_small and can_finish_round() and delta <= 0.5:
 			# The header owns this pull; the board remains paused underneath it.
@@ -1429,7 +1423,8 @@ func _refresh_completion_hints() -> void:
 		var same_word: bool = str(prefix.get("jelly_kind", "")) == "merged" \
 			and str(target.get("jelly_kind", "")) == "merged" and id != source \
 			and not prefix.get("word", {}).is_empty() \
-			and str(prefix.word.id) == str(target.get("word", {}).get("id", ""))
+			and str(prefix.word.id) == str(target.get("word", {}).get("id", "")) \
+			and WordModel._merged_upgrade_level(prefix, target) <= game.merged_level_limit
 		var eligible: bool = not prefix.is_empty() and (not _fusion_drag.is_empty() or _settled(prefix)) and game.is_contactable(target) \
 			and (same_word or _can_merge_for_feedback(prefix, target))
 		_tiles[id].set_completion_hint(eligible, _completion_elapsed, reduced_motion)
@@ -1852,8 +1847,11 @@ func set_stage_progress(state: Dictionary, celebrate: bool = false) -> void:
 	_stage_banner.reduced_motion = reduced_motion
 	_stage_banner.set_stage(state, celebrate)
 	_practice_panel.set_stage(state)
+	if celebrate:
+		_apply_pause_reasons()
 	if was_visible != _stage_banner.visible or previous_rows != _practice_panel._rows.size():
 		_layout()
+	_sync_boss()
 	_publish()
 
 func _finish_hint_allowed() -> bool:
@@ -1871,7 +1869,8 @@ func _can_tap_chest() -> bool:
 
 func can_finish_round() -> bool:
 	# A size-only pause stops the board while retaining the header's exit action.
-	return _can_play() or _paused_finish_allowed() or (_layout_too_small and not _requested_pause and _read_cell.is_empty()
+	return _can_play() or _paused_finish_allowed() or ((_layout_too_small or _stage_banner.ready_pending()) \
+		and not _requested_pause and _read_cell.is_empty()
 		and _configured and game.phase == "playing" and is_visible_in_tree()
 		and (not interaction_allowed.is_valid() or bool(interaction_allowed.call())))
 
@@ -1883,6 +1882,9 @@ func _finish_round() -> void:
 	if not can_finish_round() or _pointer != NO_POINTER or _finish_is_pulling():
 		return
 	cancel_input()
+	if _stage_banner.entry_active():
+		_stage_banner.dismiss()
+		_apply_pause_reasons()
 	game.finish_round()
 
 func _sync_chest_tap() -> void:
@@ -1974,13 +1976,13 @@ func _layout() -> void:
 	var padding: float = 4.0 / s
 	var feed_gap: float = 4.0 / s
 	var hud_width: float = clampf((size.x - edge * 2.0) * 0.25, 88.0 / s, 144.0 / s)
+	if game.boss.active():
+		hud_width = maxf(hud_width, minf(144.0 / s, (size.x - edge * 2.0) * 0.36))
 	var hud_gap: float = (8.0 if authored else 12.0) / s
 	var local_finish: bool = finish_button.get_parent() == self
 	var local_chest: bool = not has_header_chest()
 	var top_hud_height: float = (44.0 if authored else 52.0) / s if local_finish or local_chest else 0.0
-	var boss_y: float = top_hud_height
-	var boss_height: float = 84.0 / s if game.boss.active() else 0.0
-	top_hud_height += boss_height
+	var boss_layout: bool = game.boss.active()
 	var notice_y: float = top_hud_height
 	var stage_y: float = top_hud_height
 	var stage_in_rail: bool = size.x > size.y * 1.4 and size.y * s <= 400.0
@@ -1992,7 +1994,7 @@ func _layout() -> void:
 		top_hud_height += 42.0 / s
 	var content_top: float = top_hud_height + (2.0 if authored else 12.0) / s
 	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - content_top)
-	var action_height: float = 56.0 / s
+	var action_height: float = (44.0 if boss_layout else 56.0) / s
 	var tool_count: int = 3 if game.stage_run != null and game.stage_run.kind == "main" else 2
 	var collect_height: float = action_height
 	var divider_gap: float = 20.0 / s
@@ -2001,7 +2003,7 @@ func _layout() -> void:
 	var side_pitch: float = _fit_layout_pitch(available - Vector2(hud_width + hud_gap, 0.0), s)
 	# Center the well and its single action rail as one group. On short screens
 	# the rail may extend beside the supply row, but never into the header.
-	var side_hud: bool = side_pitch > bottom_pitch + 0.5 / s and available.y >= 184.0 / s
+	var side_hud: bool = boss_layout or (side_pitch > bottom_pitch + 0.5 / s and available.y >= 184.0 / s)
 	_compact_hud = side_hud
 	footer_height = 0.0 if side_hud else footer_height
 	if side_hud:
@@ -2027,10 +2029,6 @@ func _layout() -> void:
 		_reflow.clear()
 		_snapbacks.clear()
 	_board = next_board
-	_boss_view.size = size
-	_boss_view.layout_battle(Rect2(Vector2(_board.position.x, boss_y),
-		Vector2(_board.size.x, maxf(0.0, boss_height - 6.0 / s))), _board, s,
-		Rect2(Vector2(_board.position.x, group_top), Vector2(_board.size.x, preview_height)))
 	var well_bounds: Rect2 = _board.grow(-2.0 / s)
 	_well_art.position = well_bounds.position
 	_well_art.size = well_bounds.size
@@ -2055,6 +2053,8 @@ func _layout() -> void:
 		var practice_area: Rect2 = Rect2(Vector2(_board.position.x - practice_width - 18.0 / s, group_top),
 			Vector2(practice_width, minf(_board.size.y, (66.0 + _practice_panel._rows.size() * 60.0) / s))) \
 			if sidebar else badge
+		if boss_layout and sidebar and stage_in_rail:
+			practice_area.size.y = maxf(64.0 / s, practice_area.size.y - 52.0 / s)
 		_practice_panel.configure_layout(practice_area, s, not sidebar)
 	if not layout_header_chest():
 		_loot_meter.position = Vector2(edge, 4.0 / s)
@@ -2082,7 +2082,7 @@ func _layout() -> void:
 		finish_button.position = Vector2(size.x - edge - finish_button.size.x, 4.0 / s)
 	for index in range(tool_count):
 		var button: PowerupButton = powerup_buttons[["auto_merge", "fragments", "extra_time"][index]]
-		button.set_ui_scale(s)
+		button.set_ui_scale(s, boss_layout)
 		button.size = Vector2(hud_width if side_hud else item_width, action_height)
 		button.position = Vector2(hud_x, _board.end.y - (tool_count - index) * (button.size.y + 8.0 / s) + 8.0 / s) if side_hud else \
 			Vector2(hud_x + index * (footer_width - button.size.x) / float(tool_count - 1), _board.end.y + edge + action_height + divider_gap)
@@ -2116,7 +2116,18 @@ func _layout() -> void:
 			combo_bounds.size.x = minf(combo_bounds.size.x, maxf(0.0, _board.position.x - edge * 2.0))
 			# Short landscape leaves its upper gutter to collected-word cards.
 			combo_bounds.position = Vector2(edge, maxf(content_top, _board.end.y - combo_bounds.size.y))
+	if boss_layout and not local_finish and not local_chest:
+		if not stage_in_rail:
+			combo_bounds = Rect2(Vector2(hud_x, stage_y), Vector2(hud_width, 44.0 / s))
+		else:
+			combo_bounds = Rect2(Vector2(_practice_panel.position.x, _board.end.y - 44.0 / s),
+				Vector2(minf(196.0 / s, _practice_panel.size.x), 44.0 / s))
 	_combo_hud.configure(combo_bounds, s, reduced_motion)
+	_boss_view.size = size
+	var boss_top: float = content_top + (54.0 / s if stage_in_rail and _stage_banner.visible else 0.0)
+	var boss_width: float = minf(maxf(1.0, size.x - hud_x - edge), maxf(hud_width, minf(240.0 / s, _board.size.y * 0.45)))
+	_boss_view.layout_battle(Rect2(Vector2(hud_x, boss_top),
+		Vector2(boss_width, maxf(1.0, collect_button.position.y - boss_top - 8.0 / s))), _board, s, _preview_rect)
 	_action_divider.size = Vector2(hud_width if side_hud else footer_width, 2.0 / s)
 	_action_divider.position = Vector2(hud_x, collect_button.get_rect().end.y + (divider_gap - _action_divider.size.y) * 0.5)
 	if _powerup_effects != null:
@@ -2132,10 +2143,6 @@ func _layout() -> void:
 	_notice.position = Vector2(edge, notice_y)
 	_notice.size = Vector2(size.x - edge * 2.0, 42.0 / s)
 	_notice.add_theme_font_size_override("font_size", ceili(12.0 / s))
-	if _room_notice != null:
-		_room_notice.position = _board.position + Vector2(8.0, 8.0) / s
-		_room_notice.size = Vector2(_board.size.x - 16.0 / s, 56.0 / s)
-		_room_notice.add_theme_font_size_override("font_size", ceili(16.0 / s))
 	_reward_presentation.size = size
 	_reward_presentation.set_chest_anchor(chest_anchor_rect())
 	if _collection_effects != null:
@@ -2226,7 +2233,7 @@ func snapshot() -> Dictionary:
 		state.collect_button.merge({"rect": _rect(collect_button.get_global_rect()), "enabled": not collect_button.disabled, "visible": collect_button.is_visible_in_tree()}, true)
 	state.preview.enabled = state.preview.enabled and not game.collection_batch_active() and not game.powerup_active()
 	state.drag.selected = _keyboard_source
-	state.drag["needs_room"] = _room_notice != null and _room_notice.visible
+	state.drag["needs_room"] = false
 	for item: Dictionary in state.tiles:
 		var tile: WordTile = _tiles[int(item.id)]
 		item["presentation"] = tile.presentation_snapshot()

@@ -38,7 +38,9 @@ func _run() -> void:
 			ending.advance(invalid)
 		check(ending.snapshot() == original, "Invalid clock updates cannot consume end presentation time")
 		ending.advance(0.30)
-		check(ending.is_active() and ending._visual.modulate.a > 0.9, "The end message becomes fully readable")
+		check(ending.is_active() and ending._visual.modulate.a > 0.0 and ending._visual.modulate.a < 0.9
+			and ending._heading.modulate.a == 0.0,
+			"Reaction light enters gently before the end heading, instead of abruptly replacing the board")
 		var elapsed: float = float(ending.snapshot().elapsed)
 		ending.set_paused(true)
 		ending.advance(20.0)

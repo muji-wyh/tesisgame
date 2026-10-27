@@ -107,7 +107,8 @@ func _verify() -> void:
 	print("Boss: acquired skinned Bramble and eight authored skeletal clips checked in startup.")
 	var boss_view: Script = load("res://scripts/word_jelly_boss_view.gd")
 	if boss_view == null or not boss_view.can_instantiate() \
-		or not ResourceLoader.exists("res://assets/jelly-boss/compass.webp"):
+		or not ResourceLoader.exists("res://assets/jelly-boss/compass.webp") \
+		or not ResourceLoader.exists("res://assets/jelly-boss/private/bramble-portrait.png"):
 		printerr("Boss presentation and its story compass must load without an age-twelve vocabulary pack.")
 		failures += 1
 	var confetti := load("res://assets/images/jelly-match/confetti.png") as Texture2D

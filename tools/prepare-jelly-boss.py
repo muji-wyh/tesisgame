@@ -78,6 +78,14 @@ def main():
         rest = rig_rotation @ bone.bone.matrix_local.to_quaternion()
         bone.rotation_euler = (rest.inverted() @ Quaternion(Vector(axis), angle) @ rest).to_euler("XYZ")
 
+    def aim_from_parent(name, direction):
+        bpy.context.view_layer.update()
+        bone = bones[name]
+        parent_delta = bone.parent.matrix.to_quaternion() @ bone.parent.bone.matrix_local.to_quaternion().inverted()
+        base = rig_rotation @ parent_delta @ bone.bone.matrix_local.to_quaternion()
+        turn = (base @ Vector((0, 1, 0))).rotation_difference(Vector(direction).normalized())
+        bone.rotation_euler = (base.inverted() @ turn @ base).to_euler("XYZ")
+
     def side(name):
         return 1 if (rig.matrix_world @ bones[name].bone.head_local).x > 0 else -1
 
@@ -126,10 +134,13 @@ def main():
             bones["Ear1.L"].rotation_euler.x += 0.4 * bounce
             bones["Ear1.R"].rotation_euler.x += 0.4 * bounce
         elif clip == "Taunt":
-            bones["Head"].rotation_euler.z = 0.25 * math.sin(p * math.tau * 2)
-            bones["Torso"].rotation_euler.x = 0.14 * abs(math.sin(p * math.tau * 3))
-            bones["LowerArm.L"].rotation_euler.x = -0.55
-            bones["LowerArm.R"].rotation_euler.x = -0.55
+            aim("UpperArm.L", (side("UpperArm.L") * 0.58, -0.15, 0.40 + 0.22 * wave))
+            aim("UpperArm.R", (side("UpperArm.R") * 0.58, -0.15, 0.40 - 0.22 * wave))
+            bones["Head"].rotation_euler.z = 0.18 * math.sin(p * math.tau * 2)
+            bones["Torso"].rotation_euler.z = 0.065 * wave
+            bones["Torso"].rotation_euler.x = 0.07 * abs(math.sin(p * math.tau * 2))
+            aim_from_parent("LowerArm.L", (side("LowerArm.L") * 0.10, -0.22, 1.0 + 0.12 * wave))
+            aim_from_parent("LowerArm.R", (side("LowerArm.R") * 0.10, -0.22, 1.0 - 0.12 * wave))
             bones["Ear1.L"].rotation_euler.z = 0.15 * wave
             bones["Ear1.R"].rotation_euler.z = -0.15 * wave
         elif clip == "Celebrate":

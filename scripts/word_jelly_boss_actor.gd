@@ -2,6 +2,8 @@ extends SubViewport
 ## The acquired character is posed from authored skeletal clips; the view owns its clock.
 
 const MODEL = "res://assets/jelly-boss/private/bramble.glb"
+const CAMERA_HEIGHT: float = 3.1
+const FOOT_Y: float = (1.05 + CAMERA_HEIGHT * 0.5) / CAMERA_HEIGHT
 var last_error: String = ""
 var _world := Node3D.new()
 var _rig := Node3D.new()
@@ -15,7 +17,7 @@ var _loaded: bool = false
 
 func _init() -> void:
 	name = "BrambleModelViewport"
-	size = Vector2i(384, 384)
+	size = Vector2i(384, 576)
 	transparent_bg = true
 	own_world_3d = true
 	gui_disable_input = true
@@ -74,7 +76,7 @@ func load_character() -> bool:
 	_rig.rotation.y = -0.15
 	_camera.position = Vector3(0.0, 1.05, 6.0)
 	_camera.look_at(Vector3(0.0, 1.05, 0.0))
-	_camera.size = 2.65
+	_camera.size = CAMERA_HEIGHT
 	_player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 	_loaded = true
 	last_error = ""

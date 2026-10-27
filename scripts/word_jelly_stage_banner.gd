@@ -4,8 +4,10 @@ extends Control
 const Style = preload("res://scripts/ui_style.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const RAYS = preload("res://assets/chests/milestone/rays.png")
 const STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 const DURATION: float = 1.8
+const READY_SECONDS: float = 0.82
 const STAR_LOSS_SECONDS: float = 0.60
 var reduced_motion: bool = false
 var _state: Dictionary = {}
@@ -16,6 +18,7 @@ var _card := Control.new()
 var _badge := Rect2()
 var _scale: float = 1.0
 var _elapsed: float = DURATION
+var _entry: bool = false
 var _star_loss_elapsed: Array[float] = [STAR_LOSS_SECONDS, STAR_LOSS_SECONDS, STAR_LOSS_SECONDS]
 
 
@@ -61,6 +64,7 @@ func set_stage(state: Dictionary, celebrate: bool = false) -> void:
 	set("accessibility_name", _label.text)
 	if celebrate:
 		_elapsed = 0.0
+		_entry = not state.get("complete", false) and state.get("kind", "") in ["main", "challenge"]
 		if state.get("kind") == "challenge":
 			_title.text = "Challenge"
 			_detail.text = "No timer  ·  Wave %d" % int(state.get("pressure", {}).get("level", 1))
@@ -69,8 +73,7 @@ func set_stage(state: Dictionary, celebrate: bool = false) -> void:
 			_detail.text = "Beautiful work!" if state.get("complete", false) else "%d word goals" % state.total \
 				if state.get("kind") == "main" else "%d new words to master" % state.total
 			if state.get("objective", "") == "boss":
-				_title.text = "Boss battle"
-				_detail.text = "Collect words to defeat Bramble"
+				_detail.text = "Stage %d" % int(state.number)
 	_refresh_motion()
 	queue_redraw()
 
@@ -78,6 +81,7 @@ func set_stage(state: Dictionary, celebrate: bool = false) -> void:
 func reset() -> void:
 	_state.clear()
 	_elapsed = DURATION
+	_entry = false
 	_star_loss_elapsed.fill(STAR_LOSS_SECONDS)
 	hide()
 	_card.hide()
@@ -85,7 +89,16 @@ func reset() -> void:
 
 func dismiss() -> void:
 	_elapsed = DURATION
+	_entry = false
 	_refresh_motion()
+
+
+func entry_active() -> bool:
+	return _entry and visible and _elapsed < DURATION
+
+
+func ready_pending() -> bool:
+	return _entry and visible and _elapsed < READY_SECONDS
 
 
 func advance(delta: float) -> void:
@@ -104,19 +117,21 @@ func configure_layout(badge: Rect2, board: Rect2, ui_scale: float) -> void:
 	_badge = badge
 	_label.add_theme_font_size_override("font_size", ceili(14.0 / _scale))
 	_update_label()
-	_card.size = Vector2(minf(board.size.x - 16.0 / _scale, 320.0 / _scale), 104.0 / _scale)
+	_card.size = Vector2(minf(board.size.x - 16.0 / _scale, 320.0 / _scale), 128.0 / _scale)
 	_card.position = board.get_center() - _card.size * 0.5
 	_card.pivot_offset = _card.size * 0.5
 	var title_width: float = maxf(1.0, _card.size.x - 16.0 / _scale)
 	var title_pixels: int = ceili((minf(24.0, _card.size.x * _scale / 10.0) \
-		if _state.get("complete", false) else 30.0) / _scale)
+		if _state.get("complete", false) else 48.0) / _scale)
 	var measured: float = Style.HEADING_FONT.get_string_size(_title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, title_pixels).x
 	if measured > title_width:
 		title_pixels = maxi(1, floori(float(title_pixels) * title_width / measured))
 	_title.add_theme_font_size_override("font_size", title_pixels)
-	_title.position = Vector2(8, 14) / _scale
-	_title.size = Vector2(title_width, 42.0 / _scale)
-	_detail.position = Vector2(8, 60) / _scale
+	_title.position = Vector2(8, 16) / _scale
+	_title.size = Vector2(title_width, 62.0 / _scale)
+	_title.add_theme_constant_override("outline_size", ceili(4.0 / _scale))
+	_title.add_theme_color_override("font_outline_color", Color("#fffdf6"))
+	_detail.position = Vector2(8, 84) / _scale
 	_detail.size = Vector2(_card.size.x - 16.0 / _scale, 28.0 / _scale)
 	_detail.add_theme_font_size_override("font_size", ceili(14.0 / _scale))
 	queue_redraw()
@@ -129,6 +144,8 @@ func snapshot() -> Dictionary:
 	state["label"] = _label.text
 	state["celebrating"] = visible and _elapsed < DURATION
 	state["elapsed"] = _elapsed
+	state["ready_pending"] = ready_pending()
+	state["entry_phase"] = "ready" if ready_pending() else "go" if entry_active() else "done"
 	state["timer_ratio"] = _timer_ratio()
 	state["rating_segments"] = rating_geometry(_rating_bounds(), _scale)
 	state["star_loss_active"] = rating_feedback_active()
@@ -214,11 +231,16 @@ func _update_label() -> void:
 
 
 func _refresh_motion() -> void:
+	if entry_active():
+		_title.text = "Ready?" if ready_pending() else "Go!"
+		_title.add_theme_color_override("font_color", Style.INK if ready_pending() else Style.GOOD)
 	_card.visible = _elapsed < DURATION and visible
 	var enter: float = clampf(_elapsed / 0.25, 0.0, 1.0)
 	var leave: float = clampf((DURATION - _elapsed) / 0.32, 0.0, 1.0)
 	_card.modulate.a = minf(enter, leave)
-	_card.scale = Vector2.ONE if reduced_motion else Vector2.ONE * (1.0 + sin(enter * PI) * 0.08 - (1.0 - enter) * 0.14)
+	var beat: float = clampf((_elapsed - READY_SECONDS) / 0.24, 0.0, 1.0)
+	_card.scale = Vector2.ONE if reduced_motion else Vector2.ONE * \
+		(1.0 + sin(enter * PI) * 0.08 - (1.0 - enter) * 0.14 + sin(beat * PI) * 0.13)
 	_card.queue_redraw()
 
 
@@ -241,7 +263,11 @@ func _draw_card() -> void:
 		return
 	var bounds := Rect2(Vector2.ZERO, _card.size)
 	draw_card_light(bounds)
-	_card.draw_style_box(Style.box(Color("fffdf1"), Color("9bcbad"), 22, 2), bounds)
+	var spin: float = 0.0 if reduced_motion else _elapsed * 0.12
+	_card.draw_set_transform(bounds.get_center(), spin)
+	_card.draw_texture_rect(RAYS, Rect2(-bounds.size * 0.62, bounds.size * 1.24), false,
+		Color(1.0, 0.87, 0.48, 0.35))
+	_card.draw_set_transform(Vector2.ZERO)
 	for index in range(6):
 		var angle: float = TAU * float(index) / 6.0
 		var travel: float = 1.0 if reduced_motion else smoothstep(0.0, 0.7, _elapsed)

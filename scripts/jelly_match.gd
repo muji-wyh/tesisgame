@@ -1068,7 +1068,9 @@ func _reward_pickup_ready() -> bool:
 	var arrived: int = game.fragment_count
 	for flight: Dictionary in _loot_flights:
 		arrived -= int(flight.get("amount", 1))
-	var tier: int = int(_reward_presentation.snapshot().tier)
+	var presentation: Dictionary = _reward_presentation.snapshot()
+	var tier: int = int(presentation.next_tier) if presentation.started and int(presentation.next_tier) > 0 \
+		else int(presentation.tier)
 	return tier > 0 and arrived >= 4 + (tier - 1) * 5
 
 func _advance_loot_feedback(delta: float) -> void:

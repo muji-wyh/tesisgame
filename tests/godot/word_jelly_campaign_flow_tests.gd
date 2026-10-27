@@ -50,7 +50,13 @@ func advance_app(app, delta: float) -> void:
 			card.art._advance_animation(delta)
 
 
+func finish_entry(app) -> void:
+	for frame in range(40):
+		advance_app(app, 0.05)
+
+
 func finish_live_stage(app) -> void:
+	finish_entry(app)
 	var game = app._word_jelly.game
 	game.cells.clear()
 	game.upcoming.clear()
@@ -143,6 +149,7 @@ func test_home_confirmation_and_feedback(app) -> void:
 	await settle()
 	var view = app._word_jelly
 	view.set_process(false)
+	finish_entry(app)
 	var game = view.game
 	game.cells.clear()
 	game.upcoming.clear()
@@ -192,8 +199,10 @@ func test_home_confirmation_and_feedback(app) -> void:
 	check(game.stage_ending() and not game.paused and not app._mode_menu_open(),
 		"Confirming Home starts the normal forced collection sweep rather than opening the library early")
 	var saw_feedback: bool = false
+	var unearned_confetti: bool = false
 	for frame in range(400):
 		advance_app(app, 0.05)
+		unearned_confetti = unearned_confetti or app._reward_confetti.snapshot().keys.has(round_id + ":round-clear")
 		var effects: Dictionary = view.snapshot().collection_effects
 		var reveal: Dictionary = view.snapshot().word_reveal
 		if effects.active_count > 0 or reveal.active_count > 0:
@@ -209,6 +218,7 @@ func test_home_confirmation_and_feedback(app) -> void:
 		% JSON.stringify({"phase": game.phase, "ending": game.stage_ending(), "home": app._mode_menu_open(),
 			"cleared": game.cleared_pairs, "settling": app._campaign.settling,
 			"room_opening": app._jelly_rewards._opening, "error": app._campaign.error}))
+	check(not unearned_confetti, "A voluntary stage exit cannot launch an unearned clear celebration")
 	app.choose_mode("word_jelly")
 	await settle()
 	check(app._campaign.map.visible and not app._mode_menu_open() and game.phase == "finished",
@@ -276,6 +286,7 @@ func test_stage_deadline_border(app) -> void:
 	await settle()
 	var view = app._word_jelly
 	view.set_process(false)
+	finish_entry(app)
 	var game = view.game
 	var attempt = game.stage_run
 	attempt.advance(attempt.remaining - 10.001)
@@ -451,7 +462,7 @@ func _run() -> void:
 	check(view.game.stage_run.kind == "challenge" and view.game.stage_run.initial_seconds == 0.0
 		and view._stage_banner.snapshot().label.to_lower().contains("challenge"),
 		"The separate challenge entrance starts a real untimed board rather than a fake numbered stage")
-	check(view._stage_banner._title.text == "Challenge" and view._stage_banner._detail.text.contains("No timer"),
+	check(view._stage_banner._title.text == "Ready?" and view._stage_banner._detail.text.contains("No timer"),
 		"The challenge introduction never presents a fictitious stage zero or mastery quota")
 	check(view.snapshot().practice.words.size() == 3,
 		"Challenge keeps the three active words' real saved learning progress visible")

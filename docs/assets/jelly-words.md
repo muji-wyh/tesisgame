@@ -6,6 +6,18 @@ the [Kenney daylight panorama](jelly-sky.md), the
 [chest-fragment presentation](jelly-fragments.md). Their source, acquisition,
 and license records remain in the linked asset documents.
 
+The Ready/Go flourish, newly earned skill explanation and completed-goal
+retirement reuse these integrated gel skins, actual vocabulary pictures and
+the same sourced portal/ray/sparkle textures. The skill preview is a view-only
+illustration of the real collection footprint, not a synthetic replacement
+Jelly or a second gameplay/reward model. Completion uses the existing sourced
+check mark; its check pop, three-second countdown and 380 ms exit are game-authored
+motion. The round-clear medal reuses Microsoft Fluent Emoji's acquired MIT
+mastery medal, whose original provenance remains in [Vocabulary mastery](vocabulary-mastery.md).
+The full two-edge paper fountain reuses the acquired Archanor Toon FX paper
+texture described in [Jelly fragments](jelly-fragments.md); no new artwork is
+claimed or acquired for these revisions.
+
 | Material | Source, creator, license | Integration and animation |
 | --- | --- | --- |
 | Four gel skins and contact shadow | Zuhria Alfitra / pzUH, GameArt2D Jelly Squash Free Sprites, CC0 1.0; acquired and integrated previously | The actual mint skin was inspected before reuse. The rounded-square painted contours and material maps keep the ordinary Jelly size through every composition stage. The source is static; runtime contact, continuous union, collection, and settling are authored by this game. |

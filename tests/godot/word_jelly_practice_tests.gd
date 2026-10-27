@@ -40,6 +40,8 @@ func _check_resize_history(panel) -> void:
 		check(panel._scroll.get_v_scroll_bar().max_value > panel._scroll.get_v_scroll_bar().page,
 			"A resized eight-word sidebar retains a real vertical scroll range after repeated refreshes")
 		for row: Dictionary in panel._rows:
+			if not row.surface.visible:
+				continue
 			var card: Rect2 = row.surface.get_global_rect()
 			check(card.position.x >= bounds.position.x and card.end.x <= bounds.end.x + 0.1,
 				"Resizing the same sidebar to %.0f never retains an earlier wider card (actual %.1f)" % [width, card.size.x])
@@ -80,16 +82,30 @@ func _check_progress_feedback(panel) -> void:
 	panel.advance(1.2)
 	check(panel.snapshot().words[0].get("completed_marker_visible", false)
 		and not panel.snapshot().words[0].get("complete_active", false),
-		"A persistent completed badge follows the transient success animation")
+		"The completed badge remains readable after its success burst")
+	var next_position: Vector2 = panel._rows[1].surface.position
+	panel.advance(1.699)
+	check(row.surface.visible and row.surface.modulate.a == 1.0
+		and panel.snapshot().words[0].dismiss_remaining > 0.0,
+		"Completion stays fully marked for the entire required three-second countdown")
+	panel.advance(0.191)
+	check(row.surface.visible and row.surface.modulate.a > 0.0 and row.surface.modulate.a < 1.0
+		and panel._rows[1].surface.position.y < next_position.y,
+		"After three seconds the completed row fades and pending goals smoothly reclaim its space")
+	panel.advance(0.3)
+	check(not row.surface.visible and panel.snapshot().words[0].retired
+		and panel._rows[1].surface.position.y == 0.0,
+		"The retired completion leaves only the next pending goal in the first list slot")
 	panel.set_stage({})
 	panel.set_stage(state)
-	check(events.size() == 2 and panel.snapshot().words[0].get("completed_marker_visible", false)
+	check(events.size() == 2 and panel.snapshot().words[0].retired
+		and not panel.snapshot().words[0].get("completed_marker_visible", false)
 		and not panel.snapshot().words[0].get("complete_active", false),
-		"Reloading already completed targets shows their badge without replaying success")
+		"Reloading already completed targets keeps them out of the pending list without replaying success")
 	panel.configure_layout(Rect2(16, 70, 300, 28), 1.0, true)
-	check(panel.snapshot().words[0].get("completed_marker_visible", false)
+	check(not panel.snapshot().words[0].get("completed_marker_visible", false)
 		and not panel._rows[0].fraction.is_visible_in_tree(),
-		"A narrow completed chip keeps its sourced check but no progress numbers")
+		"A narrow layout cannot resurrect retired completed chips")
 
 
 func _run() -> void:
@@ -144,9 +160,9 @@ func _run() -> void:
 			check(row.fraction.is_visible_in_tree() == (not state.compact and not state.words[index].mastered),
 				"Compact practice cards never show progress numbers; desktop retains the readable fraction")
 			var background: ProgressBar = row.get("background_progress")
-			check(background != null and background.is_visible_in_tree()
+			check(background != null and background.is_visible_in_tree() == (not state.words[index].mastered)
 				and is_equal_approx(float(background.value) / float(background.max_value), float(index % 4) / 3.0),
-				"Both desktop and compact card backgrounds fill in proportion to actual saved mastery")
+				"Pending cards retain their true progress fill while precompleted cards stay retired")
 			check(background != null and Rect2(Vector2.ZERO, row.surface.size).encloses(background.get_rect()),
 				"Background progress preserves the rounded card border instead of bleeding past its edges")
 			if row.get("steps", []).size() == 3:

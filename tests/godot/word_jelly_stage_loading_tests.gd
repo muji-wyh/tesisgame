@@ -133,7 +133,7 @@ func _loading_and_background() -> void:
 	check(app._round_id == original_round and app._word_jelly_stages.number == 1,
 		"A duplicate media completion cannot recreate the started stage")
 	_master(app, first, "complete-mixed-stage")
-	view._practice_panel.advance(1.40)
+	view._practice_panel.advance(3.40)
 	check(app.growth.age == 4 and app.growth.learning_age() == 5,
 		"Completing the mixed stage recognizes both previously unfinished cohorts")
 	var board_ids: Array = view.game.cells.map(func(tile: Dictionary) -> int: return int(tile.id))

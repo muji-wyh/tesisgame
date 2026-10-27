@@ -17,6 +17,11 @@
   fades, resample to 44.1 kHz. No pitch shift, gain change, or additional layers.
 - Animation: not applicable; audio only.
 
+Jelly's round-clear presentation also reuses this exact integrated human cheer.
+The dedicated round-end player preserves its original pitch and complete 1.75
+seconds; failure retains its separate acquired cue. Mute, backgrounding and
+navigation use the existing round-end cleanup instead of replaying old cheering.
+
 The inspected source peaks at -4.19 dBFS with RMS -18.51 dBFS and no clipping.
 Trimming removes the leading silence without cutting the vocal attack. Signal
 analysis and runtime playback checks do not establish subjective listening

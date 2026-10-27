@@ -23,6 +23,8 @@ const CoinBreakdown = preload("res://scripts/chest_coin_breakdown.gd")
 const TREASURE_LIGHT = preload("res://assets/chests/particles/portal_glow.png")
 const RATING_STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 const RATING_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const SkillReveal = preload("res://scripts/word_jelly_skill_reveal.gd")
+const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
 const STAR_STEP_SECONDS: float = 0.18
 const STAR_APPEAR_SECONDS: float = 0.42
 const STAGE_BONUS_SECONDS: float = 0.70
@@ -87,10 +89,16 @@ var _stage_bonus_elapsed: float = STAGE_BONUS_SECONDS
 var _stage_bonus_receipt: String = ""
 var _stage_bonus_reward: Dictionary = {}
 var _stage_publish_elapsed: float = 0.0
+var _skill_reveal := SkillReveal.new()
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_PASS
+	add_child(_skill_reveal)
+	_skill_reveal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	_skill_reveal.accepted.connect(func() -> void:
+		_content.show()
+		changed.emit(snapshot()))
 	_heading = _label("Your treasure", 28)
 	_progress = _label("", 14)
 	_result_score = _label("", 14)
@@ -260,6 +268,8 @@ func set_result_context(result: Dictionary, earned_round_id: String = "") -> voi
 	var previous_reward_id: String = _result_reward_id
 	var feedback_round: String = earned_round_id if result.has("campaign") else ""
 	if feedback_round != _stage_feedback_round:
+		_skill_reveal.hide()
+		_content.show()
 		_release_stage_bonus(false)
 		_stage_feedback_round = feedback_round
 		_stage_intro_elapsed = 1.0 if reduced_motion else 0.0
@@ -284,7 +294,7 @@ func set_result_context(result: Dictionary, earned_round_id: String = "") -> voi
 
 func stage_feedback_active() -> bool:
 	var rating: int = int(_result_context.get("campaign", {}).get("stars", 0))
-	return not _stage_bonus_reward.is_empty() or not reduced_motion \
+	return _skill_reveal.visible or not _stage_bonus_reward.is_empty() or not reduced_motion \
 		and rating > 0 and _stage_intro_elapsed < (rating - 1) * STAR_STEP_SECONDS + STAR_APPEAR_SECONDS
 
 
@@ -297,10 +307,20 @@ func present_stage_bonus(receipt: String, reward: Dictionary) -> void:
 	_pose_stage_feedback()
 
 
+func present_skill_unlock(level: int, word: Dictionary) -> bool:
+	if not _skill_reveal.present(level, word, reduced_motion):
+		return false
+	_content.hide()
+	changed.emit(snapshot())
+	return true
+
+
 func advance_stage_feedback(delta: float) -> void:
 	if _paused or not is_visible_in_tree() or not is_finite(delta) or delta <= 0.0 or not stage_feedback_active():
 		return
 	_stage_intro_elapsed += delta
+	if _skill_reveal.visible:
+		_skill_reveal.advance(delta)
 	if not _stage_bonus_reward.is_empty():
 		_stage_bonus_elapsed = STAGE_BONUS_SECONDS if reduced_motion else minf(STAGE_BONUS_SECONDS, _stage_bonus_elapsed + delta)
 		if _stage_bonus_elapsed >= STAGE_BONUS_SECONDS:
@@ -750,6 +770,9 @@ func set_page(index: int) -> bool:
 
 func navigation_controls() -> Array[Control]:
 	var controls: Array[Control] = []
+	if _skill_reveal.visible:
+		controls.append(_skill_reveal if _skill_reveal._continue.disabled else _skill_reveal._continue)
+		return controls
 	for card in _cards:
 		if not card.button.disabled:
 			controls.append(card.button)
@@ -1001,6 +1024,7 @@ func resume() -> void:
 
 func set_reduced_motion(enabled: bool) -> void:
 	reduced_motion = enabled
+	_skill_reveal.reduced_motion = enabled
 	for card in _cards:
 		card.art.reduced_motion = enabled
 	if enabled and _active >= 0 and _opening:
@@ -1127,7 +1151,7 @@ func _refresh() -> void:
 				if int(_result_context.get("merged_level_unlocked", 0)) > 0:
 					_result_caption.text = "New merged Lv%d! Saving..." % int(_result_context.merged_level_unlocked)
 				elif _result_context.get("boss", {}).get("outcome") == "ambushed":
-					_result_caption.text = "The chase begins. Find Bramble at stage 9!"
+					_result_caption.text = "The chase begins. Find Bramble at stage %d!" % BossCatalog.STAGES[0]
 				_result_caption.visible = true
 		if _result_context.has("campaign"):
 			_back.hide()
@@ -1464,7 +1488,9 @@ func snapshot() -> Dictionary:
 	var viewport_rect: Rect2 = _scroll.get_global_rect() if is_instance_valid(_scroll) else Rect2()
 	var pip_rect: Rect2 = pip.get_global_rect() if is_instance_valid(pip) else Rect2()
 	return {"round_id": _empty_result_id if not _empty_result_id.is_empty() else _configured_id, "chest_count": batch.size(), "opened_count": opened,
-		"stage_feedback": {"phase": "bonus" if not _stage_bonus_reward.is_empty() else "stars" if stage_feedback_active() else "done",
+		"skill_unlock": _skill_reveal.snapshot(),
+		"stage_feedback": {"phase": "skill" if _skill_reveal.visible else "bonus" if not _stage_bonus_reward.is_empty() \
+			else "stars" if stage_feedback_active() else "done",
 			"round_id": _stage_feedback_round, "star_elapsed": _stage_intro_elapsed,
 			"bonus_elapsed": _stage_bonus_elapsed, "formula": _result_score.text \
 				if int(_result_context.get("campaign", {}).get("stars", 0)) > 0 else "",

@@ -90,7 +90,7 @@ const WORD_JELLY_COMBO_PATHS: Array[String] = [
 const WORD_JELLY_COMBO_GAINS: Array[float] = [0.40, 0.44, 0.48]
 const WORD_JELLY_COMBO_CHANNELS: int = 3
 const ROUND_END_PATHS: Dictionary = {
-	false: WORD_JELLY_COMBO_PATHS[2],
+	false: PAIR_CHEST_DISCOVERY_PATH,
 	true: MEMORY_CHEST_LOSS_PATHS[true],
 }
 const ROUND_CELEBRATION_PATHS := {

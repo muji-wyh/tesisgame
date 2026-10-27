@@ -463,7 +463,7 @@ func _check_concurrent_powerup_resize(view) -> void:
 			for index in range(bodies.size()):
 				check(view.game.powerup_snapshot() == frozen and bodies[index].get_rect().get_center().is_equal_approx(centers[index]), "paused processing advances neither overlapping route nor its artwork")
 		view.pause(false)
-		_advance(view, 0.05)
+		_advance(view, (Model.POWERUP_DRAG_SECONDS - Model.POWERUP_MERGE_BEAT_SECONDS) * 0.5 + 0.001)
 		check(view.game.fusions.size() == 1 and view.game.powerup_snapshot().drags.size() == 1,
 			"the first flight reaches fusion while the second keeps traveling after resize")
 		_advance(view, 5.0)

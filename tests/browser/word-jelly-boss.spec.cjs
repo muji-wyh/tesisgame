@@ -3,8 +3,9 @@ const { test, expect } = require('@playwright/test');
 const { openGame, enterGame, openModeMenu, activateLibraryControl, waitForCampaignMap, metrics, tap, seedPipLevel } = require('./game-ui.cjs');
 const { recipe } = require('./jelly-campaign-fixture.cjs');
 
-const bossStages = [9, 18, 27, 36, 45, 63, 81, 99];
+const bossStages = [3, 5, 7, 9, 18, 36, 63, 99];
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
+const room = page => page.locator('#jelly-reward-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 const wallet = page => page.locator('#coin-status').evaluate(node => JSON.parse(node.dataset.snapshot || '{}'));
 test.use({ trace: 'off' });
 
@@ -37,8 +38,8 @@ async function start(page, number) {
   await activateLibraryControl(page, 'Mode_word_jelly');
   const map = await waitForCampaignMap(page);
   const node = map.stage_nodes.find(stage => stage.number === number);
-  expect(node.boss).toBe(true);
-  expect(map.boss_markers.filter(stage => stage > number)).toHaveLength(0);
+  expect(node.boss).toBe(number !== 1);
+  expect(map.boss_markers.filter(stage => stage > number)).toHaveLength(number === 1 ? 1 : 0);
   await page.evaluate(() => {
     const status = document.getElementById('game-status');
     window.bossActionFrames = {};
@@ -47,8 +48,9 @@ async function start(page, number) {
       const boss = state.boss || {}, view = state.boss_view || {};
       if (!boss.active || !view.visible) return;
       let key = '';
-      if (view.clip === 'Kick' && view.character_rect[2] > view.rect[3] * 2.18) key = 'giant-kick';
-      if (view.clip === 'Snatch' && view.character_rect[1] > view.rect[1] + view.rect[3] + 30) key = 'jump-snatch';
+      const base = view.base_character_rect || [];
+      if (view.clip === 'Kick' && view.character_rect[2] > base[2] * 1.35) key = 'giant-kick';
+      if (view.clip === 'Snatch' && view.character_rect[0] < base[0] - 12) key = 'jump-snatch';
       if (boss.phase === 'ending' && boss.ending_elapsed > 1.7 && boss.ending_elapsed < 2.5)
         key = boss.outcome === 'ambushed' ? 'compass-theft' : 'victory-banter';
       if (boss.phase === 'ending' && boss.ending_elapsed > 5.2 && boss.ending_elapsed < 5.8) key = 'retreat';
@@ -60,7 +62,8 @@ async function start(page, number) {
   await tap(page, node.rect.x + node.rect.width / 2, node.rect.y + node.rect.height / 2);
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.visible && state.boss.active && state.boss_view.visible && state.tiles.every(tile => tile.settled);
+    return state.visible && state.boss.active && state.boss_view.visible === (number !== 1)
+      && state.tiles.every(tile => tile.settled);
   }, { timeout: 30000 }).toBe(true).catch(async error => {
     fs.writeFileSync(test.info().outputPath('boss-entry-state.json'), JSON.stringify({
       state: await jelly(page), errors
@@ -89,7 +92,7 @@ async function shot(page) {
 
 test('a real first Boss victory celebrates, escapes, saves Lv2 and never duplicates its unlock on reload', async ({ page }, info) => {
   test.setTimeout(300000);
-  const errors = await start(page, 9);
+  const errors = await start(page, 3);
   const opening = await jelly(page);
   expect(opening.max_merge_level).toBe(1);
   expect(opening.boss_view.animations).toEqual(expect.arrayContaining(['Idle', 'Throw', 'Kick', 'Snatch', 'Hit', 'Taunt', 'Escape']));
@@ -103,14 +106,22 @@ test('a real first Boss victory celebrates, escapes, saves Lv2 and never duplica
     }
     await shot(page);
   }
-  await expect.poll(async () => (await jelly(page)).campaign_map.visible, { timeout: 60000 }).toBe(true);
+  await expect.poll(async () => (await room(page)).skill_unlock?.visible, { timeout: 60000 }).toBe(true);
+  const skill = (await room(page)).skill_unlock;
+  expect(skill.level).toBe(2);
+  expect(skill.description).toContain('4 nearby');
+  expect(skill.preview_targets).toBe(4);
+  await expect.poll(async () => (await room(page)).skill_unlock.continue.enabled).toBe(true);
+  await page.screenshot({ path: info.outputPath('new-jelly-skill.png'), scale: 'css' });
+  await press(page, (await room(page)).skill_unlock.continue.rect);
+  await expect.poll(async () => (await jelly(page)).campaign_map.visible, { timeout: 30000 }).toBe(true);
   const finished = await jelly(page);
   expect(finished.boss.outcome).toBe('defeated');
   expect(finished.campaign.outcome).toBe('cleared');
   expect(finished.campaign_map.merged_level).toBe(2);
   expect(finished.campaign_map.boss_victories).toEqual([1]);
-  expect(finished.campaign_map.boss_markers).toEqual([9, 18]);
-  expect(finished.campaign_map.stage_nodes.find(stage => stage.number === 10).unlocked).toBe(true);
+  expect(finished.campaign_map.boss_markers).toEqual([3, 5]);
+  expect(finished.campaign_map.stage_nodes.find(stage => stage.number === 4).unlocked).toBe(true);
   await retainAction(page, info, 'victory-banter');
   await retainAction(page, info, 'retreat');
   await page.screenshot({ path: info.outputPath('boss-lv2-map.png'), scale: 'css' });
@@ -131,6 +142,8 @@ test('stage one ends in the compass theft without losing learning rewards or inv
   test.setTimeout(240000);
   const errors = await start(page, 1);
   expect((await jelly(page)).boss.definition.intro).toBe(true);
+  expect((await jelly(page)).boss_view.visible).toBe(false);
+  expect((await jelly(page)).max_merge_level).toBe(1);
   await shot(page);
   await expect.poll(async () => (await jelly(page)).campaign_map.visible, { timeout: 60000 }).toBe(true);
   const state = await jelly(page);
@@ -138,7 +151,7 @@ test('stage one ends in the compass theft without losing learning rewards or inv
   expect(state.campaign.outcome).toBe('cleared');
   expect(state.campaign_map.merged_level).toBe(1);
   expect(state.campaign_map.boss_victories).toEqual([]);
-  expect(state.campaign_map.boss_markers).toEqual([9]);
+  expect(state.campaign_map.boss_markers).toEqual([3]);
   expect(state.campaign_map.stage_nodes.find(stage => stage.number === 2).unlocked).toBe(true);
   expect(state.cleared_pairs).toBeGreaterThanOrEqual(3);
   await retainAction(page, info, 'compass-theft');
@@ -148,7 +161,7 @@ test('stage one ends in the compass theft without losing learning rewards or inv
 
 test('the giant kick limits actual preview releases to two and repairs after eight active seconds', async ({ page }, info) => {
   test.setTimeout(180000);
-  const errors = await start(page, 45);
+  const errors = await start(page, 18);
   await expect.poll(async () => (await jelly(page)).boss.broken_remaining).toBeGreaterThan(0);
   const before = await jelly(page);
   expect(before.boss.drop_limit).toBe(2);
@@ -171,7 +184,7 @@ test('the giant kick limits actual preview releases to two and repairs after eig
 
 test('the recurring rival jumps into the well and returns a snatched body with its original identity', async ({ page }, info) => {
   test.setTimeout(180000);
-  const errors = await start(page, 63);
+  const errors = await start(page, 36);
   await expect.poll(async () => (await jelly(page)).boss.events.some(event => event.kind === 'snatch'),
     { timeout: 20000 }).toBe(true);
   const state = await jelly(page);
@@ -189,7 +202,7 @@ test('the recurring rival jumps into the well and returns a snatched body with i
 
 test('the fourth encounter creates two real shadow doubles that collected words disperse', async ({ page }, info) => {
   test.setTimeout(180000);
-  const errors = await start(page, 36);
+  const errors = await start(page, 9);
   await expect.poll(async () => (await jelly(page)).boss.clones).toBe(2);
   await page.screenshot({ path: info.outputPath('boss-shadow-doubles.png'), scale: 'css' });
   await shot(page);
@@ -200,7 +213,7 @@ test('the fourth encounter creates two real shadow doubles that collected words 
 
 test('a real blue hit has a frozen countdown that pauses and then visibly thaws', async ({ page }, info) => {
   test.setTimeout(180000);
-  const errors = await start(page, 9);
+  const errors = await start(page, 3);
   let target;
   await expect.poll(async () => {
     const state = await jelly(page);
@@ -221,7 +234,7 @@ test('a real blue hit has a frozen countdown that pauses and then visibly thaws'
 
 test('a real golden lock is removed by a matching drag without consuming either jelly', async ({ page }, info) => {
   test.setTimeout(180000);
-  const errors = await start(page, 27);
+  const errors = await start(page, 7);
   let state, locked, partner;
   await expect.poll(async () => {
     state = await jelly(page);

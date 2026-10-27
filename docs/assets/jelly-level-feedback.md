@@ -146,7 +146,7 @@ focus transition. A 180 ms windup precedes accelerating 420 ms outward bolts wit
 samples. Up to six groups launch 60 ms apart, nearer bodies first. Each impact
 marks its body and requests audio on arrival, never at launch. The last impact
 ends slow motion immediately, followed by a 100 ms normal-speed planted recovery
-before the established automatic 250 ms journeys and ordinary short union.
+before the overlapping automatic 320 ms journeys and ordinary short union.
 Targets compress by up to 22 percent around their existing foot pivot and
 support shadow, then rebound by up to six percent without bobbing or camera
 shake. Reduced motion uses still source/target marks, no traveling light or

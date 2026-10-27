@@ -49,6 +49,14 @@ from 1.98 to 2.65 seconds, reversing the same straight path and scale to recover
 the original position and size without
 fading the chest away. First-chest and pair rewards target a 176px silhouette;
 upgrades target 216px, fitted to the available viewport on small screens.
+When several earned tiers are queued, this is one continuous journey: the chest
+stays at its first fitting envelope in the upper screen, turns and reveals each
+successive material, then returns only after the last earned tier. Later steps
+begin at the existing top hold, not at another fragment-arrival/departure phase.
+A next pickup that has not visibly arrived holds the same chest at the top.
+Each earned tier keeps its own reveal sound and model-owned progress; presentation
+neither manufactures intermediate chests nor skips a final level. The source
+chest, rays and local flashes remain the same acquired artwork.
 
 The flight draws on a noninteractive viewport layer, outside gameplay clipping.
 Its source coordinates and actual turned silhouette remain tied to the current

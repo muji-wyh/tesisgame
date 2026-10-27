@@ -13,7 +13,8 @@ const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const CHECK = preload("res://assets/images/ui/jelly-goals/completed.svg")
 const GAIN_SECONDS: float = 0.55
 const COMPLETE_SECONDS: float = 0.60
-const MARKER_HOLD: float = 0.7
+const COMPLETED_HOLD_SECONDS: float = 3.0
+const EXIT_SECONDS: float = 0.38
 var reduced_motion: bool = false
 var stage_timer: StageTimer
 var _title: Label
@@ -55,7 +56,8 @@ func set_stage(state: Dictionary) -> void:
 	if _state == state:
 		return
 	var previous: Dictionary = {}
-	if not _state.is_empty() and int(_state.get("number", 0)) == int(state.get("number", 0)):
+	if not _state.is_empty() and _state.get("kind") == state.get("kind") \
+		and int(_state.get("number", 0)) == int(state.get("number", 0)):
 		for item: Dictionary in _state.get("practice", []):
 			previous[str(item.id)] = item
 	_state = state.duplicate(true)
@@ -137,27 +139,32 @@ func set_stage(state: Dictionary) -> void:
 			"fraction": fraction, "picture": picture, "steps": steps, "gain_label": gain,
 			"success_glow": glow, "success_sparkles": sparkles, "complete_badge": badge,
 			"complete_icon": check_icon, "done_label": done, "word_id": "",
-			"gain_elapsed": GAIN_SECONDS, "complete_elapsed": COMPLETE_SECONDS + MARKER_HOLD,
-			"gain_amount": 0, "mastered": false})
+			"gain_elapsed": GAIN_SECONDS, "complete_elapsed": COMPLETED_HOLD_SECONDS + EXIT_SECONDS,
+			"gain_amount": 0, "mastered": false, "retired": false})
 	for index in range(words.size()):
 		var item: Dictionary = words[index]
 		var row: Dictionary = _rows[index]
 		var old: Dictionary = previous.get(str(item.id), {})
 		if str(row.word_id) != str(item.id) or old.is_empty():
 			row.gain_elapsed = GAIN_SECONDS
-			row.complete_elapsed = COMPLETE_SECONDS + MARKER_HOLD
+			row.complete_elapsed = COMPLETED_HOLD_SECONDS + EXIT_SECONDS
 		row.word_id = str(item.id)
 		row.mastered = bool(item.mastered)
-		if not old.is_empty() and int(item.current) > int(old.current) and is_visible_in_tree():
+		row.retired = row.mastered and (bool(row.retired) and not old.is_empty() \
+			or float(row.complete_elapsed) >= _retire_time())
+		if not old.is_empty() and is_visible_in_tree() and (int(item.current) > int(old.current) \
+			or bool(item.mastered) and not bool(old.mastered)):
 			row.gain_amount = int(item.current) - int(old.current)
 			row.gain_elapsed = GAIN_SECONDS if reduced_motion else 0.0
 			var completed: bool = bool(item.mastered) and not bool(old.mastered)
 			if completed:
-				row.complete_elapsed = COMPLETE_SECONDS + MARKER_HOLD if reduced_motion else 0.0
+				row.complete_elapsed = 0.0
+				row.retired = false
 			word_progressed.emit(str(item.id), completed)
 		elif not old.is_empty() and int(item.current) < int(old.current):
 			row.gain_elapsed = GAIN_SECONDS
-			row.complete_elapsed = COMPLETE_SECONDS + MARKER_HOLD
+			row.complete_elapsed = COMPLETED_HOLD_SECONDS + EXIT_SECONDS
+			row.retired = row.mastered
 		row.label.text = str(item.text)
 		row.fraction.text = "%d/%d" % [int(item.current), int(item.required)]
 		row.background_progress.max_value = int(item.required)
@@ -184,20 +191,34 @@ func set_stage(state: Dictionary) -> void:
 func advance(delta: float) -> void:
 	if not is_visible_in_tree() or not is_finite(delta) or delta <= 0.0:
 		return
+	var reflow: bool = false
 	for row: Dictionary in _rows:
-		if float(row.gain_elapsed) >= GAIN_SECONDS and float(row.complete_elapsed) >= COMPLETE_SECONDS + MARKER_HOLD:
+		if float(row.gain_elapsed) >= GAIN_SECONDS \
+			and (not row.mastered or row.retired):
 			continue
+		var previous_exit: float = _exit_progress(row)
 		row.gain_elapsed = minf(GAIN_SECONDS, float(row.gain_elapsed) + delta)
-		row.complete_elapsed = minf(COMPLETE_SECONDS + MARKER_HOLD, float(row.complete_elapsed) + delta)
+		if row.mastered:
+			row.complete_elapsed = minf(_retire_time(), float(row.complete_elapsed) + delta)
+			row.retired = float(row.complete_elapsed) >= _retire_time()
+		reflow = reflow or not is_equal_approx(previous_exit, _exit_progress(row))
 		_pose_feedback(row)
+	if reflow:
+		_layout()
 
 
 func feedback_active() -> bool:
-	return not reduced_motion and _rows.any(func(row: Dictionary) -> bool:
-		return float(row.gain_elapsed) < GAIN_SECONDS or float(row.complete_elapsed) < COMPLETE_SECONDS + MARKER_HOLD)
+	return _rows.any(func(row: Dictionary) -> bool:
+		return (not reduced_motion and float(row.gain_elapsed) < GAIN_SECONDS) \
+			or (row.mastered and not row.retired))
 
 
 func _pose_feedback(row: Dictionary) -> void:
+	row.surface.visible = not row.retired
+	var exit: float = _exit_progress(row)
+	row.surface.modulate.a = 1.0 - exit
+	if row.has("base_position"):
+		row.surface.position = row.base_position + Vector2((0.0 if reduced_motion else 22.0 * exit) / _scale, 0)
 	var gaining: bool = not reduced_motion and float(row.gain_elapsed) < GAIN_SECONDS
 	var completing: bool = not reduced_motion and float(row.complete_elapsed) < COMPLETE_SECONDS
 	var p: float = clampf(float(row.gain_elapsed) / GAIN_SECONDS, 0.0, 1.0)
@@ -211,7 +232,9 @@ func _pose_feedback(row: Dictionary) -> void:
 	row.label.size.x = maxf(1.0, row.surface.size.x - row.label.position.x
 		- (48.0 if gaining and not _compact else 10.0) / _scale)
 	row.fraction.visible = not _compact and (not row.mastered or completing)
-	row.complete_badge.visible = row.mastered and not completing
+	row.complete_badge.visible = row.mastered and not row.retired
+	row.complete_badge.scale = Vector2.ONE * (1.0 + 0.18 * sin(complete_p * PI) if completing else 1.0)
+	row.done_label.text = "Done %d" % maxi(1, ceili(COMPLETED_HOLD_SECONDS - float(row.complete_elapsed)))
 	for star: TextureRect in row.steps:
 		star.visible = not _compact and not row.mastered and _state.get("kind", "") != "main"
 	row.success_glow.visible = completing
@@ -233,6 +256,18 @@ func _pose_feedback(row: Dictionary) -> void:
 	card.border_color = Color("#edc45f").lerp(Color("#c5d9b0"), complete_p) if completing \
 		else Color("#c5d9b0") if row.mastered else Color("#dce7dd")
 	row.surface.queue_redraw()
+
+
+func _exit_progress(row: Dictionary) -> float:
+	if not row.mastered:
+		return 0.0
+	if reduced_motion:
+		return 1.0 if float(row.complete_elapsed) >= COMPLETED_HOLD_SECONDS else 0.0
+	return smoothstep(COMPLETED_HOLD_SECONDS, COMPLETED_HOLD_SECONDS + EXIT_SECONDS, float(row.complete_elapsed))
+
+
+func _retire_time() -> float:
+	return COMPLETED_HOLD_SECONDS + (0.0 if reduced_motion else EXIT_SECONDS)
 
 
 func configure_layout(area: Rect2, ui_scale: float, compact: bool) -> void:
@@ -307,7 +342,8 @@ func _layout() -> void:
 			Style.HEADING_FONT.get_string_size(row.label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x + 44.0 / s)) \
 			if _compact else _scroll.size.x
 		var height: float = _scroll.size.y if _compact else 52.0 / s
-		row.surface.position = Vector2(cursor, 0.0) if _compact else Vector2(0.0, cursor)
+		row.base_position = Vector2(cursor, 0.0) if _compact else Vector2(0.0, cursor)
+		row.surface.position = row.base_position
 		row.surface.size = Vector2(width, height)
 		row.background_progress.position = Vector2.ONE / s
 		row.background_progress.size = (row.surface.size - Vector2.ONE * 2.0 / s).max(Vector2.ONE)
@@ -330,13 +366,14 @@ func _layout() -> void:
 		row.complete_badge.add_theme_stylebox_override("panel",
 			Style.box(Style.GOOD, Color.TRANSPARENT, ceili(7.0 / s), 0))
 		row.complete_badge.position = row.picture.position + row.picture.size - Vector2.ONE * 12.0 / s if _compact \
-			else Vector2(width - 64.0 / s, 28.0 / s)
-		row.complete_badge.size = Vector2.ONE * 12.0 / s if _compact else Vector2(58, 20) / s
+			else Vector2(width - 72.0 / s, 28.0 / s)
+		row.complete_badge.size = Vector2.ONE * 12.0 / s if _compact else Vector2(66, 20) / s
+		row.complete_badge.pivot_offset = row.complete_badge.size * 0.5
 		row.complete_icon.position = Vector2.ONE / s if _compact else Vector2(3, 3) / s
 		row.complete_icon.size = Vector2.ONE * (10.0 if _compact else 14.0) / s
 		row.done_label.visible = not _compact
 		row.done_label.position = Vector2(18, 0) / s
-		row.done_label.size = Vector2(36, 20) / s
+		row.done_label.size = Vector2(46, 20) / s
 		row.done_label.add_theme_font_size_override("font_size", ceili(10.0 / s))
 		for index in range(3):
 			var star: TextureRect = row.steps[index]
@@ -344,7 +381,8 @@ func _layout() -> void:
 			star.position = Vector2(left + index * 17.0 / s, 32.0 / s)
 			star.size = Vector2.ONE * 13.0 / s
 		_pose_feedback(row)
-		cursor += width + 8.0 / s if _compact else height + 8.0 / s
+		if not row.retired:
+			cursor += (width + 8.0 / s if _compact else height + 8.0 / s) * (1.0 - _exit_progress(row))
 	_content.custom_minimum_size = Vector2(maxf(1.0, cursor - 8.0 / s), _scroll.size.y) if _compact \
 		else Vector2(0.0, maxf(1.0, cursor - 8.0 / s))
 	_scroll.focus_mode = Control.FOCUS_ALL if (_content.custom_minimum_size.x > _scroll.size.x + 0.1 \
@@ -368,6 +406,10 @@ func snapshot() -> Dictionary:
 		words[index]["gain_active"] = not reduced_motion and float(_rows[index].gain_elapsed) < GAIN_SECONDS
 		words[index]["complete_active"] = not reduced_motion and float(_rows[index].complete_elapsed) < COMPLETE_SECONDS
 		words[index]["completed_marker_visible"] = _rows[index].complete_badge.is_visible_in_tree()
+		words[index]["visible"] = _rows[index].surface.is_visible_in_tree()
+		words[index]["retired"] = bool(_rows[index].retired)
+		words[index]["dismiss_remaining"] = maxf(0.0, COMPLETED_HOLD_SECONDS - float(_rows[index].complete_elapsed)) \
+			if _rows[index].mastered and not _rows[index].retired else 0.0
 	var bounds: Rect2 = get_global_rect()
 	return {"visible": is_visible_in_tree(), "compact": _compact, "words": words,
 		"rect": [bounds.position.x, bounds.position.y, bounds.size.x, bounds.size.y]}

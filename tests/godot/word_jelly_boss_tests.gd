@@ -22,7 +22,7 @@ func check(value: bool, message: String) -> void:
 		printerr("FAIL: " + message)
 
 
-func make_model(number: int = 9, level: int = 1):
+func make_model(number: int = 3, level: int = 1):
 	var plan: Dictionary = Catalog.make_plan(number, words, 3, 71)
 	plan.boss = BossCatalog.encounter(number)
 	plan.merged_level_limit = level
@@ -49,7 +49,7 @@ func put(model, tile: Dictionary, column: int) -> Dictionary:
 
 
 func test_status_rules() -> void:
-	var model = make_model(27)
+	var model = make_model(7)
 	var word: Dictionary = model.stage_run.words[0]
 	var root_tile: Dictionary = put(model, model._new_word_root(word), 0)
 	var picture: Dictionary = put(model, model._new_picture_tile(word), 1)
@@ -81,7 +81,7 @@ func test_status_rules() -> void:
 
 func test_combat_clock_and_damage() -> void:
 	var run := Boss.new()
-	run.configure(BossCatalog.encounter(9), 71)
+	run.configure(BossCatalog.encounter(3), 71)
 	check(run.collect_hit("word:1", 1, 0, {}) and run.health == 84,
 		"A committed Lv1 collection has a useful fourteen-point attack")
 	check(not run.collect_hit("word:1", 1, 0, {}) and run.health == 84,
@@ -89,7 +89,7 @@ func test_combat_clock_and_damage() -> void:
 	run.charge_merge(false, true)
 	run.collect_hit("word:2", 1, 4, {})
 	check(run.health < 70 and run.charge == 0, "Manual charge and combo strengthen the next collection attack")
-	run.configure(BossCatalog.encounter(45), 71)
+	run.configure(BossCatalog.encounter(18), 71)
 	run.advance(2.2, [{"id": 1, "column": 0, "row": 7}], true)
 	check(run.broken_remaining == 0.0, "A kick is telegraphed before it damages the supply")
 	run.advance(Boss.WINDUP_SECONDS, [], true)
@@ -101,7 +101,7 @@ func test_combat_clock_and_damage() -> void:
 	check(run.snapshot().drop_limit == 2, "Damaged supply remains restricted until the boundary")
 	run.advance(0.001, [], true)
 	check(run.snapshot().drop_limit == 5, "The full five-slot supply returns exactly after eight active seconds")
-	run.configure(BossCatalog.encounter(36), 71)
+	run.configure(BossCatalog.encounter(9), 71)
 	run.advance(2.2, [{"id": 1, "column": 0, "row": 7}], true)
 	var health: int = run.health
 	run.collect_hit("clone:1", 1, 0, {})
@@ -116,7 +116,7 @@ func test_levels_and_story() -> void:
 		and BossCatalog.merged_level([1, 1, 2]) == 3
 		and BossCatalog.merged_level([1, 2, 3, 4, 5, 6, 7, 8]) == 9,
 		"Only distinct first victories unlock the eight remaining merged levels")
-	check(BossCatalog.map_markers(1) == [9] and BossCatalog.map_markers(20) == [9, 18, 27],
+	check(BossCatalog.map_markers(1) == [3] and BossCatalog.map_markers(20) == [3, 5, 7, 9, 18, 36],
 		"Map markers include unlocked Bosses and only the next future encounter")
 	var model = make_model()
 	var word: Dictionary = model.stage_run.words[0]
@@ -144,7 +144,7 @@ func test_levels_and_story() -> void:
 
 
 func test_snatch_recovery() -> void:
-	var model = make_model(63, 6)
+	var model = make_model(36, 6)
 	var word: Dictionary = model.stage_run.words[0]
 	var tile: Dictionary = put(model, model._new_word_root(word, 3), 0)
 	tile.source_word_id = word.id

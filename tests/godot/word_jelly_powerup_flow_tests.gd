@@ -134,22 +134,21 @@ func _check_auto_merge(app) -> void:
 		"Repeated button signals during a paid sequence cannot buy another action")
 	var from: Vector2 = view._tile_rect(state.source).get_center()
 	var to: Vector2 = view._tile_rect(state.target).get_center()
-	view._process(game.POWERUP_DRAG_SECONDS * 0.5)
+	view._process(game.POWERUP_DRAG_SECONDS * 0.25)
 	var halfway: Vector2 = view._tiles[int(state.source_id)].get_rect().get_center()
 	check(halfway.distance_to(from) > 2.0 and halfway.distance_to(to) > 2.0
 		and halfway.x > minf(from.x, to.x) and halfway.x < maxf(from.x, to.x)
 		and view._powerup_effects.stamps.size() > 0 and game.fusions.is_empty(),
 		"The source jelly travels through an intermediate position with light effects before union")
-	view._process(game.POWERUP_DRAG_SECONDS * 0.25)
 	var traveling: Dictionary = game.powerup_snapshot()
 	check(traveling.drags.size() == 1 and game.fusions.is_empty()
 		and int(traveling.drags[0].source_id) == int(state.source_id)
-		and is_equal_approx(float(traveling.drags[0].elapsed), game.POWERUP_DRAG_SECONDS * 0.75),
-		"The reserved first pair remains in flight at three quarters of its transfer")
-	view._process(game.POWERUP_MERGE_BEAT_SECONDS - game.POWERUP_DRAG_SECONDS * 0.75)
+		and is_equal_approx(float(traveling.drags[0].elapsed), game.POWERUP_DRAG_SECONDS * 0.25),
+		"The reserved first pair visibly moves before the next fixed launch beat")
+	view._process(game.POWERUP_MERGE_BEAT_SECONDS - game.POWERUP_DRAG_SECONDS * 0.25)
 	var overlapping: Dictionary = game.powerup_snapshot()
 	check(overlapping.drags.size() == 2 and game.fusions.is_empty(),
-		"At 160 ms the second paid flight starts while the first continues toward its target")
+		"At 100 ms the second paid flight starts while the first continues toward its target")
 	var following: Dictionary = overlapping.drags[1] if overlapping.drags.size() == 2 else {}
 	if not following.is_empty():
 		check(is_zero_approx(float(overlapping.drags[0].started_at))
@@ -157,27 +156,27 @@ func _check_auto_merge(app) -> void:
 			and int(following.source_id) not in [int(state.source_id), int(state.target_id)]
 			and int(following.target_id) not in [int(state.source_id), int(state.target_id)],
 			"overlapping launches have independent clocks and reserve four distinct endpoints")
-	view._process(game.POWERUP_DRAG_SECONDS - game.POWERUP_MERGE_BEAT_SECONDS)
+	view._process(game.POWERUP_DRAG_SECONDS * 0.5)
+	if not following.is_empty():
+		var next_from: Vector2 = view._tile_rect(following.source).get_center()
+		var next_to: Vector2 = view._tile_rect(following.target).get_center()
+		var next_halfway: Vector2 = view._tiles[int(following.source_id)].get_rect().get_center()
+		check(next_halfway.distance_to(next_from) > 2.0 and next_halfway.distance_to(next_to) > 2.0
+			and view._powerup_effects.stamps.size() > 0 and game.fusions.is_empty(),
+			"The second source reaches its own halfway point while the first source remains visibly in flight")
+	view._process(game.POWERUP_DRAG_SECONDS - game.POWERUP_MERGE_BEAT_SECONDS - game.POWERUP_DRAG_SECONDS * 0.5)
 	var after_contact: Dictionary = game.powerup_snapshot()
 	check(game.fusions.size() == 1 and after_contact.drags.size() == 1 and after_contact.stage == "drag",
-		"At 180 ms the first pair starts its 110 ms fusion while the second flight continues")
+		"At 320 ms the first pair starts its 110 ms fusion while the second flight continues")
 	var first_result_id: int = int(game.fusions[0].result.id)
 	view._process(0.05)
 	check(game.fusions.size() == 1 and game.powerup_snapshot().drags.size() == 1,
 		"an in-progress fusion retains its endpoints without blocking the other flight")
 	if not following.is_empty():
-		following = game.powerup_snapshot().drags[0]
-		var next_from: Vector2 = view._tile_rect(following.source).get_center()
-		var next_to: Vector2 = view._tile_rect(following.target).get_center()
-		view._process(maxf(0.0, game.POWERUP_DRAG_SECONDS * 0.5 - float(following.elapsed)))
-		var next_halfway: Vector2 = view._tiles[int(following.source_id)].get_rect().get_center()
-		check(next_halfway.distance_to(next_from) > 2.0 and next_halfway.distance_to(next_to) > 2.0
-			and view._powerup_effects.stamps.size() > 0 and game.fusions.size() == 1,
-			"the second source reaches its own halfway point while the first fusion remains visible")
 		var first_done: float = game.POWERUP_DRAG_SECONDS + game.POWERUP_FUSION_SECONDS + game.POWERUP_SETTLE_SECONDS
-		view._process(first_done - (game.POWERUP_MERGE_BEAT_SECONDS + game.POWERUP_DRAG_SECONDS * 0.5) + 0.001)
-		check(game.is_settled(game.cell(first_result_id)) and game.powerup_snapshot().drags.size() == 1,
-			"The first result settles while the second flight finishes its independent 180 ms journey")
+		view._process(first_done - game.POWERUP_DRAG_SECONDS - 0.05 + 0.001)
+		check(game.is_settled(game.cell(first_result_id)) and game.fusions.size() == 1,
+			"The first result settles while the second pair finishes its independent overlapping fusion")
 	_drain(view)
 	check(game.cells.size() == 2 and game.collectable_ids().size() == 2 and int(game.powerup_snapshot().completed) == 2,
 		"One automatic purchase completes both distinct word-picture pairs on the captured board")

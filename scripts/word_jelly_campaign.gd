@@ -24,6 +24,7 @@ var _result_draft: Dictionary = {}
 var _result_round: String = ""
 var _settlement_elapsed: float = 0.0
 var _bonus_presented: bool = false
+var _skill_presented: bool = false
 var _result_context_key: String = ""
 # Leaving the old session can synchronously publish its failure before the new request exists.
 var requesting_preparation: bool = false
@@ -84,9 +85,10 @@ func _map_state() -> Dictionary:
 	for number in range(1, highest + 1):
 		ratings[str(number)] = store.best_stars(context_key, number)
 	return {"highest_cleared": highest, "best_stars": ratings, "frontier": mini(highest + 1, 99),
+		"context_key": context_key,
 		"coins": _app.coin_wallet.balance, "error": error,
 		"loading": starting, "pending_stage": selected_stage,
-		"boss_markers": [1] if highest == 0 else BossCatalog.map_markers(mini(highest + 1, 99)),
+		"boss_markers": BossCatalog.map_markers(mini(highest + 1, 99)),
 		"boss_victories": store.boss_victories(context_key) if store.ready else [],
 		"merged_level": store.merged_level(context_key) if store.ready else 1}
 
@@ -177,6 +179,7 @@ func round_started() -> void:
 	_result_draft.clear()
 	_result_round = ""
 	_bonus_presented = false
+	_skill_presented = false
 	return_home_after_settlement = false
 	error = ""
 	map.close()
@@ -213,6 +216,7 @@ func capture_result(result: Dictionary) -> bool:
 		"bonus": quote.bonus, "completed_word_ids": []}
 	var boss: Dictionary = result.get("boss", {})
 	if bool(boss.get("active", false)):
+		_result_draft["boss_roster_version"] = 2
 		_result_draft["boss_id"] = int(boss.definition.get("id", 0))
 		_result_draft["boss_victory"] = boss.get("outcome") == "defeated" and stage.outcome == "cleared"
 		_result_draft["boss_outcome"] = str(boss.get("outcome", ""))
@@ -284,6 +288,16 @@ func advance(delta: float) -> void:
 		_bonus_presented = true
 		return
 	if _settlement_elapsed < 2.2:
+		return
+	var unlocked_level: int = int(_app._round_result.get("merged_level_unlocked", 0))
+	if unlocked_level > 0 and not _skill_presented:
+		var learned: Array = _app._round_result.get("words", [])
+		if learned.is_empty() or not room.present_skill_unlock(unlocked_level, learned[0]):
+			error = "The earned Jelly skill needs its learned word before continuing."
+			room.set_settlement_error(error)
+			return
+		_skill_presented = true
+		_app.audio.play_jelly_cue("goal_complete")
 		return
 	if not store.complete_result(_result_context_key, _result_round):
 		error = store.error

@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 1.0,
   "character": "Bramble",
   "status": "Acquired production artwork; integrated with game-authored skeletal motion",
   "source": {
@@ -13,8 +13,8 @@
   },
   "model": {
     "path": "assets/jelly-boss/private/bramble.glb",
-    "sha256": "e8333846b6ae08b0a6f160cec78a37f6b0cfc6c55df5ee13171075c2722b7de1",
-    "bytes": 590264,
+    "sha256": "3ca0f840d750b35123210fbf016ca0dd3135a112b73be97389055fcd5a6d0a6a",
+    "bytes": 593980.0,
     "private_build_input": true,
     "animation_origin": "Game-authored skeletal clips on the original acquired skinned character, including baked source foot-control IK.",
     "animations": [
@@ -35,11 +35,24 @@
     "download": "https://opengameart.org/sites/default/files/laugh-evil-1_0.ogg",
     "license": "CC0-1.0",
     "sha256": "2662d484fd3f174145de1ac7527994d153b109ff8f1ee3ac83591beec58d62e4",
-    "bytes": 28146,
+    "bytes": 28146.0,
     "duration_seconds": 2.54424,
-    "sample_rate": 44100,
-    "channels": 1,
+    "sample_rate": 44100.0,
+    "channels": 1.0,
     "runtime_gain": 0.28,
     "dialogue": "Game-authored English subtitles with recorded vocalization, not fully voiced sentences."
+  },
+  "portrait": {
+    "path": "assets/jelly-boss/private/bramble-portrait.png",
+    "sha256": "9c93a851019deac7925275ca19ae6fb04eed7a01c57e541b70250811a602f93d",
+    "bytes": 31222,
+    "width": 256,
+    "height": 256,
+    "source_model_sha256": "3ca0f840d750b35123210fbf016ca0dd3135a112b73be97389055fcd5a6d0a6a",
+    "creator": "Wabu",
+    "license": "Standard Unity Asset Store EULA",
+    "acquisition": "Rendered from the acquired and integrated Bramble model; not a source-listing preview.",
+    "animations": "Static portrait sampled from the game-authored Idle clip at 0.45 seconds.",
+    "framing": "Complete face and ears, upper-body portrait, transparent background and proportional fit."
   }
 }

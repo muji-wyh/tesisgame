@@ -29,6 +29,7 @@ var _anchor := Rect2()
 var _models: RewardModel
 var _model_sample: Dictionary = {}
 var _model_bounds := Rect2()
+var _journey_peak: float = 176.0
 var _flight_layer := CanvasLayer.new()
 var _flight_surface := Node2D.new()
 
@@ -62,6 +63,7 @@ func enqueue(previous_tier: int, tier: int, before: Texture2D, after: Texture2D)
 		_elapsed = 0.0
 		_started = false
 		_revealed = false
+		_journey_peak = 216.0 if previous_tier > 0 else 176.0
 		_prepare_models()
 		_sync()
 
@@ -95,7 +97,9 @@ func advance(delta: float, pickup_ready: bool = true) -> float:
 	var generation: int = _serial
 	var remaining: float = delta
 	while is_active() and remaining > 0.0 and generation == _serial:
-		var boundary: float = ARRIVAL_SECONDS if not _started else ARRIVAL_SECONDS + REVEAL_SECONDS if not _revealed else ARRIVAL_SECONDS + PERFORMANCE_SECONDS
+		var chained: bool = _events.size() > 1 and _elapsed <= ARRIVAL_SECONDS + Flight.RETURN_START
+		var finish: float = ARRIVAL_SECONDS + (Flight.RETURN_START if chained else PERFORMANCE_SECONDS)
+		var boundary: float = ARRIVAL_SECONDS if not _started else ARRIVAL_SECONDS + REVEAL_SECONDS if not _revealed else finish
 		var consume: float = minf(remaining, maxf(0.0, boundary - _elapsed))
 		_elapsed += consume
 		remaining -= consume
@@ -116,7 +120,18 @@ func advance(delta: float, pickup_ready: bool = true) -> float:
 			cue_requested.emit("reward")
 			if generation != _serial or not is_active():
 				return 0.0
-		if _elapsed >= ARRIVAL_SECONDS + PERFORMANCE_SECONDS:
+		if _revealed and chained and _elapsed >= finish:
+			if not pickup_ready:
+				_sync()
+				return 0.0
+			_events.pop_front()
+			_elapsed = ARRIVAL_SECONDS + Flight.TOP_SECONDS
+			_revealed = false
+			_prepare_models()
+			cue_requested.emit("assemble")
+			if generation != _serial or not is_active():
+				return 0.0
+		elif _elapsed >= ARRIVAL_SECONDS + PERFORMANCE_SECONDS:
 			_events.pop_front()
 			_elapsed = 0.0
 			_started = false
@@ -188,9 +203,10 @@ func _texture_rect(texture: Texture2D, center: Vector2, edge: float) -> Rect2:
 
 func _motion(age: float) -> Dictionary:
 	var edge: float = minf(_anchor.size.x, _anchor.size.y)
-	var upgrade: bool = is_active() and int(_events[0].previous_tier) > 0
-	var peak: float = 216.0 if upgrade else 176.0
-	return Flight.sample(age, _anchor.get_center(), _flight_bounds(), edge, peak / Style.ui_scale(self), true)
+	var held_age: float = minf(age, Flight.RETURN_START - 0.000001) \
+		if _events.size() > 1 and age <= Flight.RETURN_START + 0.000001 else age
+	return Flight.sample(held_age, _anchor.get_center(), _flight_bounds(), edge,
+		_journey_peak / Style.ui_scale(self), true)
 
 
 func _placement(pose: Dictionary, edge: float, _center: Vector2) -> Dictionary:
@@ -290,6 +306,7 @@ func snapshot() -> Dictionary:
 	var bounds: Rect2 = _flight_bounds()
 	return {"active": is_active(), "visible": visible, "elapsed": _elapsed,
 		"tier": int(_events[0].tier) if is_active() else 0,
+		"started": _started, "next_tier": int(_events[1].tier) if _events.size() > 1 else 0,
 		"kind": ("upgrade" if int(_events[0].previous_tier) > 0 else "synthesis") if is_active() else "none",
 		"revealed": _revealed, "queued": _events.size(), "reduced_motion": reduced_motion,
 		"motion": motion, "flight_bounds": [bounds.position.x, bounds.position.y, bounds.size.x, bounds.size.y],

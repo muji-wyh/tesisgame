@@ -180,7 +180,11 @@ func advance_reward_presentation(delta: float) -> void:
 	if interaction_allowed.is_valid() and not interaction_allowed.call():
 		return
 	var round: String = game.round_id
-	_reward_presentation.advance(delta)
+	var presentation: Dictionary = _reward_presentation.snapshot()
+	var next_tier: int = int(presentation.next_tier)
+	var pickup_ready: bool = not presentation.started or next_tier == 0 \
+		or game.fragment_count - _loot_flights.size() >= 4 + (next_tier - 1) * 5
+	_reward_presentation.advance(delta, pickup_ready)
 	if round != game.round_id or _stopped or _finished_sent:
 		return
 	if not reward_presentation_active():

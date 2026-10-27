@@ -112,15 +112,12 @@ func _run() -> void:
 	var cues: Array[String] = []
 	view.audio_requested.connect(func(cue: String) -> void: cues.append(cue))
 	view.game.drag_blocked.emit("needs_room")
-	check(view._room_notice.visible and view.snapshot().drag.needs_room, "A declined authored lift has visible room feedback")
-	check(view._room_notice.text == "Make room before moving this jelly." and cues.is_empty(),
-		"Room feedback explains the blocked move without treating it as a language error")
-	check(view._board.encloses(view._room_notice.get_rect()), "Room feedback stays inside the board")
-	check(view._room_notice.get_theme_font_size("font_size") * Style.ui_scale(view) >= 16.0,
-		"Room feedback uses readable text")
+	check(not view.snapshot().drag.needs_room and cues == ["contact"],
+		"A declined lift gives a small material response, not a misleading language error or giant notice")
 	for frame in range(5):
 		view._process(0.5)
-	check(not view._room_notice.visible and _positions(view) == positions, "Room feedback expires without moving the board")
+	check(not view.snapshot().drag.needs_room and _positions(view) == positions,
+		"A blocked gesture never opens a persistent notice or moves the board")
 	view.size = Vector2(180, 220)
 	view._layout()
 	check(view._layout_too_small and view.game.paused and view._size_cover.visible, "An undersized viewport safely pauses instead of shrinking labels")

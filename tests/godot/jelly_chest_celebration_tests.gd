@@ -108,17 +108,33 @@ func _check_queue(view) -> void:
 	view.enqueue(1, 2, BEFORE, AFTER)
 	check(view.snapshot().queued == 2 and view.snapshot().tier == 1,
 		"A later upgrade queues behind synthesis without replacing the earned first chest")
-	var total: float = Celebration.ARRIVAL_SECONDS + Celebration.PERFORMANCE_SECONDS
-	view.advance(total + Celebration.ARRIVAL_SECONDS + 0.05)
+	var first_hold: float = Celebration.ARRIVAL_SECONDS + Flight.RETURN_START
+	view.advance(first_hold - 0.001)
+	var peak: Dictionary = view.snapshot().motion
+	view.advance(0.002)
 	check(view.snapshot().queued == 1 and view.snapshot().tier == 2 and view.snapshot().kind == "upgrade"
-		and is_equal_approx(float(view.snapshot().elapsed), Celebration.ARRIVAL_SECONDS + 0.05),
-		"Queued upgrades consume only time remaining after the previous presentation")
+		and is_equal_approx(float(view.snapshot().elapsed), Celebration.ARRIVAL_SECONDS + Flight.TOP_SECONDS + 0.001)
+		and Vector2(view.snapshot().motion.center[0], view.snapshot().motion.center[1]).is_equal_approx(
+			Vector2(peak.center[0], peak.center[1])) and is_equal_approx(float(view.snapshot().motion.scale), float(peak.scale)),
+		"The next upgrade continues at the same peak without returning, departing again or jumping in size")
 	check(heard.size() == 3 and heard[0].cue == "assemble" and heard[1].cue == "reward"
 		and heard[2].cue == "assemble", "Queue order preserves each chest's own sound sequence")
-	view.advance(total)
+	view.advance(Celebration.PERFORMANCE_SECONDS)
 	check(not view.is_active() and heard.size() == 4 and heard[3].cue == "reward"
 		and reveals.size() == 2 and reveals[0].tier == 1 and reveals[1].tier == 2,
 		"Each queued milestone completes exactly once")
+	_begin(view, 0, 1)
+	view.enqueue(1, 2, BEFORE, AFTER)
+	view.enqueue(2, 3, BEFORE, AFTER)
+	view.advance(Celebration.ARRIVAL_SECONDS, true)
+	view.advance(Flight.RETURN_START, false)
+	check(view.snapshot().tier == 1 and view.visible and view.snapshot().motion.phase == "celebrate",
+		"A not-yet-arrived next pickup keeps the same chest at the peak instead of retracting")
+	view.advance(0.001, true)
+	check(view.snapshot().tier == 2 and view.visible, "The waiting upgrade resumes without replaying departure")
+	view.advance(20.0)
+	check(not view.is_active() and reveals.map(func(item: Dictionary) -> int: return int(item.tier)) == [1, 2, 3],
+		"A coarse frame still reveals every earned tier once and retracts only after the final one")
 	view.enqueue(3, 3, BEFORE, AFTER)
 	view.enqueue(3, 2, BEFORE, AFTER)
 	check(not view.is_active(), "Repeated or regressive tier transitions cannot start a presentation")

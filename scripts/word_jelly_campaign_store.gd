@@ -429,8 +429,11 @@ func _result_error(value: Variant, context: Dictionary) -> String:
 	if value.get("boss_victory", false):
 		if not value.get("boss_victory") is bool or value.kind != "main" or value.outcome != "cleared" \
 			or not value.get("boss_id") is int or value.boss_id < 1 or value.boss_id > BossCatalog.STAGES.size() \
-			or BossCatalog.STAGES[value.boss_id - 1] != value.number:
+			or (BossCatalog.STAGES[value.boss_id - 1] != value.number \
+				and (value.has("boss_roster_version") or BossCatalog.LEGACY_STAGES[value.boss_id - 1] != value.number)):
 			return "A Boss unlock needs the original cleared Boss stage and its matching encounter identity."
+	if value.has("boss_roster_version") and (not value.boss_roster_version is int or value.boss_roster_version != 2):
+		return "The Boss settlement has an unsupported encounter roster."
 	for key: Variant in value:
 		if not key is String or key.is_empty() or key.length() > 64 or not _field_name(key):
 			return "Settlement field names must be bounded stable identifiers."

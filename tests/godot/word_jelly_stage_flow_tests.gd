@@ -152,7 +152,7 @@ func _run() -> void:
 	view.game.fragment_count = 3
 	for attempt in range(3):
 		app._record_growth("last-%d" % attempt, [first[2]], true)
-	view._practice_panel.advance(1.40)
+	view._practice_panel.advance(3.40)
 	app._advance_word_jelly_stages(0.1)
 	check(app._word_jelly_stages.number == 2 and view.game._words.size() == 4, "Three mastered words automatically start a four-word stage two")
 	var stage_key: String = round_id + ":word_jelly:stage:1"
@@ -191,7 +191,7 @@ func _run() -> void:
 	for id: String in app._word_jelly_stages.snapshot().word_ids:
 		for attempt in range(3):
 			app._record_growth("final-%s-%d" % [id, attempt], [id], true)
-	view._practice_panel.advance(1.40)
+	view._practice_panel.advance(3.40)
 	app._advance_word_jelly_stages(0.1)
 	check(app._word_jelly_stages.completed and view.game.phase == "finished"
 		and app._reward_confetti.snapshot().keys.has(round_id + ":word_jelly:stage:2"),

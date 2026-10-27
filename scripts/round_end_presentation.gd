@@ -7,7 +7,9 @@ signal cue_requested(round_id: String, failed: bool)
 const Style = preload("res://scripts/ui_style.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const RAYS = preload("res://assets/chests/milestone/rays.png")
-const DURATION: float = 1.8
+const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const MEDAL = preload("res://assets/images/ui/mastery-medal.webp")
+const DURATION: float = 3.2
 
 var reduced_motion: bool = false
 var _round_id: String = ""
@@ -18,6 +20,8 @@ var _shade := ColorRect.new()
 var _visual := Control.new()
 var _glow := TextureRect.new()
 var _rays := TextureRect.new()
+var _medal := TextureRect.new()
+var _failed: bool = false
 var _heading: Label
 var _caption: Label
 
@@ -41,6 +45,11 @@ func _init() -> void:
 	_glow.modulate = Color("#a8dacf")
 	_rays.texture = RAYS
 	_rays.modulate = Color("#ffe5a0")
+	_medal.texture = MEDAL
+	_medal.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_medal.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_medal.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_visual.add_child(_medal)
 	_heading = Style.heading("", 60)
 	_caption = Style.label("Let's see what you earned.", 20)
 	for label: Label in [_heading, _caption]:
@@ -64,7 +73,12 @@ func begin(round_id: String, failed: bool, steady: bool) -> bool:
 	_paused = false
 	_elapsed = 0.0
 	reduced_motion = steady
+	_failed = failed
 	_heading.text = "Game over" if failed else "Round complete"
+	_caption.text = "Your treasure is safe. Let's try again." if failed else "Wonderful work!"
+	_medal.visible = not failed
+	_glow.modulate = Color("#a8dacf") if failed else Color("#ffe2a3")
+	_rays.modulate = Color("#b3dbe9") if failed else Color("#ffe5a0")
 	set("accessibility_name", _heading.text + ". " + _caption.text)
 	show()
 	_layout()
@@ -108,17 +122,20 @@ func _layout() -> void:
 	_visual.pivot_offset = size * 0.5
 	var s: float = Style.ui_scale(self)
 	var width: float = maxf(1.0, size.x - 40.0 / s)
-	var pixels: int = maxi(1, floori(minf(64.0 / s, size.y * 0.20)))
+	var pixels: int = maxi(1, floori(minf(60.0 / s, size.y * 0.16)))
 	while pixels > 1 and Style.HEADING_FONT.get_string_size(_heading.text,
 		HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x > width:
 		pixels -= 1
 	var height: float = Style.HEADING_FONT.get_height(pixels) + 8.0 / s
 	_heading.add_theme_font_size_override("font_size", pixels)
-	_heading.position = Vector2((size.x - width) * 0.5, size.y * 0.46 - height * 0.5)
+	_heading.position = Vector2((size.x - width) * 0.5, size.y * (0.48 if _failed else 0.58) - height * 0.5)
 	_heading.size = Vector2(width, height)
 	_caption.add_theme_font_size_override("font_size", maxi(1, floori(minf(18.0 / s, minf(width * 0.055, size.y * 0.08)))))
 	_caption.position = Vector2(_heading.position.x, _heading.position.y + height + 8.0 / s)
 	_caption.size = Vector2(width, minf(62.0 / s, size.y * 0.20))
+	_medal.size = Vector2.ONE * minf(150.0 / s, minf(size.x * 0.32, size.y * 0.29))
+	_medal.position = Vector2(size.x * 0.5, size.y * 0.32) - _medal.size * 0.5
+	_medal.pivot_offset = _medal.size * 0.5
 	var edge: float = minf(500.0 / s, minf(size.x * 0.96, size.y * 0.88))
 	for artwork: TextureRect in [_glow, _rays]:
 		artwork.size = Vector2.ONE * edge
@@ -128,14 +145,35 @@ func _layout() -> void:
 
 
 func _sample() -> void:
-	var entrance: float = smoothstep(0.0, 0.22, _elapsed)
+	var entrance: float = smoothstep(0.0, 0.55, _elapsed)
 	var alpha: float = entrance * (1.0 - smoothstep(DURATION - 0.18, DURATION, _elapsed))
-	_shade.modulate.a = alpha
+	_shade.modulate.a = alpha * 0.38
 	_visual.modulate.a = alpha
-	_visual.scale = Vector2.ONE if reduced_motion else Vector2.ONE * lerpf(0.94, 1.0, smoothstep(0.0, 0.40, _elapsed))
+	var reveal: float = smoothstep(0.35, 0.88, _elapsed)
+	_heading.modulate.a = reveal
+	_caption.modulate.a = smoothstep(0.65, 1.10, _elapsed)
+	_visual.scale = Vector2.ONE if reduced_motion else Vector2.ONE * lerpf(0.90, 1.0, smoothstep(0.0, 0.60, _elapsed))
+	_medal.scale = Vector2.ONE if reduced_motion else Vector2.ONE * \
+		(0.72 + 0.28 * entrance + 0.10 * sin(entrance * PI))
+	_medal.rotation = 0.0 if reduced_motion else sin(entrance * PI) * -0.12
 	_glow.modulate.a = 0.62
 	_rays.modulate.a = 0.26
 	_rays.rotation = 0.0 if reduced_motion else _elapsed * 0.035
+	queue_redraw()
+
+
+func _draw() -> void:
+	if not _active or reduced_motion:
+		return
+	var p: float = clampf(_elapsed / 1.4, 0.0, 1.0)
+	var center := Vector2(size.x * 0.5, size.y * (0.43 if _failed else 0.32))
+	for index in range(12):
+		var angle: float = TAU * index / 12.0
+		var offset := Vector2(cos(angle), sin(angle)) * minf(size.x, size.y) * (0.10 + p * 0.22)
+		var edge: float = 12.0 / Style.ui_scale(self)
+		var tint: Color = Color("#b9e6ee") if _failed else Color("#ffe18b")
+		draw_texture_rect(SPARKLE, Rect2(center + offset - Vector2.ONE * edge * 0.5, Vector2.ONE * edge),
+			false, Color(tint, sin(p * PI) * 0.75))
 
 
 func snapshot() -> Dictionary:

@@ -2516,6 +2516,9 @@ func _sync_jelly() -> void:
 		return
 	_sync_round_end()
 	_sync_settlement_dialog()
+	if _campaign != null and _campaign.map != null:
+		_campaign.map.set_active(not _page_hidden and not _rebuilding and not _speech_debug_active \
+			and not collection_page.visible and not _mode_menu_open())
 	var allowed: bool = _jelly_interaction_allowed()
 	_jelly.pause(not allowed or _mode_id != "jelly")
 	_word_jelly.pause(not allowed or _mode_id != "word_jelly", _jelly_pause_open())
@@ -2729,6 +2732,9 @@ func _round_end_cue(round_id: String, failed: bool) -> void:
 		return
 	audio.interact(model.theme_id, false)
 	audio.play_round_end(failed)
+	if not failed and not reduced_motion and (not _round_result.has("campaign") \
+		or _round_result.campaign.get("outcome", "") == "cleared"):
+		_reward_confetti.burst(round_id + ":round-clear")
 
 
 func _round_end_completed(round_id: String) -> void:
@@ -2737,8 +2743,6 @@ func _round_end_completed(round_id: String) -> void:
 	audio.stop_round_end()
 	_celebration_seen_id = round_id
 	if _round_result.has("campaign"):
-		if _round_result.campaign.outcome == "cleared" and not reduced_motion:
-			_reward_confetti.burst_small(round_id + ":campaign:clear")
 		_campaign.begin_settlement()
 		return
 	_show_jelly_rewards()
