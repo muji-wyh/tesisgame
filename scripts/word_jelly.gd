@@ -1395,8 +1395,8 @@ func _process(delta: float) -> void:
 	_powerup_frame_end = -1.0
 	if _can_play() and delta <= 0.5:
 		_combo_hud.advance(delta)
-		_practice_panel.advance(delta)
 		_stage_banner.advance(delta)
+		_practice_panel.advance(delta)
 		_practice_panel.queue_redraw()
 		var powerup: Dictionary = game.powerup_snapshot()
 		if bool(powerup.active) and str(powerup.kind) == "fragments":
@@ -2176,6 +2176,8 @@ func _layout() -> void:
 		if boss_layout and sidebar and stage_in_rail:
 			practice_area.size.y = maxf(64.0 / s, practice_area.size.y - 52.0 / s)
 		_practice_panel.configure_layout(practice_area, s, not sidebar)
+		_stage_banner.configure_time_bonus(badge if _stage_banner._label.visible else
+			Rect2(practice_area.position, Vector2(86.0 / s, practice_area.size.y)), not _stage_banner._label.visible)
 	if not layout_header_chest():
 		_loot_meter.position = Vector2(edge, 4.0 / s)
 		_loot_meter.size = Vector2.ONE * 44.0 / s

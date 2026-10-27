@@ -928,6 +928,7 @@ func _build_controls() -> void:
 	_jelly_rewards.exit_requested.connect(_hide_jelly_rewards)
 	_jelly_rewards.replay_requested.connect(_replay_jelly)
 	_jelly_rewards.challenge_result_accepted.connect(func() -> void: _campaign.accept_challenge_result())
+	_jelly_rewards.challenge_retry_requested.connect(func() -> void: _campaign.accept_challenge_result(true))
 	_jelly_rewards.challenge_record_broken.connect(func(round_id: String) -> void:
 		if round_id != _round_id or _page_hidden or not _jelly_rewards_shown:
 			return
@@ -3196,6 +3197,11 @@ func _reward_confetti_allowed() -> bool:
 func _sync_reward_confetti() -> void:
 	if not is_instance_valid(_reward_confetti):
 		return
+	var reading_rect := Rect2()
+	if _mode_id == "word_jelly" and _jelly_rewards_shown and _settlement_dialog_open() \
+		and _round_result.get("campaign", {}).get("kind") == "challenge":
+		reading_rect = _settlement_dialog.panel.get_global_rect()
+	_reward_confetti.set_reading_rect(reading_rect)
 	if reduced_motion and _reward_confetti.is_active():
 		_reward_confetti.clear()
 	_reward_confetti.set_paused(reduced_motion or not _reward_confetti_allowed())

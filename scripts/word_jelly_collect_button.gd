@@ -200,15 +200,13 @@ func _draw() -> void:
 	var available: bool = ready and (not disabled or _active)
 	var press: float = 1.0 if is_pressed() and not disabled and not _locked else 0.0
 	var strength: float = float(pose.strength)
-	# Keep the title, frame and count aligned with Auto merge and Treasure.
-	# The acquired jelly illustration carries the growing collection charge.
 	var bounds := Rect2(Vector2.ONE * unit, size - Vector2.ONE * 2.0 * unit)
 	var radius: int = maxi(1, roundi(13.0 * unit))
-	var fill := Color("#f5fbf4").lerp(Color("#e9f6e8"), strength) if available else Color("#f0f1eb")
+	var fill := Color("#d6efdf").lerp(Color("#c7e9d3"), strength) if available else Color("#f0f1eb")
 	if is_hovered() and not disabled and not _locked:
 		fill = fill.lightened(0.10)
 	_panel.bg_color = fill
-	_panel.border_color = Color("#c7dfcc") if available else Color("#d5d9d0")
+	_panel.border_color = Color("#72ac89") if available else Color("#d5d9d0")
 	_panel.set_border_width_all(maxi(1, roundi(unit)))
 	_panel.set_corner_radius_all(radius)
 	_panel.shadow_color = Color("#577777", 0.14)
@@ -287,7 +285,7 @@ func _draw_sparkles(center: Vector2, pose: Dictionary, available: bool) -> void:
 func _draw_caption(available: bool, unit: float) -> void:
 	var font: Font = Style.HEADING_FONT
 	var area := Rect2(Vector2(6.0, 3.0) * unit, Vector2(size.x - 12.0 * unit, 22.0 * unit))
-	var font_size: int = maxi(1, roundi(12.0 * unit))
+	var font_size: int = maxi(1, roundi((14.0 if available else 12.0) * unit))
 	var caption: String = "Collect"
 	var extent: Vector2 = font.get_string_size(caption, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
 	if extent.x > area.size.x:
@@ -301,7 +299,7 @@ func _draw_caption(available: bool, unit: float) -> void:
 	var count: int = _remaining if _active else _count
 	var detail: String = "%d left" % count if _active else "%d word%s" % [count, "" if count == 1 else "s"]
 	area = Rect2(Vector2(minf(40.0 * unit, size.x * 0.40), 0.0), Vector2(maxf(1.0, size.x - minf(40.0 * unit, size.x * 0.40) - 6.0 * unit), size.y))
-	var detail_size: int = maxi(9, roundi(11.0 * unit))
+	var detail_size: int = maxi(9, roundi((12.0 if available else 11.0) * unit))
 	var detail_width: float = font.get_string_size(detail, HORIZONTAL_ALIGNMENT_LEFT, -1, detail_size).x
 	if detail_width > area.size.x:
 		detail_size = maxi(8, floori(detail_size * area.size.x / detail_width))

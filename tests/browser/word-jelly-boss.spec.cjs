@@ -33,7 +33,7 @@ async function press(page, rect) {
 
 async function start(page, number) {
   await seed(page, number);
-  const errors = await openGame(page, { reducedMotion: 'no-preference' });
+  const errors = await openGame(page, { home: true, reducedMotion: 'no-preference' });
   await openModeMenu(page);
   await activateLibraryControl(page, 'Mode_word_jelly');
   const map = await waitForCampaignMap(page);
@@ -43,10 +43,14 @@ async function start(page, number) {
   await page.evaluate(() => {
     const status = document.getElementById('game-status');
     window.bossActionFrames = {};
+    window.bossActionEvidence = {};
     window.bossActionObserver = new MutationObserver(() => {
       const state = JSON.parse(status.dataset.jelly || '{}');
       const boss = state.boss || {}, view = state.boss_view || {};
       if (!boss.active || !view.visible) return;
+      const impact = boss.events?.find(event => event.kind === 'player_hit' && event.id === view.impact_serial);
+      if (impact && !window.bossActionEvidence.impact)
+        window.bossActionEvidence.impact = { age: boss.elapsed - impact.at, event: impact };
       let key = '';
       const base = view.base_character_rect || [];
       if (view.clip === 'Kick' && view.character_rect[2] > base[2] * 1.35) key = 'giant-kick';
@@ -56,6 +60,8 @@ async function start(page, number) {
       if (boss.phase === 'ending' && boss.ending_elapsed > 5.2 && boss.ending_elapsed < 5.8) key = 'retreat';
       if (key && !window.bossActionFrames[key])
         window.bossActionFrames[key] = document.getElementById('canvas').toDataURL('image/png').split(',')[1];
+      if (key === 'victory-banter' && !window.bossActionEvidence.victory)
+        window.bossActionEvidence.victory = { clip: view.clip, dialogue: view.dialogue };
     });
     window.bossActionObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
   });
@@ -95,6 +101,7 @@ test('a real first Boss victory celebrates, escapes, saves Lv2 and never duplica
   const errors = await start(page, 3);
   const opening = await jelly(page);
   expect(opening.max_merge_level).toBe(1);
+  expect(opening.boss_view.compass_visible).toBe(true);
   expect(opening.boss_view.animations).toEqual(expect.arrayContaining(['Idle', 'Throw', 'Kick', 'Snatch', 'Hit', 'Taunt', 'Escape']));
   await page.screenshot({ path: info.outputPath('boss-first-battle.png'), scale: 'css' });
   for (let round = 0; round < 3; round++) {
@@ -126,6 +133,11 @@ test('a real first Boss victory celebrates, escapes, saves Lv2 and never duplica
   expect(finished.campaign_map.stage_nodes.find(stage => stage.number === 4).unlocked).toBe(true);
   await retainAction(page, info, 'victory-banter');
   await retainAction(page, info, 'retreat');
+  const dramaticBeats = await page.evaluate(() => window.bossActionEvidence);
+  expect(dramaticBeats.impact.age).toBeGreaterThanOrEqual(0.55 - 1e-6);
+  expect(dramaticBeats.impact.event.health_after).toBeGreaterThanOrEqual(0);
+  expect(dramaticBeats.victory.clip).not.toBe('Taunt');
+  expect(dramaticBeats.victory.dialogue).not.toBe('');
   await page.screenshot({ path: info.outputPath('boss-lv2-map.png'), scale: 'css' });
   const balance = (await wallet(page)).balance;
   fs.writeFileSync(info.outputPath('boss-clear.json'), JSON.stringify({ opening, finished, balance }, null, 2));

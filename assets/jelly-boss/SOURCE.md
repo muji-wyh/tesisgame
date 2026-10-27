@@ -82,6 +82,16 @@ The eight health-energy glints, hit depletion, side-dock light and retreat
 accents reuse these exact textures. There is no replacement geometric character,
 opaque battle information panel or board-sized ending dialog.
 
+The current pursuit pass keeps the compass visible beside Bramble throughout a
+rematch and enlarges the same source during the theft and final return. Short
+game-authored, two-line challenges identify his actual tricks and the next
+encounter; no dialogue is relabeled as recorded speech. Idle, Hit and Escape
+retain the same acquired rig and authored clips. The visible word bolt's 550 ms
+contact now drives the hit cue, small grounded recoil and local energy loss
+together; the final strike gets its victory accent before the concession and
+retreat. These are presentation/sequence changes, not additional damage,
+rewards, source animation, character geometry or audio acquisitions.
+
 ## Boss vocalization
 
 - **Evil Laugh**, recorded/performed by **AntumDeluge** for Stendhal.

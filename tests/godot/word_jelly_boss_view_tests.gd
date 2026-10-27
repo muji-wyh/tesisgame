@@ -18,6 +18,17 @@ func check(value: bool, message: String) -> void:
 		printerr("FAIL: " + message)
 
 
+func capture_state(name: String) -> void:
+	if not OS.get_cmdline_user_args().has("--capture") or DisplayServer.get_name() == "headless":
+		return
+	DirAccess.make_dir_recursive_absolute("res://build/qa/jelly-boss")
+	for frame in range(3):
+		await process_frame
+	await RenderingServer.frame_post_draw
+	check(root.get_texture().get_image().save_png("res://build/qa/jelly-boss/" + name + ".png") == OK,
+		"Capture the real " + name + " beat using the acquired character and compass")
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1000, 760)
@@ -57,23 +68,57 @@ func _run() -> void:
 	check(state.heading.is_empty() and state.health_text.is_empty() and state.energy_segments == 8
 		and is_equal_approx(float(state.health_fraction), 1.0),
 		"Health uses sourced energy effects without permanent names, instructions or a numeric HP panel")
+	var cues: Array[String] = []
+	view.audio_requested.connect(func(cue: String) -> void: cues.append(cue))
 	run.collect_hit("presentation:hit", 1, 0, {})
-	view.sync(run.snapshot(), {}, 1, false)
+	view.sync(run.snapshot(), {}, 1, true)
 	check(float(view.snapshot().health_fraction) < float(view.snapshot().energy_fraction),
-		"A real hit drains energy over a visible presentation interval instead of jumping a number")
-	run.advance(0.43, [], true)
-	view.sync(run.snapshot(), {}, 1, false)
+		"A committed attack keeps its energy target pending while the real sourced bolt is still in flight")
+	run.advance(0.28, [], true)
+	view.sync(run.snapshot(), {}, 1, true)
+	await capture_state("drama-attack-in-flight")
+	run.advance(View.HIT_FLIGHT_SECONDS - 0.29, [], true)
+	view.sync(run.snapshot(), {}, 1, true)
+	check(cues.count("boss-hit") == 0 and view.snapshot().clip != "Hit"
+		and is_equal_approx(float(view.snapshot().energy_fraction), 1.0),
+		"Bramble cannot recoil, lose visible energy or sound hit before the bolt reaches him")
+	run.advance(0.02, [], true)
+	view.sync(run.snapshot(), {}, 1, true)
+	check(cues.count("boss-hit") == 1 and view.snapshot().clip == "Hit"
+		and view._character.position.x > view._character_rect.position.x,
+		"The visual contact owns one synchronized hit cue, skeletal reaction and planted recoil")
+	view.sync(run.snapshot(), {}, 1, true)
+	check(cues.count("boss-hit") == 1, "Repeated status/layout refreshes cannot replay a hit cue")
+	run.advance(0.08, [], true)
+	view.sync(run.snapshot(), {}, 1, true)
+	await capture_state("drama-attack-contact")
+	run.advance(0.16, [], true)
+	view.sync(run.snapshot(), {}, 1, true)
 	check(is_equal_approx(float(view.snapshot().health_fraction), float(view.snapshot().energy_fraction)),
-		"The visual energy settles to the actual authoritative health ratio")
-	run.begin_ending("defeated")
-	run.advance(3.5, [], false)
-	view.sync(run.snapshot(), {}, 1, false)
+		"After contact the visual energy settles promptly to the authoritative committed health")
+	run.collect_hit("presentation:finishing-word", 9, 0, {})
+	view.sync(run.snapshot(), {}, 1, true)
+	check(cues.count("boss-win") == 0, "A final award does not announce victory before its visual impact")
+	run.advance(View.HIT_FLIGHT_SECONDS + 0.01, [], false)
+	view.sync(run.snapshot(), {}, 1, true)
+	check(cues.count("boss-win") == 1 and view.snapshot().dialogue == "Bramble beaten!",
+		"The decisive impact has an unmistakable victory response rather than another ordinary taunt")
+	run.advance(0.14, [], false)
+	view.sync(run.snapshot(), {}, 1, true)
+	await capture_state("drama-victory-impact")
+	run.advance(3.5 - View.HIT_FLIGHT_SECONDS - 0.15, [], false)
+	view.sync(run.snapshot(), {}, 1, true)
 	check(view.snapshot().speaker == "Pip" and not view._dialogue.text.is_empty(),
 		"The escape exchanges a real reply with Pip instead of leaving a silent retreat")
+	check(view.snapshot().clip != "Taunt" and cues.count("boss-win") == 1
+		and view.snapshot().compass_visible,
+		"A beaten Bramble retreats instead of instantly mocking again; the stolen objective remains visible")
+	await capture_state("drama-victory-reply")
 	check(dock.grow(0.1).encloses(view._character.get_rect()) and not board.intersects(view._character.get_rect()),
 		"Even the ending keeps the Boss beside the board instead of opening a giant dialog")
-	check(view._dialogue.size.y <= 38.1 and view._dialogue.max_lines_visible == 2,
-		"Story reactions are bounded two-line subtitles rather than a board-sized text surface")
+	check(view._dialogue.size.y <= 52.1 and view._dialogue.max_lines_visible == 2
+		and view._dialogue.get_theme_font_size("font_size") >= 16,
+		"The ending gives its short two-line payoff readable emphasis without a board-sized text surface")
 	var intro := Run.new()
 	intro.configure(Catalog.encounter(1, true), 71)
 	view.sync(intro.snapshot(), {}, 2, false)
@@ -84,6 +129,10 @@ func _run() -> void:
 	view.sync(intro.snapshot(), {}, 2, false)
 	check(view.visible and dock.grow(0.1).encloses(view._character.get_rect()),
 		"The story visitor actually enters from the edge and stops beside the board")
+	await capture_state("drama-compass-theft")
+	intro.advance(1.75, [], false)
+	view.sync(intro.snapshot(), {}, 2, false)
+	await capture_state("drama-chase-challenge")
 	var kick_run := Run.new()
 	kick_run.configure(Catalog.encounter(18), 71)
 	kick_run.advance(2.2, [{"id": 1, "column": 0, "row": 7}], true)
@@ -93,6 +142,26 @@ func _run() -> void:
 	var foot: Vector2 = view._character.position + view._character.size * Vector2(0.5, view.Actor.FOOT_Y)
 	check(view._preview.grow(8.0).has_point(foot),
 		"The giant kick physically reaches the current preview instead of a fixed unrelated screen row")
+	view.reduced_motion = true
+	var still_run := Run.new()
+	still_run.configure(Catalog.encounter(3), 71)
+	view.sync(still_run.snapshot(), {}, 4, false)
+	var still_position: Vector2 = view._character.position
+	still_run.collect_hit("presentation:reduced-hit", 1, 0, {})
+	view.sync(still_run.snapshot(), {}, 4, false)
+	check(view._character.position == still_position and view._character.rotation == 0.0
+		and is_equal_approx(float(view.snapshot().energy_fraction), float(view.snapshot().health_fraction)),
+		"Reduced motion communicates the real hit immediately without recoil or a flying-bolt delay")
+	var finale := Run.new()
+	finale.configure(Catalog.encounter(99), 71)
+	finale.health = 1
+	finale.collect_hit("presentation:final-compass", 1, 0, {})
+	finale.advance(2.2, [], false)
+	view.reduced_motion = false
+	view.sync(finale.snapshot(), {}, 5, false)
+	check(view.snapshot().clip == "Idle" and view.snapshot().dialogue.contains("You win"),
+		"The final rival admits defeat instead of taunting while returning the actual compass")
+	await capture_state("drama-compass-recovered")
 	view.free()
 	sky.free()
 	print("Jelly Boss presentation: %d checks, %d failures" % [checks, failures])

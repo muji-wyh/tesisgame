@@ -112,6 +112,14 @@ func test_combat_clock_and_damage() -> void:
 
 
 func test_levels_and_story() -> void:
+	check(BossCatalog.chase_target(1) == 3 and BossCatalog.chase_target(24) == 36
+		and BossCatalog.chase_target(99) == 0,
+		"The chase always points at the next real encounter and ends after the finale")
+	for number: int in BossCatalog.STAGES:
+		var definition: Dictionary = BossCatalog.encounter(number)
+		check(str(definition.entrance).contains("\n") and str(definition.escape).contains("\n")
+			and str(definition.reply).contains("\n"),
+			"Each encounter uses short authored setup, admitted defeat and pursuit beats that fit two subtitles")
 	check(BossCatalog.STAGES.size() == 8 and BossCatalog.merged_level([]) == 1
 		and BossCatalog.merged_level([1, 1, 2]) == 3
 		and BossCatalog.merged_level([1, 2, 3, 4, 5, 6, 7, 8]) == 9,

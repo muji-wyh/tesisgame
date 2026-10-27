@@ -94,7 +94,13 @@ through both the full width and height instead of a small local patch.
 Each paper strip is 1.5 times its base edge in length and 0.65 times in width,
 with its full rotated footprint kept inside the viewport sides. The chest and Pip retain
 their original completion gates while the paper continues over the current
-game or result screen. A 0.55-0.8-second launch spreads across the full width;
+game or result screen.
+In the Challenge result, a game-authored screen-space mask lets this same paper
+pass behind the actual responsive dialog, keeping its title, medal and two
+actions readable. It does not change particle counts, paths, duration or input.
+Other modes retain their existing full-screen presentation.
+
+A 0.55-0.8-second launch spreads across the full width;
 the descent then takes more than four seconds. Independent air currents, opposing
 tumbles with changing angular speed, and two-axis flutter keep the paper from
 moving as one band. The acquired rounded-square texture bends along each strip's

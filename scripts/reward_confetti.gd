@@ -3,6 +3,7 @@ extends CanvasLayer
 
 const PAPER = preload("res://assets/images/jelly-match/confetti.png")
 const Style = preload("res://scripts/ui_style.gd")
+const READING_MASK = preload("res://scripts/reward_confetti_mask.gdshader")
 const DURATION: float = 6.4
 const PAPER_COUNT: int = 85
 const MAX_PAPER_COUNT: int = 267
@@ -20,6 +21,9 @@ var _surface := PaperSurface.new()
 var _bursts: Array[Dictionary] = []
 var _seen_keys: Dictionary = {}
 var _paused: bool = false
+var _reading_rect := Rect2()
+var _reading_screen := Rect2()
+var _reading_material := ShaderMaterial.new()
 
 
 func _init() -> void:
@@ -27,6 +31,8 @@ func _init() -> void:
 	layer = 80
 	_surface.name = "ViewportPaper"
 	_surface.effect = self
+	_reading_material.shader = READING_MASK
+	_surface.material = _reading_material
 	_surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_surface.focus_mode = Control.FOCUS_NONE
 	add_child(_surface)
@@ -70,9 +76,25 @@ func set_paused(value: bool) -> void:
 	_sync()
 
 
+func set_reading_rect(bounds: Rect2) -> void:
+	var screen: Rect2 = screen_rect()
+	if bounds == _reading_rect and screen == _reading_screen:
+		return
+	_reading_rect = bounds
+	_reading_screen = screen
+	var mask := Vector4.ZERO
+	if bounds.has_area() and screen.has_area():
+		var start: Vector2 = (bounds.position - screen.position) / screen.size
+		var end: Vector2 = (bounds.end - screen.position) / screen.size
+		mask = Vector4(start.x, start.y, end.x, end.y)
+	_reading_material.set_shader_parameter("reading_rect", mask)
+	_surface.queue_redraw()
+
+
 func clear() -> void:
 	_bursts.clear()
 	_seen_keys.clear()
+	set_reading_rect(Rect2())
 	_sync()
 
 
@@ -234,5 +256,6 @@ func snapshot() -> Dictionary:
 	return {"active": is_active(), "visible": visible, "paused": _paused,
 		"paper_count": count if is_active() else _paper_count(rect, 1.0 / Style.ui_scale(_surface)),
 		"regions": regions,
+		"reading_rect": [_reading_rect.position.x, _reading_rect.position.y, _reading_rect.size.x, _reading_rect.size.y],
 		"ages": _bursts.map(func(item: Dictionary) -> float: return float(item.age)),
 		"keys": _seen_keys.keys(), "screen_rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y]}

@@ -263,6 +263,13 @@ func _run() -> void:
 				check(row.surface.size.y * panel._scale >= 50.0
 					and row.label.get_theme_font_size("font_size") * panel._scale >= 16.9,
 					"The sidebar gives every illustrated word a readable, comfortably spaced card")
+				check(is_equal_approx(row.label.get_rect().get_center().y, row.surface.size.y * 0.5)
+					and is_equal_approx(row.fraction.get_rect().get_center().y, row.surface.size.y * 0.5),
+					"The word and its count share one reading line: label=%s fraction=%s card=%s" % [
+						row.label.get_rect(), row.fraction.get_rect(), row.surface.size])
+				if not state.words[index].mastered:
+					check(row.label.get_rect().end.x <= row.fraction.position.x - 6.0 / panel._scale,
+						"The visible count capsule reserves its own column even when a spelling fills the label")
 			check(row.get("steps", []).size() == 3,
 				"Three sourced mastery accents replace the generic table-like progress line")
 			check(row.fraction.is_visible_in_tree() == (not state.compact and not state.words[index].mastered),

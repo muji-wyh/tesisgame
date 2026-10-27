@@ -8,6 +8,7 @@ const Catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
 const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
 const Morphology = preload("res://scripts/growth_morphology.gd")
 const Fixture = preload("res://tests/godot/player_flow_fixture.gd")
+const RecordBadge = preload("res://scripts/word_jelly_record_badge.gd")
 var checks: int = 0
 var failures: int = 0
 
@@ -277,12 +278,207 @@ func test_challenge_best_hud() -> void:
 	app.free()
 
 
+func test_taste_hud() -> void:
+	root.size = Vector2i(393, 852)
+	var directory: String = "user://jelly-taste-%d-%d" % [OS.get_process_id(), Time.get_ticks_usec()]
+	check(DirAccess.make_dir_recursive_absolute(directory) == OK, "Taste review uses isolated real save storage")
+	var app = load("res://scenes/main.tscn").instantiate()
+	Fixture.install(app, directory)
+	app._presentation.path = directory + "/presentation.cfg"
+	root.add_child(app)
+	for frame in range(6):
+		await process_frame
+	app.audio.set_muted(true)
+	app.set_process(false)
+	app.reduced_motion = false
+	app._show_mode_menu()
+	app.choose_mode("word_jelly")
+	for frame in range(6):
+		await process_frame
+	check(app._campaign.store.record_challenge_stage("growth", 5), "The review retains a genuine historical record")
+	seed(73021)
+	app._campaign.request_challenge()
+	for frame in range(6):
+		await process_frame
+	var view = app._word_jelly
+	view.set_process(false)
+	for frame in range(40):
+		view._process(0.05)
+		app._advance_ui(0.05)
+	Fixture.unlock_auto_collect(app)
+	var run = view.game.stage_run
+	run.challenge_stage = 3
+	run._challenge_goals.clear()
+	run._append_challenge_stage()
+	run._challenge_goals[0].current = mini(1, int(run._challenge_goals[0].required) - 1)
+	view.game._sync_challenge_pressure()
+	view.game.cells.clear()
+	for index in range(3):
+		var definition: Dictionary = run.words[index % run.words.size()]
+		var tile: Dictionary = view.game._new_word_root(definition)
+		view.game._set_merged_word(tile, definition, 1, true)
+		tile.fragments = 0
+		tile.chest = false
+		tile.column = index
+		tile.row = 7
+		tile.age = 100.0
+		tile.settling = false
+		view.game.cells.append(tile)
+	view._sync_tiles()
+	app._refresh_jelly_stage_targets()
+	view.collect_button.advance(1.0)
+	for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(1366, 768), Vector2i(844, 390)]:
+		root.size = dimensions
+		for frame in range(6):
+			await process_frame
+		check(not view.collect_button.disabled and view.collect_button.snapshot().count == 3,
+			"The representative play loop retains three real collectable words at every target size")
+		await capture_ui("taste-ready-%dx%d" % [dimensions.x, dimensions.y])
+	var awards: Array[float] = []
+	view.game.challenge_time_awarded.connect(func(seconds: float) -> void: awards.append(seconds))
+	run.advance(maxf(0.0, run.remaining - 55.0))
+	view._collect(int(view.game.cells[0].id))
+	for frame in range(20):
+		view._process(0.05)
+		app._advance_ui(0.05)
+		if not awards.is_empty():
+			break
+	check(awards == [10.0], "A real completed Challenge goal owns exactly one ten-second award")
+	var banner = view._stage_banner
+	banner.advance(0.12)
+	for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(1366, 768), Vector2i(844, 390)]:
+		root.size = dimensions
+		for frame in range(6):
+			await process_frame
+		var bonus: Dictionary = banner.snapshot().time_bonus
+		check(bonus.get("visible", false) and bonus.get("text", "") == "+10s"
+			and is_equal_approx(float(bonus.seconds), awards[0]),
+			"Desktop, phone and short landscape visibly name the real time gain, not a static Goals +10s hint")
+		if bonus.has("rect"):
+			var values: Array = bonus.rect
+			var rect := Rect2(values[0], values[1], values[2], values[3])
+			var controls: Array[Rect2] = [view.get_global_transform() * view._board,
+				view.get_global_transform() * view._preview_rect, view.collect_button.get_global_rect()]
+			for row: Dictionary in view._practice_panel._rows:
+				controls.append(row.surface.get_global_rect())
+			for reserved: Rect2 in controls:
+				check(not rect.intersects(reserved), "Time feedback never obscures a goal, input target or Jelly")
+			var clock: Label = banner._label if banner._label.visible else view._practice_panel._title
+			var font: Font = clock.get_theme_font("font")
+			var pixels: int = clock.get_theme_font_size("font_size")
+			var width: float = font.get_string_size(clock.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
+			var glyph: Rect2 = clock.get_global_transform() * Rect2(
+				Vector2(clock.size.x - width, (clock.size.y - font.get_height(pixels)) * 0.5),
+				Vector2(width, font.get_height(pixels)))
+			check(not rect.intersects(glyph),
+				"The actual countdown digits stay readable beside the time-gain pop at %s: bonus=%s clock=%s" % [
+					dimensions, rect, glyph])
+		await capture_ui("challenge-time-gain-%dx%d" % [dimensions.x, dimensions.y])
+	var frozen: Dictionary = banner.snapshot().time_bonus.duplicate(true)
+	view.pause(true, true)
+	view._process(0.4)
+	check(banner.snapshot().time_bonus == frozen, "Pausing freezes the same visible award instead of consuming it")
+	view.pause(false)
+	banner.advance(2.0)
+	run._challenge_goals[1].current = int(run._challenge_goals[1].required) - 1
+	run.elapsed = run.initial_seconds + run._challenge_added_seconds - 86.5
+	run.advance(0.0)
+	app._refresh_jelly_stage_targets()
+	view._collect(int(view.game.cells[0].id))
+	for frame in range(20):
+		view._process(0.05)
+		app._advance_ui(0.05)
+		if awards.size() == 2:
+			break
+	check(awards.size() == 2 and awards[1] > 3.4 and awards[1] < 5.0 and run.remaining <= 90.0
+		and is_equal_approx(float(banner.snapshot().time_bonus.seconds), awards[1]),
+		"A capped award displays the actual fractional headroom without pretending ten seconds were added")
+	banner.present_time_bonus(2.0)
+	check(awards.size() == 2 and is_equal_approx(float(banner.snapshot().time_bonus.seconds), awards[1] + 2.0),
+		"Closely spaced awards combine visibly without issuing any additional gameplay award")
+	view.set_reduced_motion(true)
+	banner.advance(0.05)
+	var still: Dictionary = banner.snapshot().time_bonus
+	check(still.get("visible", false) and still.get("feedback_scale", 0.0) == 1.0
+		and still.get("clock_scale", 0.0) == 1.0,
+		"Reduced motion retains the explicit amount and static highlight without a flying or pulsing clock")
+	banner.advance(2.0)
+	check(not banner.snapshot().time_bonus.active and not banner.snapshot().time_bonus.get("visible", true),
+		"The bounded award retires cleanly rather than becoming another permanent HUD label")
+	app.audio.halt()
+	app.free()
+	await process_frame
+
+
+func test_record_composition() -> void:
+	var badge := RecordBadge.new()
+	root.add_child(badge)
+	for scale_factor: float in [0.75, 1.0, 2.0]:
+		for dimensions: Vector2 in [Vector2(76, 28), Vector2(220, 100)]:
+			for record: int in [0, 5, 12, 393, 16384]:
+				badge.set_record(record)
+				badge.layout_badge(Rect2(Vector2(10, 20), dimensions / scale_factor), scale_factor)
+				var label: Label = badge._number
+				var font_size: int = label.get_theme_font_size("font_size")
+				var width: float = _record_text_width(label, font_size)
+				var offset: float = (label.size.x - width) * 0.5 \
+					if label.horizontal_alignment == HORIZONTAL_ALIGNMENT_CENTER else 0.0
+				var glyph := Rect2(label.position + Vector2(offset, 0), Vector2(width, label.size.y))
+				var group: Rect2 = badge._medal.get_rect().merge(glyph)
+				check(absf(group.get_center().x - badge.size.x * 0.5) <= 0.6 / scale_factor,
+					"The actual medal and %d glyphs form one centered award at %s, scale %.2f" % [record, dimensions, scale_factor])
+				check(Rect2(Vector2.ZERO, badge.size).grow(0.1).encloses(group)
+					and glyph.position.x >= badge._medal.get_rect().end.x + 3.0 / scale_factor,
+					"One through five record digits retain their own space without crowding the acquired medal")
+				badge.set_record(record, true, maxi(0, record - 1))
+				badge.advance(0.8)
+				var line_height: float = label.get_theme_font("font").get_height(label.get_theme_font_size("font_size"))
+				var posed: Rect2 = label.get_transform() * Rect2(Vector2(0, (label.size.y - line_height) * 0.5),
+					Vector2(label.size.x, line_height))
+				check(Rect2(Vector2.ZERO, badge.size).grow(0.1).encloses(posed),
+					"The record pop stays inside its reserved bounds, including the compact five-digit case")
+	badge.free()
+
+
+func _record_text_width(label: Label, font_size: int) -> float:
+	return label.get_theme_font("font").get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+
+
+func check_record_readability(app) -> void:
+	var effect = app._reward_confetti
+	var window: Array = effect.snapshot().get("reading_rect", [])
+	var panel: Rect2 = app._settlement_dialog.panel.get_global_rect()
+	check(window.size() == 4 and Rect2(window[0], window[1], window[2], window[3]).is_equal_approx(panel),
+		"The live Challenge dialog reserves its actual responsive reading window from foreground paper")
+	if not OS.get_cmdline_user_args().has("--capture") or DisplayServer.get_name() == "headless":
+		return
+	for frame in range(6):
+		await process_frame
+	await RenderingServer.frame_post_draw
+	var with_paper: Image = root.get_texture().get_image()
+	effect._surface.hide()
+	for frame in range(2):
+		await process_frame
+	await RenderingServer.frame_post_draw
+	var without_paper: Image = root.get_texture().get_image()
+	effect._surface.show()
+	var changed: int = 0
+	var inset := Rect2i(panel.grow(-20.0))
+	for y in range(inset.position.y, inset.end.y, 3):
+		for x in range(inset.position.x, inset.end.x, 3):
+			if with_paper.get_pixel(x, y) != without_paper.get_pixel(x, y):
+				changed += 1
+	check(changed == 0,
+		"Actual rendered paper cannot paint over the title, record, save status or return action: %d changed pixels" % changed)
+
+
 func test_challenge_results() -> void:
 	for example: Dictionary in [
 		{"best": 5, "reached": 1, "record": false, "reduce": false},
 		{"best": 5, "reached": 5, "record": false, "reduce": false},
 		{"best": 5, "reached": 6, "record": true, "reduce": false},
 		{"best": 5, "reached": 6, "record": true, "reduce": false, "fail": true},
+		{"best": 5, "reached": 1, "record": false, "reduce": false, "replay": true},
 		{"best": 0, "reached": 1, "record": true, "reduce": true}]:
 		if OS.get_cmdline_user_args().has("--results-retry-only") and not bool(example.get("fail", false)):
 			continue
@@ -391,8 +587,15 @@ func test_challenge_results() -> void:
 			"Only a genuinely surpassed old record emits the breakthrough effect once")
 		check(room._back.visible and not room._back.disabled and room._back.text == "Back to map"
 			and room._return_glow.visible, "The saved result exposes a sourced-glow Back to map button")
+		check(room._home.visible and not room._home.disabled and room._home.text == "Try again"
+			and not room._home.get_rect().intersects(room._back.get_rect())
+			and room._home.size.y * Jelly.Style.ui_scale(room) >= 44.0,
+			"Challenge offers separate readable Try again and Back to map actions after durable settlement")
+		var return_light: Color = room._return_glow.modulate
 		for frame in range(9):
 			app._advance_ui(0.05)
+		check(room._back.scale == Vector2.ONE and room._return_glow.modulate == return_light,
+			"Normal and reduced motion both keep the return button still, without breathing brightness or scale")
 		var age: float = room._challenge_record._elapsed
 		room.set_result_context(app._round_result, app._round_id)
 		room._refresh()
@@ -402,16 +605,54 @@ func test_challenge_results() -> void:
 			for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(1366, 768)]:
 				root.size = dimensions
 				await capture_ui("challenge-record-%d" % dimensions.x)
+				app._sync_reward_confetti()
+				await check_record_readability(app)
 		for frame in range(120):
 			app._advance_ui(0.05)
 		check(app._campaign.settling and not app._campaign.map.visible and room.is_visible_in_tree(),
 			"An arbitrarily idle result never returns to the map by itself")
+		check(room._back.scale == Vector2.ONE and room._return_glow.modulate == return_light,
+			"The static return highlight does not restart an idle motion after the record effect ends")
 		check(not bool(example.reduce) or room._back.scale == Vector2.ONE,
 			"Reduced motion retains the award and highlighted return without a moving button")
-		room._back.pressed.emit()
-		app._advance_ui(0.05)
-		check(app._campaign.map.visible and not app._campaign.settling and not app._settlement_dialog.visible,
-			"Only the player's explicit Back to map action closes the saved Challenge result")
+		if bool(example.get("replay", false)):
+			await capture_ui("challenge-two-actions-393")
+			var completed_round: String = app._round_id
+			var coins: int = app.coin_wallet.balance
+			room._home.pressed.emit()
+			room._home.pressed.emit()
+			room._back.pressed.emit()
+			app._advance_ui(0.05)
+			for frame in range(6):
+				await process_frame
+			check(app._round_id != completed_round and not app._campaign.map.visible
+				and not app._campaign.settling and view.game.stage_run.kind == "challenge"
+				and view.game.stage_run.challenge_stage == 1 and view.game.stage_run.remaining == 90.0,
+				"Try again immediately starts one fresh Stage 1 Challenge, not a restored ended round or the map")
+			check(app.coin_wallet.balance == coins and app._campaign.store.challenge_best_stage("growth") == int(example.best)
+				and view.game.stage_run.collection_count == 0,
+				"Repeated retry input preserves earned coins and the historical best without repeating the old rewards")
+			for frame in range(40):
+				view._process(0.05)
+				app._advance_ui(0.05)
+			check(view.can_finish_round() and view.finish_button.is_visible_in_tree() and not view.finish_button.disabled,
+				"The restarted Challenge restores its real header Pause/Finish control after Ready/Go: " \
+					+ JSON.stringify(view.snapshot().finish))
+			var touch := InputEventScreenTouch.new()
+			touch.index = 4
+			touch.position = view.finish_button.get_global_rect().get_center()
+			touch.pressed = true
+			view.finish_button._input(touch)
+			touch.pressed = false
+			view.finish_button._input(touch)
+			check(app._jelly_pause_open() and view.game.paused,
+				"The first real touch on the restored header pauses the new Challenge")
+			app._resume_jelly()
+		else:
+			room._back.pressed.emit()
+			app._advance_ui(0.05)
+			check(app._campaign.map.visible and not app._campaign.settling and not app._settlement_dialog.visible,
+				"Only the player's explicit Back to map action closes the saved Challenge result")
 		app.audio.halt()
 		app.free()
 		await process_frame
@@ -420,6 +661,18 @@ func test_challenge_results() -> void:
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1000, 760)
+	if OS.get_cmdline_user_args().has("--time-gain-only"):
+		await test_taste_hud()
+		print("Challenge time feedback: %d checks, %d failures" % [checks, failures])
+		quit(1 if failures else 0)
+		return
+	if OS.get_cmdline_user_args().has("--taste-only"):
+		test_record_composition()
+		await test_taste_hud()
+		await test_challenge_results()
+		print("Jelly taste presentation: %d checks, %d failures" % [checks, failures])
+		quit(1 if failures else 0)
+		return
 	if OS.get_cmdline_user_args().has("--results-only"):
 		await test_challenge_results()
 		print("Challenge results: %d checks, %d failures" % [checks, failures])

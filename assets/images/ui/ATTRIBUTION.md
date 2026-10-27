@@ -4,7 +4,7 @@ The Challenge record badge reuses the acquired Microsoft Fluent Sports medal
 below together with the existing licensed portal glow, Toon FX rays and sparkle
 documented in `docs/assets/jelly-fragments.md`. The inspected originals are
 already integrated assets, not new acquisitions or source animations. Numeric
-lift, award shimmer and the Back to map highlight are game-authored motion;
+lift and award shimmer are game-authored motion; Back to map keeps a static highlight.
 there is no new medal-tier asset or invented bronze/silver/gold progression.
 
 ## Jelly journey controls
@@ -15,6 +15,10 @@ The actual source preview and selected originals were inspected before integrati
 Original paths, hashes and the byte-identical license are in
 `jelly-map/sources.json` and `jelly-map/LICENSE-CC0.txt`.
 These assets are static; map placement, focus and rating feedback are game-authored.
+Focus follows only the round medallion with a thin warm highlight, not a green
+loop around its star row. Cleared-stage stars sit on a separate cream UI tray;
+the unplayed frontier uses the existing acquired Play icon and text instead of
+three grey, unearned stars. Source images and their bytes remain unchanged.
 The challenge reuses the existing acquired Toon FX gold coin, with source and
 rights unchanged in `assets/coins/manifest.json`. No private source package is copied.
 The current compact Challenge entrance instead reuses the acquired Microsoft
@@ -86,6 +90,9 @@ are recorded in `jelly-goals/sources.json`. Goal achievement reuses the existing
 licensed Toon FX static light/sparkle textures and Kenney CC0
 `confirmation_002.ogg`-derived receipt cue, not a new generated illustration or
 audio recording. Its card-local animation and the paused gel tug are game-authored.
+Challenge's clock-side `+Xs` badge reuses that same acquired clock, portal glow
+and sparkle. The bounded pulse is authored presentation, not a new source
+animation or a new sound acquisition; reduced motion uses a still highlight.
 
 `finish-flag.svg` is the `flag-check` icon from Tabler Icons v3.35.0 by
 Paweł Kuna, licensed under the MIT License. The source SVG was downloaded on

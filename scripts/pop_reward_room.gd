@@ -9,6 +9,7 @@ signal chest_cue_requested(theme_id: String, cue: String, step: int)
 signal coins_released(id: String, reward: Dictionary, origin: Vector2, animate: bool)
 signal settlement_retry_requested
 signal challenge_result_accepted
+signal challenge_retry_requested
 signal challenge_record_broken(round_id: String)
 
 const Data = preload("res://scripts/game_data.gd")
@@ -96,7 +97,6 @@ var _skill_reveal := SkillReveal.new()
 var _challenge_record := RecordBadge.new()
 var _challenge_return_ready: bool = false
 var _record_announced_round: String = ""
-var _return_elapsed: float = 0.0
 var _return_glow := TextureRect.new()
 
 
@@ -175,8 +175,7 @@ func _ready() -> void:
 	Style.action_button(_back, Style.GOOD)
 	_back.pressed.connect(func() -> void:
 		if _result_context.get("campaign", {}).get("kind") == "challenge":
-			if _challenge_return_ready and not _paused and not _save_failed and _settlement_error.is_empty() \
-				and (not interaction_allowed.is_valid() or interaction_allowed.call()):
+			if _challenge_action_allowed():
 				challenge_result_accepted.emit()
 			return
 		if not _result_context.is_empty():
@@ -191,7 +190,6 @@ func _ready() -> void:
 	_return_glow.z_index = -1
 	_back.add_child(_return_glow)
 	_return_glow.hide()
-	_back.draw.connect(_draw_return_effect)
 	_home = Button.new()
 	UiClick.bind_button(_home)
 	_home.name = "GameOverHome"
@@ -200,6 +198,10 @@ func _ready() -> void:
 	Style.action_button(_home, Style.GOOD)
 	_home.hide()
 	_home.pressed.connect(func() -> void:
+		if _result_context.get("campaign", {}).get("kind") == "challenge":
+			if _challenge_action_allowed():
+				challenge_retry_requested.emit()
+			return
 		if _is_result_dialog() and not _paused and (not interaction_allowed.is_valid() or interaction_allowed.call()):
 			home_requested.emit())
 	_retry = Button.new()
@@ -299,7 +301,6 @@ func set_result_context(result: Dictionary, earned_round_id: String = "") -> voi
 		_stage_bonus_elapsed = STAGE_BONUS_SECONDS
 		_challenge_return_ready = false
 		_record_announced_round = ""
-		_return_elapsed = 0.0
 		_back.scale = Vector2.ONE
 		_challenge_record.reset()
 	if _result_context != result:
@@ -324,6 +325,11 @@ func stage_feedback_active() -> bool:
 	return _skill_reveal.visible or (_challenge_record.visible and _challenge_record.feedback_active()) \
 		or not _stage_bonus_reward.is_empty() or not reduced_motion \
 		and rating > 0 and _stage_intro_elapsed < (rating - 1) * STAR_STEP_SECONDS + STAR_APPEAR_SECONDS
+
+
+func _challenge_action_allowed() -> bool:
+	return _challenge_return_ready and not _paused and not _save_failed and _settlement_error.is_empty() \
+		and (not interaction_allowed.is_valid() or interaction_allowed.call())
 
 
 func present_challenge_result(summary: Dictionary) -> void:
@@ -360,12 +366,6 @@ func present_skill_unlock(level: int, word: Dictionary) -> bool:
 func advance_stage_feedback(delta: float) -> void:
 	if _paused or not is_visible_in_tree() or not is_finite(delta) or delta <= 0.0:
 		return
-	if _challenge_return_ready:
-		_return_elapsed += delta
-		var pulse: float = 0.0 if reduced_motion else sin(_return_elapsed * 2.8)
-		_back.scale = Vector2.ONE * (1.0 + 0.025 * pulse)
-		_return_glow.modulate = Color(1.0, 0.84, 0.36, 0.30 + 0.08 * pulse)
-		_back.queue_redraw()
 	if not stage_feedback_active():
 		return
 	_challenge_record.advance(delta)
@@ -381,19 +381,6 @@ func advance_stage_feedback(delta: float) -> void:
 	if _stage_publish_elapsed >= 0.08 or not stage_feedback_active():
 		_stage_publish_elapsed = 0.0
 		changed.emit(snapshot())
-
-
-func _draw_return_effect() -> void:
-	if not _challenge_return_ready or reduced_motion:
-		return
-	var s: float = Style.ui_scale(self)
-	for index in range(4):
-		var p: float = _return_elapsed * 1.6 + float(index) * PI * 0.5
-		var edge: float = (7.0 + 3.0 * sin(p)) / s
-		var at := Vector2(_back.size.x * (0.08 if index % 2 == 0 else 0.92),
-			_back.size.y * (0.25 if index < 2 else 0.75))
-		_back.draw_texture_rect(RATING_SPARKLE, Rect2(at - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false,
-			Color(1.0, 0.92, 0.53, 0.65 + 0.25 * sin(p)))
 
 
 func _release_stage_bonus(animate: bool) -> void:
@@ -1178,6 +1165,7 @@ func _refresh() -> void:
 	var danger_result: bool = _is_danger_result()
 	_home.visible = _is_result_dialog()
 	_home.disabled = _paused
+	_home.text = "Home"
 	_back.text = "Play again" if result_mode else "Back"
 	_result_score.visible = result_mode
 	_result_score.scale = Vector2.ONE
@@ -1233,7 +1221,9 @@ func _refresh() -> void:
 			_back.visible = challenge_result and _challenge_return_ready
 			_back.text = "Back to map" if challenge_result else _back.text
 			_back.disabled = _paused or failed or not _challenge_return_ready
-			_home.hide()
+			_home.visible = challenge_result and _challenge_return_ready
+			_home.text = "Try again" if challenge_result else "Home"
+			_home.disabled = _back.disabled
 		_result_score.accessibility_name = "Score: %d. %s" % [maxi(0, int(_result_context.get("score", 0))), _result_score.text]
 		var tier: int = maxi(0, int(_result_context.get("chest_tier", 0)))
 		var is_pop: bool = _result_context.has("hits")
@@ -1397,10 +1387,11 @@ func _layout() -> void:
 
 
 func _layout_result_dialog(s: float, w: float, h: float) -> void:
-	var appearance: Array = [s, true]
+	var challenge_result: bool = _result_context.get("campaign", {}).get("kind") == "challenge"
+	var appearance: Array = [s, true, challenge_result]
 	if _back.get_meta("result_appearance", []) != appearance:
-		Style.action_button(_back, Style.GOOD, true)
-		Style.action_button(_home, Style.GOOD)
+		Style.action_button(_back, Style.GOOD, not challenge_result)
+		Style.action_button(_home, Style.GOOD, challenge_result)
 		Style.action_button(_retry, Style.GOOD)
 		Style.action_button(_previous_page, Style.GOOD)
 		Style.action_button(_next_page, Style.GOOD)
@@ -1421,11 +1412,10 @@ func _layout_result_dialog(s: float, w: float, h: float) -> void:
 	if _challenge_record.visible:
 		_challenge_record.layout_badge(layout.pip, s)
 	if _challenge_return_ready:
-		var action: Rect2 = layout.replay
-		if not _save_failed and _settlement_error.is_empty():
-			action = Rect2(Vector2(4.0 / s, action.position.y), Vector2(w - 8.0 / s, action.size.y))
-		_back.position = action.position
-		_back.size = action.size
+		_back.position = layout.home.position
+		_back.size = layout.home.size
+		_home.position = layout.replay.position
+		_home.size = layout.replay.size
 		_back.pivot_offset = _back.size * 0.5
 		_return_glow.position = -Vector2.ONE * 12.0 / s
 		_return_glow.size = _back.size + Vector2.ONE * 24.0 / s

@@ -976,6 +976,50 @@ func _capture_chapters(view: Control) -> void:
 			await _capture("chapter-%02d-%dx%d" % [chapter, dimensions.x, dimensions.y])
 
 
+func _check_stage_medallions(view: Control) -> void:
+	for dimensions: Vector2i in [SIZES[0], SIZES[1], SIZES[3]]:
+		await _resize(dimensions)
+		view.call("open", _state(24), true)
+		await _settle(6)
+		var nodes: Array = view.get("_nodes")
+		var frontier: Dictionary = nodes[24]
+		frontier.button.grab_focus()
+		await _settle(3)
+		var focus := frontier.button.get_theme_stylebox("focus") as StyleBoxFlat
+		check(focus != null, "A medallion retains an explicit visible keyboard/controller focus treatment")
+		if focus == null:
+			continue
+		var focus_rect := Rect2(Vector2(-focus.expand_margin_left, -focus.expand_margin_top),
+			frontier.button.size + Vector2(focus.expand_margin_left + focus.expand_margin_right,
+				focus.expand_margin_top + focus.expand_margin_bottom))
+		check(not focus_rect.intersects(frontier.rating.get_rect())
+			and focus_rect.get_center().distance_to(frontier.face.get_rect().get_center()) < 2.0 / _pixel_scale(),
+			"Keyboard focus follows the real medallion instead of looping around the separate rating row")
+		check(frontier.next.visible and frontier.next_label.text == "Play"
+			and frontier.stars.all(func(star: TextureRect) -> bool: return not star.visible),
+			"Unplayed Stage 25 has a clear Play action instead of three unearned grey stars")
+		var cleared: Dictionary = nodes[23]
+		check(cleared.rating.visible and cleared.stars.all(func(star: TextureRect) -> bool:
+			return star.visible and cleared.rating.get_rect().encloses(star.get_rect())),
+			"A completed stage keeps all three sourced star slots together on their own cream rating tray")
+		check(frontier.button.size * _pixel_scale() == Vector2(98, 104),
+			"The cleaner node preserves the original generous stage hit area")
+		if OS.get_cmdline_user_args().has("--capture") and DisplayServer.get_name() != "headless":
+			await RenderingServer.frame_post_draw
+			DirAccess.make_dir_recursive_absolute(CAPTURE_DIRECTORY)
+			var bounds := Rect2i(frontier.button.get_global_rect().grow(8.0 / _pixel_scale()))
+			check(root.get_texture().get_image().get_region(bounds).save_png(
+				CAPTURE_DIRECTORY + "/stage-25-focused-%d.png" % dimensions.x) == OK,
+				"Capture the actual focused Stage 25 medallion at its real display scale")
+			await _capture("stage-25-map-%d" % dimensions.x)
+	var finale: Dictionary = _state(99)
+	finale["boss_victories"] = [8]
+	finale["merged_level"] = 2
+	view.call("configure", finale, true)
+	check(str(view.get("_subtitle").text) == "Compass recovered!",
+		"A genuine final victory closes the pursuit instead of asking the player to chase a beaten Boss forever")
+
+
 func _run() -> void:
 	var exists: bool = ResourceLoader.exists(MAP_PATH)
 	check(exists, "The self-contained stage map resource exists: " + MAP_PATH)
@@ -1012,12 +1056,18 @@ func _run() -> void:
 	view.connect("home_requested", func() -> void: _action_events.append("home"))
 	view.connect("retry_requested", func() -> void: _action_events.append("retry"))
 	await _settle()
+	if OS.get_cmdline_user_args().has("--nodes-only"):
+		await _check_stage_medallions(view)
+		_holder.free()
+		_finish()
+		return
 	await _check_configuration_and_isolation(view)
 	await _check_actions_and_status(view)
 	await _resize(SIZES[1])
 	await _check_endpoints_and_focus(view)
 	await _check_resize_histories(view)
 	await _check_gesture_and_lifecycle(view)
+	await _check_stage_medallions(view)
 	await _capture_chapters(view)
 	_holder.free()
 	await process_frame

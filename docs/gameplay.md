@@ -290,6 +290,10 @@ visible opponent. Eight sourced purple energy glints and draining local light
 represent his health; there is no permanent name/instruction block or numeric HP
 rail. Taunts use bounded two-line subtitles. The ambush enters from the edge,
 and every retreat leaves from that same side-standing position.
+The acquired Word Compass remains visibly in his possession during battle.
+After the ambush, the map names the next real Boss stage; wider layouts also
+name its first-win Jelly-level unlock, never an already-earned duplicate reward.
+Short, trick-specific challenges and an admitted defeat replace generic banter.
 
 A distinct Boss first victory also presents **New skill unlocked** in settlement,
 with the earned Jelly, its level, the exact collection footprint and a view-only
@@ -308,6 +312,12 @@ cannot announce a clear or grant a level. If Bramble is defeated first, he stays
 exhausted beside the board with no attacks, victory speech or retreat while
 the remaining word goals continue. Reviewed partners remain available when
 all words are done first but the Boss still needs hits.
+The visible attack takes 550 ms to reach Bramble. Its hit cue, skeletal response,
+small planted recoil and 240 ms energy depletion share that contact boundary.
+The authoritative collection receipt and damage still commit at collection;
+the presentation does not defer a save or grant a second hit. Decoys and shields
+name their blocked impact instead of showing a misleading zero-damage number.
+Reduced motion presents the real hit immediately without travel or recoil.
 
 **Counterplay:** attacks have a visible wind-up and distinct blue, purple and
 golden projectiles. Their paths use a fixed launch/landing position and a
@@ -345,6 +355,10 @@ the characters exchange a short readable reply, and Bramble's escape uses its
 encounter's scramble, distraction, swagger or panic style. His final defeat
 returns the compass. These performances finish before the ordinary Round
 complete/settlement sequence; rewards still use their original saved receipts.
+The decisive impact explicitly announces Bramble's defeat; he does not resume a
+smug taunt immediately after losing. His concession and Pip's next-stage pursuit
+occupy separate short beats. The finale admits defeat and visibly returns the
+same compass; its larger theft/return framing uses the original acquired art.
 The vocal reaction is an acquired human laugh with subtitle dialogue, not a
 claim that every written line has a corresponding spoken recording.
 
@@ -433,6 +447,12 @@ The top heading names **Challenge** and its current Stage. The timer and target
 counts remain visible; historical **Best Stage** is an acquired medal and a warm
 numeric badge, not a second title or a `Goals +10s` explanation. A newly saved
 record gives its number a short old-to-new lift, glow and sparkle response.
+Each positive committed time award has a separate 1.6-second clock-side badge
+showing the actual added duration, including fractional headroom below the
+90-second cap. Close awards combine their real amounts in the same badge.
+The sourced clock/light accents and one short digit response do not launch
+confetti or change the timer. Pause freezes the feedback; reduced motion keeps
+its amount and static highlight.
 Each completed target batch launches the shared smaller sourced-paper preset
 once, without stopping play. The best is saved when a higher
 stage is reached, separately per learning route; a lower replay cannot overwrite it.
@@ -443,7 +463,10 @@ Challenge can also end on a blocked top or intentional Finish and retains the
 existing combo, rare-collection and chest coins without unlocking a campaign stage.
 
 After Game over, Challenge stays on its result summary until the player chooses
-the highlighted **Back to map** button. It shows the reached Stage, level-weighted
+**Back to map** or **Try again**. Both are still, separately readable actions:
+Try again is primary and starts a fresh Stage 1 Challenge in the same learning
+route with 90 seconds; Back to map leaves the saved result. Neither breathes,
+scales or cycles idle sparkles. It shows the reached Stage, level-weighted
 active collection total and saved record medal. The comparison freezes the old
 best before the first eager save of the run: saving the reached Stage early
 cannot suppress a genuine breakthrough. A new best adds the numeric medal
@@ -451,6 +474,9 @@ animation and one reduced-count paper celebration after durable settlement.
 Lower or tied records do not replay it. Save failure exposes Retry save and
 keeps returning disabled; refreshes and retries do not restart an announced award.
 Reduced motion retains the medal, exact number and static return highlight.
+The acquired medal and actual digit widths share one centered award group.
+Paper retains its established count, sizes, paths and lifetime but renders behind
+the Challenge dialog's reading window rather than over its result or actions.
 
 Illustrated goal cards use proportional green background fill. Each saved
 increase has a small card-local number/art pop; a newly completed item instead

@@ -214,6 +214,7 @@ func advance(delta: float) -> void:
 	if not is_visible_in_tree() or not is_finite(delta) or delta <= 0.0:
 		return
 	_record_badge.advance(delta)
+	_pose_timer_feedback()
 	var reflow: bool = false
 	for row: Dictionary in _rows:
 		if float(row.gain_elapsed) >= GAIN_SECONDS \
@@ -251,9 +252,10 @@ func _pose_feedback(row: Dictionary) -> void:
 	row.gain_label.visible = gaining and not _compact and not row.mastered
 	row.gain_label.text = "+%d" % int(row.gain_amount)
 	row.gain_label.modulate.a = 1.0 - smoothstep(0.45, 1.0, p)
-	row.gain_label.position = Vector2(row.surface.size.x - 42.0 / _scale, (8.0 - p * 8.0) / _scale)
-	row.label.size.x = maxf(1.0, row.surface.size.x - row.label.position.x
-		- (40.0 if row.mastered and not _compact else 48.0 if gaining and not _compact else 10.0) / _scale)
+	row.gain_label.position = Vector2(row.fraction.position.x, (1.0 - p * 7.0) / _scale)
+	var label_end: float = row.surface.size.x - 10.0 / _scale if _compact \
+		else row.surface.size.x - 40.0 / _scale if row.mastered else row.fraction.position.x - 6.0 / _scale
+	row.label.size.x = maxf(1.0, label_end - row.label.position.x)
 	row.fraction.visible = not _compact and not row.mastered
 	row.complete_badge.visible = row.mastered and not row.retired
 	row.complete_badge.scale = Vector2.ONE * (1.0 + 0.18 * sin(complete_p * PI) if completing else 1.0)
@@ -322,6 +324,19 @@ func _update_heading() -> void:
 		_title.text = "" if challenge else "Word goals"
 		_subtitle.text = "%d of %d goals done" % [int(_state.get("mastered", 0)), _rows.size()] \
 			if _state.get("kind") == "main" else "%d of %d mastered" % [int(_state.get("mastered", 0)), _rows.size()]
+	_pose_timer_feedback()
+
+
+func _pose_timer_feedback() -> void:
+	var boost: float = stage_timer.time_bonus_scale() \
+		if _compact and _state.get("kind") == "challenge" and stage_timer != null else 1.0
+	_title.scale = Vector2.ONE * boost
+	if is_equal_approx(boost, 1.0):
+		return
+	var font: Font = _title.get_theme_font("font")
+	var width: float = font.get_string_size(_title.text, HORIZONTAL_ALIGNMENT_LEFT, -1,
+		_title.get_theme_font_size("font_size")).x
+	_title.pivot_offset = Vector2(maxf(0.0, _title.size.x - width), _title.size.y * 0.5)
 
 
 func _layout() -> void:
@@ -350,7 +365,7 @@ func _layout() -> void:
 	_subtitle.position = Vector2(46, 28) / s
 	_subtitle.size = Vector2(maxf(1.0, size.x - 46.0 / s), 20.0 / s)
 	if _compact and _state.get("kind") == "challenge":
-		_record_badge.layout_badge(Rect2(Vector2(6, 16) / s, Vector2(76, 28) / s), s)
+		_record_badge.layout_badge(Rect2(Vector2(6, 20) / s, Vector2(76, 24) / s), s)
 	elif _state.get("kind") == "challenge":
 		_record_badge.layout_badge(Rect2(Vector2.ZERO, Vector2(size.x, 52.0 / s)), s)
 	_scroll.position = Vector2(padding if stacked or not _compact else (88.0 if timed else 70.0) / s,
@@ -382,7 +397,7 @@ func _layout() -> void:
 		badge.set_corner_radius_all(ceili(8.0 / s))
 		var font_size: int = ceili((13.0 if _compact else 18.0) / s)
 		row.label.add_theme_font_size_override("font_size", font_size)
-		row.fraction.add_theme_font_size_override("font_size", ceili(12.0 / s))
+		row.fraction.add_theme_font_size_override("font_size", ceili(13.0 / s))
 		var width: float = minf(220.0 / s, maxf(82.0 / s,
 			Style.HEADING_FONT.get_string_size(row.label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x + 44.0 / s)) \
 			if _compact else _scroll.size.x
@@ -400,14 +415,18 @@ func _layout() -> void:
 		row.picture.size = Vector2.ONE * picture_edge
 		row.picture.pivot_offset = row.picture.size * 0.5
 		var left: float = (32.0 if _compact else 58.0) / s if row.picture.visible else 10.0 / s
-		row.label.position = Vector2(left, 0.0 if _compact else 4.0 / s)
+		row.label.position = Vector2(left, 0.0)
 		row.label.size = Vector2(maxf(1.0, width - left - 10.0 / s),
-			height if _compact else 26.0 / s)
-		row.fraction.position = Vector2(width - 37.0 / s, (height - 20.0 / s) * 0.5 if _compact else 28.0 / s)
-		row.fraction.size = Vector2(30.0, 20.0) / s
+			height)
+		var fraction_width: float = minf(width * 0.43, maxf(34.0 / s,
+			Style.HEADING_FONT.get_string_size(row.fraction.text, HORIZONTAL_ALIGNMENT_LEFT, -1,
+				row.fraction.get_theme_font_size("font_size")).x + 8.0 / s))
+		var fraction_height: float = maxf(20.0 / s, row.fraction.get_combined_minimum_size().y)
+		row.fraction.position = Vector2(width - fraction_width - 8.0 / s, (height - fraction_height) * 0.5)
+		row.fraction.size = Vector2(fraction_width, fraction_height)
 		row.fraction.pivot_offset = row.fraction.size * 0.5
-		row.gain_label.size = Vector2(34, 18) / s
-		row.gain_label.add_theme_font_size_override("font_size", ceili(13.0 / s))
+		row.gain_label.size = Vector2(fraction_width, 14.0 / s)
+		row.gain_label.add_theme_font_size_override("font_size", ceili(11.0 / s))
 		row.complete_badge.add_theme_stylebox_override("panel",
 			Style.box(Style.GOOD, Color.TRANSPARENT, ceili((7.0 if _compact else 14.0) / s), 0))
 		row.complete_badge.position = row.picture.position + row.picture.size - Vector2.ONE * 14.0 / s if _compact \

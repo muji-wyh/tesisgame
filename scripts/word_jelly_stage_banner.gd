@@ -10,6 +10,7 @@ const CLOCK = preload("res://assets/images/ui/jelly-goals/clock.webp")
 const DURATION: float = 1.8
 const READY_SECONDS: float = 0.82
 const STAR_LOSS_SECONDS: float = 0.60
+const TIME_BONUS_SECONDS: float = 1.6
 var reduced_motion: bool = false
 var _state: Dictionary = {}
 var _label: Label
@@ -23,6 +24,11 @@ var _card_duration: float = DURATION
 var _entry: bool = false
 var _time_bonus_remaining: float = 0.0
 var _time_bonus: float = 0.0
+var _time_feedback := Control.new()
+var _time_amount: Label
+var _time_clock := TextureRect.new()
+var _time_anchor := Rect2()
+var _time_compact: bool = false
 var _star_loss_elapsed: Array[float] = [STAR_LOSS_SECONDS, STAR_LOSS_SECONDS, STAR_LOSS_SECONDS]
 
 
@@ -50,6 +56,24 @@ func _init() -> void:
 	_detail.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	_detail.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_card.add_child(_detail)
+	_time_feedback.name = "ChallengeTimeGain"
+	_time_feedback.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_time_feedback.z_index = 8
+	add_child(_time_feedback)
+	_time_feedback.draw.connect(_draw_time_feedback)
+	_time_clock.texture = CLOCK
+	_time_clock.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	_time_clock.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	_time_clock.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_time_feedback.add_child(_time_clock)
+	_time_amount = Style.label("", 18)
+	_time_amount.add_theme_font_override("font", Style.HEADING_FONT)
+	_time_amount.add_theme_color_override("font_color", Style.GOOD)
+	_time_amount.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_time_amount.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_time_amount.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_time_feedback.add_child(_time_amount)
+	_time_feedback.hide()
 	hide()
 
 
@@ -90,6 +114,8 @@ func reset() -> void:
 	_card_duration = DURATION
 	_entry = false
 	_time_bonus_remaining = 0.0
+	_time_bonus = 0.0
+	_pose_time_feedback()
 	_star_loss_elapsed.fill(STAR_LOSS_SECONDS)
 	hide()
 	_card.hide()
@@ -113,6 +139,7 @@ func advance(delta: float) -> void:
 	if not is_finite(delta) or delta <= 0.0:
 		return
 	_time_bonus_remaining = maxf(0.0, _time_bonus_remaining - delta)
+	_pose_time_feedback()
 	for index in range(3):
 		_star_loss_elapsed[index] = minf(STAR_LOSS_SECONDS, _star_loss_elapsed[index] + delta)
 	if _elapsed < _card_duration:
@@ -122,9 +149,94 @@ func advance(delta: float) -> void:
 
 
 func present_time_bonus(seconds: float) -> void:
-	_time_bonus = seconds
-	_time_bonus_remaining = 1.0
-	queue_redraw()
+	if not is_finite(seconds) or seconds < 0.0:
+		push_error("A Challenge time notification needs a finite nonnegative committed award.")
+		return
+	if seconds == 0.0:
+		return
+	_time_bonus = (_time_bonus if _time_bonus_remaining > 0.0 else 0.0) + seconds
+	_time_bonus_remaining = TIME_BONUS_SECONDS
+	_layout_time_feedback()
+	_pose_time_feedback()
+
+
+func configure_time_bonus(bounds: Rect2, compact: bool) -> void:
+	_time_compact = compact
+	var unit: float = 1.0 / _scale
+	_time_anchor = Rect2(bounds.position + Vector2(4, 0) * unit, Vector2(40, 18) * unit) if compact \
+		else Rect2(bounds.position + Vector2(8.0 * unit, (bounds.size.y - 28.0 * unit) * 0.5),
+			Vector2(minf(96.0 * unit, maxf(1.0, bounds.size.x - 92.0 * unit)), 28.0 * unit))
+	_layout_time_feedback()
+	_pose_time_feedback()
+
+
+func time_bonus_scale() -> float:
+	if reduced_motion or _time_bonus_remaining <= 0.0:
+		return 1.0
+	var p: float = clampf((TIME_BONUS_SECONDS - _time_bonus_remaining) / 0.42, 0.0, 1.0)
+	return 1.0 + 0.12 * sin(p * PI)
+
+
+func _time_bonus_text() -> String:
+	return "+<0.1s" if _time_bonus > 0.0 and _time_bonus < 0.1 \
+		else "+" + String.num(_time_bonus, 1).trim_suffix(".0") + "s"
+
+
+func _layout_time_feedback() -> void:
+	_time_feedback.position = _time_anchor.position
+	_time_feedback.size = _time_anchor.size
+	_time_feedback.pivot_offset = _time_feedback.size * 0.5
+	_time_clock.visible = not _time_compact
+	_time_clock.position = Vector2(4, 4) / _scale
+	_time_clock.size = Vector2.ONE * 20.0 / _scale
+	_time_amount.position = Vector2(2.0 if _time_compact else 26.0, 0.0) / _scale
+	var area := Vector2(maxf(1.0, _time_feedback.size.x - _time_amount.position.x - 2.0 / _scale),
+		maxf(1.0, _time_feedback.size.y))
+	_time_amount.text = _time_bonus_text()
+	var pixels: int = ceili((13.0 if _time_compact else 18.0) / _scale)
+	var width: float = Style.HEADING_FONT.get_string_size(_time_amount.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
+	var height: float = Style.HEADING_FONT.get_height(pixels)
+	var fit: float = minf(1.0, minf(area.x / maxf(1.0, width), area.y / maxf(1.0, height)))
+	pixels = maxi(1, floori(float(pixels) * fit))
+	_time_amount.add_theme_font_size_override("font_size", pixels)
+	_time_amount.update_minimum_size()
+	_time_amount.size = area
+	_time_feedback.accessibility_name = "Challenge time: " + _time_amount.text
+
+
+func _pose_time_feedback() -> void:
+	var active: bool = _time_bonus_remaining > 0.0 and _state.get("kind") == "challenge"
+	if not active and not _time_feedback.visible and _label.scale == Vector2.ONE:
+		return
+	_time_feedback.visible = active
+	_time_feedback.scale = Vector2.ONE * time_bonus_scale()
+	_time_feedback.modulate.a = 1.0 if reduced_motion else clampf(_time_bonus_remaining / 0.25, 0.0, 1.0)
+	_label.pivot_offset = _label.size * Vector2(1.0, 0.5)
+	_label.scale = Vector2.ONE * time_bonus_scale()
+	_label.add_theme_color_override("font_color", Style.GOOD if active else Style.INK)
+	_time_feedback.queue_redraw()
+
+
+func _draw_time_feedback() -> void:
+	if not _time_feedback.visible:
+		return
+	var unit: float = 1.0 / _scale
+	var bounds := Rect2(Vector2.ZERO, _time_feedback.size)
+	var age: float = TIME_BONUS_SECONDS - _time_bonus_remaining
+	var strength: float = 0.18 if reduced_motion else 0.25 + 0.20 * sin(clampf(age / 0.6, 0.0, 1.0) * PI)
+	_time_feedback.draw_texture_rect(GLOW, bounds.grow(8.0 * unit), false, Color(0.78, 1.0, 0.72, strength))
+	_time_feedback.draw_style_box(Style.box(Color("#eaffde"), Color("#75ae79"),
+		ceili(9.0 * unit), maxi(1, roundi(unit))), bounds)
+	if reduced_motion or age >= 0.65:
+		return
+	var p: float = age / 0.65
+	for index in range(3):
+		var angle: float = -PI * (0.15 + float(index) * 0.35)
+		var at: Vector2 = bounds.get_center() + Vector2(cos(angle), sin(angle)) \
+			* Vector2(bounds.size.x * 0.46 + p * 5.0 * unit, bounds.size.y * 0.5 + p * 5.0 * unit)
+		var edge: float = (5.0 if _time_compact else 8.0) * unit * (1.0 - p)
+		_time_feedback.draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * edge * 0.5,
+			Vector2.ONE * edge), false, Color(1.0, 0.91, 0.49, 1.0 - p))
 
 
 func present_stage_clear(seconds: float) -> void:
@@ -160,6 +272,7 @@ func configure_layout(badge: Rect2, board: Rect2, ui_scale: float) -> void:
 	_detail.position = Vector2(8, 84) / _scale
 	_detail.size = Vector2(_card.size.x - 16.0 / _scale, 28.0 / _scale)
 	_detail.add_theme_font_size_override("font_size", ceili(14.0 / _scale))
+	configure_time_bonus(badge, false)
 	queue_redraw()
 	_card.queue_redraw()
 
@@ -172,7 +285,12 @@ func snapshot() -> Dictionary:
 	state["elapsed"] = _elapsed
 	state["ready_pending"] = ready_pending()
 	state["entry_phase"] = "ready" if ready_pending() else "go" if entry_active() else "done"
-	state["time_bonus"] = {"active": _time_bonus_remaining > 0.0, "seconds": _time_bonus}
+	var time_rect: Rect2 = _time_feedback.get_global_rect()
+	state["time_bonus"] = {"active": _time_bonus_remaining > 0.0, "seconds": _time_bonus,
+		"visible": _time_feedback.is_visible_in_tree(), "text": _time_amount.text if _time_feedback.visible else "",
+		"remaining": _time_bonus_remaining, "duration": TIME_BONUS_SECONDS,
+		"feedback_scale": _time_feedback.scale.x, "clock_scale": time_bonus_scale(),
+		"rect": [time_rect.position.x, time_rect.position.y, time_rect.size.x, time_rect.size.y]}
 	state["timer_ratio"] = _timer_ratio()
 	state["rating_segments"] = rating_geometry(_rating_bounds(), _scale)
 	state["star_loss_active"] = rating_feedback_active()
@@ -274,13 +392,6 @@ func _draw() -> void:
 		if fill.has_area():
 			draw_style_box(Style.box(Color("#c5e7cc"), Color.TRANSPARENT, 11, 0), fill)
 	if _state.get("kind") == "challenge":
-		if _time_bonus_remaining > 0.0:
-			var at := Vector2(_badge.end.x - 64.0 / _scale,
-				_badge.position.y + (20.0 + 10.0 * _time_bonus_remaining) / _scale)
-			draw_texture_rect(CLOCK, Rect2(at, Vector2.ONE * 18.0 / _scale), false)
-			draw_string(Style.HEADING_FONT, at + Vector2(20, 15) / _scale,
-				"+" + String.num(_time_bonus, 1).trim_suffix(".0") + "s",
-				HORIZONTAL_ALIGNMENT_LEFT, -1, ceili(15.0 / _scale), Style.GOOD)
 		return
 	if _state.get("kind") == "main":
 		if _label.visible:

@@ -30,6 +30,7 @@ var _challenge_previous_best: int = 0
 var _result_committed: bool = false
 var _challenge_summary_presented: bool = false
 var _challenge_returned: bool = false
+var _challenge_retry: bool = false
 var _result_context_key: String = ""
 # Leaving the old session can synchronously publish its failure before the new request exists.
 var requesting_preparation: bool = false
@@ -188,6 +189,7 @@ func round_started() -> void:
 	_result_committed = false
 	_challenge_summary_presented = false
 	_challenge_returned = false
+	_challenge_retry = false
 	return_home_after_settlement = false
 	error = ""
 	map.close()
@@ -354,15 +356,20 @@ func advance(delta: float) -> void:
 	if return_home_after_settlement:
 		return_home_after_settlement = false
 		_app._show_mode_menu()
+	elif _challenge_retry:
+		_challenge_retry = false
+		open_map()
+		request_challenge()
 	else:
 		_show_map()
 
 
-func accept_challenge_result() -> void:
+func accept_challenge_result(replay: bool = false) -> void:
 	if not settling or not _result_committed or not _challenge_summary_presented or not error.is_empty() \
-		or _app._page_hidden or _result_draft.get("kind") != "challenge":
+		or _challenge_returned or _app._page_hidden or _result_draft.get("kind") != "challenge":
 		return
 	_challenge_returned = true
+	_challenge_retry = replay
 	return_home_after_settlement = false
 
 

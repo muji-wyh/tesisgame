@@ -22,6 +22,31 @@ async function pressMapControl(page, control) {
   await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
 }
 
+async function pullToFinish(page) {
+  const recordFailure = async error => {
+    fs.writeFileSync(test.info().outputPath('finish-pausing-failure.json'),
+      JSON.stringify({ state: await jelly(page), rewards: await rewards(page), bounds: await metrics(page) }, null, 2));
+    throw error;
+  };
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.finish.visible && !state.finish.disabled;
+  }, { message: 'The current round must restore its actionable header control before a player can tap it' })
+    .toBe(true).catch(recordFailure);
+  const live = await jelly(page);
+  if (!live.pause.active) await pressRect(page, live.finish.rect);
+  await expect.poll(async () => (await jelly(page)).pause.active).toBe(true).catch(recordFailure);
+  const paused = await jelly(page), bounds = await metrics(page), from = center(paused.finish.rect, bounds);
+  await page.mouse.move(from.x, from.y);
+  await page.mouse.down();
+  try {
+    await page.mouse.move(from.x, from.y + paused.finish.pull.threshold * bounds.scale + 12, { steps: 12 });
+    await expect.poll(async () => (await jelly(page)).finish.pull.armed).toBe(true);
+  } finally {
+    await page.mouse.up();
+  }
+}
+
 async function openMap(page) {
   await openModeMenu(page);
   await activateLibraryControl(page, 'Mode_word_jelly');
@@ -382,6 +407,14 @@ test('Challenge completes a full goal stage, increases difficulty and restores i
     await pressRect(page, ready.collect_button.rect);
     await expect.poll(async () => (await jelly(page)).cleared_pairs).toBeGreaterThan(before);
     await expect.poll(async () => (await jelly(page)).collection_batch.active).toBe(false);
+    if (batch === 0) {
+      const gained = await jelly(page);
+      expect(gained.stage.time_bonus.visible).toBe(true);
+      expect(gained.stage.time_bonus.seconds).toBeGreaterThan(0);
+      expect(gained.stage.time_bonus.seconds).toBeLessThanOrEqual(gained.campaign.seconds_added);
+      expect(gained.stage.time_bonus.text).toMatch(/^\+(?:\d+(?:\.\d)?|<0\.1)s$/);
+      await capture(page, info, 'challenge-actual-time-gain');
+    }
   }
   const after = await jelly(page);
   expect(after.campaign.challenge_stage).toBeGreaterThanOrEqual(2);
@@ -402,17 +435,7 @@ test('Challenge completes a full goal stage, increases difficulty and restores i
   expect(saved).toMatch(new RegExp(`"challenge_best_stage":\\s*${best}\\b`));
   await capture(page, info, 'challenge-growing-pressure');
   fs.writeFileSync(info.outputPath('challenge-pressure.json'), JSON.stringify({ opening, after }, null, 2));
-  await pressRect(page, (await jelly(page)).finish.rect);
-  await expect.poll(async () => (await jelly(page)).pause.active).toBe(true);
-  const paused = await jelly(page), bounds = await metrics(page), from = center(paused.finish.rect, bounds);
-  await page.mouse.move(from.x, from.y);
-  await page.mouse.down();
-  try {
-    await page.mouse.move(from.x, from.y + paused.finish.pull.threshold * bounds.scale + 12, { steps: 12 });
-    await expect.poll(async () => (await jelly(page)).finish.pull.armed).toBe(true);
-  } finally {
-    await page.mouse.up();
-  }
+  await pullToFinish(page);
   await expect.poll(async () => (await rewards(page)).challenge_return_ready, { timeout: 60000 }).toBe(true);
   const result = await rewards(page);
   expect(result.result_context.challenge_result).toMatchObject({
@@ -426,7 +449,25 @@ test('Challenge completes a full goal stage, increases difficulty and restores i
   await capture(page, info, 'challenge-saved-record-summary');
   const back = (await rewards(page)).actions.find(action => action.text === 'Back to map' && action.visible);
   expect(back?.disabled).toBe(false);
-  await pressRect(page, back.rect);
+  const retry = (await rewards(page)).actions.find(action => action.text === 'Try again' && action.visible);
+  expect(retry?.disabled).toBe(false);
+  expect(retry.rect[3] * (await metrics(page)).scale).toBeGreaterThanOrEqual(44);
+  const settledBalance = (await wallet(page)).balance;
+  await pressRect(page, retry.rect);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.visible && state.phase === 'playing' && state.campaign?.kind === 'challenge' &&
+      state.campaign.challenge_stage === 1 && state.campaign.collection_count === 0 &&
+      state.tiles.length === 15 && state.tiles.every(tile => tile.settled);
+  }, { timeout: 60000 }).toBe(true);
+  expect((await jelly(page)).stage.challenge_best_stage).toBe(best);
+  expect((await wallet(page)).balance).toBe(settledBalance);
+  await capture(page, info, 'challenge-try-again-retains-best');
+  await pullToFinish(page);
+  await expect.poll(async () => (await rewards(page)).challenge_return_ready, { timeout: 60000 }).toBe(true);
+  expect((await rewards(page)).result_context.challenge_result.new_best).toBe(false);
+  const returnToMap = (await rewards(page)).actions.find(action => action.text === 'Back to map' && action.visible);
+  await pressRect(page, returnToMap.rect);
   const settledMap = await waitForMap(page);
   expect(stage(settledMap, 2).unlocked).toBe(false);
   await page.reload();

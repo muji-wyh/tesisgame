@@ -160,6 +160,12 @@ func _run() -> void:
 			check(not actor.intersects(button.get_rect()), "The side-standing Boss leaves every tool usable")
 		check(not actor.intersects(view._combo_hud.get_rect()),
 			"The combo badge and Boss use distinct responsive side/header space")
+		var dialogue: Label = view._boss_view._dialogue
+		if not view._layout_too_small and dialogue.visible:
+			check(dialogue.get_line_count() <= 2 and dialogue.get_visible_line_count() >= dialogue.get_line_count(),
+				"The actual two-line challenge remains readable at %s: lines=%d visible=%d rect=%s font=%d" % [
+					dimensions, dialogue.get_line_count(), dialogue.get_visible_line_count(),
+					dialogue.get_rect(), dialogue.get_theme_font_size("font_size")])
 		if capture:
 			await RenderingServer.frame_post_draw
 			check(root.get_texture().get_image().save_png("res://build/qa/jelly-boss/battle-%d.png" % dimensions.x) == OK,

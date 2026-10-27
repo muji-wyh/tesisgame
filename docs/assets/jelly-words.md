@@ -120,6 +120,15 @@ them. Resizing never changes logical footprints.
 The model owns the merge and collection clocks, wallet receipt, fragment count,
 and chest tier. Visual callbacks never grant coins.
 
+The current interface pass takes its material cues from the acquired mint gel
+and Fluent medal: cream goal cards keep the word and its separate count on one
+reading line, while the free ready-to-Collect action gets a stronger mint
+surface than the optional paid tools. Existing charge artwork, input bounds,
+body size and timing remain unchanged. The medal and measured numeric glyphs
+form one centered group, including five-digit records; highlights support that
+subject rather than adding another idle motion. These are layout/type/state
+refinements of the integrated production art, not new acquisitions.
+
 Each manual drop completing a whole word requests its pronunciation immediately when the
 merge is accepted, alongside the fusion animation. This removes the previous
 760 ms wait for the animation to finish, using the unchanged

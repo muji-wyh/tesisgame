@@ -101,7 +101,7 @@ func collect_hit(receipt: String, level: int, combo: int, origin: Dictionary, wa
 		_event("ward_hit", {"damage": 0, "origin": origin, "remaining": ward})
 	else:
 		health = maxi(0, health - damage)
-		_event("player_hit", {"damage": damage, "level": level, "origin": origin})
+		_event("player_hit", {"damage": damage, "level": level, "origin": origin, "health_after": health})
 		if health == 0:
 			if wait_for_goals:
 				phase = "exhausted"
@@ -154,8 +154,8 @@ func begin_ending(result: String) -> void:
 	ending_elapsed = 0.0
 	_clear_attacks()
 	_event("victory" if outcome == "defeated" else "taunt", {
-		"text": definition.escape if outcome in ["ambushed", "defeated"] else "The compass stays with me! Try my next trick!",
-		"reply": definition.reply if outcome in ["ambushed", "defeated"] else "We'll be back. Every word brings us closer.",
+		"text": definition.escape if outcome in ["ambushed", "defeated"] else "The compass stays!\nCan you beat my trick?",
+		"reply": definition.reply if outcome in ["ambushed", "defeated"] else "We know your trick.\nOne more try!",
 		"retreat": definition.retreat})
 
 
@@ -283,7 +283,12 @@ func _projectile(kind: String, tile: Dictionary, delay: float = 0.0) -> void:
 		"column": int(tile.column), "row": int(tile.row), "elapsed": -delay,
 		"windup": WINDUP_SECONDS, "duration": FLIGHT_SECONDS}
 	_projectiles.append(shot)
-	_event("throw", shot)
+	var event: Dictionary = shot.duplicate()
+	if _attack_index == 1 or _attack_index % 3 == 0:
+		event["text"] = {"freeze": "That word is on ice!",
+			"ink": "No peeking through ink!", "lock": "Match your way out!",
+			"snatch": "Mine! Try building now!"}.get(kind, "")
+	_event("throw", event)
 
 
 func _event(kind: String, data: Dictionary = {}) -> void:

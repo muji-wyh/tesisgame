@@ -16,6 +16,8 @@ const COMPASS = preload("res://assets/jelly-boss/compass.webp")
 const WOOD = preload("res://assets/images/ui/jelly-map/adventure-panel.png")
 const COLORS: Dictionary = {"freeze": Color("#6cdffb"), "ink": Color("#c39afa"),
 	"lock": Color("#ffc75d"), "snatch": Color("#a5ed8c")}
+const HIT_FLIGHT_SECONDS: float = 0.55
+const HIT_RECOVERY_SECONDS: float = 0.32
 var reduced_motion: bool = false
 var _actor := Actor.new()
 var _character := TextureRect.new()
@@ -42,6 +44,11 @@ var _thrown: Array[Dictionary] = []
 var _health_from: float = 1.0
 var _health_to: float = 1.0
 var _health_at: float = 0.0
+var _last_impact_event: int = 0
+var _impact_level: int = 1
+var _audible_clock: bool = false
+var _victory_announced: bool = false
+var _dialogue_layout_key: Array = []
 
 
 func _init() -> void:
@@ -92,25 +99,19 @@ func layout_battle(hud: Rect2, board: Rect2, scale_factor: float, preview: Rect2
 		hud.end.y - dimensions.y), dimensions)
 	_character.position = _character_rect.position
 	_character.size = _character_rect.size
-	_dialogue.position = Vector2(board.position.x + 8 / _scale, board.end.y - 46 / _scale)
-	_dialogue.size = Vector2(maxf(1.0, board.size.x - 16 / _scale), 38 / _scale)
-	_dialogue.add_theme_font_size_override("font_size", ceili(13 / _scale))
-	_dialogue.add_theme_constant_override("outline_size", ceili(3 / _scale))
+	_dialogue_layout_key.clear()
+	_layout_dialogue(_state.get("phase") in ["ending", "done"])
 	_pose()
 	queue_redraw()
 
 
 func sync(state: Dictionary, tiles: Dictionary, generation: int, active_clock: bool, visuals: Dictionary = {}) -> bool:
-	var previous_health: float = _energy_ratio()
 	var target_health: float = float(state.get("health", 0)) / maxf(1.0, float(state.get("max_health", 1)))
 	if generation != _generation:
 		_health_from = target_health
 		_health_to = target_health
-	elif not is_equal_approx(target_health, _health_to):
-		_health_from = previous_health
-		_health_to = target_health
-		_health_at = float(state.elapsed)
 	_state = state
+	_audible_clock = active_clock
 	_tile_rects = tiles
 	visible = bool(state.get("active", false)) and (not bool(state.get("definition", {}).get("intro", false)) \
 		or state.get("phase") in ["ending", "done"])
@@ -125,6 +126,8 @@ func sync(state: Dictionary, tiles: Dictionary, generation: int, active_clock: b
 		_gesture_at = -100.0
 		_last_pose_frame = -1
 		_last_pose_clip = ""
+		_last_impact_event = 0
+		_victory_announced = false
 		_sparks.clear()
 		_snatch.clear()
 		_thrown.clear()
@@ -140,8 +143,8 @@ func sync(state: Dictionary, tiles: Dictionary, generation: int, active_clock: b
 
 func _handle_event(event: Dictionary, audible: bool, visuals: Dictionary) -> void:
 	var kind: String = str(event.kind)
-	var clips: Dictionary = {"throw": "Throw", "kick_windup": "Kick", "snatch": "Snatch",
-		"player_hit": "Hit", "victory": "Hit", "taunt": "Taunt", "clones": "Taunt", "ward": "Celebrate"}
+	var clips: Dictionary = {"entrance": "Taunt", "throw": "Throw", "kick_windup": "Kick", "snatch": "Snatch",
+		"taunt": "Taunt", "clones": "Taunt", "ward": "Celebrate"}
 	if clips.has(kind):
 		_gesture = clips[kind]
 		_gesture_at = float(event.at)
@@ -163,20 +166,70 @@ func _handle_event(event: Dictionary, audible: bool, visuals: Dictionary) -> voi
 	if kind in ["status_hit", "thaw", "clear_ink", "unlock", "lock_resisted", "kick", "sky_repaired"]:
 		_sparks.append({"event": event, "until": float(event.at) + 0.65})
 	var cues: Dictionary = {"throw": "boss-throw", "kick": "boss-kick", "snatch": "boss-throw",
-		"player_hit": "boss-hit", "unlock": "boss-unlock", "thaw": "boss-thaw",
+		"unlock": "boss-unlock", "thaw": "boss-thaw",
 		"sky_repaired": "boss-thaw", "clones": "boss-trick", "ward": "boss-trick",
-		"taunt": "boss-taunt", "victory": "boss-win"}
+		"taunt": "boss-taunt"}
 	if audible and cues.has(kind):
 		audio_requested.emit(cues[kind])
+
+
+func _layout_dialogue(ending: bool) -> void:
+	var key: Array = [ending, _board, _scale]
+	if key == _dialogue_layout_key:
+		return
+	_dialogue_layout_key = key
+	var pixels: float = (16.0 if _board.size.x * _scale >= 220.0 else 14.0) if ending else 13.0
+	var height: float = 52.0 if ending else 44.0
+	_dialogue.position = Vector2(_board.position.x + 8.0 / _scale, _board.end.y - (height + 8.0) / _scale)
+	_dialogue.size = Vector2(maxf(1.0, _board.size.x - 16.0 / _scale), height / _scale)
+	_dialogue.add_theme_font_size_override("font_size", ceili(pixels / _scale))
+	_dialogue.add_theme_constant_override("outline_size", ceili(3.0 / _scale))
+
+
+func _present_impacts(elapsed: float) -> void:
+	var delay: float = 0.0 if reduced_motion else HIT_FLIGHT_SECONDS
+	for event: Dictionary in _state.get("events", []):
+		if event.kind != "player_hit" or int(event.id) <= _last_impact_event:
+			continue
+		var age: float = elapsed - float(event.at) - delay
+		if age < 0.0:
+			continue
+		_last_impact_event = int(event.id)
+		_health_from = _energy_ratio()
+		_health_to = float(event.health_after) / maxf(1.0, float(_state.max_health))
+		_health_at = float(event.at) + delay
+		if age <= HIT_RECOVERY_SECONDS:
+			_gesture = "Hit"
+			_gesture_at = _health_at
+			_impact_level = int(event.level)
+			if _audible_clock:
+				audio_requested.emit("boss-hit")
+	if _state.outcome == "defeated" and float(_state.ending_elapsed) >= _victory_delay() and not _victory_announced:
+		_victory_announced = true
+		if _audible_clock:
+			audio_requested.emit("boss-win")
+
+
+func _finishing_hit() -> bool:
+	var started: float = float(_state.elapsed) - float(_state.ending_elapsed)
+	return _state.get("outcome") == "defeated" and _state.get("events", []).any(
+		func(event: Dictionary) -> bool:
+			return event.kind == "player_hit" and absf(float(event.at) - started) <= Run.EPSILON)
+
+
+func _victory_delay() -> float:
+	return HIT_FLIGHT_SECONDS if not reduced_motion and _finishing_hit() else 0.0
 
 
 func _pose() -> void:
 	if _state.is_empty() or not visible:
 		return
 	var elapsed: float = float(_state.elapsed)
+	_present_impacts(elapsed)
 	var ending: bool = _state.phase in ["ending", "done"]
+	_layout_dialogue(ending)
 	var ending_time: float = float(_state.ending_elapsed)
-	var clip: String = _gesture if elapsed - _gesture_at < 1.1 else "Taunt"
+	var clip: String = _gesture if elapsed - _gesture_at < 1.1 else "Idle"
 	if _state.phase == "exhausted":
 		clip = "Hit"
 		_snatch.clear()
@@ -185,7 +238,12 @@ func _pose() -> void:
 	_character.modulate = Color.WHITE
 	_character.rotation = 0.0
 	if ending:
-		clip = "Hit" if _state.outcome == "defeated" and ending_time < 1.2 else "Taunt" if ending_time < 5.0 else "Escape"
+		var impact_at: float = _victory_delay()
+		if _state.outcome == "defeated":
+			clip = "Idle" if ending_time < impact_at else "Hit" if ending_time < 1.7 \
+				else "Idle" if int(_state.definition.id) == 8 else "Escape"
+		else:
+			clip = "Taunt" if ending_time < 5.0 else "Escape"
 		var departure: float = clampf((ending_time - 5.0) / 2.0, 0.0, 1.0)
 		if not reduced_motion:
 			var style: String = str(_state.definition.retreat)
@@ -202,9 +260,12 @@ func _pose() -> void:
 			if event.kind in ["victory", "taunt"]:
 				end_event = event
 		_dialogue.text = str(end_event.get("reply", "")) if ending_time >= 3.0 and ending_time < 4.8 else str(end_event.get("text", ""))
-		if _state.outcome == "defeated" and ending_time < 1.7:
+		if _state.outcome == "ambushed" and ending_time >= 0.5 and ending_time < 2.0:
 			_speaker_text = "Pip"
-			_dialogue.text = "We did it!"
+			_dialogue.text = "Hey! Our Word Compass!"
+		elif _state.outcome == "defeated" and ending_time >= impact_at and ending_time < 1.7:
+			_speaker_text = "Pip"
+			_dialogue.text = "Bramble beaten!"
 	else:
 		if not reduced_motion:
 			if _gesture == "Kick" and elapsed - _gesture_at < 1.4:
@@ -228,16 +289,36 @@ func _pose() -> void:
 					if back >= 1.0:
 						_snatch.clear()
 		_speaker_text = "Bramble"
+	_character.pivot_offset = _character.size * Vector2(0.5, Actor.FOOT_Y)
+	if not reduced_motion:
+		if ending and _finishing_hit():
+			var impact: float = clampf((ending_time - HIT_FLIGHT_SECONDS) / 0.45, 0.0, 1.0)
+			var recoil: float = sin(impact * PI)
+			_character.position.x += recoil * 16.0 / _scale
+			_character.rotation += recoil * 0.12
+		elif not ending and _gesture == "Hit":
+			var impact: float = clampf((elapsed - _gesture_at) / HIT_RECOVERY_SECONDS, 0.0, 1.0)
+			var recoil: float = sin(impact * PI)
+			_character.position.x += recoil * minf(10.0, 3.0 + _impact_level) / _scale
+			_character.rotation = recoil * 0.055
 	_dialogue.visible = ((_state.phase == "ending" and ending_time < 6.4) \
 		or not ending and elapsed < _dialogue_until) and not _dialogue.text.is_empty()
 	var sample: int = floori(elapsed * 24.0)
 	if sample != _last_pose_frame or clip != _last_pose_clip:
-		_actor.pose(clip, elapsed - _gesture_at, reduced_motion)
+		var pose_time: float = elapsed - _gesture_at
+		if ending and _state.outcome == "defeated":
+			pose_time = ending_time - (HIT_FLIGHT_SECONDS if clip == "Hit" else 1.7 if clip == "Escape" else 0.0)
+		_actor.pose(clip, pose_time, reduced_motion)
 		_last_pose_frame = sample
 		_last_pose_clip = clip
 	for index in range(2):
 		var clone: TextureRect = _doubles[index]
-		clone.visible = not ending and int(_state.clones) > index
+		var arriving_hits: int = 0
+		if not reduced_motion:
+			for event: Dictionary in _state.get("events", []):
+				if event.kind == "clone_hit" and elapsed - float(event.at) < HIT_FLIGHT_SECONDS:
+					arriving_hits += 1
+		clone.visible = not ending and int(_state.clones) + arriving_hits > index
 		clone.size = _character.size * 0.8
 		clone.position = _character.position + Vector2((8.0 if index == 0 else _character.size.x * 0.24), 8.0 / _scale)
 	_sparks = _sparks.filter(func(item: Dictionary) -> bool: return float(item.until) > elapsed)
@@ -246,7 +327,7 @@ func _pose() -> void:
 
 func _energy_ratio() -> float:
 	var elapsed: float = float(_state.get("elapsed", 0.0))
-	var p: float = 1.0 if reduced_motion else smoothstep(0.0, 0.42, elapsed - _health_at)
+	var p: float = 1.0 if reduced_motion else smoothstep(0.0, 0.24, elapsed - _health_at)
 	return clampf(lerpf(_health_from, _health_to, p), 0.0, 1.0)
 
 
@@ -257,6 +338,13 @@ func _draw() -> void:
 	var floor_point: Vector2 = _character.position + _character.size * Vector2(0.5, Actor.FOOT_Y)
 	draw_texture_rect(GLOW, Rect2(floor_point - _character.size * Vector2(0.35, 0.035),
 		_character.size * Vector2(0.70, 0.07)), false, Color(0.32, 0.22, 0.52, 0.42))
+	if _state.outcome == "defeated" and not reduced_motion:
+		var release: float = float(_state.ending_elapsed) - _victory_delay()
+		if release >= 0.0 and release < 1.0:
+			var glow: float = sin(clampf(release / 0.4, 0.0, 1.0) * PI) * (1.0 - release)
+			var edge: float = _character.size.x * (1.1 + 0.35 * smoothstep(0.0, 0.4, release))
+			draw_texture_rect(RAYS, Rect2(center - Vector2.ONE * edge * 0.5, Vector2.ONE * edge),
+				false, Color(1.0, 0.82, 0.34, glow * 0.8))
 	if _state.phase not in ["ending", "done"]:
 		var energy: float = _energy_ratio()
 		draw_texture_rect(GLOW, _character.get_rect().grow(-_character.size.x * 0.06),
@@ -310,7 +398,7 @@ func _draw() -> void:
 		var start: Vector2 = _board.position + Vector2(float(origin.get("column", 2)) + 0.5,
 			float(origin.get("row", 4)) + 0.5) * _board.size.x / 5.0
 		var target: Vector2 = _character.position + _character.size * Vector2(0.5, 0.42)
-		var p: float = clampf(age / 0.55, 0.0, 1.0)
+		var p: float = clampf(age / HIT_FLIGHT_SECONDS, 0.0, 1.0)
 		var at: Vector2 = start.lerp(target, p)
 		at.y -= sin(p * PI) * 48.0 / _scale
 		var edge: float = (18.0 + int(event.get("level", 1)) * 2.0) / _scale
@@ -322,12 +410,24 @@ func _draw() -> void:
 			draw_texture_rect(GLOW, Rect2(at - Vector2.ONE * edge, Vector2.ONE * edge * 2), false, Color("#fff0a6"))
 			draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false, Color("#ffe799"))
 		else:
-			draw_texture_rect(RAYS, Rect2(target - Vector2.ONE * edge * 1.6, Vector2.ONE * edge * 3.2), false, Color(1, 0.85, 0.5, 1 - (age - 0.55) / 0.3))
-			draw_string(Style.HEADING_FONT, target - Vector2(10, 12) / _scale,
-				"-%d" % int(event.get("damage", 0)), HORIZONTAL_ALIGNMENT_CENTER, -1, ceili(18 / _scale), Color("#75426f"))
+			draw_texture_rect(RAYS, Rect2(target - Vector2.ONE * edge * 1.6, Vector2.ONE * edge * 3.2), false,
+				Color(1, 0.85, 0.5, 1 - (age - HIT_FLIGHT_SECONDS) / 0.3))
+			var text: String = "Decoy!" if event.kind == "clone_hit" else "Shield!" if event.kind == "ward_hit" \
+				else "-%d" % int(event.damage)
+			var pixels: int = ceili(18.0 / _scale)
+			var width: float = Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
+			draw_string(Style.HEADING_FONT, target - Vector2(width * 0.5, 12.0 / _scale),
+				text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels, Color("#75426f"))
+	if _state.phase not in ["ending", "done"]:
+		var held_compass: Vector2 = _character.get_transform() * (_character.size * Vector2(0.77, 0.62))
+		var edge: float = 28.0 / _scale
+		draw_texture_rect(GLOW, Rect2(held_compass - Vector2.ONE * edge, Vector2.ONE * edge * 2.0),
+			false, Color(1.0, 0.86, 0.42, 0.26))
+		draw_texture_rect(COMPASS, Rect2(held_compass - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false)
 	if _state.phase in ["ending", "done"]:
-		var compass_edge: float = 42 / _scale
-		var compass_target: Vector2 = _character.position + _character.size * Vector2(0.77, 0.62)
+		var compass_edge: float = (64.0 if _state.outcome == "ambushed" \
+			or int(_state.definition.get("id", 0)) == 8 and _state.outcome == "defeated" else 42.0) / _scale
+		var compass_target: Vector2 = _character.get_transform() * (_character.size * Vector2(0.77, 0.62))
 		if _state.outcome == "ambushed":
 			var steal: float = clampf((float(_state.ending_elapsed) - 0.5) / 1.4, 0, 1)
 			var from: Vector2 = _board.position + Vector2(_board.size.x * 0.20, 40 / _scale)
@@ -339,8 +439,10 @@ func _draw() -> void:
 			false, Color(1, 0.86, 0.42, 0.7))
 		draw_texture_rect(COMPASS, Rect2(compass_target - Vector2.ONE * compass_edge * 0.5,
 			Vector2.ONE * compass_edge), false)
-		if not reduced_motion and _state.outcome == "defeated" and float(_state.ending_elapsed) < 2.0:
-			var p: float = float(_state.ending_elapsed) / 2.0
+		var impact_at: float = _victory_delay()
+		if not reduced_motion and _state.outcome == "defeated" \
+			and float(_state.ending_elapsed) >= impact_at and float(_state.ending_elapsed) < impact_at + 1.4:
+			var p: float = (float(_state.ending_elapsed) - impact_at) / 1.4
 			for index in range(12):
 				var angle: float = TAU * index / 12.0
 				var at: Vector2 = center + Vector2(cos(angle), sin(angle)) * (40.0 + p * 100.0) / _scale
@@ -394,5 +496,7 @@ func snapshot() -> Dictionary:
 		"presentation": "side_character", "clip": _last_pose_clip, "heading": "", "health_text": "",
 		"health_fraction": float(_state.get("health", 0)) / maxf(1.0, float(_state.get("max_health", 1))),
 		"energy_fraction": _energy_ratio(), "energy_segments": 8,
+		"impact_serial": _last_impact_event, "victory_announced": _victory_announced,
+		"compass_visible": visible and not _state.is_empty(),
 		"dialogue": _dialogue.text if visible and _dialogue.visible else "", "speaker": _speaker_text if visible else "",
 		"animations": Array(_actor.animation_names()), "error": _actor.last_error}

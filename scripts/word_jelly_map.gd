@@ -12,6 +12,7 @@ const Scroll = preload("res://scripts/result_scroll.gd")
 const Catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
 const Icons = preload("res://scripts/icon_button.gd")
 const LevelBadge = preload("res://scripts/word_jelly_level_badge.gd")
+const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
 const STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 const SKY = preload("res://assets/images/jelly-match/sky/day.png")
 const STAGE_OPEN = preload("res://assets/images/ui/jelly-map/stage-open.png")
@@ -138,18 +139,22 @@ func _init() -> void:
 		button.focus_mode = Control.FOCUS_ALL
 		for state: String in ["normal", "hover", "pressed", "disabled"]:
 			button.add_theme_stylebox_override(state, StyleBoxEmpty.new())
-		button.add_theme_stylebox_override("focus", Style.box(Color.TRANSPARENT, Color("#719686"), 18, 2))
+		button.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 		button.pressed.connect(_select.bind(number))
 		_content.add_child(button)
 		button.focus_entered.connect(_reveal_stage.bind(number))
 		var face: TextureRect = _image(button, STAGE_OPEN)
 		var label: Label = _label(button, str(number), 30)
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		var rating := Panel.new()
+		rating.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		button.add_child(rating)
 		var stars: Array[TextureRect] = []
 		for index in range(3):
 			stars.append(_image(button, STAR))
 		var next: TextureRect = _image(button, PLAY)
 		next.modulate = Style.GOOD
+		var next_label: Label = _label(button, "Play", 12)
 		var lock_glow: TextureRect = _image(button, GLOW)
 		lock_glow.modulate = Color(0.73, 0.86, 1.0, 0.24)
 		var padlock: TextureRect = _image(button, LOCK)
@@ -170,7 +175,8 @@ func _init() -> void:
 		_content.add_child(boss_picture)
 		boss_picture.hide()
 		_nodes.append({"number": number, "button": button, "face": face, "label": label,
-			"stars": stars, "next": next, "boss": boss_picture, "boss_frame": boss_frame, "boss_aura": boss_aura,
+			"stars": stars, "rating": rating, "next": next, "next_label": next_label,
+			"boss": boss_picture, "boss_frame": boss_frame, "boss_aura": boss_aura,
 			"padlock": padlock, "lock_glow": lock_glow})
 	resized.connect(_layout)
 	visibility_changed.connect(func() -> void:
@@ -256,8 +262,11 @@ func configure(state: Dictionary, reduced_motion: bool = false) -> void:
 		item.face.texture = STAGE_OPEN if unlocked else STAGE_LOCKED
 		item.label.add_theme_color_override("font_color", Style.INK if unlocked else Color("#cbd7da"))
 		for index in range(3):
-			item.stars[index].modulate = Color.WHITE if index < stars else Color(0.32, 0.41, 0.43, 0.48)
+			item.stars[index].visible = number <= highest
+			item.stars[index].modulate = Color.WHITE if index < stars else Color(0.57, 0.49, 0.36, 0.28)
 		item.next.visible = number == highest + 1
+		item.next_label.visible = item.next.visible
+		item.rating.visible = number <= mini(highest + 1, 99)
 		item.boss.visible = number == 99 or number > 1 and number in state.get("boss_markers", [])
 		item.boss.disabled = item.button.disabled
 		if item.boss.visible:
@@ -392,6 +401,17 @@ func _layout() -> void:
 		Vector2(level_width, 28.0 / s)), s)
 	_subtitle.text = ("Collect words" if int(_state.get("highest_cleared", 0)) == 0 else "Chase Bramble") if _state.has("merged_level") \
 		else "Collect words. Earn stars. Explore." if narrow else "99 little adventures. Collect words, earn stars."
+	var highest: int = int(_state.get("highest_cleared", 0))
+	var target: int = BossCatalog.chase_target(highest)
+	if highest > 0 and target > 0:
+		var first_win: bool = BossCatalog.STAGES.find(target) + 1 not in _state.get("boss_victories", [])
+		_subtitle.text = "Bramble: Stage %d" % target if narrow \
+			else "Catch Bramble at Stage %d · Win: Jelly Lv%d" % [
+				target, mini(9, int(_state.get("merged_level", 1)) + 1)] if first_win \
+			else "Catch Bramble at Stage %d · Follow the compass" % target
+	elif highest == 99:
+		_subtitle.text = "Compass recovered!" if 8 in _state.get("boss_victories", []) \
+			else "99 adventures complete"
 	_subtitle.add_theme_font_size_override("font_size", ceili(14.0 / s))
 	var status_height: float = 76.0 / s if _status.visible else 0.0
 	_status.position = Vector2(left, 90.0 / s)
@@ -441,11 +461,25 @@ func _layout() -> void:
 		item.face.position = Vector2(11, 0) / s
 		item.face.size = Vector2.ONE * 76.0 / s
 		item.face.pivot_offset = item.face.size * 0.5
+		var focus := Style.box(Color.TRANSPARENT, Color("#fff0bd"), ceili(39.0 / s), maxi(1, roundi(2.0 / s)))
+		focus.expand_margin_left = -10.0 / s
+		focus.expand_margin_right = -10.0 / s
+		focus.expand_margin_top = 1.0 / s
+		focus.expand_margin_bottom = -27.0 / s
+		button.add_theme_stylebox_override("focus", focus)
 		item.label.position = item.face.position
 		item.label.size = item.face.size
 		item.label.add_theme_font_size_override("font_size", ceili(30.0 / s))
-		item.next.position = Vector2(79, 31) / s
+		item.rating.position = Vector2(8, 78) / s
+		item.rating.size = Vector2(82, 24) / s
+		item.rating.add_theme_stylebox_override("panel",
+			Style.box(Color("#fff8e6"), Color("#dfcba2"), ceili(12.0 / s), maxi(1, roundi(1.0 / s))))
+		item.next.position = Vector2(24, 83) / s
 		item.next.size = Vector2.ONE * 14.0 / s
+		item.next_label.position = Vector2(43, 78) / s
+		item.next_label.size = Vector2(37, 24) / s
+		item.next_label.add_theme_font_size_override("font_size", ceili(12.0 / s))
+		item.next_label.add_theme_color_override("font_color", Style.GOOD)
 		item.lock_glow.position = Vector2(56, 43) / s
 		item.lock_glow.size = Vector2.ONE * 36.0 / s
 		item.padlock.position = Vector2(65, 52) / s
@@ -459,7 +493,7 @@ func _layout() -> void:
 		item.boss_frame.size = item.boss.size + Vector2.ONE * 36.0 / s
 		for index in range(3):
 			var star: TextureRect = item.stars[index]
-			star.position = Vector2((14.0 + index * 24.0) / s, 80.0 / s)
+			star.position = Vector2((14.0 + index * 24.0) / s, 79.0 / s)
 			star.size = Vector2.ONE * 22.0 / s
 	_content.custom_minimum_size = Vector2(0.0, summit_space + chapter_height * 11.0)
 	_content.size.x = width

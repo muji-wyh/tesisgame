@@ -30,6 +30,7 @@ func _init() -> void:
 		var label := Style.label("", 30)
 		label.add_theme_font_override("font", Style.HEADING_FONT)
 		label.add_theme_color_override("font_color", Color("#a56b20"))
+		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		add_child(label)
@@ -68,21 +69,34 @@ func layout_badge(bounds: Rect2, ui_scale: float) -> void:
 	position = bounds.position
 	size = bounds.size
 	_scale = maxf(0.1, ui_scale)
-	var edge: float = minf(size.y * 0.80, size.x * 0.38)
-	_medal.size = Vector2.ONE * edge
-	_medal.position = Vector2(2.0 / _scale, (size.y - edge) * 0.5)
-	_medal.pivot_offset = _medal.size * 0.5
-	_base_number_position = Vector2(_medal.get_rect().end.x + 5.0 / _scale, 0)
-	var area := Vector2(maxf(1.0, size.x - _base_number_position.x - 3.0 / _scale), size.y)
+	var edge: float = minf(size.y * 0.72, size.x * 0.30)
+	var gap: float = 5.0 / _scale
+	var available: float = maxf(1.0, size.x - edge - gap - 8.0 / _scale)
 	var pixels: int = maxi(1, ceili(minf(64.0, size.y * _scale * 0.78) / _scale))
+	var height: float = Style.HEADING_FONT.get_height(pixels)
+	if height * 1.18 > size.y:
+		pixels = maxi(1, floori(float(pixels) * size.y / (height * 1.18)))
 	var width: float = Style.HEADING_FONT.get_string_size(_number.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
-	if width > area.x:
-		pixels = maxi(1, floori(float(pixels) * area.x / width))
+	if feedback_active() and _previous != value:
+		width = maxf(width, Style.HEADING_FONT.get_string_size(_old_number.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x)
+	if width * 1.18 > available:
+		pixels = maxi(1, floori(float(pixels) * available / (width * 1.18)))
+		width = Style.HEADING_FONT.get_string_size(_number.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
+		if feedback_active() and _previous != value:
+			width = maxf(width, Style.HEADING_FONT.get_string_size(_old_number.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x)
+	var number_width: float = minf(available / 1.18, ceilf(width))
+	var left: float = (size.x - edge - gap - number_width) * 0.5
+	_medal.size = Vector2.ONE * edge
+	_medal.position = Vector2(left, (size.y - edge) * 0.5)
+	_medal.pivot_offset = _medal.size * 0.5
+	_base_number_position = Vector2(_medal.get_rect().end.x + gap, 0)
+	var area := Vector2(maxf(1.0, number_width), size.y)
 	for label: Label in [_number, _old_number]:
+		label.add_theme_font_size_override("font_size", pixels)
+		label.update_minimum_size()
 		label.position = _base_number_position
 		label.size = area
 		label.pivot_offset = area * 0.5
-		label.add_theme_font_size_override("font_size", pixels)
 	_pose()
 
 

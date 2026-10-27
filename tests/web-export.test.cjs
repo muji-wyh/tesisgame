@@ -315,7 +315,10 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /Extra time adds 30 seconds for 100 coins, then 50 more coins for every later use/);
   assert.match(help, /paid time cannot restore it/);
   assert.match(help, /Survival Challenge starts with ninety seconds and ends at zero[\s\S]*Complete every target in the current batch/);
-  assert.match(help, /summary stays open until the player activates the highlighted Back to map button/);
+  assert.match(help, /summary stays open until the player chooses Back to map or Try again/);
+  assert.match(help, /Both buttons stay still without breathing/);
+  assert.match(help, /clock-side \+Xs badge shows the actual added duration, including fractional headroom/);
+  assert.match(help, /Try again starts a fresh Stage 1 Challenge with ninety seconds/);
   assert.match(help, /medal with an animated number displays the saved highest Stage/);
   assert.match(help, /Lv2 Jelly contributes two goal units, Lv3 contributes three/);
   assert.doesNotMatch(help, /Endless Challenge has no countdown|keeps its Done marker/);
