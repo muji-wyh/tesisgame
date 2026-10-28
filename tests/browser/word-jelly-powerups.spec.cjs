@@ -15,8 +15,8 @@ const FRAGMENT_APPEAR = 'assets/audio/fragments/appear.wav';
 const FRAGMENT = 'assets/audio/fragments/arrive.wav';
 const MERGE = 'assets/imported-audio/jelly-interaction/merge-together-v3.wav';
 const prices = { auto_merge: 600, fragments: 200 };
-const AUTO_MERGE_BEAT = 0.16;
-const AUTO_MERGE_DRAG = 0.18;
+const AUTO_MERGE_BEAT = 0.10;
+const AUTO_MERGE_DRAG = 0.32;
 const AUTO_MERGE_FUSION = 0.11;
 const AUTO_MERGE_SETTLE = 0.03;
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
@@ -78,10 +78,14 @@ async function start(page, info, balance, pipLevel = 0) {
   await chooseMode(page, 'word_jelly', { challenge: true });
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.visible && state.phase === 'playing' && state.tiles.length >= 15 &&
+    return state.visible && !state.paused && state.phase === 'playing' && state.tiles.length === 40 &&
       state.tiles.every(tile => tile.settled) &&
-      Object.values(state.powerup_buttons || {}).filter(button => button.visible).length === 2;
-  }, { timeout: 20000 }).toBe(true);
+      Object.values(state.powerup_buttons || {}).filter(button => button.visible).length === 3;
+  }, { timeout: 30000 }).toBe(true).catch(async error => {
+    fs.writeFileSync(info.outputPath('powerup-startup-state.json'),
+      JSON.stringify({ state: await jelly(page), bounds: await metrics(page) }, null, 2));
+    throw error;
+  });
   await expect.poll(async () => (await wallet(page)).balance).toBe(balance);
   const audioAvailable = await page.evaluate(() => window.audioObservation.available);
   if (!audioAvailable) info.annotations.push({ type: 'audio-limitation',
@@ -239,10 +243,10 @@ function expectAutoMergeTimeline(evidence, completed) {
   const resultIds = new Set(frames.flatMap(frame => frame.fusions.map(fusion => fusion.result.id)));
   const launches = new Map();
   for (const frame of frames) {
-    expect(frame.powerup.drags.length, 'A 180 ms flight overlaps at most one following 160 ms launch').toBeLessThanOrEqual(2);
+    expect(frame.powerup.drags.length, 'A 320 ms flight overlaps at most three following 100 ms launches').toBeLessThanOrEqual(4);
     const reserved = new Set();
     for (const drag of frame.powerup.drags) {
-      expect(drag.duration, 'Every automatic transfer takes 180 ms').toBeCloseTo(AUTO_MERGE_DRAG, 6);
+      expect(drag.duration, 'Every automatic transfer takes 320 ms').toBeCloseTo(AUTO_MERGE_DRAG, 6);
       expect(drag.elapsed).toBeGreaterThanOrEqual(0);
       expect(drag.elapsed).toBeLessThanOrEqual(AUTO_MERGE_DRAG + 0.00001);
       expect(drag.started_at).toBeGreaterThanOrEqual(0);
@@ -283,10 +287,10 @@ function expectAutoMergeTimeline(evidence, completed) {
   expect(ordered.length).toBeGreaterThan(1);
   expect(ordered[0].started_at, 'The first eligible pair launches immediately').toBeCloseTo(0, 5);
   expect(ordered[1].started_at - ordered[0].started_at,
-    'The next independent pair launches on the 160 ms beat while the first still flies').toBeCloseTo(AUTO_MERGE_BEAT, 5);
+    'The next independent pair launches on the 100 ms beat while the first still flies').toBeCloseTo(AUTO_MERGE_BEAT, 5);
   for (const launch of ordered) {
     const beat = launch.started_at / AUTO_MERGE_BEAT;
-    expect(beat, 'Every launch remains aligned to the 160 ms grid after dependency waits').toBeCloseTo(Math.round(beat), 5);
+    expect(beat, 'Every launch remains aligned to the 100 ms grid after dependency waits').toBeCloseTo(Math.round(beat), 5);
   }
   let overlappingLaunches = 0;
   for (let index = 1; index < ordered.length; index++) {
@@ -299,16 +303,16 @@ function expectAutoMergeTimeline(evidence, completed) {
         'Overlapping launch windows reserve four distinct endpoints, even between rendered frames').toBe(4);
     }
   }
-  expect(overlappingLaunches, 'The actual 180 ms flights overlap on the 160 ms launch rhythm').toBeGreaterThan(0);
+  expect(overlappingLaunches, 'The actual 320 ms flights overlap on the 100 ms launch rhythm').toBeGreaterThan(0);
   expect(frames.some(frame => frame.powerup.drags.length && frame.fusions.length),
     'A liquid union remains visible while the next pair flies').toBe(true);
   return { frames: dragFrames, launches: ordered };
 }
 
-test('Auto merge launches eligible pairs every 160 ms with overlapping 180 ms flights', async ({ page }, info) => {
+test('Auto merge launches eligible pairs every 100 ms with overlapping 320 ms flights', async ({ page }, info) => {
   const { errors } = await start(page, info, 5000);
   const before = await jelly(page), saved = await savedGrowth(page);
-  await beginTrace(page, 'auto-merge-160ms');
+  await beginTrace(page, 'auto-merge-100ms');
   await pressRect(page, before.powerup_buttons.auto_merge.rect);
   await expect.poll(async () => (await wallet(page)).balance).toBe(4400);
   await expect.poll(async () => {
@@ -317,12 +321,14 @@ test('Auto merge launches eligible pairs every 160 ms with overlapping 180 ms fl
       state.tiles.every(tile => tile.settled);
   }, { timeout: 20000 }).toBe(true);
   const after = await jelly(page);
-  const evidence = await retainTrace(page, info, 'auto-merge-160ms', ['auto-midpoint', 'auto-fusion']);
+  const evidence = await retainTrace(page, info, 'auto-merge-100ms', ['auto-midpoint', 'auto-fusion']);
   expectAutoMergeTimeline(evidence, after.powerup.completed);
   expect(after.powerup.completed).toBeGreaterThan(1);
   expect(after.powerup.total).toBe(after.powerup.completed);
   expect(after.merged_count - before.merged_count).toBe(after.powerup.completed);
-  expect(after.powerup_buttons.auto_merge.enabled, 'All complete authored paths have been consumed').toBe(false);
+  const originalIds = new Set(before.tiles.map(tile => tile.id));
+  expect(forwardPairs(after).some(pair => pair.every(id => originalIds.has(id))),
+    'The captured board has no remaining original pair; required Fill may supply new paths').toBe(false);
   expect(progress(after), 'Auto merge leaves the resulting words for manual collection').toEqual(progress(before));
   expect(fragmentTotal(after)).toBe(fragmentTotal(before));
   expect(await savedGrowth(page)).toBe(saved);
@@ -332,7 +338,74 @@ test('Auto merge launches eligible pairs every 160 ms with overlapping 180 ms fl
   expect(debits).toHaveLength(1);
   expect(debits[0][0].endsWith(`:${after.powerup.receipt_id}`)).toBe(true);
   expect(debits[0][1]).toBe(-600);
-  await capture(page, info, 'auto-merge-160ms-complete');
+  await capture(page, info, 'auto-merge-100ms-complete');
+  expect(errors).toEqual([]);
+});
+
+test('Magnet charges only for the player-selected family and Challenge keeps Fill on', async ({ page }, info) => {
+  test.setTimeout(180000);
+  const { errors } = await start(page, info, 2000, 3);
+  const opening = await readyPowerup(page, 'family_merge');
+  await page.keyboard.press('p');
+  await expect.poll(async () => (await jelly(page)).paused).toBe(true);
+  expect(opening.fill_control).toMatchObject({ on: true, locked: true, enabled: false });
+  const pairs = forwardPairs(opening).map(pair => pair.map(id => opening.tiles.find(tile => tile.id === id)))
+    .filter(pair => pair.some(tile => tile.jelly_kind === 'picture'));
+  expect(pairs.length).toBeGreaterThan(0);
+  const selected = pairs[0].find(tile => tile.jelly_kind === 'picture');
+  const id = selected.image_word.id;
+  const family = tile => tile.word?.id || tile.image_word?.id || tile.word_candidate?.id || tile.source_word_id;
+  const unrelated = opening.tiles.filter(tile => family(tile) !== id).map(tile => tile.id);
+  expect(unrelated.length, 'The test has a genuine second family, not a single-family proxy').toBeGreaterThan(0);
+  const beforeProgress = progress(opening), beforeGrowth = await savedGrowth(page);
+  await page.evaluate(walletKey => {
+    const status = document.getElementById('game-status');
+    window.magnetChoiceFrames = [];
+    window.magnetChoiceObserver = new MutationObserver(() => {
+      const state = JSON.parse(status.dataset.jelly || '{}');
+      window.magnetChoiceFrames.push({ selection: state.family_selection, powerup: state.powerup,
+        preview: state.preview?.enabled, title: state.powerup_buttons?.family_merge?.title,
+        wallet: localStorage.getItem(walletKey) });
+    });
+    window.magnetChoiceObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
+  }, WALLET_KEY);
+  // Keep the genuine ten-second full-board clock for player gestures, not
+  // browser-driver assertions; pausing itself deliberately cancels a selector.
+  await page.keyboard.press('p');
+  await pressRect(page, opening.powerup_buttons.family_merge.rect);
+  await pressRect(page, opening.powerup_buttons.family_merge.rect);
+  await page.keyboard.press('p');
+  await expect.poll(async () => (await jelly(page)).paused).toBe(true);
+  const choice = await page.evaluate(() => window.magnetChoiceFrames.filter(frame => frame.selection?.active));
+  expect(choice.length, 'The real player gesture visibly arms the selector before its next press cancels it').toBeGreaterThan(0);
+  expect(choice.every(frame => frame.title === 'Pick Jelly' && !frame.powerup.active && !frame.preview)).toBe(true);
+  expect(choice.every(frame => /^balance=2000$/m.test(frame.wallet))).toBe(true);
+  expect((await jelly(page)).family_selection.active).toBe(false);
+  expect((await wallet(page)).balance).toBe(2000);
+  await page.keyboard.press('p');
+  await pressRect(page, opening.powerup_buttons.family_merge.rect);
+  await pressRect(page, selected.rect);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(1800);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return !state.powerup.active && state.powerup.kind === 'family_merge';
+  }, { timeout: 20000 }).toBe(true);
+  await page.keyboard.press('p');
+  await expect.poll(async () => (await jelly(page)).paused).toBe(true);
+  const after = await jelly(page);
+  expect(after.powerup.family_word_id).toBe(id);
+  expect(after.powerup.selected_id).toBe(selected.id);
+  expect(after.tiles.some(tile => tile.jelly_kind === 'merged' && tile.word.id === id)).toBe(true);
+  expect(unrelated.every(old => after.tiles.some(tile => tile.id === old))).toBe(true);
+  expect(progress(after)).toEqual(beforeProgress);
+  expect(after.combo.coins).toBe(0);
+  expect(await savedGrowth(page)).toBe(beforeGrowth);
+  expect(after.powerup_buttons.family_merge.price).toBe(300);
+  const persisted = await storedWallet(page);
+  expect(persisted.balance).toBe(1800);
+  expect(Object.values(persisted.receipts).filter(amount => amount < 0)).toEqual([-200]);
+  await page.evaluate(() => window.magnetChoiceObserver.disconnect());
+  await capture(page, info, 'selected-family-magnet');
   expect(errors).toEqual([]);
 });
 

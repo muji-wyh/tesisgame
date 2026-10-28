@@ -219,7 +219,7 @@ Upload the export together under a path such as `/games/word-buddies/`, then emb
 ```html
 <iframe
   src="/games/word-buddies/index.html"
-  title="Grow with Pip"
+  title="Pip's world"
   allow="autoplay; fullscreen; gamepad; microphone"
   style="display:block;width:100%;height:100dvh;border:0">
 </iframe>

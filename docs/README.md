@@ -31,7 +31,7 @@ Build outputs under `build/` are generated evidence, not editable source.
 - [Changelog](../changelog.md): events in chronological context.
 
 Current game modes are Match, Memory, single-player Voice Pop, and Phrase Builder.
-The game is named Grow with Pip. Local names, identity avatars, leaderboards and
+The game is named Pip's world. Local names, identity avatars, leaderboards and
 Pip's room are retired. Talk Quest was retired on 2026-10-06; source records and
 dated QA remain historical. The optional browser-managed local speech experiment
 is separate from the removed sherpa-onnx multiplayer runtime. Old medal and

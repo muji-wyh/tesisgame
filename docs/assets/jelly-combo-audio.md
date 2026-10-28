@@ -1,21 +1,22 @@
 # Jelly Words combo audio
 
-Each accepted combo increment requests `jelly-combo-N`, where `N` is the new
-count. `GameAudio.play_jelly_cue()` routes it to `play_word_jelly_combo(N)`.
+Each actual cumulative combo level-up requests `jelly-combo-N`, where `N` is the
+new level. Ordinary progress points do not replay this accent.
+`GameAudio.play_jelly_cue()` routes it to `play_word_jelly_combo(N)`.
 The sound is presentation only: it does not change the combo, award coins or
 delay collection. Reduced motion uses the same audio behavior.
 
-| Combo count | Recording | Detail | Runtime gain |
+| Combo level | Recording | Detail | Runtime gain |
 | --- | --- | --- | --- |
 | 1-2 | `assets/audio/jelly-combo/step.wav` | Short confirmation tone with a light glass attack | 0.40 |
-| 3-7 | `assets/audio/jelly-combo/bright.wav` | The same tone with a stronger glass accent | 0.44 |
-| 8 onward | `assets/audio/jelly-combo/crown.wav` | Confirmation tone, a pitched fifth and glass detail | 0.48 |
+| 3-4 | `assets/audio/jelly-combo/bright.wav` | The same tone with a stronger glass accent | 0.44 |
+| 5 onward | `assets/audio/jelly-combo/crown.wav` | Confirmation tone, a pitched fifth and glass detail | 0.48 |
 
 All three recordings last 0.322 seconds at their original pitch. Every increment
-raises the playback rate with `2 ^ (1 - exp(-(count - 1) / 14))`, approaching an
+raises the playback rate with `2 ^ (1 - exp(-(level - 1) / 3))`, approaching an
 octave above the first sound. This bounds the range during very long streaks;
-the gain stops increasing at combo 8. Three dedicated channels let the 140 ms
-automatic collection beats overlap without replacing pronunciation, contact
+the gain stops increasing at level 5. Three dedicated channels let rapid
+committed level-ups overlap without replacing pronunciation, contact
 feedback, warnings or collection fireworks. A fourth overlapping request reuses
 the oldest combo channel. Pronunciation ducks these accents by 6 dB. The existing
 Jelly pause, mute, halt and screen-exit cleanup cancels both playing and pending
@@ -43,12 +44,17 @@ The original files are preserved byte-for-byte. Source hashes, output hashes,
 layer offsets, rate multipliers and mix measurements are recorded in
 [the manifest](jelly-combo-audio.json).
 
-## Reproduction and verification
+## Reproduction and retained earlier evidence
 
 ```powershell
 python tools/prepare-jelly-combo-audio.py --check
 node tools/run-godot.cjs --headless --path . --script res://tests/godot/word_jelly_combo_audio_tests.gd
 ```
+
+The cumulative-level change reuses those same three WAVs, sources and gains.
+Only level ownership and runtime pitch/timbre thresholds change. The following
+mixing/browser evidence predates cumulative progression and is retained as
+historical evidence, not a fresh auditory review of the new trigger cadence.
 
 Running the preparation tool without `--check` regenerates the three WAVs,
 their imports and the manifest. It also writes a listening preview at
@@ -79,4 +85,5 @@ preview is provided without an auditory or physical-device mixing claim.
 The October 25 Lv9 extension rechecks the same 24-pickup, 140 ms combo mix
 against each acquired collection recording from Lv4 through Lv9. The recorded
 peaks are retained in `jelly-combo-audio.json`; all stay at or below -5.848 dBFS.
-The waveform sources, output bytes, gain and pitch behavior are unchanged.
+The waveform sources, output bytes and gain are unchanged. The later cumulative
+update changes playback pitch as documented above.

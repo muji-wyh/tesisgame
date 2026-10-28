@@ -93,11 +93,13 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   const chestModels = Object.values(chestManifest.styles).map(style => style.model);
   const cc0Manifest = JSON.parse(fs.readFileSync(path.join(root, 'assets/chests/catalog-cc0/sources.json'), 'utf8'));
   const cc0Models = cc0Manifest.files.filter(file => file.kind === 'model').map(file => file.path);
+  const polishedModels = JSON.parse(fs.readFileSync(path.join(root, 'assets/chests/polished-cc0/manifest.json'), 'utf8'))
+    .models.map(model => model.file);
   assert.equal(new Set(chestModels).size, 5, 'The five added chest designs use separate live models');
   assert.ok(imports.every(filename => !filename.startsWith(path.join(root, 'assets/chests/downloaded') + path.sep)),
     'Retired 320-pixel opening frames are not imported into the game');
   const modelImports = imports.filter(filename => filename.endsWith('.glb.import'));
-  assert.deepEqual(modelImports.sort(), [...chestModels, ...cc0Models]
+  assert.deepEqual(modelImports.sort(), [...chestModels, ...cc0Models, ...polishedModels]
     .map(filename => path.join(root, filename + '.import')).sort());
   for (const filename of modelImports) {
     const metadata = fs.readFileSync(filename, 'utf8');
@@ -124,7 +126,7 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   }
   const textureImports = imports.filter(filename => !filename.endsWith('.glb.import')
     && !filename.startsWith(path.join(root, 'assets/chests/models') + path.sep));
-  const cc0Images = cc0Models.flatMap(filename => {
+  const cc0Images = [...cc0Models, ...polishedModels].flatMap(filename => {
     const model = readModelContainer(path.join(root, filename));
     return model.gltf.images?.some(image => Number.isInteger(image.bufferView))
       ? embeddedModelImages(filename, model) : [];
@@ -137,6 +139,7 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   const campaignArt = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/jelly-campaign/sources.json'), 'utf8'));
   const goalArt = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/ui/jelly-goals/sources.json'), 'utf8'));
   const mapArt = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/ui/jelly-map/sources.json'), 'utf8'));
+  const powerupArt = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/ui/jelly-powerups/sources.json'), 'utf8'));
   const sceneryImages = ['jelly-garden', 'jelly-sky'].flatMap(name =>
     JSON.parse(fs.readFileSync(path.join(root, `docs/assets/${name}.json`), 'utf8')).images);
   assert.equal(sceneryImages.length, 9, 'Eight preserved garden layers and one daytime panorama are imported');
@@ -152,13 +155,14 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     'assets/images/ui/modes/cat.webp',
     'assets/images/ui/modes/microphone.webp',
     'assets/images/ui/jelly-powerups/auto-merge-wand.svg',
+    ...powerupArt.assets.map(image => image.file),
     ...cc0Textures,
     ...campaignArt.images.map(image => `assets/images/jelly-campaign/${image.path}`),
     ...mapArt.images.map(image => `assets/images/ui/jelly-map/${image.file}`),
     ...[...goalArt.assets, ...goalArt.shared_illustrations].map(image => image.file)
   ];
   const addedImports = new Set(addedArtwork.map(filename => path.join(root, filename + '.import')));
-  assert.equal(addedImports.size, 35,
+  assert.equal(addedImports.size, 42,
     'Scenery, Home previews, mastery, tools, CC0 model atlases, campaign and goal artwork have separate imports');
   assert.deepEqual(textureImports.filter(filename => addedImports.has(filename)).sort(), [...addedImports].sort());
   for (const filename of addedArtwork) assert.ok(fs.existsSync(path.join(root, filename)), filename);
@@ -608,6 +612,11 @@ test('goal and campaign controls retain sourced check, star, clock and unchanged
     assert.ok(fs.existsSync(path.join(root, asset.file + '.import')));
     if (asset.reused_from)
       assert.deepEqual(fs.readFileSync(path.join(root, asset.file)), fs.readFileSync(path.join(root, asset.reused_from)));
+    if (asset.adapted_from) {
+      assert.equal(sha256(fs.readFileSync(path.join(root, asset.adapted_from))), asset.source_image_sha256);
+      assert.notEqual(asset.integrated_sha256, asset.source_image_sha256, 'A palette adaptation is not mislabeled as an original byte copy');
+      assert.match(asset.processing, /original alpha, contour and lighting detail retained/);
+    }
   }
   assert.equal(manifest.reused_audio.license, 'CC0-1.0');
   assert.equal(sha256(fs.readFileSync(path.join(root, manifest.reused_audio.file))), manifest.reused_audio.sha256);

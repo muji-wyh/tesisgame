@@ -78,6 +78,33 @@ function registry(catalog) {
     .map(file => [file.path, file]));
 }
 
+test('refined CC0 chests retain source identities, separate real lids, original clips and bounded geometry', () => {
+  const refinement = readJson('assets/chests/polished-cc0/manifest.json');
+  const catalog = readJson(catalogPath);
+  assert.equal(refinement.models.length, 4);
+  for (const entry of refinement.models) {
+    const source = catalog.files.find(file => file.path === entry.original);
+    assert.ok(source && source.role === 'chest-base');
+    assert.equal(entry.source_sha256, source.output_sha256);
+    assert.equal(entry.license, 'CC0-1.0');
+    assert.ok(entry.creator && entry.source && entry.license_file);
+    const bytes = fs.readFileSync(absolute(safePath(entry.file)));
+    assert.equal(bytes.length, entry.bytes);
+    assert.equal(sha256(bytes), entry.sha256);
+    const before = readModelContainer(absolute(entry.original));
+    const after = readModelContainer(absolute(entry.file));
+    assert.deepEqual((after.gltf.animations || []).map(animation => animation.name).sort(),
+      (before.gltf.animations || []).map(animation => animation.name).sort());
+    assert.ok(after.gltf.nodes.some(node => /lid/i.test(node.name)), 'The sourced lid is still separately articulated');
+    for (const mesh of after.gltf.meshes) for (const primitive of mesh.primitives) {
+      assert.equal(spatialRank(readFloatAccessor(after, primitive.attributes.POSITION)), 3);
+      assert.ok(primitive.attributes.NORMAL !== undefined && primitive.attributes.TEXCOORD_0 !== undefined);
+    }
+    assert.ok(entry.refined_vertices > 0 && entry.refined_vertices < 5000 && entry.bytes < 250000);
+    assert.match(entry.processing, /bevel/);
+  }
+});
+
 test('the source catalog distinguishes original CC0 bytes, nine bases and reviewed modular runtime tiers', () => {
   const catalog = readJson(catalogPath);
   assert.equal(catalog.version, 1);

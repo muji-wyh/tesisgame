@@ -149,7 +149,7 @@ func _learn_terms(count: int, prefix: String) -> void:
 
 func _check_home(course: String, level: int) -> void:
 	var home: Dictionary = app._mode_panel.snapshot()
-	check(home.brand == "Grow with Pip" and home.vocabulary.kind == "professional", "Professional vocabulary retains the shared Grow with Pip identity")
+	check(home.brand == "Pip's world" and home.vocabulary.kind == "professional", "Professional vocabulary retains the shared Pip's world identity")
 	check(home.vocabulary.selection.course_id == course and home.vocabulary.title == "Playing professional English", "Home explicitly identifies the active professional vocabulary")
 	check(home.professional.ready and home.professional.course_id == course and home.professional.level == level, "Home shows this career's independently derived Pip level")
 	check(home.hero.title == "Pip · Lv%d" % level and home.hero.goal == home.professional.course_title, "The shared hero pairs Pip's level with the career title")

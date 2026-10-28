@@ -4,6 +4,7 @@ extends Button
 const Style = preload("res://scripts/ui_style.gd")
 const Model = preload("res://scripts/word_jelly_model.gd")
 const WAND = preload("res://assets/images/ui/jelly-powerups/auto-merge-wand.svg")
+const MAGNET = preload("res://assets/images/ui/jelly-powerups/family-magnet.webp")
 const CHEST = preload("res://assets/chests/royal/closed.png")
 const COIN = preload("res://assets/coins/gold-coin.png")
 const CLOCK = preload("res://assets/images/ui/jelly-goals/clock.webp")
@@ -22,6 +23,7 @@ var _reduced_motion: bool = false
 var _paused: bool = false
 var _ui_scale: float = 1.0
 var _compact: bool = false
+var _targeting: bool = false
 var _feedback_active: bool = false
 var _feedback_success: bool = true
 var _feedback_elapsed: float = 0.0
@@ -58,10 +60,11 @@ func _init() -> void:
 
 
 func configure(kind: String, price: int, reduced_motion: bool) -> void:
-	_kind = "extra_time" if kind == "extra_time" else "fragments" if kind in ["fragments", "treasure"] else "auto_merge"
+	_kind = kind if kind in ["extra_time", "family_merge"] else "fragments" if kind in ["fragments", "treasure"] else "auto_merge"
 	_price = maxi(0, price)
 	_reduced_motion = reduced_motion
-	name = "PowerupExtraTime" if _kind == "extra_time" else "PowerupTreasure" if _kind == "fragments" else "PowerupAutoMerge"
+	name = "PowerupExtraTime" if _kind == "extra_time" else "PowerupMagnet" if _kind == "family_merge" \
+		else "PowerupTreasure" if _kind == "fragments" else "PowerupAutoMerge"
 	tooltip_text = ""
 	reset()
 	_layout()
@@ -81,6 +84,14 @@ func set_price(value: int) -> void:
 		return
 	_price = next_price
 	# Updating the next purchase must not cancel the current success animation.
+	_layout()
+	_update_accessibility()
+
+
+func set_targeting(value: bool) -> void:
+	if value == _targeting:
+		return
+	_targeting = value
 	_layout()
 	_update_accessibility()
 
@@ -130,6 +141,7 @@ func advance(delta: float) -> void:
 
 
 func reset() -> void:
+	_targeting = false
 	_feedback_active = false
 	_feedback_elapsed = 0.0
 	_paused = false
@@ -140,10 +152,16 @@ func _duration() -> float:
 	return REDUCED_SECONDS if _reduced_motion else SUCCESS_SECONDS if _feedback_success else FAILURE_SECONDS
 
 
+func _title_text() -> String:
+	return "+30 sec" if _kind == "extra_time" else "Treasure" if _kind == "fragments" \
+		else "Pick Jelly" if _targeting else "Magnet" if _kind == "family_merge" else "Auto merge"
+
+
 func _update_accessibility() -> void:
-	var title: String = "+30 sec" if _kind == "extra_time" else "Treasure" if _kind == "fragments" else "Auto merge"
+	var title: String = _title_text()
 	var status: String = "Working" if _busy else "Unavailable right now" if not _available else "Not enough coins" if not _affordable else "Ready"
-	set("accessibility_name", "%s. %d coins. %s" % [title, _price, status])
+	set("accessibility_name", "%s. %d coins. %s.%s" % [title, _price, status,
+		" Choose a Jelly to merge its word, picture and upgraded family. Press again or Back to cancel." if _kind == "family_merge" else ""])
 
 
 func _layout() -> void:
@@ -153,7 +171,7 @@ func _layout() -> void:
 	_icon_rect = Rect2(Vector2(7.0 * unit, lower_center - edge * 0.5), Vector2.ONE * edge)
 	_title.position = Vector2(6.0 * unit, (1.0 if _compact else 3.0) * unit)
 	var title_size := Vector2(maxf(1.0, size.x - 12.0 * unit), maxf(1.0, (18.0 if _compact else 22.0) * unit))
-	var title: String = "+30 sec" if _kind == "extra_time" else "Treasure" if _kind == "fragments" else "Auto merge"
+	var title: String = _title_text()
 	var font_size: int = maxi(1, roundi(12.0 * unit))
 	while font_size > 1 and (Style.HEADING_FONT.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > title_size.x \
 		or Style.HEADING_FONT.get_height(font_size) > title_size.y):
@@ -207,6 +225,9 @@ func _draw() -> void:
 	var unit: float = 1.0 / _ui_scale
 	var accent := Color("#a699bc") if _kind == "auto_merge" else Color("#b5a075")
 	var fill := Color("#faf9fc") if _kind == "auto_merge" else Color("#fffcf2")
+	if _kind == "family_merge":
+		accent = Color("#c86f95")
+		fill = Color("#ffe4f0") if _targeting else Color("#fff6fa")
 	var pose: Dictionary = _pose()
 	var ink: Color = Style.INK
 	var celebrating: bool = _feedback_active and _feedback_success and not _paused
@@ -254,6 +275,8 @@ func _draw() -> void:
 	draw_set_transform(center, float(pose.rotation), Vector2.ONE * float(pose.scale) * press)
 	if _kind == "auto_merge":
 		draw_texture_rect(WAND, Rect2(-_icon_rect.size * 0.5, _icon_rect.size), false, tint)
+	elif _kind == "family_merge":
+		draw_texture_rect(MAGNET, Rect2(-_icon_rect.size * 0.5, _icon_rect.size), false, tint)
 	elif _kind == "extra_time":
 		draw_texture_rect(CLOCK, Rect2(-_icon_rect.size * 0.5, _icon_rect.size), false, tint)
 	else:
@@ -276,7 +299,7 @@ func _draw() -> void:
 
 func snapshot() -> Dictionary:
 	var pose: Dictionary = _pose()
-	return {"kind": _kind, "price": _price, "available": _available, "affordable": _affordable,
+	return {"kind": _kind, "price": _price, "available": _available, "affordable": _affordable, "targeting": _targeting,
 		"busy": _busy, "enabled": not disabled, "paused": _paused, "reduced_motion": _reduced_motion,
 		"feedback_active": _feedback_active, "feedback_success": _feedback_success,
 		"feedback_serial": _feedback_serial, "feedback_elapsed": _feedback_elapsed,

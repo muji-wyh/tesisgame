@@ -1,6 +1,6 @@
 extends RefCounted
 
-const GAME_NAME: String = "Grow with Pip"
+const GAME_NAME: String = "Pip's world"
 const PIECES_PER_MEDAL: int = 3
 const AGE_BANDS: Array[Dictionary] = [
 	{"id": "3", "name": "Age 3 words", "label": "3", "max_age": 3},

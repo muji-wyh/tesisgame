@@ -173,7 +173,7 @@ func _sync() -> void:
 		var event: Dictionary = _events[0]
 		var age: float = _elapsed - ARRIVAL_SECONDS
 		var tier: int = int(event.tier) if _revealed or int(event.previous_tier) == 0 else int(event.previous_tier)
-		if tier > 0 and int(event.tier) <= 4:
+		if tier > 0:
 			var pose: Dictionary = _motion(age)
 			# Both shapes share the same fitting envelope before and after the swap.
 			# This keeps an edge-clamped flight reversible when their silhouettes differ.
@@ -191,7 +191,7 @@ func _sync() -> void:
 
 
 func _prepare_models() -> void:
-	if not is_active() or reduced_motion or int(_events[0].tier) > 4:
+	if not is_active() or reduced_motion:
 		return
 	_models.prepare(int(_events[0].previous_tier))
 	_models.prepare(int(_events[0].tier))
@@ -230,9 +230,10 @@ func _motion(age: float) -> Dictionary:
 		if _events.size() > 1 and age <= Flight.RETURN_START + 0.000001 else age
 	var pose: Dictionary = Flight.sample(held_age, _anchor.get_center(), _flight_bounds(), edge,
 		_journey_peak / Style.ui_scale(self), true)
+	pose.model_weight = 1.0
+	pose.sprite_scale_x = 1.0
 	if _continuous_turns:
 		pose.yaw = (float(_completed_turns) + clampf((age - Flight.TURN_START) / TURN_SECONDS, 0.0, 1.0)) * TAU
-		pose.sprite_scale_x = cos(float(pose.yaw))
 	return pose
 
 
@@ -278,10 +279,10 @@ func _draw_flight() -> void:
 			var radius: float = accent_edge * lerpf(0.36, 1.34, 1.0 - pow(1.0 - ripple / 0.76, 2.0))
 			_draw_ring(point, Vector2.ONE * radius, accent, (1.0 - ripple / 0.76) * 0.85)
 	var texture: Texture2D = after if _revealed or int(event.previous_tier) == 0 else before
-	var model_weight: float = float(pose.model_weight) if not _model_sample.is_empty() else 0.0
+	var model_weight: float = 1.0 if not _model_sample.is_empty() else 0.0
 	if texture != null and model_weight < 1.0:
-		# Project the original flat artwork around its vertical axis.
-		_flight_surface.draw_set_transform(point, 0.0, Vector2(float(pose.sprite_scale_x), 1.0) * float(placement.scale))
+		# A reported missing-model error may retain a still marker, never a fake turn.
+		_flight_surface.draw_set_transform(point, 0.0, Vector2.ONE * float(placement.scale))
 		_flight_surface.draw_texture_rect(texture, _texture_rect(texture, Vector2.ZERO, edge), false, Color(1, 1, 1, 1.0 - model_weight))
 	if model_weight > 0.0:
 		_flight_surface.draw_set_transform(point, 0.0, Vector2.ONE * float(placement.scale))

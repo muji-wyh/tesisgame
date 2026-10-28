@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "blender": "5.2.2 LTS",
+  "converter": "tools/polish-chest-models.py",
+  "source_policy": "Original acquired files are never overwritten. These are source-derived CC0 chest bases, not new geometric stand-ins.",
+  "models": [
+    {
+      "source_id": "kenney-survival",
+      "creator": "Kenney",
+      "source": "https://kenney.nl/assets/survival-kit",
+      "license": "CC0-1.0",
+      "license_file": "assets/chests/catalog-cc0/kenney-survival/LICENSE.txt",
+      "original": "assets/chests/catalog-cc0/kenney-survival/chest.glb",
+      "source_sha256": "84b03023e425cc1f96c6d0b0f352608be9e8e01b112790e6b00b8651bf84379b",
+      "file": "assets/chests/polished-cc0/kenney-survival.glb",
+      "sha256": "93e2375d6cb12f8e939c9c23d6879d0b2c84d2e5c27800f6d90b0d34946dc774",
+      "bytes": 92640,
+      "source_vertices": 558,
+      "refined_vertices": 895,
+      "animations": [
+        "close",
+        "open",
+        "open-close"
+      ],
+      "processing": "Weld coincident source positions without changing UV loops; 0.8%-width two-segment edge bevel and weighted panel normals. Original separate lid, local transforms, palette, materials and animation tracks retained.",
+      "status": "Converted from acquired CC0 originals; native runtime review is separate from this conversion record."
+    },
+    {
+      "source_id": "kenney-platformer",
+      "creator": "Kenney",
+      "source": "https://kenney.nl/assets/platformer-kit",
+      "license": "CC0-1.0",
+      "license_file": "assets/chests/catalog-cc0/kenney-platformer/LICENSE.txt",
+      "original": "assets/chests/catalog-cc0/kenney-platformer/chest.glb",
+      "source_sha256": "ba92d21be71649e608de4c76859f04e83308efc699508b2ddb1221678102e274",
+      "file": "assets/chests/polished-cc0/kenney-platformer.glb",
+      "sha256": "fca0376c3e024def2a5c590ace4fa44dd8851735dfdacac794829bb34d0954d2",
+      "bytes": 99560,
+      "source_vertices": 378,
+      "refined_vertices": 732,
+      "animations": [
+        "close",
+        "open",
+        "open-close"
+      ],
+      "processing": "Weld coincident source positions without changing UV loops; 0.8%-width two-segment edge bevel and weighted panel normals. Original separate lid, local transforms, palette, materials and animation tracks retained.",
+      "status": "Converted from acquired CC0 originals; native runtime review is separate from this conversion record."
+    },
+    {
+      "source_id": "kenney-mini-dungeon",
+      "creator": "Kenney",
+      "source": "https://kenney.nl/assets/mini-dungeon",
+      "license": "CC0-1.0",
+      "license_file": "assets/chests/catalog-cc0/kenney-mini-dungeon/LICENSE.txt",
+      "original": "assets/chests/catalog-cc0/kenney-mini-dungeon/chest.glb",
+      "source_sha256": "64cc6c44786a0833bbe53c694cbad9f10d4fdd9e99d4b5ec03fcb3b8b5dd71e0",
+      "file": "assets/chests/polished-cc0/kenney-mini-dungeon.glb",
+      "sha256": "574c0365a500efdd1daaad734757c607919687a5609272c8882366a798113e57",
+      "bytes": 99540,
+      "source_vertices": 490,
+      "refined_vertices": 804,
+      "animations": [
+        "close",
+        "open",
+        "open-close"
+      ],
+      "processing": "Weld coincident source positions without changing UV loops; 0.8%-width two-segment edge bevel and weighted panel normals. Original separate lid, local transforms, palette, materials and animation tracks retained.",
+      "status": "Converted from acquired CC0 originals; native runtime review is separate from this conversion record."
+    },
+    {
+      "source_id": "kaykit-dungeon-1.0",
+      "creator": "Kay Lousberg",
+      "source": "https://kaylousberg.itch.io/kaykit-dungeon-pack",
+      "license": "CC0-1.0",
+      "license_file": "assets/chests/catalog-cc0/kaykit-dungeon/LICENSE.txt",
+      "original": "assets/chests/catalog-cc0/kaykit-dungeon/chest.glb",
+      "source_sha256": "f72fd2201cd42ad399928a0b7bcc34d5b0e6d0624aeaf824fef81852109955f8",
+      "file": "assets/chests/polished-cc0/kaykit-dungeon.glb",
+      "sha256": "163bbbc98fea8370a3c85c269360cb642f1946b1167d12e5efd6bdd3039ff5ff",
+      "bytes": 203460,
+      "source_vertices": 1204,
+      "refined_vertices": 2194,
+      "animations": [],
+      "processing": "Weld coincident source positions without changing UV loops; 0.8%-width two-segment edge bevel and weighted panel normals. Original separate lid, local transforms, palette, materials and animation tracks retained.",
+      "status": "Converted from acquired CC0 originals; native runtime review is separate from this conversion record."
+    }
+  ]
+}

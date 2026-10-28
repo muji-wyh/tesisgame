@@ -5,13 +5,30 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 
-test('Grow with Pip branding keeps the existing internal save identity', () => {
+test("Pip's world branding keeps the existing internal save identity", () => {
   const shell = fs.readFileSync(path.join(root, 'web', 'shell.html'), 'utf8');
-  assert.match(shell, /<title>Grow with Pip<\/title>/);
-  assert.match(shell, /id="loading-title">Grow with Pip<\/h1>/);
-  assert.match(shell, /aria-label="Grow with Pip word game"/);
+  assert.equal(shell.match(/<title>([^<]*)<\/title>/)?.[1], "Pip's world");
+  assert.match(shell, /id="loading-title">Pip's world<\/h1>/);
+  assert.match(shell, /aria-label="Pip's world word game"/);
+  assert.match(shell, /id="help"[^>]*>Pip's world uses one Home/);
+  const data = fs.readFileSync(path.join(root, 'scripts', 'game_data.gd'), 'utf8');
+  assert.match(data, /const GAME_NAME: String = "Pip's world"/);
+  for (const file of ['scripts/game_library.gd', 'scripts/learning_path_selector.gd']) {
+    const source = fs.readFileSync(path.join(root, file), 'utf8');
+    assert.match(source, /Data\.GAME_NAME/, `${file} uses the shared game name`);
+    assert.doesNotMatch(source, /Grow with Pip/, `${file} has no stale visible branding`);
+  }
+  const credits = fs.readFileSync(path.join(root, 'web', 'map-credits.html'), 'utf8');
+  assert.match(credits, /<title>Pip's world art credits<\/title>/);
+  assert.match(credits, /<h1>The art of Pip's world<\/h1>/);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(root, 'curriculum.json'), 'utf8')).name, "Pip's world");
+  assert.equal(JSON.parse(fs.readFileSync(path.join(root, 'data', 'pip-growth-stages.json'), 'utf8')).title, "Pip's world");
+  const engine = fs.readFileSync(path.join(root, 'tools', 'patch-web-engine.cjs'), 'utf8');
+  assert.match(engine, /Close other Pip's world game tabs/);
   const project = fs.readFileSync(path.join(root, 'project.godot'), 'utf8');
   assert.match(project, /^config\/name="Word Buddies"$/m);
+  assert.match(shell, /growWithPip\.growth\.v1/);
+  assert.match(shell, /growWithPip\.coinWallet\.v1/);
   assert.match(shell, /wordBuddies\.medalProgress/);
   assert.doesNotMatch(shell, /(?:removeItem|setItem)\(['"]wordBuddies\.playroom['"]/,
     'Automatic learning themes must not rewrite historical playroom data');
@@ -291,9 +308,10 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /same-word pairs remain mergeable even at Lv9/);
   assert.doesNotMatch(help, /up to Lv6\b|two identical words of the same level/);
   assert.match(help, /Auto merge costs 600, 900, then 1200 coins/);
-  assert.match(help, /Auto merge launches an eligible pair every 160 ms with a 180 ms flight, so consecutive flights overlap/);
-  assert.match(help, /Treasure costs 200, 300, then 400 coins[\s\S]*2 to 8 chest fragments/);
-  assert.match(help, /combos refill an eight-second progress bar[\s\S]*gold COMBO BONUS/);
+  assert.match(help, /Automatic pairs launch every 100 ms with a 320 ms flight, so consecutive flights overlap/);
+  assert.match(help, /Magnet first asks you to choose a board Jelly[\s\S]*never substitutes a random target/);
+  assert.match(help, /Treasure independently costs 200, 300, then 400[\s\S]*2 to 8 chest fragments/);
+  assert.match(help, /two independent progress bars[\s\S]*Three actions earn the first level-up[\s\S]*COMBO BONUS/);
   assert.match(help, /Lv7 adds four outer-ring targets, Lv8 reaches its capped two rings and Lv9 reaches the board/);
   assert.match(help, /New journeys start with only merged Lv1[\s\S]*first Boss victory durably unlocks one further level/);
   assert.match(help, /stages 3, 5, 7, 9, 18, 36, 63 and 99/);

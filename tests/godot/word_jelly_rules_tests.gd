@@ -121,7 +121,7 @@ func _test_auto_merge_and_collection_credit() -> void:
 	model.step(1.0)
 	check(model.cells.size() == 2 and model.cells.all(func(tile: Dictionary) -> bool: return tile.jelly_kind == "merged"),
 		"The paid automatic flight finishes both complete words")
-	check(model.combo_count == 2 and model.combo_best == 2 and model.combo_coins == 0 and payments.is_empty(),
+	check(model.combo_actions == 2 and model.combo_count == 1 and model.combo_best == 1 and model.combo_coins == 0 and payments.is_empty(),
 		"Each committed Auto merge extends the combo once without inventing an automatic coin payout")
 	check(learning.is_empty(), "Automatic construction alone never records a collection answer")
 	check(model.start_collection_batch(), "Auto Collect accepts both automatically constructed words")
@@ -134,7 +134,7 @@ func _test_auto_merge_and_collection_credit() -> void:
 			and [learning[0].ids[0], learning[1].ids[0]].has("dog"),
 			"The two collected words have distinct exactly-once answer receipts")
 	model.step(2.0)
-	check(learning.size() == 2 and model.combo_count == 4 and payments.is_empty(),
+	check(learning.size() == 2 and model.combo_actions == 4 and model.combo_count == 2 and payments.is_empty(),
 		"Further frames never duplicate either learning or automatic combo increments")
 	model.credit_combo = Callable()
 	model.purchase_powerup = Callable()
@@ -149,11 +149,11 @@ func _test_blast_combo() -> void:
 	model.step(3.0)
 	check(model.cells.size() == 1 and model.cells[0].jelly_kind == "merged",
 		"The source blast really marks a neighbor and merges it with its partner")
-	check(model.combo_count == 2 and model.combo_best == 2 and model.combo_coins == 0,
+	check(model.combo_actions == 2 and model.combo_count == 1 and model.combo_best == 1 and model.combo_coins == 0,
 		"The source collection and its completed blast match each extend the chain once")
-	var count: int = model.combo_count
+	var count: int = model.combo_actions
 	model.step(0.1)
-	check(model.combo_count == count, "An already-completed blast cannot count on subsequent frames")
+	check(model.combo_actions == count, "An already-completed blast cannot count on subsequent frames")
 
 
 func _test_batch_tempo() -> void:

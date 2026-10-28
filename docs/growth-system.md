@@ -1,4 +1,4 @@
-# Grow with Pip
+# Pip's world
 
 The ten age-labelled stages form an editorial English-as-a-second-language curriculum for children learning from a Chinese-language foundation. They are a learning sequence, not age norms or an assessment of a child's development. `words.json` is canonical; `curriculum.json` records each disjoint cohort and its research references. Age 12 is displayed as 12+.
 

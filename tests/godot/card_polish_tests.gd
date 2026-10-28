@@ -30,7 +30,7 @@ func contrast(first: Color, second: Color) -> float:
 
 func _run() -> void:
 	var Data = load("res://scripts/game_data.gd")
-	check(Data.get_script_constant_map().get("GAME_NAME", "") == "Grow with Pip", "The visible game has its new Grow with Pip name")
+	check(Data.get_script_constant_map().get("GAME_NAME", "") == "Pip's world", "The visible game has the requested Pip's world name")
 	var backgrounds := ["#effbef", "#fff4df", "#fff2e5", "#eef5ff", "#e7f8fa", "#f1edfb", "#f0f8e7", "#fff0f7"]
 	for index in range(Data.THEMES.size()):
 		var palette: Dictionary = Data.theme(Data.THEMES.keys()[index])
@@ -58,7 +58,7 @@ func _run() -> void:
 	await settle()
 	check(app._mode_id == "match" and app.grid.is_visible_in_tree() and not app._mode_menu_open(),
 		"Card press checks start on the Match board after choosing it from Home")
-	check(root.title == "Grow with Pip", "The native window displays the new name")
+	check(root.title == "Pip's world", "The native window displays the new name")
 	check(ProjectSettings.get_setting("application/config/name") == "Word Buddies",
 		"The internal project identity remains stable for existing native and Web save paths")
 	var first: String = app.model.cards[0].id

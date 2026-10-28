@@ -55,6 +55,24 @@ func _run() -> void:
 	hud.advance(2.0)
 	check(not hud.snapshot().bonus_visible and hud.snapshot().visible,
 		"The bounded coin acknowledgement settles while the active combo remains")
+	hud.reset()
+	var level: Dictionary = _state(2, 8.0, 1)
+	level.required = 4
+	level.progress = 0
+	level.event_id = "action-3"
+	hud.set_state(level, true)
+	hud.advance(2.0)
+	serial = int(hud.snapshot().pulse_serial)
+	level.progress = 1
+	level.remaining = 4.0
+	level.event_id = "action-4"
+	hud.set_state(level, true)
+	check(hud.snapshot().count == 2 and hud.snapshot().progress_text == "1/4"
+		and is_equal_approx(float(hud.snapshot().progress_ratio), 0.25)
+		and is_equal_approx(float(hud.snapshot().time_ratio), 0.5)
+		and hud.snapshot().progress_visible and hud.snapshot().timer_visible
+		and int(hud.snapshot().pulse_serial) == serial and hud.snapshot().bonus_visible,
+		"One ordinary progress point fills XP independently of expiry, pays its visible coin and never pretends to level up")
 	for dimensions: Vector2 in [Vector2(196, 72), Vector2(144, 72), Vector2(128, 56), Vector2(94, 44)]:
 		for scale_factor: float in [0.75, 1.0, 1.5]:
 			for steady: bool in [false, true]:
@@ -68,7 +86,7 @@ func _run() -> void:
 				var snapshot: Dictionary = hud.snapshot()
 				var bounds: Rect2 = _rect(snapshot.rect)
 				check(snapshot.input_transparent, "Timer and rewards never intercept play input")
-				for key: String in ["rank_rect", "count_rect", "bonus_rect", "timer_rect"]:
+				for key: String in ["rank_rect", "count_rect", "bonus_rect", "timer_rect", "progress_rect"]:
 					check(snapshot.has(key), "The HUD exposes its " + key + " bounds")
 					if snapshot.has(key):
 						check(bounds.grow(0.1).encloses(_rect(snapshot[key])),

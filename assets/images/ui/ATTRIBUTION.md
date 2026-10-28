@@ -1,5 +1,17 @@
 # Interface icons
 
+Jelly World's selected-family Magnet uses the already acquired Microsoft Fluent
+Emoji 3D Magnet (Microsoft Corporation, MIT), copied unchanged into
+`jelly-powerups/` for startup availability. Its source, hashes, local acquisition
+and static-animation record are in `jelly-powerups/sources.json`.
+
+The campaign's left-to-right bronze, silver and gold rating keeps the acquired
+Fluent 3D star's exact modeled silhouette. Bronze and silver are game-authored
+luminance-palette adaptations, not separate Microsoft originals; gold retains
+the original bytes. `jelly-goals/sources.json` records both derivatives and
+`tools/prepare-jelly-rating.py` reproduces them. Sizes, glints, rays and rating
+loss are authored presentation and do not change star thresholds or rewards.
+
 The Challenge record badge reuses the acquired Microsoft Fluent Sports medal
 below together with the existing licensed portal glow, Toon FX rays and sparkle
 documented in `docs/assets/jelly-fragments.md`. The inspected originals are

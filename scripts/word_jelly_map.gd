@@ -13,7 +13,7 @@ const Catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
 const Icons = preload("res://scripts/icon_button.gd")
 const LevelBadge = preload("res://scripts/word_jelly_level_badge.gd")
 const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
-const STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
+const Rating = preload("res://scripts/word_jelly_stage_banner.gd")
 const SKY = preload("res://assets/images/jelly-match/sky/day.png")
 const STAGE_OPEN = preload("res://assets/images/ui/jelly-map/stage-open.png")
 const STAGE_LOCKED = preload("res://assets/images/ui/jelly-map/stage-locked.png")
@@ -151,7 +151,7 @@ func _init() -> void:
 		button.add_child(rating)
 		var stars: Array[TextureRect] = []
 		for index in range(3):
-			stars.append(_image(button, STAR))
+			stars.append(_image(button, Rating.STAR_TEXTURES[index]))
 		var next: TextureRect = _image(button, PLAY)
 		next.modulate = Style.GOOD
 		var next_label: Label = _label(button, "Play", 12)

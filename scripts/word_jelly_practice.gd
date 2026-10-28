@@ -296,6 +296,10 @@ func _retire_time() -> float:
 	return COMPLETED_HOLD_SECONDS + (0.0 if reduced_motion else EXIT_SECONDS)
 
 
+func timer_width() -> float:
+	return 112.0 if _state.get("kind") == "challenge" else 86.0
+
+
 func configure_layout(area: Rect2, ui_scale: float, compact: bool) -> void:
 	position = area.position
 	size = area.size
@@ -358,17 +362,17 @@ func _layout() -> void:
 	_title.size = Vector2(size.x - (padding * 2.0 if _compact else 46.0 / s) if stacked or not _compact else 62.0 / s,
 		(16.0 / s if timed and _compact else title_height) if _compact else 28.0 / s)
 	if timed and _compact:
-		_title.size.x = 76.0 / s
+		_title.size.x = (timer_width() - 10.0) / s
 		_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	else:
 		_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_subtitle.position = Vector2(46, 28) / s
 	_subtitle.size = Vector2(maxf(1.0, size.x - 46.0 / s), 20.0 / s)
 	if _compact and _state.get("kind") == "challenge":
-		_record_badge.layout_badge(Rect2(Vector2(6, 20) / s, Vector2(76, 24) / s), s)
+		_record_badge.layout_badge(Rect2(Vector2(6, 20) / s, Vector2(timer_width() - 12.0, 24) / s), s)
 	elif _state.get("kind") == "challenge":
 		_record_badge.layout_badge(Rect2(Vector2.ZERO, Vector2(size.x, 52.0 / s)), s)
-	_scroll.position = Vector2(padding if stacked or not _compact else (88.0 if timed else 70.0) / s,
+	_scroll.position = Vector2(padding if stacked or not _compact else (timer_width() + 2.0 if timed else 70.0) / s,
 		18.0 / s if stacked else 58.0 / s if not _compact else 0.0)
 	_scroll.horizontal = _compact
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER if _compact else ScrollContainer.SCROLL_MODE_DISABLED
@@ -457,9 +461,12 @@ func _draw() -> void:
 	if _state.get("kind") in ["main", "challenge"]:
 		var ratio: float = clampf(float(_state.get("seconds_remaining", 0.0)) \
 			/ maxf(0.001, float(_state.get("seconds_total", 90.0))), 0.0, 1.0)
-		var fill := Rect2(Vector2.ZERO, Vector2(86.0 * ratio / _scale, size.y))
+		var clock_bounds := Rect2(Vector2.ZERO, Vector2(timer_width() / _scale, size.y))
+		draw_style_box(Style.box(Color("#fbf5e8"), Color("#ddd3bc"), 10, 1), clock_bounds)
+		var fill := Rect2(Vector2(6.0 / _scale, size.y - 3.0 / _scale),
+			Vector2((timer_width() - 12.0) * ratio / _scale, 2.0 / _scale))
 		if fill.has_area():
-			draw_style_box(Style.box(Color("#c5e7cc"), Color.TRANSPARENT, 10, 0), fill)
+			draw_style_box(Style.box(Color("#78b9ae"), Color.TRANSPARENT, 1, 0), fill)
 		if _state.get("kind") == "main" and stage_timer != null:
 			stage_timer.draw_rating(self, Rect2(Vector2(6, 18) / _scale, Vector2(72, 24) / _scale), _scale, true)
 		return

@@ -160,9 +160,9 @@ func _test_flight_and_accounting() -> void:
 	check(model.cells.size() == 1 and model.cells[0].jelly_kind == "merged" and model.cells[0].merge_level == 1
 		and model.cells[0].word.id == _word().id and model.cells[0].fragments == 7,
 		"The automatic union keeps the normal level, sense identity and both bodies' fragments")
-	check(model.combo_count == 2 and model.combo_coins == 0 and model.cleared_pairs == 1
+	check(model.combo_actions == 2 and model.combo_coins == 0 and model.cleared_pairs == 1
 		and fixture.purchases.is_empty() and model.powerup_snapshot().kind == "blast"
-		and model.snapshot().powerup_uses == {"auto_merge": 0, "fragments": 0},
+		and model.snapshot().powerup_uses == {"auto_merge": 0, "family_merge": 0, "fragments": 0},
 		"Collection chains do not charge a paid item, mint combo coins, auto-collect, or advance purchase prices")
 	check(model._rng.state == supply_state, "Random blast selection never consumes word-supply randomness")
 	check(fixture.learning.size() == 1 and model.cells[0].assisted and not model.cells[0].mastery_eligible,
@@ -266,7 +266,7 @@ func _test_batch_and_exit() -> void:
 		and not model.collection_batch_active(), "Blast reactions never steal a body already promised to the collection batch")
 	_drain(model)
 	check(launches.size() == 1 and model.cells.size() == 1 and model.cells[0].fragments == 5
-		and model.fragment_count == 2 and model.combo_count == 3,
+		and model.fragment_count == 2 and model.combo_actions == 3,
 		"Overlapping batch blasts coalesce their marks and merge the same two endpoints only once")
 	check(model.cell(int(left.id)).is_empty() and model.cell(int(right.id)).is_empty()
 		and model.cleared_pairs == 2, "Batch-triggered automatic unions remain uncollected")
@@ -375,7 +375,7 @@ func _test_hit_stop_timeline() -> void:
 	check(model.snapshot() == frozen, "Pausing during impact recovery cannot launch or replay the marking action")
 	model.set_paused(false)
 	_drain(model)
-	check(fixture.launches.size() == 1 and model.cleared_pairs == 1 and model.combo_count == 2
+	check(fixture.launches.size() == 1 and model.cleared_pairs == 1 and model.combo_actions == 2
 		and not model.snapshot().get("hit_stop", {}).get("active", true),
 		"The weighted sequence keeps one assisted merge, one pickup and no lingering slowdown")
 	for level: int in [1, 2]:

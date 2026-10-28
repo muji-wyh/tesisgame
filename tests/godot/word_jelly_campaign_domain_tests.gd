@@ -226,7 +226,7 @@ func _test_all_stage_recipes() -> void:
 			check(raised == plan.words.size(), "A chapter finale gives every target its explicit extra collection")
 		else:
 			check(raised == 0, "Discovery, practice and relief profiles retain their chapter's base quotas")
-		check(is_finite(float(plan.seconds)) and float(plan.seconds) >= 90.0 and float(plan.seconds) <= 900.0
+		check(is_finite(float(plan.seconds)) and float(plan.seconds) >= 60.0 and float(plan.seconds) <= 900.0
 			and is_finite(float(plan.spawn_interval)) and float(plan.spawn_interval) > 0.0
 			and is_finite(float(plan.fall_speed_scale)) and float(plan.fall_speed_scale) > 0.0,
 			"Every stage has bounded finite time and real supply and fall parameters")
@@ -285,7 +285,7 @@ func _test_effort_budgets_and_relief() -> void:
 				var handling: float = float(pieces) * 1.6
 				var supply: float = maxf(0.0, float(pieces - 15)) / 5.0 * float(plan.spawn_interval)
 				check(float(plan.seconds) >= maxf(handling, supply) + 25.0
-					and float(plan.seconds) >= 90.0 and float(plan.seconds) <= 900.0,
+					and float(plan.seconds) >= 60.0 and float(plan.seconds) <= 900.0,
 					"Stage %d funds deliberate actions and packet supply for %d parts, picture=%s" %
 					[number, part_count, picture])
 			for pair: Array in [[21, 22], [24, 25], [93, 94], [96, 97]]:
@@ -304,6 +304,14 @@ func _test_effort_budgets_and_relief() -> void:
 	check(float(_plan(1).spawn_interval) >= 18.0 and float(_plan(99).spawn_interval) >= 10.0
 		and float(_plan(99).spawn_interval) < float(_plan(1).spawn_interval),
 		"Main supply progresses from approximately twenty seconds toward ten, not an unplayable instant drop")
+	for pair: Array in [[1, 10], [10, 28], [28, 55], [55, 91]]:
+		var earlier: Dictionary = _plan(int(pair[0]))
+		var later: Dictionary = _plan(int(pair[1]))
+		check(float(_pieces_required(later)) / float(later.seconds) > float(_pieces_required(earlier)) / float(earlier.seconds)
+			and float(later.fall_speed_scale) > float(earlier.fall_speed_scale),
+			"Like-for-like chapter profiles increase real work per second and physical fall speed, not just goal counts")
+	check(is_equal_approx(float(_plan(1).seconds), 90.0) and is_equal_approx(float(_plan(99).fall_speed_scale), 1.40),
+		"The opening retains its generous ninety seconds while late supply lands forty percent faster")
 
 
 func _test_exact_replay_recipes() -> void:

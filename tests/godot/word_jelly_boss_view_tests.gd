@@ -49,16 +49,36 @@ func _run() -> void:
 	check(view.sync(run.snapshot(), {}, 1, false), "The real acquired skinned Boss loads with its source materials")
 	for clip: String in ["Idle", "Throw", "Kick", "Snatch", "Hit", "Taunt", "Celebrate", "Escape"]:
 		check(clip in view._actor.animation_names(), "The converted source includes the explicit authored %s clip" % clip)
+	var faces: Array[Node] = view._actor._model.find_children("*", "MeshInstance3D", true, false)
+	var face: MeshInstance3D = faces[0] as MeshInstance3D if faces.size() == 1 else null
+	check(face != null and face.mesh.get_blend_shape_count() == 3,
+		"The replacement Frog retains its real skinned mesh and three original-eye expression shapes")
+	if face != null:
+		view._actor.pose("Hit", 0.25)
+		var wide: int = face.find_blend_shape_by_name("WideEyes")
+		check(wide >= 0 and face.get_blend_shape_value(wide) > 0.90,
+			"An actual native impact visibly opens the source eyes, not only a diagnostic clip name")
+		view._actor.pose("Taunt", 1.0)
+		var wink: int = face.find_blend_shape_by_name("Blink.L")
+		check(wink >= 0 and face.get_blend_shape_value(wink) > 0.90,
+			"The native taunt contains a real one-eye wink")
 	var capture: bool = OS.get_cmdline_user_args().has("--capture") and DisplayServer.get_name() != "headless"
 	if capture:
 		DirAccess.make_dir_recursive_absolute("res://build/qa/jelly-boss")
 		view._character.position = Vector2(320, 80)
 		view._character.size = Vector2(360, 540)
 		for clip: String in ["Idle", "Throw", "Kick", "Snatch", "Hit", "Taunt", "Celebrate", "Escape"]:
-			view._actor.pose(clip, 0.45)
+			var at: float = {"Idle": 0.45, "Throw": 0.65, "Kick": 0.6, "Snatch": 0.6,
+				"Hit": 0.25, "Taunt": 1.0, "Celebrate": 0.5, "Escape": 0.35}[clip]
+			view._actor.pose(clip, at)
 			for frame in range(3):
 				await process_frame
 			await RenderingServer.frame_post_draw
+			var body: Image = view._actor.get_texture().get_image()
+			var occupied: Rect2i = body.get_used_rect()
+			check(occupied.position.x > 0 and occupied.position.y > 0
+				and occupied.end.x < body.get_width() and occupied.end.y < body.get_height(),
+				"The actual %s silhouette retains every hand, finger and foot inside its transparent camera frame: %s" % [clip, occupied])
 			var path: String = "res://build/qa/jelly-boss/%s.png" % clip.to_lower()
 			check(root.get_texture().get_image().save_png(path) == OK, "Capture actual rendered %s deformation" % clip)
 	view.layout_battle(dock, board, 1.0)

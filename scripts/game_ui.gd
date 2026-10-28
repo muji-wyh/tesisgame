@@ -2633,7 +2633,9 @@ func _purchase_word_jelly_powerup(event_id: String, kind: String, price: int) ->
 	_coin_counter.available = coin_wallet.ready and coin_wallet.error.is_empty()
 	if bool(result.get("ok", false)) and not bool(result.get("duplicate", false)):
 		_coin_flight.sync(coin_wallet.balance)
-		_announce_status("%s purchased for %d coins. Total: %d coins." % ["Auto merge" if kind == "auto_merge" else "Treasure", price, coin_wallet.balance])
+		var title: String = {"auto_merge": "Auto merge", "family_merge": "Magnet",
+			"fragments": "Treasure", "extra_time": "Extra time"}[kind]
+		_announce_status("%s purchased for %d coins. Total: %d coins." % [title, price, coin_wallet.balance])
 	elif bool(result.get("duplicate", false)):
 		_announce_status("This powerup purchase was already processed. No more coins were spent.")
 	elif coin_wallet.balance < price:

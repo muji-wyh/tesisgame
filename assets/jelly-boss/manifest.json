@@ -3,20 +3,20 @@
   "character": "Bramble",
   "status": "Acquired production artwork; integrated with game-authored skeletal motion",
   "source": {
-    "title": "Bunny, 50+ Monsters Bundle",
+    "title": "Frog, 50+ Monsters Bundle",
     "creator": "Wabu",
     "url": "https://assetstore.unity.com/packages/3d/characters/low-poly-monsters-pack-380750",
     "license": "Standard Unity Asset Store EULA",
     "acquisition": "previously acquired original package",
-    "fbx_sha256": "981a92e69550d090ab08d55bc8eb8d26fac406fa35be5807025496cd29115705",
+    "fbx_sha256": "b716387a7be20268652e64b36aff88a8a46169ed8401051b422bebdacf00af76",
     "publisher_metadata_discrepancy": "The same product later listed Visible Ghost / 1.1; original Wabu / 1.0 provenance is retained."
   },
   "model": {
     "path": "assets/jelly-boss/private/bramble.glb",
-    "sha256": "3ca0f840d750b35123210fbf016ca0dd3135a112b73be97389055fcd5a6d0a6a",
-    "bytes": 593980.0,
+    "sha256": "e758e69c3aaa7db278c7f3a4051cafee3c8ae80022cb385d8984f54f304342d5",
+    "bytes": 593100.0,
     "private_build_input": true,
-    "animation_origin": "Game-authored skeletal clips on the original acquired skinned character, including baked source foot-control IK.",
+    "animation_origin": "Game-authored skeletal motion and blink/wink/wide-eye morphs on the acquired Frog; publisher clips are not relabeled.",
     "animations": [
       "Idle",
       "Throw",
@@ -26,7 +26,13 @@
       "Taunt",
       "Celebrate",
       "Escape"
-    ]
+    ],
+    "facial_shapes": [
+      "Blink.L",
+      "Blink.R",
+      "WideEyes"
+    ],
+    "material_adaptations": "Game-authored mint-jade skin and cream belly/spot finish; source eye surfaces and dark mouth retained."
   },
   "vocal": {
     "path": "assets/audio/jelly-boss/bramble-laugh.ogg",
@@ -44,15 +50,15 @@
   },
   "portrait": {
     "path": "assets/jelly-boss/private/bramble-portrait.png",
-    "sha256": "9c93a851019deac7925275ca19ae6fb04eed7a01c57e541b70250811a602f93d",
-    "bytes": 31222,
+    "sha256": "f5031073cdb3681e299be2262309817cc5f3f99d7db7f3d3d41b90fe91981ae8",
+    "bytes": 34342,
     "width": 256,
     "height": 256,
-    "source_model_sha256": "3ca0f840d750b35123210fbf016ca0dd3135a112b73be97389055fcd5a6d0a6a",
+    "source_model_sha256": "e758e69c3aaa7db278c7f3a4051cafee3c8ae80022cb385d8984f54f304342d5",
     "creator": "Wabu",
     "license": "Standard Unity Asset Store EULA",
     "acquisition": "Rendered from the acquired and integrated Bramble model; not a source-listing preview.",
     "animations": "Static portrait sampled from the game-authored Idle clip at 0.45 seconds.",
-    "framing": "Complete face and ears, upper-body portrait, transparent background and proportional fit."
+    "framing": "Complete Frog face and shoulder silhouette, transparent background and proportional fit."
   }
 }

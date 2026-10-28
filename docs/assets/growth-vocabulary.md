@@ -1,6 +1,6 @@
 # Growth vocabulary artwork
 
-The Grow with Pip curriculum adds 300 words. Thirty-five use additional acquired
+The Pip's world curriculum adds 300 words. Thirty-five use additional acquired
 Mulberry illustrations. The remaining 265 describe grammatical or abstract
 concepts that are taught in Phrase Builder without substitute pictures.
 

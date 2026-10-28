@@ -15,7 +15,7 @@ async function fixture(t) {
   const mainPack = `game-${createHash('sha256').update(bytes).digest('hex').slice(0, 16)}.pck.br`;
   const compressed = brotliCompressSync(bytes);
   fs.writeFileSync(path.join(root, mainPack), compressed);
-  fs.writeFileSync(path.join(root, 'index.html'), '<title>Grow with Pip</title>');
+  fs.writeFileSync(path.join(root, 'index.html'), "<title>Pip's world</title>");
   fs.writeFileSync(path.join(root, 'engine-0123456789abcdef.js'), 'window.engineLoaded = true;');
   fs.writeFileSync(path.join(root, 'engine-0123456789abcdef.js.br'), brotliCompressSync(Buffer.from('window.engineLoaded = true;')));
   const server = createWebServer(root);
@@ -92,7 +92,7 @@ test('the pack handler preserves HTML and negotiated engine asset delivery', asy
   const html = await fetch(`${url}/`);
   assert.equal(html.status, 200);
   assert.equal(html.headers.get('content-encoding'), null);
-  assert.equal(await html.text(), '<title>Grow with Pip</title>');
+  assert.equal(await html.text(), "<title>Pip's world</title>");
   const engine = await rawRequest(`${url}/engine-0123456789abcdef.js`, { headers: { 'Accept-Encoding': 'br' } });
   assert.equal(engine.status, 200);
   assert.equal(engine.headers['content-encoding'], 'br');

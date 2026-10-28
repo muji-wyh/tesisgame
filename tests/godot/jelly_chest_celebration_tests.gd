@@ -350,9 +350,8 @@ func _check_flight_choreography(view, anchor: Rect2) -> void:
 		check(max_deviation < 0.1 and max_travel_scale > 1.1 and is_zero_approx(max_yaw)
 			and is_zero_approx(max_pitch) and is_zero_approx(max_roll) and max_depth > 0.9,
 			"Tier %d grows along a straight approach with no pitch, roll or premature turn" % (previous + 1))
-		if previous < 4:
-			check(max_model_weight > 0.9 and not view._model_sample.is_empty(),
-				"The acquired three-dimensional chest is visible during the tier %d flight" % (previous + 1))
+		check(max_model_weight > 0.9 and not view._model_sample.is_empty(),
+			"The acquired three-dimensional chest is visible during every tier %d flight" % (previous + 1))
 		check(is_zero_approx(float(upper.yaw)) and is_zero_approx(float(upper.pitch))
 			and is_zero_approx(float(upper.roll))
 			and float(upper.scale) > 1.3,
@@ -428,8 +427,8 @@ func _check_reversible_growth(view, label: String, steps: int = 24) -> void:
 			and is_zero_approx(float(pose.pitch)) and is_zero_approx(float(pose.roll)),
 			"%s holds its arrival position and size while turning only around the vertical axis" % label)
 		if int(view._events[0].tier) > 4:
-			check(is_equal_approx(float(pose.sprite_scale_x), cos(float(pose.yaw))),
-				"%s projects its source artwork horizontally for the vertical-axis turn" % label)
+			check(not view._model_sample.is_empty(),
+				"%s keeps a real volumetric chest even beyond the former four-tier limit" % label)
 
 
 func _check_upgrade_containment(view) -> void:
@@ -527,7 +526,7 @@ func _check_closed_models() -> void:
 	var models := RewardModel.new()
 	root.add_child(models)
 	models.set_active(false)
-	for tier in range(1, 5):
+	for tier in [1, 4, 5, 10, 20, 30]:
 		models.prepare(tier)
 		check(models._pool.has(tier), "Chest tier %d loads its acquired articulated model" % tier)
 		if not models._pool.has(tier):
@@ -593,8 +592,8 @@ func _check_closed_models() -> void:
 		model.set_display_size(Vector2(2000, 2000))
 		check(model.snapshot().resolution == 512 and _models_stopped(models),
 			"Tier %d respects the small HUD render budget and stays disabled when inactive" % tier)
-	check(models._pool.size() == 2 and models._pool.has(3) and models._pool.has(4),
-		"Advancing through four tiers retains only the latest two reusable model surfaces")
+	check(models._pool.size() == 2 and models._pool.has(20) and models._pool.has(30),
+		"Advancing through early and late tiers retains only the latest two reusable model surfaces")
 	var before_invalid: Array = models._order.duplicate()
 	check(models.sample(0, 0.0).is_empty() and models.sample(31, 0.0).is_empty()
 		and models.sample(4, NAN).is_empty() and models.sample(4, INF).is_empty()

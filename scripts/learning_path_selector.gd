@@ -9,6 +9,7 @@ signal browsing_changed(screen: String)
 signal course_selected(course_id: String)
 
 const Style = preload("res://scripts/ui_style.gd")
+const Data = preload("res://scripts/game_data.gd")
 const Context = preload("res://scripts/learning_context.gd")
 const Progress = preload("res://scripts/professional_progress.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
@@ -89,7 +90,7 @@ func _init() -> void:
 	_navigation.add_child(_change_module)
 	_paths = GridContainer.new()
 	add_child(_paths)
-	_growth_button = _choice("Grow with Pip", "Build everyday English, one step at a time.", "GrowthPath", _choose_growth)
+	_growth_button = _choice(Data.GAME_NAME, "Build everyday English, one step at a time.", "GrowthPath", _choose_growth)
 	_paths.add_child(_growth_button)
 	var pip_portrait := AtlasTexture.new()
 	pip_portrait.atlas = BABY_PIP

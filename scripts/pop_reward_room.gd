@@ -25,6 +25,7 @@ const RewardLayout = preload("res://scripts/round_reward_layout.gd")
 const CoinBreakdown = preload("res://scripts/chest_coin_breakdown.gd")
 const TREASURE_LIGHT = preload("res://assets/chests/particles/portal_glow.png")
 const RATING_STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
+const JellyRating = preload("res://scripts/word_jelly_stage_banner.gd")
 const RATING_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const SkillReveal = preload("res://scripts/word_jelly_skill_reveal.gd")
 const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
@@ -145,7 +146,7 @@ func _ready() -> void:
 	_stage_rating.draw.connect(_draw_stage_feedback)
 	for index in range(3):
 		var star := TextureRect.new()
-		star.texture = RATING_STAR
+		star.texture = JellyRating.STAR_TEXTURES[index]
 		star.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		star.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_stage_rating.add_child(star)
@@ -447,7 +448,7 @@ func _draw_stage_feedback() -> void:
 			var at: Vector2 = center.lerp(_stage_bonus_label.get_rect().get_center(), travel)
 			at.y -= sin(travel * PI) * 18.0 / s
 			var edge: float = 16.0 / s * (1.0 - travel * 0.35)
-			_stage_rating.draw_texture_rect(RATING_STAR, Rect2(at - Vector2.ONE * edge * 0.5, Vector2.ONE * edge),
+			_stage_rating.draw_texture_rect(JellyRating.STAR_TEXTURES[index], Rect2(at - Vector2.ONE * edge * 0.5, Vector2.ONE * edge),
 				false, Color(1, 1, 1, sin(travel * PI)))
 
 

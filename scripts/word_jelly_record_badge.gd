@@ -13,6 +13,7 @@ var _elapsed: float = DURATION
 var _scale: float = 1.0
 var _base_number_position := Vector2.ZERO
 var _medal := TextureRect.new()
+var _stage: Label
 var _number: Label
 var _old_number: Label
 
@@ -26,6 +27,13 @@ func _init() -> void:
 	_medal.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_medal.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_medal)
+	_stage = Style.label("Stage", 12)
+	_stage.add_theme_font_override("font", Style.HEADING_FONT)
+	_stage.add_theme_color_override("font_color", Color("#a56b20"))
+	_stage.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	add_child(_stage)
+	_stage.hide()
 	for index in range(2):
 		var label := Style.label("", 30)
 		label.add_theme_font_override("font", Style.HEADING_FONT)
@@ -46,6 +54,7 @@ func reset() -> void:
 	_previous = -1
 	_elapsed = DURATION
 	_number.text = ""
+	_stage.hide()
 	_old_number.hide()
 	queue_redraw()
 
@@ -58,6 +67,7 @@ func set_record(record: int, celebrate: bool = false, previous: int = -1) -> voi
 	value = record
 	_elapsed = 0.0 if celebrate else DURATION
 	_number.text = str(value)
+	_stage.show()
 	_old_number.text = str(maxi(0, _previous))
 	tooltip_text = "Best Stage %d" % value
 	set("accessibility_name", tooltip_text)
@@ -71,7 +81,12 @@ func layout_badge(bounds: Rect2, ui_scale: float) -> void:
 	_scale = maxf(0.1, ui_scale)
 	var edge: float = minf(size.y * 0.72, size.x * 0.30)
 	var gap: float = 5.0 / _scale
-	var available: float = maxf(1.0, size.x - edge - gap - 8.0 / _scale)
+	var stage_pixels: int = maxi(1, ceili(minf(14.0, size.y * _scale * 0.38) / _scale))
+	_stage.add_theme_font_size_override("font_size", stage_pixels)
+	_stage.update_minimum_size()
+	var stage_width: float = ceilf(Style.HEADING_FONT.get_string_size("Stage",
+		HORIZONTAL_ALIGNMENT_LEFT, -1, stage_pixels).x)
+	var available: float = maxf(1.0, size.x - edge - gap * 2.0 - stage_width - 8.0 / _scale)
 	var pixels: int = maxi(1, ceili(minf(64.0, size.y * _scale * 0.78) / _scale))
 	var height: float = Style.HEADING_FONT.get_height(pixels)
 	if height * 1.18 > size.y:
@@ -85,11 +100,13 @@ func layout_badge(bounds: Rect2, ui_scale: float) -> void:
 		if feedback_active() and _previous != value:
 			width = maxf(width, Style.HEADING_FONT.get_string_size(_old_number.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x)
 	var number_width: float = minf(available / 1.18, ceilf(width))
-	var left: float = (size.x - edge - gap - number_width) * 0.5
+	var left: float = (size.x - edge - gap * 2.0 - stage_width - number_width) * 0.5
 	_medal.size = Vector2.ONE * edge
 	_medal.position = Vector2(left, (size.y - edge) * 0.5)
 	_medal.pivot_offset = _medal.size * 0.5
-	_base_number_position = Vector2(_medal.get_rect().end.x + gap, 0)
+	_stage.position = Vector2(_medal.get_rect().end.x + gap, 0)
+	_stage.size = Vector2(stage_width, size.y)
+	_base_number_position = Vector2(_stage.get_rect().end.x + gap, 0)
 	var area := Vector2(maxf(1.0, number_width), size.y)
 	for label: Label in [_number, _old_number]:
 		label.add_theme_font_size_override("font_size", pixels)
@@ -149,4 +166,4 @@ func _draw() -> void:
 func snapshot() -> Dictionary:
 	return {"visible": is_visible_in_tree(), "value": maxi(0, value), "previous": _previous,
 		"active": feedback_active(), "elapsed": _elapsed, "number_scale": _number.scale.x,
-		"text": _number.text}
+		"text": "Stage %d" % maxi(0, value), "number_text": _number.text}

@@ -1174,7 +1174,7 @@ func _check_auto_collect_unlock(view) -> void:
 				check(view.snapshot().collect_button.locked and not view.game.collection_batch_active(),
 					"Changing to a lower-level Pip relocks the button and cancels future batch work immediately")
 				_advance(view, 1.0)
-				check(view.game.cleared_pairs == 2 and view.game.combo_count == 2,
+				check(view.game.cleared_pairs == 2 and view.game.combo_actions == 2,
 					"Relocking lets the started pickup finish once without changing combo behavior")
 	view.size = Vector2(1000, 720)
 

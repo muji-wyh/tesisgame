@@ -437,7 +437,7 @@ test('the exported game runs inside a normal website iframe', async ({ page }) =
     contentType: 'text/html',
     body: '<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width,initial-scale=1">' +
       '<style>html,body{margin:0;width:100%;height:100%;overflow:hidden}iframe{display:block;width:100%;height:100%;border:0}</style>' +
-      '</head><body><iframe title="Grow with Pip" src="/" allow="autoplay; fullscreen"></iframe></body></html>'
+      `</head><body><iframe title="Pip's world" src="/" allow="autoplay; fullscreen"></iframe></body></html>`
   }));
   await page.goto('/embed-test.html');
   const frame = page.frameLocator('iframe');
@@ -464,7 +464,7 @@ test('a below-the-fold game does not steal the hosting page scroll position', as
     contentType: 'text/html',
     body: '<!doctype html><html lang="en"><head><meta name="viewport" content="width=device-width,initial-scale=1">' +
       '<style>body{margin:0}section{height:150vh}iframe{display:block;width:100%;height:700px;border:0}</style>' +
-      '</head><body><section>Content above the game</section><iframe title="Grow with Pip" src="/" allow="autoplay"></iframe></body></html>'
+      `</head><body><section>Content above the game</section><iframe title="Pip's world" src="/" allow="autoplay"></iframe></body></html>`
   }));
   await page.goto('/below-fold.html');
   const frame = page.frameLocator('iframe');

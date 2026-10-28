@@ -2,7 +2,7 @@ const { test, expect } = require('@playwright/test');
 const fs = require('node:fs');
 const { MODES, THEME_NAMES, openGame, openModeMenu, chooseMode, metrics, tap, enterGame, rendered,
   visibleColorCount, libraryControl, activateLibraryControl, openRewards,
-  activateGrowthControl, growthView, matchWords, discoverMatchCards, boardPoint } = require('./game-ui.cjs');
+  activateGrowthControl, growthView, growthState, seedPipLevel, matchWords, discoverMatchCards, boardPoint } = require('./game-ui.cjs');
 const learningThemes = require('../../data/professional/themes.json').profiles;
 
 async function expectAutomaticPalette(page, themeId) {
@@ -36,6 +36,9 @@ async function openHome(page, { reducedMotion = 'reduce' } = {}) {
   await page.addInitScript(() => { window.SpeechRecognition = undefined; window.webkitSpeechRecognition = undefined; });
   await page.emulateMedia({ reducedMotion });
   await page.goto('/');
+  await expect(page).toHaveTitle("Pip's world");
+  await expect(page.locator('#loading-title')).toHaveText("Pip's world");
+  await expect(page.locator('#canvas')).toHaveAttribute('aria-label', "Pip's world word game");
   await enterGame(page, { home: true });
   // Home opens with everyday games; vocabulary selection lives in Word Library.
   await expect.poll(async () => {
@@ -43,6 +46,7 @@ async function openHome(page, { reducedMotion = 'reduce' } = {}) {
     return home.visible && home.vocabulary?.kind === 'everyday';
   }, { message: 'A new learner reaches Home with everyday vocabulary' }).toBe(true);
   const initial = (await metrics(page)).library;
+  expect(initial.brand).toBe("Pip's world");
   expect(initial.controls.filter(item => item.name.startsWith('Mode_')).map(item => item.name),
     'All six games are available directly from Home').toEqual(MODES.map(mode => `Mode_${mode}`));
   expect(initial.controls.some(item => item.name.startsWith('Mode_') && item.visible),
@@ -93,6 +97,33 @@ function changedPreviewPixels(before, after) {
   }
   return changed;
 }
+
+test("Pip's world brands loading, Home and credits while restoring existing progress", async ({ page }, info) => {
+  test.setTimeout(240000);
+  await seedPipLevel(page, 3);
+  await page.addInitScript(() => {
+    const key = 'growWithPip.coinWallet.v1';
+    // v3 supports exact coin amounts; earlier receipts require multiples of 50.
+    if (localStorage.getItem(key) === null) localStorage.setItem(key,
+      '[wallet]\nversion=3\nbalance=275\nreceipts={"branding-opening-coins":275}\n');
+  });
+  const errors = await openHome(page);
+  expect((await growthState(page)).level, 'The old growth key restores the earned Pip level').toBe(3);
+  await expect.poll(() => page.locator('#coin-status').evaluate(node =>
+    JSON.parse(node.dataset.snapshot || '{}').balance)).toBe(275);
+  const saved = await page.evaluate(() => ({
+    growth: localStorage.getItem('growWithPip.growth.v1'),
+    wallet: localStorage.getItem('growWithPip.coinWallet.v1')
+  }));
+  expect(saved.growth).toBeTruthy();
+  expect(saved.wallet).toContain('branding-opening-coins');
+  await captureHome(page, info, 'pip-world-home');
+  await page.goto('/map-credits.html');
+  await expect(page).toHaveTitle("Pip's world art credits");
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText("The art of Pip's world");
+  await expect(page.getByRole('link', { name: "Pip's world", exact: true })).toHaveAttribute('href', './');
+  expect(errors).toEqual([]);
+});
 
 test('Home previews loop through all six games automatically without changing gameplay or taking card input', async ({ page }, testInfo) => {
   test.setTimeout(240000);

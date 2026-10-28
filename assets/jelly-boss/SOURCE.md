@@ -2,7 +2,7 @@
 
 ## Character
 
-- Original: **Bunny** from [Low Poly Monsters Pack / product 380750](https://assetstore.unity.com/packages/3d/characters/low-poly-monsters-pack-380750).
+- Original: **Frog** from [Low Poly Monsters Pack / product 380750](https://assetstore.unity.com/packages/3d/characters/low-poly-monsters-pack-380750).
 - Acquired archive: **50+ Monsters Bundle**, **Wabu**, 1.0. The listing subsequently
   identified Visible Ghost / 1.1; this is the same product, not a second acquisition.
   The discrepancy and original package hash remain in
@@ -10,27 +10,36 @@
 - License: **Standard Unity Asset Store EULA**. The acquired FBX and converted
   reusable GLB remain private. Only the compiled game embeds them.
 - Source FBX SHA-256:
-  `981a92e69550d090ab08d55bc8eb8d26fac406fa35be5807025496cd29115705`.
-- Original source preview was inspected: complete white/purple rabbit, ears,
-  original carrot prop, nonthreatening face, no skull imagery or aggressive teeth.
+  `b716387a7be20268652e64b36aff88a8a46169ed8401051b422bebdacf00af76`.
+- Original source previews for Cactoro, Frog and Squidle were inspected.
+  Frog was selected for its broad face, large expressive hands, friendly mouth
+  and complete articulated body, without skull imagery or exposed teeth.
+  The original Frog preview is yellow with dark spots; it is not the final
+  mint-jade/cream game material.
   This preview is not a gameplay screenshot or proof of animated integration.
-- Conversion: `tools/prepare-jelly-boss.py` preserves Bunny/Carrot mesh topology,
-  original diffuse materials and the actual source rig. Four strongest
+- Conversion: `tools/prepare-jelly-boss.py` preserves the 2,532-vertex Frog mesh
+  topology and actual source rig. A game-authored mint-jade skin and cream
+  belly/spot finish lighten its silhouette; the original mouth stays dark and
+  the eye surfaces retain their source materials. Four strongest
   skin influences are normalized by the glTF exporter.
 - Integrated build input: `private/bramble.glb`; its exact size and SHA-256 are
   recorded by the converter in `manifest.json`.
 - Available converted clips: `Idle`, `Throw`, `Kick`, `Snatch`, `Hit`, `Taunt`,
   `Celebrate`, `Escape`. These eight clips are **game-authored skeletal motion**,
-  not relabeled publisher clips. Actual native renders and desktop/phone browser
-  journeys review deformation, extreme poses, the front face and phone framing.
-  Conversion alone is not substituted for those presentation checks.
-  The revised `Taunt` poses the original upper arms and uses each posed parent's
-  transform to aim bent forearms into a playful raised-hand stance. This is an
-  authored rival gesture, not a newly acquired publisher animation. The tall
-  transparent battle viewport keeps the full body beside the board; its camera
-  includes the extreme hand poses rather than clipping them into a HUD portrait.
+  not relabeled publisher clips. Original-eye morphs `Blink.L`, `Blink.R` and
+  `WideEyes` add real blinks, a one-eye taunt and a wide-eyed impact reaction.
+  The facial tracks are exported in those same eight clips, not separate fake
+  animation names. The source FBX contains 43 action records; the retained
+  `lpm-frog` inventory in `docs/assets/talk-quest-monsters.json` includes its
+  evaluated `IdleStanding1` and `YesStanding` takes. Those publisher actions
+  are not relabeled or claimed as the new Boss performance.
+  `Taunt` uses actual finger bones and raised, forward-facing palms rather than
+  Bunny's ear motion. The existing foot-control IK remains baked for grounded
+  kicks and retreat. Conversion is separate from native pose, face and framing
+  review; earlier Bunny browser evidence does not verify this replacement.
 
-Talk Quest remains retired. This reuses one separately acquired character, not
+The previous Bunny and carrot are no longer the active Boss model. Talk Quest
+remains retired. This reuses one separately acquired character, not
 the old mode, monster roster, environments, or gameplay.
 
 ## Map portrait
@@ -39,7 +48,8 @@ The Boss map marker is a real transparent portrait of Bramble, not a text capsul
 `tools/render-jelly-boss-portrait.gd` samples the integrated model's authored
 `Idle` at 0.45 seconds, preserves the complete face and ears, and proportionally
 fits the actual rendered upper-body image into a 256-pixel transparent canvas.
-It is a static in-game portrait, distinct from the original source-listing preview.
+It is a static in-game portrait of the converted Frog face and shoulder silhouette,
+distinct from the original source-listing preview.
 Creator and license are the same Wabu / Standard Unity Asset Store EULA recorded
 above. The image and import metadata remain private build inputs; `manifest.json`
 records their model-source hash, image hash, dimensions and acquisition status.

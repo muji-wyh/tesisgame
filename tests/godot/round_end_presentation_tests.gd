@@ -53,6 +53,12 @@ func _run() -> void:
 			var bounds := Rect2(Vector2.ZERO, dimensions)
 			check(bounds.encloses(ending._heading.get_rect()) and bounds.encloses(ending._caption.get_rect()),
 				"Both the end heading and next-step caption fit short, phone and large desktop viewports")
+			var card: Rect2 = ending._failure_bounds
+			check(card.encloses(ending._heading.get_rect()) and card.encloses(ending._caption.get_rect())
+				and not ending._rays.visible and not ending._medal.visible
+				and ending._heading.get_theme_color("font_color") == ending.Style.INK,
+				"Failure text stays on its quiet card at %s: heading %s, caption %s, card %s" %
+					[dimensions, ending._heading.get_rect(), ending._caption.get_rect(), card])
 			check(ending.snapshot().elapsed == elapsed, "Responsive layout does not reset or accelerate the handoff clock")
 			if steady:
 				check(ending._visual.scale == Vector2.ONE and ending._rays.rotation == 0.0,

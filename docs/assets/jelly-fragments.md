@@ -30,11 +30,17 @@ line in both directions. The chest stays upright during travel and enlarges
 gradually; the acquired 3D model stays visible throughout the journey. The paths respond to
 the HUD position and viewport, without an intermediate stop at screen center.
 Match and Memory retain their existing direct flight.
-Tiers 1-4 use the acquired closed 3D models for a full vertical-axis turn, with a
-fixed camera envelope and no pitch or screen-plane roll.
-Transitions to Royal and Crystal use horizontal cosine projection of their
-original 2D artwork for a vertical-axis turn, retaining the existing illustrated
-appearance without adding rear geometry. No new artwork or sound is acquired.
+All thirty tiers use their acquired closed 3D assemblies for the full journey
+and vertical-axis turn, with a fixed camera envelope and no pitch or screen-plane
+roll. The former tier-five-and-later flat-image/cosine turn is removed.
+Real sides, back panels, thickness and attached fittings remain visible as the
+chest rotates. The existing two-surface pool and independent reward ownership
+remain. The first twelve tiers also use Blender-refined CC0 bases; original
+files, separate lids, source UVs and opening clips are preserved. Source,
+creator, license, conversion hashes and animations are recorded in
+`assets/chests/polished-cc0/manifest.json`; the five private designs retain their
+existing softer three-segment source conversion. No replacement geometric chest
+or new audio is introduced.
 Intermediate chests never run final opening or saving callbacks; the gameplay
 model alone owns fragment credit and tier changes.
 
@@ -86,11 +92,11 @@ burst of 85-267 paper pieces, scaled to viewport area and UI density. This remov
 another third of the preceding 128-400 population, rounded to the nearest whole
 paper for each viewport and UI scale. The smaller upper-third preset likewise
 drops from 8-24 to 5-16 pieces. The same acquired atlas now uses a 22-34px base edge
-instead of 18-28px, making each paper about twenty percent larger. Two-edge launch,
-fall speed, bending and lifetime are unchanged. Chest
+instead of 18-28px, making each paper about twenty percent larger. Chest
 bursts use the current round, mode and chest tier; Jelly Words stage bursts
-use the round and stage number. A stratified canopy distributes the paper
-through both the full width and height instead of a small local patch.
+use the round and stage number. Both cannons start at the lower screen sides
+and crest in the upper quarter before drifting down. Papers are not initialized
+at arbitrary heights across the whole screen.
 Each paper strip is 1.5 times its base edge in length and 0.65 times in width,
 with its full rotated footprint kept inside the viewport sides. The chest and Pip retain
 their original completion gates while the paper continues over the current
@@ -105,8 +111,11 @@ the descent then takes more than four seconds. Independent air currents, opposin
 tumbles with changing angular speed, and two-axis flutter keep the paper from
 moving as one band. The acquired rounded-square texture bends along each strip's
 center, with continuous front/back shading as it turns. Wider launch heights and
-small flutter-driven lifts vary the descent while retaining a bounded terminal
-speed. Each reward identity seeds its own repeatable arrangement without consuming
+distinct upper-band peaks vary the descent without changing terminal speed by
+height. All papers share the same elapsed-time drag curve: a 240 ms acceleration
+approaches a viewport-scaled terminal drift. Fall distance is never normalized
+to a paper's remaining lifetime or distance to the bottom, eliminating the old
+fast-top/slow-bottom artifact. Each reward identity seeds its own repeatable arrangement without consuming
 gameplay randomness. Each piece stays opaque until its
 entire footprint passes below the viewport bottom, with staggered exits.
 Menu and background pauses hide and freeze the tail. Leaving the round or

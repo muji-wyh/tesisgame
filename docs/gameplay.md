@@ -1,6 +1,6 @@
 # Gameplay reference
 
-**Grow with Pip** is an English vocabulary game with Match, Memory, Phrase Builder,
+**Pip's world** is an English vocabulary game with Match, Memory, Phrase Builder,
 single-player Voice Pop, Jelly Match and Jelly Words. It starts on Home, where players choose a game. There are no
 accounts, usernames, identity avatars, leaderboards or Pip's room.
 
@@ -33,7 +33,7 @@ the player scrolls. Future cohorts are clearly previews: browsing them cannot
 change the game's earned level or age.
 
 Word Library has **Everyday English** and **Professional English** categories.
-Professional vocabulary uses the same Grow with Pip Home and six games. Choose
+Professional vocabulary uses the same Pip's world Home and six games. Choose
 a career and module, then **Use this vocabulary** to return Home. Browsing alone
 does not change the active vocabulary or the paused round. A module still in
 preparation can be selected, but its games remain unavailable until its content
@@ -156,7 +156,7 @@ Progression and durable claims are described in
 Every game mode settles in a responsive modal over its completed board. Match,
 Memory and Phrase Builder retain their completion celebration inside that modal,
 then offer their existing chest and replay actions. Voice Pop shows its result
-immediately. Both Jelly modes first show a 1.8-second end message over the frozen
+immediately. Both Jelly modes first show a 3.2-second end message over the frozen
 board, with a distinct acquired sound for danger expiry or ordinary completion,
 then open settlement. No mode opens a standalone settlement page.
 
@@ -193,8 +193,10 @@ skip it. Backgrounding freezes its clock and stops its sound without replaying
 the cue on return. Reduced motion keeps the readable message without zoom or
 rotation. Light enters before the heading instead of replacing the board abruptly.
 A clear adds the acquired mastery medal, local sparkle reactions and the existing
-CC0 human group cheer. Failure uses a gentler cool-colored reaction and keeps
-earned treasure safe. The clear also launches the full viewport's two-sided
+CC0 human group cheer. Failure instead uses a quiet cream card, smaller ink
+heading and supportive next-run caption against a properly darkened board.
+It has no victory rays, medal or celebration particles, and keeps earned treasure
+safe. The clear also launches the full viewport's two-sided
 confetti fountains: paper spreads, tumbles and drifts all the way below the screen
 bottom over 6.4 seconds, continuing independently over the ensuing result rather
 than being cut off at the well or the top third of the display.
@@ -240,7 +242,7 @@ without drawing or scaling it and retains the same silent three-second wait.
 
 ### Bramble and the stolen Word Compass
 
-Jelly World now follows **Bramble**, a smug, mischievous rabbit who steals Pip's
+Jelly World now follows **Bramble**, a smug, mischievous mint-jade frog who steals Pip's
 Word Compass. The same rival returns with a new trick at each encounter, so the
 chase has a recognizable opponent rather than unrelated disposable enemies.
 His teasing targets the chase and stolen treasure, never the learner's
@@ -285,8 +287,10 @@ finish its original journal; newly authored settlements identify the new roster.
 
 Bramble's full acquired, skinned body stands beside the well throughout battle
 and the ending; it never moves into an information bar or a giant story dialog.
-Game-authored bent-arm gestures, attacks and grounded reactions make him a
-visible opponent. Eight sourced purple energy glints and draining local light
+Game-authored broad hand gestures, a one-eye wink, blinking and wide-eyed hit
+reactions animate the acquired Frog's actual skeleton and original eye surfaces.
+The source mouth stays gentle; a cream belly replaces the heavy dark body patch.
+Eight sourced purple energy glints and draining local light
 represent his health; there is no permanent name/instruction block or numeric HP
 rail. Taunts use bounded two-line subtitles. The ambush enters from the edge,
 and every retreat leaves from that same side-standing position.
@@ -386,15 +390,23 @@ Flow, Reward, Prepare and Finale. Chapter quotas gradually grow from one to six,
 with selected extra repetitions and chapter finales. Breather and Reward stages
 give more room instead of increasing pressure every time. Time budgets account
 for each reviewed word's real parts, picture matching and supply throughput;
-they are not a fixed subtraction from the preceding stage.
+they are not a fixed subtraction from the preceding stage. Newly generated
+recipes reduce excess allowance across the journey, ease the opening 90-second
+minimum toward 60 seconds by stage 28, accelerate ordinary supply toward ten
+seconds, and raise actual descent speed from 1.0 to 1.4. Every budget still funds
+its deliberate handling and supply cost plus 25 seconds; relief profiles remain.
+Existing saved recipes keep their exact original words, quotas, timing and speed.
 
 The countdown has three star phases based on the **original active-play budget**:
 clearing before its first third earns three stars, before its second third earns
 two, and later earns one. Pauses, reading overlays, automatic sequences and
 pending saves do not consume active time. **+30 sec** costs 100 coins, then 150,
 200, 250 and so on per attempt; a saved purchase extends the deadline but never
-restores an expired star tier. Remaining time fills the progress background,
-with a right-aligned clock and larger acquired rating stars; the current Stage
+restores an expired star tier. Remaining time drains a fine separate clock track,
+with a right-aligned clock and a dark-teal rating dock on a warm cream surface.
+The left-to-right bronze, silver and gold stars grow in size and preciousness;
+the highest tier has local sourced rays and bounded glints. These are source-derived
+materials, not a change to the one/two/three-star rules. The current Stage
 moves into the top game heading. Crossing a star boundary produces a short sourced sparkle and fading
 star rather than silently changing the rating. Reduced motion updates it still.
 A saved extension refills the remaining-time bar independently of the rating:
@@ -445,7 +457,7 @@ There are no random extra-time drops or paid Challenge time purchases.
 Pending/failed/duplicate collection receipts cannot grant time or advance a stage.
 The top heading names **Challenge** and its current Stage. The timer and target
 counts remain visible; historical **Best Stage** is an acquired medal and a warm
-numeric badge, not a second title or a `Goals +10s` explanation. A newly saved
+**Stage N** badge, not a bare number, second title or a `Goals +10s` explanation. A newly saved
 record gives its number a short old-to-new lift, glow and sparkle response.
 Each positive committed time award has a separate 1.6-second clock-side badge
 showing the actual added duration, including fractional headroom below the
@@ -453,6 +465,9 @@ showing the actual added duration, including fractional headroom below the
 The sourced clock/light accents and one short digit response do not launch
 confetti or change the timer. Pause freezes the feedback; reduced motion keeps
 its amount and static highlight.
+Challenge's **Fill: On** switch is enabled from the start and cannot be turned
+off. It continuously supplies actual falling packets until every reachable
+vacancy is filled, respecting operation, pause and saving gates.
 Each completed target batch launches the shared smaller sourced-paper preset
 once, without stopping play. The best is saved when a higher
 stage is reached, separately per learning route; a lower replay cannot overwrite it.
@@ -534,6 +549,21 @@ with at most 15 jellies across three rows. Long labels use reviewed line breaks
 or an ellipsis; hold a clipped label, or focus it and press R, to pause and read
 its full spelling.
 
+The **Fill** switch immediately above Auto Collect continuously dispatches the
+advertised top supply when spaces remain, awaiting real falling and settlement.
+Main/unbound play can turn it off; Challenge forces it on without overwriting the
+ordinary preference. It does not teleport bodies or bypass a sealed entrance,
+Boss two-body supply restriction, dragging, a paid operation, a pending save or
+an ending.
+
+The **Magnet** item first asks the player to choose a board Jelly. Its exact word
+family's roots, pictures and differently leveled merged Jellies use the ordinary
+automatic planner; gel color is irrelevant. No target is selected at random.
+Pressing the item again, Escape/Back, pausing or leaving cancels without spending.
+One valid purchase costs 200, then 300, then 400 coins per round, independently
+of other items. Ordinary legality, unlocked caps, fragments and unmatched inputs
+remain intact. It does not collect or grant construction learning or manual combo coins.
+
 Both Jelly modes have a Pause control in the header. Pause, or P on a keyboard,
 switches that same control to Resume and freezes supply, danger, combo and automatic matching
 clocks. Resume continues the same round; Escape or controller Back also resumes.
@@ -585,19 +615,25 @@ do not change that level's policy. Opening chests provides additional coins.
 Collection banks all carried fragments. A manually solved
 picture match or root composition records learning only on collection;
 automatic merges and image-free atomic exposure do not earn mastery.
-Successful manual merges and collections build a visible combo and refill its
-eight-second countdown bar. The bar drains during active play; reaching zero
+Successful merges and collections add a point toward a visible combo **level**,
+with a separate cumulative progress bar and fraction. The first upgrade needs
+three actions, the next four, then five and so on. The displayed level therefore
+does not increment on every pickup or merge. Each success also refills the
+independent eight-second countdown bar. That bar drains during active play; reaching zero
 or an invalid merge ends the current chain, without removing saved coins or its
-best count. A success completed at or after expiry starts a fresh chain.
+best level. A success completed at or after expiry starts a fresh chain.
 Preview drops and stage transitions do not directly reset or refill it.
 Pauses, saving waits and automatic matching sequences freeze its clock.
-Automatic Collect adds one per committed word, while paid Auto Merge stays
-neutral. Manual merges award one coin at combo 3-5, two at 6-9 and three at 10
-or above. Collection still uses its separate level-based coin chance. A rank
+Automatic Collect and committed automatic matches add one progress point without
+minting manual-merge coins. Manual merges retain the original **raw successful-action**
+income schedule: one coin on action 3-5, two on 6-9 and three from action 10 onward.
+Boss combo damage likewise retains the raw chain length; slower displayed
+level-ups do not nerf either policy. Collection still uses its separate level-based coin chance. A rank
 badge advances through D/C/B/A/S/SS/SSS with sourced sparkle/ray flares and a
-rising accent on each increment. Earned merge coins display a larger gold
+rising accent only on an actual level-up. Earned merge coins display a larger gold
 **COMBO BONUS +N** acknowledgement for up to 1.8 seconds, including through an
-immediate bonus-free collection. The countdown turns warm red in its last
+immediate bonus-free collection, even when a paying action does not raise the level.
+The countdown turns warm red in its last
 quarter. Reduced motion keeps the real countdown and a steady readable badge.
 Merging and upgrading alone do not grant mastery. Combo payment failures keep
 the merge inputs and original receipt for Retry saving without paying twice.

@@ -463,9 +463,9 @@ func play_jelly_cue(cue_name: String) -> void:
 static func word_jelly_combo_profile(count: int) -> Dictionary:
 	if count < 1:
 		return {}
-	var tier: int = 2 if count >= 8 else 1 if count >= 3 else 0
-	# Each increment rises toward one octave without running into a shrill range.
-	var pitch: float = pow(2.0, 1.0 - exp(-float(count - 1) / 14.0))
+	var tier: int = 2 if count >= 5 else 1 if count >= 3 else 0
+	# Cumulative levels, not every successful action, receive this rising accent.
+	var pitch: float = pow(2.0, 1.0 - exp(-float(count - 1) / 3.0))
 	return {"count": count, "tier": tier, "path": WORD_JELLY_COMBO_PATHS[tier],
 		"gain": WORD_JELLY_COMBO_GAINS[tier], "pitch": pitch}
 

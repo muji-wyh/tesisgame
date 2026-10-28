@@ -1,0 +1,18 @@
+{
+  "assets": [
+    {
+      "id": "family-magnet",
+      "file": "assets/images/ui/jelly-powerups/family-magnet.webp",
+      "reused_from": "assets/images/word-library/magnet.webp",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Magnet/3D/magnet_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT",
+      "record": "docs/assets/word-library.json",
+      "source_sha256": "56687f679214a76166acd38ce1431f3de003733f0e0c58a3a83cc2acf9c7f7cf",
+      "integrated_sha256": "3ae50b75e0d86ea2db3537a8ed48aa0e741c272ae04e2b9b5b14485d0cea08ca",
+      "bytes": 5506,
+      "status": "Existing acquired production illustration inspected before its unchanged core-UI copy; this copy does not require the age-eight media pack.",
+      "animation": "Static source artwork. Selection, bounded purchase feedback and ordinary automatic Jelly flights are game-authored."
+    }
+  ]
+}

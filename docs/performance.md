@@ -3,7 +3,7 @@
 Jelly Words drag work has a separate [CPU diagnostic and validation report](jelly-drag-performance.md).
 It does not replace the rendered main-scene protocol below or establish mobile FPS.
 
-The current protocol is `main-scene-rendered-v2`. It covers the Grow with Pip
+The current protocol is `main-scene-rendered-v2`. It covers the Pip's world
 curriculum and growth notebook; no v2 timing or performance improvement is claimed
 by the workload migration itself.
 

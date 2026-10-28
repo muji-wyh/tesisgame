@@ -13,7 +13,8 @@ test('Bramble retains the real acquired source, source rights and private reusab
   assert.equal(manifest.source.creator, 'Wabu');
   assert.match(manifest.source.url, /380750$/);
   assert.equal(manifest.source.license, 'Standard Unity Asset Store EULA');
-  assert.equal(manifest.source.fbx_sha256, '981a92e69550d090ab08d55bc8eb8d26fac406fa35be5807025496cd29115705');
+  assert.equal(manifest.source.fbx_sha256, 'b716387a7be20268652e64b36aff88a8a46169ed8401051b422bebdacf00af76');
+  assert.equal(manifest.source.title, 'Frog, 50+ Monsters Bundle');
   assert.equal(manifest.model.private_build_input, true);
   assert.match(fs.readFileSync(path.join(root, '.gitignore'), 'utf8'), /^assets\/jelly-boss\/private\/$/m);
   const bytes = fs.readFileSync(path.join(root, manifest.model.path));
@@ -25,7 +26,10 @@ test('the acquired Boss uses skinned production meshes and eight actually moving
   const model = readModelContainer(path.join(root, manifest.model.path));
   const { gltf } = model;
   assert.ok(gltf.skins?.length, 'The Boss is not a rigid placeholder silhouette');
-  assert.ok(gltf.meshes.length >= 2, 'The original Bunny and carrot remain present');
+  assert.equal(gltf.meshes.length, 1, 'The newly acquired Frog body replaces the Bunny and its carrot');
+  assert.deepEqual([...manifest.model.facial_shapes].sort(), ['Blink.L', 'Blink.R', 'WideEyes'].sort());
+  for (const primitive of gltf.meshes[0].primitives)
+    assert.equal(primitive.targets.length, 3, 'Expressions deform the original eye surfaces, not a painted-on placeholder face');
   for (const mesh of gltf.meshes) for (const primitive of mesh.primitives)
     assert.ok(primitive.attributes.JOINTS_0 !== undefined && primitive.attributes.WEIGHTS_0 !== undefined);
   assert.deepEqual(gltf.animations.map(animation => animation.name).sort(), [...manifest.model.animations].sort());
@@ -39,6 +43,13 @@ test('the acquired Boss uses skinned production meshes and eight actually moving
     assert.ok(moving, `${animation.name} deforms a real skinned joint, not only its scene root`);
   }
   assert.ok(model.bytes.length < 2_000_000, 'The complete Boss remains a bounded mobile build input');
+  for (const name of ['Idle', 'Taunt', 'Hit']) {
+    const animation = gltf.animations.find(item => item.name === name);
+    const track = animation.channels.find(channel => channel.target.path === 'weights');
+    assert.ok(track, `${name} actually exports its eye-expression track`);
+    const samples = readFloatAccessor(model, animation.samplers[track.sampler].output);
+    assert.ok(samples.some(sample => sample.some(value => value > 0.1)), `${name} contains a visible facial-expression change`);
+  }
 });
 
 test('Boss taunts use the acquired CC0 human recording and exact original bytes', () => {

@@ -355,7 +355,7 @@ func _approximately_equal_state(left: Variant, right: Variant) -> bool:
 
 
 func _test_powerup_eligibility() -> void:
-	check(Model.POWERUP_PRICES == {"auto_merge": 600, "fragments": 200, "extra_time": 100},
+	check(Model.POWERUP_PRICES == {"auto_merge": 600, "family_merge": 200, "fragments": 200, "extra_time": 100},
 		"paid powers expose their first-purchase prices")
 	for kind: String in ["auto_merge", "fragments"]:
 		for blocked_by: String in ["paused", "held", "settling", "fusion", "collection", "batch", "finished", "empty"]:
@@ -488,7 +488,7 @@ func _test_powerup_price_progression() -> void:
 			check(model.snapshot().powerup_uses[kind] == index + 1,
 				"pausing or completing the animation preserves the successful-use count")
 		check(model.configure([_word("cat")], 3, 42) and model.powerup_price(kind) == prices[0]
-			and model.snapshot().powerup_uses == {"auto_merge": 0, "fragments": 0},
+			and model.snapshot().powerup_uses == {"auto_merge": 0, "family_merge": 0, "fragments": 0},
 			"only a new round resets both powerup prices to their first-use tier")
 		model.purchase_powerup = Callable()
 	check(Model.coins_for_tile({"mass": 40}) == 0 and Model.coin_drop_chance_for_tile({"mass": 40}) == 0.0,
@@ -1884,6 +1884,10 @@ func _test_rejected_merge_atomicity() -> void:
 	before = _rejection_state(model)
 	var prior_combo: Dictionary = before.snapshot.combo.duplicate(true)
 	before.snapshot.combo.count = 0
+	before.snapshot.combo.actions = 0
+	before.snapshot.combo.progress = 0
+	before.snapshot.combo.progress_ratio = 0.0
+	before.snapshot.combo.required = 3
 	before.snapshot.combo.rank = "D"
 	before.snapshot.combo.tier = 0
 	before.snapshot.combo.bonus = 0
@@ -2753,7 +2757,7 @@ func _test_auto_collect_unlock() -> void:
 		_batch_board(model, 3)
 		check(model.auto_collect_unlocked() and model.start_collection_batch(), "Pip Lv%d can start Auto Collect" % level)
 		model.step(Model.BATCH_BEAT_SECONDS * 3.0)
-		check(model.cleared_pairs == 3 and model.combo_count == 3 and not model.collection_batch_active(),
+		check(model.cleared_pairs == 3 and model.combo_actions == 3 and not model.collection_batch_active(),
 			"Unlocked Auto Collect keeps the normal three-word rhythm and combo")
 	model = _model([_word("cat")], false)
 	_batch_board(model, 3)
@@ -2770,7 +2774,7 @@ func _test_auto_collect_unlock() -> void:
 	check(not model.collection_batch_active() and model.start_collection_batch(),
 		"Regaining Lv3 requires a fresh explicit Auto Collect command")
 	model.step(2.0)
-	check(model.cleared_pairs == 3 and model.combo_count == 3, "A fresh unlocked command collects each remaining word once")
+	check(model.cleared_pairs == 3 and model.combo_actions == 3, "A fresh unlocked command collects each remaining word once")
 	model = _model([_word("cat")], false)
 	_batch_board(model, 3)
 	model.start_collection_batch()

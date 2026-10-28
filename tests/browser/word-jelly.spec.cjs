@@ -3,6 +3,7 @@ const { test, expect } = require('@playwright/test');
 const { openGame, openModeMenu, chooseMode, metrics, tap, rendered, enterGame, observeAudio, seedGrowth, seedPipLevel } = require('./game-ui.cjs');
 const { recordingTiming, expectRecording } = require('./bundled-audio.cjs');
 const { collectionCoins, expectCollectionReward } = require('./word-jelly-rewards.cjs');
+const { seedCampaign } = require('./jelly-campaign-fixture.cjs');
 const vocabulary = require('../../words.json');
 const morphology = Array.from({ length: 10 }, (_, index) =>
   require(`../../data/vocabulary/morphology/age-${String(index + 3).padStart(2, '0')}.json`).entries).flat();
@@ -40,26 +41,28 @@ async function pressRect(page, rect) {
   await rendered(page);
 }
 
-async function startWordJelly(page, { age = COMPOSITION_AGE, reducedMotion = 'no-preference', preseededGrowth = false, pipLevel = 0 } = {}) {
+async function startWordJelly(page, { age = COMPOSITION_AGE, reducedMotion = 'no-preference', preseededGrowth = false, pipLevel = 0, challenge = true } = {}) {
   const earnedAge = age === 3 ? 0 : age - 1;
   if (!preseededGrowth) await seedPipLevel(page, pipLevel, { age: earnedAge });
-  const errors = await openGame(page, { reducedMotion });
+  const errors = await openGame(page, { reducedMotion, home: true });
   await openModeMenu(page);
   const control = (await metrics(page)).library.controls.find(item => item.name === 'Mode_word_jelly');
   expect(control, 'Word Jelly appears in the ordinary game library').toBeTruthy();
   expect(control.disabled).toBe(false);
-  await chooseMode(page, 'word_jelly', { challenge: true });
+  await chooseMode(page, 'word_jelly', { challenge, stage: 1 });
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.mode === 'word_jelly' && state.visible && state.phase === 'playing' &&
-      state.authored_morphology && state.tiles?.length > 0 && state.tiles.every(tile => tile.settled);
+    return state.mode === 'word_jelly' && state.visible && !state.paused && state.phase === 'playing' &&
+      state.authored_morphology && state.tiles?.length === (challenge ? 40 : 15) && state.tiles.every(tile => tile.settled);
   }, { timeout: 20000, message: 'The real Word Jelly board opens with reviewed, settled content' }).toBe(true);
   const opening = await jelly(page);
   const occupiedArea = opening.tiles.reduce((sum, tile) => sum + tile.width * tile.height, 0);
-  expect(occupiedArea, 'The opening contains fifteen ordinary square cells').toBe(15);
+  expect(occupiedArea, 'Challenge Fill settles forty cells; ordinary main play retains its fifteen-piece opening')
+    .toBe(challenge ? 40 : 15);
+  expect(opening.fill_control).toMatchObject({ on: challenge, locked: challenge, enabled: !challenge });
   const next = opening.upcoming.find(tile => tile.id);
   expect(occupiedArea + next.width * next.height,
-    'The next fixed-size body would exceed the opening budget').toBeGreaterThan(15);
+    'The next fixed-size body exceeds the settled opening occupancy').toBeGreaterThan(challenge ? 40 : 15);
   for (const tile of opening.tiles) {
     expect([tile.width, tile.height], 'Every source part uses one normal square cell').toEqual([1, 1]);
     expect(tile.rect[2], 'The displayed starter keeps the ordinary square proportions').toBeCloseTo(tile.rect[3], 3);
@@ -197,22 +200,41 @@ async function timedMerge(page, sourceId, targetId, prepared = null) {
   const authored = authoredJoin(source, target);
   expect(authored).toBeTruthy();
   const from = center(source.rect, bounds), to = center(target.rect, bounds);
-  await page.mouse.move(from.x, from.y);
-  await page.mouse.down();
+  const touch = test.info().project.name === 'android-chromium' ? await page.context().newCDPSession(page) : null;
+  const move = async point => {
+    if (touch) await touch.send('Input.dispatchTouchEvent', {
+      type: 'touchMove', touchPoints: [{ id: 1, ...point }]
+    });
+    else await page.mouse.move(point.x, point.y);
+  };
   try {
-    await page.mouse.move(from.x, from.y - 16);
-    await page.mouse.move(to.x, to.y, { steps: 3 });
-    await expect.poll(async () => (await jelly(page)).drag.source, { intervals: [25] }).toBe(sourceId);
+    // Prepare the touch transport before resuming the real combo clock.
+    if (before.pause?.active) await resumeTimedRound(page, before.round_id);
+    if (touch) await touch.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...from }] });
+    else { await page.mouse.move(from.x, from.y); await page.mouse.down(); }
+    await move({ x: from.x, y: from.y - 16 });
+    await move(to);
+    let heldPointer = -1;
     await expect.poll(async () => {
       const state = await jelly(page), liveTarget = state.tiles.find(tile => tile.id === targetId);
-      if (!liveTarget?.settled) return false;
+      if (state.drag.source !== sourceId || !liveTarget?.settled) return false;
+      heldPointer = state.drag.pointer;
       if (state.drag.target === targetId) return true;
-      const point = center(liveTarget.rect, bounds);
-      await page.mouse.move(point.x, point.y, { steps: 3 });
+      await move(center(liveTarget.rect, bounds));
       return false;
-    }, { intervals: [25], message: 'The held source contacts the real target after support removal' }).toBe(true);
+    }, { intervals: [25], message: 'The held source contacts the real target after support removal' }).toBe(true).catch(async error => {
+      fs.writeFileSync(test.info().outputPath('timed-gesture-failure.json'), JSON.stringify({
+        sourceId, targetId, source, target, from, to, preparedBounds: bounds,
+        actualBounds: await metrics(page), latest: await jelly(page)
+      }, null, 2));
+      throw error;
+    });
+    if (touch) expect(heldPointer, 'Phone input owns a real touch pointer').toBeGreaterThanOrEqual(0);
   } finally {
-    await page.mouse.up();
+    if (touch) {
+      try { await touch.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] }); }
+      finally { await touch.detach(); }
+    } else await page.mouse.up();
   }
   let state, result;
   await expect.poll(async () => {
@@ -1841,8 +1863,9 @@ for (const collectionMode of ['manual', 'batch']) additiveTest(collectionMode ==
 additiveTest('combo coins start at three real merges, fast drop preserves the streak, and Collect increments without combo payouts', async ({ page, browserName }, info) => {
   test.setTimeout(240000);
   await seedPipLevel(page, 3);
+  await seedCampaign(page, { seconds: 180, quota: 4 });
   await observeAudio(page, { fingerprintBuffers: true, fingerprintMaxDuration: 1, trackSourceLifecycle: true });
-  const errors = await startWordJelly(page, { age: 3, preseededGrowth: true });
+  const errors = await startWordJelly(page, { age: 3, preseededGrowth: true, challenge: false });
   const opening = await jelly(page), startingWallet = await wallet(page);
   expect(opening.combo.count).toBe(0);
   await page.evaluate(() => {
@@ -1865,13 +1888,13 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
   for (let count = 1; count <= 3; count++) {
     const state = await jelly(page), bounds = await metrics(page);
     expect(state.paused).toBe(true);
-    expect(state.combo.count).toBe(count - 1);
+    expect(state.combo.actions).toBe(count - 1);
     const candidate = suppliedWords(state, 3)[0];
     expect(candidate?.picture, 'The frozen ordinary supply provides the next real picture match').toBeTruthy();
     const audioFrom = await page.evaluate(() => window.audioObservation.playbacks.length);
     evidence.preparations.push({ roundId: state.round_id, combo: state.combo });
+    save();
     // Selector and waveform work belongs outside the real eight-second play window.
-    await resumeTimedRound(page, opening.round_id);
     const { result: completed, state: current } = await timedMerge(page, candidate.roots[0].id, candidate.picture.id,
       { state, bounds });
     mergedIds.push(completed.id);
@@ -1880,15 +1903,20 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
     evidence.merges.push({ id: completed.id, combo: current.combo, hud: current.combo_hud, wallet: await wallet(page) });
     save();
     expect(current.round_id).toBe(opening.round_id);
-    expect(current.combo.count).toBe(count);
-    expect(current.combo.best).toBe(count);
+    const level = count < 3 ? 1 : 2;
+    expect(current.combo.actions).toBe(count);
+    expect(current.combo.count).toBe(level);
+    expect(current.combo.best).toBe(level);
+    expect(current.combo.progress).toBe(count < 3 ? count : 0);
+    expect(current.combo.required).toBe(count < 3 ? 3 : 4);
     expect(current.combo.bonus).toBe(count === 3 ? 1 : 0);
     expect(current.combo.coins).toBe(count === 3 ? 1 : 0);
     expect(current.combo.pending).toBe(false);
     await expect.poll(async () => (await wallet(page)).balance)
       .toBe(startingWallet.balance + current.combo.coins);
     expect(current.combo_hud.visible).toBe(true);
-    expect(current.combo_hud.count).toBe(count);
+    expect(current.combo_hud.count).toBe(level);
+    expect(current.combo_hud.progress_visible).toBe(true);
     expect(current.combo_hud.input_transparent).toBe(true);
     expect(current.combo_hud.timer_visible).toBe(true);
     expect(current.combo_hud.time_ratio).toBeGreaterThan(0);
@@ -1896,9 +1924,9 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
       expect(current.combo_hud.bonus_visible).toBe(true);
       expect(current.combo_hud.bonus_text).toBe('COMBO BONUS +1');
     }
-    if (audioAvailable) {
-      const sound = await expectRecording(page, audioFrom, `assets/audio/jelly-combo/${count < 3 ? 'step' : 'bright'}.wav`);
-      expect(sound.playbackRate).toBeCloseTo(2 ** (1 - Math.exp(-(count - 1) / 14)), 5);
+    if (audioAvailable && count !== 2) {
+      const sound = await expectRecording(page, audioFrom, 'assets/audio/jelly-combo/step.wav');
+      expect(sound.playbackRate).toBeCloseTo(2 ** (1 - Math.exp(-(level - 1) / 3)), 5);
       expect(sound.peak).toBeGreaterThan(0.01);
       if (evidence.sounds.length) expect(sound.playbackRate).toBeGreaterThan(evidence.sounds.at(-1).playbackRate);
       evidence.sounds.push(sound);
@@ -1906,8 +1934,8 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
     save();
   }
   if (audioAvailable) {
+    expect(evidence.sounds).toHaveLength(2);
     expect(evidence.sounds[0].fingerprint).toBe(evidence.sounds[1].fingerprint);
-    expect(evidence.sounds[2].fingerprint).not.toBe(evidence.sounds[1].fingerprint);
   }
   const goldFrame = await page.evaluate(() => {
     window.comboGoldObserver.disconnect();
@@ -1920,10 +1948,15 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
   await resumeTimedRound(page, opening.round_id);
   await page.mouse.click(next.x, next.y);
   let afterDrop;
-  await expect.poll(async () => {
+  if (beforeDrop.tiles.length < 40) {
+    await expect.poll(async () => {
+      afterDrop = await jelly(page);
+      return afterDrop.generated_tiles > beforeDrop.generated_tiles;
+    }, { intervals: [25] }).toBe(true);
+  } else {
     afterDrop = await jelly(page);
-    return afterDrop.generated_tiles > beforeDrop.generated_tiles;
-  }, { intervals: [25] }).toBe(true);
+    expect(afterDrop.generated_tiles, 'A full required-Fill board cannot dispatch an extra packet').toBe(beforeDrop.generated_tiles);
+  }
   await pauseTimedRound(page);
   expect(comboIdentity(afterDrop.combo)).toEqual(comboIdentity(beforeDrop.combo));
   expect(afterDrop.combo.remaining).toBeLessThan(beforeDrop.combo.remaining);
@@ -1953,9 +1986,12 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
     const collected = await jelly(page);
     expect(collected.collection_batch.completed).toBe(3);
     expect(collected.collection_batch.elapsed).toBeCloseTo(0.36, 6);
-    expect(collected.combo.count).toBe(6);
-    expect(collected.combo.best).toBe(6);
-    expect(collected.combo.rank).toBe('B');
+    expect(collected.combo.actions).toBe(6);
+    expect(collected.combo.count).toBe(2);
+    expect(collected.combo.best).toBe(2);
+    expect(collected.combo.progress).toBe(3);
+    expect(collected.combo.required).toBe(4);
+    expect(collected.combo.rank).toBe('C');
     expect(collected.combo.bonus).toBe(0);
     expect(collected.combo.coins).toBe(beforeCollect.combo.coins);
     const earnedCoins = collectionCoins(collected, beforeCollect, selected);
@@ -1968,11 +2004,9 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
       const collectSounds = () => page.evaluate(({ from, timing }) => window.audioObservation.playbacks.slice(from).filter(sound =>
         sound.contextState === 'running' && Math.abs(sound.duration - timing.seconds) <= timing.importAllowance + 1 / sound.sampleRate),
       { from: collectAudioFrom, timing });
-      await expect.poll(async () => (await collectSounds()).length,
-        { message: 'Every automatic collection increment plays its own short combo accent' }).toBe(3);
+      expect(await collectSounds(),
+        'Three ordinary progress points below the next threshold never pretend to level up').toHaveLength(0);
       evidence.collectionSounds = await collectSounds();
-      for (const [index, sound] of evidence.collectionSounds.entries())
-        expect(sound.playbackRate).toBeCloseTo(2 ** (1 - Math.exp(-(index + 3) / 14)), 5);
     }
     await capture(page, info, 'word-jelly-combo-after-collect');
   } finally {
@@ -1983,7 +2017,8 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
     save();
   }
   for (const frame of evidence.collectionTimeline) {
-    expect(frame.combo.count).toBe(beforeCollect.combo.count + frame.batch.completed);
+    expect(frame.combo.actions).toBe(beforeCollect.combo.actions + frame.batch.completed);
+    expect(frame.combo.count).toBe(2);
     expect(frame.combo.coins).toBe(beforeCollect.combo.coins);
   }
   expect(errors).toEqual([]);
@@ -2017,7 +2052,6 @@ additiveTest('combo coins fly from the bonus into the header and roll up only on
       });
       window.comboCoinObserver.observe(status, { attributes: true, attributeFilter: ['data-snapshot'] });
     });
-    await resumeTimedRound(page, opening.round_id);
     await timedMerge(page, candidate.roots[0].id, candidate.picture.id, { state, bounds });
     if (count < 3) await pauseTimedRound(page);
   }
@@ -2052,9 +2086,15 @@ additiveTest('combo coins fly from the bonus into the header and roll up only on
 
 additiveTest('combo countdown drains, freezes in Home and expires before a fresh unrewarded chain', async ({ page }, info) => {
   test.setTimeout(150000);
-  await seedGrowth(page, 12, { unmastered: ['cat'] });
-  const errors = await startWordJelly(page, { age: 3, preseededGrowth: true });
-  await matchCat(page);
+  await seedPipLevel(page, 3);
+  const errors = await startWordJelly(page, { age: 3, preseededGrowth: true, challenge: false });
+  const matchNext = async () => {
+    const state = await jelly(page);
+    const candidate = suppliedWords(state, 3).find(item => item.picture);
+    expect(candidate, 'Use an actual reviewed target from this reserved recipe, not an assumed cat draw').toBeTruthy();
+    return timedMerge(page, candidate.roots[0].id, candidate.picture.id);
+  };
+  await matchNext();
   const fresh = await jelly(page), balance = (await wallet(page)).balance;
   expect(fresh.combo).toMatchObject({ count: 1, seconds: 8, best: 1, coins: 0 });
   expect(fresh.combo_hud).toMatchObject({ visible: true, timer_visible: true });
@@ -2075,7 +2115,7 @@ additiveTest('combo countdown drains, freezes in Home and expires before a fresh
   expect(expired.combo).toMatchObject({ count: 0, remaining: 0, best: 1, coins: 0, bonus: 0 });
   expect(expired.combo_hud.visible).toBe(false);
   expect((await wallet(page)).balance).toBe(balance);
-  await matchCat(page);
+  await matchNext();
   const restarted = await jelly(page);
   expect(restarted.combo).toMatchObject({ count: 1, best: 1, coins: 0, bonus: 0 });
   expect(restarted.combo.remaining).toBeGreaterThan(6);
@@ -2131,7 +2171,7 @@ additiveTest('Lv2 collection marks a real neighbor, flies it into a partner and 
       tile.jelly_kind === 'merged' && tile.assisted);
     expect(result).toMatchObject({ jelly_kind: 'merged', merge_level: 1, assisted: true, mastery_eligible: false });
     expect(result.word.id).toBe('cat');
-    expect(after.combo.count).toBe(before.combo.count + 1);
+    expect(after.combo.actions).toBe(before.combo.actions + 1);
     expect(after.combo.coins).toBe(before.combo.coins);
     expect(after.powerup_uses).toEqual(before.powerup_uses);
     await expect.poll(async () => (await wallet(page)).balance)

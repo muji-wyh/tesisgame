@@ -62,9 +62,9 @@ func _run() -> void:
 	for count in range(1, 25):
 		audio.play_jelly_cue("jelly-combo-%d" % count)
 		var player: AudioStreamPlayer = audio._jelly_combo_players[posmod(audio._jelly_combo_next - 1, Audio.WORD_JELLY_COMBO_CHANNELS)]
-		var expected_tier: int = 2 if count >= 8 else 1 if count >= 3 else 0
+		var expected_tier: int = 2 if count >= 5 else 1 if count >= 3 else 0
 		check(player.playing and player.stream.resource_path == Audio.WORD_JELLY_COMBO_PATHS[expected_tier],
-			"Each accepted increment immediately plays its acquired timbre tier")
+			"Each actual combo level plays its acquired timbre tier")
 		check(player.pitch_scale > previous_pitch and player.pitch_scale <= 2.0,
 			"Successive combo increments rise within one octave")
 		check(is_equal_approx(player.volume_db, linear_to_db(Audio.WORD_JELLY_COMBO_GAINS[expected_tier]) - 6.0),

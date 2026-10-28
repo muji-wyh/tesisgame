@@ -1,29 +1,53 @@
 # Jelly Words powerups
 
-The Auto merge and Treasure purchase controls share a quiet pearl surface.
+The Auto merge, Magnet and Treasure purchase controls share a quiet pearl surface.
 A full-width title sits above the sourced item artwork and a separate coin-price
 capsule, so narrow phone controls no longer squeeze the title beside the icon.
 Their artwork stays separate from the stable touch target, title, and coin price.
 Auto merge costs 600, 900, then 1200 coins per round;
-Treasure costs 200, 300, then 400. Each item tracks successful purchases separately
+Magnet and Treasure each cost 200, 300, then 400. Each item tracks successful purchases separately
 and shows its next price without resetting the current feedback animation.
 The latter uses the same current chest texture as the jelly fragment markers
 once its cropped image is ready. The acquired Royal fallback stays visible while
 that viewport warms up, without a synchronous GPU readback.
 
-The purchase controls and Collect share one action group. When a side layout
-allows a larger board, Auto merge and Treasure stack above Collect in a single
-144-pixel-wide rail to the right, separated from the well by 12 display pixels.
-The well and rail are centered as one group; on short screens the rail may
-extend beside the supply row without entering the header. Otherwise the controls
-form a compact footer under the well, with Collect in the middle. Each action
-is 56 display pixels high, and the group retains twelve-pixel bottom padding.
+The purchase controls, Fill and Collect share one action group. Fill sits directly
+above Collect. The three paid tools (four in main stages, including extra time)
+use a side rail when it preserves larger Jelly reading space. Wide rails use two
+columns; narrow footers wrap rather than overlap. Ordinary paid controls are
+56 display pixels high, using compact 44-pixel controls on short screens and Boss
+layouts. Fill always keeps a 44-pixel target. The group retains bottom padding.
+
+## Selected-family Magnet
+
+Press Magnet, then choose a board Jelly. The button changes to **Pick Jelly**;
+pressing it again, Back/Escape, pause or leaving cancels without spending.
+The preview cannot dispatch or pronounce a word in selection mode. No random
+target is substituted, and no coins are charged until a valid chosen family has
+a complete ordinary merge path. Holding a target briefly lights its word family.
+Roots, pictures and different merged levels are grouped by their actual word
+identity, never their gel color or printed substring.
+
+One saved purchase uses the existing overlapping automatic-flight planner.
+It preserves unlocked levels, real occupancy, carried fragments and frozen/locked
+eligibility. Only legal complete paths are consumed; missing partners are not
+invented. Other families stay on the board. It never automatically collects,
+grants construction mastery or mints manual-merge combo coins. A later successful
+collection owns its usual learning and rewards. The next price is independent of
+Auto merge, Treasure and extra time.
+
+Fill dispatches real advertised supply packets, waiting for their natural fall
+and settlement before dispatching another. It never fills instantly or bypasses
+paid-operation, drag, pause, save or ending ownership. Main/unbound play has an
+independent optional preference. Challenge always enables Fill and disables its
+switch; this forced value never overwrites the ordinary preference.
 
 ## Artwork and acquisition
 
 | Runtime material | Original source, creator, and rights | Acquisition and animation |
 | --- | --- | --- |
 | `assets/images/ui/jelly-powerups/auto-merge-wand.svg` | Kenney, [Cursor Pack 1.1](https://kenney.nl/assets/cursor-pack), `Vector/Basic/tool_wand.svg`. CC0 1.0; the original pack license is retained beside the SVG as `LICENSE-Kenney.txt`. | Acquired in the user's local Kenney All-in-1 3.7.0 collection. The original vector and 64px PNG were inspected at 32–40px before the SVG was copied byte-for-byte. Static white artwork, with a violet runtime tint; it has no source animation. |
+| `assets/images/ui/jelly-powerups/family-magnet.webp` | Microsoft Corporation, Fluent Emoji 3D Magnet, MIT. Original URL, original/output hashes and existing word-library provenance are retained in `assets/images/ui/jelly-powerups/sources.json`. | Previously acquired pink horseshoe magnet with silver tips, inspected before an exact-byte core-UI copy. This is integrated artwork, not a marketplace preview or a deferred age-eight dependency. Static source image; no source animation. |
 | Current chest marker texture | Existing acquired chest rendering and tier selection, documented in [Jelly fragments](jelly-fragments.md) and [chest replacement](chest-refresh.md). | Reuses the owner's current cropped texture, including its cached model render. No new chest is downloaded. The button animates this still texture; it does not play a source rig or opening clip. |
 | Royal fallback, `assets/chests/royal/closed.png` | Bobardo, [Modern 2D Animated Chests FREE Demo 1.0.2](https://assetstore.unity.com/packages/2d/modern-2d-animated-chests-free-demo-360538), `Chests/Royal/Sprites/SPR_Royal_Close.png`. Existing Unity Asset Store Standard EULA acquisition; see `assets/chests/SOURCE.txt`. | Already integrated and inspected. The known transparent margins are excluded when used as a compact icon. Static closed-chest artwork; existing source open art and other game animations are not triggered by this button. |
 | `assets/coins/gold-coin.png` | Kenneth Foldal Moe / Archanor VFX, Toon FX 1.52, under its recorded Unity Asset Store Standard EULA. See [coin artwork](coins.md) and `assets/coins/manifest.json`. | Existing acquired, processed and integrated price icon. Static artwork; no new copy or acquisition. |
@@ -78,7 +102,8 @@ The game owner advances the button clock. Pausing freezes the clock and hides
 the transient pose and light; hidden controls do not advance. Reset clears the
 transient presentation without issuing a purchase. Reduced motion uses a static
 0.32-second light accent with no scale, translation, or rotation. The minimum
-target is 88 by 56 display pixels, scaled through the existing UI scale.
+target is 88 by 56 display pixels normally, or 88 by 44 in compact layouts,
+scaled through the existing UI scale.
 
 The controls only emit the normal Button `pressed` signal. The model and wallet
 own eligibility, spending, rewards, busy state, and cancellation; button
@@ -94,10 +119,10 @@ new extraction, source audio claim, or CC0 attribution is applied to them.
 The source recording, processing and embedded-game limits remain documented in
 [answer feedback sounds](pair-feedback-audio.md).
 
-Auto merge selects an eligible pair on each 200 ms launch beat, starting
-immediately after purchase. Each automatic flight lasts 250 ms, followed by a
-110 ms fusion and 30 ms settlement. Consecutive flights overlap for 50 ms;
-the next launch does not wait for the preceding 390 ms sequence to finish.
+Auto merge and Magnet select an eligible pair on each 100 ms launch beat, starting
+immediately after purchase. Each automatic flight lasts 320 ms, followed by a
+110 ms fusion and 30 ms settlement. Consecutive flights overlap for 220 ms;
+the next launch does not wait for the preceding 460 ms sequence to finish.
 Manual gestures retain their existing timing. Every moving source and its
 target stay reserved until contact, and each path preserves the inputs needed
 by its later steps. Independent pairs can launch while earlier paths continue.

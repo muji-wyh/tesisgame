@@ -414,7 +414,7 @@ func test_record_composition() -> void:
 	var badge := RecordBadge.new()
 	root.add_child(badge)
 	for scale_factor: float in [0.75, 1.0, 2.0]:
-		for dimensions: Vector2 in [Vector2(76, 28), Vector2(220, 100)]:
+		for dimensions: Vector2 in [Vector2(100, 24), Vector2(220, 100)]:
 			for record: int in [0, 5, 12, 393, 16384]:
 				badge.set_record(record)
 				badge.layout_badge(Rect2(Vector2(10, 20), dimensions / scale_factor), scale_factor)
@@ -428,8 +428,11 @@ func test_record_composition() -> void:
 				check(absf(group.get_center().x - badge.size.x * 0.5) <= 0.6 / scale_factor,
 					"The actual medal and %d glyphs form one centered award at %s, scale %.2f" % [record, dimensions, scale_factor])
 				check(Rect2(Vector2.ZERO, badge.size).grow(0.1).encloses(group)
-					and glyph.position.x >= badge._medal.get_rect().end.x + 3.0 / scale_factor,
-					"One through five record digits retain their own space without crowding the acquired medal")
+					and badge._stage.visible and badge._stage.text == "Stage"
+					and badge.snapshot().text == "Stage %d" % record
+					and glyph.position.x >= badge._stage.get_rect().end.x + 3.0 / scale_factor
+					and badge._stage.position.x >= badge._medal.get_rect().end.x + 3.0 / scale_factor,
+					"Stage and one through five record digits retain their own space beside the acquired medal")
 				badge.set_record(record, true, maxi(0, record - 1))
 				badge.advance(0.8)
 				var line_height: float = label.get_theme_font("font").get_height(label.get_theme_font_size("font_size"))
@@ -661,6 +664,11 @@ func test_challenge_results() -> void:
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1000, 760)
+	if OS.get_cmdline_user_args().has("--record-only"):
+		test_record_composition()
+		print("Challenge Stage label: %d checks, %d failures" % [checks, failures])
+		quit(1 if failures else 0)
+		return
 	if OS.get_cmdline_user_args().has("--time-gain-only"):
 		await test_taste_hud()
 		print("Challenge time feedback: %d checks, %d failures" % [checks, failures])
@@ -682,6 +690,7 @@ func _run() -> void:
 	check(data.load_all(), "Presentation contracts use the real vocabulary and acquired artwork")
 	var words: Array = data.words.filter(func(word: Dictionary) -> bool: return Data.word_age(word) == 3) \
 		.map(func(word: Dictionary) -> Dictionary: return Morphology.decorate(word))
+	test_record_composition()
 	test_map()
 	test_entry_and_lv1(data, words)
 	test_skills(words[0])

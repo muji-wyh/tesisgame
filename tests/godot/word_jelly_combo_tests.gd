@@ -107,7 +107,7 @@ func _seed_with_collections(model: RefCounted, amount: int = 2) -> void:
 		var tile: Dictionary = _ready(model)
 		check(model.collect(int(tile.id)), "A real completed word begins collection")
 		model.step(2.0)
-	check(model.combo_snapshot().count == amount and model.combo_snapshot().coins == 0,
+	check(model.combo_snapshot().actions == amount and model.combo_snapshot().coins == 0,
 		"Successful collections establish a chain without issuing combo coins")
 
 
@@ -125,12 +125,13 @@ func _test_manual_rewards() -> void:
 	var ids: Array[String] = []
 	for index in range(expected.size()):
 		var operation: Dictionary = _begin_pair(model)
-		check(model.combo_snapshot().count == index and fixture.wallet.balance == total,
+		check(model.combo_snapshot().actions == index and fixture.wallet.balance == total,
 			"Accepting a merge does not count or pay before its successful completion")
 		model.step(2.0)
 		total += expected[index]
 		var combo: Dictionary = model.combo_snapshot()
-		check(combo.count == index + 1 and combo.best == index + 1 and combo.bonus == expected[index]
+		var level: int = 1 if index + 1 < 3 else 2 if index + 1 < 7 else 3 if index + 1 < 12 else 4
+		check(combo.actions == index + 1 and combo.count == level and combo.best == level and combo.bonus == expected[index]
 			and combo.coins == total and fixture.wallet.balance == total,
 			"Committed manual merges follow the 0, 1, 2, 3 coin schedule exactly")
 		check(not model.cell(int(operation.result.id)).is_empty() and model.cell(int(operation.a_id)).is_empty()
@@ -149,17 +150,17 @@ func _test_manual_rewards() -> void:
 	var wrong_root: Dictionary = _put(model, model._new_word_root(_word(), 0))
 	var wrong_picture: Dictionary = _put(model, model._new_picture_tile(_word("dog"), 0))
 	check(model.try_merge(int(wrong_root.id), int(wrong_picture.id)) == "wrong"
-		and model.combo_snapshot().count == 0 and model.combo_snapshot().best == 12
+		and model.combo_snapshot().count == 0 and model.combo_snapshot().best == 4
 		and model.combo_snapshot().coins == total and fixture.wallet.balance == total,
 		"Breaking a long chain cannot remove saved coins or its best result")
 	for next_count in range(1, 4):
 		_begin_pair(model)
 		model.step(2.0)
-		check(model.combo_snapshot().count == next_count and fixture.wallet.balance == total + (1 if next_count == 3 else 0),
+		check(model.combo_snapshot().actions == next_count and fixture.wallet.balance == total + (1 if next_count == 3 else 0),
 			"After a mistake the reward threshold starts again from the new chain")
 	total += 1
 	var result: Dictionary = model.finish_round()
-	check(result.combo_coins == total and result.coins == total and result.best_combo == 12,
+	check(result.combo_coins == total and result.coins == total and result.best_combo == 4,
 		"Round results include earned combo coins and the best chain exactly once")
 	model.credit_combo = Callable()
 
@@ -195,7 +196,7 @@ func _test_neutral_actions_and_invalid_merge() -> void:
 		"A vocabulary stage transition preserves the current count, best, and reward state")
 	var wrong: Dictionary = _put(model, model._new_picture_tile(_word("dog"), 0))
 	check(model.try_merge(int(root.id), int(wrong.id)) == "wrong", "An actual wrong root-picture pair is rejected")
-	check(model.combo_snapshot().count == 0 and model.combo_snapshot().best == 2
+	check(model.combo_snapshot().count == 0 and model.combo_snapshot().best == 1
 		and model.combo_snapshot().coins == 0 and model.combo_snapshot().event_id == "",
 		"An invalid merge resets only the active chain, retaining the round's best and earned coins")
 	model.credit_combo = Callable()
@@ -223,7 +224,7 @@ func _test_countdown() -> void:
 	var operation: Dictionary = _begin_pair(model)
 	model.step(Model.FUSION_SECONDS)
 	fresh = model.combo_snapshot()
-	check(model.combo_count == 2 and is_equal_approx(float(fresh.get("remaining", 0.0)), 8.0),
+	check(model.combo_actions == 2 and model.combo_count == 1 and is_equal_approx(float(fresh.get("remaining", 0.0)), 8.0),
 		"A subsequent committed success refills rather than extends the countdown")
 	model.step(1.0)
 	var before_duplicate: Dictionary = model.combo_snapshot()
@@ -231,7 +232,7 @@ func _test_countdown() -> void:
 	check(model.combo_snapshot() == before_duplicate, "Duplicate completion cannot refill an existing combo")
 	model.step(7.0)
 	var expired: Dictionary = model.combo_snapshot()
-	check(model.combo_count == 0 and expired.best == 2 and expired.coins == 0
+	check(model.combo_count == 0 and expired.best == 1 and expired.coins == 0
 		and expired.bonus == 0 and expired.event_id == "" and float(expired.get("remaining", -1.0)) == 0.0,
 		"Reaching zero ends only the current chain, preserving its best result and earned coins")
 	check(fixture.changes.size() == 3 and fixture.changes.back().count == 0,
@@ -279,7 +280,7 @@ func _test_collection_batch_and_assistance() -> void:
 		_ready(model, "cat" if index % 2 == 0 else "dog")
 	check(model.start_collection_batch(), "Automatic Collect captures a ready group")
 	model.step(Model.BATCH_BEAT_SECONDS * 5.0 + 0.01)
-	check(model.combo_snapshot().count == 5 and model.cleared_pairs == 5 and not model.collection_batch_active()
+	check(model.combo_snapshot().actions == 5 and model.cleared_pairs == 5 and not model.collection_batch_active()
 		and fixture.payments.is_empty() and fixture.wallet.balance == 0,
 		"Every automatic collection extends the chain once without minting combo rewards")
 	check(fixture.changes.size() == 5, "Each automatic collection emits one increment for HUD and audio feedback")
@@ -289,15 +290,15 @@ func _test_collection_batch_and_assistance() -> void:
 	model.purchase_powerup = func(_id: String, _kind: String, _price: int) -> Dictionary: return {"ok": true}
 	check(model.activate_powerup("auto_merge"), "A paid Auto Merge can complete the next pictured word")
 	model.finish_powerup(false)
-	check(model.combo_snapshot().count == 6 and fixture.payments.is_empty() and fixture.wallet.balance == 0,
+	check(model.combo_snapshot().actions == 6 and fixture.payments.is_empty() and fixture.wallet.balance == 0,
 		"Paid Auto Merge increments the combo on commit without inventing an automatic coin payout")
 	check(model.start_collection_batch(), "The assisted result remains collectable")
 	model.step(2.0)
-	check(model.combo_snapshot().count == 7 and fixture.wallet.balance == 0,
+	check(model.combo_snapshot().actions == 7 and fixture.wallet.balance == 0,
 		"Collecting an assisted result still extends the chain without refunding its purchase")
 	_begin_pair(model)
 	model.step(2.0)
-	check(model.combo_snapshot().count == 8 and fixture.wallet.balance == 2,
+	check(model.combo_snapshot().actions == 8 and fixture.wallet.balance == 2,
 		"The next manual merge receives the tier reached through automatic collection")
 	model.credit_combo = Callable()
 	model.purchase_powerup = Callable()
@@ -315,14 +316,14 @@ func _test_batch_cancel_and_upgrade() -> void:
 		"Canceling a batch settles only its accepted item and preserves that earned increment")
 	check(model.start_collection_batch(), "A later Collect command can resume the remaining words")
 	model.step(2.0)
-	check(model.combo_snapshot().count == 4 and fixture.payments.is_empty(),
+	check(model.combo_snapshot().actions == 4 and fixture.payments.is_empty(),
 		"Resuming a canceled batch extends its existing chain without combo coin farming")
 	var left: Dictionary = _ready(model)
 	var right: Dictionary = _ready(model)
 	check(model.try_merge(int(left.id), int(right.id)) == "merged", "Identical completed words accept a manual level upgrade")
 	var upgraded_id: int = int(model.fusions.back().result.id)
 	model.step(2.0)
-	check(model.cell(upgraded_id).merge_level == 2 and model.combo_snapshot().count == 5 and fixture.wallet.balance == 1,
+	check(model.cell(upgraded_id).merge_level == 2 and model.combo_snapshot().actions == 5 and fixture.wallet.balance == 1,
 		"A successful manual level upgrade counts and pays under the same rule as a root-picture merge")
 	model.credit_combo = Callable()
 
@@ -338,12 +339,12 @@ func _test_high_level_upgrade_combo() -> void:
 		check(model.try_merge(int(left.id), int(right.id)) == "merged", "A high-level additive upgrade remains an ordinary manual merge")
 		var result_id: int = int(model.fusion.result.id)
 		model.step(2.0)
-		check(model.cell(result_id).merge_level == level and model.combo_count == 3
+		check(model.cell(result_id).merge_level == level and model.combo_actions == 3
 			and fixture.wallet.balance == 1 and fixture.payments.size() == 1,
 			"A Lv%d upgrade advances combo once and retains the existing one-coin tier" % level)
 		check(model.collect(result_id), "The high-level result remains manually collectable")
 		model.step(2.0)
-		check(model.combo_count == 4 and fixture.wallet.balance == 1 and fixture.payments.size() == 1,
+		check(model.combo_actions == 4 and fixture.wallet.balance == 1 and fixture.payments.size() == 1,
 			"Collecting a Lv%d word advances combo once without paying another merge bonus" % level)
 		model.credit_combo = Callable()
 
@@ -356,7 +357,7 @@ func _test_save_retry() -> void:
 	var operation: Dictionary = _begin_pair(model)
 	fixture.storage.fail_write = true
 	model.step(2.0)
-	check(model.combo_snapshot().pending and model.combo_snapshot().count == 2 and fixture.wallet.balance == 0
+	check(model.combo_snapshot().pending and model.combo_snapshot().actions == 2 and fixture.wallet.balance == 0
 		and not model.cell(int(operation.a_id)).is_empty() and not model.cell(int(operation.b_id)).is_empty()
 		and model.cell(int(operation.result.id)).is_empty(), "Failed payment retains both merge sources without counting or granting coins")
 	var frozen: Dictionary = model.snapshot()
@@ -370,17 +371,17 @@ func _test_save_retry() -> void:
 	check(model.try_merge(int(spare.id), int(operation.a_id)) == "ignored", "Pending save blocks another merge attempt")
 	model.retry_combo_credit()
 	check(fixture.payments.size() == 2 and fixture.payments[0] == fixture.payments[1]
-		and model.combo_snapshot().count == 2, "A repeated failure preserves the exact event, reward, and chain position")
+		and model.combo_snapshot().actions == 2, "A repeated failure preserves the exact event, reward, and chain position")
 	fixture.storage.fail_write = false
 	model.retry_combo_credit()
-	check(not model.combo_snapshot().pending and model.combo_snapshot().count == 3 and model.combo_snapshot().coins == 1
+	check(not model.combo_snapshot().pending and model.combo_snapshot().actions == 3 and model.combo_snapshot().coins == 1
 		and fixture.wallet.balance == 1 and fixture.storage.writes == 1 and model.error.is_empty(),
 		"Successful retry durably pays and commits the retained merge exactly once")
 	check(fixture.payments.size() == 3 and fixture.payments[0] == fixture.payments[2]
 		and model.cell(int(operation.a_id)).is_empty() and not model.cell(int(operation.result.id)).is_empty(),
 		"Recovery reuses the original receipt and replaces its original sources")
 	model.retry_combo_credit()
-	check(fixture.payments.size() == 3 and model.combo_snapshot().count == 3 and fixture.wallet.balance == 1,
+	check(fixture.payments.size() == 3 and model.combo_snapshot().actions == 3 and fixture.wallet.balance == 1,
 		"Repeated Retry saving cannot farm the completed reward")
 	model.credit_combo = Callable()
 
@@ -397,10 +398,10 @@ func _test_lost_payment_acknowledgement() -> void:
 		return {"ok": false} if attempts.size() == 1 else response
 	_begin_pair(model)
 	model.step(2.0)
-	check(model.combo_snapshot().pending and model.combo_snapshot().count == 2 and wallet.balance == 1,
+	check(model.combo_snapshot().pending and model.combo_snapshot().actions == 2 and wallet.balance == 1,
 		"A lost acknowledgement retains the merge while its durable receipt remains paid")
 	model.retry_combo_credit()
-	check(model.combo_snapshot().count == 3 and model.combo_snapshot().coins == 1 and wallet.balance == 1
+	check(model.combo_snapshot().actions == 3 and model.combo_snapshot().coins == 1 and wallet.balance == 1
 		and attempts.size() == 2 and attempts[1].duplicate and attempts[0].id == attempts[1].id,
 		"Retry acknowledges an already saved coin and completes once without a second reward")
 	model.credit_combo = Callable()
@@ -414,12 +415,12 @@ func _test_concurrent_merges() -> void:
 	var second: Dictionary = _begin_pair(model)
 	fixture.storage.fail_write = true
 	model.step(2.0)
-	check(model.combo_snapshot().count == 4 and model.fusions.size() == 2 and fixture.payments.size() == 1,
+	check(model.combo_snapshot().actions == 4 and model.fusions.size() == 2 and fixture.payments.size() == 1,
 		"A failed first payment freezes both concurrent merges before either source pair is consumed")
 	fixture.storage.fail_write = false
 	model.retry_combo_credit()
 	model.step(1.0)
-	check(model.combo_snapshot().count == 6 and model.combo_snapshot().coins == 3 and fixture.wallet.balance == 3,
+	check(model.combo_snapshot().actions == 6 and model.combo_snapshot().coins == 3 and fixture.wallet.balance == 3,
 		"Concurrent successes cross the reward threshold in committed order with one- then two-coin awards")
 	check(fixture.payments.size() == 3 and fixture.payments[0] == fixture.payments[1]
 		and fixture.payments[1].amount == 1 and fixture.payments[2].amount == 2
@@ -440,24 +441,24 @@ func _test_collection_commit_order() -> void:
 		return {"pending": true}
 	check(model.collect(int(tile.id)), "Start a collection whose durable acknowledgement is delayed")
 	model.step(1.0)
-	check(requests.size() == 1 and model.combo_snapshot().count == 2,
+	check(requests.size() == 1 and model.combo_snapshot().actions == 2,
 		"A pending collection does not increment the combo early")
 	_begin_pair(model)
 	model.step(2.0)
-	check(model.combo_snapshot().count == 3 and fixture.wallet.balance == 1,
+	check(model.combo_snapshot().actions == 3 and fixture.wallet.balance == 1,
 		"A later merge that commits first earns the third-success reward")
 	var request: Dictionary = requests[0]
 	check(model.resolve_collection_commit(str(request.event_id), int(request.generation), {"ok": false})
-		and model.combo_snapshot().count == 3, "A failed delayed collection leaves the committed merge's chain intact")
+		and model.combo_snapshot().actions == 3, "A failed delayed collection leaves the committed merge's chain intact")
 	check(model.collect(int(tile.id)), "The same failed collection can retry")
 	model.step(1.0)
 	check(requests.size() == 2 and requests[0].event_id == requests[1].event_id,
 		"Collection retry preserves its existing permanent identity")
 	check(model.resolve_collection_commit(str(request.event_id), int(request.generation), {"ok": true})
-		and model.combo_snapshot().count == 4 and fixture.wallet.balance == 1,
+		and model.combo_snapshot().actions == 4 and fixture.wallet.balance == 1,
 		"Collection acknowledgement advances the chain once with no extra combo payment")
 	check(not model.resolve_collection_commit(str(request.event_id), int(request.generation), {"ok": true})
-		and model.combo_snapshot().count == 4, "A duplicate asynchronous acknowledgement cannot add a combo")
+		and model.combo_snapshot().actions == 4, "A duplicate asynchronous acknowledgement cannot add a combo")
 	model.commit_collection = Callable()
 	model.credit_combo = Callable()
 
@@ -471,7 +472,7 @@ func _test_finish_and_reconfigure() -> void:
 	model.step(2.0)
 	var result: Dictionary = model.finish_round("exit")
 	check(model.phase == "finished" and not model.combo_snapshot().pending and result.combo_coins == 0
-		and result.best_combo == 2 and fixture.wallet.balance == 0,
+		and result.best_combo == 1 and fixture.wallet.balance == 0,
 		"Finishing cancels an unpaid pending reward without claiming a successful merge")
 	check(not model.cell(int(operation.a_id)).is_empty() and not model.cell(int(operation.b_id)).is_empty(),
 		"Canceling unpaid settlement retains its unconsumed source bodies")
@@ -504,10 +505,10 @@ func _test_payment_reentrancy() -> void:
 			return response
 		model.step(2.0)
 		if action == "finish-failed":
-			check(model.phase == "finished" and not model.combo_snapshot().pending and model.combo_snapshot().count == 2
+			check(model.phase == "finished" and not model.combo_snapshot().pending and model.combo_snapshot().actions == 2
 				and wallet.balance == 0, "A finish requested inside a failed payment callback cancels unpaid settlement cleanly")
 		else:
-			check(model.combo_snapshot().count == 3 and model.combo_snapshot().coins == 1 and wallet.balance == 1
+			check(model.combo_snapshot().actions == 3 and model.combo_snapshot().coins == 1 and wallet.balance == 1
 				and model.cell(int(operation.a_id)).is_empty() and not model.cell(int(operation.result.id)).is_empty(),
 				"Payment callback reentrancy cannot separate the saved coin from its committed merge")
 			if action == "finish":
@@ -579,11 +580,11 @@ func _test_game_ui_wallet() -> void:
 	model.spawn_interval = 10000.0
 	_game_ui_merge(view, word)
 	_game_ui_merge(view, word)
-	check(app.coin_wallet.balance == 0 and model.combo_snapshot().count == 2,
+	check(app.coin_wallet.balance == 0 and model.combo_snapshot().actions == 2,
 		"The real application saves no coins before the third consecutive success")
 	var first_event: String = _game_ui_merge(view, word)
 	var first_receipt: String = app._round_id + ":combo:" + first_event
-	check(model.combo_snapshot().count == 3 and app.coin_wallet.balance == 1
+	check(model.combo_snapshot().actions == 3 and app.coin_wallet.balance == 1
 		and app.coin_wallet._receipts.get(first_receipt, 0) == 1 and app._coin_counter.target == 0
 		and app._coin_flight.snapshot().active,
 		"GameUI saves the round-scoped combo coin but holds its visible balance until arrival")
@@ -594,7 +595,7 @@ func _test_game_ui_wallet() -> void:
 	check(DirAccess.make_dir_absolute(wallet_path + ".pending") == OK, "Block the real wallet's next native staging write")
 	var retry_event: String = _game_ui_merge(view, word)
 	await _settle_ui()
-	check(model.combo_snapshot().pending and model.combo_snapshot().count == 3 and app.coin_wallet.balance == 1
+	check(model.combo_snapshot().pending and model.combo_snapshot().actions == 3 and app.coin_wallet.balance == 1
 		and not app._jelly_interaction_allowed() and not view._can_play(),
 		"A real save failure preserves the chain and coin balance while blocking gameplay input")
 	check(app._storage_retry_button.is_visible_in_tree(), "The application exposes Retry saving for a pending combo payment")
@@ -602,7 +603,7 @@ func _test_game_ui_wallet() -> void:
 	app._retry_storage()
 	await _settle_ui()
 	var retry_receipt: String = app._round_id + ":combo:" + retry_event
-	check(not model.combo_snapshot().pending and model.combo_snapshot().count == 4
+	check(not model.combo_snapshot().pending and model.combo_snapshot().actions == 4
 		and app.coin_wallet.balance == 2 and app.coin_wallet._receipts.get(retry_receipt, 0) == 1
 		and app._coin_counter.target == 1 and app._coin_flight.snapshot().active and app._jelly_interaction_allowed(),
 		"The real Retry saving action pays once, completes the merge, restores input and launches the recovered coin")
@@ -610,7 +611,7 @@ func _test_game_ui_wallet() -> void:
 	check(app._coin_counter.target == 2 and app._coin_counter.displayed == 2.0,
 		"The recovered saved reward increments the header only through the coin's arrival")
 	app._retry_storage()
-	check(model.combo_snapshot().count == 4 and app.coin_wallet.balance == 2,
+	check(model.combo_snapshot().actions == 4 and app.coin_wallet.balance == 2,
 		"Repeated application retry cannot replay a committed combo")
 	var duplicate: Dictionary = app._credit_word_jelly_combo(retry_event, 1)
 	check(duplicate.ok and duplicate.duplicate and app.coin_wallet.balance == 2,
@@ -636,19 +637,19 @@ func _test_game_ui_wallet() -> void:
 		if cue.begins_with("jelly-combo-"):
 			cues.append(cue))
 	model.combo_changed.connect(func(state: Dictionary) -> void:
-		if int(state.count) > 4:
+		if int(state.actions) > 4:
 			observed_pulses.append(view._combo_hud.snapshot().pulse_serial))
 	var pulse_before: int = int(view._combo_hud.snapshot().pulse_serial)
 	PlayerFixture.unlock_auto_collect(app)
 	check(model.start_collection_batch(), "The real GameUI starts an automatic batch of three mastery-eligible words")
 	model.step(Model.BATCH_BEAT_SECONDS * 3.0 + 0.01)
-	check(model.combo_snapshot().count == 7 and app.coin_wallet.balance == 2,
+	check(model.combo_snapshot().actions == 7 and app.coin_wallet.balance == 2,
 		"Three committed automatic pickups advance the real application's combo without paying extra coins")
-	check(cues == ["jelly-combo-5", "jelly-combo-6", "jelly-combo-7"],
-		"Every automatic collection emits its distinct combo sound despite synchronous learning refresh")
-	check(observed_pulses == [pulse_before + 1, pulse_before + 2, pulse_before + 3]
-		and int(view._combo_hud.snapshot().count) == 7,
-		"Every automatic increment reaches the HUD once and advances its animation pulse after learning saves")
+	check(cues == ["jelly-combo-3"],
+		"Automatic collection sounds celebrate an actual level-up, not each added progress point")
+	check(observed_pulses == [pulse_before, pulse_before, pulse_before + 1]
+		and int(view._combo_hud.snapshot().count) == 3,
+		"Every automatic increment reaches the HUD, but only the actual level-up pulses after learning saves")
 	app.audio.halt()
 	app.queue_free()
 	await _settle_ui()

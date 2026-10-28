@@ -54,7 +54,7 @@ func _run() -> void:
 		"creator": manifest.source.creator, "license": manifest.source.license,
 		"acquisition": "Rendered from the acquired and integrated Bramble model; not a source-listing preview.",
 		"animations": "Static portrait sampled from the game-authored Idle clip at 0.45 seconds.",
-		"framing": "Complete face and ears, upper-body portrait, transparent background and proportional fit."}
+		"framing": "Complete Frog face and shoulder silhouette, transparent background and proportional fit."}
 	var file := FileAccess.open("res://assets/jelly-boss/manifest.json", FileAccess.WRITE)
 	if file == null:
 		printerr("Could not record the Boss portrait's source and output hashes.")

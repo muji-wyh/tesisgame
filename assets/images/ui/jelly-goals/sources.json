@@ -42,16 +42,60 @@
       "integrated_sha256": "7290063e88daa234a1ac5b0a6906672270ab7388c4ee65e0760811716a0fe631",
       "status": "Previously acquired and source-inspected illustration copied unchanged into the core UI for the extra-time item.",
       "animation": "Static source illustration; no source animation clips."
+    },
+    {
+      "id": "rating-bronze",
+      "file": "assets/images/ui/jelly-goals/rating-bronze.png",
+      "adapted_from": "assets/images/ui/jelly-goals/star.webp",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Star/3D/star_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT",
+      "record": "docs/assets/word-library.json",
+      "source_sha256": "b935cdf502b69054bc2b08e7ba4e4eaba6499564a2041dd77d6291e21bf8cfe8",
+      "integrated_sha256": "262b7b8dbdb682a71c05629cdd4ef7a14b943a728f42f00a893c3bc45dffd54d",
+      "status": "Derived locally from the acquired production artwork; native presentation review is recorded separately from source inspection.",
+      "animation": "Static source illustration; no source animation clips.",
+      "source_image_sha256": "cfbd55db7e7d74c5d68c4f881bbdb7102488ad67d5a24bafc897f2866532f100",
+      "processing": "Game-authored bronze luminance palette; original alpha, contour and lighting detail retained. tools/prepare-jelly-rating.py"
+    },
+    {
+      "id": "rating-silver",
+      "file": "assets/images/ui/jelly-goals/rating-silver.png",
+      "adapted_from": "assets/images/ui/jelly-goals/star.webp",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Star/3D/star_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT",
+      "record": "docs/assets/word-library.json",
+      "source_sha256": "b935cdf502b69054bc2b08e7ba4e4eaba6499564a2041dd77d6291e21bf8cfe8",
+      "integrated_sha256": "93143f9b488e0debeb720b0de462c289334630c2a8fe2858efa0c0d6714014c5",
+      "status": "Derived locally from the acquired production artwork; native presentation review is recorded separately from source inspection.",
+      "animation": "Static source illustration; no source animation clips.",
+      "source_image_sha256": "cfbd55db7e7d74c5d68c4f881bbdb7102488ad67d5a24bafc897f2866532f100",
+      "processing": "Game-authored silver luminance palette; original alpha, contour and lighting detail retained. tools/prepare-jelly-rating.py"
     }
   ],
   "reused_effects": {
     "files": [
       "assets/chests/particles/portal_glow.png",
-      "assets/chests/milestone/sparkle.png"
+      "assets/chests/milestone/sparkle.png",
+      "assets/chests/milestone/rays.png"
     ],
-    "creator": "Kenneth Foldal Moe / Archanor VFX",
-    "source": "https://assetstore.unity.com/packages/vfx/particles/toon-fx-25601",
-    "version": "1.52",
+    "sources": [
+      {
+        "files": ["assets/chests/particles/portal_glow.png"],
+        "creator": "Bobardo",
+        "source": "https://assetstore.unity.com/packages/2d/modern-2d-animated-chests-free-demo-360538",
+        "version": "1.0.2",
+        "record": "assets/chests/SOURCE.txt"
+      },
+      {
+        "files": ["assets/chests/milestone/sparkle.png", "assets/chests/milestone/rays.png"],
+        "creator": "Kenneth Foldal Moe / Archanor VFX",
+        "source": "https://assetstore.unity.com/packages/vfx/particles/toon-fx-25601",
+        "version": "1.52",
+        "record": "docs/assets/jelly-fragments.md"
+      }
+    ],
     "license": "Standard Unity Asset Store EULA",
     "status": "Existing acquired private runtime inputs; reused without new downloads or source-package redistribution.",
     "animation": "Static particle textures; bounded card-local movement is authored by the game."

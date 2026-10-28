@@ -138,7 +138,7 @@ async function expectHeaderBadge(page) {
 
 test('new device starts at Lv0 with Baby Pip, an age 3 lesson, and a complete notebook', async ({ page }, info) => {
   const errors = await openGame(page);
-  await expect(page).toHaveTitle(/Grow with Pip/);
+  await expect(page).toHaveTitle("Pip's world");
   await expect.poll(async () => (await growth(page)).level).toBe(0);
   expect((await growth(page)).age).toBe(0);
   expect((await growth(page)).age_label).toBe('Baby');

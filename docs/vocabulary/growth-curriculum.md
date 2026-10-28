@@ -1,4 +1,4 @@
-# Grow with Pip vocabulary curriculum
+# Pip's world vocabulary curriculum
 
 The October 9, 2026 curriculum contains **1,550 distinct word entries**, preserving
 the existing 1,250 IDs and adding 300. It is designed for children learning English

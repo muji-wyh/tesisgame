@@ -1,5 +1,5 @@
 extends Control
-## Model-owned rank and exact count, with one bounded flourish per increment.
+## Cumulative level progress and its independent model-owned expiry clock.
 
 const Style = preload("res://scripts/ui_style.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
@@ -19,6 +19,8 @@ var _count: int = 0
 var _tier: int = 0
 var _rank: String = "D"
 var _bonus: int = 0
+var _progress: int = 0
+var _required: int = 3
 var _shown_bonus: int = 0
 var _remaining: float = 0.0
 var _seconds: float = 1.0
@@ -34,6 +36,9 @@ var _bonus_label: Label
 var _bonus_caption: Label
 var _coin := TextureRect.new()
 var _timer := ProgressBar.new()
+var _charge := ProgressBar.new()
+var _charge_track := StyleBoxFlat.new()
+var _charge_fill := StyleBoxFlat.new()
 var _timer_track := StyleBoxFlat.new()
 var _timer_fill := StyleBoxFlat.new()
 var _body := Rect2()
@@ -74,6 +79,16 @@ func _init() -> void:
 	_timer.add_theme_stylebox_override("fill", _timer_fill)
 	_timer.set("accessibility_name", "Combo time remaining")
 	_content.add_child(_timer)
+	_charge.name = "ComboLevelProgress"
+	_charge.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_charge.focus_mode = Control.FOCUS_NONE
+	_charge.show_percentage = false
+	_charge.step = 0.0
+	for surface: StyleBoxFlat in [_charge_track, _charge_fill]:
+		surface.set_corner_radius_all(3)
+	_charge.add_theme_stylebox_override("background", _charge_track)
+	_charge.add_theme_stylebox_override("fill", _charge_fill)
+	_content.add_child(_charge)
 	resized.connect(_layout)
 	set("accessibility_name", "Combo 0")
 	hide()
@@ -111,8 +126,10 @@ func set_state(state: Dictionary, celebrate: bool = false) -> void:
 	if next_rank.is_empty():
 		next_rank = RANKS[next_tier]
 	var next_bonus: int = maxi(0, int(state.get("bonus", 0)))
+	var next_required: int = maxi(1, int(state.get("required", maxi(1, next_count) + 2)))
+	var next_progress: int = clampi(int(state.get("progress", 0)), 0, next_required)
 	if next_count == _count and next_event == _event_id and next_tier == _tier \
-		and next_rank == _rank and next_bonus == _bonus:
+		and next_rank == _rank and next_bonus == _bonus and next_required == _required and next_progress == _progress:
 		return
 	var increased: bool = next_count > _count
 	var changed: bool = next_count != _count or next_event != _event_id
@@ -120,13 +137,18 @@ func set_state(state: Dictionary, celebrate: bool = false) -> void:
 	_tier = next_tier
 	_rank = next_rank
 	_bonus = next_bonus
+	_progress = next_progress
+	_required = next_required
+	_charge.max_value = _required
+	_charge.value = _progress
+	_charge.set("accessibility_name", "Next combo level: %d of %d actions" % [_progress, _required])
 	_event_id = next_event
 	if _count <= 0:
 		_pop_elapsed = POP_SECONDS
 		_bonus_elapsed = BONUS_SECONDS
 		_shown_bonus = 0
 	elif changed:
-		if celebrate and increased and _bonus > 0:
+		if celebrate and next_event != "" and _bonus > 0:
 			_shown_bonus = _bonus
 			_bonus_elapsed = 0.0
 		if celebrate and increased:
@@ -135,7 +157,7 @@ func set_state(state: Dictionary, celebrate: bool = false) -> void:
 	_rank_label.text = _rank
 	_count_label.text = "×%d" % _count
 	_bonus_label.text = "+%d" % _shown_bonus
-	set("accessibility_name", "Combo %d. Rank %s.%s" % [_count, _rank,
+	set("accessibility_name", "Combo level %d. Rank %s. Progress %d of %d.%s" % [_count, _rank, _progress, _required,
 		" Combo bonus: %d coins." % _shown_bonus if _reward_visible() else ""])
 	_layout()
 	_refresh()
@@ -178,6 +200,9 @@ func reset() -> void:
 	_tier = 0
 	_rank = "D"
 	_bonus = 0
+	_progress = 0
+	_required = 3
+	_charge.value = 0.0
 	_shown_bonus = 0
 	_remaining = 0.0
 	_timer.value = 0.0
@@ -219,6 +244,7 @@ func _layout() -> void:
 	inner.size.y = maxf(1.0, inner.size.y - 12.0 / _ui_scale)
 	var reward_visible: bool = _reward_visible()
 	var roomy: bool = _content.size.y * _ui_scale >= 50.0
+	_caption.text = "%d/%d" % [_progress, _required] if reward_visible else "COMBO %d/%d" % [_progress, _required]
 	_reward_region = Rect2()
 	if reward_visible and roomy:
 		var reward_height: float = minf(25.0 / _ui_scale, inner.size.y * 0.49)
@@ -240,26 +266,30 @@ func _layout() -> void:
 			_reward_region = Rect2(right.position + Vector2(right.size.x * 0.38, 0.0),
 				Vector2(right.size.x * 0.62, right.size.y))
 			right.size.x *= 0.38
-		_count_region = Rect2(right.position, Vector2(right.size.x, right.size.y * 0.66))
-		_detail_region = Rect2(right.position + Vector2(0.0, right.size.y * 0.64),
-			Vector2(right.size.x, right.size.y * 0.36))
+		_count_region = Rect2(right.position, Vector2(right.size.x, right.size.y * 0.60))
+		_detail_region = Rect2(right.position + Vector2(0.0, right.size.y * 0.60),
+			Vector2(right.size.x, right.size.y * 0.40))
 	_fit_font(_rank_label, _rank_region, 43.0 / _ui_scale)
 	_fit_font(_count_label, _count_region, 36.0 / _ui_scale)
-	_fit_font(_caption, _detail_region, 11.0 / _ui_scale)
+	var caption_region := Rect2(_detail_region.position,
+		Vector2(_detail_region.size.x, maxf(1.0, _detail_region.size.y - 6.0 / _ui_scale)))
+	_fit_font(_caption, caption_region, 11.0 / _ui_scale)
+	_charge.position = _detail_region.position + Vector2(2.0, _detail_region.size.y * _ui_scale - 4.0) / _ui_scale
+	_charge.size = Vector2(maxf(1.0, _detail_region.size.x - 4.0 / _ui_scale), 4.0 / _ui_scale)
 	if reward_visible:
 		var reward := Rect2(_reward_region.position + Vector2(3.0, 0.0) / _ui_scale,
 			(_reward_region.size - Vector2(6.0, 0.0) / _ui_scale).max(Vector2.ONE))
-		var caption_region: Rect2
+		var reward_caption_region: Rect2
 		var amount_region: Rect2
 		if roomy:
-			caption_region = Rect2(reward.position, Vector2(reward.size.x * 0.57, reward.size.y))
-			amount_region = Rect2(reward.position + Vector2(caption_region.size.x, 0.0),
-				Vector2(reward.size.x - caption_region.size.x, reward.size.y))
+			reward_caption_region = Rect2(reward.position, Vector2(reward.size.x * 0.57, reward.size.y))
+			amount_region = Rect2(reward.position + Vector2(reward_caption_region.size.x, 0.0),
+				Vector2(reward.size.x - reward_caption_region.size.x, reward.size.y))
 		else:
-			caption_region = Rect2(reward.position, Vector2(reward.size.x, reward.size.y * 0.34))
-			amount_region = Rect2(reward.position + Vector2(0.0, caption_region.size.y),
-				Vector2(reward.size.x, reward.size.y - caption_region.size.y))
-		_fit_font(_bonus_caption, caption_region, (12.0 if roomy else 9.0) / _ui_scale)
+			reward_caption_region = Rect2(reward.position, Vector2(reward.size.x, reward.size.y * 0.34))
+			amount_region = Rect2(reward.position + Vector2(0.0, reward_caption_region.size.y),
+				Vector2(reward.size.x, reward.size.y - reward_caption_region.size.y))
+		_fit_font(_bonus_caption, reward_caption_region, (12.0 if roomy else 9.0) / _ui_scale)
 		var coin_edge: float = minf(24.0 / _ui_scale, minf(amount_region.size.y, amount_region.size.x * 0.43))
 		_coin.position = amount_region.position + Vector2(0.0, (amount_region.size.y - coin_edge) * 0.5)
 		_coin.size = Vector2.ONE * coin_edge
@@ -298,6 +328,9 @@ func _refresh() -> void:
 	_bonus_label.visible = reward_visible
 	_bonus_caption.visible = reward_visible
 	_caption.visible = true
+	_charge.visible = _count > 0
+	_charge_track.bg_color = Color("#e6d9bb")
+	_charge_fill.bg_color = Color("#e7aa3c")
 	_timer.visible = _count > 0
 	var timer_tint: Color = Color("#d85b3b") if _remaining / _seconds <= 0.25 else tint
 	if _timer_track.bg_color != tint.lightened(0.82):
@@ -374,6 +407,9 @@ func snapshot() -> Dictionary:
 		"bonus_visible": _coin.visible and visible, "bonus_text": _bonus_caption.text + " " + _bonus_label.text,
 		"bonus_font_size": _bonus_label.get_theme_font_size("font_size"),
 		"remaining": _remaining, "seconds": _seconds, "time_ratio": _remaining / _seconds,
+		"progress": _progress, "required": _required, "progress_ratio": float(_progress) / _required,
+		"progress_text": _caption.text, "progress_visible": _charge.visible and visible,
+		"progress_rect": _rect_array(_charge.get_global_rect()),
 		"timer_visible": _timer.visible and visible, "timer_rect": _rect_array(_timer.get_global_rect()),
 		"pulse_serial": _pulse_serial,
 		"pulse_elapsed": _pop_elapsed, "pulse_active": visible and not reduced_motion and _pop_elapsed < POP_SECONDS,

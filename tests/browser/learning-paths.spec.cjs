@@ -16,7 +16,7 @@ async function openLibrary(page) {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto('/');
   await enterGame(page, { home: true });
-  await expect.poll(async () => (await metrics(page)).library.brand).toBe('Grow with Pip');
+  await expect.poll(async () => (await metrics(page)).library.brand).toBe("Pip's world");
   expect((await metrics(page)).library.vocabulary.kind).toBe('everyday');
   expect((await metrics(page)).library.controls.filter(item => item.name.startsWith('Mode_')).length).toBe(6);
   await activateLibraryControl(page, 'HomeVocabulary');
@@ -132,7 +132,7 @@ test('career vocabulary uses the shared Pip Home while preparing modules stay un
     await activateGrowthControl(page, 'ContinueLearningPath');
     await expect.poll(async () => (await metrics(page)).library.visible).toBe(true);
     const home = (await metrics(page)).library;
-    expect(home.brand).toBe('Grow with Pip');
+    expect(home.brand).toBe("Pip's world");
     expect(home.vocabulary.kind).toBe('professional');
     expect(home.vocabulary.title).toBe('Playing professional English');
     expect(home.vocabulary.detail).toContain(course.title);

@@ -122,8 +122,10 @@ func _check_catalog(presets: Dictionary) -> void:
 			"Tier %d keeps the acquired recipe identity through rendering" % tier)
 		ids[preset.get("id", "")] = true
 		var source: String = str(preset.get("base_model", ""))
-		check(_resource_path(str(style.get("model", ""))) == _resource_path(source),
-			"Tier %d uses its declared acquired base rather than another tier or flat art" % tier)
+		check(_resource_path(str(style.get("source_model", ""))) == _resource_path(source)
+			and _resource_path(str(style.get("model", ""))) == _resource_path(
+				str(constants.POLISHED_MODELS.get(source, source))),
+			"Tier %d uses the documented refined source base, never a different tier or flat art" % tier)
 		check(_known_model(source), "Tier %d base resolves to a documented source artifact" % tier)
 		check(FileAccess.file_exists(_resource_path(source)),
 			"Tier %d acquired base file is present" % tier)
@@ -691,7 +693,7 @@ func _check_reward_pool() -> void:
 			and model.render_target_update_mode == SubViewport.UPDATE_DISABLED,
 			"Reward tier %d remains idle while its owner is paused" % tier)
 		if _catalog != null:
-			check(state.get("source", "") == _resource_path(str(_preset(tier).get("base_model", ""))),
+			check(state.get("source", "") == _resource_path(str(_style(tier).get("model", ""))),
 				"Reward tier %d uses its exact recipe rather than a repeating legacy theme" % tier)
 		var camera: Camera3D = model.get("_camera") as Camera3D
 		var camera_transform: Transform3D = camera.transform

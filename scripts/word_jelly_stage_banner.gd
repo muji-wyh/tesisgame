@@ -6,6 +6,11 @@ const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const RAYS = preload("res://assets/chests/milestone/rays.png")
 const STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
+const STAR_TEXTURES: Array[Texture2D] = [
+	preload("res://assets/images/ui/jelly-goals/rating-bronze.png"),
+	preload("res://assets/images/ui/jelly-goals/rating-silver.png"),
+	STAR]
+const STAR_COLORS: Array[Color] = [Color("#ce9062"), Color("#a9d8f6"), Color("#ffda6f")]
 const CLOCK = preload("res://assets/images/ui/jelly-goals/clock.webp")
 const DURATION: float = 1.8
 const READY_SECONDS: float = 0.82
@@ -22,6 +27,7 @@ var _scale: float = 1.0
 var _elapsed: float = DURATION
 var _card_duration: float = DURATION
 var _entry: bool = false
+var _rating_clock: float = 0.0
 var _time_bonus_remaining: float = 0.0
 var _time_bonus: float = 0.0
 var _time_feedback := Control.new()
@@ -82,6 +88,8 @@ func set_stage(state: Dictionary, celebrate: bool = false) -> void:
 		return
 	var same_stage: bool = not celebrate and state.get("kind") == "main" and _state.get("kind") == "main" \
 		and state.get("number") == _state.get("number")
+	if not same_stage:
+		_rating_clock = 0.0
 	if not same_stage or reduced_motion:
 		_star_loss_elapsed.fill(STAR_LOSS_SECONDS)
 	elif state.get("outcome", "") in ["", "timeout"]:
@@ -113,6 +121,7 @@ func reset() -> void:
 	_elapsed = DURATION
 	_card_duration = DURATION
 	_entry = false
+	_rating_clock = 0.0
 	_time_bonus_remaining = 0.0
 	_time_bonus = 0.0
 	_pose_time_feedback()
@@ -138,6 +147,7 @@ func ready_pending() -> bool:
 func advance(delta: float) -> void:
 	if not is_finite(delta) or delta <= 0.0:
 		return
+	_rating_clock += delta
 	_time_bonus_remaining = maxf(0.0, _time_bonus_remaining - delta)
 	_pose_time_feedback()
 	for index in range(3):
@@ -311,31 +321,56 @@ func _rating_bounds() -> Rect2:
 func rating_geometry(bounds: Rect2, ui_scale: float, compact: bool = false) -> Array[Dictionary]:
 	var slots: Array[Dictionary] = []
 	var span: float = bounds.size.x / 3.0
-	var edge: float = minf((20.0 if compact else 28.0) / ui_scale, span * 0.84)
+	var maximum: float = minf((20.0 if compact else 28.0) / ui_scale,
+		minf(span * 0.84, maxf(1.0, bounds.size.y - 4.0 / ui_scale)))
 	for index in range(3):
-		var star := Rect2(Vector2(bounds.position.x + (float(index) + 0.5) * span - edge * 0.5, bounds.position.y),
+		var edge: float = maximum * [0.72, 0.86, 1.0][index]
+		var star := Rect2(Vector2(bounds.position.x + (float(index) + 0.5) * span - edge * 0.5,
+			bounds.position.y + (bounds.size.y - 4.0 / ui_scale - edge) * 0.5),
 			Vector2.ONE * edge)
 		var bar := Rect2(Vector2(bounds.position.x + float(index) * span, bounds.end.y - 3.0 / ui_scale),
 			Vector2(maxf(0.0, span - 2.0 / ui_scale), 3.0 / ui_scale))
-		slots.append({"star": [star.position.x, star.position.y, star.size.x, star.size.y],
+		slots.append({"tier": index + 1, "material": ["Bronze", "Silver", "Gold"][index],
+			"active": index < int(_state.get("stars_now", 0)),
+			"star": [star.position.x, star.position.y, star.size.x, star.size.y],
 			"bar": [bar.position.x, bar.position.y, bar.size.x, bar.size.y]})
 	return slots
 
 
 func draw_rating(canvas: CanvasItem, bounds: Rect2, ui_scale: float, compact: bool = false) -> void:
 	var slots: Array[Dictionary] = rating_geometry(bounds, ui_scale, compact)
+	canvas.draw_style_box(Style.box(Color("#254955"), Color("#738f95"),
+		maxi(1, roundi(10.0 / ui_scale)), maxi(1, roundi(1.0 / ui_scale))), bounds)
+	canvas.draw_texture_rect(GLOW, bounds, false, Color(0.61, 0.82, 0.95, 0.12))
 	for index in range(3):
 		var slot: Dictionary = slots[index]
 		var star := Rect2(slot.star[0], slot.star[1], slot.star[2], slot.star[3])
-		canvas.draw_texture_rect(STAR, star, false,
-			Color.WHITE if index < int(_state.get("stars_now", 0)) else Color(0.35, 0.40, 0.38, 0.45))
+		var active: bool = bool(slot.active)
+		var texture: Texture2D = STAR_TEXTURES[index]
+		if active and index > 0:
+			canvas.draw_texture_rect(GLOW, star.grow(3.0 / ui_scale).intersection(bounds), false,
+				Color(STAR_COLORS[index], 0.16 if index == 1 else 0.28))
+		if active and index == 2:
+			canvas.draw_texture_rect(RAYS, star.grow(4.0 / ui_scale).intersection(bounds), false,
+				Color(1.0, 0.85, 0.40, 0.20))
+		canvas.draw_texture_rect(texture, star, false, Color.WHITE if active else Color(0.48, 0.58, 0.62, 0.34))
+		var bar := Rect2(slot.bar[0], slot.bar[1], slot.bar[2], slot.bar[3])
+		canvas.draw_style_box(Style.box(Color(STAR_COLORS[index], 0.85 if active else 0.12),
+			Color.TRANSPARENT, maxi(1, roundi(2.0 / ui_scale)), 0), bar)
+		var glint: float = fposmod(_rating_clock + float(index) * 0.32, 4.0)
+		if active and index > 0 and not reduced_motion and glint < 0.75:
+			var progress: float = glint / 0.75
+			var point: Vector2 = star.position + star.size * Vector2(0.24 + progress * 0.50, 0.23)
+			var edge: float = (5.0 + index * 1.5) / ui_scale
+			canvas.draw_texture_rect(SPARKLE, Rect2(point - Vector2.ONE * edge * 0.5, Vector2.ONE * edge),
+				false, Color(1, 0.97, 0.80, sin(progress * PI) * 0.90))
 		if reduced_motion or _star_loss_elapsed[index] >= STAR_LOSS_SECONDS:
 			continue
 		var p: float = _star_loss_elapsed[index] / STAR_LOSS_SECONDS
 		var pulse: float = sin(p * PI)
 		var flying: Rect2 = star.grow(star.size.x * 0.14 * pulse)
 		flying.position.y -= 8.0 / ui_scale * pulse
-		canvas.draw_texture_rect(STAR, flying, false, Color(1, 1, 1, 1.0 - p))
+		canvas.draw_texture_rect(texture, flying, false, Color(1, 1, 1, 1.0 - p))
 		for mote in range(4):
 			var angle: float = TAU * float(mote) / 4.0
 			var at: Vector2 = star.get_center() + Vector2(cos(angle), sin(angle)) * (6.0 + 15.0 * p) / ui_scale
@@ -385,12 +420,12 @@ func _refresh_motion() -> void:
 func _draw() -> void:
 	if _state.is_empty():
 		return
-	draw_style_box(Style.box(Color("eef9ed"), Color("b8d6bf"), 12, 1), _badge)
+	draw_style_box(Style.box(Color("#fbf5e8"), Color("#ddd3bc"), 12, 1), _badge)
 	if _label.visible and _state.get("kind") in ["main", "challenge"]:
-		var fill: Rect2 = _badge.grow(-1.0 / _scale)
-		fill.size.x *= _timer_ratio()
+		var fill := Rect2(_badge.position + Vector2(10.0 / _scale, _badge.size.y - 3.0 / _scale),
+			Vector2(maxf(0.0, _badge.size.x - 20.0 / _scale) * _timer_ratio(), 2.0 / _scale))
 		if fill.has_area():
-			draw_style_box(Style.box(Color("#c5e7cc"), Color.TRANSPARENT, 11, 0), fill)
+			draw_style_box(Style.box(Color("#78b9ae"), Color.TRANSPARENT, 1, 0), fill)
 	if _state.get("kind") == "challenge":
 		return
 	if _state.get("kind") == "main":

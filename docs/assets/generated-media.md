@@ -4,7 +4,7 @@ Maintained asset workflows and source requirements. Paths in commands are
 relative to the repository root. See the [asset index](README.md) for individual
 source manifests, licenses, and retired provenance.
 
-The visible game name is **Grow with Pip**. The internal Godot project identity,
+The visible game name is **Pip's world**. The internal Godot project identity,
 `wordBuddiesHost` API and `wordBuddies.*` storage keys remain unchanged so the
 rename preserves existing native and browser saves.
 

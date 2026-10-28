@@ -106,7 +106,7 @@ func _init() -> void:
 	_top = Control.new()
 	_top.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_stage.add_child(_top)
-	_brand = Style.label("Grow with Pip", 22)
+	_brand = Style.label(Data.GAME_NAME, 22)
 	_top.add_child(_brand)
 	coin_counter = CoinCounter.new()
 	coin_counter.name = "HomeCoins"
@@ -889,7 +889,7 @@ func configure_learning(catalog: RefCounted, selection: Dictionary, state: Dicti
 	_continuation = continuation.duplicate(true)
 	_continue_round.visible = not continuation.is_empty()
 	if not continuation.is_empty():
-		var title: String = "Grow with Pip"
+		var title: String = Data.GAME_NAME
 		var module_title: String = "Age " + str(continuation.module_id)
 		if continuation.track == "professional":
 			var course: Dictionary = catalog.course(continuation.course_id)

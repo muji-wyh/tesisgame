@@ -48,6 +48,6 @@ if (require.main === module) {
   } else {
     const server = createWebServer(path.resolve(__dirname, '../build/web'));
     server.on('error', error => { console.error(error.message); process.exitCode = 1; });
-    server.listen(port, '127.0.0.1', () => console.log(`Grow with Pip: http://127.0.0.1:${port}/`));
+    server.listen(port, '127.0.0.1', () => console.log(`Pip's world: http://127.0.0.1:${port}/`));
   }
 }

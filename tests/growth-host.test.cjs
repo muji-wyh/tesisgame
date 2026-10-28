@@ -136,5 +136,5 @@ test('retired interfaces stay absent and saved themes cannot override learning-p
   assert.equal(selected, 'spring');
   assert.doesNotMatch(shell, /loadingPreferences\.preferred_theme|getItem\('wordBuddies\.playroom'\)/);
   assert.doesNotMatch(shell, /setItem\('wordBuddies\.(?:playroom|leaderboards|favoriteReward)'/);
-  assert.match(shell, /<title>Grow with Pip<\/title>/);
+  assert.match(shell, /<title>Pip's world<\/title>/);
 });

@@ -1,5 +1,30 @@
 # Themed chest replacement
 
+## Current volumetric refinement
+
+The thirty-tier catalog now uses real closed-model surfaces throughout Jelly's
+reward flight, including tiers 5-30. It no longer compresses a rendered image with
+a cosine to impersonate a back/side view. The camera, real lid pose, two-model
+pool, reveal cue and saved reward boundaries remain unchanged.
+
+`tools/polish-chest-models.py` uses Blender CLI to refine the acquired Kenney
+Survival, Platformer, Mini Dungeon and KayKit Dungeon bases used by tiers 1-12.
+It retains original UV loops, separate lids, local transforms, materials and
+available opening clips; a 0.8%-width two-segment bevel and weighted panel normals
+create readable edge highlights. These are adaptations of the actual production
+models, not newly generated stand-in chests. Original source bytes remain in
+`assets/chests/catalog-cc0/`. Derived GLBs and full creator/license/source/hash/
+animation records live in `assets/chests/polished-cc0/manifest.json`.
+The original Kenney and Kay Lousberg CC0 notices remain referenced alongside the
+acquired inputs. The five private bases below already have a separate softer
+three-segment conversion; their licenses and original source records are unchanged.
+
+```powershell
+& 'C:\Program Files\Blender Foundation\Blender 5.2\blender.exe' -b --python tools\polish-chest-models.py
+```
+
+## Retained five-design acquisition
+
 The Autumn, Ocean, Space, Jungle, and Candy reward scenes use five distinct
 acquired chest designs with softer colors and edges. Their closed forms are
 also reused by the shared round celebration. Spring Royal, Summer Energy, and

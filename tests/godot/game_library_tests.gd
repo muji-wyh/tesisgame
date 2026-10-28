@@ -211,8 +211,8 @@ func check_professional_states(library: Library, catalog: Catalog) -> void:
 	library.configure_learning(catalog, context, {"phase": "idle"})
 	library.configure_professional(profile)
 	await settle()
-	check(library.snapshot().brand == "Grow with Pip" and library._hero.visible and library.grid.visible,
-		"Professional vocabulary uses the same Grow with Pip Home and all six game cards")
+	check(library.snapshot().brand == "Pip's world" and library._hero.visible and library.grid.visible,
+		"Professional vocabulary uses the same Pip's world Home and all six game cards")
 	check(not library.learning.is_visible_in_tree() and not library._learning_art.visible,
 		"Home does not introduce a separate career chooser or workplace splash")
 	check(library._vocabulary_title.text == "Playing professional English"

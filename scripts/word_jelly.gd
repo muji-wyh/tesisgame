@@ -38,6 +38,10 @@ var purchase_powerup: Callable:
 		game.purchase_powerup = value
 var coin_balance: Callable
 var powerup_buttons: Dictionary = {}
+var _family_selecting: bool = false
+var _family_pick_id: int = -1
+var _fill_preference: bool = false
+var _fill_button := Button.new()
 var _powerup_effects: PowerupEffects
 var _powerup_arrivals: Array[Dictionary] = []
 var _powerup_frame_end: float = -1.0
@@ -182,6 +186,12 @@ func _init() -> void:
 	collect_button.pressed.connect(_collect_all)
 	collect_button.z_index = 5
 	add_child(collect_button)
+	_fill_button.name = "WordJellyFillMode"
+	_fill_button.toggle_mode = true
+	_fill_button.toggled.connect(_set_fill_mode)
+	_fill_button.z_index = 5
+	Style.action_button(_fill_button, Style.GOOD)
+	add_child(_fill_button)
 	for kind: String in WordModel.POWERUP_PRICES:
 		var button := PowerupButton.new()
 		button.configure(kind, game.powerup_price(kind), reduced_motion)
@@ -224,6 +234,14 @@ func _init() -> void:
 			word_requested.emit(word.duplicate(true)))
 	add_child(_read_panel)
 
+func configure(words: Array, level: int, theme: Dictionary, chests: Dictionary, reduced: bool, seed_value: int = -1) -> bool:
+	if not super.configure(words, level, theme, chests, reduced, seed_value):
+		return false
+	game.set_fill_mode(_fill_preference)
+	_refresh_controls()
+	return true
+
+
 func set_pip_level(level: int) -> void:
 	if game.pip_level == maxi(0, level):
 		return
@@ -232,6 +250,7 @@ func set_pip_level(level: int) -> void:
 	_publish()
 
 func stop() -> void:
+	_fill_button.hide()
 	_queued_collections.clear()
 	if _stage_banner != null:
 		_stage_banner.reset()
@@ -293,7 +312,7 @@ func _apply_pause_reasons() -> void:
 	_refresh_controls()
 
 func _show_read(id: int) -> void:
-	if not _can_play() or game.powerup_active() or game.collection_batch_active():
+	if not _can_play() or _family_selecting or game.powerup_active() or game.collection_batch_active():
 		return
 	var target: Dictionary = _cell(id)
 	if target.is_empty():
@@ -363,6 +382,10 @@ func _finish_feedback_ready() -> bool:
 
 func cancel_input() -> void:
 	_end_view_update()
+	_family_selecting = false
+	_family_pick_id = -1
+	if powerup_buttons.has("family_merge"):
+		powerup_buttons.family_merge.set_targeting(false)
 	_fusion_tap.clear()
 	if not _fusion_drag.is_empty():
 		game.hold_merge_for_drag(str(_fusion_drag.event_id), false)
@@ -415,8 +438,13 @@ func _input(event: InputEvent) -> void:
 		return
 	if game.collection_batch_active() or game.powerup_active() or game.stage_ending():
 		return
+	if event.is_action_pressed("ui_cancel") and _family_selecting:
+		cancel_input()
+		_refresh_controls()
+		get_viewport().set_input_as_handled()
+		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R \
-		and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and _can_play():
+		and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and _can_play() and not _family_selecting:
 		var focused: Control = get_viewport().gui_get_focus_owner()
 		for tile: WordTile in _tiles.values() + _preview_tiles:
 			if tile == focused and tile.is_visible_in_tree():
@@ -427,7 +455,7 @@ func _input(event: InputEvent) -> void:
 		cancel_input()
 		get_viewport().set_input_as_handled()
 		return
-	if event is InputEventKey and event.shift_pressed and event.is_action_pressed("ui_accept") and not event.echo:
+	if event is InputEventKey and event.shift_pressed and event.is_action_pressed("ui_accept") and not event.echo and not _family_selecting:
 		if _can_play() and _pointer == NO_POINTER:
 			var focused: Control = get_viewport().gui_get_focus_owner()
 			for id in _tiles:
@@ -444,6 +472,15 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	# A completed tap speaks; pressing before a drag never reveals a partial root.
 	if _pointer != NO_POINTER or not _can_play() or _finish_is_pulling() or game.collection_batch_active() or game.powerup_active():
 		return false
+	if _family_selecting:
+		var point: Vector2 = get_global_transform().affine_inverse() * global_point
+		if not _board.has_point(point) and not _preview_rect.has_point(point):
+			return false
+		_pointer = pointer
+		_press_point = point
+		_family_pick_id = _tile_at(point)
+		_refresh_marks()
+		return true
 	if _read_action_at(global_point):
 		return false
 	var point: Vector2 = get_global_transform().affine_inverse() * global_point
@@ -514,6 +551,11 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	return true
 
 func _move(global_point: Vector2) -> void:
+	if _family_selecting:
+		if _family_pick_id >= 0 and (get_global_transform().affine_inverse() * global_point).distance_to(_press_point) * Style.ui_scale(self) > 7.0:
+			_family_pick_id = -1
+			_refresh_marks()
+		return
 	if (get_global_transform().affine_inverse() * global_point).distance_to(_press_point) * Style.ui_scale(self) > 7.0:
 		_fusion_tap.clear()
 		# A deliberate drag supersedes a previously queued tap on this body.
@@ -548,6 +590,19 @@ func _move(global_point: Vector2) -> void:
 	super._move(global_point)
 
 func _release(global_point: Vector2) -> void:
+	if _family_selecting:
+		var point: Vector2 = get_global_transform().affine_inverse() * global_point
+		var selected: int = _family_pick_id
+		var valid: bool = selected >= 0 and _pointer != NO_POINTER and _can_play() \
+			and point.distance_to(_press_point) * Style.ui_scale(self) <= 7.0 and _tile_at(point) == selected
+		_pointer = NO_POINTER
+		_family_pick_id = -1
+		if valid:
+			_select_family(selected)
+		else:
+			_refresh_marks()
+			_refresh_controls()
+		return
 	# Measure on release arrival, before motion rendering can turn a tap into a hold.
 	var collection_click: bool = _tile_press_started_ms >= 0 \
 		and Time.get_ticks_msec() - _tile_press_started_ms < COLLECTION_CLICK_MAX_MS
@@ -669,6 +724,9 @@ func _refresh_placement() -> void:
 	_placement_tile.show()
 
 func _activate(id: int) -> void:
+	if _family_selecting:
+		_select_family(id)
+		return
 	if not game.boss_interactable(id):
 		return
 	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling() or not _settled(_cell(id)) or game.collection_batch_active() or game.powerup_active():
@@ -862,12 +920,18 @@ func _cell(id: int) -> Dictionary:
 	return _view_cells.get(id, {}) if _view_update_active else super._cell(id)
 
 func _can_drop_preview() -> bool:
+	if _family_selecting:
+		return false
 	if not _view_update_active:
 		return game.can_drop_now()
 	if not _view_drop_known:
 		_view_drop_available = game.can_drop_now()
 		_view_drop_known = true
 	return _view_drop_available
+
+func _drop_next(expected_first_id: int = -1) -> void:
+	if not _family_selecting:
+		super._drop_next(expected_first_id)
 
 func _can_merge_for_feedback(source: Dictionary, target: Dictionary) -> bool:
 	if not _view_update_active:
@@ -1123,11 +1187,57 @@ func _sync_positions() -> void:
 		_end_view_update()
 
 func _activate_powerup(kind: String) -> void:
-	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling() or _keyboard_source >= 0:
+	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling():
 		return
+	if kind == "family_merge":
+		var cancel: bool = _family_selecting
+		var generation: int = _generation
+		var model_generation: int = game._generation
+		cancel_input()
+		if generation != _generation or model_generation != game._generation or not _can_play():
+			return
+		if not cancel and game.can_activate_powerup(kind):
+			_family_selecting = true
+			powerup_buttons.family_merge.set_targeting(true)
+			_refresh_marks()
+		_refresh_controls()
+		_publish()
+		return
+	if _keyboard_source >= 0:
+		return
+	if _family_selecting:
+		cancel_input()
 	game.activate_powerup(kind)
 	_refresh_controls()
 	_publish()
+
+func _select_family(id: int) -> void:
+	if not _family_selecting or not _can_play() or _finish_is_pulling():
+		return
+	var generation: int = _generation
+	var model_generation: int = game._generation
+	cancel_input()
+	if generation != _generation or model_generation != game._generation or not _can_play():
+		return
+	if game.can_activate_powerup("family_merge"):
+		game.activate_powerup("family_merge", id)
+	else:
+		_powerup_feedback("family_merge", false)
+		_cue("powerup_wrong")
+	_refresh_controls()
+	_publish()
+
+
+func _set_fill_mode(enabled: bool) -> void:
+	if not _can_play() or game.collection_batch_active() or game.powerup_active() or game.stage_ending() or game.fill_mode_locked():
+		_fill_button.set_pressed_no_signal(game.fill_mode)
+		return
+	cancel_input()
+	game.set_fill_mode(enabled)
+	_fill_preference = game.fill_mode
+	_refresh_controls()
+	_publish()
+
 
 func _powerup_feedback(kind: String, success: bool) -> void:
 	if powerup_buttons.has(kind):
@@ -1177,7 +1287,7 @@ func _pose_powerup() -> void:
 		_powerup_stamp(stamps, POWERUP_RAYS, origin, Vector2.ONE * unit * 0.80, Color(tint.lightened(0.35), 0.72))
 	if bool(state.get("active", false)) and str(state.get("kind", "")) == "blast":
 		_pose_blast_marks(state, stamps, unit)
-	if bool(state.get("active", false)) and str(state.get("kind", "")) in ["auto_merge", "blast"]:
+	if bool(state.get("active", false)) and str(state.get("kind", "")) in ["auto_merge", "family_merge", "blast"]:
 		for drag: Dictionary in state.get("drags", []):
 			var source: Dictionary = drag.get("source", {})
 			var target: Dictionary = drag.get("target", {})
@@ -1345,7 +1455,7 @@ func _sync_preview() -> void:
 func _refresh_preview_read_controls() -> void:
 	for preview: WordTile in _preview_tiles:
 		var available: bool = preview.visible and preview.requires_read and _can_play() and not _finish_is_pulling() \
-			and not game.collection_batch_active() and not game.powerup_active()
+			and not _family_selecting and not game.collection_batch_active() and not game.powerup_active()
 		preview.disabled = not available
 		preview.focus_mode = Control.FOCUS_ALL if available else Control.FOCUS_NONE
 
@@ -1449,6 +1559,13 @@ func _refresh_marks() -> void:
 	_refresh_completion_hints()
 
 func _refresh_completion_hints() -> void:
+	if _family_selecting:
+		var family: String = game.family_word_id(_family_pick_id)
+		for id: int in _tiles:
+			var matching: bool = not family.is_empty() and game.family_word_id(id) == family
+			_tiles[id].set_completion_hint(matching, 0.0, reduced_motion)
+			_tiles[id].set_match_dimmed(not family.is_empty() and not matching)
+		return
 	var source: int = (_source if _source >= 0 else _keyboard_source) if _can_play() and not game.collection_batch_active() else -1
 	if _view_update_active and _view_hints_ready and _view_hint_source == source:
 		return
@@ -1597,6 +1714,8 @@ func navigation_controls() -> Array[Control]:
 	for preview: WordTile in _preview_tiles:
 		if preview.is_visible_in_tree() and not preview.disabled:
 			controls.append(preview)
+	if _fill_button.is_visible_in_tree() and not _fill_button.disabled:
+		controls.append(_fill_button)
 	if not collect_button.disabled:
 		controls.append(collect_button)
 	for button: PowerupButton in powerup_buttons.values():
@@ -1948,10 +2067,12 @@ func _combo_changed(state: Dictionary) -> void:
 	if _combo_hud == null:
 		return
 	var increased: bool = int(state.count) > int(_combo_hud.snapshot().count)
+	var new_event: bool = not str(state.get("event_id", "")).is_empty() \
+		and str(state.event_id) != str(_combo_hud.snapshot().event_id)
 	_combo_hud.set_state(state, _can_play())
 	if increased and _can_play():
 		audio_requested.emit("jelly-combo-%d" % int(state.count))
-	if increased and int(state.get("bonus", 0)) > 0:
+	if new_event and int(state.get("bonus", 0)) > 0:
 		combo_coins_earned.emit(str(state.event_id), _combo_hud.coin_origin())
 	_publish()
 
@@ -2037,6 +2158,12 @@ func _refresh_controls() -> void:
 		return
 	_refresh_collect_button()
 	_refresh_powerup_buttons()
+	_fill_button.visible = _configured and game.phase == "playing"
+	_fill_button.set_pressed_no_signal(game.fill_mode)
+	_fill_button.text = "Fill: On" if game.fill_mode else "Fill: Off"
+	_fill_button.disabled = not _can_play() or board_locked or _finish_is_pulling() or _pointer != NO_POINTER or game.fill_mode_locked()
+	_fill_button.set("accessibility_name", "Fill mode. %s.%s" % ["On" if game.fill_mode else "Off",
+		" Required in Challenge." if game.fill_mode_locked() else " Automatically drop supply into every vacancy."])
 
 func _refresh_powerup_buttons() -> void:
 	var balance: int = int(coin_balance.call()) if coin_balance.is_valid() else 0
@@ -2047,6 +2174,8 @@ func _refresh_powerup_buttons() -> void:
 		button.visible = _configured and game.phase == "playing" and (kind != "extra_time" \
 			or game.stage_run != null and game.stage_run.kind == "main")
 		var available: bool = game.can_activate_powerup(kind)
+		if kind == "family_merge" and _family_selecting:
+			available = true
 		button.set_availability(_can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and _keyboard_source < 0 and available,
 			balance >= price, game.powerup_active() and not available)
 
@@ -2115,10 +2244,36 @@ func _layout() -> void:
 	var content_top: float = top_hud_height + (2.0 if authored else 12.0) / s
 	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - content_top)
 	var action_height: float = (44.0 if boss_layout else 56.0) / s
-	var tool_count: int = 3 if game.stage_run != null and game.stage_run.kind == "main" else 2
+	var tool_kinds: Array[String] = ["auto_merge", "family_merge", "fragments"]
+	if game.stage_run != null and game.stage_run.kind == "main":
+		tool_kinds.append("extra_time")
+	var tool_count: int = tool_kinds.size()
+	var tool_gap: float = 8.0 / s
+	var side_columns: int = 2 if size.x * s >= 680.0 else 1
+	if side_columns == 2:
+		hud_width = maxf(hud_width, 184.0 / s)
+	var side_rows: int = ceili(float(tool_count) / side_columns)
+	var footer_width: float = minf(size.x - edge * 2.0, 388.0 / s)
+	var footer_columns: int = clampi(floori((footer_width + 4.0 / s) / (92.0 / s)), 1, tool_count)
+	if footer_columns < tool_count:
+		footer_columns = mini(2, footer_columns)
+	var footer_rows: int = ceili(float(tool_count) / footer_columns)
 	var collect_height: float = action_height
 	var divider_gap: float = 20.0 / s
-	var footer_height: float = action_height * 2.0 + divider_gap + edge
+	var fill_height: float = 44.0 / s
+	var fill_space: float = fill_height + tool_gap
+	var fitting_rows: int = maxi(1, floori((available.y - fill_space - 44.0 / s - divider_gap + tool_gap)
+		/ (44.0 / s + tool_gap)))
+	var fitting_columns: int = maxi(side_columns, ceili(float(tool_count) / fitting_rows))
+	var fitting_width: float = (88.0 * fitting_columns + 8.0 * (fitting_columns - 1)) / s
+	if fitting_width + 32.0 * WordModel.COLUMNS / s + hud_gap <= available.x:
+		side_columns = fitting_columns
+		side_rows = ceili(float(tool_count) / side_columns)
+		hud_width = maxf(hud_width, fitting_width)
+	if available.y < action_height * (1 + side_rows) + (side_rows - 1) * tool_gap + fill_space + divider_gap:
+		action_height = 44.0 / s
+		collect_height = action_height
+	var footer_height: float = action_height * (1 + footer_rows) + (footer_rows - 1) * tool_gap + fill_space + divider_gap + edge
 	var bottom_pitch: float = _fit_layout_pitch(available - Vector2(0.0, footer_height), s)
 	var side_pitch: float = _fit_layout_pitch(available - Vector2(hud_width + hud_gap, 0.0), s)
 	# Center the well and its single action rail as one group. On short screens
@@ -2127,7 +2282,8 @@ func _layout() -> void:
 	_compact_hud = side_hud
 	footer_height = 0.0 if side_hud else footer_height
 	if side_hud:
-		collect_height = clampf(available.y - action_height * tool_count - divider_gap - 8.0 / s, 44.0 / s, action_height)
+		collect_height = clampf(available.y - action_height * side_rows - (side_rows - 1) * tool_gap \
+			- fill_space - divider_gap - tool_gap, 44.0 / s, action_height)
 	_pitch = side_pitch if side_hud else bottom_pitch
 	var too_small: bool = authored and _pitch * s < 32.0
 	if too_small != _layout_too_small:
@@ -2157,8 +2313,10 @@ func _layout() -> void:
 	_danger_frame.layout_frame(_board.grow(2.0), s, 18.0)
 	_falling_layer.position = _board.position
 	_falling_layer.size = _board.size
-	var footer_width: float = minf(size.x - edge * 2.0, 388.0 / s)
-	var item_width: float = clampf((footer_width - (12.0 if tool_count == 3 else 132.0) / s) / tool_count, 88.0 / s, 112.0 / s)
+	var columns: int = side_columns if side_hud else footer_columns
+	var rows: int = side_rows if side_hud else footer_rows
+	var item_width: float = (hud_width - (columns - 1) * tool_gap) / columns if side_hud else \
+		clampf((footer_width - (columns - 1) * 4.0 / s) / columns, 88.0 / s, 112.0 / s)
 	var hud_x: float = _board.end.x + hud_gap if side_hud else (size.x - footer_width) * 0.5
 	if _stage_banner != null:
 		_stage_banner.size = size
@@ -2177,7 +2335,8 @@ func _layout() -> void:
 			practice_area.size.y = maxf(64.0 / s, practice_area.size.y - 52.0 / s)
 		_practice_panel.configure_layout(practice_area, s, not sidebar)
 		_stage_banner.configure_time_bonus(badge if _stage_banner._label.visible else
-			Rect2(practice_area.position, Vector2(86.0 / s, practice_area.size.y)), not _stage_banner._label.visible)
+			Rect2(practice_area.position, Vector2(_practice_panel.timer_width() / s, practice_area.size.y)),
+			not _stage_banner._label.visible)
 	if not layout_header_chest():
 		_loot_meter.position = Vector2(edge, 4.0 / s)
 		_loot_meter.size = Vector2.ONE * 44.0 / s
@@ -2203,15 +2362,24 @@ func _layout() -> void:
 		finish_button.size = Vector2(84.0, 44.0) / s
 		finish_button.position = Vector2(size.x - edge - finish_button.size.x, 4.0 / s)
 	for index in range(tool_count):
-		var button: PowerupButton = powerup_buttons[["auto_merge", "fragments", "extra_time"][index]]
-		button.set_ui_scale(s, boss_layout)
-		button.size = Vector2(hud_width if side_hud else item_width, action_height)
-		button.position = Vector2(hud_x, _board.end.y - (tool_count - index) * (button.size.y + 8.0 / s) + 8.0 / s) if side_hud else \
-			Vector2(hud_x + index * (footer_width - button.size.x) / float(tool_count - 1), _board.end.y + edge + action_height + divider_gap)
+		var button: PowerupButton = powerup_buttons[tool_kinds[index]]
+		button.set_ui_scale(s, action_height * s < 55.0)
+		button.size = Vector2(item_width, action_height)
+		var column: int = index % columns
+		var row: int = index / columns
+		var start_y: float = _board.end.y - rows * action_height - (rows - 1) * tool_gap if side_hud else \
+			_board.end.y + edge + fill_space + collect_height + divider_gap
+		var step_x: float = item_width + tool_gap if side_hud else \
+			(footer_width - item_width) / maxi(1, columns - 1)
+		button.position = Vector2(hud_x + column * step_x, start_y + row * (action_height + tool_gap))
 	var auto_merge: Rect2 = powerup_buttons.auto_merge.get_rect()
 	collect_button.set_ui_scale(s)
 	collect_button.size = Vector2(auto_merge.size.x, collect_height)
 	collect_button.position = Vector2(auto_merge.position.x, auto_merge.position.y - divider_gap - collect_button.size.y)
+	_fill_button.custom_minimum_size = Vector2(88.0, 44.0) / s
+	_fill_button.add_theme_font_size_override("font_size", maxi(1, roundi(12.0 / s)))
+	_fill_button.size = Vector2(collect_button.size.x, fill_height)
+	_fill_button.position = collect_button.position - Vector2(0.0, fill_space)
 	# Use existing header/footer/rail space, preserving the board's cell size.
 	var combo_bounds := Rect2(Vector2.ZERO, Vector2(196.0, 72.0) / s)
 	if local_finish or local_chest:
@@ -2229,7 +2397,7 @@ func _layout() -> void:
 			collect_button.position.y + (collect_height - combo_bounds.size.y) * 0.5)
 	else:
 		var rail_top: float = content_top + (54.0 / s if stage_in_rail and _stage_banner.visible else 0.0)
-		var rail_space: float = collect_button.position.y - rail_top - 8.0 / s
+		var rail_space: float = _fill_button.position.y - rail_top - 8.0 / s
 		combo_bounds.size.y = minf(combo_bounds.size.y, maxf(44.0 / s, rail_space))
 		if rail_space >= combo_bounds.size.y:
 			combo_bounds.size.x = minf(combo_bounds.size.x, hud_width)
@@ -2265,7 +2433,7 @@ func _layout() -> void:
 			boss_top = maxf(boss_top, combo_bounds.end.y + 6.0 / s)
 	var boss_width: float = minf(maxf(1.0, size.x - hud_x - edge), maxf(hud_width, minf(240.0 / s, _board.size.y * 0.45)))
 	_boss_view.layout_battle(Rect2(Vector2(hud_x, boss_top),
-		Vector2(boss_width, maxf(1.0, collect_button.position.y - boss_top - 8.0 / s))), _board, s, _preview_rect)
+		Vector2(boss_width, maxf(1.0, _fill_button.position.y - boss_top - 8.0 / s))), _board, s, _preview_rect)
 	_action_divider.size = Vector2(hud_width if side_hud else footer_width, 2.0 / s)
 	_action_divider.position = Vector2(hud_x, collect_button.get_rect().end.y + (divider_gap - _action_divider.size.y) * 0.5)
 	if _powerup_effects != null:
@@ -2299,8 +2467,10 @@ func _layout() -> void:
 		var firework_area := Rect2(Vector2.ONE * edge,
 			Vector2(size.x - edge * 2.0, minf(680.0 / s, size.y * maxf(0.86, reveal_fraction)) - edge))
 		var effect_exclusions: Array[Rect2] = [chest_meter_rect().grow(10.0 / s), collect_button.get_rect().grow(8.0 / s), finish_rect.grow(8.0 / s),
-			_combo_hud.get_rect().grow(3.0 / s), powerup_buttons.auto_merge.get_rect().grow(5.0 / s),
-			powerup_buttons.fragments.get_rect().grow(5.0 / s)]
+			_combo_hud.get_rect().grow(3.0 / s), _fill_button.get_rect().grow(5.0 / s)]
+		for button: PowerupButton in powerup_buttons.values():
+			if button.visible:
+				effect_exclusions.append(button.get_rect().grow(5.0 / s))
 		if _practice_panel.visible:
 			effect_exclusions.append(_practice_panel.get_rect().grow(6.0 / s))
 		_word_reveal.configure_layout(Rect2(Vector2.ONE * edge,
@@ -2341,6 +2511,10 @@ func snapshot() -> Dictionary:
 	state["boss_view"] = _boss_view.snapshot() if _boss_view != null else {}
 	state["practice"] = _practice_panel.snapshot() if _practice_panel != null else {"visible": false, "words": []}
 	state["combo_hud"] = _combo_hud.snapshot() if _combo_hud != null else {"visible": false}
+	state["family_selection"] = {"active": _family_selecting, "target_id": _family_pick_id}
+	state["fill_control"] = {"visible": _fill_button.is_visible_in_tree(), "enabled": not _fill_button.disabled,
+		"on": _fill_button.button_pressed, "locked": game.fill_mode_locked(),
+		"rect": _rect(_fill_button.get_global_rect())}
 	state["mode"] = "word_jelly"
 	state["columns"] = WordModel.COLUMNS
 	state["rows"] = WordModel.ROWS
@@ -2370,7 +2544,7 @@ func snapshot() -> Dictionary:
 		state.placement.rect = _rect(_global_rect(_placement.rect))
 	if collect_button != null:
 		state.collect_button.merge({"rect": _rect(collect_button.get_global_rect()), "enabled": not collect_button.disabled, "visible": collect_button.is_visible_in_tree()}, true)
-	state.preview.enabled = state.preview.enabled and not game.collection_batch_active() and not game.powerup_active()
+	state.preview.enabled = state.preview.enabled and not _family_selecting and not game.collection_batch_active() and not game.powerup_active()
 	state.drag.selected = _keyboard_source
 	state.drag["needs_room"] = false
 	for item: Dictionary in state.tiles:

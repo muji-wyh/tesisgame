@@ -70,6 +70,7 @@ static func make_plan(number: int, pool: Array, age: int, seed: int,
 	var wave: int = 0 if challenge else (number - 1) % PROFILES.size()
 	var goals: Dictionary = {}
 	var cadence: float = 20.0
+	var fall_speed: float = 1.0
 	var seconds: float = CHALLENGE_SECONDS if challenge else 0.0
 	if not challenge:
 		var base: int = 1 + floori(float(chapter - 1) / 2.0)
@@ -77,20 +78,24 @@ static func make_plan(number: int, pool: Array, age: int, seed: int,
 		for index in range(words.size()):
 			var raised: bool = wave == 8 or (wave in [2, 4, 5, 7] and (index - offset) % 3 == 0)
 			goals[ids[index]] = base + (1 if raised else 0)
-		cadence = clampf(lerpf(20.0, 10.0, float(number - 1) / 98.0) * CADENCE_WAVE[wave], 10.0, 24.0)
+		var progression: float = float(number - 1) / 98.0
+		cadence = clampf(lerpf(20.0, 10.0, pow(progression, 0.65)) * CADENCE_WAVE[wave], 10.0, 24.0)
+		fall_speed = lerpf(1.0, 1.40, progression)
 		var pieces: int = 0
 		for word: Dictionary in words:
 			pieces += (word.morphology.parts.size() + (0 if str(word.get("image", "")).is_empty() else 1)) \
 				* int(goals[word.id])
 		var handling: float = float(pieces) * 1.6
 		var supply: float = maxf(0.0, float(pieces - 15)) / 5.0 * cadence
-		seconds = clampf(ceilf(maxf(handling, supply) * MARGINS[wave] + 25.0), 90.0, 900.0)
+		var margin: float = 1.0 + (MARGINS[wave] - 1.0) * lerpf(1.0, 0.15, progression)
+		var warmup_floor: float = lerpf(90.0, 60.0, smoothstep(1.0, 28.0, float(number)))
+		seconds = clampf(ceilf(maxf(handling, supply) * margin + 25.0), warmup_floor, 900.0)
 	return {"ok": true, "error": "", "kind": "challenge" if challenge else "main",
 		"number": 0 if challenge else number, "chapter": chapter,
 		"title": "Survival Challenge" if challenge else CHAPTERS[chapter - 1],
 		"profile": "Challenge" if challenge else PROFILES[wave], "age": age, "seed": seed,
 		"words": words, "word_ids": ids, "goals": goals, "seconds": seconds,
-		"spawn_interval": cadence, "fall_speed_scale": 1.0}
+		"spawn_interval": cadence, "fall_speed_scale": fall_speed}
 
 
 ## Returns a versioned recipe, or an explicit {ok: false, error} result.

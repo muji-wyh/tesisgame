@@ -124,7 +124,7 @@ func _verify() -> void:
 			failures += 1
 	for name in ["body", "heading"]:
 		var font: Font = load("res://assets/fonts/" + name + ".tres") as Font
-		if font == null or font.get_string_size("Grow with Pip").x <= 0.0:
+		if font == null or font.get_string_size("Pip's world").x <= 0.0:
 			printerr("An active interface font is missing from the startup pack: " + name)
 			failures += 1
 	failures += _verify_word_library(catalog.words)

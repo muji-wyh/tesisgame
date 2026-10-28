@@ -33,6 +33,7 @@ func _run() -> void:
 	_check_density_reduction(paper)
 	_check_lifecycle(paper)
 	_check_viewport_coverage(paper)
+	_check_equal_fall_speed(paper)
 	_check_burst_sampling()
 	_check_motion_variety(paper)
 	_check_small_stage_celebration(paper)
@@ -208,9 +209,33 @@ func _check_viewport_coverage(paper) -> void:
 				occupied_rows[cell.y] = true
 			check(occupied_columns.size() == 6,
 				"The lighter canopy still reaches all six full-screen columns instead of becoming a local patch")
-			check(occupied_rows.size() == 5,
-				"The lighter canopy still spans all five vertical regions at %s, variation %.3f: %s" %
+			check(occupied_rows.size() <= 2 and not cells.is_empty() and cells.keys().all(func(cell: Vector2i) -> bool: return cell.y <= 1),
+				"Papers crest in the upper forty percent instead of appearing across the entire screen at %s, variation %.3f: %s" %
 					[dimensions, variation, cells])
+
+
+func _check_equal_fall_speed(paper) -> void:
+	for dimensions: Vector2 in [Vector2(390, 844), Vector2(1366, 768), Vector2(568, 320)]:
+		var screen := Rect2(Vector2.ZERO, dimensions)
+		for variation: float in [0.0, 0.43, 0.999999]:
+			var slowest: float = INF
+			var fastest: float = 0.0
+			var highest: float = INF
+			var lowest: float = -INF
+			for index in range(paper._paper_count(screen, 1.0)):
+				var launch: Dictionary = paper._paper_state(index, screen, 1.0, 0.025, variation)
+				if not launch.is_empty():
+					check(float(launch.position.y) > dimensions.y * 0.70,
+						"A newly emitted paper starts beside the bottom cannon, never at an arbitrary screen height")
+				var first: Dictionary = paper._paper_state(index, screen, 1.0, 2.0, variation)
+				var second: Dictionary = paper._paper_state(index, screen, 1.0, 2.02, variation)
+				var velocity: float = (float(second.position.y) - float(first.position.y)) / 0.02
+				slowest = minf(slowest, velocity)
+				fastest = maxf(fastest, velocity)
+				highest = minf(highest, float(first.position.y))
+				lowest = maxf(lowest, float(first.position.y))
+			check(lowest - highest > dimensions.y * 0.15 and slowest > 0.0 and fastest / slowest < 1.035,
+				"High and low papers share the same terminal fall rate, without height-normalized slow motion")
 
 
 func _check_motion_variety(paper) -> void:

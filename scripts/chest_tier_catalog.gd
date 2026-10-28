@@ -3,6 +3,12 @@ extends RefCounted
 
 const MAX_TIER: int = 30
 const PRESETS_PATH: String = "res://assets/chests/tier-presets.json"
+const POLISHED_MODELS: Dictionary = {
+	"assets/chests/catalog-cc0/kenney-survival/chest.glb": "assets/chests/polished-cc0/kenney-survival.glb",
+	"assets/chests/catalog-cc0/kenney-platformer/chest.glb": "assets/chests/polished-cc0/kenney-platformer.glb",
+	"assets/chests/catalog-cc0/kenney-mini-dungeon/chest.glb": "assets/chests/polished-cc0/kenney-mini-dungeon.glb",
+	"assets/chests/catalog-cc0/kaykit-dungeon/chest.glb": "assets/chests/polished-cc0/kaykit-dungeon.glb"
+}
 const THEME_TIERS: Dictionary = {
 	"spring": 30, "royal": 30,
 	"summer": 10, "energy": 10,
@@ -64,6 +70,8 @@ static func style(tier: int, manifest: Dictionary) -> Dictionary:
 			"camera_margin": 1.12
 		}
 	result["tier"] = tier
+	result["source_model"] = path
+	result["model"] = str(POLISHED_MODELS.get(path, path))
 	result["preset_id"] = str(recipe.id)
 	result["name"] = str(recipe.name)
 	result["base_source_id"] = str(recipe.base_source_id)

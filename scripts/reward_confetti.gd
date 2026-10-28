@@ -131,8 +131,7 @@ func _paper_state(index: int, screen: Rect2, unit: float, age: float, variation:
 	var seed_value: float = fposmod(float(index) * 0.618034 + variation * 0.41, 1.0)
 	var vertical_seed: float = (row + 0.2 + seed_value * 0.6) / rows
 	var delay: float = float(index % 11) * 0.025
-	var finish: float = DURATION - 1.1 + vertical_seed * 1.1
-	if not is_finite(age) or age <= delay or age >= finish:
+	if not is_finite(age) or age <= delay or age >= DURATION:
 		return {}
 	var t: float = age - delay
 	var extent: Vector2 = screen.size
@@ -144,7 +143,7 @@ func _paper_state(index: int, screen: Rect2, unit: float, age: float, variation:
 	if index % 2 != 0:
 		launch_x = extent.x - launch_x
 	launch_x = clampf(launch_x, margin, extent.x - margin)
-	# Stratify the canopy across the entire viewport, independently of launch side.
+	# Both cannons rise into the upper band before the papers begin their descent.
 	var landing_x: float = lerpf(margin, extent.x - margin, (column + 0.2 + horizontal_seed * 0.6) / columns)
 	var rise_seconds: float = 0.55 + horizontal_seed * 0.25
 	var rise: float = clampf(t / rise_seconds, 0.0, 1.0)
@@ -156,34 +155,34 @@ func _paper_state(index: int, screen: Rect2, unit: float, age: float, variation:
 	# Room near the edges limits the breeze smoothly, without clipped paper or wall bounces.
 	var wind_room: float = minf(sway, minf(center_x - margin, extent.x - margin - center_x))
 	var x: float = center_x + wind * wind_room * spread
-	# Vary height independently of lifetime so paper does not fall as one strip.
-	var apex: float = extent.y * (-0.06 + vertical_seed * 1.02)
+	var apex: float = extent.y * (0.055 + vertical_seed * 0.19)
 	var flutter_rate: float = lerpf(4.2, 7.0, vertical_seed)
 	var flutter_phase: float = t * flutter_rate + phase + sin(t * 1.7 + phase) * 0.38
 	var y: float
+	var fall_seconds: float = maxf(0.0, t - rise_seconds)
+	var terminal_speed: float = (extent.y + 32.0 * unit) / 5.0
 	if t < rise_seconds:
-		var launch_y: float = maxf(extent.y * (0.78 + seed_value * 0.20), apex + extent.y * 0.12)
+		var launch_y: float = extent.y * (0.86 + seed_value * 0.12)
 		y = lerpf(launch_y, apex, 1.0 - pow(1.0 - rise, 2.0))
 	else:
-		# A brief acceleration becomes a slow terminal drift. The fall uses real
-		# seconds, never a compressed chest/Pip performance window.
-		var fall: float = clampf((t - rise_seconds) / (finish - delay - rise_seconds), 0.0, 1.0)
-		var drift: float = (fall - 0.12 * (1.0 - exp(-fall / 0.12))) / (1.0 - 0.12 * (1.0 - exp(-1.0 / 0.12)))
-		# Broadside paper catches air; the small lift vanishes at the apex and exit.
-		drift += pow(sin(fall * PI), 2.0) * sin(flutter_phase) * 0.009
-		y = lerpf(apex, extent.y + paper_edge, drift)
+		# Equal elapsed fall time means equal speed at every height. Normalizing
+		# each paper's remaining distance/lifetime made high papers fall faster.
+		y = apex + terminal_speed * (fall_seconds - 0.24 * (1.0 - exp(-fall_seconds / 0.24)))
 	var flutter: float = cos(flutter_phase)
 	var pitch: float = cos(t * (2.3 + horizontal_seed * 1.4) + vertical_seed * TAU)
 	var dimensions := Vector2(paper_size.x * maxf(0.12, absf(flutter)), paper_size.y * lerpf(0.52, 1.0, absf(pitch)))
 	var direction: float = -1.0 if index % 2 == 0 else 1.0
 	var bank: float = cos(t * wind_rate + phase) * 0.32 * spread
 	var rotation: float = phase + direction * t * lerpf(0.75, 1.65, seed_value) + sin(flutter_phase * 0.62) * 0.48 + bank
+	if y - margin > extent.y:
+		return {}
 	var bend: float = sin(flutter_phase + 0.65) * dimensions.y * 0.16
 	# Turning faces change brightness continuously instead of snapping at each flip.
 	var color: Color = COLORS[index % COLORS.size()].darkened(lerpf(0.24, 0.0, (flutter + 1.0) * 0.5))
 	color = color.lerp(Color.WHITE, pow(maxf(flutter, 0.0), 4.0) * 0.08)
 	return {"position": screen.position + Vector2(x, y), "size": dimensions,
-		"rotation": rotation, "bend": bend, "color": color}
+		"rotation": rotation, "bend": bend, "color": color,
+		"fall_seconds": fall_seconds, "fall_speed": terminal_speed * (1.0 - exp(-fall_seconds / 0.24))}
 
 
 func _draw_strip(surface: Control, paper: Dictionary) -> void:
