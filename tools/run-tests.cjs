@@ -19,7 +19,7 @@ const groups = {
   },
   jelly: { godot: ['jelly_match_model_tests', 'jelly_tile_label_tests', 'jelly_match_view_tests', 'jelly_loot_meter_tests', 'jelly_chest_celebration_tests', 'jelly_chest_tap_tests', 'jelly_header_layout_tests', 'jelly_match_flow_tests', 'jelly_finish_confirmation_tests', 'danger_game_over_tests', 'round_end_presentation_tests', 'round_end_audio_tests', 'jelly_queued_upgrade_settlement_tests', 'jelly_finish_pull_tests', 'jelly_backdrop_tests', 'jelly_result_coin_tests', 'jelly_match_audio_tests', 'coin_audio_tests', 'pop_reward_room_tests'], node: ['jelly-host', 'jelly-reward-art', 'chest-milestone-art'] },
   'word-jelly': { godot: ['word_jelly_falling_contact_tests', 'word_jelly_interaction_tests', 'word_jelly_drag_performance_tests', 'word_jelly_tile_performance_tests', 'word_jelly_stage_model_tests', 'word_jelly_stage_flow_tests', 'word_jelly_stage_loading_tests', 'growth_cross_age_tests', 'word_jelly_hybrid_tests', 'word_jelly_hybrid_tile_tests', 'word_jelly_hybrid_view_tests', 'word_jelly_collection_fx_tests', 'word_jelly_level_audio_tests', 'word_jelly_combo_audio_tests', 'growth_morphology_tests', 'morphology_tests', 'word_jelly_morphology_tests', 'word_jelly_authored_drag_tests', 'word_jelly_model_tests', 'word_jelly_combo_tests', 'word_jelly_combo_hud_tests', 'word_jelly_blast_tests', 'word_jelly_blast_view_tests', 'word_jelly_word_reveal_tests', 'word_jelly_view_tests', 'word_jelly_morphology_view_tests', 'word_jelly_merge_speech_tests', 'jelly_chest_tap_tests', 'jelly_header_layout_tests', 'word_jelly_flow_tests', 'word_jelly_pip_unlock_flow_tests', 'word_jelly_powerup_flow_tests', 'word_jelly_powerup_button_tests', 'jelly_finish_confirmation_tests', 'danger_game_over_tests', 'round_end_presentation_tests', 'round_end_audio_tests', 'jelly_queued_upgrade_settlement_tests', 'jelly_finish_pull_tests', 'jelly_backdrop_tests', 'coin_wallet_tests', 'coin_audio_tests', 'game_library_tests', 'game_mode_preview_tests'] },
-  growth: { godot: ['growth_cross_age_tests', 'growth_morphology_tests', 'growth_state_tests', 'professional_pip_progress_tests', 'professional_pip_tests', 'presentation_vocabulary_tests', 'growth_flow_tests', 'word_sampler_tests', 'pip_growth_tests', 'pip_age_motion_tests', 'pip_attachment_tests'], node: ['growth-host', 'growth-vocabulary', 'growth-morphology', 'professional-pip-art'] },
+  growth: { godot: ['growth_cross_age_tests', 'growth_morphology_tests', 'growth_state_tests', 'professional_pip_progress_tests', 'professional_pip_tests', 'presentation_vocabulary_tests', 'growth_flow_tests', 'word_sampler_tests', 'pip_growth_tests', 'pip_age_motion_tests', 'pip_attachment_tests'], node: ['growth-host', 'growth-vocabulary', 'growth-morphology', 'professional-pip-art', 'pip-actions-review'] },
   core: {
     godot: [
       'run_tests', 'match_hint_payment_tests', 'adventure_model_tests', 'adventure_scene_tests', 'settlement_modal_tests', 'medal_progress_tests',
@@ -68,14 +68,20 @@ const groups = {
 
 const allGroups = Object.keys(groups);
 
-groups.jelly.godot.push('jelly_pause_tests');
+groups.jelly.godot.push('jelly_pause_tests', 'chest_upgrade_level_tests');
 groups['word-jelly'].godot.push('jelly_pause_tests', 'word_jelly_practice_tests', 'coin_reward_flow_tests',
-  'word_jelly_selected_merge_tests', 'word_jelly_selected_merge_flow_tests',
+  'word_jelly_selected_merge_tests', 'word_jelly_selected_merge_flow_tests', 'word_jelly_controls_tests',
+  'word_jelly_fill_stream_tests', 'word_jelly_fill_stream_view_tests',
+  'word_jelly_fill_button_tests', 'word_jelly_fill_control_tests',
+  'word_jelly_fill_items_tests',
+  'word_jelly_funds_feedback_tests',
   'word_jelly_boss_tests', 'word_jelly_boss_progress_tests', 'word_jelly_boss_view_tests', 'word_jelly_boss_flow_tests', 'word_jelly_boss_portrait_tests', 'word_jelly_presentation_tests',
   'word_jelly_rules_tests', 'word_jelly_board_burst_tests', 'word_jelly_collection_learning_tests',
   'word_jelly_campaign_domain_tests', 'word_jelly_campaign_model_tests', 'word_jelly_campaign_flow_tests',
   'word_jelly_map_tests', 'chest_tier_models_tests', 'chest_tier_progress_tests', 'chest_tier_consumers_tests');
 groups.core.godot.push('chest_tier_models_tests', 'chest_tier_progress_tests', 'chest_tier_consumers_tests');
+groups['chest-charge'].godot.push('chest_upgrade_level_tests');
+groups['word-jelly'].godot.push('chest_upgrade_level_tests');
 groups.jelly.node.push('jelly-campaign-art', 'jelly-campaign-host', 'chest-tier-art', 'jelly-boss-art');
 
 function createPlan(names = ['all']) {

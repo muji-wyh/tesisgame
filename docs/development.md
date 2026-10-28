@@ -37,16 +37,29 @@ npm start
 
 `npm start` imports the resources, exports Godot to Web, and serves the result at `http://127.0.0.1:41773`.
 
-For the ten-stage Pip asset review, run `npm run preview:pip` and open
+For the Baby-and-ten-age Pip asset review, run `npm run preview:pip` and open
 `http://127.0.0.1:41774/`. This separate server binds to localhost only and does
 not require a game build. Asset previews are development tools; Pip's preview
 is excluded from the production export, its build receipt inputs and game UI.
+The **All actions** page at `http://127.0.0.1:41774/actions.html` catalogs all
+native age gestures, inherited moves, reactions, expressions and celebration.
+It supports age/category/search filters, timeline inspection, reduced motion
+and 52-pixel review. Regenerate its source-pinned native samples with
+`node tools\pip-growth\export-review.cjs`. Loading-screen jump/shy/bonk responses
+are included alongside the native repertoire, using their original SVG artwork.
+The proposed interaction expansion is separate from the existing action catalog;
+see [the Pip interaction plan](plans/2026-10-28-pip-interactions.md).
 
 To build without starting a server:
 
 ```powershell
 npm run build:web
 ```
+
+All age and shared vocabulary bundles are packed in one Godot invocation with
+a bounded 30-minute timeout, rather than the ordinary three-minute engine-call
+budget. A slow full build still must finish every pack and verification before
+it receives a deployable receipt; partial bundles are never treated as success.
 
 The deliverable is **the entire `build\web` directory**. Keep its HTML, JavaScript, WebAssembly, core and vocabulary PCKs, audio-worklet, icon and `.br` files together. Shared music and effects are in the core PCK; word and phrase media are in age packs. Deploy that directory to a static HTTPS host; do not deploy just the HTML file or open it using `file://`. The host must serve `.wasm` as `application/wasm`.
 

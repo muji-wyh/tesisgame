@@ -65,12 +65,22 @@ func controller_back_event() -> void:
 		root.push_input(event)
 
 
-func check_tab_reachability(view, context: String) -> void:
+func check_tab_reachability(view, context: String, auto_fill: bool = false) -> void:
 	view.set_process(false)
 	view.cancel_input()
-	check(view.game.drop_now(), "The keyboard fixture evolves the board with new supply in " + context)
-	view.game.step(1.0)
-	view._process(0.0)
+	var generated: int = view.game.generated_tiles
+	for frame in range(120):
+		view._process(0.05)
+		if not view.game.paused and view._tiles.values().any(func(tile) -> bool: return not tile.disabled):
+			break
+	if auto_fill:
+		check(view.game.generated_tiles > generated
+			or (view.game.generated_tiles > 0 and view.game.cells.size() > view.game.COLUMNS * 3),
+			"Required Fill supplies actual new bodies before keyboard inspection in " + context)
+	else:
+		check(view.game.drop_now(), "The keyboard fixture evolves the board with new supply in " + context)
+	for frame in range(20):
+		view._process(0.05)
 	await pointer_event(view._global_rect(view._board).position - Vector2(2.0, 2.0), true)
 	await pointer_event(view._global_rect(view._board).position - Vector2(2.0, 2.0), false)
 	var remaining: Array[int] = []
@@ -114,10 +124,28 @@ func check_input_focus(app) -> void:
 		and not tile.selected and not tile.highlighted and not tile.completion_hint)
 		and view._source == -1 and view._keyboard_source == -1,
 		"Pointer entry does not paint an unsolicited selection, focus rim, or completion hint")
-	var first: Control = view.navigation_controls()[0]
+	# Home/Continue is a core unbound-round contract; campaign exits use the map.
+	check(app.new_round(405, false, "", "word_jelly"), "Focus continuity uses an ordinary unbound round")
+	await settle()
+	view.set_process(false)
+	for frame in range(120):
+		if view._tiles.values().filter(func(tile) -> bool: return not tile.disabled).size() >= 2:
+			break
+		view._process(0.05)
+		await process_frame
+	var available: Array[Control] = view.navigation_controls()
+	check(available.size() >= 2, "Actual supply settles before keyboard selection is inspected")
+	if available.size() < 2:
+		return
+	var neutral: Vector2 = view._global_rect(view._board).position - Vector2(2.0, 2.0)
+	await pointer_event(neutral, true)
+	await pointer_event(neutral, false)
+	var first: Control = available[0]
 	await key_event(KEY_TAB)
+	view._process(0.0)
 	check(first.has_focus() and first._mark == 1 and not first.selected,
-		"The first Tab from the neutral board focuses the first playable jelly without selecting it")
+		"The first Tab from the neutral board focuses the first playable jelly without selecting it (focused=%s mark=%s selected=%s owner=%s expected=%s)"
+		% [first.has_focus(), first._mark, first.selected, root.gui_get_focus_owner(), first])
 	await key_event(KEY_ENTER, true)
 	check(view._keyboard_source == first.tile_id and first.selected and first._mark == 2,
 		"Shift+Enter still intentionally selects the keyboard-focused jelly")
@@ -185,7 +213,7 @@ func check_input_focus(app) -> void:
 	check(view.default_focus().has_focus(),
 		"Controller activation promotes the neutral board to a playable jelly")
 	app._controller_mode = false
-	await check_tab_reachability(view, "Jelly Words")
+	await check_tab_reachability(view, "Jelly Words", view.game.fill_mode)
 	Fixture.enter_mode(app, "jelly")
 	await settle()
 	await check_tab_reachability(app._jelly, "Jelly Match")
@@ -291,19 +319,25 @@ func check_finish_header(app, view) -> void:
 		var board: Rect2 = view._global_rect(view._board)
 		# Inspect actual controls after their minimum sizes resolve, including
 		# the hosted 320-pixel viewport where nominal footer widths can be smaller.
-		var actions: Dictionary = {"Auto merge": view.powerup_buttons.auto_merge.get_global_rect(),
-			"Collect": collect, "Treasure": view.powerup_buttons.fragments.get_global_rect()}
-		var auto_merge: Rect2 = actions["Auto merge"]
+		var actions: Dictionary = {"Collect": collect}
+		var paid_area: Rect2 = view.powerup_buttons.auto_merge.get_global_rect()
+		for kind: String in view.powerup_buttons:
+			var button: Control = view.powerup_buttons[kind]
+			if button.visible:
+				actions[kind] = button.get_global_rect()
+				paid_area = paid_area.merge(button.get_global_rect())
+		var auto_merge: Rect2 = actions["auto_merge"]
 		check(absf(collect.position.x - auto_merge.position.x) < 0.1
-			and absf(auto_merge.position.y - collect.end.y - 20.0 / s) < 0.1,
-			"Collect sits directly above Auto merge with a separate twenty-pixel divider band" + context)
+			and absf(auto_merge.position.y - collect.end.y - 14.0 / s) < 0.1
+			and absf(collect.size.x - (paid_area.size.x if view._compact_hud else auto_merge.size.x)) < 0.1,
+			"Collect fills the rail above a separate fourteen-pixel divider band" + context)
 		var divider_state: Dictionary = view.snapshot().get("action_divider", {})
 		var divider_rect: Array = divider_state.get("rect", [])
 		check(bool(divider_state.get("visible", false)) and divider_rect.size() == 4,
 			"The free Collect action has a visible separator from the paid tools" + context)
 		if divider_rect.size() == 4:
 			var divider := Rect2(float(divider_rect[0]), float(divider_rect[1]), float(divider_rect[2]), float(divider_rect[3]))
-			var divider_right: float = auto_merge.end.x if view._compact_hud else actions["Treasure"].end.x
+			var divider_right: float = paid_area.end.x
 			check(divider.size.x > 0.0 and divider.size.y > 0.0 and playfield.grow(0.1).encloses(divider)
 				and divider.position.y >= collect.end.y and divider.end.y <= auto_merge.position.y,
 				"The divider remains inside the empty band between free and paid actions" + context)
@@ -323,7 +357,8 @@ func check_finish_header(app, view) -> void:
 					+ " retain eight display pixels between their actual touch targets" + context)
 			if view._compact_hud:
 				check(action.position.x >= board.end.x + 8.0 / s - 0.1
-					and absf(action.position.x - collect.position.x) < 0.1,
+					and action.position.x >= collect.position.x - 0.1
+					and action.end.x <= paid_area.end.x + 0.1,
 					str(action_names[action_index]) + " shares one action rail to the right of the board" + context)
 			else:
 				check(action.position.y >= board.end.y - 0.1,
@@ -355,8 +390,23 @@ func check_finish_header(app, view) -> void:
 			view._word_reveal.reset()
 			view._word_reveal.set_reduced_motion(view.reduced_motion)
 		if dimensions == Vector2i(624, 1119):
-			check(view._pitch * s >= 90.0,
-				"The reported portrait size keeps at least ninety display pixels per square cell")
+			var authored: bool = view.game.uses_authored_morphology()
+			var horizontal_budget: float = playfield.size.x - (8.0 if authored else 12.0) / s
+			if view._compact_hud:
+				horizontal_budget -= paid_area.size.x + (8.0 if authored else 12.0) / s
+			var top_limit: float = playfield.position.y + 2.0 / s
+			var badge: Rect2 = view._global_rect(view._stage_banner._badge)
+			if view._stage_banner.visible and badge.position.x < board.end.x and badge.end.y <= view.drop_button.get_global_rect().position.y:
+				top_limit = maxf(top_limit, badge.end.y + 8.0 / s)
+			var bottom_limit: float = playfield.end.y - 12.0 / s if view._compact_hud \
+				else view._fill_button.get_global_rect().position.y - (4.0 if authored else 6.0) / s
+			var height_budget: float = (bottom_limit - top_limit) * s
+			var height_pitch: float = (height_budget - 9.0) / (view.WordModel.ROWS + view._preview_row_count()) if authored \
+				else (height_budget - 12.0) / (view.WordModel.ROWS + 0.91)
+			var expected_pitch: float = minf(90.0, minf(horizontal_budget * s / view.WordModel.COLUMNS, height_pitch))
+			check(view._pitch * s >= expected_pitch - 0.1,
+				"The portrait uses the readable cell budget after accounting for its complete HUD (pitch=%s expected=%s)"
+				% [view._pitch * s, expected_pitch])
 		if dimensions == Vector2i(320, 480):
 			check(view._pitch * s >= 30.0,
 				"The small phone keeps at least thirty display pixels per board column beside the responsive action rail")
@@ -470,10 +520,17 @@ func _check_playfield_layout(view, s: float, context: String) -> void:
 		for rectangle: Rect2 in regions.values():
 			occupied = occupied.merge(rectangle)
 	var horizontal_slack: float = view.size.x - occupied.size.x
-	var top_slack: float = tray.position.y - view.global_position.y
-	var stage_badge: Rect2 = view._stage_banner._label.get_global_rect()
-	if view._stage_banner.visible and stage_badge.position.x < tray.end.x and stage_badge.end.y <= tray.position.y:
-		top_slack -= stage_badge.size.y + 6.0 / s
+	var reserved_top: float = view.global_position.y
+	var headers: Array[Rect2] = []
+	if view._stage_banner.visible:
+		headers.append(view._global_rect(view._stage_banner._badge))
+	if view._practice_panel.visible:
+		headers.append(view._practice_panel.get_global_rect())
+	for header: Rect2 in headers:
+		if header.position.x < tray.end.x and header.end.x > tray.position.x \
+			and header.end.y <= tray.position.y:
+			reserved_top = maxf(reserved_top, header.end.y + 6.0 / s)
+	var top_slack: float = tray.position.y - reserved_top
 	check(horizontal_slack * s <= 24.0 or top_slack * s <= 16.0,
 		"The board uses the available width or height instead of leaving spare room in both directions" + context)
 

@@ -1,8 +1,10 @@
 # Jelly Words powerups
 
 The Auto merge, Magnet and Treasure purchase controls share a quiet pearl surface.
-A full-width title sits above the sourced item artwork and a separate coin-price
-capsule, so narrow phone controls no longer squeeze the title beside the icon.
+A full-width title sits above the sourced item artwork and a plain coin-price
+row, so narrow phone controls do not squeeze the title beside the icon. Neutral
+cream surfaces share one border treatment; the sourced artwork identifies the
+tool instead of giving every card a different colored frame.
 Their artwork stays separate from the stable touch target, title, and coin price.
 Auto merge costs 600, 900, then 1200 coins per round;
 Magnet and Treasure each cost 200, 300, then 400. Each item tracks successful purchases separately
@@ -17,6 +19,17 @@ use a side rail when it preserves larger Jelly reading space. Wide rails use two
 columns; narrow footers wrap rather than overlap. Ordinary paid controls are
 56 display pixels high, using compact 44-pixel controls on short screens and Boss
 layouts. Fill always keeps a 44-pixel target. The group retains bottom padding.
+Fill and Collect span the complete rail, including above a two-column tool grid.
+Fill is an icon-only toggle: acquired downward chevrons feed a small stack of
+the actual gel artwork. A separate thumb changes position as well as color.
+Off is a still cream control; On has a mint rim, continuous downward icon flow,
+soft local acquired glow and two tiny sourced glints. The cue stays alive while
+the mode is On, including when the board is full or Challenge locks the switch.
+The existing lock appears inside the enabled thumb in Challenge. There are no
+Fill, On, Off, tooltip, or helper labels. The complete name and selected/required
+state remain accessible to screen readers.
+One quiet cream backing groups the controls; only Collect is a strong green
+primary action. The divider remains visible but uses the same fine neutral edge.
 
 ## Selected-family Magnet
 
@@ -36,16 +49,33 @@ grants construction mastery or mints manual-merge combo coins. A later successfu
 collection owns its usual learning and rewards. The next price is independent of
 Auto merge, Treasure and extra time.
 
-Fill dispatches real advertised supply packets, waiting for their natural fall
-and settlement before dispatching another. It never fills instantly or bypasses
-paid-operation, drag, pause, save or ending ownership. Main/unbound play has an
-independent optional preference. Challenge always enables Fill and disables its
+Fill continuously releases real advertised supply into each physically clear
+entrance. Later Jellies begin falling while earlier ones are still airborne,
+without waiting for a whole packet to land or settle. Landing space is reserved
+before departure, and entrance spacing follows the real fall speed so bodies
+cannot pass through one another. Preview replacements wait for that same real
+entrance clearance, including faster stages, rather than fading over a body
+that is still leaving the tray. It stops when no reachable vacancy remains;
+switching it off leaves already dispatched Jellies to finish falling normally.
+It never fills instantly or bypasses paid-operation, drag, pause, save or ending
+ownership. Main/unbound play has an independent optional preference.
+Challenge always enables Fill and disables its
 switch; this forced value never overwrites the ordinary preference.
+
+Items remain usable while unrelated supply is falling. Auto merge and Magnet
+still need a legal settled pair; incoming supply is not mistaken for unsettled
+board support that would make an operation unsafe. A saved item temporarily owns
+new supply, while already dispatched Jellies continue their normal descent.
+After the item finishes, Fill resumes automatically without changing its selected
+preference. Treasure retains its live moving-body targets and repeat-purchase
+behavior, and extra time retains its independent stage-clock purchase.
 
 ## Artwork and acquisition
 
 | Runtime material | Original source, creator, and rights | Acquisition and animation |
 | --- | --- | --- |
+| Fill chevrons and lock, `assets/images/ui/controls/chevron-left.svg` and `lock.svg` | Paweł Kuna, Tabler Icons 3.35.0, MIT. Original URLs, source hashes and unchanged-path integration are recorded in `assets/images/ui/controls/sources.json`; the MIT license remains in `assets/images/ui/LICENSE-Tabler.txt`. | Already acquired. Their actual source-scale review was inspected before this reuse. The chevron is rotated downward, not redrawn; its repeating descent/fade is game-authored. The source SVGs have no animation clips. The round-restart refresh icon was inspected but deliberately not reused for a mode switch. |
+| Fill gel stack, `assets/images/jelly-match/gel-mint.png` and `gel-sky.png` | Zuhria Alfitra / pzUH, GameArt2D Jelly Squash Free Sprites, CC0 1.0. Existing source and acquisition details remain in [Jelly Words](jelly-words.md) and [Jelly Match](jelly-match.md). | Already acquired and integrated. The actual mint material was inspected before composing the icon; source crop and aspect ratio are preserved. Static source artwork; no new model, skin or animation is claimed. |
 | `assets/images/ui/jelly-powerups/auto-merge-wand.svg` | Kenney, [Cursor Pack 1.1](https://kenney.nl/assets/cursor-pack), `Vector/Basic/tool_wand.svg`. CC0 1.0; the original pack license is retained beside the SVG as `LICENSE-Kenney.txt`. | Acquired in the user's local Kenney All-in-1 3.7.0 collection. The original vector and 64px PNG were inspected at 32–40px before the SVG was copied byte-for-byte. Static white artwork, with a violet runtime tint; it has no source animation. |
 | `assets/images/ui/jelly-powerups/family-magnet.webp` | Microsoft Corporation, Fluent Emoji 3D Magnet, MIT. Original URL, original/output hashes and existing word-library provenance are retained in `assets/images/ui/jelly-powerups/sources.json`. | Previously acquired pink horseshoe magnet with silver tips, inspected before an exact-byte core-UI copy. This is integrated artwork, not a marketplace preview or a deferred age-eight dependency. Static source image; no source animation. |
 | Current chest marker texture | Existing acquired chest rendering and tier selection, documented in [Jelly fragments](jelly-fragments.md) and [chest replacement](chest-refresh.md). | Reuses the owner's current cropped texture, including its cached model render. No new chest is downloaded. The button animates this still texture; it does not play a source rig or opening clip. |
@@ -76,9 +106,28 @@ these inspected interface images are static and contain no animation.
 Successful purchases give the sourced icon a short upward pop, a restrained
 turn, and local glints over 0.62 seconds. Rejection uses a 0.42-second damped
 sideways recoil and warm amber light. Titles and prices stay level, and the
-touch target never changes. An insufficient balance uses a neutral price capsule
+touch target never changes. An insufficient balance uses a muted price row
 and warm readable price text while preserving clickability; only unavailable or busy actions
 are disabled. There are no tooltips or explanatory overlays.
+
+Insufficient coins have a more explicit, separate 1.15-second response. The
+clicked card briefly says **Need coins**, warms its surface and rim, and makes
+the acquired coin and unchanged price row recoil and settle. The tool artwork
+stays still: the cost, not a broken wand or chest, is the cause. The existing
+`gold-coin.png` and sourced local glow are reused without new artwork or
+celebration sparkles. The accessible name retains the actual tool, exact quoted
+cost and actual missing-coin amount. The ordinary title returns automatically.
+Rapid retries restart one bounded response; they do not stack effects, debit
+coins, advance item prices, open a dialog or move the hit area.
+
+The wallet's explicit `reason: insufficient` outcome owns this explanation.
+A failed save, duplicate receipt or invalid Magnet target keeps its own normal
+rejection and cannot inherit an old low-balance hint. A known low balance also
+warns on the first Magnet press while preserving its free target-selection and
+cancellation steps. Unknown wallet balances are not treated as known zero coins.
+Pause hides and freezes the transient warning; reduced motion keeps its readable
+warm state and wording without coin scaling or price motion, including when the
+preference changes mid-response.
 
 Treasure has no cooldown: it remains available while earlier Treasure fragments
 are flying or their arrival effects are fading. Each click pays its current
@@ -87,13 +136,16 @@ flights overlap existing ones without restarting or skipping them. Insufficient
 funds still trigger rejection feedback and leave all paid deliveries intact.
 Auto merge retains its exclusive board operation.
 
-Collect uses a horizontal mint capsule with a larger sourced word-jelly
-illustration on the left and the title and inline word count together on the
-right. There is no separate count badge or coin illustration. The mint, sky and
+Collect uses a full-width green action with a sourced word-jelly illustration,
+a stable title and a contained completed-word count badge. During collection
+the number becomes the remaining count; the full meaning stays available in
+the existing accessible name. Narrow controls retain the same bounded number
+under the title. No coin illustration suggests a collection fee. The mint, sky and
 lilac gel skins and Microsoft Fluent Emoji cat are existing integrated artwork;
 their unchanged source, creator, license and acquisition records are linked in
-[Jelly Words](jelly-words.md). The empty state keeps this illustration and the
-"0 words" count visible. Accumulated words retain the existing charge, growth,
+[Jelly Words](jelly-words.md). The empty state keeps the illustration and zero count visible. Typography fits
+both width and line height in the existing UI scale, without the old eight-unit
+minimum that overflowed highly scaled desktop controls. Accumulated words retain the existing charge, growth,
 local light and sparkle rhythm, while each pickup gives the illustration a
 small compress-and-lift beat. This styling does not change collection
 eligibility or reward amounts, and count changes never move the hit area.
@@ -105,9 +157,20 @@ transient presentation without issuing a purchase. Reduced motion uses a static
 target is 88 by 56 display pixels normally, or 88 by 44 in compact layouts,
 scaled through the existing UI scale.
 
-The controls only emit the normal Button `pressed` signal. The model and wallet
-own eligibility, spending, rewards, busy state, and cancellation; button
-animation never commits a transaction.
+Fill has its own persistent mode clock rather than borrowing a purchase's
+short success effect. The downward cycle lasts 1.4 seconds, with a quiet
+2.8-second local glow breath; the status thumb crosses in 160 ms. These effects
+do not dispatch supply or modify a gameplay clock. Pause freezes the pose and
+retains the active style. Reduced motion retains the mint surface, downward
+icon, glow and thumb position without continuous motion. Hidden/finished
+controls stop advancing, and reset clears only presentation. On/Off, Challenge
+ownership, real hit bounds and the ordinary preference are unchanged. Forced,
+paused and reduced-motion states put the thumb on the actual selected side
+immediately rather than freezing it halfway across.
+
+Paid controls use the normal Button `pressed` signal; Fill retains its native
+`toggled` path. The model and wallet own eligibility, spending, rewards, busy
+state, and cancellation; button animation never commits a transaction.
 
 ## Reused sound and world effects
 

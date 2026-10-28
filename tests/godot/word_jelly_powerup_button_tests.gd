@@ -95,6 +95,51 @@ func _run() -> void:
 		check(state.light > 0.0, "reduced motion still indicates outcome")
 		button.advance(1.0)
 		check(not button.snapshot().feedback_active, "reduced feedback clears promptly")
+	button.configure("auto_merge", 600, false)
+	button.set_ui_scale(1.0)
+	button.size = Vector2(88, 56)
+	button.set_availability(true, false)
+	var target: Rect2 = button.get_rect()
+	button.feedback(false)
+	button.insufficient_coins(150)
+	button.advance(0.08)
+	var funds: Dictionary = button.snapshot()
+	check(funds.funds_warning and funds.missing_coins == 150 and funds.title == "Need coins"
+		and funds.price_text == "600", "The actual shortage is explicit without replacing the quoted price")
+	check(funds.price_offset != [0.0, 0.0] and funds.coin_scale > 1.0
+		and funds.icon_offset == [0.0, 0.0] and funds.icon_scale == 1.0,
+		"Low funds highlights the money instead of making the purchased tool look broken")
+	check(button.get_rect() == target and button.tooltip_text.is_empty(),
+		"The local warning never moves the touch target or creates a tooltip")
+	button.advance(0.5)
+	check(button.snapshot().funds_warning, "The cause remains readable after the short initial recoil settles")
+	var retry_serial: int = button.snapshot().feedback_serial
+	button.feedback(false)
+	button.insufficient_coins(150)
+	check(button.snapshot().feedback_serial == retry_serial + 1 and button.snapshot().feedback_elapsed == 0.0,
+		"A repeated rejected click restarts one bounded response, not an accumulating animation")
+	button.pause_feedback(true)
+	var funds_time: float = button.snapshot().feedback_elapsed
+	button.advance(2.0)
+	check(button.snapshot().feedback_elapsed == funds_time and not button.snapshot().funds_warning,
+		"Pause hides and freezes the transient money warning")
+	button.pause_feedback(false)
+	check(button.snapshot().funds_warning, "Resume restores the same warning rather than announcing a new purchase")
+	button.set_reduced_motion(true)
+	button.advance(0.1)
+	check(button.snapshot().funds_warning and button.snapshot().price_offset == [0.0, 0.0]
+		and button.snapshot().coin_scale == 1.0 and button.snapshot().title == "Need coins",
+		"Reduced motion retains the explicit reason without shaking the price or scaling the coin")
+	button.advance(2.0)
+	check(not button.snapshot().funds_warning and button.snapshot().title == "Auto merge"
+		and button.snapshot().price_text == "600" and button.snapshot().missing_coins == 0,
+		"The original tool and price return cleanly after the warning")
+	button.feedback(false)
+	check(not button.snapshot().funds_warning and button.snapshot().title == "Auto merge",
+		"Other rejection causes cannot inherit a stale insufficient-funds explanation")
+	button.set_availability(true, false, false, false)
+	check(str(button.get("accessibility_name")).contains("Coin balance unavailable"),
+		"An unavailable wallet is not announced as a known low balance")
 	var viewport := SubViewport.new()
 	viewport.size = Vector2i(64, 64)
 	root.add_child(viewport)

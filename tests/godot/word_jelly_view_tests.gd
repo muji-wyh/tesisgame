@@ -324,9 +324,14 @@ func _check_supply_layout(view) -> void:
 	var collect: Rect2 = view.collect_button.get_rect()
 	var auto_merge: Rect2 = view.powerup_buttons.auto_merge.get_rect()
 	var divider: Rect2 = view._action_divider.get_rect()
-	check(is_equal_approx(collect.position.x, auto_merge.position.x) and is_equal_approx(collect.size.x, auto_merge.size.x)
-		and absf(auto_merge.position.y - collect.end.y - 20.0 / s) < 0.01,
-		"Collect sits directly above Auto merge with a twenty-pixel separator band" + context)
+	var paid_area: Rect2 = auto_merge
+	for button: Control in view.powerup_buttons.values():
+		if button.visible:
+			paid_area = paid_area.merge(button.get_rect())
+	check(is_equal_approx(collect.position.x, auto_merge.position.x)
+		and is_equal_approx(collect.size.x, paid_area.size.x if view._compact_hud else auto_merge.size.x)
+		and absf(auto_merge.position.y - collect.end.y - 14.0 / s) < 0.01,
+		"Primary Collect fills the side rail above a fourteen-pixel separator band" + context)
 	check(view._action_divider.visible and bounds.encloses(divider) and divider.size.y * s >= 1.0
 		and divider.position.y > collect.end.y and divider.end.y < auto_merge.position.y,
 		"a visible divider separates free collection from the paid tools" + context)

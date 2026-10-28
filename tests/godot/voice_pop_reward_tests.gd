@@ -93,6 +93,9 @@ func _test_scene(dimensions: Vector2i) -> void:
 			view.advance_reward_presentation(MILESTONE_REVEAL)
 			check(view.snapshot().reward_presentation.revealed and view._displayed_chest_tier == tier,
 				"The synchronized reveal updates the displayed chest tier")
+			var level: Dictionary = view.snapshot().reward_presentation.level_transition
+			check(not level.visible if tier == 1 else level.from_tier == tier - 1 and level.to_tier == tier,
+				"Voice Pop shares the exact committed before-and-after chest level, without a fake level zero")
 			check(reveals.size() == tier and reveals.back() == tier,
 				"Unlocks and upgrades each request one shared screen-overlay burst at reveal")
 			check(view.clip_contents and view._reward_presentation.mouse_filter == Control.MOUSE_FILTER_IGNORE,

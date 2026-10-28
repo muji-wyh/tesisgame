@@ -889,7 +889,9 @@ func _build_controls() -> void:
 		return _word_jelly._finish_feedback_ready() and not _coin_flight.snapshot().active \
 			and absf(_coin_counter.displayed - float(_coin_counter.target)) <= 0.001
 	_word_jelly.purchase_powerup = _purchase_word_jelly_powerup
-	_word_jelly.coin_balance = func() -> int: return coin_wallet.balance
+	# An unavailable wallet is distinct from a known zero balance.
+	_word_jelly.coin_balance = func() -> int:
+		return coin_wallet.balance if coin_wallet.ready and coin_wallet.error.is_empty() else -1
 	_word_jelly.collected.connect(_word_jelly_collected)
 	_word_jelly.word_requested.connect(_jelly_hear.bind("word_jelly"))
 	_word_jelly.word_merged.connect(_word_jelly_merged)
@@ -2638,7 +2640,7 @@ func _purchase_word_jelly_powerup(event_id: String, kind: String, price: int) ->
 		_announce_status("%s purchased for %d coins. Total: %d coins." % [title, price, coin_wallet.balance])
 	elif bool(result.get("duplicate", false)):
 		_announce_status("This powerup purchase was already processed. No more coins were spent.")
-	elif coin_wallet.balance < price:
+	elif str(result.get("reason", "")) == "insufficient":
 		_announce_status("Not enough coins. This powerup costs %d coins." % price)
 	else:
 		_announce_status("Your purchase could not be saved. No coins were spent.")

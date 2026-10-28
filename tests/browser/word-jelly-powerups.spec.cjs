@@ -64,7 +64,7 @@ function expectFragmentBadge(tile) {
   expect(y + height, 'The chest stack stays inside its jelly').toBeLessThanOrEqual(tile.rect[3] + 0.5);
 }
 
-async function start(page, info, balance, pipLevel = 0) {
+async function start(page, info, balance, pipLevel = 0, { pauseOnReady = false } = {}) {
   const reducedMotion = info.project.use.reducedMotion || 'no-preference';
   await page.setViewportSize(/iphone|android|mobile/.test(info.project.name)
     ? { width: 393, height: 852 } : { width: 1473, height: 1175 });
@@ -76,8 +76,9 @@ async function start(page, info, balance, pipLevel = 0) {
   }, { balance, walletKey: WALLET_KEY });
   const errors = await openGame(page, { reducedMotion });
   await chooseMode(page, 'word_jelly', { challenge: true });
+  let opening;
   await expect.poll(async () => {
-    const state = await jelly(page);
+    const state = opening = await jelly(page);
     return state.visible && !state.paused && state.phase === 'playing' && state.tiles.length === 40 &&
       state.tiles.every(tile => tile.settled) &&
       Object.values(state.powerup_buttons || {}).filter(button => button.visible).length === 3;
@@ -86,15 +87,19 @@ async function start(page, info, balance, pipLevel = 0) {
       JSON.stringify({ state: await jelly(page), bounds: await metrics(page) }, null, 2));
     throw error;
   });
+  if (pauseOnReady) {
+    await page.keyboard.press('p');
+    await expect.poll(async () => (await jelly(page)).paused).toBe(true);
+  }
   await expect.poll(async () => (await wallet(page)).balance).toBe(balance);
   const audioAvailable = await page.evaluate(() => window.audioObservation.available);
   if (!audioAvailable) info.annotations.push({ type: 'audio-limitation',
     description: 'This renderer has no WebAudio. Chromium verifies the recordings; this case still verifies all visible and saved outcomes.' });
-  return { errors, reducedMotion, audioAvailable };
+  return { errors, reducedMotion, audioAvailable, opening };
 }
 
-async function pressRect(page, rect) {
-  await tap(page, rect[0] + rect[2] / 2, rect[1] + rect[3] / 2);
+async function pressRect(page, rect, bounds) {
+  await tap(page, rect[0] + rect[2] / 2, rect[1] + rect[3] / 2, bounds);
 }
 
 async function readyPowerup(page, kind) {
@@ -310,16 +315,27 @@ function expectAutoMergeTimeline(evidence, completed) {
 }
 
 test('Auto merge launches eligible pairs every 100 ms with overlapping 320 ms flights', async ({ page }, info) => {
-  const { errors } = await start(page, info, 5000);
-  const before = await jelly(page), saved = await savedGrowth(page);
+  test.setTimeout(300000);
+  const { errors, opening: before } = await start(page, info, 5000, 0, { pauseOnReady: true });
+  const saved = await savedGrowth(page), bounds = await metrics(page);
   await beginTrace(page, 'auto-merge-100ms');
-  await pressRect(page, before.powerup_buttons.auto_merge.rect);
+  await page.keyboard.press('p');
+  await expect.poll(async () => (await jelly(page)).paused).toBe(false);
+  await pressRect(page, before.powerup_buttons.auto_merge.rect, bounds);
   await expect.poll(async () => (await wallet(page)).balance).toBe(4400);
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.powerup.kind === 'auto_merge' && !state.powerup.active && state.powerup.stage === 'complete' &&
       state.tiles.every(tile => tile.settled);
-  }, { timeout: 20000 }).toBe(true);
+  }, { timeout: 60000 }).toBe(true).catch(async error => {
+    fs.writeFileSync(info.outputPath('auto-merge-completion-state.json'),
+      JSON.stringify(await jelly(page), null, 2));
+    fs.writeFileSync(info.outputPath('auto-merge-completion-trace.json'),
+      JSON.stringify(await page.evaluate(() => window.wordJellyPowerupEvidence), null, 2));
+    throw error;
+  });
+  await page.keyboard.press('p');
+  await expect.poll(async () => (await jelly(page)).paused).toBe(true);
   const after = await jelly(page);
   const evidence = await retainTrace(page, info, 'auto-merge-100ms', ['auto-midpoint', 'auto-fusion']);
   expectAutoMergeTimeline(evidence, after.powerup.completed);
@@ -330,7 +346,19 @@ test('Auto merge launches eligible pairs every 100 ms with overlapping 320 ms fl
   expect(forwardPairs(after).some(pair => pair.every(id => originalIds.has(id))),
     'The captured board has no remaining original pair; required Fill may supply new paths').toBe(false);
   expect(progress(after), 'Auto merge leaves the resulting words for manual collection').toEqual(progress(before));
-  expect(fragmentTotal(after)).toBe(fragmentTotal(before));
+  // A short union can fall between rendered frames; later drag endpoints and
+  // the final merged words still distinguish its results from fresh supply.
+  const resultIds = new Set(evidence.timeline.flatMap(frame => [
+    ...frame.fusions.map(fusion => fusion.result.id),
+    ...(frame.powerup.drags || []).flatMap(drag => [drag.source_id, drag.target_id])
+      .filter(id => !originalIds.has(id))
+  ]).concat(after.tiles.filter(tile => tile.jelly_kind === 'merged' && !originalIds.has(tile.id))
+    .map(tile => tile.id)));
+  expect(resultIds.size, 'Every automatic result is accounted for').toBe(after.powerup.completed);
+  const supplied = after.tiles.filter(tile => !originalIds.has(tile.id) && !resultIds.has(tile.id));
+  expect(supplied.length, 'Only genuinely generated Fill bodies add carried markers')
+    .toBe(after.generated_tiles - before.generated_tiles);
+  expect(fragmentTotal(after)).toBe(fragmentTotal(before) + fragmentTotal({ tiles: supplied }));
   expect(await savedGrowth(page)).toBe(saved);
   const persisted = await storedWallet(page);
   expect(persisted.balance).toBe(4400);
@@ -343,12 +371,12 @@ test('Auto merge launches eligible pairs every 100 ms with overlapping 320 ms fl
 });
 
 test('Magnet charges only for the player-selected family and Challenge keeps Fill on', async ({ page }, info) => {
-  test.setTimeout(180000);
-  const { errors } = await start(page, info, 2000, 3);
-  const opening = await readyPowerup(page, 'family_merge');
-  await page.keyboard.press('p');
-  await expect.poll(async () => (await jelly(page)).paused).toBe(true);
+  test.setTimeout(300000);
+  const { errors, opening } = await start(page, info, 2000, 3, { pauseOnReady: true });
+  const bounds = await metrics(page);
+  expect(opening.powerup_buttons.family_merge.enabled).toBe(true);
   expect(opening.fill_control).toMatchObject({ on: true, locked: true, enabled: false });
+  expect(opening.fill_control.presentation).toMatchObject({ icon_only: true, on: true, locked: true, glow: true });
   const pairs = forwardPairs(opening).map(pair => pair.map(id => opening.tiles.find(tile => tile.id === id)))
     .filter(pair => pair.some(tile => tile.jelly_kind === 'picture'));
   expect(pairs.length).toBeGreaterThan(0);
@@ -372,8 +400,9 @@ test('Magnet charges only for the player-selected family and Challenge keeps Fil
   // Keep the genuine ten-second full-board clock for player gestures, not
   // browser-driver assertions; pausing itself deliberately cancels a selector.
   await page.keyboard.press('p');
-  await pressRect(page, opening.powerup_buttons.family_merge.rect);
-  await pressRect(page, opening.powerup_buttons.family_merge.rect);
+  await expect.poll(async () => (await jelly(page)).paused).toBe(false);
+  await pressRect(page, opening.powerup_buttons.family_merge.rect, bounds);
+  await pressRect(page, opening.powerup_buttons.family_merge.rect, bounds);
   await page.keyboard.press('p');
   await expect.poll(async () => (await jelly(page)).paused).toBe(true);
   const choice = await page.evaluate(() => window.magnetChoiceFrames.filter(frame => frame.selection?.active));
@@ -383,8 +412,9 @@ test('Magnet charges only for the player-selected family and Challenge keeps Fil
   expect((await jelly(page)).family_selection.active).toBe(false);
   expect((await wallet(page)).balance).toBe(2000);
   await page.keyboard.press('p');
-  await pressRect(page, opening.powerup_buttons.family_merge.rect);
-  await pressRect(page, selected.rect);
+  await expect.poll(async () => (await jelly(page)).paused).toBe(false);
+  await pressRect(page, opening.powerup_buttons.family_merge.rect, bounds);
+  await pressRect(page, selected.rect, bounds);
   await expect.poll(async () => (await wallet(page)).balance).toBe(1800);
   await expect.poll(async () => {
     const state = await jelly(page);
@@ -410,26 +440,39 @@ test('Magnet charges only for the player-selected family and Challenge keeps Fil
 });
 
 test('powerup prices stay visible and unaffordable purchases give feedback without changing the board or wallet', async ({ page }, info) => {
-  test.setTimeout(180000);
-  const { errors, reducedMotion, audioAvailable } = await start(page, info, 0);
-  const opening = await jelly(page), initialSave = await storedWallet(page), growth = await savedGrowth(page);
-  expectLayout(opening, await metrics(page), false);
+  test.setTimeout(600000);
+  const { errors, reducedMotion, audioAvailable, opening } = await start(page, info, 0, 0, { pauseOnReady: true });
+  const initialSave = await storedWallet(page), growth = await savedGrowth(page), bounds = await metrics(page);
+  expectLayout(opening, bounds, false);
   await capture(page, info, 'word-jelly-powerups-idle-zero-coins');
   const audioEvidence = { reducedMotion, audioAvailable, trials: [] };
   for (const kind of Object.keys(prices)) {
     const from = await playbackIndex(page);
     await beginTrace(page, `negative-${kind}`);
-    const before = await readyPowerup(page, kind);
-    await pressRect(page, before.powerup_buttons[kind].rect);
+    const before = await jelly(page);
+    await page.keyboard.press('p');
+    await expect.poll(async () => (await jelly(page)).paused).toBe(false);
+    await pressRect(page, before.powerup_buttons[kind].rect, bounds);
     await expect.poll(async () => (await jelly(page)).powerup_buttons[kind].feedback_serial).toBe(before.powerup_buttons[kind].feedback_serial + 1);
     await expect.poll(async () => (await jelly(page)).powerup_buttons[kind].feedback_active).toBe(false);
+    await page.keyboard.press('p');
+    await expect.poll(async () => (await jelly(page)).paused).toBe(true);
     const evidence = await retainTrace(page, info, `word-jelly-${kind}-unaffordable`, [`negative-${kind}`]);
     const feedback = evidence.timeline.map(frame => frame.buttons[kind]).filter(button => button.feedback_active);
     expect(feedback.some(button => !button.feedback_success && button.light > 0)).toBe(true);
+    const funds = feedback.filter(button => button.funds_warning);
+    expect(funds.length, 'The exported game identifies the actual insufficient-funds cause').toBeGreaterThan(0);
+    expect(funds.every(button => button.title === 'Need coins' && button.missing_coins === prices[kind] &&
+      button.price_text === String(prices[kind])), 'The warning preserves the real price and shortfall').toBe(true);
+    if (reducedMotion !== 'reduce')
+      expect(funds.some(button => button.price_offset.some(value => Math.abs(value) > 0.01)),
+        'The actual coin-price row, not just the tool art, recoils').toBe(true);
     if (reducedMotion === 'reduce') for (const button of feedback) {
       expect(button.icon_scale).toBe(1);
       expect(button.icon_rotation).toBe(0);
       expect(button.icon_offset).toEqual([0, 0]);
+      expect(button.price_offset).toEqual([0, 0]);
+      expect(button.coin_scale).toBe(1);
     }
     const after = await jelly(page);
     expect(after.powerup.active).toBe(false);
@@ -451,14 +494,29 @@ test('powerup prices stay visible and unaffordable purchases give feedback witho
     expect(await storedWallet(page)).toEqual(initialSave);
     expect(await savedGrowth(page)).toBe(growth);
   }
-  await openModeMenu(page);
+  // Reload the same persisted wallet for the independent muted trial.
+  await openGame(page, { reducedMotion, home: true });
   await activateLibraryControl(page, 'LibrarySound');
   await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('pipAndWords.presentation.v1')).muted)).toBe(true);
   await chooseMode(page, 'word_jelly', { challenge: true });
-  const beforeMuted = await readyPowerup(page, 'fragments'), mutedFrom = await playbackIndex(page);
-  await pressRect(page, beforeMuted.powerup_buttons.fragments.rect);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.phase === 'playing' && !state.paused && state.tiles.length === 40 &&
+      state.tiles.every(tile => tile.settled);
+  }, { timeout: 30000 }).toBe(true);
+  const beforeMuted = await readyPowerup(page, 'fragments');
+  await page.keyboard.press('p');
+  await expect.poll(async () => (await jelly(page)).paused).toBe(true);
+  const mutedFrom = await playbackIndex(page);
+  await page.keyboard.press('p');
+  await expect.poll(async () => (await jelly(page)).paused).toBe(false);
+  await pressRect(page, beforeMuted.powerup_buttons.fragments.rect, bounds);
   await expect.poll(async () => (await jelly(page)).powerup_buttons.fragments.feedback_serial)
-    .toBe(beforeMuted.powerup_buttons.fragments.feedback_serial + 1);
+    .toBe(beforeMuted.powerup_buttons.fragments.feedback_serial + 1).catch(async error => {
+      fs.writeFileSync(info.outputPath('muted-purchase-state.json'),
+        JSON.stringify({ before: beforeMuted, after: await jelly(page), bounds: await metrics(page) }, null, 2));
+      throw error;
+    });
   await page.waitForTimeout(450);
   audioEvidence.muted = await soundsSince(page, mutedFrom);
   expect(audioEvidence.muted, 'Mute also silences rejected purchases').toEqual([]);

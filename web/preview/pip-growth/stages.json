@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "title": "Grow with Pip",
+  "title": "Pip's world",
   "status": "Integrated storybook age artwork with a local interactive review",
   "description": "Eleven storybook duck illustrations adapted from the original project Pip vectors express growth through face, crown, body, wings, legs and everyday clothing. Appearance follows completed curriculum ages independently of word mastery. These playful stages are not a developmental diagnosis.",
   "artSource": "tools/pip-growth/storybook.cjs",

@@ -29,8 +29,9 @@ require('./prepare-chest-milestone-art.cjs').checkChestMilestoneArt(root);
 require('./prepare-coin-art.cjs').checkCoinArt(root);
 runGodot(['--headless', '--path', root, '--import']);
 const vocabulary = writeVocabularyPlan(root);
+console.log('Packing all age and shared vocabulary bundles.');
 process.stdout.write(runGodot(['--headless', '--path', root, '--script',
-  'res://tools/pack-vocabulary.gd', '--', vocabulary.manifest]).stdout);
+  'res://tools/pack-vocabulary.gd', '--', vocabulary.manifest], { timeout: 1800000 }).stdout);
 const audio = collectRequiredAudio(root);
 verifyPreparedRelease({ rootDir: root, report: domainRelease });
 const inputs = snapshotInputs(root);

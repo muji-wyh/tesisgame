@@ -35,6 +35,7 @@ var _locked: bool = true
 var _ui_scale: float = 1.0
 var _panel := StyleBoxFlat.new()
 var _focus := StyleBoxFlat.new()
+var _count_badge := StyleBoxFlat.new()
 
 
 func _init() -> void:
@@ -199,14 +200,13 @@ func _draw() -> void:
 	var ready: bool = not _locked and (_count > 0 or _active)
 	var available: bool = ready and (not disabled or _active)
 	var press: float = 1.0 if is_pressed() and not disabled and not _locked else 0.0
-	var strength: float = float(pose.strength)
 	var bounds := Rect2(Vector2.ONE * unit, size - Vector2.ONE * 2.0 * unit)
 	var radius: int = maxi(1, roundi(13.0 * unit))
-	var fill := Color("#d6efdf").lerp(Color("#c7e9d3"), strength) if available else Color("#f0f1eb")
+	var fill: Color = Style.GOOD if available else Style.SURFACE
 	if is_hovered() and not disabled and not _locked:
 		fill = fill.lightened(0.10)
 	_panel.bg_color = fill
-	_panel.border_color = Color("#72ac89") if available else Color("#d5d9d0")
+	_panel.border_color = Style.GOOD.darkened(0.10) if available else Style.EDGE
 	_panel.set_border_width_all(maxi(1, roundi(unit)))
 	_panel.set_corner_radius_all(radius)
 	_panel.shadow_color = Color("#577777", 0.14)
@@ -223,8 +223,10 @@ func _draw() -> void:
 		_draw_locked_detail(unit)
 		_draw_caption(false, unit)
 		return
-	var icon_edge: float = minf(27.0 * unit, size.x * 0.27) * float(pose.visual_scale)
-	var icon_center := Vector2(7.0 * unit + icon_edge * 0.5, size.y - 17.0 * unit)
+	var content: Dictionary = _content_layout()
+	var icon_area: Rect2 = content.icon
+	var icon_edge: float = icon_area.size.x * float(pose.visual_scale)
+	var icon_center: Vector2 = icon_area.get_center()
 	var halo_edge: float = icon_edge * 1.28
 	if available and float(pose.glow) > 0.001:
 		_draw_art(GLOW, icon_center, Vector2.ONE * halo_edge, Color(0.85, 1.0, 0.82, float(pose.glow) * 0.75))
@@ -275,7 +277,7 @@ func _draw_sparkles(center: Vector2, pose: Dictionary, available: bool) -> void:
 		var angle: float = -PI * 0.86 + float(index) * TAU / maxf(float(amount), 4.0)
 		var phase: float = float(index) * 1.91 + _elapsed * (1.7 + float(pose.strength) * 1.8 + float(pose.surplus))
 		var twinkle: float = 0.72 if _reduced_motion else pow((sin(phase) + 1.0) * 0.5, 2.0)
-		var radius: float = minf((11.0 + float(index % 2) * 3.0) * unit, size.x * 0.14)
+		var radius: float = minf((11.0 + float(index % 2) * 3.0) * unit, minf(size.x * 0.14, size.y * 0.18))
 		var point: Vector2 = center + Vector2(cos(angle), sin(angle) * 0.78) * radius
 		var star_edge: float = (4.0 + twinkle * 3.0 + float(pose.strike) * 2.0) * unit
 		_draw_art(SPARKLE, point, Vector2.ONE * star_edge, Color(1.0, 0.97, 0.72, 0.30 + twinkle * 0.55))
@@ -283,51 +285,85 @@ func _draw_sparkles(center: Vector2, pose: Dictionary, available: bool) -> void:
 
 
 func _draw_caption(available: bool, unit: float) -> void:
-	var font: Font = Style.HEADING_FONT
-	var area := Rect2(Vector2(6.0, 3.0) * unit, Vector2(size.x - 12.0 * unit, 22.0 * unit))
-	var font_size: int = maxi(1, roundi((14.0 if available else 12.0) * unit))
-	var caption: String = "Collect"
-	var extent: Vector2 = font.get_string_size(caption, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
-	if extent.x > area.size.x:
-		font_size = maxi(8, floori(font_size * area.size.x / extent.x))
-		extent = font.get_string_size(caption, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size)
-	var baseline: float = area.get_center().y + (font.get_ascent(font_size) - font.get_descent(font_size)) * 0.5
-	draw_string(font, Vector2(area.get_center().x - extent.x * 0.5, baseline), caption,
-		HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Style.INK if available else Color("#64736b"))
-	if _locked:
-		return
-	var count: int = _remaining if _active else _count
-	var detail: String = "%d left" % count if _active else "%d word%s" % [count, "" if count == 1 else "s"]
-	area = Rect2(Vector2(minf(40.0 * unit, size.x * 0.40), 0.0), Vector2(maxf(1.0, size.x - minf(40.0 * unit, size.x * 0.40) - 6.0 * unit), size.y))
-	var detail_size: int = maxi(9, roundi((12.0 if available else 11.0) * unit))
-	var detail_width: float = font.get_string_size(detail, HORIZONTAL_ALIGNMENT_LEFT, -1, detail_size).x
-	if detail_width > area.size.x:
-		detail_size = maxi(8, floori(detail_size * area.size.x / detail_width))
-		detail_width = font.get_string_size(detail, HORIZONTAL_ALIGNMENT_LEFT, -1, detail_size).x
-	var detail_y: float = size.y - 17.0 * unit + (font.get_ascent(detail_size) - font.get_descent(detail_size)) * 0.5
-	draw_string(font, Vector2(area.get_center().x - detail_width * 0.5, detail_y), detail,
-		HORIZONTAL_ALIGNMENT_LEFT, -1, detail_size, Color("#2f6d59") if available else Color("#718e80"))
+	var content: Dictionary = _content_layout()
+	var ink: Color = Color.WHITE if available else Style.MUTED
+	_draw_text(content.title, ink, not bool(content.wide))
+	_draw_text(content.detail, Color("#daebe0") if available else Style.MUTED, false)
+	if not str(content.count.text).is_empty():
+		if not _locked:
+			_count_badge.bg_color = Style.GOOD.darkened(0.18) if available else Style.SOFT
+			_count_badge.set_corner_radius_all(maxi(1, roundi(9.0 * unit)))
+			draw_style_box(_count_badge, content.count.area)
+		_draw_text(content.count, ink, true)
 
 
 func _draw_locked_detail(unit: float) -> void:
+	var area: Rect2 = _content_layout().icon
+	_draw_art(LOCK, area.get_center(), Vector2.ONE * minf(area.size.x, 22.0 * unit), Style.MUTED)
+
+
+func _text_entry(value: String, area: Rect2, target: float) -> Dictionary:
+	if value.is_empty():
+		return {"text": value, "area": area, "font_size": 1}
 	var font: Font = Style.HEADING_FONT
-	var font_size: int = maxi(1, roundi(12.0 * unit))
-	var detail: String = "Lv%d" % UNLOCK_LEVEL
-	var text_width: float = font.get_string_size(detail, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
-	var icon_edge: float = minf(22.0 * unit, maxf(16.0 * unit, size.y - 28.0 * unit))
-	var gap: float = 4.0 * unit
-	var row_width: float = icon_edge + gap + text_width
-	var row_x: float = (size.x - row_width) * 0.5
-	var center_y: float = size.y - 15.0 * unit
-	var tint := Color("#64736b")
-	_draw_art(LOCK, Vector2(row_x + icon_edge * 0.5, center_y), Vector2.ONE * icon_edge, tint)
-	var baseline: float = center_y + (font.get_ascent(font_size) - font.get_descent(font_size)) * 0.5
-	draw_string(font, Vector2(row_x + icon_edge + gap, baseline), detail,
-		HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, tint)
+	var font_size: int = maxi(1, roundi(target / _ui_scale))
+	while font_size > 1 and (font.get_string_size(value, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > area.size.x
+		or font.get_height(font_size) > area.size.y):
+		font_size -= 1
+	return {"text": value, "area": area, "font_size": font_size}
+
+
+func _content_layout() -> Dictionary:
+	var unit: float = 1.0 / _ui_scale
+	var wide: bool = size.x * _ui_scale >= 136.0
+	var compact: bool = size.y * _ui_scale < 50.0
+	var icon_edge: float = (26.0 if wide else 18.0 if compact else 24.0) * unit
+	var icon := Rect2(Vector2((8.0 if wide else 10.0) * unit,
+		(size.y - icon_edge) * 0.5 if wide else size.y - (13.0 if compact else 16.0) * unit - icon_edge * 0.5),
+		Vector2.ONE * icon_edge)
+	var count_area := Rect2(Vector2(size.x - 40.0 * unit,
+		(size.y - 32.0 * unit) * 0.5 if wide else size.y - (24.0 if compact else 28.0) * unit),
+		Vector2(32.0, 32.0 if wide else 22.0 if compact else 24.0) * unit)
+	var title_area := Rect2(Vector2(6.0, 2.0) * unit,
+		Vector2(maxf(1.0, size.x - 12.0 * unit), 18.0 * unit))
+	var detail_area := Rect2()
+	if wide:
+		var title_width: float = maxf(1.0, (size.x - 48.0 * unit if _locked else count_area.position.x - 46.0 * unit))
+		title_area = Rect2(Vector2(40.0 * unit, size.y * 0.5 - 13.0 * unit), Vector2(title_width, 26.0 * unit))
+		if _locked:
+			title_area.position.y = size.y * 0.5 - 18.0 * unit
+			title_area.size.y = 20.0 * unit
+			detail_area = Rect2(Vector2(title_area.position.x, size.y * 0.5 + 2.0 * unit), Vector2(title_width, 18.0 * unit))
+	var value: String = "Lv%d" % UNLOCK_LEVEL if _locked else str(_remaining if _active else _count)
+	var detail: String = "Unlock at Lv%d" % UNLOCK_LEVEL if _locked and wide else ""
+	return {"wide": wide, "icon": icon,
+		"title": _text_entry("Collect", title_area, 16.0 if wide and not _locked else 14.0 if wide else 12.0),
+		"detail": _text_entry(detail, detail_area, 10.0),
+		"count": _text_entry("" if _locked and wide else value, count_area, 12.0 if _locked else 16.0)}
+
+
+func _draw_text(entry: Dictionary, color: Color, centered: bool) -> void:
+	var value: String = entry.text
+	if value.is_empty():
+		return
+	var area: Rect2 = entry.area
+	var font: Font = Style.HEADING_FONT
+	var font_size: int = int(entry.font_size)
+	var width: float = font.get_string_size(value, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x
+	var x: float = area.get_center().x - width * 0.5 if centered else area.position.x
+	var y: float = area.get_center().y + (font.get_ascent(font_size) - font.get_descent(font_size)) * 0.5
+	draw_string(font, Vector2(x, y), value, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, color)
 
 
 func snapshot() -> Dictionary:
 	var pose: Dictionary = _sample()
+	var content: Dictionary = _content_layout()
+	var text_content := {}
+	for key: String in ["title", "detail", "count"]:
+		var entry: Dictionary = content[key]
+		var rect: Rect2 = entry.area
+		text_content[key] = {"text": entry.text, "font_size": entry.font_size,
+			"rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y]}
 	return {
 		"pip_level": _pip_level, "unlock_level": UNLOCK_LEVEL, "locked": _locked,
 		"count": _count, "active": _active, "remaining": _remaining, "total": _total,
@@ -335,5 +371,6 @@ func snapshot() -> Dictionary:
 		"visual_scale": pose.visual_scale, "growth": pose.growth,
 		"glow": pose.glow, "rays": pose.rays,
 		"sparkle_count": pose.sparkle_count, "jelly_count": pose.jelly_count,
-		"elapsed": _elapsed, "beat_count": _beat_count, "reduced_motion": _reduced_motion
+		"elapsed": _elapsed, "beat_count": _beat_count, "reduced_motion": _reduced_motion,
+		"content": text_content
 	}

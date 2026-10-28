@@ -10,10 +10,12 @@ const Style = preload("res://scripts/ui_style.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const RAYS = preload("res://assets/chests/milestone/rays.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const LEVEL_ARROW = preload("res://assets/images/ui/controls/chevron-right.svg")
 const ARRIVAL_SECONDS: float = 0.65
 const REVEAL_SECONDS: float = Flight.REVEAL_SECONDS
 const PERFORMANCE_SECONDS: float = Flight.PERFORMANCE_SECONDS
 const TURN_SECONDS: float = Flight.TURN_END - Flight.TURN_START
+const LEVEL_REVEAL_HOLD: float = 0.45
 
 var reduced_motion: bool = false:
 	set(value):
@@ -35,6 +37,8 @@ var _continuous_turns: bool = false
 var _completed_turns: int = 0
 var _reveal_effect_elapsed: float = 10.0
 var _reveal_effect_tier: int = 0
+var _reveal_effect_previous_tier: int = 0
+var _level_panel := StyleBoxFlat.new()
 var _flight_layer := CanvasLayer.new()
 var _flight_surface := Node2D.new()
 
@@ -72,6 +76,7 @@ func enqueue(previous_tier: int, tier: int, before: Texture2D, after: Texture2D)
 		_continuous_turns = false
 		_completed_turns = 0
 		_reveal_effect_elapsed = 10.0
+		_reveal_effect_previous_tier = 0
 		_prepare_models()
 		_sync()
 	elif _elapsed <= ARRIVAL_SECONDS + Flight.RETURN_START:
@@ -97,6 +102,9 @@ func clear() -> void:
 	_continuous_turns = false
 	_completed_turns = 0
 	_reveal_effect_elapsed = 10.0
+	_reveal_effect_previous_tier = 0
+	_reveal_effect_tier = 0
+	set("accessibility_name", "")
 	_model_sample.clear()
 	_model_bounds = Rect2()
 	_models.clear()
@@ -131,6 +139,7 @@ func advance(delta: float, pickup_ready: bool = true) -> float:
 			_revealed = true
 			_reveal_effect_elapsed = 0.0
 			_reveal_effect_tier = int(_events[0].tier)
+			_reveal_effect_previous_tier = int(_events[0].previous_tier)
 			if not reduced_motion:
 				confetti_requested.emit()
 				if generation != _serial or not is_active():
@@ -188,6 +197,9 @@ func _sync() -> void:
 				var unit: float = 1.0 / maxf(framing.size.x, framing.size.y)
 				_model_bounds = _model_bounds.merge(Rect2((turned.position - framing.get_center()) * unit, turned.size * unit))
 	_sync_flight_layer()
+	var level: Dictionary = _level_transition()
+	set("accessibility_name", "Chest level %d to level %d." % [level.from_tier, level.to_tier]
+		if level.from_tier > 0 else "")
 
 
 func _prepare_models() -> void:
@@ -257,6 +269,7 @@ func _draw_flight() -> void:
 		var still: Texture2D = after if _revealed or int(event.previous_tier) == 0 else before
 		if still != null:
 			_flight_surface.draw_texture_rect(still, _texture_rect(still, center, edge), false)
+		_draw_level_transition()
 		return
 	var pose: Dictionary = _motion(age)
 	var accent: Color = _tier_color(_reveal_effect_tier if _reveal_effect_elapsed < 0.85 else int(event.tier))
@@ -302,6 +315,95 @@ func _draw_flight() -> void:
 			var star_point: Vector2 = point + direction * accent_edge * (0.65 + t * 0.40)
 			var star_size: float = accent_edge * 0.22 * sin(t / 0.64 * PI)
 			_flight_surface.draw_texture_rect(SPARKLE, Rect2(star_point - Vector2.ONE * star_size * 0.5, Vector2.ONE * star_size), false, Color(accent.lightened(0.6), (1.0 - t / 0.64) * fade))
+	_draw_level_transition()
+
+
+func _level_transition() -> Dictionary:
+	var result: Dictionary = {"visible": false, "from_tier": 0, "to_tier": 0, "from_text": "", "to_text": "",
+		"rect": [0.0, 0.0, 0.0, 0.0], "from_rect": [0.0, 0.0, 0.0, 0.0],
+		"to_rect": [0.0, 0.0, 0.0, 0.0], "arrow_rect": [0.0, 0.0, 0.0, 0.0],
+		"from_font": 1, "to_font": 1, "alpha": 0.0}
+	if not is_active():
+		return result
+	var event: Dictionary = _events[0]
+	var previous: int = int(event.previous_tier)
+	var tier: int = int(event.tier)
+	# A queued next revolution must not erase the result on its reveal frame.
+	if _reveal_effect_elapsed < LEVEL_REVEAL_HOLD and _reveal_effect_previous_tier > 0:
+		previous = _reveal_effect_previous_tier
+		tier = _reveal_effect_tier
+	if previous <= 0:
+		return result
+	result.from_tier = previous
+	result.to_tier = tier
+	result.from_text = "Lv%d" % previous
+	result.to_text = "Lv%d" % tier
+	var unit: float = 1.0 / Style.ui_scale(self)
+	var safe: Rect2 = _flight_bounds().grow(-6.0 * unit)
+	if not safe.has_area() or not _anchor.has_area():
+		return result
+	var from_font: int = maxi(1, ceili((13.0 if reduced_motion else 18.0) * unit))
+	var to_font: int = maxi(1, ceili((18.0 if reduced_motion else 26.0) * unit))
+	var gap: float = (6.0 if reduced_motion else 8.0) * unit
+	var padding: float = (8.0 if reduced_motion else 12.0) * unit
+	var arrow: float = (14.0 if reduced_motion else 18.0) * unit
+	var from_width: float = Style.HEADING_FONT.get_string_size(result.from_text, HORIZONTAL_ALIGNMENT_LEFT, -1, from_font).x
+	var to_width: float = Style.HEADING_FONT.get_string_size(result.to_text, HORIZONTAL_ALIGNMENT_LEFT, -1, to_font).x
+	while from_width + to_width + arrow + gap * 2.0 + padding * 2.0 > safe.size.x and to_font > 1:
+		to_font -= 1
+		from_font = maxi(1, roundi(to_font * 0.7))
+		from_width = Style.HEADING_FONT.get_string_size(result.from_text, HORIZONTAL_ALIGNMENT_LEFT, -1, from_font).x
+		to_width = Style.HEADING_FONT.get_string_size(result.to_text, HORIZONTAL_ALIGNMENT_LEFT, -1, to_font).x
+	var extent := Vector2(from_width + to_width + arrow + gap * 2.0 + padding * 2.0,
+		Style.HEADING_FONT.get_height(to_font) + 12.0 * unit)
+	var edge: float = minf(_anchor.size.x, _anchor.size.y)
+	var age: float = _elapsed - ARRIVAL_SECONDS
+	var pose: Dictionary = _placement(_motion(age), edge, _anchor.get_center())
+	var center: Vector2 = _anchor.get_center() if reduced_motion else Vector2(pose.center)
+	var half_height: float = edge * 0.5 if reduced_motion else edge * float(pose.scale) * maxf(0.5, _model_bounds.end.y)
+	var top: float = center.y + half_height + 8.0 * unit
+	if top + extent.y > safe.end.y:
+		top = center.y - half_height - extent.y - 8.0 * unit
+	top = clampf(top, safe.position.y, maxf(safe.position.y, safe.end.y - extent.y))
+	var rect := Rect2(Vector2(clampf(center.x - extent.x * 0.5, safe.position.x,
+		maxf(safe.position.x, safe.end.x - extent.x)), top), extent)
+	var from_rect := Rect2(rect.position + Vector2(padding, 4.0 * unit), Vector2(from_width, extent.y - 8.0 * unit))
+	var arrow_rect := Rect2(Vector2(from_rect.end.x + gap, rect.get_center().y - arrow * 0.5), Vector2.ONE * arrow)
+	var to_rect := Rect2(Vector2(arrow_rect.end.x + gap, from_rect.position.y), Vector2(to_width, from_rect.size.y))
+	var alpha: float = 1.0 if reduced_motion else smoothstep(Flight.TOP_SECONDS - 0.15, Flight.TOP_SECONDS, age) \
+		* (1.0 - smoothstep(Flight.RETURN_START, Flight.RETURN_START + 0.16, age))
+	result.merge({"visible": _started and is_visible_in_tree() and not _paused and alpha > 0.001,
+		"alpha": alpha, "rect": _level_rect(rect), "from_rect": _level_rect(from_rect),
+		"to_rect": _level_rect(to_rect), "arrow_rect": _level_rect(arrow_rect),
+		"from_font": from_font, "to_font": to_font}, true)
+	return result
+
+
+func _level_rect(rect: Rect2) -> Array:
+	return [rect.position.x, rect.position.y, rect.size.x, rect.size.y]
+
+
+func _draw_level_transition() -> void:
+	var level: Dictionary = _level_transition()
+	if not level.visible:
+		return
+	var rect := Rect2(level.rect[0], level.rect[1], level.rect[2], level.rect[3])
+	var unit: float = 1.0 / Style.ui_scale(self)
+	var alpha: float = float(level.alpha)
+	_level_panel.bg_color = Color("#203c39", alpha * 0.96)
+	_level_panel.border_color = Color("#87b8a2", alpha * 0.65)
+	_level_panel.set_border_width_all(maxi(1, roundi(unit)))
+	_level_panel.set_corner_radius_all(maxi(1, roundi(14.0 * unit)))
+	_flight_surface.draw_style_box(_level_panel, rect)
+	var arrow: Array = level.arrow_rect
+	_flight_surface.draw_texture_rect(LEVEL_ARROW, Rect2(arrow[0], arrow[1], arrow[2], arrow[3]),
+		false, Color("#b4cab9", alpha))
+	var baseline: float = rect.get_center().y + (Style.HEADING_FONT.get_ascent(int(level.to_font))
+		- Style.HEADING_FONT.get_descent(int(level.to_font))) * 0.5
+	_flight_surface.draw_string(Style.HEADING_FONT, Vector2(level.from_rect[0], baseline), level.from_text,
+		HORIZONTAL_ALIGNMENT_LEFT, -1.0, int(level.from_font), Color("#cbdacf", alpha))
+	_flight_surface.draw_string(Style.HEADING_FONT, Vector2(level.to_rect[0], baseline), level.to_text,
+		HORIZONTAL_ALIGNMENT_LEFT, -1.0, int(level.to_font), Color("#ffe4a3", alpha))
 
 
 func _tier_color(tier: int) -> Color:
@@ -339,5 +441,6 @@ func snapshot() -> Dictionary:
 		"completed_turns": _completed_turns + (1 if _continuous_turns and _revealed else 0),
 		"kind": ("upgrade" if int(_events[0].previous_tier) > 0 else "synthesis") if is_active() else "none",
 		"revealed": _revealed, "queued": _events.size(), "reduced_motion": reduced_motion,
+		"level_transition": _level_transition(),
 		"motion": motion, "flight_bounds": [bounds.position.x, bounds.position.y, bounds.size.x, bounds.size.y],
 		"anchor": [_anchor.position.x, _anchor.position.y, _anchor.size.x, _anchor.size.y]}

@@ -66,6 +66,26 @@ Each earned tier keeps its own reveal sound and model-owned progress; presentati
 neither manufactures intermediate chests nor skips a final level. The source
 chest, rays and local flashes remain the same acquired artwork.
 
+An upgrade also shows its real **previous level → new level** beneath the enlarged
+chest, such as **Lv3 → Lv4**. One compact dark-teal strip keeps the old value
+smaller and muted and the new value larger and warm gold. Its values come from
+the committed milestone payload, not the current HUD tier or target-minus-one.
+The strip fades in as the chest reaches its upper destination and leaves with
+the existing return, without extending the performance or pausing play. Each
+queued upgrade retains the just-revealed pair for 450 ms before showing the next
+turn's pair, so a completed level cannot disappear on the same frame as its cue.
+First-chest synthesis does not invent a Lv0 transition. Reduced motion keeps a
+static level pair near the existing HUD chest. Pause, hiding and round cleanup
+hide the same input-transparent presentation.
+
+The connector reuses Paweł Kuna's already acquired Tabler Icons 3.35.0
+`assets/images/ui/controls/chevron-right.svg`, MIT, with unchanged source paths.
+Its original URL and hashes remain in `assets/images/ui/controls/sources.json`
+and its license in `assets/images/ui/LICENSE-Tabler.txt`. The source-scale icon
+review and the actual chest turn were inspected before reuse. This is static
+source artwork with no animation clips; the text, panel and timing are ordinary
+game-authored interface presentation. No new chest, particles or audio is acquired.
+
 The flight draws on a noninteractive viewport layer, outside gameplay clipping.
 Its source coordinates and actual turned silhouette remain tied to the current
 HUD layout. Both upgrade models share one fitted envelope, so the tier change

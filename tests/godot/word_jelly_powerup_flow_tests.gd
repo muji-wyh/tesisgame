@@ -98,6 +98,9 @@ func _check_insufficient(app) -> void:
 			"Insufficient funds leave wallet storage and the visible coin counter available")
 		check(purchases.back() == {"kind": kind, "success": false} and cues.back() == "powerup_wrong",
 			"An unfunded button produces one negative purchase response")
+		check(button.snapshot().funds_warning and button.snapshot().missing_coins == price
+			and button.snapshot().title == "Need coins" and button.snapshot().price_text == str(price),
+			"Only the real insufficient-funds outcome explains the missing coins inside the clicked card")
 		check(game.powerup_price(kind) == price and button.snapshot().price == price
 			and game.snapshot().powerup_uses[kind] == 0,
 			"An unfunded purchase keeps its current quoted price and first-use tier")
@@ -229,6 +232,9 @@ func _check_storage_failure(app) -> void:
 	check(not app._coin_counter.available and not app.coin_wallet.error.is_empty()
 		and purchases == [{"kind": "fragments", "success": false}] and cues.count("powerup_wrong") == 1,
 		"Storage failure reports unavailable coins and negative feedback instead of pretending the powerup was purchased")
+	check(not view.powerup_buttons.fragments.snapshot().funds_warning
+		and app._status_announcement.contains("could not be saved"),
+		"A real storage failure is not mislabeled as insufficient funds")
 	check(view.game.powerup_price("fragments") == 200 and view.powerup_buttons.fragments.snapshot().price == 200,
 		"An unsaved purchase does not consume the lower first-use price")
 	check(DirAccess.remove_absolute(staging) == OK, "Restore the wallet staging path for purchase recovery")
@@ -502,6 +508,61 @@ func _check_responsive_actions(app) -> void:
 			"Responsive powerup buttons retain their exact visible price metadata" + context)
 
 
+func _click_live(view, control: Control) -> void:
+	var at: Vector2 = control.get_global_rect().get_center()
+	for pressed: bool in [true, false]:
+		var event := InputEventMouseButton.new()
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.pressed = pressed
+		event.position = at
+		event.global_position = at
+		root.push_input(event)
+		view.set_process(false)
+		await process_frame
+	view.set_process(false)
+
+
+func _check_items_during_fill(app) -> void:
+	root.size = Vector2i(480, 800)
+	await settle()
+	app.set_process(false)
+	check(app.coin_wallet.credit_amount("fixture:items-during-fill", 5000).ok, "Fund only the isolated live-input regression")
+	for kind: String in ["auto_merge", "family_merge", "fragments", "extra_time"]:
+		await _prepare(app)
+		var view = app._word_jelly
+		var game = view.game
+		var reviewed: Array = game._words.map(func(word: Dictionary) -> Dictionary:
+			return preload("res://scripts/growth_morphology.gd").decorate(word))
+		var plan: Dictionary = preload("res://scripts/word_jelly_stage_catalog.gd").make_plan(1, reviewed,
+			app.growth.learning_age(), round_seed)
+		check(game.bind_stage(plan), "Use the real main-stage item set: " + str(plan.get("error", "")) + game.error)
+		game._stage_spawn_interval = 10000.0
+		game.spawn_interval = 10000.0
+		game.set_fill_mode(false)
+		view._refresh_controls()
+		view._layout()
+		await _click_live(view, view._fill_button)
+		view._process(0.25)
+		view.set_process(false)
+		check(game.fill_mode and game._settling_remaining() > game.EPSILON,
+			"Native item input is exercised while Auto Fill is genuinely dispatching")
+		for item: String in ["auto_merge", "family_merge", "fragments", "extra_time"]:
+			check(not view.powerup_buttons[item].disabled, "Falling supply does not disable the legal " + item + " button")
+		var balance: int = app.coin_wallet.balance
+		var price: int = game.powerup_price(kind)
+		await _click_live(view, view.powerup_buttons[kind])
+		if kind == "family_merge":
+			check(view._family_selecting and app.coin_wallet.balance == balance,
+				"Magnet still selects a family before charging during Fill")
+			await _click_live(view, view._tiles[int(game.cells[0].id)])
+		check(app.coin_wallet.balance == balance - price and game.snapshot().powerup_uses[kind] == 1,
+			"A real " + kind + " click buys exactly one quoted item during Fill")
+		check(purchases.size() == 1 and purchases[0] == {"kind": kind, "success": true},
+			"The normal success route, not a forced button signal, owns the purchase")
+		_drain(view)
+		check(game.fill_mode and view._fill_button.button_pressed, "Item completion retains the visible Auto Fill selection")
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(480, 800)
@@ -530,6 +591,7 @@ func _run() -> void:
 	await _check_lifecycle(app)
 	await _check_preferences(app)
 	await _check_responsive_actions(app)
+	await _check_items_during_fill(app)
 	var balance: int = app.coin_wallet.balance
 	var receipts: Dictionary = app.coin_wallet._receipts.duplicate()
 	var reloaded := Wallet.new(directory + "/coins.cfg")

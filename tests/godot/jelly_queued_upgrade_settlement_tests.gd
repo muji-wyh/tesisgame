@@ -254,15 +254,24 @@ func check_queued_finish(mode: String, retained: bool, fail_first_save: bool) ->
 		label + ": the completed model reward has reached tier 4 ahead of presentation")
 	var previous_tier: int = 1 if retained else 0
 	check_level_badge(view, previous_tier, true, label + " queued upgrades")
-	view.advance_reward_presentation(Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS
-		- float(presentation.elapsed) - 0.001)
+	# Queued upgrades reveal at a completed revolution, then the next event owns
+	# the front of the queue with its own unrevealed state.
+	var reveal_at: float = Celebration.ARRIVAL_SECONDS + (Celebration.Flight.TURN_END
+		if presentation.continuous_turns else Celebration.REVEAL_SECONDS)
+	view.advance_reward_presentation(reveal_at - float(presentation.elapsed) - 0.001)
 	check(not view._reward_presentation.snapshot().revealed,
 		label + ": the earlier chest has not revealed just before its reward cue")
 	check_level_badge(view, previous_tier, true, label + " before reveal")
 	view.advance_reward_presentation(0.002)
-	check(view._reward_presentation.snapshot().revealed and game.chest_tier == FINAL_TIER,
+	var after_reveal: Dictionary = view._reward_presentation.snapshot()
+	check(after_reveal.active and after_reveal.queued == int(presentation.queued) - 1
+		and after_reveal.tier == int(presentation.tier) + 1 and game.chest_tier == FINAL_TIER,
 		label + ": one reveal leaves the later earned upgrades queued")
 	check_level_badge(view, previous_tier + 1, true, label + " after reveal")
+	if previous_tier > 0:
+		check(after_reveal.level_transition.from_tier == previous_tier
+			and after_reveal.level_transition.to_tier == previous_tier + 1,
+			label + ": the completed upgrade retains its own exact level pair during the queue handoff")
 	var round_id: String = app._round_id
 	var reward_id: String = "jelly:" + round_id + ":0"
 	var coins_before: int = app.coin_wallet.balance

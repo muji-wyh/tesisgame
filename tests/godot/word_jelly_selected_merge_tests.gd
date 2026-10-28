@@ -159,11 +159,20 @@ func test_fill() -> void:
 	check(model.cells.size() > 15 and model.cells.size() < Model.CAPACITY
 		and model.cells.any(func(tile: Dictionary) -> bool: return tile.arrival),
 		"Fill starts a real top-down supply flight instead of popping a full board into existence")
+	var first_arrivals: Array[int] = []
+	for tile: Dictionary in model.cells:
+		if bool(tile.arrival):
+			first_arrivals.append(int(tile.id))
+	var first_generated: int = model.generated_tiles
+	model.step(0.5)
+	check(model.generated_tiles > first_generated and model.cells.any(func(tile: Dictionary) -> bool:
+		return int(tile.id) in first_arrivals and not model.is_settled(tile)),
+		"Fill releases the next advertised Jellies while the previous ones are still falling")
 	for frame in range(300):
 		model.step(0.025)
 		if model.cells.size() == Model.CAPACITY:
 			break
-	check(model.cells.size() == Model.CAPACITY, "Repeated naturally settled packets fill every available ordinary cell")
+	check(model.cells.size() == Model.CAPACITY, "The continuous physical supply fills every available ordinary cell")
 	check(model.set_fill_mode(false), "Main play can switch automatic filling off")
 	var top: Dictionary = model.cells.filter(func(tile: Dictionary) -> bool: return tile.row == 0)[0]
 	model.cells.remove_at(model._index_for_id(int(top.id)))

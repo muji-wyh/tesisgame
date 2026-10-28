@@ -560,8 +560,12 @@ function expectSupplyLayout(state, bounds) {
     }
   }
   expect(Math.abs(collect[0] - autoMerge[0]), 'Collect aligns directly above Auto merge').toBeLessThan(tolerance);
-  expect(Math.abs(autoMerge[1] - collect[1] - collect[3] - 20 / scale),
-    'A twenty-pixel separator gap keeps Collect adjacent to the paid tools').toBeLessThan(tolerance);
+  expect(Math.abs(autoMerge[1] - collect[1] - collect[3] - 14 / scale),
+    'A fourteen-pixel separator gap keeps Collect adjacent to the paid tools').toBeLessThan(tolerance);
+  const railWidth = Math.max(...paidTools.map(rect => rect[0] + rect[2])) - autoMerge[0];
+  const sideRail = autoMerge[0] >= board[0] + board[2] - tolerance;
+  expect(Math.abs(collect[2] - (sideRail ? railWidth : autoMerge[2])),
+    'Primary Collect spans the complete side rail without covering footer status').toBeLessThan(tolerance);
   expect(state.action_divider.visible, 'The free Collect action has a visible divider from paid tools').toBe(true);
   expect(divider[1], 'The divider stays below Collect').toBeGreaterThanOrEqual(collect[1] + collect[3] - tolerance);
   for (const rect of paidTools) {

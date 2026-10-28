@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <link rel="icon" href="data:,">
+  <title>All Pip actions · Pip's world</title>
+  <link rel="stylesheet" href="preview.css">
+  <link rel="stylesheet" href="actions.css">
+  <script src="actions.js" defer></script>
+</head>
+<body>
+  <header class="page-header">
+    <a class="brand" href="./">Pip's world <span>Local asset review</span></a>
+    <nav class="review-nav" aria-label="Asset review pages">
+      <a href="./">Growth journey</a>
+      <a href="actions.html" aria-current="page">All actions</a>
+      <a href="#interaction-plan">Interaction plan</a>
+    </nav>
+  </header>
+  <main>
+    <div class="introduction">
+      <p class="eyebrow">The motion library</p>
+      <h1>Every side of Pip.</h1>
+      <p>Every existing gesture, expression and reaction in one place, including the loading-screen tap responses. These are runtime samples on the real game artwork, not newly invented animations.</p>
+      <p id="inventory" class="inventory" aria-live="polite">Loading the native motion catalog...</p>
+    </div>
+    <section class="motion-player" aria-label="Selected action review" aria-busy="true" id="motion-player">
+      <div class="player-stage">
+        <span class="player-age" id="player-age">Pip</span>
+        <button id="character-replay" class="character-replay" type="button" aria-label="Replay selected action" disabled>
+          <canvas id="pip-player" width="512" height="512" role="img" aria-label="Selected Pip performance"></canvas>
+        </button>
+        <p id="preview-note">Runtime timing · silent review · no game rewards</p>
+      </div>
+      <div class="player-details">
+        <p class="eyebrow" id="action-category">Existing production motion</p>
+        <h2 id="action-title">Meet Pip's repertoire.</h2>
+        <p id="action-description">Choose a performance below to inspect its real expression, contact and recovery.</p>
+        <div class="variant-controls">
+          <label>Pip's age<select id="variant-age" disabled aria-label="Pip appearance"></select></label>
+          <label>Display size<select id="display-size" aria-label="Character display size"><option value="52">52 px header</option><option value="120">120 px</option><option value="256" selected>256 px review</option></select></label>
+          <label>Speed<select id="speed" aria-label="Playback speed"><option value="0.5">0.5×</option><option value="1" selected>1× native</option><option value="1.5">1.5×</option></select></label>
+        </div>
+        <div class="playback-controls">
+          <button type="button" id="play" class="primary-button" disabled>Play</button>
+          <button type="button" id="replay" class="action-button" disabled>Replay</button>
+          <label><input id="loop" type="checkbox"> Loop this action</label>
+          <label><input id="reduced-motion" type="checkbox"> Reduced motion</label>
+        </div>
+        <label class="timeline-label" for="timeline">Inspect the timeline <output id="time">0.00 s</output></label>
+        <input id="timeline" type="range" min="0" max="1000" value="0" step="1" disabled>
+        <p id="action-source" class="source-line"></p>
+        <p class="source-line">Only this selected Pip animates. Changing actions, leaving the tab or pressing Escape stops playback.</p>
+      </div>
+    </section>
+    <section class="action-library" aria-labelledby="library-title">
+      <div class="section-heading">
+        <div><p class="eyebrow">Already in the game</p><h2 id="library-title">Find a gesture.</h2></div>
+        <p id="filter-count" aria-live="polite"></p>
+      </div>
+      <div class="library-filters">
+        <label>Category<select id="category"><option value="all">All categories</option><option value="signature">Age signatures</option><option value="inherited">Inherited gestures</option><option value="feedback">Greetings and answers</option><option value="attention">Idle and attention</option><option value="expressions">Expression stills</option><option value="celebration">Shared celebration</option><option value="loading">Loading interactions</option></select></label>
+        <label>Available age<select id="age"><option value="all">All ages</option></select></label>
+        <label class="search-label">Find an action<input id="search" type="search" placeholder="Try hop, wink or curious" autocomplete="off"></label>
+      </div>
+      <div id="action-grid" class="action-grid"></div>
+      <p id="empty" hidden>No actions match these filters. Try another age, category or search.</p>
+    </section>
+    <section id="interaction-plan" class="interaction-plan" aria-labelledby="plan-title">
+      <p class="eyebrow">Proposed next · not implemented</p>
+      <h2 id="plan-title">More personality, not more interruptions.</h2>
+      <p>Keep Pip's warm storybook identity. Borrow Duolingo's action-contingent response and contrast between small encouragements and rare milestones, not its artwork, fire transformation or pressure to return.</p>
+      <div class="plan-grid">
+        <article><span class="plan-priority">P0 · Touch</span><h3>A little hello, then a high five</h3><p>Respond to a deliberate tap within 80 ms. Offer a wing, wait for a real second tap, then land the contact and settle. Home and result companions only: never steal the header's menu action.</p><p class="plan-dependency">Needs: new contact choreography and a cue review. Existing six-layer art can be reused.</p></article>
+        <article><span class="plan-priority">P0 · Awareness</span><h3>Notice what the player is doing</h3><p>A bounded head turn follows attention toward a word or input. Return to rest when the player leaves. Touch gets a brief acknowledgement, not permanent tracking.</p><p class="plan-dependency">Needs: authored gaze heads or a reviewed eye rig. Current baked pupils cannot actually track a pointer.</p></article>
+        <article><span class="plan-priority">P1 · Learning</span><h3>Share the effort and the win</h3><p>Use a quiet nod for ordinary progress, supportive recovery for mistakes, and reserve the complete celebration for meaningful clears. Pronunciation and the real reward timeline keep priority.</p><p class="plan-dependency">Needs: event mapping and restrained variants. Do not alter scores, timings or reward ownership.</p></article>
+        <article><span class="plan-priority">P2 · Discovery</span><h3>Small, age-specific surprises</h3><p>Baby can peek from the shell; older Pip can catch a slipping visor or offer a playful balance challenge. Occasional quiet moments, not another animation after every input.</p><p class="plan-dependency">Needs: any missing prop layers and age-specific keyframes. No placeholder feathers or hats presented as finished art.</p></article>
+      </div>
+      <p class="source-line">Reference: <a href="https://blog.duolingo.com/building-character/" target="_blank" rel="noopener">Duolingo: Building character</a> · <a href="https://blog.duolingo.com/streak-milestone-design-animation/" target="_blank" rel="noopener">Designing streak milestones</a>. Their linked product GIF frame sequences were inspected; no audio or physical-device preference claim is made.</p>
+    </section>
+    <footer class="review-note">
+      <details><summary>Sources, rights and review scope</summary>
+        <p>All Pip pixels are the existing project-authored storybook PNG atlases and original Spring SVG atlas, identical to the game's material. Original Pip illustrator is not recorded; the repository declares ISC and records no separate illustrator license. No Duolingo artwork or audio is integrated.</p>
+        <p>Generated by <code>tools/pip-growth/export-review.cjs</code>: the actual native mascot APIs plus the maintained loading-screen Web Animations, sampled at 24 fps. Expressions and attention include held states, not a set of newly authored animations. Game audio, particles, learning and wallet operations are intentionally absent.</p>
+        <p>Regenerate with <code>node tools\pip-growth\export-review.cjs</code>. Source hashes and every supported age are included in the catalog. Full direction and acceptance criteria: <code>docs/plans/2026-10-28-pip-interactions.md</code>.</p>
+      </details>
+    </footer>
+    <p id="load-error" class="load-error" role="alert" hidden></p>
+  </main>
+</body>
+</html>

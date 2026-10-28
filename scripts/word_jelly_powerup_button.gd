@@ -13,11 +13,13 @@ const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const SUCCESS_SECONDS: float = 0.62
 const FAILURE_SECONDS: float = 0.42
 const REDUCED_SECONDS: float = 0.32
+const FUNDS_SECONDS: float = 1.15
 
 var _kind: String = "auto_merge"
 var _price: int = Model.POWERUP_PRICES.auto_merge
 var _available: bool = true
 var _affordable: bool = false
+var _balance_known: bool = true
 var _busy: bool = false
 var _reduced_motion: bool = false
 var _paused: bool = false
@@ -28,6 +30,8 @@ var _feedback_active: bool = false
 var _feedback_success: bool = true
 var _feedback_elapsed: float = 0.0
 var _feedback_serial: int = 0
+var _missing_coins: int = 0
+var _price_position := Vector2.ZERO
 var _chest: Texture2D = CHEST
 var _chest_region := Rect2(39, 309, 798, 595)
 var _icon_rect := Rect2()
@@ -106,9 +110,10 @@ func set_chest_texture(texture: Texture2D) -> void:
 	queue_redraw()
 
 
-func set_availability(available: bool, affordable: bool, busy: bool = false) -> void:
+func set_availability(available: bool, affordable: bool, busy: bool = false, balance_known: bool = true) -> void:
 	_available = available
 	_affordable = affordable
+	_balance_known = balance_known
 	_busy = busy
 	# A low balance is a feedback opportunity, never a disabled purchase target.
 	disabled = not available or busy
@@ -120,15 +125,34 @@ func feedback(success: bool) -> void:
 	if _paused:
 		return
 	_feedback_success = success
+	_missing_coins = 0
 	_feedback_elapsed = 0.0
 	_feedback_active = true
 	_feedback_serial += 1
-	queue_redraw()
+	_layout()
+	_update_accessibility()
+
+
+func insufficient_coins(missing: int) -> void:
+	if _paused or not _feedback_active or _feedback_success:
+		return
+	_missing_coins = maxi(0, missing)
+	_layout()
+	_update_accessibility()
+
+
+func set_reduced_motion(value: bool) -> void:
+	_reduced_motion = value
+	_layout()
+	_update_accessibility()
 
 
 func pause_feedback(paused: bool) -> void:
+	if _paused == paused:
+		return
 	_paused = paused
-	queue_redraw()
+	_layout()
+	_update_accessibility()
 
 
 func advance(delta: float) -> void:
@@ -137,6 +161,9 @@ func advance(delta: float) -> void:
 	_feedback_elapsed = minf(_duration(), _feedback_elapsed + delta)
 	if _feedback_elapsed >= _duration():
 		_feedback_active = false
+		_missing_coins = 0
+		_layout()
+		_update_accessibility()
 	queue_redraw()
 
 
@@ -144,35 +171,50 @@ func reset() -> void:
 	_targeting = false
 	_feedback_active = false
 	_feedback_elapsed = 0.0
+	_missing_coins = 0
 	_paused = false
-	queue_redraw()
+	_layout()
+	_update_accessibility()
 
 
 func _duration() -> float:
+	if _missing_coins > 0:
+		return FUNDS_SECONDS
 	return REDUCED_SECONDS if _reduced_motion else SUCCESS_SECONDS if _feedback_success else FAILURE_SECONDS
 
 
 func _title_text() -> String:
+	return "Need coins" if _funds_warning() else _action_title()
+
+
+func _action_title() -> String:
 	return "+30 sec" if _kind == "extra_time" else "Treasure" if _kind == "fragments" \
 		else "Pick Jelly" if _targeting else "Magnet" if _kind == "family_merge" else "Auto merge"
 
 
+func _funds_warning() -> bool:
+	return _feedback_active and not _feedback_success and _missing_coins > 0 and not _paused
+
+
 func _update_accessibility() -> void:
-	var title: String = _title_text()
-	var status: String = "Working" if _busy else "Unavailable right now" if not _available else "Not enough coins" if not _affordable else "Ready"
+	var title: String = _action_title()
+	var status: String = "Working" if _busy else "Unavailable right now" if not _available \
+		else "Coin balance unavailable" if not _balance_known else "Not enough coins" if not _affordable else "Ready"
+	if _funds_warning():
+		status = "Not enough coins. Need %d more coins" % _missing_coins
 	set("accessibility_name", "%s. %d coins. %s.%s" % [title, _price, status,
 		" Choose a Jelly to merge its word, picture and upgraded family. Press again or Back to cancel." if _kind == "family_merge" else ""])
 
 
 func _layout() -> void:
 	var unit: float = 1.0 / _ui_scale
-	var edge: float = minf((20.0 if _compact else 30.0) * unit, minf(size.y * 0.50, size.x * 0.27))
+	var edge: float = minf((18.0 if _compact else 26.0) * unit, minf(size.y * 0.50, size.x * 0.27))
 	var lower_center: float = size.y - (12.0 if _compact else 17.0) * unit
 	_icon_rect = Rect2(Vector2(7.0 * unit, lower_center - edge * 0.5), Vector2.ONE * edge)
 	_title.position = Vector2(6.0 * unit, (1.0 if _compact else 3.0) * unit)
 	var title_size := Vector2(maxf(1.0, size.x - 12.0 * unit), maxf(1.0, (18.0 if _compact else 22.0) * unit))
 	var title: String = _title_text()
-	var font_size: int = maxi(1, roundi(12.0 * unit))
+	var font_size: int = maxi(1, roundi((12.0 if _compact else 13.0) * unit))
 	while font_size > 1 and (Style.HEADING_FONT.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > title_size.x \
 		or Style.HEADING_FONT.get_height(font_size) > title_size.y):
 		font_size -= 1
@@ -193,13 +235,22 @@ func _layout() -> void:
 	_price_pill = Rect2(Vector2(size.x - 6.0 * unit - pill_width, lower_center - 11.0 * unit), Vector2(pill_width, 22.0 * unit))
 	_coin_rect = Rect2(Vector2(_price_pill.position.x + 4.0 * unit, lower_center - coin_edge * 0.5), Vector2.ONE * coin_edge)
 	_price_label.position = Vector2(_coin_rect.end.x + 4.0 * unit, lower_center - 9.5 * unit)
+	_price_position = _price_label.position
 	_price_label.size = Vector2(price_width + 1.0, 19.0 * unit)
 	queue_redraw()
 
 
 func _pose() -> Dictionary:
-	var pose := {"scale": 1.0, "rotation": 0.0, "offset": Vector2.ZERO, "light": 0.0}
+	var pose := {"scale": 1.0, "rotation": 0.0, "offset": Vector2.ZERO, "light": 0.0,
+		"price_offset": Vector2.ZERO, "coin_scale": 1.0}
 	if not _feedback_active or _paused:
+		return pose
+	if _funds_warning():
+		pose.light = 1.0 - smoothstep(0.78, FUNDS_SECONDS, _feedback_elapsed)
+		if not _reduced_motion:
+			var recoil: float = clampf(_feedback_elapsed / FAILURE_SECONDS, 0.0, 1.0)
+			pose.price_offset = Vector2(sin(recoil * TAU * 3.0) * pow(1.0 - recoil, 2.0) * 4.0 / _ui_scale, 0.0)
+			pose.coin_scale = 1.0 + sin(clampf(_feedback_elapsed / 0.28, 0.0, 1.0) * PI) * 0.18
 		return pose
 	if _reduced_motion:
 		pose.light = 0.65
@@ -223,15 +274,17 @@ func _draw() -> void:
 	if size.x <= 0.0 or size.y <= 0.0:
 		return
 	var unit: float = 1.0 / _ui_scale
-	var accent := Color("#a699bc") if _kind == "auto_merge" else Color("#b5a075")
-	var fill := Color("#faf9fc") if _kind == "auto_merge" else Color("#fffcf2")
-	if _kind == "family_merge":
-		accent = Color("#c86f95")
-		fill = Color("#ffe4f0") if _targeting else Color("#fff6fa")
+	var accent: Color = Style.GOOD if _targeting else Style.EDGE
+	var fill: Color = Style.SOFT if _targeting else Style.SURFACE
 	var pose: Dictionary = _pose()
 	var ink: Color = Style.INK
 	var celebrating: bool = _feedback_active and _feedback_success and not _paused
-	if disabled and not celebrating:
+	var funds: bool = _funds_warning()
+	if funds:
+		fill = Style.SURFACE.lerp(Color("#ffedcf"), 0.65 + float(pose.light) * 0.35)
+		accent = Color("#d28a43")
+		ink = Color("#925026")
+	elif disabled and not celebrating:
 		fill = Color("#f0f1eb")
 		accent = Color("#b5bbb0")
 		ink = Color("#64736b")
@@ -240,27 +293,22 @@ func _draw() -> void:
 	elif is_hovered():
 		fill = fill.lightened(0.28)
 	_panel.bg_color = fill
-	_panel.border_color = accent.lightened(0.50)
-	_panel.set_border_width_all(maxi(1, roundi(unit)))
+	_panel.border_color = accent
+	_panel.set_border_width_all(maxi(1, roundi((2.0 if funds else 1.0) * unit)))
 	_panel.set_corner_radius_all(maxi(1, roundi(13.0 * unit)))
 	_panel.shadow_color = Color("#577777", 0.14)
 	_panel.shadow_size = roundi(3.0 * unit)
 	_panel.shadow_offset = Vector2(0.0, (1.0 if is_pressed() else 2.0) * unit)
-	if has_focus() and not disabled:
-		_panel.border_color = accent
+	if has_focus() and not disabled and not funds:
+		_panel.border_color = Style.GOOD
 		_panel.set_border_width_all(maxi(1, roundi(2.0 * unit)))
 	draw_style_box(_panel, Rect2(Vector2.ONE * unit, size - Vector2.ONE * 2.0 * unit))
 	_title.add_theme_color_override("font_color", ink)
 	var price_color := Color("#675335") if _affordable else Color("#80644d")
 	if _feedback_active and not _feedback_success and not _paused:
-		price_color = Color("#b46640")
+		price_color = Color("#a34c24") if funds else Color("#b46640")
 	_price_label.add_theme_color_override("font_color", ink if disabled and not celebrating else price_color)
-	var price_fill := Color("#fff2c9") if _affordable or celebrating else Color("#eeeee6")
-	var price_edge := Color("#e8d5a7") if _affordable or celebrating else Color("#dde0d6")
-	if disabled and not celebrating:
-		price_fill = Color("#e7ebe3")
-	var price_surface := Style.box(price_fill, price_edge, roundi(11.0 * unit), maxi(1, roundi(unit)))
-	draw_style_box(price_surface, _price_pill)
+	_price_label.position = _price_position + Vector2(pose.price_offset)
 	var center: Vector2 = _icon_rect.get_center() + Vector2(pose.offset)
 	var tint := Color("#8e68b5") if _kind == "auto_merge" else Color.WHITE
 	if disabled and not celebrating:
@@ -270,7 +318,8 @@ func _draw() -> void:
 	var light: float = float(pose.light)
 	var light_color := Color("#d7c5ff") if _feedback_success and _kind == "auto_merge" else Color("#ffe49d") if _feedback_success else Color("#ffc49d")
 	if light > 0.0:
-		draw_texture_rect(GLOW, Rect2(center - _icon_rect.size * 0.8, _icon_rect.size * 1.6), false, Color(light_color, light))
+		var glow_rect: Rect2 = _price_pill.grow(4.0 * unit) if funds else Rect2(center - _icon_rect.size * 0.8, _icon_rect.size * 1.6)
+		draw_texture_rect(GLOW, glow_rect, false, Color(light_color, light * (0.65 if funds else 1.0)))
 	var press: float = 0.94 if is_pressed() and not disabled else 1.0
 	draw_set_transform(center, float(pose.rotation), Vector2.ONE * float(pose.scale) * press)
 	if _kind == "auto_merge":
@@ -288,8 +337,11 @@ func _draw() -> void:
 		var extent: Vector2 = region.size * (_icon_rect.size.x / maxf(1.0, region.size.x))
 		draw_texture_rect_region(texture, Rect2(-extent * 0.5, extent), region, tint)
 	draw_set_transform(Vector2.ZERO)
-	draw_texture_rect(COIN, _coin_rect, false, Color(1.0, 1.0, 1.0, 0.75 if disabled and not celebrating else 1.0))
-	if light > 0.0:
+	var coin_size: Vector2 = _coin_rect.size * float(pose.coin_scale)
+	var coin_center: Vector2 = _coin_rect.get_center() + Vector2(pose.price_offset)
+	draw_texture_rect(COIN, Rect2(coin_center - coin_size * 0.5, coin_size), false,
+		Color(1.0, 1.0, 1.0, 0.75 if disabled and not celebrating and not funds else 1.0))
+	if light > 0.0 and not funds:
 		var offsets: Array[Vector2] = [Vector2(-0.42, -0.42), Vector2(0.48, -0.24), Vector2(0.38, 0.38)]
 		for index in range(offsets.size()):
 			var edge: float = (8.0 if index == 0 else 6.0) * unit
@@ -303,7 +355,11 @@ func snapshot() -> Dictionary:
 		"busy": _busy, "enabled": not disabled, "paused": _paused, "reduced_motion": _reduced_motion,
 		"feedback_active": _feedback_active, "feedback_success": _feedback_success,
 		"feedback_serial": _feedback_serial, "feedback_elapsed": _feedback_elapsed,
+		"funds_warning": _funds_warning(), "missing_coins": _missing_coins, "balance_known": _balance_known,
+		"price_offset": [pose.price_offset.x, pose.price_offset.y], "coin_scale": pose.coin_scale,
 		"icon_scale": pose.scale, "icon_rotation": pose.rotation, "icon_offset": [pose.offset.x, pose.offset.y],
 		"light": pose.light, "title": _title.text, "price_text": _price_label.text,
+		"icon_rect": [_icon_rect.position.x, _icon_rect.position.y, _icon_rect.size.x, _icon_rect.size.y],
+		"coin_rect": [_coin_rect.position.x, _coin_rect.position.y, _coin_rect.size.x, _coin_rect.size.y],
 		"title_rect": [_title.position.x, _title.position.y, _title.size.x, _title.size.y],
 		"price_rect": [_price_label.position.x, _price_label.position.y, _price_label.size.x, _price_label.size.y]}

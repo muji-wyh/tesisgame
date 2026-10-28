@@ -172,7 +172,7 @@ const storybookStages = stages.filter(stage => stage.compositionStatus === 'inte
 const allStorybook = storybookStages.length === stages.length;
 const mixedArtwork = storybookStages.length > 0 && !allStorybook;
 const catalog = {
-  schemaVersion: 3, title: 'Grow with Pip',
+  schemaVersion: 3, title: JSON.parse(fs.readFileSync(path.join(ROOT, 'curriculum.json'), 'utf8')).name,
   status: allStorybook ? 'Integrated storybook age artwork with a local interactive review' : mixedArtwork ? 'Integrated age artwork with a local interactive review' : 'Integrated sculpted age models with a local interactive review',
   description: `${allStorybook ? 'Eleven storybook duck illustrations adapted from the original project Pip vectors' : mixedArtwork ? 'Eleven authored duck characters' : 'Eleven authored Blender duck models'} express growth through face, crown, body, wings, legs and everyday clothing. Appearance follows completed curriculum ages independently of word mastery. These playful stages are not a developmental diagnosis.`,
   artSource: allStorybook ? stages[0].source.model : 'tools/pip-growth/render.py',

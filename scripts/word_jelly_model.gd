@@ -13,6 +13,7 @@ signal fragments_awarded(count: int)
 signal chest_milestone(previous_tier: int, new_tier: int)
 signal finished(result: Dictionary)
 signal powerup_feedback(kind: String, success: bool)
+signal powerup_insufficient(kind: String, missing_coins: int)
 signal powerup_drag_started(payload: Dictionary)
 signal powerup_fragment_arrived(payload: Dictionary)
 signal drag_blocked(reason: String)
@@ -646,10 +647,11 @@ func can_activate_powerup(kind: String) -> bool:
 			and stage_run.remaining > EPSILON and phase == "playing" and not paused \
 			and not _powerup_purchasing and _combo_pending.is_empty()
 	var repeat_treasure: bool = kind == "fragments" and str(_powerup.get("kind", "")) == "fragments"
+	# Supply owns its landing slots, not the toolbar. Real board settlement still blocks items.
 	if not POWERUP_PRICES.has(kind) or phase != "playing" or paused or _powerup_purchasing \
 		or (powerup_active() and not repeat_treasure) \
 		or _finishing_powerup or collection_batch_active() or _held_tile_id >= 0 \
-		or not fusions.is_empty() or not _blast_queue.is_empty() or _settling_remaining() > EPSILON or cells.is_empty():
+		or not fusions.is_empty() or not _blast_queue.is_empty() or _settling_remaining(false) > EPSILON or cells.is_empty():
 		return false
 	return kind == "fragments" or not _powerup_pair(false).is_empty()
 
@@ -686,9 +688,12 @@ func _purchase_extra_time() -> bool:
 	if generation != _generation:
 		return false
 	if not response is Dictionary or not bool(response.get("ok", false)):
-		error = str(response.get("error", "Extra time could not be saved. Please retry.")) if response is Dictionary \
-			else "Extra time could not be saved. Please retry."
-		powerup_feedback.emit("extra_time", false)
+		if response is Dictionary and str(response.get("reason", "")) == "insufficient":
+			error = ""
+		else:
+			error = str(response.get("error", "Extra time could not be saved. Please retry.")) if response is Dictionary \
+				else "Extra time could not be saved. Please retry."
+		_reject_powerup_purchase("extra_time", price, response)
 		return false
 	if not stage_run.add_time(receipt):
 		error = stage_run.error
@@ -722,7 +727,7 @@ func _purchase_powerup(kind: String, family: String = "", selected_id: int = -1)
 			finish_powerup()
 		if generation != _generation:
 			return false
-		powerup_feedback.emit(kind, false)
+		_reject_powerup_purchase(kind, price, response)
 		if generation == _generation and (not powerup_active() or _same_powerup(generation, previous_timeline)):
 			cue_requested.emit("powerup_wrong")
 		if _finish_after_purchase and generation == _generation:
@@ -752,6 +757,16 @@ func _purchase_powerup(kind: String, family: String = "", selected_id: int = -1)
 	if _same_powerup(generation, timeline_id) and not paused:
 		_advance_powerup()
 	return true
+
+
+func _reject_powerup_purchase(kind: String, price: int, response: Variant) -> void:
+	var generation: int = _generation
+	powerup_feedback.emit(kind, false)
+	if not _can_continue(generation) or not response is Dictionary or str(response.get("reason", "")) != "insufficient":
+		return
+	var balance: Variant = response.get("after")
+	if balance is int and balance >= 0 and balance < price:
+		powerup_insufficient.emit(kind, price - balance)
 
 
 func _begin_powerup_timeline(kind: String, receipt_id: String, family: String = "", selected_id: int = -1) -> void:
@@ -1626,13 +1641,9 @@ func step(delta: float) -> void:
 			break
 		if _finishing_powerup and not powerup_active():
 			break
-		if fill_mode and can_drop_now() and (stage_run == null or stage_run.outcome.is_empty() and stage_run.remaining > EPSILON) \
-			and _held_tile_id < 0 and _dragged_tile_id < 0 \
-			and fusions.is_empty() and _blast_queue.is_empty() and _settling_remaining() <= EPSILON:
-			spawn_elapsed = 0.0
-			_spawn_drop()
-			if not _can_continue(generation):
-				break
+		_pump_fill()
+		if not _can_continue(generation):
+			break
 		var powerup_running: bool = powerup_active()
 		var impact_running: bool = not _collection_hit_stop.is_empty()
 		var time_scale: float = gameplay_time_scale()
@@ -1653,8 +1664,9 @@ func step(delta: float) -> void:
 		consumed = minf(consumed, _collection_batch_boundary())
 		consumed = minf(consumed, _powerup_boundary())
 		if time_scale > 0.0:
-			if fill_mode and not powerup_running and not _stage_ending and _settling_remaining() > EPSILON:
-				consumed = minf(consumed, _settling_remaining() / time_scale)
+			var fill_boundary: float = _fill_boundary()
+			if fill_boundary > EPSILON:
+				consumed = minf(consumed, fill_boundary / time_scale)
 			consumed = minf(consumed, _next_drag_gravity_boundary() / time_scale)
 			if _growth_pending and _settling_remaining() > EPSILON:
 				consumed = minf(consumed, _settling_remaining() / time_scale)
@@ -1797,8 +1809,52 @@ func step(delta: float) -> void:
 			if spawn_elapsed + EPSILON >= spawn_interval:
 				spawn_elapsed = 0.0
 				_spawn_drop()
+	if _can_continue(generation):
+		_pump_fill()
 	if generation == _generation:
 		changed.emit()
+
+
+func _fill_boundary() -> float:
+	if not fill_mode or not can_drop_now() or _powerup_purchasing or _finishing_powerup \
+		or _held_tile_id >= 0 or _dragged_tile_id >= 0 or not fusions.is_empty() \
+		or not _blast_queue.is_empty() or not _collection_hit_stop.is_empty() \
+		or stage_run != null and (not stage_run.outcome.is_empty() or stage_run.remaining <= EPSILON):
+		return INF
+	var settling: float = _settling_remaining(boss.broken_remaining > EPSILON)
+	if settling > EPSILON:
+		return settling
+	var delays: Dictionary = _arrival_entry_delays(true)
+	var occupied: Dictionary = _occupied()
+	var boundary: float = INF
+	for index in range(upcoming.size()):
+		boundary = minf(boundary, _fill_slot_delay(index, delays, occupied))
+	return boundary
+
+
+func _pump_fill() -> void:
+	var generation: int = _generation
+	while _can_continue(generation) and _fill_boundary() <= EPSILON:
+		var before: int = generated_tiles
+		spawn_elapsed = 0.0
+		_spawn_drop(true)
+		if generated_tiles == before:
+			break
+
+
+func _fill_slot_delay(index: int, delays: Dictionary, occupied: Dictionary) -> float:
+	var preview: Dictionary = upcoming[index]
+	if not preview.has("id"):
+		return INF
+	var width: int = int(preview.width) if authored_morphology else 1
+	var height: int = int(preview.height) if authored_morphology else 1
+	var position: Vector2i = _arrival_position(occupied, index, width, height)
+	if position.x < 0 or not _arrival_preserves_drag_return(preview, position):
+		return INF
+	var remaining: float = maxf(0.0, float(delays.slots.get(index, 0.0)))
+	for column in range(position.x, position.x + width):
+		remaining = maxf(remaining, float(delays.columns.get(column, 0.0)))
+	return remaining
 
 
 func set_paused(value: bool) -> void:
@@ -2107,6 +2163,13 @@ static func arrival_contact_at(tile: Dictionary) -> float:
 
 static func arrival_delay(tile: Dictionary) -> float:
 	return maxf(0.0, float(tile.get("arrival_delay", _scheduled_arrival_delay(int(tile.get("arrival_index", 0))))))
+
+
+static func arrival_slot_clearance(tile: Dictionary) -> float:
+	if not bool(tile.get("fill_stream", false)):
+		return ARRIVAL_SLOT_CLEARANCE
+	var speed: float = clampf(float(tile.get("motion_speed_scale", 1.0)), 1.0, 2.2)
+	return sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed
 
 
 static func _scheduled_arrival_delay(slot: int) -> float:
@@ -2858,40 +2921,61 @@ func _search_supply_order(packet: Array[Dictionary], order: Array[int], score: i
 		order.pop_back()
 
 
-func _spawn_drop() -> void:
+func _arrival_entry_delays(streaming: bool = false) -> Dictionary:
+	var column_delays: Dictionary = {}
+	var slot_delays: Dictionary = {}
+	for tile: Dictionary in cells:
+		if bool(tile.get("arrival", false)) and not is_settled(tile):
+			var slot: int = int(tile.get("arrival_index", 0))
+			var departure: float = arrival_delay(tile) - float(tile.age)
+			var speed: float = clampf(float(tile.get("motion_speed_scale", 1.0)), 1.0, 2.2) if streaming else 1.0
+			var clearance: float = departure + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed
+			for column in range(int(tile.column), int(tile.column) + int(tile.width)):
+				column_delays[column] = maxf(float(column_delays.get(column, -INF)), clearance)
+			slot_delays[slot] = maxf(float(slot_delays.get(slot, -INF)),
+				departure + (arrival_slot_clearance(tile) if streaming else ARRIVAL_SLOT_CLEARANCE))
+	return {"columns": column_delays, "slots": slot_delays}
+
+
+func _spawn_drop(streaming: bool = false) -> void:
+	var generation: int = _generation
 	var previous_generated: int = generated_tiles
 	var advertised: Dictionary = {}
 	for index in range(upcoming.size()):
 		if upcoming[index].has("id"):
 			advertised[index] = int(upcoming[index].id)
-	var column_delays: Dictionary = {}
-	var slot_delays: Dictionary = {}
-	# Concurrent batches reserve their destinations immediately. Preserve the
-	# entry spacing of earlier arrivals without delaying the next input.
-	for tile: Dictionary in cells:
-		if bool(tile.get("arrival", false)) and not is_settled(tile):
-			var slot: int = int(tile.get("arrival_index", 0))
-			var departure: float = arrival_delay(tile) - float(tile.age)
-			var clearance: float = departure + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY)
-			for column in range(int(tile.column), int(tile.column) + int(tile.width)):
-				column_delays[column] = maxf(float(column_delays.get(column, -INF)), clearance)
-			slot_delays[slot] = maxf(float(slot_delays.get(slot, -INF)), departure + ARRIVAL_SLOT_CLEARANCE)
+	# Destinations are reserved immediately; only physically cleared entrances
+	# release more automatic supply. Manual packets keep their existing queue.
+	var delays: Dictionary = _arrival_entry_delays(streaming)
+	var column_delays: Dictionary = delays.columns
+	var slot_delays: Dictionary = delays.slots
 	var dispatched: int = 0
 	for index in range(DROP_COUNT):
+		if not _can_continue(generation):
+			return
 		if boss.broken_remaining > EPSILON and dispatched >= 2:
 			break
 		if not advertised.has(index) or int(upcoming[index].get("id", -1)) != int(advertised[index]):
+			continue
+		if streaming and _fill_slot_delay(index, delays, _occupied()) > EPSILON:
 			continue
 		if not _spawn_tile(true, index):
 			continue
 		dispatched += 1
 		var tile: Dictionary = cells.back()
+		if streaming:
+			tile.fill_stream = true
+			if slot_delays.has(index):
+				tile.arrival_delay = 0.0
+		else:
+			tile.erase("fill_stream")
 		tile.arrival_delay = maxf(float(tile.arrival_delay), float(slot_delays.get(index, 0.0)))
 		for column in range(int(tile.column), int(tile.column) + int(tile.width)):
 			if column_delays.has(column):
 				tile.arrival_delay = maxf(float(tile.arrival_delay), float(column_delays[column]))
 		for column in range(int(tile.column), int(tile.column) + int(tile.width)):
-			column_delays[column] = float(tile.arrival_delay) + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY)
+			var speed: float = clampf(float(tile.get("motion_speed_scale", 1.0)), 1.0, 2.2) if streaming else 1.0
+			column_delays[column] = float(tile.arrival_delay) + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed
 	if generated_tiles > previous_generated:
 		# Completed collections set the next packet's pace. Keep the current
 		# Next timer intact so a late Collect cannot unexpectedly release it.
@@ -3474,9 +3558,11 @@ func _arrival_position(occupied: Dictionary, preferred_column: int = -1, width: 
 	return position
 
 
-func _settling_remaining() -> float:
+func _settling_remaining(include_arrivals: bool = true) -> float:
 	var remaining: float = 0.0
 	for tile in cells:
+		if not include_arrivals and bool(tile.get("arrival", false)):
+			continue
 		remaining = maxf(remaining, settle_duration(tile) - float(tile.age))
 	return maxf(0.0, remaining)
 

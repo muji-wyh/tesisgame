@@ -14,6 +14,10 @@ a{color:inherit;text-decoration:none}
 .brand span{font-size:12px;display:inline-block;font-weight:650;letter-spacing:.04em;color:var(--muted);margin-left:14px;padding-left:14px;border-left:1px solid #d5dccf}
 .back-link{font-size:14px;font-weight:750;white-space:nowrap}
 .back-link span{font-size:18px;margin-left:8px}
+.page-header{flex-wrap:wrap}
+.review-pages{display:flex;flex-wrap:wrap;gap:16px;font-size:13px;font-weight:800}
+.review-pages a{display:inline-flex;align-items:center;min-height:44px;border-bottom:2px solid transparent}
+.review-pages a[aria-current=page]{border-color:var(--accent)}
 main{max-width:1264px;margin:auto;padding:32px 36px 24px}
 .introduction{max-width:640px;margin-bottom:24px}
 .eyebrow{text-transform:uppercase;letter-spacing:.12em;font-size:11px;font-weight:900;color:var(--muted);margin:0 0 7px}

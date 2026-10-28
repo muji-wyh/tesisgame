@@ -145,7 +145,9 @@ async function waitForCampaignMap(page, options = {}) {
     const number = options.stage || map.stage_nodes.find(item => item.unlocked && !item.best_stars)?.number || 99;
     const target = options.challenge ? map.challenge : map.stage_nodes.find(item => item.number === number);
     if (!target || (!options.challenge && !target.unlocked)) throw new Error('The requested campaign stage is unavailable.');
-    const area = options.challenge ? map.map_rect : map.scroll_rect;
+    // Challenge is hosted in the shared game header, outside the map content.
+    const canvas = options.challenge ? await metrics(page) : null;
+    const area = options.challenge ? { x: 0, y: 0, width: canvas.width, height: canvas.height } : map.scroll_rect;
     const rect = target.rect;
     return target.visible && rect.x >= area.x - 0.5 && rect.y >= area.y - 0.5 &&
       rect.x + rect.width <= area.x + area.width + 0.5 &&

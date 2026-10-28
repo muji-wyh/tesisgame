@@ -466,8 +466,9 @@ The sourced clock/light accents and one short digit response do not launch
 confetti or change the timer. Pause freezes the feedback; reduced motion keeps
 its amount and static highlight.
 Challenge's **Fill: On** switch is enabled from the start and cannot be turned
-off. It continuously supplies actual falling packets until every reachable
-vacancy is filled, respecting operation, pause and saving gates.
+off. It continuously releases the advertised supply through physically clear
+entrances until every reachable vacancy is filled. Multiple generations can
+fall together, respecting operation, pause and saving gates.
 Each completed target batch launches the shared smaller sourced-paper preset
 once, without stopping play. The best is saved when a higher
 stage is reached, separately per learning route; a lower replay cannot overwrite it.
@@ -549,12 +550,34 @@ with at most 15 jellies across three rows. Long labels use reviewed line breaks
 or an ellipsis; hold a clipped label, or focus it and press R, to pause and read
 its full spelling.
 
-The **Fill** switch immediately above Auto Collect continuously dispatches the
-advertised top supply when spaces remain, awaiting real falling and settlement.
+The icon-only **Auto Fill** switch immediately above Auto Collect uses downward
+arrows feeding a gel stack and a moving status thumb, without visible words.
+Mint styling and a small continuous downward light cue mean On; a still cream
+control means Off. Challenge adds a lock to the enabled thumb. Pause freezes the
+effect, and reduced motion keeps a static active treatment.
+The switch continuously dispatches the
+advertised top supply when spaces remain. Each entrance releases its next Jelly
+as soon as the previous one has physically cleared it; it does not wait for the
+whole preceding packet to land or settle. Real destination reservations and
+speed-aware entrance spacing prevent collisions. Turning Fill off stops new
+releases without interrupting bodies that are already falling.
 Main/unbound play can turn it off; Challenge forces it on without overwriting the
 ordinary preference. It does not teleport bodies or bypass a sealed entrance,
 Boss two-body supply restriction, dragging, a paid operation, a pending save or
 an ending.
+
+Auto Fill does not disable items merely because supply is airborne. Legal settled
+pairs remain available to Auto merge and Magnet, and Treasure and extra time
+keep their normal purchase rules. An active item reserves new supply without
+freezing existing falling bodies; Fill resumes after that ownership is released.
+
+Clicking a legally available item without enough coins briefly highlights that
+card and its real coin-price row, with **Need coins** in place of its title.
+The quoted price and wallet do not change. The source coin settles after a
+small recoil, the explanation remains readable for 1.15 seconds, and then the
+normal title returns. Magnet warns at its initial selection step without
+charging. Save failures and invalid targets do not masquerade as low funds.
+Reduced motion retains the explicit warning without shaking.
 
 The **Magnet** item first asks the player to choose a board Jelly. Its exact word
 family's roots, pictures and differently leveled merged Jellies use the ordinary
