@@ -58,8 +58,12 @@ func prepare(app) -> Array:
 			func(word: Dictionary) -> Dictionary: return Morphology.decorate(word))
 	check(view.configure(words, app.growth.learning_age(), Data.theme(app.model.theme_id),
 		app.data.chests, false, seed_value), "Use current-age production words, pictures and the real control layout")
+	check(view.game.bind_stage(Catalog.make_plan(1, words, app.growth.learning_age(), seed_value)),
+		"Bind actual pending word goals before testing their paid actions")
+	view.set_stage_progress(view.game.stage_run.snapshot())
 	view.game.cells.clear()
 	view.game.spawn_interval = 10000.0
+	view.game._stage_spawn_interval = 10000.0
 	for index in range(4):
 		var tile: Dictionary = view.game._new_word_root(words[index / 2]) if index % 2 == 0 \
 			else view.game._new_picture_tile(words[index / 2])
@@ -70,8 +74,29 @@ func prepare(app) -> Array:
 	view._sync_tiles()
 	view._layout()
 	view._process(0.0)
+	for frame in range(100):
+		if not view._stage_banner.ready_pending():
+			break
+		view._process(0.05)
+	view._refresh_controls()
 	await settle()
 	return words
+
+
+func goal_button(view, word_id: String) -> Button:
+	for item: Dictionary in view.snapshot().practice.words:
+		if str(item.get("word_id", item.id)) == word_id:
+			return view._practice_panel.button_for_goal(str(item.id))
+	return null
+
+
+func move_mouse(at: Vector2, buttons: int = 0) -> void:
+	var motion := InputEventMouseMotion.new()
+	motion.position = at
+	motion.global_position = at
+	motion.button_mask = buttons
+	root.push_input(motion)
+	await process_frame
 
 
 func put(model, tile: Dictionary) -> void:
@@ -85,6 +110,8 @@ func put(model, tile: Dictionary) -> void:
 
 
 func test_selection(app) -> void:
+	root.size = Vector2i(1366, 768)
+	await settle()
 	var words: Array = await prepare(app)
 	var view = app._word_jelly
 	var model = view.game
@@ -96,35 +123,61 @@ func test_selection(app) -> void:
 	view._layout()
 	view._process(0.0)
 	await settle()
-	var selected: int = int(model.cells[0].id)
 	var unrelated: Array[int] = [int(model.cells[2].id), int(model.cells[3].id)]
 	var before: int = app.coin_wallet.balance
 	var receipts: int = app.coin_wallet._receipts.size()
-	var generated: int = model.generated_tiles
 	var growth: Dictionary = app.growth.snapshot().streaks.duplicate(true)
 	var spoken: Array = []
 	var on_word: Callable = func(word: Dictionary) -> void: spoken.append(word.id)
 	view.word_requested.connect(on_word)
-	await click(view.powerup_buttons.family_merge)
-	check(view.snapshot().family_selection.active and view.powerup_buttons.family_merge.snapshot().title == "Pick Jelly"
-		and app.coin_wallet.balance == before and not model.powerup_active() and model._held_tile_id < 0,
-		"A real Magnet click arms a visible choice without spending, holding a body or picking at random")
-	await capture("magnet-pick-jelly")
-	view._drop_next()
-	check(view.drop_button.disabled and not view.snapshot().preview.enabled
-		and not view.navigation_controls().has(view.drop_button) and model.generated_tiles == generated,
-		"Keyboard/controller supply activation is unavailable during target selection, not just pointer drops")
-	await click(view.drop_button)
-	check(view.snapshot().family_selection.active and model.generated_tiles == generated and spoken.is_empty(),
-		"The supply cannot dispatch or read a word while the player is choosing a board Jelly")
-	await click(view._tiles[selected])
+	check(not view.powerup_buttons.has("family_merge") and view.find_child("PowerupMagnet", true, false) == null,
+		"Magnet is removed, including its native focus and input target")
+	var button = goal_button(view, str(words[0].id))
+	check(button != null and not button.disabled and button.snapshot().price == 200,
+		"The actual pending goal advertises its exact first family-merge price")
+	if button == null:
+		return
+	await capture("goal-idle")
+	await move_mouse(button.get_global_rect().get_center())
+	view._process(0.25)
+	check(view.snapshot().goal_hover.word_id == words[0].id and button.snapshot().targeting
+		and app.coin_wallet.balance == before and not model.powerup_active(),
+		"A genuine goal hover acknowledges its row and never charges")
+	for tile: Dictionary in model.cells:
+		var visual = view._tiles[int(tile.id)]
+		var matching: bool = model.family_word_id(int(tile.id)) == str(words[0].id)
+		check(visual.completion_hint == matching and visual.match_dimmed == not matching,
+			"Goal hover uses the ordinary drag-match halo and family-aware dimming")
+	check(view._tiles[int(model.cells[0].id)].completion_scale > 1.0,
+		"The corresponding acquired gel grows through the same live matching animation")
+	await capture("goal-hover")
+	await move_mouse(Vector2(1300, 720))
+	check(view.snapshot().goal_hover.word_id.is_empty()
+		and view._tiles.values().all(func(tile) -> bool: return not tile.completion_hint and not tile.match_dimmed),
+		"Leaving a goal restores all original Jelly surfaces without stale highlights")
+	var coin_rect: Rect2 = button.get("_coin_rect")
+	var destination: Vector2 = button.get_global_transform() * coin_rect.get_center()
+	await click(button)
 	check(model.powerup_active() and model.powerup_snapshot().kind == "family_merge"
 		and model.powerup_snapshot().family_word_id == words[0].id
-		and not view.snapshot().family_selection.active and app.coin_wallet.balance == before - 200
-		and app.coin_wallet._receipts.size() == receipts + 1 and app._status_announcement.contains("Magnet purchased"),
-		"The actual selected board Jelly commits one correctly named, durable two-hundred-coin purchase")
+		and app.coin_wallet.balance == before - 200 and app.coin_wallet._receipts.size() == receipts + 1
+		and app._status_announcement.contains("Auto merge " + str(words[0].text)),
+		"One actual goal click durably buys only the named family, without a second target-selection gesture")
+	check(app._coin_flight.snapshot().debit_active and app._coin_flight.snapshot().debit_amount == 200
+		and app._coin_flight._debit.destination.is_equal_approx(destination)
+		and app._coin_counter.target == before - 200 and app._coin_counter.displayed > float(before - 200),
+		"The accepted receipt owns the downward wallet roll, exact negative amount and coin flight into this goal")
+	check(not app._coin_flight._debit.inline_caption,
+		"A desktop goal puts its debit below the wallet, never across the neighboring Pause control")
+	check(button.snapshot().spent_coins == 200 and button.snapshot().price == 300,
+		"The paid feedback keeps its actual debit separate from the next advertised price")
+	await click(button)
+	check(app.coin_wallet._receipts.size() == receipts + 1 and app.coin_wallet.balance == before - 200,
+		"A repeat press during the paid operation cannot debit another goal")
 	view._process(0.16)
+	app._coin_flight.advance(0.16)
 	check(not view._powerup_effects.stamps.is_empty(), "Selected-family motion uses the actual automatic-flight presentation")
+	await capture("goal-paid")
 	for frame in range(300):
 		if not model.powerup_active():
 			break
@@ -135,7 +188,9 @@ func test_selection(app) -> void:
 	check(not model.cell(unrelated[0]).is_empty() and not model.cell(unrelated[1]).is_empty()
 		and spoken.is_empty() and model.cleared_pairs == 0 and model.combo_coins == 0
 		and app.growth.snapshot().streaks == growth and app.coin_wallet.balance == before - 200,
-		"Selection cannot accidentally collect, pronounce, spend again or consume another family")
+		"A paid goal cannot accidentally collect, pronounce, spend again or consume another family")
+	check(view.snapshot().practice.words.all(func(item: Dictionary) -> bool: return item.purchase.price == 300),
+		"All goal rows share the existing per-round family purchase tier")
 	view.word_requested.disconnect(on_word)
 
 
@@ -143,21 +198,11 @@ func test_cancel_and_fill(app) -> void:
 	await prepare(app)
 	var view = app._word_jelly
 	var before: int = app.coin_wallet.balance
-	await click(view.powerup_buttons.family_merge)
-	await click(view.powerup_buttons.family_merge)
-	check(not view.snapshot().family_selection.active and app.coin_wallet.balance == before,
-		"Pressing Magnet again cancels the real selector without a charge")
-	await click(view.powerup_buttons.family_merge)
-	var cancel := InputEventAction.new()
-	cancel.action = "ui_cancel"
-	cancel.pressed = true
-	Input.parse_input_event(cancel)
-	await process_frame
-	check(not view.snapshot().family_selection.active and app.coin_wallet.balance == before,
-		"Controller Back and keyboard Cancel leave no target or paid obligation")
-	await click(view.powerup_buttons.family_merge)
+	var button: Button = goal_button(view, str(view.game._words[0].id))
 	view.pause(true)
-	check(not view.snapshot().family_selection.active, "Pause clears the selector instead of resurrecting a stale target after resume")
+	await click(button)
+	check(view.snapshot().goal_hover.word_id.is_empty() and app.coin_wallet.balance == before,
+		"Pause clears goal hover and blocks payment, not just the board gesture")
 	view.pause(false)
 	var generated: int = view.game.generated_tiles
 	check(view.navigation_controls().has(view._fill_button),
@@ -165,7 +210,7 @@ func test_cancel_and_fill(app) -> void:
 	await click(view._fill_button)
 	view._process(0.01)
 	check(view.game.fill_mode and view.game.generated_tiles > generated,
-		"The real optional Fill button starts normal advertised supply flights")
+		"The real unified Fill switch starts normal advertised supply flights")
 	await click(view._fill_button)
 	check(not view.game.fill_mode, "Main/unbound play can turn Fill back off while already launched pieces settle")
 	view._process(2.0)
@@ -178,7 +223,8 @@ func test_cancel_and_fill(app) -> void:
 	view._layout()
 	await click(view._fill_button)
 	check(view._fill_button.disabled and view._fill_button.button_pressed and view.game.fill_mode
-		and view.snapshot().fill_control.locked, "Challenge visibly forces Fill on and rejects a real attempt to switch it off")
+		and view.snapshot().fill_control.locked and view._fill_button.snapshot().unified_switch,
+		"Challenge keeps the single whole-row switch On and rejects a real attempt to turn it off")
 	check(view.configure(words, app.growth.learning_age(), Data.theme(app.model.theme_id), app.data.chests, false, seed_value)
 		and view.game.fill_mode and not view.game.fill_mode_locked(),
 		"Leaving Challenge restores the independent ordinary Fill preference rather than persisting the forced lock")
@@ -186,28 +232,143 @@ func test_cancel_and_fill(app) -> void:
 
 func test_keyboard_and_controller(app) -> void:
 	for controller: bool in [false, true]:
-		await prepare(app)
+		var words: Array = await prepare(app)
 		var view = app._word_jelly
-		var id: int = int(view.game.cells[0].id)
 		var before: int = app.coin_wallet.balance
-		await click(view.powerup_buttons.family_merge)
-		view._tiles[id].grab_focus()
+		var button: Button = goal_button(view, str(words[0].id))
+		button.grab_focus()
+		check(view.navigation_controls().has(button) and view.snapshot().goal_hover.word_id == words[0].id,
+			"Keyboard and controller focus expose the same goal-family highlight as mouse hover")
 		for pressed: bool in [true, false]:
 			if controller:
-				var button := InputEventJoypadButton.new()
-				button.button_index = JOY_BUTTON_A
-				button.pressed = pressed
-				Input.parse_input_event(button)
+				var joy := InputEventJoypadButton.new()
+				joy.button_index = JOY_BUTTON_A
+				joy.pressed = pressed
+				Input.parse_input_event(joy)
 			else:
 				var key := InputEventKey.new()
 				key.keycode = KEY_ENTER
 				key.pressed = pressed
 				Input.parse_input_event(key)
 			await process_frame
-		check(view.game.powerup_active() and view.game.powerup_snapshot().selected_id == id
+		check(view.game.powerup_active() and view.game.powerup_snapshot().family_word_id == words[0].id
 			and app.coin_wallet.balance == before - 200 and view.game.cleared_pairs == 0,
-			"A focused keyboard/controller target buys its explicit family instead of pronouncing or collecting it")
+			"A focused keyboard/controller goal buys its explicit family instead of pronouncing or collecting it")
 		view.game.finish_powerup()
+
+
+func test_goal_rejection(app) -> void:
+	var words: Array = await prepare(app)
+	var view = app._word_jelly
+	var button = goal_button(view, str(words[0].id))
+	var balance: int = app.coin_wallet.balance
+	check(app.coin_wallet.spend("fixture:partial-goal-wallet", balance - 150).ok,
+		"Create an actual partially funded isolated wallet")
+	app._coin_flight.sync(app.coin_wallet.balance)
+	view._refresh_controls()
+	var saved: Variant = app.coin_wallet._saved_text
+	await click(button)
+	view._process(0.10)
+	check(button.snapshot().funds_warning and button.snapshot().missing_coins == 50
+		and button.snapshot().price_text == "200" and not view.game.powerup_active()
+		and app.coin_wallet.balance == 150 and app.coin_wallet._saved_text == saved
+		and not app._coin_flight.snapshot().debit_active,
+		"A real rejected goal click explains exactly fifty missing coins without a debit, merge or price increase")
+	await capture("goal-needs-coins")
+	view.set_reduced_motion(true)
+	check(button.snapshot().price_offset == [0.0, 0.0] and button.snapshot().coin_scale == 1.0,
+		"Changing reduced motion preserves the money explanation without a moving cost")
+	view.set_reduced_motion(false)
+	for frame in range(24):
+		view._process(0.05)
+	check(not button.snapshot().feedback_active and button.snapshot().title == words[0].text,
+		"The goal recovers its ordinary word label after the bounded shortfall")
+	check(app.coin_wallet.credit_amount("fixture:goal-retry-funding", 1000).ok, "Fund a later legitimate retry")
+	app._coin_flight.sync(app.coin_wallet.balance)
+	var partner: Dictionary = view.game.cells.filter(func(tile: Dictionary) -> bool:
+		return tile.jelly_kind == "picture" and tile.image_word.id == words[0].id)[0]
+	view.game.cells.erase(partner)
+	view._sync_tiles()
+	view._refresh_controls()
+	balance = app.coin_wallet.balance
+	await click(button)
+	check(not view.game.powerup_active() and app.coin_wallet.balance == balance
+		and not button.snapshot().funds_warning and button.snapshot().feedback_active,
+		"A pending word with no legal partner rejects without paying or borrowing another goal's pair")
+	view._activate_goal_merge(str(button.get("_goal").id), str(words[1].id))
+	check(app.coin_wallet.balance == balance and not view.game.powerup_active(),
+		"A stale or mismatched goal identity cannot redirect its payment to another family")
+
+
+func test_goal_scroll(app) -> void:
+	root.size = Vector2i(393, 852)
+	await settle()
+	var words: Array = await prepare(app)
+	var view = app._word_jelly
+	var button: Button = goal_button(view, str(words[0].id))
+	var balance: int = app.coin_wallet.balance
+	var receipts: int = app.coin_wallet._receipts.size()
+	var at: Vector2 = button.get_global_rect().get_center()
+	var event := InputEventMouseButton.new()
+	event.button_index = MOUSE_BUTTON_LEFT
+	event.pressed = true
+	event.position = at
+	event.global_position = at
+	root.push_input(event)
+	await process_frame
+	await move_mouse(at - Vector2(45, 0), MOUSE_BUTTON_MASK_LEFT)
+	event.pressed = false
+	event.position = at - Vector2(45, 0)
+	event.global_position = event.position
+	root.push_input(event)
+	await process_frame
+	check(view._practice_panel._scroll.scroll_horizontal > 0 and app.coin_wallet.balance == balance
+		and app.coin_wallet._receipts.size() == receipts and not view.game.powerup_active(),
+		"A real swipe scrolls the compact goals without turning its release into a paid click")
+	view._practice_panel._scroll.cancel_drag()
+	view._practice_panel._scroll.scroll_horizontal = 0
+	await settle()
+	at = button.get_global_rect().get_center()
+	for step: Vector2i in [Vector2i(0, 1), Vector2i(1, 1), Vector2i(0, 0), Vector2i(1, 0)]:
+		var touch := InputEventScreenTouch.new()
+		touch.index = step.x
+		touch.pressed = step.y == 1
+		touch.position = at + Vector2(step.x * 4.0, 0)
+		root.push_input(touch)
+		await process_frame
+	check(app.coin_wallet.balance == balance and app.coin_wallet._receipts.size() == receipts,
+		"A second touch cancels the goal gesture rather than paying twice")
+	await click(button)
+	check(app.coin_wallet.balance == balance - 200 and app._coin_flight._debit.inline_caption,
+		"One settled phone tap buys its goal and uses the actual stacked-header debit placement")
+	view._process(0.12)
+	app._coin_flight.advance(0.12)
+	await capture("goal-paid-phone")
+	view.game.finish_powerup()
+
+
+func test_reentrant_goal(app) -> void:
+	var words: Array = await prepare(app)
+	var view = app._word_jelly
+	var first = goal_button(view, str(words[0].id))
+	var other = goal_button(view, str(words[1].id))
+	var before: int = app.coin_wallet.balance
+	var receipts: int = app.coin_wallet._receipts.size()
+	var original: Callable = view.purchase_powerup
+	var calls: Array = []
+	view.purchase_powerup = func(id: String, kind: String, price: int) -> Dictionary:
+		calls.append([id, kind, price])
+		other.pressed.emit()
+		return original.call(id, kind, price)
+	await click(first)
+	view.purchase_powerup = original
+	check(calls.size() == 1 and app.coin_wallet.balance == before - 200
+		and app.coin_wallet._receipts.size() == receipts + 1 and view.game.powerup_snapshot().family_word_id == words[0].id,
+		"A nested goal press cannot pay again or redirect the original family")
+	check(first.snapshot().spent_coins == 200 and app._coin_flight.snapshot().debit_active
+		and app._status_announcement.contains("Auto merge " + str(words[0].text)),
+		"Rejecting nested input preserves the original goal's payment context and real debit feedback")
+	view.game.finish_powerup()
 
 
 func test_layouts(app) -> void:
@@ -215,7 +376,7 @@ func test_layouts(app) -> void:
 	var view = app._word_jelly
 	var words: Array = view.game._words.duplicate(true)
 	var plan: Dictionary = Catalog.make_plan(2, words, app.growth.learning_age(), seed_value)
-	check(view.game.bind_stage(plan), "Use a real main plan so all four paid tools are laid out: " + str(plan.get("error", "")) + view.game.error)
+	check(view.game.bind_stage(plan), "Use a real main plan with the three remaining paid tools: " + str(plan.get("error", "")) + view.game.error)
 	for dimensions: Vector2i in [Vector2i(1366, 768), Vector2i(768, 1024), Vector2i(393, 852), Vector2i(320, 480), Vector2i(844, 390)]:
 		root.size = dimensions
 		await settle()
@@ -315,6 +476,9 @@ func _run() -> void:
 	app._coin_flight.sync(app.coin_wallet.balance)
 	await test_selection(app)
 	await test_keyboard_and_controller(app)
+	await test_goal_rejection(app)
+	await test_goal_scroll(app)
+	await test_reentrant_goal(app)
 	await test_cancel_and_fill(app)
 	await test_layouts(app)
 	await review_rendered_states(app)
@@ -324,5 +488,5 @@ func _run() -> void:
 	for file in DirAccess.get_files_at(directory):
 		DirAccess.remove_absolute(directory.path_join(file))
 	DirAccess.remove_absolute(directory)
-	print("Selected Jelly input and Fill UI: %d checks, %d failures" % [checks, failures])
+	print("Paid goal input and unified Fill UI: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

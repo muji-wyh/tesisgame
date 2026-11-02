@@ -61,10 +61,9 @@ func geometry(view) -> void:
 	for button: Control in view.powerup_buttons.values():
 		if button.visible:
 			tools = button.get_rect() if not tools.has_area() else tools.merge(button.get_rect())
-	if view._compact_hud:
-		check(is_equal_approx(view.collect_button.size.x, tools.size.x)
-			and is_equal_approx(view._fill_button.size.x, tools.size.x),
-			"Fill and primary Collect span the complete paid-tool rail")
+	check(is_equal_approx(view.collect_button.size.x, tools.size.x)
+		and is_equal_approx(view._fill_button.size.x, tools.size.x),
+		"Fill and primary Collect span the complete paid-tool group in rail and footer layouts")
 	check_collect_typography(view.collect_button, _scale(view))
 	for button in view.powerup_buttons.values():
 		if not button.visible:
@@ -149,7 +148,7 @@ func _run() -> void:
 	check(view.configure(words, app.growth.learning_age(), Data.theme(app.model.theme_id),
 		app.data.chests, false, 1901), "Use real production words and sourced tile art")
 	check(view.game.bind_stage(Catalog.make_plan(2, words, app.growth.learning_age(), 1901)),
-		"Main play includes all four paid tools")
+		"Main play includes the three remaining paid tools and priced pending goals")
 	view.game.set_fill_mode(false)
 	view.game.cells.clear()
 	view.game.spawn_interval = 10000.0
@@ -164,6 +163,7 @@ func _run() -> void:
 		put(view.game, view.game._new_word_root(word) if index % 2 == 0 else view.game._new_picture_tile(word))
 	Fixture.unlock_auto_collect(app)
 	app._sync_jelly()
+	view.set_stage_progress(view.game.stage_run.snapshot())
 	view.set_process(false)
 	for dimensions: Vector2i in [Vector2i(1473, 1175), Vector2i(1366, 768),
 			Vector2i(393, 852), Vector2i(320, 480), Vector2i(844, 390)]:
@@ -191,10 +191,11 @@ func _run() -> void:
 			view._sync_tiles()
 			view._refresh_controls()
 			await capture(view, "ready-tools")
-			view._activate_powerup("family_merge")
-			check(view._family_selecting and view.powerup_buttons.family_merge.snapshot().targeting,
-				"Review the real armed Magnet state without a purchase or a fake disabled selection")
-			await capture(view, "magnet-selection")
+			var goal: Button = view._practice_panel.button_for_goal(str(view.game.stage_run.snapshot().practice[0].id))
+			goal.grab_focus()
+			check(view.snapshot().goal_hover.word_id == str(goal.get("_goal").get("word_id", goal.get("_goal").id)),
+				"Review the actual goal-family hover without a purchase or a second selector")
+			await capture(view, "goal-hover")
 			view.cancel_input()
 			view.game.cells.erase(partner)
 			view._sync_tiles()

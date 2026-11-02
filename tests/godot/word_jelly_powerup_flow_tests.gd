@@ -538,6 +538,7 @@ func _check_items_during_fill(app) -> void:
 		check(game.bind_stage(plan), "Use the real main-stage item set: " + str(plan.get("error", "")) + game.error)
 		game._stage_spawn_interval = 10000.0
 		game.spawn_interval = 10000.0
+		view.set_stage_progress(game.stage_run.snapshot())
 		game.set_fill_mode(false)
 		view._refresh_controls()
 		view._layout()
@@ -546,15 +547,13 @@ func _check_items_during_fill(app) -> void:
 		view.set_process(false)
 		check(game.fill_mode and game._settling_remaining() > game.EPSILON,
 			"Native item input is exercised while Auto Fill is genuinely dispatching")
-		for item: String in ["auto_merge", "family_merge", "fragments", "extra_time"]:
+		for item: String in ["auto_merge", "fragments", "extra_time"]:
 			check(not view.powerup_buttons[item].disabled, "Falling supply does not disable the legal " + item + " button")
+		var goal: Button = view._practice_panel.button_for_goal(str(game.stage_run.snapshot().practice[0].id))
+		check(goal != null and not goal.disabled, "Falling supply does not disable the actual pending-goal merge")
 		var balance: int = app.coin_wallet.balance
 		var price: int = game.powerup_price(kind)
-		await _click_live(view, view.powerup_buttons[kind])
-		if kind == "family_merge":
-			check(view._family_selecting and app.coin_wallet.balance == balance,
-				"Magnet still selects a family before charging during Fill")
-			await _click_live(view, view._tiles[int(game.cells[0].id)])
+		await _click_live(view, goal if kind == "family_merge" else view.powerup_buttons[kind])
 		check(app.coin_wallet.balance == balance - price and game.snapshot().powerup_uses[kind] == 1,
 			"A real " + kind + " click buys exactly one quoted item during Fill")
 		check(purchases.size() == 1 and purchases[0] == {"kind": kind, "success": true},

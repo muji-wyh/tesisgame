@@ -154,6 +154,122 @@ async function observeFinish(page) {
   });
 }
 
+test('chapter segments browse only nine stages and preserve saved unlocks and ratings', async ({ page }, info) => {
+  test.setTimeout(300000);
+  await seedCampaign(page, { highestCleared: 12, balance: 3200 });
+  const errors = await openGame(page, { home: true, reducedMotion: 'reduce' });
+  await expect.poll(async () => (await wallet(page)).balance).toBe(3200);
+  let map = await openMap(page);
+  expect(map.segment).toMatchObject({ index: 2, count: 11, title: 'Grove', first_stage: 10, last_stage: 18 });
+  expect(map.stage_nodes).toHaveLength(99);
+  expect(map.stage_nodes.filter(item => item.in_segment).map(item => item.number)).toEqual([10, 11, 12, 13, 14, 15, 16, 17, 18]);
+  const saved = await page.evaluate(() => ({
+    campaign: localStorage.getItem('growWithPip.jellyCampaign.v1'),
+    wallet: localStorage.getItem('growWithPip.coinWallet.v1')
+  }));
+  await capture(page, info, 'chapter-two-frontier');
+  await pressMapControl(page, map.chapter_previous);
+  await expect.poll(async () => (await jelly(page)).campaign_map.segment.index).toBe(1);
+  map = (await jelly(page)).campaign_map;
+  expect(map.chapter_previous.enabled).toBe(false);
+  expect(stage(map, 1)).toMatchObject({ unlocked: true, best_stars: 1, in_segment: true });
+  expect(stage(map, 13).visible).toBe(false);
+  await pressMapControl(page, map.chapter_next);
+  await expect.poll(async () => (await jelly(page)).campaign_map.segment.index).toBe(2);
+  map = (await jelly(page)).campaign_map;
+  await pressMapControl(page, map.chapter_next);
+  await expect.poll(async () => (await jelly(page)).campaign_map.segment.index).toBe(3);
+  await expect.poll(async () => {
+    map = (await jelly(page)).campaign_map;
+    const target = stage(map, 19), area = map.scroll_rect, rect = target.rect;
+    return target.visible && rect.y >= area.y - 0.5 && rect.y + rect.height <= area.y + area.height + 0.5;
+  }).toBe(true);
+  map = (await jelly(page)).campaign_map;
+  expect(map.segment).toMatchObject({ title: 'Pine Trail', first_stage: 19, last_stage: 27 });
+  expect(map.stage_nodes.filter(item => item.in_segment).every(item => !item.unlocked)).toBe(true);
+  await pressMapControl(page, stage(map, 19));
+  expect((await jelly(page)).campaign_map.visible).toBe(true);
+  expect((await wallet(page)).balance).toBe(3200);
+  expect(await page.evaluate(() => ({
+    campaign: localStorage.getItem('growWithPip.jellyCampaign.v1'),
+    wallet: localStorage.getItem('growWithPip.coinWallet.v1')
+  }))).toEqual(saved);
+  await capture(page, info, 'future-chapter-stays-locked');
+  map = await waitForCampaignMap(page, { stage: 13 });
+  expect(map.segment.index).toBe(2);
+  expect(stage(map, 13)).toMatchObject({ unlocked: true, visible: true, in_segment: true });
+  await pressMapControl(page, stage(map, 13));
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.visible && state.phase === 'playing' && state.campaign?.number === 13 && !state.campaign_map.visible;
+  }, { timeout: 30000 }).toBe(true);
+  expect(errors).toEqual([]);
+});
+
+test('Pip guides the actual frontier and tactile map feedback never changes stage hit areas or progress', async ({ page }, info) => {
+  test.setTimeout(300000);
+  await seedCampaign(page, { highestCleared: 24, balance: 3200 });
+  const errors = await openGame(page, { home: true, reducedMotion: 'no-preference' });
+  let map = await openMap(page);
+  map = await waitForCampaignMap(page, { stage: 25 });
+  expect(map.guide).toMatchObject({ visible: true, stage: 25, age: 0, course_id: '' });
+  expect(map.presentation).toMatchObject({ completed_edges: 5, reduced_motion: false });
+  const saved = await page.evaluate(() => ({
+    campaign: localStorage.getItem('growWithPip.jellyCampaign.v1'),
+    wallet: localStorage.getItem('growWithPip.coinWallet.v1')
+  }));
+  const geometry = map.stage_nodes.map(item => item.rect);
+  const bounds = await metrics(page), replay = stage(map, 24).rect;
+  const point = {
+    x: bounds.x + (replay.x + replay.width / 2) * bounds.scale,
+    y: bounds.y + (replay.y + replay.height / 2) * bounds.scale
+  };
+  await page.mouse.move(point.x, point.y);
+  await expect.poll(async () => (await jelly(page)).campaign_map.presentation.hovered_stage).toBe(24);
+  await expect.poll(async () => (await jelly(page)).campaign_map.presentation.hover_scale).toBeGreaterThan(1.02);
+  map = (await jelly(page)).campaign_map;
+  expect(map.stage_nodes.map(item => item.rect)).toEqual(geometry);
+  await capture(page, info, 'map-feel-hover');
+  await page.mouse.down();
+  try {
+    await expect.poll(async () => (await jelly(page)).campaign_map.presentation.pressed_stage).toBe(24);
+    await expect.poll(async () => (await jelly(page)).campaign_map.presentation.pressed_scale).toBeLessThan(1);
+    await capture(page, info, 'map-feel-pressed');
+    await page.mouse.move(point.x, point.y - 64 * bounds.scale, { steps: 8 });
+    await expect.poll(async () => (await jelly(page)).campaign_map.presentation.pressed_stage).toBe(0);
+  } finally {
+    await page.mouse.up();
+  }
+  map = await waitForCampaignMap(page, { stage: 25 });
+  expect(map.visible).toBe(true);
+  await pressMapControl(page, map.chapter_next);
+  await expect.poll(async () => (await jelly(page)).campaign_map.segment.index).toBe(4);
+  map = (await jelly(page)).campaign_map;
+  expect(map.guide.visible).toBe(false);
+  expect(map.presentation).toMatchObject({ completed_edges: 0, hovered_stage: 0, pressed_stage: 0 });
+  await capture(page, info, 'map-feel-future-chapter');
+  await pressMapControl(page, map.chapter_previous);
+  await expect.poll(async () => (await jelly(page)).campaign_map.guide.visible).toBe(true);
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect.poll(async () => (await jelly(page)).campaign_map.presentation.reduced_motion).toBe(true);
+  map = await waitForCampaignMap(page, { stage: 25 });
+  expect(map.guide).toMatchObject({ visible: true, stage: 25 });
+  await capture(page, info, 'map-feel-frontier-reduced');
+  expect((await wallet(page)).balance).toBe(3200);
+  expect(await page.evaluate(() => ({
+    campaign: localStorage.getItem('growWithPip.jellyCampaign.v1'),
+    wallet: localStorage.getItem('growWithPip.coinWallet.v1')
+  }))).toEqual(saved);
+  await pressMapControl(page, stage(map, 25));
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.visible && state.phase === 'playing' && state.campaign?.number === 25 &&
+      state.campaign_map.visible === false;
+  }, { timeout: 30000 }).toBe(true);
+  expect((await jelly(page)).campaign_map).not.toHaveProperty('guide');
+  expect(errors).toEqual([]);
+});
+
 test('campaign quotas clear, sweep leftovers, save stars and unlock the next stage', async ({ page }, info) => {
   test.setTimeout(240000);
   await seedCampaign(page);

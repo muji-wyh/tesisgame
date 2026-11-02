@@ -14,6 +14,7 @@ var checks := 0
 var failures := 0
 var _activations := 0
 var _focus_events := 0
+var _held: Button
 
 
 func _initialize() -> void:
@@ -76,6 +77,7 @@ func _run() -> void:
 	var probe := InputProbe.new()
 	root.add_child(probe)
 	var scroll := ResultScroll.new()
+	scroll.held_button_changed.connect(func(button: Button) -> void: _held = button)
 	scroll.position = Vector2(20, 20)
 	scroll.size = Vector2(350, 350)
 	root.add_child(scroll)
@@ -105,6 +107,7 @@ func _run() -> void:
 			await pointer(point, true, not touch_first)
 			check(_focus_events == focus_before and scroll.scroll_vertical == before,
 				"A touch press does not focus-reveal a card before its gesture is known")
+			check(_held != null, "A stationary owned contact exposes its exact painted-button feedback target")
 			for distance in [20.0, 40.0, 60.0, 50.0]:
 				var moved := point - Vector2(0, distance * factor)
 				await motion(moved, touch_first)
@@ -118,6 +121,7 @@ func _run() -> void:
 			await settle()
 			check(not scroll.is_pointer_active(), "Touch release ends contact while momentum may continue")
 			check(_activations == activation_before, "A drag across a word card never activates it")
+			check(_held == null, "A drag retires held-button feedback before the eventual release")
 			await _check_tap(scroll, body.get_child(0), touch_first)
 	scroll.scale = Vector2.ONE
 	await settle()
@@ -141,10 +145,12 @@ func _check_tap(scroll: ResultScroll, button: Button, touch_first: bool) -> void
 	await pointer(point, true, not touch_first)
 	check(not button.self_modulate.is_equal_approx(Color.WHITE),
 		"A stationary contact gives the word card immediate visual feedback")
+	check(_held == button, "Paired touch/emulation owns only the real tapped button's press response")
 	await pointer(point, false, touch_first)
 	await pointer(point, false, not touch_first)
 	check(_activations == before + 1 and button.has_focus() and button.self_modulate.is_equal_approx(Color.WHITE),
 		"Paired touch and emulated mouse events activate a word once and leave keyboard focus")
+	check(_held == null, "Successful release clears its view-only held-button feedback")
 
 
 func _check_cancellations(scroll: ResultScroll, button: Button) -> void:
@@ -177,6 +183,7 @@ func _check_cancellations(scroll: ResultScroll, button: Button) -> void:
 		await pointer(point, false, true)
 		check(_activations == before and not scroll.is_pointer_active() and button.self_modulate.is_equal_approx(Color.WHITE),
 			"Canceled gesture cannot activate a word after " + cause)
+		check(_held == null, "Canceled feedback cannot leave a pressed card after " + cause)
 	await _check_tap(scroll, button, false)
 
 

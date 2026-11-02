@@ -155,9 +155,9 @@ the coin channels, including pending stream requests. Restore and duplicate
 receipts do not replay the sound. Both WAVs are required startup-pack resources,
 so neither event makes an additional audio download.
 
-## Match Hint payments
+## Match Hint and word-goal payments
 
-A newly saved Hint payment rolls the balance downward over 550 ms and shows
+A newly saved Hint or Jelly word-goal payment rolls the balance downward over 550 ms and shows
 the exact negative amount for 760 ms, below the wallet on desktop and beside
 it in a stacked phone header to keep the Hint bulb clear. One existing front-facing gold coin
 travels from the wallet to the Hint along a short arc. It reuses the acquired
@@ -165,6 +165,12 @@ coin texture above and the integrated Modern 2D Animated Chests
 `particles/portal_glow.png` (source and Unity Asset Store license recorded in
 `assets/chests/SOURCE.txt`). These are static textures with game-authored motion;
 no new asset acquisition or animation clip is claimed.
+
+Word-goal payments use the same saved receipt and send the coin to the clicked
+goal's actual price position. The goal emphasizes the cost and briefly shows
+the exact amount spent while retaining the next use's price. It does not reuse
+mastery stars or imply that the word has been collected. Unavailable, rejected,
+duplicate and completed-goal actions never start this debit presentation.
 
 The Hint bulb pops and lights up for 660 ms, with three existing Toon FX
 `milestone/sparkle.png` glints. The glint's creator, license and integration are

@@ -17,6 +17,69 @@ func check(condition: bool, message: String) -> void:
 		printerr("FAIL: " + message)
 
 
+func _check_goal() -> void:
+	var goal := Powerup.new()
+	root.add_child(goal)
+	var item := {"id": "cat", "word_id": "cat", "text": "cat", "current": 0, "required": 2, "mastered": false}
+	goal.configure_goal(item, 200, false)
+	for scale_value: float in [0.65, 1.0, 1175.0 / 480.0]:
+		for compact: bool in [false, true]:
+			var width: float = 140.0 if compact else 152.0
+			var height: float = 44.0 if compact else 52.0
+			var left: float = 36.0 if compact else 54.0
+			var y: float = height - 23.0
+			goal.size = Vector2(width, height) / scale_value
+			var picture_edge: float = 24.0 if compact else 38.0
+			goal.layout_goal(Rect2(Vector2(6, 7) / scale_value, Vector2.ONE * picture_edge / scale_value),
+				Rect2(Vector2(left, 0) / scale_value, Vector2(width - left - 10, y) / scale_value),
+				Rect2(Vector2(left, y) / scale_value, Vector2(46, 21) / scale_value),
+				Rect2(Vector2(width - 42, y) / scale_value, Vector2(34, 21) / scale_value), scale_value, compact)
+			var state: Dictionary = goal.snapshot()
+			for key: String in ["icon_rect", "title_rect", "price_rect", "coin_rect"]:
+				var area: Array = state[key]
+				check(Rect2(Vector2.ZERO, goal.size).encloses(Rect2(area[0], area[1], area[2], area[3])),
+					"Goal word and price fit both genuine sidebar and compact layouts at every scale")
+			check(state.title == "cat" and state.price_text == "200"
+				and goal._title.get_theme_font_size("font_size") * scale_value >= 11.0,
+				"A goal retains a readable word name and truthful price, not a Magnet title")
+	goal.set_availability(true, true)
+	goal.feedback(true, 200)
+	goal.advance(0.12)
+	goal.set_price(300)
+	check(goal.snapshot().spent_coins == 200 and goal.snapshot().price_text == "300"
+		and goal.snapshot().coin_scale > 1.0 and goal.snapshot().price_offset != [0.0, 0.0],
+		"The shared feedback emphasizes the actually spent cost while preserving the next quote")
+	goal.advance(1.0)
+	check(goal.snapshot().spent_coins == 0 and not goal.snapshot().feedback_active,
+		"Actual payment feedback ends cleanly without changing the goal's quote")
+	goal.set_availability(true, false)
+	goal.feedback(false)
+	goal.insufficient_coins(50)
+	check(goal.snapshot().title == "Need coins" and goal.snapshot().missing_coins == 50
+		and goal.snapshot().price_text == "300" and goal.snapshot().spent_coins == 0
+		and str(goal.get("accessibility_name")).contains("Auto merge cat"),
+		"A rejected goal keeps its family, real price and shortage without claiming a debit")
+	goal.set_reduced_motion(true)
+	check(goal.snapshot().price_offset == [0.0, 0.0] and goal.snapshot().coin_scale == 1.0
+		and goal.snapshot().funds_warning,
+		"The shared reduced-motion path retains a goal's explicit money explanation")
+	goal.pause_feedback(true)
+	var age: float = goal.snapshot().feedback_elapsed
+	goal.advance(5.0)
+	check(goal.snapshot().feedback_elapsed == age and not goal.snapshot().funds_warning,
+		"A paused goal never consumes or displays an active warning")
+	goal.pause_feedback(false)
+	goal.advance(2.0)
+	check(goal.snapshot().title == "cat" and not goal.snapshot().feedback_active,
+		"Resume returns the bounded goal feedback to its ordinary family name")
+	item.current = 2
+	item.mastered = true
+	goal.set_goal(item)
+	check(goal.snapshot().progress_ratio == 1.0 and not goal.snapshot().price_visible,
+		"Completed goals expose their true progress without an obsolete purchase cost")
+	goal.queue_free()
+
+
 func _run() -> void:
 	var button := Powerup.new()
 	root.add_child(button)
@@ -146,6 +209,7 @@ func _run() -> void:
 	button.set_chest_texture(viewport.get_texture())
 	check(button._chest == viewport.get_texture(), "a new viewport chest is accepted without a GPU readback")
 	viewport.queue_free()
+	_check_goal()
 	button.queue_free()
 	await process_frame
 	print("Powerup button checks: %d; failures: %d" % [checks, failures])

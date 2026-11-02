@@ -42,14 +42,15 @@ func sync(balance: int) -> void:
 	queue_redraw()
 
 
-func spend(receipt: Dictionary, destination: Vector2) -> void:
+func spend(receipt: Dictionary, destination: Vector2, inline_caption: bool = false) -> void:
 	if not receipt.get("ok", false) or receipt.get("duplicate", false) or int(receipt.get("amount", 0)) >= 0:
 		return
 	# Reconcile pending deposits before presenting this already-saved debit.
 	sync(int(receipt.after))
 	counter.reduced_motion = reduced_motion
 	counter.debit(int(receipt.before), int(receipt.after))
-	_debit = {"amount": -int(receipt.amount), "destination": destination, "elapsed": 0.0}
+	_debit = {"amount": -int(receipt.amount), "destination": destination, "elapsed": 0.0,
+		"inline_caption": inline_caption}
 	spend_sound.emit()
 	queue_redraw()
 
@@ -128,6 +129,7 @@ func snapshot() -> Dictionary:
 	return {"active": not _events.is_empty() or not _debit.is_empty(), "flights": _events.size(),
 		"events": events, "destination": [destination.x, destination.y],
 		"debit_active": not _debit.is_empty(), "debit_amount": int(_debit.get("amount", 0)),
+		"debit_destination": [_debit.destination.x, _debit.destination.y] if not _debit.is_empty() else [],
 		"arrived_balance": _visual_total, "displayed": counter.displayed if is_instance_valid(counter) else 0.0,
 		"target": counter.target if is_instance_valid(counter) else 0}
 
@@ -194,7 +196,7 @@ func _draw_debit(source: Vector2, s: float) -> void:
 	var label: String = "−%d" % int(_debit.amount)
 	var width: float = 100.0 / s
 	var at: Vector2 = counter.global_position - global_position + Vector2(counter.size.x * 0.5 - width * 0.5, counter.size.y + 15.0 / s)
-	var stacked: bool = float(_debit.destination.y) > counter.global_position.y + counter.size.y
+	var stacked: bool = bool(_debit.inline_caption)
 	if stacked:
 		# Phone headers put Hint beneath the wallet; keep its bulb unobscured.
 		at = counter.global_position - global_position + Vector2(-width + 18.0 / s, counter.size.y * 0.5 + 5.0 / s)

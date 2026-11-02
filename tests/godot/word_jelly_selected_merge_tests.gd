@@ -80,7 +80,8 @@ func test_selected_family() -> void:
 		check(model.can_activate_powerup("family_merge") and model.family_word_id(selected) == str(cat.id)
 			and f.payments.is_empty() and model.snapshot() == before,
 			"Availability and target identity are read-only and never choose or charge at random")
-		check(model.activate_powerup("family_merge", selected), "Each supported source kind can choose its own word family")
+		check(model.activate_family_merge(str(cat.id)) if selected_kind == "root" else model.activate_powerup("family_merge", selected),
+			"The goal identity and legacy direct targets both choose only their own word family")
 		check(f.payments.size() == 1 and f.payments[0].kind == "family_merge" and f.payments[0].price == 200
 			and model.powerup_snapshot().family_word_id == str(cat.id),
 			"One explicit target owns exactly one quoted purchase and its visible family")
@@ -106,6 +107,9 @@ func test_guards_and_cap() -> void:
 		"A selected word without a complete legal merge path cannot waste coins")
 	check(not model.activate_powerup("family_merge", -1) and f.payments.is_empty(),
 		"Missing, preview or stale targets never trigger a random replacement purchase")
+	check(not model.activate_family_merge(str(cat.id)) and not model.activate_family_merge("")
+		and not model.activate_family_merge("not-a-goal") and f.payments.is_empty(),
+		"A missing goal path or identity never substitutes the other family's complete pair")
 	var picture: Dictionary = put(model, model._new_picture_tile(cat))
 	model.boss.configure(BossCatalog.encounter(7), 71)
 	model.boss.apply_status("freeze", int(picture.id))
@@ -142,7 +146,7 @@ func test_authored_family(compound: Dictionary) -> void:
 	check(ids.size() >= 2 and model.family_word_id(ids[0]) == str(compound.id)
 		and model.family_word_id(int(picture.id)) == str(compound.id),
 		"A selected incomplete root identifies its authored word, not its printed substring or gel color")
-	check(model.activate_powerup("family_merge", ids[0]), "A complete authored root path can own the selected-family purchase")
+	check(model.activate_family_merge(str(compound.id)), "A goal resolves its complete authored multi-root path without a board selector")
 	drain(model)
 	check(model.cells.size() == 1 and model.cells[0].word.id == compound.id
 		and model.cells[0].merge_level == 3 and model.cells[0].fragments == carried
@@ -205,7 +209,7 @@ func test_family_payment_lifecycle() -> void:
 		var before: Dictionary = model.snapshot()
 		model.purchase_powerup = func(_id: String, _kind: String, _price: int) -> Dictionary:
 			return response.duplicate()
-		check(not model.activate_powerup("family_merge", int(root.id)) and model.cells == before.cells
+		check(not model.activate_family_merge(str(cat.id)) and model.cells == before.cells
 			and model.powerup_price("family_merge") == 200 and not model.powerup_active()
 			and model.snapshot().powerup_uses.family_merge == 0,
 			"Failed and duplicate chosen-family payments preserve inputs, use count and quoted price")
@@ -223,7 +227,7 @@ func test_family_payment_lifecycle() -> void:
 			else:
 				check(not model.configure([cat], 3, 92), "An in-flight family payment cannot replace its selected round")
 			return {"ok": true}
-		check(model.activate_powerup("family_merge", int(root.id)), "A committed selected-family purchase retains its paid obligation")
+		check(model.activate_family_merge(str(cat.id)), "A committed goal-family purchase retains its paid obligation")
 		model.finish_powerup()
 		check(f.payments.size() == 1 and model.cells.size() == 1 and model.cells[0].word.id == cat.id
 			and model.cells[0].fragments == 5 and not model.powerup_active()

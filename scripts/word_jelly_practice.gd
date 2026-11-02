@@ -2,8 +2,11 @@ extends Panel
 ## The stage's durable learning evidence, outside the playable well.
 
 signal word_progressed(word_id: String, complete: bool)
+signal word_hovered(word_id: String)
+signal merge_requested(goal_id: String, word_id: String)
 
 const Style = preload("res://scripts/ui_style.gd")
+const GoalButton = preload("res://scripts/word_jelly_powerup_button.gd")
 const Scroll = preload("res://scripts/review_scroll.gd")
 const StageTimer = preload("res://scripts/word_jelly_stage_banner.gd")
 const WordArt = preload("res://scripts/word_art.gd")
@@ -29,6 +32,12 @@ var _rows: Array[Dictionary] = []
 var _state: Dictionary = {}
 var _compact: bool = false
 var _scale: float = 1.0
+var _interactive: bool = false
+var _paused: bool = false
+var _busy: bool = false
+var _updating_rows: bool = false
+var _hovered_word: String = ""
+var _purchase_state: Array = []
 
 
 func _init() -> void:
@@ -52,8 +61,13 @@ func _init() -> void:
 	_record_badge.hide()
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
+	_scroll.follow_focus = true
+	_scroll.interaction_allowed = func() -> bool: return not _paused
 	add_child(_scroll)
 	_scroll.add_child(_content)
+	visibility_changed.connect(func() -> void:
+		if not is_visible_in_tree():
+			_clear_hover())
 	hide()
 
 
@@ -73,26 +87,16 @@ func set_stage(state: Dictionary) -> void:
 			previous[str(item.id)] = item
 	_state = state.duplicate(true)
 	var words: Array = state.get("practice", [])
+	_updating_rows = true
+	_purchase_state.clear()
 	while _rows.size() > words.size():
 		_rows.pop_back().surface.free()
 	while _rows.size() < words.size():
-		var surface := Panel.new()
-		surface.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var surface := GoalButton.new()
 		surface.clip_contents = true
 		_content.add_child(surface)
-		var background := ProgressBar.new()
-		background.show_percentage = false
-		background.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		background.add_theme_stylebox_override("background", StyleBoxEmpty.new())
-		background.add_theme_stylebox_override("fill",
-			Style.box(Color("#c1e1c5"), Color.TRANSPARENT, 10, 0))
-		surface.add_child(background)
-		var label: Label = Style.label("", 16)
-		label.add_theme_font_override("font", Style.HEADING_FONT)
+		var label: Label = surface._title
 		label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
-		label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		surface.add_child(label)
 		var fraction: Label = Style.label("", 14)
 		fraction.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		fraction.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -144,12 +148,18 @@ func set_stage(state: Dictionary) -> void:
 		check_material.shader = CHECK_REVEAL
 		check_icon.material = check_material
 		badge.add_child(check_icon)
-		_rows.append({"surface": surface, "background_progress": background, "label": label,
+		var row := {"surface": surface, "label": label,
 			"fraction": fraction, "picture": picture, "steps": steps, "gain_label": gain,
 			"success_glow": glow, "success_sparkles": sparkles, "complete_badge": badge,
-			"complete_icon": check_icon, "word_id": "",
+			"complete_icon": check_icon, "word_id": "", "family_word_id": "",
 			"gain_elapsed": GAIN_SECONDS, "complete_elapsed": COMPLETED_HOLD_SECONDS + EXIT_SECONDS,
-			"gain_amount": 0, "mastered": false, "retired": false})
+			"gain_amount": 0, "mastered": false, "retired": false}
+		_rows.append(row)
+		surface.pressed.connect(func() -> void:
+			if _interactive and not _paused and not _busy and not row.mastered and not row.retired:
+				merge_requested.emit(str(row.word_id), str(row.family_word_id)))
+		for event: Signal in [surface.mouse_entered, surface.mouse_exited, surface.focus_entered, surface.focus_exited]:
+			event.connect(_refresh_hover)
 	var ordered: Array[Dictionary] = []
 	var ids: Array = words.map(func(item: Dictionary) -> String: return str(item.id))
 	for item: Dictionary in words:
@@ -169,7 +179,9 @@ func set_stage(state: Dictionary) -> void:
 		if str(row.word_id) != str(item.id) or old.is_empty():
 			row.gain_elapsed = GAIN_SECONDS
 			row.complete_elapsed = COMPLETED_HOLD_SECONDS + EXIT_SECONDS
+			row.surface.configure_goal(item, 200, reduced_motion)
 		row.word_id = str(item.id)
+		row.family_word_id = str(item.get("word_id", item.id))
 		row.mastered = bool(item.mastered)
 		row.retired = row.mastered and (bool(row.retired) and not old.is_empty() \
 			or float(row.complete_elapsed) >= _retire_time())
@@ -186,11 +198,8 @@ func set_stage(state: Dictionary) -> void:
 			row.gain_elapsed = GAIN_SECONDS
 			row.complete_elapsed = COMPLETED_HOLD_SECONDS + EXIT_SECONDS
 			row.retired = row.mastered
-		row.label.text = "%s %d/%d" % [item.text, int(item.current), int(item.required)] \
-			if _state.get("kind") == "challenge" and not item.mastered and _compact else str(item.text)
+		row.surface.set_goal(item)
 		row.fraction.text = "%d/%d" % [int(item.current), int(item.required)]
-		row.background_progress.max_value = int(item.required)
-		row.background_progress.value = int(item.current)
 		row.picture.texture = WordArt.texture(str(item.get("image", "")), row.picture)
 		row.picture.visible = row.picture.texture != null
 		for index_step in range(3):
@@ -204,10 +213,91 @@ func set_stage(state: Dictionary) -> void:
 		row.surface.add_theme_stylebox_override("panel", card)
 		row.fraction.add_theme_stylebox_override("normal",
 			Style.box(Color("#deefd7") if item.mastered else Color("#edf3ee"), Color.TRANSPARENT, ceili(8.0 / _scale), 0))
-		row.surface.set("accessibility_name", "%s. %d of %d correct. %s" % [
-			item.text, int(item.current), int(item.required), "Mastered." if item.mastered else "Practising."])
+	_updating_rows = false
 	visible = not words.is_empty()
 	_layout()
+	_refresh_hover()
+
+
+func set_purchase_state(price: int, balance: int, interactive: bool, busy: bool, paused: bool, available: bool = true) -> void:
+	var state: Array = [price, balance, interactive, busy, paused, available]
+	if state == _purchase_state:
+		return
+	_purchase_state = state
+	_interactive = interactive
+	_busy = busy
+	_paused = paused
+	for row: Dictionary in _rows:
+		row.surface.set_price(price)
+		row.surface.pause_feedback(paused)
+		row.surface.set_availability(interactive and available and not row.mastered and not row.retired,
+			balance >= price, busy, balance >= 0)
+	_refresh_hover()
+
+
+func button_for_goal(goal_id: String) -> Button:
+	for row: Dictionary in _rows:
+		if str(row.word_id) == goal_id and not row.mastered and not row.retired:
+			return row.surface
+	return null
+
+
+func feedback(goal_id: String, success: bool, spent_coins: int = 0) -> void:
+	for row: Dictionary in _rows:
+		if str(row.word_id) == goal_id:
+			row.surface.feedback(success, spent_coins)
+			_pose_feedback(row)
+			return
+
+
+func insufficient_coins(goal_id: String, missing: int) -> void:
+	var button = button_for_goal(goal_id)
+	if button != null:
+		button.insufficient_coins(missing)
+
+
+func navigation_controls() -> Array[Control]:
+	var controls: Array[Control] = []
+	var viewport: Rect2 = _scroll.get_global_rect()
+	for row: Dictionary in _rows:
+		var button: Button = row.surface
+		if button.is_visible_in_tree() and not button.disabled and viewport.encloses(button.get_global_rect()):
+			controls.append(button)
+	if _scroll.focus_mode == Control.FOCUS_ALL:
+		controls.append(_scroll)
+	return controls
+
+
+func _clear_hover() -> void:
+	for row: Dictionary in _rows:
+		if is_instance_valid(row.surface):
+			row.surface.set_targeting(false)
+	if not _hovered_word.is_empty():
+		_hovered_word = ""
+		word_hovered.emit("")
+
+
+func _refresh_hover() -> void:
+	if _updating_rows:
+		return
+	var selected: Dictionary = {}
+	if _interactive and not _paused and not _busy and is_visible_in_tree():
+		for row: Dictionary in _rows:
+			if not row.mastered and not row.retired and row.surface.is_hovered():
+				selected = row
+				break
+		if selected.is_empty():
+			for row: Dictionary in _rows:
+				if not row.mastered and not row.retired and row.surface.has_focus():
+					selected = row
+					break
+	for row: Dictionary in _rows:
+		row.surface.set_targeting(row == selected)
+		_pose_feedback(row)
+	var word_id: String = str(selected.family_word_id) if not selected.is_empty() else ""
+	if word_id != _hovered_word:
+		_hovered_word = word_id
+		word_hovered.emit(word_id)
 
 
 func advance(delta: float) -> void:
@@ -217,8 +307,12 @@ func advance(delta: float) -> void:
 	_pose_timer_feedback()
 	var reflow: bool = false
 	for row: Dictionary in _rows:
+		var had_feedback: bool = row.surface._feedback_active
+		row.surface.advance(delta)
 		if float(row.gain_elapsed) >= GAIN_SECONDS \
 			and (not row.mastered or row.retired):
+			if had_feedback and not row.surface._feedback_active:
+				_pose_feedback(row)
 			continue
 		var previous_exit: float = _exit_progress(row)
 		row.gain_elapsed = minf(GAIN_SECONDS, float(row.gain_elapsed) + delta)
@@ -229,6 +323,7 @@ func advance(delta: float) -> void:
 		_pose_feedback(row)
 	if reflow:
 		_layout()
+		_refresh_hover()
 
 
 func feedback_active() -> bool:
@@ -248,15 +343,16 @@ func _pose_feedback(row: Dictionary) -> void:
 	var p: float = clampf(float(row.gain_elapsed) / GAIN_SECONDS, 0.0, 1.0)
 	var complete_p: float = clampf(float(row.complete_elapsed) / COMPLETE_SECONDS, 0.0, 1.0)
 	row.fraction.scale = Vector2.ONE * (1.0 + (0.18 * sin(p * PI) if gaining else 0.0))
-	row.picture.scale = Vector2.ONE * (1.0 + (0.12 * sin(p * PI) if gaining else 0.0))
+	var hovering: bool = row.surface._targeting and not reduced_motion and not _paused
+	row.picture.scale = Vector2.ONE * (1.0 + (0.12 * sin(p * PI) if gaining else 0.035 if hovering else 0.0))
 	row.gain_label.visible = gaining and not _compact and not row.mastered
 	row.gain_label.text = "+%d" % int(row.gain_amount)
 	row.gain_label.modulate.a = 1.0 - smoothstep(0.45, 1.0, p)
 	row.gain_label.position = Vector2(row.fraction.position.x, (1.0 - p * 7.0) / _scale)
-	var label_end: float = row.surface.size.x - 10.0 / _scale if _compact \
-		else row.surface.size.x - 40.0 / _scale if row.mastered else row.fraction.position.x - 6.0 / _scale
+	var label_end: float = row.surface.size.x - (40.0 if row.mastered and not _compact else 10.0) / _scale
 	row.label.size.x = maxf(1.0, label_end - row.label.position.x)
-	row.fraction.visible = not _compact and not row.mastered
+	row.fraction.visible = not row.mastered and not (row.surface._feedback_active and row.surface._feedback_success \
+		and row.surface._spent_coins > 0 and not _paused)
 	row.complete_badge.visible = row.mastered and not row.retired
 	row.complete_badge.scale = Vector2.ONE * (1.0 + 0.18 * sin(complete_p * PI) if completing else 1.0)
 	row.complete_icon.material.set_shader_parameter("check_progress",
@@ -279,6 +375,7 @@ func _pose_feedback(row: Dictionary) -> void:
 		sparkle.position = point.clamp(half, row.surface.size - half) - half
 		sparkle.modulate = Color(1.0, 0.77, 0.30, 1.0 - complete_p)
 	var card: StyleBoxFlat = row.surface.get_theme_stylebox("panel")
+	row.surface._goal_complete_progress = complete_p if completing else 1.0
 	card.border_color = Color("#edc45f").lerp(Color("#c5d9b0"), complete_p) if completing \
 		else Color("#c5d9b0") if row.mastered else Color("#dce7dd")
 	row.surface.queue_redraw()
@@ -402,33 +499,31 @@ func _layout() -> void:
 		var font_size: int = ceili((13.0 if _compact else 18.0) / s)
 		row.label.add_theme_font_size_override("font_size", font_size)
 		row.fraction.add_theme_font_size_override("font_size", ceili(13.0 / s))
-		var width: float = minf(220.0 / s, maxf(82.0 / s,
-			Style.HEADING_FONT.get_string_size(row.label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x + 44.0 / s)) \
+		var width: float = minf(220.0 / s, maxf(140.0 / s,
+			Style.HEADING_FONT.get_string_size(row.label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x + 50.0 / s)) \
 			if _compact else _scroll.size.x
 		var height: float = _scroll.size.y if _compact else 52.0 / s
 		row.base_position = Vector2(cursor, 0.0) if _compact else Vector2(0.0, cursor)
 		row.surface.position = row.base_position
 		row.surface.size = Vector2(width, height)
-		row.background_progress.position = Vector2.ONE / s
-		row.background_progress.size = (row.surface.size - Vector2.ONE * 2.0 / s).max(Vector2.ONE)
-		row.background_progress.get_theme_stylebox("fill").set_corner_radius_all(
-			maxi(0, ceili((10.0 if _compact else 14.0) / s) - 1))
 		row.fraction.visible = not _compact
-		var picture_edge: float = (20.0 if _compact else 38.0) / s
+		var picture_edge: float = minf((24.0 if _compact else 38.0) / s, height - 8.0 / s)
 		row.picture.position = Vector2(6.0 / s, (height - picture_edge) * 0.5)
 		row.picture.size = Vector2.ONE * picture_edge
 		row.picture.pivot_offset = row.picture.size * 0.5
-		var left: float = (32.0 if _compact else 58.0) / s if row.picture.visible else 10.0 / s
-		row.label.position = Vector2(left, 0.0)
-		row.label.size = Vector2(maxf(1.0, width - left - 10.0 / s),
-			height)
+		var left: float = (36.0 if _compact else 54.0) / s if row.picture.visible else 10.0 / s
 		var fraction_width: float = minf(width * 0.43, maxf(34.0 / s,
 			Style.HEADING_FONT.get_string_size(row.fraction.text, HORIZONTAL_ALIGNMENT_LEFT, -1,
 				row.fraction.get_theme_font_size("font_size")).x + 8.0 / s))
 		var fraction_height: float = maxf(20.0 / s, row.fraction.get_combined_minimum_size().y)
-		row.fraction.position = Vector2(width - fraction_width - 8.0 / s, (height - fraction_height) * 0.5)
+		var lower_y: float = maxf(0.0, height - 23.0 / s)
+		row.fraction.position = Vector2(width - fraction_width - 8.0 / s, lower_y)
 		row.fraction.size = Vector2(fraction_width, fraction_height)
 		row.fraction.pivot_offset = row.fraction.size * 0.5
+		var title_area := Rect2(Vector2(left, 0.0), Vector2(maxf(1.0, width - left - 10.0 / s), maxf(1.0, lower_y)))
+		var price_area := Rect2(Vector2(left, lower_y), Vector2(46.0, 21.0) / s)
+		var detail_area := Rect2(row.fraction.position, row.fraction.size)
+		row.surface.layout_goal(row.picture.get_rect(), title_area, price_area, detail_area, s, _compact)
 		row.gain_label.size = Vector2(fraction_width, 14.0 / s)
 		row.gain_label.add_theme_font_size_override("font_size", ceili(11.0 / s))
 		row.complete_badge.add_theme_stylebox_override("panel",
@@ -477,6 +572,11 @@ func snapshot() -> Dictionary:
 	for index in range(words.size()):
 		var rect: Rect2 = _rows[index].surface.get_global_rect()
 		words[index]["rect"] = [rect.position.x, rect.position.y, rect.size.x, rect.size.y]
+		var purchase: Dictionary = _rows[index].surface.snapshot()
+		words[index]["purchase"] = purchase
+		words[index]["hovered"] = purchase.targeting
+		words[index]["price"] = purchase.price
+		words[index]["enabled"] = purchase.enabled
 		words[index]["gain_active"] = not reduced_motion and float(_rows[index].gain_elapsed) < GAIN_SECONDS
 		words[index]["complete_active"] = not reduced_motion and float(_rows[index].complete_elapsed) < COMPLETE_SECONDS
 		words[index]["completed_marker_visible"] = _rows[index].complete_badge.is_visible_in_tree()

@@ -50,20 +50,16 @@ func capture(name: String) -> void:
 
 
 func reject(view, kind: String) -> void:
-	var button = view.powerup_buttons[kind]
+	var button = view._practice_panel.button_for_goal(str(view.game.stage_run.snapshot().practice[0].id)) \
+		if kind == "family_merge" else view.powerup_buttons[kind]
 	button.reset()
 	check(not button.disabled, "A legally usable but unaffordable item remains clickable")
 	await click(view, button)
-	if kind == "family_merge":
-		if not baseline:
-			check(button.snapshot().get("funds_warning", false) and view._family_selecting,
-				"Magnet explains the shortfall immediately without silently choosing or charging a family")
-		await click(view, view._tiles[int(view.game.cells[0].id)])
 	view._process(0.12)
 	view.set_process(false)
 	if not baseline:
 		check(button.snapshot().get("funds_warning", false) and button.snapshot().title == "Need coins",
-			"An actual insufficient-funds receipt has an explicit local money explanation")
+			"An actual insufficient-funds receipt has an explicit local money explanation: " + kind)
 		check(button.snapshot().get("missing_coins", 0) == view.game.powerup_price(kind),
 			"The warning retains the actual shortfall without changing the quoted price")
 
@@ -100,7 +96,7 @@ func _run() -> void:
 	view.game.cells.clear()
 	view.game._stage_spawn_interval = 10000.0
 	view.game.spawn_interval = 10000.0
-	for index in range(4):
+	for index in range(words.size() * 2):
 		var tile: Dictionary = view.game._new_word_root(words[index / 2]) if index % 2 == 0 else view.game._new_picture_tile(words[index / 2])
 		var at: Vector2i = view.game._free_position(view.game._occupied(), 1, 1)
 		tile.merge({"column": at.x, "row": at.y, "age": 100.0, "arrival": false, "settling": false}, true)
@@ -112,6 +108,7 @@ func _run() -> void:
 		if not view._stage_banner.ready_pending():
 			break
 		view._process(0.05)
+	view.set_stage_progress(view.game.stage_run.snapshot())
 	view._layout()
 	await settle()
 	var wallet: Variant = app.coin_wallet._saved_text

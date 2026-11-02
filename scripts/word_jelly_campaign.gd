@@ -92,6 +92,7 @@ func _map_state() -> Dictionary:
 		ratings[str(number)] = store.best_stars(context_key, number)
 	return {"highest_cleared": highest, "best_stars": ratings, "frontier": mini(highest + 1, 99),
 		"context_key": context_key,
+		"pip_age": _app.growth.age, "pip_profile": _app._professional_profile_for(request_context),
 		"coins": _app.coin_wallet.balance, "error": error,
 		"loading": starting, "pending_stage": selected_stage,
 		"boss_markers": BossCatalog.map_markers(mini(highest + 1, 99)),

@@ -46,7 +46,7 @@ func _check_resize_history(panel) -> void:
 			check(card.position.x >= bounds.position.x and card.end.x <= bounds.end.x + 0.1,
 				"Resizing the same sidebar to %.0f never retains an earlier wider card (actual %.1f)" % [width, card.size.x])
 	for compact: bool in [true, false, true]:
-		var area := Rect2(16, 70, 300, 28) if compact else Rect2(16, 70, 160, 310)
+		var area := Rect2(16, 70, 300, 44) if compact else Rect2(16, 70, 160, 310)
 		panel.configure_layout(area, 1.0, compact)
 		await process_frame
 		await process_frame
@@ -89,7 +89,7 @@ func _check_progress_feedback(panel) -> void:
 	if check_material != null:
 		var check_progress: float = float(check_material.get_shader_parameter("check_progress"))
 		panel.set_stage(state)
-		panel.configure_layout(Rect2(16, 70, 300, 28), 1.0, true)
+		panel.configure_layout(Rect2(16, 70, 300, 44), 1.0, true)
 		check(is_equal_approx(float(row.complete_elapsed), 0.1)
 			and is_equal_approx(float(check_material.get_shader_parameter("check_progress")), check_progress),
 			"Refresh and compact relayout preserve the same partial stroke and silent hold clock")
@@ -119,7 +119,7 @@ func _check_progress_feedback(panel) -> void:
 		and not panel.snapshot().words[0].get("completed_marker_visible", false)
 		and not panel.snapshot().words[0].get("complete_active", false),
 		"Reloading already completed targets keeps them out of the pending list without replaying success")
-	panel.configure_layout(Rect2(16, 70, 300, 28), 1.0, true)
+	panel.configure_layout(Rect2(16, 70, 300, 44), 1.0, true)
 	check(not panel.snapshot().words[0].get("completed_marker_visible", false)
 		and not panel._rows[0].fraction.is_visible_in_tree(),
 		"A narrow layout cannot resurrect retired completed chips")
@@ -131,7 +131,7 @@ func _check_silent_check_lifecycle(panel) -> void:
 		for compact: bool in [false, true]:
 			panel.set_stage({})
 			panel.reduced_motion = steady
-			panel.configure_layout(Rect2(16, 70, 300, 28) if compact else Rect2(16, 70, 232, 310), 1.0, compact)
+			panel.configure_layout(Rect2(16, 70, 300, 44) if compact else Rect2(16, 70, 232, 310), 1.0, compact)
 			state.practice[0].current = 2
 			state.practice[0].mastered = false
 			panel.set_stage(state)
@@ -263,23 +263,20 @@ func _run() -> void:
 				check(row.surface.size.y * panel._scale >= 50.0
 					and row.label.get_theme_font_size("font_size") * panel._scale >= 16.9,
 					"The sidebar gives every illustrated word a readable, comfortably spaced card")
-				check(is_equal_approx(row.label.get_rect().get_center().y, row.surface.size.y * 0.5)
-					and is_equal_approx(row.fraction.get_rect().get_center().y, row.surface.size.y * 0.5),
-					"The word and its count share one reading line: label=%s fraction=%s card=%s" % [
-						row.label.get_rect(), row.fraction.get_rect(), row.surface.size])
+				check(row.label.get_rect().end.y <= row.fraction.position.y
+					and absf(row.fraction.get_rect().get_center().y - row.surface._price_label.get_rect().get_center().y) <= 1.0 / panel._scale,
+					"The word has the first line; the exact cost and completion count share the second")
 				if not state.words[index].mastered:
-					check(row.label.get_rect().end.x <= row.fraction.position.x - 6.0 / panel._scale,
-						"The visible count capsule reserves its own column even when a spelling fills the label")
+					check(row.surface._price_pill.end.x <= row.fraction.position.x - 4.0 / panel._scale,
+						"Cost and progress keep distinct columns without truncating the word name above")
 			check(row.get("steps", []).size() == 3,
 				"Three sourced mastery accents replace the generic table-like progress line")
-			check(row.fraction.is_visible_in_tree() == (not state.compact and not state.words[index].mastered),
-				"Compact practice cards never show progress numbers; desktop retains the readable fraction")
-			var background: ProgressBar = row.get("background_progress")
-			check(background != null and background.is_visible_in_tree() == (not state.words[index].mastered)
-				and is_equal_approx(float(background.value) / float(background.max_value), float(index % 4) / 3.0),
+			check(row.fraction.is_visible_in_tree() == not state.words[index].mastered,
+				"Compact and sidebar goals retain the readable count beside their actual cost")
+			check(is_equal_approx(float(state.words[index].purchase.progress_ratio), float(index % 4) / 3.0),
 				"Pending cards retain their true progress fill while precompleted cards stay retired")
-			check(background != null and Rect2(Vector2.ZERO, row.surface.size).encloses(background.get_rect()),
-				"Background progress preserves the rounded card border instead of bleeding past its edges")
+			check(not state.words[index].purchase.price_visible if state.words[index].mastered else state.words[index].purchase.price_visible,
+				"A completed retired target cannot keep advertising a paid merge")
 			if row.get("steps", []).size() == 3:
 				for step in range(3):
 					check(row.steps[step].modulate == (Color("#e3aa35") if step < index % 4 else Color("#b9c9bf")),

@@ -6,6 +6,63 @@ the [Kenney daylight panorama](jelly-sky.md), the
 [chest-fragment presentation](jelly-fragments.md). Their source, acquisition,
 and license records remain in the linked asset documents.
 
+## Segmented journey map
+
+The existing eleven scenic chapters are now individual nine-stage map segments.
+Their acquired sky, hills, trees, cottage, snow, palms, cactus, mountains and
+castle remain unchanged. Only the selected chapter's scenery and stage bodies
+are drawn; the route never connects to an invisible neighboring segment.
+The current chapter's name and real stage range have their own cream navigation
+strip, with existing Tabler previous/next chevrons and forty-four-pixel controls.
+Current progress chooses the initial segment, while browsing and ordinary wallet
+refreshes cannot alter a stage's saved unlock, rating or recipe.
+
+The map props are existing Kenney **Background Elements Remastered 1.0** PNGs,
+acquired from the user's local collection under **CC0-1.0**. Exact source and
+runtime hashes, original paths and the retained license are in
+[`assets/images/jelly-campaign/sources.json`](../../assets/images/jelly-campaign/sources.json).
+Stage medallions remain the acquired Kenney **UI Pack - Adventure 1.1** artwork,
+also CC0-1.0, with their
+[unchanged source record](../../assets/images/ui/jelly-map/sources.json).
+The existing Paweł Kuna / Tabler **MIT** chevrons retain their paths and
+[control-source provenance](../../assets/images/ui/controls/sources.json).
+These are integrated static source assets, not new acquisitions, animations,
+generated scenery or marketplace previews. The cream strip is an interface
+layout primitive. The actual pre-change map and corresponding source medallion,
+pine and cottage PNGs were inspected before this presentation change.
+
+Normal unlock motion keeps its 850 ms route and 650 ms padlock release; a chapter
+boundary uses the new segment's local entry instead of a hidden prior node.
+Pause, hidden/background state and reduced motion retain the existing lifecycle.
+The final Boss portrait preserves its acquired aspect ratio and uses a compact
+size in a short landscape viewport so its actual Stage 99 action stays reachable.
+
+The map's presentation takes its emotional anchor from the integrated storybook
+[Pip artwork and six-part choreography](pip-growth.md), not a newly acquired
+character. Pip stands beside the actual next stage, uses the saved growth age
+or the requested career wardrobe, greets on arrival and retains the existing
+quiet age gestures. This reuses original project artwork under the repository
+ISC declaration; the original illustrator is still unrecorded and no separate
+illustrator license is claimed. Baby and age-three atlas poses were inspected
+alongside the actual phone map before integration. Pip is decorative and cannot
+intercept a stage tap or enter keyboard navigation.
+
+Completed route edges have a warm gold center; an unearned road stays cream.
+Only the actual frontier gets the larger acquired medallion, mint Play tray,
+local portal glow and a restrained sourced glint. These light textures are the
+already integrated Modern2DChests portal and Archanor Toon FX sparkle recorded in
+[Jelly fragments](jelly-fragments.md), under their existing Unity Asset Store
+licenses, not new purchases or source previews. A hover lifts the medallion over
+140 ms, while its owned pointer press seats it immediately. Neither response
+moves the native stage target or changes ratings and progress. Existing click
+audio remains unchanged. Tree and foliage PNGs sway gently around their base;
+cottages, cactus, mountains and castles remain rigid. These are game-authored
+transforms of static scenery, not supplied animation clips. Reduced motion keeps
+the current-stage hierarchy and Pip still; hidden, offscreen and inactive guides
+stop their idle clock, and a canceled scroll contact clears its press response.
+
+## Board presentation
+
 The Ready/Go flourish, newly earned skill explanation and completed-goal
 retirement reuse these integrated gel skins, actual vocabulary pictures and
 the same sourced portal/ray/sparkle textures. The skill preview is a view-only

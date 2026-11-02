@@ -20,6 +20,8 @@ const CHAPTER_ART: Array[String] = [
 	"res://assets/images/jelly-campaign/mountains.png",
 	"res://assets/images/jelly-campaign/castle.png"]
 const STAR_SOURCE: String = "res://assets/images/ui/jelly-goals/star.webp"
+const STAR_SOURCES: Array[String] = ["res://assets/images/ui/jelly-goals/rating-bronze.png",
+	"res://assets/images/ui/jelly-goals/rating-silver.png", STAR_SOURCE]
 const SIZES: Array[Vector2i] = [Vector2i(1366, 768), Vector2i(393, 852),
 	Vector2i(320, 480), Vector2i(844, 390)]
 
@@ -286,6 +288,8 @@ func _accept(button: BaseButton, controller: bool = false) -> void:
 	check(button != null and not button.disabled, "Keyboard/controller activation has a playable control")
 	if button == null:
 		return
+	if str(button.name).begins_with("Stage"):
+		button.get_parent().get_parent().get_parent().call("_reveal_stage", int(str(button.name).trim_prefix("Stage")))
 	button.grab_focus()
 	await _settle()
 	for pressed: bool in [true, false]:
@@ -324,7 +328,7 @@ func _touch_move(point: Vector2, index: int = 7) -> void:
 func _reveal(scroll: ScrollContainer, button: BaseButton) -> void:
 	check(button != null, "The requested real stage button exists")
 	if button != null:
-		scroll.ensure_control_visible(button)
+		scroll.get_parent().call("_reveal_stage", int(str(button.name).trim_prefix("Stage")))
 		await _settle()
 
 
@@ -434,8 +438,8 @@ func _check_semantics(view: Control, source: Dictionary) -> void:
 			continue
 		check(button.disabled == (not playable or blocked),
 			"Stage %d native disabled state matches lock/loading/error state" % number)
-		check(navigation.has(button) == (playable and not blocked),
-			"Stage %d keyboard navigation matches its playable state" % number)
+		check(navigation.has(button) == (playable and not blocked and bool(item.get("in_segment", true))),
+			"Stage %d keyboard navigation matches its playable state in the visible chapter" % number)
 		var name: String = _normal(str(button.get("accessibility_name")))
 		var action: String = "replay" if number <= highest else ("next" if playable else "locked")
 		check(name.contains("stage" + str(number)) and name.contains("%dof3stars" % stars)
@@ -489,11 +493,11 @@ func _check_stars(view: Control, source: Dictionary, context: String) -> void:
 	var snapshot: Dictionary = _snapshot(view)
 	for number in range(1, int(source.highest_cleared) + 1):
 		var button: BaseButton = _stage_button(view, number, snapshot)
-		if button == null:
+		if button == null or not button.is_visible_in_tree():
 			continue
 		var slots: Array[Dictionary] = []
 		for entry: Dictionary in _art(button):
-			if _source(entry.texture) == STAR_SOURCE and entry.node.is_visible_in_tree():
+			if _source(entry.texture) in STAR_SOURCES and entry.node.is_visible_in_tree():
 				slots.append(entry)
 		check(slots.size() == 3,
 			context + ": cleared stage %d prominently keeps three actual sourced star slots" % number)
@@ -532,6 +536,10 @@ func _check_scenery(view: Control) -> void:
 	check(is_equal_approx(float(view.get("_sky").modulate.a), 1.0),
 		"The scenic map is opaque so a finished board and its header cannot ghost through")
 	for index in range(CHAPTERS.size()):
+		if view.has_method("show_chapter"):
+			check(view.call("show_chapter", index + 1), "The existing scenic chapter can be opened")
+			snapshot = _snapshot(view)
+			copy = _visible_copy(view)
 		check(copy.contains(CHAPTERS[index]), "The authored chapter heading is present: " + CHAPTERS[index])
 		var first: Rect2 = _rect(_stage(snapshot, index * 9 + 1).get("rect"))
 		var last: Rect2 = _rect(_stage(snapshot, index * 9 + 9).get("rect"))
@@ -563,6 +571,7 @@ func _check_scenery(view: Control) -> void:
 					previous_delta = delta
 		check((centers.max() - centers.min()) * _pixel_scale() >= 40.0 and reversals >= 1,
 			CHAPTERS[index] + " has a genuinely winding route")
+	view.call("focus_frontier")
 	var challenge: BaseButton = _action_button(view, "challenge")
 	if challenge != null:
 		check(challenge.text == "Challenge" and _normal(str(challenge.get("accessibility_name"))).contains("90seconds")
@@ -598,6 +607,10 @@ func _check_layout(view: Control, context: String) -> void:
 		if button == null:
 			continue
 		check(rect.is_equal_approx(button.get_global_rect()), context + ": stage hit bounds track actual children")
+		if not bool(item.get("in_segment", true)):
+			check(not button.is_visible_in_tree() and not bool(item.visible),
+				context + ": off-segment stages keep their identities but no live hit target")
+			continue
 		check(rect.size.x * _pixel_scale() >= 56.0 and rect.size.y * _pixel_scale() >= 56.0,
 			context + ": every stage keeps a 56+ displayed-pixel interaction target")
 		check(rect.position.x >= viewport.position.x - 0.2 and rect.end.x <= viewport.end.x + 0.2,
@@ -609,7 +622,7 @@ func _check_layout(view: Control, context: String) -> void:
 		check(separate, context + ": nearby stage interaction targets stay separate")
 		rects.append(rect)
 	var action_rects: Array[Rect2] = []
-	for key: String in ["home", "challenge"]:
+	for key: String in ["home", "challenge", "chapter_previous", "chapter_next"]:
 		var button: BaseButton = _action_button(view, key)
 		if button == null:
 			continue
@@ -833,6 +846,7 @@ func _check_endpoints_and_focus(view: Control) -> void:
 		var button: BaseButton = _stage_button(view, number)
 		if button == null:
 			continue
+		view.call("_reveal_stage", number)
 		button.grab_focus()
 		await _settle(2)
 		check(root.gui_get_focus_owner() == button
@@ -879,10 +893,13 @@ func _check_resize_histories(view: Control) -> void:
 				for number in [1, 9, 10, 45, 90, 99]:
 					var button: BaseButton = _stage_button(view, number)
 					if button != null:
+						view.call("_reveal_stage", number)
 						button.grab_focus()
 						await _settle(2)
 						check(scroll.get_global_rect().grow(0.5).encloses(button.get_global_rect()),
-							context + ": focus still reveals stage %d after an earlier wider/taller layout" % number)
+							context + ": focus still reveals stage %d after an earlier wider/taller layout: %s" % [
+								number, JSON.stringify({"viewport": scroll.get_global_rect(), "button": button.get_global_rect(),
+									"offset": scroll.scroll_vertical, "scale": _pixel_scale()})])
 			if not scaled and index < SIZES.size():
 				await _capture("responsive-%dx%d" % [dimensions.x, dimensions.y])
 	await _resize(SIZES[1])
@@ -902,10 +919,12 @@ func _check_gesture_and_lifecycle(view: Control) -> void:
 	var point: Vector2 = _stage_button(view, 2).get_global_rect().get_center()
 	var offset: int = scroll.scroll_vertical
 	var events: int = _stage_events.size()
+	var direction: float = 1.0 if float(offset) >= float(scroll.call("_maximum")) - 80.0 / _pixel_scale() else -1.0
+	var destination: Vector2 = point + Vector2(0, direction * 80.0 / _pixel_scale())
 	await _touch(point, true)
-	await _touch_move(point - Vector2(0, 80.0 / _pixel_scale()))
-	await _touch(point - Vector2(0, 80.0 / _pixel_scale()), false)
-	check(scroll.scroll_vertical > offset and _stage_events.size() == events,
+	await _touch_move(destination)
+	await _touch(destination, false)
+	check(scroll.scroll_vertical != offset and _stage_events.size() == events,
 		"A real touch swipe scrolls the route without accidentally entering a stage")
 	scroll.call("cancel_drag")
 	var frozen: Array = _poses(view)

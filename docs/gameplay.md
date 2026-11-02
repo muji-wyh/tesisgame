@@ -208,9 +208,14 @@ A failed save keeps settlement open for retry.
 
 ## Jelly Words
 
-Jelly Words opens a scrollable **99-stage journey**, climbing from stage 1 at
-the bottom to stage 99 at the top, across eleven scenic chapters of nine stages.
-Entry focuses the current frontier. Acquired adventure medallions keep numbers
+Jelly Words opens a **segmented 99-stage journey**: eleven scenic chapters,
+each presenting its own nine-stage upward route rather than one long scroll.
+Entry opens the current frontier's chapter and focuses that stage. Previous/next
+chapter controls show the chapter name, position and exact stage range;
+Page Up/Page Down also browse chapters. Future chapters can be inspected, but
+their stages remain locked. Browsing never changes stars, unlocks, recipes or
+coins. A wallet/status refresh preserves the browsed chapter; reopening or
+returning to the frontier restores the earned-progress chapter. Acquired adventure medallions keep numbers
 and their three rating stars separate. A permanently named **Challenge** action
 with the acquired mastery medal sits at the upper right, with a 44-pixel touch
 height. Its wallet font follows UI scale and its title fits the remaining header,
@@ -223,11 +228,24 @@ Progress and frozen word recipes are separate for Everyday English and each
 professional career/module. A recipe remains replayable after its words have
 been mastered, provided the original reviewed identities are still available.
 After a new contiguous clear, sourced golden light travels along the route from
-the completed node to the next over 850 ms. That node then opens its padlock and
+the completed node to the next over 850 ms. At a chapter boundary, the next
+segment opens and the light arrives from its entry path without drawing through
+an invisible previous chapter. That node then opens its padlock and
 pops into its available state over 650 ms. Every later locked node retains a
 padlock with restrained light. Reopening the map, replaying an old clear or
 changing learning context cannot replay a progression unlock. Reduced motion
 presents the final state directly; hidden/background maps stop their effect clock.
+Pip accompanies the real next stage using the learner's earned appearance or
+requested career wardrobe. Its slightly larger medallion, mint Play tray and
+local light distinguish the next action from replay ratings and locked stages;
+gold road centers mark only connections between already cleared stages. Hover
+and press feedback moves the medallion artwork, never the stage's hit area.
+Gentle tree motion and Pip's existing quiet gestures stop when hidden or inactive;
+reduced motion retains the same clear static hierarchy. A live browser motion
+setting change also updates the open map without changing the browsed chapter.
+Pip is decorative,
+does not block a stage tap, and does not appear beside a future chapter's
+locked stages.
 
 Each real round begins with a sourced, input-transparent Ready/Go flourish, not
 an opaque instruction dialog. Its first 820 ms reserve the stage and supply clock;
@@ -550,10 +568,11 @@ with at most 15 jellies across three rows. Long labels use reviewed line breaks
 or an ellipsis; hold a clipped label, or focus it and press R, to pause and read
 its full spelling.
 
-The icon-only **Auto Fill** switch immediately above Auto Collect uses downward
-arrows feeding a gel stack and a moving status thumb, without visible words.
-Mint styling and a small continuous downward light cue mean On; a still cream
-control means Off. Challenge adds a lock to the enabled thumb. Pause freezes the
+The icon-only **Auto Fill** control immediately above Auto Collect is one whole
+capsule switch, with the acquired gel stack as its thumb rather than a nested
+mini-toggle. The gel sits left when Off and right when On, without visible words.
+Mint track styling and a continuous downward light cue mean On; a still cream
+track means Off. Challenge adds a lock to the enabled gel thumb. Pause freezes the
 effect, and reduced motion keeps a static active treatment.
 The switch continuously dispatches the
 advertised top supply when spaces remain. Each entrance releases its next Jelly
@@ -567,7 +586,7 @@ Boss two-body supply restriction, dragging, a paid operation, a pending save or
 an ending.
 
 Auto Fill does not disable items merely because supply is airborne. Legal settled
-pairs remain available to Auto merge and Magnet, and Treasure and extra time
+pairs remain available to Auto merge and paid word goals, and Treasure and extra time
 keep their normal purchase rules. An active item reserves new supply without
 freezing existing falling bodies; Fill resumes after that ownership is released.
 
@@ -575,17 +594,23 @@ Clicking a legally available item without enough coins briefly highlights that
 card and its real coin-price row, with **Need coins** in place of its title.
 The quoted price and wallet do not change. The source coin settles after a
 small recoil, the explanation remains readable for 1.15 seconds, and then the
-normal title returns. Magnet warns at its initial selection step without
-charging. Save failures and invalid targets do not masquerade as low funds.
+normal title returns. Paid goals receive the same real wallet shortfall without
+a separate target-selection step. Save failures and invalid targets do not masquerade as low funds.
 Reduced motion retains the explicit warning without shaking.
 
-The **Magnet** item first asks the player to choose a board Jelly. Its exact word
-family's roots, pictures and differently leveled merged Jellies use the ordinary
-automatic planner; gel color is irrelevant. No target is selected at random.
-Pressing the item again, Escape/Back, pausing or leaving cancels without spending.
-One valid purchase costs 200, then 300, then 400 coins per round, independently
-of other items. Ordinary legality, unlocked caps, fragments and unmatched inputs
-remain intact. It does not collect or grant construction learning or manual combo coins.
+The standalone **Magnet** button is removed. Hover or focus a pending word goal
+to highlight its corresponding board family with the same effect used for drag
+matches; the goal card also gains a mint hover treatment. Hovering never spends
+coins. The card displays its next coin cost alongside its completion count.
+Click that card to automatically merge only its exact word family's roots,
+pictures and differently leveled merged Jellies. One valid purchase costs 200,
+then 300, then 400 coins per round, with that family-use tier shared across all
+goals and independent of other items. Payment must be saved and the current
+family must have a legal complete path. No unrelated target or missing partner
+is substituted. A paid click shows the exact wallet debit, a coin flight into the
+goal, and local cost feedback without changing the hit target. Ordinary legality,
+unlocked caps, fragments and unmatched inputs remain intact. It does not collect
+or grant construction learning or manual combo coins; collect the result yourself.
 
 Both Jelly modes have a Pause control in the header. Pause, or P on a keyboard,
 switches that same control to Resume and freezes supply, danger, combo and automatic matching

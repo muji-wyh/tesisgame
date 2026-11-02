@@ -81,7 +81,7 @@ async function start(page, info, balance, pipLevel = 0, { pauseOnReady = false }
     const state = opening = await jelly(page);
     return state.visible && !state.paused && state.phase === 'playing' && state.tiles.length === 40 &&
       state.tiles.every(tile => tile.settled) &&
-      Object.values(state.powerup_buttons || {}).filter(button => button.visible).length === 3;
+      Object.values(state.powerup_buttons || {}).filter(button => button.visible).length === 2;
   }, { timeout: 30000 }).toBe(true).catch(async error => {
     fs.writeFileSync(info.outputPath('powerup-startup-state.json'),
       JSON.stringify({ state: await jelly(page), bounds: await metrics(page) }, null, 2));
@@ -180,6 +180,7 @@ async function beginTrace(page, label, { pauseOnOverlap = false } = {}) {
       if (state.mode !== 'word_jelly') return;
       const powerup = state.powerup || {};
       evidence.timeline.push({ at: performance.now(), powerup, buttons: state.powerup_buttons,
+        goals: state.practice?.words || [], goal_hover: state.goal_hover,
         effects: state.powerup_effect_count, paused: state.paused, spawn_elapsed: state.spawn_elapsed,
         generated: state.generated_tiles, merged: state.merged_count, cleared: state.cleared_pairs,
         coins: state.collected_coins, fragments: state.fragment_count, chest_tier: state.chest_tier,
@@ -192,6 +193,12 @@ async function beginTrace(page, label, { pauseOnOverlap = false } = {}) {
           b_id: fusion.b_id, result: fusion.result, elapsed: fusion.elapsed, duration: fusion.duration })) });
       for (const [kind, button] of Object.entries(state.powerup_buttons || {})) {
         if (button.feedback_active && !button.feedback_success && button.light > 0.05) capture(`negative-${kind}`);
+      }
+      if (state.goal_hover?.word_id && state.goal_hover.elapsed > 0.12) capture('goal-hover');
+      for (const goal of state.practice?.words || []) {
+        const button = goal.purchase || {};
+        if (button.feedback_active && !button.feedback_success && button.light > 0.05) capture('negative-goal');
+        if (button.spent_coins > 0 && button.feedback_elapsed > 0.04) capture('goal-paid');
       }
       if (powerup.active && powerup.kind === 'fragments' && powerup.elapsed > 0.08 && powerup.elapsed < 0.35 && state.powerup_effect_count > 0)
         capture('fragment-flight');
@@ -370,51 +377,39 @@ test('Auto merge launches eligible pairs every 100 ms with overlapping 320 ms fl
   expect(errors).toEqual([]);
 });
 
-test('Magnet charges only for the player-selected family and Challenge keeps Fill on', async ({ page }, info) => {
+test('word goals hover their matching Jellies and buy only that family while Challenge keeps Fill on', async ({ page }, info) => {
   test.setTimeout(300000);
   const { errors, opening } = await start(page, info, 2000, 3, { pauseOnReady: true });
   const bounds = await metrics(page);
-  expect(opening.powerup_buttons.family_merge.enabled).toBe(true);
+  expect(opening.powerup_buttons.family_merge).toBeUndefined();
   expect(opening.fill_control).toMatchObject({ on: true, locked: true, enabled: false });
-  expect(opening.fill_control.presentation).toMatchObject({ icon_only: true, on: true, locked: true, glow: true });
-  const pairs = forwardPairs(opening).map(pair => pair.map(id => opening.tiles.find(tile => tile.id === id)))
-    .filter(pair => pair.some(tile => tile.jelly_kind === 'picture'));
-  expect(pairs.length).toBeGreaterThan(0);
-  const selected = pairs[0].find(tile => tile.jelly_kind === 'picture');
-  const id = selected.image_word.id;
+  expect(opening.fill_control.presentation).toMatchObject({ icon_only: true, on: true, locked: true, glow: true, unified_switch: true });
+  const goal = opening.practice.words.find(item => !item.mastered && item.enabled);
+  expect(goal).toBeTruthy();
+  const id = goal.word_id || goal.id;
   const family = tile => tile.word?.id || tile.image_word?.id || tile.word_candidate?.id || tile.source_word_id;
   const unrelated = opening.tiles.filter(tile => family(tile) !== id).map(tile => tile.id);
   expect(unrelated.length, 'The test has a genuine second family, not a single-family proxy').toBeGreaterThan(0);
+  expect(goal.purchase).toMatchObject({ price: 200, price_text: '200', title: goal.text, goal: true });
   const beforeProgress = progress(opening), beforeGrowth = await savedGrowth(page);
-  await page.evaluate(walletKey => {
-    const status = document.getElementById('game-status');
-    window.magnetChoiceFrames = [];
-    window.magnetChoiceObserver = new MutationObserver(() => {
-      const state = JSON.parse(status.dataset.jelly || '{}');
-      window.magnetChoiceFrames.push({ selection: state.family_selection, powerup: state.powerup,
-        preview: state.preview?.enabled, title: state.powerup_buttons?.family_merge?.title,
-        wallet: localStorage.getItem(walletKey) });
-    });
-    window.magnetChoiceObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
-  }, WALLET_KEY);
-  // Keep the genuine ten-second full-board clock for player gestures, not
-  // browser-driver assertions; pausing itself deliberately cancels a selector.
+  await beginTrace(page, 'paid-goal');
   await page.keyboard.press('p');
   await expect.poll(async () => (await jelly(page)).paused).toBe(false);
-  await pressRect(page, opening.powerup_buttons.family_merge.rect, bounds);
-  await pressRect(page, opening.powerup_buttons.family_merge.rect, bounds);
+  await page.mouse.move(bounds.x + (goal.rect[0] + goal.rect[2] / 2) * bounds.scale,
+    bounds.y + (goal.rect[1] + goal.rect[3] / 2) * bounds.scale);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.goal_hover?.word_id === id && state.goal_hover.elapsed >= 0.2 &&
+      state.tiles.every(tile => tile.completion_hint === (family(tile) === id) &&
+        tile.match_dimmed === (family(tile) !== id));
+  }).toBe(true);
   await page.keyboard.press('p');
   await expect.poll(async () => (await jelly(page)).paused).toBe(true);
-  const choice = await page.evaluate(() => window.magnetChoiceFrames.filter(frame => frame.selection?.active));
-  expect(choice.length, 'The real player gesture visibly arms the selector before its next press cancels it').toBeGreaterThan(0);
-  expect(choice.every(frame => frame.title === 'Pick Jelly' && !frame.powerup.active && !frame.preview)).toBe(true);
-  expect(choice.every(frame => /^balance=2000$/m.test(frame.wallet))).toBe(true);
-  expect((await jelly(page)).family_selection.active).toBe(false);
+  expect((await jelly(page)).goal_hover.word_id).toBe('');
   expect((await wallet(page)).balance).toBe(2000);
   await page.keyboard.press('p');
   await expect.poll(async () => (await jelly(page)).paused).toBe(false);
-  await pressRect(page, opening.powerup_buttons.family_merge.rect, bounds);
-  await pressRect(page, selected.rect, bounds);
+  await pressRect(page, goal.rect, bounds);
   await expect.poll(async () => (await wallet(page)).balance).toBe(1800);
   await expect.poll(async () => {
     const state = await jelly(page);
@@ -424,18 +419,51 @@ test('Magnet charges only for the player-selected family and Challenge keeps Fil
   await expect.poll(async () => (await jelly(page)).paused).toBe(true);
   const after = await jelly(page);
   expect(after.powerup.family_word_id).toBe(id);
-  expect(after.powerup.selected_id).toBe(selected.id);
   expect(after.tiles.some(tile => tile.jelly_kind === 'merged' && tile.word.id === id)).toBe(true);
   expect(unrelated.every(old => after.tiles.some(tile => tile.id === old))).toBe(true);
   expect(progress(after)).toEqual(beforeProgress);
   expect(after.combo.coins).toBe(0);
   expect(await savedGrowth(page)).toBe(beforeGrowth);
-  expect(after.powerup_buttons.family_merge.price).toBe(300);
+  expect(after.practice.words.every(item => item.price === 300)).toBe(true);
   const persisted = await storedWallet(page);
   expect(persisted.balance).toBe(1800);
   expect(Object.values(persisted.receipts).filter(amount => amount < 0)).toEqual([-200]);
-  await page.evaluate(() => window.magnetChoiceObserver.disconnect());
-  await capture(page, info, 'selected-family-magnet');
+  const evidence = await retainTrace(page, info, 'paid-goal', ['goal-hover', 'goal-paid']);
+  expect(evidence.timeline.some(frame => frame.goals.some(item => item.id === goal.id &&
+    item.purchase.spent_coins === 200 && item.purchase.price === 300)),
+  'The clicked goal shows its real debit without replacing the next quote').toBe(true);
+  await capture(page, info, 'paid-goal-complete');
+  expect(errors).toEqual([]);
+});
+
+test('a pending word goal reports its exact shortfall without spending or merging', async ({ page }, info) => {
+  test.setTimeout(300000);
+  const { errors, opening } = await start(page, info, 150, 0, { pauseOnReady: true });
+  const goal = opening.practice.words.find(item => !item.mastered && item.enabled);
+  expect(goal).toBeTruthy();
+  const bounds = await metrics(page), saved = await storedWallet(page), growth = await savedGrowth(page);
+  await beginTrace(page, 'unaffordable-goal');
+  await page.keyboard.press('p');
+  await expect.poll(async () => (await jelly(page)).paused).toBe(false);
+  await pressRect(page, goal.rect, bounds);
+  await expect.poll(async () => (await jelly(page)).practice.words.find(item => item.id === goal.id)
+    ?.purchase.feedback_serial).toBe(goal.purchase.feedback_serial + 1);
+  await expect.poll(async () => (await jelly(page)).practice.words.find(item => item.id === goal.id)
+    ?.purchase.feedback_active).toBe(false);
+  await page.keyboard.press('p');
+  await expect.poll(async () => (await jelly(page)).paused).toBe(true);
+  const evidence = await retainTrace(page, info, 'unaffordable-goal', ['negative-goal']);
+  const funds = evidence.timeline.flatMap(frame => frame.goals).filter(item =>
+    item.id === goal.id && item.purchase.funds_warning);
+  expect(funds.length).toBeGreaterThan(0);
+  expect(funds.every(item => item.purchase.title === 'Need coins' && item.purchase.missing_coins === 50 &&
+    item.purchase.price_text === '200' && item.purchase.spent_coins === 0 &&
+    item.purchase.accessibility_name.includes('Need 50 more coins'))).toBe(true);
+  expect(await storedWallet(page)).toEqual(saved);
+  expect(await savedGrowth(page)).toBe(growth);
+  expect(progress(await jelly(page))).toEqual(progress(opening));
+  expect((await jelly(page)).merged_count).toBe(opening.merged_count);
+  expect((await jelly(page)).powerup.active).toBe(false);
   expect(errors).toEqual([]);
 });
 

@@ -39,8 +39,10 @@ var purchase_powerup: Callable:
 		game.purchase_powerup = value
 var coin_balance: Callable
 var powerup_buttons: Dictionary = {}
-var _family_selecting: bool = false
-var _family_pick_id: int = -1
+var _goal_merge_id: String = ""
+var _goal_merge_price: int = 0
+var _goal_hover_word: String = ""
+var _goal_hover_elapsed: float = 0.0
 var _fill_preference: bool = false
 var _fill_button := FillButton.new()
 var _powerup_effects: PowerupEffects
@@ -178,6 +180,8 @@ func _init() -> void:
 	_practice_panel.word_progressed.connect(func(_id: String, complete: bool) -> void:
 		if complete and _can_play():
 			audio_requested.emit("goal_complete"))
+	_practice_panel.word_hovered.connect(_goal_hovered)
+	_practice_panel.merge_requested.connect(_activate_goal_merge)
 	add_child(_practice_panel)
 	_boss_view = BossView.new()
 	_boss_view.audio_requested.connect(func(cue: String) -> void: audio_requested.emit(cue))
@@ -202,6 +206,8 @@ func _init() -> void:
 	_fill_button.z_index = 5
 	add_child(_fill_button)
 	for kind: String in WordModel.POWERUP_PRICES:
+		if kind == "family_merge":
+			continue
 		var button := PowerupButton.new()
 		button.configure(kind, game.powerup_price(kind), reduced_motion)
 		button.pressed.connect(_activate_powerup.bind(kind))
@@ -261,6 +267,8 @@ func set_pip_level(level: int) -> void:
 
 
 func _powerup_insufficient(kind: String, missing_coins: int) -> void:
+	if kind == "family_merge" and not _goal_merge_id.is_empty():
+		_practice_panel.insufficient_coins(_goal_merge_id, missing_coins)
 	if powerup_buttons.has(kind):
 		powerup_buttons[kind].insufficient_coins(missing_coins)
 	_publish()
@@ -330,7 +338,7 @@ func _apply_pause_reasons() -> void:
 	_refresh_controls()
 
 func _show_read(id: int) -> void:
-	if not _can_play() or _family_selecting or game.powerup_active() or game.collection_batch_active():
+	if not _can_play() or game.powerup_active() or game.collection_batch_active():
 		return
 	var target: Dictionary = _cell(id)
 	if target.is_empty():
@@ -367,6 +375,8 @@ func _read_action_at(point: Vector2) -> bool:
 
 func set_reduced_motion(value: bool) -> void:
 	_practice_panel.reduced_motion = value
+	for row: Dictionary in _practice_panel._rows:
+		row.surface.set_reduced_motion(value)
 	_combo_hud.reduced_motion = value
 	_stage_banner.reduced_motion = value
 	_word_reveal.set_reduced_motion(value)
@@ -401,10 +411,10 @@ func _finish_feedback_ready() -> bool:
 
 func cancel_input() -> void:
 	_end_view_update()
-	_family_selecting = false
-	_family_pick_id = -1
-	if powerup_buttons.has("family_merge"):
-		powerup_buttons.family_merge.set_targeting(false)
+	_goal_hover_word = ""
+	_goal_hover_elapsed = 0.0
+	if _practice_panel != null:
+		_practice_panel._clear_hover()
 	_fusion_tap.clear()
 	if not _fusion_drag.is_empty():
 		game.hold_merge_for_drag(str(_fusion_drag.event_id), false)
@@ -457,13 +467,8 @@ func _input(event: InputEvent) -> void:
 		return
 	if game.collection_batch_active() or game.powerup_active() or game.stage_ending():
 		return
-	if event.is_action_pressed("ui_cancel") and _family_selecting:
-		cancel_input()
-		_refresh_controls()
-		get_viewport().set_input_as_handled()
-		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R \
-		and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and _can_play() and not _family_selecting:
+		and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and _can_play():
 		var focused: Control = get_viewport().gui_get_focus_owner()
 		for tile: WordTile in _tiles.values() + _preview_tiles:
 			if tile == focused and tile.is_visible_in_tree():
@@ -474,7 +479,7 @@ func _input(event: InputEvent) -> void:
 		cancel_input()
 		get_viewport().set_input_as_handled()
 		return
-	if event is InputEventKey and event.shift_pressed and event.is_action_pressed("ui_accept") and not event.echo and not _family_selecting:
+	if event is InputEventKey and event.shift_pressed and event.is_action_pressed("ui_accept") and not event.echo:
 		if _can_play() and _pointer == NO_POINTER:
 			var focused: Control = get_viewport().gui_get_focus_owner()
 			for id in _tiles:
@@ -491,15 +496,6 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	# A completed tap speaks; pressing before a drag never reveals a partial root.
 	if _pointer != NO_POINTER or not _can_play() or _finish_is_pulling() or game.collection_batch_active() or game.powerup_active():
 		return false
-	if _family_selecting:
-		var point: Vector2 = get_global_transform().affine_inverse() * global_point
-		if not _board.has_point(point) and not _preview_rect.has_point(point):
-			return false
-		_pointer = pointer
-		_press_point = point
-		_family_pick_id = _tile_at(point)
-		_refresh_marks()
-		return true
 	if _read_action_at(global_point):
 		return false
 	var point: Vector2 = get_global_transform().affine_inverse() * global_point
@@ -570,11 +566,6 @@ func _press(pointer: int, global_point: Vector2) -> bool:
 	return true
 
 func _move(global_point: Vector2) -> void:
-	if _family_selecting:
-		if _family_pick_id >= 0 and (get_global_transform().affine_inverse() * global_point).distance_to(_press_point) * Style.ui_scale(self) > 7.0:
-			_family_pick_id = -1
-			_refresh_marks()
-		return
 	if (get_global_transform().affine_inverse() * global_point).distance_to(_press_point) * Style.ui_scale(self) > 7.0:
 		_fusion_tap.clear()
 		# A deliberate drag supersedes a previously queued tap on this body.
@@ -609,19 +600,6 @@ func _move(global_point: Vector2) -> void:
 	super._move(global_point)
 
 func _release(global_point: Vector2) -> void:
-	if _family_selecting:
-		var point: Vector2 = get_global_transform().affine_inverse() * global_point
-		var selected: int = _family_pick_id
-		var valid: bool = selected >= 0 and _pointer != NO_POINTER and _can_play() \
-			and point.distance_to(_press_point) * Style.ui_scale(self) <= 7.0 and _tile_at(point) == selected
-		_pointer = NO_POINTER
-		_family_pick_id = -1
-		if valid:
-			_select_family(selected)
-		else:
-			_refresh_marks()
-			_refresh_controls()
-		return
 	# Measure on release arrival, before motion rendering can turn a tap into a hold.
 	var collection_click: bool = _tile_press_started_ms >= 0 \
 		and Time.get_ticks_msec() - _tile_press_started_ms < COLLECTION_CLICK_MAX_MS
@@ -743,9 +721,6 @@ func _refresh_placement() -> void:
 	_placement_tile.show()
 
 func _activate(id: int) -> void:
-	if _family_selecting:
-		_select_family(id)
-		return
 	if not game.boss_interactable(id):
 		return
 	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling() or not _settled(_cell(id)) or game.collection_batch_active() or game.powerup_active():
@@ -939,18 +914,12 @@ func _cell(id: int) -> Dictionary:
 	return _view_cells.get(id, {}) if _view_update_active else super._cell(id)
 
 func _can_drop_preview() -> bool:
-	if _family_selecting:
-		return false
 	if not _view_update_active:
 		return game.can_drop_now()
 	if not _view_drop_known:
 		_view_drop_available = game.can_drop_now()
 		_view_drop_known = true
 	return _view_drop_available
-
-func _drop_next(expected_first_id: int = -1) -> void:
-	if not _family_selecting:
-		super._drop_next(expected_first_id)
 
 func _can_merge_for_feedback(source: Dictionary, target: Dictionary) -> bool:
 	if not _view_update_active:
@@ -1208,47 +1177,51 @@ func _sync_positions() -> void:
 func _activate_powerup(kind: String) -> void:
 	if not _can_play() or _pointer != NO_POINTER or _finish_is_pulling():
 		return
-	if kind == "family_merge":
-		var cancel: bool = _family_selecting
-		var generation: int = _generation
-		var model_generation: int = game._generation
-		cancel_input()
-		if generation != _generation or model_generation != game._generation or not _can_play():
-			return
-		if not cancel and game.can_activate_powerup(kind):
-			_family_selecting = true
-			powerup_buttons.family_merge.set_targeting(true)
-			var balance: int = int(coin_balance.call()) if coin_balance.is_valid() else -1
-			var price: int = game.powerup_price(kind)
-			if balance >= 0 and balance < price:
-				powerup_buttons.family_merge.feedback(false)
-				powerup_buttons.family_merge.insufficient_coins(price - balance)
-			_refresh_marks()
-		_refresh_controls()
-		_publish()
+	if not powerup_buttons.has(kind):
 		return
 	if _keyboard_source >= 0:
 		return
-	if _family_selecting:
-		cancel_input()
 	game.activate_powerup(kind)
 	_refresh_controls()
 	_publish()
 
-func _select_family(id: int) -> void:
-	if not _family_selecting or not _can_play() or _finish_is_pulling():
+func _activate_goal_merge(goal_id: String, word_id: String) -> void:
+	var button: Button = _practice_panel.button_for_goal(goal_id)
+	if button == null or button.disabled or not _goal_merge_id.is_empty() or not _can_play() \
+		or _pointer != NO_POINTER or _keyboard_source >= 0 or _finish_is_pulling():
+		return
+	var goal: Dictionary = button.get("_goal")
+	if word_id != str(goal.get("word_id", goal.id)):
 		return
 	var generation: int = _generation
 	var model_generation: int = game._generation
+	_goal_merge_id = goal_id
+	_goal_merge_price = game.powerup_price("family_merge")
 	cancel_input()
 	if generation != _generation or model_generation != game._generation or not _can_play():
+		_goal_merge_id = ""
 		return
-	if game.can_activate_powerup("family_merge"):
-		game.activate_powerup("family_merge", id)
-	else:
-		_powerup_feedback("family_merge", false)
-		_cue("powerup_wrong")
+	game.activate_family_merge(word_id)
+	_goal_merge_id = ""
+	if generation != _generation or model_generation != game._generation:
+		return
 	_refresh_controls()
+	_publish()
+
+
+func goal_merge_button() -> Button:
+	return _practice_panel.button_for_goal(_goal_merge_id)
+
+
+func _goal_hovered(word_id: String) -> void:
+	var next: String = word_id if _can_play() and _pointer == NO_POINTER and _keyboard_source < 0 \
+		and not game.powerup_active() and not game.collection_batch_active() else ""
+	if next == _goal_hover_word:
+		return
+	_goal_hover_word = next
+	_goal_hover_elapsed = 0.0
+	_view_hints_ready = false
+	_refresh_marks()
 	_publish()
 
 
@@ -1264,6 +1237,8 @@ func _set_fill_mode(enabled: bool) -> void:
 
 
 func _powerup_feedback(kind: String, success: bool) -> void:
+	if kind == "family_merge" and not _goal_merge_id.is_empty():
+		_practice_panel.feedback(_goal_merge_id, success, _goal_merge_price if success else 0)
 	if powerup_buttons.has(kind):
 		powerup_buttons[kind].feedback(success)
 	_rejection.clear()
@@ -1483,7 +1458,7 @@ func _sync_preview() -> void:
 func _refresh_preview_read_controls() -> void:
 	for preview: WordTile in _preview_tiles:
 		var available: bool = preview.visible and preview.requires_read and _can_play() and not _finish_is_pulling() \
-			and not _family_selecting and not game.collection_batch_active() and not game.powerup_active()
+			and not game.collection_batch_active() and not game.powerup_active()
 		preview.disabled = not available
 		preview.focus_mode = Control.FOCUS_ALL if available else Control.FOCUS_NONE
 
@@ -1498,6 +1473,8 @@ func _advance_board_presentation(delta: float) -> void:
 	_word_reveal.advance(delta)
 	if _completion_source >= 0:
 		_completion_elapsed += delta
+	if not _goal_hover_word.is_empty():
+		_goal_hover_elapsed += delta
 
 
 func _process(delta: float) -> void:
@@ -1589,12 +1566,15 @@ func _refresh_marks() -> void:
 	_refresh_completion_hints()
 
 func _refresh_completion_hints() -> void:
-	if _family_selecting:
-		var family: String = game.family_word_id(_family_pick_id)
+	if not _goal_hover_word.is_empty() and _can_play() and _source < 0 and _keyboard_source < 0 \
+		and not game.powerup_active() and not game.collection_batch_active():
+		var matching_ids: Array[int] = []
 		for id: int in _tiles:
-			var matching: bool = not family.is_empty() and game.family_word_id(id) == family
-			_tiles[id].set_completion_hint(matching, 0.0, reduced_motion)
-			_tiles[id].set_match_dimmed(not family.is_empty() and not matching)
+			if game.family_word_id(id) == _goal_hover_word and not game.is_fusing(id) and game.boss_interactable(id, false):
+				matching_ids.append(id)
+		for id: int in _tiles:
+			_tiles[id].set_completion_hint(id in matching_ids, _goal_hover_elapsed, reduced_motion)
+			_tiles[id].set_match_dimmed(not matching_ids.is_empty() and id not in matching_ids)
 		return
 	var source: int = (_source if _source >= 0 else _keyboard_source) if _can_play() and not game.collection_batch_active() else -1
 	if _view_update_active and _view_hints_ready and _view_hint_source == source:
@@ -1751,6 +1731,7 @@ func navigation_controls() -> Array[Control]:
 	for button: PowerupButton in powerup_buttons.values():
 		if button.visible and not button.disabled:
 			controls.append(button)
+	controls.append_array(_practice_panel.navigation_controls())
 	if not drop_button.disabled:
 		controls.append(drop_button)
 	if not _chest_tap.disabled:
@@ -2114,6 +2095,7 @@ func set_stage_progress(state: Dictionary, celebrate: bool = false) -> void:
 	_stage_banner.reduced_motion = reduced_motion
 	_stage_banner.set_stage(state, celebrate)
 	_practice_panel.set_stage(state)
+	_refresh_goal_buttons()
 	if celebrate:
 		_apply_pause_reasons()
 	if was_visible != _stage_banner.visible or previous_rows != _practice_panel._rows.size():
@@ -2189,6 +2171,7 @@ func _refresh_controls() -> void:
 		return
 	_refresh_collect_button()
 	_refresh_powerup_buttons()
+	_refresh_goal_buttons()
 	_fill_button.visible = _configured and game.phase == "playing"
 	_fill_button.disabled = not _can_play() or board_locked or _finish_is_pulling() or _pointer != NO_POINTER or game.fill_mode_locked()
 	_fill_button.set_state(game.fill_mode, game.fill_mode_locked(), reduced_motion)
@@ -2203,10 +2186,17 @@ func _refresh_powerup_buttons() -> void:
 		button.visible = _configured and game.phase == "playing" and (kind != "extra_time" \
 			or game.stage_run != null and game.stage_run.kind == "main")
 		var available: bool = game.can_activate_powerup(kind)
-		if kind == "family_merge" and _family_selecting:
-			available = true
 		button.set_availability(_can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and _keyboard_source < 0 and available,
 			balance >= price, game.powerup_active() and not available, balance >= 0)
+
+func _refresh_goal_buttons() -> void:
+	if _practice_panel == null:
+		return
+	var balance: int = int(coin_balance.call()) if coin_balance.is_valid() else -1
+	_practice_panel.set_purchase_state(game.powerup_price("family_merge"), balance,
+		_can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and _keyboard_source < 0,
+		game.powerup_active() or game.collection_batch_active() or game.stage_ending(), _paused,
+		game.can_activate_powerup("family_merge"))
 
 func _refresh_collect_button() -> void:
 	if collect_button == null:
@@ -2274,7 +2264,7 @@ func _layout() -> void:
 	var content_top: float = top_hud_height + (2.0 if authored else 12.0) / s
 	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - content_top)
 	var action_height: float = (44.0 if boss_layout else 56.0) / s
-	var tool_kinds: Array[String] = ["auto_merge", "family_merge", "fragments"]
+	var tool_kinds: Array[String] = ["auto_merge", "fragments"]
 	if game.stage_run != null and game.stage_run.kind == "main":
 		tool_kinds.append("extra_time")
 	var tool_count: int = tool_kinds.size()
@@ -2394,7 +2384,8 @@ func _layout() -> void:
 	for index in range(tool_count):
 		var button: PowerupButton = powerup_buttons[tool_kinds[index]]
 		button.set_ui_scale(s, action_height * s < 55.0)
-		button.size = Vector2(item_width, action_height)
+		var span: bool = columns > 1 and index == tool_count - 1 and tool_count % columns == 1
+		button.size = Vector2((hud_width if side_hud else footer_width) if span else item_width, action_height)
 		var column: int = index % columns
 		var row: int = index / columns
 		var start_y: float = _board.end.y - rows * action_height - (rows - 1) * tool_gap if side_hud else \
@@ -2404,7 +2395,7 @@ func _layout() -> void:
 		button.position = Vector2(hud_x + column * step_x, start_y + row * (action_height + tool_gap))
 	var auto_merge: Rect2 = powerup_buttons.auto_merge.get_rect()
 	collect_button.set_ui_scale(s)
-	collect_button.size = Vector2(hud_width if side_hud else auto_merge.size.x, collect_height)
+	collect_button.size = Vector2(hud_width if side_hud else footer_width, collect_height)
 	collect_button.position = Vector2(auto_merge.position.x, auto_merge.position.y - divider_gap - collect_button.size.y)
 	_fill_button.set_ui_scale(s)
 	_fill_button.size = Vector2(collect_button.size.x, fill_height)
@@ -2549,7 +2540,7 @@ func snapshot() -> Dictionary:
 	state["boss_view"] = _boss_view.snapshot() if _boss_view != null else {}
 	state["practice"] = _practice_panel.snapshot() if _practice_panel != null else {"visible": false, "words": []}
 	state["combo_hud"] = _combo_hud.snapshot() if _combo_hud != null else {"visible": false}
-	state["family_selection"] = {"active": _family_selecting, "target_id": _family_pick_id}
+	state["goal_hover"] = {"word_id": _goal_hover_word, "elapsed": _goal_hover_elapsed}
 	state["fill_control"] = {"visible": _fill_button.is_visible_in_tree(), "enabled": not _fill_button.disabled,
 		"on": _fill_button.button_pressed, "locked": game.fill_mode_locked(),
 		"presentation": _fill_button.snapshot(),
@@ -2583,7 +2574,7 @@ func snapshot() -> Dictionary:
 		state.placement.rect = _rect(_global_rect(_placement.rect))
 	if collect_button != null:
 		state.collect_button.merge({"rect": _rect(collect_button.get_global_rect()), "enabled": not collect_button.disabled, "visible": collect_button.is_visible_in_tree()}, true)
-	state.preview.enabled = state.preview.enabled and not _family_selecting and not game.collection_batch_active() and not game.powerup_active()
+	state.preview.enabled = state.preview.enabled and not game.collection_batch_active() and not game.powerup_active()
 	state.drag.selected = _keyboard_source
 	state.drag["needs_room"] = false
 	for item: Dictionary in state.tiles:

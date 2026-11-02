@@ -138,6 +138,24 @@ async function activateLibraryControl(page, name) {
 
 async function waitForCampaignMap(page, options = {}) {
   let map;
+  for (let change = 0; change < 11 && !options.challenge; change++) {
+    await expect.poll(async () => {
+      map = await page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}').campaign_map);
+      if (map?.error) throw new Error(map.error);
+      return map?.visible && !map.loading;
+    }, { timeout: 10000 }).toBe(true);
+    const number = options.stage || map.stage_nodes.find(item => item.unlocked && !item.best_stars)?.number || 99;
+    const target = map.stage_nodes.find(item => item.number === number);
+    if (!target?.unlocked) throw new Error('The requested campaign stage is unavailable.');
+    if (!map.segment || target.chapter === map.segment.index) break;
+    const direction = target.chapter < map.segment.index ? -1 : 1;
+    const control = direction < 0 ? map.chapter_previous : map.chapter_next;
+    if (!control?.enabled) throw new Error('The requested chapter is unavailable.');
+    const expected = map.segment.index + direction, rect = control.rect;
+    await tap(page, rect.x + rect.width / 2, rect.y + rect.height / 2);
+    await expect.poll(async () => page.locator('#game-status').evaluate(node =>
+      JSON.parse(node.dataset.jelly || '{}').campaign_map?.segment?.index)).toBe(expected);
+  }
   await expect.poll(async () => {
     map = await page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}').campaign_map);
     if (!map?.visible || map.loading) return false;
@@ -149,10 +167,18 @@ async function waitForCampaignMap(page, options = {}) {
     const canvas = options.challenge ? await metrics(page) : null;
     const area = options.challenge ? { x: 0, y: 0, width: canvas.width, height: canvas.height } : map.scroll_rect;
     const rect = target.rect;
-    return target.visible && rect.x >= area.x - 0.5 && rect.y >= area.y - 0.5 &&
+    const ready = target.visible && rect.x >= area.x - 0.5 && rect.y >= area.y - 0.5 &&
       rect.x + rect.width <= area.x + area.width + 0.5 &&
       rect.y + rect.height <= area.y + area.height + 0.5;
-  }, { timeout: 10000, message: 'The revealed map target has current onscreen input coordinates' }).toBe(true);
+    if (!ready && !options.challenge && (!map.segment || target.in_segment)) {
+      const bounds = await metrics(page), viewport = map.scroll_rect;
+      await page.mouse.move(bounds.x + (viewport.x + viewport.width / 2) * bounds.scale,
+        bounds.y + (viewport.y + viewport.height / 2) * bounds.scale);
+      await page.mouse.wheel(0, rect.y < viewport.y ? -240 : 240);
+    }
+    return ready;
+  }, { timeout: options.stage ? 30000 : 10000,
+    message: 'The revealed map target has current onscreen input coordinates' }).toBe(true);
   return map;
 }
 

@@ -676,6 +676,19 @@ func activate_powerup(kind: String, selected_id: int = -1) -> bool:
 	return purchased
 
 
+func activate_family_merge(word_id: String) -> bool:
+	if not can_activate_powerup("family_merge"):
+		return false
+	var plan: Dictionary = authored_completion_plan(false, word_id) if not word_id.is_empty() and _words_by_id.has(word_id) else {}
+	if plan.get("status") != "complete":
+		var generation: int = _generation
+		powerup_feedback.emit("family_merge", false)
+		if _can_continue(generation):
+			cue_requested.emit("powerup_wrong")
+		return false
+	return activate_powerup("family_merge", int(plan.first_source_id))
+
+
 func _purchase_extra_time() -> bool:
 	if _stage_time_pending.is_empty():
 		_stage_time_pending = _event_id("extra-time")

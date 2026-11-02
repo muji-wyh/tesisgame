@@ -1,5 +1,7 @@
 extends ScrollContainer
 
+signal held_button_changed(button: Button)
+
 const Style = preload("res://scripts/ui_style.gd")
 const Momentum = preload("res://scripts/scroll_momentum.gd")
 const NO_POINTER := 0
@@ -56,6 +58,7 @@ func cancel_drag() -> void:
 
 
 func _clear_pointer() -> void:
+	var had_target: bool = is_instance_valid(_target)
 	if is_instance_valid(_target):
 		_target.self_modulate = _target_tint
 	_target = null
@@ -64,6 +67,8 @@ func _clear_pointer() -> void:
 	_travel = 0.0
 	_dragging = false
 	_braking = false
+	if had_target:
+		held_button_changed.emit(null)
 
 
 func _now() -> float:
@@ -142,6 +147,7 @@ func _begin(point: Vector2, pointer: int, touch_id: int = -1) -> void:
 	if is_instance_valid(_target):
 		_target_tint = _target.self_modulate
 		_target.self_modulate = _target_tint * Color(0.82, 0.90, 1.0, 1.0)
+		held_button_changed.emit(_target)
 	if pointer != MOUSE_POINTER:
 		_suppress_emulated_mouse = true
 
@@ -159,6 +165,7 @@ func _move(point: Vector2) -> void:
 		_dragging = true
 		if is_instance_valid(_target):
 			_target.self_modulate = _target_tint
+			held_button_changed.emit(null)
 	_set_offset(_scroll_origin - distance)
 	_motion.track(_offset(), _now())
 

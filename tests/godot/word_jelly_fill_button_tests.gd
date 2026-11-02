@@ -17,6 +17,7 @@ func check(value: bool, message: String) -> void:
 
 
 func _run() -> void:
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	var button := FillButton.new()
 	root.add_child(button)
 	button.position = Vector2(30, 30)
@@ -32,6 +33,9 @@ func _run() -> void:
 	button.advance(0.2)
 	var on: Dictionary = button.snapshot()
 	check(on.on and on.glow and on.flowing and button.button_pressed, "On immediately owns a persistent active presentation")
+	check(on.unified_switch and float(on.track_rect[2]) >= button.size.x - 2.1
+		and float(on.track_rect[3]) >= button.size.y - 2.1,
+		"The entire capsule is the switch track, not a second small pill inside a button")
 	var before: float = on.elapsed
 	for frame in range(140):
 		button.advance(0.1)
@@ -101,6 +105,17 @@ func _run() -> void:
 		await process_frame
 	check(toggles == [true] and button.snapshot().on,
 		"Native keyboard activation still dispatches exactly one owner-confirmed toggle")
+	for x: float in [1.0, 87.0]:
+		for pressed: bool in [true, false]:
+			var event := InputEventMouseButton.new()
+			event.button_index = MOUSE_BUTTON_LEFT
+			event.pressed = pressed
+			event.position = button.global_position + Vector2(x, 22.0)
+			event.global_position = event.position
+			root.push_input(event)
+			await process_frame
+	check(toggles == [true, false, true] and button.snapshot().on,
+		"Both ends of the full-width control own one native toggle, not only an inner thumb: " + str(toggles))
 	button.reset()
 	check(button.snapshot().on and button.snapshot().elapsed == 0.0,
 		"Presentation reset cannot switch off the model's selected mode")

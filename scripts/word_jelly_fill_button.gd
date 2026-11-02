@@ -21,7 +21,6 @@ var _elapsed := 0.0
 var _blend := 0.0
 var _down := false
 var _panel := StyleBoxFlat.new()
-var _track := StyleBoxFlat.new()
 var _focus := StyleBoxFlat.new()
 
 
@@ -95,10 +94,13 @@ func advance(delta: float) -> void:
 
 func _layout() -> Dictionary:
 	var unit: float = 1.0 / _ui_scale
-	var center: Vector2 = size * 0.5
+	var track := Rect2(Vector2.ONE * unit, size - Vector2.ONE * 2.0 * unit)
+	var center := Vector2(lerpf(track.position.x + 21.0 * unit, track.end.x - 21.0 * unit, _blend), size.y * 0.5)
 	return {
-		"icon": Rect2(center + Vector2(-34.0, -16.0) * unit, Vector2(30.0, 32.0) * unit),
-		"track": Rect2(center + Vector2(8.0, -9.0) * unit, Vector2(28.0, 18.0) * unit)
+		"icon": Rect2(center - Vector2(16.0, 16.0) * unit, Vector2(32.0, 32.0) * unit),
+		"flow": Rect2(Vector2(lerpf(track.end.x - 34.0 * unit, track.position.x + 8.0 * unit, _blend),
+			(size.y - 30.0 * unit) * 0.5), Vector2(26.0, 30.0) * unit),
+		"track": track
 	}
 
 
@@ -109,58 +111,57 @@ func _draw() -> void:
 	var layout: Dictionary = _layout()
 	var icon: Rect2 = layout.icon
 	var track: Rect2 = layout.track
-	var fill: Color = Color("#dff5e8") if _on else Style.SURFACE
+	var flow: Rect2 = layout.flow
+	var fill: Color = Color("#d9f4e4") if _on else Color("#f2f1e8")
 	if is_hovered() and not disabled:
-		fill = fill.lightened(0.06) if _on else Style.PAPER
+		fill = fill.lightened(0.08) if _on else Style.SURFACE
+	if _down and not disabled:
+		fill = fill.darkened(0.04)
 	_panel.bg_color = fill
-	_panel.border_color = Color("#61b78f") if _on else Style.EDGE
+	_panel.border_color = Color("#57ab83") if _on else Color("#c9d4c9")
 	_panel.set_border_width_all(maxi(1, roundi((2.0 if _on else 1.0) * unit)))
-	_panel.set_corner_radius_all(maxi(1, roundi(13.0 * unit)))
+	_panel.set_corner_radius_all(maxi(1, roundi(track.size.y * 0.5)))
 	_panel.shadow_color = Color("#48775c", 0.14)
 	_panel.shadow_size = roundi(2.0 * unit)
 	_panel.shadow_offset = Vector2(0.0, unit)
-	draw_style_box(_panel, Rect2(Vector2.ONE * unit, size - Vector2.ONE * 2.0 * unit))
+	draw_style_box(_panel, track)
 	var pulse: float = 0.5 if _reduced_motion else 0.5 + 0.5 * sin(_elapsed * TAU / 2.8)
 	if _on:
-		draw_texture_rect(GLOW, icon.grow(2.0 * unit), false, Color("#77e8b3", 0.28 + pulse * 0.22))
+		draw_texture_rect(GLOW, track.grow(-3.0 * unit), false, Color("#77e8b3", 0.12 + pulse * 0.10))
+		draw_texture_rect(GLOW, icon, false, Color("#77e8b3", 0.24 + pulse * 0.18))
 	var tint: Color = Style.GOOD if _on else Style.MUTED
-	tint.a = 1.0 if _on else 0.65
+	tint.a = 1.0 if _on else 0.36
 	var press: Vector2 = Vector2(0.0, unit) if _down and not disabled else Vector2.ZERO
 	for index in range(2):
 		var phase: float = fposmod(_elapsed / FLOW_SECONDS + index * 0.5, 1.0) if _on and not _reduced_motion else 0.18 + index * 0.48
 		var alpha: float = sin(phase * PI) if _on and not _reduced_motion else 0.75
-		var center := Vector2(icon.get_center().x, icon.position.y + (7.0 + phase * 12.0) * unit) + press
+		var center := Vector2(flow.get_center().x, flow.position.y + (5.0 + phase * 18.0) * unit) + press
 		draw_set_transform(center, -PI * 0.5)
-		draw_texture_rect(CHEVRON, Rect2(Vector2.ONE * -13.0 * unit, Vector2.ONE * 26.0 * unit),
+		draw_texture_rect(CHEVRON, Rect2(Vector2.ONE * -10.0 * unit, Vector2.ONE * 20.0 * unit),
 			false, Color(tint, alpha * tint.a))
 		draw_set_transform(Vector2.ZERO)
-	var gel_tint := Color.WHITE if _on else Color("#cbd8cf", 0.72)
-	var back_size := Vector2(16.0, 16.0 * GEL_REGION.size.y / GEL_REGION.size.x) * unit
-	var front_size := Vector2(21.0, 21.0 * GEL_REGION.size.y / GEL_REGION.size.x) * unit
-	draw_texture_rect_region(SKY, Rect2(Vector2(icon.get_center().x - 3.0 * unit,
-		icon.end.y - back_size.y - 3.0 * unit) + press, back_size), GEL_REGION, gel_tint)
-	draw_texture_rect_region(GEL, Rect2(Vector2(icon.get_center().x - 12.0 * unit,
+	var gel_tint := Color.WHITE if _on else Color("#d0d9d5", 0.78)
+	var back_size := Vector2(22.0, 22.0 * GEL_REGION.size.y / GEL_REGION.size.x) * unit
+	var front_size := Vector2(29.0, 29.0 * GEL_REGION.size.y / GEL_REGION.size.x) * unit
+	draw_texture_rect_region(SKY, Rect2(Vector2(icon.end.x - back_size.x,
+		icon.position.y + 1.0 * unit) + press, back_size), GEL_REGION, gel_tint)
+	draw_texture_rect_region(GEL if _on else SKY, Rect2(Vector2(icon.position.x,
 		icon.end.y - front_size.y) + press, front_size), GEL_REGION, gel_tint)
-	_track.bg_color = Style.GOOD if _on else Color("#dbe2d8")
-	_track.set_corner_radius_all(maxi(1, roundi(9.0 * unit)))
-	draw_style_box(_track, track)
-	var thumb := Vector2(lerpf(track.position.x + 9.0 * unit, track.end.x - 9.0 * unit, _blend), track.get_center().y)
-	draw_circle(thumb + Vector2(0.0, unit), 6.0 * unit, Color("#244738", 0.14))
-	draw_circle(thumb, 6.0 * unit, Color.WHITE if _on else Style.SURFACE)
 	if _locked:
-		draw_texture_rect(LOCK, Rect2(thumb - Vector2.ONE * 5.0 * unit, Vector2.ONE * 10.0 * unit), false, Style.GOOD)
+		draw_texture_rect(LOCK, Rect2(icon.get_center() + Vector2(-6.0, -1.0) * unit,
+			Vector2.ONE * 12.0 * unit), false, Color("#235b45"))
 	if _on and not _reduced_motion:
 		for index in range(2):
 			var phase: float = fposmod(_elapsed / FLOW_SECONDS + 0.5 * index, 1.0)
-			var point := Vector2(icon.position.x + (2.0 if index == 0 else 28.0) * unit,
-				icon.position.y + (3.0 + phase * 24.0) * unit)
+			var point := Vector2(lerpf(flow.end.x + 2.0 * unit, icon.position.x + 2.0 * unit, phase),
+				size.y * 0.5 + (3.0 if index == 0 else -3.0) * unit)
 			draw_texture_rect(SPARKLE, Rect2(point - Vector2.ONE * 3.0 * unit, Vector2.ONE * 6.0 * unit),
 				false, Color("#faffed", sin(phase * PI) * 0.85))
 	if has_focus() and not disabled:
 		_focus.bg_color = Color.TRANSPARENT
 		_focus.border_color = Style.GOOD
 		_focus.set_border_width_all(maxi(1, roundi(2.0 * unit)))
-		_focus.set_corner_radius_all(maxi(1, roundi(14.0 * unit)))
+		_focus.set_corner_radius_all(maxi(1, roundi(size.y * 0.5)))
 		draw_style_box(_focus, Rect2(Vector2.ZERO, size))
 
 
@@ -170,7 +171,7 @@ func snapshot() -> Dictionary:
 	var icon: Rect2 = layout.icon
 	return {"on": _on, "locked": _locked, "paused": _paused, "reduced_motion": _reduced_motion,
 		"elapsed": _elapsed, "flowing": _on and not _paused and not _reduced_motion and is_visible_in_tree(),
-		"icon_only": text.is_empty(), "glow": _on,
-		"thumb_x": lerpf(track.position.x + 9.0 / _ui_scale, track.end.x - 9.0 / _ui_scale, _blend),
+		"icon_only": text.is_empty(), "glow": _on, "unified_switch": true,
+		"thumb_x": icon.get_center().x,
 		"icon_rect": [icon.position.x, icon.position.y, icon.size.x, icon.size.y],
 		"track_rect": [track.position.x, track.position.y, track.size.x, track.size.y]}

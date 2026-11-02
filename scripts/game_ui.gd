@@ -2634,9 +2634,18 @@ func _purchase_word_jelly_powerup(event_id: String, kind: String, price: int) ->
 	var result: Dictionary = coin_wallet.spend(receipt, price)
 	_coin_counter.available = coin_wallet.ready and coin_wallet.error.is_empty()
 	if bool(result.get("ok", false)) and not bool(result.get("duplicate", false)):
-		_coin_flight.sync(coin_wallet.balance)
-		var title: String = {"auto_merge": "Auto merge", "family_merge": "Magnet",
+		var title: String = {"auto_merge": "Auto merge", "family_merge": "Word auto merge",
 			"fragments": "Treasure", "extra_time": "Extra time"}[kind]
+		var goal: Button = _word_jelly.goal_merge_button() if kind == "family_merge" else null
+		if goal != null:
+			var item: Dictionary = goal.get("_goal")
+			var coin_rect: Rect2 = goal.get("_coin_rect")
+			title = "Auto merge " + str(item.text)
+			_coin_flight.reduced_motion = reduced_motion
+			_coin_flight.spend(result, goal.get_global_transform() * coin_rect.get_center(),
+				_jelly_pause_button.get_global_rect().position.y > _coin_counter.get_global_rect().end.y)
+		else:
+			_coin_flight.sync(coin_wallet.balance)
 		_announce_status("%s purchased for %d coins. Total: %d coins." % [title, price, coin_wallet.balance])
 	elif bool(result.get("duplicate", false)):
 		_announce_status("This powerup purchase was already processed. No more coins were spent.")
@@ -4392,7 +4401,8 @@ func _request_hint() -> void:
 	hint_button.feedback(true)
 	audio.play_pair_feedback(true)
 	_coin_flight.reduced_motion = reduced_motion
-	_coin_flight.spend(purchase, hint_button.global_position + hint_button.size * Vector2(0.5, 0.32))
+	_coin_flight.spend(purchase, hint_button.global_position + hint_button.size * Vector2(0.5, 0.32),
+		hint_button.global_position.y + hint_button.size.y * 0.32 > _coin_counter.get_global_rect().end.y)
 	if not _voice_mode:
 		audio.cue("select")
 		audio.say("res://" + model.card_by_id(model.hint_ids[0]).word.audio)
@@ -4496,6 +4506,8 @@ func set_reduced_motion(value: bool) -> void:
 	_pop_rewards.set_reduced_motion(value)
 	_jelly.set_reduced_motion(value)
 	_word_jelly.set_reduced_motion(value)
+	if _campaign != null and _campaign.is_open():
+		_campaign.map.set_reduced_motion(value)
 	_jelly_backdrop.set_reduced_motion(value)
 	_jelly_rewards.set_reduced_motion(value)
 	_memory.set_reduced_motion(value)

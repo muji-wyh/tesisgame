@@ -29,9 +29,13 @@ function recipe({ seconds = 180, quota = 1, number = 1 } = {}) {
     seconds, spawn_interval: 20, fall_speed_scale: 1 };
 }
 
-async function seedCampaign(page, { balance = 0, ...options } = {}) {
-  const contexts = { growth: { highest_cleared: 0, recipes: { 1: recipe(options) },
-    ratings: {}, pending: {}, completed: [] } };
+async function seedCampaign(page, { balance = 0, highestCleared = 0, ...options } = {}) {
+  const ratings = Object.fromEntries(Array.from({ length: highestCleared }, (_, index) =>
+    [String(index + 1), 1 + index % 3]));
+  const recipes = Object.fromEntries(Array.from({ length: Math.max(1, highestCleared) }, (_, index) =>
+    [String(index + 1), recipe({ ...options, number: index + 1 })]));
+  const contexts = { growth: { highest_cleared: highestCleared, recipes,
+    ratings, pending: {}, completed: [] } };
   await page.addInitScript(({ contexts, balance }) => {
     const key = 'growWithPip.jellyCampaign.v1';
     if (localStorage.getItem(key) === null) localStorage.setItem(key,

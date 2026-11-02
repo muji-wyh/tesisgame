@@ -309,7 +309,7 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.doesNotMatch(help, /up to Lv6\b|two identical words of the same level/);
   assert.match(help, /Auto merge costs 600, 900, then 1200 coins/);
   assert.match(help, /Automatic pairs launch every 100 ms with a 320 ms flight, so consecutive flights overlap/);
-  assert.match(help, /Magnet first asks you to choose a board Jelly[\s\S]*never substitutes a random target/);
+  assert.match(help, /standalone Magnet button is removed[\s\S]*pending word goal[\s\S]*never substitutes a random target/);
   assert.match(help, /Treasure independently costs 200, 300, then 400[\s\S]*2 to 8 chest fragments/);
   assert.match(help, /two independent progress bars[\s\S]*Three actions earn the first level-up[\s\S]*COMBO BONUS/);
   assert.match(help, /Lv7 adds four outer-ring targets, Lv8 reaches its capped two rings and Lv9 reaches the board/);
@@ -319,7 +319,8 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /two bodies for eight active seconds[\s\S]*Snatched pieces return through Next/);
   assert.match(help, /Completing a Jelly Words stage launches a brief confetti burst in the upper third/);
   assert.match(help, /map has 99 stages[\s\S]*replay cleared stages or enter the next unlocked stage/);
-  assert.match(help, /stage 1 at the bottom to stage 99 at the top/);
+  assert.match(help, /99 stages in eleven chapter segments[\s\S]*nine-stage upward route/);
+  assert.match(help, /Previous and next chapter controls[\s\S]*Future chapters can be inspected without unlocking them/);
   assert.match(help, /Remaining time fills the progress background, the clock is on the right, and larger rating stars/);
   assert.match(help, /ten-second flashing countdown; clearing space cancels it/);
   assert.match(help, /independent stage deadline also flashes the border in its final ten seconds/);

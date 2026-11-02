@@ -376,6 +376,27 @@ func _run() -> void:
 	var first_state: Dictionary = app._campaign.map.snapshot()
 	check(first_state.stage_nodes[0].unlocked and not first_state.stage_nodes[1].unlocked,
 		"A new campaign exposes only its first frontier")
+	check(first_state.guide.visible and first_state.guide.stage == 1
+		and first_state.guide.age == app.growth.age and first_state.guide.course_id.is_empty(),
+		"The real map binds its Pip guide to saved growth and the requested learning scope")
+	var saved_request: Dictionary = app._campaign.request_context.duplicate(true)
+	app._campaign.request_context = {"track": "professional", "course_id": "retail", "module_id": "module01"}
+	check(app._campaign._map_state().pip_profile.course_id == "retail",
+		"Map wardrobe follows the pending career request, not the previously active round")
+	app._campaign.request_context = saved_request
+	var saved_motion: bool = app.reduced_motion
+	check(app._campaign.map.show_chapter(2), "Browse a future chapter before changing the real app setting")
+	await settle()
+	app.set_reduced_motion(not saved_motion)
+	check(app._campaign.map.snapshot().presentation.reduced_motion == (not saved_motion)
+		and app._campaign.map.snapshot().segment.index == 2,
+		"The global live motion setting reaches the open map without changing its browsed chapter")
+	app.set_reduced_motion(saved_motion)
+	check(app._campaign.map.snapshot().presentation.reduced_motion == saved_motion
+		and app._campaign.map.snapshot().segment.index == 2,
+		"Restoring the global motion setting also preserves the existing map segment")
+	check(app._campaign.map.show_chapter(1), "Return to the first frontier without changing progress")
+	await settle()
 	app._campaign.request_stage(2)
 	check(app._campaign.map.visible and not app._campaign.starting,
 		"A stale locked-stage callback cannot skip the persistent frontier")
