@@ -8,11 +8,34 @@ const PREVIOUS_CHEST_REWARD_POLICY: String = "pip-chest-v1"
 const LEGACY_CHEST_REWARD_POLICY: String = "legacy-chest-v1"
 const MATCH_HINT_PRICES: Array[int] = [100, 150, 200]
 const MEMORY_PEEK_PRICES: Array[int] = [0, 100, 200, 300]
+# Retired quotes remain available to historical reports, not the live tool catalog.
 const POWERUP_BASE_PRICES: Dictionary = {"auto_merge": 600, "family_merge": 50, "fragments": 200, "extra_time": 100}
 const JELLY_BONUS_CHANCES: Array[float] = [0.0, 0.02, 0.04, 0.12, 0.20, 0.30, 0.40, 0.50, 0.80]
 const JELLY_BONUS_AMOUNTS: Array[int] = [0, 50, 100, 150, 200, 250, 300, 350, 450]
 const TREASURE_FRAGMENT_MIN: int = 2
 const TREASURE_FRAGMENT_MAX: int = 8
+const JELLY_UPGRADE_PRICES: Array[int] = [50, 100, 200, 350, 550, 800, 1100, 1500]
+const JELLY_FIRST_CLEAR_MIN_COINS: int = 50
+const MAX_UPGRADE_LEVEL: int = 9
+const AUTO_MERGE_BASE_CAPACITY: int = 3
+
+
+static func jelly_upgrade_price(level: int) -> int:
+	if level < 2 or level > 9:
+		push_error("A Jelly upgrade needs a level from 2 to 9.")
+		return 0
+	return JELLY_UPGRADE_PRICES[level - 2]
+
+
+static func permanent_upgrade_price(kind: String, level: int) -> int:
+	if kind not in ["jelly", "auto_merge"]:
+		push_error("Choose Jelly powers or Auto merge before pricing an upgrade.")
+		return 0
+	return jelly_upgrade_price(level)
+
+
+static func auto_merge_capacity(level: int) -> int:
+	return AUTO_MERGE_BASE_CAPACITY + clampi(level, 1, MAX_UPGRADE_LEVEL) - 1
 
 
 static func match_hint_price(successful_uses: int) -> int:

@@ -11,7 +11,6 @@ const GoalButton = preload("res://scripts/word_jelly_powerup_button.gd")
 const Scroll = preload("res://scripts/review_scroll.gd")
 const StageTimer = preload("res://scripts/word_jelly_stage_banner.gd")
 const WordArt = preload("res://scripts/word_art.gd")
-const MEDAL = preload("res://assets/images/ui/mastery-medal.webp")
 const STAR = preload("res://assets/chests/milestone/sparkle.png")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const CHECK = preload("res://assets/images/ui/jelly-goals/completed.svg")
@@ -24,8 +23,6 @@ const EXIT_SECONDS: float = 0.38
 var reduced_motion: bool = false
 var stage_timer: StageTimer
 var _title: Label
-var _subtitle: Label
-var _medal := TextureRect.new()
 var _record_badge := RecordBadge.new()
 var _scroll := Scroll.new()
 var _content := Control.new()
@@ -39,6 +36,7 @@ var _busy: bool = false
 var _updating_rows: bool = false
 var _hovered_word: String = ""
 var _purchase_state: Array = []
+var _pointer_input: bool = false
 
 
 func _init() -> void:
@@ -49,27 +47,32 @@ func _init() -> void:
 	_title.add_theme_font_override("font", Style.HEADING_FONT)
 	_title.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_title)
-	_subtitle = Style.label("", 12)
-	_subtitle.add_theme_color_override("font_color", Style.MUTED)
-	_subtitle.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_subtitle)
-	_medal.texture = MEDAL
-	_medal.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	_medal.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-	_medal.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_medal)
 	add_child(_record_badge)
 	_record_badge.hide()
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	_scroll.follow_focus = true
 	_scroll.interaction_allowed = func() -> bool: return not _paused
+	# The rail consumes pointer events before this panel's _input.
+	_scroll.held_button_changed.connect(func(button: Button) -> void:
+		if button != null:
+			_pointer_input = true)
 	add_child(_scroll)
 	_scroll.add_child(_content)
 	visibility_changed.connect(func() -> void:
 		if not is_visible_in_tree():
 			_clear_hover())
 	hide()
+
+
+func _input(event: InputEvent) -> void:
+	if not is_visible_in_tree():
+		return
+	if event is InputEventMouseButton or event is InputEventScreenTouch:
+		_pointer_input = true
+	elif event is InputEventKey or event is InputEventJoypadButton \
+		or event is InputEventJoypadMotion and absf(event.axis_value) > 0.3:
+		_pointer_input = false
 
 
 func set_stage(state: Dictionary) -> void:
@@ -154,13 +157,21 @@ func set_stage(state: Dictionary) -> void:
 			"success_glow": glow, "success_sparkles": sparkles, "complete_badge": badge,
 			"complete_icon": check_icon, "word_id": "", "family_word_id": "",
 			"gain_elapsed": GAIN_SECONDS, "complete_elapsed": COMPLETED_HOLD_SECONDS + EXIT_SECONDS,
-			"gain_amount": 0, "mastered": false, "retired": false}
+			"gain_amount": 0, "mastered": false, "retired": false, "preview_consumed": false}
 		_rows.append(row)
 		surface.pressed.connect(func() -> void:
 			if _interactive and not _paused and not _busy and not row.mastered and not row.retired:
+				if _pointer_input:
+					surface.release_focus()
+				row.preview_consumed = true
+				_refresh_hover()
 				merge_requested.emit(str(row.word_id), str(row.family_word_id)))
-		for event: Signal in [surface.mouse_entered, surface.mouse_exited, surface.focus_entered, surface.focus_exited]:
+		for event: Signal in [surface.mouse_entered, surface.focus_exited]:
 			event.connect(_refresh_hover)
+		for event: Signal in [surface.mouse_exited, surface.focus_entered]:
+			event.connect(func() -> void:
+				row.preview_consumed = false
+				_refresh_hover())
 	var ordered: Array[Dictionary] = []
 	var ids: Array = words.map(func(item: Dictionary) -> String: return str(item.id))
 	for item: Dictionary in words:
@@ -178,6 +189,7 @@ func set_stage(state: Dictionary) -> void:
 		var row: Dictionary = _rows[index]
 		var old: Dictionary = previous.get(str(item.id), {})
 		if str(row.word_id) != str(item.id) or old.is_empty():
+			row.preview_consumed = false
 			row.gain_elapsed = GAIN_SECONDS
 			row.complete_elapsed = COMPLETED_HOLD_SECONDS + EXIT_SECONDS
 			row.surface.configure_goal(item, Economy.powerup_price("family_merge", 0), reduced_motion)
@@ -284,12 +296,12 @@ func _refresh_hover() -> void:
 	var selected: Dictionary = {}
 	if _interactive and not _paused and not _busy and is_visible_in_tree():
 		for row: Dictionary in _rows:
-			if not row.mastered and not row.retired and row.surface.is_hovered():
+			if not row.mastered and not row.retired and not row.preview_consumed and row.surface.is_hovered():
 				selected = row
 				break
 		if selected.is_empty():
 			for row: Dictionary in _rows:
-				if not row.mastered and not row.retired and row.surface.has_focus():
+				if not row.mastered and not row.retired and not row.preview_consumed and row.surface.has_focus():
 					selected = row
 					break
 	for row: Dictionary in _rows:
@@ -408,9 +420,7 @@ func configure_layout(area: Rect2, ui_scale: float, compact: bool) -> void:
 
 func _update_heading() -> void:
 	var challenge: bool = _state.get("kind") == "challenge"
-	_title.visible = not challenge or _compact
-	_subtitle.visible = not _compact and not challenge
-	_medal.visible = not _compact and not challenge
+	_title.visible = _compact and _state.get("kind") in ["main", "challenge"]
 	_record_badge.visible = challenge
 	if not challenge and _record_badge.value >= 0:
 		_record_badge.reset()
@@ -418,14 +428,11 @@ func _update_heading() -> void:
 		var best: int = int(_state.get("challenge_best_stage", 0))
 		_record_badge.reduced_motion = reduced_motion
 		_record_badge.set_record(best, _record_badge.value >= 0 and best > _record_badge.value)
-		_subtitle.text = ""
-	if _compact and _state.get("kind") in ["main", "challenge"]:
+	if _title.visible:
 		var remaining: int = maxi(0, ceili(float(_state.get("seconds_remaining", 0))))
 		_title.text = "%d:%02d" % [remaining / 60, remaining % 60]
 	else:
-		_title.text = "" if challenge else "Word goals"
-		_subtitle.text = "%d of %d goals done" % [int(_state.get("mastered", 0)), _rows.size()] \
-			if _state.get("kind") == "main" else "%d of %d mastered" % [int(_state.get("mastered", 0)), _rows.size()]
+		_title.text = ""
 	_pose_timer_feedback()
 
 
@@ -450,28 +457,16 @@ func _layout() -> void:
 	_title.add_theme_font_size_override("font_size", ceili((12.0 if _compact else 20.0) / s))
 	_update_heading()
 	var timed: bool = _state.get("kind") in ["main", "challenge"]
-	_subtitle.add_theme_font_size_override("font_size", ceili(12.0 / s))
-	_medal.position = Vector2(0, 2.0) / s
-	_medal.size = Vector2(36, 40) / s
-	var stacked: bool = _compact and not timed and size.y * s >= 40.0
-	var title_height: float = 18.0 / s if stacked else size.y - padding * 2.0
 	_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	_title.position = Vector2(padding if _compact else 46.0 / s, 0.0)
-	_title.size = Vector2(size.x - (padding * 2.0 if _compact else 46.0 / s) if stacked or not _compact else 62.0 / s,
-		(16.0 / s if timed and _compact else title_height) if _compact else 28.0 / s)
-	if timed and _compact:
-		_title.size.x = (timer_width() - 10.0) / s
-		_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	else:
-		_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-	_subtitle.position = Vector2(46, 28) / s
-	_subtitle.size = Vector2(maxf(1.0, size.x - 46.0 / s), 20.0 / s)
+	_title.position = Vector2(padding, 0.0)
+	_title.size = Vector2((timer_width() - 10.0) / s, 16.0 / s)
+	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	if _compact and _state.get("kind") == "challenge":
 		_record_badge.layout_badge(Rect2(Vector2(6, 20) / s, Vector2(timer_width() - 12.0, 24) / s), s)
 	elif _state.get("kind") == "challenge":
 		_record_badge.layout_badge(Rect2(Vector2.ZERO, Vector2(size.x, 52.0 / s)), s)
-	_scroll.position = Vector2(padding if stacked or not _compact else (timer_width() + 2.0 if timed else 70.0) / s,
-		18.0 / s if stacked else 58.0 / s if not _compact else 0.0)
+	_scroll.position = Vector2((timer_width() + 2.0) / s if _compact and timed else padding,
+		0.0 if _compact else 58.0 / s if _state.get("kind") == "challenge" else padding)
 	_scroll.horizontal = _compact
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER if _compact else ScrollContainer.SCROLL_MODE_DISABLED
 	_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED if _compact else ScrollContainer.SCROLL_MODE_SHOW_NEVER

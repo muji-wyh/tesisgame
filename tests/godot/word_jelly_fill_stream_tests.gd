@@ -182,7 +182,7 @@ func test_interruption() -> void:
 				check(interrupted.configure(words, 3, 72), "A callback can replace the active round")
 		, CONNECT_ONE_SHOT)
 		interrupted.step(3.0)
-		check(interrupted.generated_tiles == (15 if action == "configure" else initial + 5),
+		check(interrupted.generated_tiles == (Model.INITIAL_SETTLED_TILES if action == "configure" else initial + Model.DROP_COUNT),
 			"Reentrant %s cannot release another stale wave at the closing boundary" % action)
 
 
@@ -191,7 +191,7 @@ func test_deadline_and_manual() -> void:
 	var generated: int = model.generated_tiles
 	model.stage_run.advance(model.stage_run.remaining - 0.4)
 	model.step(1.0)
-	check(model.stage_ending() and model.generated_tiles == generated + 5,
+	check(model.stage_ending() and model.generated_tiles == generated + Model.DROP_COUNT,
 		"A deadline tied with entrance clearance wins before any extra supply")
 	var manual = make_model()
 	manual.set_fill_mode(false)

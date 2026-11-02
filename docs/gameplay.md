@@ -236,11 +236,16 @@ padlock with restrained light. Reopening the map, replaying an old clear or
 changing learning context cannot replay a progression unlock. Reduced motion
 presents the final state directly; hidden/background maps stop their effect clock.
 Pip accompanies the real next stage using the learner's earned appearance or
-requested career wardrobe. Its slightly larger medallion, mint Play tray and
+requested career wardrobe, resting with folded wings on its upper rim.
+Quiet breathing and blinks replace the map companion's standing age tricks;
+hover or focus lifts its head without delaying a stage click. The torso is
+occluded by the medallion and the number and Play tray remain readable. Current
+Boss portraits use the free flank instead of competing for the same perch.
+Its slightly larger medallion, mint Play tray and
 local light distinguish the next action from replay ratings and locked stages;
 gold road centers mark only connections between already cleared stages. Hover
 and press feedback moves the medallion artwork, never the stage's hit area.
-Gentle tree motion and Pip's existing quiet gestures stop when hidden or inactive;
+Gentle tree motion and Pip's quiet rest stop when hidden or inactive;
 reduced motion retains the same clear static hierarchy. A live browser motion
 setting change also updates the open map without changing the browsed position.
 Pip is decorative,
@@ -313,15 +318,13 @@ represent his health; there is no permanent name/instruction block or numeric HP
 rail. Taunts use bounded two-line subtitles. The ambush enters from the edge,
 and every retreat leaves from that same side-standing position.
 The acquired Word Compass remains visibly in his possession during battle.
-After the ambush, the map names the next real Boss stage; wider layouts also
-name its first-win Jelly-level unlock, never an already-earned duplicate reward.
+After the ambush, the map names the next real Boss stage. Its separate
+**Jelly LvN / Upgrade** control opens the coin-funded Jelly upgrade page.
 Short, trick-specific challenges and an admitted defeat replace generic banter.
 
-A distinct Boss first victory also presents **New skill unlocked** in settlement,
-with the earned Jelly, its level, the exact collection footprint and a view-only
-illustrated demonstration. Continue becomes available after the initial reveal,
-so held input cannot skip the explanation. Rematches do not show another unlock;
-the pending victory journal retains ownership of the earned level.
+Boss victories retain their story, map markers, stars and clear rewards, but
+never unlock a merged level or open a skill-unlock settlement. Previewing and
+buying Jelly levels is independent of fighting Bramble.
 
 **Attacking:** a successfully committed merged-word collection fires an attack.
 Lv1 already deals 14 base damage; Lv2–Lv9 deal 38, 72, 116, 176, 248, 344, 464
@@ -359,7 +362,7 @@ before impact makes an obsolete shot miss rather than hit a different word.
   merge. Invalid matches cannot unlock a body; a third lock does nothing.
 - The giant kick is telegraphed before impact. Its damaged sky dispatches at most
   two actual bodies per requested or automatic batch for eight active seconds.
-  Advertised waiting partners are retained. The ordinary five-slot supply
+  Advertised waiting partners are retained. The ordinary seven-slot supply
   returns at the exact boundary with repair feedback.
 - Snatch avoids held, fusing and promised bodies and does not confiscate completed
   merged words. The grabbed piece visibly leaves the screen, then returns to
@@ -384,12 +387,50 @@ same compass; its larger theft/return framing uses the original acquired art.
 The vocal reaction is an acquired human laugh with subtitle dialogue, not a
 claim that every written line has a corresponding spoken recording.
 
-Every **first** Boss victory unlocks one further merged level after durable
-settlement. Replays pay their existing clear reward but never farm new levels.
-Unlocks follow the same Everyday/professional-module context separation as the
-journey. Version-one saves migrate without resetting recipes, stars, pending
-settlements or progress, and without inventing Boss wins for old ordinary clears.
-Players may revisit those unlocked stages to earn their new Boss medals.
+Merged Lv1 is free. The **Jelly Upgrades** page permanently unlocks Lv2 through
+Lv9 in order for **50, 100, 200, 350, 550, 800, 1100 and 1500 coins**. Ownership
+is shared across all Everyday and professional Jelly World journeys; stage
+recipes, stars, Boss victories and Challenge records retain their separate
+learning-context histories. Every level, including locked ones, can be inspected
+before purchase. The view-only seven-by-eight demonstration uses the actual
+campaign target selector and shows the collection footprint, pickup-coin odds
+and base Boss damage without changing learning, rewards or wallet state.
+
+The same page's **Auto merge** category upgrades its independent permanent
+capacity. Lv1 is free and can merge up to **3 original board Jellies** per use;
+Lv2-Lv9 handle **4-11**, one more per level. Their sequential prices are the
+same increasing **50, 100, 200, 350, 550, 800, 1100, 1500** coin curve.
+Inspecting a level shows that exact capacity using the existing acquired Jelly
+and wand artwork. The live Auto merge button has a stable gel-and-number badge
+for its owned capacity; inspecting a future level cannot change it.
+Generated results may continue along legal merges without counting as additional
+original inputs. A complete path, including any required picture, must fit the
+remaining budget before it is reserved. The tool can finish with unused capacity
+when no complete path fits, rather than charging for a partial word.
+Goal-family help and collection-triggered matching retain their existing scope.
+Auto merge's per-use coin cost remains separate from its permanent upgrades.
+
+The first saved Stage 1 clear offers a **New Jelly powers!** modal after its
+settlement and coin arrivals. The stage guarantees at least 50 clear coins even
+without a chest; its existing 75-coin base and star multipliers are preserved.
+**Upgrade Jellies** opens a first-use guide focused on the real **Unlock Lv2 /
+50 coins** action. It never buys automatically. **Not now**, leaving the page,
+or reloading preserves an unfinished guide; completing the paid Lv2 ends it.
+Selecting a preview is free, while a purchase requires an explicit confirmation.
+
+Each purchase first saves its immutable level, price and receipt, then debits the
+real wallet and commits ownership only after that exact debit is present. A
+failed final save retains the paid intent and offers Retry without charging
+again, including if another upgrade category is being inspected. Stale tabs
+cannot overwrite another purchase or apply its debit to the other upgrade.
+Campaign save versions 1-3 migrate without rewriting on read: legitimately earned old levels are kept,
+including an already journaled old Boss victory, but future Boss wins never
+advance them. Existing stages, recipes, stars, pending settlements and coins are
+not reset, and old ordinary clears do not invent Boss victories. Version-four
+Jelly ownership and pending quotes are kept exactly; Auto merge begins at Lv1.
+The next actual save writes version five with both independent levels and one
+kind-specific purchase journal. Buying Auto merge does not complete or suppress
+the first-clear Jelly introduction.
 See [Bramble's source and animation record](../assets/jelly-boss/SOURCE.md).
 
 Stage 1 has three word goals, adding one per stage up to eight. Each attempt
@@ -418,9 +459,8 @@ Existing saved recipes keep their exact original words, quotas, timing and speed
 The countdown has three star phases based on the **original active-play budget**:
 clearing before its first third earns three stars, before its second third earns
 two, and later earns one. Pauses, reading overlays, automatic sequences and
-pending saves do not consume active time. **+30 sec** costs 100 coins, then 150,
-200, 250 and so on per attempt; a saved purchase extends the deadline but never
-restores an expired star tier. Remaining time drains a fine separate clock track,
+pending saves do not consume active time. The paid **+30 sec** item is removed;
+coins cannot extend the numbered-stage deadline. Remaining time drains a fine separate clock track,
 with a right-aligned clock and a dark-teal rating dock on a warm cream surface.
 The left-to-right bronze, silver and gold stars grow in size and preciousness;
 the highest tier has local sourced rays and bounded glints. These are source-derived
@@ -448,8 +488,27 @@ Settlement waits for the full sweep and its board bursts, reading tails and
 treasure feedback. It does not repeat a second late clear announcement.
 Failure keeps its separate Game over handoff after safe cleanup.
 Treasure opening and arrival-driven coins then finish
-automatically, then the game saves the clear and returns to the map. A pending
+automatically. A saved clear returns to the map. Numbered-stage timeouts and
+full-board failures instead retain their saved result with **Try again**,
+**Jelly Upgrades** and **Back to map**; the entry does not disappear on a timer.
+Try again restarts the same numbered stage. Jelly Upgrades opens the existing
+permanent merged-Jelly and Auto merge page without buying anything or repeating
+the finished round's rewards. Back from that page follows its usual map route.
+Navigation is unavailable until treasure, coins and the campaign journal have
+saved; a failure keeps **Retry save** rather than allowing the player to discard
+an unpaid result. Successful stages and voluntary Home exits retain their
+existing automatic destinations. A pending
 settlement survives reload and is recovered with its original receipt.
+Once a genuine Game over result is saved, Bramble replaces the empty-star
+display with his acquired articulated body, real raised-hand taunt and wink.
+A short sourced violet hand-light and sparkle response follows the actual
+palm joints; it runs once, then holds instead of repeating over the actions.
+**Try again**, **Jelly Upgrades** and **Back to map** remain usable immediately.
+Challenge records keep their medal and a positive short line rather than a
+taunt that insults the learner. Storage errors, voluntary exits and cleared
+stages never trigger this performance. Hidden/background results stop its
+clock and viewport; reduced motion uses one real still pose and soft light.
+The modal does not add another laugh over the existing defeat/record sound.
 Any older retained treasure is settled with its original quote before returning;
 it is not counted again in this attempt's star multiplier.
 Settlement lights earned stars one by one, shows the base-and-star multiplication,
@@ -497,10 +556,13 @@ Challenge can also end on a blocked top or intentional Finish and retains the
 existing combo, rare-collection and chest coins without unlocking a campaign stage.
 
 After Game over, Challenge stays on its result summary until the player chooses
-**Back to map** or **Try again**. Both are still, separately readable actions:
+**Back to map**, **Try again** or **Jelly Upgrades**. These are still, separately readable actions:
 Try again is primary and starts a fresh Stage 1 Challenge in the same learning
-route with 90 seconds; Back to map leaves the saved result. Neither breathes,
-scales or cycles idle sparkles. It shows the reached Stage, level-weighted
+route with 90 seconds; Back to map leaves the saved result. Jelly Upgrades leaves
+only after saving and opens the same permanent-upgrade page as the map.
+The upgrade action uses a third column on wide dialogs or a full-width second
+row on phones, retaining a full touch target instead of squeezing three labels.
+None of the actions breathes, scales or cycles idle sparkles. It shows the reached Stage, level-weighted
 active collection total and saved record medal. The comparison freezes the old
 best before the first eager save of the run: saving the reached Stage early
 cannot suppress a genuine breakthrough. A new best adds the numeric medal
@@ -528,7 +590,7 @@ but the displayed number rolls upward only as each coin arrives. One to three
 acquired sprites represent the exact bonus; manual pause freezes the flight and
 number roll. Save retries cannot duplicate the reward or its presentation.
 
-Join reviewed roots on a five-column, eight-row board, then match the complete
+Join reviewed roots on a seven-column, eight-row board, then match the complete
 spelling with its separate picture. Positional hyphens show the missing sides: `un-`,
 `-believe-`, and `-able`. Roots follow their authored composition and spelling
 changes; arbitrary letter chunks are not accepted. An atomic word such as
@@ -540,7 +602,7 @@ with elastic feedback and a negative sound, without creating a merged body.
 Merged Jellies show the word and its available picture, with a brighter rim and
 glints. New Jelly World journeys start with only Lv1 unlocked. Two merged
 Jellies of the same word add their levels, including different levels; the result
-clamps to the currently unlocked Boss-earned cap rather than rejecting an overflow.
+clamps to the permanently unlocked coin-bought cap rather than rejecting an overflow.
 With Lv4 unlocked, Lv2 + Lv3 produces Lv4 in either direction, manually or through
 Auto merge. All input mass and carried fragments survive the clamp.
 For example, Lv2 plus Lv7 and Lv7 plus Lv5 both produce
@@ -563,8 +625,9 @@ vertically onto the next support or floor. Bodies above a dragged-away jelly wai
 600 ms before falling; collecting a supporting word also releases them. Held
 bodies and active merges finish before their deferred fall. Roots, pictures and
 every merged level keep the same ordinary
-rounded-square cell with a 1:1 aspect ratio. The well holds 40 cells and opens
-with at most 15 jellies across three rows. Long labels use reviewed line breaks
+rounded-square cell with a 1:1 aspect ratio. The well holds 56 cells and opens
+with at most 21 jellies across three rows. Expanding the board does not change
+existing stage time budgets, quotas or per-word rewards. Long labels use reviewed line breaks
 or an ellipsis; hold a clipped label, or focus it and press R, to pause and read
 its full spelling.
 
@@ -587,8 +650,8 @@ Boss two-body supply restriction, dragging, a paid operation, a pending save or
 an ending.
 
 Auto Fill does not disable items merely because supply is airborne. Legal settled
-pairs remain available to Auto merge and paid word goals, and Treasure and extra time
-keep their normal purchase rules. An active item reserves new supply without
+pairs remain available to Auto merge and paid word goals. Treasure and paid extra
+time are retired. An active item reserves new supply without
 freezing existing falling bodies; Fill resumes after that ownership is released.
 
 Clicking a legally available item without enough coins briefly highlights that
@@ -634,7 +697,7 @@ after twenty collections. Tap and Collect pickups both count; idle time,
 merging alone, Auto Merge, and unsuccessful collections do not. A successful
 batch dispatch fixes the next cycle's interval, so the current Next countdown
 never shrinks when a word is collected. Tapping the preview can still release
-the next batch early. The five-slot preview sits above the well: each jelly
+the next batch early. The seven-slot preview sits above the well: each jelly
 leaves its visible slot, accelerates straight down its corresponding column and
 compresses briefly on contact before becoming playable. A small stagger separates the releases;
 only a sealed column redirects a root into reachable space. The preview is already
@@ -762,13 +825,13 @@ Lv1-Lv3 stay unchanged. Board effects, reading art and ambient motion use the
 model's actual consumed motion segments, so a coarse frame cannot skip the freeze.
 The interface/audio keep their own clocks and `Engine.time_scale` remains one.
 
-Auto merge costs 600, 900, then 1200 coins for further uses in the same round;
-Treasure costs 200, 300, then 400. Each item has its own successful-use count,
-and its button displays the next price. Treasure still distributes 2–8 fragments;
-Auto merge follows validated paths of root joins, picture matches and
+Auto merge costs 600, 900, then 1200 coins for further uses in the same round.
+Its button displays the next price and current Jelly capacity. The Treasure and +30 sec purchase cards and
+their live purchase routes are removed; naturally earned chest fragments and
+ordinary treasure settlement remain. Auto merge follows validated paths of root joins, picture matches and
 same-word upgrades whose output is capped at nine. It launches an eligible
-pair every 100 ms, while each 320 ms flight stays visibly in motion. Three
-independent paths can all be traveling before the first contact; a fuller board
+pair every 100 ms, while each 320 ms flight stays visibly in motion. At an
+upgraded capacity, three independent paths can all travel before the first contact; a fuller board
 can have four staggered flights at once.
 A dependent step waits for its
 required result to settle; independent pairs can launch while earlier merges

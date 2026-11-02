@@ -17,19 +17,60 @@ The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 | Memory observation | A free initial 10-second observation, then optional 5-second reveals costing 100, 200, 300, then 300 |
 | Auto Merge | 600, 900, 1200, then 1200 |
 | Pending word goal (family merge) | 50, 75, 100, then 100 |
-| Treasure | 200, 300, 400, then 400 |
-| Treasure fragments | Random 2-8 |
+| Permanent merged Jelly levels, Lv2-Lv9 | 50, 100, 200, 350, 550, 800, 1100, 1500 |
+| Permanent Auto merge levels, Lv2-Lv9 | 50, 100, 200, 350, 550, 800, 1100, 1500; capacity rises from 3 at free Lv1 to 11 at Lv9 |
 
-Only successful purchases advance their item's price. All pending word goals
-share one family-merge counter, separate from Auto Merge and Treasure.
+Only successful per-round help purchases advance their item's price. All pending word goals
+share one family-merge counter, separate from Auto Merge.
 A new round resets the prices; a menu, pause, rejected
 payment, or wallet retry does not. The current price is shown before purchase.
-Auto Merge launches an eligible pair every 200 ms. Each 250 ms flight can overlap
+Auto Merge launches an eligible pair every 100 ms. Each 320 ms flight can overlap
 the next flight, then completes a 110 ms fusion and 30 ms settlement; the next
 launch does not wait for that full sequence. It never collects the resulting
-words. Treasure banks its fragments only when their carrying words are collected.
+words. Naturally carried chest fragments still bank only when their words are collected.
 Memory's Start matching action can skip either observation countdown; repeated
 clicks cannot charge or extend a reveal.
+The Treasure and paid +30 sec items are retired. Their old quote values remain
+in archived analysis and immutable receipts, but no live view, model or wallet
+adapter accepts a new purchase. This does not remove earned treasure or
+Challenge time awarded by completing goals.
+
+## Permanent Jelly upgrades
+
+Lv1 is free. Higher merged levels unlock sequentially from the map's Jelly
+upgrade page and stay owned across rounds and all Jelly World learning routes.
+These prices do not reset with a round, and defeating a Boss no longer buys or
+grants a level. Any locked level's actual collection ability, coin bonus and
+base Boss attack can be previewed without spending or granting learning credit.
+
+The first saved Stage 1 clear guarantees at least 50 clear coins with no chest.
+The existing 75-coin base and star multipliers are retained rather than replaced
+by an extra or lower 50-coin payment. Once settlement is safely saved, an
+introduction leads to an explicit 50-coin Lv2 purchase. The guide never pays or
+grants the upgrade automatically and can be postponed without losing progress.
+
+The same page has a separate **Auto merge** category. Its free Lv1 can use up to
+three original board Jellies per purchase; each permanent level adds one, up to
+eleven at Lv9. The next levels use the same increasing price curve as merged
+Jellies, but their ownership and receipts are independent. Generated intermediate
+or completed results do not consume another slot; every accepted path must still
+finish a legal word. A path that cannot fit never charges or leaves a partial
+spelling. Goal-family purchases and collection blasts have no such capacity cap.
+The gameplay button's sourced gel-and-number badge always shows the owned
+capacity, not the last level previewed or a countdown of remaining matches.
+Per-use Auto merge prices remain 600, 900 and 1200 coins and reset with a round;
+permanent capacity does not reset.
+
+Campaign format 5 stores both global upgrade levels, the Jelly introduction state
+and one bounded, kind-specific pending quote. The quote is saved before the
+wallet's exact `jelly-level-v1:N` or `auto-merge-level-v1:N` debit.
+Ownership commits only with proof of that track's saved debit;
+reload and Retry can complete a paid quote without another debit. Reading old
+campaign formats neither rewrites them nor changes their wallet. Previously
+earned levels are retained once during migration, not recalculated from future
+Boss victories. Version-four Jelly ownership and already-paid quotes retain
+their exact values; Auto merge begins at free Lv1. Neither a migration read nor
+switching preview categories spends coins or rewrites a save.
 
 ## Pip-level chest rewards
 
@@ -54,8 +95,8 @@ All modes use this increased `pip-chest-v2` policy for new quotes. The maximum
 Pip bonus is 32% of the new base; absolute payouts are higher at every Pip level.
 Random Jelly
 collection bonuses, merge combo coins and professional learning-event credits
-keep their separate fixed policies. Treasure's price and fragment grant do not
-scale with Pip.
+keep their separate fixed policies. Archived Treasure prices and grants did not
+scale with Pip; that paid item is no longer available.
 
 The first settlement presentation or claim reserves a durable quote containing
 policy, chest tier, Pip level, base, bonus and total. Later level changes, reloads,
@@ -148,19 +189,22 @@ Match's expectation includes the three-round guarantee:
 whole round is completed; leaving an unfinished round earns nothing. Previously
 earned Memory chests retain their original payouts.
 
-Using chest income alone, collecting ordinary Jelly words at Lv1 requires 28 source words to unlock the
-first 200-coin Treasure budget, or 78 for the first 600-coin Auto Merge budget,
+Using chest income alone, collecting ordinary Jelly words at Lv1 requires eight source words to fund
+the first 50-coin Lv2 unlock, or 78 for the first 600-coin Auto Merge budget,
 when every naturally marked half is collected in one round. Partial rounds can
 finish below a chest threshold, and upgraded bodies combine source words, so
 these are explicit planning units rather than observed player behavior.
 
-Automatic supply provides three new source words every 20 seconds initially,
-down to every 10 seconds after twenty successful word collections. Every four
+Automatic supply provides seven source pieces every 20 seconds initially,
+down to every 10 seconds after twenty successful word collections. For pictured
+single-root words, two pieces form one source word, averaging 3.5 new words per
+full dispatch over successive packets; multipart words need more pieces. Every four
 collections reduce the next cycle's interval by two seconds; the interval is
 fixed at dispatch and never shortens the countdown already running. Merging,
 Auto Merge, and idle time do not advance that progression. At 7.5 chest coins
 per source word, perfect Lv1 collection gives a theoretical automatic-supply
-bound of 67.5-135 chest coins per minute. This excludes combo rewards and the opening board, assumes complete
+bound of 78.75-157.5 chest coins per minute for that two-piece vocabulary. This
+excludes combo rewards and the opening board, assumes complete
 collection, and is not a measured earning rate. Preview taps can release supply
 early. No new cap or waiting gate is introduced.
 
@@ -213,7 +257,8 @@ separate report table. The source-normalized bound above assumes perfect
 retention; these finite workloads use their exact fragment-threshold distributions.
 
 Chest income uses the full binomial fragment distribution and actual reward
-thresholds. Paid scenarios assume an existing wallet can afford each purchase;
+thresholds. The Treasure columns below are archived, retired-item comparisons,
+not available purchase options. Paid scenarios assume an existing wallet can afford each purchase;
 negative net values mean savings are spent. Treasure calculations optimistically
 retain every injected fragment. Auto Merge uses the same completed workload,
 without treating convenience as new supply. One session is one fresh round.
@@ -227,13 +272,13 @@ without treating convenience as new supply. One session is one fresh round.
 | 60 | 60% | 255.00 | 130.00 | -345.00 | -420.00 |
 | 60 | 100% | 450.00 | 303.57 | -150.00 | -240.31 |
 
-Even the smallest modeled workload can save while buying one Treasure every
-three fresh rounds on average under the increased chest policy.
+The archived policy allowed the smallest modeled workload to save while buying
+one Treasure every three fresh rounds on average under the increased chest policy.
 Repeated purchases still consume savings. Prices have not been changed to offset
 the new bonus policy. Three Treasure purchases cost 900; three Auto Merge uses
 cost 2700.
 
-## Treasure cannot fund itself
+## Archived retired-Treasure comparison
 
 For every existing fragment total from 0 through 100, the regression suite checks
 all awards from 2 through 8. The largest extra chest payout is two levels, or
@@ -263,7 +308,7 @@ Run the reproducible report:
 node tools/run-godot.cjs --headless --path . --script res://tools/coin-economy-report.gd
 ```
 
-Run policy, supply, budget, Treasure, wallet, and level reward checks:
+Run policy, supply, budget, legacy-quote, wallet, and level reward checks:
 
 ```powershell
 node tools/run-godot.cjs --headless --path . --script res://tests/godot/coin_economy_tests.gd

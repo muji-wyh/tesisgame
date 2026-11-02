@@ -123,7 +123,7 @@ func _test_retired_word_packets_keep_their_partners() -> void:
 		var pending: Array = model._supply_pending.duplicate(true)
 		var issued: int = board.size() + advertised.filter(func(tile: Dictionary) -> bool: return not tile.is_empty()).size() \
 			+ queued.size() + pending.size()
-		check(board.size() == 15 and issued % 2 == 0,
+		check(board.size() == Model.INITIAL_SETTLED_TILES and issued % 2 == 0,
 			"The real starter leaves an odd number of board pieces whose partners are already issued")
 		model.retire_mastered_words([old_word.id])
 		check(model.cells == board and model.upcoming == advertised and model._supply == queued

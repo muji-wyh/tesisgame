@@ -46,7 +46,6 @@ func capture_frame(name: String) -> void:
 
 func defeat(app) -> void:
 	var game = app._word_jelly.game
-	var captured_skill: bool = false
 	var captured_ending: bool = false
 	for frame in range(40):
 		advance(app, 0.05)
@@ -89,19 +88,9 @@ func defeat(app) -> void:
 			and game._stage_clear_feedback < 0.5 and not captured_ending:
 			captured_ending = true
 			await capture_frame("clear-before-sweep")
-		var skill = app._jelly_rewards._skill_reveal
-		if skill.is_visible_in_tree() and not skill._continue.disabled:
-			check(skill.snapshot().level == 2 and skill.snapshot().description.contains("4 nearby"),
-				"The first genuine victory explains the actual newly earned Lv2 collection skill")
-			check(app._jelly_rewards.snapshot().stage_feedback.phase == "skill",
-				"Diagnostics identify the skill reveal rather than claiming the rating stars are still playing")
-			if not captured_skill:
-				captured_skill = true
-				await capture_frame("new-skill")
-			skill._continue.pressed.emit()
 		if app._campaign.map.visible:
 			return
-	check(false, "Boss escape, saved rewards and earned level return to the map: " + game.error + " / " + app._campaign.error)
+	check(false, "Boss escape and saved rewards return to the map: " + game.error + " / " + app._campaign.error)
 
 
 func _run() -> void:
@@ -128,6 +117,7 @@ func _run() -> void:
 			{"kind": "main", "number": number, "outcome": "cleared", "stars": 3})
 			and store.complete_result("growth", "setup:%d" % number), "Prepare a genuine contiguous earlier-stage record")
 	app._campaign._show_map()
+	Fixture.dismiss_jelly_upgrade_intro(app)
 	app._campaign.request_stage(3)
 	await settle()
 	app._word_jelly.set_process(false)
@@ -170,26 +160,42 @@ func _run() -> void:
 			await RenderingServer.frame_post_draw
 			check(root.get_texture().get_image().save_png("res://build/qa/jelly-boss/battle-%d.png" % dimensions.x) == OK,
 				"Capture the actual complete Boss application layout")
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+	root.content_scale_size = Vector2i(480, 480)
+	root.size = Vector2i(393, 852)
+	await settle()
+	var web_view = app._word_jelly
+	var web_pitch: float = web_view._pitch * app.Style.ui_scale(web_view)
+	check(is_equal_approx(app.Style.ui_scale(web_view), 393.0 / 480.0)
+		and is_equal_approx(web_pitch, 32.0) and not web_view._layout_too_small
+		and not web_view.game.paused,
+		"Web's fractional phone scale keeps a mathematically 32px seven-column Boss board playable: %.12f" % web_pitch)
+	root.size = Vector2i(320, 480)
+	await settle()
+	check(web_view._layout_too_small and web_view.game.paused and web_view._size_cover.visible,
+		"The Web-scale boundary tolerance never admits a genuinely undersized board")
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1366, 768)
 	await settle()
 	await defeat(app)
-	check(app._campaign.map.visible and store.merged_level("growth") == 2
+	check(app._campaign.map.visible and store.merged_level() == 1
 		and store.boss_victories("growth") == [1] and store.highest_cleared("growth") == 3,
-		"The complete first Boss journey persists exactly one unlock and the next stage")
+		"The complete first Boss journey persists its victory and next stage without a Jelly unlock")
 	var result: Dictionary = app._round_result
 	check(result.get("boss", {}).get("outcome") == "defeated" and result.campaign.outcome == "cleared"
 		and app.coin_wallet.balance == 150 and store.pending("growth").is_empty(),
 		"Boss celebration/escape keeps the existing exact clear coins and fully completed settlement")
 	var map_state: Dictionary = app._campaign.map.snapshot()
-	check(map_state.boss_markers == [3, 5] and map_state.merged_level == 2,
+	check(map_state.boss_markers == [3, 5] and map_state.merged_level == 1,
 		"The map keeps the unlocked rematch and exposes only the next future Boss")
 	app._campaign.request_stage(3)
 	await settle()
 	app._word_jelly.set_process(false)
-	check(app._word_jelly.game.merged_level_limit == 2, "The next real attempt receives the durably unlocked level")
+	check(app._word_jelly.game.merged_level_limit == 1, "The next real attempt still uses the coin-owned level")
 	await defeat(app)
-	check(store.merged_level("growth") == 2 and app.coin_wallet.balance == 300,
-		"A full rematch pays its normal clear reward without duplicating the level unlock")
+	check(store.merged_level() == 1 and app.coin_wallet.balance == 300,
+		"A full rematch pays its normal clear reward without changing Jelly ownership")
 	app.audio.halt()
 	app.free()
 	await settle()

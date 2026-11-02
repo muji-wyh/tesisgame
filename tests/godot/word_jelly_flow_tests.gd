@@ -410,8 +410,8 @@ func check_finish_header(app, view) -> void:
 				"The portrait uses the readable cell budget after accounting for its complete HUD (pitch=%s expected=%s)"
 				% [view._pitch * s, expected_pitch])
 		if dimensions == Vector2i(320, 480):
-			check(view._pitch * s >= 30.0,
-				"The small phone keeps at least thirty display pixels per board column beside the responsive action rail")
+			check(view._layout_too_small and view.game.paused and view._size_cover.visible,
+				"The undersized window explicitly pauses instead of shrinking seven columns below their readable minimum")
 	root.size = original_size
 	await settle()
 	var source: Vector2 = view._tiles[int(view.game.cells[0].id)].get_global_rect().get_center()
@@ -513,9 +513,9 @@ func _check_playfield_layout(view, s: float, context: String) -> void:
 		for next in range(index + 1, names.size()):
 			check(not rectangle.intersects(regions[names[next]]),
 				str(names[index]) + " stays clear of " + str(names[next]) + context)
-	check(is_equal_approx(board.size.x / board.size.y, 5.0 / 8.0)
+	check(is_equal_approx(board.size.x / board.size.y, 7.0 / 8.0)
 		and is_equal_approx(tray.position.x, board.position.x) and is_equal_approx(tray.size.x, board.size.x),
-		"Five square-cell columns keep an aligned supply tray without stretching the board" + context)
+		"Seven square-cell columns keep an aligned supply tray without stretching the board" + context)
 	# The occupied width includes the single side rail when it enlarges the well.
 	var occupied: Rect2 = board
 	if view._compact_hud:

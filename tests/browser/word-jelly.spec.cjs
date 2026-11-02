@@ -53,16 +53,17 @@ async function startWordJelly(page, { age = COMPOSITION_AGE, reducedMotion = 'no
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.mode === 'word_jelly' && state.visible && !state.paused && state.phase === 'playing' &&
-      state.authored_morphology && state.tiles?.length === (challenge ? 40 : 15) && state.tiles.every(tile => tile.settled);
+      state.authored_morphology && state.columns === 7 && state.rows === 8 &&
+      state.tiles?.length === (challenge ? 56 : 21) && state.tiles.every(tile => tile.settled);
   }, { timeout: 20000, message: 'The real Word Jelly board opens with reviewed, settled content' }).toBe(true);
   const opening = await jelly(page);
   const occupiedArea = opening.tiles.reduce((sum, tile) => sum + tile.width * tile.height, 0);
-  expect(occupiedArea, 'Challenge Fill settles forty cells; ordinary main play retains its fifteen-piece opening')
-    .toBe(challenge ? 40 : 15);
+  expect(occupiedArea, 'Challenge Fill settles fifty-six cells; ordinary main play retains its three-row opening')
+    .toBe(challenge ? 56 : 21);
   expect(opening.fill_control).toMatchObject({ on: challenge, locked: challenge, enabled: !challenge });
   const next = opening.upcoming.find(tile => tile.id);
   expect(occupiedArea + next.width * next.height,
-    'The next fixed-size body exceeds the settled opening occupancy').toBeGreaterThan(challenge ? 40 : 15);
+    'The next fixed-size body exceeds the settled opening occupancy').toBeGreaterThan(challenge ? 56 : 21);
   for (const tile of opening.tiles) {
     expect([tile.width, tile.height], 'Every source part uses one normal square cell').toEqual([1, 1]);
     expect(tile.rect[2], 'The displayed starter keeps the ordinary square proportions').toBeCloseTo(tile.rect[3], 3);
@@ -529,11 +530,11 @@ function expectSupplyLayout(state, bounds) {
     expect(rect[1] + rect[3], `${label} is inside the bottom edge`).toBeLessThanOrEqual(parent[1] + parent[3] + tolerance);
   };
   expect(Math.abs(tray[0] - board[0]), 'The supply tray starts at the well left edge').toBeLessThan(tolerance);
-  expect(Math.abs(tray[2] - board[2]), 'The supply tray is exactly as wide as the five-column well').toBeLessThan(tolerance);
+  expect(Math.abs(tray[2] - board[2]), 'The supply tray is exactly as wide as the seven-column well').toBeLessThan(tolerance);
   expect(tray[1] + tray[3], 'The supply tray stays above the well').toBeLessThanOrEqual(board[1] + tolerance);
   for (const [axis, value] of state.preview.control.rect.entries())
     expect(Math.abs(value - tray[axis]), 'The whole tray remains the manual drop target').toBeLessThan(tolerance);
-  expect(state.preview.slots).toHaveLength(5);
+  expect(state.preview.slots).toHaveLength(7);
   for (const [index, slot] of state.preview.slots.entries()) {
     const body = state.upcoming[index];
     if (!body.id) {
@@ -752,7 +753,7 @@ async function verifyArrival(page, info, before, label) {
   }] : []);
   const delay = root => root.arrival_delay;
   for (const root of arrivals) expect(delay(root), 'The advertised lane keeps its authored crossing release beat')
-    .toBeCloseTo([0, 3, 1, 4, 2].indexOf(root.slot) * 0.15, 4);
+    .toBeCloseTo([0, 4, 1, 5, 2, 6, 3].indexOf(root.slot) * 0.15, 4);
   expect(new Set(arrivals.map(delay)).size, `${label}: advertised bodies have separate release beats`).toBe(arrivals.length);
   expect(Math.max(...arrivals.map(delay)) - Math.min(...arrivals.map(delay)),
     `${label}: the packet spreads across a perceptible release sequence`).toBeGreaterThanOrEqual((arrivals.length - 1) * 0.15 - 0.001);
@@ -760,7 +761,7 @@ async function verifyArrival(page, info, before, label) {
     .filter(late => early.slot > late.slot && delay(late) - delay(early) > 0.29)
     .map(late => ({ early, late })));
   const expectedCrossLane = arrivals.some(early => arrivals.some(late => early.slot > late.slot &&
-    [0, 3, 1, 4, 2].indexOf(late.slot) - [0, 3, 1, 4, 2].indexOf(early.slot) >= 2));
+    [0, 4, 1, 5, 2, 6, 3].indexOf(late.slot) - [0, 4, 1, 5, 2, 6, 3].indexOf(early.slot) >= 2));
   expect(crossLanePairs.length > 0).toBe(expectedCrossLane);
   const pitch = after.board_rect[3] / after.rows;
   const travel = (frame, root) => {
@@ -1952,7 +1953,7 @@ additiveTest('combo coins start at three real merges, fast drop preserves the st
   await resumeTimedRound(page, opening.round_id);
   await page.mouse.click(next.x, next.y);
   let afterDrop;
-  if (beforeDrop.tiles.length < 40) {
+  if (beforeDrop.tiles.length < 56) {
     await expect.poll(async () => {
       afterDrop = await jelly(page);
       return afterDrop.generated_tiles > beforeDrop.generated_tiles;
@@ -2434,10 +2435,10 @@ test('merged word mastery is recorded only on collection and survives reload', a
   expect(errors).toEqual([]);
 });
 
-test('five columns build a pictured word and a deliberate tap collects Lv1 without coins', async ({ page, isMobile }, info) => {
+test('seven columns build a pictured word and a deliberate tap collects Lv1 without coins', async ({ page, isMobile }, info) => {
   test.setTimeout(isMobile ? 300000 : 180000);
-  const errors = await startWordJelly(page), opening = await jelly(page), bounds = await metrics(page);
-  expect(opening.columns).toBe(5);
+  const errors = await startWordJelly(page, { challenge: false }), opening = await jelly(page), bounds = await metrics(page);
+  expect(opening.columns).toBe(7);
   expect(opening.rows).toBe(8);
   const occupied = new Set();
   for (const tile of opening.tiles) for (let row = tile.row; row < tile.row + tile.height; row++)
@@ -2445,15 +2446,15 @@ test('five columns build a pictured word and a deliberate tap collects Lv1 witho
       expect(occupied.has(row * opening.columns + column), 'Authored starter footprints do not overlap').toBe(false);
       occupied.add(row * opening.columns + column);
     }
-  expect(occupied.size).toBe(15);
-  expect(opening.upcoming).toHaveLength(5);
+  expect(occupied.size).toBe(21);
+  expect(opening.upcoming).toHaveLength(7);
   for (const tile of opening.tiles) {
     expect(tile.mass).toBe(1);
     expect(tile.picture_visible, 'Only picture sources and pictured merged words show image artwork')
       .toBe(tile.jelly_kind === 'picture' || tile.jelly_kind === 'merged' && Boolean(tile.word.image));
     expectInside(tile.rect, bounds);
   }
-  await capture(page, info, 'word-jelly-five-column-opening');
+  await capture(page, info, 'word-jelly-seven-column-opening');
   const originalViewport = page.viewportSize();
   const viewports = isMobile
     ? [{ width: 390, height: 844 }, { width: 393, height: 852 }, { width: 844, height: 390 }]

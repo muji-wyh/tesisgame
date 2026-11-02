@@ -113,7 +113,7 @@ func _run() -> void:
 	await settle()
 	var wallet: Variant = app.coin_wallet._saved_text
 	var receipts: int = app.coin_wallet._receipts.size()
-	for kind: String in ["auto_merge", "family_merge", "fragments", "extra_time"]:
+	for kind: String in ["auto_merge", "family_merge"]:
 		for button in view.powerup_buttons.values():
 			button.reset()
 		await reject(view, kind)
@@ -132,17 +132,17 @@ func _run() -> void:
 		await reject(view, "auto_merge")
 		await capture("1366x768-auto_merge")
 		view.set_reduced_motion(true)
-		await reject(view, "fragments")
+		await reject(view, "auto_merge")
 		await capture("1366x768-reduced")
 	if not baseline:
 		check(app.coin_wallet.credit_amount("fixture:partial-item-cost", 150).ok, "Use a real partially funded wallet")
 		app._coin_flight.sync(app.coin_wallet.balance)
 		view._refresh_controls()
-		var button = view.powerup_buttons.fragments
+		var button = view.powerup_buttons.auto_merge
 		button.reset()
 		await click(view, button)
-		check(button.snapshot().funds_warning and button.snapshot().missing_coins == 50
-			and button.snapshot().price_text == "200" and app.coin_wallet.balance == 150,
+		check(button.snapshot().funds_warning and button.snapshot().missing_coins == 450
+			and button.snapshot().price_text == "600" and app.coin_wallet.balance == 150,
 			"A partially funded purchase explains only the real shortfall and never changes its price or balance")
 	app.audio.halt()
 	app.queue_free()

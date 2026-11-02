@@ -5,6 +5,7 @@ signal stage_selected(number: int)
 signal challenge_selected
 signal home_requested
 signal retry_requested
+signal upgrades_requested
 signal changed
 
 const Style = preload("res://scripts/ui_style.gd")
@@ -14,7 +15,7 @@ const Icons = preload("res://scripts/icon_button.gd")
 const LevelBadge = preload("res://scripts/word_jelly_level_badge.gd")
 const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
 const Rating = preload("res://scripts/word_jelly_stage_banner.gd")
-const Pip = preload("res://scripts/duck_mascot.gd")
+const Pip = preload("res://scripts/word_jelly_map_pip.gd")
 const SKY = preload("res://assets/images/jelly-match/sky/day.png")
 const STAGE_OPEN = preload("res://assets/images/ui/jelly-map/stage-open.png")
 const STAGE_LOCKED = preload("res://assets/images/ui/jelly-map/stage-locked.png")
@@ -52,6 +53,8 @@ var _heading: Label
 var _subtitle: Label
 var _wallet: Label
 var _merged_level_badge := LevelBadge.new()
+var _upgrades := Button.new()
+var _upgrade_label: Label
 var _status: Label
 var _home: Button
 var _challenge: Button
@@ -87,7 +90,15 @@ func _init() -> void:
 	_subtitle = _label(self, "99 little adventures. Collect words, earn stars.", 14)
 	_wallet = _label(self, "", 16)
 	_wallet.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	add_child(_merged_level_badge)
+	_upgrades.name = "JellyUpgrades"
+	_upgrades.tooltip_text = "Upgrade Jelly powers and Auto merge capacity with saved coins"
+	add_child(_upgrades)
+	_upgrades.add_child(_merged_level_badge)
+	_upgrade_label = _label(_upgrades, "Upgrade", 13)
+	_upgrade_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_upgrades.pressed.connect(func() -> void:
+		if _active and not _upgrades.disabled:
+			upgrades_requested.emit())
 	_home = Icons.new()
 	_home.set("symbol", Icons.Symbol.HOME)
 	_home.accessibility_name = "Home. Back to game library"
@@ -145,6 +156,7 @@ func _init() -> void:
 	for number in range(1, 100):
 		var button := Button.new()
 		button.name = "Stage%d" % number
+		button.z_index = 1
 		button.set_meta("map_stage", number)
 		button.add_theme_font_override("font", Style.HEADING_FONT)
 		button.add_theme_color_override("font_color", Style.INK)
@@ -158,6 +170,11 @@ func _init() -> void:
 		button.pressed.connect(_select.bind(number))
 		_content.add_child(button)
 		button.focus_entered.connect(_reveal_stage.bind(number))
+		button.focus_entered.connect(func() -> void:
+			if number == int(_state.get("highest_cleared", 0)) + 1 and _active:
+				_pip.react("curious"))
+		button.focus_entered.connect(_sync_guide)
+		button.focus_exited.connect(_sync_guide)
 		button.mouse_entered.connect(_hover_stage.bind(number))
 		button.mouse_exited.connect(func() -> void:
 			if _hovered_stage == number:
@@ -189,6 +206,7 @@ func _init() -> void:
 		boss_aura.visible = number == 99
 		var boss_picture := TextureButton.new()
 		boss_picture.name = "BossPortrait%d" % number
+		boss_picture.z_index = 1
 		boss_picture.texture_normal = BOSS_PORTRAIT
 		boss_picture.texture_disabled = BOSS_PORTRAIT
 		boss_picture.ignore_texture_size = true
@@ -293,7 +311,7 @@ func configure(state: Dictionary, reduced_motion: bool = false) -> void:
 	_pip.set_growth_age(int(state.get("pip_age", 0)))
 	_pip.set_professional_profile(state.get("pip_profile", {}))
 	_pip.set_reduced_motion(reduced_motion)
-	_pip.set_proactive_allowed(true)
+	_pip.set_proactive_allowed(false)
 	var blocked: bool = bool(state.get("loading", false)) or not str(state.get("error", "")).is_empty()
 	if blocked:
 		_scroll.cancel_drag()
@@ -323,6 +341,10 @@ func configure(state: Dictionary, reduced_motion: bool = false) -> void:
 			item.boss.tooltip_text = "Bramble. Boss in stage %d" % number
 	_challenge.disabled = blocked
 	_challenge.focus_mode = Control.FOCUS_NONE if blocked else Control.FOCUS_ALL
+	_upgrades.disabled = blocked
+	_upgrades.focus_mode = Control.FOCUS_NONE if blocked else Control.FOCUS_ALL
+	_upgrades.accessibility_name = "Jelly Lv%d. Auto merge Lv%d. Open permanent upgrades. Higher levels cost coins." % [
+		int(state.get("merged_level", 1)), int(state.get("auto_merge_level", 1))]
 	_wallet.text = "%d coins" % int(state.get("coins", 0))
 	_status.text = str(state.get("error", "")) if not str(state.get("error", "")).is_empty() \
 		else "Loading stage %d..." % int(state.get("pending_stage", 0)) if state.get("loading", false) else ""
@@ -358,9 +380,8 @@ func close() -> void:
 func _hover_stage(number: int) -> void:
 	_hovered_stage = number if number > 0 and not _nodes[number - 1].button.disabled \
 		and _nodes[number - 1].button.is_visible_in_tree() and _active else 0
-	if _hovered_stage == int(_state.get("highest_cleared", 0)) + 1 and not _reduced_motion:
-		_pip.react("curious")
 	_pose_nodes()
+	_sync_guide()
 	_queue_changed()
 
 
@@ -369,6 +390,7 @@ func _set_pressed(number: int) -> void:
 		return
 	_pressed_stage = number if number > 0 and _active and is_visible_in_tree() else 0
 	_pose_nodes()
+	_sync_guide()
 	_queue_changed()
 
 
@@ -378,6 +400,7 @@ func _clear_response() -> void:
 	for item: Dictionary in _nodes:
 		item.hover = 0.0
 	_pose_nodes()
+	_sync_guide()
 
 
 func focus_frontier() -> void:
@@ -431,7 +454,7 @@ func _reveal_stage(number: int) -> void:
 		var button_bottom: int = maxi(0, ceili(button.get_rect().end.y - _scroll.size.y))
 		_scroll.scroll_vertical = maxi(button_bottom, mini(_scroll.scroll_vertical, portrait_top))
 	var focus_bounds: Rect2 = button.get_rect()
-	if _pip.visible and number == int(_state.get("highest_cleared", 0)) + 1:
+	if number == int(_state.get("highest_cleared", 0)) + 1:
 		focus_bounds = focus_bounds.merge(_pip.get_rect())
 	if _nodes[number - 1].boss.visible:
 		focus_bounds = focus_bounds.merge(_nodes[number - 1].boss.get_rect())
@@ -469,6 +492,8 @@ func navigation_controls() -> Array[Control]:
 	if not is_visible_in_tree():
 		return controls
 	controls.append(_home)
+	if not _upgrades.disabled:
+		controls.append(_upgrades)
 	if not _challenge.disabled:
 		controls.append(_challenge)
 	if _retry.visible:
@@ -520,33 +545,35 @@ func _layout() -> void:
 	_heading.add_theme_font_size_override("font_size", heading_pixels)
 	_heading.size = Vector2(title_width, 44.0 / s)
 	_subtitle.position = Vector2(left, top + 48.0 / s)
-	var level_width: float = minf(width * 0.48, 142.0 / s)
-	_subtitle.size = Vector2(width - level_width - 8.0 / s, 30.0 / s)
+	var level_width: float = minf(width * 0.55, 180.0 / s)
+	_subtitle.size = Vector2(width - level_width - 8.0 / s, 44.0 / s)
 	_merged_level_badge.set_level(int(_state.get("merged_level", 1)))
-	_merged_level_badge.layout_badge(Rect2(Vector2(left + width - level_width, top + 48.0 / s),
-		Vector2(level_width, 28.0 / s)), s)
+	_upgrades.position = Vector2(left + width - level_width, top + 48.0 / s)
+	_upgrades.size = Vector2(level_width, 44.0 / s)
+	Style.action_button(_upgrades, Style.GOOD)
+	_merged_level_badge.layout_badge(Rect2(Vector2(4, 8) / s, Vector2(108, 28) / s), s)
+	_upgrade_label.position = Vector2(116.0 / s, 0)
+	_upgrade_label.size = Vector2(maxf(1.0, level_width - 120.0 / s), 44.0 / s)
+	_upgrade_label.add_theme_font_size_override("font_size", ceili(13.0 / s))
 	_subtitle.text = ("Collect words" if int(_state.get("highest_cleared", 0)) == 0 else "Chase Bramble") if _state.has("merged_level") \
 		else "Collect words. Earn stars. Explore." if narrow else "99 little adventures. Collect words, earn stars."
 	var highest: int = int(_state.get("highest_cleared", 0))
 	var target: int = BossCatalog.chase_target(highest)
 	if highest > 0 and target > 0:
-		var first_win: bool = BossCatalog.STAGES.find(target) + 1 not in _state.get("boss_victories", [])
 		_subtitle.text = "Bramble: Stage %d" % target if narrow \
-			else "Catch Bramble at Stage %d · Win: Jelly Lv%d" % [
-				target, mini(9, int(_state.get("merged_level", 1)) + 1)] if first_win \
 			else "Catch Bramble at Stage %d · Follow the compass" % target
 	elif highest == 99:
 		_subtitle.text = "Compass recovered!" if 8 in _state.get("boss_victories", []) \
 			else "99 adventures complete"
 	_subtitle.add_theme_font_size_override("font_size", ceili(14.0 / s))
 	var status_height: float = 76.0 / s if _status.visible else 0.0
-	_status.position = Vector2(left, 90.0 / s)
+	_status.position = Vector2(left, 106.0 / s)
 	_status.size = Vector2(width - (84.0 / s if _retry.visible else 0.0), status_height)
 	_status.add_theme_font_size_override("font_size", ceili(14.0 / s))
-	_retry.position = Vector2(left + width - 78.0 / s, 98.0 / s)
+	_retry.position = Vector2(left + width - 78.0 / s, 114.0 / s)
 	_retry.size = Vector2(78, 44) / s
 	_content.custom_minimum_size.x = 0.0
-	_scroll.position = Vector2(left, 88.0 / s + status_height)
+	_scroll.position = Vector2(left, 104.0 / s + status_height)
 	_scroll.size = Vector2(width, maxf(1.0, size.y - _scroll.position.y - 12.0 / s))
 	var chapter_height: float = 1160.0 / s
 	var summit_space: float = 132.0 / s
@@ -639,6 +666,14 @@ func _layout() -> void:
 		var boss_size: float = minf(124.0 / s, maxf(68.0 / s, _scroll.size.y - node_size.y - 26.0 / s)) \
 			if number == 99 else 68.0 / s
 		item.boss.position = button.position + Vector2((node_size.x - boss_size) * 0.5, -boss_size)
+		if number == highest + 1 and item.boss.visible:
+			var on_right: bool = width - button.get_rect().end.x >= button.position.x
+			var frame_margin: float = 18.0 / s if number == 99 else 0.0
+			var room: float = maxf(button.position.x, width - button.get_rect().end.x)
+			boss_size = minf(boss_size, room - 8.0 / s - frame_margin * 2.0)
+			item.boss.position = Vector2(button.get_rect().end.x + 8.0 / s + frame_margin if on_right \
+				else button.position.x - 8.0 / s - frame_margin - boss_size,
+				button.position.y + 8.0 / s - boss_size * 0.5)
 		item.boss.size = Vector2.ONE * boss_size
 		item.boss_aura.position = item.boss.position - Vector2.ONE * 16.0 / s
 		item.boss_aura.size = item.boss.size + Vector2.ONE * 32.0 / s
@@ -659,16 +694,9 @@ func _layout() -> void:
 			earned.add_point(center, Vector2(0, 40.0 / s), Vector2(0, -40.0 / s))
 	_route_points = curve.get_baked_points()
 	_earned_points = earned.get_baked_points()
-	var frontier: int = mini(highest + 1, 99)
-	var guide_node: Button = _nodes[frontier - 1].button
-	var guide_room: float = maxf(guide_node.position.x, width - guide_node.get_rect().end.x)
-	var guide_edge: float = minf(112.0 / s, guide_room - 8.0 / s)
-	var guide_x: float = guide_node.get_rect().end.x + 8.0 / s \
-		if guide_node.get_rect().get_center().x < width * 0.5 else guide_node.position.x - guide_edge - 8.0 / s
 	_pip.custom_minimum_size = Vector2.ZERO
-	_pip.position = Vector2(clampf(guide_x, 0.0, maxf(0.0, width - guide_edge)),
-		guide_node.get_rect().end.y - guide_edge)
-	_pip.size = Vector2.ONE * guide_edge
+	_pip.size = Vector2(112, 84) / s
+	_position_guide()
 	_refresh_locks()
 	_refresh_viewport()
 	_content.queue_redraw()
@@ -705,14 +733,27 @@ func _sync_guide() -> void:
 	if not is_inside_tree() or _nodes.is_empty():
 		return
 	var highest: int = clampi(int(_state.get("highest_cleared", 0)), 0, 99)
-	var was_visible: bool = _pip.is_visible_in_tree()
+	var viewport: Rect2 = _scroll.get_global_rect()
+	var supported_node: Button = _nodes[mini(highest, 98)].button
 	_pip.visible = is_visible_in_tree() and highest < 99 \
-		and not bool(_state.get("loading", false)) and str(_state.get("error", "")).is_empty()
+		and not bool(_state.get("loading", false)) and str(_state.get("error", "")).is_empty() \
+		and viewport.intersects(supported_node.get_global_rect())
 	var on_screen: bool = _pip.is_visible_in_tree() \
 		and _scroll.get_global_rect().intersects(_pip.get_global_rect())
 	_pip.set_idle_paused(not on_screen or not _active or _reduced_motion)
-	if on_screen and _active and not was_visible and not _reduced_motion:
-		_pip.react("happy")
+	_pip.set_awake(on_screen and _active and highest < 99 \
+		and (_hovered_stage == highest + 1 or _pressed_stage == highest + 1 \
+			or _reduced_motion and _nodes[highest].button.has_focus()))
+
+
+func _position_guide() -> void:
+	if _nodes.is_empty() or _pip.size.x <= 0.0:
+		return
+	var highest: int = clampi(int(_state.get("highest_cleared", 0)), 0, 98)
+	var item: Dictionary = _nodes[highest]
+	var face: TextureRect = item.face
+	var support: Vector2 = item.button.position + face.get_transform() * Vector2(face.size.x * 0.5, 0.0)
+	_pip.position = support - _pip.support_point()
 
 
 func _refresh_viewport() -> void:
@@ -755,6 +796,7 @@ func _pose_nodes(delta: float = 0.0) -> void:
 		item.glint.visible = current and available
 		item.glint.modulate = Color(1.0, 0.96, 0.73,
 			0.80 if _reduced_motion else 0.10 + 0.80 * pow(maxf(0.0, cos(_effect_elapsed * 1.6)), 8.0))
+	_position_guide()
 
 
 func _pose_scenery() -> void:
@@ -884,7 +926,7 @@ func snapshot() -> Dictionary:
 		"guide": {"visible": _pip.is_visible_in_tree() and _scroll.get_global_rect().intersects(_pip.get_global_rect()),
 			"stage": highest + 1 if highest < 99 else 0,
 			"age": _pip.growth_age, "course_id": str(_pip.professional_profile.get("course_id", "")),
-			"rect": _rect(_pip.get_global_rect())},
+			"rect": _rect(_pip.get_global_rect()), "presentation": _pip.rest_snapshot()},
 		"presentation": {"elapsed": _effect_elapsed, "hovered_stage": _hovered_stage, "pressed_stage": _pressed_stage,
 			"reduced_motion": _reduced_motion,
 			"hover_scale": _nodes[_hovered_stage - 1].face.scale.x if _hovered_stage > 0 else 1.0,
@@ -896,7 +938,9 @@ func snapshot() -> Dictionary:
 				else "node" if _unlock_elapsed < ROUTE_SECONDS + UNLOCK_SECONDS else "done"},
 		"error": str(_state.get("error", "")),
 		"merged_level": int(_state.get("merged_level", 1)),
+		"auto_merge_level": int(_state.get("auto_merge_level", 1)),
 		"final_boss_stage": 99,
 		"merged_level_indicator": _merged_level_badge.snapshot(),
+		"upgrades_entry": _control(_upgrades),
 		"boss_markers": _state.get("boss_markers", []).filter(func(number: int) -> bool: return number > 1),
 		"boss_victories": _state.get("boss_victories", []).duplicate()}

@@ -7,7 +7,7 @@ uniform vec2 region_size = vec2(400.0, 600.0);
 uniform vec2 frame_half = vec2(170.0, 270.0);
 uniform float corner_radius = 18.0;
 uniform float urgency = 0.0;
-uniform float glow_extent = 12.0;
+uniform float glow_extent = 20.0;
 uniform float travel_speed = 0.07;
 uniform float pulse = 0.0;
 uniform float travel = 0.0;
@@ -56,7 +56,7 @@ void fragment() {
 	float inner_mask = smoothstep(-5.0, -0.5, distance_to_rim);
 	float outer_mask = 1.0 - smoothstep(glow_extent * 0.55, glow_extent, distance_to_rim);
 	float core = exp(-abs(distance_to_rim) / mix(1.35, 2.6, urgency));
-	float halo = exp(-max(distance_to_rim, 0.0) / mix(4.0, 29.0, urgency));
+	float halo = exp(-max(distance_to_rim, 0.0) / mix(7.0, 46.0, urgency));
 	float breath = mix(0.10, 1.0, pulse);
 	float moving_glint = moving ? glint : 0.0;
 	float tail_distance = fract((travel - along) * 2.0) * perimeter * 0.5;

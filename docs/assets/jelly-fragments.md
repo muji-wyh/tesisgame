@@ -186,11 +186,11 @@ timing and headroom were inspected; this does not establish auditory quality.
 
 Jelly Match, Jelly Words and Voice Pop play `appear.wav` when a collected
 fragment starts its visible flight, then `arrive.wav` when it reaches the chest.
-Treasure uses the same pair for each scheduled launch and delivery to its target
+Legacy paid Treasure deliveries used the same pair for each launch and arrival at the target
 jelly. These cues follow actual presentation events, independently of the
 already committed reward. Ordinary pickups that transfer directly to the HUD
-under reduced motion play only the arrival cue; Treasure retains its existing
-delivery timeline.
+under reduced motion play only the arrival cue. Treasure is no longer purchasable;
+only an already committed legacy delivery retains that fulfilment timeline.
 
 Four dedicated channels keep fragment tails separate from coins, merges,
 warnings and chest milestones. Runtime gain is 0.45, with a further 6 dB

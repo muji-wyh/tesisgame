@@ -218,6 +218,39 @@ func _check_rendered_check(panel) -> void:
 		"Capture the real completion stroke, silent hold, exit and reclaimed pending-goal slot")
 
 
+func _check_goal_heading_removal(state: Dictionary) -> void:
+	var panel := Jelly.PracticePanel.new()
+	root.add_child(panel)
+	var main: Dictionary = state.duplicate(true)
+	main.kind = "main"
+	main.seconds_remaining = 83.0
+	panel.set_stage(main)
+	panel.configure_layout(Rect2(16, 70, 232, 520), 1.0, false)
+	check(not panel._title.visible and panel._title.text.is_empty()
+		and panel.get_children().all(func(child: Node) -> bool: return not child is TextureRect),
+		"The normal goal list has no decorative medal, Word goals heading or aggregate progress label")
+	check(panel._scroll.position.y == 6.0 and panel._rows[0].surface.position.y == 0.0
+		and panel.snapshot().words.size() == 8,
+		"The first individual goal immediately uses the reclaimed header space with all eight goals preserved")
+	panel.configure_layout(Rect2(16, 70, 360, 44), 1.0, true)
+	check(panel._title.visible and panel._title.text == "1:23"
+		and panel._scroll.position.x == panel.timer_width() + 2.0,
+		"Removing the decorative heading does not remove or overlap the compact stage countdown")
+	var challenge: Dictionary = main.duplicate(true)
+	challenge.kind = "challenge"
+	challenge.seconds_remaining = 64.0
+	challenge.challenge_best_stage = 7
+	panel.set_stage(challenge)
+	check(panel._title.visible and panel._title.text == "1:04"
+		and panel._record_badge.is_visible_in_tree(),
+		"The independent Challenge clock and best-stage medal remain intact")
+	panel.configure_layout(Rect2(16, 70, 232, 520), 1.0, false)
+	check(not panel._title.visible and panel._record_badge.is_visible_in_tree()
+		and panel._scroll.position.y == 58.0,
+		"The Challenge sidebar reserves only its still-useful best-stage record")
+	panel.free()
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	var data := Data.new()
@@ -243,6 +276,8 @@ func _run() -> void:
 		await process_frame
 		var panel = view._practice_panel
 		var state: Dictionary = panel.snapshot()
+		check(not panel._title.visible and panel._title.text.is_empty(),
+			"Untimed word lists never restore the redundant Word goals heading on resize")
 		var bounds := Rect2(Vector2.ZERO, view.size)
 		check(state.visible and state.words.size() == 8 and bounds.grow(0.1).encloses(panel.get_rect())
 			and not panel.get_rect().intersects(view._board) and not panel.get_rect().intersects(view._preview_rect),
@@ -290,6 +325,7 @@ func _run() -> void:
 			"The compact word font fits the visible stage strip without clipping its descenders")
 		await _capture("%dx%d-eight-words" % [dimensions.x, dimensions.y])
 		if dimensions == Vector2i(1366, 768):
+			_check_goal_heading_removal(panel._state)
 			await _check_resize_history(panel)
 			_check_progress_feedback(panel)
 			_check_silent_check_lifecycle(panel)

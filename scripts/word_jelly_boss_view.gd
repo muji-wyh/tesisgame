@@ -6,6 +6,7 @@ signal audio_requested(cue: String)
 const Style = preload("res://scripts/ui_style.gd")
 const Actor = preload("res://scripts/word_jelly_boss_actor.gd")
 const Run = preload("res://scripts/word_jelly_boss_run.gd")
+const Model = preload("res://scripts/word_jelly_model.gd")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const RAYS = preload("res://assets/chests/milestone/rays.png")
@@ -156,8 +157,8 @@ func _handle_event(event: Dictionary, audible: bool, visuals: Dictionary) -> voi
 		if visuals.has(id):
 			var tile = visuals[id]
 			_thrown.append({"at": float(event.at), "rect": _tile_rects.get(id,
-				Rect2(_board.position + Vector2(event.tile.column, event.tile.row) * _board.size.x / 5,
-					Vector2.ONE * _board.size.x / 5)),
+				Rect2(_board.position + Vector2(event.tile.column, event.tile.row) * _board.size.x / Model.COLUMNS,
+					Vector2.ONE * _board.size.x / Model.COLUMNS)),
 				"surface": tile._surface.texture, "picture": tile._picture.texture,
 				"text": tile._label.text})
 	if event.has("text"):
@@ -276,7 +277,7 @@ func _pose() -> void:
 			if not _snatch.is_empty():
 				var age: float = elapsed - float(_snatch.at)
 				var destination: Vector2 = _board.position + Vector2(float(_snatch.column) + 0.5,
-					float(_snatch.row) + 0.5) * _board.size.x / 5.0
+					float(_snatch.row) + 0.5) * _board.size.x / Model.COLUMNS
 				var target: Vector2 = destination - _character.size * Vector2(0.5, 0.65)
 				var jump: float = clampf(age / (Run.WINDUP_SECONDS + Run.FLIGHT_SECONDS), 0.0, 1.0)
 				if age <= Run.WINDUP_SECONDS + Run.FLIGHT_SECONDS:
@@ -395,8 +396,8 @@ func _draw() -> void:
 		if age < 0.0 or age > 0.85:
 			continue
 		var origin: Dictionary = event.get("origin", {})
-		var start: Vector2 = _board.position + Vector2(float(origin.get("column", 2)) + 0.5,
-			float(origin.get("row", 4)) + 0.5) * _board.size.x / 5.0
+		var start: Vector2 = _board.position + Vector2(float(origin.get("column", floori(Model.COLUMNS * 0.5))) + 0.5,
+			float(origin.get("row", 4)) + 0.5) * _board.size.x / Model.COLUMNS
 		var target: Vector2 = _character.position + _character.size * Vector2(0.5, 0.42)
 		var p: float = clampf(age / HIT_FLIGHT_SECONDS, 0.0, 1.0)
 		var at: Vector2 = start.lerp(target, p)
@@ -454,7 +455,7 @@ func _draw() -> void:
 			continue
 		var progress: float = clampf((float(projectile.elapsed) - float(projectile.windup)) / float(projectile.duration), 0.0, 1.0)
 		var destination: Vector2 = _board.position + Vector2(float(projectile.column) + 0.5,
-			float(projectile.row) + 0.5) * _board.size.x / 5.0
+			float(projectile.row) + 0.5) * _board.size.x / Model.COLUMNS
 		var start: Vector2 = _character.position + _character.size * Vector2(0.35, 0.5)
 		var at: Vector2 = start.lerp(destination, progress)
 		at.y -= 4.0 * progress * (1.0 - progress) * maxf(30 / _scale, start.distance_to(destination) * 0.24)

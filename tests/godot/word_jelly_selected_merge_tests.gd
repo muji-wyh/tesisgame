@@ -160,7 +160,7 @@ func test_fill() -> void:
 	model.spawn_interval = 10000.0
 	check(model.set_fill_mode(true), "The ordinary Fill switch can be turned on")
 	model.step(0.01)
-	check(model.cells.size() > 15 and model.cells.size() < Model.CAPACITY
+	check(model.cells.size() > Model.INITIAL_SETTLED_TILES and model.cells.size() < Model.CAPACITY
 		and model.cells.any(func(tile: Dictionary) -> bool: return tile.arrival),
 		"Fill starts a real top-down supply flight instead of popping a full board into existence")
 	var first_arrivals: Array[int] = []
@@ -247,8 +247,8 @@ func test_family_payment_lifecycle() -> void:
 			"Each selected-family repeat pays its own exact capped use tier")
 		drain(model)
 		check(f.payments.back().price == prices[index] and model.powerup_price("auto_merge") == 600
-			and model.powerup_price("fragments") == 200,
-			"A family purchase never advances the unrelated tools' prices")
+			and model.auto_merge_level == 1 and model.powerup_price("fragments") == 0,
+			"A family purchase changes neither Auto merge prices nor capacity and cannot restore retired tools")
 
 
 func test_combo_levels() -> void:

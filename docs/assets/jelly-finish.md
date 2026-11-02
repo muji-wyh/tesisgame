@@ -7,6 +7,13 @@ reaching the threshold again replays the cue; holding past it stays silent. Rele
 only while the threshold is reached. An early release returns the gel to its
 resting shape. These poses are authored by the game, not source animations.
 
+Under a long pull, the suspended lower lobe rounds into a convex hanging foot
+rather than preserving the source sprite's flat resting floor. The same
+lower-lobe mapping bends the acquired paint and ready rim together, leaving
+the anchored crown, caption center, hit rectangle and release threshold intact.
+The curve grows continuously with tension and returns to the original source
+shape at rest; this is a runtime adaptation, not replacement artwork.
+
 A pointer tap demonstrates the same action: the gel stretches down by 32 screen
 pixels over 200 ms, then springs back with a small upward overshoot. The header
 layout and hit target stay fixed. Only gestures that travel at most 8 screen

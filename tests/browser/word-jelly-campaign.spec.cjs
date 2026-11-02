@@ -61,7 +61,7 @@ async function startStage(page) {
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.visible && state.phase === 'playing' && state.campaign?.kind === 'main' &&
-      state.tiles.length === 15 && state.tiles.every(tile => tile.settled);
+      state.tiles.length === 21 && state.tiles.every(tile => tile.settled);
   }, { timeout: 30000 }).toBe(true);
 }
 
@@ -113,6 +113,11 @@ async function collect(page, tile) {
 async function waitForMap(page) {
   await expect.poll(async () => (await jelly(page)).campaign_map?.visible,
     { timeout: 45000, message: 'Automatic sweep, saved settlement and coin arrivals return to the map' }).toBe(true);
+  const introduction = (await jelly(page)).campaign_map.upgrades;
+  if (introduction?.visible && introduction.mode === 'offer') {
+    await pressRect(page, introduction.offer.later);
+    await expect.poll(async () => (await jelly(page)).campaign_map.upgrades.visible).toBe(false);
+  }
   return (await jelly(page)).campaign_map;
 }
 
@@ -207,6 +212,7 @@ test('Pip guides the actual frontier and tactile map feedback never changes stag
   let map = await openMap(page);
   map = await waitForCampaignMap(page, { stage: 25 });
   expect(map.guide).toMatchObject({ visible: true, stage: 25, age: 0, course_id: '' });
+  expect(map.guide.presentation).toMatchObject({ pose: 'resting-on-stage' });
   expect(map.presentation).toMatchObject({ completed_edges: 5, reduced_motion: false });
   const saved = await page.evaluate(() => ({
     campaign: localStorage.getItem('growWithPip.jellyCampaign.v1'),
@@ -247,6 +253,7 @@ test('Pip guides the actual frontier and tactile map feedback never changes stag
   await expect.poll(async () => (await jelly(page)).campaign_map.presentation.reduced_motion).toBe(true);
   map = await waitForCampaignMap(page, { stage: 25 });
   expect(map.guide).toMatchObject({ visible: true, stage: 25 });
+  expect(map.guide.presentation).toMatchObject({ pose: 'resting-on-stage', breathing: false });
   await capture(page, info, 'map-feel-frontier-reduced');
   expect((await wallet(page)).balance).toBe(3200);
   expect(await page.evaluate(() => ({
@@ -271,7 +278,7 @@ test('compact Fill uses a fixed icon and whole-surface state while real supply a
   await pressMapControl(page, stage(map, 2));
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.visible && state.phase === 'playing' && state.tiles.length === 15 &&
+    return state.visible && state.phase === 'playing' && state.tiles.length === 21 &&
       state.tiles.every(tile => tile.settled) && state.fill_control.enabled;
   }, { timeout: 30000 }).toBe(true);
   const off = await jelly(page), bounds = await metrics(page);
@@ -311,7 +318,7 @@ test('campaign quotas clear, sweep leftovers, save stars and unlock the next sta
   const opening = await jelly(page);
   expect(opening.campaign.goals).toEqual({ cat: 1, dog: 1, duck: 1 });
   expect(opening.campaign.stars_now).toBe(3);
-  expect(opening.powerup_buttons.extra_time.visible).toBe(true);
+  expect(opening.powerup_buttons.extra_time).toBeUndefined();
   await capture(page, info, 'campaign-stage-one');
   await pressRect(page, opening.finish.rect);
   await expect.poll(async () => (await jelly(page)).pause.active).toBe(true);
@@ -403,7 +410,7 @@ test('the map climbs upwards and Home confirms before collecting, settling and r
   await pressMapControl(page, stage(map, 1));
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.visible && state.tiles.length === 15 && state.tiles.every(tile => tile.settled);
+    return state.visible && state.tiles.length === 21 && state.tiles.every(tile => tile.settled);
   }).toBe(true);
   await mergeWord(page, 'cat');
   await mergeWord(page, 'dog');
@@ -448,28 +455,14 @@ test('the map climbs upwards and Home confirms before collecting, settling and r
   expect(errors).toEqual([]);
 });
 
-test('extra time escalates without restoring stars and a paused pull finishes its sweep', async ({ page }, info) => {
+test('retired time purchases are absent and a paused pull still finishes its sweep', async ({ page }, info) => {
   test.setTimeout(180000);
-  await seedCampaign(page, { seconds: 12, quota: 2, balance: 750 });
+  await seedCampaign(page, { seconds: 90, quota: 2, balance: 750 });
   const errors = await openGame(page, { reducedMotion: 'no-preference' });
   await startStage(page);
-  await expect.poll(async () => (await jelly(page)).campaign.stars_now).toBe(2);
-  await capture(page, info, 'extra-time-before-purchase');
-  for (const [index, price] of [100, 150].entries()) {
-    const state = await jelly(page);
-    expect(state.powerup_buttons.extra_time.price).toBe(price);
-    await pressRect(page, state.powerup_buttons.extra_time.rect);
-    await expect.poll(async () => (await jelly(page)).campaign.seconds_added).toBe((index + 1) * 30);
-    if (state.stage.timer_ratio < 0.999) {
-      await expect.poll(async () => (await jelly(page)).stage.timer_ratio,
-        { message: 'Saved extra time visibly refills the remaining-time bar' }).toBeGreaterThan(state.stage.timer_ratio);
-    } else {
-      await expect.poll(async () => (await jelly(page)).stage.timer_ratio).toBe(1);
-    }
-    expect((await jelly(page)).campaign.stars_now).toBeLessThanOrEqual(state.campaign.stars_now);
-    await capture(page, info, `extra-time-refilled-${index + 1}`);
-  }
-  expect((await wallet(page)).balance).toBe(500);
+  expect((await jelly(page)).powerup_buttons.extra_time).toBeUndefined();
+  expect((await jelly(page)).campaign.seconds_added).toBe(0);
+  expect((await wallet(page)).balance).toBe(750);
   const merged = await mergeWord(page, 'cat');
   await pressRect(page, (await jelly(page)).finish.rect);
   await expect.poll(async () => (await jelly(page)).pause.active).toBe(true);
@@ -489,7 +482,7 @@ test('extra time escalates without restoring stars and a paused pull finishes it
   expect(finished.campaign.current).toEqual({ cat: 0, dog: 0, duck: 0 });
   expect(stage(map, 1).best_stars).toBe(0);
   expect(stage(map, 2).unlocked).toBe(false);
-  expect((await wallet(page)).balance).toBe(500);
+  expect((await wallet(page)).balance).toBe(750);
   await capture(page, info, 'campaign-failed-stage-map');
   expect(errors).toEqual([]);
 });
@@ -505,6 +498,19 @@ test('a timeout warns with the board border and cannot turn cleanup into goal cr
     return state.campaign.seconds_remaining <= 10 && state.danger.active && state.danger.source === 'stage';
   }, { timeout: 30000 }).toBe(true);
   await capture(page, info, 'stage-final-ten-second-border');
+  await expect.poll(async () => (await rewards(page)).stage_failure_ready,
+    { timeout: 45000 }).toBe(true);
+  const saved = await rewards(page), balance = (await wallet(page)).balance;
+  const upgrade = saved.actions.find(action => action.name === 'JellyResultUpgrades' && action.visible);
+  expect(upgrade?.disabled).toBe(false);
+  expect((await jelly(page)).campaign_map.visible).toBe(false);
+  await capture(page, info, 'saved-failure-upgrade-entry');
+  await pressRect(page, upgrade.rect);
+  await expect.poll(async () => (await jelly(page)).campaign_map.upgrades.visible).toBe(true);
+  const pageState = (await jelly(page)).campaign_map.upgrades;
+  expect(pageState.categories.map(item => item.kind)).toEqual(['jelly', 'auto_merge']);
+  expect((await wallet(page)).balance).toBe(balance);
+  await pressRect(page, pageState.back.rect);
   const map = await waitForMap(page), finished = await jelly(page);
   expect(finished.campaign.outcome).toBe('timeout');
   expect(finished.cleared_pairs).toBe(1);
@@ -532,7 +538,7 @@ test('Challenge completes a full goal stage, increases difficulty and restores i
   expect(opening.stage.challenge_best_stage).toBeGreaterThanOrEqual(1);
   expect(opening.campaign.pressure.word_limit).toBe(3);
   expect(opening.practice.words).toHaveLength(3);
-  expect(opening.powerup_buttons.extra_time.visible).toBe(false);
+  expect(opening.powerup_buttons.extra_time).toBeUndefined();
   for (let batch = 0; batch < 10 && (await jelly(page)).campaign.challenge_stage < 2; batch++) {
     if (batch > 0) {
       for (let supply = 0; supply < 2; supply++) {
@@ -606,7 +612,7 @@ test('Challenge completes a full goal stage, increases difficulty and restores i
     const state = await jelly(page);
     return state.visible && state.phase === 'playing' && state.campaign?.kind === 'challenge' &&
       state.campaign.challenge_stage === 1 && state.campaign.collection_count === 0 &&
-      state.tiles.length === 15 && state.tiles.every(tile => tile.settled);
+      state.tiles.length === 21 && state.tiles.every(tile => tile.settled);
   }, { timeout: 60000 }).toBe(true);
   expect((await jelly(page)).stage.challenge_best_stage).toBe(best);
   expect((await wallet(page)).balance).toBe(settledBalance);

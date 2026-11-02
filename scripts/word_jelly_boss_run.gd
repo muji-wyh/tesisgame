@@ -305,6 +305,6 @@ func snapshot() -> Dictionary:
 		"health": health, "max_health": int(definition.get("health", 0)), "charge": charge,
 		"clones": clones, "ward": ward, "elapsed": elapsed, "outcome": outcome,
 		"ending_elapsed": ending_elapsed, "broken_remaining": broken_remaining,
-		"drop_limit": 2 if broken_remaining > EPSILON else 5,
+		"drop_limit": 2 if broken_remaining > EPSILON else 7,
 		"statuses": _statuses.duplicate(true), "projectiles": _projectiles.duplicate(true),
 		"events": _events.duplicate(true), "next_attack": _attack_in}

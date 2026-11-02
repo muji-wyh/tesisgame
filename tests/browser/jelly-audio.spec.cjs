@@ -487,7 +487,7 @@ test('Jelly Words reuses one fixed bubble pop per manual or batch collection and
   expect(opening.mode).toBe('word_jelly');
   expect(opening.authored_morphology).toBe(true);
   expect(opening.tiles.reduce((area, tile) => area + tile.width * tile.height, 0),
-    'The authored opening respects its fifteen-cell occupied-area budget').toBeLessThanOrEqual(15);
+    'The authored opening respects its twenty-one-cell occupied-area budget').toBeLessThanOrEqual(21);
   await context.setOffline(true);
   try {
     const manual = await prepareWordCollection(page, { manual: true }), beforeManual = await jelly(page);

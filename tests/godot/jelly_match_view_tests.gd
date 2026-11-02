@@ -1484,6 +1484,8 @@ func _check_danger_curve() -> void:
 	for duration: float in [8.0, 10.0]:
 		var opening: Dictionary = DangerFrame.sample(0.0, duration, false)
 		var peak: Dictionary = DangerFrame.sample(duration, duration, false)
+		check(is_equal_approx(float(opening.glow_extent), 20.0) and is_equal_approx(float(peak.glow_extent), 112.0),
+			"The wider warning keeps a twenty-pixel opening and a full 112-pixel exterior bloom")
 		check(float(peak.glow_extent) >= float(opening.glow_extent) * 4.0,
 			"The final warning spreads its light well beyond the opening rim")
 		check(float(peak.travel_speed) >= float(opening.travel_speed) * 8.0,
@@ -1516,6 +1518,8 @@ func _check_danger_curve() -> void:
 			previous = state
 	var frame = DangerFrame.new()
 	var peak_extent: float = float(DangerFrame.sample(10.0, 10.0, false).glow_extent)
+	check(DangerFrame.HALO_MARGIN >= peak_extent + 8.0,
+		"The expanded danger canvas leaves safety padding beyond the entire visible bloom")
 	for scale_factor: float in [0.65, 1.0, 1.6]:
 		var bounds := Rect2(90.0, 100.0, 260.0, 440.0)
 		frame.layout_frame(bounds, scale_factor, 18.0)

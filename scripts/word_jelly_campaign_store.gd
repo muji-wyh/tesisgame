@@ -3,7 +3,10 @@ extends RefCounted
 
 const Catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
 const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
-const VERSION: int = 3
+const Economy = preload("res://scripts/coin_economy.gd")
+const Wallet = preload("res://scripts/coin_wallet.gd")
+const VERSION: int = 5
+const UPGRADE_LEVEL_KEYS: Dictionary = {"jelly": "level", "auto_merge": "auto_merge_level"}
 const MAX_CONTEXTS: int = 256
 const MAX_COMPLETED: int = 64
 const MAX_RESULT_FIELDS: int = 32
@@ -24,6 +27,7 @@ var _path: String
 var _host: Object
 var _saved_text: Variant = null
 var _contexts: Dictionary = {}
+var _upgrades: Dictionary = {"level": 1, "auto_merge_level": 1, "pending": {}, "intro": "unseen"}
 
 
 func _init(path: String = "user://jelly-campaign-v1.cfg", host: Object = null) -> void:
@@ -44,16 +48,21 @@ func load_state() -> bool:
 	if not stored.ok:
 		return false
 	var next_contexts: Dictionary = {}
+	var next_upgrades: Dictionary = {"level": 1, "auto_merge_level": 1, "pending": {}, "intro": "unseen"}
 	if stored.text != null:
 		var config := ConfigFile.new()
 		if config.parse(stored.text) != OK or config.get_sections().size() != 1 \
-			or not config.has_section("campaign") or config.get_section_keys("campaign").size() != 2:
+			or not config.has_section("campaign"):
 			return _fail("Your campaign save could not be understood. It has not been reset.")
 		var version: Variant = config.get_value("campaign", "version", null)
-		if not version is int or version not in [1, 2, VERSION]:
+		if not version is int or version not in [1, 2, 3, 4, VERSION]:
 			return _fail("This campaign save needs a supported version.")
+		var keys: PackedStringArray = config.get_section_keys("campaign")
+		if keys.size() != (3 if version >= 4 else 2) or not "contexts" in keys \
+			or (version >= 4 and not "upgrades" in keys):
+			return _fail("Your campaign save needs its complete progression and upgrade journal.")
 		var contexts: Variant = config.get_value("campaign", "contexts", null)
-		if version < VERSION and contexts is Dictionary:
+		if version < 3 and contexts is Dictionary:
 			contexts = contexts.duplicate(true)
 			for state: Variant in contexts.values():
 				if version == 1 and state is Dictionary and state.size() == 5 and not state.has("boss_victories"):
@@ -64,7 +73,26 @@ func load_state() -> bool:
 		if not validation_error.is_empty():
 			return _fail(validation_error)
 		next_contexts = contexts.duplicate(true)
+		if version >= 4:
+			var upgrades: Variant = config.get_value("campaign", "upgrades", null)
+			if version == 4:
+				if not upgrades is Dictionary or upgrades.size() != 3 \
+					or not upgrades.has_all(["level", "pending", "intro"]) or not upgrades.pending is Dictionary \
+					or not upgrades.pending.is_empty() and (upgrades.pending.size() != 3 \
+						or not upgrades.pending.has_all(["level", "price", "id"])):
+					return _fail("Your saved Jelly upgrades need their complete level and purchase journal.")
+				upgrades = upgrades.duplicate(true)
+				upgrades.auto_merge_level = 1
+				if not upgrades.pending.is_empty():
+					upgrades.pending.kind = "jelly"
+			var upgrade_error: String = _upgrades_error(upgrades)
+			if not upgrade_error.is_empty():
+				return _fail(upgrade_error)
+			next_upgrades = upgrades.duplicate(true)
+		else:
+			next_upgrades = _legacy_upgrades(next_contexts)
 	_contexts = next_contexts
+	_upgrades = next_upgrades
 	_saved_text = stored.text
 	ready = true
 	return true
@@ -105,8 +133,80 @@ func boss_victories(context: String) -> Array:
 	return _context(context).boss_victories.duplicate()
 
 
-func merged_level(context: String) -> int:
-	return BossCatalog.merged_level(boss_victories(context))
+func merged_level() -> int:
+	return upgrade_level("jelly")
+
+
+func auto_merge_level() -> int:
+	return upgrade_level("auto_merge")
+
+
+func upgrade_level(kind: String) -> int:
+	if not _upgrades_readable():
+		return 1
+	if not UPGRADE_LEVEL_KEYS.has(kind):
+		_fail("Choose Jelly powers or Auto merge before reading an upgrade.")
+		return 1
+	return int(_upgrades[UPGRADE_LEVEL_KEYS[kind]])
+
+
+func upgrade_state() -> Dictionary:
+	return _upgrades.duplicate(true) if _upgrades_readable() else {}
+
+
+func begin_upgrade(level: int, kind: String = "jelly") -> bool:
+	error = ""
+	if not _upgrades_readable() or not _current_snapshot_matches():
+		return false
+	if not UPGRADE_LEVEL_KEYS.has(kind) or level < 2 or level > Economy.MAX_UPGRADE_LEVEL \
+		or level != int(_upgrades[UPGRADE_LEVEL_KEYS[kind]]) + 1:
+		return _fail("Buy the next level of the selected upgrade in order.")
+	if not _upgrades.pending.is_empty():
+		return true if _upgrades.pending.kind == kind and int(_upgrades.pending.level) == level \
+			else _fail("Finish the saved upgrade before buying another.")
+	var next: Dictionary = _upgrades.duplicate(true)
+	next.pending = {"kind": kind, "level": level, "price": Economy.permanent_upgrade_price(kind, level),
+		"id": _upgrade_receipt(kind, level)}
+	return _commit(_contexts.duplicate(true), next)
+
+
+func complete_upgrade(level: int, wallet: Wallet, kind: String = "jelly") -> bool:
+	error = ""
+	if not _upgrades_readable() or not _current_snapshot_matches():
+		return false
+	if not UPGRADE_LEVEL_KEYS.has(kind):
+		return _fail("Choose the saved upgrade before completing its purchase.")
+	var owned: int = int(_upgrades[UPGRADE_LEVEL_KEYS[kind]])
+	if level >= 2 and level <= owned:
+		return true
+	var pending: Dictionary = _upgrades.pending
+	if pending.is_empty() or pending.kind != kind or int(pending.level) != level or level != owned + 1:
+		return _fail("This level has no matching saved upgrade.")
+	if wallet == null or not wallet.ready or not wallet.has_purchase(str(pending.id), int(pending.price)):
+		return _fail("The upgrade needs its exact saved coin purchase before it can unlock.")
+	var next: Dictionary = _upgrades.duplicate(true)
+	next[UPGRADE_LEVEL_KEYS[kind]] = level
+	next.pending = {}
+	if kind == "jelly":
+		next.intro = "complete"
+	return _commit(_contexts.duplicate(true), next)
+
+
+static func _upgrade_receipt(kind: String, level: int) -> String:
+	return ("auto-merge-level-v1:%d" if kind == "auto_merge" else "jelly-level-v1:%d") % level
+
+
+func begin_upgrade_guide() -> bool:
+	error = ""
+	if not _upgrades_readable() or not _current_snapshot_matches():
+		return false
+	if _upgrades.intro in ["guide", "complete"]:
+		return true
+	if _upgrades.intro != "offer" or int(_upgrades.level) != 1:
+		return _fail("Complete the first stage before starting the Jelly upgrade introduction.")
+	var next: Dictionary = _upgrades.duplicate(true)
+	next.intro = "guide"
+	return _commit(_contexts.duplicate(true), next)
 
 
 func challenge_best_stage(context: String) -> int:
@@ -229,6 +329,7 @@ func complete_result(context: String, round_id: String) -> bool:
 		return _fail("This round has no matching pending settlement. Another result has not been removed.")
 	var result: Dictionary = state.pending.result
 	var changed: Dictionary = state.duplicate(true)
+	var next_upgrades: Dictionary = _upgrades.duplicate(true)
 	if result.kind == "main" and result.outcome == "cleared":
 		var number: int = int(result.number)
 		var highest: int = int(state.highest_cleared)
@@ -237,6 +338,8 @@ func complete_result(context: String, round_id: String) -> bool:
 		changed.highest_cleared = maxi(highest, number)
 		var key: String = str(number)
 		changed.ratings[key] = maxi(int(changed.ratings.get(key, 0)), int(result.stars))
+		if number == 1 and highest == 0 and int(next_upgrades.level) == 1 and next_upgrades.intro == "unseen":
+			next_upgrades.intro = "offer"
 		if bool(result.get("boss_victory", false)) and int(result.boss_id) not in changed.boss_victories:
 			changed.boss_victories.append(int(result.boss_id))
 			changed.boss_victories.sort()
@@ -248,16 +351,21 @@ func complete_result(context: String, round_id: String) -> bool:
 	changed.pending = {}
 	var next: Dictionary = _contexts.duplicate(true)
 	next[context] = changed
-	return _commit(next)
+	return _commit(next, next_upgrades)
 
 
-func _commit(next_contexts: Dictionary) -> bool:
+func _commit(next_contexts: Dictionary, upgrades: Variant = null) -> bool:
 	var validation_error: String = _contexts_error(next_contexts)
+	if not validation_error.is_empty():
+		return _fail(validation_error)
+	var next_upgrades: Dictionary = _upgrades if upgrades == null else upgrades
+	validation_error = _upgrades_error(next_upgrades)
 	if not validation_error.is_empty():
 		return _fail(validation_error)
 	var config := ConfigFile.new()
 	config.set_value("campaign", "version", VERSION)
 	config.set_value("campaign", "contexts", next_contexts)
+	config.set_value("campaign", "upgrades", next_upgrades)
 	var text: String = config.encode_to_text()
 	if text.to_utf8_buffer().size() > MAX_SAVE_BYTES:
 		return _fail("Campaign storage is full. This change has not been saved.")
@@ -272,8 +380,49 @@ func _commit(next_contexts: Dictionary) -> bool:
 	elif not _persist_native(text):
 		return false
 	_contexts = next_contexts
+	_upgrades = next_upgrades.duplicate(true)
 	_saved_text = text
 	return true
+
+
+func _upgrades_readable() -> bool:
+	return true if ready else _fail("Load your campaign successfully before reading or changing Jelly upgrades.")
+
+
+func _upgrades_error(value: Variant) -> String:
+	if not value is Dictionary or value.size() != 4 or not value.has_all(["level", "auto_merge_level", "pending", "intro"]) \
+		or not value.level is int or value.level < 1 or value.level > Economy.MAX_UPGRADE_LEVEL \
+		or not value.auto_merge_level is int or value.auto_merge_level < 1 \
+		or value.auto_merge_level > Economy.MAX_UPGRADE_LEVEL or not value.pending is Dictionary \
+		or not value.intro is String or value.intro not in ["unseen", "offer", "guide", "complete"] \
+		or (value.level > 1 and value.intro != "complete"):
+		return "Your Jelly upgrades need their saved level, introduction and purchase journal."
+	if not value.pending.is_empty():
+		var pending: Dictionary = value.pending
+		if pending.size() != 4 or not pending.has_all(["kind", "level", "price", "id"]) \
+			or not pending.kind is String or not UPGRADE_LEVEL_KEYS.has(pending.kind) \
+			or not pending.level is int or pending.level != value[UPGRADE_LEVEL_KEYS[pending.kind]] + 1 \
+			or pending.level > Economy.MAX_UPGRADE_LEVEL \
+			or not pending.price is int or pending.price < 25 or pending.price > MAX_SCALAR \
+			or pending.price % Wallet.PURCHASE_UNIT != 0 \
+			or pending.get("id") != _upgrade_receipt(str(pending.kind), int(pending.level)):
+			return "Your pending Jelly upgrade needs its original next level, exact price and receipt."
+	return ""
+
+
+func _legacy_upgrades(contexts: Dictionary) -> Dictionary:
+	var level: int = 1
+	var played: bool = false
+	for state: Dictionary in contexts.values():
+		played = played or int(state.highest_cleared) > 0
+		var earned: int = 1 + state.boss_victories.size()
+		if not state.pending.is_empty():
+			var result: Dictionary = state.pending.result
+			if bool(result.get("boss_victory", false)) and int(result.boss_id) not in state.boss_victories:
+				earned += 1
+		level = maxi(level, mini(9, earned))
+	return {"level": level, "auto_merge_level": 1, "pending": {},
+		"intro": "complete" if played or level > 1 else "unseen"}
 
 
 func _persist_native(text: String) -> bool:
@@ -467,7 +616,7 @@ func _result_error(value: Variant, context: Dictionary) -> String:
 			or not value.get("boss_id") is int or value.boss_id < 1 or value.boss_id > BossCatalog.STAGES.size() \
 			or (BossCatalog.STAGES[value.boss_id - 1] != value.number \
 				and (value.has("boss_roster_version") or BossCatalog.LEGACY_STAGES[value.boss_id - 1] != value.number)):
-			return "A Boss unlock needs the original cleared Boss stage and its matching encounter identity."
+			return "A Boss victory needs the original cleared Boss stage and its matching encounter identity."
 	if value.has("boss_roster_version") and (not value.boss_roster_version is int or value.boss_roster_version != 2):
 		return "The Boss settlement has an unsupported encounter roster."
 	if value.has("challenge_stage") and (value.kind != "challenge" or not value.challenge_stage is int \

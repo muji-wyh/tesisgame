@@ -41,13 +41,23 @@ size in a short landscape viewport so its actual Stage 99 action stays reachable
 
 The map's presentation takes its emotional anchor from the integrated storybook
 [Pip artwork and six-part choreography](pip-growth.md), not a newly acquired
-character. Pip stands beside the actual next stage, uses the saved growth age
-or the requested career wardrobe, greets on arrival and retains the existing
-quiet age gestures. This reuses original project artwork under the repository
+character. Pip rests on the actual next medallion's upper rim, using the saved
+growth age or requested career wardrobe. The existing torso layer sits behind
+the medallion while folded wings and the sleepy head sit in front; individual
+parts rotate around their real joints without flattening the character. The
+map-only controller in `scripts/word_jelly_map_pip.gd` adds quiet breathing and
+blinks, and raises the head on real stage hover or focus without delaying entry.
+It does not change the header's age-specific gestures or add a shared action.
+This reuses original project artwork under the repository
 ISC declaration; the original illustrator is still unrecorded and no separate
 illustrator license is claimed. Baby and age-three atlas poses were inspected
-alongside the actual phone map before integration. Pip is decorative and cannot
-intercept a stage tap or enter keyboard navigation.
+alongside the actual phone map before integration. The actual baby part and
+expression-head atlases were inspected again before this supported pose.
+These remain static source layers with game-authored motion, not newly acquired
+artwork or source animation clips. Pip and its foreground layer are decorative
+and cannot intercept a stage tap or enter keyboard navigation. At the current
+Boss node, the existing portrait uses the free flank so it does not occupy Pip's
+perch; the final portrait retains its distinct purple frame and sourced aspect.
 
 Completed route edges have a warm gold center; an unearned road stays cream.
 Only the actual frontier gets the larger acquired medallion, mint Play tray,
@@ -65,11 +75,19 @@ stop their idle clock, and a canceled scroll contact clears its press response.
 
 ## Board presentation
 
-The Ready/Go flourish, newly earned skill explanation and completed-goal
+The existing warning light has a wider exterior corona: it grows from 20 to
+112 display pixels over the unchanged rescue clock, with 128 pixels of canvas
+padding and a softer outward falloff. The fine traveling rim, interior spill,
+color progression, beat and reduced-motion policy are unchanged. The acquired
+portal-glow and sparkle textures retain their existing rights and integration;
+no new artwork, timer, full-screen tint or input layer is added.
+
+The Ready/Go flourish, coin-upgrade ability previews and completed-goal
 retirement reuse these integrated gel skins, actual vocabulary pictures and
-the same sourced portal/ray/sparkle textures. The skill preview is a view-only
-illustration of the real collection footprint, not a synthetic replacement
-Jelly or a second gameplay/reward model. Completion uses the existing sourced
+the same sourced portal/ray/sparkle textures. The upgrade page samples the real
+campaign collection selector on a complete seven-column, eight-row board,
+including all 55 other bodies for Lv9. The illustration never collects, pays,
+or records learning. Completion uses the existing sourced
 Tabler check mark (Paweł Kuna, MIT); its source SVG paths stay unchanged.
 A game-authored mask progressively reveals the tick inside the source circle,
 followed by a silent three-active-second hold and 380 ms exit. There is no Done
@@ -86,9 +104,11 @@ claimed or acquired for these revisions.
 | Chest models, local light accents, paper confetti | Existing acquired chest and particle assets; creators and licenses recorded in the linked fragment record | The shared ChestCelebration and RewardConfetti timelines provide first-chest synthesis, upgrade rotation, enlargement, flash, and paper bursts. Reused as integrated assets, not source previews. |
 | Contact, merge, and disappear audio | User-selected contact and merge WAVs; original creators greenlinker and rubberduck, CC0. The approved fixed bubble pop and acquired Kenney CC0 layers provide level cues; exact provenance is in [Jelly level feedback](jelly-level-feedback.md) | Contact fires on the first eligible approach or painted-body touch, merge on commitment, and the level-specific cue on collection release. Lv1 keeps the approved bubble pop. |
 | Rejected merge audio | Existing user-supplied wrong-answer excerpt; creator, acquisition status and unsupplied license terms are recorded in [pair feedback](pair-feedback-audio.md) | Reuses the integrated 860 ms `wrong.wav` at gain 0.48 once when a failed drop separates. No new extraction, processing or animation asset. |
+| Upgrade and first-clear example picture | Microsoft Corporation, Fluent Emoji 3D Cat, MIT; the byte-identical acquired `assets/images/ui/modes/cat.webp` copy and upstream revision are recorded in [mode artwork](../../assets/images/ui/modes/ATTRIBUTION.md) | Reused integrated startup artwork, not a source preview or new download. The source is static; target illumination and Jelly material motion are game-authored. |
+| Saved-coin and upgrade price artwork | Kenneth Foldal Moe / Archanor VFX, acquired Toon FX 1.52, recorded Standard Unity Asset Store EULA; see [gold coin artwork](coins.md) | Reuses `assets/coins/gold-coin.png` with its existing acquisition, source/output hashes and license. No new art or animation clips are acquired. |
 
-The board has five columns and eight rows, holding 40 cells and opening with at
-most 15 jellies across three rows. Every jelly keeps a 1:1 square aspect ratio.
+The board has seven columns and eight rows, holding 56 cells and opening with at
+most 21 jellies across three rows. Every jelly keeps a 1:1 square aspect ratio.
 Reviewed entries use meaningful roots and exact authored spelling transformations.
 Root labels use positional hyphens, such as `un-`, `-believe-`, and `-able`.
 An atomic word such as `cat` supplies a whole-word root plus a separate cat picture.
@@ -101,11 +121,16 @@ content stays whole; it is never cut into arbitrary letter groups. See the
 Merged jellies show the full word, its available picture, a warm rim, and sourced
 light accents. Two merged jellies with the same vocabulary identity combine by
 adding their levels, including different levels: Lv1 + Lv3 becomes Lv4 and
-Lv2 + Lv7 becomes Lv9. There are nine levels, unlocked through Boss victories.
+Lv2 + Lv7 becomes Lv9. Lv1 is free; the eight higher levels are permanent coin
+unlocks shared across Jelly World learning routes. Their sequential prices are
+50, 100, 200, 350, 550, 800, 1100 and 1500 coins. Boss wins no longer grant levels.
 Sums clamp to the learner's unlocked cap, so Lv2 + Lv3 becomes Lv4 when Lv4 is
 unlocked. All carried mass and fragments survive the union. A matching Jelly
 can also join the accepted result while its previous fusion is still animating.
-The map and active board name the available cap in their sourced Jelly LvN badge.
+The map's sourced Jelly LvN badge is an actionable Upgrade entry, while the
+active board names the available cap. The first saved Stage 1 clear leads through
+a power-discovery modal into a focused Lv2 purchase guide; saved clear coins are
+already available and no purchase happens without the player's tap.
 Lv2–9 show their individual number at the upper-right;
 carried chest fragments use the opposite corner. All stages retain one ordinary
 cell. Joining, picture matching, and upgrading do not collect rewards or learning
@@ -158,7 +183,7 @@ fragment markers, while tapping the complete word collects them.
 Carried fragments use a compact upper-left stack of at most two current-tier
 chest icons. One or two fragments remain directly countable; larger stacks show
 their exact total in a small cream count capsule. The group fits inside the
-jelly with a separate space above the spelling, so repeat Treasure purchases
+jelly with a separate space above the spelling, so accumulated natural fragments
 cannot create a row of icons across neighboring bodies. A brief, local receive
 pop follows the existing fragment-arrival clock; reduced motion keeps it still.
 This reuses the acquired chest texture and its existing source/license records
@@ -166,7 +191,7 @@ in [Jelly fragments](jelly-fragments.md) and [chest replacement](chest-refresh.m
 The chest is a static cropped render here, with runtime scale animation; no new
 artwork or audio is acquired. The count capsule is an interface layout primitive.
 All source parts, intermediate compositions, atomic words, completed words, and
-previews use one ordinary square cell. The five-column, eight-row well uses a
+previews use one ordinary square cell. The seven-column, eight-row well uses a
 responsive cell pitch; neither spelling length nor accumulated parts
 enlarge a body. This is the former ordinary Jelly display size, not a fixed
 32-pixel rendering size. Labels fit the available square at a minimum of 13
@@ -176,6 +201,8 @@ Hold an overflowed Jelly still for 450 ms, or focus it and press R, to pause and
 more than seven displayed pixels cancels the hold; quick taps still collect
 completed words. The Read detail also works for supply previews without dropping
 them. Resizing never changes logical footprints.
+The Boss rail yields excess width to preserve the seven-column well's existing
+32-display-pixel minimum on supported phones; genuinely undersized windows pause.
 The model owns the merge and collection clocks, wallet receipt, fragment count,
 and chest tier. Visual callbacks never grant coins.
 
@@ -187,6 +214,9 @@ body size and timing remain unchanged. The medal and measured numeric glyphs
 form one centered group, including five-digit records; highlights support that
 subject rather than adding another idle motion. These are layout/type/state
 refinements of the integrated production art, not new acquisitions.
+Normal word-goal lists start with the individual cards, without a medal,
+`Word goals` heading or aggregate completion subtitle. The cards reclaim that
+vertical space; compact countdowns and Challenge best-stage records stay intact.
 
 Each manual drop completing a whole word requests its pronunciation immediately when the
 merge is accepted, alongside the fusion animation. This removes the previous
@@ -208,18 +238,22 @@ compatible roots, finishes picture matching, or adds levels of matching words,
 clamping the result to the same unlocked cap as manual merging.
 It leaves merged jellies on the board for ordinary collection. The planner checks
 an entire completion path and all intermediate rectangles before charging.
-Eligible pairs launch every 200 ms, each with a 250 ms flight, 110 ms fusion,
+The same permanent-upgrade page includes Auto merge: free Lv1 handles up to three
+original board Jellies, and each higher level adds one up to eleven at Lv9.
+Its increasing upgrade costs and independent saved ownership are documented in
+[coin economy](../coin-economy.md). Generated results do not consume additional
+slots; a complete path and its required picture must fit before reservation.
+The button's sourced gel-and-number badge shows this actual owned capacity.
+Eligible pairs launch every 100 ms, each with a 320 ms flight, 110 ms fusion,
 and 30 ms settlement. Flights overlap; only steps that need an earlier result
 wait for that result to settle. Partial-only paths cannot buy the tool.
 Its assisted result remains collectable without creating mastery evidence.
-Treasure costs 200,
-300, then 400 coins per round and delivers a random total of two to eight carried fragments to the current
-board, preferring bodies without fragments. Payment is persisted before either
-ability starts. Treasure can be purchased again during delivery, with each paid
-batch starting its own flights immediately on the shared animation timeline.
-The two prices advance independently after successful payment;
-failed or duplicate payments do not advance them. Supply and danger clocks wait while the ability runs; Home and
-the Finish pull gesture pause it. Neither ability collects words, grants coins, or
+The paid Treasure and +30 sec controls are retired. Their buttons, quotes and
+purchase routes are unavailable; natural chest fragments and earned treasure
+remain. Auto merge payment is persisted before the action starts, and its price
+advances only after successful payment. Failed or duplicate payments do not
+advance it. Supply and danger clocks wait while the action runs; Home and the
+Finish pull gesture pause it. The action never collects words, grants coins or
 credits learning progress by itself.
 
 Automatic merges keep the board positions fixed while their reserved paths run.
@@ -285,10 +319,12 @@ the union at the visible contact pose and removes the consumed fall animation.
 Queued supply items, lifted bodies and accepted fusion endpoints cannot be
 caught again. Keyboard and automatic merge commands retain settled targets.
 
-New five-part supply packets mix parts from different words, leaving intervening
+New seven-part supply packets mix parts from different words, leaving intervening
 pieces between siblings whenever the packet permits it. Word provenance, part
 order, and fragment markers stay attached to each piece, including targets that
 span packet boundaries; already visible previews are never reshuffled.
+The exact ordering search reuses equivalent per-packet states, preserving its
+original first-tie order without repeating the same remaining work.
 Neighboring bodies leave a nine-percent cell gap for clearer separation.
 
 On pointer press, every available target that legally composes with the selected
@@ -339,7 +375,7 @@ The next pickup, pause, round finish or navigation stops the previous sound tail
 Rejection preserves both bodies, carried fragments and rewards without recording
 a learning attempt.
 
-Supply releases across alternating columns (1, 4, 2, 5, 3), with 0.15 seconds
+Supply releases across alternating columns (1, 5, 2, 6, 3, 7, 4), with 0.15 seconds
 between starts. The bodies accelerate under the existing gravity and recover
 after landing. Shared entry lanes retain extra clearance so a later piece cannot
 overtake an earlier one. Each preview slot refills after its own departing body
@@ -353,12 +389,12 @@ packet dispatch, automatic or manual, fixes the interval for the following
 cycle. Collections never shorten the current Next countdown, and rejected
 dispatches leave it intact. New rounds restore the twenty-second opening
 baseline interval. Reviewed rounds multiply that baseline by
-`max(1, preview occupied area / 5)` for the next wave; atomic collections count
+`max(1, preview occupied area / 7)` for the next wave; atomic collections count
 once, while partial merges never count. The existing danger grace period remains independent. This polish
 reuses the integrated gel artwork and landing
 audio above; it adds no downloaded assets.
 
-The committed preview has five lanes, with each jelly using one square slot.
+The committed preview has seven lanes, with each jelly using one square slot.
 Unused lanes remain empty. The next FIFO card waits for a contiguous
 span without rearranging cards. Each card enters through its advertised columns
 only when its full rectangle fits; a sealed entry keeps its identity, exact text,
@@ -399,11 +435,10 @@ coins remain rare; the button uses the word illustration rather than coin art.
 
 Collect sits directly above Auto merge with the same width and horizontal
 alignment. A visible rule centered in a twenty-pixel gap separates free
-collection from the two coin-priced tools. This rule is a decorative interface
+collection from the remaining coin-priced Auto merge tool. This rule is a decorative interface
 primitive and does not receive input. Side layouts keep this action group at
-the bottom of the right rail, with Treasure eight pixels below Auto merge.
-Other layouts place Collect above the left purchase control below the well;
-the divider spans both purchase controls in their shared bottom row.
+the bottom of the right rail, with no empty retired slots. Other layouts place
+Collect above Auto merge below the well; the divider spans their shared width.
 
 The well and side rail are centered together, with a twelve-pixel gap between
 them. The rail ranges from 88 to 144 display pixels wide so small screens

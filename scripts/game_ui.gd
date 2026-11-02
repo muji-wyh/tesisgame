@@ -929,8 +929,9 @@ func _build_controls() -> void:
 	_jelly_rewards.interaction_allowed = func() -> bool: return _jelly_rewards_shown and _is_jelly_mode() and not collection_page.visible and not _page_hidden and not _mode_menu_open()
 	_jelly_rewards.exit_requested.connect(_hide_jelly_rewards)
 	_jelly_rewards.replay_requested.connect(_replay_jelly)
-	_jelly_rewards.challenge_result_accepted.connect(func() -> void: _campaign.accept_challenge_result())
-	_jelly_rewards.challenge_retry_requested.connect(func() -> void: _campaign.accept_challenge_result(true))
+	_jelly_rewards.campaign_result_accepted.connect(func() -> void: _campaign.accept_result())
+	_jelly_rewards.campaign_retry_requested.connect(func() -> void: _campaign.accept_result("retry"))
+	_jelly_rewards.upgrades_requested.connect(func() -> void: _campaign.accept_result("upgrades"))
 	_jelly_rewards.challenge_record_broken.connect(func(round_id: String) -> void:
 		if round_id != _round_id or _page_hidden or not _jelly_rewards_shown:
 			return
@@ -2552,7 +2553,7 @@ func _sync_jelly() -> void:
 	_sync_round_end()
 	_sync_settlement_dialog()
 	if _campaign != null and _campaign.map != null:
-		_campaign.map.set_active(not _page_hidden and not _rebuilding and not _speech_debug_active \
+		_campaign.set_active(not _page_hidden and not _rebuilding and not _speech_debug_active \
 			and not collection_page.visible and not _mode_menu_open())
 	var allowed: bool = _jelly_interaction_allowed()
 	_jelly.pause(not allowed or _mode_id != "jelly")
@@ -2634,8 +2635,7 @@ func _purchase_word_jelly_powerup(event_id: String, kind: String, price: int) ->
 	var result: Dictionary = coin_wallet.spend(receipt, price)
 	_coin_counter.available = coin_wallet.ready and coin_wallet.error.is_empty()
 	if bool(result.get("ok", false)) and not bool(result.get("duplicate", false)):
-		var title: String = {"auto_merge": "Auto merge", "family_merge": "Word auto merge",
-			"fragments": "Treasure", "extra_time": "Extra time"}[kind]
+		var title: String = {"auto_merge": "Auto merge", "family_merge": "Word auto merge"}[kind]
 		var goal: Button = _word_jelly.goal_merge_button() if kind == "family_merge" else null
 		if goal != null:
 			var item: Dictionary = goal.get("_goal")
@@ -4507,7 +4507,7 @@ func set_reduced_motion(value: bool) -> void:
 	_jelly.set_reduced_motion(value)
 	_word_jelly.set_reduced_motion(value)
 	if _campaign != null and _campaign.is_open():
-		_campaign.map.set_reduced_motion(value)
+		_campaign.set_reduced_motion(value)
 	_jelly_backdrop.set_reduced_motion(value)
 	_jelly_rewards.set_reduced_motion(value)
 	_memory.set_reduced_motion(value)
@@ -5327,7 +5327,7 @@ func _valid_focus(control: Control) -> bool:
 	if _jelly_pause_open():
 		return control == _jelly_pause_button
 	if _campaign != null and _campaign.is_open() and not _vocabulary_prompt.visible:
-		return _campaign.map.is_ancestor_of(control)
+		return _campaign.allows_focus(control)
 	if _finish_confirmation_open():
 		return _finish_confirmation.is_ancestor_of(control)
 	if is_instance_valid(_vocabulary_prompt) and _vocabulary_prompt.visible:
@@ -5347,8 +5347,7 @@ func _valid_focus(control: Control) -> bool:
 
 func _default_focus() -> Control:
 	if _campaign != null and _campaign.is_open() and not _vocabulary_prompt.visible:
-		var controls: Array[Control] = _campaign.map.navigation_controls()
-		return controls.back() if not controls.is_empty() else _campaign.map
+		return _campaign.default_focus()
 	if _jelly_pause_open():
 		return _jelly_pause_button
 	if _finish_confirmation_open():

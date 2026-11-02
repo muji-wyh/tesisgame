@@ -26,17 +26,20 @@ static func supply_groups(count: int) -> Array[Dictionary]:
 	if not game.configure(fixture_words(), 3, 20261014):
 		return []
 	var groups: Dictionary = {}
-	while groups.size() < count:
+	var complete: Dictionary = {}
+	while complete.size() < count:
 		for tile: Dictionary in game.cells:
 			var id: int = int(tile.supply_group)
 			if not groups.has(id):
 				groups[id] = {"id": id, "chunks": 0, "fragments": 0}
 			groups[id].chunks += 1
 			groups[id].fragments += int(tile.fragments)
+			if int(groups[id].chunks) == int(tile.supply_parts):
+				complete[id] = true
 		game.cells.clear()
-		if groups.size() < count and not game.drop_now():
+		if complete.size() < count and not game.drop_now():
 			return []
-	var ids: Array = groups.keys()
+	var ids: Array = complete.keys()
 	ids.sort()
 	var result: Array[Dictionary] = []
 	for id: int in ids.slice(0, count):

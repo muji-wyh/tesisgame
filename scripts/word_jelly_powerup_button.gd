@@ -3,11 +3,13 @@ extends Button
 
 const Style = preload("res://scripts/ui_style.gd")
 const Model = preload("res://scripts/word_jelly_model.gd")
+const Economy = preload("res://scripts/coin_economy.gd")
 const WAND = preload("res://assets/images/ui/jelly-powerups/auto-merge-wand.svg")
 const MAGNET = preload("res://assets/images/ui/jelly-powerups/family-magnet.webp")
 const CHEST = preload("res://assets/chests/royal/closed.png")
 const COIN = preload("res://assets/coins/gold-coin.png")
 const CLOCK = preload("res://assets/images/ui/jelly-goals/clock.webp")
+const GEL = preload("res://assets/images/jelly-match/gel-mint.png")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
 const SUCCESS_SECONDS: float = 0.62
@@ -39,6 +41,11 @@ var _coin_rect := Rect2()
 var _price_pill := Rect2()
 var _title := Label.new()
 var _price_label := Label.new()
+var _capacity_label := Label.new()
+var _capacity_badge := StyleBoxFlat.new()
+var _capacity_rect := Rect2()
+var _auto_merge_capacity: int = Economy.AUTO_MERGE_BASE_CAPACITY
+var _auto_merge_level: int = 1
 var _panel := StyleBoxFlat.new()
 var _goal: Dictionary = {}
 var _goal_geometry: Dictionary = {}
@@ -53,7 +60,7 @@ func _init() -> void:
 	mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
 	for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
 		add_theme_stylebox_override(state, StyleBoxEmpty.new())
-	for label: Label in [_title, _price_label]:
+	for label: Label in [_title, _price_label, _capacity_label]:
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		label.add_theme_font_override("font", Style.HEADING_FONT)
 		label.add_theme_constant_override("line_spacing", 0)
@@ -61,6 +68,8 @@ func _init() -> void:
 		label.autowrap_mode = TextServer.AUTOWRAP_OFF
 		add_child(label)
 	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_capacity_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_capacity_label.add_theme_color_override("font_color", Style.PAPER)
 	resized.connect(_layout)
 	for event: Signal in [focus_entered, focus_exited, mouse_entered, mouse_exited, button_down, button_up]:
 		event.connect(queue_redraw)
@@ -117,6 +126,18 @@ func set_price(value: int) -> void:
 		return
 	_price = next_price
 	# Updating the next purchase must not cancel the current success animation.
+	_layout()
+	_update_accessibility()
+
+
+func set_auto_merge_level(level: int) -> void:
+	if level < 1 or level > Economy.MAX_UPGRADE_LEVEL:
+		push_error("Auto merge needs its real saved level.")
+		return
+	if level == _auto_merge_level:
+		return
+	_auto_merge_capacity = Economy.auto_merge_capacity(level)
+	_auto_merge_level = level
 	_layout()
 	_update_accessibility()
 
@@ -241,11 +262,14 @@ func _update_accessibility() -> void:
 			title, progress, _price, "Goal complete" if _goal.mastered else status])
 		return
 	set("accessibility_name", "%s. %d coins. %s.%s" % [title, _price, status,
-		" Choose a Jelly to merge its word, picture and upgraded family. Press again or Back to cancel." if _kind == "family_merge" else ""])
+		" Choose a Jelly to merge its word, picture and upgraded family. Press again or Back to cancel." if _kind == "family_merge" \
+			else " Lv%d. Up to %d board Jellies per use." % [_auto_merge_level, _auto_merge_capacity] if _kind == "auto_merge" else ""])
 
 
 func _layout() -> void:
 	var unit: float = 1.0 / _ui_scale
+	_capacity_label.visible = _kind == "auto_merge" and _goal.is_empty()
+	_capacity_rect = Rect2()
 	if not _goal.is_empty():
 		_title.scale = Vector2.ONE
 		_price_label.scale = Vector2.ONE
@@ -276,7 +300,8 @@ func _layout() -> void:
 	# local font sizes when the application canvas is highly scaled.
 	_title.scale = Vector2.ONE * unit
 	_price_label.scale = Vector2.ONE * unit
-	var wide: bool = size.x >= 144.0 * unit or is_equal_approx(size.x, 144.0 * unit)
+	var wide_edge: float = 180.0 if _kind == "auto_merge" else 144.0
+	var wide: bool = size.x >= wide_edge * unit or is_equal_approx(size.x, wide_edge * unit)
 	var edge: float = (24.0 if _compact else 32.0) * unit if wide else \
 		minf((18.0 if _compact else 26.0) * unit, minf(size.y * 0.50, size.x * 0.25))
 	var lower_center: float = size.y - (12.0 if _compact else 17.0) * unit
@@ -289,7 +314,23 @@ func _layout() -> void:
 		_icon_rect = Rect2(Vector2(7.0 * unit, lower_center - edge * 0.5), Vector2.ONE * edge)
 		_title.position = Vector2(6.0 * unit, (1.0 if _compact else 3.0) * unit)
 	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if wide else HORIZONTAL_ALIGNMENT_CENTER
-	var title_size := Vector2(maxf(1.0, size.x - _title.position.x - (8.0 if wide else 6.0) * unit), maxf(1.0, title_height))
+	var capacity_space: float = 0.0
+	if _capacity_label.visible:
+		if wide:
+			_capacity_rect = Rect2(Vector2(size.x - 54.0 * unit, (size.y - 26.0 * unit) * 0.5),
+				Vector2(46, 26) * unit)
+			capacity_space = 52.0 * unit
+		else:
+			_capacity_rect = Rect2(Vector2(_icon_rect.end.x - 14.0 * unit, _icon_rect.position.y + 3.0 * unit),
+				Vector2(20, 18) * unit)
+		_capacity_label.scale = Vector2.ONE * unit
+		_capacity_label.position = _capacity_rect.position + Vector2(22.0 * unit if wide else 0.0, 0)
+		_capacity_label.size = Vector2((_capacity_rect.size.x - (23.0 * unit if wide else 0.0)) / unit,
+			_capacity_rect.size.y / unit)
+		_capacity_label.text = str(_auto_merge_capacity)
+		_capacity_label.add_theme_font_size_override("font_size", 13 if wide else 11)
+	var title_size := Vector2(maxf(1.0, size.x - _title.position.x - (8.0 if wide else 6.0) * unit \
+		- capacity_space), maxf(1.0, title_height))
 	var title: String = _title_text()
 	var font_size: int = 12 if _compact else 13
 	while font_size > 1 and (Style.HEADING_FONT.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x * unit > title_size.x \
@@ -439,6 +480,13 @@ func _draw() -> void:
 		var extent: Vector2 = region.size * (_icon_rect.size.x / maxf(1.0, region.size.x))
 		draw_texture_rect_region(texture, Rect2(-extent * 0.5, extent), region, tint)
 	draw_set_transform(Vector2.ZERO)
+	if _capacity_label.visible:
+		_capacity_badge.bg_color = Color("#706080") if disabled and not celebrating else Color("#745496")
+		_capacity_badge.set_corner_radius_all(maxi(1, roundi(8.0 * unit)))
+		draw_style_box(_capacity_badge, _capacity_rect)
+		if _capacity_rect.size.x > 30.0 * unit:
+			draw_texture_rect(GEL, Rect2(_capacity_rect.position + Vector2(4, 5) * unit,
+				Vector2.ONE * 16.0 * unit), false)
 	var coin_size: Vector2 = _coin_rect.size * float(pose.coin_scale)
 	var coin_center: Vector2 = _coin_rect.get_center() + Vector2(pose.price_offset)
 	if not mastered:
@@ -465,6 +513,9 @@ func _draw() -> void:
 func snapshot() -> Dictionary:
 	var pose: Dictionary = _pose()
 	return {"kind": _kind, "price": _price, "available": _available, "affordable": _affordable, "targeting": _targeting,
+		"auto_merge_level": _auto_merge_level, "capacity": _auto_merge_capacity,
+		"capacity_badge": {"visible": _capacity_label.is_visible_in_tree(), "text": _capacity_label.text,
+			"rect": [_capacity_rect.position.x, _capacity_rect.position.y, _capacity_rect.size.x, _capacity_rect.size.y]},
 		"goal": not _goal.is_empty(), "spent_coins": _spent_coins if _feedback_active and _feedback_success and not _paused else 0,
 		"progress_ratio": clampf(float(_goal.current) / maxf(1.0, float(_goal.required)), 0.0, 1.0) if not _goal.is_empty() else 0.0,
 		"price_visible": _price_label.is_visible_in_tree(),

@@ -32,7 +32,7 @@ const MorphologyResolver = preload("res://scripts/morphology_resolver.gd")
 const StageRun = preload("res://scripts/word_jelly_stage_run.gd")
 const BossRun = preload("res://scripts/word_jelly_boss_run.gd")
 const LABEL_FONT = preload("res://assets/fonts/heading.tres")
-const COLUMNS: int = 5
+const COLUMNS: int = 7
 const ROWS: int = 8
 const CAPACITY: int = COLUMNS * ROWS
 const MAX_MERGE_LEVEL: int = 9
@@ -43,7 +43,7 @@ const SETTLE_SECONDS: float = 0.36
 const DRAG_GRAVITY_DELAY_SECONDS: float = 0.60
 const ARRIVAL_STAGGER: float = 0.15
 const ARRIVAL_SLOT_CLEARANCE: float = 0.36
-const ARRIVAL_ORDER: Array[int] = [0, 3, 1, 4, 2]
+const ARRIVAL_ORDER: Array[int] = [0, 4, 1, 5, 2, 6, 3]
 const FUSION_SECONDS: float = 0.76
 const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
@@ -67,7 +67,9 @@ const FULL_SECONDS: float = 10.0
 const CHEST_UNLOCK_FRAGMENTS: int = RewardProgress.CHEST_UNLOCK_FRAGMENTS
 const CHEST_UPGRADE_FRAGMENTS: int = RewardProgress.CHEST_UPGRADE_FRAGMENTS
 const EPSILON: float = 0.000001
-const POWERUP_PRICES: Dictionary = CoinEconomy.POWERUP_BASE_PRICES
+const POWERUP_PRICES: Dictionary = {
+	"auto_merge": CoinEconomy.POWERUP_BASE_PRICES.auto_merge,
+	"family_merge": CoinEconomy.POWERUP_BASE_PRICES.family_merge}
 const POWERUP_MERGE_BEAT_SECONDS: float = 0.10
 const POWERUP_DRAG_SECONDS: float = 0.32
 const POWERUP_FUSION_SECONDS: float = 0.11
@@ -156,7 +158,7 @@ var _blast_rng := RandomNumberGenerator.new()
 var _blast_queue: Array[Dictionary] = []
 var _collection_hit_stop: Dictionary = {}
 var _powerup: Dictionary = {}
-var _powerup_uses: Dictionary = {"auto_merge": 0, "family_merge": 0, "fragments": 0}
+var _powerup_uses: Dictionary = {"auto_merge": 0, "family_merge": 0}
 var _powerup_ids: Array[int] = []
 var _powerup_purchasing: bool = false
 var _powerup_activating: bool = false
@@ -172,12 +174,12 @@ var _stage_ending: bool = false
 var _stage_finalizing: bool = false
 var _stage_spawn_interval: float = INITIAL_SPAWN_INTERVAL
 var _stage_pressure_level: int = 0
-var _stage_time_pending: String = ""
 var _stage_clear_feedback: float = 0.0
 var _stage_clear_announced: bool = false
 var finish_feedback_ready: Callable
 var boss := BossRun.new()
 var merged_level_limit: int = MAX_MERGE_LEVEL
+var auto_merge_level: int = 1
 var _boss_returning: Array[Dictionary] = []
 var _campaign_level_rules: bool = false
 
@@ -195,12 +197,12 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	stage_run = null
 	boss.configure({})
 	merged_level_limit = MAX_MERGE_LEVEL
+	auto_merge_level = 1
 	_boss_returning.clear()
 	_campaign_level_rules = false
 	_stage_ending = false
 	_stage_finalizing = false
 	_stage_pressure_level = 0
-	_stage_time_pending = ""
 	_stage_clear_feedback = 0.0
 	_stage_clear_announced = false
 	fall_speed_scale = 1.0
@@ -300,7 +302,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 		changed.emit()
 		return false
 	authored_morphology = not analyses.is_empty()
-	_powerup_uses = {"auto_merge": 0, "family_merge": 0, "fragments": 0}
+	_powerup_uses = {"auto_merge": 0, "family_merge": 0}
 	phase = "playing"
 	_fill_upcoming()
 	var initial_area: int = 0
@@ -328,12 +330,17 @@ func bind_stage(plan: Dictionary) -> bool:
 	if not stage_transition_ready():
 		error = "Wait for the current Jelly operation before starting a stage."
 		return false
+	var auto_level: Variant = plan.get("auto_merge_level", auto_merge_level)
+	if not auto_level is int or auto_level < 1 or auto_level > CoinEconomy.MAX_UPGRADE_LEVEL:
+		error = "Auto merge needs a saved level from 1 to 9."
+		return false
 	var attempt := StageRun.new()
 	if not attempt.configure(plan):
 		error = attempt.error
 		return false
 	stage_run = attempt
 	merged_level_limit = clampi(int(plan.get("merged_level_limit", MAX_MERGE_LEVEL)), 1, MAX_MERGE_LEVEL)
+	auto_merge_level = auto_level
 	_campaign_level_rules = plan.has("merged_level_limit")
 	boss.configure(plan.get("boss", {}), int(plan.get("seed", 0)))
 	stage_run.boss_objective = boss.active() and not bool(boss.definition.get("intro", false))
@@ -620,7 +627,11 @@ func hit_stop_snapshot() -> Dictionary:
 
 
 func powerup_price(kind: String) -> int:
-	return CoinEconomy.powerup_price(kind, int(_powerup_uses.get(kind, 0)))
+	return CoinEconomy.powerup_price(kind, int(_powerup_uses.get(kind, 0))) if POWERUP_PRICES.has(kind) else 0
+
+
+func auto_merge_capacity() -> int:
+	return CoinEconomy.auto_merge_capacity(auto_merge_level)
 
 
 func powerup_snapshot() -> Dictionary:
@@ -629,6 +640,8 @@ func powerup_snapshot() -> Dictionary:
 		var snapshot: Dictionary = _powerup.duplicate()
 		snapshot.erase("plans")
 		snapshot.erase("next_plan_id")
+		snapshot.erase("used_input_ids")
+		snapshot.erase("generated_ids")
 		return snapshot.duplicate(true)
 	return {
 		"active": false, "kind": "", "receipt_id": "", "stage": "", "elapsed": 0.0,
@@ -639,21 +652,15 @@ func powerup_snapshot() -> Dictionary:
 
 
 func can_activate_powerup(kind: String) -> bool:
-	if _stage_ending:
+	if _stage_ending or not POWERUP_PRICES.has(kind):
 		return false
-	if kind == "extra_time":
-		return stage_run != null and stage_run.kind == "main" and stage_run.outcome.is_empty() \
-			and stage_run.can_add_time() \
-			and stage_run.remaining > EPSILON and phase == "playing" and not paused \
-			and not _powerup_purchasing and _combo_pending.is_empty()
-	var repeat_treasure: bool = kind == "fragments" and str(_powerup.get("kind", "")) == "fragments"
 	# Supply owns its landing slots, not the toolbar. Real board settlement still blocks items.
 	if not POWERUP_PRICES.has(kind) or phase != "playing" or paused or _powerup_purchasing \
-		or (powerup_active() and not repeat_treasure) \
+		or powerup_active() \
 		or _finishing_powerup or collection_batch_active() or _held_tile_id >= 0 \
 		or not fusions.is_empty() or not _blast_queue.is_empty() or _settling_remaining(false) > EPSILON or cells.is_empty():
 		return false
-	return kind == "fragments" or not _powerup_pair(false).is_empty()
+	return not _powerup_pair(false, auto_merge_capacity() if kind == "auto_merge" else -1).is_empty()
 
 
 func activate_powerup(kind: String, selected_id: int = -1) -> bool:
@@ -668,8 +675,7 @@ func activate_powerup(kind: String, selected_id: int = -1) -> bool:
 	var generation: int = _generation
 	# Separate clicks may overlap flights; nested purchase callbacks may not pay again.
 	_powerup_activating = true
-	var purchased: bool = _purchase_extra_time() if kind == "extra_time" \
-		else _purchase_powerup(kind, family, selected_id)
+	var purchased: bool = _purchase_powerup(kind, family, selected_id)
 	if generation == _generation:
 		changed.emit()
 	_powerup_activating = false
@@ -689,40 +695,9 @@ func activate_family_merge(word_id: String) -> bool:
 	return activate_powerup("family_merge", int(plan.first_source_id))
 
 
-func _purchase_extra_time() -> bool:
-	if _stage_time_pending.is_empty():
-		_stage_time_pending = _event_id("extra-time")
-	var receipt: String = _stage_time_pending
-	var generation: int = _generation
-	var price: int = powerup_price("extra_time")
-	_powerup_purchasing = true
-	var response: Variant = purchase_powerup.call(receipt, "extra_time", price) if purchase_powerup.is_valid() else {}
-	_powerup_purchasing = false
-	if generation != _generation:
-		return false
-	if not response is Dictionary or not bool(response.get("ok", false)):
-		if response is Dictionary and str(response.get("reason", "")) == "insufficient":
-			error = ""
-		else:
-			error = str(response.get("error", "Extra time could not be saved. Please retry.")) if response is Dictionary \
-				else "Extra time could not be saved. Please retry."
-		_reject_powerup_purchase("extra_time", price, response)
-		return false
-	if not stage_run.add_time(receipt):
-		error = stage_run.error
-		return false
-	_powerup_uses.extra_time = int(_powerup_uses.get("extra_time", 0)) + 1
-	_stage_time_pending = ""
-	error = ""
-	powerup_feedback.emit("extra_time", true)
-	cue_requested.emit("powerup_success")
-	if _finish_after_purchase:
-		_finish_after_purchase = false
-		finish_round()
-	return true
-
-
 func _purchase_powerup(kind: String, family: String = "", selected_id: int = -1) -> bool:
+	if not POWERUP_PRICES.has(kind):
+		return false
 	var generation: int = _generation
 	var receipt_id: String = _event_id("powerup-" + kind)
 	var previous_timeline: String = str(_powerup.get("receipt_id", ""))
@@ -752,8 +727,6 @@ func _purchase_powerup(kind: String, family: String = "", selected_id: int = -1)
 	if not bool(_powerup.get("active", false)):
 		_begin_powerup_timeline(kind, receipt_id, family, selected_id)
 	var timeline_id: String = str(_powerup.receipt_id)
-	if kind == "fragments":
-		_prepare_powerup_fragments(receipt_id)
 	# The paid obligation exists before any user callback may pause or leave.
 	if _settle_after_purchase or _finish_after_purchase:
 		_settle_after_purchase = false
@@ -794,6 +767,9 @@ func _begin_powerup_timeline(kind: String, receipt_id: String, family: String = 
 		"next_launch_at": 0.0, "contact_played": false, "contact_pending": false,
 		"family_word_id": family, "family_ids": _powerup_ids.duplicate() if not family.is_empty() else [],
 		"selected_id": selected_id}
+	if kind == "auto_merge":
+		_powerup.merge({"capacity": auto_merge_capacity(), "affected_jellies": 0,
+			"used_input_ids": {}, "generated_ids": {}})
 
 
 func _blast_target_ids(origin: Dictionary, level: int) -> Array[int]:
@@ -942,8 +918,8 @@ func _same_powerup(generation: int, receipt_id: String) -> bool:
 		and str(_powerup.get("receipt_id", "")) == receipt_id
 
 
-func _powerup_pair(captured_only: bool = true) -> Array[int]:
-	var plan: Dictionary = authored_completion_plan(captured_only)
+func _powerup_pair(captured_only: bool = true, input_limit: int = -1) -> Array[int]:
+	var plan: Dictionary = authored_completion_plan(captured_only, "", input_limit)
 	if plan.get("status") == "complete":
 		return [int(plan.first_source_id), int(plan.first_target_id)]
 	return []
@@ -958,23 +934,25 @@ func _next_powerup_merge() -> Dictionary:
 		var job: Dictionary = _powerup_plan_job(plan)
 		if not job.is_empty():
 			return job
-	var plan: Dictionary = authored_completion_plan(true, str(_powerup.get("family_word_id", "")))
+	var limited: bool = str(_powerup.kind) == "auto_merge"
+	var remaining: int = int(_powerup.capacity) - _powerup.used_input_ids.size() if limited else -1
+	var generated: Dictionary = _powerup.generated_ids if limited else {}
+	var plan: Dictionary = authored_completion_plan(true, str(_powerup.get("family_word_id", "")),
+		remaining, generated)
 	if plan.get("status") != "complete":
 		return {}
 	plan.plan_id = int(_powerup.next_plan_id)
 	_powerup.next_plan_id = int(_powerup.next_plan_id) + 1
 	plan.result_ids = {}
 	plan.launched_steps = {}
-	plan.reserved_ids = []
+	plan.reserved_ids = _plan_input_ids(plan)
 	# The resolver's input table also contains unused roots. Reserve only the
 	# references actually consumed by this complete path so others can launch.
-	for pending: Dictionary in plan.steps:
-		for key: String in ["left_ref", "right_ref"]:
-			var reference: String = str(pending[key])
-			if reference.begins_with("input:"):
-				var tile_id: int = _plan_tile_id(plan, reference)
-				if not plan.reserved_ids.has(tile_id):
-					plan.reserved_ids.append(tile_id)
+	if limited:
+		for id: int in plan.reserved_ids:
+			if not generated.has(id):
+				_powerup.used_input_ids[id] = true
+		_powerup.affected_jellies = _powerup.used_input_ids.size()
 	_powerup.plans.append(plan)
 	return _powerup_plan_job(plan)
 
@@ -1000,6 +978,26 @@ func _plan_tile_id(plan: Dictionary, reference: String) -> int:
 	if reference.begins_with("input:"):
 		return int(plan.input_ids[int(reference.trim_prefix("input:"))])
 	return int(plan.result_ids.get(int(reference.trim_prefix("step:")), -1))
+
+
+static func _plan_input_ids(plan: Dictionary) -> Array[int]:
+	var ids: Array[int] = []
+	for pending: Dictionary in plan.steps:
+		for key: String in ["left_ref", "right_ref"]:
+			var reference: String = str(pending[key])
+			if reference.begins_with("input:"):
+				var id: int = int(plan.input_ids[int(reference.trim_prefix("input:"))])
+				if id not in ids:
+					ids.append(id)
+	return ids
+
+
+static func _plan_input_count(plan: Dictionary, generated: Dictionary) -> int:
+	var count: int = 0
+	for id: int in _plan_input_ids(plan):
+		if not generated.has(id):
+			count += 1
+	return count
 
 
 func _reserved_for_powerup(tile_id: int) -> bool:
@@ -1033,33 +1031,6 @@ func _sync_powerup_drag() -> void:
 		_held_tile_id = -1
 
 
-func _prepare_powerup_fragments(receipt_id: String) -> void:
-	var total: int = _rng.randi_range(CoinEconomy.TREASURE_FRAGMENT_MIN, CoinEconomy.TREASURE_FRAGMENT_MAX)
-	var start: float = float(_powerup.elapsed)
-	var pending_counts: Dictionary = {}
-	for tile: Dictionary in cells:
-		pending_counts[int(tile.id)] = int(tile.fragments)
-	for arrival: Dictionary in _powerup.arrivals:
-		if not bool(arrival.arrived):
-			pending_counts[int(arrival.tile_id)] = int(pending_counts[int(arrival.tile_id)]) + 1
-	for index in range(total):
-		var candidates: Array[int] = []
-		for id: int in _powerup_ids:
-			if int(pending_counts[id]) == 0:
-				candidates.append(id)
-		if candidates.is_empty():
-			candidates = _powerup_ids.duplicate()
-		var id: int = candidates[_rng.randi_range(0, candidates.size() - 1)]
-		pending_counts[id] = int(pending_counts[id]) + 1
-		_powerup.arrivals.append({"tile_id": id, "index": _powerup.arrivals.size(),
-			"receipt_id": receipt_id, "total": total,
-			"at": start + POWERUP_FRAGMENT_FLIGHT + index * POWERUP_FRAGMENT_STAGGER,
-			"launched": false, "arrived": false})
-	_powerup.stage = "arrivals"
-	_powerup.total = int(_powerup.total) + total
-	_powerup.duration = maxf(float(_powerup.duration), start + POWERUP_FRAGMENT_FLIGHT + (total - 1) * POWERUP_FRAGMENT_STAGGER + POWERUP_FRAGMENT_RECOVERY)
-
-
 func _advance_powerup() -> void:
 	if not bool(_powerup.get("active", false)) or paused or phase != "playing":
 		return
@@ -1083,6 +1054,7 @@ func _advance_powerup() -> void:
 		and float(_powerup.clock) + EPSILON < float(_powerup.next_launch_at):
 		return
 	if str(_powerup.kind) == "fragments":
+		# Honor an already committed legacy delivery; no new purchase can enter this branch.
 		for arrival: Dictionary in _powerup.arrivals.duplicate():
 			if bool(arrival.arrived):
 				continue
@@ -2249,9 +2221,8 @@ func snapshot() -> Dictionary:
 		"hit_stop": hit_stop_snapshot(),
 		"queued_blasts": _blast_queue.size(),
 		"powerup_uses": _powerup_uses.duplicate(),
-		"powerup_prices": {"auto_merge": powerup_price("auto_merge"), "family_merge": powerup_price("family_merge"),
-			"fragments": powerup_price("fragments"),
-			"extra_time": powerup_price("extra_time")},
+		"powerup_prices": {"auto_merge": powerup_price("auto_merge"), "family_merge": powerup_price("family_merge")},
+		"auto_merge_level": auto_merge_level, "auto_merge_capacity": auto_merge_capacity(),
 		"error": error, "result": _result.duplicate(true)
 	}
 	state.authored_morphology = authored_morphology
@@ -2661,7 +2632,8 @@ func _family_for_cell(tile: Dictionary) -> String:
 	return ""
 
 
-func authored_completion_plan(captured_only: bool = false, family: String = "") -> Dictionary:
+func authored_completion_plan(captured_only: bool = false, family: String = "",
+	input_limit: int = -1, generated: Dictionary = {}) -> Dictionary:
 	var available: Array[Dictionary] = []
 	for tile: Dictionary in cells:
 		if not family.is_empty() and _family_for_cell(tile) != family:
@@ -2676,6 +2648,8 @@ func authored_completion_plan(captured_only: bool = false, family: String = "") 
 	# Completed spellings and upgrades are already complete one-step plans.
 	for left: Dictionary in available:
 		for right: Dictionary in available:
+			if input_limit >= 0 and int(not generated.has(int(left.id))) + int(not generated.has(int(right.id))) > input_limit:
+				continue
 			if not parts_compatible(left, right):
 				continue
 			var direct: Dictionary = merge_candidate(left, right)
@@ -2699,7 +2673,7 @@ func authored_completion_plan(captured_only: bool = false, family: String = "") 
 			analyses.append(word.morphology)
 	if analyses.is_empty():
 		return {"status": "unavailable", "steps": []}
-	var plan: Dictionary = _authored_spelling_plan(available, pictures, analyses)
+	var plan: Dictionary = _authored_spelling_plan(available, pictures, analyses, "", input_limit, generated)
 	if plan.status == "complete":
 		return plan
 	# Cumulative stage definitions can contain identical spellings with different
@@ -2710,14 +2684,14 @@ func authored_completion_plan(captured_only: bool = false, family: String = "") 
 		spellings[spelling] = int(spellings.get(spelling, 0)) + 1
 	for analysis: Dictionary in analyses:
 		if int(spellings[normalize_word(str(analysis.text))]) > 1:
-			plan = _authored_spelling_plan(available, pictures, [analysis], str(analysis.id))
+			plan = _authored_spelling_plan(available, pictures, [analysis], str(analysis.id), input_limit, generated)
 			if plan.status == "complete":
 				return plan
 	return plan
 
 
 func _authored_spelling_plan(available: Array[Dictionary], pictures: Dictionary,
-	analyses: Array, origin_analysis: String = "") -> Dictionary:
+	analyses: Array, origin_analysis: String = "", input_limit: int = -1, generated: Dictionary = {}) -> Dictionary:
 	var resolver := MorphologyResolver.new()
 	if not resolver.configure(analyses):
 		return {"status": "unavailable", "steps": []}
@@ -2739,7 +2713,17 @@ func _authored_spelling_plan(available: Array[Dictionary], pictures: Dictionary,
 	var accept: Callable = func(state: Dictionary) -> bool:
 		var tile: Dictionary = _new_composition_tile(state, false)
 		return is_valid_word(tile) or (not tile.word_candidate.is_empty() and pictures.has(str(tile.word_candidate.id)))
-	var plan: Dictionary = resolver.completion_plan(states, fit, MorphologyResolver.MAX_PLAN_STATES, accept)
+	var within_budget: Callable = func(steps: Array, state: Dictionary) -> bool:
+		if input_limit < 0:
+			return true
+		var count: int = _plan_input_count({"steps": steps, "input_ids": ids}, generated)
+		var completed: Dictionary = _new_composition_tile(state, false)
+		if str(completed.jelly_kind) == "root" and not completed.word_candidate.is_empty() \
+			and pictures.has(str(completed.word_candidate.id)):
+			count += int(not generated.has(int(pictures[str(completed.word_candidate.id)].id)))
+		return count <= input_limit
+	var plan: Dictionary = resolver.completion_plan(states, fit, MorphologyResolver.MAX_PLAN_STATES,
+		accept, within_budget if input_limit >= 0 else Callable())
 	if plan.status == "complete":
 		var completed: Dictionary = _new_composition_tile(plan.tile, false)
 		if str(completed.jelly_kind) == "root":
@@ -2904,25 +2888,42 @@ func _build_supply() -> void:
 	if packet.is_empty():
 		return
 	var best: Dictionary = {"score": 2147483647, "order": []}
-	_search_supply_order(packet, [], 0, best)
+	_search_supply_order(packet, [], 0, best, {})
 	for index: int in best.order:
 		_supply.append(packet[index])
 
 
-func _search_supply_order(packet: Array[Dictionary], order: Array[int], score: int, best: Dictionary) -> void:
+func _search_supply_order(packet: Array[Dictionary], order: Array[int], score: int, best: Dictionary, visited: Dictionary) -> void:
 	if score >= int(best.score):
 		return
 	if order.size() == packet.size():
 		best.score = score
 		best.order = order.duplicate()
 		return
-	# Five slots have at most 120 arrangements. Deterministic scoring avoids a
-	# greedy tail that leaves siblings adjacent when a separated order exists.
+	var used: int = 0
+	for index in order:
+		used |= 1 << index
+	# Only the used identities and last two pieces affect future penalties.
+	var state := Vector3i(used, order[-1] if not order.is_empty() else -1, order[-2] if order.size() > 1 else -1)
+	if score >= int(visited.get(state, 2147483647)):
+		return
+	visited[state] = score
+	# Deterministic branch-and-bound avoids a greedy tail that leaves siblings
+	# adjacent when a separated order exists.
 	for index in range(packet.size()):
-		if index in order:
+		if (used & (1 << index)) != 0:
+			continue
+		# The first unused equivalent piece wins every deterministic tie.
+		var equivalent: bool = false
+		for previous in range(index):
+			if (used & (1 << previous)) == 0 and packet[previous].supply_group == packet[index].supply_group \
+				and packet[previous].source_word_id == packet[index].source_word_id:
+				equivalent = true
+				break
+		if equivalent:
 			continue
 		var next_score: int = score
-		for previous in range(order.size()):
+		for previous in range(maxi(0, order.size() - 2), order.size()):
 			var distance: int = order.size() - previous
 			var neighbor: Dictionary = packet[order[previous]]
 			if int(packet[index].supply_group) == int(neighbor.supply_group):
@@ -2930,7 +2931,7 @@ func _search_supply_order(packet: Array[Dictionary], order: Array[int], score: i
 			elif distance == 1 and packet[index].source_word_id == neighbor.source_word_id:
 				next_score += 100
 		order.append(index)
-		_search_supply_order(packet, order, next_score, best)
+		_search_supply_order(packet, order, next_score, best, visited)
 		order.pop_back()
 
 
@@ -3166,6 +3167,8 @@ func _complete_merge(completed: Dictionary) -> void:
 	_gravity_pending = true
 	merged_count += 1
 	if _authored_auto_active():
+		if str(_powerup.kind) == "auto_merge":
+			_powerup.generated_ids[int(result.id)] = true
 		for plan: Dictionary in _powerup.plans:
 			if int(plan.plan_id) != int(completed.get("powerup_plan_id", -1)):
 				continue

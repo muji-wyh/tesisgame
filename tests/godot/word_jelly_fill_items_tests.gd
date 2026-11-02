@@ -109,7 +109,7 @@ func check_item(kind: String, continuous: bool, speed: float) -> void:
 func check_guards() -> void:
 	var f: Dictionary = fixture()
 	var model = f.model
-	for kind: String in ["auto_merge", "family_merge", "fragments"]:
+	for kind: String in ["auto_merge", "family_merge"]:
 		model.set_paused(true)
 		check(not model.activate_powerup(kind, int(f.selected)), "Pause still blocks " + kind)
 		model.set_paused(false)
@@ -119,7 +119,7 @@ func check_guards() -> void:
 	var ground: Dictionary = model.cells[0]
 	ground.age = 0.0
 	ground.arrival = false
-	for kind: String in ["auto_merge", "family_merge", "fragments"]:
+	for kind: String in ["auto_merge", "family_merge"]:
 		check(not model.can_activate_powerup(kind), "Real board support settlement is not mistaken for unrelated supply")
 	check(f.payments.is_empty(), "Blocked operations never reach payment")
 	f = fixture()
@@ -144,7 +144,7 @@ func _run() -> void:
 			func(word: Dictionary) -> Dictionary: return Morphology.decorate(word))
 	for continuous: bool in [true, false]:
 		for speed: float in [1.0, 2.2]:
-			for kind: String in ["auto_merge", "family_merge", "fragments", "extra_time"]:
+			for kind: String in ["auto_merge", "family_merge"]:
 				check_item(kind, continuous, speed)
 	check_guards()
 	print("Fill with items: %d checks, %d failures" % [checks, failures])

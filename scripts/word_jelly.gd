@@ -1,6 +1,6 @@
 class_name WordJelly
 extends "res://scripts/jelly_match.gd"
-## Five-column word construction, with the established jelly input and rewards.
+## Seven-column word construction, with the established jelly input and rewards.
 
 signal collected(event_id: String, word: Dictionary, amount: int, fragments: int, origin: Vector2)
 signal word_merged(word: Dictionary)
@@ -450,8 +450,6 @@ func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
 
 func _apply_chest_texture(texture: Texture2D) -> void:
 	super._apply_chest_texture(texture)
-	if powerup_buttons.has("fragments"):
-		powerup_buttons.fragments.set_chest_texture(texture)
 	if _placement_tile != null:
 		_placement_tile.set_chest_texture(texture)
 	for visual: Dictionary in _fusion_visuals.values():
@@ -1309,20 +1307,6 @@ func _pose_powerup() -> void:
 					var trail: float = maxf(0.0, p - 0.055 * float(index + 1))
 					var point: Vector2 = from.get_center().lerp(to, trail) - Vector2(0.0, sin(trail * PI) * minf(unit * 0.65, from.get_center().distance_to(to) * 0.18))
 					_powerup_stamp(stamps, POWERUP_SPARKLE, point, Vector2.ONE * unit * (0.20 - index * 0.03), Color(1.0, 0.92, 0.63, 0.7 - index * 0.14), trail * TAU)
-	elif bool(state.get("active", false)) and str(state.get("kind", "")) == "fragments" and powerup_buttons.has("fragments"):
-		var start: Vector2 = powerup_buttons.fragments.get_rect().get_center()
-		for arrival: Dictionary in state.get("arrivals", []):
-			var id: int = int(arrival.tile_id)
-			var remaining: float = float(arrival.at) - float(state.elapsed)
-			if bool(arrival.get("arrived", false)) or remaining < 0.0 or remaining > WordModel.POWERUP_FRAGMENT_FLIGHT or not _tiles.has(id):
-				continue
-			var t: float = clampf(1.0 - remaining / WordModel.POWERUP_FRAGMENT_FLIGHT, 0.0, 1.0)
-			var target: Vector2 = _tiles[id].get_rect().get_center()
-			var point: Vector2 = start.lerp(target, smoothstep(0.0, 1.0, t))
-			if not reduced_motion:
-				point += Vector2(sin(t * PI) * unit * 0.4 * (-1.0 if int(arrival.index) % 2 == 0 else 1.0), -sin(t * PI) * unit * 0.55)
-			_powerup_stamp(stamps, COLLECTION_GLOW, point, Vector2.ONE * unit, Color(1.0, 0.85, 0.4, 0.48))
-			_powerup_stamp(stamps, _chest_texture, point, Vector2.ONE * unit * 0.5, Color.WHITE, 0.0 if reduced_motion else sin(t * PI) * 0.25)
 	for arrival: Dictionary in _powerup_arrivals:
 		var id: int = int(arrival.tile_id)
 		if not _tiles.has(id):
@@ -2183,8 +2167,9 @@ func _refresh_powerup_buttons() -> void:
 		var button: PowerupButton = powerup_buttons[kind]
 		var price: int = game.powerup_price(kind)
 		button.set_price(price)
-		button.visible = _configured and game.phase == "playing" and (kind != "extra_time" \
-			or game.stage_run != null and game.stage_run.kind == "main")
+		if kind == "auto_merge":
+			button.set_auto_merge_level(game.auto_merge_level)
+		button.visible = _configured and game.phase == "playing"
 		var available: bool = game.can_activate_powerup(kind)
 		button.set_availability(_can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and _keyboard_source < 0 and available,
 			balance >= price, game.powerup_active() and not available, balance >= 0)
@@ -2264,9 +2249,7 @@ func _layout() -> void:
 	var content_top: float = top_hud_height + (2.0 if authored else 12.0) / s
 	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - content_top)
 	var action_height: float = (44.0 if boss_layout else 56.0) / s
-	var tool_kinds: Array[String] = ["auto_merge", "fragments"]
-	if game.stage_run != null and game.stage_run.kind == "main":
-		tool_kinds.append("extra_time")
+	var tool_kinds: Array[String] = ["auto_merge"]
 	var tool_count: int = tool_kinds.size()
 	var tool_gap: float = 8.0 / s
 	var side_columns: int = 2 if tool_count == 2 and size.x * s >= 680.0 else 1
@@ -2297,6 +2280,9 @@ func _layout() -> void:
 		side_columns = fitting_columns
 		side_rows = ceili(float(tool_count) / side_columns)
 		hud_width = maxf(hud_width, fitting_width)
+	if boss_layout:
+		hud_width = minf(hud_width, maxf(88.0 / s,
+			available.x - hud_gap - 32.0 * WordModel.COLUMNS / s))
 	side_fill_space = fill_height + tool_gap if hud_width * s < 152.0 else 0.0
 	if side_available_height < action_height * (1 + side_rows) + (side_rows - 1) * tool_gap + side_fill_space + divider_gap:
 		action_height = 44.0 / s
@@ -2316,7 +2302,9 @@ func _layout() -> void:
 		collect_height = clampf(side_available_height - action_height * side_rows - (side_rows - 1) * tool_gap \
 			- fill_space - divider_gap - tool_gap, 44.0 / s, action_height)
 	_pitch = side_pitch if side_hud else bottom_pitch
-	var too_small: bool = authored and _pitch * s < 32.0
+	# Vector2 rounding must not turn an exact 32px Web cell into a size pause.
+	var pitch_pixels: float = _pitch * s
+	var too_small: bool = authored and pitch_pixels < 32.0 and not is_equal_approx(pitch_pixels, 32.0)
 	if too_small != _layout_too_small:
 		_layout_too_small = too_small
 		_apply_pause_reasons()
@@ -2358,8 +2346,9 @@ func _layout() -> void:
 		var sidebar: bool = sidebar_width * s >= 152.0 and _board.size.y * s >= 200.0
 		_stage_banner._label.visible = not _practice_panel.visible or sidebar
 		var practice_width: float = minf(232.0 / s, sidebar_width)
+		var practice_header: float = 66.0 if _practice_panel._state.get("kind") == "challenge" else 12.0
 		var practice_area: Rect2 = Rect2(Vector2(_board.position.x - practice_width - 18.0 / s, group_top),
-			Vector2(practice_width, minf(_board.size.y, (66.0 + _practice_panel._rows.size() * 60.0) / s))) \
+			Vector2(practice_width, minf(_board.size.y, (practice_header + _practice_panel._rows.size() * 60.0) / s))) \
 			if sidebar else badge
 		if boss_layout and sidebar and stage_in_rail:
 			practice_area.size.y = maxf(64.0 / s, practice_area.size.y - 52.0 / s)

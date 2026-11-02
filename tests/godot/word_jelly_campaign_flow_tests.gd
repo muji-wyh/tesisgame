@@ -91,6 +91,7 @@ func finish_live_stage(app) -> void:
 			stage_presentations.append(feedback)
 		if app._campaign.map.visible:
 			break
+	Fixture.dismiss_jelly_upgrade_intro(app)
 
 
 func test_map_chest_retry(app) -> void:
@@ -322,11 +323,12 @@ func test_stage_deadline_border(app) -> void:
 	check(attempt.remaining == before and not view._danger_frame.is_visible_in_tree(),
 		"Pausing freezes the stage deadline and suppresses its flashing frame")
 	view.pause(false)
-	check(game.activate_powerup("extra_time"), "A real saved extra-time purchase can rescue the deadline")
+	var balance: int = app.coin_wallet.balance
+	check(not game.activate_powerup("extra_time"), "The removed time item cannot purchase a rescue")
 	view._refresh_danger()
-	check(attempt.remaining > 10.0 and not view._danger_frame.is_visible_in_tree()
-		and not view.snapshot().danger.active and attempt.stars_now() == 1,
-		"Bought time cancels the deadline border without restoring an expired star tier")
+	check(attempt.remaining == before and view._danger_frame.is_visible_in_tree()
+		and view.snapshot().danger.active and attempt.stars_now() == 1 and app.coin_wallet.balance == balance,
+		"Rejecting a retired item preserves the real deadline warning, star tier and saved coins")
 
 
 func _run() -> void:

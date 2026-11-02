@@ -65,14 +65,6 @@ static func chase_target(highest_cleared: int) -> int:
 	return 0
 
 
-static func merged_level(victories: Array) -> int:
-	var distinct: Dictionary = {}
-	for id: Variant in victories:
-		if id is int and id >= 1 and id <= STAGES.size():
-			distinct[id] = true
-	return 1 + distinct.size()
-
-
 static func map_markers(frontier: int) -> Array[int]:
 	var result: Array[int] = []
 	var future_added: bool = false

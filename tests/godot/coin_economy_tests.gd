@@ -130,6 +130,10 @@ func _test_max_pip_treasure_sink() -> void:
 
 
 func _test_supply_and_budget() -> void:
+	for count in [1, 7, 20, 60]:
+		var supplied: Array[Dictionary] = Report.supply_groups(count)
+		check(supplied.size() == count and supplied.all(func(group: Dictionary) -> bool: return int(group.chunks) == 2),
+			"Odd seven-piece packets never count an incomplete source word in the income ledger")
 	var groups: Array[Dictionary] = Report.supply_groups(60)
 	check(groups.size() == 60, "The report enumerates sixty actual supplied word groups")
 	var fragments: int = 0
@@ -199,40 +203,52 @@ func _test_paid_model_and_wallet() -> void:
 	check(wallet.load_state() and wallet.balance == 0, "Fresh players keep free play and receive no invented starter currency")
 	var game := Jelly.new()
 	check(game.configure(Report.fixture_words(), 3, 19), "The purchase fixture uses a real stable opening board")
+	var prepare: Callable = func() -> void:
+		game.cells.clear()
+		var word: Dictionary = Report.fixture_words()[0]
+		for index in range(4):
+			var tile: Dictionary = game._new_word_root(word, 1)
+			game._set_merged_word(tile, word, 1, true)
+			tile.merge({"column": index, "row": Jelly.ROWS - 1, "age": 100.0,
+				"settling": false, "falling": false, "arrival": false}, true)
+			game.cells.append(tile)
+	prepare.call()
 	var charges: Array[int] = []
 	game.purchase_powerup = func(id: String, _kind: String, price: int) -> Dictionary:
 		charges.append(price)
 		return wallet.spend(id, price)
 	var before: Array[Dictionary] = game.cells.duplicate(true)
-	check(not game.activate_powerup("fragments") and game.cells == before and game.powerup_price("fragments") == 200,
-		"An unaffordable first purchase cannot grant fragments or increase its next price")
+	check(not game.activate_powerup("auto_merge") and game.cells == before and game.powerup_price("auto_merge") == 600,
+		"An unaffordable first Auto merge cannot change the board or increase its next price")
 	check(wallet.credit("earned:old-chest", 20).ok and wallet.balance == 1000, "Existing chest values fund a saved-wallet purchase")
+	check(wallet.credit("earned:auto-merge-help", 40).ok and wallet.balance == 3000,
+		"Additional earned fixture chests fund the live automatic-use ladder")
 	storage.fail_write = true
-	check(not game.activate_powerup("fragments") and wallet.balance == 1000 and game.powerup_price("fragments") == 200,
+	check(not game.activate_powerup("auto_merge") and wallet.balance == 3000 and game.powerup_price("auto_merge") == 600,
 		"Failed persistence leaves both balance and successful-use price untouched")
 	storage.fail_write = false
-	var awarded: int = 0
-	for expected_price: int in [200, 300, 400]:
+	for expected_price: int in [600, 900, 1200]:
+		prepare.call()
 		var previous_balance: int = wallet.balance
-		check(game.activate_powerup("fragments"), "A paid Treasure purchase starts after a durable debit")
-		var current: Dictionary = game.powerup_snapshot()
-		awarded += int(current.total)
+		check(game.activate_powerup("auto_merge"), "A live Auto merge starts after a durable debit")
 		check(wallet.balance == previous_balance - expected_price and int(charges.back()) == expected_price,
 			"The real model charges the current escalating price through CoinWallet")
-		check(int(current.total) >= 2 and int(current.total) <= 8,
-			"The paid model reserves the policy's fragment range")
 		game.finish_powerup(true)
-	check(wallet.balance == 100 and awarded >= 6 and awarded <= 24,
-		"Three successful purchases spend nine hundred coins and only supply collectible fragments")
+		check(game.powerup_snapshot().affected_jellies == 3 and game.cells.size() == 2
+			and game.cells.reduce(func(total: int, tile: Dictionary) -> int: return total + int(tile.fragments), 0) == 4,
+			"Free Lv1 merges exactly three original Jellies while preserving all naturally carried fragments")
+	check(wallet.balance == 300,
+		"Three successful live purchases spend twenty-seven hundred saved coins")
 	check(game.fragment_count == 0 and game.collected_coins == 0,
-		"Treasure delivery alone cannot grant chest progress or refund coins before word collection")
-	check(game.powerup_price("fragments") == 400 and game.powerup_price("auto_merge") == 600,
+		"Automatic construction cannot grant chest progress or refund coins before word collection")
+	check(game.powerup_price("auto_merge") == 1200 and game.powerup_price("family_merge") == 50
+		and game.powerup_price("fragments") == 0,
 		"Repeat prices cap and independent item kinds do not inflate one another")
 	game.configure(Report.fixture_words(), 3, 20)
-	check(game.powerup_price("fragments") == 200 and game.powerup_price("auto_merge") == 600,
-		"Starting a genuinely new round resets both item ladders")
+	check(game.powerup_price("family_merge") == 50 and game.powerup_price("auto_merge") == 600
+		and game.auto_merge_level == 1, "A new isolated round resets use prices and starts with free capacity")
 	var reloaded := Wallet.new("user://unused-economy-wallet.cfg", storage)
-	check(reloaded.load_state() and reloaded.balance == 100 and reloaded.credit("earned:old-chest", 20).duplicate,
+	check(reloaded.load_state() and reloaded.balance == 300 and reloaded.credit("earned:old-chest", 20).duplicate,
 		"New price policy preserves the saved balance and old chest receipt identity")
 	game.purchase_powerup = Callable()
 

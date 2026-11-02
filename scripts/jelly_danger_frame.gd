@@ -4,7 +4,7 @@ extends ColorRect
 const LIGHT = preload("res://assets/chests/particles/portal_glow.png")
 const GLINT = preload("res://assets/chests/milestone/sparkle.png")
 const FRAME_SHADER = preload("res://scripts/jelly_danger_frame.gdshader")
-const HALO_MARGIN: float = 80.0
+const HALO_MARGIN: float = 128.0
 
 var state: Dictionary = {}
 
@@ -44,7 +44,7 @@ static func sample(elapsed: float, duration: float, reduced: bool) -> Dictionary
 	echo *= smoothstep(0.38, 0.82, progress) * 0.82
 	return {
 		"urgency": urgency,
-		"glow_extent": lerpf(12.0, 72.0, urgency),
+		"glow_extent": lerpf(20.0, 112.0, urgency),
 		"travel_speed": travel_speed,
 		"pulse": 0.65 if reduced else maxf(primary_pulse(elapsed, false), echo),
 		"travel": 0.125 if reduced else travel,

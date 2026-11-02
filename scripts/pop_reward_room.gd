@@ -8,8 +8,9 @@ signal chest_audio_requested(action: String, theme_id: String, progress: float)
 signal chest_cue_requested(theme_id: String, cue: String, step: int)
 signal coins_released(id: String, reward: Dictionary, origin: Vector2, animate: bool)
 signal settlement_retry_requested
-signal challenge_result_accepted
-signal challenge_retry_requested
+signal campaign_result_accepted
+signal campaign_retry_requested
+signal upgrades_requested
 signal challenge_record_broken(round_id: String)
 
 const Data = preload("res://scripts/game_data.gd")
@@ -27,9 +28,9 @@ const TREASURE_LIGHT = preload("res://assets/chests/particles/portal_glow.png")
 const RATING_STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 const JellyRating = preload("res://scripts/word_jelly_stage_banner.gd")
 const RATING_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
-const SkillReveal = preload("res://scripts/word_jelly_skill_reveal.gd")
 const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
 const RecordBadge = preload("res://scripts/word_jelly_record_badge.gd")
+const ResultTaunt = preload("res://scripts/word_jelly_result_taunt.gd")
 const STAR_STEP_SECONDS: float = 0.18
 const STAR_APPEAR_SECONDS: float = 0.42
 const STAGE_BONUS_SECONDS: float = 0.70
@@ -70,6 +71,7 @@ var _content: Control
 var _notice: Label
 var _back: Button
 var _home: Button
+var _upgrades: Button
 var _retry: Button
 var _previous_page: Button
 var _next_page: Button
@@ -94,20 +96,16 @@ var _stage_bonus_elapsed: float = STAGE_BONUS_SECONDS
 var _stage_bonus_receipt: String = ""
 var _stage_bonus_reward: Dictionary = {}
 var _stage_publish_elapsed: float = 0.0
-var _skill_reveal := SkillReveal.new()
 var _challenge_record := RecordBadge.new()
 var _challenge_return_ready: bool = false
+var _stage_failure_ready: bool = false
 var _record_announced_round: String = ""
 var _return_glow := TextureRect.new()
+var _result_boss := ResultTaunt.new()
 
 
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_PASS
-	add_child(_skill_reveal)
-	_skill_reveal.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	_skill_reveal.accepted.connect(func() -> void:
-		_content.show()
-		changed.emit(snapshot()))
 	_heading = _label("Your treasure", 28)
 	_progress = _label("", 14)
 	_result_score = _label("", 14)
@@ -166,6 +164,7 @@ func _ready() -> void:
 	pip.hide()
 	_content.add_child(_challenge_record)
 	_challenge_record.hide()
+	_content.add_child(_result_boss)
 	_notice = _label("", 14)
 	_notice.add_theme_color_override("font_color", Style.WRONG)
 	_back = Button.new()
@@ -175,9 +174,9 @@ func _ready() -> void:
 	add_child(_back)
 	Style.action_button(_back, Style.GOOD)
 	_back.pressed.connect(func() -> void:
-		if _result_context.get("campaign", {}).get("kind") == "challenge":
-			if _challenge_action_allowed():
-				challenge_result_accepted.emit()
+		if _result_context.has("campaign"):
+			if _campaign_action_allowed():
+				campaign_result_accepted.emit()
 			return
 		if not _result_context.is_empty():
 			if not _paused and (not interaction_allowed.is_valid() or interaction_allowed.call()):
@@ -199,12 +198,23 @@ func _ready() -> void:
 	Style.action_button(_home, Style.GOOD)
 	_home.hide()
 	_home.pressed.connect(func() -> void:
-		if _result_context.get("campaign", {}).get("kind") == "challenge":
-			if _challenge_action_allowed():
-				challenge_retry_requested.emit()
+		if _result_context.has("campaign"):
+			if _campaign_action_allowed():
+				campaign_retry_requested.emit()
 			return
 		if _is_result_dialog() and not _paused and (not interaction_allowed.is_valid() or interaction_allowed.call()):
 			home_requested.emit())
+	_upgrades = Button.new()
+	_upgrades.name = "JellyResultUpgrades"
+	_upgrades.text = "Jelly Upgrades"
+	_upgrades.accessibility_name = "Open permanent Jelly and Auto merge upgrades"
+	UiClick.bind_button(_upgrades)
+	Style.action_button(_upgrades, Style.GOOD)
+	add_child(_upgrades)
+	_upgrades.hide()
+	_upgrades.pressed.connect(func() -> void:
+		if _upgrades.visible and offers_upgrades() and _campaign_action_allowed():
+			upgrades_requested.emit())
 	_retry = Button.new()
 	UiClick.bind_button(_retry)
 	_retry.name = "PopTreasureRetry"
@@ -293,7 +303,6 @@ func set_result_context(result: Dictionary, earned_round_id: String = "") -> voi
 	var previous_reward_id: String = _result_reward_id
 	var feedback_round: String = earned_round_id if result.has("campaign") else ""
 	if feedback_round != _stage_feedback_round:
-		_skill_reveal.hide()
 		_content.show()
 		_release_stage_bonus(false)
 		_stage_feedback_round = feedback_round
@@ -301,6 +310,8 @@ func set_result_context(result: Dictionary, earned_round_id: String = "") -> voi
 		_stage_bonus_receipt = ""
 		_stage_bonus_elapsed = STAGE_BONUS_SECONDS
 		_challenge_return_ready = false
+		_stage_failure_ready = false
+		_result_boss.reset()
 		_record_announced_round = ""
 		_back.scale = Vector2.ONE
 		_challenge_record.reset()
@@ -323,14 +334,34 @@ func set_result_context(result: Dictionary, earned_round_id: String = "") -> voi
 
 func stage_feedback_active() -> bool:
 	var rating: int = int(_result_context.get("campaign", {}).get("stars", 0))
-	return _skill_reveal.visible or (_challenge_record.visible and _challenge_record.feedback_active()) \
+	return (_challenge_record.visible and _challenge_record.feedback_active()) \
 		or not _stage_bonus_reward.is_empty() or not reduced_motion \
 		and rating > 0 and _stage_intro_elapsed < (rating - 1) * STAR_STEP_SECONDS + STAR_APPEAR_SECONDS
 
 
-func _challenge_action_allowed() -> bool:
-	return _challenge_return_ready and not _paused and not _save_failed and _settlement_error.is_empty() \
+func _campaign_action_allowed() -> bool:
+	return (_challenge_return_ready or _stage_failure_ready) and not _paused and not _save_failed and _settlement_error.is_empty() \
 		and (not interaction_allowed.is_valid() or interaction_allowed.call())
+
+
+func offers_upgrades() -> bool:
+	var campaign: Dictionary = _result_context.get("campaign", {})
+	return campaign.get("kind") == "challenge" or campaign.get("kind") == "main" \
+		and campaign.get("outcome") in ["timeout", "blocked"]
+
+
+func wants_result_boss() -> bool:
+	var campaign: Dictionary = _result_context.get("campaign", {})
+	return offers_upgrades() and (campaign.get("outcome") in ["timeout", "blocked"] \
+		or _result_context.get("reason") in ["danger", "timeout"])
+
+
+func present_stage_failure() -> void:
+	if _result_context.get("campaign", {}).get("kind") != "main" or not offers_upgrades() or _stage_failure_ready:
+		return
+	_stage_failure_ready = true
+	_refresh()
+	changed.emit(snapshot())
 
 
 func present_challenge_result(summary: Dictionary) -> void:
@@ -356,23 +387,14 @@ func present_stage_bonus(receipt: String, reward: Dictionary) -> void:
 	_pose_stage_feedback()
 
 
-func present_skill_unlock(level: int, word: Dictionary) -> bool:
-	if not _skill_reveal.present(level, word, reduced_motion):
-		return false
-	_content.hide()
-	changed.emit(snapshot())
-	return true
-
-
 func advance_stage_feedback(delta: float) -> void:
 	if _paused or not is_visible_in_tree() or not is_finite(delta) or delta <= 0.0:
 		return
+	_result_boss.advance(delta)
 	if not stage_feedback_active():
 		return
 	_challenge_record.advance(delta)
 	_stage_intro_elapsed += delta
-	if _skill_reveal.visible:
-		_skill_reveal.advance(delta)
 	if not _stage_bonus_reward.is_empty():
 		_stage_bonus_elapsed = STAGE_BONUS_SECONDS if reduced_motion else minf(STAGE_BONUS_SECONDS, _stage_bonus_elapsed + delta)
 		if _stage_bonus_elapsed >= STAGE_BONUS_SECONDS:
@@ -822,9 +844,6 @@ func set_page(index: int) -> bool:
 
 func navigation_controls() -> Array[Control]:
 	var controls: Array[Control] = []
-	if _skill_reveal.visible:
-		controls.append(_skill_reveal if _skill_reveal._continue.disabled else _skill_reveal._continue)
-		return controls
 	for card in _cards:
 		if not card.button.disabled:
 			controls.append(card.button)
@@ -835,6 +854,8 @@ func navigation_controls() -> Array[Control]:
 			controls.append(button)
 	if is_instance_valid(_home) and _home.visible:
 		controls.append(_home)
+	if is_instance_valid(_upgrades) and _upgrades.visible and not _upgrades.disabled:
+		controls.append(_upgrades)
 	controls.append(_back)
 	return controls
 
@@ -1076,7 +1097,6 @@ func resume() -> void:
 
 func set_reduced_motion(enabled: bool) -> void:
 	reduced_motion = enabled
-	_skill_reveal.reduced_motion = enabled
 	for card in _cards:
 		card.art.reduced_motion = enabled
 	if enabled and _active >= 0 and _opening:
@@ -1167,6 +1187,7 @@ func _refresh() -> void:
 	_home.visible = _is_result_dialog()
 	_home.disabled = _paused
 	_home.text = "Home"
+	_upgrades.visible = offers_upgrades() and (_challenge_return_ready or _stage_failure_ready)
 	_back.text = "Play again" if result_mode else "Back"
 	_result_score.visible = result_mode
 	_result_score.scale = Vector2.ONE
@@ -1176,7 +1197,14 @@ func _refresh() -> void:
 	var campaign: Dictionary = _result_context.get("campaign", {})
 	var campaign_result: bool = campaign.get("kind", "") == "main"
 	var challenge_result: bool = campaign.get("kind", "") == "challenge"
-	_stage_rating.visible = campaign_result
+	var show_boss: bool = wants_result_boss() and (_challenge_return_ready or _stage_failure_ready) and not failed
+	var boss_loaded: bool = false
+	if show_boss:
+		boss_loaded = _result_boss.present(_stage_feedback_round, reduced_motion,
+			bool(_result_context.get("challenge_result", {}).get("new_best", false)))
+	_result_boss.visible = show_boss and boss_loaded
+	_result_boss.set_active(show_boss and boss_loaded and not _paused and is_visible_in_tree())
+	_stage_rating.visible = campaign_result and not _result_boss.visible
 	_challenge_record.visible = challenge_result
 	_return_glow.visible = challenge_result and _challenge_return_ready
 	if campaign_result or challenge_result:
@@ -1212,19 +1240,25 @@ func _refresh() -> void:
 			for index in range(3):
 				_stage_stars[index].modulate = Color.WHITE if index < rating else Color(0.4, 0.46, 0.42, 0.40)
 			if _cards.is_empty() and not failed:
-				_result_caption.text = "Saving your stars and returning to the map..."
-				if int(_result_context.get("merged_level_unlocked", 0)) > 0:
-					_result_caption.text = "New merged Lv%d! Saving..." % int(_result_context.merged_level_unlocked)
-				elif _result_context.get("boss", {}).get("outcome") == "ambushed":
+				_result_caption.text = "Your rewards are saved." if _stage_failure_ready \
+					else "Saving your results..." if offers_upgrades() else "Saving your stars and returning to the map..."
+				if _result_context.get("boss", {}).get("outcome") == "ambushed":
 					_result_caption.text = "The chase begins. Find Bramble at stage %d!" % BossCatalog.STAGES[0]
 				_result_caption.visible = true
 		if _result_context.has("campaign"):
-			_back.visible = challenge_result and _challenge_return_ready
-			_back.text = "Back to map" if challenge_result else _back.text
-			_back.disabled = _paused or failed or not _challenge_return_ready
-			_home.visible = challenge_result and _challenge_return_ready
-			_home.text = "Try again" if challenge_result else "Home"
+			var ready: bool = _challenge_return_ready or _stage_failure_ready
+			_back.visible = ready
+			_back.text = "Back to map"
+			_back.disabled = _paused or failed or not ready
+			_home.visible = ready
+			_home.text = "Try again"
 			_home.disabled = _back.disabled
+			_upgrades.visible = offers_upgrades() and ready
+			_upgrades.disabled = _back.disabled
+		if show_boss and not boss_loaded:
+			_result_caption.text = _result_boss.last_error
+			_result_caption.visible = true
+			_result_caption.add_theme_color_override("font_color", Style.WRONG)
 		_result_score.accessibility_name = "Score: %d. %s" % [maxi(0, int(_result_context.get("score", 0))), _result_score.text]
 		var tier: int = maxi(0, int(_result_context.get("chest_tier", 0)))
 		var is_pop: bool = _result_context.has("hits")
@@ -1388,17 +1422,28 @@ func _layout() -> void:
 
 
 func _layout_result_dialog(s: float, w: float, h: float) -> void:
-	var challenge_result: bool = _result_context.get("campaign", {}).get("kind") == "challenge"
-	var appearance: Array = [s, true, challenge_result]
+	var campaign_choices: bool = offers_upgrades()
+	var appearance: Array = [s, true, campaign_choices]
 	if _back.get_meta("result_appearance", []) != appearance:
-		Style.action_button(_back, Style.GOOD, not challenge_result)
-		Style.action_button(_home, Style.GOOD, challenge_result)
+		Style.action_button(_back, Style.GOOD, not campaign_choices)
+		Style.action_button(_home, Style.GOOD, campaign_choices)
+		Style.action_button(_upgrades, Style.GOOD)
+		_upgrades.add_theme_font_size_override("font_size", ceili(15.0 / s))
 		Style.action_button(_retry, Style.GOOD)
 		Style.action_button(_previous_page, Style.GOOD)
 		Style.action_button(_next_page, Style.GOOD)
 		_back.set_meta("result_appearance", appearance)
 	var has_reward: bool = _cards.any(func(card: Dictionary) -> bool: return not card.chest_reward.is_empty())
-	var layout: Dictionary = RewardLayout.measure(Vector2(w, h), s, not _cards.is_empty(), _save_failed, true, has_reward)
+	var retry_save: bool = _save_failed or not _settlement_error.is_empty()
+	var layout: Dictionary = RewardLayout.measure(Vector2(w, h), s, not _cards.is_empty(), retry_save, true, has_reward, _upgrades.visible)
+	if _result_boss.visible and not _cards.is_empty():
+		var hero_top: float = layout.chest.position.y
+		var hero_height: float = layout.chest.size.y
+		var width: float = layout.heading.size.x
+		var actor_width: float = (width - 8.0 / s) * 0.5
+		layout.pip = Rect2(layout.heading.position.x, hero_top, actor_width, hero_height)
+		layout.chest = Rect2(layout.heading.position.x + actor_width + 8.0 / s,
+			hero_top, width - actor_width - 8.0 / s, hero_height)
 	_heading.add_theme_font_size_override("font_size", layout.heading_size)
 	_result_score.add_theme_font_size_override("font_size", layout.summary_size)
 	_result_caption.add_theme_font_size_override("font_size", layout.caption_size)
@@ -1409,10 +1454,25 @@ func _layout_result_dialog(s: float, w: float, h: float) -> void:
 		control.custom_minimum_size = Vector2.ZERO
 		control.position = rect.position
 		control.size = rect.size
+	if _upgrades.visible:
+		_upgrades.custom_minimum_size = Vector2.ZERO
+		_upgrades.position = layout.upgrades.position
+		_upgrades.size = layout.upgrades.size
 	_result_score.pivot_offset = _result_score.size * 0.5
-	if _challenge_record.visible:
+	if _result_boss.visible:
+		var hero: Rect2 = layout.pip
+		if _cards.is_empty():
+			hero.position.x = layout.heading.position.x
+			hero.size.x = layout.heading.size.x
+		if _challenge_record.visible:
+			var badge_height: float = minf(44.0 / s, hero.size.y * 0.28)
+			_challenge_record.layout_badge(Rect2(hero.position + Vector2(0, hero.size.y - badge_height),
+				Vector2(hero.size.x, badge_height)), s)
+			hero.size.y = maxf(1.0, hero.size.y - badge_height - 4.0 / s)
+		_result_boss.configure_layout(hero, s)
+	elif _challenge_record.visible:
 		_challenge_record.layout_badge(layout.pip, s)
-	if _challenge_return_ready:
+	if _challenge_return_ready or _stage_failure_ready:
 		_back.position = layout.home.position
 		_back.size = layout.home.size
 		_home.position = layout.replay.position
@@ -1438,7 +1498,7 @@ func _layout_result_dialog(s: float, w: float, h: float) -> void:
 		_stage_bonus_label.pivot_offset = _stage_bonus_label.size * 0.5
 		_pose_stage_feedback()
 	var gap: float = 8 / s
-	var footer_top: float = minf(_home.position.y, _retry.position.y) if _save_failed else _home.position.y
+	var footer_top: float = minf(_home.position.y, _retry.position.y) if retry_save else _home.position.y
 	_scroll.position = Vector2.ZERO
 	_scroll.size = Vector2(w, maxf(1.0, footer_top - gap))
 	var caption_rect: Rect2 = layout.caption
@@ -1478,7 +1538,7 @@ func _layout_result_dialog(s: float, w: float, h: float) -> void:
 		card.button.custom_minimum_size = Vector2(44 / s, 44 / s)
 		card.button.position = card.art.position
 		card.button.size = card.art.size
-		card.hint.visible = not _save_failed
+		card.hint.visible = not retry_save
 		card.hint.position = caption_rect.position
 		card.hint.size = caption_rect.size
 		card.caption.position = Vector2.ZERO
@@ -1536,7 +1596,10 @@ func _update_navigation(columns: int) -> void:
 func snapshot() -> Dictionary:
 	var entries: Array[Dictionary] = []
 	var actions: Array[Dictionary] = []
-	for button: Button in [_home, _retry, _back]:
+	var buttons: Array[Button] = [_home, _retry, _back]
+	if offers_upgrades():
+		buttons.insert(1, _upgrades)
+	for button: Button in buttons:
 		if not is_instance_valid(button):
 			continue
 		var action_rect: Rect2 = button.get_global_rect()
@@ -1568,10 +1631,11 @@ func snapshot() -> Dictionary:
 	var viewport_rect: Rect2 = _scroll.get_global_rect() if is_instance_valid(_scroll) else Rect2()
 	var pip_rect: Rect2 = pip.get_global_rect() if is_instance_valid(pip) else Rect2()
 	return {"round_id": _empty_result_id if not _empty_result_id.is_empty() else _configured_id, "chest_count": batch.size(), "opened_count": opened,
-		"skill_unlock": _skill_reveal.snapshot(),
 		"challenge_record": _challenge_record.snapshot(),
 		"challenge_return_ready": _challenge_return_ready,
-		"stage_feedback": {"phase": "record" if _challenge_record.visible and _challenge_record.feedback_active() else "skill" if _skill_reveal.visible else "bonus" if not _stage_bonus_reward.is_empty() \
+		"stage_failure_ready": _stage_failure_ready,
+		"result_boss": _result_boss.snapshot(),
+		"stage_feedback": {"phase": "record" if _challenge_record.visible and _challenge_record.feedback_active() else "bonus" if not _stage_bonus_reward.is_empty() \
 			else "stars" if stage_feedback_active() else "done",
 			"round_id": _stage_feedback_round, "star_elapsed": _stage_intro_elapsed,
 			"bonus_elapsed": _stage_bonus_elapsed, "formula": _result_score.text \

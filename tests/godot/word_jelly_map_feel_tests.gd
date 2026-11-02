@@ -53,9 +53,10 @@ func _run() -> void:
 		"Pip is sourced, input-transparent presentation rather than another stage or focus target")
 	check(view.snapshot().guide.visible and view.snapshot().guide.stage == 25 and view._pip.growth_age == 3,
 		"The acquired guide marks the actual frontier and follows the supplied earned age")
-	check(not item.button.get_global_rect().intersects(view._pip.get_global_rect())
-		and view._scroll.get_global_rect().encloses(view._pip.get_global_rect()),
-		"Pip stands beside the next medallion without obscuring its number, stars or real hit area")
+	check(view._scroll.get_global_rect().encloses(view._pip.get_global_rect())
+		and view._pip.rest_snapshot().pose == "resting-on-stage"
+		and view._pip.rest_snapshot().support[1] < item.label.get_global_rect().position.y,
+		"Pip rests on the medallion rim while the number, stars and original native target stay clear")
 	check(view.snapshot().presentation.completed_edges == 5 and item.halo.visible,
 		"Earned route color and the current node's local light have real progress ownership")
 	var saved: Dictionary = state.duplicate(true)
@@ -134,7 +135,7 @@ func _run() -> void:
 		"A future chapter cannot display a false current Pip, earned road or success light")
 	check(view.show_chapter(3), "Return to the earned frontier chapter")
 	await _settle()
-	check(view.snapshot().guide.visible, "Returning restores the guide only beside the true frontier")
+	check(view.snapshot().guide.visible, "Returning restores the resting guide only on the true frontier")
 	var alternate: Dictionary = state.duplicate(true)
 	alternate.pip_age = 8
 	view.configure(alternate, true)
@@ -152,8 +153,8 @@ func _run() -> void:
 		view.open(state, true)
 		await _settle()
 		check(view._scroll.get_global_rect().grow(0.5).encloses(view._pip.get_global_rect())
-			and not item.button.get_global_rect().intersects(view._pip.get_global_rect()),
-			"Guide, stage and input remain separately legible on " + str(dimensions))
+			and view._pip.rest_snapshot().support[1] < item.label.get_global_rect().position.y,
+			"Resting guide, stage and input remain legible on " + str(dimensions))
 		await _save("frontier-%dx%d" % [dimensions.x, dimensions.y])
 	for dimensions: Vector2i in [SIZES[1], SIZES[3]]:
 		await _resize(dimensions)
@@ -162,7 +163,7 @@ func _run() -> void:
 			await _settle(2)
 			check(view.snapshot().guide.visible and view.snapshot().guide.stage == number
 				and view._scroll.get_global_rect().grow(0.5).encloses(view._pip.get_global_rect())
-				and not view._nodes[number - 1].button.get_global_rect().intersects(view._pip.get_global_rect()),
+				and view._pip.rest_snapshot().support[1] < view._nodes[number - 1].label.get_global_rect().position.y,
 				"Every real frontier keeps its guide legible and input-transparent: stage %d at %s; %s" %
 					[number, str(dimensions), str([view._scroll.get_global_rect(),
 						view._pip.get_global_rect(), view._nodes[number - 1].button.get_global_rect()])])

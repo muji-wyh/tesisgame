@@ -137,7 +137,7 @@ func check_scaled_collect() -> void:
 		for width: float in [88.0, 100.0, 136.0, 184.0]:
 			for height: float in [44.0, 56.0]:
 				button.size = Vector2(width, height) / scale_value
-				for count in [0, 8, 40]:
+				for count in [0, 8, 56]:
 					button.set_state(count, false, 0, 0)
 					check_collect_typography(button, scale_value)
 	button.queue_free()
@@ -172,7 +172,7 @@ func _run() -> void:
 	check(view.configure(words, app.growth.learning_age(), Data.theme(app.model.theme_id),
 		app.data.chests, false, 1901), "Use real production words and sourced tile art")
 	check(view.game.bind_stage(Catalog.make_plan(2, words, app.growth.learning_age(), 1901)),
-		"Main play includes the three remaining paid tools and priced pending goals")
+		"Main play includes Auto merge and priced pending goals")
 	view.game.set_fill_mode(false)
 	view.game.cells.clear()
 	view.game.spawn_interval = 10000.0
@@ -207,7 +207,7 @@ func _run() -> void:
 		view.collect_button.set_state(8, false, 0, 0)
 		await capture(view, "%dx%d-ready8" % [dimensions.x, dimensions.y])
 		if not baseline:
-			for count in [0, 1, 8, 40]:
+			for count in [0, 1, 8, 56]:
 				view.collect_button.set_state(count, false, 0, 0)
 				geometry(view)
 			view.collect_button.set_state(8, true, 2, 8)

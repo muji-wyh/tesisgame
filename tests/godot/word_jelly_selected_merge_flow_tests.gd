@@ -193,6 +193,20 @@ func test_selection(app) -> void:
 		"A paid goal cannot accidentally collect, pronounce, spend again or consume another family")
 	check(view.snapshot().practice.words.all(func(item: Dictionary) -> bool: return item.purchase.price == 75),
 		"All goal rows share the existing per-round family purchase tier")
+	view._process(1.3)
+	await settle()
+	check(not button.snapshot().targeting and not button.has_focus()
+		and view.snapshot().goal_hover.word_id.is_empty(),
+		"A completed pointer purchase restores its ordinary card even while the pointer stays over it")
+	await capture("goal-after-click")
+	await move_mouse(Vector2(1300, 720))
+	check(view.snapshot().goal_hover.word_id.is_empty()
+		and view._tiles.values().all(func(tile) -> bool: return not tile.completion_hint and not tile.match_dimmed),
+		"Moving away after purchasing cannot leave a mouse-acquired focus or board-family highlight behind")
+	await move_mouse(button.get_global_rect().get_center())
+	check(button.snapshot().targeting and view.snapshot().goal_hover.word_id == str(words[0].id),
+		"A fresh hover can preview the family again without spending")
+	await move_mouse(Vector2(1300, 720))
 	view.word_requested.disconnect(on_word)
 
 
@@ -308,6 +322,9 @@ func test_keyboard_and_controller(app) -> void:
 			and app.coin_wallet.balance == before - 50 and view.game.cleared_pairs == 0,
 			"A focused keyboard/controller goal buys its explicit family instead of pronouncing or collecting it")
 		view.game.finish_powerup()
+		view._process(1.3)
+		check(not button.snapshot().targeting and view.snapshot().goal_hover.word_id.is_empty(),
+			"Keyboard/controller activation also finishes its temporary family preview")
 
 
 func test_goal_rejection(app) -> void:
@@ -336,6 +353,8 @@ func test_goal_rejection(app) -> void:
 		view._process(0.05)
 	check(not button.snapshot().feedback_active and button.snapshot().title == words[0].text,
 		"The goal recovers its ordinary word label after the bounded shortfall")
+	check(not button.snapshot().targeting and not button.has_focus() and view.snapshot().goal_hover.word_id.is_empty(),
+		"A rejected pointer purchase returns to the ordinary card after its funds message")
 	check(app.coin_wallet.credit_amount("fixture:goal-retry-funding", 1000).ok, "Fund a later legitimate retry")
 	app._coin_flight.sync(app.coin_wallet.balance)
 	var partner: Dictionary = view.game.cells.filter(func(tile: Dictionary) -> bool:
@@ -398,6 +417,29 @@ func test_goal_scroll(app) -> void:
 	app._coin_flight.advance(0.12)
 	await capture("goal-paid-phone")
 	view.game.finish_powerup()
+	for reduced: bool in [false, true]:
+		words = await prepare(app)
+		view.set_reduced_motion(reduced)
+		button = goal_button(view, str(words[0].id))
+		balance = app.coin_wallet.balance
+		await move_mouse(Vector2(390, 820))
+		at = button.get_global_rect().get_center()
+		for pressed: bool in [true, false]:
+			var touch := InputEventScreenTouch.new()
+			touch.index = 7
+			touch.position = at
+			touch.pressed = pressed
+			root.push_input(touch)
+			await process_frame
+		check(app.coin_wallet.balance == balance - 50 and view.game.powerup_active(),
+			"A real single-finger tap still buys exactly one named goal")
+		view.game.finish_powerup()
+		view._process(1.3)
+		await settle()
+		check(not button.snapshot().targeting and not button.has_focus() and view.snapshot().goal_hover.word_id.is_empty(),
+			"Touch purchases cannot leave a selected card in normal or reduced motion")
+		await capture("goal-after-touch-" + ("reduced" if reduced else "normal"))
+	view.set_reduced_motion(false)
 
 
 func test_reentrant_goal(app) -> void:

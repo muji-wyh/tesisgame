@@ -110,13 +110,16 @@ func _check_tool_layout() -> void:
 						and not Rect2(areas.icon_rect).intersects(areas.coin_rect)
 						and not Rect2(areas.title_rect).intersects(areas.price_rect),
 						"Artwork, name and cost have separate content areas")
-					if width >= 144.0:
+					if width >= (180.0 if kind == "auto_merge" else 144.0):
 						check(button._title.horizontal_alignment == HORIZONTAL_ALIGNMENT_LEFT
 							and is_equal_approx(Rect2(areas.title_rect).position.x, Rect2(areas.coin_rect).position.x)
 							and Rect2(areas.icon_rect).end.x + 6.0 / scale_value <= Rect2(areas.title_rect).position.x
 							and Rect2(areas.title_rect).end.y <= Rect2(areas.coin_rect).position.y
 							and is_equal_approx(Rect2(areas.icon_rect).get_center().y, button.size.y * 0.5),
 							"Wide tools align name and cost beside a vertically centered sourced icon")
+					else:
+						check(button._title.horizontal_alignment == HORIZONTAL_ALIGNMENT_CENTER,
+							"Narrow tools preserve a full-width readable title above art, price and capacity")
 	button.queue_free()
 
 

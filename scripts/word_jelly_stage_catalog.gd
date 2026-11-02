@@ -86,6 +86,7 @@ static func make_plan(number: int, pool: Array, age: int, seed: int,
 			pieces += (word.morphology.parts.size() + (0 if str(word.get("image", "")).is_empty() else 1)) \
 				* int(goals[word.id])
 		var handling: float = float(pieces) * 1.6
+		# Expanding the board does not retune existing stage-time budgets.
 		var supply: float = maxf(0.0, float(pieces - 15)) / 5.0 * cadence
 		var margin: float = 1.0 + (MARGINS[wave] - 1.0) * lerpf(1.0, 0.15, progression)
 		var warmup_floor: float = lerpf(90.0, 60.0, smoothstep(1.0, 28.0, float(number)))
@@ -204,6 +205,8 @@ static func clear_reward(number: int, stars: int, chest_coins: int) -> Dictionar
 	if number < 0 or number > MAX_STAGE or stars < 0 or stars > 3 or chest_coins < 0 or chest_coins > MAX_COINS:
 		return _failure("A clear quote needs a supported stage, star rating and nonnegative chest amount.")
 	var base: int = 0 if number == 0 else 75 + 15 * (ceili(float(number) / 9.0) - 1)
+	if number == 1:
+		base = maxi(base, preload("res://scripts/coin_economy.gd").JELLY_FIRST_CLEAR_MIN_COINS)
 	var total: int = chest_coins
 	var factor: float = 0.0
 	if number != 0 and stars != 0:

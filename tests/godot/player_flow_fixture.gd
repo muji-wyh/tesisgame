@@ -112,3 +112,8 @@ static func finish_celebration(app) -> void:
 	if app._round_celebration.is_active():
 		assert(app._mode_id in ["match", "memory"] and app._round_celebration.is_ready() and not app.model.chest_earned)
 		app._round_celebration.action_button.pressed.emit()
+
+
+static func dismiss_jelly_upgrade_intro(app) -> void:
+		if app._campaign.upgrades.visible and app._campaign.upgrades.is_offer():
+			app._campaign.upgrades._offer_later.pressed.emit()

@@ -254,7 +254,8 @@ func _processing(view: Control) -> Array[String]:
 func _geometry(view: Control) -> Array:
 	var result: Array = []
 	for button: BaseButton in _buttons(view):
-		result.append([button.get_instance_id(), button.get_global_rect()])
+		if button.mouse_filter != Control.MOUSE_FILTER_IGNORE:
+			result.append([button.get_instance_id(), button.get_global_rect()])
 	return result
 
 

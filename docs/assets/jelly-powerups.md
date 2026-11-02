@@ -1,6 +1,6 @@
 # Jelly Words powerups
 
-The Auto merge, Treasure and extra-time purchase controls share a quiet pearl surface.
+Auto merge and goal-family purchases share a quiet pearl surface.
 Wide controls place the sourced artwork beside a left-aligned name and coin-price
 column, borrowing the pending word goals' reading order. Narrow phone tiles keep
 a full-width title above the artwork and price, without squeezing the name beside
@@ -9,22 +9,20 @@ cream surfaces share one border treatment; the sourced artwork identifies the
 tool instead of giving every card a different colored frame.
 Their artwork stays separate from the stable touch target, title, and coin price.
 Auto merge costs 600, 900, then 1200 coins per round;
-Goal-family merges cost 50, 75, then 100; Treasure remains 200, 300, then 400.
+Goal-family merges cost 50, 75, then 100.
 Each item tracks successful purchases separately
 and shows its next price without resetting the current feedback animation.
-The latter uses the same current chest texture as the jelly fragment markers
-once its cropped image is ready. The acquired Royal fallback stays visible while
-that viewport warms up, without a synchronous GPU readback.
+Treasure and the paid +30 sec card are retired. Neither is constructed in the
+live action rail, advertised in its price snapshot, or accepted by the model or
+application wallet adapter. Natural chest fragments, earned treasure and
+Challenge goal-time awards remain intact. Historical quote values and already
+committed delivery completion do not enable new purchases.
 
 The purchase controls, Fill and Collect share one action group. The compact
 icon-only Fill control sits beside the wider Collect action wherever both fit;
-only a narrow rail places it above Collect. The two paid tools (three in main stages, including extra time)
-use a side rail when it preserves larger Jelly reading space. The three main-stage
-tools form one equal-width vertical column in the rail, or one equal-width row
-in a sufficiently wide footer. Short screens can use a complete horizontal row;
-narrow footers use a column rather than an incomplete grid. No final tool spans
-an extra column, and neighboring paid targets keep eight display pixels between
-them. Two-tool rounds retain their compact row where it fits.
+only a narrow rail places it above Collect. Auto merge is the only separate paid
+tool, below the free controls in a side rail or footer. Retired cards reserve no
+empty rows or columns, and the remaining group uses the reclaimed space.
 Ordinary paid controls are
 56 display pixels high, using compact 44-pixel controls on short screens and Boss
 layouts. Fill always keeps a 44-pixel target. The group retains bottom padding.
@@ -43,6 +41,34 @@ state remain accessible to screen readers.
 One quiet cream backing groups the controls; only Collect is a strong green
 primary action. The divider remains visible but uses the same fine neutral edge.
 
+## Permanent Auto merge capacity
+
+The existing **Jelly Upgrades** page has separate **Merged Jelly** and **Auto
+merge** category controls. Auto merge starts at free Lv1 with three original
+board Jellies per use. Each next level adds one, reaching eleven at Lv9.
+The independent permanent upgrades cost 50, 100, 200, 350, 550, 800, 1100 and
+1500 coins. These do not replace the per-round 600 / 900 / 1200 use prices.
+The existing v4 Jelly ownership and pending receipts migrate without repricing;
+v5 records both levels and the pending upgrade kind. A paid final-save retry
+always follows that kind, even after switching category.
+
+The button retains its acquired Kenney wand and coin-price column. A quiet
+violet badge pairs the existing acquired mint gel with the real capacity number;
+the most compact tiles attach the same number to the wand without squeezing
+the full title or coin price. The badge stays stable during pause, reduced
+motion, purchase feedback and price escalation. It is an owned per-use capacity,
+not the number of matches left in the current animation. The accessible name
+includes the saved level, capacity and real use price.
+The category preview reuses those same static acquired materials to show
+exactly three through eleven illustrated Jellies; it is a capacity illustration,
+not a recorded merge performance or newly acquired animation.
+
+Only complete legal paths are reserved. Each original input counts once across
+all paths; generated intermediate and complete results do not count twice.
+No budget is spent on unmatched Jellies or a word whose required picture will
+not fit. Already reserved paths finish on pause/exit through the existing
+transaction lifecycle. Goal-family and collection-blast matching are unchanged.
+
 ## Goal-family auto merge
 
 The standalone Magnet button and its second target-selection gesture are removed.
@@ -53,6 +79,12 @@ of hiding the count. Hovering or focusing a row gives it a mint edge and lightly
 lifts its illustration. Corresponding board Jellies use the existing drag-match
 silhouette halo, gel growth and subdued competing material light. Hover is free;
 leaving, pause, dragging and navigation clear it without moving hit geometry.
+Activating a goal ends that hover/focus preview. Mouse and touch activation also
+release their acquired button focus, so finishing or rejecting the purchase
+returns the card and board to normal even if the pointer has not moved.
+Leaving and re-entering the card, or focusing it again through navigation,
+starts a fresh preview. Keyboard/controller focus retains its ordinary focus
+indicator without latching the consumed family preview.
 Clicking or activating that goal uses its exact word identity directly. No random
 target is substituted, and no coins are charged unless this family's current
 board inputs have a complete ordinary merge path.
@@ -65,8 +97,8 @@ eligibility. Only legal complete paths are consumed; missing partners are not
 invented. Other families stay on the board. It never automatically collects,
 grants construction mastery or mints manual-merge combo coins. A later successful
 collection owns its usual learning and rewards. All goal rows share the existing
-per-round family-use price tier, independent of Auto merge, Treasure and extra
-time; the price does not reset for a different goal.
+per-round family-use price tier, independent of Auto merge; the price does not
+reset for a different goal.
 
 A newly saved payment reuses the existing wallet debit: rolling digits, an exact
 negative amount, and one acquired gold coin traveling from the wallet to the
@@ -96,8 +128,8 @@ still need a legal settled pair; incoming supply is not mistaken for unsettled
 board support that would make an operation unsafe. A saved item temporarily owns
 new supply, while already dispatched Jellies continue their normal descent.
 After the item finishes, Fill resumes automatically without changing its selected
-preference. Treasure retains its live moving-body targets and repeat-purchase
-behavior, and extra time retains its independent stage-clock purchase.
+preference. Retired Treasure and extra-time requests cannot charge, add fragments
+or extend a clock, including while Fill is active.
 
 ## Artwork and acquisition
 
@@ -160,12 +192,9 @@ Pause hides and freezes the transient warning; reduced motion keeps its readable
 warm state and wording without coin scaling or price motion, including when the
 preference changes mid-response.
 
-Treasure has no cooldown: it remains available while earlier Treasure fragments
-are flying or their arrival effects are fading. Each click pays its current
-quoted price independently and launches another two to eight fragments. New
-flights overlap existing ones without restarting or skipping them. Insufficient
-funds still trigger rejection feedback and leave all paid deliveries intact.
-Auto merge retains its exclusive board operation.
+Auto merge retains its exclusive board operation. An already committed legacy
+delivery can still finish safely; retiring its card neither refunds nor changes
+old immutable wallet receipts.
 
 Collect remains the wide green primary action beside compact Fill, with a sourced word-jelly illustration,
 a stable title and a contained completed-word count badge. During collection
@@ -228,14 +257,14 @@ own clock. Contact starts the liquid merge and its cue at the destination.
 Completed words remain
 on the board until the player collects them.
 
-Automatic movement reuses the ordinary pick, contact, and merge cues. Treasure
-flights reuse the existing current chest texture, `portal_glow.png`, and
+Automatic movement reuses the ordinary pick, contact, and merge cues. Archived
+Treasure flights used the existing chest texture, `portal_glow.png`, and
 `milestone/sparkle.png`. Each scheduled fragment launch plays
 `assets/audio/fragments/appear.wav`, and its delivery plays
 `assets/audio/fragments/arrive.wav`, both at gain 0.45. These distinct acquired
 Kenney CC0 recordings, their preparation and their independent four-channel
 mix are documented in [fragment audio](jelly-fragments.md#fragment-audio).
-The first flight arrives after 0.42 seconds and subsequent deliveries are
+The legacy first flight arrives after 0.42 seconds and subsequent deliveries are
 staggered by 0.18 seconds. Launches and arrivals each emit once at their actual
 timeline boundaries, including overlapping purchases, and do not replay after
 a pause. The cues belong to the owner's committed purchase and delivery

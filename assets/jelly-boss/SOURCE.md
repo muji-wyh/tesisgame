@@ -102,6 +102,38 @@ together; the final strike gets its victory accent before the concession and
 retreat. These are presentation/sequence changes, not additional damage,
 rewards, source animation, character geometry or audio acquisitions.
 
+## Saved Game over performance
+
+The saved Jelly World failure modal reuses that same acquired private Frog GLB
+and its existing game-authored two-second `Taunt`, not a portrait replacement,
+publisher animation relabel, new download or procedural character. The rig's
+actual `Middle1.L` and `Middle1.R` palm-base joints drive local acquired
+Bobardo portal glow and Archanor sparkles. Those effects remain static source
+textures with game-authored trajectories, not a new particle-pack acquisition.
+The gesture, wink and hand-light peak share one short presentation clock.
+
+Nine native samples from 0.0 through 1.99 seconds were inspected for the full
+face, hands, fingers and feet. Their union in the 384-by-576 viewport is
+`(16, 151, 338, 344)`. The UI uses a padded GPU atlas region
+`(4, 139, 362, 368)` to remove transparent camera margins without flattening
+the actual animated rig. Runtime does not read the viewport back into an image.
+The source-pose contact sheet is review evidence, separate from the integrated
+phone and desktop Game over captures.
+
+One 2.4-second visual response then holds a relaxed open-hand pose; it does not
+replay its burst while the player decides. Reduced motion samples the real
+one-second wink once with a still soft light. Backgrounding or leaving stops
+the viewport, and repeated wallet/result refreshes retain the same round clock.
+The saved retry, upgrade and map actions never wait for the performance.
+An earned Challenge record retains its medal and positive acknowledgement.
+Storage errors and voluntary exits do not trigger this response.
+
+The new modal layer deliberately adds no second vocalization or fully voiced
+line. Existing combat, defeat and record audio keep their established ownership
+and mute controls; the short English captions are game-authored text.
+Creators, licenses, acquisition status and all eight available converted clips
+remain the character/effect records above.
+
 ## Boss vocalization
 
 - **Evil Laugh**, recorded/performed by **AntumDeluge** for Stendhal.

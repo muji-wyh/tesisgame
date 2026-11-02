@@ -77,6 +77,7 @@ func _run() -> void:
 	_test_supply_and_determinism()
 	_test_mastery_supply()
 	_test_supply_packets()
+	_test_supply_order_exhaustive()
 	_test_all_age_complementary_supply()
 	_test_supply_preview_stability()
 	_test_immediate_manual_batches()
@@ -103,14 +104,6 @@ func _run() -> void:
 	_test_powerup_auto_chain()
 	_test_powerup_auto_interleaved_authored_paths()
 	_test_powerup_manual_guards()
-	_test_powerup_fragment_timeline()
-	_test_powerup_fragment_launch_rhythm()
-	_test_powerup_fragment_launch_reentry()
-	_test_powerup_fragment_repeats()
-	_test_powerup_fragment_changed_reentry()
-	_test_powerup_fragment_repeat_failure()
-	_test_powerup_fragment_repeat_lifecycle()
-	_test_powerup_fragments_on_nested_word()
 	_test_powerup_pause_and_clocks()
 	_test_powerup_determinism()
 	_test_powerup_finish_and_lifecycle()
@@ -265,7 +258,7 @@ func _assert_board(model, label: String) -> void:
 		ids[tile.id] = true
 		check(int(tile.column) >= 0 and int(tile.row) >= 0 and int(tile.width) >= 1 and int(tile.height) >= 1
 			and int(tile.column) + int(tile.width) <= Model.COLUMNS and int(tile.row) + int(tile.height) <= Model.ROWS,
-			label + ": every rectangular footprint stays within five columns and eight rows")
+			label + ": every rectangular footprint stays within seven columns and eight rows")
 		for y in range(int(tile.row), int(tile.row) + int(tile.height)):
 			for x in range(int(tile.column), int(tile.column) + int(tile.width)):
 				var key: int = y * Model.COLUMNS + x
@@ -300,6 +293,7 @@ func _observe(model) -> Dictionary:
 func _powerup_model(kind: String):
 	var model = _model([_word("cat"), _word("cater"), _word("dog")])
 	if kind == "auto_merge":
+		model.auto_merge_level = 4
 		_board(model, ["picture:cat", "cat", "merged:cat:1", "dog", "picture:dog", "x"], [1, 2, 3, 4, 5, 6])
 	else:
 		_board(model, ["cat", "picture:cat", "dog", "picture:dog", "x", "y"], [0, 0, 0, 0, 3, 7])
@@ -355,9 +349,9 @@ func _approximately_equal_state(left: Variant, right: Variant) -> bool:
 
 
 func _test_powerup_eligibility() -> void:
-	check(Model.POWERUP_PRICES == {"auto_merge": 600, "family_merge": 50, "fragments": 200, "extra_time": 100},
+	check(Model.POWERUP_PRICES == {"auto_merge": 600, "family_merge": 50},
 		"paid powers expose their first-purchase prices")
-	for kind: String in ["auto_merge", "fragments"]:
+	for kind: String in ["auto_merge"]:
 		for blocked_by: String in ["paused", "held", "settling", "fusion", "collection", "batch", "finished", "empty"]:
 			var model = _powerup_model(kind)
 			var payments: Array = _accept_powerup_payments(model)
@@ -394,7 +388,7 @@ func _test_powerup_eligibility() -> void:
 	var payments: Array = _accept_powerup_payments(model)
 	check(not model.can_activate_powerup("auto_merge") and not model.activate_powerup("auto_merge")
 		and payments.is_empty(), "automatic merging cannot charge for a board without an exact dictionary pair")
-	check(model.can_activate_powerup("fragments"), "fragment delivery remains available without a possible word")
+	check(not model.can_activate_powerup("fragments"), "The retired Treasure item remains unavailable")
 	check(not model.activate_powerup("unknown") and not model.can_activate_powerup("unknown")
 		and payments.is_empty(), "an unknown power cannot make a wallet request")
 	model.purchase_powerup = Callable()
@@ -408,7 +402,7 @@ func _test_powerup_eligibility() -> void:
 
 
 func _test_powerup_payment_atomicity() -> void:
-	for kind: String in ["auto_merge", "fragments"]:
+	for kind: String in ["auto_merge"]:
 		var model = _powerup_model(kind)
 		var before: Dictionary = model.snapshot()
 		check(not model.activate_powerup(kind) and not model.powerup_active() and model.snapshot() == before,
@@ -455,10 +449,10 @@ func _test_powerup_payment_atomicity() -> void:
 
 
 func _test_powerup_price_progression() -> void:
-	for kind: String in ["auto_merge", "fragments"]:
+	for kind: String in ["auto_merge"]:
 		var model = _model([_word("cat")])
-		var other: String = "fragments" if kind == "auto_merge" else "auto_merge"
-		var prices: Array = [600, 900, 1200, 1200] if kind == "auto_merge" else [200, 300, 400, 400]
+		var other: String = "family_merge"
+		var prices: Array = [600, 900, 1200, 1200]
 		for index in range(prices.size()):
 			_board(model, ["cat", "picture:cat"])
 			var expected: int = prices[index]
@@ -480,15 +474,13 @@ func _test_powerup_price_progression() -> void:
 			if kind == "auto_merge":
 				check(not model.activate_powerup(kind) and payments.size() == 1,
 					"an active automatic merge cannot spend or escalate again")
-			else:
-				check(model.can_activate_powerup(kind), "Treasure remains purchasable during its delivery animation")
 			model.finish_powerup(true)
 			model.set_paused(true)
 			model.set_paused(false)
 			check(model.snapshot().powerup_uses[kind] == index + 1,
 				"pausing or completing the animation preserves the successful-use count")
 		check(model.configure([_word("cat")], 3, 42) and model.powerup_price(kind) == prices[0]
-			and model.snapshot().powerup_uses == {"auto_merge": 0, "family_merge": 0, "fragments": 0},
+			and model.snapshot().powerup_uses == {"auto_merge": 0, "family_merge": 0},
 			"only a new round resets both powerup prices to their first-use tier")
 		model.purchase_powerup = Callable()
 	check(Model.coins_for_tile({"mass": 40}) == 0 and Model.coin_drop_chance_for_tile({"mass": 40}) == 0.0,
@@ -544,6 +536,7 @@ func _test_powerup_auto_timeline() -> void:
 
 func _test_powerup_auto_rhythm() -> void:
 	var model = _model([_word("cat"), _word("dog"), _word("sun")])
+	model.auto_merge_level = 4
 	_board(model, ["cat", "picture:cat", "dog", "picture:dog", "sun", "picture:sun"], [1, 2, 3, 4, 5, 6])
 	for index in range(model.cells.size()):
 		model.cells[index].column = int(index / 2) * 2
@@ -603,6 +596,7 @@ func _test_powerup_auto_random_sources() -> void:
 		var orders: Array = []
 		for copy_index in range(models.size()):
 			var model = models[copy_index]
+			model.auto_merge_level = 4
 			_board(model, ["cat", "picture:cat", "dog", "picture:dog", "sun", "picture:sun"])
 			for index in range(model.cells.size()):
 				model.cells[index].column = int(index / 2) * 2
@@ -633,6 +627,7 @@ func _test_powerup_auto_random_sources() -> void:
 
 func _test_powerup_auto_completion_during_drag() -> void:
 	var model = _model([_word("cat")])
+	model.auto_merge_level = 9
 	var pieces: Array[String] = []
 	for index in range(24):
 		pieces.append("cat" if index % 2 == 0 else "picture:cat")
@@ -653,16 +648,19 @@ func _test_powerup_auto_completion_during_drag() -> void:
 			and int(drag.source_id) != first_result_id and int(drag.target_id) != first_result_id,
 			"no launch can reuse the new result before its landing settles")
 	model.finish_powerup(true)
-	check(not model.powerup_active() and model.collectable_ids().size() == 1 and payments.size() == 1,
-		"The paid stream completes picture matches and additive upgrades without another payment")
+	check(not model.powerup_active() and model.collectable_ids().size() == 1 and payments.size() == 1
+		and model.powerup_snapshot().affected_jellies == 10,
+		"The paid stream finishes five complete pairs within its eleven-input budget without another payment")
 	var represented_levels: int = 0
+	var mass: int = 0
 	for tile: Dictionary in model.cells:
 		represented_levels += int(tile.merge_level)
+		mass += int(tile.mass)
 		check(int(tile.merge_level) <= Model.MAX_MERGE_LEVEL, "Automatic upgrades never exceed Lv9")
-	check(represented_levels == 9 and int(model.cells[0].mass) == 24
+	check(represented_levels == 5 and mass == 24 and model.cells.size() == 15
 		and model.merged_count == 24 - model.cells.size() and model.collected_coins == 0
-		and model.compatible_pairs().is_empty(),
-		"The exhausted stream preserves all source mass in a single capped Lv9 word")
+		and not model.compatible_pairs().is_empty(),
+		"The capacity-limited stream preserves all source mass and leaves unused pairs for a later purchase")
 	_assert_board(model, "automatic picture-and-level stream")
 	model.purchase_powerup = Callable()
 
@@ -717,6 +715,7 @@ func _test_powerup_auto_interleaved_authored_paths() -> void:
 				"rule": "test_authored_join", "break_offsets": [str(parts[0]).length()]}], "roots": ["whole"]}
 		authored_words.append(word)
 	var model = _model(authored_words)
+	model.auto_merge_level = 4
 	model.cells.clear()
 	var pictures: Dictionary = {}
 	for word: Dictionary in authored_words:
@@ -786,7 +785,7 @@ func _test_powerup_auto_interleaved_authored_paths() -> void:
 
 
 func _test_powerup_manual_guards() -> void:
-	for kind: String in ["auto_merge", "fragments"]:
+	for kind: String in ["auto_merge"]:
 		var model = _model([_word("cat")])
 		var root_tile: Dictionary = _placed_tile(1003, "x", 4, 7)
 		model.cells.assign([_placed_tile(1000, "cat", 0, 7), _placed_tile(1001, "picture:cat", 1, 7),
@@ -810,380 +809,13 @@ func _test_powerup_manual_guards() -> void:
 		if kind == "auto_merge":
 			check(not model.can_activate_powerup("fragments") and not model.activate_powerup("fragments")
 				and payments.size() == 1, "Auto merge retains exclusive use of the board")
-		else:
-			check(model.can_activate_powerup("fragments"), "Another Treasure purchase can join the reserved delivery sequence")
 		check(model.snapshot() == before, "blocked manual actions do not mutate a reserved paid sequence")
 		model.finish_powerup(true)
 		model.purchase_powerup = Callable()
 
 
-func _test_powerup_fragment_timeline() -> void:
-	var model = _powerup_model("fragments")
-	var payments: Array = _accept_powerup_payments(model)
-	var events: Dictionary = _observe_powerups(model)
-	var regular_events: Dictionary = _observe(model)
-	var original: int = _board_fragments(model)
-	check(model.activate_powerup("fragments"), "fragment delivery accepts a stable occupied board")
-	var active: Dictionary = model.powerup_snapshot()
-	var total: int = int(active.total)
-	check(active.stage == "arrivals" and total >= 2 and total <= 8 and active.arrivals.size() == total,
-		"one fragment purchase reserves a random two-to-eight arrival sequence")
-	check(_board_fragments(model) == original and events.arrivals.is_empty(),
-		"payment reserves fragment destinations without applying them before arrival")
-	var reserved_ids: Array[int] = []
-	for index in range(total):
-		var arrival: Dictionary = active.arrivals[index]
-		check(is_equal_approx(float(arrival.at), 0.42 + index * 0.18) and not arrival.arrived,
-			"fragment arrivals have a 420 ms lead-in followed by 180 ms beats")
-		if index < 4:
-			check(int(arrival.tile_id) in [1000, 1001, 1002, 1003] and int(arrival.tile_id) not in reserved_ids,
-				"fragment-free bodies are selected before adding more fragments to an already marked body")
-		reserved_ids.append(int(arrival.tile_id))
-	check(is_equal_approx(float(active.duration), 0.42 + (total - 1) * 0.18 + 0.35),
-		"the fragment sequence includes the final 350 ms impact recovery")
-	var elapsed: float = 0.0
-	for index in range(total):
-		var deadline: float = 0.42 + index * 0.18
-		model.step(deadline - elapsed - 0.001)
-		check(events.arrivals.size() == index and _board_fragments(model) == original + index,
-			"fragment application waits for its exact arrival deadline")
-		model.step(0.001)
-		elapsed = deadline
-		check(events.arrivals.size() == index + 1 and _board_fragments(model) == original + index + 1,
-			"one fragment applies atomically at each staggered arrival")
-		var payload: Dictionary = events.arrivals[index]
-		var target: Dictionary = model.cell(int(payload.tile_id))
-		check(payload.tile_id == reserved_ids[index] and int(payload.total) == total
-			and int(payload.fragments) == int(target.fragments) and bool(target.chest)
-			and str(payload.receipt_id) == str(payments[0].id),
-			"arrival presentation identifies the reserved target, persisted purchase, and updated fragment count")
-	model.step(0.349)
-	check(model.powerup_active(), "fragment impact recovery remains reserved until its last millisecond")
-	model.step(0.001)
-	check(not model.powerup_active() and payments.size() == 1 and _board_fragments(model) == original + total,
-		"all purchased fragments apply once and the sequence ends after recovery")
-	check(model.fragment_count == 0 and model.collected_coins == 0 and model.chest_tier == 0
-		and regular_events.collections.is_empty() and regular_events.milestones.is_empty(),
-		"delivered fragments remain on jellies until collection and do not immediately unlock a chest")
-	model.purchase_powerup = Callable()
-
-
-func _test_powerup_fragment_launch_rhythm() -> void:
-	var observations: Array[Array] = []
-	for coarse: bool in [true, false]:
-		var model = _powerup_model("fragments")
-		_accept_powerup_payments(model)
-		var events: Array[Dictionary] = []
-		var observe_cue: Callable = func(cue: String) -> void:
-			if cue in ["powerup_fragment_launch", "powerup_fragment"]:
-				var state: Dictionary = model.powerup_snapshot()
-				events.append({"cue": cue, "at": float(state.elapsed)})
-		model.cue_requested.connect(observe_cue)
-		check(model.activate_powerup("fragments") and events.size() == 1
-			and events[0].cue == "powerup_fragment_launch" and is_zero_approx(float(events[0].at)),
-			"the first fragment appearance cue fires at purchase time without waiting for a frame")
-		var active: Dictionary = model.powerup_snapshot()
-		var total: int = int(active.total)
-		check(bool(active.arrivals[0].launched) and not bool(active.arrivals[0].arrived)
-			and active.arrivals.filter(func(item: Dictionary) -> bool: return bool(item.launched)).size() == 1,
-			"an audible first launch marks only its own visible flight and grants no fragment early")
-		if coarse:
-			model.step(5.0)
-		else:
-			for frame in range(500):
-				model.step(0.01)
-		var launches: Array = events.filter(func(event: Dictionary) -> bool: return event.cue == "powerup_fragment_launch")
-		var arrivals: Array = events.filter(func(event: Dictionary) -> bool: return event.cue == "powerup_fragment")
-		check(not model.powerup_active() and launches.size() == total and arrivals.size() == total,
-			"every visible Treasure fragment has one appearance cue and one destination cue")
-		for index in range(total):
-			check(is_equal_approx(float(launches[index].at), index * Model.POWERUP_FRAGMENT_STAGGER)
-				and is_equal_approx(float(arrivals[index].at) - float(launches[index].at), Model.POWERUP_FRAGMENT_FLIGHT),
-				"each staggered appearance precedes its matching destination by the full flight duration")
-		var previous: float = -1.0
-		for event: Dictionary in events:
-			check(float(event.at) + Model.EPSILON >= previous,
-				"coarse stepping dispatches fragment launch and arrival sounds in chronological order")
-			previous = float(event.at)
-		var completed: Dictionary = model.powerup_snapshot()
-		check(completed.arrivals.all(func(item: Dictionary) -> bool: return bool(item.launched) and bool(item.arrived)),
-			"completed delivery keeps both phases committed so later stepping cannot replay them")
-		var count: int = events.size()
-		model.step(1.0)
-		check(events.size() == count, "finished fragment sounds never replay on later frames")
-		observations.append(events)
-		model.cue_requested.disconnect(observe_cue)
-		model.purchase_powerup = Callable()
-	check(_approximately_equal_state(observations[0], observations[1]),
-		"coarse and fine frames have identical fragment appearance and destination cue timing")
-
-
-func _test_powerup_fragment_launch_reentry() -> void:
-	for launch_number: int in [1, 2]:
-		for action: String in ["pause", "drain", "finish", "configure", "advance"]:
-			var model = _powerup_model("fragments")
-			var payments: Array = _accept_powerup_payments(model)
-			var original: int = _board_fragments(model)
-			var observed: Dictionary = {"launches": 0, "arrivals": 0, "handled": false, "total": 0, "replacement": {}}
-			var observe_cue: Callable = func(cue: String) -> void:
-				if cue == "powerup_fragment":
-					observed.arrivals += 1
-				if cue != "powerup_fragment_launch":
-					return
-				observed.launches += 1
-				if observed.handled or int(observed.launches) != launch_number:
-					return
-				observed.handled = true
-				var state: Dictionary = model.powerup_snapshot()
-				observed.total = int(state.total)
-				check(bool(state.arrivals[launch_number - 1].launched)
-					and not bool(state.arrivals[launch_number - 1].arrived),
-					"the launch flag is committed before a sound callback can reenter the delivery")
-				if action == "pause":
-					model.set_paused(true)
-				elif action == "drain":
-					model.finish_powerup(true)
-				elif action == "finish":
-					model.finish_round()
-				elif action == "configure":
-					check(model.configure([_word("sunflower")], 3, 9),
-						"a launch callback can replace the round after silently fulfilling the paid delivery")
-					observed.replacement = model.snapshot()
-				else:
-					model.step(4.0)
-			model.cue_requested.connect(observe_cue)
-			check(model.activate_powerup("fragments"), "a paid delivery permits a reentrant appearance callback")
-			if launch_number > 1:
-				model.step(Model.POWERUP_FRAGMENT_STAGGER)
-			check(bool(observed.handled) and payments.size() == 1,
-				"both immediate and later appearance callbacks run once against the accepted purchase")
-			if action == "pause":
-				var paused_state: Dictionary = model.snapshot()
-				var paused_cues: Array[int] = [int(observed.launches), int(observed.arrivals)]
-				model.step(5.0)
-				check(model.paused and model.snapshot() == paused_state
-					and [int(observed.launches), int(observed.arrivals)] == paused_cues,
-					"pausing at fragment appearance freezes the board and both sound phases")
-				model.set_paused(false)
-				model.step(5.0)
-			if action == "configure":
-				check(model.snapshot() == observed.replacement and model.phase == "playing"
-					and not model.powerup_active() and int(observed.launches) == launch_number and int(observed.arrivals) == 0,
-					"round replacement cancels every stale launch, arrival, and remaining frame of the old delivery")
-			else:
-				check(not model.powerup_active() and _board_fragments(model) == original + int(observed.total)
-					and model.powerup_snapshot().completed == observed.total,
-					"appearance callback interruption preserves every purchased fragment exactly once")
-				if action in ["pause", "advance"]:
-					check(int(observed.launches) == int(observed.total) and int(observed.arrivals) == int(observed.total),
-						"resumed and reentrant advancement never repeats or skips a fragment's two sound phases")
-				else:
-					check(int(observed.launches) == launch_number and int(observed.arrivals) == 0,
-						"silent settlement drains the accepted delivery without catch-up appearance or arrival sounds")
-				check(model.phase == ("finished" if action == "finish" else "playing"),
-					"appearance callback lifecycle changes preserve the requested round state")
-			model.cue_requested.disconnect(observe_cue)
-			model.purchase_powerup = Callable()
-
-
-func _test_powerup_fragment_repeats() -> void:
-	var model = _powerup_model("fragments")
-	var payments: Array = _accept_powerup_payments(model)
-	var events: Dictionary = _observe_powerups(model)
-	var cues: Array[String] = []
-	model.cue_requested.connect(func(cue: String) -> void: cues.append(cue))
-	model.powerup_feedback.connect(func(_kind: String, success: bool) -> void:
-		if success:
-			check(not model.activate_powerup("fragments") and not model.activate_powerup("auto_merge"),
-				"purchase feedback cannot recursively create another debit"))
-	var original: int = _board_fragments(model)
-	var starts: Array[float] = [0.0, 0.10, 0.19]
-	var prices: Array[int] = [200, 300, 400]
-	var totals: Array[int] = []
-	var prior: Dictionary = {}
-	var timeline_id: String = ""
-	for purchase in range(starts.size()):
-		if purchase > 0:
-			model.step(starts[purchase] - starts[purchase - 1])
-			prior = model.powerup_snapshot()
-		check(model.can_activate_powerup("fragments") and model.activate_powerup("fragments"),
-			"Treasure can be purchased again before any earlier fragment arrives")
-		var state: Dictionary = model.powerup_snapshot()
-		if purchase == 0:
-			timeline_id = str(state.receipt_id)
-		check(is_equal_approx(float(state.elapsed), starts[purchase]) and str(state.receipt_id) == timeline_id,
-			"a repeat purchase preserves the original delivery clock and timeline identity")
-		check(payments.size() == purchase + 1 and int(payments[purchase].price) == prices[purchase],
-			"each rapid click pays its current quoted price exactly once")
-		var bought: Array = state.arrivals.filter(func(item: Dictionary) -> bool:
-			return str(item.receipt_id) == str(payments[purchase].id))
-		check(bought.size() >= 2 and bought.size() <= 8, "each independent receipt reserves its own two-to-eight fragments")
-		totals.append(bought.size())
-		for index in range(bought.size()):
-			check(is_equal_approx(float(bought[index].at), starts[purchase] + 0.42 + index * 0.18)
-				and int(bought[index].total) == bought.size(),
-				"each added purchase starts its own full flight and stagger without waiting for earlier tails")
-		if purchase > 0:
-			check(state.arrivals.slice(0, prior.arrivals.size()) == prior.arrivals,
-				"new Treasure purchases preserve all existing destinations, deadlines, and arrival states")
-		check(not model.can_activate_powerup("auto_merge") and not model.activate_powerup("auto_merge"),
-			"automatic merging stays unavailable while any purchased fragments are in flight")
-	var active: Dictionary = model.powerup_snapshot()
-	check(_board_fragments(model) == original and events.arrivals.is_empty(),
-		"three rapid payments never grant fragments before their visible arrival")
-	var reserved_ids: Array[int] = []
-	for arrival: Dictionary in active.arrivals.slice(0, 4):
-		reserved_ids.append(int(arrival.tile_id))
-	check(reserved_ids.size() == 4 and reserved_ids.has(1000) and reserved_ids.has(1001)
-		and reserved_ids.has(1002) and reserved_ids.has(1003),
-		"later purchases include earlier pending markers when preferring unmarked jelly bodies")
-	model.set_paused(true)
-	model.step(4.0)
-	check(model.powerup_snapshot() == active and not model.can_activate_powerup("fragments"),
-		"pause freezes every overlapping delivery and prevents purchases")
-	model.set_paused(false)
-	model.step(0.50)
-	var running: Dictionary = model.powerup_snapshot()
-	var expected: Array = running.arrivals.filter(func(item: Dictionary) -> bool:
-		return float(item.at) <= float(running.elapsed) + Model.EPSILON)
-	check(events.arrivals.size() == expected.size() and _board_fragments(model) == original + expected.size(),
-		"coarse frames cross every interleaved receipt deadline without delaying newly appended flights")
-	var previous_at: float = -1.0
-	for event: Dictionary in events.arrivals:
-		var scheduled: Dictionary = active.arrivals[int(event.index)]
-		check(float(event.at) + Model.EPSILON >= previous_at and is_equal_approx(float(event.at), float(scheduled.at))
-			and str(event.receipt_id) == str(scheduled.receipt_id) and str(event.timeline_id) == timeline_id
-			and int(event.total) == int(scheduled.total),
-			"overlapping arrivals emit in time order with their own receipt and exact presentation deadline")
-		previous_at = float(event.at)
-	model.step(5.0)
-	var total: int = totals.reduce(func(sum: int, value: int) -> int: return sum + value, 0)
-	check(not model.powerup_active() and _board_fragments(model) == original + total
-		and events.arrivals.size() == total and cues.count("powerup_fragment") == total
-		and cues.count("powerup_fragment_launch") == total
-		and cues.count("powerup_success") == 3 and payments.size() == 3,
-		"every repeated purchase finishes once with its own feedback and one launch and arrival cue per fragment")
-	check(model.powerup_snapshot().completed == total and model.powerup_snapshot().total == total
-		and model.powerup_price("fragments") == 400 and model.fragment_count == 0 and model.chest_count == 0,
-		"combined delivery totals are conserved without collecting fragments or changing capped pricing")
-	model.purchase_powerup = Callable()
-
-
-func _test_powerup_fragment_changed_reentry() -> void:
-	var model = _powerup_model("fragments")
-	var payments: Array = _accept_powerup_payments(model)
-	for purchase in range(2):
-		var attempted: Dictionary = {"value": false}
-		model.changed.connect(func() -> void:
-			if attempted.value:
-				return
-			attempted.value = true
-			check(model.can_activate_powerup("fragments"),
-				"the final purchase notification exposes an immediately available Treasure button")
-			check(not model.activate_powerup("fragments"),
-				"a synchronous final change callback cannot recursively create another paid delivery"), CONNECT_ONE_SHOT)
-		check(model.activate_powerup("fragments") and attempted.value and payments.size() == purchase + 1,
-			"each outer click completes one charge even when its final notification tries to purchase again")
-		check(model.can_activate_powerup("fragments"),
-			"the next independent click remains eligible after the guarded notification returns")
-	model.finish_powerup(true)
-	model.purchase_powerup = Callable()
-
-
-func _test_powerup_fragment_repeat_failure() -> void:
-	var model = _powerup_model("fragments")
-	var payments: Array = _accept_powerup_payments(model)
-	var events: Dictionary = _observe_powerups(model)
-	var cues: Array[String] = []
-	model.cue_requested.connect(func(cue: String) -> void: cues.append(cue))
-	var original: int = _board_fragments(model)
-	check(model.activate_powerup("fragments"), "one accepted Treasure delivery exists before a repeat fails")
-	model.step(0.12)
-	var active: Dictionary = model.powerup_snapshot()
-	var board: Array = model.cells.duplicate(true)
-	for response: Dictionary in [{"ok": false, "reason": "insufficient"}, {"ok": false, "reason": "storage"}, {"ok": true, "duplicate": true}]:
-		model.purchase_powerup = func(_receipt: String, _kind: String, price: int) -> Dictionary:
-			check(price == 300, "failed repeats retain the next successful-use price")
-			return response.duplicate()
-		check(not model.activate_powerup("fragments") and model.powerup_snapshot() == active
-			and model.cells == board and model.powerup_price("fragments") == 300,
-			"a failed repeat preserves all pending deliveries, existing fragments, and price")
-	check(events.feedback == [["fragments", true], ["fragments", false], ["fragments", false], ["fragments", false]]
-		and cues.count("powerup_wrong") == 3,
-		"insufficient, unsaved, and duplicate repeats give negative feedback while earlier deliveries continue")
-	model.step(5.0)
-	check(not model.powerup_active() and _board_fragments(model) == original + int(active.total)
-		and events.arrivals.size() == int(active.total) and payments.size() == 1,
-		"failed repeats neither lose nor duplicate the already-paid fragments")
-	model.purchase_powerup = Callable()
-
-
-func _test_powerup_fragment_repeat_lifecycle() -> void:
-	for action: String in ["drain", "finish"]:
-		var model = _powerup_model("fragments")
-		var payments: Array = _accept_powerup_payments(model)
-		var events: Dictionary = _observe_powerups(model)
-		var original: int = _board_fragments(model)
-		model.activate_powerup("fragments")
-		model.step(0.1)
-		model.activate_powerup("fragments")
-		var total: int = int(model.powerup_snapshot().total)
-		model.set_paused(true)
-		if action == "finish":
-			model.finish_round()
-		else:
-			model.finish_powerup(true)
-		check(not model.powerup_active() and _board_fragments(model) == original + total
-			and model.powerup_snapshot().completed == total and payments.size() == 2 and events.arrivals.is_empty(),
-			"silent lifecycle completion drains every accepted repeat without late effects or another charge")
-		check(model.phase == ("finished" if action == "finish" else "playing")
-			and model.fragment_count == 0 and model.collected_coins == 0,
-			"repeat settlement preserves the requested lifecycle and leaves fragments uncollected")
-		model.purchase_powerup = Callable()
-	var model = _powerup_model("fragments")
-	var payments: Array = _accept_powerup_payments(model)
-	model.activate_powerup("fragments")
-	var duration: float = float(model.powerup_snapshot().duration)
-	model.step(duration - 0.01)
-	var previous: Dictionary = model.powerup_snapshot()
-	check(model.can_activate_powerup("fragments") and model.activate_powerup("fragments")
-		and payments.size() == 2 and is_equal_approx(float(model.powerup_snapshot().elapsed), duration - 0.01)
-		and int(model.powerup_snapshot().completed) == int(previous.total),
-		"Treasure stays available through the previous purchase's final impact recovery")
-	model.finish_powerup(true)
-	model.purchase_powerup = Callable()
-
-
-func _test_powerup_fragments_on_nested_word() -> void:
-	for original_fragments: Array in [[0, 0, 0], [1, 2, 3]]:
-		var model = _model([_word("cat"), _word("cater"), _word("caterpillar")])
-		var amounts: Array[int] = []
-		amounts.assign(original_fragments)
-		_board(model, ["cat", "picture:cat", "merged:cat:1"], amounts)
-		var cat: Dictionary = _merge(model, 1000, 1001)
-		var cater: Dictionary = _merge(model, int(cat.id), 1002)
-		model.step(Model.SETTLE_SECONDS * 2.0)
-		var original: int = _board_fragments(model)
-		_accept_powerup_payments(model)
-		check(model.activate_powerup("fragments"), "a nested valid word can receive a fragment purchase")
-		var total: int = int(model.powerup_snapshot().total)
-		model.finish_powerup(true)
-		check(model.cells.size() == 1 and model.cell(int(cater.id)).fragments == original + total
-			and bool(model.cell(int(cater.id)).chest), "every purchased fragment stays on the only eligible merged word")
-		model.cells.append(_placed_tile(2000, "merged:cat:2", Model.COLUMNS - 1, 7, 1, 2))
-		var final_word: Dictionary = _merge(model, int(cater.id), 2000)
-		check(final_word.text == "cat" and final_word.merge_level == 4 and final_word.mass == 8 and final_word.fragments == original + total + 2,
-			"a later valid merge retains the purchased fragments and the new target's fragments")
-		model.step(Model.SETTLE_SECONDS * 2.0)
-		check(model.collect(int(final_word.id)), "the nested word remains manually collectible after its paid effect")
-		model.step(Model.collection_seconds(int(final_word.merge_level)))
-		check(model.cells.is_empty() and model.fragment_count == original + total + 2,
-			"collecting the final word awards every original and purchased fragment exactly once")
-		model.purchase_powerup = Callable()
-
-
 func _test_powerup_pause_and_clocks() -> void:
-	for kind: String in ["auto_merge", "fragments"]:
+	for kind: String in ["auto_merge"]:
 		var model = _powerup_model(kind)
 		_accept_powerup_payments(model)
 		model.spawn_interval = 20.0
@@ -1240,7 +872,7 @@ func _test_powerup_pause_and_clocks() -> void:
 
 
 func _test_powerup_determinism() -> void:
-	for kind: String in ["auto_merge", "fragments"]:
+	for kind: String in ["auto_merge"]:
 		var large = _powerup_model(kind)
 		var fine = _powerup_model(kind)
 		var large_payments: Array = _accept_powerup_payments(large)
@@ -1261,32 +893,17 @@ func _test_powerup_determinism() -> void:
 			"frame slicing preserves every paid drag, fragment impact, and single payment: " + kind)
 		large.purchase_powerup = Callable()
 		fine.purchase_powerup = Callable()
-	var observed_totals: Dictionary = {}
-	for seed_value in range(1, 25):
-		var model = _model([_word("cat")])
-		model.configure([_word("cat")], 3, seed_value)
-		_board(model, ["cat", "picture:cat"])
-		_accept_powerup_payments(model)
-		model.activate_powerup("fragments")
-		var total: int = int(model.powerup_snapshot().total)
-		check(total >= 2 and total <= 8, "every seeded purchase stays within its advertised random two-to-eight fragment range")
-		observed_totals[total] = true
-		model.finish_powerup(true)
-		check(_board_fragments(model) == total, "fragment randomization never duplicates or drops a reserved reward")
-		model.purchase_powerup = Callable()
-	check(observed_totals.size() > 1, "different seeds vary the fragment purchase total")
-	check(observed_totals.has(2) and observed_totals.has(8), "seeded purchases can award both advertised fragment range endpoints")
 
 
 func _test_powerup_finish_and_lifecycle() -> void:
-	for kind: String in ["auto_merge", "fragments"]:
+	for kind: String in ["auto_merge"]:
 		for progress: float in [0.0, 0.225, 0.30, 0.37, 1.20]:
 			var model = _powerup_model(kind)
 			var payments: Array = _accept_powerup_payments(model)
 			var events: Dictionary = _observe_powerups(model)
 			var regular_events: Dictionary = _observe(model)
 			model.activate_powerup(kind)
-			var expected_fragments: int = _board_fragments(model) + (int(model.powerup_snapshot().total) if kind == "fragments" else 0)
+			var expected_fragments: int = _board_fragments(model)
 			model.step(progress)
 			model.set_paused(true)
 			var presentation: Dictionary = events.duplicate(true)
@@ -1312,7 +929,7 @@ func _test_powerup_finish_and_lifecycle() -> void:
 			var payments: Array = _accept_powerup_payments(model)
 			var events: Dictionary = _observe_powerups(model)
 			model.activate_powerup(kind)
-			var expected_fragments: int = _board_fragments(model) + (int(model.powerup_snapshot().total) if kind == "fragments" else 0)
+			var expected_fragments: int = _board_fragments(model)
 			model.step(0.20)
 			model.set_paused(true)
 			var presentation: Dictionary = events.duplicate(true)
@@ -1335,7 +952,7 @@ func _test_powerup_finish_and_lifecycle() -> void:
 
 
 func _test_powerup_payment_reentry() -> void:
-	for kind: String in ["auto_merge", "fragments"]:
+	for kind: String in ["auto_merge"]:
 		var model = _powerup_model(kind)
 		var calls: Array = []
 		model.purchase_powerup = func(receipt_id: String, requested: String, price: int) -> Dictionary:
@@ -1354,7 +971,7 @@ func _test_powerup_payment_reentry() -> void:
 			return {"ok": true, "duplicate": false}
 		check(model.activate_powerup(kind) and model.paused and model.powerup_active(),
 			"pause during accepted payment retains the purchased effect for eventual completion")
-		var expected_fragments: int = _board_fragments(model) + (int(model.powerup_snapshot().total) if kind == "fragments" else 0)
+		var expected_fragments: int = _board_fragments(model)
 		model.finish_powerup(true)
 		check(not model.powerup_active() and calls.size() == 1 and _board_fragments(model) == expected_fragments,
 			"the accepted paused payment finishes once without invoking persistence again")
@@ -1397,7 +1014,7 @@ func _test_powerup_payment_reentry() -> void:
 
 
 func _test_finish_reasons() -> void:
-	for kind: String in ["auto_merge", "fragments"]:
+	for kind: String in ["auto_merge"]:
 		for accepted: bool in [false, true]:
 			var model = _powerup_model(kind)
 			var finished: Array[Dictionary] = []
@@ -1472,8 +1089,8 @@ func _test_powerup_presentation_reentry() -> void:
 	check(attempted.count == 1 and model.merged_count == 3 and not model.powerup_active(),
 		"rejected callback input leaves the paid merge chain intact")
 	model.purchase_powerup = Callable()
-	for trigger: String in ["feedback", "arrival"]:
-		for kind: String in (["auto_merge", "fragments"] if trigger == "feedback" else ["fragments"]):
+	for trigger: String in ["feedback"]:
+		for kind: String in ["auto_merge"]:
 			model = _powerup_model(kind)
 			var payments: Array = _accept_powerup_payments(model)
 			var after_callback: Dictionary = {}
@@ -1526,11 +1143,17 @@ func _test_configuration() -> void:
 	var words: Array = [_word("cat"), _word(" CAT ", 3, "duplicate-spelling"), _word("dog", 3, "cat"),
 		_word("rocket", 6), {"id": "missing-media", "text": "test", "min_age": 3}]
 	check(model.configure(words, 3, 1), "eligible pictured words configure")
-	check(model.cells.size() == Model.INITIAL_SETTLED_TILES, "round starts with fifteen parts")
+	check(Model.COLUMNS == 7 and Model.ROWS == 8 and Model.CAPACITY == 56
+		and Model.INITIAL_SETTLED_TILES == 21 and Model.DROP_COUNT == 7 and Model.UPCOMING_COUNT == 7,
+		"Jelly World has seven real lanes, eight rows, fifty-six cells and a three-row opening")
+	check(model.cells.size() == Model.INITIAL_SETTLED_TILES, "round starts with twenty-one parts")
 	for row in range(Model.ROWS):
 		check(model.cells.filter(func(tile: Dictionary) -> bool: return int(tile.row) == row).size()
 			== (Model.COLUMNS if row >= Model.ROWS - 3 else 0), "Exactly the bottom three rows start full")
-	check(model.upcoming.size() == 5 and Model.COLUMNS == 5, "five columns and previews")
+	check(model.upcoming.size() == 7, "All seven columns have a real advertised preview")
+	var arrival_order: Array[int] = Model.ARRIVAL_ORDER.duplicate()
+	arrival_order.sort()
+	check(arrival_order == [0, 1, 2, 3, 4, 5, 6], "The staggered arrival schedule covers every new lane exactly once")
 	for tile in model.cells:
 		check(str(tile.text) in ["cat", "picture:cat"], "duplicate IDs, duplicate spelling, other ages, and incomplete media are omitted")
 		check(tile.word.is_empty() and not model.collect(int(tile.id)), "an unmerged root cannot be collected")
@@ -3891,6 +3514,60 @@ func _assert_supply_conservation(roots: Array, words: Array, label: String, allo
 	return groups
 
 
+func _exhaustive_supply_order(packet: Array[Dictionary]) -> Dictionary:
+	var order: Array[int] = []
+	for index in range(packet.size()):
+		order.append(index)
+	var best: Dictionary = {"score": 2147483647, "order": []}
+	while true:
+		var score: int = 0
+		for index in range(order.size()):
+			var tile: Dictionary = packet[order[index]]
+			if index > 0:
+				var previous: Dictionary = packet[order[index - 1]]
+				score += 1000 if tile.supply_group == previous.supply_group else (
+					100 if tile.source_word_id == previous.source_word_id else 0)
+			if index > 1 and tile.supply_group == packet[order[index - 2]].supply_group:
+				score += 10
+		if score < int(best.score):
+			best = {"score": score, "order": order.duplicate()}
+		var pivot: int = order.size() - 2
+		while pivot >= 0 and order[pivot] >= order[pivot + 1]:
+			pivot -= 1
+		if pivot < 0:
+			return best
+		var successor: int = order.size() - 1
+		while order[successor] <= order[pivot]:
+			successor -= 1
+		var value: int = order[pivot]
+		order[pivot] = order[successor]
+		order[successor] = value
+		var left: int = pivot + 1
+		var right: int = order.size() - 1
+		while left < right:
+			value = order[left]
+			order[left] = order[right]
+			order[right] = value
+			left += 1
+			right -= 1
+	return best
+
+
+func _test_supply_order_exhaustive() -> void:
+	var model := Model.new()
+	for groups: Array in [[], [0, 0, 1, 1, 2], [0, 0, 1, 1, 2, 2, 3],
+			[0, 0, 0, 0, 1, 1, 1], [0, 0, 0, 0, 0, 0, 0], [0, 1, 2, 3, 4, 5, 6]]:
+		for mixed: bool in [false, true]:
+			var packet: Array[Dictionary] = []
+			for index in range(groups.size()):
+				packet.append({"supply_group": groups[index], "source_word_id": str(index % 3) if mixed else "cat"})
+			var actual: Dictionary = {"score": 2147483647, "order": []}
+			model._search_supply_order(packet, [], 0, actual, {})
+			var expected: Dictionary = _exhaustive_supply_order(packet)
+			check(actual.score == expected.score and actual.order == expected.order,
+				"Per-packet memoization retains the exhaustive optimum and original first-tie identity order")
+
+
 func _test_supply_packets() -> void:
 	var cat: Dictionary = _curated_word("cat", ["cat", "picture:cat"])
 	var dog: Dictionary = _curated_word("dog", ["d", "og"])
@@ -4051,7 +3728,7 @@ func _latest_arrival_ready(model) -> float:
 
 func _test_arrival_timing() -> void:
 	var initial = _model([_word("cat")])
-	var onset_slots: Array[int] = [0, 3, 1, 4, 2]
+	var onset_slots: Array[int] = [0, 4, 1, 5, 2, 6, 3]
 	check(is_equal_approx(Model.ARRIVAL_STAGGER, 0.15), "arrival onsets have a readable 150-millisecond separation")
 	check(initial.cells.size() == Model.INITIAL_SETTLED_TILES, "natural arrival keeps the three-row opening")
 	for tile: Dictionary in initial.cells:
@@ -4072,7 +3749,7 @@ func _test_arrival_timing() -> void:
 			check(tile.arrival_index == index and bool(tile.arrival) and bool(tile.settling) and tile.age == 0.0,
 				"batch roots retain their advertised preview slot and start on the shared model clock")
 			check(is_equal_approx(Model.arrival_delay(tile), stagger),
-				"unrestricted lanes launch in the alternating 0, 3, 1, 4, 2 preview-slot order")
+				"unrestricted lanes launch in the alternating seven-slot preview order")
 			check(is_equal_approx(Model.arrival_contact_at(tile), expected_contact),
 				"arrival contact follows board-scaled acceleration and batch stagger")
 			check(is_equal_approx(Model.settle_duration(tile), expected_contact + Motion.COMPRESSION_SECONDS + Motion.REBOUND_SECONDS + Motion.RECOVERY_SECONDS),
@@ -4337,7 +4014,7 @@ func _test_arrival_preview_columns() -> void:
 	for dispatch: String in ["manual", "automatic"]:
 		var model = _model([_word("cat")])
 		model.cells.clear()
-		var roofs: Array[int] = [4, 7, 3, 6, 2]
+		var roofs: Array[int] = [4, 7, 3, 6, 2, 5, 4]
 		for column in range(Model.COLUMNS):
 			for row in range(roofs[column], Model.ROWS):
 				model.cells.append(_placed_tile(2000 + row * Model.COLUMNS + column, "x", column, row))
@@ -4376,13 +4053,14 @@ func _test_arrival_preview_columns() -> void:
 func _blocked_preview_model():
 	var model = _model([_word("father"), _word("happy"), _word("sleep"), _word("play"), _word("foot")])
 	model.cells.assign([_placed_tile(1000, "play", 0, 0, 2, 1, _word("play")),
-		_placed_tile(1001, "foot", 4, 0, 2, 1, _word("foot")),
-		_placed_tile(1002, "play", 1, 0, 2, 1, _word("play"))])
-	for column in [0, 1, 4]:
+		_placed_tile(1001, "foot", Model.COLUMNS - 1, 0, 2, 1, _word("foot")),
+		_placed_tile(1002, "play", 1, 0, 2, 1, _word("play")),
+		_placed_tile(1003, "x", 4, 0), _placed_tile(1004, "x", 5, 0)])
+	for column in [0, 1, 4, 5, 6]:
 		for row in range(1, Model.ROWS):
 			model.cells.append(_placed_tile(2000 + row * Model.COLUMNS + column, "x", column, row))
 	model.upcoming.clear()
-	var parts: Array[String] = ["fat", "hap", "sle", "her", "py"]
+	var parts: Array[String] = ["fat", "hap", "sle", "her", "play", "foot", "py"]
 	for slot in range(parts.size()):
 		model.upcoming.append(model._new_tile(parts[slot], 1, 1 if slot % 2 == 0 else 0))
 	return model
@@ -4412,7 +4090,7 @@ func _test_arrival_blocked_preview_slots() -> void:
 				model.spawn_elapsed = model.spawn_interval - 0.01
 				model.step(0.01)
 			check(model.generated_tiles == generated + (batch + 1) * 2 and model.cells.size() == existing_count + (batch + 1) * 2,
-				"%s release adds exactly the two admitted roots while three preview columns are blocked" % dispatch)
+				"%s release adds exactly the two admitted roots while five preview columns are blocked" % dispatch)
 			check(is_zero_approx(model.spawn_elapsed), "%s partial release resets the supply timer once" % dispatch)
 			for slot in range(Model.UPCOMING_COUNT):
 				var tile: Dictionary = model.cell(int(advertised[slot].id))
@@ -4423,7 +4101,7 @@ func _test_arrival_blocked_preview_slots() -> void:
 						"only a departing preview slot receives a fresh root")
 				else:
 					check(tile.is_empty() and model.upcoming[slot] == original[slot],
-						"fat, hap, and py stay byte-for-byte in their blocked preview slots")
+						"all five blocked preview slots retain their byte-for-byte advertised identities")
 			_assert_board(model, "%s screenshot lanes batch %d" % [dispatch, batch])
 		var waiting: Array = model.upcoming.duplicate(true)
 		check(model.collect(1000) and model.collect(1002), "collecting the two left roof words reopens their sealed preview columns")
@@ -4441,7 +4119,7 @@ func _test_arrival_blocked_preview_slots() -> void:
 		check(model.collect(1001), "collecting the right roof word reopens the remaining preview column")
 		model.step(Model.COLLECT_SECONDS + Model.SETTLE_SECONDS)
 		check(model.drop_now(), "the original right previews can enter once their own roof clears")
-		for slot in [4]:
+		for slot in [Model.COLUMNS - 1]:
 			_assert_advertised_root(model.cell(int(original[slot].id)), original[slot], slot, 0,
 				"reopened right columns slot %d" % slot)
 		for slot in [0, 1]:
@@ -4494,8 +4172,9 @@ func _test_arrival_same_lane_spacing() -> void:
 		var tile: Dictionary = model.cell(int(advertised.id))
 		check(tile.column == Model.COLUMNS - 1 and tile.row == Model.ROWS - 1 - index,
 			"the only reachable lane stacks new roots from the floor upward")
-		check(tile.arrival_index == Model.COLUMNS - 1 and is_equal_approx(Model.arrival_delay(tile), 0.45 + float(index) * clearance),
-			"repeated use of the last slot retains its stagger and 400 milliseconds of headroom")
+		check(tile.arrival_index == Model.COLUMNS - 1 and is_equal_approx(Model.arrival_delay(tile),
+			Model.ARRIVAL_ORDER.find(Model.COLUMNS - 1) * Model.ARRIVAL_STAGGER + float(index) * clearance),
+			"repeated use of the seventh slot retains its stagger and real lane clearance")
 		check(is_equal_approx(Model.arrival_contact_at(tile), Model.arrival_delay(tile) + Motion.contact_at(tile))
 			and is_equal_approx(Model.settle_duration(tile), Model.arrival_delay(tile) + Motion.ready_at(tile)),
 			"contact and input readiness use the stored lane delay")

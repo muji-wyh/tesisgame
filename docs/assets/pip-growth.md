@@ -158,6 +158,23 @@ the action; late input cannot stack it or take over the reward clock. Existing
 answer reactions, shared chest timing, voice recordings and game state remain
 unchanged. The new motion is silent and adds no instructional UI text.
 
+## Map companion rest
+
+`scripts/word_jelly_map_pip.gd` reuses these integrated six-part and expression-head
+atlases for the map only. The existing sleepy/blink heads and folded wings rest
+against the current stage's painted rim; the torso remains behind its acquired
+medallion. Real age and career pivots retarget the pose without flattening the
+character, including complete hats and face accessories. There is no new source
+illustration, acquisition, audio or shared growth-repertoire action.
+This is original game-authored choreography under the existing repository ISC
+declaration, not an animation clip supplied by another asset creator.
+
+The map owns visibility, reduced motion and input-transparent presentation.
+Slow breathing freezes offscreen and in the background. Stage hover and focus
+give a small head lift while the existing click enters immediately; no wake-up
+gate or extra label is introduced. Existing header, gameplay and preview actions
+remain unchanged.
+
 ## Regeneration
 
 From the repository root, render all eleven storybook ages and the base/eight

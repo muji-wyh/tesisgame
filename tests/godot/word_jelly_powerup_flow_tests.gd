@@ -43,6 +43,7 @@ func _prepare(app, pairs: int = 2) -> void:
 	app._sync_jelly()
 	view.set_process(false)
 	var game = view.game
+	game.auto_merge_level = maxi(1, pairs * 2 - 2)
 	game.spawn_interval = 10000.0
 	game.cells.clear()
 	for index in range(pairs * 2):
@@ -84,7 +85,7 @@ func _check_insufficient(app) -> void:
 	var view = app._word_jelly
 	var game = view.game
 	var saved: Variant = app.coin_wallet._saved_text
-	for kind: String in ["auto_merge", "fragments"]:
+	for kind: String in ["auto_merge"]:
 		var board: Array = game.cells.duplicate(true)
 		var button = view.powerup_buttons[kind]
 		var price: int = game.powerup_price(kind)
@@ -110,8 +111,8 @@ func _check_insufficient(app) -> void:
 		check(button.snapshot().feedback_active and not button.snapshot().feedback_success and float(button.snapshot().light) > 0.0,
 			"The rejected purchase remains visibly marked on its own button")
 		app.audio.stop_pair_feedback()
-	check(cues.count("powerup_wrong") == 2 and cues.count("powerup_success") == 0,
-		"Two unfunded attempts never announce success")
+	check(cues.count("powerup_wrong") == 1 and cues.count("powerup_success") == 0,
+		"An unfunded attempt never announces success")
 
 
 func _check_auto_merge(app) -> void:
@@ -129,10 +130,10 @@ func _check_auto_merge(app) -> void:
 	check(cues.count("powerup_success") == 1 and purchases == [{"kind": "auto_merge", "success": true}]
 		and app.audio.pair_feedback.playing and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[true]),
 		"A saved purchase starts the positive response and its existing sound")
-	check(view.collect_button.disabled and view.powerup_buttons.auto_merge.disabled and view.powerup_buttons.fragments.disabled,
-		"The automatic sequence reserves all three gameplay action buttons")
+	check(view.collect_button.disabled and view.powerup_buttons.auto_merge.disabled,
+		"The automatic sequence reserves Collect and Auto merge")
 	view.powerup_buttons.auto_merge.pressed.emit()
-	view.powerup_buttons.fragments.pressed.emit()
+	check(not game.activate_powerup("fragments"), "A retired Treasure request cannot interrupt automatic merging")
 	check(app.coin_wallet.balance == before - 600 and app.coin_wallet._receipts.size() == receipts + 1,
 		"Repeated button signals during a paid sequence cannot buy another action")
 	var from: Vector2 = view._tile_rect(state.source).get_center()
@@ -189,8 +190,8 @@ func _check_auto_merge(app) -> void:
 		"Automatic merging leaves words for manual collection without rewards, mastery, or coin flights")
 	check(not app.audio.voice.playing,
 		"Completed automatic merges neither pronounce words nor queue delayed narration")
-	check(not view.collect_button.disabled and not view.powerup_buttons.fragments.disabled,
-		"The three-action area returns control after the paid sequence")
+	check(not view.collect_button.disabled,
+		"The remaining action area returns control after the paid sequence")
 	var saved_receipts: Dictionary = app.coin_wallet._receipts.duplicate()
 	var saved_text: String = app.coin_wallet._saved_text
 	var stale: Dictionary = app._purchase_word_jelly_powerup(str(state.receipt_id) + ":stale", "auto_merge", 600)
@@ -224,27 +225,27 @@ func _check_storage_failure(app) -> void:
 	var saved: String = FileAccess.get_file_as_string(app.coin_wallet._path)
 	var staging: String = app.coin_wallet._path + ".pending"
 	check(DirAccess.make_dir_absolute(staging) == OK, "Block the isolated wallet staging path for a purchase failure")
-	view.powerup_buttons.fragments.pressed.emit()
+	view.powerup_buttons.auto_merge.pressed.emit()
 	check(app.coin_wallet.balance == before and app.coin_wallet._receipts == receipts
 		and FileAccess.get_file_as_string(app.coin_wallet._path) == saved
 		and view.game.cells == board and not view.game.powerup_active(),
 		"A failed durable purchase starts no effect and leaves all money, fragments, and receipts untouched")
 	check(not app._coin_counter.available and not app.coin_wallet.error.is_empty()
-		and purchases == [{"kind": "fragments", "success": false}] and cues.count("powerup_wrong") == 1,
+		and purchases == [{"kind": "auto_merge", "success": false}] and cues.count("powerup_wrong") == 1,
 		"Storage failure reports unavailable coins and negative feedback instead of pretending the powerup was purchased")
-	check(not view.powerup_buttons.fragments.snapshot().funds_warning
+	check(not view.powerup_buttons.auto_merge.snapshot().funds_warning
 		and app._status_announcement.contains("could not be saved"),
 		"A real storage failure is not mislabeled as insufficient funds")
-	check(view.game.powerup_price("fragments") == 200 and view.powerup_buttons.fragments.snapshot().price == 200,
+	check(view.game.powerup_price("auto_merge") == 600 and view.powerup_buttons.auto_merge.snapshot().price == 600,
 		"An unsaved purchase does not consume the lower first-use price")
 	check(DirAccess.remove_absolute(staging) == OK, "Restore the wallet staging path for purchase recovery")
-	view.powerup_buttons.fragments.pressed.emit()
-	check(app.coin_wallet.balance == before - 200 and app._coin_counter.available and view.game.powerup_active(),
+	view.powerup_buttons.auto_merge.pressed.emit()
+	check(app.coin_wallet.balance == before - 600 and app._coin_counter.available and view.game.powerup_active(),
 		"The same button recovers verified storage and starts one paid powerup after saving succeeds")
 	_drain(view)
 	check(app.coin_wallet._receipts.size() == receipts.size() + 1 and cues.count("powerup_success") == 1,
 		"Storage retry creates exactly one debit and one successful action")
-	check(view.game.powerup_price("fragments") == 300 and view.powerup_buttons.fragments.snapshot().price == 300,
+	check(view.game.powerup_price("auto_merge") == 900 and view.powerup_buttons.auto_merge.snapshot().price == 900,
 		"Only the recovered successful payment advances the visible price")
 
 
@@ -253,9 +254,9 @@ func _check_escalating_prices(app) -> void:
 	var view = app._word_jelly
 	var game = view.game
 	var pieces: Array = game.cells.duplicate(true)
-	var expected: Dictionary = {"auto_merge": [600, 900, 1200, 1200], "fragments": [200, 300, 400, 400]}
+	var expected: Dictionary = {"auto_merge": [600, 900, 1200, 1200]}
 	for index in range(4):
-		for kind: String in ["auto_merge", "fragments"]:
+		for kind: String in ["auto_merge"]:
 			game.cells.assign(pieces.duplicate(true))
 			view._sync_tiles()
 			view._process(0.0)
@@ -275,135 +276,8 @@ func _check_escalating_prices(app) -> void:
 				and game.snapshot().powerup_uses[kind] == index + 1,
 				"The button and model show the same independently escalating capped price")
 	await _prepare(app, 1)
-	check(view.powerup_buttons.auto_merge.snapshot().price == 600 and view.powerup_buttons.fragments.snapshot().price == 200,
-		"Starting a new round resets both displayed prices")
-
-
-func _check_fragments(app) -> void:
-	await _prepare(app)
-	var view = app._word_jelly
-	var game = view.game
-	var before: int = app.coin_wallet.balance
-	view.powerup_buttons.fragments.pressed.emit()
-	var state: Dictionary = game.powerup_snapshot()
-	check(state.active and state.kind == "fragments" and int(state.total) >= 2 and int(state.total) <= 8
-		and app.coin_wallet.balance == before - 200 and _carried_fragments(game) == 0,
-		"Treasure purchases reserve two to eight fragment arrivals for the exact 200-coin price")
-	check(cues.count("powerup_fragment_launch") == 1 and app.audio._fragment_players[0].playing
-		and app.audio._fragment_players[0].stream == load(app.audio.FRAGMENT_APPEAR_PATH),
-		"The first Treasure fragment plays its appearance recording when its flight starts")
-	view._process(game.POWERUP_FRAGMENT_FLIGHT * 0.5)
-	check(view._powerup_effects.stamps.size() > 0 and _carried_fragments(game) == 0,
-		"Treasure art flies toward the board before any fragment is attached")
-	view._process(game.POWERUP_FRAGMENT_FLIGHT * 0.5 + 0.001)
-	check(arrivals.size() == 1 and _carried_fragments(game) == 1 and cues.count("powerup_fragment") == 1,
-		"The first visible arrival attaches exactly one fragment and triggers its arrival cue")
-	var arrived_id: int = int(arrivals[0].tile_id)
-	check(view._tiles[arrived_id].visible_fragment_badges() == 1 and not view._powerup_arrivals.is_empty()
-		and view._powerup_effects.stamps.size() > 0, "The destination shows its new fragment badge with an arrival flash")
-	var arrival_playing: bool = false
-	for player: AudioStreamPlayer in app.audio._fragment_players:
-		arrival_playing = arrival_playing or (player.playing and player.stream == load(app.audio.FRAGMENT_ARRIVE_PATH))
-	check(arrival_playing, "Fragment arrival plays its distinct acquired recording on the fragment channel")
-	_drain(view)
-	check(_carried_fragments(game) == int(state.total) and arrivals.size() == int(state.total)
-		and cues.count("powerup_fragment") == int(state.total) and game.fragment_count == 0
-		and game.chest_count == 0 and game.collected_coins == 0 and app.coin_wallet.balance == before - 200,
-		"All purchased fragments remain on jelly bodies until collection, with one arrival event each and no immediate chest payout")
-	for tile: Dictionary in game.cells:
-		var badge: Dictionary = view._tiles[int(tile.id)].fragment_badge_snapshot()
-		check(view._tiles[int(tile.id)].visible_fragment_badges() == mini(2, int(tile.fragments))
-			and str(badge.count_text) == (str(tile.fragments) if int(tile.fragments) > 2 else ""),
-			"Every purchased fragment is represented by a bounded chest stack and its exact total")
-
-
-func _check_fragment_coarse_frame(app) -> void:
-	await _prepare(app)
-	var view = app._word_jelly
-	var game = view.game
-	var probe := RandomNumberGenerator.new()
-	for seed_value in range(100):
-		probe.seed = seed_value
-		if probe.randi_range(2, 8) >= 3:
-			game._rng.seed = seed_value
-			break
-	view.powerup_buttons.fragments.pressed.emit()
-	check(int(game.powerup_snapshot().total) >= 3, "A real random purchase schedules at least three staggered fragment arrivals")
-	view._process(0.35)
-	check(arrivals.is_empty() and view._powerup_arrivals.is_empty(), "A coarse frame before the first contact cannot show an early fragment pop")
-	view._process(0.50)
-	check(arrivals.size() == 3 and view._powerup_arrivals.size() == 3 and _carried_fragments(game) == 3,
-		"One coarse frame crossing three arrival beats preserves every fragment attachment and pop")
-	var expected_ages: Array[float] = [0.43, 0.25, 0.07]
-	for index in range(mini(3, view._powerup_arrivals.size())):
-		var arrival: Dictionary = view._powerup_arrivals[index]
-		check(int(arrival.index) == index and absf(float(arrival.elapsed) - expected_ages[index]) < 0.001,
-			"Fragment pop %d retains its own scheduled age across a slow frame" % index)
-	view._process(0.10)
-	check(view._powerup_arrivals.size() >= 2 and int(view._powerup_arrivals[0].index) == 1,
-		"The oldest pop expires independently while later arrival flashes remain visible")
-	_drain(view)
-
-
-func _check_fragment_repeated_purchases(app) -> void:
-	await _prepare(app)
-	var view = app._word_jelly
-	var game = view.game
-	check(app.coin_wallet.spend("fixture:treasure-repeat-budget", app.coin_wallet.balance - 500).ok,
-		"Reserve exactly enough real coins for two immediate Treasure purchases")
-	app._coin_flight.sync(app.coin_wallet.balance)
-	view._process(0.0)
-	var receipts: int = app.coin_wallet._receipts.size()
-	var button = view.powerup_buttons.fragments
-	button.pressed.emit()
-	var first: Dictionary = game.powerup_snapshot()
-	check(not button.disabled and not button.snapshot().busy and button.snapshot().price == 300
-		and view.powerup_buttons.auto_merge.disabled and app.coin_wallet.balance == 300,
-		"Treasure immediately shows its next price and remains tappable while Auto merge stays reserved")
-	view._process(0.10)
-	button.pressed.emit()
-	var combined: Dictionary = game.powerup_snapshot()
-	check(not button.disabled and not button.snapshot().affordable and button.snapshot().price == 400
-		and app.coin_wallet.balance == 0 and app.coin_wallet._receipts.size() == receipts + 2
-		and combined.receipt_id == first.receipt_id and is_equal_approx(float(combined.elapsed), 0.10),
-		"A second click pays the displayed 300 coins and appends delivery without resetting the first flight")
-	check(int(combined.total) >= int(first.total) + 2 and int(combined.total) <= int(first.total) + 8
-		and _carried_fragments(game) == 0 and view._powerup_effects.stamps.size() > 0,
-		"Both paid batches retain visible flight effects before their markers arrive")
-	view._process(0.05)
-	var before_failure: Dictionary = game.powerup_snapshot()
-	button.pressed.emit()
-	check(game.powerup_snapshot() == before_failure and app.coin_wallet.balance == 0
-		and app.coin_wallet._receipts.size() == receipts + 2 and button.snapshot().price == 400
-		and not button.snapshot().feedback_success and cues.count("powerup_wrong") == 1
-		and cues.count("powerup_success") == 2,
-		"An unfunded rapid third click gives negative feedback without disturbing either accepted purchase")
-	check(app.audio.pair_feedback.playing and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[false]),
-		"An unfunded repeat plays the negative recording even during earlier Treasure flights")
-	view.pause(true)
-	view._process(0.40)
-	check(game.powerup_snapshot() == before_failure and view._powerup_arrivals.is_empty(),
-		"Pausing overlapping Treasure purchases freezes both animation timelines")
-	view.pause(false)
-	view._process(0.50)
-	var delivered: Array = game.powerup_snapshot().arrivals.filter(func(item: Dictionary) -> bool:
-		return float(item.at) <= 0.65 + game.EPSILON)
-	check(arrivals.size() == delivered.size() and view._powerup_arrivals.size() == delivered.size()
-		and _carried_fragments(game) == delivered.size(),
-		"One slow frame preserves every interleaved marker and arrival flash from both purchases")
-	for index in range(mini(arrivals.size(), view._powerup_arrivals.size())):
-		var event: Dictionary = arrivals[index]
-		var flash: Dictionary = view._powerup_arrivals[index]
-		check(int(flash.index) == int(event.index) and absf(float(flash.elapsed) - (0.65 - float(event.at))) < 0.001,
-			"Each overlapping arrival flash keeps its exact deadline instead of using another receipt's array position")
-	_drain(view)
-	check(_carried_fragments(game) == int(combined.total) and arrivals.size() == int(combined.total)
-		and cues.count("powerup_fragment") == int(combined.total)
-		and app.coin_wallet.balance == 0 and app.coin_wallet._receipts.size() == receipts + 2,
-		"Both paid batches finish once with their original marker sounds and no extra debit")
-	check(app.coin_wallet.credit("fixture:after-treasure-repeat-budget", 1000).ok,
-		"Restore ordinary fixture funds through a distinct valid chest receipt")
-	app._coin_flight.sync(app.coin_wallet.balance)
+	check(view.powerup_buttons.auto_merge.snapshot().price == 600,
+		"Starting a new round resets the remaining displayed price")
 
 
 func _check_lifecycle(app) -> void:
@@ -438,16 +312,15 @@ func _check_lifecycle(app) -> void:
 	await _prepare(app, 1)
 	game = view.game
 	before = app.coin_wallet.balance
-	view.powerup_buttons.fragments.pressed.emit()
+	var carried: int = _carried_fragments(game)
+	view.powerup_buttons.auto_merge.pressed.emit()
 	view._process(0.1)
-	view.powerup_buttons.fragments.pressed.emit()
-	var total: int = int(game.powerup_snapshot().total)
 	view.finish_button.accessibility_requested.emit()
-	check(app._finish_confirmation_open(), "Finish confirms before ending a purchased fragment flight")
+	check(app._finish_confirmation_open(), "Finish confirms before ending the paid automatic flight")
 	app._finish_confirmation.finish_button.pressed.emit()
-	check(game.phase == "finished" and not game.powerup_active() and _carried_fragments(game) == total
-		and game.collected_coins == 0 and game.fragment_count == 0 and app.coin_wallet.balance == before - 500,
-		"Confirmed Finish settles both repeated purchases without automatic collection or another charge")
+	check(game.phase == "finished" and not game.powerup_active() and _carried_fragments(game) == carried
+		and game.collected_coins == 0 and game.fragment_count == 0 and app.coin_wallet.balance == before - 600,
+		"Confirmed Finish settles the remaining paid action without collecting or losing natural fragments")
 
 
 func _check_preferences(app) -> void:
@@ -468,15 +341,15 @@ func _check_preferences(app) -> void:
 	_drain(view)
 	check(view.game.collectable_ids().size() == 1 and app.coin_wallet.balance == before - 600,
 		"Mute and reduced motion preserve the automatic action and exact purchase amount")
-	view.powerup_buttons.fragments.pressed.emit()
-	_drain(view)
+	var carried: int = _carried_fragments(view.game)
+	check(not view.game.activate_powerup("fragments"), "Reduced motion cannot restore a retired Treasure purchase")
 	var any_audio: bool = app.audio.pair_feedback.playing
 	for player: AudioStreamPlayer in app.audio._jelly_players:
 		any_audio = any_audio or player.playing
 	for player: AudioStreamPlayer in app.audio._fragment_players:
 		any_audio = any_audio or player.playing
-	check(not any_audio and _carried_fragments(view.game) >= 1,
-		"Muted fragment delivery remains visible and complete without fragment audio")
+	check(not any_audio and _carried_fragments(view.game) == carried,
+		"Rejecting a retired item cannot change natural fragments or play purchase audio")
 	app.set_reduced_motion(false)
 	app.audio.set_muted(false)
 
@@ -490,7 +363,7 @@ func _check_responsive_actions(app) -> void:
 		view.set_process(false)
 		view._process(0.0)
 		var scale: float = app.Style.ui_scale(app)
-		var buttons: Array = [view.powerup_buttons.auto_merge, view.collect_button, view.powerup_buttons.fragments]
+		var buttons: Array = [view.powerup_buttons.auto_merge, view.collect_button, view._fill_button]
 		var context: String = " at " + str(dimensions)
 		for index in range(buttons.size()):
 			var button = buttons[index]
@@ -504,8 +377,8 @@ func _check_responsive_actions(app) -> void:
 			for previous in range(index):
 				check(not bounds.intersects(buttons[previous].get_global_rect()), "The three action targets never overlap" + context)
 		check(view.powerup_buttons.auto_merge.snapshot().get("price", 0) == 600
-			and view.powerup_buttons.fragments.snapshot().get("price", 0) == 200,
-			"Responsive powerup buttons retain their exact visible price metadata" + context)
+			and view.powerup_buttons.keys() == ["auto_merge"],
+			"Responsive layouts expose only the remaining paid tool and its exact price" + context)
 
 
 func _click_live(view, control: Control) -> void:
@@ -527,7 +400,7 @@ func _check_items_during_fill(app) -> void:
 	await settle()
 	app.set_process(false)
 	check(app.coin_wallet.credit_amount("fixture:items-during-fill", 5000).ok, "Fund only the isolated live-input regression")
-	for kind: String in ["auto_merge", "family_merge", "fragments", "extra_time"]:
+	for kind: String in ["auto_merge", "family_merge"]:
 		await _prepare(app)
 		var view = app._word_jelly
 		var game = view.game
@@ -547,7 +420,7 @@ func _check_items_during_fill(app) -> void:
 		view.set_process(false)
 		check(game.fill_mode and game._settling_remaining() > game.EPSILON,
 			"Native item input is exercised while Auto Fill is genuinely dispatching")
-		for item: String in ["auto_merge", "fragments", "extra_time"]:
+		for item: String in ["auto_merge"]:
 			check(not view.powerup_buttons[item].disabled, "Falling supply does not disable the legal " + item + " button")
 		var goal: Button = view._practice_panel.button_for_goal(str(game.stage_run.snapshot().practice[0].id))
 		check(goal != null and not goal.disabled, "Falling supply does not disable the actual pending-goal merge")
@@ -584,9 +457,6 @@ func _run() -> void:
 	await _check_auto_merge(app)
 	await _check_storage_failure(app)
 	await _check_escalating_prices(app)
-	await _check_fragments(app)
-	await _check_fragment_coarse_frame(app)
-	await _check_fragment_repeated_purchases(app)
 	await _check_lifecycle(app)
 	await _check_preferences(app)
 	await _check_responsive_actions(app)

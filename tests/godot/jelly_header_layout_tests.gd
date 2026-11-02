@@ -73,11 +73,9 @@ func check_geometry(app, view, dimensions: Vector2i) -> void:
 			context + " anchors gameplay above a small bottom margin")
 	if dimensions.x >= 624 and dimensions.x < dimensions.y:
 		if app._mode_id == "word_jelly":
-			# Five square columns retain the former minimum cell size while the
-			# eight-row board becomes narrower on height-limited tablets.
-			check(board.size.x * s / 5.0 >= float(dimensions.x) * 0.74 / 6.0
-				and is_equal_approx(board.size.x / board.size.y, 5.0 / 8.0),
-				context + " keeps five columns of playable square cells")
+			check(board.size.x * s / view.game.COLUMNS >= float(dimensions.x) * 0.74 / (view.game.COLUMNS + 1)
+				and is_equal_approx(board.size.x / board.size.y, float(view.game.COLUMNS) / view.game.ROWS),
+				context + " keeps seven columns of playable square cells")
 		else:
 			check(board.size.x * s >= float(dimensions.x) * 0.74,
 				context + " uses the portrait width for playable cells")

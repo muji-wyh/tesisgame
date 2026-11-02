@@ -2,7 +2,7 @@ extends SceneTree
 
 const Map = preload("res://scripts/word_jelly_map.gd")
 const Jelly = preload("res://scripts/word_jelly.gd")
-const Skill = preload("res://scripts/word_jelly_skill_reveal.gd")
+const Skill = preload("res://scripts/word_jelly_ability_preview.gd")
 const Data = preload("res://scripts/game_data.gd")
 const Catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
 const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
@@ -41,11 +41,17 @@ func test_map() -> void:
 	map.size = Vector2(393, 700)
 	map.open({"highest_cleared": 0, "merged_level": 1, "boss_markers": [1, 3]}, false)
 	map.set_process(false)
+	await process_frame
+	map.focus_frontier()
+	await process_frame
 	check(map.snapshot().unlock.phase == "done" and not map._nodes[0].boss.visible,
 		"A new save neither invents an unlock animation nor spoils the opening Boss")
 	var next := {"highest_cleared": 1, "merged_level": 1, "boss_markers": [3]}
 	map.configure(next, false)
 	map.set_process(false)
+	await process_frame
+	map.focus_frontier()
+	await process_frame
 	check(map.snapshot().unlock.from == 1 and map.snapshot().unlock.to == 2
 		and map.snapshot().unlock.phase == "route" and map._nodes[1].padlock.visible,
 		"A new clear starts a journey from the completed node, with its destination still visibly locked")
@@ -144,26 +150,20 @@ func test_entry_and_lv1(data, words: Array) -> void:
 func test_skills(word: Dictionary) -> void:
 	var skill := Skill.new()
 	root.add_child(skill)
-	var acceptances: Array[int] = []
-	skill.accepted.connect(func() -> void: acceptances.append(1))
-	for level in range(2, 10):
+	for level in range(1, 10):
 		skill.size = Vector2(390, 500)
 		check(skill.present(level, word, false) and skill.snapshot().level == level
-			and not skill.snapshot().description.is_empty(), "Every earned level explains its actual collection skill")
-		check(skill.snapshot().preview_targets == [4, 6, 8, 4, 8, 12, 22, 24][level - 2],
-			"Skill %d previews its correct local/column/cross/ring/board footprint" % level)
-		skill._continue.pressed.emit()
-		check(skill.visible and acceptances.size() == level - 2, "A held old accept cannot skip an unread unlock")
-		skill.advance(1.1)
+			and not skill.snapshot().description.is_empty(), "Every level explains its actual collection skill before purchase")
+		check(skill.snapshot().target_count == [2, 4, 6, 8, 7, 13, 12, 22, 55][level - 1],
+			"Skill %d previews its correct full seven-column campaign footprint" % level)
+		skill.advance(0.1)
 		for dimensions: Vector2 in [Vector2(320, 220), Vector2(393, 500), Vector2(1000, 600)]:
 			skill.size = dimensions
 			skill._layout()
 			var bounds := Rect2(Vector2.ZERO, dimensions)
-			for control: Control in [skill._title, skill._level_label, skill._description, skill._demo, skill._continue]:
+			for control: Control in [skill._jelly]:
 				check(bounds.grow(0.1).encloses(control.get_rect()),
-					"The skill artwork, explanation and Continue remain inside a real short/phone/desktop surface")
-		skill._continue.pressed.emit()
-		check(not skill.visible and acceptances.size() == level - 1, "Each read skill accepts exactly once")
+					"The actual preview source remains inside a real short/phone/desktop surface")
 	skill.free()
 
 
@@ -182,8 +182,8 @@ func test_level_and_finale(data, words: Array) -> void:
 			and (not map._wallet.visible or not map._challenge.get_rect().intersects(map._wallet.get_rect())),
 			"The sourced-medal Challenge action is always named and leaves the scaled wallet readable")
 		check(map._nodes[98].boss.visible and map._nodes[98].boss_aura.visible
-			and map._nodes[98].boss.size.x > map._nodes[2].boss.size.x * 1.7,
-			"The finale uses a distinct enlarged real Boss portrait and acquired energy aura")
+			and map._nodes[98].boss_frame.size.x > map._nodes[2].boss.size.x * 1.7,
+			"The finale retains its distinctly enlarged framed portrait and acquired energy aura beside resting Pip")
 		await capture_ui("final-boss-map-%d" % dimensions.x)
 	map.configure({"highest_cleared": 0, "merged_level": 1, "boss_markers": [3]}, true)
 	check(map._nodes[98].boss.visible and map._nodes[98].boss.disabled and not map._nodes[4].boss.visible,
@@ -240,7 +240,8 @@ func test_challenge_best_hud() -> void:
 		view._process(0.05)
 		app._advance_ui(0.05)
 	check(view.game.stage_run.challenge_stage == 1 and view._practice_panel._record_badge.value == 5
-		and view._practice_panel._record_badge.is_visible_in_tree() and not view._practice_panel._subtitle.visible
+		and view._practice_panel._record_badge.is_visible_in_tree()
+		and view._practice_panel._title.visible and view._practice_panel._title.text.contains(":")
 		and app._mode_heading.text == "Challenge · 1" and view.game.stage_run.remaining > 0.0,
 		"The phone Challenge puts its mode/Stage at the top and the real best in a sourced medal number without Goals +10s")
 	await capture_ui("challenge-stage-1-best-5")
@@ -691,7 +692,7 @@ func _run() -> void:
 	var words: Array = data.words.filter(func(word: Dictionary) -> bool: return Data.word_age(word) == 3) \
 		.map(func(word: Dictionary) -> Dictionary: return Morphology.decorate(word))
 	test_record_composition()
-	test_map()
+	await test_map()
 	test_entry_and_lv1(data, words)
 	test_skills(words[0])
 	await test_level_and_finale(data, words)

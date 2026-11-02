@@ -241,14 +241,14 @@ func _check_opening_and_bounds(view) -> void:
 		view.size = dimensions
 		_reset(view)
 		var state: Dictionary = view.snapshot()
-		check(state.columns == 5 and state.rows == 8 and state.tiles.size() == 15, "opening contains three full rows of five settled roots")
-		check(state.preview.slots.size() == 5 and state.preview.enabled, "five upcoming roots have a working manual drop")
+		check(state.columns == 7 and state.rows == 8 and state.tiles.size() == 21, "opening contains three full rows of seven settled roots")
+		check(state.preview.slots.size() == 7 and state.preview.enabled, "seven upcoming roots have a working manual drop")
 		check(view._preview_rect.end.y <= view._board.position.y,
 			"the whole supply tray sits above the well in portrait and landscape")
 		for index in range(1, view._preview_tiles.size()):
 			check(is_equal_approx(view._preview_tiles[index].position.y, view._preview_tiles[0].position.y)
 				and view._preview_tiles[index].position.x > view._preview_tiles[index - 1].position.x,
-				"all five upcoming bodies form one horizontal row above the well")
+				"all seven upcoming bodies form one horizontal row above the well")
 		check(view._board.position.x >= 0 and view._board.position.y >= 0 and view._board.end.x <= dimensions.x + 0.1
 			and view._board.end.y <= dimensions.y + 0.1, "board fits portrait and landscape bounds")
 		var s: float = Style.ui_scale(view)
@@ -267,7 +267,7 @@ func _check_opening_and_bounds(view) -> void:
 			check(view._tiles[int(tile.id)]._label.text == cell.display_text, "opening faces show the intended spelling or picture-only clue")
 			var body: Rect2 = view._tile_rect(tile)
 			check(view._board.encloses(body) and is_equal_approx(body.size.x, body.size.y),
-				"root rectangle stays square and inside the five-column well")
+				"root rectangle stays square and inside the seven-column well")
 			for neighbor: Dictionary in state.tiles:
 				if int(neighbor.row) != int(tile.row) or int(neighbor.column) != int(tile.column) + 1:
 					continue
@@ -479,6 +479,7 @@ func _check_concurrent_powerup_resize(view) -> void:
 		_reset(view, reduced)
 		purchases.clear()
 		var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", "root:caterpillar", "picture:caterpillar"], [1, 2, 3, 4])
+		view.game.auto_merge_level = 2
 		view._activate_powerup("auto_merge")
 		_advance(view, (Model.POWERUP_MERGE_BEAT_SECONDS + Model.POWERUP_DRAG_SECONDS) * 0.5)
 		var moving: Dictionary = view.game.powerup_snapshot()
@@ -2988,14 +2989,14 @@ func _check_arrival_packet(view) -> void:
 func _partial_preview_fixture(view, reduced: bool) -> Array:
 	_reset(view, reduced)
 	view.game.cells.clear()
-	# Three ordinary bodies block three entrances; semantic mass cannot span lanes.
-	for column: int in [0, 1, 4]:
+	# Only the two middle lanes are open; semantic mass cannot span lanes.
+	for column: int in [0, 1, 4, 5, 6]:
 		var roof: Dictionary = _fixture_tile(view, "play" if column < 2 else "foot", 2, 1)
 		roof.column = column
 		roof.row = 0
 		view.game.cells.append(roof)
 	view.game.upcoming.clear()
-	for text: String in ["fat", "hap", "sle", "her", "py"]:
+	for text: String in ["fat", "hap", "sle", "her", "play", "foot", "py"]:
 		view.game.upcoming.append(_fixture_tile(view, text, 1, 1 if text in ["fat", "sle"] else 0))
 	view._sync_tiles()
 	view._layout()
@@ -3020,8 +3021,8 @@ func _check_partial_preview_columns(view) -> void:
 					var point: Vector2 = view.get_global_transform() * view._preview_rect.get_center()
 					check(view._press(2, point), "a partially open tray accepts an ordinary pointer press")
 					view._release(point)
-				check(view.game.generated_tiles == generated + 2 and view.game.cells.size() == 5,
-					"only sle and her leave a tray whose three outer entrances have ordinary roof bodies")
+				check(view.game.generated_tiles == generated + 2 and view.game.cells.size() == Model.COLUMNS,
+					"only sle and her leave a tray whose five outer entrances have ordinary roof bodies")
 				for slot: int in [2, 3]:
 					var id: int = int(packet[slot].id)
 					var cell: Dictionary = view.game.cell(id)
@@ -3031,7 +3032,7 @@ func _check_partial_preview_columns(view) -> void:
 					var expected: Rect2 = view._tile_rect(cell) if reduced else origins[slot]
 					check(view._tiles[id].get_rect().is_equal_approx(expected), "a partial release preserves the original painted origin")
 				for sample in range(25):
-					for slot: int in [0, 1, 4]:
+					for slot: int in [0, 1, 4, 5, 6]:
 						var preview = view._preview_tiles[slot]
 						check(view.game.upcoming[slot] == packet[slot] and preview.visible
 							and preview.tile_id == int(packet[slot].id) and preview._label.text == packet[slot].display_text

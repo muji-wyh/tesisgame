@@ -74,7 +74,7 @@ func _test_footprints() -> void:
 		for column in range(Model.COLUMNS):
 			_put(model, model._new_word_root(_word()), column, row)
 	var origin: Dictionary = model.cells[3 * Model.COLUMNS + 2]
-	var expected: Array[int] = [0, 1, 2, 3, 7, 11, 8, 22, 39]
+	var expected: Array[int] = [0, 1, 2, 3, Model.ROWS - 1, Model.ROWS + Model.COLUMNS - 2, 8, 22, Model.CAPACITY - 1]
 	for level in range(1, 10):
 		var targets: Array = _targets(model, origin, level)
 		check(targets.size() == expected[level - 1], "Lv%d selects exactly its requested full-board footprint" % level)
@@ -162,7 +162,7 @@ func _test_flight_and_accounting() -> void:
 		"The automatic union keeps the normal level, sense identity and both bodies' fragments")
 	check(model.combo_actions == 2 and model.combo_coins == 0 and model.cleared_pairs == 1
 		and fixture.purchases.is_empty() and model.powerup_snapshot().kind == "blast"
-		and model.snapshot().powerup_uses == {"auto_merge": 0, "family_merge": 0, "fragments": 0},
+		and model.snapshot().powerup_uses == {"auto_merge": 0, "family_merge": 0},
 		"Collection chains do not charge a paid item, mint combo coins, auto-collect, or advance purchase prices")
 	check(model._rng.state == supply_state, "Random blast selection never consumes word-supply randomness")
 	check(fixture.learning.size() == 1 and model.cells[0].assisted and not model.cells[0].mastery_eligible,
@@ -316,7 +316,7 @@ func _test_pending_blast_purchase_guard() -> void:
 		return {"ok": true}
 	model.collect(int(fixture.source.id))
 	model.step(Model.collection_seconds(2))
-	check(not model.can_activate_powerup("auto_merge") and not model.can_activate_powerup("fragments"),
+	check(not model.can_activate_powerup("auto_merge") and not model.can_activate_powerup("family_merge"),
 		"A promised free blast cannot be overtaken by a paid item between simulation frames")
 	check(not model.activate_powerup("auto_merge") and purchases.is_empty(),
 		"Pending blast protection rejects a purchase before any wallet callback or repeat-price change")

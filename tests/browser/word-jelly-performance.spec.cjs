@@ -37,7 +37,7 @@ async function fillBoard(page, first, mouse) {
   await press(page, [stage.rect.x, stage.rect.y, stage.rect.width, stage.rect.height], mouse);
   await expect.poll(async () => {
     const state = await jelly(page);
-    return state.visible && state.phase === 'playing' && state.tiles.length === 15 &&
+    return state.visible && state.phase === 'playing' && state.tiles.length === 21 &&
       state.tiles.every(tile => tile.settled);
   }, { timeout: 30000 }).toBe(true);
   for (let count = 0; count < 8 && (await jelly(page)).tiles.length < 35; count++) {

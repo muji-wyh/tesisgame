@@ -92,8 +92,14 @@ func _layout() -> void:
 	var companion_result: bool = _room is CompanionResult or _room is CompanionCelebration \
 		or (_room is RewardRoom and not _room._result_context.is_empty())
 	var chest_height: float = 460.0 if companion_result else 540.0
-	panel.size = Vector2(minf((560 if landscape else 480) / s, maxf(0, size.x - 32 / s)),
-		minf((chest_height if _has_chest else 300) / s, maxf(0, size.y - 32 / s)))
+	var result_boss: bool = _room is RewardRoom and _room.wants_result_boss()
+	if result_boss:
+		chest_height = maxf(chest_height, 520.0)
+	var panel_width: float = minf((560 if landscape else 480) / s, maxf(0, size.x - 32 / s))
+	var upgrade_row: bool = _room is RewardRoom and _room.offers_upgrades() and panel_width * s - 24.0 < 420.0
+	var empty_height: float = 520.0 if result_boss else 356.0 if upgrade_row else 300.0
+	panel.size = Vector2(panel_width,
+		minf((chest_height if _has_chest else empty_height) / s, maxf(0, size.y - 32 / s)))
 	panel.position = (size - panel.size) * 0.5
 	panel.pivot_offset = panel.size * 0.5
 	if is_instance_valid(_room):

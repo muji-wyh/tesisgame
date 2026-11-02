@@ -118,7 +118,7 @@ func test_timeout_and_retry() -> void:
 	model.credit_collection = Callable()
 
 
-func test_timer_pause_and_extra_time() -> void:
+func test_timer_pause_without_paid_time() -> void:
 	var model = make_model(90.0)
 	model.set_paused(true)
 	model.step(10.0)
@@ -132,19 +132,12 @@ func test_timer_pause_and_extra_time() -> void:
 		attempts.append([id, kind, price])
 		return {"ok": true}
 	model.cells.clear()
-	check(model.activate_powerup("extra_time") and model.powerup_price("extra_time") == 150
-		and is_equal_approx(model.stage_run.remaining, 91.0) and attempts[0][2] == 100,
-		"A saved first extra-time purchase adds 30 seconds and increases the next price")
+	check(not model.activate_powerup("extra_time") and model.powerup_price("extra_time") == 0
+		and is_equal_approx(model.stage_run.remaining, 61.0) and attempts.is_empty(),
+		"The retired paid extension cannot charge or add time even with an accepting purchase adapter")
 	model.step(2.0)
-	check(model.stage_run.stars_now() == 2, "Bought time never restores an expired original star tier")
-	check(model.activate_powerup("extra_time") and attempts[1][2] == 150 and model.powerup_price("extra_time") == 200,
-		"Every paid extension increases its own price rather than capping after two uses")
-	model.stage_run._added_seconds = model.stage_run.MAX_ADDED_SECONDS - 30
-	check(model.activate_powerup("extra_time") and attempts.size() == 3,
-		"The final supported extension can still be purchased and applied")
-	check(not model.can_activate_powerup("extra_time") and not model.activate_powerup("extra_time")
-		and attempts.size() == 3,
-		"An exhausted extension allowance disables the item before any payment is attempted")
+	check(model.stage_run.stars_now() == 2 and is_equal_approx(model.stage_run.remaining, 59.0),
+		"The original active-play clock and star thresholds continue without a paid rescue")
 	model.purchase_powerup = Callable()
 
 
@@ -400,7 +393,7 @@ func _run() -> void:
 		return
 	test_clear_sweep()
 	test_timeout_and_retry()
-	test_timer_pause_and_extra_time()
+	test_timer_pause_without_paid_time()
 	test_challenge_pressure_and_blocked_top()
 	test_main_stage_full_warning()
 	test_full_board_pending_collection()

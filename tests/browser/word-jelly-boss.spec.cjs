@@ -96,7 +96,7 @@ async function shot(page) {
   await expect.poll(async () => !(await jelly(page)).collection_batch.active, { timeout: 30000 }).toBe(true);
 }
 
-test('a real first Boss victory celebrates, escapes, saves Lv2 and never duplicates its unlock on reload', async ({ page }, info) => {
+test('a real first Boss victory celebrates and saves its story record without unlocking a Jelly level', async ({ page }, info) => {
   test.setTimeout(300000);
   const errors = await start(page, 3);
   const opening = await jelly(page);
@@ -113,21 +113,13 @@ test('a real first Boss victory celebrates, escapes, saves Lv2 and never duplica
     }
     await shot(page);
   }
-  await expect.poll(async () => (await room(page)).skill_unlock?.visible, { timeout: 60000 }).toBe(true);
-  const skill = (await room(page)).skill_unlock;
-  expect(skill.level).toBe(2);
-  expect(skill.description).toContain('4 nearby');
-  expect(skill.preview_targets).toBe(4);
-  await expect.poll(async () => (await room(page)).skill_unlock.continue.enabled).toBe(true);
-  await page.screenshot({ path: info.outputPath('new-jelly-skill.png'), scale: 'css' });
-  await press(page, (await room(page)).skill_unlock.continue.rect);
-  await expect.poll(async () => (await jelly(page)).campaign_map.visible, { timeout: 30000 }).toBe(true);
+  await expect.poll(async () => (await jelly(page)).campaign_map.visible, { timeout: 60000 }).toBe(true);
   const finished = await jelly(page);
   expect(finished.boss.outcome).toBe('defeated');
   expect(finished.campaign.outcome).toBe('cleared');
   expect(finished.campaign.word_goals_complete).toBe(true);
   expect(finished.campaign.remaining).toBe(0);
-  expect(finished.campaign_map.merged_level).toBe(2);
+  expect(finished.campaign_map.merged_level).toBe(1);
   expect(finished.campaign_map.boss_victories).toEqual([1]);
   expect(finished.campaign_map.boss_markers).toEqual([3, 5]);
   expect(finished.campaign_map.stage_nodes.find(stage => stage.number === 4).unlocked).toBe(true);
@@ -138,7 +130,7 @@ test('a real first Boss victory celebrates, escapes, saves Lv2 and never duplica
   expect(dramaticBeats.impact.event.health_after).toBeGreaterThanOrEqual(0);
   expect(dramaticBeats.victory.clip).not.toBe('Taunt');
   expect(dramaticBeats.victory.dialogue).not.toBe('');
-  await page.screenshot({ path: info.outputPath('boss-lv2-map.png'), scale: 'css' });
+  await page.screenshot({ path: info.outputPath('boss-no-free-upgrade-map.png'), scale: 'css' });
   const balance = (await wallet(page)).balance;
   fs.writeFileSync(info.outputPath('boss-clear.json'), JSON.stringify({ opening, finished, balance }, null, 2));
   await page.reload();
@@ -146,7 +138,7 @@ test('a real first Boss victory celebrates, escapes, saves Lv2 and never duplica
   await openModeMenu(page);
   await activateLibraryControl(page, 'Mode_word_jelly');
   const restored = await waitForCampaignMap(page);
-  expect(restored.merged_level).toBe(2);
+  expect(restored.merged_level).toBe(1);
   expect(restored.boss_victories).toEqual([1]);
   expect((await wallet(page)).balance).toBe(balance);
   expect(errors).toEqual([]);
@@ -188,7 +180,7 @@ test('the giant kick limits actual preview releases to two and repairs after eig
     timeout: 60000, message: 'Repair follows eight active-play seconds, even under software-rendered WebKit'
   }).toBe(0);
   const repaired = await jelly(page);
-  expect(repaired.boss.drop_limit).toBe(5);
+  expect(repaired.boss.drop_limit).toBe(7);
   const kick = repaired.boss.events.find(event => event.kind === 'kick');
   const repair = repaired.boss.events.find(event => event.kind === 'sky_repaired');
   expect(repair.at - kick.at).toBeCloseTo(8, 4);

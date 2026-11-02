@@ -57,6 +57,13 @@ vec2 skin_uv(vec2 point) {
 	width += max(0.0, -pull / h) * 0.35;
 	float travel = smoothstep(cap, split, t);
 	float x = 0.5 + (point.x - body_size.x * 0.5 - sideways * travel) / (body_size.x * width);
+	// A suspended lobe rounds under tension; the source's resting floor must
+	// not become a straight cut across the hanging gel, paint or ready rim.
+	float foot_x = clamp((x - 0.5) * 2.0, -1.0, 1.0);
+	float foot_curve = 1.0 - sqrt(max(0.0, 1.0 - foot_x * foot_x));
+	float lower_stretch = h + body_stretch / (1.0 - split);
+	t += smoothstep(0.55, 0.95, t) * tension * tension
+		* body_size.x * 0.36 * foot_curve / lower_stretch;
 	return vec2(mix(0.018, 0.963, x), mix(0.108, 0.892, t));
 }
 

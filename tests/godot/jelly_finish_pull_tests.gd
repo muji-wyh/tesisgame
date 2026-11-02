@@ -67,6 +67,114 @@ func relax(button) -> void:
 		button.advance(1.0 / 60.0)
 
 
+func foot_bottom(image: Image, x: int) -> int:
+	for y in range(image.get_height() - 1, -1, -1):
+		if image.get_pixel(x, y).a >= 0.5:
+			return y
+	return -1
+
+
+func check_rendered_foot() -> void:
+	check(DisplayServer.get_name() != "headless", "The lower-lobe regression needs an actual shader renderer")
+	if DisplayServer.get_name() == "headless":
+		return
+	var output: String = "res://build/qa/jelly-finish-foot/" + ("before" if OS.get_cmdline_user_args().has("--before") else "after")
+	check(DirAccess.make_dir_recursive_absolute(output) == OK, "Prepare the rendered gel evidence directory")
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(240, 720)
+	viewport.transparent_bg = true
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	root.add_child(viewport)
+	var metrics: Array[Dictionary] = []
+	var resting_skin: Image
+	for example: Dictionary in [
+		{"name": "idle", "scale": 0.65, "pull": 0.0},
+		{"name": "partial", "scale": 0.65, "pull": 0.5},
+		{"name": "armed", "scale": 0.65, "pull": 1.05},
+		{"name": "maximum", "scale": 0.65, "pull": 6.0},
+		{"name": "maximum-left", "scale": 0.65, "pull": 6.0, "side": -84.0},
+		{"name": "maximum-right", "scale": 0.65, "pull": 6.0, "side": 84.0},
+		{"name": "maximum-reduced", "scale": 0.65, "pull": 6.0, "reduce": true},
+		{"name": "landscape", "scale": 1.0, "pull": 6.0, "height": 240},
+		{"name": "compact", "scale": 1.5, "pull": 6.0},
+	]:
+		viewport.size.y = int(example.get("height", 720))
+		var button = Finish.new()
+		viewport.add_child(button)
+		button.configure(Color("e2a268"), float(example.scale), bool(example.get("reduce", false)))
+		button.position = Vector2(56, 20)
+		button.size = Vector2(84, 44) / float(example.scale)
+		button.set_process(false)
+		await settle()
+		if float(example.pull) > 0.0:
+			var start: Vector2 = button.get_global_rect().get_center()
+			button._begin_pull(start, -1)
+			button._move_pull(start + Vector2(float(example.get("side", 0.0)) / float(example.scale),
+				button.snapshot().threshold * float(example.pull)))
+		button._label.hide()
+		button._flag.hide()
+		button._glow.hide()
+		for sparkle: TextureRect in button._sparkles:
+			sparkle.hide()
+		button._gel.set_shader_parameter("armed", 0.0)
+		button._gel.set_shader_parameter("focus_light", 0.0)
+		await settle()
+		await RenderingServer.frame_post_draw
+		var skin: Image = viewport.get_texture().get_image()
+		var bounds: Rect2i = skin.get_used_rect()
+		check(bounds.position.x > 0 and bounds.position.y > 0
+			and bounds.end.x < viewport.size.x and bounds.end.y < viewport.size.y,
+			str(example.name) + ": neither the anchored crown nor hanging foot is clipped")
+		if example.name == "idle":
+			resting_skin = skin
+		elif float(example.scale) == 0.65:
+			var crown_unchanged: bool = true
+			for y in range(0, floori(button.position.y + button.size.y * 0.18)):
+				for x in range(skin.get_width()):
+					crown_unchanged = crown_unchanged and is_equal_approx(
+						skin.get_pixel(x, y).a, resting_skin.get_pixel(x, y).a)
+			check(crown_unchanged, str(example.name) + ": the original upper crown remains fixed")
+		var center: int = roundi(button.position.x + button.size.x * 0.5 + button._sideways)
+		var offset: int = roundi(button.size.x * 0.26)
+		var middle: int = foot_bottom(skin, center)
+		var left: int = foot_bottom(skin, center - offset)
+		var right: int = foot_bottom(skin, center + offset)
+		var drop: float = (middle - (left + right) * 0.5) * float(example.scale)
+		metrics.append({"pose": example.name, "center_drop_px": drop, "bottom": middle,
+			"left": left, "right": right, "scale": example.scale})
+		check(middle > 0 and left > 0 and right > 0, str(example.name) + ": inspect the real painted silhouette")
+		if float(example.pull) >= 1.0:
+			check(drop >= (2.0 if float(example.pull) < 6.0 else 3.0),
+				"%s: the suspended foot curves downward instead of retaining a flat cut (drop %.2f px)" % [example.name, drop])
+		button._surface.hide()
+		button._label.show()
+		await settle()
+		await RenderingServer.frame_post_draw
+		var caption: Image = viewport.get_texture().get_image()
+		var outside: int = 0
+		var caption_bounds: Rect2i = caption.get_used_rect()
+		for y in range(caption_bounds.position.y, caption_bounds.end.y):
+			for x in range(caption_bounds.position.x, caption_bounds.end.x):
+				if caption.get_pixel(x, y).a >= 0.2 and skin.get_pixel(x, y).a < 0.2:
+					outside += 1
+		check(outside == 0, str(example.name) + ": every instruction glyph stays inside the actual rounded gel")
+		button._surface.show()
+		button._update_visual()
+		await settle()
+		await RenderingServer.frame_post_draw
+		var capture: Image = viewport.get_texture().get_image()
+		check(capture.save_png(output + "/" + str(example.name) + ".png") == OK, "Capture the actual " + str(example.name) + " pull")
+		button.free()
+		await settle()
+	var file := FileAccess.open(output + "/metrics.json", FileAccess.WRITE)
+	check(file != null, "Save the measured lower contour")
+	if file != null:
+		file.store_string(JSON.stringify(metrics, "\t"))
+		file.close()
+	viewport.queue_free()
+	await settle()
+
+
 func check_tap_response(button, context: String, cues: Array[int], commits: Array[int], requests: Array[int]) -> void:
 	var fixed_target: Rect2 = button.get_global_rect()
 	var peak: float = 0.0
@@ -447,6 +555,11 @@ func check_gameplay(mode: String) -> void:
 
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+	if OS.get_cmdline_user_args().has("--rendered-foot-only"):
+		await check_rendered_foot()
+		print("Jelly suspended foot: %d checks, %d failures" % [checks, failures])
+		quit(1 if failures > 0 else 0)
+		return
 	await check_component()
 	for mode: String in ["jelly", "word_jelly"]:
 		await check_gameplay(mode)

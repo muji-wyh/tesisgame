@@ -5,7 +5,7 @@ const HEADING_FONT = preload("res://assets/fonts/heading.tres")
 const CoinBreakdown = preload("res://scripts/chest_coin_breakdown.gd")
 
 
-static func measure(bounds: Vector2, scale_factor: float, has_chest: bool, save_failed: bool = false, has_summary: bool = false, has_reward: bool = false) -> Dictionary:
+static func measure(bounds: Vector2, scale_factor: float, has_chest: bool, save_failed: bool = false, has_summary: bool = false, has_reward: bool = false, has_upgrade_action: bool = false) -> Dictionary:
 	var s: float = maxf(0.25, scale_factor)
 	var w: float = bounds.x * s
 	var h: float = bounds.y * s
@@ -15,11 +15,18 @@ static func measure(bounds: Vector2, scale_factor: float, has_chest: bool, save_
 	var inner_w: float = maxf(1.0, w - margin * 2.0)
 	var action_y: float = h - margin - action_h
 	var wide_actions: bool = w >= 420.0
-	var action_count: int = 3 if save_failed and wide_actions else 2
+	var upgrades := Rect2()
+	var upgrade_row: bool = has_upgrade_action and (not wide_actions or save_failed)
+	if upgrade_row:
+		upgrades = Rect2(margin, action_y, inner_w, action_h)
+		action_y -= action_h + gap
+	var action_count: int = 3 if wide_actions and (save_failed or has_upgrade_action) else 2
 	var action_w: float = (inner_w - gap * (action_count - 1)) / action_count
 	var home := Rect2(margin, action_y, action_w, action_h)
 	var replay := Rect2(w - margin - action_w, action_y, action_w, action_h)
 	var retry := Rect2()
+	if has_upgrade_action and not upgrade_row:
+		upgrades = Rect2(margin + action_w + gap, action_y, action_w, action_h)
 	var stage_bottom: float = action_y - gap
 	if save_failed:
 		if wide_actions:
@@ -52,7 +59,7 @@ static func measure(bounds: Vector2, scale_factor: float, has_chest: bool, save_
 	var center_side: float = minf(hero_h, pip_side * 1.28) if has_chest else pip_side
 	var pip_center := Rect2((w - center_side) * 0.5, hero_top + (hero_h - center_side) * 0.5, center_side, center_side)
 	var result: Dictionary = {"heading": heading, "summary": summary, "caption": caption, "pip": pip, "pip_center": pip_center, "chest": chest,
-		"home": home, "replay": replay, "retry": retry}
+		"home": home, "replay": replay, "retry": retry, "upgrades": upgrades}
 	for key: String in result:
 		var rect: Rect2 = result[key]
 		result[key] = Rect2(rect.position / s, rect.size / s)

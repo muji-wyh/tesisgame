@@ -1,5 +1,5 @@
 extends Control
-## Acquired treasure and light artwork follows the powerup's gameplay clock.
+## Sourced light artwork follows automatic-merge and collection clocks.
 
 var stamps: Array[Dictionary] = []
 

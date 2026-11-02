@@ -380,6 +380,7 @@ func _test_auto_timing_and_lifecycle() -> void:
 	var expected: Array = []
 	for large_frame: bool in [false, true]:
 		var model = _model(_four())
+		model.auto_merge_level = 2
 		_sources(model, "unpredictability", 1)
 		var purchases: Array = []
 		model.purchase_powerup = func(receipt: String, kind: String, price: int) -> Dictionary:
@@ -450,7 +451,9 @@ func _test_auto_keeps_preflighted_route() -> void:
 
 
 func _preview(model: RefCounted, tiles: Array, columns: Array) -> void:
-	model.upcoming.assign([{}, {}, {}, {}, {}])
+	model.upcoming.clear()
+	for column in range(Model.COLUMNS):
+		model.upcoming.append({})
 	for index in range(tiles.size()):
 		var tile: Dictionary = tiles[index]
 		var column: int = int(columns[index])
@@ -468,7 +471,9 @@ func _test_preview_and_arrival() -> void:
 	var leading: Dictionary = pieces[1]
 	var other: Dictionary = pieces[2]
 	var tail: Dictionary = model._new_composition_tile(model._morphology.source_tiles("unhelpful")[2])
-	_preview(model, [leading, pieces[0], tail], [0, 2, 4])
+	var right: Dictionary = model._new_composition_tile(model._morphology.source_tiles("unhelpful")[0])
+	var edge: Dictionary = model._new_composition_tile(model._morphology.source_tiles("unhelpful")[1])
+	_preview(model, [leading, pieces[0], tail, right, edge], [0, 2, 4, 5, 6])
 	var head: Dictionary = model._new_composition_tile(model._morphology.source_tiles("unhelpful")[1])
 	model._supply.assign([head, other])
 	# Isolated empty lanes accept whole authored parts without repacking neighbors.
@@ -476,7 +481,7 @@ func _test_preview_and_arrival() -> void:
 	model._fill_upcoming()
 	check(model.upcoming[1].id == head.id and model.upcoming[3].id == other.id and model._supply.is_empty(),
 		"Single-lane FIFO supply fills separated gaps in order without waiting for adjacent space")
-	for column: int in [0, 2, 4]:
+	for column: int in [0, 2, 4, 5, 6]:
 		check(model.upcoming[column] == before[column], "Refilling isolated lanes preserves every advertised neighbor")
 	for column in range(Model.COLUMNS):
 		var preview: Dictionary = model.upcoming[column]

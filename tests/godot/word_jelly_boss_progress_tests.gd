@@ -53,42 +53,42 @@ func _run() -> void:
 	var store := Store.new("user://boss-progress.cfg", host)
 	check(store.load_state() and store.highest_cleared("growth") == 8 and store.best_stars("growth", 8) == 3,
 		"Version-one saves migrate without resetting cleared stages, frozen recipes or best stars")
-	check(host.text == previous and store.merged_level("growth") == 1,
+	check(host.text == previous and store.merged_level() == 1,
 		"Reading a legacy save neither invents historical Boss victories nor rewrites it silently")
 	var plan: Dictionary = Catalog.make_plan(9, words, 3, 71)
 	check(store.reserve_plan("growth", plan), "Reserve the existing frontier's exact first Boss recipe")
 	var win: Dictionary = {"kind": "main", "number": 9, "outcome": "cleared", "stars": 3,
 		"boss_id": 1, "boss_victory": true, "boss_outcome": "defeated"}
-	check(store.queue_result("growth", "boss:first", win), "Journal the real first Boss victory before granting its unlock")
+	check(store.queue_result("growth", "boss:first", win), "Journal the real first Boss victory before advancing its stage")
 	host.writable = false
-	check(not store.complete_result("growth", "boss:first") and store.merged_level("growth") == 1
+	check(not store.complete_result("growth", "boss:first") and store.merged_level() == 1
 		and not store.pending("growth").is_empty(),
-		"An unsaved completion retains its journal and cannot unlock Lv2 early")
+		"An unsaved completion retains its journal without changing Jelly ownership")
 	host.writable = true
-	check(store.complete_result("growth", "boss:first") and store.merged_level("growth") == 2
+	check(store.complete_result("growth", "boss:first") and store.merged_level() == 1
 		and store.boss_victories("growth") == [1] and store.highest_cleared("growth") == 9,
-		"Successful durable completion advances the stage and unlocks exactly Lv2 together")
-	check(store.complete_result("growth", "boss:first") and store.merged_level("growth") == 2,
-		"A replayed completion callback cannot grant the same unlock twice")
+		"Successful Boss completion advances the stage but never grants a coin-bought Jelly level")
+	check(store.complete_result("growth", "boss:first") and store.merged_level() == 1,
+		"A replayed completion callback cannot change Jelly ownership")
 	check(store.queue_result("growth", "boss:replay", win) and store.complete_result("growth", "boss:replay")
-		and store.merged_level("growth") == 2,
+		and store.merged_level() == 1,
 		"Replaying and defeating an already-beaten Boss never farms additional levels")
-	check(store.merged_level("professional:retail:module01") == 1,
+	check(store.boss_victories("professional:retail:module01").is_empty(),
 		"A different vocabulary journey does not borrow a Boss victory it never earned")
 	var restored := Store.new("user://boss-progress.cfg", host)
-	check(restored.load_state() and restored.merged_level("growth") == 2
+	check(restored.load_state() and restored.merged_level() == 1
 		and restored.boss_victories("growth") == [1],
-		"Reload restores the durable first-victory unlock")
+		"Reload restores the durable story victory without inventing a paid upgrade")
 	var invalid: Dictionary = win.duplicate()
 	invalid.boss_id = 2
 	check(not restored.queue_result("growth", "boss:wrong-identity", invalid),
-		"A stage-nine result cannot claim a different Boss unlock")
+		"A stage-nine result cannot claim a different Boss victory")
 	check(restored.challenge_best_stage("growth") == 0,
 		"Reading a legacy campaign does not invent a historical Challenge score")
 	check(restored.record_challenge_stage("growth", 5) and restored.record_challenge_stage("growth", 2)
 		and restored.challenge_best_stage("growth") == 5 and restored.highest_cleared("growth") == 9
 		and restored.boss_victories("growth") == [1],
-		"A best-stage record only increases and cannot change numbered clears or Boss-earned levels")
+		"A best-stage record only increases and cannot change numbered clears or paid Jelly levels")
 	host.writable = false
 	check(not restored.record_challenge_stage("growth", 7) and restored.challenge_best_stage("growth") == 5,
 		"An unsaved score cannot pretend the new best was persisted")

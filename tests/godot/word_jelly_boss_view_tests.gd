@@ -182,6 +182,27 @@ func _run() -> void:
 	check(view.snapshot().clip == "Idle" and view.snapshot().dialogue.contains("You win"),
 		"The final rival admits defeat instead of taunting while returning the actual compass")
 	await capture_state("drama-compass-recovered")
+	var projection_run := Run.new()
+	projection_run.configure(Catalog.encounter(18), 71)
+	var projection_state: Dictionary = projection_run.snapshot()
+	view.sync(projection_state, {}, 6, false)
+	var tile = preload("res://scripts/word_jelly_tile.gd").new()
+	root.add_child(tile)
+	var pitch: float = board.size.x / View.Model.COLUMNS
+	for column in range(View.Model.COLUMNS):
+		var expected := Rect2(board.position + Vector2(column, 7) * pitch, Vector2.ONE * pitch)
+		view._handle_event({"kind": "snatch", "at": 0.0, "target": 991,
+			"tile": {"column": column, "row": 7}}, false, {991: tile})
+		check(Rect2(view._thrown.back().rect).is_equal_approx(expected),
+			"Snatched artwork retains the real square and position in column %d" % (column + 1))
+		view._handle_event({"kind": "throw", "status": "snatch", "at": 0.0,
+			"column": column, "row": 7}, false, {})
+		projection_state.elapsed = Run.WINDUP_SECONDS + Run.FLIGHT_SECONDS
+		view.sync(projection_state, {}, 6, false)
+		var contact: Vector2 = view._character.position + view._character.size * Vector2(0.5, 0.65)
+		check(contact.is_equal_approx(expected.get_center()),
+			"The live Boss snatch reaches the real center of column %d without a five-column offset" % (column + 1))
+	tile.free()
 	view.free()
 	sky.free()
 	print("Jelly Boss presentation: %d checks, %d failures" % [checks, failures])

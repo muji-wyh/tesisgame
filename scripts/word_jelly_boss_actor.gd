@@ -11,6 +11,7 @@ var _rig := Node3D.new()
 var _camera := Camera3D.new()
 var _model: Node3D
 var _player: AnimationPlayer
+var _skeleton: Skeleton3D
 var _clip: String = ""
 var _box := AABB()
 var _loaded: bool = false
@@ -90,6 +91,8 @@ func _scan(node: Node, meshes: Array[MeshInstance3D]) -> void:
 		meshes.append(node)
 	if node is AnimationPlayer:
 		_player = node
+	if node is Skeleton3D:
+		_skeleton = node
 	for child: Node in node.get_children():
 		_scan(child, meshes)
 
@@ -118,6 +121,18 @@ func pose(clip: String, elapsed: float, reduced_motion: bool = false) -> void:
 
 func animation_names() -> PackedStringArray:
 	return _player.get_animation_list() if _player != null else PackedStringArray()
+
+
+func project_bone(bone_name: String) -> Vector2:
+	if not _loaded or _skeleton == null:
+		_fail("Load Bramble's real rig before positioning an attached effect.")
+		return Vector2.ZERO
+	var index: int = _skeleton.find_bone(bone_name)
+	if index < 0:
+		_fail("Bramble's rig is missing the %s effect anchor." % bone_name)
+		return Vector2.ZERO
+	var world: Vector3 = _skeleton.global_transform * _skeleton.get_bone_global_pose(index).origin
+	return _camera.unproject_position(world)
 
 
 func _fail(message: String) -> bool:

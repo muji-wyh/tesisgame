@@ -100,7 +100,7 @@ func test_combat_clock_and_damage() -> void:
 	run.advance(7.999, [], true)
 	check(run.snapshot().drop_limit == 2, "Damaged supply remains restricted until the boundary")
 	run.advance(0.001, [], true)
-	check(run.snapshot().drop_limit == 5, "The full five-slot supply returns exactly after eight active seconds")
+	check(run.snapshot().drop_limit == 7, "The full seven-slot supply returns exactly after eight active seconds")
 	run.configure(BossCatalog.encounter(9), 71)
 	run.advance(2.2, [{"id": 1, "column": 0, "row": 7}], true)
 	var health: int = run.health
@@ -120,10 +120,8 @@ func test_levels_and_story() -> void:
 		check(str(definition.entrance).contains("\n") and str(definition.escape).contains("\n")
 			and str(definition.reply).contains("\n"),
 			"Each encounter uses short authored setup, admitted defeat and pursuit beats that fit two subtitles")
-	check(BossCatalog.STAGES.size() == 8 and BossCatalog.merged_level([]) == 1
-		and BossCatalog.merged_level([1, 1, 2]) == 3
-		and BossCatalog.merged_level([1, 2, 3, 4, 5, 6, 7, 8]) == 9,
-		"Only distinct first victories unlock the eight remaining merged levels")
+	check(BossCatalog.STAGES.size() == 8 and not BossCatalog.new().has_method("merged_level"),
+		"The eight story encounters no longer define Jelly level ownership")
 	check(BossCatalog.map_markers(1) == [3] and BossCatalog.map_markers(20) == [3, 5, 7, 9, 18, 36],
 		"Map markers include unlocked Bosses and only the next future encounter")
 	var model = make_model()
