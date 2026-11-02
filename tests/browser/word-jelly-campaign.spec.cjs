@@ -154,39 +154,33 @@ async function observeFinish(page) {
   });
 }
 
-test('chapter segments browse only nine stages and preserve saved unlocks and ratings', async ({ page }, info) => {
+test('one continuous route crosses chapter landmarks without paging or changing saved progress', async ({ page }, info) => {
   test.setTimeout(300000);
   await seedCampaign(page, { highestCleared: 12, balance: 3200 });
   const errors = await openGame(page, { home: true, reducedMotion: 'reduce' });
   await expect.poll(async () => (await wallet(page)).balance).toBe(3200);
   let map = await openMap(page);
-  expect(map.segment).toMatchObject({ index: 2, count: 11, title: 'Grove', first_stage: 10, last_stage: 18 });
+  expect(map.layout).toBe('continuous');
+  expect(map.chapter).toMatchObject({ index: 2, count: 11, title: 'Grove', first_stage: 10, last_stage: 18 });
   expect(map.stage_nodes).toHaveLength(99);
-  expect(map.stage_nodes.filter(item => item.in_segment).map(item => item.number)).toEqual([10, 11, 12, 13, 14, 15, 16, 17, 18]);
+  expect(map.chapters).toHaveLength(11);
+  expect(map).not.toHaveProperty('chapter_previous');
+  expect(map).not.toHaveProperty('chapter_next');
+  expect(map).not.toHaveProperty('segment');
   const saved = await page.evaluate(() => ({
     campaign: localStorage.getItem('growWithPip.jellyCampaign.v1'),
     wallet: localStorage.getItem('growWithPip.coinWallet.v1')
   }));
-  await capture(page, info, 'chapter-two-frontier');
-  await pressMapControl(page, map.chapter_previous);
-  await expect.poll(async () => (await jelly(page)).campaign_map.segment.index).toBe(1);
-  map = (await jelly(page)).campaign_map;
-  expect(map.chapter_previous.enabled).toBe(false);
-  expect(stage(map, 1)).toMatchObject({ unlocked: true, best_stars: 1, in_segment: true });
-  expect(stage(map, 13).visible).toBe(false);
-  await pressMapControl(page, map.chapter_next);
-  await expect.poll(async () => (await jelly(page)).campaign_map.segment.index).toBe(2);
-  map = (await jelly(page)).campaign_map;
-  await pressMapControl(page, map.chapter_next);
-  await expect.poll(async () => (await jelly(page)).campaign_map.segment.index).toBe(3);
-  await expect.poll(async () => {
-    map = (await jelly(page)).campaign_map;
-    const target = stage(map, 19), area = map.scroll_rect, rect = target.rect;
-    return target.visible && rect.y >= area.y - 0.5 && rect.y + rect.height <= area.y + area.height + 0.5;
-  }).toBe(true);
-  map = (await jelly(page)).campaign_map;
-  expect(map.segment).toMatchObject({ title: 'Pine Trail', first_stage: 19, last_stage: 27 });
-  expect(map.stage_nodes.filter(item => item.in_segment).every(item => !item.unlocked)).toBe(true);
+  await capture(page, info, 'continuous-frontier');
+  map = await waitForCampaignMap(page, { stage: 9, adjacentStage: 10 });
+  expect(stage(map, 9)).toMatchObject({ visible: true, unlocked: true, best_stars: 3 });
+  expect(stage(map, 10)).toMatchObject({ visible: true, unlocked: true });
+  expect(map.chapters.find(item => item.index === 2).visible).toBe(true);
+  expect(stage(map, 10).rect.y).toBeLessThan(stage(map, 9).rect.y);
+  await capture(page, info, 'continuous-boundary-nine-ten');
+  map = await waitForCampaignMap(page, { stage: 19, allowLocked: true });
+  expect(map.chapter).toMatchObject({ title: 'Pine Trail', first_stage: 19, last_stage: 27 });
+  expect(map.stage_nodes.filter(item => item.chapter === 3).every(item => !item.unlocked)).toBe(true);
   await pressMapControl(page, stage(map, 19));
   expect((await jelly(page)).campaign_map.visible).toBe(true);
   expect((await wallet(page)).balance).toBe(3200);
@@ -196,8 +190,8 @@ test('chapter segments browse only nine stages and preserve saved unlocks and ra
   }))).toEqual(saved);
   await capture(page, info, 'future-chapter-stays-locked');
   map = await waitForCampaignMap(page, { stage: 13 });
-  expect(map.segment.index).toBe(2);
-  expect(stage(map, 13)).toMatchObject({ unlocked: true, visible: true, in_segment: true });
+  expect(map.chapter.index).toBe(2);
+  expect(stage(map, 13)).toMatchObject({ unlocked: true, visible: true });
   await pressMapControl(page, stage(map, 13));
   await expect.poll(async () => {
     const state = await jelly(page);
@@ -242,14 +236,13 @@ test('Pip guides the actual frontier and tactile map feedback never changes stag
   }
   map = await waitForCampaignMap(page, { stage: 25 });
   expect(map.visible).toBe(true);
-  await pressMapControl(page, map.chapter_next);
-  await expect.poll(async () => (await jelly(page)).campaign_map.segment.index).toBe(4);
-  map = (await jelly(page)).campaign_map;
+  map = await waitForCampaignMap(page, { stage: 28, allowLocked: true });
+  expect(map.chapter.index).toBe(4);
   expect(map.guide.visible).toBe(false);
   expect(map.presentation).toMatchObject({ completed_edges: 0, hovered_stage: 0, pressed_stage: 0 });
   await capture(page, info, 'map-feel-future-chapter');
-  await pressMapControl(page, map.chapter_previous);
-  await expect.poll(async () => (await jelly(page)).campaign_map.guide.visible).toBe(true);
+  map = await waitForCampaignMap(page, { stage: 25 });
+  expect(map.guide.visible).toBe(true);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect.poll(async () => (await jelly(page)).campaign_map.presentation.reduced_motion).toBe(true);
   map = await waitForCampaignMap(page, { stage: 25 });
@@ -267,6 +260,45 @@ test('Pip guides the actual frontier and tactile map feedback never changes stag
       state.campaign_map.visible === false;
   }, { timeout: 30000 }).toBe(true);
   expect((await jelly(page)).campaign_map).not.toHaveProperty('guide');
+  expect(errors).toEqual([]);
+});
+
+test('compact Fill uses a fixed icon and whole-surface state while real supply and reduced motion stay correct', async ({ page }, info) => {
+  test.setTimeout(300000);
+  await seedCampaign(page, { highestCleared: 1 });
+  const errors = await openGame(page, { home: true, reducedMotion: 'no-preference' });
+  const map = await openMap(page);
+  await pressMapControl(page, stage(map, 2));
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.visible && state.phase === 'playing' && state.tiles.length === 15 &&
+      state.tiles.every(tile => tile.settled) && state.fill_control.enabled;
+  }, { timeout: 30000 }).toBe(true);
+  const off = await jelly(page), bounds = await metrics(page);
+  expect(off.fill_control).toMatchObject({ on: false, locked: false, enabled: true });
+  expect(off.fill_control.presentation).toMatchObject({ icon_only: true, stationary_icon: true, flowing: false });
+  expect(off.fill_control.rect[2] * bounds.scale).toBeCloseTo(56, 1);
+  expect(off.fill_control.presentation).not.toHaveProperty('thumb_x');
+  await capture(page, info, 'compact-fill-off');
+  await pressRect(page, off.fill_control.rect);
+  await expect.poll(async () => {
+    const state = await jelly(page);
+    return state.fill_control.on && state.fill_control.presentation.flowing &&
+      state.fill_control.presentation.elapsed > 0.3 && state.tiles.length > off.tiles.length;
+  }).toBe(true);
+  const on = await jelly(page);
+  expect(on.fill_control.rect).toEqual(off.fill_control.rect);
+  expect(on.fill_control.presentation.icon_rect).toEqual(off.fill_control.presentation.icon_rect);
+  await capture(page, info, 'compact-fill-on');
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect.poll(async () => {
+    const control = (await jelly(page)).fill_control;
+    return control.on && control.presentation.reduced_motion && !control.presentation.flowing;
+  }).toBe(true);
+  await capture(page, info, 'compact-fill-reduced');
+  await pressRect(page, (await jelly(page)).fill_control.rect);
+  await expect.poll(async () => (await jelly(page)).fill_control.on).toBe(false);
+  expect((await wallet(page)).balance).toBe(0);
   expect(errors).toEqual([]);
 });
 

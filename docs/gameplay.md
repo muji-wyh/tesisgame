@@ -208,14 +208,15 @@ A failed save keeps settlement open for retry.
 
 ## Jelly Words
 
-Jelly Words opens a **segmented 99-stage journey**: eleven scenic chapters,
-each presenting its own nine-stage upward route rather than one long scroll.
-Entry opens the current frontier's chapter and focuses that stage. Previous/next
-chapter controls show the chapter name, position and exact stage range;
-Page Up/Page Down also browse chapters. Future chapters can be inspected, but
+Jelly Words opens a **continuous 99-stage journey**, visually divided into eleven
+nine-stage scenic chapters. Chapter titles and real stage ranges belong to the
+route, not a page selector. Swipe or scroll directly between neighboring stages,
+including across chapter boundaries, without replacing the visible stage set.
+Entry scrolls to and focuses the earned frontier. Page Up/Page Down scroll the
+same route. Future chapters can be inspected, but
 their stages remain locked. Browsing never changes stars, unlocks, recipes or
-coins. A wallet/status refresh preserves the browsed chapter; reopening or
-returning to the frontier restores the earned-progress chapter. Acquired adventure medallions keep numbers
+coins. A wallet/status refresh preserves the actual scroll offset; reopening or
+returning to the frontier restores its position. Acquired adventure medallions keep numbers
 and their three rating stars separate. A permanently named **Challenge** action
 with the acquired mastery medal sits at the upper right, with a 44-pixel touch
 height. Its wallet font follows UI scale and its title fits the remaining header,
@@ -228,9 +229,8 @@ Progress and frozen word recipes are separate for Everyday English and each
 professional career/module. A recipe remains replayable after its words have
 been mastered, provided the original reviewed identities are still available.
 After a new contiguous clear, sourced golden light travels along the route from
-the completed node to the next over 850 ms. At a chapter boundary, the next
-segment opens and the light arrives from its entry path without drawing through
-an invisible previous chapter. That node then opens its padlock and
+the completed node to the next over 850 ms, using the same real connecting road
+when the next stage belongs to another chapter. That node then opens its padlock and
 pops into its available state over 650 ms. Every later locked node retains a
 padlock with restrained light. Reopening the map, replaying an old clear or
 changing learning context cannot replay a progression unlock. Reduced motion
@@ -242,7 +242,7 @@ gold road centers mark only connections between already cleared stages. Hover
 and press feedback moves the medallion artwork, never the stage's hit area.
 Gentle tree motion and Pip's existing quiet gestures stop when hidden or inactive;
 reduced motion retains the same clear static hierarchy. A live browser motion
-setting change also updates the open map without changing the browsed chapter.
+setting change also updates the open map without changing the browsed position.
 Pip is decorative,
 does not block a stage tap, and does not appear beside a future chapter's
 locked stages.
@@ -568,11 +568,12 @@ with at most 15 jellies across three rows. Long labels use reviewed line breaks
 or an ellipsis; hold a clipped label, or focus it and press R, to pause and read
 its full spelling.
 
-The icon-only **Auto Fill** control immediately above Auto Collect is one whole
-capsule switch, with the acquired gel stack as its thumb rather than a nested
-mini-toggle. The gel sits left when Off and right when On, without visible words.
-Mint track styling and a continuous downward light cue mean On; a still cream
-track means Off. Challenge adds a lock to the enabled gel thumb. Pause freezes the
+The icon-only **Auto Fill** control is a compact, whole-control switch beside
+Auto Collect, or above it only when a narrow rail cannot fit both. The acquired
+gel illustration stays centered instead of sliding across an empty track.
+Blue cells on a still cream surface mean Off; a mint surface and continuous
+downward supply motion mean On, without visible words. Challenge replaces the
+downward chevron with a lock while keeping supply active. Pause freezes the
 effect, and reduced motion keeps a static active treatment.
 The switch continuously dispatches the
 advertised top supply when spaces remain. Each entrance releases its next Jelly
@@ -603,8 +604,8 @@ to highlight its corresponding board family with the same effect used for drag
 matches; the goal card also gains a mint hover treatment. Hovering never spends
 coins. The card displays its next coin cost alongside its completion count.
 Click that card to automatically merge only its exact word family's roots,
-pictures and differently leveled merged Jellies. One valid purchase costs 200,
-then 300, then 400 coins per round, with that family-use tier shared across all
+pictures and differently leveled merged Jellies. One valid purchase costs 100,
+then 150, then 200 coins per round, with that family-use tier shared across all
 goals and independent of other items. Payment must be saved and the current
 family must have a legal complete path. No unrelated target or missing partner
 is substituted. A paid click shows the exact wallet debit, a coin flight into the

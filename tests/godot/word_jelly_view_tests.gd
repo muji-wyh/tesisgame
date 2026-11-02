@@ -328,13 +328,14 @@ func _check_supply_layout(view) -> void:
 	for button: Control in view.powerup_buttons.values():
 		if button.visible:
 			paid_area = paid_area.merge(button.get_rect())
-	check(is_equal_approx(collect.position.x, auto_merge.position.x)
-		and is_equal_approx(collect.size.x, paid_area.size.x)
+	var free_area: Rect2 = view._fill_button.get_rect().merge(collect)
+	check(is_equal_approx(free_area.position.x, auto_merge.position.x)
+		and is_equal_approx(free_area.size.x, paid_area.size.x)
 		and absf(auto_merge.position.y - collect.end.y - 14.0 / s) < 0.01,
-		"Primary Collect fills the entire tool group above a fourteen-pixel separator band" + context)
-	check(is_equal_approx(view._fill_button.size.x, paid_area.size.x)
+		"The free controls fill the tool group above a fourteen-pixel separator band" + context)
+	check(is_equal_approx(view._fill_button.size.x * s, 56.0)
 		and view._fill_button.snapshot().unified_switch,
-		"One complete Fill switch spans the same full-width group in rail and footer layouts" + context)
+		"Fill is one compact whole-control switch, not an empty full-width slider" + context)
 	check(view._action_divider.visible and bounds.encloses(divider) and divider.size.y * s >= 1.0
 		and divider.position.y > collect.end.y and divider.end.y < auto_merge.position.y,
 		"a visible divider separates free collection from the paid tools" + context)

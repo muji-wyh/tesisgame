@@ -61,9 +61,11 @@ func geometry(view) -> void:
 	for button: Control in view.powerup_buttons.values():
 		if button.visible:
 			tools = button.get_rect() if not tools.has_area() else tools.merge(button.get_rect())
-	check(is_equal_approx(view.collect_button.size.x, tools.size.x)
-		and is_equal_approx(view._fill_button.size.x, tools.size.x),
-		"Fill and primary Collect span the complete paid-tool group in rail and footer layouts")
+	var free_area: Rect2 = view._fill_button.get_rect().merge(view.collect_button.get_rect())
+	check(is_equal_approx(free_area.position.x, tools.position.x)
+		and is_equal_approx(free_area.size.x, tools.size.x)
+		and is_equal_approx(view._fill_button.size.x * _scale(view), 56.0),
+		"Compact Fill and primary Collect share the paid-tool group without an empty full-row switch")
 	check_collect_typography(view.collect_button, _scale(view))
 	for button in view.powerup_buttons.values():
 		if not button.visible:

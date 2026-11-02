@@ -389,11 +389,11 @@ func _run() -> void:
 	await settle()
 	app.set_reduced_motion(not saved_motion)
 	check(app._campaign.map.snapshot().presentation.reduced_motion == (not saved_motion)
-		and app._campaign.map.snapshot().segment.index == 2,
+		and app._campaign.map.snapshot().chapter.index == 2,
 		"The global live motion setting reaches the open map without changing its browsed chapter")
 	app.set_reduced_motion(saved_motion)
 	check(app._campaign.map.snapshot().presentation.reduced_motion == saved_motion
-		and app._campaign.map.snapshot().segment.index == 2,
+		and app._campaign.map.snapshot().chapter.index == 2,
 		"Restoring the global motion setting also preserves the existing map segment")
 	check(app._campaign.map.show_chapter(1), "Return to the first frontier without changing progress")
 	await settle()

@@ -7,26 +7,30 @@ cream surfaces share one border treatment; the sourced artwork identifies the
 tool instead of giving every card a different colored frame.
 Their artwork stays separate from the stable touch target, title, and coin price.
 Auto merge costs 600, 900, then 1200 coins per round;
-Goal-family merges and Treasure each cost 200, 300, then 400. Each item tracks successful purchases separately
+Goal-family merges cost 100, 150, then 200; Treasure remains 200, 300, then 400.
+Each item tracks successful purchases separately
 and shows its next price without resetting the current feedback animation.
 The latter uses the same current chest texture as the jelly fragment markers
 once its cropped image is ready. The acquired Royal fallback stays visible while
 that viewport warms up, without a synchronous GPU readback.
 
-The purchase controls, Fill and Collect share one action group. Fill sits directly
-above Collect. The two paid tools (three in main stages, including extra time)
+The purchase controls, Fill and Collect share one action group. The compact
+icon-only Fill control sits beside the wider Collect action wherever both fit;
+only a narrow rail places it above Collect. The two paid tools (three in main stages, including extra time)
 use a side rail when it preserves larger Jelly reading space. Wide rails use two
 columns; narrow footers wrap rather than overlap. Ordinary paid controls are
 56 display pixels high, using compact 44-pixel controls on short screens and Boss
 layouts. Fill always keeps a 44-pixel target. The group retains bottom padding.
-Fill and Collect span the complete rail, including above a two-column tool grid.
-Fill is one icon-only capsule switch, not a button containing a smaller toggle.
-The actual acquired gel stack is its thumb, moving from the left when Off to the
-right when On. Acquired downward chevrons and the whole track communicate supply.
-Off is a still cream control; On has a mint rim, continuous downward icon flow,
-soft local acquired glow and two tiny sourced glints. The cue stays alive while
+Their combined bounds span the rail, including above a two-column paid-tool grid.
+Fill is one 56-pixel-wide whole-control switch, not a long capsule or a button
+containing a smaller toggle. Its acquired gel illustration stays centered:
+clear blue cells are still when Off; On changes the entire surface to mint and
+feeds a larger green cell downward into the two source-art cells below.
+The acquired downward chevron belongs beside this supply illustration rather
+than at the far edge like a dropdown. One light border also carries focus,
+without drawing another ring around the same control. The cue stays alive while
 the mode is On, including when the board is full or Challenge locks the switch.
-The existing lock overlays the enabled gel thumb in Challenge. There are no
+The existing lock replaces the chevron in Challenge while the supply stays active. There are no
 Fill, On, Off, tooltip, or helper labels. The complete name and selected/required
 state remain accessible to screen readers.
 One quiet cream backing groups the controls; only Collect is a strong green
@@ -178,14 +182,15 @@ scaled through the existing UI scale.
 
 Fill has its own persistent mode clock rather than borrowing a purchase's
 short success effect. The downward cycle lasts 1.4 seconds, with a quiet
-2.8-second local glow breath; the status thumb crosses in 160 ms. These effects
+2.8-second local glow breath; the whole surface changes tint over 160 ms. These effects
 do not dispatch supply or modify a gameplay clock. Pause freezes the pose and
 retains the active style. Reduced motion retains the mint surface, downward
-icon, glow and thumb position without continuous motion. Hidden/finished
+icon and local glow without continuous motion. Hidden/finished
 controls stop advancing, and reset clears only presentation. On/Off, Challenge
-ownership, real hit bounds and the ordinary preference are unchanged. Forced,
-paused and reduced-motion states put the thumb on the actual selected side
-immediately rather than freezing it halfway across.
+ownership and the ordinary preference are unchanged. The compact target stays
+at least 56 by 44 display pixels; its illustration never moves sideways between
+states. Forced, paused and reduced-motion states settle the surface to the
+actual selected state immediately.
 
 Paid controls use the normal Button `pressed` signal; Fill retains its native
 `toggled` path. The model and wallet own eligibility, spending, rewards, busy

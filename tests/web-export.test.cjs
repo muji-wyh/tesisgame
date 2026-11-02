@@ -311,6 +311,7 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /Automatic pairs launch every 100 ms with a 320 ms flight, so consecutive flights overlap/);
   assert.match(help, /standalone Magnet button is removed[\s\S]*pending word goal[\s\S]*never substitutes a random target/);
   assert.match(help, /Treasure independently costs 200, 300, then 400[\s\S]*2 to 8 chest fragments/);
+  assert.match(help, /Goal-family purchases share the 100, 150, then 200 coin tier per round/);
   assert.match(help, /two independent progress bars[\s\S]*Three actions earn the first level-up[\s\S]*COMBO BONUS/);
   assert.match(help, /Lv7 adds four outer-ring targets, Lv8 reaches its capped two rings and Lv9 reaches the board/);
   assert.match(help, /New journeys start with only merged Lv1[\s\S]*first Boss victory durably unlocks one further level/);
@@ -318,9 +319,9 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /Blue attacks freeze a Jelly for three active seconds[\s\S]*purple ink obscures its contents/);
   assert.match(help, /two bodies for eight active seconds[\s\S]*Snatched pieces return through Next/);
   assert.match(help, /Completing a Jelly Words stage launches a brief confetti burst in the upper third/);
-  assert.match(help, /map has 99 stages[\s\S]*replay cleared stages or enter the next unlocked stage/);
-  assert.match(help, /99 stages in eleven chapter segments[\s\S]*nine-stage upward route/);
-  assert.match(help, /Previous and next chapter controls[\s\S]*Future chapters can be inspected without unlocking them/);
+  assert.match(help, /map is one continuous upward route with 99 stages[\s\S]*replay cleared stages or enter the next unlocked stage/);
+  assert.match(help, /continuous upward route with 99 stages[\s\S]*Eleven scenic chapters[\s\S]*not separate pages/);
+  assert.match(help, /scroll directly between adjacent stages across chapter boundaries[\s\S]*Future chapters can be inspected without unlocking them/);
   assert.match(help, /Remaining time fills the progress background, the clock is on the right, and larger rating stars/);
   assert.match(help, /ten-second flashing countdown; clearing space cancels it/);
   assert.match(help, /independent stage deadline also flashes the border in its final ten seconds/);

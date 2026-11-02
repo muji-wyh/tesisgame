@@ -133,7 +133,7 @@ func test_selection(app) -> void:
 	check(not view.powerup_buttons.has("family_merge") and view.find_child("PowerupMagnet", true, false) == null,
 		"Magnet is removed, including its native focus and input target")
 	var button = goal_button(view, str(words[0].id))
-	check(button != null and not button.disabled and button.snapshot().price == 200,
+	check(button != null and not button.disabled and button.snapshot().price == 100,
 		"The actual pending goal advertises its exact first family-merge price")
 	if button == null:
 		return
@@ -160,19 +160,20 @@ func test_selection(app) -> void:
 	await click(button)
 	check(model.powerup_active() and model.powerup_snapshot().kind == "family_merge"
 		and model.powerup_snapshot().family_word_id == words[0].id
-		and app.coin_wallet.balance == before - 200 and app.coin_wallet._receipts.size() == receipts + 1
+		and app.coin_wallet.balance == before - 100 and app.coin_wallet._receipts.size() == receipts + 1
 		and app._status_announcement.contains("Auto merge " + str(words[0].text)),
 		"One actual goal click durably buys only the named family, without a second target-selection gesture")
-	check(app._coin_flight.snapshot().debit_active and app._coin_flight.snapshot().debit_amount == 200
+	check(app._coin_flight.snapshot().debit_active and app._coin_flight.snapshot().debit_amount == 100
 		and app._coin_flight._debit.destination.is_equal_approx(destination)
-		and app._coin_counter.target == before - 200 and app._coin_counter.displayed > float(before - 200),
+		and app._coin_counter.target == before - 100
+		and app._coin_counter.displayed >= float(before - 100) and app._coin_counter.displayed <= float(before),
 		"The accepted receipt owns the downward wallet roll, exact negative amount and coin flight into this goal")
 	check(not app._coin_flight._debit.inline_caption,
 		"A desktop goal puts its debit below the wallet, never across the neighboring Pause control")
-	check(button.snapshot().spent_coins == 200 and button.snapshot().price == 300,
+	check(button.snapshot().spent_coins == 100 and button.snapshot().price == 150,
 		"The paid feedback keeps its actual debit separate from the next advertised price")
 	await click(button)
-	check(app.coin_wallet._receipts.size() == receipts + 1 and app.coin_wallet.balance == before - 200,
+	check(app.coin_wallet._receipts.size() == receipts + 1 and app.coin_wallet.balance == before - 100,
 		"A repeat press during the paid operation cannot debit another goal")
 	view._process(0.16)
 	app._coin_flight.advance(0.16)
@@ -187,9 +188,9 @@ func test_selection(app) -> void:
 		"Roots, pictures and different levels of the chosen family finish one real Lv6 Jelly")
 	check(not model.cell(unrelated[0]).is_empty() and not model.cell(unrelated[1]).is_empty()
 		and spoken.is_empty() and model.cleared_pairs == 0 and model.combo_coins == 0
-		and app.growth.snapshot().streaks == growth and app.coin_wallet.balance == before - 200,
+		and app.growth.snapshot().streaks == growth and app.coin_wallet.balance == before - 100,
 		"A paid goal cannot accidentally collect, pronounce, spend again or consume another family")
-	check(view.snapshot().practice.words.all(func(item: Dictionary) -> bool: return item.purchase.price == 300),
+	check(view.snapshot().practice.words.all(func(item: Dictionary) -> bool: return item.purchase.price == 150),
 		"All goal rows share the existing per-round family purchase tier")
 	view.word_requested.disconnect(on_word)
 
@@ -252,7 +253,7 @@ func test_keyboard_and_controller(app) -> void:
 				Input.parse_input_event(key)
 			await process_frame
 		check(view.game.powerup_active() and view.game.powerup_snapshot().family_word_id == words[0].id
-			and app.coin_wallet.balance == before - 200 and view.game.cleared_pairs == 0,
+			and app.coin_wallet.balance == before - 100 and view.game.cleared_pairs == 0,
 			"A focused keyboard/controller goal buys its explicit family instead of pronouncing or collecting it")
 		view.game.finish_powerup()
 
@@ -262,7 +263,7 @@ func test_goal_rejection(app) -> void:
 	var view = app._word_jelly
 	var button = goal_button(view, str(words[0].id))
 	var balance: int = app.coin_wallet.balance
-	check(app.coin_wallet.spend("fixture:partial-goal-wallet", balance - 150).ok,
+	check(app.coin_wallet.spend("fixture:partial-goal-wallet", balance - 50).ok,
 		"Create an actual partially funded isolated wallet")
 	app._coin_flight.sync(app.coin_wallet.balance)
 	view._refresh_controls()
@@ -270,8 +271,8 @@ func test_goal_rejection(app) -> void:
 	await click(button)
 	view._process(0.10)
 	check(button.snapshot().funds_warning and button.snapshot().missing_coins == 50
-		and button.snapshot().price_text == "200" and not view.game.powerup_active()
-		and app.coin_wallet.balance == 150 and app.coin_wallet._saved_text == saved
+		and button.snapshot().price_text == "100" and not view.game.powerup_active()
+		and app.coin_wallet.balance == 50 and app.coin_wallet._saved_text == saved
 		and not app._coin_flight.snapshot().debit_active,
 		"A real rejected goal click explains exactly fifty missing coins without a debit, merge or price increase")
 	await capture("goal-needs-coins")
@@ -339,7 +340,7 @@ func test_goal_scroll(app) -> void:
 	check(app.coin_wallet.balance == balance and app.coin_wallet._receipts.size() == receipts,
 		"A second touch cancels the goal gesture rather than paying twice")
 	await click(button)
-	check(app.coin_wallet.balance == balance - 200 and app._coin_flight._debit.inline_caption,
+	check(app.coin_wallet.balance == balance - 100 and app._coin_flight._debit.inline_caption,
 		"One settled phone tap buys its goal and uses the actual stacked-header debit placement")
 	view._process(0.12)
 	app._coin_flight.advance(0.12)
@@ -362,10 +363,10 @@ func test_reentrant_goal(app) -> void:
 		return original.call(id, kind, price)
 	await click(first)
 	view.purchase_powerup = original
-	check(calls.size() == 1 and app.coin_wallet.balance == before - 200
+	check(calls.size() == 1 and app.coin_wallet.balance == before - 100
 		and app.coin_wallet._receipts.size() == receipts + 1 and view.game.powerup_snapshot().family_word_id == words[0].id,
 		"A nested goal press cannot pay again or redirect the original family")
-	check(first.snapshot().spent_coins == 200 and app._coin_flight.snapshot().debit_active
+	check(first.snapshot().spent_coins == 100 and app._coin_flight.snapshot().debit_active
 		and app._status_announcement.contains("Auto merge " + str(words[0].text)),
 		"Rejecting nested input preserves the original goal's payment context and real debit feedback")
 	view.game.finish_powerup()
@@ -395,8 +396,9 @@ func test_layouts(app) -> void:
 			for previous in range(index):
 				check(not bounds.intersects(controls[previous].get_global_rect()),
 					"No paid, free or fill targets overlap at %s" % dimensions)
-		check(view._fill_button.get_global_rect().end.y < view.collect_button.get_global_rect().position.y,
-			"Fill stays immediately above Auto Collect in every responsive layout")
+		check(not view._fill_button.get_global_rect().intersects(view.collect_button.get_global_rect())
+			and is_equal_approx(view._fill_button.size.x * app.Style.ui_scale(app), 56.0),
+			"Fill stays compact beside Collect, or above it only when the rail cannot fit both")
 		if dimensions.x == 393:
 			await capture("phone-controls")
 

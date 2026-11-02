@@ -56,9 +56,6 @@ var _status: Label
 var _home: Button
 var _challenge: Button
 var _retry: Button
-var _chapter_previous := Icons.new()
-var _chapter_next := Icons.new()
-var _chapter_panel := Panel.new()
 var _chapter_index: int = 0
 var _pip := Pip.new()
 var _nodes: Array[Dictionary] = []
@@ -111,20 +108,6 @@ func _init() -> void:
 	_status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_retry = _button("Retry", "Retry stage loading or saving")
 	_retry.pressed.connect(func() -> void: retry_requested.emit())
-	_chapter_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	add_child(_chapter_panel)
-	_chapter_previous.name = "MapPreviousChapter"
-	_chapter_previous.symbol = Icons.Symbol.BACK
-	_chapter_previous.tooltip_text = ""
-	_chapter_previous.accessibility_name = "Previous chapter"
-	add_child(_chapter_previous)
-	_chapter_previous.pressed.connect(func() -> void: show_chapter(_chapter_index))
-	_chapter_next.name = "MapNextChapter"
-	_chapter_next.symbol = Icons.Symbol.NEXT
-	_chapter_next.tooltip_text = ""
-	_chapter_next.accessibility_name = "Next chapter"
-	add_child(_chapter_next)
-	_chapter_next.pressed.connect(func() -> void: show_chapter(_chapter_index + 2))
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	_scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
 	_scroll.interaction_allowed = func() -> bool:
@@ -137,9 +120,12 @@ func _init() -> void:
 	_content.mouse_filter = Control.MOUSE_FILTER_PASS
 	_content.draw.connect(_draw_route)
 	for chapter in range(11):
-		var title: Label = _label(self, Catalog.CHAPTERS[chapter], 27)
+		var banner := Panel.new()
+		banner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_content.add_child(banner)
+		var title: Label = _label(banner, Catalog.CHAPTERS[chapter], 27)
 		title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		var number: Label = _label(self, "CHAPTER %02d" % (chapter + 1), 11)
+		var number: Label = _label(banner, "CHAPTER %02d" % (chapter + 1), 11)
 		number.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		var left: TextureRect = _image(_content, SCENERY[chapter])
 		var right: TextureRect = _image(_content, SCENERY[chapter])
@@ -154,7 +140,7 @@ func _init() -> void:
 			right.material = fade
 		var shrubs: TextureRect = _image(_content, FOLIAGE)
 		var grove: TextureRect = _image(_content, TREE)
-		_chapters.append({"title": title, "number": number, "left": left, "right": right,
+		_chapters.append({"banner": banner, "title": title, "number": number, "left": left, "right": right,
 			"hills": hills, "shrubs": shrubs, "grove": grove})
 	for number in range(1, 100):
 		var button := Button.new()
@@ -217,6 +203,7 @@ func _init() -> void:
 			"boss": boss_picture, "boss_frame": boss_frame, "boss_aura": boss_aura,
 			"padlock": padlock, "lock_glow": lock_glow})
 	_pip.name = "MapPip"
+	_pip.accessibility_name = "Pip. Your journey companion."
 	_pip.disabled = true
 	_pip.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_pip.focus_mode = Control.FOCUS_NONE
@@ -231,7 +218,8 @@ func _init() -> void:
 	visibility_changed.connect(_sync_guide)
 	_scroll.get_v_scroll_bar().value_changed.connect(func(_value: float) -> void:
 		queue_redraw()
-		_sync_guide.call_deferred()
+		_clear_response()
+		_refresh_viewport.call_deferred()
 		_queue_changed())
 	set_process(false)
 	hide()
@@ -344,6 +332,8 @@ func configure(state: Dictionary, reduced_motion: bool = false) -> void:
 	_refresh_locks()
 	set_process(is_visible_in_tree() and _active and not _reduced_motion)
 	_layout()
+	if is_visible_in_tree() and previous >= 0 and (previous != highest or not same_context):
+		focus_frontier.call_deferred()
 
 
 func set_reduced_motion(value: bool) -> void:
@@ -353,7 +343,6 @@ func set_reduced_motion(value: bool) -> void:
 
 func open(state: Dictionary, reduced_motion: bool = false) -> void:
 	configure(state, reduced_motion)
-	_chapter_index = mini(clampi(int(_state.get("highest_cleared", 0)), 0, 99), 98) / STAGES_PER_CHAPTER
 	show()
 	_layout()
 	focus_frontier.call_deferred()
@@ -408,6 +397,11 @@ func _select(number: int) -> void:
 		return
 	if _nodes[number - 1].button.disabled or not _nodes[number - 1].button.is_visible_in_tree():
 		return
+	var item: Dictionary = _nodes[number - 1]
+	var viewport: Rect2 = _scroll.get_global_rect()
+	if not viewport.intersects(item.button.get_global_rect()) \
+		and not (item.boss.is_visible_in_tree() and viewport.intersects(item.boss.get_global_rect())):
+		return
 	stage_selected.emit(number)
 
 
@@ -415,33 +409,19 @@ func show_chapter(number: int) -> bool:
 	if number < 1 or number > Catalog.CHAPTERS.size() or not _active or not is_visible_in_tree() \
 		or _state.get("loading", false) or not str(_state.get("error", "")).is_empty():
 		return false
-	if number - 1 == _chapter_index:
-		return true
 	_scroll.cancel_drag()
 	_clear_response()
-	_chapter_index = number - 1
-	_layout()
 	var frontier: int = mini(clampi(int(_state.get("highest_cleared", 0)), 0, 99) + 1, 99)
-	var first: int = _chapter_index * STAGES_PER_CHAPTER + 1
+	var first: int = (number - 1) * STAGES_PER_CHAPTER + 1
 	var anchor: int = frontier if frontier >= first and frontier < first + STAGES_PER_CHAPTER else first
-	_reveal_current_stage.call_deferred(anchor, _chapter_index)
+	_reveal_stage(anchor)
 	return true
 
 
-func _reveal_current_stage(number: int, chapter: int) -> void:
-	if chapter == _chapter_index and is_visible_in_tree():
-		_reveal_stage(number)
-
-
 func _reveal_stage(number: int) -> void:
-	if number < 1 or number > Catalog.MAX_STAGE:
+	if number < 1 or number > Catalog.MAX_STAGE or not is_visible_in_tree():
 		return
-	var chapter: int = (number - 1) / STAGES_PER_CHAPTER
-	if chapter != _chapter_index:
-		_scroll.cancel_drag()
-		_clear_response()
-		_chapter_index = chapter
-		_layout()
+	_scroll.cancel_drag()
 	var button: Button = _nodes[number - 1].button
 	_scroll.ensure_control_visible(button)
 	var maximum: float = _scroll.get_v_scroll_bar().max_value - _scroll.get_v_scroll_bar().page
@@ -450,13 +430,29 @@ func _reveal_stage(number: int) -> void:
 		var portrait_top: int = maxi(0, floori(_nodes[98].boss_frame.position.y - 8.0 / _scale))
 		var button_bottom: int = maxi(0, ceili(button.get_rect().end.y - _scroll.size.y))
 		_scroll.scroll_vertical = maxi(button_bottom, mini(_scroll.scroll_vertical, portrait_top))
+	var focus_bounds: Rect2 = button.get_rect()
+	if _pip.visible and number == int(_state.get("highest_cleared", 0)) + 1:
+		focus_bounds = focus_bounds.merge(_pip.get_rect())
+	if _nodes[number - 1].boss.visible:
+		focus_bounds = focus_bounds.merge(_nodes[number - 1].boss.get_rect())
+	for section: Dictionary in _chapters:
+		var banner: Rect2 = section.banner.get_rect()
+		if banner.position.y < _scroll.scroll_vertical and banner.end.y > _scroll.scroll_vertical:
+			var aligned: int = ceili(banner.end.y + 4.0 / _scale)
+			if aligned <= maximum and focus_bounds.position.y >= aligned \
+				and focus_bounds.end.y <= aligned + _scroll.size.y:
+				_scroll.scroll_vertical = aligned
+	_refresh_viewport()
 
 
 func _input(event: InputEvent) -> void:
 	if not is_visible_in_tree() or not _active:
 		return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_PAGEUP, KEY_PAGEDOWN]:
-		if show_chapter(_chapter_index if event.keycode == KEY_PAGEUP else _chapter_index + 2):
+		if not _state.get("loading", false) and str(_state.get("error", "")).is_empty():
+			_scroll.cancel_drag()
+			_clear_response()
+			_scroll.scroll_vertical += roundi(_scroll.size.y * (0.85 if event.keycode == KEY_PAGEDOWN else -0.85))
 			get_viewport().set_input_as_handled()
 		return
 	if not event is InputEventJoypadButton or event.button_index != JOY_BUTTON_A:
@@ -477,9 +473,6 @@ func navigation_controls() -> Array[Control]:
 		controls.append(_challenge)
 	if _retry.visible:
 		controls.append(_retry)
-	for button: Button in [_chapter_previous, _chapter_next]:
-		if not button.disabled:
-			controls.append(button)
 	for item: Dictionary in _nodes:
 		if item.button.is_visible_in_tree() and not item.button.disabled:
 			controls.append(item.button)
@@ -553,21 +546,7 @@ func _layout() -> void:
 	_retry.position = Vector2(left + width - 78.0 / s, 98.0 / s)
 	_retry.size = Vector2(78, 44) / s
 	_content.custom_minimum_size.x = 0.0
-	_chapter_panel.position = Vector2(left, 88.0 / s + status_height)
-	_chapter_panel.size = Vector2(width, 64.0 / s)
-	_chapter_panel.add_theme_stylebox_override("panel",
-		Style.box(Color("#fffaf0"), Color("#d5e4db"), ceili(16.0 / s), maxi(1, roundi(1.0 / s))))
-	for button: Button in [_chapter_previous, _chapter_next]:
-		Style.square_icon_button(button, Style.GOOD)
-		button.size = Vector2.ONE * ceilf(44.0 / s)
-	_chapter_previous.position = _chapter_panel.position + Vector2(6, 10) / s
-	_chapter_next.position = Vector2(_chapter_panel.get_rect().end.x - 50.0 / s, _chapter_previous.position.y)
-	var blocked: bool = not _active or bool(_state.get("loading", false)) or not str(_state.get("error", "")).is_empty()
-	_chapter_previous.disabled = blocked or _chapter_index == 0
-	_chapter_next.disabled = blocked or _chapter_index == Catalog.CHAPTERS.size() - 1
-	_chapter_previous.accessibility_name = "Previous chapter. " + Catalog.CHAPTERS[maxi(0, _chapter_index - 1)]
-	_chapter_next.accessibility_name = "Next chapter. " + Catalog.CHAPTERS[mini(Catalog.CHAPTERS.size() - 1, _chapter_index + 1)]
-	_scroll.position = Vector2(left, _chapter_panel.get_rect().end.y + 8.0 / s)
+	_scroll.position = Vector2(left, 88.0 / s + status_height)
 	_scroll.size = Vector2(width, maxf(1.0, size.y - _scroll.position.y - 12.0 / s))
 	var chapter_height: float = 1160.0 / s
 	var summit_space: float = 132.0 / s
@@ -575,20 +554,22 @@ func _layout() -> void:
 	var amplitude: float = minf(width * 0.27, 240.0 / s)
 	for index in range(_chapters.size()):
 		var section: Dictionary = _chapters[index]
-		var selected: bool = index == _chapter_index
-		for key: String in ["title", "number", "left", "right", "hills", "shrubs", "grove"]:
-			section[key].visible = selected
-		var y: float = summit_space + (_chapter_index - index) * chapter_height
-		var title_left: float = _chapter_previous.get_rect().end.x + 8.0 / s
-		var chapter_title_width: float = maxf(1.0, _chapter_next.position.x - 8.0 / s - title_left)
+		var y: float = summit_space + (_chapters.size() - 1 - index) * chapter_height
+		var banner_width: float = minf(width - 16.0 / s, 340.0 / s)
+		section.banner.position = Vector2((width - banner_width) * 0.5,
+			y + chapter_height - 74.0 / s)
+		section.banner.size = Vector2(banner_width, 44.0 / s)
+		section.banner.add_theme_stylebox_override("panel",
+			Style.box(Color("#fffaf0"), Color("#d5e4db"), ceili(16.0 / s), maxi(1, roundi(1.0 / s))))
+		var chapter_title_width: float = banner_width - 24.0 / s
 		section.number.text = "CHAPTER %02d / 11 · %d-%d" % [
 			index + 1, index * STAGES_PER_CHAPTER + 1, (index + 1) * STAGES_PER_CHAPTER]
-		section.number.position = Vector2(title_left, _chapter_panel.position.y + 38.0 / s)
-		section.number.size = Vector2(chapter_title_width, 20.0 / s)
+		section.number.position = Vector2(12, 25) / s
+		section.number.size = Vector2(chapter_title_width, 18.0 / s)
 		section.number.add_theme_font_size_override("font_size", ceili(11.0 / s))
-		section.title.position = Vector2(title_left, _chapter_panel.position.y + 4.0 / s)
-		section.title.size = Vector2(chapter_title_width, 34.0 / s)
-		var pixels: int = ceili((20.0 if narrow else 24.0) / s)
+		section.title.position = Vector2(12, 1) / s
+		section.title.size = Vector2(chapter_title_width, 24.0 / s)
+		var pixels: int = ceili((18.0 if narrow else 20.0) / s)
 		while pixels > 1 and Style.HEADING_FONT.get_string_size(section.title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x > chapter_title_width:
 			pixels -= 1
 		section.title.add_theme_font_size_override("font_size", pixels)
@@ -613,13 +594,12 @@ func _layout() -> void:
 		var chapter: int = (number - 1) / STAGES_PER_CHAPTER
 		var step: int = (number - 1) % STAGES_PER_CHAPTER
 		var center := Vector2(width * 0.5 + sin(float(step) * PI * 0.5) * amplitude,
-			summit_space + (1 + _chapter_index - chapter) * chapter_height - (136.0 + step * 116.0) / s)
+			summit_space + (_chapters.size() - chapter) * chapter_height - (136.0 + step * 116.0) / s)
 		var button: Button = item.button
-		var selected: bool = chapter == _chapter_index
-		button.visible = selected
-		item.boss.visible = selected and bool(item.get("boss_marker", number == 99))
-		item.boss_frame.visible = selected and number == 99
-		item.boss_aura.visible = selected and number == 99
+		button.visible = true
+		item.boss.visible = bool(item.get("boss_marker", number == 99))
+		item.boss_frame.visible = number == 99
+		item.boss_aura.visible = number == 99
 		button.position = center - node_size * 0.5
 		button.size = node_size
 		item.face.position = Vector2(11, 0) / s
@@ -668,13 +648,11 @@ func _layout() -> void:
 			var star: TextureRect = item.stars[index]
 			star.position = Vector2((14.0 + index * 24.0) / s, 79.0 / s)
 			star.size = Vector2.ONE * 22.0 / s
-	_content.custom_minimum_size = Vector2(0.0, summit_space + chapter_height)
+	_content.custom_minimum_size = Vector2(0.0, summit_space + chapter_height * _chapters.size())
 	_content.size.x = width
 	var curve := Curve2D.new()
 	var earned := Curve2D.new()
 	for item: Dictionary in _nodes:
-		if not item.button.visible:
-			continue
 		var center: Vector2 = item.button.get_rect().get_center()
 		curve.add_point(center, Vector2(0, 40.0 / s), Vector2(0, -40.0 / s))
 		if int(item.number) <= highest:
@@ -692,9 +670,7 @@ func _layout() -> void:
 		guide_node.get_rect().end.y - guide_edge)
 	_pip.size = Vector2.ONE * guide_edge
 	_refresh_locks()
-	_pose_nodes()
-	_pose_scenery()
-	_sync_guide()
+	_refresh_viewport()
 	_content.queue_redraw()
 	_queue_changed()
 
@@ -731,7 +707,6 @@ func _sync_guide() -> void:
 	var highest: int = clampi(int(_state.get("highest_cleared", 0)), 0, 99)
 	var was_visible: bool = _pip.is_visible_in_tree()
 	_pip.visible = is_visible_in_tree() and highest < 99 \
-		and highest / STAGES_PER_CHAPTER == _chapter_index \
 		and not bool(_state.get("loading", false)) and str(_state.get("error", "")).is_empty()
 	var on_screen: bool = _pip.is_visible_in_tree() \
 		and _scroll.get_global_rect().intersects(_pip.get_global_rect())
@@ -740,12 +715,26 @@ func _sync_guide() -> void:
 		_pip.react("happy")
 
 
+func _refresh_viewport() -> void:
+	if _nodes.is_empty() or _chapters.is_empty():
+		return
+	var center: float = _scroll.scroll_vertical + _scroll.size.y * 0.5
+	_chapter_index = clampi(_chapters.size() - 1 - floori((center - 132.0 / _scale) / (1160.0 / _scale)),
+		0, _chapters.size() - 1)
+	_refresh_locks(true)
+	_pose_nodes()
+	_pose_scenery()
+	_sync_guide()
+
+
 func _pose_nodes(delta: float = 0.0) -> void:
 	if _nodes.is_empty():
 		return
 	var highest: int = clampi(int(_state.get("highest_cleared", 0)), 0, 99)
-	for index in range(_chapter_index * STAGES_PER_CHAPTER, (_chapter_index + 1) * STAGES_PER_CHAPTER):
-		var item: Dictionary = _nodes[index]
+	var viewport: Rect2 = _scroll.get_global_rect()
+	for item: Dictionary in _nodes:
+		if not viewport.intersects(item.button.get_global_rect()) and is_zero_approx(float(item.hover)):
+			continue
 		var available: bool = not item.button.disabled and _active
 		var hovering: bool = available and _hovered_stage == int(item.number)
 		var holding: bool = available and _pressed_stage == int(item.number)
@@ -771,11 +760,16 @@ func _pose_nodes(delta: float = 0.0) -> void:
 func _pose_scenery() -> void:
 	if _chapters.is_empty():
 		return
-	var section: Dictionary = _chapters[_chapter_index]
-	var wind: float = 0.0 if _reduced_motion else sin(_effect_elapsed * 0.95 + _chapter_index * 0.7)
-	for key: String in ["grove", "shrubs", "left", "right"]:
-		var flexible: bool = key in ["grove", "shrubs"] or _chapter_index in [1, 2, 4, 5, 6, 7]
-		section[key].rotation = wind * (0.008 if key == "shrubs" else 0.012) if flexible else 0.0
+	for index in range(_chapters.size()):
+		var section: Dictionary = _chapters[index]
+		var section_y: float = (132.0 + (_chapters.size() - 1 - index) * 1160.0) / _scale
+		if not _reduced_motion and (section_y > _scroll.scroll_vertical + _scroll.size.y
+			or section_y + 1160.0 / _scale < _scroll.scroll_vertical):
+			continue
+		var wind: float = 0.0 if _reduced_motion else sin(_effect_elapsed * 0.95 + index * 0.7)
+		for key: String in ["grove", "shrubs", "left", "right"]:
+			var flexible: bool = key in ["grove", "shrubs"] or index in [1, 2, 4, 5, 6, 7]
+			section[key].rotation = wind * (0.008 if key == "shrubs" else 0.012) if flexible else 0.0
 
 
 func _notification(what: int) -> void:
@@ -820,11 +814,8 @@ func _draw_route() -> void:
 		_content.draw_polyline(_earned_points, Color("#fff1bf"), 2.0 / _scale, true)
 	if _unlock_from <= 0 or _unlock_elapsed >= ROUTE_SECONDS + UNLOCK_SECONDS:
 		return
-	if not _nodes[_unlock_from].button.visible:
-		return
 	var journey := Curve2D.new()
-	var start: Vector2 = _nodes[_unlock_from - 1].button.get_rect().get_center() \
-		if _nodes[_unlock_from - 1].button.visible else _nodes[_unlock_from].button.get_rect().get_center() + Vector2(0, 72.0 / _scale)
+	var start: Vector2 = _nodes[_unlock_from - 1].button.get_rect().get_center()
 	journey.add_point(start,
 		Vector2.ZERO, Vector2(0, -40.0 / _scale))
 	journey.add_point(_nodes[_unlock_from].button.get_rect().get_center(),
@@ -862,6 +853,13 @@ func _control(control: Control) -> Dictionary:
 
 func snapshot() -> Dictionary:
 	var stages: Array[Dictionary] = []
+	var chapters: Array[Dictionary] = []
+	for index in range(_chapters.size()):
+		var banner: Panel = _chapters[index].banner
+		chapters.append({"index": index + 1, "title": Catalog.CHAPTERS[index],
+			"first_stage": index * STAGES_PER_CHAPTER + 1, "last_stage": (index + 1) * STAGES_PER_CHAPTER,
+			"rect": _rect(banner.get_global_rect()),
+			"visible": banner.is_visible_in_tree() and _scroll.get_global_rect().intersects(banner.get_global_rect())})
 	var highest: int = clampi(int(_state.get("highest_cleared", 0)), 0, 99)
 	for item: Dictionary in _nodes:
 		var number: int = int(item.number)
@@ -874,16 +872,15 @@ func snapshot() -> Dictionary:
 			"boss_rect": _rect(item.boss.get_global_rect()) if item.boss.visible else {},
 			"boss_portrait": BOSS_PORTRAIT.resource_path if item.boss.visible else "",
 			"rect": _rect(item.button.get_global_rect()),
-			"in_segment": (number - 1) / STAGES_PER_CHAPTER == _chapter_index,
 			"visible": item.button.is_visible_in_tree() and _scroll.get_global_rect().intersects(item.button.get_global_rect())})
 	return {"visible": is_visible_in_tree(), "map_rect": _rect(get_global_rect()),
 		"heading_rect": _rect(_heading.get_global_rect()),
 		"scroll_rect": _rect(_scroll.get_global_rect()), "scroll_offset": _scroll.scroll_vertical,
 		"stage_nodes": stages, "challenge": _control(_challenge), "home": _control(_home),
-		"segment": {"index": _chapter_index + 1, "count": Catalog.CHAPTERS.size(),
+		"layout": "continuous", "chapters": chapters,
+		"chapter": {"index": _chapter_index + 1, "count": Catalog.CHAPTERS.size(),
 			"title": Catalog.CHAPTERS[_chapter_index], "first_stage": _chapter_index * STAGES_PER_CHAPTER + 1,
 			"last_stage": (_chapter_index + 1) * STAGES_PER_CHAPTER},
-		"chapter_previous": _control(_chapter_previous), "chapter_next": _control(_chapter_next),
 		"guide": {"visible": _pip.is_visible_in_tree() and _scroll.get_global_rect().intersects(_pip.get_global_rect()),
 			"stage": highest + 1 if highest < 99 else 0,
 			"age": _pip.growth_age, "course_id": str(_pip.professional_profile.get("course_id", "")),

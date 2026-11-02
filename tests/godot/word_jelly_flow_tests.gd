@@ -319,7 +319,9 @@ func check_finish_header(app, view) -> void:
 		var board: Rect2 = view._global_rect(view._board)
 		# Inspect actual controls after their minimum sizes resolve, including
 		# the hosted 320-pixel viewport where nominal footer widths can be smaller.
-		var actions: Dictionary = {"Collect": collect}
+		var fill: Rect2 = view._fill_button.get_global_rect()
+		var free_area: Rect2 = fill.merge(collect)
+		var actions: Dictionary = {"Collect": collect, "Fill": fill}
 		var paid_area: Rect2 = view.powerup_buttons.auto_merge.get_global_rect()
 		for kind: String in view.powerup_buttons:
 			var button: Control = view.powerup_buttons[kind]
@@ -327,10 +329,10 @@ func check_finish_header(app, view) -> void:
 				actions[kind] = button.get_global_rect()
 				paid_area = paid_area.merge(button.get_global_rect())
 		var auto_merge: Rect2 = actions["auto_merge"]
-		check(absf(collect.position.x - auto_merge.position.x) < 0.1
+		check(absf(free_area.position.x - auto_merge.position.x) < 0.1
 			and absf(auto_merge.position.y - collect.end.y - 14.0 / s) < 0.1
-			and absf(collect.size.x - (paid_area.size.x if view._compact_hud else auto_merge.size.x)) < 0.1,
-			"Collect fills the rail above a separate fourteen-pixel divider band" + context)
+			and absf(free_area.size.x - paid_area.size.x) < 0.1,
+			"Compact Fill and Collect fill the free-action row above the fourteen-pixel divider band" + context)
 		var divider_state: Dictionary = view.snapshot().get("action_divider", {})
 		var divider_rect: Array = divider_state.get("rect", [])
 		check(bool(divider_state.get("visible", false)) and divider_rect.size() == 4,
@@ -357,21 +359,21 @@ func check_finish_header(app, view) -> void:
 					+ " retain eight display pixels between their actual touch targets" + context)
 			if view._compact_hud:
 				check(action.position.x >= board.end.x + 8.0 / s - 0.1
-					and action.position.x >= collect.position.x - 0.1
+					and action.position.x >= free_area.position.x - 0.1
 					and action.end.x <= paid_area.end.x + 0.1,
 					str(action_names[action_index]) + " shares one action rail to the right of the board" + context)
 			else:
 				check(action.position.y >= board.end.y - 0.1,
 					str(action_names[action_index]) + " stays in the action footer beneath the board" + context)
-				if action_names[action_index] != "Collect":
+				if action_names[action_index] not in ["Collect", "Fill"]:
 					check(absf(action.position.y - auto_merge.position.y) < 0.1,
 						str(action_names[action_index]) + " stays in the paid-tool footer beneath the board" + context)
 		_check_playfield_layout(view, s, context)
 		if not view._compact_hud:
 			check(chest.end.y <= playfield.position.y + 0.1,
 				"Portrait treasure stays above the playfield and supply tray" + context)
-			check(absf(collect.position.x - auto_merge.position.x) < 0.1 and collect.position.y >= board.end.y,
-				"Hosted Collect remains above the left paid tool in the phone footer" + context)
+			check(absf(free_area.position.x - auto_merge.position.x) < 0.1 and free_area.position.y >= board.end.y,
+				"The hosted free-action row remains above the paid tools in the phone footer" + context)
 			view._word_reveal.set_reduced_motion(false)
 			view._word_reveal._rng.seed = 4821
 			for index in range(3):
@@ -383,7 +385,7 @@ func check_finish_header(app, view) -> void:
 				for entry: Dictionary in view._word_reveal.snapshot().entries:
 					var rect: Array = entry.rect
 					var card := Rect2(float(rect[0]), float(rect[1]), float(rect[2]), float(rect[3]))
-					check(not card.intersects(chest) and not card.intersects(collect)
+					check(not card.intersects(chest) and not card.intersects(free_area)
 						and playfield.grow(0.1).encloses(card),
 						"Every collected-word card stays clear of the chest and Collect action throughout its elastic motion" + context)
 				view._word_reveal.advance(0.025)

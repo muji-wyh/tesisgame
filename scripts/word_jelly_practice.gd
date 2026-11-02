@@ -6,6 +6,7 @@ signal word_hovered(word_id: String)
 signal merge_requested(goal_id: String, word_id: String)
 
 const Style = preload("res://scripts/ui_style.gd")
+const Economy = preload("res://scripts/coin_economy.gd")
 const GoalButton = preload("res://scripts/word_jelly_powerup_button.gd")
 const Scroll = preload("res://scripts/review_scroll.gd")
 const StageTimer = preload("res://scripts/word_jelly_stage_banner.gd")
@@ -179,7 +180,7 @@ func set_stage(state: Dictionary) -> void:
 		if str(row.word_id) != str(item.id) or old.is_empty():
 			row.gain_elapsed = GAIN_SECONDS
 			row.complete_elapsed = COMPLETED_HOLD_SECONDS + EXIT_SECONDS
-			row.surface.configure_goal(item, 200, reduced_motion)
+			row.surface.configure_goal(item, Economy.powerup_price("family_merge", 0), reduced_motion)
 		row.word_id = str(item.id)
 		row.family_word_id = str(item.get("word_id", item.id))
 		row.mastered = bool(item.mastered)

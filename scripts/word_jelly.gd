@@ -2281,8 +2281,9 @@ func _layout() -> void:
 	var collect_height: float = action_height
 	var divider_gap: float = 14.0 / s
 	var fill_height: float = 44.0 / s
-	var fill_space: float = fill_height + tool_gap
-	var fitting_rows: int = maxi(1, floori((available.y - fill_space - 44.0 / s - divider_gap + tool_gap)
+	var side_fill_space: float = fill_height + tool_gap if hud_width * s < 152.0 else 0.0
+	var footer_fill_space: float = fill_height + tool_gap if footer_width * s < 152.0 else 0.0
+	var fitting_rows: int = maxi(1, floori((available.y - side_fill_space - 44.0 / s - divider_gap + tool_gap)
 		/ (44.0 / s + tool_gap)))
 	var fitting_columns: int = maxi(side_columns, ceili(float(tool_count) / fitting_rows))
 	var fitting_width: float = (88.0 * fitting_columns + 8.0 * (fitting_columns - 1)) / s
@@ -2290,15 +2291,17 @@ func _layout() -> void:
 		side_columns = fitting_columns
 		side_rows = ceili(float(tool_count) / side_columns)
 		hud_width = maxf(hud_width, fitting_width)
-	if available.y < action_height * (1 + side_rows) + (side_rows - 1) * tool_gap + fill_space + divider_gap:
+	side_fill_space = fill_height + tool_gap if hud_width * s < 152.0 else 0.0
+	if available.y < action_height * (1 + side_rows) + (side_rows - 1) * tool_gap + side_fill_space + divider_gap:
 		action_height = 44.0 / s
 		collect_height = action_height
-	var footer_height: float = action_height * (1 + footer_rows) + (footer_rows - 1) * tool_gap + fill_space + divider_gap + edge
+	var footer_height: float = action_height * (1 + footer_rows) + (footer_rows - 1) * tool_gap + footer_fill_space + divider_gap + edge
 	var bottom_pitch: float = _fit_layout_pitch(available - Vector2(0.0, footer_height), s)
 	var side_pitch: float = _fit_layout_pitch(available - Vector2(hud_width + hud_gap, 0.0), s)
 	# Center the well and its single action rail as one group. On short screens
 	# the rail may extend beside the supply row, but never into the header.
 	var side_hud: bool = boss_layout or (side_pitch > bottom_pitch + 0.5 / s and available.y >= 184.0 / s)
+	var fill_space: float = side_fill_space if side_hud else footer_fill_space
 	_compact_hud = side_hud
 	footer_height = 0.0 if side_hud else footer_height
 	if side_hud:
@@ -2398,8 +2401,14 @@ func _layout() -> void:
 	collect_button.size = Vector2(hud_width if side_hud else footer_width, collect_height)
 	collect_button.position = Vector2(auto_merge.position.x, auto_merge.position.y - divider_gap - collect_button.size.y)
 	_fill_button.set_ui_scale(s)
-	_fill_button.size = Vector2(collect_button.size.x, fill_height)
-	_fill_button.position = collect_button.position - Vector2(0.0, fill_space)
+	var inline_fill: bool = is_zero_approx(fill_space)
+	_fill_button.size = Vector2(56.0 / s, collect_height if inline_fill else fill_height)
+	_fill_button.position = collect_button.position
+	if inline_fill:
+		collect_button.position.x += 64.0 / s
+		collect_button.size.x -= 64.0 / s
+	else:
+		_fill_button.position += Vector2((collect_button.size.x - _fill_button.size.x) * 0.5, -fill_space)
 	var action_area: Rect2 = _fill_button.get_rect().merge(collect_button.get_rect())
 	for kind: String in tool_kinds:
 		action_area = action_area.merge(powerup_buttons[kind].get_rect())

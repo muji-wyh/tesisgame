@@ -438,8 +438,8 @@ func _check_semantics(view: Control, source: Dictionary) -> void:
 			continue
 		check(button.disabled == (not playable or blocked),
 			"Stage %d native disabled state matches lock/loading/error state" % number)
-		check(navigation.has(button) == (playable and not blocked and bool(item.get("in_segment", true))),
-			"Stage %d keyboard navigation matches its playable state in the visible chapter" % number)
+		check(navigation.has(button) == (playable and not blocked),
+			"Stage %d keyboard navigation matches its playable state on the continuous route" % number)
 		var name: String = _normal(str(button.get("accessibility_name")))
 		var action: String = "replay" if number <= highest else ("next" if playable else "locked")
 		check(name.contains("stage" + str(number)) and name.contains("%dof3stars" % stars)
@@ -607,10 +607,6 @@ func _check_layout(view: Control, context: String) -> void:
 		if button == null:
 			continue
 		check(rect.is_equal_approx(button.get_global_rect()), context + ": stage hit bounds track actual children")
-		if not bool(item.get("in_segment", true)):
-			check(not button.is_visible_in_tree() and not bool(item.visible),
-				context + ": off-segment stages keep their identities but no live hit target")
-			continue
 		check(rect.size.x * _pixel_scale() >= 56.0 and rect.size.y * _pixel_scale() >= 56.0,
 			context + ": every stage keeps a 56+ displayed-pixel interaction target")
 		check(rect.position.x >= viewport.position.x - 0.2 and rect.end.x <= viewport.end.x + 0.2,
@@ -622,7 +618,7 @@ func _check_layout(view: Control, context: String) -> void:
 		check(separate, context + ": nearby stage interaction targets stay separate")
 		rects.append(rect)
 	var action_rects: Array[Rect2] = []
-	for key: String in ["home", "challenge", "chapter_previous", "chapter_next"]:
+	for key: String in ["home", "challenge"]:
 		var button: BaseButton = _action_button(view, key)
 		if button == null:
 			continue

@@ -51,20 +51,24 @@ func _test_economy_ladder() -> void:
 	var hints: Array[int] = []
 	var peeks: Array[int] = []
 	var auto: Array[int] = []
+	var family: Array[int] = []
 	var treasure: Array[int] = []
 	for use in range(5):
 		hints.append(Economy.match_hint_price(use))
 		peeks.append(Economy.memory_peek_price(use))
 		auto.append(Economy.powerup_price("auto_merge", use))
+		family.append(Economy.powerup_price("family_merge", use))
 		treasure.append(Economy.powerup_price("fragments", use))
 	check(hints == [100, 150, 200, 200, 200], "Match starts accessible and charges more for repeated help")
 	check(peeks == [0, 100, 200, 300, 300], "Memory preserves a free first look and its existing capped ladder")
 	check(auto == [600, 900, 1200, 1200, 1200], "Auto Merge remains the premium item at every repeat level")
+	check(family == [100, 150, 200, 200, 200], "Goal-family merges cost half the previous tier at every repeat level")
 	check(treasure == [200, 300, 400, 400, 400], "Treasure is a smaller decision with increasing repeat prices")
-	for price: int in hints + peeks + auto + treasure:
+	for price: int in hints + peeks + auto + family + treasure:
 		check(price >= 0 and price % Wallet.COINS_PER_TIER == 0, "Every configured price is legal for existing wallet receipts")
 	check(Economy.match_hint_price(-1) == 100 and Economy.memory_peek_price(-1) == 0
-		and Economy.powerup_price("auto_merge", -1) == 600, "Negative counters cannot discount a first purchase")
+		and Economy.powerup_price("auto_merge", -1) == 600
+		and Economy.powerup_price("family_merge", -1) == 100, "Negative counters cannot discount a first purchase")
 	check(Economy.powerup_price("unknown", 0) == 0, "Unknown item kinds have no purchasable price")
 	var chances: Array[float] = [0.0, 0.02, 0.04, 0.12, 0.20, 0.30, 0.40, 0.50, 0.80]
 	var amounts: Array[int] = [0, 50, 100, 150, 200, 250, 300, 350, 450]

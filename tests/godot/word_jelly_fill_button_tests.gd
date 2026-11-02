@@ -18,6 +18,7 @@ func check(value: bool, message: String) -> void:
 
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+	root.size = Vector2i(320, 180)
 	var button := FillButton.new()
 	root.add_child(button)
 	button.position = Vector2(30, 30)
@@ -33,9 +34,20 @@ func _run() -> void:
 	button.advance(0.2)
 	var on: Dictionary = button.snapshot()
 	check(on.on and on.glow and on.flowing and button.button_pressed, "On immediately owns a persistent active presentation")
-	check(on.unified_switch and float(on.track_rect[2]) >= button.size.x - 2.1
-		and float(on.track_rect[3]) >= button.size.y - 2.1,
-		"The entire capsule is the switch track, not a second small pill inside a button")
+	check(on.has_all(["surface_rect", "stationary_icon", "switch_blend"]),
+		"The mode has one full control surface and a fixed centered feed illustration, not a sliding thumb")
+	if not on.has_all(["surface_rect", "stationary_icon", "switch_blend"]):
+		button.free()
+		print("Icon-only Fill button: %d checks, %d failures" % [checks, failures])
+		quit(1)
+		return
+	check(on.unified_switch and on.stationary_icon and not on.has("thumb_x")
+		and float(on.surface_rect[2]) >= button.size.x - 0.1
+		and float(on.surface_rect[3]) >= button.size.y - 0.1,
+		"The whole button changes mode without an empty slider track or a nested toggle")
+	var icon_center: float = on.icon_rect[0] + on.icon_rect[2] * 0.5
+	check(is_equal_approx(icon_center, button.size.x * 0.5),
+		"The supply illustration occupies the middle instead of leaving a hollow center")
 	var before: float = on.elapsed
 	for frame in range(140):
 		button.advance(0.1)
@@ -57,7 +69,8 @@ func _run() -> void:
 		"Reduced motion communicates On without moving particles or arrows")
 	button.set_state(true, true, false)
 	button.disabled = true
-	check(button.snapshot().thumb_x == on.thumb_x, "A forced-on lock cannot freeze its thumb in the Off position")
+	check(button.snapshot().icon_rect == on.icon_rect and button.snapshot().switch_blend == 1.0,
+		"A forced-on mode has the full active surface without moving its illustration")
 	button.advance(0.2)
 	check(button.snapshot().on and button.snapshot().locked and button.snapshot().flowing,
 		"Challenge's disabled input is not mistaken for an inactive mode")
@@ -67,8 +80,8 @@ func _run() -> void:
 	button.set_state(false, false)
 	button.advance(0.2)
 	check(not button.snapshot().on and not button.snapshot().glow and not button.snapshot().flowing
-		and button.snapshot().thumb_x < on.thumb_x,
-		"Off removes the running light and returns the status thumb to the other side")
+		and button.snapshot().icon_rect == on.icon_rect and button.snapshot().switch_blend == 0.0,
+		"Off stops the running cue without shifting or washing out the centered artwork")
 	before = button.snapshot().elapsed
 	button.advance(3.0)
 	check(button.snapshot().elapsed == before, "Off does not secretly keep a running effect clock")
@@ -82,15 +95,15 @@ func _run() -> void:
 	check(button.snapshot().elapsed == before, "Invalid deltas cannot alter presentation")
 	for scale_value: float in [0.65, 1.0, 1.5, 1175.0 / 480.0, 3.2]:
 		button.set_ui_scale(scale_value)
-		for width: float in [88.0, 120.0, 184.0]:
+		for width: float in [56.0, 88.0, 184.0]:
 			button.size = Vector2(width, 44.0) / scale_value
 			var state: Dictionary = button.snapshot()
-			for key: String in ["icon_rect", "track_rect"]:
+			for key: String in ["icon_rect", "surface_rect"]:
 				var rect: Array = state[key]
 				check(Rect2(Vector2.ZERO, button.size).encloses(Rect2(rect[0], rect[1], rect[2], rect[3])),
 					"Artwork and status stay inside every small and highly scaled target")
-			check(button.custom_minimum_size.x * scale_value >= 87.9 and button.custom_minimum_size.y * scale_value >= 43.9,
-				"Removing text never shrinks the 88 by 44 display-pixel touch target")
+			check(button.custom_minimum_size.x * scale_value >= 55.9 and button.custom_minimum_size.y * scale_value >= 43.9,
+				"The compact mode control retains a 56 by 44 display-pixel touch target")
 	button.set_ui_scale(1.0)
 	button.size = Vector2(88, 44)
 	button.set_state(false, false)
@@ -105,17 +118,21 @@ func _run() -> void:
 		await process_frame
 	check(toggles == [true] and button.snapshot().on,
 		"Native keyboard activation still dispatches exactly one owner-confirmed toggle")
+	var pointer_states: Array = []
 	for x: float in [1.0, 87.0]:
 		for pressed: bool in [true, false]:
 			var event := InputEventMouseButton.new()
 			event.button_index = MOUSE_BUTTON_LEFT
+			event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
 			event.pressed = pressed
 			event.position = button.global_position + Vector2(x, 22.0)
 			event.global_position = event.position
 			root.push_input(event)
 			await process_frame
+		pointer_states.append([x, button.get_global_rect(), root.get_mouse_position(), button.button_pressed])
 	check(toggles == [true, false, true] and button.snapshot().on,
-		"Both ends of the full-width control own one native toggle, not only an inner thumb: " + str(toggles))
+		"Both ends of the full-width control own one native toggle, not only an inner thumb: " +
+			str([toggles, pointer_states]))
 	button.reset()
 	check(button.snapshot().on and button.snapshot().elapsed == 0.0,
 		"Presentation reset cannot switch off the model's selected mode")

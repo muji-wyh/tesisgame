@@ -42,6 +42,8 @@ func _check_resize_history(panel) -> void:
 		for row: Dictionary in panel._rows:
 			if not row.surface.visible:
 				continue
+			check(row.surface.snapshot().price == 100,
+				"Fresh goal cards use the central half-price quote before any paid action")
 			var card: Rect2 = row.surface.get_global_rect()
 			check(card.position.x >= bounds.position.x and card.end.x <= bounds.end.x + 0.1,
 				"Resizing the same sidebar to %.0f never retains an earlier wider card (actual %.1f)" % [width, card.size.x])

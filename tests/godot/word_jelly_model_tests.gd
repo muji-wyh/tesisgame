@@ -355,7 +355,7 @@ func _approximately_equal_state(left: Variant, right: Variant) -> bool:
 
 
 func _test_powerup_eligibility() -> void:
-	check(Model.POWERUP_PRICES == {"auto_merge": 600, "family_merge": 200, "fragments": 200, "extra_time": 100},
+	check(Model.POWERUP_PRICES == {"auto_merge": 600, "family_merge": 100, "fragments": 200, "extra_time": 100},
 		"paid powers expose their first-purchase prices")
 	for kind: String in ["auto_merge", "fragments"]:
 		for blocked_by: String in ["paused", "held", "settling", "fusion", "collection", "batch", "finished", "empty"]:

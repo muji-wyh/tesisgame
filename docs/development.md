@@ -57,8 +57,9 @@ npm run build:web
 ```
 
 All age and shared vocabulary bundles are packed in one Godot invocation with
-a bounded 30-minute timeout, rather than the ordinary three-minute engine-call
-budget. A slow full build still must finish every pack and verification before
+a bounded 30-minute timeout. The full native Web-pack audit has its own same
+30-minute bound for the complete animated-art and audio inventory, rather than
+the ordinary three-minute engine-call budget. A slow full build still must finish every pack and verification before
 it receives a deployable receipt; partial bundles are never treated as success.
 
 The deliverable is **the entire `build\web` directory**. Keep its HTML, JavaScript, WebAssembly, core and vocabulary PCKs, audio-worklet, icon and `.br` files together. Shared music and effects are in the core PCK; word and phrase media are in age packs. Deploy that directory to a static HTTPS host; do not deploy just the HTML file or open it using `file://`. The host must serve `.wasm` as `application/wasm`.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Game Taste"
+  short_description: "Elevate game art direction, feel, sound, and clarity"
+  default_prompt: "Use $game-taste to inspect this game, ground taste decisions in relevant inspected references and its intended player experience, and improve the most important details within my requested scope."

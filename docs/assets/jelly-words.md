@@ -6,16 +6,18 @@ the [Kenney daylight panorama](jelly-sky.md), the
 [chest-fragment presentation](jelly-fragments.md). Their source, acquisition,
 and license records remain in the linked asset documents.
 
-## Segmented journey map
+## Continuous chapter journey
 
-The existing eleven scenic chapters are now individual nine-stage map segments.
+The existing eleven scenic chapters are nine-stage sections on one continuous
+upward route, not pages.
 Their acquired sky, hills, trees, cottage, snow, palms, cactus, mountains and
-castle remain unchanged. Only the selected chapter's scenery and stage bodies
-are drawn; the route never connects to an invisible neighboring segment.
-The current chapter's name and real stage range have their own cream navigation
-strip, with existing Tabler previous/next chevrons and forty-four-pixel controls.
-Current progress chooses the initial segment, while browsing and ordinary wallet
-refreshes cannot alter a stage's saved unlock, rating or recipe.
+castle remain unchanged. All 99 native stage bodies share the same world
+coordinates and scroll surface, so neighboring chapters can appear together.
+Each chapter's cream title landmark and real stage range sit inside the route,
+between its first stage and the preceding chapter. The fixed page strip and its
+previous/next controls are removed. Entry scrolls to the earned frontier;
+browsing and wallet/status refreshes cannot alter saved unlocks, stars or recipes,
+or pull the viewport away from its actual position.
 
 The map props are existing Kenney **Background Elements Remastered 1.0** PNGs,
 acquired from the user's local collection under **CC0-1.0**. Exact source and
@@ -24,15 +26,15 @@ runtime hashes, original paths and the retained license are in
 Stage medallions remain the acquired Kenney **UI Pack - Adventure 1.1** artwork,
 also CC0-1.0, with their
 [unchanged source record](../../assets/images/ui/jelly-map/sources.json).
-The existing Paweł Kuna / Tabler **MIT** chevrons retain their paths and
+The existing Paweł Kuna / Tabler **MIT** Home artwork retains its path and
 [control-source provenance](../../assets/images/ui/controls/sources.json).
 These are integrated static source assets, not new acquisitions, animations,
-generated scenery or marketplace previews. The cream strip is an interface
-layout primitive. The actual pre-change map and corresponding source medallion,
+generated scenery or marketplace previews. The cream chapter cards are interface
+layout primitives. The actual pre-change map and corresponding source medallion,
 pine and cottage PNGs were inspected before this presentation change.
 
-Normal unlock motion keeps its 850 ms route and 650 ms padlock release; a chapter
-boundary uses the new segment's local entry instead of a hidden prior node.
+Normal unlock motion keeps its 850 ms route and 650 ms padlock release, including
+the real connecting path from one chapter's final stage to the next chapter.
 Pause, hidden/background state and reduced motion retain the existing lifecycle.
 The final Boss portrait preserves its acquired aspect ratio and uses a compact
 size in a short landscape viewport so its actual Stage 99 action stays reachable.

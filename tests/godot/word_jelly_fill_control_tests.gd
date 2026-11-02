@@ -30,6 +30,7 @@ func click(view) -> void:
 	for pressed: bool in [true, false]:
 		var event := InputEventMouseButton.new()
 		event.button_index = MOUSE_BUTTON_LEFT
+		event.button_mask = MOUSE_BUTTON_MASK_LEFT if pressed else 0
 		event.pressed = pressed
 		event.position = view._fill_button.get_global_rect().get_center()
 		event.global_position = event.position

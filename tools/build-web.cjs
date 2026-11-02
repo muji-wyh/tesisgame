@@ -61,7 +61,7 @@ const verification = runGodot([
   '--vocabulary-manifest', vocabulary.manifest,
   '--professional-domain-manifest', domainPackPreparation.manifestPath,
   '--professional-domain-proof', domainPackPreparation.proofPath
-]);
+], { timeout: 1800000 });
 process.stdout.write(verification.stdout);
 const domainEvidence = finishPackVerification({ release: domainRelease,
   packPath: path.join(output, 'index.pck'), preparation: domainPackPreparation });

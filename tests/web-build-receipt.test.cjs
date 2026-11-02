@@ -7,6 +7,21 @@ const { createHash } = require('node:crypto');
 const { brotliCompressSync } = require('node:zlib');
 const { snapshotInputs, invalidateBuildReceipt, writeBuildReceipt, verifyBuildReceipt } = require('../tools/web-build-receipt.cjs');
 
+test('the full native Web pack audit owns a bounded dense-asset timeout without relaxing ordinary calls', () => {
+  const build = fs.readFileSync(path.join(__dirname, '..', 'tools', 'build-web.cjs'), 'utf8');
+  const start = build.indexOf('const verification = runGodot([');
+  const end = build.indexOf('process.stdout.write(verification.stdout);', start);
+  assert.ok(start >= 0 && end > start);
+  const verification = build.slice(start, end);
+  assert.match(verification, /verify_web_pack\.gd/);
+  assert.match(verification, /--audio-manifest/);
+  assert.match(verification, /--vocabulary-manifest/);
+  assert.match(verification, /--professional-domain-proof/);
+  assert.match(verification, /\], \{ timeout: 1800000 \}\);/);
+  const runner = fs.readFileSync(path.join(__dirname, '..', 'tools', 'run-godot.cjs'), 'utf8');
+  assert.match(runner, /timeout = 180000/);
+});
+
 function fixture(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'web-build-receipt-'));
   t.after(() => fs.rmSync(root, { recursive: true, force: true }));
