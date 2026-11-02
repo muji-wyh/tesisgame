@@ -604,8 +604,8 @@ to highlight its corresponding board family with the same effect used for drag
 matches; the goal card also gains a mint hover treatment. Hovering never spends
 coins. The card displays its next coin cost alongside its completion count.
 Click that card to automatically merge only its exact word family's roots,
-pictures and differently leveled merged Jellies. One valid purchase costs 100,
-then 150, then 200 coins per round, with that family-use tier shared across all
+pictures and differently leveled merged Jellies. One valid purchase costs 50,
+then 75, then 100 coins per round, with that family-use tier shared across all
 goals and independent of other items. Payment must be saved and the current
 family must have a legal complete path. No unrelated target or missing partner
 is substituted. A paid click shows the exact wallet debit, a coin flight into the

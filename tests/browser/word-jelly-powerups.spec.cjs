@@ -72,7 +72,7 @@ async function start(page, info, balance, pipLevel = 0, { pauseOnReady = false }
   await seedPipLevel(page, pipLevel);
   await page.addInitScript(({ balance, walletKey }) => {
     if (localStorage.getItem(walletKey) === null) localStorage.setItem(walletKey,
-      `[wallet]\nversion=2\nbalance=${balance}\nreceipts=${JSON.stringify(balance ? { 'browser-opening-coins': balance } : {})}\n`);
+      `[wallet]\nversion=3\nbalance=${balance}\nreceipts=${JSON.stringify(balance ? { 'browser-opening-coins': balance } : {})}\n`);
   }, { balance, walletKey: WALLET_KEY });
   const errors = await openGame(page, { reducedMotion });
   await chooseMode(page, 'word_jelly', { challenge: true });
@@ -392,7 +392,7 @@ test('word goals hover their matching Jellies and buy only that family while Cha
   const family = tile => tile.word?.id || tile.image_word?.id || tile.word_candidate?.id || tile.source_word_id;
   const unrelated = opening.tiles.filter(tile => family(tile) !== id).map(tile => tile.id);
   expect(unrelated.length, 'The test has a genuine second family, not a single-family proxy').toBeGreaterThan(0);
-  expect(goal.purchase).toMatchObject({ price: 100, price_text: '100', title: goal.text, goal: true });
+  expect(goal.purchase).toMatchObject({ price: 50, price_text: '50', title: goal.text, goal: true });
   const beforeProgress = progress(opening), beforeGrowth = await savedGrowth(page);
   await beginTrace(page, 'paid-goal');
   await page.keyboard.press('p');
@@ -412,7 +412,7 @@ test('word goals hover their matching Jellies and buy only that family while Cha
   await page.keyboard.press('p');
   await expect.poll(async () => (await jelly(page)).paused).toBe(false);
   await pressRect(page, goal.rect, bounds);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(1900);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(1950);
   await expect.poll(async () => {
     const state = await jelly(page);
     return !state.powerup.active && state.powerup.kind === 'family_merge';
@@ -426,13 +426,13 @@ test('word goals hover their matching Jellies and buy only that family while Cha
   expect(progress(after)).toEqual(beforeProgress);
   expect(after.combo.coins).toBe(0);
   expect(await savedGrowth(page)).toBe(beforeGrowth);
-  expect(after.practice.words.every(item => item.price === 150)).toBe(true);
+  expect(after.practice.words.every(item => item.price === 75)).toBe(true);
   const persisted = await storedWallet(page);
-  expect(persisted.balance).toBe(1900);
-  expect(Object.values(persisted.receipts).filter(amount => amount < 0)).toEqual([-100]);
+  expect(persisted.balance).toBe(1950);
+  expect(Object.values(persisted.receipts).filter(amount => amount < 0)).toEqual([-50]);
   const evidence = await retainTrace(page, info, 'paid-goal', ['goal-hover', 'goal-paid']);
   expect(evidence.timeline.some(frame => frame.goals.some(item => item.id === goal.id &&
-    item.purchase.spent_coins === 100 && item.purchase.price === 150)),
+    item.purchase.spent_coins === 50 && item.purchase.price === 75)),
   'The clicked goal shows its real debit without replacing the next quote').toBe(true);
   await capture(page, info, 'paid-goal-complete');
   expect(errors).toEqual([]);
@@ -440,7 +440,7 @@ test('word goals hover their matching Jellies and buy only that family while Cha
 
 test('a pending word goal reports its exact shortfall without spending or merging', async ({ page }, info) => {
   test.setTimeout(300000);
-  const { errors, opening } = await start(page, info, 50, 0, { pauseOnReady: true });
+  const { errors, opening } = await start(page, info, 25, 0, { pauseOnReady: true });
   const goal = opening.practice.words.find(item => !item.mastered && item.enabled);
   expect(goal).toBeTruthy();
   const bounds = await metrics(page), saved = await storedWallet(page), growth = await savedGrowth(page);
@@ -458,9 +458,9 @@ test('a pending word goal reports its exact shortfall without spending or mergin
   const funds = evidence.timeline.flatMap(frame => frame.goals).filter(item =>
     item.id === goal.id && item.purchase.funds_warning);
   expect(funds.length).toBeGreaterThan(0);
-  expect(funds.every(item => item.purchase.title === 'Need coins' && item.purchase.missing_coins === 50 &&
-    item.purchase.price_text === '100' && item.purchase.spent_coins === 0 &&
-    item.purchase.accessibility_name.includes('Need 50 more coins'))).toBe(true);
+  expect(funds.every(item => item.purchase.title === 'Need coins' && item.purchase.missing_coins === 25 &&
+    item.purchase.price_text === '50' && item.purchase.spent_coins === 0 &&
+    item.purchase.accessibility_name.includes('Need 25 more coins'))).toBe(true);
   expect(await storedWallet(page)).toEqual(saved);
   expect(await savedGrowth(page)).toBe(growth);
   expect(progress(await jelly(page))).toEqual(progress(opening));

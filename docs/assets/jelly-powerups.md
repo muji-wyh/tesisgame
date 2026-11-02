@@ -9,7 +9,7 @@ cream surfaces share one border treatment; the sourced artwork identifies the
 tool instead of giving every card a different colored frame.
 Their artwork stays separate from the stable touch target, title, and coin price.
 Auto merge costs 600, 900, then 1200 coins per round;
-Goal-family merges cost 100, 150, then 200; Treasure remains 200, 300, then 400.
+Goal-family merges cost 50, 75, then 100; Treasure remains 200, 300, then 400.
 Each item tracks successful purchases separately
 and shows its next price without resetting the current feedback animation.
 The latter uses the same current chest texture as the jelly fragment markers

@@ -5,7 +5,7 @@
 Coins remain saved help for a difficult moment. Ordinary play is free, the
 wallet starts at zero, and purchases never gate finishing or learning. Existing
 balances and paid receipts keep their original amounts. New chest rewards
-include Pip's level bonus; item prices and fragment rules are unchanged.
+include Pip's level bonus; other item prices and fragment rules are unchanged.
 
 The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 
@@ -16,11 +16,13 @@ The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 | Match Hint | 100, 150, then 200; no per-round use limit |
 | Memory observation | A free initial 10-second observation, then optional 5-second reveals costing 100, 200, 300, then 300 |
 | Auto Merge | 600, 900, 1200, then 1200 |
+| Pending word goal (family merge) | 50, 75, 100, then 100 |
 | Treasure | 200, 300, 400, then 400 |
 | Treasure fragments | Random 2-8 |
 
-Only successful purchases advance their item's price. Auto Merge and Treasure
-have separate counters. A new round resets the prices; a menu, pause, rejected
+Only successful purchases advance their item's price. All pending word goals
+share one family-merge counter, separate from Auto Merge and Treasure.
+A new round resets the prices; a menu, pause, rejected
 payment, or wallet retry does not. The current price is shown before purchase.
 Auto Merge launches an eligible pair every 200 ms. Each 250 ms flight can overlap
 the next flight, then completes a 110 ms fusion and 30 ms settlement; the next

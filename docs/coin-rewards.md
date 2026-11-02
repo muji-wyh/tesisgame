@@ -57,7 +57,7 @@ their paid receipts remain valid without silently changing their original tier
 or amount. Real 3D tier presentation is documented in
 [the chest catalog](../assets/chests/catalog-cc0/README.md).
 
-`CoinWallet` version 4 saves each chest's quote before payment: its original
+`CoinWallet` version 5 retains the chest quotes introduced in version 4: each chest's original
 receipt ID, tier, Pip level, base, bonus and total. The first settlement
 presentation or claim locks this quote across level changes and reloads.
 An older chest without a quote receives the new `pip-chest-v2` policy. Already
@@ -67,6 +67,13 @@ Pop/Jelly entries keep their original reward
 IDs across inventory batches. Coins are saved before chest consumption, so a
 partial save retries the same total without paying twice. Silent exit/recovery
 uses the same quote without replaying a flight.
+
+New purchases use 25-coin units, including the 75-coin goal-family tier.
+Versions 1-4 still load without rewriting balances, receipts or chest quotes.
+Only a successfully saved change updates the format; failed saves, retries and
+duplicate acknowledgments cannot migrate or charge twice. Older versions retain
+their original 50-coin debit validation. Reward amounts and historical payments
+are not rounded, repriced or refunded.
 
 The wallet is authoritative; the header has a separate visual total while coins are travelling. Leaving the page, changing rounds, opening the catalog, or leaving the reward room reconciles that display to the saved total and discards old animation callbacks. A subsequent save retry cannot replay an already reconciled deposit. Coin-flight presentation never writes the wallet. Storage failures preserve the chest and expose the existing retry controls.
 

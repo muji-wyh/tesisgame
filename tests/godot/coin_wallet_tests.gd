@@ -62,9 +62,9 @@ func _load_corrupt(wallet) -> bool:
 	return loaded
 
 
-func _save_quotes(balance_value: Variant, receipts: Variant, rewards: Variant) -> String:
+func _save_quotes(balance_value: Variant, receipts: Variant, rewards: Variant, version: int = Wallet.VERSION) -> String:
 	var config := ConfigFile.new()
-	config.parse(_save(balance_value, receipts, Wallet.VERSION))
+	config.parse(_save(balance_value, receipts, version))
 	config.set_value("wallet", "chest_rewards", rewards)
 	return config.encode_to_text()
 
@@ -76,6 +76,7 @@ func _run() -> void:
 	_test_spending_and_migration()
 	_test_spending_retry_and_conflicts()
 	_test_signed_receipt_validation()
+	_test_quarter_coin_spending()
 	_test_exact_credit_migration()
 	_test_exact_credit_retry_and_conflicts()
 	_test_exact_credit_validation()
@@ -343,9 +344,9 @@ func _test_signed_receipt_validation() -> void:
 	var wallet := Wallet.new("user://unused-coin-wallet.cfg", storage)
 	check(wallet.load_state(), "A credit-only version-two wallet is supported")
 	var saved: String = storage.text
-	for amount: int in [-500, 0, 1, 49, 51, Wallet.MAX_BALANCE, Wallet.MAX_BALANCE + 1]:
+	for amount: int in [-500, 0, 1, 24, 26, 49, 51, 74, 76, Wallet.MAX_BALANCE, Wallet.MAX_BALANCE + 1]:
 		check(not wallet.spend("power:bad-price", amount).ok and wallet.balance == 2000
-			and storage.text == saved and storage.calls == 0, "A price must be a positive, safely represented multiple of 50")
+			and storage.text == saved and storage.calls == 0, "A price must be a positive, safely represented multiple of 25")
 	for id: String in ["", " ", "bad\nreceipt", "bad\treceipt", " leading", "trailing ", "x".repeat(513)]:
 		check(not wallet.spend(id, 500).ok and storage.text == saved and storage.calls == 0,
 			"Purchase IDs follow the same strict receipt rules as earned rewards")
@@ -363,6 +364,78 @@ func _test_signed_receipt_validation() -> void:
 	var reloaded := Wallet.new("user://unused-coin-wallet.cfg", storage)
 	check(reloaded.load_state() and reloaded.balance == 0 and reloaded.spend("power:last-fifty", 50).duplicate,
 		"Serialized mixed-sign history survives another save and reload without overflow or precision loss")
+
+
+func _test_quarter_coin_spending() -> void:
+	for version: int in [1, 2, 3, 4]:
+		var storage := BrowserStorage.new()
+		var receipts: Dictionary = {"chest:funding": 1000}
+		var starting_balance: int = 1000
+		if version >= 2:
+			receipts["power:previous"] = -100
+			starting_balance -= 100
+		if version >= 3:
+			receipts["combo:previous"] = 1
+			starting_balance += 1
+		var quotes: Dictionary = {"chest:pending": Economy.chest_reward(1, 5)} if version == 4 else {}
+		storage.text = _save_quotes(starting_balance, receipts, quotes, version) if version == 4 \
+			else _save(starting_balance, receipts, version)
+		var original: String = storage.text
+		var wallet := Wallet.new("user://unused-quarter-coins.cfg", storage)
+		var stale := Wallet.new("user://unused-quarter-coins.cfg", storage)
+		check(wallet.load_state() and stale.load_state() and wallet.balance == starting_balance
+			and wallet._chest_rewards == quotes and storage.text == original and storage.writes == 0,
+			"Every v1-v4 wallet loads its original balance, receipts and chest quotes without rewriting")
+		storage.fail_write = true
+		check(not wallet.spend("goal:quarter", 75).ok and wallet.balance == starting_balance
+			and wallet._receipts == receipts and storage.text == original and storage.writes == 0,
+			"A failed seventy-five-coin payment cannot migrate, debit or consume its receipt")
+		storage.fail_write = false
+		var paid: Dictionary = wallet.spend("goal:quarter", 75)
+		var expected: Dictionary = receipts.duplicate()
+		expected["goal:quarter"] = -75
+		check(paid.ok and not paid.duplicate and paid.amount == -75 and paid.before == starting_balance
+			and paid.after == starting_balance - 75 and wallet._receipts == expected,
+			"A saved seventy-five-coin purchase owns exactly one immutable debit")
+		var config := ConfigFile.new()
+		check(config.parse(storage.text) == OK and config.get_value("wallet", "version") == 5
+			and config.get_value("wallet", "receipts") == expected
+			and config.get_value("wallet", "chest_rewards", {}) == quotes,
+			"V5 migration preserves every historical receipt and saved chest quote")
+		var saved: String = storage.text
+		var writes: int = storage.writes
+		var reloaded := Wallet.new("user://unused-quarter-coins.cfg", storage)
+		check(reloaded.load_state() and reloaded.balance == starting_balance - 75
+			and reloaded._receipts == expected and reloaded._chest_rewards == quotes,
+			"The exact quarter-hundred debit and original entitlements survive reloading")
+		check(reloaded.spend("goal:quarter", 75).duplicate and not reloaded.spend("goal:quarter", 50).ok
+			and storage.text == saved and storage.writes == writes,
+			"Reloaded purchases acknowledge the original seventy-five coins without repricing or charging again")
+		check(not stale.spend("goal:stale-quarter", 75).ok and stale.balance == starting_balance
+			and storage.text == saved and storage.writes == writes,
+			"An old wallet snapshot cannot overwrite the saved quarter-hundred payment")
+		check(stale.load_state() and stale.spend("goal:quarter", 75).duplicate and storage.writes == writes,
+			"Explicit reload recovers an already-paid quarter-hundred receipt without another debit")
+		var invalid: String = _save_quotes(25, {"credit": 100, "debit": -75}, {}, version) if version == 4 \
+			else _save(25, {"credit": 100, "debit": -75}, version)
+		storage.text = invalid
+		check(not _load_corrupt(wallet) and not wallet.ready and storage.text == invalid
+			and storage.writes == writes, "Older wallet versions retain their original debit validation")
+	var storage := BrowserStorage.new()
+	var wallet := Wallet.new("user://unused-quarter-boundary.cfg", storage)
+	check(wallet.load_state() and wallet.credit_amount("funding:quarter", 74).ok,
+		"Exact reward credits retain their independent whole-coin policy")
+	var saved: String = storage.text
+	var insufficient: Dictionary = wallet.spend("goal:exact-quarter", 75)
+	check(not insufficient.ok and insufficient.get("reason", "") == "insufficient" and wallet.balance == 74
+		and wallet.error.is_empty() and storage.text == saved and not wallet.has_purchase("goal:exact-quarter", 75),
+		"A wallet one coin short of seventy-five stays available without writing or reserving payment")
+	check(wallet.credit_amount("funding:one-more", 1).amount == 1
+		and wallet.spend("goal:exact-quarter", 75).amount == -75 and wallet.balance == 0,
+		"An exact seventy-five-coin budget can pay once down to zero")
+	var reloaded := Wallet.new("user://unused-quarter-boundary.cfg", storage)
+	check(reloaded.load_state() and reloaded.balance == 0 and reloaded.spend("goal:exact-quarter", 75).duplicate,
+		"A spent-down quarter-hundred wallet reloads without restoring its consumed coins")
 
 
 func _test_exact_credit_migration() -> void:
@@ -621,7 +694,7 @@ func _test_chest_legacy_receipts() -> void:
 		var reloaded := Wallet.new("user://unused-legacy-quotes.cfg", storage)
 		check(reloaded.load_state() and reloaded.chest_reward("chest:paid").total == 100
 			and reloaded.chest_reward("chest:unclaimed").total == 198
-			and reloaded.balance == original_balance + 299, "Legacy and new chest policies survive the same v4 save")
+			and reloaded.balance == original_balance + 299, "Legacy and new chest policies survive the same current-format save")
 		if version == 3:
 			check(reloaded.credit_amount("combo:old", 3).duplicate
 				and reloaded.chest_reward("combo:old").is_empty(), "Existing v3 combo receipts remain exact and are not promoted to chest rewards")
@@ -809,9 +882,16 @@ func _test_native_spending() -> void:
 		and recovered.spend("power:native-fragments", 500).duplicate
 		and recovered.credit("chest:native-funding", 60).duplicate,
 		"Native journal recovery preserves signed purchase and credit idempotence")
-	check(recovered.spend("power:native-remainder", 2500).after == 0, "Native spending can safely consume the remaining balance")
+	check(recovered.spend("power:native-goal", 75).amount == -75 and recovered.balance == 2425,
+		"A native goal purchase durably charges its exact seventy-five coins")
+	var quarter_reload := Wallet.new(path)
+	check(quarter_reload.load_state() and quarter_reload.balance == 2425
+		and quarter_reload.spend("power:native-goal", 75).duplicate,
+		"Native quarter-hundred spending reloads with its permanent receipt")
+	check(quarter_reload.spend("power:native-remainder", 2425).after == 0,
+		"Native spending can safely consume a quarter-hundred remainder")
 	var reloaded := Wallet.new(path)
-	check(reloaded.load_state() and reloaded.balance == 0 and reloaded.spend("power:native-remainder", 2500).duplicate,
+	check(reloaded.load_state() and reloaded.balance == 0 and reloaded.spend("power:native-remainder", 2425).duplicate,
 		"A native zero balance retains the last purchase receipt after reload")
 	check(not FileAccess.file_exists(path + ".pending") and not FileAccess.file_exists(path + ".previous"),
 		"Successful native spending clears staging and backup files")

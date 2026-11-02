@@ -1,9 +1,10 @@
 extends RefCounted
 ## Coin changes and their permanent receipts commit together.
 
-const VERSION: int = 4
+const VERSION: int = 5
 const Economy = preload("res://scripts/coin_economy.gd")
 const COINS_PER_TIER: int = Economy.COINS_PER_TIER
+const PURCHASE_UNIT: int = 25
 const MAX_BALANCE: int = 9007199254740991
 const MAX_TIER: int = 180143985094819
 const MAX_RECEIPTS: int = 100000
@@ -52,20 +53,22 @@ func load_state() -> bool:
 		var version: Variant = config.get_value("wallet", "version", null)
 		var saved_balance: Variant = config.get_value("wallet", "balance", null)
 		var receipts: Variant = config.get_value("wallet", "receipts", null)
-		if not version is int or version not in [1, 2, 3, VERSION]:
+		if not version is int or version not in [1, 2, 3, 4, VERSION]:
 			return _fail("This coin save needs a supported version.")
-		if config.get_section_keys("wallet").size() != (4 if version == VERSION else 3):
+		if config.get_section_keys("wallet").size() != (4 if version >= 4 else 3):
 			return _fail("Your coin save could not be understood. Please retry.")
 		if not saved_balance is int or saved_balance < 0 or saved_balance > MAX_BALANCE \
 			or not receipts is Dictionary or receipts.size() > MAX_RECEIPTS:
 			return _fail("Your coin save contains an invalid balance or receipt history.")
 		var credits: Array[int] = []
 		var debits: Array[int] = []
+		var purchase_unit: int = COINS_PER_TIER if version < 5 else PURCHASE_UNIT
 		for id in receipts:
 			var amount: Variant = receipts[id]
 			if not _valid_id(id) or not amount is int or amount == 0 \
 				or amount < -MAX_BALANCE or amount > MAX_BALANCE \
-				or ((version < 3 or amount < 0) and amount % COINS_PER_TIER != 0) \
+				or (version < 3 and amount % COINS_PER_TIER != 0) \
+				or (amount < 0 and amount % purchase_unit != 0) \
 				or (version == 1 and amount < 0):
 				return _fail("Your coin save contains an invalid receipt.")
 			next_receipts[id] = amount
@@ -87,7 +90,7 @@ func load_state() -> bool:
 			next_balance += amount
 		if saved_balance != next_balance:
 			return _fail("Your coin balance does not match its saved receipts.")
-		if version == VERSION:
+		if version >= 4:
 			var rewards: Variant = config.get_value("wallet", "chest_rewards", null)
 			if not rewards is Dictionary or rewards.size() > MAX_RECEIPTS:
 				return _fail("Your saved chest rewards could not be understood.")
@@ -250,8 +253,8 @@ func spend(purchase_id: String, amount: int) -> Dictionary:
 	error = ""
 	if not ready:
 		return _rejected("Load your coins successfully before making this purchase.")
-	if not _valid_id(purchase_id) or amount < COINS_PER_TIER or amount > MAX_BALANCE or amount % COINS_PER_TIER != 0:
-		return _rejected("This purchase needs a valid ID and a positive cost in multiples of 50 coins.")
+	if not _valid_id(purchase_id) or amount < PURCHASE_UNIT or amount > MAX_BALANCE or amount % PURCHASE_UNIT != 0:
+		return _rejected("This purchase needs a valid ID and a positive cost in multiples of %d coins." % PURCHASE_UNIT)
 	if not _current_snapshot_matches():
 		return _outcome(false, false, 0, balance)
 	if _chest_rewards.has(purchase_id):

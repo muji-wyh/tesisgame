@@ -82,7 +82,7 @@ func test_selected_family() -> void:
 			"Availability and target identity are read-only and never choose or charge at random")
 		check(model.activate_family_merge(str(cat.id)) if selected_kind == "root" else model.activate_powerup("family_merge", selected),
 			"The goal identity and legacy direct targets both choose only their own word family")
-		check(f.payments.size() == 1 and f.payments[0].kind == "family_merge" and f.payments[0].price == 100
+		check(f.payments.size() == 1 and f.payments[0].kind == "family_merge" and f.payments[0].price == 50
 			and model.powerup_snapshot().family_word_id == str(cat.id),
 			"One explicit target owns exactly one quoted purchase and its visible family")
 		drain(model)
@@ -210,7 +210,7 @@ func test_family_payment_lifecycle() -> void:
 		model.purchase_powerup = func(_id: String, _kind: String, _price: int) -> Dictionary:
 			return response.duplicate()
 		check(not model.activate_family_merge(str(cat.id)) and model.cells == before.cells
-			and model.powerup_price("family_merge") == 100 and not model.powerup_active()
+			and model.powerup_price("family_merge") == 50 and not model.powerup_active()
 			and model.snapshot().powerup_uses.family_merge == 0,
 			"Failed and duplicate chosen-family payments preserve inputs, use count and quoted price")
 	for interruption: String in ["pause", "finish", "configure"]:
@@ -231,12 +231,12 @@ func test_family_payment_lifecycle() -> void:
 		model.finish_powerup()
 		check(f.payments.size() == 1 and model.cells.size() == 1 and model.cells[0].word.id == cat.id
 			and model.cells[0].fragments == 5 and not model.powerup_active()
-			and model.powerup_price("family_merge") == 150,
+			and model.powerup_price("family_merge") == 75,
 			"A reentrant pause, exit or rejected reconfigure settles the chosen family exactly once")
 		model.purchase_powerup = Callable()
 	var f: Dictionary = fixture()
 	var model = f.model
-	var prices: Array[int] = [100, 150, 200, 200]
+	var prices: Array[int] = [50, 75, 100, 100]
 	for index in range(prices.size()):
 		model.cells.clear()
 		var root: Dictionary = put(model, model._new_word_root(cat))

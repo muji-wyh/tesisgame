@@ -64,3 +64,17 @@ test('signed v2 receipts migrate in the existing namespace with conditional pers
   assert.deepEqual([...records.keys()], [key], 'Migration uses the existing durable wallet key');
   assert.equal(writes, 1);
 });
+
+test('a v5 seventy-five-coin debit preserves the v4 snapshot and existing storage namespace', () => {
+  const previous = '[wallet]\nversion=4\nbalance=125\nreceipts={"chest:funding":175,"power:previous":-50}\nchest_rewards={}\n';
+  const next = '[wallet]\nversion=5\nbalance=50\nreceipts={"chest:funding":175,"power:previous":-50,"goal:second":-75}\nchest_rewards={}\n';
+  const records = new Map([[key, previous]]);
+  let writes = 0;
+  const bridge = host({ getItem: name => records.get(name) ?? null, setItem(name, text) { records.set(name, text); writes++; } });
+  assert.equal(bridge.coinWalletState(), previous);
+  assert.equal(bridge.saveCoinWalletState(next, previous), true);
+  assert.equal(bridge.coinWalletState(), next);
+  assert.equal(bridge.saveCoinWalletState(previous, previous), false);
+  assert.deepEqual([...records.keys()], [key]);
+  assert.equal(writes, 1);
+});

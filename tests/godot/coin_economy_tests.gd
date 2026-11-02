@@ -53,22 +53,25 @@ func _test_economy_ladder() -> void:
 	var auto: Array[int] = []
 	var family: Array[int] = []
 	var treasure: Array[int] = []
+	var extra_time: Array[int] = []
 	for use in range(5):
 		hints.append(Economy.match_hint_price(use))
 		peeks.append(Economy.memory_peek_price(use))
 		auto.append(Economy.powerup_price("auto_merge", use))
 		family.append(Economy.powerup_price("family_merge", use))
 		treasure.append(Economy.powerup_price("fragments", use))
+		extra_time.append(Economy.powerup_price("extra_time", use))
 	check(hints == [100, 150, 200, 200, 200], "Match starts accessible and charges more for repeated help")
 	check(peeks == [0, 100, 200, 300, 300], "Memory preserves a free first look and its existing capped ladder")
 	check(auto == [600, 900, 1200, 1200, 1200], "Auto Merge remains the premium item at every repeat level")
-	check(family == [100, 150, 200, 200, 200], "Goal-family merges cost half the previous tier at every repeat level")
+	check(family == [50, 75, 100, 100, 100], "Goal-family merges cost exactly half the previous tier and cap at one hundred")
 	check(treasure == [200, 300, 400, 400, 400], "Treasure is a smaller decision with increasing repeat prices")
-	for price: int in hints + peeks + auto + family + treasure:
-		check(price >= 0 and price % Wallet.COINS_PER_TIER == 0, "Every configured price is legal for existing wallet receipts")
+	check(extra_time == [100, 150, 200, 250, 300], "Extra time retains its independent fifty-coin repeat increment")
+	for price: int in hints + peeks + auto + family + treasure + extra_time:
+		check(price >= 0 and price % 25 == 0, "Every configured price fits the wallet's quarter-hundred purchase unit")
 	check(Economy.match_hint_price(-1) == 100 and Economy.memory_peek_price(-1) == 0
 		and Economy.powerup_price("auto_merge", -1) == 600
-		and Economy.powerup_price("family_merge", -1) == 100, "Negative counters cannot discount a first purchase")
+		and Economy.powerup_price("family_merge", -1) == 50, "Negative counters cannot discount a first purchase")
 	check(Economy.powerup_price("unknown", 0) == 0, "Unknown item kinds have no purchasable price")
 	var chances: Array[float] = [0.0, 0.02, 0.04, 0.12, 0.20, 0.30, 0.40, 0.50, 0.80]
 	var amounts: Array[int] = [0, 50, 100, 150, 200, 250, 300, 350, 450]
@@ -168,6 +171,8 @@ func _test_supply_and_budget() -> void:
 	check(source_counts == [1, 2, 3, 4, 5, 6, 7, 8, 9], "Each playable collection level retains its completed source-word count")
 	check(Report.purchase_total("auto_merge", 3) == 2700 and Report.purchase_total("fragments", 3) == 900,
 		"Constant-use scenarios include escalating prices rather than repeating the opening discount")
+	check(Report.purchase_total("family_merge", 3) == 225,
+		"Three family purchases cost the actual fifty, seventy-five and one-hundred tiers")
 
 
 func _test_treasure_cannot_self_fund() -> void:

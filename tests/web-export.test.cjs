@@ -311,7 +311,7 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /Automatic pairs launch every 100 ms with a 320 ms flight, so consecutive flights overlap/);
   assert.match(help, /standalone Magnet button is removed[\s\S]*pending word goal[\s\S]*never substitutes a random target/);
   assert.match(help, /Treasure independently costs 200, 300, then 400[\s\S]*2 to 8 chest fragments/);
-  assert.match(help, /Goal-family purchases share the 100, 150, then 200 coin tier per round/);
+  assert.match(help, /Goal-family purchases share the 50, 75, then 100 coin tier per round/);
   assert.match(help, /two independent progress bars[\s\S]*Three actions earn the first level-up[\s\S]*COMBO BONUS/);
   assert.match(help, /Lv7 adds four outer-ring targets, Lv8 reaches its capped two rings and Lv9 reaches the board/);
   assert.match(help, /New journeys start with only merged Lv1[\s\S]*first Boss victory durably unlocks one further level/);
