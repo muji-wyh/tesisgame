@@ -2269,30 +2269,36 @@ func _layout() -> void:
 		tool_kinds.append("extra_time")
 	var tool_count: int = tool_kinds.size()
 	var tool_gap: float = 8.0 / s
-	var side_columns: int = 2 if size.x * s >= 680.0 else 1
-	if side_columns == 2:
+	var side_columns: int = 2 if tool_count == 2 and size.x * s >= 680.0 else 1
+	if size.x * s >= 680.0:
 		hud_width = maxf(hud_width, 184.0 / s)
 	var side_rows: int = ceili(float(tool_count) / side_columns)
 	var footer_width: float = minf(size.x - edge * 2.0, 388.0 / s)
-	var footer_columns: int = clampi(floori((footer_width + 4.0 / s) / (92.0 / s)), 1, tool_count)
-	if footer_columns < tool_count:
-		footer_columns = mini(2, footer_columns)
+	var footer_columns: int = clampi(floori((footer_width + tool_gap) / (88.0 / s + tool_gap)), 1, tool_count)
+	if tool_count == 3 and footer_columns == 2:
+		footer_columns = 1
 	var footer_rows: int = ceili(float(tool_count) / footer_columns)
 	var collect_height: float = action_height
 	var divider_gap: float = 14.0 / s
 	var fill_height: float = 44.0 / s
 	var side_fill_space: float = fill_height + tool_gap if hud_width * s < 152.0 else 0.0
 	var footer_fill_space: float = fill_height + tool_gap if footer_width * s < 152.0 else 0.0
-	var fitting_rows: int = maxi(1, floori((available.y - side_fill_space - 44.0 / s - divider_gap + tool_gap)
+	var rail_heading_height: float = 54.0 / s if stage_in_rail and _stage_banner != null and _stage_banner.visible else 0.0
+	if stage_in_rail and _configured and game.stage_run != null:
+		rail_heading_height = 88.0 / s
+	var side_available_height: float = available.y - rail_heading_height
+	var fitting_rows: int = maxi(1, floori((side_available_height - side_fill_space - 44.0 / s - divider_gap + tool_gap)
 		/ (44.0 / s + tool_gap)))
 	var fitting_columns: int = maxi(side_columns, ceili(float(tool_count) / fitting_rows))
+	if tool_count == 3 and fitting_columns == 2:
+		fitting_columns = 3
 	var fitting_width: float = (88.0 * fitting_columns + 8.0 * (fitting_columns - 1)) / s
 	if fitting_width + 32.0 * WordModel.COLUMNS / s + hud_gap <= available.x:
 		side_columns = fitting_columns
 		side_rows = ceili(float(tool_count) / side_columns)
 		hud_width = maxf(hud_width, fitting_width)
 	side_fill_space = fill_height + tool_gap if hud_width * s < 152.0 else 0.0
-	if available.y < action_height * (1 + side_rows) + (side_rows - 1) * tool_gap + side_fill_space + divider_gap:
+	if side_available_height < action_height * (1 + side_rows) + (side_rows - 1) * tool_gap + side_fill_space + divider_gap:
 		action_height = 44.0 / s
 		collect_height = action_height
 	var footer_height: float = action_height * (1 + footer_rows) + (footer_rows - 1) * tool_gap + footer_fill_space + divider_gap + edge
@@ -2300,12 +2306,14 @@ func _layout() -> void:
 	var side_pitch: float = _fit_layout_pitch(available - Vector2(hud_width + hud_gap, 0.0), s)
 	# Center the well and its single action rail as one group. On short screens
 	# the rail may extend beside the supply row, but never into the header.
-	var side_hud: bool = boss_layout or (side_pitch > bottom_pitch + 0.5 / s and available.y >= 184.0 / s)
+	var side_minimum_height: float = 44.0 / s * (1 + side_rows) + (side_rows - 1) * tool_gap + side_fill_space + divider_gap
+	var side_hud: bool = boss_layout or (side_pitch > bottom_pitch + 0.5 / s and available.y >= 184.0 / s \
+		and side_available_height >= side_minimum_height)
 	var fill_space: float = side_fill_space if side_hud else footer_fill_space
 	_compact_hud = side_hud
 	footer_height = 0.0 if side_hud else footer_height
 	if side_hud:
-		collect_height = clampf(available.y - action_height * side_rows - (side_rows - 1) * tool_gap \
+		collect_height = clampf(side_available_height - action_height * side_rows - (side_rows - 1) * tool_gap \
 			- fill_space - divider_gap - tool_gap, 44.0 / s, action_height)
 	_pitch = side_pitch if side_hud else bottom_pitch
 	var too_small: bool = authored and _pitch * s < 32.0
@@ -2338,8 +2346,7 @@ func _layout() -> void:
 	_falling_layer.size = _board.size
 	var columns: int = side_columns if side_hud else footer_columns
 	var rows: int = side_rows if side_hud else footer_rows
-	var item_width: float = (hud_width - (columns - 1) * tool_gap) / columns if side_hud else \
-		clampf((footer_width - (columns - 1) * 4.0 / s) / columns, 88.0 / s, 112.0 / s)
+	var item_width: float = ((hud_width if side_hud else footer_width) - (columns - 1) * tool_gap) / columns
 	var hud_x: float = _board.end.x + hud_gap if side_hud else (size.x - footer_width) * 0.5
 	if _stage_banner != null:
 		_stage_banner.size = size
@@ -2387,15 +2394,12 @@ func _layout() -> void:
 	for index in range(tool_count):
 		var button: PowerupButton = powerup_buttons[tool_kinds[index]]
 		button.set_ui_scale(s, action_height * s < 55.0)
-		var span: bool = columns > 1 and index == tool_count - 1 and tool_count % columns == 1
-		button.size = Vector2((hud_width if side_hud else footer_width) if span else item_width, action_height)
+		button.size = Vector2(item_width, action_height)
 		var column: int = index % columns
 		var row: int = index / columns
 		var start_y: float = _board.end.y - rows * action_height - (rows - 1) * tool_gap if side_hud else \
 			_board.end.y + edge + fill_space + collect_height + divider_gap
-		var step_x: float = item_width + tool_gap if side_hud else \
-			(footer_width - item_width) / maxi(1, columns - 1)
-		button.position = Vector2(hud_x + column * step_x, start_y + row * (action_height + tool_gap))
+		button.position = Vector2(hud_x + column * (item_width + tool_gap), start_y + row * (action_height + tool_gap))
 	var auto_merge: Rect2 = powerup_buttons.auto_merge.get_rect()
 	collect_button.set_ui_scale(s)
 	collect_button.size = Vector2(hud_width if side_hud else footer_width, collect_height)

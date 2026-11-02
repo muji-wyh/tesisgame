@@ -247,6 +247,8 @@ func _update_accessibility() -> void:
 func _layout() -> void:
 	var unit: float = 1.0 / _ui_scale
 	if not _goal.is_empty():
+		_title.scale = Vector2.ONE
+		_price_label.scale = Vector2.ONE
 		if _goal_geometry.is_empty():
 			return
 		_icon_rect = _goal_geometry.icon
@@ -270,35 +272,50 @@ func _layout() -> void:
 		_price_label.visible = not bool(_goal.mastered)
 		queue_redraw()
 		return
-	var edge: float = minf((18.0 if _compact else 26.0) * unit, minf(size.y * 0.50, size.x * 0.27))
+	# Keep tool lettering in display pixels instead of rounding it to tiny
+	# local font sizes when the application canvas is highly scaled.
+	_title.scale = Vector2.ONE * unit
+	_price_label.scale = Vector2.ONE * unit
+	var wide: bool = size.x >= 144.0 * unit or is_equal_approx(size.x, 144.0 * unit)
+	var edge: float = (24.0 if _compact else 32.0) * unit if wide else \
+		minf((18.0 if _compact else 26.0) * unit, minf(size.y * 0.50, size.x * 0.25))
 	var lower_center: float = size.y - (12.0 if _compact else 17.0) * unit
-	_icon_rect = Rect2(Vector2(7.0 * unit, lower_center - edge * 0.5), Vector2.ONE * edge)
-	_title.position = Vector2(6.0 * unit, (1.0 if _compact else 3.0) * unit)
-	var title_size := Vector2(maxf(1.0, size.x - 12.0 * unit), maxf(1.0, (18.0 if _compact else 22.0) * unit))
+	var title_height: float = (18.0 if _compact else 20.0 if wide else 22.0) * unit
+	if wide:
+		_icon_rect = Rect2(Vector2(10.0 * unit, (size.y - edge) * 0.5), Vector2.ONE * edge)
+		_title.position = Vector2(_icon_rect.end.x + 8.0 * unit, (size.y - title_height - 20.0 * unit) * 0.5)
+		lower_center = _title.position.y + title_height + 10.5 * unit
+	else:
+		_icon_rect = Rect2(Vector2(7.0 * unit, lower_center - edge * 0.5), Vector2.ONE * edge)
+		_title.position = Vector2(6.0 * unit, (1.0 if _compact else 3.0) * unit)
+	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if wide else HORIZONTAL_ALIGNMENT_CENTER
+	var title_size := Vector2(maxf(1.0, size.x - _title.position.x - (8.0 if wide else 6.0) * unit), maxf(1.0, title_height))
 	var title: String = _title_text()
-	var font_size: int = maxi(1, roundi((12.0 if _compact else 13.0) * unit))
-	while font_size > 1 and (Style.HEADING_FONT.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x > title_size.x \
-		or Style.HEADING_FONT.get_height(font_size) > title_size.y):
+	var font_size: int = 12 if _compact else 13
+	while font_size > 1 and (Style.HEADING_FONT.get_string_size(title, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x * unit > title_size.x \
+		or Style.HEADING_FONT.get_height(font_size) * unit > title_size.y):
 		font_size -= 1
 	_title.text = title
 	_title.add_theme_font_size_override("font_size", font_size)
-	_title.size = title_size
+	_title.size = title_size / unit
 	_price_label.text = str(_price)
-	var price_font: int = maxi(1, roundi(12.0 * unit))
-	var price_width: float = Style.HEADING_FONT.get_string_size(_price_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, price_font).x
+	var price_font: int = 12
+	var price_width: float = Style.HEADING_FONT.get_string_size(_price_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, price_font).x * unit
 	var coin_edge: float = 12.0 * unit
-	var available_price: float = maxf(1.0, size.x - _icon_rect.end.x - 10.0 * unit)
-	while price_font > 1 and price_width + coin_edge + 12.0 * unit > available_price:
+	var available_price: float = maxf(1.0, size.x - _title.position.x - 8.0 * unit) if wide else \
+		maxf(1.0, size.x - _icon_rect.end.x - 12.0 * unit)
+	while price_font > 1 and (price_width + coin_edge + 5.0 * unit > available_price \
+		or Style.HEADING_FONT.get_height(price_font) * unit > 19.0 * unit):
 		price_font -= 1
-		price_width = Style.HEADING_FONT.get_string_size(_price_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, price_font).x
+		price_width = Style.HEADING_FONT.get_string_size(_price_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, price_font).x * unit
 	_price_label.add_theme_font_size_override("font_size", price_font)
-	var group_width: float = coin_edge + 4.0 * unit + price_width
-	var pill_width: float = group_width + 8.0 * unit
-	_price_pill = Rect2(Vector2(size.x - 6.0 * unit - pill_width, lower_center - 11.0 * unit), Vector2(pill_width, 22.0 * unit))
-	_coin_rect = Rect2(Vector2(_price_pill.position.x + 4.0 * unit, lower_center - coin_edge * 0.5), Vector2.ONE * coin_edge)
+	var group_width: float = coin_edge + 5.0 * unit + price_width
+	var price_x: float = _title.position.x if wide else size.x - 8.0 * unit - group_width
+	_price_pill = Rect2(Vector2(price_x, lower_center - 9.5 * unit), Vector2(group_width, 19.0 * unit))
+	_coin_rect = Rect2(Vector2(price_x, lower_center - coin_edge * 0.5), Vector2.ONE * coin_edge)
 	_price_label.position = Vector2(_coin_rect.end.x + 4.0 * unit, lower_center - 9.5 * unit)
 	_price_position = _price_label.position
-	_price_label.size = Vector2(price_width + 1.0, 19.0 * unit)
+	_price_label.size = Vector2(price_width + unit, 19.0 * unit) / unit
 	queue_redraw()
 
 
@@ -461,5 +478,5 @@ func snapshot() -> Dictionary:
 		"light": pose.light, "title": _title.text, "price_text": _price_label.text,
 		"icon_rect": [_icon_rect.position.x, _icon_rect.position.y, _icon_rect.size.x, _icon_rect.size.y],
 		"coin_rect": [_coin_rect.position.x, _coin_rect.position.y, _coin_rect.size.x, _coin_rect.size.y],
-		"title_rect": [_title.position.x, _title.position.y, _title.size.x, _title.size.y],
-		"price_rect": [_price_label.position.x, _price_label.position.y, _price_label.size.x, _price_label.size.y]}
+		"title_rect": [_title.position.x, _title.position.y, _title.size.x * _title.scale.x, _title.size.y * _title.scale.y],
+		"price_rect": [_price_label.position.x, _price_label.position.y, _price_label.size.x * _price_label.scale.x, _price_label.size.y * _price_label.scale.y]}

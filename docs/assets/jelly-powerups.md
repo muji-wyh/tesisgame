@@ -1,8 +1,10 @@
 # Jelly Words powerups
 
 The Auto merge, Treasure and extra-time purchase controls share a quiet pearl surface.
-A full-width title sits above the sourced item artwork and a plain coin-price
-row, so narrow phone controls do not squeeze the title beside the icon. Neutral
+Wide controls place the sourced artwork beside a left-aligned name and coin-price
+column, borrowing the pending word goals' reading order. Narrow phone tiles keep
+a full-width title above the artwork and price, without squeezing the name beside
+the icon. Actual four-digit prices retain readable lettering. Neutral
 cream surfaces share one border treatment; the sourced artwork identifies the
 tool instead of giving every card a different colored frame.
 Their artwork stays separate from the stable touch target, title, and coin price.
@@ -17,11 +19,16 @@ that viewport warms up, without a synchronous GPU readback.
 The purchase controls, Fill and Collect share one action group. The compact
 icon-only Fill control sits beside the wider Collect action wherever both fit;
 only a narrow rail places it above Collect. The two paid tools (three in main stages, including extra time)
-use a side rail when it preserves larger Jelly reading space. Wide rails use two
-columns; narrow footers wrap rather than overlap. Ordinary paid controls are
+use a side rail when it preserves larger Jelly reading space. The three main-stage
+tools form one equal-width vertical column in the rail, or one equal-width row
+in a sufficiently wide footer. Short screens can use a complete horizontal row;
+narrow footers use a column rather than an incomplete grid. No final tool spans
+an extra column, and neighboring paid targets keep eight display pixels between
+them. Two-tool rounds retain their compact row where it fits.
+Ordinary paid controls are
 56 display pixels high, using compact 44-pixel controls on short screens and Boss
 layouts. Fill always keeps a 44-pixel target. The group retains bottom padding.
-Their combined bounds span the rail, including above a two-column paid-tool grid.
+Their combined bounds span the same width as the paid tools below.
 Fill is one 56-pixel-wide whole-control switch, not a long capsule or a button
 containing a smaller toggle. Its acquired gel illustration stays centered:
 clear blue cells are still when Off; On changes the entire surface to mint and
@@ -104,6 +111,7 @@ behavior, and extra time retains its independent stage-clock purchase.
 | Current chest marker texture | Existing acquired chest rendering and tier selection, documented in [Jelly fragments](jelly-fragments.md) and [chest replacement](chest-refresh.md). | Reuses the owner's current cropped texture, including its cached model render. No new chest is downloaded. The button animates this still texture; it does not play a source rig or opening clip. |
 | Royal fallback, `assets/chests/royal/closed.png` | Bobardo, [Modern 2D Animated Chests FREE Demo 1.0.2](https://assetstore.unity.com/packages/2d/modern-2d-animated-chests-free-demo-360538), `Chests/Royal/Sprites/SPR_Royal_Close.png`. Existing Unity Asset Store Standard EULA acquisition; see `assets/chests/SOURCE.txt`. | Already integrated and inspected. The known transparent margins are excluded when used as a compact icon. Static closed-chest artwork; existing source open art and other game animations are not triggered by this button. |
 | `assets/coins/gold-coin.png` | Kenneth Foldal Moe / Archanor VFX, Toon FX 1.52, under its recorded Unity Asset Store Standard EULA. See [coin artwork](coins.md) and `assets/coins/manifest.json`. | Existing acquired, processed and integrated price icon. Static artwork; no new copy or acquisition. |
+| `assets/images/ui/jelly-goals/clock.webp` | Microsoft Corporation, Fluent Emoji 3D Mantelpiece Clock, MIT. Original URL, hashes and unchanged production reuse are recorded in `assets/images/ui/jelly-goals/sources.json`. | Already acquired and integrated. The actual clock artwork was inspected before the layout refinement; its source is static and contains no animation clips. No new download or replacement artwork. |
 | `assets/chests/particles/portal_glow.png` | Existing Modern 2D Animated Chests particle artwork, with source mapping in `assets/chests/SOURCE.txt`. | Already acquired and integrated static glow. Its placement, color and opacity are authored by the game. |
 | `assets/chests/milestone/sparkle.png` | Kenneth Foldal Moe / Archanor VFX, Toon FX 1.52, under the recorded Unity Asset Store Standard EULA. Source details and hashes are in [Jelly fragments](jelly-fragments.md). | Existing acquired four-point glint, inspected before reuse. Static texture with game-authored appearance timing; no Unity prefab or shader is imported. |
 
@@ -159,7 +167,7 @@ flights overlap existing ones without restarting or skipping them. Insufficient
 funds still trigger rejection feedback and leave all paid deliveries intact.
 Auto merge retains its exclusive board operation.
 
-Collect uses a full-width green action with a sourced word-jelly illustration,
+Collect remains the wide green primary action beside compact Fill, with a sourced word-jelly illustration,
 a stable title and a contained completed-word count badge. During collection
 the number becomes the remaining count; the full meaning stays available in
 the existing accessible name. Narrow controls retain the same bounded number

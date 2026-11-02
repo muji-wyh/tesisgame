@@ -80,6 +80,46 @@ func _check_goal() -> void:
 	goal.queue_free()
 
 
+func _check_tool_layout() -> void:
+	var button := Powerup.new()
+	root.add_child(button)
+	for scale_value: float in [0.65, 1.0, 1.5, 1175.0 / 480.0, 3.2]:
+		for width: float in [88.0, 112.0, 144.0, 184.0, 220.0]:
+			for height: float in [44.0, 56.0]:
+				for kind: String in ["auto_merge", "fragments", "extra_time"]:
+					button.configure(kind, 1200 if kind == "auto_merge" else 400, false)
+					button.set_ui_scale(scale_value, height < 55.0)
+					button.size = Vector2(width, height) / scale_value
+					button._layout()
+					var state: Dictionary = button.snapshot()
+					var areas: Dictionary = {}
+					for key: String in ["icon_rect", "title_rect", "price_rect", "coin_rect"]:
+						var values: Array = state[key]
+						areas[key] = Rect2(values[0], values[1], values[2], values[3])
+						check(Rect2(Vector2.ZERO, button.size).grow(0.01).encloses(areas[key]),
+							"Actual paid-tool content fits at width %s, height %s, scale %s" % [width, height, scale_value])
+					for label: Label in [button._title, button._price_label]:
+						var font: Font = label.get_theme_font("font")
+						var font_size: int = label.get_theme_font_size("font_size")
+						check(font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x <= label.size.x + 0.01
+							and font.get_height(font_size) <= label.size.y + 0.01
+							and font_size * scale_value * label.scale.x >= 10.0,
+							"Tool text '%s' fits at width %s, height %s, scale %s, font %s, area %s" % [
+								label.text, width, height, scale_value, font_size * scale_value * label.scale.x, label.size])
+					check(not Rect2(areas.icon_rect).intersects(areas.title_rect)
+						and not Rect2(areas.icon_rect).intersects(areas.coin_rect)
+						and not Rect2(areas.title_rect).intersects(areas.price_rect),
+						"Artwork, name and cost have separate content areas")
+					if width >= 144.0:
+						check(button._title.horizontal_alignment == HORIZONTAL_ALIGNMENT_LEFT
+							and is_equal_approx(Rect2(areas.title_rect).position.x, Rect2(areas.coin_rect).position.x)
+							and Rect2(areas.icon_rect).end.x + 6.0 / scale_value <= Rect2(areas.title_rect).position.x
+							and Rect2(areas.title_rect).end.y <= Rect2(areas.coin_rect).position.y
+							and is_equal_approx(Rect2(areas.icon_rect).get_center().y, button.size.y * 0.5),
+							"Wide tools align name and cost beside a vertically centered sourced icon")
+	button.queue_free()
+
+
 func _run() -> void:
 	var button := Powerup.new()
 	root.add_child(button)
@@ -106,12 +146,13 @@ func _run() -> void:
 		button.size = Vector2(desktop_width, 72.0) / desktop_scale
 		button._layout()
 		var title: Label = button._title
-		var physical_font_size: float = title.get_theme_font_size("font_size") * desktop_scale
-		var physical_line_height: float = title.get_line_height() * desktop_scale
+		var physical_font_size: float = title.get_theme_font_size("font_size") * desktop_scale * title.scale.x
+		var physical_line_height: float = title.get_line_height() * desktop_scale * title.scale.y
 		check(physical_font_size >= 10.0, "desktop Auto merge lettering stays at least 10 physical pixels at width=%s; actual=%s" % [desktop_width, physical_font_size])
 		check(physical_line_height >= 10.0, "desktop Auto merge line height remains readable at width=%s" % desktop_width)
 		check(title.get_visible_line_count() == title.get_line_count(), "desktop Auto merge shows every title line at width=%s" % desktop_width)
-		check(Rect2(Vector2.ZERO, button.size).encloses(title.get_rect()), "desktop Auto merge title stays inside its physical purchase target at width=%s" % desktop_width)
+		check(Rect2(Vector2.ZERO, button.size).encloses(Rect2(title.position, title.size * title.scale)),
+			"desktop Auto merge title stays inside its physical purchase target at width=%s" % desktop_width)
 	button.configure("auto_merge", 1200, false)
 	button.set_availability(true, false)
 	check(not button.disabled and not button.snapshot().affordable, "low funds remains clickable")
@@ -210,6 +251,7 @@ func _run() -> void:
 	check(button._chest == viewport.get_texture(), "a new viewport chest is accepted without a GPU readback")
 	viewport.queue_free()
 	_check_goal()
+	_check_tool_layout()
 	button.queue_free()
 	await process_frame
 	print("Powerup button checks: %d; failures: %d" % [checks, failures])

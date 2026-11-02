@@ -58,14 +58,36 @@ func put(model, tile: Dictionary) -> void:
 
 func geometry(view) -> void:
 	var tools := Rect2()
+	var visible_tools: Array[Control] = []
 	for button: Control in view.powerup_buttons.values():
 		if button.visible:
+			visible_tools.append(button)
 			tools = button.get_rect() if not tools.has_area() else tools.merge(button.get_rect())
+	if not visible_tools.is_empty():
+		var reference: Rect2 = visible_tools[0].get_rect()
+		var one_row: bool = true
+		var one_column: bool = true
+		for button: Control in visible_tools:
+			check(button.size.is_equal_approx(reference.size),
+				"Every paid tool has the same target size, without an oversized leftover card")
+			one_row = one_row and is_equal_approx(button.position.y, reference.position.y)
+			one_column = one_column and is_equal_approx(button.position.x, reference.position.x)
+		check(one_row or one_column,
+			"Paid tools form one even row or column instead of an incomplete two-column grid")
 	var free_area: Rect2 = view._fill_button.get_rect().merge(view.collect_button.get_rect())
 	check(is_equal_approx(free_area.position.x, tools.position.x)
 		and is_equal_approx(free_area.size.x, tools.size.x)
 		and is_equal_approx(view._fill_button.size.x * _scale(view), 56.0),
 		"Compact Fill and primary Collect share the paid-tool group without an empty full-row switch")
+	if not view._layout_too_small:
+		var actions: Array[Control] = [view._fill_button, view.collect_button]
+		actions.append_array(visible_tools)
+		for heading: Control in [view._merged_level_badge, view._stage_banner._label]:
+			if not heading.is_visible_in_tree():
+				continue
+			for action: Control in actions:
+				check(not heading.get_global_rect().grow(-0.01).intersects(action.get_global_rect()),
+					"Stage and Jelly level information never cover a live action target")
 	check_collect_typography(view.collect_button, _scale(view))
 	for button in view.powerup_buttons.values():
 		if not button.visible:
@@ -167,6 +189,12 @@ func _run() -> void:
 	app._sync_jelly()
 	view.set_stage_progress(view.game.stage_run.snapshot())
 	view.set_process(false)
+	for frame in range(100):
+		if not view._stage_banner.ready_pending():
+			break
+		view._process(0.05)
+	check(not view._stage_banner.ready_pending() and not view._paused,
+		"Review the actual interactive controls after the real stage-entry gate")
 	for dimensions: Vector2i in [Vector2i(1473, 1175), Vector2i(1366, 768),
 			Vector2i(393, 852), Vector2i(320, 480), Vector2i(844, 390)]:
 		root.size = dimensions
