@@ -270,8 +270,8 @@ func _test_version_four_upgrade_migration() -> void:
 	check(store.complete_upgrade(3, wallet) and wallet.balance == 375 and store.merged_level() == 3,
 		"The old exact receipt still completes after migration without a second debit")
 	var migrated := ConfigFile.new()
-	check(migrated.parse(host.campaign) == OK and migrated.get_value("campaign", "version") == 5,
-		"The next actual write persists both upgrade tracks in version five")
+	check(migrated.parse(host.campaign) == OK and migrated.get_value("campaign", "version") == Store.VERSION,
+		"The next actual write persists both upgrade tracks and their contribution state")
 	for invalid: Dictionary in [
 			{"level": 1, "auto_merge_level": 0, "pending": {}, "intro": "unseen"},
 			{"level": 1, "auto_merge_level": 10, "pending": {}, "intro": "unseen"},
@@ -281,6 +281,7 @@ func _test_version_four_upgrade_migration() -> void:
 				"pending": {"kind": "auto_merge", "level": 2, "price": 50, "id": "jelly-level-v1:2"}},
 			{"level": 1, "auto_merge_level": 1, "intro": "unseen",
 				"pending": {"kind": "fragments", "level": 2, "price": 50, "id": "auto-merge-level-v1:2"}}]:
+		invalid.funded = {"jelly": 0, "auto_merge": 0}
 		migrated.set_value("campaign", "upgrades", invalid)
 		host.campaign = migrated.encode_to_text()
 		original = host.campaign

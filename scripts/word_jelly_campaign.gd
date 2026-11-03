@@ -62,6 +62,8 @@ func configure(app, path: String, host: Object = null) -> void:
 	upgrades.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	upgrades.back_requested.connect(close_upgrades)
 	upgrades.purchase_requested.connect(purchase_upgrade)
+	upgrades.contribution_requested.connect(contribute_upgrade)
+	upgrades.audio_requested.connect(_upgrade_audio)
 	upgrades.retry_requested.connect(retry)
 	upgrades.intro_accepted.connect(_accept_upgrade_intro)
 	upgrades.intro_dismissed.connect(_dismiss_upgrade_intro)
@@ -105,17 +107,18 @@ func _preview_word() -> Dictionary:
 func _upgrade_state() -> Dictionary:
 	var state: Dictionary = store.upgrade_state() if store.ready else \
 		upgrades._state.duplicate(true) if not upgrades._state.is_empty() else \
-			{"level": 1, "auto_merge_level": 1, "pending": {}, "intro": "unseen"}
+			{"level": 1, "auto_merge_level": 1, "funded": {"jelly": 0, "auto_merge": 0},
+				"pending": {}, "intro": "unseen"}
 	var pending: Dictionary = state.pending
 	var storage_error: String = error
 	if not _app.coin_wallet.ready or not _app.coin_wallet.error.is_empty():
 		storage_error = _app.coin_wallet.error if not _app.coin_wallet.error.is_empty() \
 			else "Load your saved coins before buying a Jelly upgrade."
 	state["balance"] = _app.coin_wallet.balance
-	state["paid"] = not pending.is_empty() and _app.coin_wallet.has_purchase(str(pending.id), int(pending.price))
+	state["paid"] = not pending.is_empty() and _app.coin_wallet.has_purchase(str(pending.id), _pending_upgrade_amount(pending))
 	state["busy"] = _buying_upgrade
 	state["error"] = _upgrade_error if not _upgrade_error.is_empty() else storage_error
-	state["retry"] = not storage_error.is_empty()
+	state["retry"] = not storage_error.is_empty() or not pending.is_empty()
 	state["just_unlocked"] = _last_unlocked
 	state["just_unlocked_kind"] = _last_unlocked_kind
 	return state
@@ -207,12 +210,85 @@ func _upgrade_failed(message: String) -> void:
 
 func _recover_upgrade() -> bool:
 	var pending: Dictionary = store.upgrade_state().pending
-	if pending.is_empty() or not _app.coin_wallet.has_purchase(str(pending.id), int(pending.price)):
+	if pending.is_empty() or not _app.coin_wallet.has_purchase(str(pending.id), _pending_upgrade_amount(pending)):
 		return true
-	if not store.complete_upgrade(int(pending.level), _app.coin_wallet, str(pending.kind)):
+	var completed: bool = store.complete_upgrade_contribution(_app.coin_wallet) \
+		if pending.get("mode", "") == "contribution" \
+		else store.complete_upgrade(int(pending.level), _app.coin_wallet, str(pending.kind))
+	if not completed:
 		error = store.error
 		return false
 	return true
+
+
+func _pending_upgrade_amount(pending: Dictionary) -> int:
+	return int(pending.get("amount", pending.get("price", 0)))
+
+
+func _upgrade_audio(cue: String) -> void:
+	if cue == "upgrade_coin":
+		_app.audio.play_coin_spend()
+	elif cue == "goal_complete":
+		_app.audio.play_upgrade_milestone()
+	else:
+		_app.audio.play_jelly_cue(cue)
+
+
+func contribute_upgrade(kind: String, amount: int = 25, resume_pending: bool = false) -> void:
+	if _buying_upgrade or _app._page_hidden or starting or settling or not upgrades.visible \
+		or not upgrades._active or upgrades.is_offer() or not store.ready or not error.is_empty() \
+		or kind not in Store.UPGRADE_LEVEL_KEYS or amount != 25 \
+		or store.upgrade_level(kind) >= Economy.MAX_UPGRADE_LEVEL:
+		return
+	var current: Dictionary = store.upgrade_state()
+	if not resume_pending and (str(upgrades.snapshot().get("kind", "")) != kind \
+		or int(upgrades._state.get("level", 0)) != int(current.level) \
+		or int(upgrades._state.get("auto_merge_level", 0)) != int(current.auto_merge_level) \
+		or upgrades._state.get("funded", {}) != current.funded):
+		return
+	var pending: Dictionary = current.pending
+	if not pending.is_empty() and (pending.get("mode", "") != "contribution" \
+		or str(pending.kind) != kind or int(pending.amount) != amount):
+		return
+	if not _app.coin_wallet.ready or not _app.coin_wallet.error.is_empty():
+		_upgrade_failed(_app.coin_wallet.error)
+		return
+	var paid: bool = not pending.is_empty() \
+		and _app.coin_wallet.has_purchase(str(pending.id), _pending_upgrade_amount(pending))
+	if _app.coin_wallet.balance < amount and not paid:
+		upgrades.configure(_upgrade_state())
+		_publish()
+		return
+	_buying_upgrade = true
+	_upgrade_error = ""
+	var previous_level: int = store.upgrade_level(kind)
+	# Keep the held control enabled while this synchronous journal commits.
+	if not store.begin_upgrade_contribution(kind, amount):
+		_upgrade_failed(store.error)
+		return
+	pending = store.upgrade_state().pending
+	var spent: Dictionary = _app.coin_wallet.spend(str(pending.id), int(pending.amount))
+	if not spent.ok:
+		if spent.get("reason") == "insufficient":
+			_buying_upgrade = false
+			upgrades.configure(_upgrade_state())
+			_publish()
+		else:
+			_upgrade_failed(_app.coin_wallet.error)
+		return
+	if not store.complete_upgrade_contribution(_app.coin_wallet):
+		_upgrade_failed(store.error)
+		return
+	_buying_upgrade = false
+	error = ""
+	_upgrade_error = ""
+	_last_unlocked = store.upgrade_level(kind) if store.upgrade_level(kind) > previous_level else 0
+	_last_unlocked_kind = kind
+	_app._coin_flight.sync(_app.coin_wallet.balance)
+	upgrades.configure(_upgrade_state())
+	_app._sync_jelly()
+	_app._refresh()
+	_publish()
 
 
 func purchase_upgrade(level: int, kind: String = "jelly") -> void:
@@ -222,6 +298,8 @@ func purchase_upgrade(level: int, kind: String = "jelly") -> void:
 		or level > Economy.MAX_UPGRADE_LEVEL:
 		return
 	var pending: Dictionary = store.upgrade_state().pending
+	if pending.get("mode", "") == "contribution":
+		return
 	if not pending.is_empty() and pending.kind != kind:
 		_upgrade_failed("Finish the saved upgrade before buying another.")
 		return
@@ -262,7 +340,6 @@ func purchase_upgrade(level: int, kind: String = "jelly") -> void:
 	_last_unlocked = level
 	_last_unlocked_kind = kind
 	upgrades.configure(_upgrade_state())
-	_app.audio.play_jelly_cue("goal_complete")
 	_app._sync_jelly()
 	_app._refresh()
 	_publish()
@@ -664,7 +741,10 @@ func retry() -> void:
 		else:
 			var pending_upgrade: Dictionary = store.upgrade_state().pending
 			if not pending_upgrade.is_empty():
-				purchase_upgrade(int(pending_upgrade.level), str(pending_upgrade.kind))
+				if pending_upgrade.get("mode", "") == "contribution":
+					contribute_upgrade(str(pending_upgrade.kind), int(pending_upgrade.amount), true)
+				else:
+					purchase_upgrade(int(pending_upgrade.level), str(pending_upgrade.kind))
 			else:
 				upgrades.configure(_upgrade_state())
 		_app._refresh()

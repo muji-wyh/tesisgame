@@ -219,16 +219,17 @@ func _test_atomic_level_cap() -> void:
 		check(whole.merge_level == level and whole.fragments == level and not whole.mastery_eligible,
 			"Image-free atomic vocabulary supports additive levels without inventing mastery")
 	var extra: Dictionary = _sources(model, "MRI", 1)[0]
-	check(whole.merge_level == 9 and model.parts_compatible(whole, extra),
-		"An authored atomic Lv9 still accepts an identical word above the shared cap")
-	whole = _merge(model, whole, extra)
+	check(whole.merge_level == 9 and not model.parts_compatible(whole, extra)
+		and model.try_merge(int(whole.id), int(extra.id)) == "ignored" and model.fusions.is_empty(),
+		"An authored atomic Lv9 ignores further merging while preserving its identical partner")
 	var attempts: Array = []
 	model.word_attempted.connect(func(event: String, ids: Array[String], correct: bool): attempts.append([event, ids, correct]))
 	check(whole.merge_level == 9 and model.collect(int(whole.id)),
-		"An authored atomic over-cap merge clamps to Lv9 and remains collectable")
+		"An authored atomic word at Lv9 remains collectable after an ignored merge")
 	_settle(model)
-	check(model.cleared_pairs == 1 and model.fragment_count == 10 and attempts.is_empty(),
-		"The highest atomic level collects every fragment without changing its mastery policy")
+	check(model.cleared_pairs == 1 and model.fragment_count == 9 and attempts.is_empty()
+		and model.cell(int(extra.id)).fragments == 1,
+		"The highest atomic level collects its own fragments and preserves the unmerged partner without mastery")
 
 
 func _test_atomic_exposure_and_retry() -> void:

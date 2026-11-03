@@ -1346,7 +1346,9 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dic
 	if locked:
 		if automatic:
 			return "blocked"
-		if parts_compatible(a, b) or parts_compatible(b, a):
+		var matching_words: bool = str(a.get("jelly_kind", "")) == "merged" \
+			and str(b.get("jelly_kind", "")) == "merged" and _merged_upgrade_level(a, b) > 0
+		if matching_words or parts_compatible(a, b) or parts_compatible(b, a):
 			boss.unlock_pair(a_id, b_id)
 			_restore_dragged_tile()
 			_held_tile_id = -1
@@ -1366,6 +1368,8 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dic
 			candidate.result.row = destination.y
 	if candidate.status == "needs_room":
 		return "needs_room"
+	if candidate.status == "level_capped":
+		return "ignored"
 	if not candidate.status in ["partial", "complete"]:
 		var generation: int = _generation
 		_reset_combo()
@@ -2623,6 +2627,8 @@ func _resolve_composition(left: Dictionary, right: Dictionary) -> Dictionary:
 func merge_candidate(left: Dictionary, right: Dictionary, check_space: bool = true) -> Dictionary:
 	if left.is_empty() or right.is_empty() or int(left.get("id", -1)) == int(right.get("id", -2)):
 		return {"status": "invalid", "result": {}}
+	if is_max_level_merged(left) or is_max_level_merged(right):
+		return {"status": "level_capped", "result": {}}
 	if boss.frozen(int(left.get("id", -1))) or boss.frozen(int(right.get("id", -1))):
 		return {"status": "blocked", "result": {}}
 	var left_kind: String = str(left.get("jelly_kind", "root"))
@@ -2676,10 +2682,17 @@ static func _merged_upgrade_level(left: Dictionary, right: Dictionary) -> int:
 	return mini(left_level + right_level, MAX_MERGE_LEVEL)
 
 
+func is_max_level_merged(tile: Dictionary) -> bool:
+	return str(tile.get("jelly_kind", "")) == "merged" \
+		and int(tile.get("merge_level", 1)) >= merged_level_limit
+
+
 func parts_compatible(left: Dictionary, right: Dictionary) -> bool:
 	# Palette classification evaluates every visible pair; keep it semantic
 	# without copying complete word records or constructing speculative tiles.
 	if left.is_empty() or right.is_empty() or int(left.get("id", -1)) == int(right.get("id", -2)):
+		return false
+	if is_max_level_merged(left) or is_max_level_merged(right):
 		return false
 	var left_kind: String = str(left.get("jelly_kind", "root"))
 	var right_kind: String = str(right.get("jelly_kind", "root"))

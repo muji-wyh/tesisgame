@@ -216,8 +216,8 @@ func _test_levels_and_fragments() -> void:
 		check(not model.parts_compatible(current, other_word), "Different word identities never upgrade together")
 		model.cells.erase(other_word)
 	var max_twin: Dictionary = _ready(model, word, 1)
-	check(model.parts_compatible(current, max_twin) and model.merge_candidate(current, max_twin).result.merge_level == 9,
-		"Lv9 still accepts a same-word partner while keeping the output at its cap")
+	check(not model.parts_compatible(current, max_twin) and model.merge_candidate(current, max_twin).status == "level_capped",
+		"A maximum-level Jelly cannot consume another same-word partner")
 	model.cells.erase(max_twin)
 	var payloads: Array = []
 	model.collection_started.connect(func(payload: Dictionary): payloads.append(payload))
@@ -254,7 +254,7 @@ func _test_all_level_pairs() -> void:
 			var left: Dictionary = _ready(model, _word(), left_level, left_level + 1)
 			var right: Dictionary = _ready(model, _word(), right_level, right_level + 2)
 			var combined: int = left_level + right_level
-			var allowed: bool = true
+			var allowed: bool = left_level < Model.MAX_MERGE_LEVEL and right_level < Model.MAX_MERGE_LEVEL
 			var capped: int = mini(combined, Model.MAX_MERGE_LEVEL)
 			var label: String = "Lv%d + Lv%d" % [left_level, right_level]
 			var cells_before: Array = model.cells.duplicate(true)
@@ -275,9 +275,9 @@ func _test_all_level_pairs() -> void:
 				check(result.merge_level == capped and result.fragments == combined + 3 and result.mass == 2,
 					label + " commits the level sum with every carried fragment and source mass")
 			else:
-				check(model.try_merge(left.id, right.id) == "wrong" and model.cells == cells_before
+				check(model.try_merge(left.id, right.id) == "ignored" and model.cells == cells_before
 					and model._next_tile_id == next_id and model._next_event_id == next_event and model.fusions.is_empty(),
-					label + " rejects atomically instead of clamping or consuming either Jelly")
+					label + " ignores a capped input without consuming either Jelly or recording a mismatch")
 			var automatic: RefCounted = _model()
 			_ready(automatic, _word(), left_level, left_level + 1)
 			_ready(automatic, _word(), right_level, right_level + 2)

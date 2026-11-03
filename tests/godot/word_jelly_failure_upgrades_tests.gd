@@ -258,9 +258,33 @@ func _case(settings: Dictionary) -> void:
 			and app._round_id == round_id and campaign.store.merged_level() == 1,
 			"Repeated navigation cannot repeat rewards, restart the game or buy a level automatically")
 		await capture(str(settings.name) + "-upgrade-page")
-		await tap(campaign.upgrades._buy)
+		var upgrade_page = campaign.upgrades
+		var charge_position: Vector2 = upgrade_page._buy.get_global_rect().get_center()
+		var charge_press := InputEventScreenTouch.new()
+		charge_press.index = 7
+		charge_press.position = charge_position
+		charge_press.pressed = true
+		root.push_input(charge_press)
+		await process_frame
+		for frame in range(4):
+			upgrade_page.advance(0.05)
+		check(upgrade_page.snapshot().charging and campaign.store.merged_level() == 1
+			and upgrade_page.snapshot().funded == 25 and app.coin_wallet.balance == coins - 25,
+			"A real held touch saves its first twenty-five-coin pulse without unlocking the incomplete level")
+		for frame in range(5):
+			upgrade_page.advance(0.05)
+		var charge_release := InputEventScreenTouch.new()
+		charge_release.index = 7
+		charge_release.position = charge_position
+		charge_release.pressed = false
+		root.push_input(charge_release)
+		await process_frame
+		for frame in range(24):
+			upgrade_page.advance(0.05)
 		check(campaign.store.merged_level() == 2 and app.coin_wallet.balance == coins - 50,
-			"The actual upgrade page still requires one explicit fifty-coin purchase")
+			"The held touch reaches Lv2 through exactly two saved twenty-five-coin contributions")
+		check(not upgrade_page.snapshot().charging and upgrade_page.snapshot().funded == 0,
+			"A real touch release stops later pulses even after the level celebration settles")
 		var wallet := Wallet.new(app.coin_wallet._path)
 		check(wallet.load_state() and wallet.balance == coins - 50, "The upgrade debit persists in the real isolated wallet")
 		await tap(campaign.upgrades._back)

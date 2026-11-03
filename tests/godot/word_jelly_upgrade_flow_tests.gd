@@ -70,6 +70,16 @@ func tap(view, at: Vector2) -> void:
 		await process_frame
 
 
+func hold_upgrade(page, duration: float = 0.20) -> void:
+	page._buy.button_down.emit()
+	var remaining: float = duration
+	while remaining > 0.0:
+		var step: float = minf(0.05, remaining)
+		page.advance(step)
+		remaining -= step
+	page._buy.button_up.emit()
+
+
 func capture_ui(name: String) -> void:
 	if not OS.get_cmdline_user_args().has("--capture") or DisplayServer.get_name() == "headless":
 		return
@@ -131,6 +141,8 @@ func _run() -> void:
 			break
 	var campaign = app._campaign
 	var page = campaign.upgrades
+	var charge_audio: Array[String] = []
+	page.audio_requested.connect(func(cue: String) -> void: charge_audio.append(cue))
 	check(campaign.store.highest_cleared("growth") == 1 and page.visible and page.is_offer(),
 		"Only saved stage-one completion opens the special-power introduction")
 	check(app.coin_wallet.balance >= 50 and campaign.store.merged_level() == 1
@@ -148,34 +160,55 @@ func _run() -> void:
 	check(page.visible and not page.is_offer() and not campaign.map.visible
 		and page.snapshot().selected_level == 2 and page.snapshot().buy.guided
 		and page.snapshot().buy.enabled and campaign.store.upgrade_state().intro == "guide",
-		"The modal button opens the real upgrades page and highlights its affordable Lv2 purchase")
+		"The modal button opens the real upgrades page and highlights the affordable Lv2 charge")
 	await capture_ui("lv2-first-upgrade")
 	var host := Host.new()
 	host.campaign = FileAccess.get_file_as_string(campaign.store._path)
 	host.coins = FileAccess.get_file_as_string(app.coin_wallet._path)
 	campaign.store._host = host
 	app.coin_wallet._host = host
-	host.fail_after_spend = true
 	var before_purchase: int = app.coin_wallet.balance
-	await tap(view, page._buy.get_global_rect().get_center())
-	check(app.coin_wallet.balance == before_purchase - 50 and campaign.store.merged_level() == 1
+	hold_upgrade(page, 0.10)
+	check(app.coin_wallet.balance == before_purchase and campaign.store.upgrade_state().funded.jelly == 0
+		and campaign.store.upgrade_state().pending.is_empty() and not page.snapshot().charging,
+		"An affordable charge released before its first pulse saves no intent and spends no coins")
+	host.fail_after_spend = true
+	hold_upgrade(page)
+	check(app.coin_wallet.balance == before_purchase - 25 and campaign.store.merged_level() == 1
 		and page.snapshot().pending.level == 2 and page.snapshot().buy.enabled
-		and not page.snapshot().error.is_empty(),
-		"A blocked final write retains a real paid receipt and offers Retry without faking an unlock")
+		and campaign.store.upgrade_state().funded.jelly == 0
+		and not page.snapshot().charging and not page.snapshot().error.is_empty(),
+		"A blocked contribution write retains its paid twenty-five-coin receipt without faking saved progress")
+	check(charge_audio.count("upgrade_coin") == 0 and charge_audio.count("goal_complete") == 0,
+		"A wallet debit with an unsaved contribution plays neither the saved-deposit cue nor a level celebration")
 	await capture_ui("paid-upgrade-retry")
 	host.campaign_writable = true
 	await tap(view, page._buy.get_global_rect().get_center())
-	check(campaign.store.merged_level() == 2 and app.coin_wallet.balance == before_purchase - 50
+	check(campaign.store.merged_level() == 1 and app.coin_wallet.balance == before_purchase - 25
+		and campaign.store.upgrade_state().funded.jelly == 25
 		and campaign.store.upgrade_state().pending.is_empty()
+		and campaign.store.upgrade_state().intro == "guide",
+		"The real Retry commits the already-paid contribution once and preserves the remaining Lv2 funding")
+	check(charge_audio.count("upgrade_coin") == 1 and charge_audio.count("goal_complete") == 0,
+		"The retried saved deposit receives one coin accent while its unfinished level stays silent")
+	check(page.snapshot().funded == 25 and page.snapshot().remaining == 25
+		and is_equal_approx(float(page.snapshot().progress), 0.5),
+		"The visible progress reports the saved half-charge and exact remaining coins before Lv2")
+	hold_upgrade(page)
+	check(campaign.store.merged_level() == 2 and app.coin_wallet.balance == before_purchase - 50
+		and campaign.store.upgrade_state().funded.jelly == 0
 		and campaign.store.upgrade_state().intro == "complete",
-		"The actual Retry action finishes the already-paid Lv2 without charging a second fifty coins")
-	check(page.snapshot().level == 2 and not page.snapshot().buy.enabled and not page.snapshot().buy.guided,
-		"Only a saved unlock completes the FRE and marks Lv2 owned")
+		"Another genuine hold reaches Lv2 after exactly fifty coins of saved contributions")
+	check(page.snapshot().level == 2 and page.snapshot().buy.enabled == (app.coin_wallet.balance >= 25)
+		and not page.snapshot().buy.guided and not page.snapshot().charging,
+		"Only a saved unlock completes the introduction while further charging follows the available balance")
+	check(charge_audio.count("upgrade_coin") == 2 and charge_audio.count("goal_complete") == 1
+		and page.snapshot().level_up_count == 1,
+		"The actual Lv2 milestone gives one level effect and reward cue after two saved coin pulses")
 	await capture_ui("lv2-unlocked")
-	page._buy.pressed.emit()
 	campaign.purchase_upgrade(2)
 	check(app.coin_wallet.balance == before_purchase - 50 and campaign.store.merged_level() == 2,
-		"Repeated input cannot double-charge or buy a second level")
+		"Repeating an owned-level purchase cannot spend another coin")
 	var saved_upgrade := Store.new(directory + "/campaign.cfg", host)
 	var saved_wallet := Wallet.new(directory + "/coins.cfg", host)
 	check(saved_upgrade.load_state() and saved_wallet.load_state() and saved_upgrade.merged_level() == 2
@@ -190,9 +223,10 @@ func _run() -> void:
 		"A failed reload retains known ownership and exposes an actionable Retry even on a future-level preview")
 	host.campaign = valid_campaign
 	await tap(view, page._buy.get_global_rect().get_center())
-	check(campaign.store.ready and page.snapshot().error.is_empty() and not page.snapshot().buy.enabled
+	check(campaign.store.ready and page.snapshot().error.is_empty()
+		and page.snapshot().buy.enabled == (app.coin_wallet.balance >= 25)
 		and campaign.store.merged_level() == 2 and app.coin_wallet.balance == before_purchase - 50,
-		"Retrying an unreadable progress save restores ownership without buying the inspected future level")
+		"Retrying an unreadable progress save restores ownership and charge availability without funding the inspected future level")
 	await tap(view, page._back.get_global_rect().get_center())
 	check(campaign.map.visible and not page.visible and campaign.map.snapshot().merged_level == 2,
 		"Back returns to the same map with its newly owned level")
@@ -210,22 +244,32 @@ func _run() -> void:
 	await capture_ui("auto-merge-lv2-upgrade")
 	var before_auto: int = app.coin_wallet.balance
 	host.fail_after_spend = true
-	await tap(view, page._buy.get_global_rect().get_center())
-	check(app.coin_wallet.balance == before_auto - 50 and campaign.store.auto_merge_level() == 1
-		and page.snapshot().pending.kind == "auto_merge" and page.snapshot().buy.enabled,
-		"A blocked final Auto merge write retains its paid fifty-coin intent and original capacity")
+	hold_upgrade(page)
+	check(app.coin_wallet.balance == before_auto - 25 and campaign.store.auto_merge_level() == 1
+		and campaign.store.upgrade_state().funded.auto_merge == 0
+		and page.snapshot().pending.kind == "auto_merge" and page.snapshot().buy.enabled
+		and not page.snapshot().charging,
+		"A blocked Auto merge contribution retains its paid twenty-five-coin intent and original capacity")
 	await capture_ui("auto-merge-paid-retry")
 	page.select_upgrade("jelly")
 	page.select_level(9)
 	host.campaign_writable = true
 	await tap(view, page._buy.get_global_rect().get_center())
-	check(campaign.store.auto_merge_level() == 2 and campaign.store.merged_level() == 2
-		and app.coin_wallet.balance == before_auto - 50 and campaign.store.upgrade_state().pending.is_empty(),
-		"Retry follows the saved Auto merge kind even while a future Jelly power is inspected, without another debit")
+	check(campaign.store.auto_merge_level() == 1 and campaign.store.merged_level() == 2
+		and campaign.store.upgrade_state().funded.auto_merge == 25
+		and app.coin_wallet.balance == before_auto - 25 and campaign.store.upgrade_state().pending.is_empty(),
+		"Retry commits the saved Auto merge contribution while a future Jelly power is inspected, without another debit")
 	page.select_upgrade("auto_merge")
 	page.select_level(2)
-	check(page.snapshot().owned_level == 2 and not page.snapshot().buy.enabled
+	hold_upgrade(page)
+	check(page.snapshot().owned_level == 2 and app.coin_wallet.balance == before_auto - 50
+		and campaign.store.upgrade_state().funded.auto_merge == 0
+		and page.snapshot().buy.enabled == (app.coin_wallet.balance >= 25)
 		and page.snapshot().preview.capacity == 4, "Only the committed Auto merge upgrade owns four output slots")
+	check(charge_audio.count("upgrade_coin") == 4 and charge_audio.count("goal_complete") == 2
+		and page.snapshot().level_up_count == 2,
+		"The independent Auto merge milestone adds two deposits and one celebration (coins=%d, rewards=%d, effects=%d)" % [
+			charge_audio.count("upgrade_coin"), charge_audio.count("goal_complete"), page.snapshot().level_up_count])
 	await capture_ui("auto-merge-lv2-owned")
 	var restored_auto := Store.new(directory + "/campaign.cfg", host)
 	check(restored_auto.load_state() and restored_auto.auto_merge_level() == 2

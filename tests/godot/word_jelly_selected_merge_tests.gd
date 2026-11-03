@@ -119,15 +119,93 @@ func test_guards_and_cap() -> void:
 	model.merged_level_limit = 4
 	merged(model, cat, 3, 2)
 	merged(model, cat, 2, 3)
-	check(model.activate_powerup("family_merge", int(lonely.id)), "A cap never makes same-word upgrades unavailable")
+	check(model.activate_powerup("family_merge", int(lonely.id)), "Below-cap Jellies still provide a legal same-word upgrade")
 	drain(model)
 	var result: Array = model.cells.filter(func(tile: Dictionary) -> bool:
 		return tile.get("word", {}).get("id") == cat.id and tile.jelly_kind == "merged")
-	check(result.size() == 1 and result[0].merge_level == 4 and result[0].fragments == 5,
-		"The final result obeys the unlocked cap without discarding fragment ownership")
+	var carried: int = 0
+	for tile: Dictionary in result:
+		carried += int(tile.fragments)
+	check(result.size() == 2 and carried == 5
+		and result.any(func(tile: Dictionary) -> bool: return int(tile.merge_level) == 4),
+		"A family operation stops using a capped result and preserves the remaining Jelly and every fragment")
 	check(not model.cell(int(model.cells.filter(func(tile: Dictionary) -> bool:
 		return tile.get("word_candidate", {}).get("id") == dog.id)[0].id)).is_empty(),
 		"Even after a capped union, the other family's input remains ordinary board content")
+
+
+func capped_fixture(limit: int) -> Dictionary:
+	var f: Dictionary = fixture()
+	var model = f.model
+	var plan: Dictionary = Catalog.make_plan(1, [cat, dog], 3, 71)
+	plan["merged_level_limit"] = limit
+	check(model.bind_stage(plan) and model.merged_level_limit == limit,
+		"The capped fixture binds the actual campaign level limit")
+	var root: Dictionary = put(model, model._new_word_root(cat))
+	var picture: Dictionary = put(model, model._new_picture_tile(cat))
+	check(model.try_merge(int(root.id), int(picture.id)) == "merged",
+		"A genuine root-picture match starts the combo before a capped interaction")
+	model.step(Model.FUSION_SECONDS + 0.001)
+	check(model.combo_snapshot().count > 0 and model.fusions.is_empty(),
+		"The capped fixture retains a real successful combo")
+	model.cells.clear()
+	return f
+
+
+func test_capped_merge_guards() -> void:
+	for limit: int in [1, 4, Model.MAX_MERGE_LEVEL]:
+		for partner_kind: String in ["same_lower", "same_max", "other_word", "root", "picture"]:
+			for reverse: bool in [false, true]:
+				var f: Dictionary = capped_fixture(limit)
+				var model = f.model
+				var capped: Dictionary = merged(model, cat, limit, 2)
+				var partner: Dictionary
+				match partner_kind:
+					"same_lower": partner = merged(model, cat, maxi(1, limit - 1), 3)
+					"same_max": partner = merged(model, cat, limit, 3)
+					"other_word": partner = merged(model, dog, 1, 3)
+					"root": partner = put(model, model._new_word_root(cat, 3))
+					"picture": partner = put(model, model._new_picture_tile(cat, 3))
+				var source: Dictionary = partner if reverse else capped
+				var target: Dictionary = capped if reverse else partner
+				var label: String = "Lv%d %s %s" % [limit, partner_kind, "target" if reverse else "source"]
+				check(not model.parts_compatible(source, target) and not model.can_merge(source, target)
+					and not model.merge_candidate(source, target).status in ["partial", "complete"],
+					"A capped Jelly is excluded from semantic matching and merge previews: " + label)
+				var before: Array = model.cells.duplicate(true)
+				var combo: Dictionary = model.combo_snapshot()
+				var evidence: Array = f.evidence.duplicate(true)
+				var next_id: int = model._next_tile_id
+				var cues: Array[String] = []
+				var combo_changes: Array[Dictionary] = []
+				model.cue_requested.connect(func(cue: String) -> void: cues.append(cue))
+				model.combo_changed.connect(func(state: Dictionary) -> void: combo_changes.append(state))
+				check(model.try_merge(int(source.id), int(target.id)) == "ignored"
+					and model.cells == before and model.fusions.is_empty() and model._next_tile_id == next_id,
+					"Dropping either side of a capped pair preserves both bodies and their fragments: " + label)
+				check(cues.is_empty() and combo_changes.is_empty() and model.combo_snapshot() == combo
+					and f.evidence == evidence and model.error.is_empty(),
+					"A capped attempt has no wrong cue, combo penalty or learning-error evidence: " + label)
+				check(model.compatible_pairs().is_empty() and model.auto_merge_preview().result_count == 0
+					and not model.can_activate_powerup("auto_merge")
+					and not model.activate_powerup("auto_merge") and f.payments.is_empty(),
+					"Auto merge cannot select or charge for a capped pair: " + label)
+				check(int(capped.id) in model.collectable_ids(),
+					"Reaching the limit preserves the intended collection action: " + label)
+
+
+func test_below_cap_upgrade() -> void:
+	for limit: int in [4, Model.MAX_MERGE_LEVEL]:
+		var f: Dictionary = capped_fixture(limit)
+		var model = f.model
+		var left: Dictionary = merged(model, cat, limit - 1, 2)
+		var right: Dictionary = merged(model, cat, 2, 3)
+		check(model.can_merge(left, right) and model.try_merge(int(left.id), int(right.id)) == "merged",
+			"Two below-cap Jellies may still combine even when their sum reaches the limit")
+		model.step(Model.FUSION_SECONDS + 0.001)
+		check(model.cells.size() == 1 and int(model.cells[0].merge_level) == limit
+			and int(model.cells[0].fragments) == 5,
+			"A legitimate upgrade clamps to the campaign limit and retains every carried fragment")
 
 
 func test_authored_family(compound: Dictionary) -> void:
@@ -300,6 +378,8 @@ func _run() -> void:
 	dog = words.filter(func(word: Dictionary) -> bool: return str(word.id) == "dog")[0]
 	test_selected_family()
 	test_guards_and_cap()
+	test_capped_merge_guards()
+	test_below_cap_upgrade()
 	var compounds: Array = data.words.filter(func(word: Dictionary) -> bool: return str(word.text) == "rainbow").map(
 		func(word: Dictionary) -> Dictionary: return Morphology.decorate(word))
 	check(not compounds.is_empty(), "The real reviewed vocabulary supplies a compound family fixture")

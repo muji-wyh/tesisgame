@@ -20,6 +20,7 @@ func _run() -> void:
 		view.size = dimensions
 		for reduced: bool in [false, true]:
 			_check_cross_level_hints(view, reduced)
+			_check_max_level_drop(view, reduced)
 			_check_early_match(view, reduced)
 			_check_match_edges(view, reduced)
 			_check_crowded_match(view, reduced)
@@ -45,15 +46,48 @@ func _check_cross_level_hints(view, reduced: bool) -> void:
 	_reset(view, reduced)
 	var ids: Array[int] = _completion_board(view, ["merged:cat:2", "merged:cat:2", "merged:cat:7", "merged:cat:9", "merged:apple:2"])
 	check(view._press(-1, _center(view, ids[0])), "A merged word can be selected")
-	_assert_completion_hints(view, [ids[1], ids[2], ids[3]], "same-word levels")
+	_assert_completion_hints(view, [ids[1], ids[2]], "same-word levels below the cap")
 	check(view.game.can_merge(view.game.cell(ids[0]), view.game.cell(ids[2])), "Cross-level Lv2 and Lv7 words can merge into Lv9")
-	check(view.game.can_merge(view.game.cell(ids[0]), view.game.cell(ids[3])),
-		"Same-word levels remain compatible when their result clamps to Lv9")
+	check(not view.game.can_merge(view.game.cell(ids[0]), view.game.cell(ids[3])),
+		"A maximum-level target never advertises another upgrade")
 	view.cancel_input()
 	check(view._press(7, _center(view, ids[3])), "The maximum level remains selectable")
-	_assert_completion_hints(view, [ids[0], ids[1], ids[2]], "maximum-level word family")
+	_assert_completion_hints(view, [], "maximum-level source")
 	view.cancel_input()
 	_assert_completion_hints(view, [], "canceled cross-level selection")
+
+func _check_max_level_drop(view, reduced: bool) -> void:
+	for limit: int in [4, Model.MAX_MERGE_LEVEL]:
+		for partner: String in ["merged:cat:1", "merged:apple:1"]:
+			for capped_source: bool in [false, true]:
+				_reset(view, reduced)
+				view.game.merged_level_limit = limit
+				var ids: Array[int] = _completion_board(view, ["merged:cat:%d" % limit, partner], [2, 3])
+				var source: int = ids[0] if capped_source else ids[1]
+				var target: int = ids[1] if capped_source else ids[0]
+				view.game.combo_count = 3
+				view.game.combo_progress = 2
+				view.game._combo_remaining = 5.0
+				var combo: Dictionary = view.game.combo_snapshot()
+				var destination: Vector2 = _center(view, target)
+				check(view._press(-1 if capped_source else 7, _center(view, source)),
+					"Capped Jellies remain movable with mouse and touch")
+				view._move(destination)
+				check(view._dragging and view._target == target and view._contact_state().kind == "touch",
+					"Either capped drag direction keeps neutral physical contact")
+				view._release(destination)
+				check(view.game.fusions.is_empty() and view._rejection.is_empty()
+					and cues.count("wrong") == 0 and cues.count("merge") == 0,
+					"Dropping a capped input neither merges nor presents a matching error")
+				check(view.game.combo_snapshot() == combo and attempts.is_empty() and payouts.is_empty(),
+					"A capped drop preserves the active combo without learning or reward side effects")
+				check(view.game.cells.size() == 2 and view.game.cell(ids[0]).merge_level == limit
+					and view.game.cell(ids[1]).merge_level == 1 and view.game.cell(ids[0]).fragments == 2
+					and view.game.cell(ids[1]).fragments == 3,
+					"A capped drop preserves both original bodies, levels and carried fragments")
+				_advance(view, 0.5)
+				check(view.game.fusions.is_empty() and view.game.combo_count == 3 and cues.count("wrong") == 0,
+					"Snapback finishes without a delayed mismatch or combo reset")
 
 func _check_early_match(view, reduced: bool) -> void:
 	for target: String in ["picture:cat", "picture:apple"]:
@@ -273,9 +307,9 @@ func _check_fusion_contact(view, reduced: bool) -> void:
 		var origin: Vector2 = view.get_global_transform() * view._tile_rect(fusion.result).get_center()
 		var partner: int = ids[2]
 		var destination: Vector2 = _center(view, partner)
-		var matching: bool = description.begins_with("merged:cat:")
+		var matching: bool = description.begins_with("merged:cat:") and description != "merged:cat:9"
 		check(view._press(7, origin), "An active fusion can be held for contact feedback")
-		check(view._tiles[partner].completion_hint == description.begins_with("merged:cat"), "Pending words highlight their same-word family across levels")
+		check(view._tiles[partner].completion_hint == matching, "Pending words highlight only same-word partners below the cap")
 		var separated: Vector2 = _place_at_gap(view, partner, Vector2.UP, 8.0)
 		check(view._target == -1, "A pending fusion cannot advertise contact across an eight-pixel gap")
 		var approach: Vector2 = _place_at_gap(view, partner, Vector2.UP, 1.0)
@@ -288,7 +322,7 @@ func _check_fusion_contact(view, reduced: bool) -> void:
 		check(not overlaps, "Fusion approach guidance begins outside the painted bodies")
 		check(view._target == (partner if matching else -1), "Only a compatible pending result gets wider merge guidance")
 		check(view._contact_state().kind == ("match" if matching else "none"),
-			"Approach feedback accepts matching words even when their result clamps to Lv9")
+			"Approach feedback excludes capped targets while accepting below-cap additive upgrades")
 		# Exercise the browser's coalesced pointer path as well as direct moves.
 		view._queue_drag_motion(destination - Vector2(0, view._pitch * 0.3))
 		_advance(view, 0.025)

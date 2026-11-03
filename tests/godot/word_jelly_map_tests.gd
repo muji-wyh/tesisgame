@@ -619,7 +619,7 @@ func _check_layout(view: Control, context: String) -> void:
 		check(separate, context + ": nearby stage interaction targets stay separate")
 		rects.append(rect)
 	var action_rects: Array[Rect2] = []
-	for key: String in ["home", "challenge"]:
+	for key: String in ["home", "challenge", "upgrades_entry"]:
 		var button: BaseButton = _action_button(view, key)
 		if button == null:
 			continue
@@ -637,7 +637,9 @@ func _check_layout(view: Control, context: String) -> void:
 		context + ": snapshots never retain stale pre-resize/pre-scroll geometry")
 	var home: BaseButton = _action_button(view, "home")
 	var heading: Label = view.get("_heading")
+	var subtitle: Label = view.get("_subtitle")
 	var wallet: Label = view.get("_wallet")
+	var wallet_icon: TextureRect = view.get("_wallet_icon")
 	check(not home.get_global_rect().grow(6.0 / _pixel_scale()).intersects(heading.get_global_rect())
 		and (not wallet.visible or not wallet.get_global_rect().intersects(heading.get_global_rect())),
 		context + ": the actual Home control and wallet leave a separate title region")
@@ -646,13 +648,51 @@ func _check_layout(view: Control, context: String) -> void:
 	check(ink.x <= heading.size.x + 0.1 and heading.get_line_count() == 1,
 		context + ": the complete map title fits on one line without going under Home")
 	var challenge: Button = _action_button(view, "challenge")
-	var icon_pixels: Vector2 = challenge.get_global_rect().size * _pixel_scale()
-	check(icon_pixels.x >= 132.0 and icon_pixels.x <= 134.0 and icon_pixels.y >= 44.0 and icon_pixels.y <= 46.0
-		and not challenge.get_global_rect().intersects(heading.get_global_rect())
-		and (not wallet.visible or not challenge.get_global_rect().intersects(wallet.get_global_rect())),
-		context + ": the labeled Challenge entrance stays clear of the title and wallet: " \
-			+ JSON.stringify({"pixels": icon_pixels, "challenge": challenge.get_global_rect(),
-				"title": heading.get_global_rect(), "wallet": wallet.get_global_rect()}))
+	var challenge_surface: StyleBox = challenge.get_theme_stylebox("normal")
+	var challenge_inner: Vector2 = challenge.size - challenge_surface.get_minimum_size()
+	var challenge_ink: Vector2 = challenge.get_theme_font("font").get_string_size(challenge.text,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, challenge.get_theme_font_size("font_size"))
+	var challenge_icon: Vector2 = challenge.icon.get_size() if challenge.icon != null else Vector2.ZERO
+	var icon_limit: int = challenge.get_theme_constant("icon_max_width")
+	if icon_limit > 0 and challenge_icon.x > icon_limit:
+		challenge_icon *= float(icon_limit) / challenge_icon.x
+	if challenge_icon.y > challenge_inner.y:
+		challenge_icon *= challenge_inner.y / challenge_icon.y
+	var icon_gap: float = challenge.get_theme_constant("h_separation") if challenge_icon.x > 0.0 else 0.0
+	check(challenge.icon != null and challenge_ink.x + challenge_icon.x + icon_gap <= challenge_inner.x + 0.1
+		and maxf(challenge_ink.y, challenge_icon.y) <= challenge_inner.y + 0.1,
+		context + ": the full Challenge label and sourced medal fit inside their responsive button")
+	check(wallet.is_visible_in_tree() and wallet_icon.is_visible_in_tree()
+		and _source(wallet_icon.texture) == "res://assets/coins/gold-coin.png",
+		context + ": saved coins remain visible with the acquired coin artwork at every target size")
+	var wallet_ink: Vector2 = wallet.get_theme_font("font").get_string_size(wallet.text,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, wallet.get_theme_font_size("font_size"))
+	check(wallet_ink.x <= wallet.size.x + 0.1 and wallet_ink.y <= wallet.size.y + 0.1
+		and wallet.get_line_count() == 1 and not wallet.get_global_rect().intersects(wallet_icon.get_global_rect()),
+		context + ": the complete saved balance fits alongside its coin without wrapping or collision")
+	var upgrade: BaseButton = _action_button(view, "upgrades_entry")
+	var badge: Control = view.get("_merged_level_badge")
+	var upgrade_label: Label = view.get("_upgrade_label")
+	check(upgrade != null and upgrade.get_global_rect().grow(0.2).encloses(badge.get_global_rect())
+		and upgrade.get_global_rect().grow(0.2).encloses(upgrade_label.get_global_rect())
+		and not badge.get_global_rect().intersects(upgrade_label.get_global_rect()),
+		context + ": the Jelly level and Upgrade label remain separate inside their own touch target")
+	for label: Label in [subtitle, upgrade_label, badge.get("_label")]:
+		var label_ink: Vector2 = label.get_theme_font("font").get_string_size(label.text,
+			HORIZONTAL_ALIGNMENT_LEFT, -1, label.get_theme_font_size("font_size"))
+		check(label_ink.x <= label.size.x + 0.1 and label_ink.y <= label.size.y + 0.1
+			and label.get_line_count() == 1,
+			context + ": header copy stays fully readable: " + label.text)
+	for control: Control in [heading, subtitle, wallet, wallet_icon]:
+		var rect: Rect2 = control.get_global_rect()
+		check(bounds.grow(0.2).encloses(rect) and not rect.intersects(viewport),
+			context + ": header copy and coin artwork remain onscreen above the map")
+		for action: Rect2 in action_rects:
+			check(not rect.intersects(action), context + ": header copy and coin artwork never cover an action")
+	for title: Label in [heading, subtitle]:
+		check(not title.get_global_rect().intersects(wallet.get_global_rect())
+			and not title.get_global_rect().intersects(wallet_icon.get_global_rect()),
+			context + ": the title and journey hint remain separate from the saved wallet")
 	check(challenge.get_global_rect().end.y <= _scroll(view).get_global_rect().position.y,
 		context + ": the challenge entrance is in the header, not a large map footer")
 

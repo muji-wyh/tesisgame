@@ -5,7 +5,7 @@ const Catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
 const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
 const Economy = preload("res://scripts/coin_economy.gd")
 const Wallet = preload("res://scripts/coin_wallet.gd")
-const VERSION: int = 5
+const VERSION: int = 6
 const UPGRADE_LEVEL_KEYS: Dictionary = {"jelly": "level", "auto_merge": "auto_merge_level"}
 const MAX_CONTEXTS: int = 256
 const MAX_COMPLETED: int = 64
@@ -27,7 +27,8 @@ var _path: String
 var _host: Object
 var _saved_text: Variant = null
 var _contexts: Dictionary = {}
-var _upgrades: Dictionary = {"level": 1, "auto_merge_level": 1, "pending": {}, "intro": "unseen"}
+var _upgrades: Dictionary = {"level": 1, "auto_merge_level": 1, "pending": {}, "intro": "unseen",
+	"funded": {"jelly": 0, "auto_merge": 0}}
 
 
 func _init(path: String = "user://jelly-campaign-v1.cfg", host: Object = null) -> void:
@@ -48,14 +49,15 @@ func load_state() -> bool:
 	if not stored.ok:
 		return false
 	var next_contexts: Dictionary = {}
-	var next_upgrades: Dictionary = {"level": 1, "auto_merge_level": 1, "pending": {}, "intro": "unseen"}
+	var next_upgrades: Dictionary = {"level": 1, "auto_merge_level": 1, "pending": {}, "intro": "unseen",
+		"funded": {"jelly": 0, "auto_merge": 0}}
 	if stored.text != null:
 		var config := ConfigFile.new()
 		if config.parse(stored.text) != OK or config.get_sections().size() != 1 \
 			or not config.has_section("campaign"):
 			return _fail("Your campaign save could not be understood. It has not been reset.")
 		var version: Variant = config.get_value("campaign", "version", null)
-		if not version is int or version not in [1, 2, 3, 4, VERSION]:
+		if not version is int or version not in [1, 2, 3, 4, 5, VERSION]:
 			return _fail("This campaign save needs a supported version.")
 		var keys: PackedStringArray = config.get_section_keys("campaign")
 		if keys.size() != (3 if version >= 4 else 2) or not "contexts" in keys \
@@ -85,6 +87,14 @@ func load_state() -> bool:
 				upgrades.auto_merge_level = 1
 				if not upgrades.pending.is_empty():
 					upgrades.pending.kind = "jelly"
+			if version <= 5:
+				if not upgrades is Dictionary or upgrades.size() != 4 \
+					or not upgrades.has_all(["level", "auto_merge_level", "pending", "intro"]) \
+					or not upgrades.pending is Dictionary or (not upgrades.pending.is_empty() \
+						and (upgrades.pending.size() != 4 or not upgrades.pending.has_all(["kind", "level", "price", "id"]))):
+					return _fail("Your saved Jelly upgrades need their complete level and purchase journal.")
+				upgrades = upgrades.duplicate(true)
+				upgrades.funded = {"jelly": 0, "auto_merge": 0}
 			var upgrade_error: String = _upgrades_error(upgrades)
 			if not upgrade_error.is_empty():
 				return _fail(upgrade_error)
@@ -162,8 +172,11 @@ func begin_upgrade(level: int, kind: String = "jelly") -> bool:
 		or level != int(_upgrades[UPGRADE_LEVEL_KEYS[kind]]) + 1:
 		return _fail("Buy the next level of the selected upgrade in order.")
 	if not _upgrades.pending.is_empty():
-		return true if _upgrades.pending.kind == kind and int(_upgrades.pending.level) == level \
+		return true if not _upgrades.pending.has("mode") and _upgrades.pending.kind == kind \
+			and int(_upgrades.pending.level) == level \
 			else _fail("Finish the saved upgrade before buying another.")
+	if int(_upgrades.funded[kind]) > 0:
+		return _fail("Continue the saved coin contribution before buying this level.")
 	var next: Dictionary = _upgrades.duplicate(true)
 	next.pending = {"kind": kind, "level": level, "price": Economy.permanent_upgrade_price(kind, level),
 		"id": _upgrade_receipt(kind, level)}
@@ -180,7 +193,8 @@ func complete_upgrade(level: int, wallet: Wallet, kind: String = "jelly") -> boo
 	if level >= 2 and level <= owned:
 		return true
 	var pending: Dictionary = _upgrades.pending
-	if pending.is_empty() or pending.kind != kind or int(pending.level) != level or level != owned + 1:
+	if pending.is_empty() or pending.has("mode") or pending.kind != kind \
+		or int(pending.level) != level or level != owned + 1:
 		return _fail("This level has no matching saved upgrade.")
 	if wallet == null or not wallet.ready or not wallet.has_purchase(str(pending.id), int(pending.price)):
 		return _fail("The upgrade needs its exact saved coin purchase before it can unlock.")
@@ -190,6 +204,57 @@ func complete_upgrade(level: int, wallet: Wallet, kind: String = "jelly") -> boo
 	if kind == "jelly":
 		next.intro = "complete"
 	return _commit(_contexts.duplicate(true), next)
+
+
+func begin_upgrade_contribution(kind: String, amount: int = Wallet.PURCHASE_UNIT) -> bool:
+	error = ""
+	if not _upgrades_readable() or not _current_snapshot_matches():
+		return false
+	if not UPGRADE_LEVEL_KEYS.has(kind) or amount < Wallet.PURCHASE_UNIT \
+		or amount > MAX_SCALAR or amount % Wallet.PURCHASE_UNIT != 0:
+		return _fail("Choose a supported upgrade and coin contribution.")
+	var level: int = int(_upgrades[UPGRADE_LEVEL_KEYS[kind]]) + 1
+	if level > Economy.MAX_UPGRADE_LEVEL:
+		return _fail("This upgrade has reached its final level.")
+	if not _upgrades.pending.is_empty():
+		return true if _upgrades.pending.get("mode") == "contribution" \
+			and _upgrades.pending.kind == kind and int(_upgrades.pending.amount) == amount \
+			else _fail("Finish the saved upgrade contribution before adding another.")
+	var funded: int = int(_upgrades.funded[kind])
+	var price: int = Economy.permanent_upgrade_price(kind, level)
+	if amount > price - funded:
+		return _fail("Contribute only the coins remaining before the next level.")
+	var next: Dictionary = _upgrades.duplicate(true)
+	next.pending = {"kind": kind, "level": level, "price": price,
+		"id": _contribution_receipt(kind, level, funded, amount), "mode": "contribution", "amount": amount}
+	return _commit(_contexts.duplicate(true), next)
+
+
+func complete_upgrade_contribution(wallet: Wallet) -> bool:
+	error = ""
+	if not _upgrades_readable() or not _current_snapshot_matches():
+		return false
+	var pending: Dictionary = _upgrades.pending
+	if pending.is_empty():
+		return true
+	if pending.get("mode") != "contribution":
+		return _fail("Finish the saved whole-level purchase before contributing coins.")
+	if wallet == null or not wallet.ready or not wallet.has_purchase(str(pending.id), int(pending.amount)):
+		return _fail("The contribution needs its exact saved coin purchase before it can fill the upgrade.")
+	var next: Dictionary = _upgrades.duplicate(true)
+	var kind: String = str(pending.kind)
+	next.funded[kind] = int(next.funded[kind]) + int(pending.amount)
+	if int(next.funded[kind]) == int(pending.price):
+		next[UPGRADE_LEVEL_KEYS[kind]] = int(pending.level)
+		next.funded[kind] = 0
+		if kind == "jelly":
+			next.intro = "complete"
+	next.pending = {}
+	return _commit(_contexts.duplicate(true), next)
+
+
+static func _contribution_receipt(kind: String, level: int, funded: int, amount: int) -> String:
+	return "jelly-charge-v1:%s:%d:%d:%d" % [kind, level, funded, amount]
 
 
 static func _upgrade_receipt(kind: String, level: int) -> String:
@@ -397,22 +462,43 @@ func _upgrades_readable() -> bool:
 
 
 func _upgrades_error(value: Variant) -> String:
-	if not value is Dictionary or value.size() != 4 or not value.has_all(["level", "auto_merge_level", "pending", "intro"]) \
+	if not value is Dictionary or value.size() != 5 \
+		or not value.has_all(["level", "auto_merge_level", "pending", "intro", "funded"]) \
 		or not value.level is int or value.level < 1 or value.level > Economy.MAX_UPGRADE_LEVEL \
 		or not value.auto_merge_level is int or value.auto_merge_level < 1 \
 		or value.auto_merge_level > Economy.MAX_UPGRADE_LEVEL or not value.pending is Dictionary \
 		or not value.intro is String or value.intro not in ["unseen", "offer", "guide", "complete"] \
 		or (value.level > 1 and value.intro != "complete"):
 		return "Your Jelly upgrades need their saved level, introduction and purchase journal."
+	if not value.funded is Dictionary or value.funded.size() != 2 \
+		or not value.funded.has_all(UPGRADE_LEVEL_KEYS.keys()):
+		return "Your Jelly upgrades need their saved coin contributions for both powers."
+	for kind: String in UPGRADE_LEVEL_KEYS:
+		var funded: Variant = value.funded[kind]
+		var owned: int = int(value[UPGRADE_LEVEL_KEYS[kind]])
+		if not funded is int or funded < 0 or funded % Wallet.PURCHASE_UNIT != 0 \
+			or (owned == Economy.MAX_UPGRADE_LEVEL and funded != 0) \
+			or (owned < Economy.MAX_UPGRADE_LEVEL and funded >= Economy.permanent_upgrade_price(kind, owned + 1)):
+			return "Your saved upgrade contributions must stop before their next level."
 	if not value.pending.is_empty():
 		var pending: Dictionary = value.pending
-		if pending.size() != 4 or not pending.has_all(["kind", "level", "price", "id"]) \
+		if not pending.has_all(["kind", "level", "price", "id"]) \
 			or not pending.kind is String or not UPGRADE_LEVEL_KEYS.has(pending.kind) \
 			or not pending.level is int or pending.level != value[UPGRADE_LEVEL_KEYS[pending.kind]] + 1 \
 			or pending.level > Economy.MAX_UPGRADE_LEVEL \
 			or not pending.price is int or pending.price < 25 or pending.price > MAX_SCALAR \
-			or pending.price % Wallet.PURCHASE_UNIT != 0 \
-			or pending.get("id") != _upgrade_receipt(str(pending.kind), int(pending.level)):
+			or pending.price % Wallet.PURCHASE_UNIT != 0:
+			return "Your pending Jelly upgrade needs its original next level, exact price and receipt."
+		var funded: int = int(value.funded[pending.kind])
+		if pending.has("mode"):
+			if pending.size() != 6 or not pending.has("amount") or pending.mode != "contribution" \
+				or not pending.amount is int or pending.amount < Wallet.PURCHASE_UNIT \
+				or pending.amount % Wallet.PURCHASE_UNIT != 0 or pending.amount > pending.price - funded \
+				or pending.price != Economy.permanent_upgrade_price(str(pending.kind), int(pending.level)) \
+				or pending.id != _contribution_receipt(str(pending.kind), int(pending.level), funded, int(pending.amount)):
+				return "Your pending contribution needs its original amount, saved progress and exact coin receipt."
+		elif pending.size() != 4 or funded != 0 \
+			or pending.id != _upgrade_receipt(str(pending.kind), int(pending.level)):
 			return "Your pending Jelly upgrade needs its original next level, exact price and receipt."
 	return ""
 
@@ -428,7 +514,7 @@ func _legacy_upgrades(contexts: Dictionary) -> Dictionary:
 			if bool(result.get("boss_victory", false)) and int(result.boss_id) not in state.boss_victories:
 				earned += 1
 		level = maxi(level, mini(9, earned))
-	return {"level": level, "auto_merge_level": 1, "pending": {},
+	return {"level": level, "auto_merge_level": 1, "pending": {}, "funded": {"jelly": 0, "auto_merge": 0},
 		"intro": "complete" if played or level > 1 else "unseen"}
 
 

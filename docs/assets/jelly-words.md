@@ -28,6 +28,14 @@ also CC0-1.0, with their
 [unchanged source record](../../assets/images/ui/jelly-map/sources.json).
 The existing Paweł Kuna / Tabler **MIT** Home artwork retains its path and
 [control-source provenance](../../assets/images/ui/controls/sources.json).
+The map header groups Home, the journey title and its next-Boss hint together.
+Saved coins, upgrades and Challenge share one aligned desktop row; phones keep
+the title and wallet above two full-height actions. The upgrade entry uses a
+single mint surface around the existing gel and level text, without nesting the
+standalone in-game level badge's frame. The compact wallet reuses the acquired
+[Toon FX gold coin](coins.md), and Challenge retains the acquired Microsoft
+[Fluent medal](vocabulary-mastery.md). These are static, integrated assets;
+no new artwork, purchase or source animation is introduced.
 These are integrated static source assets, not new acquisitions, animations,
 generated scenery or marketplace previews. The cream chapter cards are interface
 layout primitives. The actual pre-change map and corresponding source medallion,
@@ -84,7 +92,7 @@ no new artwork, timer, full-screen tint or input layer is added.
 
 The Ready/Go flourish, coin-upgrade ability previews and completed-goal
 retirement reuse these integrated gel skins, actual vocabulary pictures and
-the same sourced portal/ray/sparkle textures. The upgrade page samples the real
+the same sourced portal/ray/sparkle textures. The upgrade scene samples the real
 campaign collection selector on a complete seven-column, eight-row board,
 including all 55 other bodies for Lv9. The illustration never collects, pays,
 or records learning. Completion uses the existing sourced
@@ -106,6 +114,8 @@ claimed or acquired for these revisions.
 | Rejected merge audio | Existing user-supplied wrong-answer excerpt; creator, acquisition status and unsupplied license terms are recorded in [pair feedback](pair-feedback-audio.md) | Reuses the integrated 860 ms `wrong.wav` at gain 0.48 once when a failed drop separates. No new extraction, processing or animation asset. |
 | Upgrade and first-clear example picture | Microsoft Corporation, Fluent Emoji 3D Cat, MIT; the byte-identical acquired `assets/images/ui/modes/cat.webp` copy and upstream revision are recorded in [mode artwork](../../assets/images/ui/modes/ATTRIBUTION.md) | Reused integrated startup artwork, not a source preview or new download. The source is static; target illumination and Jelly material motion are game-authored. |
 | Saved-coin and upgrade price artwork | Kenneth Foldal Moe / Archanor VFX, acquired Toon FX 1.52, recorded Standard Unity Asset Store EULA; see [gold coin artwork](coins.md) | Reuses `assets/coins/gold-coin.png` with its existing acquisition, source/output hashes and license. No new art or animation clips are acquired. |
+| Auto merge upgrade wand | Kenney, Cursor Pack 1.1, `Vector/Basic/tool_wand.svg`, CC0 1.0; original local acquisition and license are recorded in [Jelly powerups](jelly-powerups.md) | Reuses the inspected, integrated `assets/images/ui/jelly-powerups/auto-merge-wand.svg`. The source is static; its charge response is authored by the game. |
+| Upgrade milestone light and audio | Bobardo's acquired Modern 2D Animated Chests portal glow and Kenneth Foldal Moe / Archanor VFX's acquired Toon FX rays/glints, under their recorded Unity Asset Store licenses; Kenney CC0 coin handling and `confirmation_002` audio | Reuses the integrated textures and recordings documented in [Jelly fragments](jelly-fragments.md) and [upgrade charging](coins.md#jelly-upgrade-charging). Effects and sound follow saved contributions and level transitions; no new asset acquisition or source animation is claimed. |
 
 The board has seven columns and eight rows, holding 56 cells and opening with at
 most 21 jellies across three rows. Every jelly keeps a 1:1 square aspect ratio.
@@ -125,13 +135,31 @@ Lv2 + Lv7 becomes Lv9. Lv1 is free; the eight higher levels are permanent coin
 unlocks shared across Jelly World learning routes. Their sequential prices are
 50, 100, 200, 350, 550, 800, 1100 and 1500 coins. Boss wins no longer grant levels.
 Sums clamp to the learner's unlocked cap, so Lv2 + Lv3 becomes Lv4 when Lv4 is
-unlocked. All carried mass and fragments survive the union. A matching Jelly
-can also join the accepted result while its previous fusion is still animating.
+unlocked. A merged Jelly already at that cap cannot participate in another
+merge; an attempted drop preserves the active combo without matching-error
+feedback. All carried mass and fragments survive a legal union. A matching
+Jelly can also join a below-cap accepted result while its previous fusion is
+still animating.
 The map's sourced Jelly LvN badge is an actionable Upgrade entry, while the
 active board names the available cap. The first saved Stage 1 clear leads through
-a power-discovery modal into a focused Lv2 purchase guide; saved clear coins are
-already available and no purchase happens without the player's tap.
-Lv2–9 show their individual number at the upper-right;
+a power-discovery modal into a focused Lv2 charging guide; saved clear coins are
+already available. Holding the control invests 25 coins per saved pulse toward
+the next level, and releasing stops it. A horizontal progress rail marks each
+level and shows invested coins against the next-level price. Inspecting a
+future ability does not change the next level being funded. Jelly powers and
+Auto merge retain independent funding and ownership across leaving and reloads;
+recovery resumes a paid contribution's retained receipt without another debit.
+
+The upgrade scene gives the acquired Jelly or wand a large focal position above
+the actual ability preview and milestone rail. Saved deposits add a coin flight,
+local pulse and coin-handling sound. Crossing a saved level marker adds a
+rebound, sourced rays/glints and one reward cue. Effects and sound
+carry the milestone without notification copy. Numeric level and coin progress
+remain visible; reduced motion uses a still light accent without traveling coins
+or body deformation. The acquired gel, wand, coin, glow and audio retain the
+source and license records above.
+
+On the board, Lv2–9 show their individual number at the upper-right;
 carried chest fragments use the opposite corner. All stages retain one ordinary
 cell. Joining, picture matching, and upgrading do not collect rewards or learning
 credit. Collection owns the existing reward transaction and eligible manual
@@ -245,9 +273,9 @@ compatible roots, finishes picture matching, or adds levels of matching words,
 clamping the result to the same unlocked cap as manual merging.
 It leaves merged jellies on the board for ordinary collection. The planner checks
 an entire completion path and all intermediate rectangles before charging.
-The same permanent-upgrade page includes Auto merge: free Lv1 handles up to three
+The same upgrade scene includes Auto merge: free Lv1 handles up to three
 completed, collectable Jellies, and each higher level adds one output up to eleven at Lv9.
-Its increasing upgrade costs and independent saved ownership are documented in
+Its unchanged upgrade costs and independent saved ownership are documented in
 [coin economy](../coin-economy.md). Ingredients and intermediate spelling joins
 do not consume output slots; a complete path and its required picture are reserved
 together. Each completed product remains separate throughout this use.
@@ -364,10 +392,12 @@ Green merge contact keeps its own contour. No new artwork or audio was acquired.
 Lettering, pictures, fragment markers, hit areas and rewards stay unchanged.
 Release, cancellation or leaving play clears the cue and restores unrelated skins.
 Reduced motion keeps the contour and material contrast steady without a sweep or enlargement.
-Selected merged words highlight every available merged word with the same word
-ID, including different levels and Lv9. This word-family cue preserves the
-existing matching guidance; a merge still requires the combined level to be
-at most nine. Over-cap contact stays neutral and a rejected drop preserves both.
+Selected merged words highlight available merged words with the same word ID
+only while both remain below the learner's unlocked level cap. Different levels
+can combine, with their sum clamped to that cap. A merged Jelly already at the
+cap cannot merge with any other Jelly, manually or through Auto merge. Its
+contact stays neutral, and releasing preserves both bodies and the active combo
+without an incorrect-answer sound or rejection accent.
 Actual merge contact uses the same resolver as manual merging and Auto merge. Reviewed partial joins are valid; results that
 lack room do not light up or incur an incorrect-answer penalty. Root joins follow
 the reviewed reading order. Word-picture matching and additive upgrades work

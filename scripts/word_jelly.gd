@@ -1630,12 +1630,8 @@ func _refresh_completion_hints() -> void:
 	var has_matches: bool = false
 	for id: int in _tiles:
 		var target: Dictionary = _cell(id)
-		var same_word: bool = str(prefix.get("jelly_kind", "")) == "merged" \
-			and str(target.get("jelly_kind", "")) == "merged" and id != source \
-			and not prefix.get("word", {}).is_empty() \
-			and str(prefix.word.id) == str(target.get("word", {}).get("id", ""))
 		var eligible: bool = not prefix.is_empty() and (not _fusion_drag.is_empty() or _settled(prefix)) and game.is_contactable(target) \
-			and (same_word or _can_merge_for_feedback(prefix, target))
+			and _can_merge_for_feedback(prefix, target)
 		_tiles[id].set_completion_hint(eligible, _completion_elapsed, reduced_motion)
 		has_matches = has_matches or eligible
 	for id: int in _tiles:

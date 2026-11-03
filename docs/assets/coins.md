@@ -18,7 +18,7 @@ is used.
 | Actual source | `Textures/coins.png`, 1024 x 1024 RGBA, texture GUID `1699dbd54fcee0a46856002fbff1b84a` |
 | Source SHA-256 | `ee6f261c5c0ef92aeef1f1885375336d472f166bd6835ee18957626f46a98077` |
 | Conversion status | Source inspected; two optimized PNG build inputs prepared and inspected over pale and dark backgrounds |
-| Runtime status | Integrated into the header wallet, chest payout and arrival-driven Jelly combo bonuses; existing chest captures reviewed at desktop, phone portrait and short landscape sizes |
+| Runtime status | Integrated into the header and Jelly Journey map wallets, held upgrade deposits, chest payout and arrival-driven Jelly combo bonuses; map header captures reviewed at desktop, phone portrait and short landscape sizes |
 
 The package README explicitly describes monochrome textures intended for vertex
 color and gradient recoloring. `Materials/Coins01.mat` references the inspected
@@ -154,6 +154,33 @@ Mute, backgrounding, Home, Library, and silent balance synchronization cancel
 the coin channels, including pending stream requests. Restore and duplicate
 receipts do not replay the sound. Both WAVs are required startup-pack resources,
 so neither event makes an additional audio download.
+
+## Jelly upgrade charging
+
+Holding the upgrade control invests saved 25-coin pulses toward the next level;
+releasing stops the flow. Jelly powers and Auto merge keep independent levels
+and partial funding. Their existing Lv2–9 prices remain 50, 100, 200, 350, 550,
+800, 1100 and 1500 coins. Each pulse reserves a receipt, debits the wallet once,
+then commits funding. A failed final write retains its paid receipt for Retry;
+recovery does not debit it again. Partial funding survives leaving and reloading.
+
+Only a committed pulse advances the gold progress rail and sends the existing
+`gold-coin.png` toward the upgrade. It plays the acquired Kenney RPG Audio
+`handleCoins2` recording through `assets/audio/coins/collect.wav`, with the
+unchanged CC0 license, source record and coin-channel lifecycle above. An
+unsaved contribution has no successful deposit effect or sound.
+
+A saved level milestone adds one local light burst, subject rebound and the
+existing `assets/audio/chest-kenney/reward.wav`: Kenney Interface Sounds
+`confirmation_002`, CC0, acquired from the same local collection. Its 560 ms
+recording and conversion are documented in [Kenney chest audio](chest-kenney-audio.md).
+The acquired Bobardo portal glow and Archanor Toon FX rays/glints retain their
+source mappings and Unity Asset Store licenses in [Jelly fragments](jelly-fragments.md).
+These are integrated production assets with game-authored motion, not new
+acquisitions or source animation clips. Milestones use effects and sound without
+notification copy; levels and exact coin progress remain visible. Reduced motion
+keeps a stationary light accent and the saved progress, without coin flight or
+subject deformation.
 
 ## Match Hint and word-goal payments
 

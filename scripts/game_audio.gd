@@ -127,6 +127,7 @@ var pop_launch: AudioStreamPlayer
 var pair_feedback: AudioStreamPlayer
 var pair_chest_discovery: AudioStreamPlayer
 var ui_click: AudioStreamPlayer
+var upgrade_milestone: AudioStreamPlayer
 var chest_charge: AudioStreamPlayer
 var muted: bool = false
 var active: bool = false
@@ -460,6 +461,26 @@ func play_jelly_cue(cue_name: String) -> void:
 	set_process(true)
 
 
+func play_upgrade_milestone() -> void:
+	if muted or not active or not available:
+		return
+	if upgrade_milestone == null:
+		upgrade_milestone = _player(float(JELLY_GAINS.goal_complete))
+		upgrade_milestone.finished.connect(stop_upgrade_milestone)
+	_update_jelly_gain()
+	# Board input stays paused on the upgrade page; its cue cancellation must
+	# not silence this separate, committed milestone.
+	await _play(upgrade_milestone, str(JELLY_PATHS.goal_complete))
+	if upgrade_milestone.playing:
+		set_process(true)
+
+
+func stop_upgrade_milestone() -> void:
+	if upgrade_milestone != null:
+		_stop(upgrade_milestone)
+		upgrade_milestone.stream = null
+
+
 static func word_jelly_combo_profile(count: int) -> Dictionary:
 	if count < 1:
 		return {}
@@ -513,6 +534,8 @@ func _update_jelly_gain() -> void:
 	var duck_db: float = JELLY_SPEECH_DB if voice != null and voice.playing else 0.0
 	if pair_chest_discovery != null:
 		pair_chest_discovery.volume_db = linear_to_db(PAIR_CHEST_DISCOVERY_GAIN) + duck_db
+	if upgrade_milestone != null:
+		upgrade_milestone.volume_db = linear_to_db(float(JELLY_GAINS.goal_complete)) + duck_db
 	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players + _jelly_combo_players:
 		player.volume_db = linear_to_db(float(_jelly_gains.get(player, 1.0))) + duck_db
 
@@ -589,7 +612,8 @@ func stop_round_celebration() -> void:
 		_stop(player)
 		player.stream = null
 		player.volume_db = linear_to_db(float(_round_celebration_gains.get(player, 1.0)))
-	set_process(not _jelly_players.is_empty() or not _jelly_level_players.is_empty() or not _jelly_combo_players.is_empty() or not _coin_players.is_empty() or not _fragment_players.is_empty())
+	set_process(not _jelly_players.is_empty() or not _jelly_level_players.is_empty() or not _jelly_combo_players.is_empty() or not _coin_players.is_empty() or not _fragment_players.is_empty() \
+		or (upgrade_milestone != null and upgrade_milestone.playing))
 	_update_music_gain()
 
 
@@ -605,10 +629,12 @@ func _process(_delta: float) -> void:
 		stop_round_celebration()
 		stop_pair_chest_discovery()
 		stop_jelly_sounds()
+		stop_upgrade_milestone()
 		stop_coin_sounds()
 		set_process(false)
 		return
-	var jelly_playing: bool = pair_chest_discovery != null and pair_chest_discovery.playing
+	var jelly_playing: bool = (pair_chest_discovery != null and pair_chest_discovery.playing) \
+		or (upgrade_milestone != null and upgrade_milestone.playing)
 	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players + _jelly_combo_players:
 		jelly_playing = jelly_playing or player.playing
 	_update_jelly_gain()
@@ -1084,6 +1110,7 @@ func halt(keep_pair_feedback: bool = false) -> void:
 		stop_pair_feedback()
 	stop_pop_sounds()
 	stop_jelly_sounds()
+	stop_upgrade_milestone()
 	stop_coin_sounds()
 	stop_round_celebration()
 	stop_round_end()

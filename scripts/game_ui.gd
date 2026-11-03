@@ -299,6 +299,7 @@ var _controller_dpad: Vector2 = Vector2.ZERO
 var _controller_last_direction: Vector2 = Vector2.ZERO
 var _controller_repeat_elapsed: float = 0.0
 var _controller_holding_chest: bool = false
+var _controller_holding_upgrade: bool = false
 var _controller_accept_needs_release: bool = true
 var _status_announcement: String = ""
 var _preferred_theme: String = ""
@@ -390,7 +391,9 @@ func _ready() -> void:
 	model.changed.connect(_refresh)
 	model.word_attempted.connect(_match_growth_answer)
 	resized.connect(_layout)
+	resized.connect(_cancel_upgrade_charging)
 	get_viewport().size_changed.connect(_layout)
+	get_viewport().gui_focus_changed.connect(_on_upgrade_focus_changed)
 	Input.joy_connection_changed.connect(_on_joy_connection_changed)
 	_presentation.load_preferences(DisplayServer.accessibility_should_reduce_animation() == 1)
 	_preferred_theme = _presentation.preferred_theme
@@ -4951,9 +4954,22 @@ func _observe_activity(event: InputEvent) -> void:
 
 func _input(event: InputEvent) -> void:
 	if _campaign != null and _campaign.is_open() and not _vocabulary_prompt.visible:
+		var upgrade_accept: bool = (event is InputEventKey and event.is_action("ui_accept")) \
+			or (event is InputEventJoypadButton and event.button_index == JOY_BUTTON_A)
+		if upgrade_accept and (_controller_holding_upgrade or _upgrade_charge_focused()):
+			if event.is_pressed():
+				if not event.is_echo() and not _controller_holding_upgrade and not _page_hidden:
+					_controller_accept()
+			else:
+				_cancel_upgrade_charging()
+				if event is InputEventJoypadButton:
+					_controller_accept_needs_release = false
+			get_viewport().set_input_as_handled()
+			return
 		if event is InputEventJoypadButton and event.button_index == JOY_BUTTON_A:
 			return
 		if event.is_action_pressed("ui_cancel"):
+			_cancel_upgrade_charging()
 			_campaign._home()
 			get_viewport().set_input_as_handled()
 		return
@@ -5043,6 +5059,9 @@ func _input(event: InputEvent) -> void:
 			if event.pressed:
 				if not _controller_accept_needs_release:
 					_controller_accept()
+			elif _controller_holding_upgrade:
+				_controller_accept_needs_release = false
+				_cancel_upgrade_charging()
 			elif _controller_holding_chest:
 				_controller_accept_needs_release = false
 				_controller_holding_chest = false
@@ -5109,6 +5128,7 @@ func _on_joy_connection_changed(_device: int, connected: bool) -> void:
 
 
 func _stop_controller_actions() -> void:
+	_cancel_upgrade_charging()
 	_controller_stick = Vector2.ZERO
 	_controller_dpad = Vector2.ZERO
 	_controller_last_direction = Vector2.ZERO
@@ -5148,6 +5168,13 @@ func _sync_controller_accept_startup() -> void:
 
 func _controller_accept() -> void:
 	var focused := get_viewport().gui_get_focus_owner()
+	if _upgrade_charge_focused():
+		if bool(_campaign.upgrades._state.get("retry", false)):
+			_campaign.upgrades.retry_saving()
+		else:
+			_controller_holding_upgrade = true
+			_campaign.upgrades.start_charging()
+		return
 	if _jelly_rewards_shown and _is_jelly_mode() and _valid_focus(focused) and _jelly_rewards.is_chest_control(focused):
 		_controller_holding_jelly_chest = true
 		_jelly_rewards.begin_hold(focused)
@@ -5479,9 +5506,7 @@ func _connect_browser() -> void:
 		set_reduced_motion(bool(arguments[0])))
 	_input_cancel_callback = JavaScriptBridge.create_callback(_on_input_canceled)
 	_pointer_release_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:
-		_phrase.release_pointer(int(arguments[0]))
-		_jelly.release_pointer(int(arguments[0]))
-		_word_jelly.release_pointer(int(arguments[0])))
+		_on_pointer_released(int(arguments[0])))
 	_host.observe(_hidden_callback, _motion_callback, _visible_callback, _input_cancel_callback, _pointer_release_callback)
 	_host.presentationSettings(reduced_motion, audio.muted)
 	_speech_result_callback = JavaScriptBridge.create_callback(_on_voice_result)
@@ -5646,7 +5671,32 @@ func _professional_closing() -> void:
 	_rebuilding = was_rebuilding
 
 
+func _upgrade_charge_focused() -> bool:
+	return _campaign != null and is_instance_valid(_campaign.upgrades) and _campaign.upgrades.visible \
+		and not _campaign.upgrades.is_offer() and _valid_focus(_campaign.upgrades._buy) \
+		and get_viewport().gui_get_focus_owner() == _campaign.upgrades._buy
+
+
+func _on_upgrade_focus_changed(_control: Control) -> void:
+	if _controller_holding_upgrade and not _upgrade_charge_focused():
+		_cancel_upgrade_charging()
+
+
+func _cancel_upgrade_charging() -> void:
+	_controller_holding_upgrade = false
+	if _campaign != null and is_instance_valid(_campaign.upgrades):
+		_campaign.upgrades.stop_charging()
+
+
+func _on_pointer_released(pointer: int) -> void:
+	_phrase.release_pointer(pointer)
+	_jelly.release_pointer(pointer)
+	_word_jelly.release_pointer(pointer)
+	_cancel_upgrade_charging()
+
+
 func _on_input_canceled(_arguments: Array = []) -> void:
+	_cancel_upgrade_charging()
 	if is_instance_valid(_jelly_pause_button):
 		_jelly_pause_button.cancel_pull(true)
 	if is_instance_valid(_finish_confirmation):

@@ -20,6 +20,7 @@ const SKY = preload("res://assets/images/jelly-match/sky/day.png")
 const STAGE_OPEN = preload("res://assets/images/ui/jelly-map/stage-open.png")
 const STAGE_LOCKED = preload("res://assets/images/ui/jelly-map/stage-locked.png")
 const MEDAL = preload("res://assets/images/ui/mastery-medal.webp")
+const COIN = preload("res://assets/coins/gold-coin.png")
 const PLAY = preload("res://assets/images/ui/controls/player-play.svg")
 const LOCK = preload("res://assets/images/ui/controls/lock.svg")
 const GLOW = preload("res://assets/chests/particles/portal_glow.png")
@@ -52,6 +53,7 @@ var _sky := TextureRect.new()
 var _heading: Label
 var _subtitle: Label
 var _wallet: Label
+var _wallet_icon: TextureRect
 var _merged_level_badge := LevelBadge.new()
 var _upgrades := Button.new()
 var _upgrade_label: Label
@@ -89,7 +91,7 @@ func _init() -> void:
 	_heading = _label(self, "Jelly Journey", 30)
 	_subtitle = _label(self, "99 little adventures. Collect words, earn stars.", 14)
 	_wallet = _label(self, "", 16)
-	_wallet.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_wallet_icon = _image(self, COIN)
 	_upgrades.name = "JellyUpgrades"
 	_upgrades.tooltip_text = "Upgrade Jelly powers and Auto merge capacity with saved coins"
 	add_child(_upgrades)
@@ -345,7 +347,9 @@ func configure(state: Dictionary, reduced_motion: bool = false) -> void:
 	_upgrades.focus_mode = Control.FOCUS_NONE if blocked else Control.FOCUS_ALL
 	_upgrades.accessibility_name = "Jelly Lv%d. Auto merge Lv%d. Open permanent upgrades. Higher levels cost coins." % [
 		int(state.get("merged_level", 1)), int(state.get("auto_merge_level", 1))]
-	_wallet.text = "%d coins" % int(state.get("coins", 0))
+	_wallet.text = str(int(state.get("coins", 0)))
+	_wallet.tooltip_text = "%s saved coins" % _wallet.text
+	_wallet.set("accessibility_name", _wallet.tooltip_text)
 	_status.text = str(state.get("error", "")) if not str(state.get("error", "")).is_empty() \
 		else "Loading stage %d..." % int(state.get("pending_stage", 0)) if state.get("loading", false) else ""
 	_status.add_theme_color_override("font_color", Style.WRONG if not str(state.get("error", "")).is_empty() else Style.INK)
@@ -510,70 +514,81 @@ func _layout() -> void:
 	var s: float = Style.ui_scale(self)
 	_scale = s
 	_sky.size = size
-	var narrow: bool = size.x * s < 600.0
+	var narrow: bool = size.x * s < 760.0
 	var width: float = minf(size.x - 24.0 / s, 1000.0 / s)
 	var left: float = (size.x - width) * 0.5
 	var top: float = 14.0 / s
 	Style.square_icon_button(_home, Style.GOOD)
-	_home.position = Vector2(left, top)
+	_home.position = Vector2(left, top + 4.0 / s)
 	_home.size = Vector2.ONE * ceilf(44.0 / s)
 	Style.action_button(_challenge, Style.GOOD)
 	_challenge.custom_minimum_size = Vector2.ZERO
 	_challenge.add_theme_font_size_override("font_size", ceili(14.0 / s))
-	_challenge.add_theme_constant_override("icon_max_width", ceili(24.0 / s))
+	_challenge.add_theme_constant_override("icon_max_width", ceili(22.0 / s))
 	for state: String in ["normal", "hover", "pressed", "disabled", "focus"]:
 		var surface: StyleBox = _challenge.get_theme_stylebox(state)
 		surface.content_margin_left = 8.0 / s
 		surface.content_margin_right = 8.0 / s
 		surface.content_margin_top = 6.0 / s
 		surface.content_margin_bottom = 6.0 / s
-	_challenge.position = Vector2(left + width - 132.0 / s, top)
-	_challenge.size = Vector2(ceilf(132.0 / s), ceilf(44.0 / s))
-	_wallet.visible = not narrow
-	_wallet.position = Vector2(_challenge.position.x - 162.0 / s, top)
-	_wallet.size = Vector2(150, 38) / s
-	_wallet.add_theme_font_size_override("font_size", ceili(16.0 / s))
-	_wallet.size = Vector2(150, 38) / s
-	_heading.position = Vector2(_home.get_rect().end.x + 14.0 / s, top)
-	var title_end: float = (_wallet.position.x if not narrow else _challenge.position.x) - 12.0 / s
+	var action_width: float = minf(width, 380.0 / s)
+	var upgrade_width: float = (action_width - 8.0 / s) * 0.57 if narrow else 176.0 / s
+	var challenge_width: float = action_width - upgrade_width - 8.0 / s if narrow else 132.0 / s
+	var actions_y: float = top + (56.0 if narrow else 6.0) / s
+	_challenge.position = Vector2(left + width - challenge_width, actions_y)
+	_challenge.size = Vector2(ceilf(challenge_width), ceilf(44.0 / s))
+	_upgrades.position = Vector2(_challenge.position.x - upgrade_width - (8.0 if narrow else 12.0) / s, actions_y)
+	_upgrades.size = Vector2(ceilf(upgrade_width), ceilf(44.0 / s))
+	Style.action_button(_upgrades, Style.GOOD)
+	_upgrades.custom_minimum_size = Vector2.ZERO
+	_upgrades.add_theme_stylebox_override("normal",
+		Style.box(Color("#edfff1"), Color("#a8c9ae"), ceili(12.0 / s), maxi(1, roundi(1.0 / s))))
+	_merged_level_badge.set_level(int(_state.get("merged_level", 1)))
+	_merged_level_badge.layout_badge(Rect2(Vector2(7, 8) / s, Vector2(96, 28) / s), s)
+	_merged_level_badge.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
+	_upgrade_label.position = Vector2(106.0 / s, 0)
+	_upgrade_label.size = Vector2(maxf(1.0, upgrade_width - 114.0 / s), 44.0 / s)
+	_upgrade_label.add_theme_font_size_override("font_size", ceili((12.0 if narrow else 13.0) / s))
+	_wallet.visible = true
+	var wallet_pixels: int = ceili((15.0 if narrow else 16.0) / s)
+	_wallet.add_theme_font_size_override("font_size", wallet_pixels)
+	var wallet_ink: float = _wallet.get_theme_font("font").get_string_size(_wallet.text,
+		HORIZONTAL_ALIGNMENT_LEFT, -1, wallet_pixels).x
+	var wallet_end: float = left + width if narrow else _upgrades.position.x - 20.0 / s
+	_wallet.position = Vector2(wallet_end - wallet_ink, top + 6.0 / s)
+	_wallet.size = Vector2(wallet_ink, 44.0 / s)
+	_wallet_icon.size = Vector2.ONE * 22.0 / s
+	_wallet_icon.position = Vector2(_wallet.position.x - 28.0 / s, _wallet.position.y + 11.0 / s)
+	_heading.position = Vector2(_home.get_rect().end.x + 12.0 / s, top)
+	var title_end: float = _wallet_icon.position.x - (12.0 if narrow else 28.0) / s
 	var title_width: float = maxf(1.0, title_end - _heading.position.x)
-	_heading.size = Vector2(title_width, 44.0 / s)
-	var heading_pixels: int = ceili((24.0 if narrow else 32.0) / s)
+	var heading_pixels: int = ceili((22.0 if narrow else 28.0) / s)
 	var heading_ink: float = Style.HEADING_FONT.get_string_size(_heading.text, HORIZONTAL_ALIGNMENT_LEFT, -1, heading_pixels).x
 	if heading_ink > title_width:
 		heading_pixels = maxi(1, floori(heading_pixels * title_width / heading_ink))
 	_heading.add_theme_font_size_override("font_size", heading_pixels)
-	_heading.size = Vector2(title_width, 44.0 / s)
-	_subtitle.position = Vector2(left, top + 48.0 / s)
-	var level_width: float = minf(width * 0.55, 180.0 / s)
-	_subtitle.size = Vector2(width - level_width - 8.0 / s, 44.0 / s)
-	_merged_level_badge.set_level(int(_state.get("merged_level", 1)))
-	_upgrades.position = Vector2(left + width - level_width, top + 48.0 / s)
-	_upgrades.size = Vector2(level_width, 44.0 / s)
-	Style.action_button(_upgrades, Style.GOOD)
-	_merged_level_badge.layout_badge(Rect2(Vector2(4, 8) / s, Vector2(108, 28) / s), s)
-	_upgrade_label.position = Vector2(116.0 / s, 0)
-	_upgrade_label.size = Vector2(maxf(1.0, level_width - 120.0 / s), 44.0 / s)
-	_upgrade_label.add_theme_font_size_override("font_size", ceili(13.0 / s))
-	_subtitle.text = ("Collect words" if int(_state.get("highest_cleared", 0)) == 0 else "Chase Bramble") if _state.has("merged_level") \
-		else "Collect words. Earn stars. Explore." if narrow else "99 little adventures. Collect words, earn stars."
+	_heading.size = Vector2(title_width, 32.0 / s)
+	_subtitle.position = Vector2(_heading.position.x, top + 32.0 / s)
+	_subtitle.size = Vector2(title_width, 22.0 / s)
+	_subtitle.text = "Collect words. Earn stars."
 	var highest: int = int(_state.get("highest_cleared", 0))
 	var target: int = BossCatalog.chase_target(highest)
 	if highest > 0 and target > 0:
-		_subtitle.text = "Bramble: Stage %d" % target if narrow \
-			else "Catch Bramble at Stage %d · Follow the compass" % target
+		_subtitle.text = "Bramble · Stage %d" % target if narrow else "Catch Bramble · Stage %d" % target
 	elif highest == 99:
 		_subtitle.text = "Compass recovered!" if 8 in _state.get("boss_victories", []) \
 			else "99 adventures complete"
-	_subtitle.add_theme_font_size_override("font_size", ceili(14.0 / s))
+	_subtitle.add_theme_font_size_override("font_size", ceili((12.0 if narrow else 13.0) / s))
+	_subtitle.add_theme_color_override("font_color", Color("#35554c"))
+	var header_bottom: float = top + (112.0 if narrow else 72.0) / s
 	var status_height: float = 76.0 / s if _status.visible else 0.0
-	_status.position = Vector2(left, 106.0 / s)
+	_status.position = Vector2(left, header_bottom)
 	_status.size = Vector2(width - (84.0 / s if _retry.visible else 0.0), status_height)
 	_status.add_theme_font_size_override("font_size", ceili(14.0 / s))
-	_retry.position = Vector2(left + width - 78.0 / s, 114.0 / s)
+	_retry.position = Vector2(left + width - 78.0 / s, header_bottom + 8.0 / s)
 	_retry.size = Vector2(78, 44) / s
 	_content.custom_minimum_size.x = 0.0
-	_scroll.position = Vector2(left, 104.0 / s + status_height)
+	_scroll.position = Vector2(left, header_bottom + status_height)
 	_scroll.size = Vector2(width, maxf(1.0, size.y - _scroll.position.y - 12.0 / s))
 	var chapter_height: float = 1160.0 / s
 	var summit_space: float = 132.0 / s
@@ -596,7 +611,7 @@ func _layout() -> void:
 		section.number.add_theme_font_size_override("font_size", ceili(11.0 / s))
 		section.title.position = Vector2(12, 1) / s
 		section.title.size = Vector2(chapter_title_width, 24.0 / s)
-		var pixels: int = ceili((18.0 if narrow else 20.0) / s)
+		var pixels: int = ceili((18.0 if size.x * s < 600.0 else 20.0) / s)
 		while pixels > 1 and Style.HEADING_FONT.get_string_size(section.title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x > chapter_title_width:
 			pixels -= 1
 		section.title.add_theme_font_size_override("font_size", pixels)

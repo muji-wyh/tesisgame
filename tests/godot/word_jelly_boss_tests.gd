@@ -132,8 +132,9 @@ func test_levels_and_story() -> void:
 	model._set_merged_word(second, word, 1, true)
 	put(model, first, 0)
 	put(model, second, 1)
-	check(model.merge_candidate(first, second).result.merge_level == 1 and model.cells.size() == 2,
-		"An over-cap same-word sum clamps to the unlocked level without unlocking a higher tier")
+	check(not model.can_merge(first, second) and model.try_merge(int(first.id), int(second.id)) == "ignored"
+		and model.cells.size() == 2 and model.fusions.is_empty(),
+		"Words already at the unlocked level cap cannot merge or trigger a matching error")
 	model.boss.apply_status("lock", int(first.id))
 	check(model.try_merge(int(second.id), int(first.id)) == "unlocked"
 		and model.boss.locks(int(first.id)) == 0 and model.cells.size() == 2,
