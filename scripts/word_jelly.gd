@@ -340,12 +340,12 @@ func pause(value: bool = true, preserve_effects: bool = false) -> void:
 	_apply_pause_reasons()
 	if _powerup_effects != null:
 		_powerup_effects.visible = not _paused and _can_play()
-	for button: PowerupButton in powerup_buttons.values():
-		button.pause_feedback(_paused)
 
 func _apply_pause_reasons() -> void:
 	super.pause(_requested_pause or _layout_too_small or not _read_cell.is_empty() or _stage_banner.ready_pending())
 	_fill_button.pause_feedback(_paused)
+	for button: PowerupButton in powerup_buttons.values():
+		button.pause_feedback(_paused)
 	# The reason can change while the combined pause remains true.
 	_refresh_controls()
 
@@ -1719,6 +1719,11 @@ func _feedback_outlines(source: WordTile) -> Array[PackedVector2Array]:
 	return outlines
 
 func _touching_target(outlines: Array[PackedVector2Array], source: WordTile) -> int:
+	if outlines.is_empty():
+		return -1
+	var bounds: Rect2 = _outline_bounds(outlines[0])
+	for index in range(1, outlines.size()):
+		bounds = bounds.merge(_outline_bounds(outlines[index]))
 	var nearest: int = -1
 	var nearest_distance: float = INF
 	for cell: Dictionary in game.cells:
@@ -1726,6 +1731,8 @@ func _touching_target(outlines: Array[PackedVector2Array], source: WordTile) -> 
 		if id == _source or not game.is_contactable(cell) or not _tiles.has(id) or not _tiles[id].visible:
 			continue
 		var target: WordTile = _tiles[id]
+		if not bounds.intersects(target.contact_bounds(), true):
+			continue
 		var distance: float = source.get_rect().get_center().distance_squared_to(target.get_rect().get_center())
 		if distance > nearest_distance or (is_equal_approx(distance, nearest_distance) and id != _target):
 			continue
@@ -2139,18 +2146,26 @@ func _combo_changed(state: Dictionary) -> void:
 func set_stage_progress(state: Dictionary, celebrate: bool = false) -> void:
 	if _stage_banner._state == state and not celebrate:
 		return
+	var previous_content: Dictionary = _stage_banner._state.duplicate()
+	var next_content: Dictionary = state.duplicate()
+	for key: String in ["seconds_remaining", "time_elapsed"]:
+		previous_content.erase(key)
+		next_content.erase(key)
+	var content_changed: bool = previous_content != next_content
 	var was_visible: bool = _stage_banner.visible
 	var previous_rows: int = _practice_panel._rows.size()
 	_stage_banner.reduced_motion = reduced_motion
 	_stage_banner.set_stage(state, celebrate)
 	_practice_panel.set_stage(state)
-	_refresh_goal_buttons()
+	if content_changed or celebrate:
+		_refresh_goal_buttons()
 	if celebrate:
 		_apply_pause_reasons()
 	if was_visible != _stage_banner.visible or previous_rows != _practice_panel._rows.size():
 		_layout()
-	_sync_boss()
-	_publish()
+	if content_changed or celebrate or _paused or game.phase != "playing":
+		_sync_boss()
+		_publish()
 
 func _finish_hint_allowed() -> bool:
 	return super._finish_hint_allowed() and not game.collection_batch_active() and not game.powerup_active() and _keyboard_source < 0
@@ -2207,11 +2222,8 @@ func _refresh_controls() -> void:
 		_word_reveal.set_reading_exclusions(_recovery_reading_bounds())
 	_recovery_hint.visible = show_recovery
 	if show_recovery:
-		var recovery: Dictionary = game.danger_recovery_snapshot()
-		var needed: int = int(recovery.spaces_needed)
-		_recovery_hint.text = ("Free 1 space" if needed == 1 else "Free %d spaces" % needed) if needed > 0 else "Room for Next"
-		_recovery_hint.set("accessibility_name", "Clear %d more reachable spaces to stop the full-board countdown." % needed \
-			if needed > 0 else "Make room for an incoming Next jelly to stop the full-board countdown.")
+		_recovery_hint.text = "Free 1 space"
+		_recovery_hint.set("accessibility_name", "Clear one space to stop the full-board countdown.")
 	_merged_level_badge.visible = _configured and game.stage_run != null and not show_recovery
 	_merged_level_badge.set_level(game.merged_level_limit)
 	var board_locked: bool = game.collection_batch_active() or game.powerup_active() or game.stage_ending()

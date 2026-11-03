@@ -240,9 +240,7 @@ func full_warning_seconds() -> float:
 
 
 func recovery_space_target() -> int:
-	if kind == "challenge":
-		return 2 if challenge_stage <= 5 else 3 if challenge_stage <= 10 else 4
-	return 1 if number <= 1 else 2 if number < 18 else 3 if number < 63 else 4
+	return 1
 
 
 func snapshot() -> Dictionary:

@@ -101,25 +101,36 @@ func _full_model(number: int):
 	return model
 
 
-func _test_recovery_buffer() -> void:
-	var model = _full_model(99)
-	var ids: Array = model.cells.slice(0, 4).map(func(tile: Dictionary) -> int: return int(tile.id))
-	for index in range(4):
-		check(model.collect(int(ids[index])), "Free Lv1 provides a legal recovery without a purchased blast")
-		model.step(Model.COLLECT_SECONDS + 0.001)
-		if index == 0:
-			var generated: int = model.generated_tiles
-			model.set_fill_mode(true)
-			model.step(0.02)
-			check(model.full_elapsed >= 0.0 and not model.can_drop_now() and model.generated_tiles == generated,
-				"One cleared slot cannot reset danger or be immediately refilled during recovery")
-			model.set_fill_mode(false)
-		if index < 3:
-			var recovery: Dictionary = model.snapshot().get("danger_recovery", {})
-			check(model.full_elapsed >= 0.0 and int(recovery.get("spaces_needed", 0)) == 3 - index,
-				"The warning names the actual remaining reachable buffer, not phantom empty cells")
-	check(model.full_elapsed < 0.0 and model.stage_run.outcome.is_empty(),
-		"Four genuine reachable spaces finish the late-game rescue without ending or paying")
+func _test_single_space_recovery() -> void:
+	for number: int in [1, 6, 18, 36, 63, 99, 0]:
+		var model = _full_model(number)
+		var warning: Dictionary = model.danger_recovery_snapshot()
+		check(model.full_elapsed >= 0.0 and warning.required_spaces == 1 and warning.spaces_needed == 1,
+			"Every stage and Challenge asks for only one real empty cell")
+		var committed: Array[Dictionary] = []
+		model.collected.connect(func(_id: String, _word: Dictionary, _coins: int, _fragments: int) -> void:
+			committed.append(model.danger_recovery_snapshot()), CONNECT_ONE_SHOT)
+		check(model.collect(int(model.cells[0].id)), "Free Lv1 provides a legal one-cell recovery")
+		model.step(Model.COLLECT_SECONDS - 0.001)
+		check(model.full_elapsed >= 0.0, "A still-owned collection footprint does not invent an early vacancy")
+		model.step(0.002)
+		var recovery: Dictionary = model.danger_recovery_snapshot()
+		check(committed.size() == 1 and not committed[0].active and committed[0].empty_spaces == 1
+			and committed[0].spaces_needed == 0 and model.full_elapsed < 0.0 and model.stage_run.outcome.is_empty(),
+			"The first committed vacancy immediately stops danger before any following dispatch")
+		if number == 0:
+			check(model.fill_mode and model.fill_mode_locked(),
+				"Challenge keeps its actual automatic Fill rule after a one-space rescue")
+		else:
+			check(recovery.empty_spaces == 1 and model.can_drop_now(),
+				"The one freed entrance immediately restores legal manual Next input")
+		model.step(0.1)
+		check(model.full_elapsed < 0.0, "A remaining vacancy cannot restart the full-board countdown")
+		if number != 0:
+			check(model.drop_now(), "A genuinely freed entrance can accept its advertised replacement")
+		model.step(2.0)
+		check(model.cells.size() == Model.CAPACITY and model.full_elapsed >= 0.0 and model.full_elapsed < 2.0,
+			"Refilling the final vacancy starts a fresh warning only after the new body settles")
 	var paused = _full_model(36)
 	paused.step(1.0)
 	var elapsed: float = paused.full_elapsed
@@ -131,37 +142,43 @@ func _test_recovery_buffer() -> void:
 func _test_recovery_geometry_and_ownership() -> void:
 	var hidden = _full_model(36)
 	for index in range(hidden.cells.size() - 1, -1, -1):
-		if int(hidden.cells[index].row) == 3 and int(hidden.cells[index].column) < 4:
+		if int(hidden.cells[index].row) == 3 and int(hidden.cells[index].column) == 0:
 			hidden.cells.remove_at(index)
 	var holes: Dictionary = hidden.danger_recovery_snapshot()
-	check(holes.reachable_spaces == 0 and holes.spaces_needed == 3,
-		"Four inaccessible holes below blocked entrances are not a successful three-space rescue")
+	check(holes.reachable_spaces == 0 and holes.empty_spaces == 1 and holes.spaces_needed == 0
+		and not holes.can_receive_next,
+		"A single internal vacancy counts even while every advertised entry remains blocked")
 	hidden._refresh_full_recovery()
-	check(hidden.full_elapsed >= 0.0, "Counting raw capacity minus bodies cannot defeat the actual entry-pressure rule")
+	check(hidden.full_elapsed < 0.0, "Any real vacancy ends the warning without an extra reachable-space requirement")
+	hidden.step(0.1)
+	check(hidden.full_elapsed < 0.0 and not hidden.can_drop_now(),
+		"Blocked Next input cannot restart a full-board warning while an internal vacancy remains")
 	var held = _full_model(36)
 	var held_id: int = int(held.cells[0].id)
 	held.set_held_tile(held_id)
 	check(held.begin_drag(held_id), "A legal drag keeps its safe cancellation destination")
-	check(held.danger_recovery_snapshot().reachable_spaces == 0,
-		"A lifted body still reserves its return cell and cannot fake a rescued buffer")
+	check(held.danger_recovery_snapshot().empty_spaces == 0,
+		"A lifted body still owns its return cell and cannot fake a committed vacancy")
+	held._refresh_full_recovery()
+	check(held.full_elapsed >= 0.0, "Holding a body does not clear a full board before an actual release")
 	held.set_held_tile()
 	var merging = _full_model(36)
 	merging.merged_level_limit = 9
 	check(merging.try_merge(int(merging.cells[0].id), int(merging.cells[1].id)) == "merged",
 		"An actual legal merge reserves its destination rather than a test-only geometry placeholder")
-	check(merging.danger_recovery_snapshot().reachable_spaces == 0,
+	check(merging.danger_recovery_snapshot().empty_spaces == 0,
 		"The in-flight fusion cannot release its source or future destination early")
 	merging.step(Model.FUSION_SECONDS + 0.001)
-	check(merging.danger_recovery_snapshot().reachable_spaces == 1 and merging.full_elapsed >= 0.0,
-		"The committed two-to-one merge frees exactly one real slot and still needs two more")
+	check(merging.danger_recovery_snapshot().empty_spaces == 1 and merging.full_elapsed < 0.0,
+		"The committed two-to-one merge immediately ends danger with its single real vacancy")
 	var challenge = _full_model(0)
 	var original: Dictionary = challenge.danger_recovery_snapshot()
 	challenge.stage_run.challenge_stage = 11
 	challenge._sync_challenge_pressure()
 	var continued: Dictionary = challenge.danger_recovery_snapshot()
-	check(original.duration == 8.0 and original.required_spaces == 2
+	check(original.duration == 8.0 and original.required_spaces == 1
 		and continued.duration == original.duration and continued.required_spaces == original.required_spaces,
-		"A new Challenge batch cannot shorten an already announced warning or secretly enlarge its rescue target")
+		"A new Challenge batch retains the announced warning duration and the same one-space recovery rule")
 	var incoming = _full_model(36)
 	incoming.cells[10].age = 0.0
 	incoming.cells[10].arrival = true
@@ -182,7 +199,7 @@ func _run() -> void:
 	_test_workload_curve()
 	_test_challenge_batch_time()
 	_test_visible_boss_counters()
-	_test_recovery_buffer()
+	_test_single_space_recovery()
 	_test_recovery_geometry_and_ownership()
 	print("Jelly difficulty pressure: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

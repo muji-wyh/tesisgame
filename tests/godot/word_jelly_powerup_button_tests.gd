@@ -2,6 +2,12 @@ extends SceneTree
 
 const Powerup = preload("res://scripts/word_jelly_powerup_button.gd")
 
+class ObservedPowerup extends "res://scripts/word_jelly_powerup_button.gd":
+	var accessibility_updates: int = 0
+	func _update_accessibility() -> void:
+		accessibility_updates += 1
+		super._update_accessibility()
+
 var checks: int = 0
 var failures: int = 0
 
@@ -15,6 +21,29 @@ func check(condition: bool, message: String) -> void:
 	if not condition:
 		failures += 1
 		printerr("FAIL: " + message)
+
+
+func _check_unchanged_availability() -> void:
+	var button := ObservedPowerup.new()
+	root.add_child(button)
+	button.set_availability(true, true)
+	var updates: int = button.accessibility_updates
+	for frame in range(120):
+		button.set_availability(true, true)
+	check(button.accessibility_updates == updates,
+		"Stable game frames do not rebuild unchanged purchase accessibility or trigger extra redraw work")
+	button.grab_focus()
+	button.clear_preview()
+	button.set_availability(true, true)
+	check(button.snapshot().preview_active,
+		"A cached availability update still restores the actual focused hover preview after temporary cancellation")
+	button.set_availability(false, true)
+	check(button.disabled and button.accessibility_updates == updates + 1 and not button.snapshot().preview_active,
+		"Real board availability changes immediately update input, preview and accessibility")
+	button.set_availability(true, false, false, false)
+	check(not button.disabled and str(button.get("accessibility_name")).contains("Coin balance unavailable"),
+		"Affordability and storage changes remain explicit even when the board is playable")
+	button.free()
 
 
 func _check_goal() -> void:
@@ -124,6 +153,7 @@ func _check_tool_layout() -> void:
 
 
 func _run() -> void:
+	_check_unchanged_availability()
 	var button := Powerup.new()
 	root.add_child(button)
 	for scale_value: float in [0.65, 1.0, 1.5]:

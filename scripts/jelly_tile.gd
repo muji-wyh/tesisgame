@@ -34,6 +34,11 @@ var _base_stretch := Vector2.ONE
 var _content_offset := Vector2.ZERO
 var _contact_outline := PackedVector2Array()
 var _surface_parameters: Dictionary = {}
+var _support_size := Vector2(-1.0, -1.0)
+var _support_lift: float = NAN
+var _support_compression: float = NAN
+var _support_drop: float = NAN
+var _support_visible: bool = false
 
 func _init() -> void:
 	text = ""
@@ -140,12 +145,18 @@ func set_chest_texture(texture: Texture2D) -> void:
 
 func contact_outline(stretch: Vector2 = Vector2.ONE) -> PackedVector2Array:
 	var outline := PackedVector2Array()
-	var foot: Vector2 = size * Vector2(0.5, Motion.FOOT_Y)
+	var body_size: Vector2 = size
+	var foot: Vector2 = body_size * Vector2(0.5, Motion.FOOT_Y)
+	var origin: Vector2 = position + _visual.position + foot
 	for point: Vector2 in _contact_outline:
-		outline.append(position + _visual.position + foot + (point * size - foot) * stretch)
+		outline.append(origin + (point * body_size - foot) * stretch)
 	# Contact squash and pull are feedback, so they cannot change their own hit
 	# test and repeatedly disconnect/reconnect a pair at the same pointer position.
 	return outline
+
+func contact_bounds() -> Rect2:
+	# The acquired contour is normalized inside this unstretched face rectangle.
+	return Rect2(position + _visual.position, size)
 
 func set_projection(value: bool) -> void:
 	if _projection == value:
@@ -223,6 +234,14 @@ func set_support(lift: float = 0.0, compression: float = 0.0, visible_shadow: bo
 	_update_support(lift, compression, visible_shadow)
 
 func _update_support(lift: float, compression: float, visible_shadow: bool, drop: float = 0.0) -> void:
+	if size == _support_size and lift == _support_lift and compression == _support_compression \
+		and drop == _support_drop and visible_shadow == _support_visible:
+		return
+	_support_size = size
+	_support_lift = lift
+	_support_compression = compression
+	_support_drop = drop
+	_support_visible = visible_shadow
 	# The source-painted shadow stays on the support while the body descends.
 	var distance: float = clampf(lift / maxf(1.0, size.y * 2.0), 0.0, 1.0)
 	var extent := size * Vector2(lerpf(0.64, 0.94, distance) + compression * 0.07, lerpf(0.082, 0.19, distance))

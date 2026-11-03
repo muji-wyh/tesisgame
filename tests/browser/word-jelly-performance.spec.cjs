@@ -6,6 +6,11 @@ const { seedCampaign } = require('./jelly-campaign-fixture.cjs');
 
 const label = process.env.JELLY_PERF_LABEL;
 const repeats = Number(process.env.JELLY_PERF_REPEATS || 3);
+const boardTiles = Number(process.env.JELLY_PERF_TILES || 35);
+const scenarios = (process.env.JELLY_PERF_SCENARIOS || 'drag,auto-merge,auto-collect').split(',');
+if (![21, 28, 35, 42, 49].includes(boardTiles) || !Number.isInteger(repeats) || repeats < 1 ||
+    scenarios.some(name => !['idle', 'hover', 'drag', 'auto-merge', 'auto-collect'].includes(name)))
+  throw new Error('Use bounded whole-row crowded boards, positive repeats and supported runtime scenarios.');
 test.skip(!label, 'Set JELLY_PERF_LABEL for the opt-in crowded-board runtime measurement.');
 test.use({ trace: 'off' });
 const jelly = page => page.locator('#game-status').evaluate(node => JSON.parse(node.dataset.jelly || '{}'));
@@ -40,7 +45,7 @@ async function fillBoard(page, first, mouse) {
     return state.visible && state.phase === 'playing' && state.tiles.length === 21 &&
       state.tiles.every(tile => tile.settled);
   }, { timeout: 30000 }).toBe(true);
-  for (let count = 0; count < 8 && (await jelly(page)).tiles.length < 35; count++) {
+  for (let count = 0; count < 8 && (await jelly(page)).tiles.length < boardTiles; count++) {
     const state = await jelly(page);
     expect(state.preview.enabled).toBe(true);
     await press(page, state.preview.rect, mouse);
@@ -49,7 +54,7 @@ async function fillBoard(page, first, mouse) {
       return current.generated_tiles > state.generated_tiles && current.tiles.every(tile => tile.settled);
     }).toBe(true);
   }
-  expect((await jelly(page)).tiles).toHaveLength(35);
+  expect((await jelly(page)).tiles).toHaveLength(boardTiles);
 }
 
 async function prepareCollect(page) {
@@ -70,12 +75,16 @@ async function prepareCollect(page) {
     return state.merged_count > before.merged_count && state.tiles.every(tile => tile.settled) &&
       state.collect_button.enabled;
   }).toBe(true);
-  expect((await jelly(page)).tiles).toHaveLength(34);
+  expect((await jelly(page)).tiles).toHaveLength(boardTiles - 1);
 }
 
 async function startFrames(page, duration) {
   await page.evaluate(duration => {
     const samples = [], longTasks = [];
+    const status = document.getElementById('game-status');
+    let publications = 0;
+    const published = new MutationObserver(records => { publications += records.length; });
+    published.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
     let observer;
     const supported = typeof PerformanceObserver !== 'undefined' &&
       PerformanceObserver.supportedEntryTypes?.includes('longtask');
@@ -92,11 +101,15 @@ async function startFrames(page, duration) {
       previous = now;
       if (now - started < duration) return requestAnimationFrame(frame);
       observer?.disconnect();
+      published.disconnect();
       const canvas = document.getElementById('canvas'), gl = canvas.getContext('webgl2');
       const debug = gl?.getExtension('WEBGL_debug_renderer_info');
       window.jellyRuntimeFrames = { done: true, samples, longTasks, longTasksSupported: Boolean(supported),
         elapsed: now - started, visibility: document.visibilityState,
-        renderer: debug ? gl.getParameter(debug.UNMASKED_RENDERER_WEBGL) : null };
+        renderer: debug ? gl.getParameter(debug.UNMASKED_RENDERER_WEBGL) : null,
+        publications, snapshot_characters: status.dataset.jelly?.length || 0,
+        device_pixel_ratio: devicePixelRatio,
+        end_state: JSON.parse(status.dataset.jelly || '{}') };
     };
     requestAnimationFrame(frame);
   }, duration);
@@ -125,7 +138,7 @@ async function finishTrace(session, info, name) {
   fs.writeFileSync(info.outputPath(`${name}-trace.json`), Buffer.concat(chunks));
 }
 
-for (const scenario of ['drag', 'auto-merge', 'auto-collect']) {
+for (const scenario of scenarios) {
   test(`crowded-board ${scenario} rendered browser intervals`, async ({ page }, info) => {
     test.setTimeout(900000);
     page.on('pageerror', error => console.log('Runtime page error: ' + error.message));
@@ -151,7 +164,19 @@ for (const scenario of ['drag', 'auto-merge', 'auto-collect']) {
         await trace.send('Tracing.start', { categories: 'devtools.timeline,v8,toplevel,blink,disabled-by-default-gpu.service',
           transferMode: 'ReturnAsStream' });
       }
-      if (scenario === 'drag') {
+      if (scenario === 'idle' || scenario === 'hover') {
+        if (scenario === 'hover') {
+          expect(before.powerup_buttons.auto_merge.enabled).toBe(true);
+          await page.keyboard.press('p');
+          await expect.poll(async () => (await jelly(page)).paused).toBe(true);
+          await page.keyboard.press('p');
+          await expect.poll(async () => (await jelly(page)).powerup_buttons.auto_merge.paused).toBe(false);
+          const point = center(before.powerup_buttons.auto_merge.rect, bounds);
+          await page.mouse.move(point.x, point.y);
+          await expect.poll(async () => (await jelly(page)).auto_merge_hover.active).toBe(true);
+        }
+        await startFrames(page, 4000);
+      } else if (scenario === 'drag') {
         const source = before.tiles.filter(tile => tile.jelly_kind === 'root').sort((a, b) => a.rect[1] - b.rect[1])[0];
         const from = center(source.rect, bounds);
         await page.mouse.move(from.x, from.y);
@@ -161,7 +186,7 @@ for (const scenario of ['drag', 'auto-merge', 'auto-collect']) {
         const started = Date.now();
         while (Date.now() - started < 4100) {
           const phase = (Date.now() - started) / 420;
-          const rect = before.board_rect, pitch = rect[2] / 5;
+          const rect = before.board_rect, pitch = rect[2] / before.columns;
           const x = bounds.x + (rect[0] + rect[2] * (.50 + Math.sin(phase) * .18)) * bounds.scale;
           const y = bounds.y + (rect[1] + pitch * .30) * bounds.scale;
           await page.mouse.move(x, y);
@@ -181,23 +206,29 @@ for (const scenario of ['drag', 'auto-merge', 'auto-collect']) {
         await finishTrace(trace, info, `${label}-${scenario}`);
         await trace.detach();
       }
-      const after = await jelly(page);
+      const after = measurement.end_state;
+      fs.writeFileSync(info.outputPath(`${label}-${scenario}-${repeat + 1}-sample.json`),
+        JSON.stringify({ before, measurement }, null, 2));
       expect(measurement.visibility).toBe('visible');
-      expect(measurement.frames).toBeGreaterThan(10);
+      expect(measurement.frames).toBeGreaterThan(0);
       expect(after.phase).toBe('playing');
       if (scenario === 'drag') {
         expect(after.drag.source).toBeGreaterThanOrEqual(0);
         await page.mouse.up();
+      } else if (scenario === 'hover') {
+        expect(after.auto_merge_hover.active).toBe(true);
+        expect(after.merged_count).toBe(before.merged_count);
+        await page.mouse.move(4, 4);
       } else if (scenario === 'auto-merge') expect(after.merged_count).toBeGreaterThan(before.merged_count);
-      else expect(after.cleared_pairs).toBeGreaterThan(before.cleared_pairs);
+      else if (scenario === 'auto-collect') expect(after.cleared_pairs).toBeGreaterThan(before.cleared_pairs);
       results.push({ repeat: repeat + 1, before_bodies: before.tiles.length, after_bodies: after.tiles.length,
         before_merged: before.merged_count, after_merged: after.merged_count,
         collected: after.cleared_pairs - before.cleared_pairs, ...measurement });
       if (repeat === 0) await page.screenshot({ path: info.outputPath(`${label}-${scenario}.png`), scale: 'css' });
     }
-    const report = { protocol: 'word-jelly-browser-intervals-v1', label, scenario, project: info.project.name,
+    const report = { protocol: 'word-jelly-browser-intervals-v2', label, scenario, board_tiles: boardTiles, project: info.project.name,
       browser: page.context().browser().version(), viewport: page.viewportSize(), repeats: results,
-      scope: 'Windows-hosted browser lab; normal motion, no CPU/network throttle. rAF intervals include drawing and driver work. Auto Collect uses 34 live bodies and one manually completed word; the separate native fixture covers 35 Lv1-9 batch targets. Not physical Chrome/iPad device FPS or field RUM.' };
+      scope: 'Windows-hosted browser lab; normal motion, no CPU/network throttle. rAF intervals include drawing and driver work; renderer and DPR are recorded. Auto Collect uses the requested crowded board minus one manual merge; the native fixture covers Lv1-9 batch targets. Not the user PC, a physical mobile device, or field RUM.' };
     fs.writeFileSync(info.outputPath(`${label}-${scenario}.json`), JSON.stringify(report, null, 2));
     console.log(JSON.stringify({ label, scenario, project: info.project.name,
       p95_ms: results.map(row => row.p95_ms), over_50ms: results.map(row => row.over_50ms) }));

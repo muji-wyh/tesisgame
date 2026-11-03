@@ -3,12 +3,15 @@ extends SceneTree
 const Fixture = preload("res://tests/performance/jelly_drag_fixture.gd")
 const Data = preload("res://scripts/game_data.gd")
 const Model = preload("res://scripts/word_jelly_model.gd")
+const Catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
+const Morphology = preload("res://scripts/growth_morphology.gd")
 
 class ObservedJelly extends "res://scripts/word_jelly.gd":
 	var position_passes: int = 0
 	var publications: int = 0
 	var merge_checks: int = 0
 	var drop_checks: int = 0
+	var outline_bounds_checks: int = 0
 	func _sync_positions() -> void:
 		position_passes += 1
 		super._sync_positions()
@@ -23,6 +26,9 @@ class ObservedJelly extends "res://scripts/word_jelly.gd":
 		if not _view_update_active or not _view_drop_known:
 			drop_checks += 1
 		return super._can_drop_preview()
+	func _outline_bounds(outline: PackedVector2Array) -> Rect2:
+		outline_bounds_checks += 1
+		return super._outline_bounds(outline)
 
 var checks: int = 0
 var failures: int = 0
@@ -36,11 +42,61 @@ func check(condition: bool, message: String) -> void:
 		failures += 1
 		printerr("FAIL: " + message)
 
+
+func _check_clock_publication(data) -> void:
+	var words: Array = data.words.filter(func(word: Dictionary) -> bool: return Data.word_age(word) == 3) \
+		.map(func(word: Dictionary) -> Dictionary: return Morphology.decorate(word))
+	var plan: Dictionary = Catalog.make_plan(1, words, 3, 73021)
+	var view := ObservedJelly.new()
+	root.add_child(view)
+	view.size = Vector2(390, 844)
+	check(plan.ok and view.configure(plan.words, 3, Data.theme("spring"), data.chests, false, 73021)
+		and view.game.bind_stage(plan),
+		"The timer diagnostic uses an actual campaign with reviewed word goals")
+	view.set_process(false)
+	if view.game.stage_run == null:
+		view.free()
+		return
+	var state: Dictionary = view.game.stage_run.snapshot()
+	view.set_stage_progress(state)
+	view.publications = 0
+	for frame in range(60):
+		state = state.duplicate(true)
+		state.time_elapsed = float(frame + 1) / 60.0
+		state.seconds_remaining = state.seconds_total - state.time_elapsed
+		view.set_stage_progress(state)
+	check(view.publications == 0 and view._stage_banner._state.seconds_remaining == state.seconds_remaining,
+		"Clock-only updates retain native timer feedback without duplicating whole-board host snapshots")
+	state.practice[0].current += 1
+	state.practice[0].mastered = true
+	view.set_stage_progress(state)
+	check(view.publications > 0 and view._practice_panel._state.practice[0].mastered,
+		"Actual word progress still updates its goal and immediately publishes the meaningful change")
+	view.publications = 0
+	state.stars_now = 2
+	view.set_stage_progress(state)
+	check(view.publications > 0, "Crossing a timed star boundary immediately publishes its semantic change")
+	view.publications = 0
+	view.set_stage_progress(state, true)
+	check(view.publications > 0, "An explicit stage celebration is never hidden by the clock-only fast path")
+	for frame in range(40):
+		view._process(0.05)
+	check(view._can_play() and view.powerup_buttons.values().all(
+		func(button: Button) -> bool: return not button.snapshot().paused),
+		"Ready-to-play resumes tool feedback and hover without needing a manual pause/resume workaround")
+	view.pause(true)
+	view.publications = 0
+	state.seconds_remaining -= 0.1
+	view.set_stage_progress(state)
+	check(view.publications > 0, "A paused timer update still publishes without relying on the playing-frame clock")
+	view.free()
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(390, 844)
 	var data := Data.new()
 	check(data.load_all(), "Production word and artwork data load")
+	_check_clock_publication(data)
 	var view := ObservedJelly.new()
 	root.add_child(view)
 	view.size = Vector2(390, 844)
@@ -57,10 +113,13 @@ func _run() -> void:
 		check(view.position_passes == 0 and view.publications == 0, "Touch bursts do not rebuild or serialize the board")
 		view.merge_checks = 0
 		view.drop_checks = 0
+		view.outline_bounds_checks = 0
 		view._process(1.0 / 60.0)
 		check(view.position_passes == 1, "One presentation pass consumes all pending motion")
 		check(view.merge_checks <= count, "Each partner is checked at most once in the presentation pass")
 		check(view.drop_checks == 1, "Preview slots share one return-space calculation")
+		check(view.outline_bounds_checks <= 8,
+			"Empty-space dragging rejects distant bodies before allocating or scanning their authored contours")
 		check(view._tiles[pair[0]].position.is_equal_approx(view.get_global_transform().affine_inverse() * destination - view._drag_offset), "The frame uses the latest touch position")
 		check(not view._view_update_active, "No cached model decisions survive the frame")
 		var target: Vector2 = view._tiles[pair[1]].get_global_rect().get_center()

@@ -401,14 +401,19 @@ baseline interval. Reviewed rounds multiply that baseline by
 `max(1, preview occupied area / 7)` for the next wave; atomic collections count
 once, while partial merges never count. Numbered-stage recipes instead use
 the actual 21/7 workload, a 20-to-7.5-second cadence and 1.0-to-1.6 descent scale.
-The first-stage rescue stays at ten seconds/one space; later stages require
-two, three or four genuinely reachable unreserved spaces within eight, seven
-or six seconds. The sourced border takes that actual warning duration,
+Full-board rescue lasts ten seconds in the first stage, then eight, seven or
+six seconds in later stages. Every stage and Challenge stops that countdown
+as soon as one real cell becomes vacant, including an internal gap awaiting
+gravity. A blocked Next entrance does not keep or restart a full-board warning
+while a vacancy remains. Held return cells and unfinished fusion reservations
+stay owned until the actual operation commits. The sourced border takes that actual warning duration,
 not a hardcoded ten-second shader clock. Its existing colors, glow, beat and
-reduced-motion behavior remain unchanged. A short **Free N spaces** hint
+reduced-motion behavior remain unchanged. A short **Free 1 space** hint
 temporarily occupies the secondary level badge's bounds without moving goals,
 covering cells or adding an input layer. Recovery pauses new dispatch while
-owned airborne bodies keep their motion.
+owned airborne bodies keep their motion. Opening one space restores the normal
+badge and allows supply whenever its separately validated entry lane is clear.
+The independent stage timer continues normally.
 The same acquired collected-word card prefers space outside the well during
 an active rescue, preserving Next, the actual countdown and rescue hint as well.
 If that content envelope cannot fit safely on a short screen,

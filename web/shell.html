@@ -3196,7 +3196,7 @@
           try { value = JSON.parse(text); } catch { return; }
           if (!value || typeof value !== 'object' || Array.isArray(value)) return;
           const status = document.getElementById('game-status');
-          status.dataset.jelly = JSON.stringify(value);
+          status.dataset.jelly = text;
           const phrase = JSON.parse(status.dataset.phrase || '{}');
           canvas.style.touchAction = value.visible || phrase.visible ? 'pinch-zoom' : 'manipulation';
         },

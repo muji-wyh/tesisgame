@@ -97,7 +97,6 @@ var spawn_interval: float = INITIAL_SPAWN_INTERVAL
 var spawn_elapsed: float = 0.0
 var full_elapsed: float = -1.0
 var _full_warning_limit: float = FULL_SECONDS
-var _full_recovery_target: int = 1
 var error: String = ""
 var credit_collection: Callable
 var credit_combo: Callable
@@ -1755,7 +1754,7 @@ func step(delta: float) -> void:
 				boundary = float(active.pop_at)
 			if time_scale > 0.0:
 				consumed = minf(consumed, maxf(0.0, boundary - float(active.elapsed)) / time_scale)
-		var full: bool = not _has_free_cell()
+		var full: bool = not _has_board_space()
 		var ending_wait: bool = _finish_after_collection_commit or _stage_ending
 		if full and full_elapsed < 0.0 and _settling_remaining() <= EPSILON and not powerup_running and not impact_running and not ending_wait:
 			_begin_full_warning()
@@ -1868,7 +1867,7 @@ func step(delta: float) -> void:
 				break
 			continue
 		_refresh_full_recovery()
-		var blocked: bool = not _has_free_cell()
+		var blocked: bool = not _has_board_space()
 		if blocked and full_elapsed < 0.0 and _settling_remaining() <= EPSILON:
 			_begin_full_warning()
 			if not _can_continue(generation):
@@ -2062,6 +2061,11 @@ func _restore_dragged_tile() -> void:
 
 
 func _drag_return_position(occupied: Dictionary, width: int, height: int, anchor: Dictionary) -> Vector2i:
+	if width == int(anchor.width) and height == int(anchor.height) \
+		and int(anchor.column) >= 0 and int(anchor.row) >= 0 \
+		and int(anchor.column) + width <= COLUMNS and int(anchor.row) + height <= ROWS \
+		and _fits(occupied, int(anchor.column), int(anchor.row), width, height):
+		return Vector2i(int(anchor.column), int(anchor.row))
 	var center := Vector2(float(anchor.column) + float(anchor.width) * 0.5,
 		float(anchor.row) + float(anchor.height) * 0.5)
 	var nearest := Vector2i(-1, -1)
@@ -2100,32 +2104,46 @@ func _drag_return_after_motion(anchor: Dictionary, additional: Dictionary = {}) 
 	# Project the positions neighbors will commit after the support delay. The
 	# return reservation must remain available once that delayed fall begins.
 	current.sort_custom(_gravity_order)
+	var obstacles: Dictionary = reserved.duplicate()
+	for tile: Dictionary in current:
+		_count_occupied(obstacles, tile, 1)
 	for tile: Dictionary in current:
 		if int(tile.id) in consumed or not is_settled(tile):
 			continue
-		var obstacles: Dictionary = reserved.duplicate()
-		for other: Dictionary in current:
-			if int(other.id) != int(tile.id):
-				_occupy(obstacles, int(other.column), int(other.row), int(other.width), int(other.height))
+		_count_occupied(obstacles, tile, -1)
 		while int(tile.row) + int(tile.height) < ROWS and _fits(obstacles, int(tile.column), int(tile.row) + 1, int(tile.width), int(tile.height)):
 			tile.row = int(tile.row) + 1
+		_count_occupied(obstacles, tile, 1)
 	for tile: Dictionary in current:
 		_occupy(occupied, int(tile.column), int(tile.row), int(tile.width), int(tile.height))
 		if not int(tile.id) in consumed:
 			projected.append(tile)
 	projected.sort_custom(_gravity_order)
+	obstacles.clear()
 	for tile: Dictionary in projected:
-		var obstacles: Dictionary = {}
-		for other: Dictionary in projected:
-			if int(other.id) != int(tile.id):
-				_occupy(obstacles, int(other.column), int(other.row), int(other.width), int(other.height))
+		_count_occupied(obstacles, tile, 1)
+	for tile: Dictionary in projected:
+		_count_occupied(obstacles, tile, -1)
 		var start_row: int = int(tile.row)
 		var row: int = start_row
 		while row + int(tile.height) < ROWS and _fits(obstacles, int(tile.column), row + 1, int(tile.width), int(tile.height)):
 			row += 1
 		_occupy(occupied, int(tile.column), start_row, int(tile.width), int(tile.height) + row - start_row)
 		tile.row = row
+		_count_occupied(obstacles, tile, 1)
 	return _drag_return_position(occupied, int(anchor.width), int(anchor.height), anchor)
+
+
+func _count_occupied(occupied: Dictionary, tile: Dictionary, change: int) -> void:
+	# Counts retain overlapping bodies and fusion reservations when one moves.
+	for row in range(int(tile.row), int(tile.row) + int(tile.height)):
+		for column in range(int(tile.column), int(tile.column) + int(tile.width)):
+			var key: int = row * COLUMNS + column
+			var count: int = int(occupied.get(key, 0)) + change
+			if count == 0:
+				occupied.erase(key)
+			else:
+				occupied[key] = count
 
 
 func can_reposition(tile_id: int, column: int, row: int) -> bool:
@@ -3639,6 +3657,11 @@ func _has_free_cell() -> bool:
 	return _arrival_position(_occupied()).x >= 0
 
 
+func _has_board_space() -> bool:
+	# Held returns and unfinished fusions still own their reserved cells.
+	return _occupied().size() < CAPACITY
+
+
 func full_warning_seconds() -> float:
 	if full_elapsed >= 0.0:
 		return _full_warning_limit
@@ -3646,9 +3669,9 @@ func full_warning_seconds() -> float:
 
 
 func danger_recovery_snapshot() -> Dictionary:
-	var target: int = _full_recovery_target if full_elapsed >= 0.0 else \
-		stage_run.recovery_space_target() if stage_run != null else 1
+	var target: int = stage_run.recovery_space_target() if stage_run != null else 1
 	var occupied: Dictionary = _occupied()
+	var empty_spaces: int = maxi(0, CAPACITY - occupied.size())
 	var reachable: int = 0
 	for column in range(COLUMNS):
 		for row in range(ROWS):
@@ -3656,13 +3679,12 @@ func danger_recovery_snapshot() -> Dictionary:
 				break
 			reachable += 1
 	return {"active": full_elapsed >= 0.0, "duration": full_warning_seconds(),
-		"required_spaces": target, "reachable_spaces": reachable,
-		"spaces_needed": maxi(0, target - reachable), "can_receive_next": _has_free_cell()}
+		"required_spaces": target, "empty_spaces": empty_spaces, "reachable_spaces": reachable,
+		"spaces_needed": maxi(0, target - empty_spaces), "can_receive_next": _has_free_cell()}
 
 
 func _begin_full_warning() -> void:
 	_full_warning_limit = stage_run.full_warning_seconds() if stage_run != null else FULL_SECONDS
-	_full_recovery_target = stage_run.recovery_space_target() if stage_run != null else 1
 	full_elapsed = 0.0
 	cue_requested.emit("danger")
 
@@ -3670,8 +3692,7 @@ func _begin_full_warning() -> void:
 func _refresh_full_recovery() -> void:
 	if full_elapsed < 0.0:
 		return
-	var recovery: Dictionary = danger_recovery_snapshot()
-	if int(recovery.spaces_needed) == 0 and bool(recovery.can_receive_next):
+	if _has_board_space():
 		full_elapsed = -1.0
 
 

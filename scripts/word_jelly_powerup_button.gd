@@ -211,6 +211,10 @@ func set_chest_texture(texture: Texture2D) -> void:
 
 
 func set_availability(available: bool, affordable: bool, busy: bool = false, balance_known: bool = true) -> void:
+	if _available == available and _affordable == affordable and _busy == busy \
+		and _balance_known == balance_known and disabled == (not available or busy):
+		_refresh_preview()
+		return
 	_available = available
 	_affordable = affordable
 	_balance_known = balance_known

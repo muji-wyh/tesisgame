@@ -64,6 +64,20 @@ func _run() -> void:
 	root.add_child(tile)
 	tile.size = Vector2.ONE * 100.0
 	tile.configure(_cell(), SKIN, PICTURE, CHEST, Color("#357d70"))
+	for offset: Vector2 in [Vector2.ZERO, Vector2(17.25, -3.75)]:
+		tile._visual.position = offset
+		var bounds: Rect2 = tile.contact_bounds().grow(0.0001)
+		var outline: PackedVector2Array = tile.contact_outline()
+		check(Array(outline).all(func(point: Vector2) -> bool: return bounds.has_point(point)),
+			"The cheap face bounds enclose the actual acquired contour, including a lifted visual")
+		var stretch := Vector2(1.04, 0.96)
+		var stretched: PackedVector2Array = tile.contact_outline(stretch)
+		var foot: Vector2 = tile.size * Vector2(0.5, tile.Motion.FOOT_Y)
+		for index in range(stretched.size()):
+			check(stretched[index] == tile.position + tile._visual.position + foot
+				+ (tile._contact_outline[index] * tile.size - foot) * stretch,
+				"Hoisted pose reads preserve every original contact point exactly")
+	tile._visual.position = Vector2.ZERO
 	tile.set_completion_hint(true, 0.0, false)
 	tile.set_completion_hint(true, 0.6, false)
 	var feedbacks: int = tile.feedback_count

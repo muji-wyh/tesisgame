@@ -1,6 +1,6 @@
 # Jelly Words drag performance
 
-Five paired CPU diagnostic runs reduced mean drag-update time by 69.7%-90.2%
+The 2026-10-22 five-pair CPU diagnostic reduced mean drag-update time by 69.7%-90.2%
 across eight scenarios, with matching per-frame interaction traces. These are
 headless CPU measurements, not mobile FPS or touch-to-screen latency results.
 
@@ -257,3 +257,136 @@ Logs, screenshots, traces, and audio evidence are retained locally under:
 - `build/performance/browser-hybrid-rerun-20261022/` and its sibling `.log`
 - `build/performance/browser-support-lift-20261022/` and its sibling `.log`
 - `build/performance/browser-lv1-audio-20261022/` and its sibling `.log`
+
+## PC runtime follow-up on 2026-11-03
+
+The current board has seven columns and eight rows. The unchanged native
+diagnostic now uses 21-body opening boards and 49-body crowded boards; the
+18/42-body results above describe their historical versions, not today's geometry.
+
+The runtime avoids constructing distant target contours during empty-space
+dragging. A cheap face rectangle conservatively encloses the acquired skin and
+its visual lift; only overlapping candidates proceed to the original exact
+polygon intersection and distance/tie rules. Contact-point generation reads
+the body's fixed pose once rather than calling native properties for every vertex.
+Support-shadow geometry and purchase accessibility also skip unchanged inputs.
+
+Return-space projection maintains counted occupancy as each copied body moves,
+retaining overlapping fusion reservations and every original swept fall path.
+An unobstructed, equally sized anchor is already the exact zero-distance return
+destination and does not need a full-well nearest-slot search.
+
+Stage-clock updates still refresh the actual timer and practice state. They no
+longer publish another complete board snapshot outside the normal presentation
+publisher. Goal, star, outcome, pause and explicit celebration changes remain
+immediate. The browser bridge validates the native JSON and stores that original
+text instead of serializing it a second time. Tool feedback follows the combined
+pause reason, including the end of Ready; hover is not left internally paused
+until the player manually pauses and resumes.
+
+### Browser protocol
+
+The opt-in protocol is now `word-jelly-browser-intervals-v2`:
+
+- `JELLY_PERF_TILES` accepts 21, 28, 35, 42 or 49 bodies; its default remains 35.
+- `JELLY_PERF_SCENARIOS` accepts comma-separated `idle`, `hover`, `drag`,
+  `auto-merge` and `auto-collect`. The default remains the three action scenarios.
+- `JELLY_PERF_REPEATS` defaults to three. `JELLY_PERF_TRACE=1` captures the first
+  repeat's Chromium CPU profile and main-thread/GPU trace.
+- Idle, hover and drag use four-second rAF windows. Hover first explicitly
+  pauses/resumes and establishes a real active forecast; its window measures
+  steady preview work, while the trace also retains the initial forecast.
+- Each sample captures its final native state in the final rAF callback, not
+  after transferring a potentially large trace. It records publication count,
+  snapshot character count, renderer, DPR, long tasks and raw frame intervals.
+  Raw samples are preserved before behavior assertions, including failed cases.
+
+For the repository's desktop profile:
+
+```powershell
+$env:JELLY_PERF_LABEL = 'pc-crowded-runtime'
+$env:JELLY_PERF_TILES = '49'
+$env:JELLY_PERF_SCENARIOS = 'idle,hover,drag'
+$env:JELLY_PERF_REPEATS = '3'
+$env:JELLY_PERF_TRACE = '1'
+npx --no-install playwright test tests\browser\word-jelly-performance.spec.cjs --project desktop-chromium
+```
+
+Use the same compiled source, harness, profile and conditions for a comparison.
+The ordinary desktop profile advertises touch; the mouse-only PC lab used an
+isolated `hasTouch: false` profile at 1366x768, DPR 1, normal motion, and no
+deliberate CPU/network throttle. Its Chromium 153 renderer is Windows SwiftShader,
+not the user's hardware GPU. Neither these rAF intervals nor the headless CPU
+diagnostic establish real-user FPS, field INP, audio quality or physical-device
+smoothness. Poor frame counts are retained as measurements, not rejected by
+an arbitrary minimum-FPS behavior assertion.
+
+### Native comparison and regression scope
+
+Three independent native processes per version used the unchanged
+`word-jelly-drag-cpu-v1` and `word-jelly-auto-cpu-v1` harnesses. Drag retained
+30 warmup and 120 measured frames per case; automatic actions retained 1,200
+measured frames so the 49-target Lv1-9 collection can actually finish.
+Every per-frame interaction trace matched the published `80ba0f56` baseline.
+
+Numbers below are medians of the three process means, in milliseconds per
+manually advanced update. Parentheses show the range of those process means.
+The drag row pools the four 49-body contact/motion variants within each process,
+not unrelated inclusive method timers.
+
+| CPU diagnostic | Before | After | Median mean reduction |
+| --- | ---: | ---: | ---: |
+| 49-body drag | 23.720 (22.724-25.279) | 11.314 (10.243-12.251) | 52.3% |
+| 49-body Auto merge | 12.011 (11.754-23.302) | 6.713 (6.572-7.805) | 44.1% |
+| 49-body Auto Collect | 6.674 (4.913-6.750) | 3.525 (3.306-4.374) | 47.2% |
+
+These headless fixtures use the existing legacy cat setup and do not replace
+the rendered, reviewed-morphology campaign journey. The exact projection oracle
+also compared 1,200 mixed geometry/fusion/arrival cases against the original
+algorithm, including checks that live cells never change.
+
+The focused drag and tile checks passed, including bounded distant-contour
+work, exact contact points, responsive shadows, clock-only publication, actual
+star/goal changes and Ready-to-play hover restoration. The current native model,
+campaign, Fill, falling contact, morphology, Auto merge capacity/forecast,
+payment and shared Jelly Match checks passed.
+
+Three additional legacy suites exposed existing failures: five Word Jelly view
+assertions using obsolete impact/recovery expectations, one authored-drag
+arrival assertion during full-board recovery, and twenty hybrid-view assertions
+expecting the deliberately reusable charge shell to be freed. Each identical
+failure set was reproduced against a frozen `80ba0f56` source snapshot; the
+baseline authored-drag reproduction used its bounded `--quick` path. These
+unrelated assertions were not relaxed or counted as passing, and this is not
+a claim that the complete repository suite is green.
+
+### Rendered Chromium comparison
+
+The published baseline used `game-f5df45b25fc6738f.pck.br`; the fresh local
+candidate used `game-e2d7f93460e4a939.pck.br`. Each scenario retained 49 live
+bodies throughout all three four-second windows, the same browser/profile,
+normal motion and unthrottled conditions described above. The first repeat
+recorded a CPU/DevTools trace in both versions.
+
+The table gives the median of each version's three window P95 rAF intervals.
+Parentheses show the range of those three P95 values, not field percentiles.
+
+| Rendered lab scenario | Before | After | Median P95 reduction |
+| --- | ---: | ---: | ---: |
+| Crowded idle | 266.6 (250.0-333.3) ms | 133.4 (133.3-166.7) ms | 50.0% |
+| Auto merge hover | 216.7 (216.6-250.0) ms | 150.1 (133.4-183.3) ms | 30.7% |
+| Crowded mouse drag | 483.4 (483.3-516.8) ms | 166.7 (166.7-200.0) ms | 65.5% |
+
+Complete board publications fell from exactly two to one per sampled rAF
+callback in every repeat; the diagnostic payload was retained rather than
+discarding vocabulary or changing its output shape. The fresh browser journey
+also preserved the exact hover-input/consumed-input match, paid six-output
+capacity and overlapping 100 ms Auto merge launches. The bridge/export/runner
+contracts passed 60 Node tests, and the source-pinned Pip review retained its
+58 states and 334 performances.
+
+The software-rendered lab still exceeds a 16.7 ms frame budget. These results
+establish a substantial reduction under the stated local conditions, not
+60 FPS on the user's actual PC, a hardware-GPU result or field INP. Artwork,
+audio, effects, difficulty, saves and purchase rules were not reduced to obtain
+the improvement. The candidate is local; this investigation does not deploy it.

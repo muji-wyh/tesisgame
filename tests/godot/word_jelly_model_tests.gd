@@ -867,12 +867,16 @@ func _test_powerup_pause_and_clocks() -> void:
 		check(model.phase == "playing" and is_equal_approx(model.full_elapsed, Model.FULL_SECONDS - 0.1),
 			"paid presentation freezes the active danger deadline without resetting it")
 		model.finish_powerup(true)
-		check(model.phase == "playing" and is_equal_approx(model.full_elapsed, Model.FULL_SECONDS - 0.1),
-			"draining a paid effect preserves its frozen danger clock until normal play resumes")
+		if kind == "auto_merge":
+			check(model.phase == "playing" and model.full_elapsed < 0.0,
+				"A committed paid merge immediately stops danger when it frees one cell")
+		else:
+			check(model.phase == "playing" and is_equal_approx(model.full_elapsed, Model.FULL_SECONDS - 0.1),
+				"A paid effect that frees no cell preserves its frozen danger clock")
 		model.step(0.10)
 		if kind == "auto_merge":
 			check(model.phase == "playing" and model.cells.size() == Model.CAPACITY - 1 and model.full_elapsed < 0.0,
-				"an ordinary-cell Auto merge frees one cell and clears danger when play resumes")
+				"An ordinary-cell Auto merge keeps its single vacancy out of danger when play resumes")
 		else:
 			check(model.phase == "finished", "a fragment award frees no cell, so preserved danger resumes and expires")
 		model.purchase_powerup = Callable()
@@ -4008,11 +4012,11 @@ func _test_arrival_reachable_lanes() -> void:
 	check(model._occupied().size() < Model.CAPACITY and not model.can_drop_now() and not model.drop_now(),
 		"enclosed empty cells cannot admit roots through a completely sealed entry")
 	model.step(1.0)
-	check(is_equal_approx(model.full_elapsed, 1.0) and model.generated_tiles == generated and model.upcoming == preview,
-		"a sealed roof advances danger without consuming or repeatedly respawning the preview")
+	check(model.full_elapsed < 0.0 and model.generated_tiles == generated and model.upcoming == preview,
+		"A sealed entry cannot start a full-board countdown while genuine vacancies remain")
 	check(model.collect(1000), "a valid roof word can reopen the entry")
 	model.step(Model.COLLECT_SECONDS + Model.SETTLE_SECONDS)
-	check(model.full_elapsed < 0.0 and model.can_drop_now(), "collecting the roof resets danger and reopens reachable entry lanes")
+	check(model.full_elapsed < 0.0 and model.can_drop_now(), "Collecting the roof preserves the vacancy rule and reopens entry lanes")
 	check(model.drop_now(int(preview[0].id)), "the unchanged preview can enter after the roof is cleared")
 	_assert_board(model, "reopened entry after collection")
 
