@@ -13,14 +13,20 @@ async function holdUntil(page, condition) {
   await page.mouse.move(bounds.x + (rect[0] + rect[2] / 2) * bounds.scale,
     bounds.y + (rect[1] + rect[3] / 2) * bounds.scale);
   await page.mouse.down();
+  let observed;
   try {
-    await expect.poll(async () => condition(await shop(page)),
+    await expect.poll(async () => {
+      observed = await shop(page);
+      return condition(observed);
+    },
       { timeout: 10000, intervals: [16, 16, 25, 25, 50] }).toBe(true);
     // Saving errors resize the footer. Releasing inside its current button
     // must still finish this gesture without activating the new Retry action.
-    const releaseRect = (await shop(page)).buy.rect, releaseBounds = await metrics(page);
-    await page.mouse.move(releaseBounds.x + (releaseRect[0] + releaseRect[2] / 2) * releaseBounds.scale,
-      releaseBounds.y + (releaseRect[1] + releaseRect[3] / 2) * releaseBounds.scale);
+    if (observed.error) {
+      const releaseRect = observed.buy.rect;
+      await page.mouse.move(bounds.x + (releaseRect[0] + releaseRect[2] / 2) * bounds.scale,
+        bounds.y + (releaseRect[1] + releaseRect[3] / 2) * bounds.scale);
+    }
   } finally {
     await page.mouse.up();
   }
