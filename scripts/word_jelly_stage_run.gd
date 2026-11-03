@@ -82,9 +82,10 @@ func record_collection(event_id: String, word_id: String, units: int = 1) -> boo
 			goal.current = mini(int(goal.required), int(goal.current) + units)
 			if int(goal.current) == int(goal.required):
 				goal.mastered = true
-				_pending_time_bonus += grant_challenge_time(str(goal.id), 10)
 				if _challenge_goals.all(func(item: Dictionary) -> bool:
 					return int(item.stage) != challenge_stage or bool(item.mastered)):
+					var reward: int = 12 if challenge_stage <= 5 else 10 if challenge_stage <= 10 else 8
+					_pending_time_bonus += grant_challenge_time("challenge-batch:%d" % challenge_stage, reward)
 					challenge_stage += 1
 					_append_challenge_stage()
 			break
@@ -151,7 +152,7 @@ func grant_challenge_time(receipt_id: String, seconds: int) -> float:
 	if not _active():
 		return 0.0
 	if kind != "challenge" or not _valid_id(receipt_id) or seconds <= 0:
-		_fail("A Challenge goal needs a valid receipt and positive time reward.")
+		_fail("A Challenge batch needs a valid receipt and positive time reward.")
 		return 0.0
 	if _time_receipts.has(receipt_id):
 		return 0.0
@@ -164,9 +165,7 @@ func grant_challenge_time(receipt_id: String, seconds: int) -> float:
 
 func _append_challenge_stage() -> void:
 	var available: Array[Dictionary] = words_for_pressure()
-	var variety_stages: int = Catalog.MAX_CHALLENGE_WORDS - 2
-	var quota: int = 1 + floori(float(mini(challenge_stage - 1, variety_stages - 1)) / 2.0) \
-		+ maxi(0, challenge_stage - variety_stages)
+	var quota: int = mini(5, 1 + floori(float(challenge_stage - 1) / 4.0))
 	for word: Dictionary in available:
 		_challenge_goals.append({"id": "challenge:%d:%s" % [challenge_stage, word.id], "stage": challenge_stage,
 			"word_id": str(word.id), "text": str(word.text), "image": str(word.get("image", "")), "current": 0,
@@ -217,19 +216,33 @@ func challenge_pressure() -> Dictionary:
 	if not _configured or kind != "challenge":
 		return {}
 	var level: int = challenge_stage
-	return {"level": level, "word_limit": mini(3 + level - 1, Catalog.MAX_CHALLENGE_WORDS),
-		"spawn_interval": maxf(3.0, 20.0 * pow(0.93, level - 1)),
-		"fall_speed_scale": minf(2.2, 1.0 + 0.04 * float(level - 1))}
+	return {"level": level, "word_limit": mini(3 + level - 1, Catalog.MAX_CHALLENGE_ACTIVE_WORDS),
+		"word_offset": maxi(0, level - 6) % maxi(1, words.size()),
+		"spawn_interval": maxf(3.0, 12.0 * pow(0.91, level - 1)),
+		"fall_speed_scale": minf(2.2, 1.0 + 0.065 * float(level - 1))}
 
 
 func words_for_pressure() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	if not _configured or kind != "challenge":
 		return result
-	var count: int = mini(words.size(), int(challenge_pressure().word_limit))
+	var pressure: Dictionary = challenge_pressure()
+	var count: int = mini(words.size(), int(pressure.word_limit))
 	for index in range(count):
-		result.append(words[index].duplicate(true))
+		result.append(words[(index + int(pressure.word_offset)) % words.size()].duplicate(true))
 	return result
+
+
+func full_warning_seconds() -> float:
+	if kind == "challenge":
+		return 8.0 if challenge_stage <= 5 else 7.0 if challenge_stage <= 10 else 6.0
+	return 10.0 if number <= 1 else 8.0 if number < 18 else 7.0 if number < 63 else 6.0
+
+
+func recovery_space_target() -> int:
+	if kind == "challenge":
+		return 2 if challenge_stage <= 5 else 3 if challenge_stage <= 10 else 4
+	return 1 if number <= 1 else 2 if number < 18 else 3 if number < 63 else 4
 
 
 func snapshot() -> Dictionary:

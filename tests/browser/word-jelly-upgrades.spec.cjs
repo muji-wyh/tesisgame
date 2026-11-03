@@ -186,7 +186,9 @@ test('Auto merge upgrades migrate independently, recover one debit and persist t
   }, { timeout: 30000 }).toBe(true);
   const used = await jelly(page);
   expect(used.powerup.capacity).toBe(4);
-  expect(used.powerup.affected_jellies).toBe(4);
+  expect(used.powerup.completed_results).toBe(4);
+  expect(used.powerup.result_ids).toHaveLength(4);
+  expect(used.powerup.affected_jellies).toBe(8);
   expect(used.powerup_buttons.auto_merge.capacity_badge.text).toBe('4');
   await page.screenshot({ path: info.outputPath('auto-merge-lv2-gameplay.png'), scale: 'css' });
   fs.writeFileSync(info.outputPath('auto-merge-upgrade-journey.json'), JSON.stringify({ pending, owned, used }, null, 2));

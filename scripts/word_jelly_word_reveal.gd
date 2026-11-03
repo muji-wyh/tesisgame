@@ -14,6 +14,7 @@ var _reduced_motion: bool = false
 var _ui_scale: float = 1.0
 var _exclusions: Array[Rect2] = []
 var _effect_area := Rect2()
+var _reading_exclusions: Array[Rect2] = []
 
 
 func _init() -> void:
@@ -82,6 +83,8 @@ func _place(entry: Card, occupied: Array[Card]) -> void:
 	var best := Rect2(margin, entry.size)
 	var best_excluded_area: float = INF
 	var best_score: float = INF
+	var placement_exclusions: Array[Rect2] = _exclusions.duplicate()
+	placement_exclusions.append_array(_reading_exclusions)
 	for attempt in range(72):
 		var anchor := Vector2(_rng.randf(), _rng.randf())
 		if attempt < 16:
@@ -96,7 +99,7 @@ func _place(entry: Card, occupied: Array[Card]) -> void:
 		var spelling := Rect2(candidate_rest + entry._spelling.position, entry._spelling.size)
 		var excluded_area: float = 0.0
 		var score: float = 0.0
-		for exclusion: Rect2 in _exclusions:
+		for exclusion: Rect2 in placement_exclusions:
 			var local := Rect2(exclusion.position - position, exclusion.size)
 			excluded_area += candidate.intersection(local).get_area()
 		for other: Card in occupied:
@@ -125,6 +128,23 @@ func _place(entry: Card, occupied: Array[Card]) -> void:
 	for exclusion: Rect2 in _exclusions:
 		effect_exclusions.append(Rect2(exclusion.position - position - entry.rest_position, exclusion.size))
 	entry.fit_effect_area(Rect2(_effect_area.position - position - entry.rest_position, _effect_area.size), effect_exclusions)
+	_apply_reading_exclusion(entry)
+
+
+func set_reading_exclusions(bounds: Array[Rect2]) -> void:
+	if _reading_exclusions == bounds:
+		return
+	_reading_exclusions = bounds.duplicate()
+	for entry: Card in _entries:
+		_apply_reading_exclusion(entry)
+		entry.sync()
+
+
+func _apply_reading_exclusion(entry: Card) -> void:
+	var envelope := Rect2(position + entry.rest_position - entry.size * 0.11, entry.size * 1.22)
+	entry.reading_suppressed = not _reading_exclusions.is_empty() and (_reading_exclusions.any(
+		func(bounds: Rect2) -> bool: return envelope.intersects(bounds)) \
+		or _exclusions.any(func(bounds: Rect2) -> bool: return envelope.intersects(bounds)))
 
 
 func advance(delta: float) -> void:
@@ -152,6 +172,7 @@ func reset() -> void:
 	for entry: Card in _entries:
 		entry.free()
 	_entries.clear()
+	_reading_exclusions.clear()
 	hide()
 
 
@@ -161,7 +182,7 @@ func snapshot() -> Dictionary:
 		states.append(entry.snapshot())
 	var latest: Dictionary = states.back().duplicate(true) if not states.is_empty() else {
 		"word_id": "", "word": {}, "picture": "", "spelling": "", "elapsed": 0.0,
-		"duration": SECONDS, "effect_duration": SECONDS, "content_visible": false,
+		"duration": SECONDS, "effect_duration": SECONDS, "content_visible": false, "reading_suppressed": false,
 		"rect": [], "resting_rect": [], "picture_rect": [],
 		"spelling_rect": [], "content_alpha": 0.0, "reduced_motion": _reduced_motion,
 		"merge_level": 1, "effects": {}}

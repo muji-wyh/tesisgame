@@ -397,18 +397,32 @@ campaign target selector and shows the collection footprint, pickup-coin odds
 and base Boss damage without changing learning, rewards or wallet state.
 
 The same page's **Auto merge** category upgrades its independent permanent
-capacity. Lv1 is free and can merge up to **3 original board Jellies** per use;
-Lv2-Lv9 handle **4-11**, one more per level. Their sequential prices are the
+capacity. Lv1 is free and can produce up to **3 completed, collectable Jellies** per use;
+Lv2-Lv9 produce **4-11**, one more per level. Their sequential prices are the
 same increasing **50, 100, 200, 350, 550, 800, 1100, 1500** coin curve.
 Inspecting a level shows that exact capacity using the existing acquired Jelly
 and wand artwork. The live Auto merge button has a stable gel-and-number badge
 for its owned capacity; inspecting a future level cannot change it.
-Generated results may continue along legal merges without counting as additional
-original inputs. A complete path, including any required picture, must fit the
-remaining budget before it is reserved. The tool can finish with unused capacity
-when no complete path fits, rather than charging for a partial word.
+Each completed product occupies one output slot and remains separate until this
+use ends. Its original ingredients and intermediate spelling joins do not use
+extra slots. A complete path, including any required picture, is reserved before
+its first flight. The tool can finish with unused capacity when no complete path
+remains; it never invents partners or charges for a partial-only spelling.
+An accepted, saved click holds the world for **100 ms**, including falling supply
+and Boss motion, with a local sourced violet light response and no dimming cover.
+The ordinary 100 ms launch rhythm then resumes, leaving the completed results
+for collection. Pause/background preserve the same impact clock; reduced motion
+keeps a still local light. Failed, duplicate or invalid purchases do not trigger it.
 Goal-family help and collection-triggered matching retain their existing scope.
 Auto merge's per-use coin cost remains separate from its permanent upgrades.
+Hover or focus its button to preview the actual original inputs for that use's
+complete legal paths. All intermediate ingredients and required pictures are
+highlighted with the existing matching glow; unused same-family bodies are not.
+The prediction includes captured airborne bodies that would land and join during
+the operation, refreshes with the live board, and never pauses play or spends.
+Leaving, pause or activation clears the preview; clicking cannot latch it after
+the operation. Keyboard/controller focus and reduced motion retain an accessible,
+still counterpart. The three-output promise and existing paid timeline are unchanged.
 
 The first saved Stage 1 clear offers a **New Jelly powers!** modal after its
 settlement and coin arrivals. The stage guarantees at least 50 clear coins even
@@ -440,21 +454,29 @@ mastery. A committed **LvN** collection contributes **N goal units**, including
 matching. Quotas clamp at their required amount; overflow does not skip a later
 Challenge batch. The pickup, wallet receipt and learning attempt still happen
 only once. Merely merging
-does not fill a collection goal. Words whose quota is satisfied stop creating
+does not fill a collection goal. Outside Boss encounters, words whose quota is satisfied stop creating
 new packets, but already issued roots, pictures and queued partners remain
 available: retiring a word must never strand an old piece.
 
 Difficulty follows a nine-stage wave: Discover, Practice, Build, Breather, Mix,
 Flow, Reward, Prepare and Finale. Chapter quotas gradually grow from one to six,
 with selected extra repetitions and chapter finales. Breather and Reward stages
-give more room instead of increasing pressure every time. Time budgets account
-for each reviewed word's real parts, picture matching and supply throughput;
-they are not a fixed subtraction from the preceding stage. Newly generated
-recipes reduce excess allowance across the journey, ease the opening 90-second
-minimum toward 60 seconds by stage 28, accelerate ordinary supply toward ten
-seconds, and raise actual descent speed from 1.0 to 1.4. Every budget still funds
-its deliberate handling and supply cost plus 25 seconds; relief profiles remain.
-Existing saved recipes keep their exact original words, quotas, timing and speed.
+give more room instead of increasing pressure every time. Time budgets now use
+the actual **21 opening pieces and seven-piece supply**, reviewed parts and
+necessary picture partners. The basic first stage retains 90 seconds; subsequent
+ordinary minimums move from 65 to 55 seconds by stage 18. The ordinary cap is
+130 seconds for pictured atomic words, scaled by the actual average multipart
+workload rather than forcing professional construction into the same short budget.
+Boss encounters add 20 seconds before stage 18 and 30 seconds afterward, with
+that same workload scaling. The 0.95-second-per-piece handling coefficient and
+12-second reading allowance (16 for Breather/Reward) are balance estimates,
+not measured player speeds.
+Ordinary cadence moves from 20 to 7.5 seconds and descent from 1.0 to 1.6;
+Fill still follows actual physical entrances, not this nominal interval.
+On a fresh attempt, only an uncleared frontier's three pressure parameters may
+be tightened; its seed, words, lexical identities and quotas cannot change.
+Already stricter recipes are never loosened. Cleared replay parameters, best
+stars, pending settlements and permanent-upgrade purchase journals stay exact.
 
 The countdown has three star phases based on the **original active-play budget**:
 clearing before its first third earns three stars, before its second third earns
@@ -472,9 +494,23 @@ the bar uses remaining seconds, while lost stars stay lost.
 A failed or duplicate purchase cannot charge twice.
 
 Completing every goal locks a clear; timer expiry locks a failure. A settled,
-blocked top starts the original **ten-second flashing warning**, not an immediate
-failure. Clearing space cancels that warning; pause and automatic/pending
-transactions freeze it. Its expiry locks a failure. The remaining merged words are then automatically
+blocked top starts a flashing recovery countdown, not an immediate failure.
+Stage 1 retains ten seconds and one-space rescue. Stages 2-17 require two
+reachable spaces within eight seconds, 18-62 require three within seven,
+and 63-99 require four within six. The existing level-badge area temporarily
+names the remaining rescue with **Free N spaces**; goals stay on the left.
+Only top-connected space counts, including real body, fusion-destination and
+drag-return reservations; inaccessible internal holes do not. The advertised
+Next supply must also have a legal entry. One small merge no longer resets
+late-game danger. Recovery blocks new Fill, manual Next and timed dispatch,
+while already launched bodies finish normally. Pause and automatic/pending
+transactions freeze the countdown. An announced warning keeps its duration
+and target even if a Challenge batch advances. Its expiry locks a failure.
+An intermediate pickup or merge does not play the danger-end cue. Reading
+popovers prefer space outside the live well, Next, clock and rescue hint; if a short screen has no safe room
+during recovery, only their opaque card is hidden on its existing clock.
+Body labels, pronunciation, local effects, learning and rewards remain intact.
+The remaining merged words are then automatically
 collected; these cleanup pickups cannot change the locked goals, outcome or
 star rating. Existing reward/save rules apply, with Retry saving on failure.
 The same sourced frame warns during the final ten seconds of a stage deadline,
@@ -524,12 +560,16 @@ The separate **Survival Challenge** starts with 90 seconds and ends in Game over
 at zero. It has its own stages, not numbered campaign clears or star bonuses.
 Stage 1 has a batch of up to three word targets, each requiring one committed
 collection. **All** targets must be completed before the next stage begins.
-Later stages add target variety up to sixteen and raise each target's quota
-every two early stages. After the variety limit is reached, each subsequent
-stage raises the quota, so difficulty still increases after the speed caps.
-Stages also increase actual fall speed and supply pressure toward the established
-2.2-speed and three-second limits.
-Each newly completed target grants ten seconds, capped at 90 remaining seconds.
+Later stages add target variety up to **eight active words**, rotating through
+the preserved sixteen-word reviewed candidate pool after stage six.
+Each target's quota rises every four batches, from one to at most five;
+late survival is not an endlessly growing reading/repetition list.
+Supply starts at twelve seconds, accelerates toward three, and actual descent
+increases toward 2.2. Full-board recovery needs two spaces in eight seconds for
+batches 1-5, three in seven for 6-10, and four in six afterward.
+Only a **complete batch** refunds time: 12 seconds for batches 1-5, 10 for 6-10,
+then eight, capped at the actual headroom below 90 remaining seconds.
+Partial targets, redundant pickups and repeated receipts never refund time.
 There are no random extra-time drops or paid Challenge time purchases.
 Pending/failed/duplicate collection receipts cannot grant time or advance a stage.
 The top heading names **Challenge** and its current Stage. The timer and target
@@ -545,7 +585,7 @@ its amount and static highlight.
 Challenge's **Fill: On** switch is enabled from the start and cannot be turned
 off. It continuously releases the advertised supply through physically clear
 entrances until every reachable vacancy is filled. Multiple generations can
-fall together, respecting operation, pause and saving gates.
+fall together, respecting recovery, operation, pause and saving gates.
 Each completed target batch launches the shared smaller sourced-paper preset
 once, without stopping play. The best is saved when a higher
 stage is reached, separately per learning route; a lower replay cannot overwrite it.
@@ -665,7 +705,12 @@ Reduced motion retains the explicit warning without shaking.
 The standalone **Magnet** button is removed. Hover or focus a pending word goal
 to highlight its corresponding board family with the same effect used for drag
 matches; the goal card also gains a mint hover treatment. Hovering never spends
-coins. The card displays its next coin cost alongside its completion count.
+coins. Pending goals stay in a reserved vertical column to the left of the
+seven-column well, including on phones. Narrow cards keep their sourced picture,
+word, price and progress in separate areas; long lists scroll vertically rather
+than moving to a top strip. Actions and Boss presentation move below the well
+when a right rail would violate the existing readable cell minimum.
+The card displays its next coin cost alongside its completion count.
 Click that card to automatically merge only its exact word family's roots,
 pictures and differently leveled merged Jellies. One valid purchase costs 50,
 then 75, then 100 coins per round, with that family-use tier shared across all

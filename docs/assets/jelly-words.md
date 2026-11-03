@@ -201,8 +201,15 @@ Hold an overflowed Jelly still for 450 ms, or focus it and press R, to pause and
 more than seven displayed pixels cancels the hold; quick taps still collect
 completed words. The Read detail also works for supply previews without dropping
 them. Resizing never changes logical footprints.
-The Boss rail yields excess width to preserve the seven-column well's existing
-32-display-pixel minimum on supported phones; genuinely undersized windows pause.
+The layout reserves a vertical left goal column before fitting the seven-column
+well. It never relocates pending targets into a top carousel. Narrow goal cards
+reuse the same acquired pictures, paid-action controls, exact prices, progress
+fill and counts; the smallest rail stacks its contents instead of overlapping
+the cost and fraction. Long lists retain real vertical scrolling.
+On phones, conflicting actions and the acquired Boss move below the well, with
+the Boss still to the right of the action group. Wider screens keep their right
+rail. This preserves the existing 32-display-pixel cell minimum rather than
+shrinking words to make three narrow columns; genuinely undersized windows pause.
 The model owns the merge and collection clocks, wallet receipt, fragment count,
 and chest tier. Visual callbacks never grant coins.
 
@@ -216,7 +223,7 @@ subject rather than adding another idle motion. These are layout/type/state
 refinements of the integrated production art, not new acquisitions.
 Normal word-goal lists start with the individual cards, without a medal,
 `Word goals` heading or aggregate completion subtitle. The cards reclaim that
-vertical space; compact countdowns and Challenge best-stage records stay intact.
+vertical space; the separate countdown and Challenge best-stage records stay intact.
 
 Each manual drop completing a whole word requests its pronunciation immediately when the
 merge is accepted, alongside the fusion animation. This removes the previous
@@ -239,12 +246,14 @@ clamping the result to the same unlocked cap as manual merging.
 It leaves merged jellies on the board for ordinary collection. The planner checks
 an entire completion path and all intermediate rectangles before charging.
 The same permanent-upgrade page includes Auto merge: free Lv1 handles up to three
-original board Jellies, and each higher level adds one up to eleven at Lv9.
+completed, collectable Jellies, and each higher level adds one output up to eleven at Lv9.
 Its increasing upgrade costs and independent saved ownership are documented in
-[coin economy](../coin-economy.md). Generated results do not consume additional
-slots; a complete path and its required picture must fit before reservation.
+[coin economy](../coin-economy.md). Ingredients and intermediate spelling joins
+do not consume output slots; a complete path and its required picture are reserved
+together. Each completed product remains separate throughout this use.
 The button's sourced gel-and-number badge shows this actual owned capacity.
-Eligible pairs launch every 100 ms, each with a 320 ms flight, 110 ms fusion,
+The accepted click first gives one 100 ms world hit-stop with a local acquired
+violet light response. Eligible pairs then launch every 100 ms, each with a 320 ms flight, 110 ms fusion,
 and 30 ms settlement. Flights overlap; only steps that need an earlier result
 wait for that result to settle. Partial-only paths cannot buy the tool.
 Its assisted result remains collectable without creating mastery evidence.
@@ -380,17 +389,33 @@ between starts. The bodies accelerate under the existing gravity and recover
 after landing. Shared entry lanes retain extra clearance so a later piece cannot
 overtake an earlier one. Each preview slot refills after its own departing body
 has cleared it. Reduced motion keeps the same readiness clocks while placing
-bodies directly at their reserved destinations. Automatic supply starts
+bodies directly at their reserved destinations. Outside campaign-bound rounds, automatic supply starts
 with a twenty-second baseline interval. Every four successful completed-word collections reduce
 the next cycle's interval by two seconds, down to ten seconds after twenty
 collections. Tap and Collect pickups count equally; idle time, merge-only play,
-Auto Merge, and failed collections do not increase difficulty. Each successful
+Auto Merge, and failed collections do not increase this legacy unbound-round progression. Each successful
 packet dispatch, automatic or manual, fixes the interval for the following
 cycle. Collections never shorten the current Next countdown, and rejected
 dispatches leave it intact. New rounds restore the twenty-second opening
 baseline interval. Reviewed rounds multiply that baseline by
 `max(1, preview occupied area / 7)` for the next wave; atomic collections count
-once, while partial merges never count. The existing danger grace period remains independent. This polish
+once, while partial merges never count. Numbered-stage recipes instead use
+the actual 21/7 workload, a 20-to-7.5-second cadence and 1.0-to-1.6 descent scale.
+The first-stage rescue stays at ten seconds/one space; later stages require
+two, three or four genuinely reachable unreserved spaces within eight, seven
+or six seconds. The sourced border takes that actual warning duration,
+not a hardcoded ten-second shader clock. Its existing colors, glow, beat and
+reduced-motion behavior remain unchanged. A short **Free N spaces** hint
+temporarily occupies the secondary level badge's bounds without moving goals,
+covering cells or adding an input layer. Recovery pauses new dispatch while
+owned airborne bodies keep their motion.
+The same acquired collected-word card prefers space outside the well during
+an active rescue, preserving Next, the actual countdown and rescue hint as well.
+If that content envelope cannot fit safely on a short screen,
+its opaque reading surface stays hidden while its existing effect clock,
+separate board burst, spelling labels and pronunciation retain their ownership.
+It is not restarted after recovery and no asset or reward is substituted.
+This polish
 reuses the integrated gel artwork and landing
 audio above; it adds no downloaded assets.
 

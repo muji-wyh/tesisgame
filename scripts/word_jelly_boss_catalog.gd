@@ -9,7 +9,7 @@ const TITLES: Array[String] = [
 	"Three Brambles", "The Broken Sky", "Catch and Release",
 	"The Borrowed Crown", "The Last Laugh"]
 const ABILITIES: Array[String] = ["freeze", "ink", "lock", "clones", "kick", "snatch", "ward", "storm"]
-const HEALTH: Array[int] = [98, 168, 245, 350, 490, 630, 840, 1120]
+const HEALTH: Array[int] = [98, 196, 320, 480, 650, 840, 1120, 1400]
 const RETREATS: Array[String] = ["scramble", "trick", "swagger", "panic", "trick", "scramble", "swagger", "panic"]
 const ENTRANCES: Array[String] = [
 	"Still chasing me?\nBeat my ice first!",
@@ -52,7 +52,8 @@ static func encounter(number: int, intro: bool = false) -> Dictionary:
 	if index < 0:
 		return {}
 	return {"id": index + 1, "stage": number, "intro": false, "name": "Bramble",
-		"title": TITLES[index], "health": HEALTH[index], "interval": maxf(3.2, 7.0 - index * 0.5),
+		"title": TITLES[index], "health": HEALTH[index], "interval": maxf(2.8, 6.5 - index * 0.55),
+		"starting_clones": 2 if number == 99 else 1 if number == 9 else 0,
 		"abilities": ABILITIES.slice(0, index + 1), "new_ability": ABILITIES[index],
 		"retreat": RETREATS[index], "entrance": ENTRANCES[index], "escape": ESCAPES[index],
 		"reply": REPLIES[index], "next_stage": STAGES[index + 1] if index + 1 < STAGES.size() else 0}

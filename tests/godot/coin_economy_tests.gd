@@ -234,9 +234,10 @@ func _test_paid_model_and_wallet() -> void:
 		check(wallet.balance == previous_balance - expected_price and int(charges.back()) == expected_price,
 			"The real model charges the current escalating price through CoinWallet")
 		game.finish_powerup(true)
-		check(game.powerup_snapshot().affected_jellies == 3 and game.cells.size() == 2
+		check(game.powerup_snapshot().affected_jellies == 4 and game.powerup_snapshot().completed_results == 2
+			and game.cells.size() == 2
 			and game.cells.reduce(func(total: int, tile: Dictionary) -> int: return total + int(tile.fragments), 0) == 4,
-			"Free Lv1 merges exactly three original Jellies while preserving all naturally carried fragments")
+			"The two available complete pairs survive as two products without inventing a third or losing fragments")
 	check(wallet.balance == 300,
 		"Three successful live purchases spend twenty-seven hundred saved coins")
 	check(game.fragment_count == 0 and game.collected_coins == 0,

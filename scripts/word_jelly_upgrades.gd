@@ -255,7 +255,7 @@ func _refresh() -> void:
 	_wallet.text = str(balance)
 	_wallet.accessibility_name = "%d saved coins" % balance
 	_wallet.tooltip_text = _wallet.accessibility_name
-	var ability_name: String = "Up to %d Jellies" % Economy.auto_merge_capacity(_selected) \
+	var ability_name: String = "Up to %d ready Jellies" % Economy.auto_merge_capacity(_selected) \
 		if _kind == "auto_merge" else Preview.NAMES[_selected]
 	_name.text = "Lv%d · %s" % [_selected, ability_name]
 	if int(_state.get("just_unlocked", 0)) == _selected and _state.get("just_unlocked_kind", "jelly") == _kind:
@@ -277,7 +277,7 @@ func _refresh() -> void:
 			else Color("#8e68b5") if _kind == "auto_merge" else Color.WHITE
 		tab.price.text = "Unlocked" if int(tab.level) <= owned else "%d coins" % quoted
 		tab.button.accessibility_name = "Preview Lv%d. %s. %s" % [
-			tab.level, "Auto merge up to %d Jellies" % Economy.auto_merge_capacity(int(tab.level)) \
+			tab.level, "Finish up to %d Jellies" % Economy.auto_merge_capacity(int(tab.level)) \
 				if _kind == "auto_merge" else Preview.NAMES[int(tab.level)], tab.price.text]
 		Style.action_button(tab.button, Style.GOOD if int(tab.level) == _selected else Style.MUTED,
 			int(tab.level) == _selected)

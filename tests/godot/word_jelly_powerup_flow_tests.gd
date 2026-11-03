@@ -124,9 +124,10 @@ func _check_auto_merge(app) -> void:
 	var growth: Dictionary = app.growth.snapshot().streaks.duplicate(true)
 	view.powerup_buttons.auto_merge.pressed.emit()
 	var state: Dictionary = game.powerup_snapshot()
-	check(state.active and state.kind == "auto_merge" and state.stage == "drag"
+	check(state.active and state.kind == "auto_merge" and state.stage == "impact"
+		and view.snapshot().hit_stop.active and not view._powerup_effects.stamps.is_empty()
 		and app.coin_wallet.balance == before - 600 and app.coin_wallet._receipts.size() == receipts + 1,
-		"The Auto merge button durably pays once before starting a visible automatic drag")
+		"The Auto merge button durably pays once and immediately starts its visible world hit-stop")
 	check(cues.count("powerup_success") == 1 and purchases == [{"kind": "auto_merge", "success": true}]
 		and app.audio.pair_feedback.playing and app.audio.pair_feedback.stream == load(app.audio.PAIR_FEEDBACK_PATHS[true]),
 		"A saved purchase starts the positive response and its existing sound")
@@ -136,6 +137,10 @@ func _check_auto_merge(app) -> void:
 	check(not game.activate_powerup("fragments"), "A retired Treasure request cannot interrupt automatic merging")
 	check(app.coin_wallet.balance == before - 600 and app.coin_wallet._receipts.size() == receipts + 1,
 		"Repeated button signals during a paid sequence cannot buy another action")
+	view._process(game.BLAST_FREEZE_SECONDS)
+	state = game.powerup_snapshot()
+	check(state.stage == "drag" and not view.snapshot().hit_stop.active,
+		"The finite click impact recovers into the first actual merge flight")
 	var from: Vector2 = view._tile_rect(state.source).get_center()
 	var to: Vector2 = view._tile_rect(state.target).get_center()
 	view._process(game.POWERUP_DRAG_SECONDS * 0.25)
@@ -155,8 +160,8 @@ func _check_auto_merge(app) -> void:
 		"At 100 ms the second paid flight starts while the first continues toward its target")
 	var following: Dictionary = overlapping.drags[1] if overlapping.drags.size() == 2 else {}
 	if not following.is_empty():
-		check(is_zero_approx(float(overlapping.drags[0].started_at))
-			and is_equal_approx(float(following.started_at), game.POWERUP_MERGE_BEAT_SECONDS)
+		check(is_equal_approx(float(overlapping.drags[0].started_at), game.BLAST_FREEZE_SECONDS)
+			and is_equal_approx(float(following.started_at), game.BLAST_FREEZE_SECONDS + game.POWERUP_MERGE_BEAT_SECONDS)
 			and int(following.source_id) not in [int(state.source_id), int(state.target_id)]
 			and int(following.target_id) not in [int(state.source_id), int(state.target_id)],
 			"overlapping launches have independent clocks and reserve four distinct endpoints")
@@ -182,7 +187,8 @@ func _check_auto_merge(app) -> void:
 		check(game.is_settled(game.cell(first_result_id)) and game.fusions.size() == 1,
 			"The first result settles while the second pair finishes its independent overlapping fusion")
 	_drain(view)
-	check(game.cells.size() == 2 and game.collectable_ids().size() == 2 and int(game.powerup_snapshot().completed) == 2,
+	check(game.cells.size() == 2 and game.collectable_ids().size() == 2 and int(game.powerup_snapshot().completed) == 2
+		and game.powerup_snapshot().completed_results == 2,
 		"One automatic purchase completes both distinct word-picture pairs on the captured board")
 	check(game.collected_coins == 0 and game.fragment_count == 0 and game.cleared_pairs == 0
 		and app.coin_wallet.balance == before - 600 and app.growth.snapshot().streaks == growth
@@ -330,6 +336,7 @@ func _check_preferences(app) -> void:
 	app.audio.set_muted(true)
 	var before: int = app.coin_wallet.balance
 	view.powerup_buttons.auto_merge.pressed.emit()
+	view._process(view.game.BLAST_FREEZE_SECONDS)
 	var state: Dictionary = view.game.powerup_snapshot()
 	view._process(view.game.POWERUP_DRAG_SECONDS * 0.5)
 	var from: Vector2 = view._tile_rect(state.source).get_center()

@@ -225,7 +225,7 @@ func _run() -> void:
 	page.select_upgrade("auto_merge")
 	page.select_level(2)
 	check(page.snapshot().owned_level == 2 and not page.snapshot().buy.enabled
-		and page.snapshot().preview.capacity == 4, "Only the committed Auto merge upgrade owns four inputs")
+		and page.snapshot().preview.capacity == 4, "Only the committed Auto merge upgrade owns four output slots")
 	await capture_ui("auto-merge-lv2-owned")
 	var restored_auto := Store.new(directory + "/campaign.cfg", host)
 	check(restored_auto.load_state() and restored_auto.auto_merge_level() == 2
@@ -248,10 +248,9 @@ func _run() -> void:
 	view.game.spawn_interval = 10000.0
 	view.game.cells.clear()
 	var auto_word: Dictionary = view.game.stage_run.words[0]
-	for index in range(6):
-		var tile: Dictionary = view.game._new_word_root(auto_word, 1)
-		view.game._set_merged_word(tile, auto_word, 1, true)
-		tile.merge({"column": index, "row": 7, "age": 100.0,
+	for index in range(8):
+		var tile: Dictionary = view.game._new_word_root(auto_word, 1) if index % 2 == 0 else view.game._new_picture_tile(auto_word, 1)
+		tile.merge({"column": index % view.game.COLUMNS, "row": 7 - int(index / view.game.COLUMNS), "age": 100.0,
 			"settling": false, "falling": false, "arrival": false}, true)
 		view.game.cells.append(tile)
 	view._sync_tiles()
@@ -261,14 +260,18 @@ func _run() -> void:
 	app._coin_flight.sync(app.coin_wallet.balance)
 	var before_use: int = app.coin_wallet.balance
 	await tap(view, view.powerup_buttons.auto_merge.get_global_rect().get_center())
+	check(view.game.hit_stop_snapshot().active and view.game.hit_stop_snapshot().source == "auto_merge"
+		and not view._powerup_effects.stamps.is_empty(),
+		"The real paid button immediately owns a visible, receipt-bound hit-stop")
 	for frame in range(800):
 		if not view.game.powerup_active():
 			break
 		advance(app, 0.025)
-	check(not view.game.powerup_active() and view.game.powerup_snapshot().affected_jellies == 4
-		and view.game.cells.size() == 3 and app.coin_wallet.balance == before_use - 600
+	check(not view.game.powerup_active() and view.game.powerup_snapshot().affected_jellies == 8
+		and view.game.powerup_snapshot().completed_results == 4 and view.game.collectable_ids().size() == 4
+		and view.game.cells.size() == 4 and app.coin_wallet.balance == before_use - 600
 		and view.snapshot().powerup_buttons.auto_merge.capacity_badge.text == "4",
-		"A genuine touch pays once and merges exactly four original Jellies while its badge remains truthful")
+		"A genuine touch pays once and leaves exactly four complete Jellies matching its badge")
 	await capture_ui("auto-merge-lv2-gameplay")
 	app.audio.halt()
 	app.queue_free()

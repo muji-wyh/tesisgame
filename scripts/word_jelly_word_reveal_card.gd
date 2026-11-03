@@ -15,6 +15,7 @@ var duration: float = 1.95
 var effect_duration: float = 1.95
 var variant_scale: float = 1.0
 var reduced_motion: bool = false
+var reading_suppressed: bool = false
 var rest_position := Vector2.ZERO
 var merge_level: int = 1
 var _level_effects: LevelEffects
@@ -186,7 +187,7 @@ func sync() -> void:
 	visible = elapsed >= -anticipation_seconds
 	_level_effects.sync(elapsed, effect_duration, reduced_motion, anticipation_seconds)
 	# The compact reading card can finish while its sibling fireworks fall away.
-	_visual.visible = visible and elapsed < duration
+	_visual.visible = visible and elapsed < duration and not reading_suppressed
 	if not visible:
 		_visual.modulate.a = 0.0
 		return
@@ -240,7 +241,8 @@ func snapshot() -> Dictionary:
 		"merge_level": merge_level, "effects": _level_effects.snapshot(),
 		"picture": WordArt.source_path(_picture.texture), "spelling": _spelling.text, "visible": is_visible_in_tree(),
 		"elapsed": elapsed, "duration": duration, "effect_duration": effect_duration,
-		"content_visible": _visual.is_visible_in_tree(), "batch": _batch, "variant_scale": variant_scale,
+		"content_visible": _visual.is_visible_in_tree(), "reading_suppressed": reading_suppressed,
+		"batch": _batch, "variant_scale": variant_scale,
 		"anticipation_seconds": anticipation_seconds, "charge_progress": charge_progress(), "phase": phase(),
 		"animated_scale": [_visual.scale.x, _visual.scale.y], "font_size": _spelling.get_theme_font_size("font_size"),
 		"rect": _rect_data(_surface.get_global_rect()), "resting_rect": _rect_data(get_global_rect()),

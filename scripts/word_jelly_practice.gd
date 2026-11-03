@@ -371,7 +371,8 @@ func _pose_feedback(row: Dictionary) -> void:
 	row.complete_icon.material.set_shader_parameter("check_progress",
 		1.0 if reduced_motion else smoothstep(0.04, COMPLETE_SECONDS * 0.75, float(row.complete_elapsed)))
 	for star: TextureRect in row.steps:
-		star.visible = not _compact and not row.mastered and _state.get("kind", "") not in ["main", "challenge"]
+		star.visible = not _compact and size.x * _scale >= 152.0 and not row.mastered \
+			and _state.get("kind", "") not in ["main", "challenge"]
 	row.success_glow.visible = completing
 	var glow_size := Vector2(52, 44) / _scale
 	var center: Vector2 = row.picture.position + row.picture.size * 0.5
@@ -453,6 +454,8 @@ func _layout() -> void:
 		return
 	var s: float = _scale
 	var padding: float = 6.0 / s
+	var narrow_sidebar: bool = not _compact and size.x * s < 152.0
+	var stacked_sidebar: bool = narrow_sidebar and size.x * s < 112.0
 	add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	_title.add_theme_font_size_override("font_size", ceili((12.0 if _compact else 20.0) / s))
 	_update_heading()
@@ -492,22 +495,23 @@ func _layout() -> void:
 		badge.content_margin_left = 4.0 / s
 		badge.content_margin_right = 4.0 / s
 		badge.set_corner_radius_all(ceili(8.0 / s))
-		var font_size: int = ceili((13.0 if _compact else 18.0) / s)
+		var font_size: int = ceili((13.0 if _compact else 14.0 if narrow_sidebar else 18.0) / s)
 		row.label.add_theme_font_size_override("font_size", font_size)
 		row.fraction.add_theme_font_size_override("font_size", ceili(13.0 / s))
 		var width: float = minf(220.0 / s, maxf(140.0 / s,
 			Style.HEADING_FONT.get_string_size(row.label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x + 50.0 / s)) \
 			if _compact else _scroll.size.x
-		var height: float = _scroll.size.y if _compact else 52.0 / s
+		var height: float = _scroll.size.y if _compact else (104.0 if stacked_sidebar else 64.0 if narrow_sidebar else 52.0) / s
 		row.base_position = Vector2(cursor, 0.0) if _compact else Vector2(0.0, cursor)
 		row.surface.position = row.base_position
 		row.surface.size = Vector2(width, height)
 		row.fraction.visible = not _compact
-		var picture_edge: float = minf((24.0 if _compact else 38.0) / s, height - 8.0 / s)
-		row.picture.position = Vector2(6.0 / s, (height - picture_edge) * 0.5)
+		var picture_edge: float = minf((24.0 if _compact else 28.0 if narrow_sidebar else 38.0) / s, height - 8.0 / s)
+		row.picture.position = Vector2((width - picture_edge) * 0.5, 6.0 / s) if stacked_sidebar else \
+			Vector2(6.0 / s, (minf(height, 40.0 / s) - picture_edge) * 0.5 if narrow_sidebar else (height - picture_edge) * 0.5)
 		row.picture.size = Vector2.ONE * picture_edge
 		row.picture.pivot_offset = row.picture.size * 0.5
-		var left: float = (36.0 if _compact else 54.0) / s if row.picture.visible else 10.0 / s
+		var left: float = (36.0 if _compact else 42.0 if narrow_sidebar else 54.0) / s if row.picture.visible else 10.0 / s
 		var fraction_width: float = minf(width * 0.43, maxf(34.0 / s,
 			Style.HEADING_FONT.get_string_size(row.fraction.text, HORIZONTAL_ALIGNMENT_LEFT, -1,
 				row.fraction.get_theme_font_size("font_size")).x + 8.0 / s))
@@ -518,8 +522,18 @@ func _layout() -> void:
 		row.fraction.pivot_offset = row.fraction.size * 0.5
 		var title_area := Rect2(Vector2(left, 0.0), Vector2(maxf(1.0, width - left - 10.0 / s), maxf(1.0, lower_y)))
 		var price_area := Rect2(Vector2(left, lower_y), Vector2(46.0, 21.0) / s)
+		if stacked_sidebar:
+			title_area = Rect2(Vector2(6, 36) / s, Vector2(maxf(1.0, width - 12.0 / s), 21.0 / s))
+			price_area = Rect2(Vector2((width - 46.0 / s) * 0.5, 58.0 / s), Vector2(46, 20) / s)
+			row.fraction.position = Vector2((width - fraction_width) * 0.5, 80.0 / s)
+		elif narrow_sidebar:
+			price_area.position.x = 6.0 / s
 		var detail_area := Rect2(row.fraction.position, row.fraction.size)
 		row.surface.layout_goal(row.picture.get_rect(), title_area, price_area, detail_area, s, _compact)
+		if narrow_sidebar:
+			row.label.add_theme_font_size_override("font_size", font_size)
+			row.label.position = title_area.position
+			row.label.size = title_area.size
 		row.gain_label.size = Vector2(fraction_width, 14.0 / s)
 		row.gain_label.add_theme_font_size_override("font_size", ceili(11.0 / s))
 		row.complete_badge.add_theme_stylebox_override("panel",

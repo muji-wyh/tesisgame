@@ -294,7 +294,7 @@ func _powerup_model(kind: String):
 	var model = _model([_word("cat"), _word("cater"), _word("dog")])
 	if kind == "auto_merge":
 		model.auto_merge_level = 4
-		_board(model, ["picture:cat", "cat", "merged:cat:1", "dog", "picture:dog", "x"], [1, 2, 3, 4, 5, 6])
+		_board(model, ["picture:cat", "cat", "dog", "picture:dog", "cater", "picture:cater"], [1, 2, 3, 4, 5, 6])
 	else:
 		_board(model, ["cat", "picture:cat", "dog", "picture:dog", "x", "y"], [0, 0, 0, 0, 3, 7])
 	return model
@@ -494,10 +494,13 @@ func _test_powerup_auto_timeline() -> void:
 	var events: Dictionary = _observe_powerups(model)
 	var regular_events: Dictionary = _observe(model)
 	check(model.activate_powerup("auto_merge"), "Automatic merging accepts the picture before its matching root")
+	check(model.powerup_snapshot().stage == "impact" and events.drags.is_empty(),
+		"The saved click owns a short hit-stop before the transfer starts")
+	model.step(Model.BLAST_FREEZE_SECONDS)
 	var active: Dictionary = model.powerup_snapshot()
 	check(active.active and active.kind == "auto_merge" and active.stage == "drag"
 		and active.source_id == 1000 and active.target_id == 1001,
-		"The paid sequence starts with a visible picture-to-root drag")
+		"The paid sequence follows its hit-stop with a visible picture-to-root drag")
 	check(active.source.text == "cat" and active.target.text == "cat" and events.drags.size() == 1,
 		"the drag exposes both intact endpoint bodies for its presentation")
 	active.source.text = "changed snapshot"
@@ -545,6 +548,7 @@ func _test_powerup_auto_rhythm() -> void:
 	var events: Dictionary = _observe_powerups(model)
 	var regular_events: Dictionary = _observe(model)
 	check(model.activate_powerup("auto_merge"), "One saved purchase starts the first complete hybrid path")
+	model.step(Model.BLAST_FREEZE_SECONDS)
 	model.step(Model.POWERUP_MERGE_BEAT_SECONDS - 0.001)
 	check(events.drags.size() == 1 and model.powerup_snapshot().drags.size() == 1,
 		"Auto keeps the next independent flight pending until its 100 ms launch boundary")
@@ -581,9 +585,9 @@ func _test_powerup_auto_rhythm() -> void:
 		check(model.parts_compatible(drag.source, drag.target), "Every Auto launch is a valid whole-word picture pair")
 		check(model.is_settled(drag.source) and model.is_settled(drag.target),
 			"each launch captures settled endpoints before reserving them for its flight")
-		check(is_equal_approx(float(drag.started_at), index * Model.POWERUP_MERGE_BEAT_SECONDS)
+		check(is_equal_approx(float(drag.started_at), Model.BLAST_FREEZE_SECONDS + index * Model.POWERUP_MERGE_BEAT_SECONDS)
 			and is_equal_approx(float(drag.duration), Model.POWERUP_DRAG_SECONDS),
-			"The three independent flights start at 0, 100 and 200 ms and each lasts 320 ms")
+			"After hit-stop the three independent flights start at 100, 200 and 300 ms and each lasts 320 ms")
 	check(_board_fragments(model) == 21 and regular_events.attempts.is_empty() and regular_events.collections.is_empty(),
 		"Automatic picture matching conserves every fragment without collecting or claiming mastery")
 	_assert_board(model, "overlapping automatic final board")
@@ -635,6 +639,7 @@ func _test_powerup_auto_completion_during_drag() -> void:
 	var payments: Array = _accept_powerup_payments(model)
 	var events: Dictionary = _observe_powerups(model)
 	check(model.activate_powerup("auto_merge"), "A larger board starts one paid hybrid stream")
+	model.step(Model.BLAST_FREEZE_SECONDS)
 	model.step(Model.POWERUP_DRAG_SECONDS + Model.POWERUP_FUSION_SECONDS - 0.01)
 	check(events.drags.size() >= 4 and model.powerup_snapshot().drags.size() >= 2 and not model.fusions.is_empty(),
 		"the first fusion keeps its endpoints reserved while several independent flights continue")
@@ -648,16 +653,16 @@ func _test_powerup_auto_completion_during_drag() -> void:
 			and int(drag.source_id) != first_result_id and int(drag.target_id) != first_result_id,
 			"no launch can reuse the new result before its landing settles")
 	model.finish_powerup(true)
-	check(not model.powerup_active() and model.collectable_ids().size() == 1 and payments.size() == 1
-		and model.powerup_snapshot().affected_jellies == 10,
-		"The paid stream finishes five complete pairs within its eleven-input budget without another payment")
+	check(not model.powerup_active() and model.collectable_ids().size() == 11 and payments.size() == 1
+		and model.powerup_snapshot().affected_jellies == 22 and model.powerup_snapshot().completed_results == 11,
+		"The paid stream leaves eleven distinct finished Jellies without another payment")
 	var represented_levels: int = 0
 	var mass: int = 0
 	for tile: Dictionary in model.cells:
 		represented_levels += int(tile.merge_level)
 		mass += int(tile.mass)
 		check(int(tile.merge_level) <= Model.MAX_MERGE_LEVEL, "Automatic upgrades never exceed Lv9")
-	check(represented_levels == 5 and mass == 24 and model.cells.size() == 15
+	check(represented_levels == 11 and mass == 24 and model.cells.size() == 13
 		and model.merged_count == 24 - model.cells.size() and model.collected_coins == 0
 		and not model.compatible_pairs().is_empty(),
 		"The capacity-limited stream preserves all source mass and leaves unused pairs for a later purchase")
@@ -673,13 +678,14 @@ func _test_powerup_auto_chain() -> void:
 	check(model.activate_powerup("auto_merge"), "a chain of complementary pairs accepts one purchase")
 	model.step(6.0)
 	check(not model.powerup_active() and model.merged_count == 3 and model.cells.size() == 3,
-		"automatic merging recomputes pairs after each result and resolves both independent and chained words")
+		"automatic merging finishes three independent words without consuming its own products")
 	var words: Dictionary = {}
 	for tile: Dictionary in model.cells:
 		words[str(tile.text)] = tile
-	check(words.has("cat") and words.has("dog") and words.has("x")
-		and words.cat.mass == 4 and words.cat.merge_level == 2 and words.cat.fragments == 6 and words.dog.fragments == 9,
-		"the new cat result can upgrade with another Lv1 cat while unrelated pieces and all fragments are preserved")
+	check(words.has("cat") and words.has("dog") and words.has("cater")
+		and words.cat.mass == 2 and words.cat.merge_level == 1 and words.cat.fragments == 3
+		and words.dog.fragments == 7 and words.cater.fragments == 11,
+		"Each completed family retains its own ordinary level and carried fragments")
 	check(payments.size() == 1 and events.drags.size() == 3 and regular_events.completed.size() == 3,
 		"one purchase owns the entire recomputed merge sequence with one presentation per pair")
 	for index in range(events.drags.size()):
@@ -694,8 +700,8 @@ func _test_powerup_auto_chain() -> void:
 		and payments.size() == 1, "a completed exhausted chain cannot charge again without a new valid pair")
 	check(model.collect(int(words.cat.id)), "the automatically built word still needs an ordinary collection")
 	model.step(Model.COLLECT_SECONDS)
-	check(model.collected_coins == 50 and model.fragment_count == 6,
-		"manual collection of the automatic Lv2 result retains its bonus and carried fragments")
+	check(model.collected_coins == 0 and model.fragment_count == 3,
+		"Manual collection of a new Lv1 result retains its fragments without inventing a Lv2 bonus")
 	model.purchase_powerup = Callable()
 
 
@@ -736,8 +742,9 @@ func _test_powerup_auto_interleaved_authored_paths() -> void:
 	var payments: Array = _accept_powerup_payments(model)
 	var events: Dictionary = _observe_powerups(model)
 	var regular_events: Dictionary = _observe(model)
-	check(model.activate_powerup("auto_merge") and events.drags.size() == 1,
-		"two authored pictured paths accept one purchase with a competing duplicate root pair")
+	check(model.activate_powerup("auto_merge"), "Two authored pictured paths accept one purchase with competing roots")
+	model.step(Model.BLAST_FREEZE_SECONDS)
+	check(events.drags.size() == 1, "The first complete authored path launches after the accepted hit-stop")
 	if events.drags.is_empty():
 		model.purchase_powerup = Callable()
 		return
@@ -823,13 +830,13 @@ func _test_powerup_pause_and_clocks() -> void:
 		var generated: int = model.generated_tiles
 		var upcoming: Array = model.upcoming.duplicate(true)
 		check(model.activate_powerup(kind), "paid sequence starts near the automatic supply deadline")
-		model.step((Model.POWERUP_MERGE_BEAT_SECONDS + Model.POWERUP_DRAG_SECONDS) * 0.5
+		model.step(Model.BLAST_FREEZE_SECONDS + (Model.POWERUP_MERGE_BEAT_SECONDS + Model.POWERUP_DRAG_SECONDS) * 0.5
 			if kind == "auto_merge" else Model.POWERUP_DRAG_SECONDS * 0.5)
 		model.set_paused(true)
 		var before: Dictionary = model.snapshot()
 		var active: Dictionary = model.powerup_snapshot()
 		if kind == "auto_merge":
-			check(active.drags.size() == 2, "Pause freezes both overlapping flights before their contact boundaries")
+			check(active.drags.size() == 3, "Pause freezes all three independent flights before their contact boundaries")
 		model.step(50.0)
 		check(model.snapshot() == before and model.powerup_snapshot() == active,
 			"pause freezes paid sequence, board motion, and supply at the exact same point")
@@ -1059,7 +1066,7 @@ func _test_powerup_presentation_reentry() -> void:
 			else:
 				model.finish_round())
 		check(model.activate_powerup("auto_merge"), "automatic power accepts before a reentrant contact callback")
-		model.step(Model.POWERUP_DRAG_SECONDS)
+		model.step(Model.BLAST_FREEZE_SECONDS + Model.POWERUP_DRAG_SECONDS)
 		check(handled.contact, "the original pair reaches its contact boundary")
 		if action == "pause":
 			check(model.paused and model.powerup_active() and model.fusions.is_empty(),
@@ -1082,7 +1089,7 @@ func _test_powerup_presentation_reentry() -> void:
 	var attempted: Dictionary = {"count": 0}
 	model.fusion_started.connect(func(_payload: Dictionary) -> void:
 		attempted.count += 1
-		check(model.try_merge(1003, 1004, true) == "ignored" and not model.start_collection_batch(),
+		check(model.try_merge(1002, 1003, true) == "ignored" and not model.start_collection_batch(),
 			"callbacks during an authorized automatic fusion cannot start an independent manual operation"), CONNECT_ONE_SHOT)
 	model.activate_powerup("auto_merge")
 	model.step(6.0)

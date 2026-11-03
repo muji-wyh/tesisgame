@@ -1,6 +1,8 @@
 extends Button
 ## A stable purchase target. The owner advances and pauses its feedback clock.
 
+signal preview_changed(active: bool)
+
 const Style = preload("res://scripts/ui_style.gd")
 const Model = preload("res://scripts/word_jelly_model.gd")
 const Economy = preload("res://scripts/coin_economy.gd")
@@ -28,6 +30,9 @@ var _paused: bool = false
 var _ui_scale: float = 1.0
 var _compact: bool = false
 var _targeting: bool = false
+var _preview_active: bool = false
+var _preview_consumed: bool = false
+var _pointer_input: bool = false
 var _feedback_active: bool = false
 var _feedback_success: bool = true
 var _feedback_elapsed: float = 0.0
@@ -73,8 +78,53 @@ func _init() -> void:
 	resized.connect(_layout)
 	for event: Signal in [focus_entered, focus_exited, mouse_entered, mouse_exited, button_down, button_up]:
 		event.connect(queue_redraw)
+	for event: Signal in [focus_exited, visibility_changed]:
+		event.connect(_refresh_preview)
+	for event: Signal in [mouse_entered, mouse_exited, focus_entered]:
+		event.connect(_restart_preview)
+	pressed.connect(_consume_preview)
 	set_ui_scale(1.0)
 	configure("auto_merge", Model.POWERUP_PRICES.auto_merge, false)
+
+
+func _input(event: InputEvent) -> void:
+	if not is_visible_in_tree() or _kind != "auto_merge" or not _goal.is_empty():
+		return
+	if event is InputEventMouseButton or event is InputEventScreenTouch:
+		_pointer_input = true
+	elif event is InputEventKey or event is InputEventJoypadButton \
+		or event is InputEventJoypadMotion and absf(event.axis_value) > 0.3:
+		_pointer_input = false
+
+
+func _refresh_preview() -> void:
+	var active: bool = _kind == "auto_merge" and _goal.is_empty() and not _preview_consumed \
+		and not disabled and not _paused and is_visible_in_tree() and (is_hovered() or has_focus())
+	if active == _preview_active:
+		return
+	_preview_active = active
+	preview_changed.emit(active)
+
+
+func _restart_preview() -> void:
+	_preview_consumed = false
+	_refresh_preview()
+
+
+func clear_preview() -> void:
+	if not _preview_active:
+		return
+	_preview_active = false
+	preview_changed.emit(false)
+
+
+func _consume_preview() -> void:
+	if _kind != "auto_merge" or not _goal.is_empty():
+		return
+	_preview_consumed = true
+	_refresh_preview()
+	if _pointer_input:
+		release_focus()
 
 
 func configure(kind: String, price: int, reduced_motion: bool) -> void:
@@ -168,6 +218,7 @@ func set_availability(available: bool, affordable: bool, busy: bool = false, bal
 	# A low balance is a feedback opportunity, never a disabled purchase target.
 	disabled = not available or busy
 	_update_accessibility()
+	_refresh_preview()
 	queue_redraw()
 
 
@@ -204,6 +255,7 @@ func pause_feedback(paused: bool) -> void:
 	_paused = paused
 	_layout()
 	_update_accessibility()
+	_refresh_preview()
 
 
 func advance(delta: float) -> void:
@@ -225,8 +277,10 @@ func reset() -> void:
 	_missing_coins = 0
 	_spent_coins = 0
 	_paused = false
+	_preview_consumed = false
 	_layout()
 	_update_accessibility()
+	_refresh_preview()
 
 
 func _duration() -> float:
@@ -263,7 +317,8 @@ func _update_accessibility() -> void:
 		return
 	set("accessibility_name", "%s. %d coins. %s.%s" % [title, _price, status,
 		" Choose a Jelly to merge its word, picture and upgraded family. Press again or Back to cancel." if _kind == "family_merge" \
-			else " Lv%d. Up to %d board Jellies per use." % [_auto_merge_level, _auto_merge_capacity] if _kind == "auto_merge" else ""])
+			else " Lv%d. Up to %d completed Jellies per use. Hover or focus to preview the exact board inputs." \
+				% [_auto_merge_level, _auto_merge_capacity] if _kind == "auto_merge" else ""])
 
 
 func _layout() -> void:
@@ -513,6 +568,7 @@ func _draw() -> void:
 func snapshot() -> Dictionary:
 	var pose: Dictionary = _pose()
 	return {"kind": _kind, "price": _price, "available": _available, "affordable": _affordable, "targeting": _targeting,
+		"preview_active": _preview_active,
 		"auto_merge_level": _auto_merge_level, "capacity": _auto_merge_capacity,
 		"capacity_badge": {"visible": _capacity_label.is_visible_in_tree(), "text": _capacity_label.text,
 			"rect": [_capacity_rect.position.x, _capacity_rect.position.y, _capacity_rect.size.x, _capacity_rect.size.y]},

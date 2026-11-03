@@ -33,7 +33,7 @@ clicks cannot charge or extend a reveal.
 The Treasure and paid +30 sec items are retired. Their old quote values remain
 in archived analysis and immutable receipts, but no live view, model or wallet
 adapter accepts a new purchase. This does not remove earned treasure or
-Challenge time awarded by completing goals.
+Challenge time awarded once per complete target batch.
 
 ## Permanent Jelly upgrades
 
@@ -50,12 +50,14 @@ introduction leads to an explicit 50-coin Lv2 purchase. The guide never pays or
 grants the upgrade automatically and can be postponed without losing progress.
 
 The same page has a separate **Auto merge** category. Its free Lv1 can use up to
-three original board Jellies per purchase; each permanent level adds one, up to
+three completed, collectable Jellies per purchase; each permanent level adds one, up to
 eleven at Lv9. The next levels use the same increasing price curve as merged
-Jellies, but their ownership and receipts are independent. Generated intermediate
-or completed results do not consume another slot; every accepted path must still
-finish a legal word. A path that cannot fit never charges or leaves a partial
-spelling. Goal-family purchases and collection blasts have no such capacity cap.
+Jellies, but their ownership and receipts are independent. Each completed product
+uses one output slot and remains separate for the current use. Original ingredients
+and intermediate joins do not use slots; every accepted path must still finish a
+legal word. Missing partners are never invented: fewer legal paths produce fewer
+results, and no complete path means no charge or partial spelling.
+Goal-family purchases and collection blasts have no such capacity cap.
 The gameplay button's sourced gel-and-number badge always shows the owned
 capacity, not the last level previewed or a countdown of remaining matches.
 Per-use Auto merge prices remain 600, 900 and 1200 coins and reset with a round;
@@ -195,7 +197,7 @@ when every naturally marked half is collected in one round. Partial rounds can
 finish below a chest threshold, and upgraded bodies combine source words, so
 these are explicit planning units rather than observed player behavior.
 
-Automatic supply provides seven source pieces every 20 seconds initially,
+Legacy unbound Jelly rounds provide seven source pieces every 20 seconds initially,
 down to every 10 seconds after twenty successful word collections. For pictured
 single-root words, two pieces form one source word, averaging 3.5 new words per
 full dispatch over successive packets; multipart words need more pieces. Every four
@@ -206,7 +208,12 @@ per source word, perfect Lv1 collection gives a theoretical automatic-supply
 bound of 78.75-157.5 chest coins per minute for that two-piece vocabulary. This
 excludes combo rewards and the opening board, assumes complete
 collection, and is not a measured earning rate. Preview taps can release supply
-early. No new cap or waiting gate is introduced.
+early. These historical unbound-round estimates are not the current campaign's
+income rate: fresh main recipes use the actual 21/7 workload, with cadence from
+20 to 7.5 seconds. Fill follows real entrance availability, while full-board
+recovery temporarily blocks new dispatch. Challenge keeps its initial 90 seconds
+but refunds only a complete batch (12, 10, then 8 seconds across its phases);
+it does not change any coin price, award, paid receipt or purchased ability.
 
 ## Reproducible workload scenarios
 

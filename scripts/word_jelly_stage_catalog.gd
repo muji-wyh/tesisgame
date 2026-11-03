@@ -6,11 +6,15 @@ const MAX_STAGE: int = 99
 const CHALLENGE_SECONDS: float = 90.0
 const MAX_MAIN_WORDS: int = 8
 const MAX_CHALLENGE_WORDS: int = 16
+const MAX_CHALLENGE_ACTIVE_WORDS: int = 8
+const BOARD_COLUMNS: int = 7
+const OPENING_ROWS: int = 3
 const MAX_GOAL: int = 99
 const MAX_POOL_WORDS: int = 20000
 const MAX_ID_LENGTH: int = 512
 const MAX_COINS: int = 9007199254740991
 const Analysis = preload("res://scripts/morphology_analysis.gd")
+const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
 const CHAPTERS: Array[String] = ["Meadow", "Grove", "Pine Trail", "Cottage Creek",
 	"Amber Orchard", "Snowfields", "Frost Pines", "Palm Lagoon", "Cactus Valley",
 	"High Peaks", "Castle Gardens"]
@@ -69,7 +73,7 @@ static func make_plan(number: int, pool: Array, age: int, seed: int,
 	var chapter: int = 1 if challenge else ceili(float(number) / 9.0)
 	var wave: int = 0 if challenge else (number - 1) % PROFILES.size()
 	var goals: Dictionary = {}
-	var cadence: float = 20.0
+	var cadence: float = 12.0 if challenge else 20.0
 	var fall_speed: float = 1.0
 	var seconds: float = CHALLENGE_SECONDS if challenge else 0.0
 	if not challenge:
@@ -78,25 +82,55 @@ static func make_plan(number: int, pool: Array, age: int, seed: int,
 		for index in range(words.size()):
 			var raised: bool = wave == 8 or (wave in [2, 4, 5, 7] and (index - offset) % 3 == 0)
 			goals[ids[index]] = base + (1 if raised else 0)
-		var progression: float = float(number - 1) / 98.0
-		cadence = clampf(lerpf(20.0, 10.0, pow(progression, 0.65)) * CADENCE_WAVE[wave], 10.0, 24.0)
-		fall_speed = lerpf(1.0, 1.40, progression)
-		var pieces: int = 0
-		for word: Dictionary in words:
-			pieces += (word.morphology.parts.size() + (0 if str(word.get("image", "")).is_empty() else 1)) \
-				* int(goals[word.id])
-		var handling: float = float(pieces) * 1.6
-		# Expanding the board does not retune existing stage-time budgets.
-		var supply: float = maxf(0.0, float(pieces - 15)) / 5.0 * cadence
-		var margin: float = 1.0 + (MARGINS[wave] - 1.0) * lerpf(1.0, 0.15, progression)
-		var warmup_floor: float = lerpf(90.0, 60.0, smoothstep(1.0, 28.0, float(number)))
-		seconds = clampf(ceilf(maxf(handling, supply) * margin + 25.0), warmup_floor, 900.0)
+		var timing: Dictionary = _main_timing(number, words, goals)
+		cadence = float(timing.spawn_interval)
+		fall_speed = float(timing.fall_speed_scale)
+		seconds = float(timing.seconds)
 	return {"ok": true, "error": "", "kind": "challenge" if challenge else "main",
 		"number": 0 if challenge else number, "chapter": chapter,
 		"title": "Survival Challenge" if challenge else CHAPTERS[chapter - 1],
 		"profile": "Challenge" if challenge else PROFILES[wave], "age": age, "seed": seed,
 		"words": words, "word_ids": ids, "goals": goals, "seconds": seconds,
 		"spawn_interval": cadence, "fall_speed_scale": fall_speed}
+
+
+static func _main_timing(number: int, words: Array, goals: Dictionary) -> Dictionary:
+	var wave: int = (number - 1) % PROFILES.size()
+	var progression: float = float(number - 1) / 98.0
+	var cadence: float = clampf(lerpf(20.0, 7.5, pow(progression, 0.65)) * CADENCE_WAVE[wave], 7.5, 24.0)
+	var pieces: int = 0
+	var units: int = 0
+	for word: Dictionary in words:
+		var required: int = int(goals[word.id])
+		units += required
+		pieces += (word.morphology.parts.size() + (0 if str(word.get("image", "")).is_empty() else 1)) * required
+	var workload_scale: float = maxf(1.0, float(pieces) / float(maxi(1, units * 2)))
+	var handling: float = float(pieces) * 0.95
+	var supply: float = ceilf(maxf(0.0, float(pieces - BOARD_COLUMNS * OPENING_ROWS)) / BOARD_COLUMNS) * cadence
+	var margin: float = 1.0 + (MARGINS[wave] - 1.0) * lerpf(0.55, 0.12, progression)
+	var warmup_floor: float = 90.0 if number == 1 else lerpf(65.0, 55.0, smoothstep(2.0, 18.0, float(number)))
+	var reading_allowance: float = 16.0 if wave in [3, 6] else 12.0
+	var seconds: float = clampf(ceilf(maxf(handling, supply) * margin + reading_allowance * workload_scale),
+		warmup_floor * workload_scale, 130.0 * workload_scale)
+	if number in BossCatalog.STAGES:
+		seconds += (20.0 if number < 18 else 30.0) * workload_scale
+	return {"seconds": minf(900.0, ceilf(seconds)), "spawn_interval": cadence,
+		"fall_speed_scale": lerpf(1.0, 1.6, progression)}
+
+
+## Only fresh, uncleared attempts may persist these three stricter parameters.
+static func tighten_plan_pressure(plan: Dictionary) -> Dictionary:
+	var recipe: Dictionary = to_recipe(plan)
+	if recipe.has("error"):
+		return recipe
+	if recipe.kind != "main":
+		return _failure("Only a numbered unfinished stage can refresh its pressure.")
+	var result: Dictionary = plan.duplicate(true)
+	var timing: Dictionary = _main_timing(int(recipe.number), plan.words, recipe.goals)
+	result.seconds = minf(float(recipe.seconds), float(timing.seconds))
+	result.spawn_interval = minf(float(recipe.spawn_interval), float(timing.spawn_interval))
+	result.fall_speed_scale = maxf(float(recipe.fall_speed_scale), float(timing.fall_speed_scale))
+	return result
 
 
 ## Returns a versioned recipe, or an explicit {ok: false, error} result.

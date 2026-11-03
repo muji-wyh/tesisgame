@@ -118,12 +118,26 @@ func _run() -> void:
 			and store.complete_result("growth", "setup:%d" % number), "Prepare a genuine contiguous earlier-stage record")
 	app._campaign._show_map()
 	Fixture.dismiss_jelly_upgrade_intro(app)
+	await settle()
 	app._campaign.request_stage(3)
 	await settle()
+	for frame in range(60):
+		if not app._campaign.starting:
+			break
+		await process_frame
 	app._word_jelly.set_process(false)
 	check(app._word_jelly.game.boss.active() and app._word_jelly.game.merged_level_limit == 1
 		and app._word_jelly._boss_view.visible and not app._campaign.map.visible,
-		"Selecting the marked first Boss stage opens the actual character, battle objective and Lv1 limit")
+		"Selecting the marked first Boss stage opens the actual character, battle objective and Lv1 limit: "
+		+ JSON.stringify({"error": app._campaign.error, "starting": app._campaign.starting,
+			"map": app._campaign.map.visible, "upgrades": app._campaign.upgrades.visible,
+			"intro": app._campaign.store.upgrade_state().intro, "model_error": app._word_jelly.game.error}))
+	if app._word_jelly.game.stage_run == null:
+		app.audio.halt()
+		app.free()
+		await settle()
+		quit(1)
+		return
 	var capture: bool = OS.get_cmdline_user_args().has("--capture") and DisplayServer.get_name() != "headless"
 	if capture:
 		DirAccess.make_dir_recursive_absolute("res://build/qa/jelly-boss")
@@ -141,9 +155,15 @@ func _run() -> void:
 		var view = app._word_jelly
 		check((not view._layout_too_small and Rect2(Vector2.ZERO, view.size).grow(0.1).encloses(view._board)) \
 			or (dimensions == Vector2i(320, 480) and view._layout_too_small and view.game.paused and view._size_cover.visible),
-			"The Boss well fits the actual viewport or explicitly pauses an undersized screen instead of shrinking below readable cells: %s" % dimensions)
+			"The Boss well fits the actual viewport or explicitly pauses an undersized screen instead of shrinking below readable cells: %s pitch=%.12f field=%s board=%s" % [
+				dimensions, view._pitch * app.Style.ui_scale(view), view.size, view._board])
+		check(not view._practice_panel._compact
+			and view._practice_panel.get_rect().end.x <= view._board.position.x
+			and not view._practice_panel.get_rect().intersects(view._preview_rect),
+			"Boss targets remain in their reserved left column, never a top carousel")
 		var actor: Rect2 = view._boss_view._character_rect
 		check(not actor.intersects(view._board) and not actor.intersects(view._preview_rect)
+			and not actor.intersects(view._practice_panel.get_rect())
 			and not actor.intersects(view.collect_button.get_rect()) and Rect2(Vector2.ZERO, view.size).grow(0.1).encloses(actor),
 			"The Boss stands outside the actual playable well, supply and Collect at %s" % dimensions)
 		for button: Control in view.powerup_buttons.values():
@@ -163,11 +183,11 @@ func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
 	root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
 	root.content_scale_size = Vector2i(480, 480)
-	root.size = Vector2i(393, 852)
+	root.size = Vector2i(376, 852)
 	await settle()
 	var web_view = app._word_jelly
 	var web_pitch: float = web_view._pitch * app.Style.ui_scale(web_view)
-	check(is_equal_approx(app.Style.ui_scale(web_view), 393.0 / 480.0)
+	check(is_equal_approx(app.Style.ui_scale(web_view), 376.0 / 480.0)
 		and is_equal_approx(web_pitch, 32.0) and not web_view._layout_too_small
 		and not web_view.game.paused,
 		"Web's fractional phone scale keeps a mathematically 32px seven-column Boss board playable: %.12f" % web_pitch)

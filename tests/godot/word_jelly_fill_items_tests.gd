@@ -81,9 +81,15 @@ func check_item(kind: String, continuous: bool, speed: float) -> void:
 			if bool(tile.arrival):
 				ages[int(tile.id)] = float(tile.age)
 		model.step(0.02)
+		if kind == "auto_merge":
+			check(model.hit_stop_snapshot().active and model.generated_tiles == generated
+				and model.cells.all(func(tile: Dictionary) -> bool:
+					return not ages.has(int(tile.id)) or float(tile.age) == float(ages[int(tile.id)])),
+				"The accepted Auto merge briefly freezes airborne supply with the rest of the world")
+			model.step(Model.BLAST_FREEZE_SECONDS)
 		check(model.generated_tiles == generated and model.cells.any(func(tile: Dictionary) -> bool:
 			return ages.has(int(tile.id)) and float(tile.age) > float(ages[int(tile.id)])),
-			"Paid ownership stops new supply but does not freeze arrivals already in flight")
+			"After the initial impact, paid ownership stops new supply but lets existing arrivals continue")
 		for frame in range(800):
 			if not model.powerup_active():
 				break

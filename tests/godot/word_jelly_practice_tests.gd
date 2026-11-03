@@ -28,7 +28,7 @@ func _capture(name: String) -> void:
 
 
 func _check_resize_history(panel) -> void:
-	for width: float in [232.0, 160.0, 200.0, 152.0, 232.0]:
+	for width: float in [232.0, 112.0, 96.0, 88.0, 160.0, 200.0, 152.0, 232.0]:
 		panel.configure_layout(Rect2(16, 70, width, 310), 1.0, false)
 		await process_frame
 		await process_frame
@@ -264,9 +264,6 @@ func _run() -> void:
 		check(view.configure(words, 3, Data.theme("spring"), data.chests, false, 3821), "The practice layout retains a real Jelly board")
 		view.set_process(false)
 		view.set_stage_progress({"number": 6, "mastered": 2, "total": 8, "remaining": 6})
-		var board: Rect2 = view._board
-		var preview: Rect2 = view._preview_rect
-		var pitch: float = view._pitch
 		var practice: Array[Dictionary] = []
 		for index in range(8):
 			practice.append({"id": words[index].id, "text": words[index].text,
@@ -281,13 +278,14 @@ func _run() -> void:
 		var bounds := Rect2(Vector2.ZERO, view.size)
 		check(state.visible and state.words.size() == 8 and bounds.grow(0.1).encloses(panel.get_rect())
 			and not panel.get_rect().intersects(view._board) and not panel.get_rect().intersects(view._preview_rect),
-			"The eight word rows occupy unused gutter or the stage rail, never playable cells")
-		check(view._board == board and view._preview_rect == preview and is_equal_approx(view._pitch, pitch),
-			"Adding individual practice progress never shrinks or shifts the existing board or supply")
-		if dimensions == Vector2i(1366, 768):
-			check(not state.compact, "Desktop uses its empty sidebar for all practice words")
-		elif dimensions.x < dimensions.y:
-			check(state.compact, "Narrow portrait layouts use the existing stage rail without shrinking the well")
+			"The eight word rows occupy their reserved gutter, never playable cells")
+		check(not state.compact and panel.get_rect().end.x <= view._board.position.x
+			and panel.get_rect().end.x <= view._preview_rect.position.x,
+			"Pending goals stay in a vertical left column at every responsive size")
+		check(view.game.COLUMNS == 7 and view.game.ROWS == 8
+			and is_equal_approx(view._board.size.x / 7.0, view._board.size.y / 8.0)
+			and is_equal_approx(view._preview_rect.size.x, view._board.size.x),
+			"Reserving the goal column keeps all seven square columns and their aligned supply")
 		for index in range(8):
 			var row: Dictionary = panel._rows[index]
 			check(row.label.text == str(words[index].text) and row.fraction.text == "%d/3" % [index % 4]
@@ -297,15 +295,18 @@ func _run() -> void:
 			check(picture != null and picture.texture != null,
 				"Practice cards use each word's real acquired vocabulary illustration, not a plain spreadsheet row")
 			if not state.compact:
+				var narrow: bool = panel.size.x * panel._scale < 152.0
+				var stacked: bool = panel.size.x * panel._scale < 112.0
 				check(row.surface.size.y * panel._scale >= 50.0
-					and row.label.get_theme_font_size("font_size") * panel._scale >= 16.9,
+					and row.label.get_theme_font_size("font_size") * panel._scale >= (13.9 if narrow else 16.9),
 					"The sidebar gives every illustrated word a readable, comfortably spaced card")
 				check(row.label.get_rect().end.y <= row.fraction.position.y
-					and absf(row.fraction.get_rect().get_center().y - row.surface._price_label.get_rect().get_center().y) <= 1.0 / panel._scale,
-					"The word has the first line; the exact cost and completion count share the second")
+					and (row.surface._price_pill.end.y <= row.fraction.position.y - 2.0 / panel._scale if stacked else
+						absf(row.fraction.get_rect().get_center().y - row.surface._price_label.get_rect().get_center().y) <= 1.0 / panel._scale),
+					"The word, exact cost and completion count have distinct readable areas")
 				if not state.words[index].mastered:
-					check(row.surface._price_pill.end.x <= row.fraction.position.x - 4.0 / panel._scale,
-						"Cost and progress keep distinct columns without truncating the word name above")
+					check(not row.surface._price_pill.intersects(row.fraction.get_rect()),
+						"Cost and progress never overlap in either narrow or full-sized goal cards")
 			check(row.get("steps", []).size() == 3,
 				"Three sourced mastery accents replace the generic table-like progress line")
 			check(row.fraction.is_visible_in_tree() == not state.words[index].mastered,

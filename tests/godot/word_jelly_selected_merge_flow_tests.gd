@@ -110,6 +110,124 @@ func put(model, tile: Dictionary) -> void:
 	model.cells.append(tile)
 
 
+func test_auto_hover(app) -> void:
+	root.size = Vector2i(1366, 768)
+	await settle()
+	app.set_reduced_motion(false)
+	var words: Array = await prepare(app)
+	check(app.coin_wallet.credit_amount("fixture:auto-hover-funding", 600).ok, "Fund only this isolated Auto merge use")
+	app._coin_flight.sync(app.coin_wallet.balance)
+	var view = app._word_jelly
+	var model = view.game
+	model.cells.clear()
+	for index in range(6):
+		var definition: Dictionary = words[0 if index < 4 else 1]
+		for tile: Dictionary in [model._new_word_root(definition), model._new_picture_tile(definition)]:
+			put(model, tile)
+	view._sync_tiles()
+	view._layout()
+	view._refresh_controls()
+	var button = view.powerup_buttons.auto_merge
+	button.release_focus()
+	await move_mouse(Vector2(1300, 40))
+	var before: Dictionary = model.snapshot()
+	var balance: int = app.coin_wallet.balance
+	var receipts: int = app.coin_wallet._receipts.size()
+	var expected: Array = model.auto_merge_preview().input_ids
+	await capture("auto-merge-preview-idle")
+	await move_mouse(button.get_global_rect().get_center())
+	check(view.snapshot().auto_merge_hover.active and view.snapshot().auto_merge_hover.input_ids == expected
+		and expected.size() == 6 and button.snapshot().preview_active,
+		"A genuine Auto merge hover names only the next complete products: " + JSON.stringify({
+			"preview": view.snapshot().auto_merge_hover, "expected": expected,
+			"hovered": button.is_hovered(), "consumed": button._preview_consumed,
+			"disabled": button.disabled, "goal": view.snapshot().goal_hover}))
+	check(model.snapshot() == before and app.coin_wallet.balance == balance
+		and app.coin_wallet._receipts.size() == receipts,
+		"Entering the real button neither spends, pauses, allocates a receipt nor changes the board")
+	for tile: Dictionary in model.cells:
+		var visual = view._tiles[int(tile.id)]
+		check(visual.completion_hint == (int(tile.id) in expected)
+			and visual.match_dimmed == (int(tile.id) not in expected),
+			"Forecasted ingredients reuse the real matching halo while unused same-family bodies remain unselected")
+	view._process(0.1)
+	check(is_equal_approx(model.stage_run.elapsed, float(before.campaign.time_elapsed) + 0.1)
+		and not model.powerup_active(), "Hover cannot freeze the stage or secretly begin an automatic use")
+	await capture("auto-merge-preview-hover")
+	var removed: Dictionary = model.cells[1]
+	model.cells.remove_at(1)
+	model.changed.emit()
+	check(view.snapshot().auto_merge_hover.input_ids == model.auto_merge_preview().input_ids
+		and int(removed.id) not in view.snapshot().auto_merge_hover.input_ids,
+		"Live board changes refresh hover targets instead of keeping a vanished ingredient highlighted")
+	model.cells.insert(1, removed)
+	model.changed.emit()
+	expected = model.auto_merge_preview().input_ids
+	await move_mouse(Vector2(1300, 40))
+	check(not view.snapshot().auto_merge_hover.active and view._tiles.values().all(
+		func(tile) -> bool: return not tile.completion_hint and not tile.match_dimmed),
+		"Leaving the Auto merge target restores all original acquired gel surfaces")
+	button._pointer_input = false
+	button.grab_focus()
+	await process_frame
+	check(view.snapshot().auto_merge_hover.input_ids == expected, "Keyboard/controller focus exposes the same legal input prediction")
+	view._fill_button.grab_focus()
+	await process_frame
+	check(not view.snapshot().auto_merge_hover.active, "Focus navigation removes the old Auto merge prediction")
+	var saved_balance: Callable = view.coin_balance
+	view.coin_balance = func() -> int: return 0
+	view._refresh_controls()
+	await move_mouse(button.get_global_rect().get_center())
+	check(view.snapshot().auto_merge_hover.active and not button.snapshot().affordable
+		and app.coin_wallet.balance == balance,
+		"An unaffordable preview is still free and never masquerades as a paid use")
+	view.coin_balance = saved_balance
+	view._refresh_controls()
+	await click(button)
+	check(model.powerup_active() and model.hit_stop_snapshot().active
+		and not view.snapshot().auto_merge_hover.active and not button.has_focus(),
+		"Accepted pointer activation consumes its preview and keeps the existing immediate hit-stop")
+	model.finish_powerup()
+	view._process(0.0)
+	var consumed: Array = model._powerup.used_input_ids.keys()
+	consumed.sort()
+	expected.sort()
+	check(consumed == expected and app.coin_wallet.balance == balance - 600
+		and model.powerup_snapshot().completed_results == 3,
+		"The saved actual click consumes exactly the highlighted originals for one existing price")
+	check(not view.snapshot().auto_merge_hover.active and view._tiles.values().all(
+		func(tile) -> bool: return not tile.completion_hint and not tile.match_dimmed),
+		"Finishing the paid use cannot latch mouse-acquired focus or leave an eternal selection")
+	await move_mouse(Vector2(1300, 40))
+	await move_mouse(button.get_global_rect().get_center())
+	check(view.snapshot().auto_merge_hover.active, "Leaving and entering again starts a fresh post-merge prediction")
+	view.pause(true)
+	check(not view.snapshot().auto_merge_hover.active, "Explicit pause clears the Auto merge prediction")
+	view.pause(false)
+	app.set_reduced_motion(true)
+	await move_mouse(Vector2(1300, 40))
+	await move_mouse(button.get_global_rect().get_center())
+	for frame in range(12):
+		view._process(0.05)
+	view._refresh_marks()
+	check(view.snapshot().auto_merge_hover.active and view._tiles.values().filter(
+		func(tile) -> bool: return tile.completion_hint).all(
+		func(tile) -> bool: return is_equal_approx(tile.completion_scale, 1.0)),
+		"Reduced motion retains exact input highlights without gel growth: " + JSON.stringify({
+			"preview": view.snapshot().auto_merge_hover, "reduced": view.reduced_motion,
+			"hovered": button.is_hovered(), "button_preview": button._preview_active,
+			"consumed": button._preview_consumed, "disabled": button.disabled,
+			"paused": model.paused, "requested_pause": view._requested_pause, "error": model.error,
+			"hover_flag": view._auto_merge_hovered, "goal": view._goal_hover_word,
+			"pointer": view._pointer, "source": view._source, "selected": view._keyboard_source,
+			"settling": model._settling_remaining(false),
+			"scales": view._tiles.values().filter(func(tile) -> bool: return tile.completion_hint).map(
+				func(tile) -> float: return tile.completion_scale)}))
+	await capture("auto-merge-preview-reduced")
+	await move_mouse(Vector2(1300, 40))
+	app.set_reduced_motion(false)
+
+
 func test_selection(app) -> void:
 	root.size = Vector2i(1366, 768)
 	await settle()
@@ -380,6 +498,12 @@ func test_goal_scroll(app) -> void:
 	var button: Button = goal_button(view, str(words[0].id))
 	var balance: int = app.coin_wallet.balance
 	var receipts: int = app.coin_wallet._receipts.size()
+	var panel = view._practice_panel
+	var full_area: Rect2 = panel.get_rect()
+	var scale_value: float = app.Style.ui_scale(view)
+	panel.configure_layout(Rect2(full_area.position, Vector2(full_area.size.x, 96.0 / scale_value)),
+		scale_value, false)
+	await settle()
 	var at: Vector2 = button.get_global_rect().get_center()
 	var event := InputEventMouseButton.new()
 	event.button_index = MOUSE_BUTTON_LEFT
@@ -388,17 +512,18 @@ func test_goal_scroll(app) -> void:
 	event.global_position = at
 	root.push_input(event)
 	await process_frame
-	await move_mouse(at - Vector2(45, 0), MOUSE_BUTTON_MASK_LEFT)
+	await move_mouse(at - Vector2(0, 45), MOUSE_BUTTON_MASK_LEFT)
 	event.pressed = false
-	event.position = at - Vector2(45, 0)
+	event.position = at - Vector2(0, 45)
 	event.global_position = event.position
 	root.push_input(event)
 	await process_frame
-	check(view._practice_panel._scroll.scroll_horizontal > 0 and app.coin_wallet.balance == balance
+	check(view._practice_panel._scroll.scroll_vertical > 0 and app.coin_wallet.balance == balance
 		and app.coin_wallet._receipts.size() == receipts and not view.game.powerup_active(),
-		"A real swipe scrolls the compact goals without turning its release into a paid click")
+		"A real vertical swipe scrolls the left goals without turning its release into a paid click")
 	view._practice_panel._scroll.cancel_drag()
-	view._practice_panel._scroll.scroll_horizontal = 0
+	view._practice_panel._scroll.scroll_vertical = 0
+	panel.configure_layout(full_area, scale_value, false)
 	await settle()
 	at = button.get_global_rect().get_center()
 	for step: Vector2i in [Vector2i(0, 1), Vector2i(1, 1), Vector2i(0, 0), Vector2i(1, 0)]:
@@ -570,15 +695,17 @@ func _run() -> void:
 	app.audio.set_muted(true)
 	check(app.coin_wallet.credit_amount("fixture:magnet-funding", 2000).ok, "Fund only isolated native test storage")
 	app._coin_flight.sync(app.coin_wallet.balance)
-	await test_selection(app)
-	await test_keyboard_and_controller(app)
-	await test_goal_rejection(app)
-	await test_goal_scroll(app)
-	await test_reentrant_goal(app)
-	await test_cancel_and_fill(app)
-	await test_layouts(app)
-	await test_tiered_prices(app)
-	await review_rendered_states(app)
+	await test_auto_hover(app)
+	if not OS.get_cmdline_user_args().has("--auto-hover-only"):
+		await test_selection(app)
+		await test_keyboard_and_controller(app)
+		await test_goal_rejection(app)
+		await test_goal_scroll(app)
+		await test_reentrant_goal(app)
+		await test_cancel_and_fill(app)
+		await test_layouts(app)
+		await test_tiered_prices(app)
+		await review_rendered_states(app)
 	app.audio.halt()
 	app.queue_free()
 	await settle()

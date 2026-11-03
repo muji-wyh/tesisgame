@@ -32,11 +32,11 @@ const MorphologyResolver = preload("res://scripts/morphology_resolver.gd")
 const StageRun = preload("res://scripts/word_jelly_stage_run.gd")
 const BossRun = preload("res://scripts/word_jelly_boss_run.gd")
 const LABEL_FONT = preload("res://assets/fonts/heading.tres")
-const COLUMNS: int = 7
+const COLUMNS: int = StageRun.Catalog.BOARD_COLUMNS
 const ROWS: int = 8
 const CAPACITY: int = COLUMNS * ROWS
 const MAX_MERGE_LEVEL: int = 9
-const INITIAL_SETTLED_TILES: int = COLUMNS * 3
+const INITIAL_SETTLED_TILES: int = COLUMNS * StageRun.Catalog.OPENING_ROWS
 const DROP_COUNT: int = COLUMNS
 const UPCOMING_COUNT: int = COLUMNS
 const SETTLE_SECONDS: float = 0.36
@@ -96,6 +96,8 @@ var merged_count: int = 0
 var spawn_interval: float = INITIAL_SPAWN_INTERVAL
 var spawn_elapsed: float = 0.0
 var full_elapsed: float = -1.0
+var _full_warning_limit: float = FULL_SECONDS
+var _full_recovery_target: int = 1
 var error: String = ""
 var credit_collection: Callable
 var credit_combo: Callable
@@ -160,6 +162,8 @@ var _collection_hit_stop: Dictionary = {}
 var _powerup: Dictionary = {}
 var _powerup_uses: Dictionary = {"auto_merge": 0, "family_merge": 0}
 var _powerup_ids: Array[int] = []
+var _auto_merge_preview_key: Array = []
+var _auto_merge_preview_cache: Dictionary = {}
 var _powerup_purchasing: bool = false
 var _powerup_activating: bool = false
 var _powerup_committing: bool = false
@@ -259,6 +263,8 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_reset_collection_batch()
 	_powerup.clear()
 	_powerup_ids.clear()
+	_auto_merge_preview_key.clear()
+	_auto_merge_preview_cache.clear()
 	_finish_after_purchase = false
 	_finish_reason = ""
 	_settle_after_purchase = false
@@ -507,8 +513,7 @@ func _advance_boss(delta: float, running: bool) -> void:
 		cells.remove_at(_index_for_id(id))
 		boss.forget(id)
 		_gravity_pending = true
-		if _has_free_cell():
-			full_elapsed = -1.0
+		_refresh_full_recovery()
 	if not boss.error.is_empty():
 		error = boss.error
 	if boss._next_id != before:
@@ -572,7 +577,7 @@ func replace_stage_words(words: Array, level: int) -> bool:
 	authored_morphology = not analyses.is_empty()
 	_fill_upcoming()
 	spawn_elapsed = 0.0
-	full_elapsed = -1.0
+	_refresh_full_recovery()
 	_schedule_spawn_interval()
 	changed.emit()
 	return true
@@ -590,6 +595,8 @@ func powerup_active() -> bool:
 func gameplay_time_scale() -> float:
 	if not _collection_hit_stop.is_empty():
 		return 0.0
+	if _auto_merge_hit_stop_remaining() > EPSILON:
+		return 0.0
 	if _stage_clear_feedback > STAGE_CLEAR_NOTICE_SECONDS + EPSILON:
 		return BLAST_TIME_SCALE
 	if bool(_powerup.get("active", false)) and str(_powerup.kind) == "blast" and str(_powerup.stage) == "mark":
@@ -600,6 +607,9 @@ func gameplay_time_scale() -> float:
 func presentation_delta(delta: float) -> float:
 	if not _collection_hit_stop.is_empty():
 		return maxf(0.0, delta - float(_collection_hit_stop.remaining))
+	var auto_freeze: float = _auto_merge_hit_stop_remaining()
+	if auto_freeze > EPSILON:
+		return maxf(0.0, delta - auto_freeze)
 	if _stage_clear_feedback > STAGE_CLEAR_NOTICE_SECONDS + EPSILON:
 		var slowed: float = minf(delta, _stage_clear_feedback - STAGE_CLEAR_NOTICE_SECONDS)
 		return slowed * BLAST_TIME_SCALE + delta - slowed
@@ -617,6 +627,10 @@ func hit_stop_snapshot() -> Dictionary:
 		impact.merge({"active": true, "time_scale": 0.0, "phase": "freeze", "paused": paused,
 			"source": "auto_collect"})
 		return impact
+	var auto_freeze: float = _auto_merge_hit_stop_remaining()
+	if auto_freeze > EPSILON:
+		return {"active": true, "time_scale": 0.0, "phase": "freeze", "paused": paused,
+			"source": "auto_merge", "remaining": auto_freeze, "event_id": _powerup.receipt_id}
 	if _stage_clear_feedback > STAGE_CLEAR_NOTICE_SECONDS + EPSILON:
 		return {"active": true, "time_scale": BLAST_TIME_SCALE, "phase": "slow", "paused": paused,
 			"source": "stage_clear", "remaining": _stage_clear_feedback - STAGE_CLEAR_NOTICE_SECONDS}
@@ -624,6 +638,12 @@ func hit_stop_snapshot() -> Dictionary:
 	return {"active": scale < 1.0, "time_scale": scale, "paused": paused,
 		"phase": "freeze" if is_zero_approx(scale) else "slow" if scale < 1.0 else "",
 		"remaining": maxf(0.0, float(_powerup.duration) - float(_powerup.elapsed)) if scale < 1.0 else 0.0}
+
+
+func _auto_merge_hit_stop_remaining() -> float:
+	if not bool(_powerup.get("active", false)) or _powerup.get("kind") != "auto_merge":
+		return 0.0
+	return maxf(0.0, BLAST_FREEZE_SECONDS - float(_powerup.clock))
 
 
 func powerup_price(kind: String) -> int:
@@ -652,15 +672,72 @@ func powerup_snapshot() -> Dictionary:
 
 
 func can_activate_powerup(kind: String) -> bool:
-	if _stage_ending or not POWERUP_PRICES.has(kind):
-		return false
+	return POWERUP_PRICES.has(kind) and _powerup_inputs_ready() and not _powerup_pair(false).is_empty()
+
+
+func _powerup_inputs_ready() -> bool:
 	# Supply owns its landing slots, not the toolbar. Real board settlement still blocks items.
-	if not POWERUP_PRICES.has(kind) or phase != "playing" or paused or _powerup_purchasing \
+	if _stage_ending or phase != "playing" or paused or _powerup_purchasing \
 		or powerup_active() \
 		or _finishing_powerup or collection_batch_active() or _held_tile_id >= 0 \
 		or not fusions.is_empty() or not _blast_queue.is_empty() or _settling_remaining(false) > EPSILON or cells.is_empty():
 		return false
-	return not _powerup_pair(false, auto_merge_capacity() if kind == "auto_merge" else -1).is_empty()
+	return true
+
+
+func auto_merge_preview() -> Dictionary:
+	var capacity: int = auto_merge_capacity()
+	var empty: Dictionary = {"capacity": capacity, "result_count": 0, "input_ids": []}
+	if not _powerup_inputs_ready():
+		return empty
+	var key: Array = [_generation, capacity, merged_level_limit, allow_cross_age,
+		fall_speed_scale, authored_morphology, _campaign_level_rules, _words_by_id,
+		_growth_pending, _gravity_pending, _drag_gravity_delays, boss.broken_remaining > EPSILON]
+	for tile: Dictionary in cells:
+		var state: Dictionary = tile.duplicate()
+		# Idle age is irrelevant after landing; airborne timing still changes the forecast.
+		if is_settled(tile):
+			state.erase("age")
+		key.append([state, boss.frozen(int(tile.id)), boss.locks(int(tile.id))])
+	if key == _auto_merge_preview_key:
+		return _auto_merge_preview_cache.duplicate(true)
+	# Replay the real timeline on isolated board data, including arrivals and
+	# gravity. Only the pure composition resolver is shared, never callbacks.
+	var forecast := WordJellyModel.new()
+	forecast.phase = "playing"
+	forecast.cells.assign(cells.duplicate(true))
+	forecast._words.assign(_words.duplicate(true))
+	forecast._words_by_id = _words_by_id.duplicate(true)
+	forecast._word_lookup = _word_lookup.duplicate(true)
+	forecast._authored_words = _authored_words.duplicate(true)
+	forecast._footprints = _footprints.duplicate(true)
+	forecast._morphology = _morphology
+	forecast.authored_morphology = authored_morphology
+	forecast.allow_cross_age = allow_cross_age
+	forecast.merged_level_limit = merged_level_limit
+	forecast.auto_merge_level = auto_merge_level
+	forecast._campaign_level_rules = _campaign_level_rules
+	forecast.fall_speed_scale = fall_speed_scale
+	forecast._next_tile_id = _next_tile_id
+	forecast._growth_pending = _growth_pending
+	forecast._gravity_pending = _gravity_pending
+	forecast._drag_gravity_delays = _drag_gravity_delays.duplicate()
+	forecast._rng.state = _rng.state
+	forecast._coin_rng.state = _coin_rng.state
+	forecast._blast_rng.state = _blast_rng.state
+	forecast.boss._statuses = boss._statuses.duplicate(true)
+	forecast.boss.broken_remaining = boss.broken_remaining
+	forecast._begin_powerup_timeline("auto_merge", "auto-merge-preview")
+	forecast.finish_powerup()
+	_auto_merge_preview_key = key.duplicate(true)
+	if forecast.powerup_active() or not forecast.error.is_empty():
+		var message: String = "Auto merge could not preview its complete legal paths. " + forecast.error
+		_auto_merge_preview_cache = {"capacity": capacity, "result_count": 0, "input_ids": [], "error": message}
+		push_error(message)
+		return _auto_merge_preview_cache.duplicate(true)
+	_auto_merge_preview_cache = {"capacity": capacity, "result_count": int(forecast._powerup.completed_results),
+		"input_ids": forecast._powerup.used_input_ids.keys()}
+	return _auto_merge_preview_cache.duplicate(true)
 
 
 func activate_powerup(kind: String, selected_id: int = -1) -> bool:
@@ -769,7 +846,9 @@ func _begin_powerup_timeline(kind: String, receipt_id: String, family: String = 
 		"selected_id": selected_id}
 	if kind == "auto_merge":
 		_powerup.merge({"capacity": auto_merge_capacity(), "affected_jellies": 0,
-			"used_input_ids": {}, "generated_ids": {}})
+			"completed_results": 0, "result_ids": [],
+			"used_input_ids": {}, "generated_ids": {}, "stage": "impact",
+			"duration": BLAST_FREEZE_SECONDS, "next_launch_at": BLAST_FREEZE_SECONDS}, true)
 
 
 func _blast_target_ids(origin: Dictionary, level: int) -> Array[int]:
@@ -935,10 +1014,10 @@ func _next_powerup_merge() -> Dictionary:
 		if not job.is_empty():
 			return job
 	var limited: bool = str(_powerup.kind) == "auto_merge"
-	var remaining: int = int(_powerup.capacity) - _powerup.used_input_ids.size() if limited else -1
+	if limited and int(_powerup.next_plan_id) >= int(_powerup.capacity):
+		return {}
 	var generated: Dictionary = _powerup.generated_ids if limited else {}
-	var plan: Dictionary = authored_completion_plan(true, str(_powerup.get("family_word_id", "")),
-		remaining, generated)
+	var plan: Dictionary = authored_completion_plan(true, str(_powerup.get("family_word_id", "")))
 	if plan.get("status") != "complete":
 		return {}
 	plan.plan_id = int(_powerup.next_plan_id)
@@ -1034,6 +1113,12 @@ func _sync_powerup_drag() -> void:
 func _advance_powerup() -> void:
 	if not bool(_powerup.get("active", false)) or paused or phase != "playing":
 		return
+	if _auto_merge_hit_stop_remaining() > EPSILON:
+		return
+	if str(_powerup.stage) == "impact":
+		_powerup.stage = "ready"
+		_powerup.elapsed = 0.0
+		_powerup.duration = 0.0
 	var generation: int = _generation
 	var receipt_id: String = str(_powerup.receipt_id)
 	if str(_powerup.kind) == "blast" and str(_powerup.stage) == "mark":
@@ -1171,6 +1256,9 @@ func _advance_powerup() -> void:
 func _powerup_boundary() -> float:
 	if not bool(_powerup.get("active", false)):
 		return INF
+	var auto_freeze: float = _auto_merge_hit_stop_remaining()
+	if auto_freeze > EPSILON:
+		return auto_freeze
 	if str(_powerup.kind) == "fragments":
 		var next: float = maxf(0.0, float(_powerup.duration) - float(_powerup.elapsed))
 		for arrival: Dictionary in _powerup.arrivals:
@@ -1626,11 +1714,13 @@ func step(delta: float) -> void:
 			break
 		if _finishing_powerup and not powerup_active():
 			break
+		_refresh_full_recovery()
 		_pump_fill()
 		if not _can_continue(generation):
 			break
 		var powerup_running: bool = powerup_active()
 		var impact_running: bool = not _collection_hit_stop.is_empty()
+		var auto_impact_running: bool = _auto_merge_hit_stop_remaining() > EPSILON
 		var time_scale: float = gameplay_time_scale()
 		var combo_running: bool = combo_count > 0 and not powerup_running and not impact_running and not _has_pending_collection_commit()
 		var stage_clock: bool = _stage_clock_running()
@@ -1668,20 +1758,19 @@ func step(delta: float) -> void:
 		var full: bool = not _has_free_cell()
 		var ending_wait: bool = _finish_after_collection_commit or _stage_ending
 		if full and full_elapsed < 0.0 and _settling_remaining() <= EPSILON and not powerup_running and not impact_running and not ending_wait:
-			full_elapsed = 0.0
-			cue_requested.emit("danger")
+			_begin_full_warning()
 			if not _can_continue(generation):
 				break
-		var danger_running: bool = full and full_elapsed >= 0.0 and not powerup_running and not impact_running and not ending_wait \
+		var danger_running: bool = full_elapsed >= 0.0 and not powerup_running and not impact_running and not ending_wait \
 			and (stage_run == null or not collection_batch_active() and not _has_pending_collection_commit())
-		var next_second: float = minf(FULL_SECONDS, floorf(full_elapsed + EPSILON) + 1.0)
+		var next_second: float = minf(full_warning_seconds(), floorf(full_elapsed + EPSILON) + 1.0)
 		if danger_running:
 			consumed = minf(consumed, maxf(0.0, next_second - full_elapsed))
 		elif full and not powerup_running and not impact_running and not ending_wait:
 			var settling: float = _settling_remaining()
 			if settling > EPSILON:
 				consumed = minf(consumed, maxf(0.0, settling))
-		elif not powerup_running and not impact_running and not ending_wait:
+		elif full_elapsed < 0.0 and not powerup_running and not impact_running and not ending_wait:
 			consumed = minf(consumed, maxf(0.0, spawn_interval - spawn_elapsed))
 		# Mark impacts keep real-time deadlines while only the board's motion slows.
 		var motion_delta: float = consumed * time_scale
@@ -1713,7 +1802,7 @@ func step(delta: float) -> void:
 			_collection_batch_next_in = maxf(0.0, _collection_batch_next_in - (0.0 if impact_running else consumed))
 		if danger_running:
 			full_elapsed += consumed
-		elif not full and not powerup_running and not impact_running and not ending_wait:
+		elif not full and full_elapsed < 0.0 and not powerup_running and not impact_running and not ending_wait:
 			spawn_elapsed += consumed
 		remaining -= consumed
 		if _stage_ending:
@@ -1726,7 +1815,7 @@ func step(delta: float) -> void:
 					break
 		if stage_clock:
 			stage_run.advance(consumed)
-		_advance_boss(consumed, stage_clock)
+		_advance_boss(0.0 if auto_impact_running else consumed, stage_clock)
 		if combo_running:
 			_combo_remaining = maxf(0.0, _combo_remaining - consumed)
 			if _combo_remaining <= EPSILON:
@@ -1778,19 +1867,19 @@ func step(delta: float) -> void:
 			if _finishing_powerup and not powerup_active():
 				break
 			continue
-		if not _has_free_cell():
-			if full_elapsed < 0.0 and _settling_remaining() <= EPSILON:
-				full_elapsed = 0.0
-				cue_requested.emit("danger")
-				if not _can_continue(generation):
-					break
+		_refresh_full_recovery()
+		var blocked: bool = not _has_free_cell()
+		if blocked and full_elapsed < 0.0 and _settling_remaining() <= EPSILON:
+			_begin_full_warning()
+			if not _can_continue(generation):
+				break
+		if full_elapsed >= 0.0:
 			if danger_running and full_elapsed + EPSILON >= next_second:
-				if full_elapsed + EPSILON >= FULL_SECONDS:
+				if full_elapsed + EPSILON >= full_warning_seconds():
 					finish_round("danger")
 				else:
 					cue_requested.emit("danger")
-		else:
-			full_elapsed = -1.0
+		elif not blocked:
 			if spawn_elapsed + EPSILON >= spawn_interval:
 				spawn_elapsed = 0.0
 				_spawn_drop()
@@ -2090,14 +2179,13 @@ func reposition(tile_id: int, column: int, row: int) -> bool:
 	if not bool(tile.falling):
 		tile.age = 0.0
 		tile.settling = true
-	if _has_free_cell():
-		full_elapsed = -1.0
+	_refresh_full_recovery()
 	changed.emit()
 	return true
 
 
 func can_drop_now() -> bool:
-	return not _stage_ending and phase == "playing" and not paused and _combo_pending.is_empty() and not powerup_active() and not collection_batch_active() and not _first_preview_tile().is_empty() and _has_free_cell()
+	return full_elapsed < 0.0 and not _stage_ending and phase == "playing" and not paused and _combo_pending.is_empty() and not powerup_active() and not collection_batch_active() and not _first_preview_tile().is_empty() and _has_free_cell()
 
 
 func drop_now(expected_first_id: int = -1) -> bool:
@@ -2205,7 +2293,8 @@ func snapshot() -> Dictionary:
 		"fill_mode": {"enabled": fill_mode, "locked": fill_mode_locked()},
 		"chest_count": chest_count, "generated_tiles": generated_tiles,
 		"spawn_interval": spawn_interval, "spawn_elapsed": spawn_elapsed, "full_elapsed": full_elapsed,
-		"full_remaining": maxf(0.0, FULL_SECONDS - full_elapsed) if full_elapsed >= 0.0 else -1.0,
+		"full_remaining": maxf(0.0, full_warning_seconds() - full_elapsed) if full_elapsed >= 0.0 else -1.0,
+		"danger_recovery": danger_recovery_snapshot(),
 		"collectable_ids": collectable_ids(),
 		"collection_batch": collection_batch_snapshot(),
 		"max_merge_level": merged_level_limit, "boss": boss.snapshot(),
@@ -3167,6 +3256,7 @@ func _complete_merge(completed: Dictionary) -> void:
 	_gravity_pending = true
 	merged_count += 1
 	if _authored_auto_active():
+		var completed_result: bool = false
 		if str(_powerup.kind) == "auto_merge":
 			_powerup.generated_ids[int(result.id)] = true
 		for plan: Dictionary in _powerup.plans:
@@ -3174,18 +3264,24 @@ func _complete_merge(completed: Dictionary) -> void:
 				continue
 			plan.result_ids[int(completed.powerup_step_index)] = int(result.id)
 			if plan.result_ids.size() >= plan.steps.size():
+				if str(_powerup.kind) == "auto_merge":
+					completed_result = true
+					_powerup.completed_results = int(_powerup.completed_results) + 1
+					_powerup.result_ids.append(int(result.id))
 				_powerup.plans.erase(plan)
 			break
 		_powerup_ids.erase(int(a.id))
 		_powerup_ids.erase(int(b.id))
-		_powerup_ids.append(int(result.id))
+		# Each promised output survives this use; only intermediate results may
+		# continue into another step. Family purchases keep their uncapped chain.
+		if not completed_result:
+			_powerup_ids.append(int(result.id))
 		_powerup.completed = int(_powerup.completed) + 1
 		if _powerup.drags.is_empty():
 			_powerup.stage = "settling"
 			_powerup.elapsed = 0.0
 			_powerup.duration = settle_duration(result)
-	if _has_free_cell():
-		full_elapsed = -1.0
+	_refresh_full_recovery()
 	completed.result = cell(int(result.id))
 	completed.word = completed.result.word.duplicate(true)
 	var generation: int = _generation
@@ -3248,7 +3344,7 @@ func _complete_collection(completed: Dictionary) -> void:
 		if _collection_batch_cursor >= _collection_batch_ids.size():
 			_collection_batch_active = false
 			_collection_batch_next_in = 0.0
-	full_elapsed = -1.0
+	_refresh_full_recovery()
 	_queue_collection_blast(completed)
 	_advance_combo(str(completed.attempt_id), 0, false)
 	if not _stage_ending:
@@ -3541,6 +3637,42 @@ func _has_free_cell() -> bool:
 				return true
 		return false
 	return _arrival_position(_occupied()).x >= 0
+
+
+func full_warning_seconds() -> float:
+	if full_elapsed >= 0.0:
+		return _full_warning_limit
+	return stage_run.full_warning_seconds() if stage_run != null else FULL_SECONDS
+
+
+func danger_recovery_snapshot() -> Dictionary:
+	var target: int = _full_recovery_target if full_elapsed >= 0.0 else \
+		stage_run.recovery_space_target() if stage_run != null else 1
+	var occupied: Dictionary = _occupied()
+	var reachable: int = 0
+	for column in range(COLUMNS):
+		for row in range(ROWS):
+			if occupied.has(row * COLUMNS + column):
+				break
+			reachable += 1
+	return {"active": full_elapsed >= 0.0, "duration": full_warning_seconds(),
+		"required_spaces": target, "reachable_spaces": reachable,
+		"spaces_needed": maxi(0, target - reachable), "can_receive_next": _has_free_cell()}
+
+
+func _begin_full_warning() -> void:
+	_full_warning_limit = stage_run.full_warning_seconds() if stage_run != null else FULL_SECONDS
+	_full_recovery_target = stage_run.recovery_space_target() if stage_run != null else 1
+	full_elapsed = 0.0
+	cue_requested.emit("danger")
+
+
+func _refresh_full_recovery() -> void:
+	if full_elapsed < 0.0:
+		return
+	var recovery: Dictionary = danger_recovery_snapshot()
+	if int(recovery.spaces_needed) == 0 and bool(recovery.can_receive_next):
+		full_elapsed = -1.0
 
 
 func _arrival_preserves_drag_return(preview: Dictionary, position: Vector2i, arrival: bool = true) -> bool:

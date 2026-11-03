@@ -86,6 +86,7 @@ func _run() -> void:
 		_test_challenge_pressure()
 		_test_snapshot_isolation()
 		_test_fresh_store_and_recipe_reservation()
+		_test_unfinished_pressure_refresh()
 		_test_progress_replays_and_contexts()
 		_test_all_99_unlocks()
 		_test_pending_journal_and_recovery()
@@ -226,7 +227,7 @@ func _test_all_stage_recipes() -> void:
 			check(raised == plan.words.size(), "A chapter finale gives every target its explicit extra collection")
 		else:
 			check(raised == 0, "Discovery, practice and relief profiles retain their chapter's base quotas")
-		check(is_finite(float(plan.seconds)) and float(plan.seconds) >= 60.0 and float(plan.seconds) <= 900.0
+		check(is_finite(float(plan.seconds)) and float(plan.seconds) >= 55.0 and float(plan.seconds) <= 900.0
 			and is_finite(float(plan.spawn_interval)) and float(plan.spawn_interval) > 0.0
 			and is_finite(float(plan.fall_speed_scale)) and float(plan.fall_speed_scale) > 0.0,
 			"Every stage has bounded finite time and real supply and fall parameters")
@@ -282,11 +283,16 @@ func _test_effort_budgets_and_relief() -> void:
 				if not plan.ok:
 					continue
 				var pieces: int = _pieces_required(plan)
-				var handling: float = float(pieces) * 1.6
-				var supply: float = maxf(0.0, float(pieces - 15)) / 5.0 * float(plan.spawn_interval)
-				check(float(plan.seconds) >= maxf(handling, supply) + 25.0
-					and float(plan.seconds) >= 60.0 and float(plan.seconds) <= 900.0,
-					"Stage %d funds deliberate actions and packet supply for %d parts, picture=%s" %
+				var units: int = 0
+				for required: int in plan.goals.values():
+					units += required
+				var scale_factor: float = maxf(1.0, float(pieces) / float(units * 2))
+				var handling: float = float(pieces) * 0.95
+				var supply: float = ceilf(maxf(0.0, float(pieces - _catalog.BOARD_COLUMNS * _catalog.OPENING_ROWS)) \
+					/ _catalog.BOARD_COLUMNS) * float(plan.spawn_interval)
+				check(float(plan.seconds) >= maxf(handling, supply) + 12.0 * scale_factor
+					and float(plan.seconds) >= 55.0 * scale_factor and float(plan.seconds) <= 900.0,
+					"Stage %d funds actual twenty-one/seven supply and multipart work for %d parts, picture=%s" %
 					[number, part_count, picture])
 			for pair: Array in [[21, 22], [24, 25], [93, 94], [96, 97]]:
 				var pressure: Dictionary = _catalog.make_plan(int(pair[0]), pool, 6, 51)
@@ -295,23 +301,24 @@ func _test_effort_budgets_and_relief() -> void:
 				var relief_allowance: float = float(relief.seconds) / float(_pieces_required(relief))
 				check(relief_allowance > pressure_allowance
 					and float(relief.spawn_interval) >= float(pressure.spawn_interval),
-					"Breather and reward stages provide more time per action and gentler supply after pressure")
+					"Breather/reward relief %s, parts=%d picture=%s: %.3f > %.3f seconds/piece; cadence %.3f >= %.3f" % [
+						pair, part_count, picture, relief_allowance, pressure_allowance, relief.spawn_interval, pressure.spawn_interval])
 	var atomic: Dictionary = _catalog.make_plan(99, _pool(24, 1, false), 6, 51)
 	var pictured: Dictionary = _catalog.make_plan(99, _pool(24, 1, true), 6, 51)
 	var complex: Dictionary = _catalog.make_plan(99, _pool(24, 4, true), 6, 51)
 	check(float(pictured.seconds) > float(atomic.seconds) and float(complex.seconds) > float(pictured.seconds),
 		"Late-stage timing pays for picture partners and reviewed multi-part construction")
-	check(float(_plan(1).spawn_interval) >= 18.0 and float(_plan(99).spawn_interval) >= 10.0
+	check(float(_plan(1).spawn_interval) >= 18.0 and float(_plan(99).spawn_interval) >= 7.5
 		and float(_plan(99).spawn_interval) < float(_plan(1).spawn_interval),
-		"Main supply progresses from approximately twenty seconds toward ten, not an unplayable instant drop")
+		"Main supply progresses from twenty seconds toward seven and a half without an instant drop")
 	for pair: Array in [[1, 10], [10, 28], [28, 55], [55, 91]]:
 		var earlier: Dictionary = _plan(int(pair[0]))
 		var later: Dictionary = _plan(int(pair[1]))
 		check(float(_pieces_required(later)) / float(later.seconds) > float(_pieces_required(earlier)) / float(earlier.seconds)
 			and float(later.fall_speed_scale) > float(earlier.fall_speed_scale),
 			"Like-for-like chapter profiles increase real work per second and physical fall speed, not just goal counts")
-	check(is_equal_approx(float(_plan(1).seconds), 90.0) and is_equal_approx(float(_plan(99).fall_speed_scale), 1.40),
-		"The opening retains its generous ninety seconds while late supply lands forty percent faster")
+	check(is_equal_approx(float(_plan(1).seconds), 90.0) and is_equal_approx(float(_plan(99).fall_speed_scale), 1.60),
+		"The opening retains its generous ninety seconds while late supply lands sixty percent faster")
 
 
 func _test_exact_replay_recipes() -> void:
@@ -537,9 +544,9 @@ func _test_challenge_pressure() -> void:
 	var run = _run_script.new()
 	check(run.configure(plan), "Configure the timed Challenge domain")
 	var start: Dictionary = run.challenge_pressure()
-	check(start.level == 1 and start.word_limit == 3 and is_equal_approx(float(start.spawn_interval), 20.0)
+	check(start.level == 1 and start.word_limit == 3 and is_equal_approx(float(start.spawn_interval), 12.0)
 		and is_equal_approx(float(start.fall_speed_scale), 1.0) and run.words_for_pressure().size() == 3,
-		"Challenge starts with three word kinds and genuinely gentle falls")
+		"Challenge starts with three word kinds and a twelve-second cadence before gradual acceleration")
 	var receipt: int = 0
 	for goal: Dictionary in run.snapshot().practice:
 		run.record_collection("pressure:%d" % receipt, str(goal.word_id))
@@ -556,23 +563,23 @@ func _test_challenge_pressure() -> void:
 		"A duplicate committed challenge pickup cannot raise pressure twice")
 	for stage in range(2, 15):
 		var stage_goals: Array = run.snapshot().practice.filter(func(goal: Dictionary) -> bool: return int(goal.stage) == stage)
-		check(stage_goals.size() == mini(3 + stage - 1, 16)
-			and stage_goals.all(func(goal: Dictionary) -> bool: return int(goal.required) == 1 + floori(float(stage - 1) / 2.0)),
-			"Every Challenge stage owns a harder explicit batch, not a raw collection counter")
+		check(stage_goals.size() == mini(3 + stage - 1, 8)
+			and stage_goals.all(func(goal: Dictionary) -> bool: return int(goal.required) == mini(5, 1 + floori(float(stage - 1) / 4.0))),
+			"Every Challenge stage owns a readable batch and gradually bounded per-word quota")
 		for goal: Dictionary in stage_goals:
 			for index in range(int(goal.required)):
 				run.record_collection("pressure:%d" % receipt, str(goal.word_id))
 				receipt += 1
 		check(run.challenge_stage == stage + 1, "Only the completed full batch advances exactly one stage")
 	var late: Dictionary = run.challenge_pressure()
-	check(late.level == 15 and late.word_limit == 16 and run.words_for_pressure().size() == 16
+	check(late.level == 15 and late.word_limit == 8 and run.words_for_pressure().size() == 8
 		and float(late.spawn_interval) >= 3.0 and float(late.spawn_interval) < float(next.spawn_interval)
 		and float(late.fall_speed_scale) <= 2.2 and float(late.fall_speed_scale) > float(next.fall_speed_scale),
 		"Later Challenge stages reach bounded variety, faster supply and a safe real fall-speed ceiling")
 	var state: Dictionary = run.snapshot()
 	check(int(state.get("collection_count", -1)) == receipt and state.get("pressure", {}) == late
-		and run.words_for_pressure() == plan.words.slice(0, 16),
-		"Challenge snapshots expose committed pickups and copied pressure alongside the exact active candidate prefix")
+		and run.words_for_pressure() == plan.words.slice(9, 16) + plan.words.slice(0, 1),
+		"Challenge keeps all sixteen reviewed candidates while rotating a bounded eight-word active window")
 	run.advance(5000.0)
 	check(run.outcome.is_empty() and run.check_deadline() and run.outcome == "timeout" and run.remaining == 0.0
 		and run.stars_now() == 0 and run.snapshot().stars == 0,
@@ -585,12 +592,11 @@ func _test_challenge_pressure() -> void:
 	check(run.configure(plan), "Start a late-stage difficulty boundary fixture")
 	run.challenge_stage = 31
 	run._append_challenge_stage()
-	var previous: int = 0
 	for stage in range(31, 34):
 		var batch: Array = run.snapshot().practice.filter(func(goal: Dictionary) -> bool: return int(goal.stage) == stage)
-		check(batch.size() == 16 and int(batch[0].required) > previous,
-			"Every later stage raises its real goal quota even when variety, fall speed and supply have capped")
-		previous = int(batch[0].required)
+		check(batch.size() == 8 and batch.all(func(goal: Dictionary) -> bool: return int(goal.required) == 5)
+			and run.challenge_pressure().spawn_interval == 3.0 and run.full_warning_seconds() == 6.0,
+			"Late Challenge remains survival pressure, not an ever-growing sixteen-word repetition grind")
 		for goal: Dictionary in batch:
 			for index in range(int(goal.required)):
 				run.record_collection("late:%d" % receipt, str(goal.word_id))
@@ -665,6 +671,80 @@ func _test_fresh_store_and_recipe_reservation() -> void:
 	check(reloaded.load_state() and reloaded.recipe("growth", 1) == expected
 		and reloaded.frontier("growth") == 1 and host.writes == writes,
 		"Reload retains a reserved recipe without treating an unplayed stage as cleared")
+
+
+func _test_unfinished_pressure_refresh() -> void:
+	var host := MemoryHost.new()
+	var store = _store(host)
+	check(store.load_state(), "Load a guarded legacy campaign before refreshing any difficulty")
+	var cleared: Dictionary = _plan()
+	cleared.seconds = 120.0
+	check(store.reserve_plan("growth", cleared)
+		and store.queue_result("growth", "pressure:cleared", _result(cleared, "cleared", 2))
+		and store.complete_result("growth", "pressure:cleared"), "Keep a genuinely saved two-star first clear")
+	var original_clear: Dictionary = store.recipe("growth", 1)
+	var legacy: Dictionary = _plan(2)
+	legacy.seconds = 180.0
+	legacy.spawn_interval = 20.0
+	legacy.fall_speed_scale = 1.0
+	check(store.reserve_plan("growth", legacy), "Reserve the old generous frontier without rerolling its targets")
+	var original: Dictionary = store.recipe("growth", 2)
+	var pressure: Dictionary = _catalog.tighten_plan_pressure(legacy)
+	check(pressure.ok and pressure.seconds == 65.0 and pressure.spawn_interval < legacy.spawn_interval
+		and pressure.fall_speed_scale > legacy.fall_speed_scale,
+		"The new attempt refresh really tightens all three obsolete frontier parameters")
+	var saved: String = host.text
+	check(not store.reserve_plan("growth", pressure) and host.text == saved,
+		"Ordinary recipe reservation remains immutable; refresh is always explicit")
+	for field: String in ["seed", "goals", "seconds", "spawn_interval", "fall_speed_scale"]:
+		var changed: Dictionary = pressure.duplicate(true)
+		if field == "seed":
+			changed.seed += 1
+		elif field == "goals":
+			changed.goals[str(changed.word_ids[0])] += 1
+		elif field == "seconds":
+			changed.seconds = legacy.seconds + 1.0
+		elif field == "spawn_interval":
+			changed.spawn_interval = legacy.spawn_interval + 1.0
+		else:
+			changed.fall_speed_scale = legacy.fall_speed_scale - 0.1
+		check(not store.reserve_plan("growth", changed, true) and host.text == saved,
+			"Pressure refresh cannot change lexical work or loosen its original " + field)
+	check(store.queue_result("growth", "pressure:pending", _result(legacy, "exit", 0)),
+		"An unpaid result retains its own old timing and payout identity")
+	var pending: Dictionary = store.pending("growth")
+	saved = host.text
+	check(not store.reserve_plan("growth", pressure, true) and host.text == saved
+		and store.pending("growth") == pending and store.recipe("growth", 2) == original,
+		"No refresh is permitted while an immutable settlement is awaiting acknowledgement")
+	check(store.complete_result("growth", "pressure:pending") and store.begin_upgrade(2, "auto_merge"),
+		"Complete the saved exit and independently journal the exact fifty-coin permanent upgrade")
+	var upgrades: Dictionary = store.upgrade_state()
+	saved = host.text
+	host.fail_write = true
+	check(not store.reserve_plan("growth", pressure, true) and not store.error.is_empty()
+		and host.text == saved and store.recipe("growth", 2) == original,
+		"Failed durable pressure refresh cannot launch with success-shaped unsaved parameters")
+	host.fail_write = false
+	check(store.reserve_plan("growth", pressure, true) and store.recipe("growth", 2) == _catalog.to_recipe(pressure)
+		and store.recipe("growth", 1) == original_clear and store.best_stars("growth", 1) == 2
+		and store.highest_cleared("growth") == 1 and store.upgrade_state() == upgrades,
+		"A successful fresh-frontier refresh preserves cleared replay parameters, stars and exact upgrade journals")
+	var reloaded = _store(host)
+	check(reloaded.load_state() and reloaded.recipe("growth", 2) == store.recipe("growth", 2)
+		and reloaded.upgrade_state() == upgrades, "The stricter frontier is persistent, not a scene-only override")
+	check(store.queue_result("growth", "pressure:clear-two", _result(pressure, "cleared", 1))
+		and store.complete_result("growth", "pressure:clear-two"), "The newly completed recipe becomes immutable again")
+	var stricter: Dictionary = pressure.duplicate(true)
+	stricter.seconds = 30.0
+	saved = host.text
+	check(not store.reserve_plan("growth", stricter, true) and host.text == saved,
+		"Even an explicit refresh cannot rewrite the difficulty of a completed replay")
+	stricter.seconds = 10.0
+	stricter.spawn_interval = 3.0
+	stricter.fall_speed_scale = 2.2
+	check(_catalog.to_recipe(_catalog.tighten_plan_pressure(stricter)) == _catalog.to_recipe(stricter),
+		"Already stricter supported recipes never gain time, slower supply or reduced falling speed")
 
 
 func _test_progress_replays_and_contexts() -> void:

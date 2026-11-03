@@ -297,6 +297,10 @@ func check_finish_header(app, view) -> void:
 		for button: Control in view.powerup_buttons.values():
 			if button.visible:
 				bottom = maxf(bottom, button.get_global_rect().end.y)
+		if view._practice_panel.visible and not view._compact_hud:
+			bottom = maxf(bottom, view._combo_hud.get_global_rect().end.y)
+			if view.game.boss.active():
+				bottom = maxf(bottom, view._global_rect(view._boss_view._hud).end.y)
 		check(absf(bottom - (playfield.end.y - 12.0 / s)) < 0.1,
 			"The board and collection controls retain twelve-pixel bottom padding" + context)
 		var chest: Rect2 = view._global_rect(view.chest_meter_rect())
@@ -394,6 +398,8 @@ func check_finish_header(app, view) -> void:
 		if dimensions == Vector2i(624, 1119):
 			var authored: bool = view.game.uses_authored_morphology()
 			var horizontal_budget: float = playfield.size.x - (8.0 if authored else 12.0) / s
+			if view._practice_panel.visible:
+				horizontal_budget -= view._practice_panel.size.x + (8.0 if authored else 12.0) / s
 			if view._compact_hud:
 				horizontal_budget -= paid_area.size.x + (8.0 if authored else 12.0) / s
 			var top_limit: float = playfield.position.y + 2.0 / s
@@ -521,6 +527,8 @@ func _check_playfield_layout(view, s: float, context: String) -> void:
 	if view._compact_hud:
 		for rectangle: Rect2 in regions.values():
 			occupied = occupied.merge(rectangle)
+	if view._practice_panel.visible:
+		occupied = occupied.merge(view._practice_panel.get_global_rect())
 	var horizontal_slack: float = view.size.x - occupied.size.x
 	var reserved_top: float = view.global_position.y
 	var headers: Array[Rect2] = []

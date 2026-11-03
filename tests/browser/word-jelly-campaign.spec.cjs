@@ -539,15 +539,9 @@ test('Challenge completes a full goal stage, increases difficulty and restores i
   expect(opening.campaign.pressure.word_limit).toBe(3);
   expect(opening.practice.words).toHaveLength(3);
   expect(opening.powerup_buttons.extra_time).toBeUndefined();
+  expect(opening.fill_mode).toEqual({ enabled: true, locked: true });
+  let capturedBatchGain = false;
   for (let batch = 0; batch < 10 && (await jelly(page)).campaign.challenge_stage < 2; batch++) {
-    if (batch > 0) {
-      for (let supply = 0; supply < 2; supply++) {
-        const state = await jelly(page);
-        await pressRect(page, state.preview.rect);
-        await expect.poll(async () => (await jelly(page)).generated_tiles).toBeGreaterThan(state.generated_tiles);
-        await expect.poll(async () => (await jelly(page)).tiles.every(tile => tile.settled)).toBe(true);
-      }
-    }
     await expect.poll(async () => (await jelly(page)).powerup_buttons.auto_merge.enabled).toBe(true);
     await pressRect(page, (await jelly(page)).powerup_buttons.auto_merge.rect);
     await expect.poll(async () => (await jelly(page)).powerup.active,
@@ -561,16 +555,22 @@ test('Challenge completes a full goal stage, increases difficulty and restores i
     await pressRect(page, ready.collect_button.rect);
     await expect.poll(async () => (await jelly(page)).cleared_pairs).toBeGreaterThan(before);
     await expect.poll(async () => (await jelly(page)).collection_batch.active).toBe(false);
-    if (batch === 0) {
-      const gained = await jelly(page);
+    const gained = await jelly(page);
+    if (gained.campaign.challenge_stage > opening.campaign.challenge_stage) {
       expect(gained.stage.time_bonus.visible).toBe(true);
       expect(gained.stage.time_bonus.seconds).toBeGreaterThan(0);
+      expect(gained.stage.time_bonus.seconds).toBeLessThanOrEqual(12);
       expect(gained.stage.time_bonus.seconds).toBeLessThanOrEqual(gained.campaign.seconds_added);
       expect(gained.stage.time_bonus.text).toMatch(/^\+(?:\d+(?:\.\d)?|<0\.1)s$/);
       await capture(page, info, 'challenge-actual-time-gain');
+      capturedBatchGain = true;
+    } else {
+      expect(gained.campaign.seconds_added).toBe(0);
+      expect(gained.stage.time_bonus.visible).toBe(false);
     }
   }
   const after = await jelly(page);
+  expect(capturedBatchGain).toBe(true);
   expect(after.campaign.challenge_stage).toBeGreaterThanOrEqual(2);
   expect(after.campaign.seconds_remaining).toBeGreaterThan(0);
   expect(after.campaign.seconds_remaining).toBeLessThanOrEqual(90);

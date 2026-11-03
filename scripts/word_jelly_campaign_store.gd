@@ -242,7 +242,7 @@ func recipe(context: String, number: int) -> Dictionary:
 	return _context(context).recipes.get(str(number), {}).duplicate(true)
 
 
-func reserve_plan(context: String, plan: Dictionary) -> bool:
+func reserve_plan(context: String, plan: Dictionary, allow_pressure_refresh: bool = false) -> bool:
 	error = ""
 	if not _readable(context):
 		return false
@@ -259,9 +259,16 @@ func reserve_plan(context: String, plan: Dictionary) -> bool:
 		return false
 	var key: String = str(number)
 	if state.recipes.has(key):
-		if state.recipes[key] != reserved:
+		var original: Dictionary = state.recipes[key]
+		if original == reserved:
+			return true
+		var same_targets: bool = Catalog.RECIPE_KEYS.all(func(field: String) -> bool:
+			return field in ["seconds", "spawn_interval", "fall_speed_scale"] or original[field] == reserved[field])
+		if not allow_pressure_refresh or number != int(state.highest_cleared) + 1 or not state.pending.is_empty() \
+			or not same_targets or float(reserved.seconds) > float(original.seconds) \
+			or float(reserved.spawn_interval) > float(original.spawn_interval) \
+			or float(reserved.fall_speed_scale) < float(original.fall_speed_scale):
 			return _fail("This stage already has an immutable recipe. Replay its original saved targets.")
-		return true
 	if not _can_add_context(context):
 		return false
 	var next: Dictionary = _contexts.duplicate(true)

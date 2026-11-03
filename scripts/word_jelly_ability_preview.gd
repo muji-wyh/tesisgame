@@ -84,7 +84,7 @@ func present_auto_merge(level: int, word: Dictionary, steady: bool) -> bool:
 
 func description() -> String:
 	if _kind == "auto_merge":
-		return "Merge up to %d board Jellies.\nNew results use no extra slots." \
+		return "Finish up to %d Jellies.\nEach result is ready to collect." \
 			% Economy.auto_merge_capacity(_level)
 	var reach: String = "up to %d nearby Jellies" % _targets.size() if _level <= 4 \
 		else "its entire column" if _level == 5 else "its row and column" if _level == 6 \

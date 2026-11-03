@@ -379,12 +379,19 @@ func prepare_plan(words: Array, seed: int) -> Dictionary:
 	if not result.get("ok", false):
 		error = str(result.get("error", "This stage vocabulary is unavailable."))
 		return result
+	var refresh_pressure: bool = not challenge and selected_stage > store.highest_cleared(context_key) \
+		and store.pending(context_key).is_empty()
+	if refresh_pressure:
+		result = Catalog.tighten_plan_pressure(result)
+		if not result.get("ok", false):
+			error = str(result.error)
+			return result
 	if challenge:
 		var current: Array = result.words.filter(func(word: Dictionary) -> bool: return not _app._jelly_word_mastered(word))
 		var review: Array = result.words.filter(func(word: Dictionary) -> bool: return _app._jelly_word_mastered(word))
 		result.words = current + review
 		result.word_ids = result.words.map(func(word: Dictionary) -> String: return str(word.id))
-	if not challenge and not store.reserve_plan(context_key, result):
+	if not challenge and not store.reserve_plan(context_key, result, refresh_pressure):
 		error = store.error
 		return {"ok": false, "error": error}
 	result["merged_level_limit"] = store.merged_level()

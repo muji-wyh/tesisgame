@@ -62,7 +62,8 @@ function expectFragmentBadge(tile) {
   expect(y + height, 'The chest stack stays inside its jelly').toBeLessThanOrEqual(tile.rect[3] + 0.5);
 }
 
-async function start(page, info, balance, pipLevel = 0, { pauseOnReady = false, autoMergeLevel = 1 } = {}) {
+async function start(page, info, balance, pipLevel = 0,
+  { pauseOnReady = false, autoMergeLevel = 1, challenge = true } = {}) {
   const reducedMotion = info.project.use.reducedMotion || 'no-preference';
   await page.setViewportSize(/iphone|android|mobile/.test(info.project.name)
     ? { width: 393, height: 852 } : { width: 1473, height: 1175 });
@@ -78,11 +79,11 @@ async function start(page, info, balance, pipLevel = 0, { pauseOnReady = false, 
         }) + '\n');
   }, { balance, walletKey: WALLET_KEY, autoMergeLevel });
   const errors = await openGame(page, { reducedMotion });
-  await chooseMode(page, 'word_jelly', { challenge: true });
+  await chooseMode(page, 'word_jelly', { challenge });
   let opening;
   await expect.poll(async () => {
     const state = opening = await jelly(page);
-    return state.visible && !state.paused && state.phase === 'playing' && state.tiles.length === 56 &&
+    return state.visible && !state.paused && state.phase === 'playing' && state.tiles.length === (challenge ? 56 : 21) &&
       state.tiles.every(tile => tile.settled) &&
       Object.values(state.powerup_buttons || {}).filter(button => button.visible).length === 1;
   }, { timeout: 30000 }).toBe(true).catch(async error => {
@@ -295,7 +296,7 @@ function expectAutoMergeTimeline(evidence, completed) {
   const ordered = [...launches.values()].sort((a, b) => a.started_at - b.started_at);
   expect(ordered.length, 'Every completed pair was shown in transit').toBe(completed);
   expect(ordered.length).toBeGreaterThan(1);
-  expect(ordered[0].started_at, 'The first eligible pair launches immediately').toBeCloseTo(0, 5);
+  expect(ordered[0].started_at, 'The first eligible pair launches after the accepted 100 ms hit-stop').toBeCloseTo(0.1, 5);
   expect(ordered[1].started_at - ordered[0].started_at,
     'The next independent pair launches on the 100 ms beat while the first still flies').toBeCloseTo(AUTO_MERGE_BEAT, 5);
   for (const launch of ordered) {
@@ -319,18 +320,55 @@ function expectAutoMergeTimeline(evidence, completed) {
   return { frames: dragFrames, launches: ordered };
 }
 
-test('upgraded Auto merge limits original inputs while keeping its overlapping 100 ms launch rhythm', async ({ page }, info) => {
+test('upgraded Auto merge caps completed outputs while keeping its overlapping 100 ms launch rhythm', async ({ page }, info) => {
   test.setTimeout(300000);
-  const { errors, opening: before } = await start(page, info, 5000, 0,
-    { pauseOnReady: true, autoMergeLevel: 4 });
+  const { errors, opening } = await start(page, info, 5000, 0,
+    { pauseOnReady: true, autoMergeLevel: 4, challenge: false });
+  let before = opening;
+  expect(before.columns).toBe(7);
+  expect(before.rows).toBe(8);
+  expect(before.practice.compact).toBe(false);
+  expect(before.practice.rect[0] + before.practice.rect[2]).toBeLessThanOrEqual(before.board_rect[0] + 0.5);
   expect(before.powerup_buttons.auto_merge).toMatchObject({ auto_merge_level: 4, capacity: 6,
     capacity_badge: { visible: true, text: '6' } });
   const saved = await savedGrowth(page), bounds = await metrics(page);
   await beginTrace(page, 'auto-merge-100ms');
   await page.keyboard.press('p');
   await expect.poll(async () => (await jelly(page)).paused).toBe(false);
+  const rect = before.powerup_buttons.auto_merge.rect;
+  const hover = async () => {
+    await expect.poll(async () => {
+      const state = await jelly(page);
+      return state.powerup_buttons.auto_merge.enabled && state.tiles.every(tile => tile.settled) &&
+        state.spawn_interval - state.spawn_elapsed > 6;
+    }, { message: 'Observe settled inputs with a complete driver-interaction window before the next supply' }).toBe(true);
+    await page.mouse.move(bounds.x + (rect[0] + rect[2] / 2) * bounds.scale,
+      bounds.y + (rect[1] + rect[3] / 2) * bounds.scale);
+    await expect.poll(async () => (await jelly(page)).auto_merge_hover?.active,
+      { message: 'A real pointer hover forecasts the exported native Auto merge inputs' }).toBe(true);
+    const state = await jelly(page);
+    expect(state.auto_merge_hover.capacity).toBe(6);
+    expect(state.auto_merge_hover.result_count).toBeGreaterThan(0);
+    expect(state.auto_merge_hover.result_count).toBeLessThanOrEqual(6);
+    const planned = [...state.auto_merge_hover.input_ids].sort((a, b) => a - b);
+    expect(state.tiles.filter(tile => tile.completion_hint).map(tile => tile.id).sort((a, b) => a - b))
+      .toEqual(planned);
+    expect(state.tiles.every(tile => tile.match_dimmed === !planned.includes(tile.id))).toBe(true);
+    expect((await wallet(page)).balance).toBe(5000);
+    expect(state.paused).toBe(false);
+    expect(state.powerup.active).toBe(false);
+    return state;
+  };
+  await hover();
+  await capture(page, info, 'auto-merge-hover-inputs');
+  await page.mouse.move(bounds.x + 4, bounds.y + 4);
+  await expect.poll(async () => (await jelly(page)).auto_merge_hover.active).toBe(false);
+  expect((await jelly(page)).tiles.every(tile => !tile.completion_hint && !tile.match_dimmed)).toBe(true);
+  before = await hover();
+  const forecast = before.auto_merge_hover;
   await pressRect(page, before.powerup_buttons.auto_merge.rect, bounds);
   await expect.poll(async () => (await wallet(page)).balance).toBe(4400);
+  expect((await jelly(page)).auto_merge_hover.active).toBe(false);
   await expect.poll(async () => {
     const state = await jelly(page);
     return state.powerup.kind === 'auto_merge' && !state.powerup.active && state.powerup.stage === 'complete' &&
@@ -351,10 +389,18 @@ test('upgraded Auto merge limits original inputs while keeping its overlapping 1
   expect(after.powerup.total).toBe(after.powerup.completed);
   expect(after.merged_count - before.merged_count).toBe(after.powerup.completed);
   expect(after.powerup.capacity).toBe(6);
-  expect(after.powerup.affected_jellies).toBeLessThanOrEqual(6);
+  expect(after.powerup.completed_results).toBeGreaterThan(0);
+  expect(after.powerup.completed_results).toBeLessThanOrEqual(6);
+  expect(after.powerup.result_ids).toHaveLength(after.powerup.completed_results);
   const originalIds = new Set(before.tiles.map(tile => tile.id));
-  expect(forwardPairs(after).some(pair => pair.every(id => originalIds.has(id))),
-    'A capacity-limited use leaves other original pairs for a later purchase').toBe(true);
+  const survivingIds = new Set(after.tiles.map(tile => tile.id));
+  expect(before.tiles.filter(tile => !survivingIds.has(tile.id)).map(tile => tile.id).sort((a, b) => a - b))
+    .toEqual([...forecast.input_ids].sort((a, b) => a - b));
+  expect(after.powerup.completed_results).toBe(forecast.result_count);
+  expect(after.auto_merge_hover.active, 'Finishing under the pointer cannot latch the consumed preview').toBe(false);
+  expect(after.powerup.result_ids.every(id => after.tiles.some(tile =>
+    tile.id === id && tile.jelly_kind === 'merged')),
+    'Every counted output survives instead of being reused by another path').toBe(true);
   expect(progress(after), 'Auto merge leaves the resulting words for manual collection').toEqual(progress(before));
   // A short union can fall between rendered frames; later drag endpoints and
   // the final merged words still distinguish its results from fresh supply.

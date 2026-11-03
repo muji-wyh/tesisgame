@@ -241,9 +241,10 @@ func test_challenge_best_hud() -> void:
 		app._advance_ui(0.05)
 	check(view.game.stage_run.challenge_stage == 1 and view._practice_panel._record_badge.value == 5
 		and view._practice_panel._record_badge.is_visible_in_tree()
-		and view._practice_panel._title.visible and view._practice_panel._title.text.contains(":")
+		and view._stage_banner._label.visible and view._stage_banner._label.text.contains(":")
+		and not view._practice_panel._compact and view._practice_panel.get_rect().end.x <= view._board.position.x
 		and app._mode_heading.text == "Challenge · 1" and view.game.stage_run.remaining > 0.0,
-		"The phone Challenge puts its mode/Stage at the top and the real best in a sourced medal number without Goals +10s")
+		"The phone Challenge keeps its heading and clock, with the real best and pending goals in the left column")
 	await capture_ui("challenge-stage-1-best-5")
 	var goals: Array = view.game.stage_run.snapshot().practice.duplicate(true)
 	view.game.cells.clear()
@@ -311,7 +312,10 @@ func test_taste_hud() -> void:
 	run.challenge_stage = 3
 	run._challenge_goals.clear()
 	run._append_challenge_stage()
-	run._challenge_goals[0].current = mini(1, int(run._challenge_goals[0].required) - 1)
+	for index in range(run._challenge_goals.size()):
+		var goal: Dictionary = run._challenge_goals[index]
+		goal.current = int(goal.required) - 1 if index == 0 else int(goal.required)
+		goal.mastered = index != 0
 	view.game._sync_challenge_pressure()
 	view.game.cells.clear()
 	for index in range(3):
@@ -344,7 +348,7 @@ func test_taste_hud() -> void:
 		app._advance_ui(0.05)
 		if not awards.is_empty():
 			break
-	check(awards == [10.0], "A real completed Challenge goal owns exactly one ten-second award")
+	check(awards == [12.0], "The actual final pickup of a complete Challenge batch owns one twelve-second award")
 	var banner = view._stage_banner
 	banner.advance(0.12)
 	for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(1366, 768), Vector2i(844, 390)]:
@@ -352,9 +356,9 @@ func test_taste_hud() -> void:
 		for frame in range(6):
 			await process_frame
 		var bonus: Dictionary = banner.snapshot().time_bonus
-		check(bonus.get("visible", false) and bonus.get("text", "") == "+10s"
+		check(bonus.get("visible", false) and bonus.get("text", "") == "+12s"
 			and is_equal_approx(float(bonus.seconds), awards[0]),
-			"Desktop, phone and short landscape visibly name the real time gain, not a static Goals +10s hint")
+			"Desktop, phone and short landscape visibly name the real batch gain rather than a per-goal hint")
 		if bonus.has("rect"):
 			var values: Array = bonus.rect
 			var rect := Rect2(values[0], values[1], values[2], values[3])
@@ -381,7 +385,13 @@ func test_taste_hud() -> void:
 	check(banner.snapshot().time_bonus == frozen, "Pausing freezes the same visible award instead of consuming it")
 	view.pause(false)
 	banner.advance(2.0)
-	run._challenge_goals[1].current = int(run._challenge_goals[1].required) - 1
+	var last_word: String = str(view.game.cells[0].word.id)
+	for goal: Dictionary in run._challenge_goals:
+		if int(goal.stage) != run.challenge_stage:
+			continue
+		var final_word: bool = str(goal.word_id) == last_word
+		goal.current = int(goal.required) - 1 if final_word else int(goal.required)
+		goal.mastered = not final_word
 	run.elapsed = run.initial_seconds + run._challenge_added_seconds - 86.5
 	run.advance(0.0)
 	app._refresh_jelly_stage_targets()
@@ -393,7 +403,7 @@ func test_taste_hud() -> void:
 			break
 	check(awards.size() == 2 and awards[1] > 3.4 and awards[1] < 5.0 and run.remaining <= 90.0
 		and is_equal_approx(float(banner.snapshot().time_bonus.seconds), awards[1]),
-		"A capped award displays the actual fractional headroom without pretending ten seconds were added")
+		"A capped complete-batch award displays only its actual fractional headroom")
 	banner.present_time_bonus(2.0)
 	check(awards.size() == 2 and is_equal_approx(float(banner.snapshot().time_bonus.seconds), awards[1] + 2.0),
 		"Closely spaced awards combine visibly without issuing any additional gameplay award")
@@ -662,6 +672,119 @@ func test_challenge_results() -> void:
 		await process_frame
 
 
+func test_space_pressure(data, words: Array) -> void:
+	var view := Jelly.new()
+	root.add_child(view)
+	view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var plan: Dictionary = Catalog.make_plan(99, words, 3, 71)
+	plan.merged_level_limit = 1
+	plan.boss = BossCatalog.encounter(99)
+	check(view.configure(plan.words, 3, Data.theme("spring"), data.chests, false, 71)
+		and view.game.bind_stage(plan), "Render the real finale with free Lv1 rescue and sourced visible decoys")
+	view.set_process(false)
+	var cues: Array[String] = []
+	view.audio_requested.connect(func(cue: String) -> void: cues.append(cue))
+	view.set_stage_progress(view.game.stage_run.snapshot(), false)
+	view._layout()
+	view.game.boss._attack_in = 10000.0
+	view.game.set_fill_mode(false)
+	view.game.cells.clear()
+	for index in range(Jelly.WordModel.CAPACITY):
+		var word: Dictionary = plan.words[index % plan.words.size()]
+		var tile: Dictionary = view.game._new_word_root(word)
+		view.game._set_merged_word(tile, word, 1, true)
+		tile.merge({"column": index % Jelly.WordModel.COLUMNS, "row": int(index / Jelly.WordModel.COLUMNS),
+			"age": 100.0, "falling": false, "settling": false, "arrival": false}, true)
+		view.game.cells.append(tile)
+	var ids: Array = view.game.cells.slice(0, 4).map(func(tile: Dictionary) -> int: return int(tile.id))
+	view.game.step(0.01)
+	check(view.game.collect(int(ids[0])), "One committed free Jelly begins a partial real rescue")
+	view.game.step(Jelly.WordModel.COLLECT_SECONDS + 0.001)
+	view.game.step(Jelly.BossView.HIT_FLIGHT_SECONDS + 0.001)
+	view.game.step(maxf(0.0, 1.05 - view.game.full_elapsed))
+	view.game.stage_run.advance(view.game.stage_run.remaining - 6.0)
+	view.set_stage_progress(view.game.stage_run.snapshot(), false)
+	view._sync_tiles()
+	view._sync_boss()
+	view._refresh_controls()
+	view._refresh_danger()
+	check(view.danger_feedback().source == "full" and view.danger_feedback().duration == 6.0,
+		"The six-second rescue outranks a six-second stage deadline by actual remaining time, not unlike elapsed values")
+	check(not cues.has("danger_end"), "A partial pickup cannot announce the end of an active multi-space rescue")
+	check(view._word_reveal._reading_exclusions.has(view._board)
+		and view._word_reveal._reading_exclusions.has(view._preview_rect)
+		and view._word_reveal._reading_exclusions.has(view._stage_banner._badge),
+		"Recovery protects live cells, Next and the clock immediately, without depending on a resize")
+	check(view._boss_view._doubles[0].visible and not view._boss_view._doubles[1].visible,
+		"The first real hit visibly disperses one starting decoy rather than hitting an invisible shield")
+	for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(390, 664), Vector2i(1366, 768), Vector2i(844, 390)]:
+		root.size = dimensions
+		for frame in range(6):
+			await process_frame
+		view._layout()
+		view._refresh_danger()
+		var hint: Label = view._recovery_hint
+		var badge: Rect2 = view._merged_level_badge.get_rect()
+		check(not view._layout_too_small and hint.is_visible_in_tree() and hint.text == "Free 3 spaces"
+			and not view._merged_level_badge.visible,
+			"The actual one-slot rescue stays urgent and names three more spaces at %s" % dimensions)
+		check(badge.is_equal_approx(hint.get_rect()) and hint.mouse_filter == Control.MOUSE_FILTER_IGNORE,
+			"The hint replaces only the secondary badge bounds without taking input ownership")
+		var font: Font = hint.get_theme_font("font")
+		var pixels: int = hint.get_theme_font_size("font_size")
+		check(font.get_string_size(hint.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x <= hint.size.x + 0.1
+			and font.get_height(pixels) <= hint.size.y + 0.1,
+			"The complete recovery instruction fits its real native font, not an approximate character width")
+		for reserved: Rect2 in [view._board, view._preview_rect, view._practice_panel.get_rect(),
+				view.collect_button.get_rect(), view._combo_hud.get_rect(), view._boss_view._character_rect]:
+			check(not hint.get_rect().intersects(reserved), "Recovery text leaves the board, left goals, actions and Boss unoccluded")
+		check(not view._practice_panel._compact and view._practice_panel.get_rect().end.x <= view._board.position.x,
+			"More pressure never relocates the goals or shrinks them into a top carousel")
+		check(view.danger_feedback().active and view._danger_frame.is_visible_in_tree(),
+			"The sourced warning is actually drawn during partial recovery")
+		for entry in view._word_reveal._entries:
+			var envelope := Rect2(view._word_reveal.position + entry.rest_position - entry.size * 0.11, entry.size * 1.22)
+			for protected: Rect2 in [view._board, view._preview_rect, view._stage_banner._badge, view._recovery_hint.get_rect()]:
+				check(not entry._visual.is_visible_in_tree() or not envelope.intersects(protected),
+					"A short-screen reading popover cannot obscure the well, Next, clock or actual rescue instruction")
+		await capture_ui("recovery-three-spaces-%dx%d" % [dimensions.x, dimensions.y])
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+	root.content_scale_size = Vector2i(480, 480)
+	root.size = Vector2i(376, 852)
+	for frame in range(6):
+		await process_frame
+	view._layout()
+	check(not view._layout_too_small and view._recovery_hint.visible
+		and is_equal_approx(view.Style.ui_scale(view), 376.0 / 480.0),
+		"The warning and readable well survive the actual fractional Web canvas-items scale")
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+	root.size = Vector2i(393, 852)
+	for frame in range(6):
+		await process_frame
+	view.game.stage_run.advance(2.0)
+	view._refresh_danger()
+	check(view.danger_feedback().source == "stage" and view.danger_feedback().duration == 10.0,
+		"A now shorter actual stage deadline owns the same sourced frame with its own duration")
+	view.game.stage_run.advance(0.0)
+	view.set_reduced_motion(true)
+	view._refresh_danger()
+	check(not view._danger_frame.state.get("moving", true) and view._recovery_hint.visible,
+		"Reduced motion preserves the recovery instruction without flashing or traveling glints")
+	await capture_ui("recovery-reduced-motion")
+	for id: int in ids.slice(1):
+		check(view.game.collect(id), "Unpurchased Lv1 can complete the remaining real rescue")
+		view.game.step(Jelly.WordModel.COLLECT_SECONDS + 0.001)
+	view._refresh_controls()
+	view._layout()
+	check(view.game.full_elapsed < 0.0 and not view._recovery_hint.visible and view._merged_level_badge.visible,
+		"Only a real four-space rescue restores the ordinary owned-level badge")
+	check(cues.count("danger_end") == 1, "The real final rescue, not its intermediate pickups, owns the danger-end cue")
+	view.free()
+	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+	await process_frame
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1000, 760)
@@ -691,6 +814,11 @@ func _run() -> void:
 	check(data.load_all(), "Presentation contracts use the real vocabulary and acquired artwork")
 	var words: Array = data.words.filter(func(word: Dictionary) -> bool: return Data.word_age(word) == 3) \
 		.map(func(word: Dictionary) -> Dictionary: return Morphology.decorate(word))
+	if OS.get_cmdline_user_args().has("--pressure-only"):
+		await test_space_pressure(data, words)
+		print("Jelly space-pressure presentation: %d checks, %d failures" % [checks, failures])
+		quit(1 if failures else 0)
+		return
 	test_record_composition()
 	await test_map()
 	test_entry_and_lv1(data, words)
@@ -698,5 +826,6 @@ func _run() -> void:
 	await test_level_and_finale(data, words)
 	await test_challenge_best_hud()
 	await test_challenge_results()
+	await test_space_pressure(data, words)
 	print("Jelly presentation refinements: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

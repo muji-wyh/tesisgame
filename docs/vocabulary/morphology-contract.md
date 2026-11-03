@@ -196,14 +196,17 @@ pinned until that target completes, even if a different word becomes placeable
 partway through. Pause and exit draining
 retain the accepted obligation; the result records assisted ancestry.
 
-The live Auto merge tool additionally passes its remaining original-Jelly budget
-to `authored_completion_plan`. The resolver's optional `accept_plan` predicate
-checks the actual referenced inputs and required final picture before expanding
-a path or accepting its completion; a shorter, fitting path can still be found when another path
-is too large. Already generated results do not count as new original inputs.
+The live Auto merge tool limits complete output paths, not original ingredients
+or individual resolver steps. Each reserved path uses one slot and may consume
+all of its required roots and picture. Intermediate results stay in that path;
+the finished collectable result is excluded from further matching during the
+same use, so the advertised three products cannot collapse into one.
 Capacity belongs only to paid Auto merge, not a goal-family purchase or
 collection blast. A reserved path always finishes even when it uses the final
-available slot, and a nonfitting partial never authorizes payment.
+available slot, and a partial-only path never authorizes payment. The resolver's
+optional `accept_plan` predicate remains available for callers with additional
+semantic or placement constraints; output counts do not impose an ingredient
+budget on multipart words.
 
 The authored preview is a five-element lane array with up to five cards. An
 anchor contains the tile plus `preview_column` and `preview_span`. Its covered

@@ -288,7 +288,7 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /Pause dims the current screen without opening a dialog/);
   assert.match(help, /same button says Resume and gently bounces downward/);
   assert.match(help, /Tap Pause in the header[\s\S]*bounces downward to demonstrate pulling to finish/);
-  assert.match(help, /green card backgrounds fill with objective progress/);
+  assert.match(help, /green card backgrounds fill with objective progress/i);
   assert.match(help, /coins fly from that bonus to the header wallet; its digits roll upward as each coin arrives/);
   assert.match(help, /Finishing or an expired danger countdown shows the existing end animation and settlement over the frozen board, even without a chest/);
   assert.doesNotMatch(help, /ca onto t|letter parts fall|choose Spring, Summer|50 for two original parts or 100/);
@@ -308,6 +308,9 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /same-word pairs remain mergeable even at Lv9/);
   assert.doesNotMatch(help, /up to Lv6\b|two identical words of the same level/);
   assert.match(help, /Auto merge costs 600, 900, then 1200 coins/);
+  assert.match(help, /Hover or focus Auto merge to highlight the exact original Jellies its next use will merge, not every Jelly in the same family/);
+  assert.match(help, /Multi-step paths include all needed roots and pictures[\s\S]*without spending coins, pronouncing words or pausing play/);
+  assert.match(help, /pointer clicks release their acquired focus so selection cannot latch after completion/);
   assert.match(help, /Automatic pairs launch every 100 ms with a 320 ms flight, so consecutive flights overlap/);
   assert.match(help, /standalone Magnet button is removed[\s\S]*pending word goal[\s\S]*never substitutes a random target/);
   assert.match(help, /Treasure and the paid extra-time item are retired[\s\S]*Naturally earned chest fragments and treasure rewards remain unchanged/);
@@ -321,7 +324,9 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /first-use guide for the real 50-coin Lv2 action/);
   assert.match(help, /paid upgrade whose final save fails can retry without another debit/);
   assert.match(help, /separate Merged Jelly and Auto merge categories/);
-  assert.match(help, /Auto merge starts at free Lv1 with up to 3 original board Jellies per use/);
+  assert.match(help, /Auto merge starts at free Lv1 with up to 3 completed, collectable Jellies per use/);
+  assert.match(help, /Each completed result uses one slot and stays separate during this use/);
+  assert.match(help, /100 ms world hit-stop with local violet magic[\s\S]*without a dark overlay/);
   assert.match(help, /Each permanent level adds one Jelly, reaching 11 at Lv9/);
   assert.match(help, /gel-and-number badge shows the actual owned capacity, not the last inspected preview/);
   assert.match(help, /Retry follows the original pending upgrade even after switching category/);
@@ -333,7 +338,9 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /continuous upward route with 99 stages[\s\S]*Eleven scenic chapters[\s\S]*not separate pages/);
   assert.match(help, /scroll directly between adjacent stages across chapter boundaries[\s\S]*Future chapters can be inspected without unlocking them/);
   assert.match(help, /Remaining time fills the progress background, the clock is on the right, and larger rating stars/);
-  assert.match(help, /ten-second flashing countdown; clearing space cancels it/);
+  assert.match(help, /Stage 1 keeps a ten-second full-board warning and one-space rescue/);
+  assert.match(help, /Stages 2-17 need two reachable spaces in eight seconds[\s\S]*63-99 need four in six/);
+  assert.match(help, /Free N spaces[\s\S]*Inaccessible holes and reserved cells do not count[\s\S]*Recovery pauses new Fill, Next and timed dispatch/);
   assert.match(help, /independent stage deadline also flashes the border in its final ten seconds/);
   assert.match(help, /Pauses, reading and automatic action sequences preserve active time/);
   assert.doesNotMatch(help, /refills the remaining-time background without restoring lost stars/);
@@ -347,9 +354,16 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /Jelly Upgrades opens the existing permanent Jelly and Auto merge page without spending automatically, repeating rewards/);
   assert.match(help, /Bramble's real raised-hand taunt and wink[\s\S]*never delays Try again, Jelly Upgrades or Back to map/);
   assert.match(help, /Cleared stages, voluntary exits and storage errors do not trigger the taunt/);
+  assert.match(help, /Pending Jelly Words goals stay in a vertical column to the left of the board on phones and larger screens/);
+  assert.doesNotMatch(help, /Narrow layouts use horizontally scrollable illustrated word chips/);
   assert.match(help, /The paid \+30 sec item is removed; numbered-stage time cannot be bought/);
   assert.match(help, /Lost timed stars are not restored during the attempt/);
   assert.match(help, /Survival Challenge starts with ninety seconds and ends at zero[\s\S]*Complete every target in the current batch/);
+  assert.match(help, /complete batch awards 12 seconds for batches 1-5, 10 for 6-10, then 8/);
+  assert.match(help, /At most eight active words rotate through the sixteen reviewed candidates[\s\S]*quotas rise every four batches, capped at five/);
+  assert.doesNotMatch(help, /A completed target adds ten seconds|Existing saved recipes retain their exact timing and words/);
+  assert.match(help, /actual 21 opening pieces and seven-piece supply[\s\S]*7\.5 seconds[\s\S]*1\.6 times/);
+  assert.match(help, /Only a fresh uncleared frontier may tighten its timing[\s\S]*Cleared replay timing, pending settlements, best stars and purchased upgrades remain unchanged/);
   assert.match(help, /summary stays open until the player chooses Back to map, Try again or Jelly Upgrades/);
   assert.match(help, /All three actions stay still without breathing/);
   assert.match(help, /clock-side \+Xs badge shows the actual added duration, including fractional headroom/);

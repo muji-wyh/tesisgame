@@ -167,9 +167,9 @@ func test_challenge_pressure_and_blocked_top() -> void:
 	model.step(0.01)
 	check(model.phase == "playing" and model.stage_run.outcome.is_empty() and model.full_elapsed >= 0.0,
 		"A full challenge starts the flashing danger countdown instead of failing immediately")
-	model.step(Model.FULL_SECONDS - 0.1)
+	model.step(model.full_warning_seconds() - 0.1)
 	check(model.phase == "playing" and model.stage_run.outcome.is_empty(),
-		"The board remains playable throughout the ten-second warning")
+		"The board remains playable throughout its actual eight-second Challenge warning")
 	model.step(0.1)
 	check(model.phase == "finished" and model.stage_run.outcome == "blocked"
 		and model.finish_round().campaign.stars == 0,
@@ -263,29 +263,30 @@ func test_challenge_goal_time() -> void:
 	var first: Dictionary = initial[0]
 	check(initial.size() == 3 and first.required == 1 and not first.mastered,
 		"The first Challenge stage presents a complete batch of three one-word targets")
-	check(attempt.record_collection("goal:first", str(first.word_id)) and is_equal_approx(attempt.remaining, 79.75)
-		and is_equal_approx(attempt.take_time_bonus(), 10.0),
-		"Completing its actual word target grants exactly ten seconds instead of a random pickup roll")
+	check(attempt.record_collection("goal:first", str(first.word_id)) and is_equal_approx(attempt.remaining, 69.75)
+		and is_equal_approx(attempt.take_time_bonus(), 0.0),
+		"Completing one word progresses the batch without farming individual time refunds")
 	check(not attempt.record_collection("goal:first", str(first.word_id))
-		and attempt.take_time_bonus() == 0.0 and is_equal_approx(attempt.remaining, 79.75),
+		and attempt.take_time_bonus() == 0.0 and is_equal_approx(attempt.remaining, 69.75),
 		"A repeated collection receipt cannot repeat the goal or its time reward")
 	check(attempt.challenge_stage == 1 and attempt.snapshot().pressure.level == 1,
 		"Completing just one target cannot skip to the next Challenge stage")
 	attempt.record_collection("goal:ordinary", str(first.word_id))
-	check(is_equal_approx(attempt.remaining, 79.75) and attempt.take_time_bonus() == 0.0,
+	check(is_equal_approx(attempt.remaining, 69.75) and attempt.take_time_bonus() == 0.0,
 		"An already completed target cannot randomly grant time on further pickups")
 	attempt.record_collection("goal:second", str(initial[1].word_id))
-	check(is_equal_approx(attempt.remaining, 89.75) and attempt.challenge_stage == 1,
-		"Each completed target grants time but the stage still waits for the entire batch")
+	check(is_equal_approx(attempt.remaining, 69.75) and attempt.challenge_stage == 1,
+		"The second completed word still waits for the entire batch before returning time")
 	attempt.record_collection("goal:third", str(initial[2].word_id))
-	check(is_equal_approx(attempt.remaining, 90.0), "A target reward clamps remaining time instead of banking time above ninety seconds")
+	check(is_equal_approx(attempt.remaining, 81.75) and attempt.take_time_bonus() == 12.0,
+		"The entire first batch owns exactly one twelve-second refund")
 	var next: Array = attempt.snapshot().practice.filter(func(goal: Dictionary) -> bool: return int(goal.stage) == 2)
 	check(attempt.challenge_stage == 2 and next.size() == 4 and attempt.challenge_pressure().fall_speed_scale > 1.0
 		and attempt.challenge_pressure().spawn_interval < 20.0,
 		"Only all three finished targets start Stage 2, which has more targets and harder actual supply")
 	attempt.advance(0.1)
-	check(is_equal_approx(attempt.remaining, 89.9), "The capped fractional extension survives the next timer tick exactly")
-	attempt.advance(89.9)
+	check(is_equal_approx(attempt.remaining, 81.65), "The batch extension survives the next fractional timer tick exactly")
+	attempt.advance(81.65)
 	check(attempt.check_deadline() and attempt.outcome == "timeout" and attempt.stars_now() == 0,
 		"An expired Challenge really ends in Game Over without a stage clear or stars")
 
@@ -326,9 +327,9 @@ func test_level_weighted_goals() -> void:
 	attempt.advance(20.0)
 	var first: Dictionary = attempt.snapshot().practice[0]
 	check(attempt.record_collection("weighted:challenge", str(first.word_id), 3)
-		and attempt.snapshot().practice[0].current == 2 and attempt.snapshot().practice[0].mastered
-		and attempt.remaining == 80.0 and attempt.take_time_bonus() == 10.0,
-		"One higher-level Jelly completes its Challenge quota with only one ten-second target award")
+		and attempt.snapshot().practice[0].current == 1 and attempt.snapshot().practice[0].mastered
+		and attempt.remaining == 70.0 and attempt.take_time_bonus() == 0.0,
+		"One higher-level Jelly completes its actual word quota without farming time or other targets")
 	check(attempt.challenge_stage == 3 and attempt.collection_count == 3,
 		"Excess units neither complete other words nor skip a Challenge batch")
 

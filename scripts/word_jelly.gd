@@ -43,6 +43,8 @@ var _goal_merge_id: String = ""
 var _goal_merge_price: int = 0
 var _goal_hover_word: String = ""
 var _goal_hover_elapsed: float = 0.0
+var _auto_merge_hovered: bool = false
+var _auto_merge_hover_elapsed: float = 0.0
 var _fill_preference: bool = false
 var _fill_button := FillButton.new()
 var _powerup_effects: PowerupEffects
@@ -99,6 +101,7 @@ var _view_hints_ready: bool = false
 var _view_hint_source: int = -1
 var _boss_view: BossView
 var _merged_level_badge := LevelBadge.new()
+var _recovery_hint := Style.label("", 12)
 var _preview_drop_available: bool = false
 var _processing_generation: int = -1
 var _tiles_pending: bool = false
@@ -189,6 +192,13 @@ func _init() -> void:
 	_merged_level_badge.z_index = 36
 	add_child(_merged_level_badge)
 	_merged_level_badge.hide()
+	_recovery_hint.name = "WordJellyRecoveryHint"
+	_recovery_hint.z_index = 36
+	_recovery_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_recovery_hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_recovery_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	add_child(_recovery_hint)
+	_recovery_hint.hide()
 	collect_button = CollectButton.new()
 	collect_button.name = "WordJellyCollectAll"
 	collect_button.pressed.connect(_collect_all)
@@ -211,6 +221,8 @@ func _init() -> void:
 		var button := PowerupButton.new()
 		button.configure(kind, game.powerup_price(kind), reduced_motion)
 		button.pressed.connect(_activate_powerup.bind(kind))
+		if kind == "auto_merge":
+			button.preview_changed.connect(_auto_merge_hover_changed)
 		button.z_index = 5
 		add_child(button)
 		powerup_buttons[kind] = button
@@ -413,6 +425,10 @@ func cancel_input() -> void:
 	_end_view_update()
 	_goal_hover_word = ""
 	_goal_hover_elapsed = 0.0
+	_auto_merge_hovered = false
+	_auto_merge_hover_elapsed = 0.0
+	if powerup_buttons.has("auto_merge"):
+		powerup_buttons.auto_merge.clear_preview()
 	if _practice_panel != null:
 		_practice_panel._clear_hover()
 	_fusion_tap.clear()
@@ -834,7 +850,8 @@ func _collection_started(fusion: Dictionary) -> void:
 	_publish()
 
 func _collected(event_id: String, word: Dictionary, coins: int, fragments: int) -> void:
-	_cue("danger_end")
+	if game.full_elapsed < 0.0:
+		_cue("danger_end")
 	collect_button.beat()
 	var origin: Vector2 = _collection_origins.get(event_id, get_global_rect().get_center())
 	_collection_origins.erase(event_id)
@@ -1179,7 +1196,8 @@ func _activate_powerup(kind: String) -> void:
 		return
 	if _keyboard_source >= 0:
 		return
-	game.activate_powerup(kind)
+	if game.activate_powerup(kind):
+		_pose_powerup()
 	_refresh_controls()
 	_publish()
 
@@ -1221,6 +1239,24 @@ func _goal_hovered(word_id: String) -> void:
 	_view_hints_ready = false
 	_refresh_marks()
 	_publish()
+
+
+func _auto_merge_hover_changed(active: bool) -> void:
+	if active == _auto_merge_hovered:
+		return
+	_auto_merge_hovered = active
+	_auto_merge_hover_elapsed = 0.0
+	_view_hints_ready = false
+	_refresh_marks()
+	_publish()
+
+
+func _auto_merge_hover_preview() -> Dictionary:
+	if not _auto_merge_hovered or not _can_play() or _source >= 0 or _keyboard_source >= 0 \
+		or _pointer != NO_POINTER or _finish_is_pulling() or not _goal_hover_word.is_empty() \
+		or game.powerup_active() or game.collection_batch_active():
+		return {"capacity": game.auto_merge_capacity(), "result_count": 0, "input_ids": []}
+	return game.auto_merge_preview()
 
 
 func _set_fill_mode(enabled: bool) -> void:
@@ -1282,6 +1318,22 @@ func _pose_powerup() -> void:
 		var tint := Color.from_hsv(float(CollectionEffects.profile(int(impact.level)).hue), 0.62, 1.0)
 		_powerup_stamp(stamps, COLLECTION_GLOW, origin, Vector2.ONE * unit * 1.20, Color(tint, 0.65))
 		_powerup_stamp(stamps, POWERUP_RAYS, origin, Vector2.ONE * unit * 0.80, Color(tint.lightened(0.35), 0.72))
+	if bool(state.get("active", false)) and state.get("kind") == "auto_merge" \
+		and float(state.clock) < WordModel.POWERUP_DRAG_SECONDS:
+		var age: float = float(state.clock)
+		var strength: float = 1.0 - smoothstep(WordModel.BLAST_FREEZE_SECONDS, WordModel.POWERUP_DRAG_SECONDS, age)
+		var center: Vector2 = _board.get_center()
+		var tint := Color("#8e68b5")
+		_powerup_stamp(stamps, COLLECTION_GLOW, center, Vector2.ONE * unit * (1.8 if reduced_motion else 2.8 + age * 2.0),
+			Color(tint, strength * (0.24 if reduced_motion else 0.72)))
+		if not reduced_motion:
+			_powerup_stamp(stamps, POWERUP_RAYS, center, Vector2.ONE * unit * (1.8 + age * 5.0),
+				Color(tint.lightened(0.2), strength * 0.95))
+			for index in range(4):
+				var angle: float = float(index) * TAU / 4.0 + PI * 0.25
+				var point: Vector2 = center + Vector2.from_angle(angle) * unit * (0.65 + age * 2.0)
+				_powerup_stamp(stamps, POWERUP_SPARKLE, point, Vector2.ONE * unit * 0.22,
+					Color(tint.lightened(0.25), strength * 0.9), angle)
 	if bool(state.get("active", false)) and str(state.get("kind", "")) == "blast":
 		_pose_blast_marks(state, stamps, unit)
 	if bool(state.get("active", false)) and str(state.get("kind", "")) in ["auto_merge", "family_merge", "blast"]:
@@ -1459,6 +1511,8 @@ func _advance_board_presentation(delta: float) -> void:
 		_completion_elapsed += delta
 	if not _goal_hover_word.is_empty():
 		_goal_hover_elapsed += delta
+	if _auto_merge_hovered:
+		_auto_merge_hover_elapsed += delta
 
 
 func _process(delta: float) -> void:
@@ -1556,9 +1610,13 @@ func _refresh_completion_hints() -> void:
 		for id: int in _tiles:
 			if game.family_word_id(id) == _goal_hover_word and not game.is_fusing(id) and game.boss_interactable(id, false):
 				matching_ids.append(id)
-		for id: int in _tiles:
-			_tiles[id].set_completion_hint(id in matching_ids, _goal_hover_elapsed, reduced_motion)
-			_tiles[id].set_match_dimmed(not matching_ids.is_empty() and id not in matching_ids)
+		_set_hover_matching(matching_ids, _goal_hover_elapsed)
+		return
+	var automatic: Dictionary = _auto_merge_hover_preview()
+	if int(automatic.result_count) > 0:
+		var matching_ids: Array[int] = []
+		matching_ids.assign(automatic.input_ids)
+		_set_hover_matching(matching_ids, _auto_merge_hover_elapsed)
 		return
 	var source: int = (_source if _source >= 0 else _keyboard_source) if _can_play() and not game.collection_batch_active() else -1
 	if _view_update_active and _view_hints_ready and _view_hint_source == source:
@@ -1582,6 +1640,13 @@ func _refresh_completion_hints() -> void:
 		has_matches = has_matches or eligible
 	for id: int in _tiles:
 		_tiles[id].set_match_dimmed(has_matches and id != source and not _tiles[id].completion_hint)
+
+
+func _set_hover_matching(ids: Array[int], elapsed: float) -> void:
+	for id: int in _tiles:
+		_tiles[id].set_completion_hint(id in ids, elapsed, reduced_motion)
+		_tiles[id].set_match_dimmed(not ids.is_empty() and id not in ids)
+
 
 func _drag_target() -> int:
 	# A nearby valid match must remain reachable through crowded neighbors.
@@ -2012,7 +2077,7 @@ func _fusion_completed(fusion: Dictionary, _awarded: int) -> void:
 			_reflow.erase(_source)
 			_refresh_marks()
 			return
-	if game._has_free_cell():
+	if game.full_elapsed < 0.0:
 		_cue("danger_end")
 	if str(fusion.get("operation", "")) == "merge" and not reduced_motion:
 		var visual: Dictionary = _fusion_visuals.get(str(fusion.attempt_id), {})
@@ -2125,8 +2190,29 @@ func _sync_chest_tap() -> void:
 	if has_header_chest() and can_finish_round():
 		_header_chest_host.show()
 
+func _recovery_reading_bounds() -> Array[Rect2]:
+	if not _configured or game.stage_run == null or game.full_elapsed < 0.0 \
+		or game.phase != "playing" or game.stage_ending():
+		return []
+	var bounds: Array[Rect2] = [_board, _preview_rect, _recovery_hint.get_rect()]
+	if _stage_banner.visible:
+		bounds.append(_stage_banner._badge)
+	return bounds
+
+
 func _refresh_controls() -> void:
-	_merged_level_badge.visible = _configured and game.stage_run != null
+	var show_recovery: bool = _configured and game.stage_run != null and game.full_elapsed >= 0.0 \
+		and game.phase == "playing" and not game.stage_ending()
+	if _word_reveal != null:
+		_word_reveal.set_reading_exclusions(_recovery_reading_bounds())
+	_recovery_hint.visible = show_recovery
+	if show_recovery:
+		var recovery: Dictionary = game.danger_recovery_snapshot()
+		var needed: int = int(recovery.spaces_needed)
+		_recovery_hint.text = ("Free 1 space" if needed == 1 else "Free %d spaces" % needed) if needed > 0 else "Room for Next"
+		_recovery_hint.set("accessibility_name", "Clear %d more reachable spaces to stop the full-board countdown." % needed \
+			if needed > 0 else "Make room for an incoming Next jelly to stop the full-board countdown.")
+	_merged_level_badge.visible = _configured and game.stage_run != null and not show_recovery
 	_merged_level_badge.set_level(game.merged_level_limit)
 	var board_locked: bool = game.collection_batch_active() or game.powerup_active() or game.stage_ending()
 	var size_paused_finish: bool = _layout_too_small and can_finish_round()
@@ -2204,21 +2290,26 @@ func _reward_pickup_ready() -> bool:
 func danger_feedback() -> Dictionary:
 	var elapsed: float = float(game.full_elapsed)
 	var source: String = "full" if elapsed >= 0.0 else ""
+	var duration: float = game.full_warning_seconds()
+	var remaining: float = duration - elapsed if elapsed >= 0.0 else INF
 	if _configured and game.stage_run != null \
 		and game.stage_run.outcome.is_empty() and game.stage_run.remaining <= STAGE_WARNING_SECONDS:
 		var deadline_elapsed: float = STAGE_WARNING_SECONDS - game.stage_run.remaining
-		if deadline_elapsed > elapsed:
+		if game.stage_run.remaining < remaining:
 			elapsed = deadline_elapsed
 			source = "stage"
+			duration = STAGE_WARNING_SECONDS
+			remaining = game.stage_run.remaining
 	var active: bool = _can_play() and not game.powerup_active() and not game.stage_ending() and elapsed >= 0.0
-	return {"active": active, "source": source, "elapsed": elapsed,
+	return {"active": active, "source": source, "elapsed": elapsed, "duration": duration,
+		"remaining": remaining if not source.is_empty() else -1.0,
 		"strength": DangerFrame.primary_pulse(elapsed, reduced_motion) if active else 0.0}
 
 
 func _refresh_danger() -> void:
 	if _danger_frame != null:
 		var warning: Dictionary = danger_feedback()
-		_danger_frame.set_warning(bool(warning.active), float(warning.elapsed), WordModel.FULL_SECONDS, reduced_motion)
+		_danger_frame.set_warning(bool(warning.active), float(warning.elapsed), float(warning.duration), reduced_motion)
 
 func _layout() -> void:
 	if _loot_icon == null or size.x <= 0.0 or size.y <= 0.0:
@@ -2248,6 +2339,15 @@ func _layout() -> void:
 		top_hud_height += 42.0 / s
 	var content_top: float = top_hud_height + (2.0 if authored else 12.0) / s
 	var available := Vector2(size.x - edge * 2.0, size.y - bottom_padding - content_top)
+	var goal_width: float = 0.0
+	if _practice_panel.visible:
+		var minimum_goal: float = clampf(available.x - hud_gap - 32.0 * WordModel.COLUMNS / s, 88.0 / s, 112.0 / s)
+		goal_width = clampf(available.x * 0.20, minimum_goal, 232.0 / s)
+	var goal_extent: float = goal_width + hud_gap if goal_width > 0.0 else 0.0
+	var play_available := available - Vector2(goal_extent, 0.0)
+	var side_budget: float = (play_available.x - hud_gap - 32.0 * WordModel.COLUMNS / s) * s
+	var footer_boss: bool = boss_layout and side_budget < 88.0 and not is_equal_approx(side_budget, 88.0)
+	var footer_boss_width: float = minf(128.0 / s, maxf(88.0 / s, available.x * 0.36)) if footer_boss else 0.0
 	var action_height: float = (44.0 if boss_layout else 56.0) / s
 	var tool_kinds: Array[String] = ["auto_merge"]
 	var tool_count: int = tool_kinds.size()
@@ -2257,6 +2357,8 @@ func _layout() -> void:
 		hud_width = maxf(hud_width, 184.0 / s)
 	var side_rows: int = ceili(float(tool_count) / side_columns)
 	var footer_width: float = minf(size.x - edge * 2.0, 388.0 / s)
+	if footer_boss:
+		footer_width = maxf(88.0 / s, available.x - footer_boss_width - hud_gap)
 	var footer_columns: int = clampi(floori((footer_width + tool_gap) / (88.0 / s + tool_gap)), 1, tool_count)
 	if tool_count == 3 and footer_columns == 2:
 		footer_columns = 1
@@ -2276,25 +2378,32 @@ func _layout() -> void:
 	if tool_count == 3 and fitting_columns == 2:
 		fitting_columns = 3
 	var fitting_width: float = (88.0 * fitting_columns + 8.0 * (fitting_columns - 1)) / s
-	if fitting_width + 32.0 * WordModel.COLUMNS / s + hud_gap <= available.x:
+	if fitting_width + 32.0 * WordModel.COLUMNS / s + hud_gap <= play_available.x:
 		side_columns = fitting_columns
 		side_rows = ceili(float(tool_count) / side_columns)
 		hud_width = maxf(hud_width, fitting_width)
 	if boss_layout:
 		hud_width = minf(hud_width, maxf(88.0 / s,
-			available.x - hud_gap - 32.0 * WordModel.COLUMNS / s))
+			play_available.x - hud_gap - 32.0 * WordModel.COLUMNS / s))
 	side_fill_space = fill_height + tool_gap if hud_width * s < 152.0 else 0.0
 	if side_available_height < action_height * (1 + side_rows) + (side_rows - 1) * tool_gap + side_fill_space + divider_gap:
 		action_height = 44.0 / s
 		collect_height = action_height
 	var footer_height: float = action_height * (1 + footer_rows) + (footer_rows - 1) * tool_gap + footer_fill_space + divider_gap + edge
-	var bottom_pitch: float = _fit_layout_pitch(available - Vector2(0.0, footer_height), s)
-	var side_pitch: float = _fit_layout_pitch(available - Vector2(hud_width + hud_gap, 0.0), s)
-	# Center the well and its single action rail as one group. On short screens
-	# the rail may extend beside the supply row, but never into the header.
+	if goal_width > 0.0:
+		footer_height += 52.0 / s
+	if footer_boss:
+		# Supply retains its 44px hit area even when the cells fit at 32px.
+		var readable_well: float = maxf((WordModel.ROWS + _preview_row_count()) * 32.0 + 9.0,
+			WordModel.ROWS * 32.0 + 48.0) / s
+		var readable_footer_space: float = available.y - readable_well
+		footer_height = maxf(footer_height, minf(180.0 / s, readable_footer_space))
+	var bottom_pitch: float = _fit_layout_pitch(play_available - Vector2(0.0, footer_height), s)
+	var side_pitch: float = _fit_layout_pitch(play_available - Vector2(hud_width + hud_gap, 0.0), s)
+	# Reserve the left goals before fitting the well and optional right action rail.
 	var side_minimum_height: float = 44.0 / s * (1 + side_rows) + (side_rows - 1) * tool_gap + side_fill_space + divider_gap
-	var side_hud: bool = boss_layout or (side_pitch > bottom_pitch + 0.5 / s and available.y >= 184.0 / s \
-		and side_available_height >= side_minimum_height)
+	var side_hud: bool = not footer_boss and (boss_layout or (side_pitch > bottom_pitch + 0.5 / s and available.y >= 184.0 / s \
+		and side_available_height >= side_minimum_height))
 	var fill_space: float = side_fill_space if side_hud else footer_fill_space
 	_compact_hud = side_hud
 	footer_height = 0.0 if side_hud else footer_height
@@ -2314,7 +2423,8 @@ func _layout() -> void:
 	var feed_height: float = preview_height + feed_gap
 	var group_top: float = maxf(content_top, size.y - bottom_padding - footer_height - _pitch * WordModel.ROWS - feed_height)
 	var rail_extent: float = hud_width + hud_gap if side_hud else 0.0
-	var next_board := Rect2(Vector2((size.x - _pitch * WordModel.COLUMNS - rail_extent) * 0.5, group_top + feed_height), Vector2(WordModel.COLUMNS, WordModel.ROWS) * _pitch)
+	var next_board := Rect2(Vector2((size.x - goal_extent - _pitch * WordModel.COLUMNS - rail_extent) * 0.5 + goal_extent,
+		group_top + feed_height), Vector2(WordModel.COLUMNS, WordModel.ROWS) * _pitch)
 	if next_board != _board:
 		# Reflow belongs to gameplay. A resize must place every hit target inside
 		# the new well immediately, even while the game clock is paused.
@@ -2336,26 +2446,21 @@ func _layout() -> void:
 	var rows: int = side_rows if side_hud else footer_rows
 	var item_width: float = ((hud_width if side_hud else footer_width) - (columns - 1) * tool_gap) / columns
 	var hud_x: float = _board.end.x + hud_gap if side_hud else (size.x - footer_width) * 0.5
+	if footer_boss:
+		hud_x = (size.x - footer_width - footer_boss_width - hud_gap) * 0.5
 	if _stage_banner != null:
 		_stage_banner.size = size
 		var badge := Rect2(Vector2(_board.position.x, stage_y), Vector2(_board.size.x, (44.0 if timed_stage else 28.0) / s))
 		if stage_in_rail and side_hud:
 			badge = Rect2(Vector2(hud_x, content_top), Vector2(hud_width, 46.0 / s))
 		_stage_banner.configure_layout(badge, _board, s)
-		var sidebar_width: float = _board.position.x - edge * 2.0 - 12.0 / s
-		var sidebar: bool = sidebar_width * s >= 152.0 and _board.size.y * s >= 200.0
-		_stage_banner._label.visible = not _practice_panel.visible or sidebar
-		var practice_width: float = minf(232.0 / s, sidebar_width)
-		var practice_header: float = 66.0 if _practice_panel._state.get("kind") == "challenge" else 12.0
-		var practice_area: Rect2 = Rect2(Vector2(_board.position.x - practice_width - 18.0 / s, group_top),
-			Vector2(practice_width, minf(_board.size.y, (practice_header + _practice_panel._rows.size() * 60.0) / s))) \
-			if sidebar else badge
-		if boss_layout and sidebar and stage_in_rail:
+		_stage_banner._label.visible = true
+		var practice_area := Rect2(Vector2(_board.position.x - goal_extent, content_top),
+			Vector2(maxf(1.0, goal_width), maxf(1.0, _board.end.y - content_top)))
+		if boss_layout and side_hud and stage_in_rail:
 			practice_area.size.y = maxf(64.0 / s, practice_area.size.y - 52.0 / s)
-		_practice_panel.configure_layout(practice_area, s, not sidebar)
-		_stage_banner.configure_time_bonus(badge if _stage_banner._label.visible else
-			Rect2(practice_area.position, Vector2(_practice_panel.timer_width() / s, practice_area.size.y)),
-			not _stage_banner._label.visible)
+		_practice_panel.configure_layout(practice_area, s, false)
+		_stage_banner.configure_time_bonus(badge, false)
 	if not layout_header_chest():
 		_loot_meter.position = Vector2(edge, 4.0 / s)
 		_loot_meter.size = Vector2.ONE * 44.0 / s
@@ -2437,7 +2542,10 @@ func _layout() -> void:
 			combo_bounds.size.x = minf(combo_bounds.size.x, maxf(0.0, _board.position.x - edge * 2.0))
 			# Short landscape leaves its upper gutter to collected-word cards.
 			combo_bounds.position = Vector2(edge, maxf(content_top, _board.end.y - combo_bounds.size.y))
-	if boss_layout and not local_finish and not local_chest:
+	if goal_width > 0.0 and not side_hud:
+		combo_bounds = Rect2(Vector2(hud_x, auto_merge.end.y + 8.0 / s),
+			Vector2(minf(196.0 / s, footer_width), 44.0 / s))
+	if boss_layout and not footer_boss and not local_finish and not local_chest:
 		if not stage_in_rail:
 			combo_bounds = Rect2(Vector2(hud_x, stage_y), Vector2(hud_width, 44.0 / s))
 		else:
@@ -2448,23 +2556,34 @@ func _layout() -> void:
 	if not side_hud:
 		level_bounds = Rect2(Vector2(collect_button.get_rect().end.x + 6.0 / s,
 			collect_button.position.y + (collect_height - 28.0 / s) * 0.5), Vector2(100, 28) / s)
-	if _merged_level_badge.visible and combo_bounds.intersects(level_bounds):
+		if goal_width > 0.0:
+			level_bounds = Rect2(Vector2(_board.position.x - goal_extent, stage_y + 8.0 / s),
+				Vector2(minf(goal_width, 100.0 / s), 28.0 / s))
+	var level_visible: bool = _merged_level_badge.visible or _recovery_hint.visible
+	if level_visible and combo_bounds.intersects(level_bounds):
 		if side_hud:
 			combo_bounds.position.y = level_bounds.end.y + 6.0 / s
 		else:
 			combo_bounds.position.x = level_bounds.end.x + 6.0 / s
 			combo_bounds.size.x = maxf(0.0, hud_x + footer_width - combo_bounds.position.x)
 	_merged_level_badge.layout_badge(level_bounds, s)
+	_recovery_hint.position = level_bounds.position
+	_recovery_hint.size = level_bounds.size
+	_recovery_hint.add_theme_font_size_override("font_size", maxi(1, roundi(12.0 / s)))
 	_combo_hud.configure(combo_bounds, s, reduced_motion)
 	_boss_view.size = size
 	var boss_top: float = content_top + (54.0 / s if stage_in_rail and _stage_banner.visible else 0.0)
-	if _merged_level_badge.visible and side_hud:
+	if level_visible and side_hud:
 		boss_top = maxf(boss_top, level_bounds.end.y + 6.0 / s)
 		if combo_bounds.position.x >= hud_x:
 			boss_top = maxf(boss_top, combo_bounds.end.y + 6.0 / s)
 	var boss_width: float = minf(maxf(1.0, size.x - hud_x - edge), maxf(hud_width, minf(240.0 / s, _board.size.y * 0.45)))
-	_boss_view.layout_battle(Rect2(Vector2(hud_x, boss_top),
-		Vector2(boss_width, maxf(1.0, _fill_button.position.y - boss_top - 8.0 / s))), _board, s, _preview_rect)
+	var boss_dock := Rect2(Vector2(hud_x, boss_top),
+		Vector2(boss_width, maxf(1.0, _fill_button.position.y - boss_top - 8.0 / s)))
+	if footer_boss:
+		boss_dock = Rect2(Vector2(hud_x + footer_width + hud_gap, _board.end.y + edge),
+			Vector2(footer_boss_width, maxf(1.0, footer_height - edge)))
+	_boss_view.layout_battle(boss_dock, _board, s, _preview_rect)
 	_action_divider.size = Vector2(hud_width if side_hud else footer_width, 1.0 / s)
 	_action_divider.position = Vector2(hud_x, collect_button.get_rect().end.y + (divider_gap - _action_divider.size.y) * 0.5)
 	if _powerup_effects != null:
@@ -2491,6 +2610,7 @@ func _layout() -> void:
 			if str(fusion.operation) == "collect":
 				_collection_effects.reanchor_pending(str(fusion.attempt_id), _tile_rect(fusion.a).get_center())
 	if _word_reveal != null:
+		_word_reveal.set_reading_exclusions(_recovery_reading_bounds())
 		# Short landscape screens need two compact rows for distinct collection beats.
 		var reveal_fraction: float = 0.60 if size.x > size.y * 1.4 and size.y * s < 350.0 else 0.40
 		var finish_rect: Rect2 = get_global_transform().affine_inverse() * finish_button.get_global_rect()
@@ -2543,6 +2663,9 @@ func snapshot() -> Dictionary:
 	state["practice"] = _practice_panel.snapshot() if _practice_panel != null else {"visible": false, "words": []}
 	state["combo_hud"] = _combo_hud.snapshot() if _combo_hud != null else {"visible": false}
 	state["goal_hover"] = {"word_id": _goal_hover_word, "elapsed": _goal_hover_elapsed}
+	state["auto_merge_hover"] = _auto_merge_hover_preview()
+	state.auto_merge_hover.merge({"active": state.auto_merge_hover.result_count > 0,
+		"elapsed": _auto_merge_hover_elapsed}, true)
 	state["fill_control"] = {"visible": _fill_button.is_visible_in_tree(), "enabled": not _fill_button.disabled,
 		"on": _fill_button.button_pressed, "locked": game.fill_mode_locked(),
 		"presentation": _fill_button.snapshot(),
@@ -2557,6 +2680,9 @@ func snapshot() -> Dictionary:
 	state["read_detail"] = _read_panel.snapshot() if _read_panel != null else {"visible": false}
 	state["layout_paused"] = _layout_too_small
 	state["merged_level_indicator"] = _merged_level_badge.snapshot()
+	state["danger_recovery_hint"] = {"visible": _recovery_hint.is_visible_in_tree(),
+		"text": _recovery_hint.text, "rect": _rect(_recovery_hint.get_global_rect()),
+		"accessibility_name": _recovery_hint.get("accessibility_name")}
 	state["cell_pitch_pixels"] = _pitch * Style.ui_scale(self)
 	state["collect_button"] = collect_button.snapshot() if collect_button != null else {}
 	state["action_divider"] = {"rect": _rect(_action_divider.get_global_rect()), "visible": _action_divider.is_visible_in_tree()}

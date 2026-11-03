@@ -44,8 +44,8 @@ primary action. The divider remains visible but uses the same fine neutral edge.
 ## Permanent Auto merge capacity
 
 The existing **Jelly Upgrades** page has separate **Merged Jelly** and **Auto
-merge** category controls. Auto merge starts at free Lv1 with three original
-board Jellies per use. Each next level adds one, reaching eleven at Lv9.
+merge** category controls. Auto merge starts at free Lv1 with up to three completed,
+collectable Jellies per use. Each next level adds one output, reaching eleven at Lv9.
 The independent permanent upgrades cost 50, 100, 200, 350, 550, 800, 1100 and
 1500 coins. These do not replace the per-round 600 / 900 / 1200 use prices.
 The existing v4 Jelly ownership and pending receipts migrate without repricing;
@@ -63,18 +63,48 @@ The category preview reuses those same static acquired materials to show
 exactly three through eleven illustrated Jellies; it is a capacity illustration,
 not a recorded merge performance or newly acquired animation.
 
-Only complete legal paths are reserved. Each original input counts once across
-all paths; generated intermediate and complete results do not count twice.
-No budget is spent on unmatched Jellies or a word whose required picture will
-not fit. Already reserved paths finish on pause/exit through the existing
+Only complete legal paths are reserved, one per output slot. Original ingredients
+and intermediate joins do not consume these slots. Each finished product is
+excluded from further matching during the same use, so three advertised results
+cannot collapse into one upgraded Jelly. Unmatched ingredients and missing pictures
+are left intact; fewer available paths yield fewer complete results, never invented
+partners or a paid partial-only spelling. Already reserved paths finish on pause/exit through the existing
 transaction lifecycle. Goal-family and collection-blast matching are unchanged.
+
+The accepted receipt starts a 100 ms hit-stop before any drag is launched. Existing
+world-motion and presentation clocks share that hold, including airborne supply
+and Boss animation. The acquired portal glow, rays and glints add one finite
+violet impact and recovery at the well, not a dark overlay or repeated flash.
+The existing 320 ms flights then launch every 100 ms. Pausing or hiding preserves
+the same receipt clock; reduced motion keeps a soft still light without traveling
+rays or particles. A failed payment produces no successful impact. No new sound
+asset or additional voice is introduced.
+
+Hovering or keyboard/controller-focusing Auto merge previews the exact original
+Jellies its next use will consume, within the owned completed-output capacity.
+It is not a highlight of every matching word family or only the first pair:
+multi-step spellings include all required roots and pictures. Already airborne,
+captured bodies are included when the real timeline would use them after landing.
+The model forecasts with its existing automatic timeline on isolated board data,
+without payment callbacks, shared random generators or a live-world pause.
+Unchanged board forecasts are cached; relevant motion, statuses and material
+changes refresh the targets.
+
+The preview reuses the acquired gel skins' existing drag-match silhouette halo,
+gentle growth and subdued competing material light. It adds no artwork, arrows,
+screen cover or hover pronunciation. Reduced motion keeps the same target IDs
+and still material contrast, without growth. Leaving the button, changing focus,
+pause, dragging and navigation clear it. An activation consumes the preview;
+pointer activation also releases acquired button focus, so completion cannot
+leave an eternal selected state. A fresh hover or navigation focus previews the
+new board. Prices, capacity, impact, flight timing and paid delivery are unchanged.
 
 ## Goal-family auto merge
 
 The standalone Magnet button and its second target-selection gesture are removed.
 Each pending word goal is now the purchase target. Its acquired word illustration
 and full name occupy the first reading line; the real coin price and completion
-count have separate places below. The compact carousel keeps both values instead
+count have separate places below. The narrow left column keeps both values instead
 of hiding the count. Hovering or focusing a row gives it a mint edge and lightly
 lifts its illustration. Corresponding board Jellies use the existing drag-match
 silhouette halo, gel growth and subdued competing material light. Hover is free;
@@ -145,7 +175,7 @@ or extend a clock, including while Fill is active.
 | `assets/coins/gold-coin.png` | Kenneth Foldal Moe / Archanor VFX, Toon FX 1.52, under its recorded Unity Asset Store Standard EULA. See [coin artwork](coins.md) and `assets/coins/manifest.json`. | Existing acquired, processed and integrated price icon. Static artwork; no new copy or acquisition. |
 | `assets/images/ui/jelly-goals/clock.webp` | Microsoft Corporation, Fluent Emoji 3D Mantelpiece Clock, MIT. Original URL, hashes and unchanged production reuse are recorded in `assets/images/ui/jelly-goals/sources.json`. | Already acquired and integrated. The actual clock artwork was inspected before the layout refinement; its source is static and contains no animation clips. No new download or replacement artwork. |
 | `assets/chests/particles/portal_glow.png` | Existing Modern 2D Animated Chests particle artwork, with source mapping in `assets/chests/SOURCE.txt`. | Already acquired and integrated static glow. Its placement, color and opacity are authored by the game. |
-| `assets/chests/milestone/sparkle.png` | Kenneth Foldal Moe / Archanor VFX, Toon FX 1.52, under the recorded Unity Asset Store Standard EULA. Source details and hashes are in [Jelly fragments](jelly-fragments.md). | Existing acquired four-point glint, inspected before reuse. Static texture with game-authored appearance timing; no Unity prefab or shader is imported. |
+| `assets/chests/milestone/sparkle.png` and `rays.png` | Kenneth Foldal Moe / Archanor VFX, Toon FX 1.52, under the recorded Unity Asset Store Standard EULA. Source details and hashes are in [Jelly fragments](jelly-fragments.md). | Existing acquired four-point glint and ray texture, inspected before reuse. Static textures with game-authored appearance timing; no Unity prefab or shader is imported. |
 
 The wand's local acquired source is
 `Q:/uwok/Kenney Game Assets All-in-1 3.7.0/UI assets/Cursor Pack/Vector/Basic/tool_wand.svg`.

@@ -94,6 +94,32 @@ func finish_live_stage(app) -> void:
 	Fixture.dismiss_jelly_upgrade_intro(app)
 
 
+func test_frontier_pressure_refresh(app) -> void:
+	var coordinator = app._campaign
+	var original: Dictionary = coordinator.store.recipe("growth", 1)
+	var definitions: Array = app._word_jelly.game.stage_run.words
+	var legacy: Dictionary = coordinator.Catalog.make_plan(2, definitions, app.growth.learning_age(), 71)
+	legacy.seconds = 180.0
+	legacy.spawn_interval = 20.0
+	legacy.fall_speed_scale = 1.0
+	check(coordinator.store.reserve_plan("growth", legacy), "The application retains an actual old frontier recipe")
+	coordinator.starting = true
+	coordinator.challenge = false
+	coordinator.selected_stage = 2
+	var prepared: Dictionary = coordinator.prepare_plan(definitions, 999)
+	check(prepared.get("ok", false) and prepared.seconds == 65.0
+		and prepared.word_ids == legacy.word_ids and prepared.seed == legacy.seed and prepared.goals == legacy.goals
+		and prepared.spawn_interval < legacy.spawn_interval and prepared.fall_speed_scale > legacy.fall_speed_scale,
+		"Real campaign preparation tightens a cached frontier without changing its saved seed, words or goals")
+	check(coordinator.store.recipe("growth", 2).seconds == prepared.seconds
+		and coordinator.store.recipe("growth", 1) == original
+		and coordinator.store.best_stars("growth", 1) == 3 and app.coin_wallet.balance == 150,
+		"The returned harder plan is already durable and preserves the completed rating and exact wallet balance")
+	coordinator.starting = false
+	coordinator.selected_stage = 1
+	coordinator.pending_plan.clear()
+
+
 func test_map_chest_retry(app) -> void:
 	var room = app._jelly_rewards
 	room.set_result_context({})
@@ -408,6 +434,7 @@ func _run() -> void:
 	check(app.audio.active and app.audio.music.playing,
 		"A synchronous map start restores gameplay audio after the old round's halt")
 	app.audio.set_muted(true)
+	app.set_reduced_motion(false)
 	var view = app._word_jelly
 	view.set_process(false)
 	check(not app._campaign.map.visible and view.game.stage_run != null
@@ -428,6 +455,7 @@ func _run() -> void:
 		return state.get("phase") == "bonus" and state.get("formula_readable", false) \
 			and state.get("bonus_readable", false)),
 		"The real settlement displays its full star-multiplier formula and unclipped clear-coin caption")
+	test_frontier_pressure_refresh(app)
 	test_settlement_caption_scaling(app._jelly_rewards)
 	var restored := Store.new(directory + "/campaign.cfg")
 	check(restored.load_state() and restored.best_stars("growth", 1) == 3 and restored.available("growth", 2),

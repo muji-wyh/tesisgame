@@ -92,6 +92,18 @@ The eight health-energy glints, hit depletion, side-dock light and retreat
 accents reuse these exact textures. There is no replacement geometric character,
 opaque battle information panel or board-sized ending dialog.
 
+Narrow gameplay layouts retain the word goals on the left and reuse this same
+full-body rig in a footer dock to the right of the actions. Wider layouts keep
+the existing right-side dock. Aspect-preserving framing, the eight clips,
+actual-board attack anchors and the same acquired energy effects remain intact;
+this is responsive placement, not another model or animation acquisition.
+
+The difficulty pass reuses the existing sourced-rendered doubles for one
+visible opening decoy at stage 9 and two at stage 99. The final encounter has
+1,400 health; paid Jelly damage and charge/combo multipliers are unchanged.
+No invisible opening shield, new effect asset or instant untelegraphed attack
+is added. The ordinary anticipation, attack ownership and eight clips remain.
+
 The current pursuit pass keeps the compass visible beside Bramble throughout a
 rematch and enlarges the same source during the theft and final return. Short
 game-authored, two-line challenges identify his actual tricks and the next
