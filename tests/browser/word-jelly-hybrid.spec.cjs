@@ -127,13 +127,28 @@ test('whole-word roots match pictures and merged words remain compact and collec
   expect(phone.tiles.find(tile => tile.jelly_kind === 'picture').label_visible).toBe(false);
   await page.screenshot({ path: info.outputPath('hybrid-phone.png') });
   const holdPoint = point(live, await metrics(page));
-  await page.mouse.move(holdPoint.x, holdPoint.y);
-  await page.mouse.down();
+  const holdTouch = info.project.name === 'android-chromium' ? await page.context().newCDPSession(page) : null;
   try {
+    if (holdTouch) {
+      await holdTouch.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ id: 1, ...holdPoint }] });
+    } else {
+      await page.mouse.move(holdPoint.x, holdPoint.y);
+      await page.mouse.down();
+    }
     await expect.poll(async () => (await state(page)).drag.source).toBe(merged.id);
+    if (holdTouch) await expect.poll(async () => (await state(page)).drag.pointer,
+      { message: 'Android holding is owned by a real touch pointer' }).toBeGreaterThanOrEqual(0);
     await page.waitForTimeout(650);
   } finally {
-    await page.mouse.up();
+    if (holdTouch) {
+      try {
+        await holdTouch.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      } finally {
+        await holdTouch.detach();
+      }
+    } else {
+      await page.mouse.up();
+    }
   }
   await expect.poll(async () => (await state(page)).drag.source).toBe(-1);
   const afterHold = await state(page), retained = afterHold.tiles.find(tile => tile.id === merged.id);
