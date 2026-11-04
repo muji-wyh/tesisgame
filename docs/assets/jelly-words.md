@@ -151,13 +151,26 @@ Auto merge retain independent funding and ownership across leaving and reloads;
 recovery resumes a paid contribution's retained receipt without another debit.
 
 The upgrade scene gives the acquired Jelly or wand a large focal position above
-the actual ability preview and milestone rail. Saved deposits add a coin flight,
-local pulse and coin-handling sound. Crossing a saved level marker adds a
+the actual ability preview and milestone rail. Level captions use transparent
+44-pixel preview targets above the rail; selected, hovered and focused controls
+cannot cover neighboring captions or the fill. Saved deposits sustain the button
+light, subject response, moving gold rail and rolling wallet with coin-handling
+sound. The rail retains velocity across receipts and scrolls with its moving tip.
+Its invested numeral follows the same paid segment, keeping the previous price
+until the earned marker is reached. No coins fly into the Jelly. Crossing a
+saved level marker adds a
 rebound, sourced rays/glints and one reward cue. Effects and sound
 carry the milestone without notification copy. Numeric level and coin progress
-remain visible; reduced motion uses a still light accent without traveling coins
-or body deformation. The acquired gel, wand, coin, glow and audio retain the
+remain visible, and a held gesture keeps funding through the celebration;
+reduced motion uses a still light accent without moving digits or body
+deformation. The acquired gel, wand, coin, glow and audio retain the
 source and license records above.
+
+The 2026-11-04 rail follow-up passed 6,096 standalone headless and 6,248 native
+view checks plus 54 saved-contribution checks. Native desktop, phone and short
+landscape captures in `build/qa/jelly-upgrades/` cover the reported Lv7/Lv9
+surface conflict and a continuous held Lv7-to-Lv8 charge. These are local Godot
+ANGLE renders, not a new physical Chrome frame-time or audio-mix measurement.
 
 On the board, Lv2–9 show their individual number at the upper-right;
 carried chest fragments use the opposite corner. All stages retain one ordinary
@@ -167,6 +180,9 @@ learning evidence; an upgrade does not multiply mastery or coin payouts.
 Manual collection requires a click or tap released in under 500 ms on the same
 merged jelly without dragging. Holding for 500 ms or longer never collects on
 release; the held jelly can still be dragged into another matching merged jelly.
+Jelly World descent runs at 1.4 times its original speed for incoming supply and
+gap falls. Arrival clearance, contact feedback and visual motion share that
+timing while the existing landing recovery and support grace remain intact.
 A receptive merge result remains a valid held-drop target throughout its final
 settling wobble, although picking up or collecting that result still waits for
 settlement. Main and Challenge objectives count the collected Jelly's actual
@@ -181,6 +197,21 @@ unchanged. A subtle darkened silhouette underneath shares the same animated
 texture to separate pale details from the gel, without cropping source frames or
 loading another animation. Readiness glints stay on the outer rim behind the
 learning faces. These changes leave tile positions and input bounds unchanged.
+
+Merged levels also retain nine distinct idle effect compositions, following
+their collection identities below. Pearl bubbles, twin ripples, spiral wisps,
+golden flamelets, rose blossoms, prismatic shards, aurora ribbons, constellation
+glints and a golden star crown use inspected, locally acquired Toon FX and
+Kenney Particle Pack sprites. The source mappings, creator, licenses, hashes,
+static-variant status and atlas recipes are in the
+[merged-level source record](../../assets/images/jelly-level-fx/README.md).
+One shared 1536 by 1728 atlas contains 32 authored frames per level; a shader
+without a global time uniform interpolates neighboring frames. The existing
+three-owner ambient cohort and interaction priorities control active time.
+Other bodies retain their pose, and reduced motion selects a stable still.
+The effect remains behind spelling, pictures and badges and follows the existing
+unrelated-body dimming. Physics, hit targets, rewards, collection sound and
+vocabulary artwork retain their existing behavior.
 
 Each level has distinct collection motion and audio. Lv1–3 use pearl, twin-ripple
 and spiral releases. Lv4 contracts and gathers light before its gold firework
@@ -268,7 +299,9 @@ spellings awaiting a picture also pronounce their word when tapped; partial
 roots remain silent.
 
 Two [coin powerups](jelly-powerups.md) share the board controls. Auto merge costs
-600 coins initially, then 900 and 1200 on further uses in the round. It joins
+200 coins initially at owned Lv1, then 300 and 400 on further uses in the round.
+Each owned level adds 50 coins to the first-use base, reaching 600 at Lv9;
+repeat uses multiply that base by 1.5, then 2. It joins
 compatible roots, finishes picture matching, or adds levels of matching words,
 clamping the result to the same unlocked cap as manual merging.
 It leaves merged jellies on the board for ordinary collection. The planner checks

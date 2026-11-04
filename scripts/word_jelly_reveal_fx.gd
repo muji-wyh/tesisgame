@@ -35,6 +35,8 @@ var _margin: float = 6.0
 var _card := Rect2()
 var _accent := Color.WHITE
 var _exclusions: Array[Rect2] = []
+var _stamp_limit: int = -1
+var _stamp_count: int = 0
 
 
 func _init() -> void:
@@ -92,6 +94,14 @@ func sync(age: float, seconds: float, steady: bool, anticipation: float = 0.0) -
 	queue_redraw()
 
 
+func set_particle_budget(stamps: int = -1) -> void:
+	var next: int = maxi(-1, stamps)
+	if _stamp_limit == next:
+		return
+	_stamp_limit = next
+	queue_redraw()
+
+
 func color_at(index: int = 0) -> Color:
 	var hue: float = float(PROFILES[level - 1].hue)
 	if level == 6 or level >= 9:
@@ -108,12 +118,13 @@ func color_at(index: int = 0) -> Color:
 
 
 func _stamp(texture: Texture2D, point: Vector2, extent: Vector2, color: Color, angle: float = 0.0) -> void:
-	if color.a <= 0.002 or extent.x <= 0.0 or extent.y <= 0.0:
+	if (_stamp_limit >= 0 and _stamp_count >= _stamp_limit) or color.a <= 0.002 or extent.x <= 0.0 or extent.y <= 0.0:
 		return
 	var fit: float = _stamp_fit(point, extent, angle)
 	if fit <= 0.0:
 		return
 	var fitted: Vector2 = extent * fit
+	_stamp_count += 1
 	draw_set_transform(point, angle)
 	draw_texture_rect(texture, Rect2(fitted * -0.5, fitted), false, color)
 
@@ -170,7 +181,8 @@ func _edge_light(fade: float, clock: float) -> void:
 
 
 func _draw() -> void:
-	if _card.size.x <= 0.0 or duration <= 0.0:
+	_stamp_count = 0
+	if _stamp_limit == 0 or _card.size.x <= 0.0 or duration <= 0.0:
 		return
 	if elapsed < 0.0:
 		if anticipation_seconds > 0.0 and elapsed >= -anticipation_seconds:
@@ -201,6 +213,8 @@ func _draw_charge(progress: float) -> void:
 		Color(color_at(), strength * (0.46 + contraction * 0.38)), progress * 0.22)
 	# Staggered inward streams accelerate into a single bright core.
 	var count: int = 8 + level * 3 if not _batch else 8 + level
+	if _stamp_limit >= 0:
+		count = mini(count, mini(8, maxi(0, (_stamp_limit - 2) / 2)))
 	for index in range(count):
 		var phase: float = float(index % 4) * 0.055
 		var pull: float = smoothstep(phase, 1.0, progress)
@@ -209,7 +223,7 @@ func _draw_charge(progress: float) -> void:
 		var point: Vector2 = center.lerp(outside, lerpf(1.0, 0.18, pull))
 		var edge: float = (8.0 + level * 0.8 + (index % 3) * 1.3) / _ui_scale
 		var tint: Color = color_at(index)
-		for tail in range(3, 0, -1):
+		for tail in range(1 if _stamp_limit >= 0 else 3, 0, -1):
 			var behind: Vector2 = center.lerp(outside, lerpf(1.0, 0.18, maxf(0.0, pull - tail * 0.045)))
 			_stamp(STAR, behind, Vector2(edge * (1.4 - tail * 0.23), edge * 0.38),
 				Color(tint, strength * (0.50 - tail * 0.10)), angle)
@@ -219,6 +233,10 @@ func _draw_charge(progress: float) -> void:
 
 
 func _draw_release(fade: float) -> void:
+	if _stamp_limit >= 0:
+		# The newest collected word owns the full opening flash. Older cards
+		# retain their tier-colored falling particles without another wide core.
+		return
 	# The compact core opens into the reserved halo before the card settles.
 	var life: float = minf(0.30, duration * 0.64) if _batch and level < 4 else 0.64
 	if elapsed >= life:
@@ -252,6 +270,8 @@ func _draw_steady(fade: float) -> void:
 	if level >= 4:
 		_edge_light(fade * (0.26 + level * 0.025), 0.0)
 	var count: int = 2 + level
+	if _stamp_limit >= 0:
+		count = mini(count, maxi(0, _stamp_limit - 5))
 	for index in range(count):
 		var angle: float = TAU * float(index) / float(count) - PI * 0.5
 		_stamp(STAR, _rim(angle, _margin * 0.35), Vector2.ONE * (5.0 + level * 0.65) / _ui_scale,
@@ -260,11 +280,17 @@ func _draw_steady(fade: float) -> void:
 
 func _spark_count() -> int:
 	var count: int = int(PROFILES[level - 1].sparks)
-	return maxi(3, roundi(count * 0.62)) if _batch else count
+	count = maxi(3, roundi(count * 0.62)) if _batch else count
+	if _stamp_limit >= 0:
+		# Reserve two small glow layers and at most one tail per particle.
+		var available: int = maxi(0, (_stamp_limit - 4) / 3) if level >= 4 else maxi(0, _stamp_limit - 3)
+		count = mini(count, mini(12, available))
+	return count
 
 
 func _trail_count() -> int:
-	return int(PROFILES[level - 1].get("trails", 0))
+	var count: int = int(PROFILES[level - 1].get("trails", 0))
+	return mini(1, count) if _stamp_limit >= 0 else count
 
 
 func _emission_span() -> float:
@@ -315,9 +341,16 @@ func _firework_point(origin: Vector2, direction: Vector2, reach: float, age: flo
 func _draw_explosion(fade: float) -> void:
 	var selected: Dictionary = PROFILES[level - 1]
 	var groups: int = int(selected.bursts)
+	if _stamp_limit >= 0:
+		groups = mini(groups, 2)
 	var span: float = _emission_span()
 	var count: int = _spark_count()
 	var trails: int = _trail_count()
+	if _stamp_limit >= 0:
+		if count == 0:
+			_stamp(GLOW, _card.get_center(), _card.size * 1.12, Color(color_at(), fade * 0.24))
+			return
+		groups = mini(groups, count)
 	for group in range(groups):
 		var spokes: int = count / groups + (1 if group < count % groups else 0)
 		var delay: float = span * float(group) / float(maxi(1, groups - 1))
@@ -373,6 +406,13 @@ func snapshot() -> Dictionary:
 		"bloom_radius": _firework_radius() if level >= 4 else 0.0,
 		"vertical_scale": _firework_vertical_scale() if level >= 4 else 1.0,
 		"burst_count": selected.bursts, "reduced_motion": reduced_motion,
+		"stamp_limit": _stamp_limit,
 		"origin": [origin.x, origin.y],
 		"input_transparent": mouse_filter == Control.MOUSE_FILTER_IGNORE,
 		"rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y]}
+
+
+func particle_work_snapshot() -> Dictionary:
+	# Rendering can service a pending redraw while the collection clock is
+	# paused. Keep draw diagnostics separate from the stable gameplay snapshot.
+	return {"stamp_limit": _stamp_limit, "stamp_count": _stamp_count}

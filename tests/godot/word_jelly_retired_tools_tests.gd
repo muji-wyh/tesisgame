@@ -33,7 +33,7 @@ func make_model(kind: String):
 
 
 func _test_removed_requests() -> void:
-	check(Model.POWERUP_PRICES == {"auto_merge": 600, "family_merge": 50},
+	check(Model.POWERUP_PRICES == {"auto_merge": 200, "family_merge": 50},
 		"The live purchase catalog contains only Auto merge and goal-family purchases")
 	for mode: String in ["main", "challenge", "legacy"]:
 		var model = make_model(mode)

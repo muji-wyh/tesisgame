@@ -68,6 +68,12 @@ func _run() -> void:
 	live.set_projection(false)
 	live._label.hide()
 	live._shadow.hide()
+	cached._set_surface_parameter(&"completion_strength", 0.95)
+	cached._set_surface_parameter(&"completion_glint", -2.0)
+	check(cached._idle_cache_eligible(), "A still full-strength completion light is eligible with its complete padded paint")
+	cached._set_surface_parameter(&"completion_strength", 0.55)
+	check(not cached._idle_cache_eligible(), "Intermediate completion entry brightness remains live")
+	cached._set_surface_parameter(&"completion_strength", 0.0)
 	cached.set_idle_cached(true)
 	if DisplayServer.get_name() == "headless":
 		check(not cached.idle_cache_snapshot().cached and not cached.idle_cache_snapshot().requested,
@@ -140,14 +146,58 @@ func _run() -> void:
 	print("Cached merged rim and opacity pixel error: ", error)
 	check(float(error.mean) <= 2.0 / 255.0 and float(error.maximum) <= 5.0 / 255.0,
 		"Merged rims, dimming and opacity retain the original premultiplied edge coverage")
-	cached._set_surface_parameter(&"completion_strength", 0.95)
+	# Integer backing dimensions and aligned origins compare the complete padded
+	# light, including its spill outside the original body, after constant scale.
+	for tile in [live, cached]:
+		tile.set_idle_cached(false)
+		tile.size = Vector2.ONE * 125.0
+		tile.position = Vector2(42.5 if tile == live else 322.5, 90.0 + 125.0 * tile.Motion.FOOT_Y * 0.2)
+		tile._label.hide()
+		tile._shadow.hide()
+		tile.deform(0.0, 0.0, Vector2.ONE * 1.2)
+		tile._set_surface_parameter(&"completion_strength", 0.95)
+		tile._set_surface_parameter(&"completion_glint", -2.0)
+		tile._gel.set_shader_parameter("rim_strength", 1.0)
+		tile._gel.set_shader_parameter("rim_width", 1.8)
+		tile._gel.set_shader_parameter("rim_color", Color("#236451"))
+		tile._surface.self_modulate = Color.WHITE
 	cached.set_idle_cached(true)
-	check(not cached.idle_cache_snapshot().cached, "An expanded completion light stays live")
+	check(await _settle_cache(cached), "A constant enlarged full completion light captures its entire padded envelope")
+	check(cached._surface.material != Cache.display_material()
+		and is_equal_approx(float(cached._surface.material.get_shader_parameter("mesh_scale")), 1.32),
+		"Padded paint uses a bounded entry display variant while ordinary bodies retain their shared material")
+	await RenderingServer.frame_post_draw
+	image = root.get_texture().get_image()
+	error = _pixel_error(image, Rect2i(6, 66, 198, 198), Rect2i(286, 66, 198, 198))
+	print("Cached full completion light pixel error: ", error)
+	check(float(error.mean) <= 2.0 / 255.0 and float(error.maximum) <= 5.0 / 255.0,
+		"Full authored glow, dark silhouette rim and enlarged skin match across the complete padded rectangle")
+	var hint_texture: Texture2D = cached._surface.texture
+	var hint_bakes: int = int(pool.snapshot().bakes)
+	for step in range(30):
+		cached.deform(0.0, float(step), Vector2.ONE * 1.2)
+		cached.set_idle_cached(true)
+	check(cached._surface.texture == hint_texture and int(pool.snapshot().bakes) == hint_bakes,
+		"Constant enlarged posture and irrelevant bend clocks do not churn padded cache entries")
+	cached._surface.position = Vector2(3.0, -2.0)
+	cached._visual.position = Vector2(-1.0, 4.0)
+	check(cached._idle_cache_eligible() and cached.idle_cache_snapshot().cached,
+		"Whole-quad offsets preserve cached paint without changing its UV deformation")
+	cached.set_contact("match", Vector2.RIGHT, 0.6)
+	check(not cached.idle_cache_snapshot().cached and cached._surface.material == cached._gel,
+		"A padded cached completion target restores its live pressure feedback immediately")
+	cached.set_contact("none")
+	cached._visual.position = Vector2.ZERO
+	cached._set_surface_parameter(&"completion_strength", 0.95)
+	cached._set_surface_parameter(&"completion_glint", 0.5)
+	cached.set_idle_cached(true)
+	check(not cached.idle_cache_snapshot().cached, "A full completion sweep remains live")
 	cached._set_surface_parameter(&"completion_strength", 0.35)
 	cached._set_surface_parameter(&"completion_glint", 0.5)
 	cached.set_idle_cached(true)
 	check(not cached.idle_cache_snapshot().cached, "A moving merged sheen stays live")
 	cached._set_surface_parameter(&"completion_glint", -2.0)
+	cached.deform(0.0, 0.0)
 	cached.set_idle_cached(true)
 	cached.scale = Vector2.ONE * 1.25
 	await process_frame

@@ -88,7 +88,8 @@ func _run() -> void:
 		and view._nodes[9].button.position.y < view._nodes[8].button.position.y,
 		"A genuine chapter clear keeps the real adjacent-world unlock event")
 	check(view.show_chapter(3), "The player can scroll elsewhere during decorative unlock motion")
-	view._process(view.ROUTE_SECONDS + view.UNLOCK_SECONDS + 0.1)
+	for frame in range(ceili((view.ROUTE_SECONDS + view.UNLOCK_SECONDS + 0.1) * 60.0)):
+		view._process(1.0 / 60.0)
 	check(view.show_chapter(2) and not _stage(view.snapshot(), 10).lock_visible,
 		"Returning after an offscreen unlock shows the real earned padlock state")
 	var context: Dictionary = _state(9)

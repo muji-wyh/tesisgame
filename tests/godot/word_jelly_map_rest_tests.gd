@@ -54,6 +54,38 @@ func _check_perch(view, number: int) -> void:
 		check(is_equal_approx(transform.determinant(), 1.0), "Perching articulates rigid sourced parts without flattening Pip")
 
 
+func _check_supported_sleep_poses(view, wardrobe: String) -> void:
+	var pip = view._pip
+	var item: Dictionary = view._nodes[51]
+	var support: Array = pip.rest_snapshot().support
+	var geometry: Array = _geometry(view)
+	pip.set_reduced_motion(false)
+	pip.set_process(false)
+	pip.set_awake(false)
+	pip.set_process(false)
+	pip._wake_blend = 0.0
+	for sample: Dictionary in [
+		{"elapsed": 0.5, "stage": "upright-snoring"},
+		{"elapsed": 9.0, "stage": "prone-snoring"},
+		{"elapsed": 18.5, "stage": "tucked-snoring"}]:
+		pip._sleep_seconds = float(sample.elapsed)
+		pip._update_pose()
+		var context: String = "%s %s at %s" % [wardrobe, str(sample.stage), root.size]
+		check(pip.rest_snapshot().state == "sleeping"
+			and pip.rest_snapshot().sleep_stage == str(sample.stage)
+			and pip.expression_name() == "sleepy", "The supported sleep fixture keeps its actual phase and closed eyes: " + context)
+		check(pip.rest_snapshot().support == support and _geometry(view) == geometry,
+			"Long supported sleep postures leave the rim and stage input targets fixed: " + context)
+		for index: int in [1, 2, 3]:
+			var bounds: Rect2 = _part_bounds(pip, index)
+			check(not bounds.grow(-0.15).intersects(_number_bounds(item.label))
+				and not bounds.intersects(item.rating.get_global_rect()),
+				"Opaque supported sleep part %d keeps the stage number and Play clear: %s %s" % [index, context, bounds])
+		for transform: Transform2D in pip.rest_transforms():
+			check(is_equal_approx(transform.determinant(), 1.0),
+				"Supported sleep retains rigid sourced artwork: " + context)
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1366, 768)
@@ -85,6 +117,20 @@ func _run() -> void:
 		await _settle(2)
 		_check_perch(view, 52)
 		check(view.snapshot().guide.course_id == str(profile.course_id), "Resting retains the actual requested career wardrobe")
+	for dimensions: Vector2i in [Vector2i(1366, 768), Vector2i(393, 852)]:
+		await _resize(dimensions)
+		for age: int in [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
+			var state: Dictionary = _state(51)
+			state.pip_age = age
+			view.open(state, true)
+			await _settle(2)
+			_check_supported_sleep_poses(view, "Age %d" % age)
+		for profile: Dictionary in profiles:
+			var state: Dictionary = _state(51)
+			state.pip_profile = {"course_id": str(profile.course_id), "level": 4}
+			view.open(state, true)
+			await _settle(2)
+			_check_supported_sleep_poses(view, str(profile.course_id))
 	await _resize(Vector2i(1366, 768))
 	view.open(_state(51), false)
 	await _settle()

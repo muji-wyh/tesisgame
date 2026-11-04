@@ -12,7 +12,7 @@ const GROWTH_KEY = 'growWithPip.growth.v1';
 const WRONG = 'assets/imported-audio/pair-feedback/wrong.wav';
 const RIGHT = 'assets/imported-audio/pair-feedback/right.wav';
 const MERGE = 'assets/imported-audio/jelly-interaction/merge-together-v3.wav';
-const prices = { auto_merge: 600 };
+const prices = { auto_merge: 200 };
 const AUTO_MERGE_BEAT = 0.10;
 const AUTO_MERGE_DRAG = 0.32;
 const AUTO_MERGE_FUSION = 0.11;
@@ -330,7 +330,7 @@ test('upgraded Auto merge caps completed outputs while keeping its overlapping 1
   expect(before.practice.compact).toBe(false);
   expect(before.practice.rect[0] + before.practice.rect[2]).toBeLessThanOrEqual(before.board_rect[0] + 0.5);
   expect(before.powerup_buttons.auto_merge).toMatchObject({ auto_merge_level: 4, capacity: 6,
-    capacity_badge: { visible: true, text: '6' } });
+    price: 350, price_text: '350', capacity_badge: { visible: true, text: '6' } });
   const saved = await savedGrowth(page), bounds = await metrics(page);
   await beginTrace(page, 'auto-merge-100ms');
   await page.keyboard.press('p');
@@ -367,7 +367,7 @@ test('upgraded Auto merge caps completed outputs while keeping its overlapping 1
   before = await hover();
   const forecast = before.auto_merge_hover;
   await pressRect(page, before.powerup_buttons.auto_merge.rect, bounds);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(4400);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(4650);
   expect((await jelly(page)).auto_merge_hover.active).toBe(false);
   await expect.poll(async () => {
     const state = await jelly(page);
@@ -417,11 +417,11 @@ test('upgraded Auto merge caps completed outputs while keeping its overlapping 1
   expect(fragmentTotal(after)).toBe(fragmentTotal(before) + fragmentTotal({ tiles: supplied }));
   expect(await savedGrowth(page)).toBe(saved);
   const persisted = await storedWallet(page);
-  expect(persisted.balance).toBe(4400);
+  expect(persisted.balance).toBe(4650);
   const debits = Object.entries(persisted.receipts).filter(([, amount]) => amount < 0);
   expect(debits).toHaveLength(1);
   expect(debits[0][0].endsWith(`:${after.powerup.receipt_id}`)).toBe(true);
-  expect(debits[0][1]).toBe(-600);
+  expect(debits[0][1]).toBe(-350);
   await capture(page, info, 'auto-merge-100ms-complete');
   expect(errors).toEqual([]);
 });
@@ -441,7 +441,9 @@ test('word goals hover their matching Jellies and buy only that family while Cha
   const family = tile => tile.word?.id || tile.image_word?.id || tile.word_candidate?.id || tile.source_word_id;
   const unrelated = opening.tiles.filter(tile => family(tile) !== id).map(tile => tile.id);
   expect(unrelated.length, 'The test has a genuine second family, not a single-family proxy').toBeGreaterThan(0);
-  expect(goal.purchase).toMatchObject({ price: 50, price_text: '50', title: goal.text, goal: true });
+  expect(goal.purchase).toMatchObject({ price_text: String(goal.price), title: goal.text, goal: true });
+  expect(goal.price).toBeGreaterThanOrEqual(50);
+  expect(goal.price % 50).toBe(0);
   const beforeProgress = progress(opening), beforeGrowth = await savedGrowth(page);
   await beginTrace(page, 'paid-goal');
   await page.keyboard.press('p');
@@ -460,8 +462,10 @@ test('word goals hover their matching Jellies and buy only that family while Cha
   expect((await wallet(page)).balance).toBe(2000);
   await page.keyboard.press('p');
   await expect.poll(async () => (await jelly(page)).paused).toBe(false);
+  const purchaseBefore = await jelly(page);
+  const goalPrice = purchaseBefore.practice.words.find(item => item.id === goal.id).price;
   await pressRect(page, goal.rect, bounds);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(1950);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(2000 - goalPrice);
   await expect.poll(async () => {
     const state = await jelly(page);
     return !state.powerup.active && state.powerup.kind === 'family_merge';
@@ -475,13 +479,15 @@ test('word goals hover their matching Jellies and buy only that family while Cha
   expect(progress(after)).toEqual(beforeProgress);
   expect(after.combo.coins).toBe(0);
   expect(await savedGrowth(page)).toBe(beforeGrowth);
-  expect(after.practice.words.every(item => item.price === 75)).toBe(true);
+  const freedSpaces = purchaseBefore.tiles.length + after.generated_tiles - purchaseBefore.generated_tiles - after.tiles.length;
+  expect(goalPrice, 'The selected quote charges for the complete legal net board reduction').toBe(50 * freedSpaces);
+  expect(after.practice.words.every(item => item.price >= 75 && item.price % 75 === 0)).toBe(true);
   const persisted = await storedWallet(page);
-  expect(persisted.balance).toBe(1950);
-  expect(Object.values(persisted.receipts).filter(amount => amount < 0)).toEqual([-50]);
+  expect(persisted.balance).toBe(2000 - goalPrice);
+  expect(Object.values(persisted.receipts).filter(amount => amount < 0)).toEqual([-goalPrice]);
   const evidence = await retainTrace(page, info, 'paid-goal', ['goal-hover', 'goal-paid']);
   expect(evidence.timeline.some(frame => frame.goals.some(item => item.id === goal.id &&
-    item.purchase.spent_coins === 50 && item.purchase.price === 75)),
+    item.purchase.spent_coins === goalPrice && item.purchase.price >= 75 && item.purchase.price % 75 === 0)),
   'The clicked goal shows its real debit without replacing the next quote').toBe(true);
   await capture(page, info, 'paid-goal-complete');
   expect(errors).toEqual([]);
@@ -507,9 +513,9 @@ test('a pending word goal reports its exact shortfall without spending or mergin
   const funds = evidence.timeline.flatMap(frame => frame.goals).filter(item =>
     item.id === goal.id && item.purchase.funds_warning);
   expect(funds.length).toBeGreaterThan(0);
-  expect(funds.every(item => item.purchase.title === 'Need coins' && item.purchase.missing_coins === 25 &&
-    item.purchase.price_text === '50' && item.purchase.spent_coins === 0 &&
-    item.purchase.accessibility_name.includes('Need 25 more coins'))).toBe(true);
+  expect(funds.every(item => item.purchase.title === 'Need coins' && item.purchase.missing_coins === goal.price - 25 &&
+    item.purchase.price_text === String(goal.price) && item.purchase.spent_coins === 0 &&
+    item.purchase.accessibility_name.includes(`Need ${goal.price - 25} more coins`))).toBe(true);
   expect(await storedWallet(page)).toEqual(saved);
   expect(await savedGrowth(page)).toBe(growth);
   expect(progress(await jelly(page))).toEqual(progress(opening));
@@ -614,11 +620,11 @@ test('only Auto merge remains purchasable while naturally earned chest fragments
   await page.keyboard.press('p');
   await expect.poll(async () => (await jelly(page)).paused).toBe(false);
   await pressRect(page, (await jelly(page)).powerup_buttons.auto_merge.rect);
-  await expect.poll(async () => (await wallet(page)).balance).toBe(before.balance - 600);
+  await expect.poll(async () => (await wallet(page)).balance).toBe(before.balance - 200);
   await expect.poll(async () => (await jelly(page)).powerup.active, { timeout: 30000 }).toBe(false);
   const merged = await jelly(page);
   expect(fragmentTotal(merged), 'Removing the paid Treasure card preserves all naturally carried fragments').toBe(carried);
-  expect((await wallet(page)).balance).toBe(before.balance - 600);
+  expect((await wallet(page)).balance).toBe(before.balance - 200);
   const ready = merged.tiles.filter(tile => tile.jelly_kind === 'merged' && tile.settled);
   expect(ready.length).toBeGreaterThan(0);
   for (const tile of ready) {

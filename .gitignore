@@ -15,6 +15,9 @@ assets/imported-unity/
 assets/images/jelly-match/confetti.png
 assets/images/jelly-match/confetti.png.import
 # Toon FX chest milestone textures are private inputs embedded in the game pack.
+# Source-composed merged-level FX retain the acquired Toon FX license.
+assets/images/jelly-level-fx/atlas.png
+assets/images/jelly-level-fx/atlas.png.import
 assets/chests/shared/effects/rays.png
 assets/chests/shared/effects/rays.png.import
 assets/chests/shared/effects/sparkle.png

@@ -1,6 +1,8 @@
 extends Button
 ## The collection action shares the quiet card layout of its neighboring tools.
 
+signal preview_changed(active: bool)
+
 const Style = preload("res://scripts/ui_style.gd")
 const GEL = preload("res://assets/images/jelly-match/gel-mint.png")
 const SKY = preload("res://assets/images/jelly-match/gel-sky.png")
@@ -32,6 +34,9 @@ var _beat_count: int = 0
 var _reduced_motion: bool = false
 var _pip_level: int = 0
 var _locked: bool = true
+var _preview_active: bool = false
+var _preview_consumed: bool = false
+var _pointer_input: bool = true
 var _ui_scale: float = 1.0
 var _panel := StyleBoxFlat.new()
 var _focus := StyleBoxFlat.new()
@@ -52,8 +57,51 @@ func _init() -> void:
 	mouse_exited.connect(queue_redraw)
 	button_down.connect(queue_redraw)
 	button_up.connect(queue_redraw)
+	for event: Signal in [focus_exited, visibility_changed]:
+		event.connect(_refresh_preview)
+	for event: Signal in [mouse_entered, mouse_exited, focus_entered]:
+		event.connect(_restart_preview)
+	pressed.connect(_consume_preview)
 	set_ui_scale(1.0)
 	_update_accessibility()
+
+
+func _input(event: InputEvent) -> void:
+	if not is_visible_in_tree():
+		return
+	if event is InputEventMouseButton or event is InputEventScreenTouch:
+		_pointer_input = true
+	elif event is InputEventKey or event is InputEventJoypadButton \
+		or event is InputEventJoypadMotion and absf(event.axis_value) > 0.3:
+		_pointer_input = false
+
+
+func _refresh_preview() -> void:
+	var active: bool = not _preview_consumed and not _locked and not _active and _count > 0 \
+		and not disabled and is_visible_in_tree() and (is_hovered() or has_focus())
+	if active == _preview_active:
+		return
+	_preview_active = active
+	preview_changed.emit(active)
+
+
+func _restart_preview() -> void:
+	_preview_consumed = false
+	_refresh_preview()
+
+
+func clear_preview() -> void:
+	if not _preview_active:
+		return
+	_preview_active = false
+	preview_changed.emit(false)
+
+
+func _consume_preview() -> void:
+	_preview_consumed = true
+	_refresh_preview()
+	if _pointer_input:
+		release_focus()
 
 
 func set_state(count: int, active: bool, remaining: int, total: int) -> void:
@@ -76,6 +124,7 @@ func set_state(count: int, active: bool, remaining: int, total: int) -> void:
 		_charge = _target_charge
 		_growth_elapsed = GROW_SECONDS
 	_update_accessibility()
+	_refresh_preview()
 	queue_redraw()
 
 
@@ -91,6 +140,7 @@ func set_pip_level(level: int) -> void:
 		_beat_elapsed = BEAT_SECONDS
 		set_state(_count, _active, _remaining, _total)
 	_update_accessibility()
+	_refresh_preview()
 	queue_redraw()
 
 
@@ -143,6 +193,8 @@ func reset() -> void:
 	_growth_strength = 0.0
 	_beat_elapsed = BEAT_SECONDS
 	_beat_count = 0
+	_preview_consumed = false
+	clear_preview()
 	_update_accessibility()
 	queue_redraw()
 
@@ -366,6 +418,7 @@ func snapshot() -> Dictionary:
 			"rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y]}
 	return {
 		"pip_level": _pip_level, "unlock_level": UNLOCK_LEVEL, "locked": _locked,
+		"preview_active": _preview_active, "preview_consumed": _preview_consumed,
 		"count": _count, "active": _active, "remaining": _remaining, "total": _total,
 		"target_charge": _target_charge, "charge": _charge, "stage": int(pose.stage), "surplus": pose.surplus,
 		"visual_scale": pose.visual_scale, "growth": pose.growth,

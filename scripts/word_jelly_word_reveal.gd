@@ -6,6 +6,8 @@ const LevelEffects = preload("res://scripts/word_jelly_reveal_fx.gd")
 const WordModel = preload("res://scripts/word_jelly_model.gd")
 const SECONDS: float = 1.95
 const BATCH_SECONDS: float = 0.86
+const SECONDARY_STAMP_BUDGET: int = 192
+const SECONDARY_CARD_STAMPS: int = 64
 
 var _entries: Array[Card] = []
 var _rng := RandomNumberGenerator.new()
@@ -71,8 +73,22 @@ func present(word: Dictionary, picture: Texture2D, accent: Color, batch: bool = 
 	_place(entry, _entries)
 	entry.elapsed = age
 	_entries.append(entry)
+	_update_particle_budgets()
 	entry.sync()
 	show()
+
+
+func _update_particle_budgets() -> void:
+	if _entries.is_empty():
+		return
+	var secondary: int = _entries.size() - 1
+	var base: int = mini(SECONDARY_CARD_STAMPS, SECONDARY_STAMP_BUDGET / maxi(1, secondary))
+	var remainder: int = SECONDARY_STAMP_BUDGET - base * secondary
+	for index in range(_entries.size()):
+		var limit: int = -1
+		if index < secondary:
+			limit = mini(SECONDARY_CARD_STAMPS, base + (1 if index < remainder else 0))
+		_entries[index]._level_effects.set_particle_budget(limit)
 
 
 func _place(entry: Card, occupied: Array[Card]) -> void:
@@ -150,14 +166,18 @@ func _apply_reading_exclusion(entry: Card) -> void:
 func advance(delta: float) -> void:
 	if not is_finite(delta) or delta <= 0.0:
 		return
+	var membership_changed: bool = false
 	for index in range(_entries.size() - 1, -1, -1):
 		var entry: Card = _entries[index]
 		entry.elapsed += delta
 		if entry.elapsed >= entry.effect_duration:
 			_entries.remove_at(index)
 			entry.free()
+			membership_changed = true
 		else:
 			entry.sync()
+	if membership_changed:
+		_update_particle_budgets()
 	visible = not _entries.is_empty()
 
 
@@ -189,4 +209,14 @@ func snapshot() -> Dictionary:
 	latest["visible"] = visible and states.any(func(entry: Dictionary) -> bool: return bool(entry.visible))
 	latest["entries"] = states
 	latest["active_count"] = states.size()
+	latest["particle_budget"] = particle_budget_snapshot()
 	return latest
+
+
+func particle_budget_snapshot() -> Dictionary:
+	var secondary_stamps: int = 0
+	for index in range(maxi(0, _entries.size() - 1)):
+		secondary_stamps += maxi(0, _entries[index]._level_effects._stamp_limit)
+	return {"hero_entry_id": _entries.back().entry_id if not _entries.is_empty() else -1,
+		"secondary_cards": maxi(0, _entries.size() - 1), "secondary_stamps": secondary_stamps,
+		"secondary_limit": SECONDARY_STAMP_BUDGET}

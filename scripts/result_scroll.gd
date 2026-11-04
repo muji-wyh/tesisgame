@@ -1,6 +1,8 @@
 extends ScrollContainer
 
 signal held_button_changed(button: Button)
+# Actual user movement, including momentum; direct focus/layout writes stay quiet.
+signal user_scroll_delta(distance: float)
 
 const Style = preload("res://scripts/ui_style.gd")
 const Momentum = preload("res://scripts/scroll_momentum.gd")
@@ -86,10 +88,21 @@ func _maximum() -> float:
 
 func _set_offset(value: float) -> void:
 	var offset := clampi(roundi(value), 0, roundi(_maximum()))
+	var previous: int = _offset()
 	if horizontal:
 		scroll_horizontal = offset
 	else:
 		scroll_vertical = offset
+	var distance: int = _offset() - previous
+	if distance != 0:
+		user_scroll_delta.emit(float(distance))
+
+
+func scroll_by_user(distance: float) -> void:
+	if not is_finite(distance):
+		return
+	cancel_drag()
+	_set_offset(_offset() + distance)
 
 
 func _local_point(point: Vector2) -> Vector2:

@@ -14,9 +14,10 @@ if (!baselineOption) throw new Error('Pass --baseline with the path to a frozen 
 const baseline = path.resolve(root, baselineOption);
 const automatic = args.includes('--automatic');
 const idle = args.includes('--idle');
-if (automatic && idle) throw new Error('Choose either --idle or --automatic.');
-const protocol = idle ? 'word-jelly-idle-cpu-v1' : automatic ? 'word-jelly-auto-cpu-v1' : 'word-jelly-drag-cpu-v1';
-const script = idle ? 'word_jelly_idle_benchmark' : automatic ? 'word_jelly_automatic_benchmark' : 'word_jelly_drag_benchmark';
+const authored = args.includes('--authored');
+if ([automatic, idle, authored].filter(Boolean).length > 1) throw new Error('Choose one of --idle, --automatic or --authored.');
+const protocol = authored ? 'word-jelly-authored-drag-cpu-v1' : idle ? 'word-jelly-idle-cpu-v1' : automatic ? 'word-jelly-auto-cpu-v1' : 'word-jelly-drag-cpu-v1';
+const script = authored ? 'word_jelly_authored_drag_benchmark' : idle ? 'word_jelly_idle_benchmark' : automatic ? 'word_jelly_automatic_benchmark' : 'word_jelly_drag_benchmark';
 const label = option('label', 'jelly-drag-cpu');
 if (!/^[a-z0-9-]+$/.test(label)) throw new Error('Use a lowercase output label.');
 const output = path.join(root, 'build', 'performance', label);
@@ -40,6 +41,7 @@ const fingerprint = project => {
   return crypto.createHash('sha256').update(JSON.stringify(files)).digest('hex');
 };
 const harness = [`tests/performance/${script}.gd`, 'tests/performance/jelly_drag_fixture.gd'];
+if (authored) harness.push('tests/performance/jelly_authored_drag_fixture.gd', 'tests/performance/word_jelly_drag_benchmark.gd');
 const harnessHashes = harness.map(file => [file, hash(path.join(root, file))]);
 const projects = { baseline, candidate: root };
 const fingerprints = Object.fromEntries(Object.entries(projects).map(([name, project]) => [name, fingerprint(project)]));

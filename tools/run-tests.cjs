@@ -75,12 +75,16 @@ groups['word-jelly'].godot.push('jelly_pause_tests', 'word_jelly_practice_tests'
   'word_jelly_fill_button_tests', 'word_jelly_fill_control_tests',
   'word_jelly_fill_items_tests',
   'word_jelly_funds_feedback_tests',
+  'word_jelly_pricing_flow_tests',
+  'word_jelly_auto_collect_hover_tests',
   'word_jelly_boss_tests', 'word_jelly_boss_progress_tests', 'word_jelly_boss_view_tests', 'word_jelly_boss_flow_tests', 'word_jelly_boss_portrait_tests', 'word_jelly_presentation_tests',
   'word_jelly_rules_tests', 'word_jelly_board_burst_tests', 'word_jelly_collection_learning_tests',
   'word_jelly_campaign_domain_tests', 'word_jelly_campaign_model_tests', 'word_jelly_difficulty_tests', 'word_jelly_campaign_flow_tests',
-  'word_jelly_map_tests', 'word_jelly_map_segments_tests', 'word_jelly_map_feel_tests', 'word_jelly_map_rest_tests',
+  'word_jelly_merged_level_fx_tests',
+  'word_jelly_map_tests', 'word_jelly_map_segments_tests', 'word_jelly_map_feel_tests', 'word_jelly_map_journey_tests', 'word_jelly_map_rest_tests',
   'word_jelly_map_sleep_tests',
   'word_jelly_map_pip_audio_tests',
+  'word_jelly_map_pip_scroll_tests',
   'word_jelly_upgrade_tests',
   'word_jelly_upgrade_contribution_tests',
   'word_jelly_upgrade_contribution_flow_tests',
@@ -89,6 +93,8 @@ groups['word-jelly'].godot.push('jelly_pause_tests', 'word_jelly_practice_tests'
   'word_jelly_powerup_availability_tests',
   'word_jelly_feedback_space_tests',
   'word_jelly_ambient_budget_tests',
+  'word_jelly_interaction_budget_tests',
+  'word_jelly_preview_cache_tests',
   'jelly_idle_body_cache_tests',
   'game_library_publication_tests',
   'word_jelly_upgrade_view_tests',
@@ -100,6 +106,8 @@ groups['word-jelly'].godot.push('jelly_pause_tests', 'word_jelly_practice_tests'
 groups.core.godot.push('chest_tier_models_tests', 'chest_tier_progress_tests', 'chest_tier_consumers_tests', 'chest_asset_states_tests');
 groups['chest-charge'].godot.push('chest_upgrade_level_tests', 'chest_asset_states_tests');
 groups['word-jelly'].godot.push('chest_upgrade_level_tests');
+groups.jelly.godot.push('jelly_publication_json_tests');
+groups['word-jelly'].godot.push('jelly_publication_json_tests');
 groups.jelly.node.push('jelly-campaign-art', 'jelly-campaign-host', 'chest-tier-art', 'jelly-boss-art');
 
 function createPlan(names = ['all']) {

@@ -11,6 +11,7 @@ var _gel: ShaderMaterial
 var _glow: TextureRect
 var _beads: Array[TextureRect] = []
 var _materials: Array[Texture2D] = []
+var _bead_texture: Texture2D
 
 func _init() -> void:
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -23,14 +24,23 @@ func _init() -> void:
 	_gel.shader = Surface
 	_paint.material = _gel
 	add_child(_paint)
+	hide()
+	_glow.hide()
+
+
+func _ensure_beads() -> void:
+	if not _beads.is_empty():
+		return
+	# Word Jelly hands off the liquid union without a bead release. Other game
+	# modes acquire these materials only when their first release actually starts.
 	for index in range(5):
 		var bead := _image()
+		bead.texture = _bead_texture
 		var skin := ShaderMaterial.new()
 		skin.shader = BeadSurface
 		skin.set_shader_parameter("shape_sdf", SHAPE_SDF)
 		bead.material = skin
 		_beads.append(bead)
-	hide()
 
 func _image() -> TextureRect:
 	var image := TextureRect.new()
@@ -41,6 +51,7 @@ func _image() -> TextureRect:
 	return image
 
 func configure(colors: Array, a: int, b: int, surface: Texture2D) -> void:
+	_bead_texture = surface
 	if _materials.is_empty():
 		for color: String in colors:
 			_materials.append(load("res://assets/images/jelly-match/gel-%s-material.png" % color) as Texture2D)
@@ -57,10 +68,16 @@ func set_contact(kind: String, direction: Vector2, strength: float, reduced: boo
 func pose(a: Vector2, b: Vector2, destination: Vector2, extent_a: Vector2, extent_b: Vector2, unit: float,
 		progress: float, compression: float, release: float, opacity: float) -> void:
 	stage = "release" if progress >= 2.0 / 3.0 else "compress" if progress >= 0.57 else "hold" if progress >= 0.52 else "union" if progress >= 0.12 else "contact"
+	if opacity <= 0.0 and (release <= 0.0 or release >= 1.0):
+		# The final learning body already owns input and paint after handover.
+		# A zero-alpha union still executes its distance and lighting shader.
+		hide()
+		return
 	var bounds := Rect2(a - extent_a * 0.5, extent_a).merge(Rect2(b - extent_b * 0.5, extent_b)).grow(unit * 0.85)
 	position = bounds.position
 	size = bounds.size
 	_paint.size = size
+	_paint.visible = opacity > 0.0
 	_gel.set_shader_parameter("canvas_size", size)
 	_gel.set_shader_parameter("body_a", Vector4(a.x - position.x, a.y - position.y, extent_a.x, extent_a.y))
 	_gel.set_shader_parameter("body_b", Vector4(b.x - position.x, b.y - position.y, extent_b.x, extent_b.y))
@@ -77,6 +94,9 @@ func pose(a: Vector2, b: Vector2, destination: Vector2, extent_a: Vector2, exten
 	_glow.size = Vector2.ONE * unit * lerpf(1.0, 2.1, release)
 	_glow.position = center - _glow.size * 0.5
 	_glow.modulate.a = bloom * 0.52
+	_glow.visible = bloom > 0.004
+	if release > 0.0 and release < 1.0:
+		_ensure_beads()
 	for index in range(_beads.size()):
 		var bead: TextureRect = _beads[index]
 		bead.visible = release > 0.0 and release < 1.0

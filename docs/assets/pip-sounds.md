@@ -31,8 +31,12 @@ preview with their documented Ava profile; they do not play during gameplay.
 
 The map companion has a separate, map-owned audio player for the requested
 sleep/wake interaction. Each visible sleep inhalation triggers one short cartoon
-snore. Hover interrupts the snore and plays the existing 0.18-second approved
-duck recording once. These cues do not restore companion audio in lessons or
+snore. Hover or actual user scrolling interrupts the snore and plays the existing
+0.18-second approved duck recording once when a visible sleeping Pip wakes.
+Repeated scroll movement and inertia do not queue additional calls; an already
+awake companion grips the stage without replaying the wake cue. Automatic focus
+reveal and layout movement do not count as a user scroll wake.
+These cues do not restore companion audio in lessons or
 result screens. The map's audio gate follows sound preferences, foreground
 activity, and visibility; hidden or muted events are discarded rather than queued.
 

@@ -5,7 +5,8 @@
 Coins remain saved help for a difficult moment. Ordinary play is free, the
 wallet starts at zero, and purchases never gate finishing or learning. Existing
 balances and paid receipts keep their original amounts. New chest rewards
-include Pip's level bonus; other item prices and fragment rules are unchanged.
+include Pip's level bonus. Auto Merge use prices scale with its owned level;
+word-goal merge prices scale with the legal board reduction they provide.
 
 The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 
@@ -15,8 +16,8 @@ The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 | Levelled chest | The ordinary payout multiplied by chest level |
 | Match Hint | 100, 150, then 200; no per-round use limit |
 | Memory observation | A free initial 10-second observation, then optional 5-second reveals costing 100, 200, 300, then 300 |
-| Auto Merge | 600, 900, 1200, then 1200 |
-| Pending word goal (family merge) | 50, 75, 100, then 100 |
+| Auto Merge | Base 200 at Lv1, plus 50 per owned level through 600 at Lv9; repeat use multiplies the base by 1.5, then 2 |
+| Pending word goal (family merge) | 50, 75, 100, then 100 per board space freed by the chosen family's complete legal merge |
 | Permanent merged Jelly levels, Lv2-Lv9 | 50, 100, 200, 350, 550, 800, 1100, 1500 |
 | Permanent Auto merge levels, Lv2-Lv9 | 50, 100, 200, 350, 550, 800, 1100, 1500; capacity rises from 3 at free Lv1 to 11 at Lv9 |
 
@@ -24,6 +25,24 @@ Only successful per-round help purchases advance their item's price. All pending
 share one family-merge counter, separate from Auto Merge.
 A new round resets the prices; a menu, pause, rejected
 payment, or wallet retry does not. The current price is shown before purchase.
+Goal prices use the net reduction in original board bodies after a forecast of
+the full chosen-family operation. A two-body merge frees one space; combining
+four bodies into one frees three and costs 150 coins on its first use.
+Unmatched roots, frozen or locked bodies, and capped Jellies that remain on the
+board do not increase the quote. Intermediate joins are counted once through
+their net reduction. Goal progress units and collected word levels are separate
+from this calculation. Quotes are cached for unchanged legal board states;
+payment locks the exact selected quote before calling the wallet.
+For settled one-cell complete words, pictures and merged bodies whose total
+level fits the unlocked cap, the count uses an exact direct calculation: each
+root/picture pair frees one space, then all completed units join into one.
+Positive levels ensure no intermediate subset reaches the cap before the final
+unit joins. Partial spellings, moving inputs, larger bodies and totals above
+the cap use the real automatic timeline on isolated data. At the Lv1 cap, each
+complete root/picture pair directly frees one space and leaves a capped body.
+Those fallback cache
+keys retain airborne timing, since arrival order can affect capped results.
+Settled idle age does not invalidate either quote cache.
 Auto Merge launches an eligible pair every 100 ms. Each 320 ms flight can overlap
 the next flight, then completes a 110 ms fusion and 30 ms settlement; the next
 launch does not wait for that full sequence. It never collects the resulting
@@ -60,8 +79,22 @@ results, and no complete path means no charge or partial spelling.
 Goal-family purchases and collection blasts have no such capacity cap.
 The gameplay button's sourced gel-and-number badge always shows the owned
 capacity, not the last level previewed or a countdown of remaining matches.
-Per-use Auto merge prices remain 600, 900 and 1200 coins and reset with a round;
-permanent capacity does not reset.
+The first-use base is `200 + 50 * (owned level - 1)` coins. The second successful
+use costs 1.5 times that base, and the third and later uses cost twice the base.
+All quotes use the wallet's 25-coin purchase unit. Use counters reset with a
+round; permanent capacity and its price base do not reset.
+
+| Owned Auto Merge level | Capacity | First use | Second use | Third and later |
+| ---: | ---: | ---: | ---: | ---: |
+| 1 | 3 | 200 | 300 | 400 |
+| 2 | 4 | 250 | 375 | 500 |
+| 3 | 5 | 300 | 450 | 600 |
+| 4 | 6 | 350 | 525 | 700 |
+| 5 | 7 | 400 | 600 | 800 |
+| 6 | 8 | 450 | 675 | 900 |
+| 7 | 9 | 500 | 750 | 1000 |
+| 8 | 10 | 550 | 825 | 1100 |
+| 9 | 11 | 600 | 900 | 1200 |
 
 Campaign format 5 stores both global upgrade levels, the Jelly introduction state
 and one bounded, kind-specific pending quote. The quote is saved before the
@@ -192,7 +225,8 @@ whole round is completed; leaving an unfinished round earns nothing. Previously
 earned Memory chests retain their original payouts.
 
 Using chest income alone, collecting ordinary Jelly words at Lv1 requires eight source words to fund
-the first 50-coin Lv2 unlock, or 78 for the first 600-coin Auto Merge budget,
+the first 50-coin Lv2 unlock, or 28 for the first 200-coin Lv1 Auto Merge budget
+(78 for the 600-coin Lv9 use),
 when every naturally marked half is collected in one round. Partial rounds can
 finish below a chest threshold, and upgraded bodies combine source words, so
 these are explicit planning units rather than observed player behavior.
@@ -268,7 +302,9 @@ thresholds. The Treasure columns below are archived, retired-item comparisons,
 not available purchase options. Paid scenarios assume an existing wallet can afford each purchase;
 negative net values mean savings are spent. Treasure calculations optimistically
 retain every injected fragment. Auto Merge uses the same completed workload,
-without treating convenience as new supply. One session is one fresh round.
+without treating convenience as new supply. The table retains its 600-coin
+Auto Merge comparison explicitly at owned Lv9; live lower-level prices are in
+the ladder above. One session is one fresh round.
 
 | Supplied words | Collection chance | No paid aid: expected coins | One Treasure: net coins | One Auto Merge: net coins | Three Treasure uses: net coins |
 | ---: | ---: | ---: | ---: | ---: | ---: |
@@ -281,9 +317,8 @@ without treating convenience as new supply. One session is one fresh round.
 
 The archived policy allowed the smallest modeled workload to save while buying
 one Treasure every three fresh rounds on average under the increased chest policy.
-Repeated purchases still consume savings. Prices have not been changed to offset
-the new bonus policy. Three Treasure purchases cost 900; three Auto Merge uses
-cost 2700.
+Repeated purchases still consume savings. Three archived Treasure purchases cost
+900; three Auto Merge uses at owned Lv9 cost 2700, while owned Lv1 costs 900.
 
 ## Archived retired-Treasure comparison
 

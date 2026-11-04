@@ -49,6 +49,11 @@ func pulse_snore() -> void:
 	_snore.play()
 
 
+func pause_snore() -> void:
+	if is_instance_valid(_snore) and _snore.playing:
+		_snore.stop()
+
+
 func wake() -> void:
 	var was_sleeping: bool = _sleeping
 	set_sleeping(false)

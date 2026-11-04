@@ -60,7 +60,11 @@ func reject(view, kind: String) -> void:
 	if not baseline:
 		check(button.snapshot().get("funds_warning", false) and button.snapshot().title == "Need coins",
 			"An actual insufficient-funds receipt has an explicit local money explanation: " + kind)
-		check(button.snapshot().get("missing_coins", 0) == view.game.powerup_price(kind),
+		var family: String = ""
+		if kind == "family_merge":
+			var item: Dictionary = button.get("_goal")
+			family = str(item.get("word_id", item.id))
+		check(button.snapshot().get("missing_coins", 0) == view.game.powerup_price(kind, family),
 			"The warning retains the actual shortfall without changing the quoted price")
 
 
@@ -141,8 +145,8 @@ func _run() -> void:
 		var button = view.powerup_buttons.auto_merge
 		button.reset()
 		await click(view, button)
-		check(button.snapshot().funds_warning and button.snapshot().missing_coins == 450
-			and button.snapshot().price_text == "600" and app.coin_wallet.balance == 150,
+		check(button.snapshot().funds_warning and button.snapshot().missing_coins == 50
+			and button.snapshot().price_text == "200" and app.coin_wallet.balance == 150,
 			"A partially funded purchase explains only the real shortfall and never changes its price or balance")
 	app.audio.halt()
 	app.queue_free()

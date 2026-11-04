@@ -35,6 +35,14 @@ func capture_ui(name: String) -> void:
 		"Capture the actual " + name)
 
 
+func advance_map(map, seconds: float) -> void:
+	var remaining: float = seconds
+	while remaining > 0.0000001:
+		var step: float = minf(remaining, 1.0 / 60.0)
+		map._process(step)
+		remaining -= step
+
+
 func test_map() -> void:
 	var map := Map.new()
 	root.add_child(map)
@@ -55,14 +63,14 @@ func test_map() -> void:
 	check(map.snapshot().unlock.from == 1 and map.snapshot().unlock.to == 2
 		and map.snapshot().unlock.phase == "route" and map._nodes[1].padlock.visible,
 		"A new clear starts a journey from the completed node, with its destination still visibly locked")
-	map._process(Map.ROUTE_SECONDS - 0.001)
+	advance_map(map, Map.ROUTE_SECONDS - 0.001)
 	check(map.snapshot().unlock.phase == "route" and map._nodes[1].padlock.visible,
 		"The route reaches the next stage before the actual lock-opening beat")
-	map._process(0.001 + Map.UNLOCK_SECONDS * 0.5)
+	advance_map(map, 0.001 + Map.UNLOCK_SECONDS * 0.5)
 	check(map.snapshot().unlock.phase == "node" and map._nodes[1].face.scale.x > 1.1
 		and map._nodes[1].padlock.modulate.a < 0.6,
 		"Arrival opens the lock with an explicit sourced-light flourish and node pop")
-	map._process(Map.UNLOCK_SECONDS)
+	advance_map(map, Map.UNLOCK_SECONDS)
 	check(map.snapshot().unlock.phase == "done" and not map._nodes[1].padlock.visible
 		and map._nodes[2].padlock.visible and map._nodes[98].padlock.visible,
 		"Only the newly opened lock disappears; every future stage retains its lock marker")

@@ -46,6 +46,8 @@ var _goal_hover_word: String = ""
 var _goal_hover_elapsed: float = 0.0
 var _auto_merge_hovered: bool = false
 var _auto_merge_hover_elapsed: float = 0.0
+var _auto_collect_hovered: bool = false
+var _auto_collect_hover_elapsed: float = 0.0
 var _fill_preference: bool = false
 var _fill_button := FillButton.new()
 var _powerup_effects: PowerupEffects
@@ -74,6 +76,8 @@ var _action_panel := Panel.new()
 var _action_surface := StyleBoxFlat.new()
 var _placement_tile: WordTile
 var _placement: Dictionary = {}
+var _placement_cache_key: Array = []
+var _placement_cache_valid: bool = false
 var _completion_source: int = -1
 var _completion_elapsed: float = 0.0
 var _fusion_drag: Dictionary = {}
@@ -102,6 +106,9 @@ var _view_space_dragged: int = -1
 var _view_space_return_area: int = 0
 var _view_drop_known: bool = false
 var _view_drop_available: bool = false
+var _view_geometry_stable: bool = false
+var _drop_cache_key: Array = []
+var _drop_cache_available: bool = false
 var _view_palette_ready: bool = false
 var _boss_view: BossView
 var _merged_level_badge := LevelBadge.new()
@@ -125,11 +132,18 @@ var _pose_revision: int = 0
 var _tile_pose_keys: Dictionary = {}
 var _tile_pose_dirty: Dictionary = {}
 var _active_tile_ids: Dictionary = {}
+var _dynamic_tile_ids: Dictionary = {}
+var _ambient_priority_batch_open: bool = false
 var _palette_key: Array = []
 var _controls_key: Array = []
 var _hud_key: Array = []
 var _hint_key: Array = []
 var _hint_matching_ids: Array[int] = []
+var _hint_animated_ids: Array[int] = []
+var _hint_live_ids: Dictionary = {}
+var _hint_cohort_key: Array = []
+var _hint_semantic_key: Array = []
+var _hint_pose_key: Array = []
 var _marks_key: Array = []
 var _contact_tile_ids: Dictionary = {}
 var _boss_statuses: Dictionary = {}
@@ -146,6 +160,7 @@ var _presentation_work: Dictionary = {"view_passes": 0, "tiles_classified": 0,
 const READ_HOLD_SECONDS: float = 0.45
 const COLLECTION_CLICK_MAX_MS: int = 500
 const STAGE_WARNING_SECONDS: float = 10.0
+const ANIMATED_MATCH_HINT_LIMIT: int = 3
 
 func _init() -> void:
 	super()
@@ -237,6 +252,7 @@ func _init() -> void:
 	_recovery_hint.hide()
 	collect_button = CollectButton.new()
 	collect_button.name = "WordJellyCollectAll"
+	collect_button.preview_changed.connect(_auto_collect_hover_changed)
 	collect_button.pressed.connect(_collect_all)
 	collect_button.z_index = 5
 	add_child(collect_button)
@@ -334,11 +350,20 @@ func stop() -> void:
 	_tile_pose_keys.clear()
 	_tile_pose_dirty.clear()
 	_active_tile_ids.clear()
+	_dynamic_tile_ids.clear()
+	_ambient_priority_batch_open = false
+	_placement_cache_key.clear()
+	_drop_cache_key.clear()
 	_palette_key.clear()
 	_controls_key.clear()
 	_hud_key.clear()
 	_hint_key.clear()
 	_hint_matching_ids.clear()
+	_hint_animated_ids.clear()
+	_hint_live_ids.clear()
+	_hint_cohort_key.clear()
+	_hint_semantic_key.clear()
+	_hint_pose_key.clear()
 	_marks_key.clear()
 	_contact_tile_ids.clear()
 	_boss_statuses.clear()
@@ -496,6 +521,10 @@ func cancel_input() -> void:
 	_goal_hover_elapsed = 0.0
 	_auto_merge_hovered = false
 	_auto_merge_hover_elapsed = 0.0
+	_auto_collect_hovered = false
+	_auto_collect_hover_elapsed = 0.0
+	if collect_button != null:
+		collect_button.clear_preview()
 	if powerup_buttons.has("auto_merge"):
 		powerup_buttons.auto_merge.clear_preview()
 	if _practice_panel != null:
@@ -764,7 +793,7 @@ func _release(global_point: Vector2) -> void:
 	_sync_positions()
 
 func _release_empty_space(source: int, from: Vector2) -> void:
-	var destination: Dictionary = _placement_at(source, from, _drag_point)
+	var destination: Dictionary = _placement_at(source, from, _drag_point, true)
 	var generation: int = _generation
 	if bool(destination.get("valid", false)) and game.reposition(source, int(destination.column), int(destination.row)):
 		if generation != _generation or not _can_play():
@@ -785,19 +814,33 @@ func _release_empty_space(source: int, from: Vector2) -> void:
 	else:
 		super._release_empty_space(source, from)
 
-func _placement_at(id: int, from: Vector2, pointer: Vector2) -> Dictionary:
+func _placement_at(id: int, from: Vector2, pointer: Vector2, fresh: bool = false) -> Dictionary:
 	if _pitch <= 0.0 or not _board.has_point(pointer) or not _tiles.has(id):
 		return {}
 	# Snap the held body's origin, preserving where the finger grabbed it.
 	var grid: Vector2 = (from - _board.position - Vector2.ONE * _gap * 0.5) / _pitch
 	var column: int = roundi(grid.x)
 	var row: int = roundi(grid.y)
-	var cell: Dictionary = game.cell(id)
+	var cell: Dictionary = _cell(id).duplicate()
 	if cell.is_empty():
 		return {}
+	# Geometry revisions include settlement and fusion reservations. Pointer
+	# motion within one rounded slot does not require another occupancy scan.
+	# Pointer-up always obtains a fresh model decision before committing.
+	var key: Array = [_view_board_revision, id, column, row, game.phase, game.paused,
+		game._stage_ending, game._combo_pending, game.powerup_active(), game.collection_batch_active(),
+		game._held_tile_id, game._dragged_tile_id, game.boss.frozen(id)]
+	var valid: bool
+	if not fresh and _view_update_active and key == _placement_cache_key:
+		valid = _placement_cache_valid
+	else:
+		valid = game.can_reposition(id, column, row)
+		if _view_update_active and not fresh:
+			_placement_cache_key = key
+			_placement_cache_valid = valid
 	cell.column = column
 	cell.row = row
-	return {"tile_id": id, "column": column, "row": row, "valid": game.can_reposition(id, column, row),
+	return {"tile_id": id, "column": column, "row": row, "valid": valid,
 		"rect": _tile_rect(cell)}
 
 func _refresh_placement() -> void:
@@ -994,6 +1037,11 @@ func _configure_tile(tile: Tile, cell: Dictionary, combined: bool = false) -> vo
 	_tile_pose_dirty[int(cell.id)] = true
 	if _tiles.get(int(cell.id)) == tile:
 		_ambient_budget.register(tile)
+		# Classification precedes registration for a newly arriving body. Apply
+		# its already established priority before this pass selects its cohort.
+		var id: int = int(cell.id)
+		_ambient_budget.set_priority(id, _active_tile_ids.has(id) or _dynamic_tile_ids.has(id)
+			or _hint_live_ids.has(id) or id == _ambient_hover_id)
 
 func _apply_palette(tile: WordTile, id: int) -> void:
 	var index: int = int(_palette_indices.get(id, _palette_cache.get(id, 0)))
@@ -1001,9 +1049,12 @@ func _apply_palette(tile: WordTile, id: int) -> void:
 		tile.set_palette(index, Palette.hue(index))
 
 func _begin_view_update() -> void:
-	# These caches live only across a presentation pass, after model.step().
-	# No time-, occupancy-, or return-space decision survives a simulation step.
+	# Model references live only across this presentation pass. The two preview
+	# decisions below can survive a step only at verified geometry boundaries.
 	_view_update_active = true
+	if not _ambient_priority_batch_open:
+		_ambient_budget.begin_priority_update()
+		_ambient_priority_batch_open = true
 	var raster_key: Array = [get_screen_transform().get_scale(), get_viewport_rect().size] if is_inside_tree() else [Vector2.ONE, size]
 	if raster_key != _view_raster_key:
 		_view_raster_key = raster_key
@@ -1020,6 +1071,13 @@ func _begin_view_update() -> void:
 		game.auto_merge_level, game.allow_cross_age, game._powerup_vocabulary_revision,
 		game._campaign_level_rules, game.fall_speed_scale, game.boss.broken_remaining > WordModel.EPSILON]
 	var active: Dictionary = {}
+	var dynamic: Dictionary = {}
+	_view_geometry_stable = game.fusions.is_empty() and game._drag_gravity_delays.is_empty()
+	for fusion: Dictionary in game.fusions:
+		var result: Dictionary = fusion.get("result", {})
+		board_key.append([fusion.operation, fusion.a_id, fusion.b_id,
+			result.get("id", -1), result.get("column", -1), result.get("row", -1),
+			result.get("width", 1), result.get("height", 1)])
 	var powerup_ids: Dictionary = {}
 	for drag: Dictionary in game._powerup.get("drags", []):
 		powerup_ids[int(drag.get("source_id", -1))] = true
@@ -1032,6 +1090,7 @@ func _begin_view_update() -> void:
 		if not _tiles.has(id):
 			_view_topology_dirty = true
 		var settled: bool = game.is_settled(cell)
+		_view_geometry_stable = _view_geometry_stable and settled
 		_view_settled[id] = settled
 		if bool(cell.get("arrival", false)) and not settled:
 			_view_arrivals[id] = cell
@@ -1047,9 +1106,14 @@ func _begin_view_update() -> void:
 			cell.get("fragments", 0), hash(cell.get("composition", {})),
 			cell.get("word", {}).get("id", ""), cell.get("image_word", {}).get("id", ""),
 			bool(cell.get("lifted", false)), _view_fusing.has(id)])
-		var interactive: bool = id == _source or id == _target or _queued_collections.has(id) or powerup_ids.has(id)
+		var interactive: bool = id == _source or id == _target or id == _keyboard_source \
+			or _queued_collections.has(id) or powerup_ids.has(id) \
+			or id == int(_rejection.get("a", -1)) or id == int(_rejection.get("b", -1))
 		var moving: bool = not settled or _snapbacks.has(id) or _reflow.has(id)
-		var hinting: bool = _tiles.has(id) and _tiles[id].completion_hint
+		var hinting: bool = id in _hint_matching_ids and (id in _hint_animated_ids \
+			or id == _ambient_hover_id or (_tiles.has(id) and _tiles[id].has_focus()))
+		if moving or interactive:
+			dynamic[id] = true
 		if moving or interactive or hinting:
 			active[id] = true
 		_ambient_budget.set_priority(id, moving or interactive or hinting or id == _ambient_hover_id)
@@ -1057,6 +1121,7 @@ func _begin_view_update() -> void:
 		if not active.has(id):
 			_tile_pose_dirty[id] = true
 	_active_tile_ids = active
+	_dynamic_tile_ids = dynamic
 	if ids != _view_live_ids or _tiles.size() != ids.size():
 		_view_topology_dirty = true
 		_view_live_ids = ids
@@ -1073,11 +1138,17 @@ func _begin_view_update() -> void:
 	_view_palette_ready = false
 
 func _end_view_update() -> void:
+	_flush_ambient_priorities()
 	_view_update_active = false
 	_view_cells.clear()
 	_view_mergeable.clear()
 	_view_space_cells.clear()
 	_view_space_known = false
+
+func _flush_ambient_priorities() -> void:
+	if _ambient_priority_batch_open:
+		_ambient_priority_batch_open = false
+		_ambient_budget.end_priority_update()
 
 func _cell(id: int) -> Dictionary:
 	return _view_cells.get(id, {}) if _view_update_active else super._cell(id)
@@ -1086,7 +1157,20 @@ func _can_drop_preview() -> bool:
 	if not _view_update_active:
 		return game.can_drop_now()
 	if not _view_drop_known:
-		_view_drop_available = game.can_drop_now()
+		var first: Dictionary = game._first_preview_tile()
+		var key: Array = [_view_board_revision, game._generation, game.phase, game.paused,
+			game.full_elapsed >= 0.0, game._stage_ending, game._combo_pending,
+			game.powerup_active(), game.collection_batch_active(), first.get("id", -1),
+			game._held_tile_id, game._dragged_tile_id, game._gravity_pending, game._growth_pending]
+		if _view_geometry_stable and key == _drop_cache_key:
+			_view_drop_available = _drop_cache_available
+		else:
+			_view_drop_available = game.can_drop_now()
+			if _view_geometry_stable:
+				_drop_cache_key = key
+				_drop_cache_available = _view_drop_available
+			else:
+				_drop_cache_key.clear()
 		_view_drop_known = true
 	return _view_drop_available
 
@@ -1312,10 +1396,11 @@ func _sync_positions() -> void:
 	var owns_update: bool = not _view_update_active
 	if owns_update:
 		_begin_view_update()
+	_refresh_completion_hints()
+	_flush_ambient_priorities()
 	# Native focus and pause transitions can change membership outside the clock.
 	for id: int in _ambient_budget.advance(0.0):
 		_tile_pose_dirty[id] = true
-	_refresh_completion_hints()
 	var preview_owners: Dictionary = {}
 	if not reduced_motion:
 		for cell: Dictionary in _view_arrivals.values():
@@ -1335,6 +1420,7 @@ func _sync_positions() -> void:
 		if _tiles.has(id) and _tiles[id].valid_word:
 			pose_ids[id] = true
 	_tile_pose_dirty.clear()
+	_ambient_budget.begin_priority_update()
 	for id: int in pose_ids:
 		var cell: Dictionary = _cell(id)
 		if not _tiles.has(id):
@@ -1356,7 +1442,10 @@ func _sync_positions() -> void:
 		if _rest_rects.has(id) and _rest_rects[id] != rect and not reduced_motion:
 			_reflow[id] = {"from": tile.position, "started": 0.0 if bool(cell.get("falling", false)) else float(cell.age), "falling": bool(cell.get("falling", false))}
 			_active_tile_ids[id] = true
+			_dynamic_tile_ids[id] = true
 			_ambient_budget.set_priority(id, true)
+			live = true
+			tile.set_idle_cached(false)
 			if bool(cell.get("falling", false)):
 				# One motion owns the new destination. Continuing a snapback first
 				# would rewind the body when the slower fall takes over afterward.
@@ -1394,7 +1483,7 @@ func _sync_positions() -> void:
 					lerpf(source.position.y, rect.position.y, fall * fall))
 				var moving: Dictionary = cell.duplicate()
 				moving.age = age
-				var pose: Dictionary = Motion.sample(moving)
+				var pose: Dictionary = Motion.sample(moving, WordModel.FALL_SPEED_SCALE)
 				stretch = pose.stretch
 				compression = float(pose.compression)
 				var source_pose: Dictionary = _arrival_origins.get(id, {})
@@ -1415,10 +1504,10 @@ func _sync_positions() -> void:
 			elif _reflow.has(id) and not reduced_motion:
 				var p: float = clampf((float(cell.age) - float(_reflow[id].started)) / WordModel.SETTLE_SECONDS, 0.0, 1.0)
 				var falling: bool = bool(_reflow[id].falling)
-				var travel: float = pow(minf(1.0, p / 0.70), 2.0) if falling else smoothstep(0.0, 1.0, p)
+				var travel: float = pow(minf(1.0, p / WordModel.FALL_CONTACT_RATIO), 2.0) if falling else smoothstep(0.0, 1.0, p)
 				tile.position = Vector2(_reflow[id].from).lerp(rect.position, travel)
-				if falling and p >= 0.70:
-					var landing: float = (p - 0.70) / 0.30
+				if falling and p >= WordModel.FALL_CONTACT_RATIO:
+					var landing: float = (p - WordModel.FALL_CONTACT_RATIO) / (1.0 - WordModel.FALL_CONTACT_RATIO)
 					var squash: float = sin(landing * TAU) * (1.0 - landing) * 0.12
 					stretch = Vector2(1.0 + squash, 1.0 - squash)
 				if p >= 1.0:
@@ -1433,6 +1522,7 @@ func _sync_positions() -> void:
 		# Request only after the final static pose; changed geometry falls back live.
 		if not live:
 			tile.set_idle_cached(bool(_view_settled.get(id, false)))
+	_ambient_budget.end_priority_update()
 	# Pose the pending body before testing contact, including on frames without
 	# pointer motion while its two lobes continue to join.
 	if not _fusion_drag.is_empty():
@@ -1472,7 +1562,7 @@ func _activate_goal_merge(goal_id: String, word_id: String) -> void:
 	var generation: int = _generation
 	var model_generation: int = game._generation
 	_goal_merge_id = goal_id
-	_goal_merge_price = game.powerup_price("family_merge")
+	_goal_merge_price = game.powerup_price("family_merge", word_id)
 	cancel_input()
 	if generation != _generation or model_generation != game._generation or not _can_play():
 		_goal_merge_id = ""
@@ -1513,10 +1603,45 @@ func _auto_merge_hover_changed(active: bool) -> void:
 
 func _auto_merge_hover_preview() -> Dictionary:
 	if not _auto_merge_hovered or not _can_play() or _source >= 0 or _keyboard_source >= 0 \
-		or _pointer != NO_POINTER or _finish_is_pulling() or not _goal_hover_word.is_empty() \
+		or _pointer != NO_POINTER or _finish_is_pulling() or _hover_preview_kind() != "auto_merge" \
 		or game.powerup_active() or game.collection_batch_active():
 		return {"capacity": game.auto_merge_capacity(), "result_count": 0, "input_ids": []}
 	return game.auto_merge_preview()
+
+
+func _hover_preview_kind() -> String:
+	# Pointing at a tool takes precedence over focus retained on another tool.
+	if _auto_collect_hovered and collect_button != null and collect_button.is_hovered():
+		return "auto_collect"
+	if _auto_merge_hovered and powerup_buttons.has("auto_merge") and powerup_buttons.auto_merge.is_hovered():
+		return "auto_merge"
+	if not _goal_hover_word.is_empty():
+		return "goal"
+	return "auto_collect" if _auto_collect_hovered else "auto_merge" if _auto_merge_hovered else ""
+
+
+func _auto_collect_hover_changed(active: bool) -> void:
+	if active == _auto_collect_hovered:
+		return
+	_auto_collect_hovered = active
+	_auto_collect_hover_elapsed = 0.0
+	_hint_key.clear()
+	_refresh_marks()
+	_publish()
+
+
+func _auto_collect_hover_preview() -> Dictionary:
+	var ids: Array[int] = []
+	if _auto_collect_hovered and _can_play() and not game.paused and game.auto_collect_unlocked() \
+		and collect_button != null and not collect_button.disabled and collect_button.is_visible_in_tree() \
+		and _source < 0 and _keyboard_source < 0 and _pointer == NO_POINTER \
+		and game._held_tile_id < 0 and game._combo_pending.is_empty() \
+		and not _finish_is_pulling() and _hover_preview_kind() == "auto_collect" \
+		and not game.powerup_active() and not game.collection_batch_active() and not game.stage_ending():
+		# This is the exact capture set used by the batch, including completed
+		# bodies still landing. Downstream collection blasts are separate effects.
+		ids = game.collectable_ids()
+	return {"active": not ids.is_empty(), "input_ids": ids, "result_count": ids.size()}
 
 
 func _set_fill_mode(enabled: bool) -> void:
@@ -1783,6 +1908,8 @@ func _advance_board_presentation(delta: float) -> void:
 		_goal_hover_elapsed += delta
 	if _auto_merge_hovered:
 		_auto_merge_hover_elapsed += delta
+	if _auto_collect_hovered:
+		_auto_collect_hover_elapsed += delta
 
 
 func _process(delta: float) -> void:
@@ -1889,35 +2016,43 @@ func _refresh_marks() -> void:
 func _refresh_completion_hints() -> void:
 	var playing: bool = _can_play()
 	var source: int = (_source if _source >= 0 else _keyboard_source) if playing and not game.collection_batch_active() else -1
+	var hover_kind: String = _hover_preview_kind()
 	var key: Array = [_view_board_revision, _boss_status_revision, source, _goal_hover_word,
-		_auto_merge_hovered, playing, game.powerup_active(), game.collection_batch_active(),
-		_pointer, _finish_is_pulling(), str(_fusion_drag.get("event_id", "")), reduced_motion]
+		_auto_merge_hovered, _auto_collect_hovered, playing, game.powerup_active(), game.collection_batch_active(),
+		_pointer, _finish_is_pulling(), str(_fusion_drag.get("event_id", "")), reduced_motion,
+		game.paused, game._held_tile_id, not game._combo_pending.is_empty(), game.stage_ending(),
+		collect_button.disabled if collect_button != null else true, hover_kind]
 	var elapsed: float = _completion_elapsed
-	if not _goal_hover_word.is_empty() and playing and _source < 0 and _keyboard_source < 0 \
+	if hover_kind == "goal" and playing and _source < 0 and _keyboard_source < 0 \
 		and not game.powerup_active() and not game.collection_batch_active():
 		elapsed = _goal_hover_elapsed
-	elif _auto_merge_hovered:
+	elif hover_kind == "auto_collect":
+		elapsed = _auto_collect_hover_elapsed
+	elif hover_kind == "auto_merge":
 		elapsed = _auto_merge_hover_elapsed
 	if key == _hint_key:
-		for id: int in _hint_matching_ids:
-			if _tiles.has(id):
-				_tiles[id].set_completion_hint(true, elapsed, reduced_motion)
+		_apply_completion_hint_poses(elapsed)
 		return
 	_hint_key = key
 	_presentation_work.hint_searches += 1
 	var matching_ids: Array[int] = []
 	var hover: bool = false
-	if not _goal_hover_word.is_empty() and playing and _source < 0 and _keyboard_source < 0 \
+	if hover_kind == "goal" and playing and _source < 0 and _keyboard_source < 0 \
 		and not game.powerup_active() and not game.collection_batch_active():
 		hover = true
 		for id: int in _tiles:
 			if game.family_word_id(id) == _goal_hover_word and not game.is_fusing(id) and game.boss_interactable(id, false):
 				matching_ids.append(id)
 	else:
-		var automatic: Dictionary = _auto_merge_hover_preview()
-		if int(automatic.result_count) > 0:
+		var collecting: Dictionary = _auto_collect_hover_preview()
+		if bool(collecting.active):
 			hover = true
-			matching_ids.assign(automatic.input_ids)
+			matching_ids.assign(collecting.input_ids)
+		else:
+			var automatic: Dictionary = _auto_merge_hover_preview()
+			if int(automatic.result_count) > 0:
+				hover = true
+				matching_ids.assign(automatic.input_ids)
 	if not hover:
 		if source != _completion_source:
 			_completion_source = source
@@ -1934,17 +2069,90 @@ func _refresh_completion_hints() -> void:
 
 
 func _set_completion_ids(ids: Array[int], source: int, elapsed: float) -> void:
+	var cohort_key: Array = [source, _goal_hover_word, _auto_merge_hovered, _auto_collect_hovered, _hover_preview_kind(), ids]
+	if cohort_key != _hint_cohort_key:
+		_hint_cohort_key = cohort_key.duplicate(true)
+		_select_hint_cohort(ids, source)
+	var semantic_key: Array = [ids, source, reduced_motion]
+	if semantic_key == _hint_semantic_key:
+		_apply_completion_hint_poses(elapsed)
+		return
+	_hint_semantic_key = semantic_key.duplicate(true)
+	_hint_pose_key.clear()
+	_hint_matching_ids.assign(ids)
+	_ambient_budget.begin_priority_update()
 	for id: int in _tiles:
 		var active: bool = id in ids
 		var tile: WordTile = _tiles[id]
+		var animated: bool = active and _hint_should_animate(id)
 		if active or tile.completion_hint:
-			tile.set_completion_hint(active, elapsed, reduced_motion)
+			tile.set_completion_hint(active, elapsed, reduced_motion, animated)
 			_tile_pose_dirty[id] = true
 		tile.set_match_dimmed(not ids.is_empty() and id != source and not active)
-		if active:
+		if animated:
 			_active_tile_ids[id] = true
-		_ambient_budget.set_priority(id, _active_tile_ids.has(id) or active or id == _ambient_hover_id)
-	_hint_matching_ids = ids
+		elif not _dynamic_tile_ids.has(id):
+			_active_tile_ids.erase(id)
+		_ambient_budget.set_priority(id, _dynamic_tile_ids.has(id) or animated or id == _ambient_hover_id)
+	_ambient_budget.end_priority_update()
+	_apply_completion_hint_poses(elapsed)
+
+func _select_hint_cohort(ids: Array[int], source: int) -> void:
+	# Keep the decorative cohort fixed during a gesture. Nearest targets are
+	# chosen once; moving the pointer never rotates dozens of bodies into motion.
+	var anchor: Vector2 = _board.get_center()
+	var cell: Dictionary = _cell(source)
+	if not cell.is_empty():
+		anchor = _tile_rect(cell).get_center()
+	var distances: Dictionary = {}
+	var ordered: Array[int] = []
+	for id: int in ids:
+		if _tiles.has(id):
+			distances[id] = _tile_rect(_cell(id)).get_center().distance_squared_to(anchor)
+			ordered.append(id)
+	ordered.sort_custom(func(a: int, b: int) -> bool:
+		return a < b if is_equal_approx(float(distances[a]), float(distances[b])) else float(distances[a]) < float(distances[b]))
+	_hint_animated_ids.assign(ordered.slice(0, mini(ANIMATED_MATCH_HINT_LIMIT, ordered.size())))
+
+func _hint_should_animate(id: int) -> bool:
+	return id in _hint_animated_ids or _dynamic_tile_ids.has(id) or id == _source \
+		or id == _target or id == _keyboard_source or id == _ambient_hover_id \
+		or (_tiles.has(id) and _tiles[id].has_focus())
+
+func _apply_completion_hint_poses(elapsed: float) -> void:
+	var live: Dictionary = {}
+	for id: int in _hint_animated_ids:
+		if id in _hint_matching_ids and _tiles.has(id):
+			live[id] = true
+	for id: int in _dynamic_tile_ids:
+		if id in _hint_matching_ids and _tiles.has(id):
+			live[id] = true
+	var focused: Control = get_viewport().gui_get_focus_owner() if is_inside_tree() else null
+	for id: int in [_target, _ambient_hover_id, focused.tile_id if focused is WordTile else -1]:
+		if id in _hint_matching_ids and _tiles.has(id):
+			live[id] = true
+	for id: int in live:
+		_active_tile_ids[id] = true
+	var key: Array = [elapsed, reduced_motion, live.keys()]
+	if key == _hint_pose_key:
+		return
+	_hint_pose_key = key
+	_ambient_budget.begin_priority_update()
+	for id: int in _hint_live_ids:
+		if not live.has(id) and _tiles.has(id):
+			_tiles[id].set_completion_hint(id in _hint_matching_ids, elapsed, reduced_motion, false)
+			_tile_pose_dirty[id] = true
+			if not _dynamic_tile_ids.has(id):
+				_active_tile_ids.erase(id)
+			_ambient_budget.set_priority(id, _dynamic_tile_ids.has(id) or id == _ambient_hover_id)
+	for id: int in live:
+		_tiles[id].set_completion_hint(true, elapsed, reduced_motion, true)
+		_active_tile_ids[id] = true
+		if not _hint_live_ids.has(id):
+			_tile_pose_dirty[id] = true
+			_ambient_budget.set_priority(id, true)
+	_hint_live_ids = live
+	_ambient_budget.end_priority_update()
 
 
 func _set_hover_matching(ids: Array[int], elapsed: float) -> void:
@@ -2412,7 +2620,7 @@ func _landing_contact_at(cell: Dictionary) -> float:
 		return INF
 	if bool(cell.get("arrival", false)):
 		return WordModel.arrival_contact_at(cell)
-	return WordModel.SETTLE_SECONDS * (0.70 if bool(cell.get("falling", false)) else 1.0)
+	return WordModel.SETTLE_SECONDS * (WordModel.FALL_CONTACT_RATIO if bool(cell.get("falling", false)) else 1.0)
 
 func _refresh_hud() -> void:
 	_hud_key = _frame_hud_content_key()
@@ -2569,7 +2777,7 @@ func _refresh_controls() -> void:
 		game.full_elapsed >= 0.0, game.fill_mode, game.fill_mode_locked(), game.pip_level,
 		game._held_tile_id, game._dragged_tile_id, game._growth_pending, game._gravity_pending,
 		hash(game._drag_gravity_delays), game.fall_speed_scale, game.boss.broken_remaining > WordModel.EPSILON,
-		balance, _stage_banner.visible, _stage_banner.ready_pending()]
+		balance, game.auto_merge_level, hash(game._powerup_uses), _stage_banner.visible, _stage_banner.ready_pending()]
 	if key == _controls_key:
 		return
 	_controls_key = key
@@ -2634,10 +2842,14 @@ func _refresh_goal_buttons(available: Variant = null) -> void:
 	if _practice_panel == null:
 		return
 	var balance: int = int(coin_balance.call()) if coin_balance.is_valid() else -1
+	var families: Array[String] = []
+	for row: Dictionary in _practice_panel._rows:
+		if not row.mastered and not row.retired:
+			families.append(str(row.family_word_id))
 	_practice_panel.set_purchase_state(game.powerup_price("family_merge"), balance,
 		_can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and _keyboard_source < 0,
 		game.powerup_active() or game.collection_batch_active() or game.stage_ending(), _paused,
-		game.can_activate_powerup("family_merge") if available == null else bool(available))
+		game.can_activate_powerup("family_merge") if available == null else bool(available), game.family_merge_quotes(families))
 
 func _refresh_collect_button() -> void:
 	if collect_button == null:
@@ -3057,6 +3269,8 @@ func snapshot() -> Dictionary:
 	state["auto_merge_hover"] = _auto_merge_hover_preview()
 	state.auto_merge_hover.merge({"active": state.auto_merge_hover.result_count > 0,
 		"elapsed": _auto_merge_hover_elapsed}, true)
+	state["auto_collect_hover"] = _auto_collect_hover_preview()
+	state.auto_collect_hover["elapsed"] = _auto_collect_hover_elapsed
 	state["fill_control"] = {"visible": _fill_button.is_visible_in_tree(), "enabled": not _fill_button.disabled,
 		"on": _fill_button.button_pressed, "locked": game.fill_mode_locked(),
 		"presentation": _fill_button.snapshot(),

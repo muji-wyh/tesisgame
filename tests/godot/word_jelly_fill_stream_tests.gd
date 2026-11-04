@@ -43,7 +43,7 @@ func physical_rect(tile: Dictionary) -> Rect2:
 		var elapsed: float = float(tile.age) - Model.arrival_delay(tile)
 		if elapsed < -Model.EPSILON:
 			return Rect2()
-		var progress: float = clampf(elapsed / Motion.contact_at(tile), 0.0, 1.0)
+		var progress: float = clampf(elapsed / Motion.contact_at(tile, Model.FALL_SPEED_SCALE), 0.0, 1.0)
 		row -= Motion.travel_rows(tile) * (1.0 - progress * progress)
 	return Rect2(Vector2(tile.column, row), Vector2(tile.width, tile.height))
 
@@ -84,7 +84,7 @@ func test_streams() -> void:
 				"Each supplied body actually uses the requested stage motion speed")
 			check(model.cells.filter(func(tile: Dictionary) -> bool: return bool(tile.arrival)).all(
 				func(tile: Dictionary) -> bool: return is_equal_approx(Model.arrival_slot_clearance(tile),
-					sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed)),
+					sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed / Model.FALL_SPEED_SCALE)),
 				"The preview handoff waits for actual speed-aware physical entrance clearance")
 			var first_generated: int = model.generated_tiles
 			var first_ids: Array[int] = []
@@ -142,7 +142,7 @@ func test_lane_ownership() -> void:
 	for index in range(model.upcoming.size()):
 		var predecessor: Dictionary = model.cells.filter(func(tile: Dictionary) -> bool:
 			return bool(tile.arrival) and int(tile.arrival_index) == index)[0]
-		if float(predecessor.age) - Model.arrival_delay(predecessor) < 0.4 - Model.EPSILON:
+		if float(predecessor.age) - Model.arrival_delay(predecessor) < Model.arrival_slot_clearance(predecessor) - Model.EPSILON:
 			check(int(model.upcoming[index].id) == int(advertised[index]),
 				"A blocked preview keeps its own exact word/part instead of sliding or being replaced")
 
@@ -189,7 +189,8 @@ func test_interruption() -> void:
 func test_deadline_and_manual() -> void:
 	var model = make_model()
 	var generated: int = model.generated_tiles
-	model.stage_run.advance(model.stage_run.remaining - 0.4)
+	var clearance: float = sqrt(2.0 * int(model.upcoming[0].height) / Motion.ARRIVAL_GRAVITY) / Model.FALL_SPEED_SCALE
+	model.stage_run.advance(model.stage_run.remaining - clearance)
 	model.step(1.0)
 	check(model.stage_ending() and model.generated_tiles == generated + Model.DROP_COUNT,
 		"A deadline tied with entrance clearance wins before any extra supply")
@@ -229,7 +230,12 @@ func test_broken_supply() -> void:
 
 
 func _run() -> void:
-	check(data.load_all(), "Load the actual current-age reviewed vocabulary")
+	var catalog: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
+	check(catalog is Array and Data.validate_words(catalog).is_empty(), "Load the validated production vocabulary without unrelated chest bootstrap")
+	if failures > 0:
+		quit(1)
+		return
+	data.words.assign(catalog)
 	words = data.words.filter(func(word: Dictionary) -> bool: return int(word.min_age) == 3).slice(0, 6).map(
 		func(word: Dictionary) -> Dictionary: return Morphology.decorate(word))
 	test_streams()

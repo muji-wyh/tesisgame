@@ -232,19 +232,23 @@ func set_stage(state: Dictionary) -> void:
 	_refresh_hover()
 
 
-func set_purchase_state(price: int, balance: int, interactive: bool, busy: bool, paused: bool, available: bool = true) -> void:
-	var state: Array = [price, balance, interactive, busy, paused, available]
+func set_purchase_state(price: int, balance: int, interactive: bool, busy: bool, paused: bool, available: bool = true,
+	quotes: Dictionary = {}) -> void:
+	var state: Array = [price, balance, interactive, busy, paused, available, quotes]
 	if state == _purchase_state:
 		return
-	_purchase_state = state
+	_purchase_state = state.duplicate(true)
 	_interactive = interactive
 	_busy = busy
 	_paused = paused
 	for row: Dictionary in _rows:
-		row.surface.set_price(price)
+		var quote: Dictionary = quotes.get(str(row.family_word_id), {})
+		var row_price: int = int(quote.get("price", price))
+		var row_available: bool = available and bool(quote.get("available", true))
+		row.surface.set_price(row_price)
 		row.surface.pause_feedback(paused)
-		row.surface.set_availability(interactive and available and not row.mastered and not row.retired,
-			balance >= price, busy, balance >= 0)
+		row.surface.set_availability(interactive and row_available and not row.mastered and not row.retired,
+			balance >= row_price, busy, balance >= 0)
 	_refresh_hover()
 
 

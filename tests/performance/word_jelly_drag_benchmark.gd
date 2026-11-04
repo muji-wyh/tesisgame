@@ -52,6 +52,19 @@ class ObservedJelly extends "res://scripts/word_jelly.gd":
 		var started: int = Time.get_ticks_usec()
 		super._refresh_completion_hints()
 		cpu_us["hints"] = int(cpu_us.get("hints", 0)) + Time.get_ticks_usec() - started
+	func _refresh_placement() -> void:
+		var started: int = Time.get_ticks_usec()
+		super._refresh_placement()
+		cpu_us["placement"] = int(cpu_us.get("placement", 0)) + Time.get_ticks_usec() - started
+	func _can_drop_preview() -> bool:
+		var started: int = Time.get_ticks_usec()
+		var allowed: bool = super._can_drop_preview()
+		cpu_us["drop_availability"] = int(cpu_us.get("drop_availability", 0)) + Time.get_ticks_usec() - started
+		return allowed
+	func _begin_view_update() -> void:
+		var started: int = Time.get_ticks_usec()
+		super._begin_view_update()
+		cpu_us["classification"] = int(cpu_us.get("classification", 0)) + Time.get_ticks_usec() - started
 
 var serialized_characters: int = 0
 

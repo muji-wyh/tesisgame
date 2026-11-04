@@ -80,10 +80,11 @@ static func expected_chest(marked_groups: int, success: float, treasure_uses: in
 	return result
 
 
-static func purchase_total(kind: String, uses: int) -> int:
+static func purchase_total(kind: String, uses: int, auto_merge_level: int = 1,
+	reduction_count: int = 1) -> int:
 	var total: int = 0
 	for use in range(uses):
-		total += Economy.powerup_price(kind, use)
+		total += Economy.powerup_price(kind, use, auto_merge_level, reduction_count)
 	return total
 
 
@@ -99,20 +100,26 @@ static func scenario(supplied_words: int, success: float) -> Dictionary:
 	var with_treasure: float = expected_chest(marked, success, 1) + bonus - purchase_total("fragments", 1)
 	return {
 		"supplied_words": supplied_words, "success_probability": success,
+		"auto_merge_level": Economy.MAX_UPGRADE_LEVEL,
 		"expected_collected_words": supplied_words * success, "natural_marked_groups": marked,
 		"free_play_chest": chest, "free_play_bonus": bonus, "free_play_total": total,
 		"one_treasure_net": with_treasure,
 		"one_treasure_every_three_sessions_net_average": (total * 2.0 + with_treasure) / 3.0,
-		"one_auto_merge_net": total - purchase_total("auto_merge", 1),
+		"one_auto_merge_net": total - purchase_total("auto_merge", 1, Economy.MAX_UPGRADE_LEVEL),
 		"three_treasure_net": expected_chest(marked, success, 3) + bonus - purchase_total("fragments", 3),
-		"three_auto_merge_net": total - purchase_total("auto_merge", 3)
+		"three_auto_merge_net": total - purchase_total("auto_merge", 3, Economy.MAX_UPGRADE_LEVEL)
 	}
 
 
 static func build_report() -> Dictionary:
 	var scenarios: Array[Dictionary] = []
 	var upgraded_collections: Array[Dictionary] = []
+	var auto_merge_prices: Array[Dictionary] = []
 	for level in range(1, Jelly.MAX_MERGE_LEVEL + 1):
+		auto_merge_prices.append({"owned_level": level, "capacity": Economy.auto_merge_capacity(level),
+			"first_use": Economy.powerup_price("auto_merge", 0, level),
+			"second_use": Economy.powerup_price("auto_merge", 1, level),
+			"third_and_later": Economy.powerup_price("auto_merge", 2, level)})
 		var expected_bonus: float = Economy.jelly_bonus_chance(level) * Economy.jelly_bonus(level)
 		upgraded_collections.append({"merge_level": level,
 			"chance": Economy.jelly_bonus_chance(level), "winning_amount": Economy.jelly_bonus(level),
@@ -130,7 +137,10 @@ static func build_report() -> Dictionary:
 			"All injected Treasure fragments are collected: this overestimates paid returns.",
 			"Net budgets assume enough previously saved coins to buy the specified items.",
 			"Auto Merge uses the same completed workload; no automatic collection or bonus income is assumed.",
+			"Workload Auto Merge comparisons use owned Lv9; the live owned-level price ladder is reported separately.",
+			"Family merge totals multiply the successful-use unit price by forecast board spaces freed; a default example frees one space per purchase.",
 			"One modeled session is one round; fresh rounds reset repeat prices."
 		],
-		"scenarios": scenarios, "upgraded_collections": upgraded_collections
+		"scenarios": scenarios, "upgraded_collections": upgraded_collections,
+		"auto_merge_prices": auto_merge_prices
 	}

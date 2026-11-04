@@ -26,8 +26,13 @@ const LOCK = preload("res://assets/images/ui/controls/lock.svg")
 const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const RAYS = preload("res://assets/chests/shared/effects/rays.png")
-const ROUTE_SECONDS: float = 0.85
-const UNLOCK_SECONDS: float = 0.65
+const DEPART_SECONDS: float = 0.18
+const RUN_SECONDS: float = 1.12
+const JUMP_SECONDS: float = 0.52
+const LAND_SECONDS: float = 0.24
+const ROUTE_SECONDS: float = DEPART_SECONDS + RUN_SECONDS
+const UNLOCK_SECONDS: float = JUMP_SECONDS + LAND_SECONDS
+const RUN_ROUTE_END: float = 0.82
 const STAGES_PER_CHAPTER: int = 9
 const BOSS_PORTRAIT = preload("res://assets/jelly-boss/private/bramble-portrait.png")
 const SCENERY: Array[Texture2D] = [
@@ -76,6 +81,8 @@ var _hovered_stage: int = 0
 var _pressed_stage: int = 0
 var _route_points := PackedVector2Array()
 var _earned_points := PackedVector2Array()
+var _journey_curve := Curve2D.new()
+var _journey_camera_follow: bool = false
 
 
 func _init() -> void:
@@ -127,6 +134,7 @@ func _init() -> void:
 		return _active and is_visible_in_tree() and not bool(_state.get("loading", false))
 	_scroll.held_button_changed.connect(func(button: Button) -> void:
 		_set_pressed(int(button.get_meta("map_stage", 0)) if is_instance_valid(button) else 0))
+	_scroll.user_scroll_delta.connect(_on_user_scroll)
 	add_child(_scroll)
 	_content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	_scroll.add_child(_content)
@@ -305,11 +313,14 @@ func configure(state: Dictionary, reduced_motion: bool = false) -> void:
 		and same_context:
 		_unlock_from = highest
 		_unlock_elapsed = ROUTE_SECONDS + UNLOCK_SECONDS if reduced_motion else 0.0
+		_journey_camera_follow = not reduced_motion
 	elif highest != previous or not same_context:
 		_unlock_from = 0
 		_unlock_elapsed = ROUTE_SECONDS + UNLOCK_SECONDS
+		_journey_camera_follow = false
 	if reduced_motion:
 		_unlock_elapsed = ROUTE_SECONDS + UNLOCK_SECONDS
+		_journey_camera_follow = false
 	_state = state.duplicate(true)
 	_pip.set_growth_age(int(state.get("pip_age", 0)))
 	_pip.set_professional_profile(state.get("pip_profile", {}))
@@ -319,6 +330,8 @@ func configure(state: Dictionary, reduced_motion: bool = false) -> void:
 	if blocked:
 		_scroll.cancel_drag()
 		_clear_response()
+		_unlock_elapsed = ROUTE_SECONDS + UNLOCK_SECONDS
+		_journey_camera_follow = false
 	for item: Dictionary in _nodes:
 		var number: int = int(item.number)
 		var stars: int = int(state.get("best_stars", {}).get(str(number), 0))
@@ -371,7 +384,8 @@ func set_reduced_motion(value: bool) -> void:
 func open(state: Dictionary, reduced_motion: bool = false) -> void:
 	configure(state, reduced_motion)
 	show()
-	_pip.reset_rest()
+	if not _journey_active():
+		_pip.reset_rest()
 	_layout()
 	focus_frontier.call_deferred()
 
@@ -379,6 +393,8 @@ func open(state: Dictionary, reduced_motion: bool = false) -> void:
 func close() -> void:
 	_scroll.cancel_drag()
 	_unlock_elapsed = ROUTE_SECONDS + UNLOCK_SECONDS
+	_journey_camera_follow = false
+	_pip.set_journey_pose("", _unlock_elapsed, 1.0, 1.0)
 	_refresh_locks()
 	hide()
 
@@ -394,6 +410,10 @@ func _hover_stage(number: int) -> void:
 func _observe_pip_input(event: InputEvent) -> void:
 	if not _active or not _pip.is_visible_in_tree() or _pip._idle_paused:
 		return
+	if event is InputEventMouseButton and event.button_index in [MOUSE_BUTTON_WHEEL_UP, MOUSE_BUTTON_WHEEL_DOWN, MOUSE_BUTTON_WHEEL_LEFT, MOUSE_BUTTON_WHEEL_RIGHT]:
+		return
+	if (event is InputEventMouseMotion or event is InputEventScreenDrag) and _scroll.is_pointer_active():
+		return
 	var point: Vector2
 	if event is InputEventMouseMotion or event is InputEventScreenDrag:
 		point = event.position
@@ -406,6 +426,14 @@ func _observe_pip_input(event: InputEvent) -> void:
 	# Observe input without taking it from the medallion or scroll container.
 	if _scroll.get_global_rect().has_point(point) and _pip.get_global_rect().has_point(point):
 		_pip.pointer_activity()
+
+
+func _on_user_scroll(distance: float) -> void:
+	_journey_camera_follow = false
+	_sync_guide()
+	if _active and _pip.is_visible_in_tree() and not _pip._idle_paused:
+		_pip.scroll_motion(distance)
+		_queue_changed()
 
 
 func _set_pressed(number: int) -> void:
@@ -456,6 +484,7 @@ func show_chapter(number: int) -> bool:
 		or _state.get("loading", false) or not str(_state.get("error", "")).is_empty():
 		return false
 	_scroll.cancel_drag()
+	_journey_camera_follow = false
 	_clear_response()
 	var frontier: int = mini(clampi(int(_state.get("highest_cleared", 0)), 0, 99) + 1, 99)
 	var first: int = (number - 1) * STAGES_PER_CHAPTER + 1
@@ -468,6 +497,12 @@ func _reveal_stage(number: int) -> void:
 	if number < 1 or number > Catalog.MAX_STAGE or not is_visible_in_tree():
 		return
 	_scroll.cancel_drag()
+	_pip.cancel_scroll_motion()
+	if _journey_active() and _journey_camera_follow and number == _unlock_from + 1:
+		_frame_journey()
+		_refresh_viewport()
+		return
+	_journey_camera_follow = false
 	var button: Button = _nodes[number - 1].button
 	_scroll.ensure_control_visible(button)
 	var maximum: float = _scroll.get_v_scroll_bar().max_value - _scroll.get_v_scroll_bar().page
@@ -499,7 +534,7 @@ func _input(event: InputEvent) -> void:
 		if not _state.get("loading", false) and str(_state.get("error", "")).is_empty():
 			_scroll.cancel_drag()
 			_clear_response()
-			_scroll.scroll_vertical += roundi(_scroll.size.y * (0.85 if event.keycode == KEY_PAGEDOWN else -0.85))
+			_scroll.scroll_by_user(roundi(_scroll.size.y * (0.85 if event.keycode == KEY_PAGEDOWN else -0.85)))
 			get_viewport().set_input_as_handled()
 		return
 	if not event is InputEventJoypadButton or event.button_index != JOY_BUTTON_A:
@@ -731,6 +766,7 @@ func _layout() -> void:
 	_earned_points = earned.get_baked_points()
 	_pip.custom_minimum_size = Vector2.ZERO
 	_pip.size = Vector2(112, 84) / s
+	_cache_journey_route()
 	_position_guide()
 	_refresh_locks()
 	_refresh_viewport()
@@ -744,9 +780,12 @@ func _process(delta: float) -> void:
 	_effect_elapsed += minf(delta, 0.1)
 	var unlocking: bool = _unlock_elapsed < ROUTE_SECONDS + UNLOCK_SECONDS
 	if unlocking:
-		_unlock_elapsed = minf(ROUTE_SECONDS + UNLOCK_SECONDS, _unlock_elapsed + delta)
+		_unlock_elapsed = minf(ROUTE_SECONDS + UNLOCK_SECONDS, _unlock_elapsed + minf(delta, 0.1))
 	_refresh_locks(true)
 	_pose_nodes(delta)
+	if _journey_active() and _journey_camera_follow:
+		_frame_journey()
+	_sync_guide()
 	_pose_scenery()
 	if unlocking:
 		_content.queue_redraw()
@@ -776,11 +815,11 @@ func _sync_guide() -> void:
 	var supported_node: Button = _nodes[mini(highest, 98)].button
 	_pip.visible = is_visible_in_tree() and highest < 99 \
 		and not bool(_state.get("loading", false)) and str(_state.get("error", "")).is_empty() \
-		and viewport.intersects(supported_node.get_global_rect())
+		and viewport.intersects(_pip.get_global_rect() if _journey_active() else supported_node.get_global_rect())
 	var on_screen: bool = _pip.is_visible_in_tree() \
 		and _scroll.get_global_rect().intersects(_pip.get_global_rect())
 	_pip.set_idle_paused(not on_screen or not _active)
-	_pip.set_interaction_active(on_screen and _active and highest < 99 \
+	_pip.set_interaction_active(on_screen and _active and highest < 99 and not _journey_active() \
 		and (_hovered_stage == highest + 1 or _pressed_stage == highest + 1 \
 			or _reduced_motion and _nodes[highest].button.has_focus()))
 
@@ -789,12 +828,87 @@ func _position_guide() -> void:
 	if _nodes.is_empty() or _pip.size.x <= 0.0:
 		return
 	var highest: int = clampi(int(_state.get("highest_cleared", 0)), 0, 98)
-	var item: Dictionary = _nodes[highest]
-	var face: TextureRect = item.face
-	var support: Vector2 = item.button.position + face.get_transform() * Vector2(face.size.x * 0.5, 0.0)
+	var support: Vector2 = _stage_support(highest + 1)
+	if _journey_active():
+		var sample: Dictionary = _journey_sample()
+		support = sample.support
+		_pip.set_journey_pose(sample.phase, _unlock_elapsed, sample.progress, sample.direction)
+	else:
+		_pip.set_journey_pose("", _unlock_elapsed, 1.0, 1.0)
 	_pip.position = support - _pip.support_point()
 	_pip.perch_direction = -1.0 if _pip.get_global_rect().get_center().x \
 		> _scroll.get_global_rect().get_center().x else 1.0
+
+
+func _stage_support(number: int) -> Vector2:
+	var item: Dictionary = _nodes[clampi(number - 1, 0, 98)]
+	var face: TextureRect = item.face
+	return item.button.position + face.get_transform() * Vector2(face.size.x * 0.5, 0.0)
+
+
+func _journey_active() -> bool:
+	return _unlock_from > 0 and _unlock_from < _nodes.size() and not _reduced_motion \
+		and _unlock_elapsed < ROUTE_SECONDS + UNLOCK_SECONDS
+
+
+func _cache_journey_route() -> void:
+	_journey_curve.clear_points()
+	if _unlock_from <= 0 or _unlock_from >= _nodes.size():
+		return
+	_journey_curve.add_point(_nodes[_unlock_from - 1].button.get_rect().get_center(),
+		Vector2.ZERO, Vector2(0, -40.0 / _scale))
+	_journey_curve.add_point(_nodes[_unlock_from].button.get_rect().get_center(),
+		Vector2(0, 40.0 / _scale), Vector2.ZERO)
+	_journey_curve.get_baked_length()
+
+
+func _journey_sample() -> Dictionary:
+	var source: Vector2 = _stage_support(_unlock_from)
+	var target: Vector2 = _stage_support(_unlock_from + 1)
+	var length: float = _journey_curve.get_baked_length()
+	var launch: Vector2 = _journey_curve.sample_baked(length * RUN_ROUTE_END)
+	var support: Vector2 = target
+	var phase: String = "land"
+	var p: float = clampf((_unlock_elapsed - ROUTE_SECONDS - JUMP_SECONDS) / LAND_SECONDS, 0.0, 1.0)
+	var tangent: Vector2 = target - launch
+	if _unlock_elapsed < DEPART_SECONDS:
+		phase = "depart"
+		p = clampf(_unlock_elapsed / DEPART_SECONDS, 0.0, 1.0)
+		var road_start: Vector2 = _journey_curve.sample_baked(0.0)
+		support = source.lerp(road_start, smoothstep(0.0, 1.0, p))
+		tangent = _journey_curve.sample_baked(minf(length, 12.0 / _scale)) - road_start
+	elif _unlock_elapsed < ROUTE_SECONDS:
+		phase = "run"
+		p = clampf((_unlock_elapsed - DEPART_SECONDS) / RUN_SECONDS, 0.0, 1.0)
+		var distance: float = length * RUN_ROUTE_END * smoothstep(0.0, 1.0, p)
+		support = _journey_curve.sample_baked(distance)
+		tangent = _journey_curve.sample_baked(minf(length, distance + 6.0 / _scale)) \
+			- _journey_curve.sample_baked(maxf(0.0, distance - 6.0 / _scale))
+	elif _unlock_elapsed < ROUTE_SECONDS + JUMP_SECONDS:
+		phase = "jump"
+		p = clampf((_unlock_elapsed - ROUTE_SECONDS) / JUMP_SECONDS, 0.0, 1.0)
+		support = launch.lerp(target, p) + Vector2(0, -sin(p * PI) * 64.0 / _scale)
+	var direction: float = signf(tangent.x) if absf(tangent.x) > 1.0 / _scale \
+		else signf(target.x - source.x) if absf(target.x - source.x) > 1.0 / _scale else _pip.perch_direction
+	return {"phase": phase, "progress": p, "support": support, "direction": direction,
+		"source_support": source, "target_support": target}
+
+
+func _frame_journey() -> void:
+	if not _journey_active():
+		return
+	# Camera framing stays planted while the arriving medallion pulses below Pip.
+	var source: Vector2 = _nodes[_unlock_from - 1].button.position + Vector2(49, 0) / _scale
+	var target: Vector2 = _nodes[_unlock_from].button.position + Vector2(49, 0) / _scale
+	var bounds := Rect2(source - _pip.support_point(), _pip.size)
+	bounds = bounds.merge(Rect2(target - _pip.support_point(), _pip.size))
+	bounds = bounds.merge(_nodes[_unlock_from - 1].button.get_rect())
+	bounds = bounds.merge(_nodes[_unlock_from].button.get_rect()).grow(12.0 / _scale)
+	var offset: float = bounds.get_center().y - _scroll.size.y * 0.5
+	if bounds.size.y > _scroll.size.y:
+		offset = (_pip.position + _pip.support_point()).y - _scroll.size.y * 0.62
+	var maximum: float = maxf(0.0, _scroll.get_v_scroll_bar().max_value - _scroll.get_v_scroll_bar().page)
+	_scroll.scroll_vertical = roundi(clampf(offset, 0.0, maximum))
 
 
 func _refresh_viewport() -> void:
@@ -897,16 +1011,14 @@ func _draw_route() -> void:
 		_content.draw_polyline(_earned_points, Color("#fff1bf"), 2.0 / _scale, true)
 	if _unlock_from <= 0 or _unlock_elapsed >= ROUTE_SECONDS + UNLOCK_SECONDS:
 		return
-	var journey := Curve2D.new()
-	var start: Vector2 = _nodes[_unlock_from - 1].button.get_rect().get_center()
-	journey.add_point(start,
-		Vector2.ZERO, Vector2(0, -40.0 / _scale))
-	journey.add_point(_nodes[_unlock_from].button.get_rect().get_center(),
-		Vector2(0, 40.0 / _scale), Vector2.ZERO)
-	var travel: float = clampf(_unlock_elapsed / ROUTE_SECONDS, 0.0, 1.0)
+	var travel: float = RUN_ROUTE_END * smoothstep(0.0, 1.0,
+		clampf((_unlock_elapsed - DEPART_SECONDS) / RUN_SECONDS, 0.0, 1.0))
+	if _unlock_elapsed >= ROUTE_SECONDS:
+		travel = lerpf(RUN_ROUTE_END, 1.0,
+			smoothstep(0.0, 1.0, clampf((_unlock_elapsed - ROUTE_SECONDS) / JUMP_SECONDS, 0.0, 1.0)))
 	var trail := PackedVector2Array()
 	for index in range(33):
-		trail.append(journey.sample_baked(journey.get_baked_length() * travel * index / 32.0))
+		trail.append(_journey_curve.sample_baked(_journey_curve.get_baked_length() * travel * index / 32.0))
 	_content.draw_polyline(trail, Color(1.0, 0.78, 0.25, 0.28), 24.0 / _scale, true)
 	_content.draw_polyline(trail, Color("#ffe69b"), 12.0 / _scale, true)
 	var head: Vector2 = trail[trail.size() - 1]
@@ -917,6 +1029,7 @@ func _draw_route() -> void:
 		false, Color("#fff4c4"))
 	if _unlock_elapsed > ROUTE_SECONDS:
 		var p: float = (_unlock_elapsed - ROUTE_SECONDS) / UNLOCK_SECONDS
+		head = _stage_support(_unlock_from + 1)
 		_content.draw_texture_rect(RAYS, Rect2(head - Vector2.ONE * edge, Vector2.ONE * edge * 2),
 			false, Color(1.0, 0.85, 0.45, 1.0 - p))
 		for index in range(8):
@@ -932,6 +1045,23 @@ func _rect(bounds: Rect2) -> Dictionary:
 func _control(control: Control) -> Dictionary:
 	return {"visible": control.is_visible_in_tree(), "enabled": not control.disabled,
 		"rect": _rect(control.get_global_rect())}
+
+
+func _point(value: Vector2) -> Dictionary:
+	return {"x": value.x, "y": value.y}
+
+
+func _journey_snapshot() -> Dictionary:
+	var support: Vector2 = _pip.position + _pip.support_point()
+	var sample: Dictionary = _journey_sample() if _journey_active() else {
+		"phase": "done", "progress": 1.0, "direction": _pip.perch_direction,
+		"source_support": _stage_support(_unlock_from) if _unlock_from > 0 else support,
+		"target_support": _stage_support(_unlock_from + 1) if _unlock_from > 0 else support}
+	return {"active": _journey_active(), "from": _unlock_from,
+		"to": _unlock_from + 1 if _unlock_from > 0 else 0,
+		"phase": sample.phase, "progress": sample.progress, "elapsed": _unlock_elapsed,
+		"support": _point(support), "source_support": _point(sample.source_support),
+		"target_support": _point(sample.target_support), "direction": sample.direction}
 
 
 func snapshot() -> Dictionary:
@@ -967,7 +1097,8 @@ func snapshot() -> Dictionary:
 		"guide": {"visible": _pip.is_visible_in_tree() and _scroll.get_global_rect().intersects(_pip.get_global_rect()),
 			"stage": highest + 1 if highest < 99 else 0,
 			"age": _pip.growth_age, "course_id": str(_pip.professional_profile.get("course_id", "")),
-			"rect": _rect(_pip.get_global_rect()), "presentation": _pip.rest_snapshot()},
+			"rect": _rect(_pip.get_global_rect()), "presentation": _pip.rest_snapshot(),
+			"journey": _journey_snapshot()},
 		"presentation": {"elapsed": _effect_elapsed, "hovered_stage": _hovered_stage, "pressed_stage": _pressed_stage,
 			"reduced_motion": _reduced_motion,
 			"hover_scale": _nodes[_hovered_stage - 1].face.scale.x if _hovered_stage > 0 else 1.0,

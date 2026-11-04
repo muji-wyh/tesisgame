@@ -216,7 +216,10 @@ func _check_charge(view, cat: Dictionary, data, reduced: bool) -> void:
 	check(view.game.cells.is_empty() and view._fusion_visuals.is_empty() and cues.count("jelly-collect-lv4") == 1,
 		"The completed firework leaves one collection and retires its fusion presentation")
 	for node: Node in owned:
-		check(node.is_queued_for_deletion(), "Charge glow and sparkles retire with their owning collection")
+		check(not node.is_visible_in_tree(), "Finished collection charge artwork stops drawing before a later collection reuses it")
+	view.stop()
+	for node: Node in owned:
+		check(node.is_queued_for_deletion(), "Stopping the view releases retained collection charge artwork")
 	for action: String in ["configure", "stop"]:
 		check(view.configure([cat], 3, Data.theme("spring"), data.chests, reduced, 45), "Interrupted charge fixture configures")
 		view.game.spawn_interval = 10000.0

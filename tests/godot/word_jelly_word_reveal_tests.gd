@@ -57,6 +57,17 @@ func _present(reveal, text: String, picture: Texture2D = null, batch: bool = fal
 	reveal.present({"id": text, "text": text}, apple if picture == null else picture, Color("#598c6c"), batch, 0.0, level)
 
 
+func _same_card_state(a: Dictionary, b: Dictionary) -> bool:
+	var first: Dictionary = a.duplicate(true)
+	var second: Dictionary = b.duplicate(true)
+	# A new hero can lower decorative density. Every content, geometry, identity,
+	# and clock field still participates in the original full-entry comparison.
+	for field: String in ["spark_count", "trail_count", "stamp_limit"]:
+		first.effects.erase(field)
+		second.effects.erase(field)
+	return first == second
+
+
 func _check_independent_lifetimes(reveal) -> void:
 	reveal.reset()
 	reveal.configure_layout(Rect2(22, 14, 900, 180), 1.0)
@@ -66,7 +77,7 @@ func _check_independent_lifetimes(reveal) -> void:
 	reveal.advance(0.10)
 	var first: Dictionary = reveal.snapshot().entries[0].duplicate(true)
 	_present(reveal, "cat", cat)
-	check(reveal.snapshot().entries[0] == first, "adding another word leaves the prior card and timeline unchanged")
+	check(_same_card_state(reveal.snapshot().entries[0], first), "adding another word leaves the prior card and timeline unchanged")
 	reveal.advance(0.10)
 	_present(reveal, "apple")
 	var state: Dictionary = reveal.snapshot()
@@ -278,6 +289,9 @@ func _check_level_effects(reveal) -> void:
 			"level effects remain decorative during ordinary motion")
 		check(int(fx.spark_count) > 0 and int(fx.burst_count) >= 0,
 			"each level carries a nonempty sourced-particle effect")
+		check(int(fx.stamp_limit) == -1 and int(fx.spark_count) == int(Reveal.LevelEffects.PROFILES[level - 1].sparks)
+			and int(fx.trail_count) == int(Reveal.LevelEffects.PROFILES[level - 1].get("trails", 0)),
+			"an isolated hero retains its original authored particle and trail profile")
 		check(state.spelling == "cat" and str(state.picture).ends_with("cat.webp")
 			and is_equal_approx(float(state.duration), Reveal.SECONDS),
 			"higher-level decoration keeps the complete picture, spelling and reading lifetime")
@@ -322,7 +336,7 @@ func _check_level_lifetimes(reveal) -> void:
 				var entries: Array = reveal.snapshot().entries
 				check(entries.size() == index + 1, "rapid mixed-level pickups retain every still-living pop")
 				for earlier in range(prior.size()):
-					check(entries[earlier] == prior[earlier],
+					check(_same_card_state(entries[earlier], prior[earlier]),
 						"a richer new pop cannot reroll a previous pop's content, identity or clock")
 				check(int(entries[index].merge_level) == levels[index]
 					and int(entries[index].effects.level) == levels[index]

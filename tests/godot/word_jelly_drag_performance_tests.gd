@@ -121,7 +121,7 @@ func _run() -> void:
 		check(view.outline_bounds_checks <= 8,
 			"Empty-space dragging rejects distant bodies before allocating or scanning their authored contours")
 		check(view._tiles[pair[0]].position.is_equal_approx(view.get_global_transform().affine_inverse() * destination - view._drag_offset), "The frame uses the latest touch position")
-		check(not view._view_update_active, "No cached model decisions survive the frame")
+		check(not view._view_update_active, "No presentation-pass model references survive the frame")
 		var target: Vector2 = view._tiles[pair[1]].get_global_rect().get_center()
 		Fixture.motion(view, destination + Vector2(4, 4))
 		view._release(target)

@@ -24,6 +24,12 @@ var palette_index: int = -1
 const COMPLETION_GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const COMPLETION_LIGHT = preload("res://scripts/jelly_completion_glow.gdshader")
 const COMPLETION_SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
+const MERGED_EFFECT_ATLAS = preload("res://assets/images/jelly-level-fx/atlas.png")
+const MERGED_EFFECT_SHADER = preload("res://scripts/word_jelly_merged_level_fx.gdshader")
+const MERGED_EFFECT_IDS: Array[String] = ["pearl", "ripple", "spiral", "firework", "cascade",
+	"bouquet", "aurora", "constellation", "grand_bouquet"]
+const MERGED_EFFECT_FRAMES: float = 32.0
+const MERGED_EFFECT_SECONDS: float = 3.2
 const COMPLETION_GROW_SECONDS: float = 0.20
 const COMPLETION_HELD_SCALE: float = 1.12
 const COMPLETION_BREATH_AMOUNT: float = 0.025
@@ -33,8 +39,13 @@ var match_dimmed: bool = false
 var completion_scale: float = 1.0
 var _completion_started_at: float = 0.0
 var _completion_last_elapsed: float = 0.0
+var _completion_animated: bool = true
+var _completion_reduced: bool = false
 var _merged_glow: TextureRect
 var _merged_glints: Array[TextureRect] = []
+var _merged_effect: TextureRect
+var _merged_effect_material: ShaderMaterial
+var _merged_effect_frame: float = 0.0
 var _merged_elapsed: float = 0.0
 var _merged_geometry_size := Vector2(-1.0, -1.0)
 var _merged_geometry_scale: float = -1.0
@@ -172,16 +183,33 @@ func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 			glint.self_modulate.a = 0.25 if match_dimmed else 1.0
 			_visual.move_child(glint, _picture.get_index())
 			_merged_glints.append(glint)
+	if active and _merged_effect == null:
+		_merged_effect = _texture()
+		_merged_effect.name = "MergedLevelEffect"
+		_merged_effect.texture = MERGED_EFFECT_ATLAS
+		_merged_effect.stretch_mode = TextureRect.STRETCH_SCALE
+		_merged_effect.self_modulate.a = 0.25 if match_dimmed else 1.0
+		_merged_effect_material = ShaderMaterial.new()
+		_merged_effect_material.shader = MERGED_EFFECT_SHADER
+		_merged_effect.material = _merged_effect_material
+		_visual.move_child(_merged_effect, _picture.get_index())
 	if _merged_glow != null:
 		var ui_scale: float = Style.ui_scale(self)
 		var geometry_changed: bool = size != _merged_geometry_size or ui_scale != _merged_geometry_scale \
 			or merge_level != _merged_geometry_level or active != _merged_geometry_active
 		if geometry_changed:
+			if merge_level != _merged_geometry_level or active != _merged_geometry_active:
+				_merged_effect_frame = 0.0
+				_merged_effect_material.set_shader_parameter("frame", 0.0)
 			_merged_geometry_size = size
 			_merged_geometry_scale = ui_scale
 			_merged_geometry_level = merge_level
 			_merged_geometry_active = active
 			_merged_glow.visible = active
+			_merged_effect.visible = active
+			_merged_effect.size = size * 1.32
+			_merged_effect.position = (size - _merged_effect.size) * 0.5
+			_merged_effect_material.set_shader_parameter("tier_row", float(maxi(0, merge_level - 1)))
 			# The sourced readiness light has fixed geometry between layout changes.
 			_merged_glow.size = size * 1.30
 			_merged_glow.position = (size - _merged_glow.size) * 0.5 - Vector2(0.0, size.y * 0.025)
@@ -195,8 +223,19 @@ func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 				glint.pivot_offset = glint.size * 0.5
 				# Readiness accents stay on the gel rim, behind the learning faces.
 				glint.position = size * (Vector2(0.04, 0.47) if index == 0 else Vector2(0.96, 0.47)) - glint.size * 0.5
-		if active and (geometry_changed or still != _merged_pose_reduced \
+		if active and (geometry_changed or still != _merged_pose_reduced or reduced and _merged_effect_frame != 0.0 \
 			or not still and (elapsed != _merged_pose_elapsed or tile_id != _merged_pose_id)):
+			var next_frame: float = _merged_effect_frame
+			if reduced:
+				next_frame = 0.0
+			elif not still and not _merged_pose_reduced and _merged_pose_elapsed >= 0.0 and not geometry_changed:
+				# A local phase holds its exact pose outside the shared idle cohort.
+				# Capped active time also avoids catching up after a hidden page.
+				next_frame = fposmod(next_frame + clampf(elapsed - _merged_pose_elapsed, 0.0, 0.1)
+					* MERGED_EFFECT_FRAMES / MERGED_EFFECT_SECONDS, MERGED_EFFECT_FRAMES)
+			if next_frame != _merged_effect_frame:
+				_merged_effect_frame = next_frame
+				_merged_effect_material.set_shader_parameter("frame", next_frame)
 			for index in range(_merged_glints.size()):
 				var glint: TextureRect = _merged_glints[index]
 				var twinkle: float = 0.5 if still else (sin(elapsed * TAU / 2.8 + index * PI + tile_id * 0.41) + 1.0) * 0.5
@@ -209,26 +248,38 @@ func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 		_set_surface_parameter(&"completion_strength", 0.35 if active else 0.0)
 		_set_surface_parameter(&"completion_glint", -2.0 if still or not active else -0.3 + fposmod(elapsed + tile_id * 0.13, 4.2) * 0.40)
 
-func set_completion_hint(active: bool, elapsed: float, reduced: bool) -> void:
+func set_completion_hint(active: bool, elapsed: float, reduced: bool, animated: bool = true) -> void:
+	var next_hint: bool = active and not _projection
+	if next_hint == completion_hint and animated == _completion_animated and reduced == _completion_reduced \
+		and (not next_hint or not animated or elapsed == _completion_last_elapsed):
+		return
 	var was_active: bool = completion_hint
-	completion_hint = active and not _projection
+	var was_animated: bool = _completion_animated
+	completion_hint = next_hint
+	_completion_animated = animated
+	_completion_reduced = reduced
 	if not completion_hint and not was_active:
 		return
 	# A newly available target grows in even when the source has been held awhile.
 	if completion_hint and (not was_active or elapsed < _completion_last_elapsed):
 		_completion_started_at = elapsed
+	if completion_hint and was_active and animated and not was_animated:
+		# Waking an already enlarged hint starts its breath at the held posture.
+		_completion_started_at = minf(_completion_started_at, elapsed - COMPLETION_GROW_SECONDS)
 	_completion_last_elapsed = elapsed
 	var age: float = maxf(0.0, elapsed - _completion_started_at)
 	var previous_scale: float = completion_scale
-	var enter: float = smoothstep(0.0, COMPLETION_GROW_SECONDS, age)
-	var breath: float = (1.0 - cos(maxf(0.0, age - COMPLETION_GROW_SECONDS) * TAU / COMPLETION_BREATH_SECONDS)) * 0.5
+	var enter: float = smoothstep(0.0, COMPLETION_GROW_SECONDS, age) if animated else 1.0
+	var breath: float = (1.0 - cos(maxf(0.0, age - COMPLETION_GROW_SECONDS) * TAU / COMPLETION_BREATH_SECONDS)) * 0.5 if animated and not reduced else 0.0
 	# Keep the enlarged resting size throughout every breath while still eligible.
 	completion_scale = lerpf(1.0, COMPLETION_HELD_SCALE + breath * COMPLETION_BREATH_AMOUNT, enter) if completion_hint and not reduced else 1.0
 	# Only the painted skin breathes. Letters, badges, layout and contact stay fixed.
-	_base_stretch *= completion_scale / previous_scale
-	_surface.scale *= completion_scale / previous_scale
+	if completion_scale != previous_scale:
+		_invalidate_idle_cache()
+		_base_stretch *= completion_scale / previous_scale
+		_surface.scale *= completion_scale / previous_scale
 	_set_surface_parameter(&"completion_strength", (0.82 if reduced else 0.7 + enter * 0.25) if completion_hint else 0.35 if valid_word and not _projection else 0.0)
-	_set_surface_parameter(&"completion_glint", -2.0 if reduced else -0.25 + fposmod(elapsed, 3.0) * 1.35)
+	_set_surface_parameter(&"completion_glint", -2.0 if reduced or not animated or not completion_hint else -0.25 + fposmod(elapsed, 3.0) * 1.35)
 	if completion_hint != was_active:
 		_refresh_feedback()
 
@@ -241,6 +292,8 @@ func set_match_dimmed(value: bool) -> void:
 	_surface.self_modulate = Color(0.68, 0.72, 0.76) if value else Color.WHITE
 	if _merged_glow != null:
 		_merged_glow.self_modulate.a = 0.25 if value else 1.0
+	if _merged_effect != null:
+		_merged_effect.self_modulate.a = 0.25 if value else 1.0
 	for glint: TextureRect in _merged_glints:
 		glint.self_modulate.a = 0.25 if value else 1.0
 
@@ -532,6 +585,10 @@ func visible_fragment_badges() -> int:
 
 func presentation_snapshot() -> Dictionary:
 	return {"jelly_kind": jelly_kind, "merge_level": merge_level, "display_text": _spelling,
+		"merged_effect": {"visible": _merged_effect != null and _merged_effect.is_visible_in_tree(),
+			"id": MERGED_EFFECT_IDS[merge_level - 1] if valid_word else "",
+			"level": merge_level, "animated": valid_word and not _projection and is_visible_in_tree() and _ambient_animation and not _merged_pose_reduced,
+			"frame": _merged_effect_frame, "atlas": MERGED_EFFECT_ATLAS.resource_path},
 		"picture_only": jelly_kind == "picture" and _picture.visible and not _label.visible,
 		"merged_light": _merged_glow != null and _merged_glow.visible,
 		"merged_glints": _merged_glints.size() if valid_word and not _projection else 0,

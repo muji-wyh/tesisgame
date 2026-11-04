@@ -349,8 +349,8 @@ func _approximately_equal_state(left: Variant, right: Variant) -> bool:
 
 
 func _test_powerup_eligibility() -> void:
-	check(Model.POWERUP_PRICES == {"auto_merge": 600, "family_merge": 50},
-		"paid powers expose their first-purchase prices")
+	check(Model.POWERUP_PRICES == {"auto_merge": 200, "family_merge": 50},
+		"The live paid catalog exposes the lowest-level first-use prices")
 	for kind: String in ["auto_merge"]:
 		for blocked_by: String in ["paused", "held", "settling", "fusion", "collection", "batch", "finished", "empty"]:
 			var model = _powerup_model(kind)
@@ -409,6 +409,7 @@ func _test_powerup_payment_atomicity() -> void:
 			"a missing purchase adapter cannot provide a free " + kind + " power")
 		for response: Dictionary in [{"ok": false}, {"ok": true, "duplicate": true}]:
 			model = _powerup_model(kind)
+			var quoted_price: int = model.powerup_price(kind)
 			var calls: Array = []
 			var events: Dictionary = _observe_powerups(model)
 			var regular_events: Dictionary = _observe(model)
@@ -422,7 +423,7 @@ func _test_powerup_payment_atomicity() -> void:
 			check(not model.activate_powerup(kind) and not model.powerup_active(),
 				"failed and duplicate purchases do not begin a power")
 			check(calls.size() == 1 and not str(calls[0][0]).is_empty()
-				and calls[0][1] == kind and calls[0][2] == Model.POWERUP_PRICES[kind],
+				and calls[0][1] == kind and calls[0][2] == quoted_price,
 				"purchase persistence receives one receipt, the requested power, and its exact price")
 			check(model.cells == before.cells and model.upcoming == before.upcoming
 				and model._rng.state == rng_state
@@ -452,7 +453,7 @@ func _test_powerup_price_progression() -> void:
 	for kind: String in ["auto_merge"]:
 		var model = _model([_word("cat")])
 		var other: String = "family_merge"
-		var prices: Array = [600, 900, 1200, 1200]
+		var prices: Array = [200, 300, 400, 400]
 		for index in range(prices.size()):
 			_board(model, ["cat", "picture:cat"])
 			var expected: int = prices[index]
@@ -3754,7 +3755,7 @@ func _test_arrival_timing() -> void:
 		for index in range(incoming.size()):
 			var tile: Dictionary = model.cell(incoming[index])
 			var stagger: float = float(onset_slots.find(index)) * 0.15
-			var expected_contact: float = stagger + sqrt(2.0 * float(row + 1) / Motion.ARRIVAL_GRAVITY)
+			var expected_contact: float = stagger + sqrt(2.0 * float(row + 1) / Motion.ARRIVAL_GRAVITY) / Model.FALL_SPEED_SCALE
 			check(tile.row == row and tile.column == index and tile.falling_rows == row + 1,
 				"arrival distance spans the whole well from one row above the board")
 			check(tile.arrival_index == index and bool(tile.arrival) and bool(tile.settling) and tile.age == 0.0,
@@ -4154,7 +4155,7 @@ func _test_arrival_reserved_lanes() -> void:
 		check(model.drop_now(), "the remaining entry lane accepts one root during each partial dispatch")
 		var tile: Dictionary = model.cell(int(advertised.id))
 		_assert_advertised_root(tile, advertised, 1, 2 - batch, "arrival above reserved result")
-		check(is_equal_approx(Model.arrival_delay(tile), 0.3 + float(batch) * 0.4),
+		check(is_equal_approx(Model.arrival_delay(tile), 0.3 + float(batch) * maxf(Model.ARRIVAL_SLOT_CLEARANCE, 0.4 / Model.FALL_SPEED_SCALE)),
 			"repeated partial dispatch preserves the slot stagger and same-column clearance")
 		check(model.generated_tiles == generated_before + batch + 1,
 			"each dispatch consumes exactly one root from the only open preview column")
@@ -4175,7 +4176,7 @@ func _test_arrival_same_lane_spacing() -> void:
 		model.cells.append(_placed_tile(2000 + column, "x", column, 0))
 	var waiting: Array = model.upcoming.duplicate(true)
 	var incoming: Array[int] = []
-	var clearance: float = 0.4
+	var clearance: float = maxf(Model.ARRIVAL_SLOT_CLEARANCE, 0.4 / Model.FALL_SPEED_SCALE)
 	for index in range(6):
 		var advertised: Dictionary = model.upcoming[Model.COLUMNS - 1].duplicate(true)
 		incoming.append(int(advertised.id))
@@ -4186,8 +4187,8 @@ func _test_arrival_same_lane_spacing() -> void:
 		check(tile.arrival_index == Model.COLUMNS - 1 and is_equal_approx(Model.arrival_delay(tile),
 			Model.ARRIVAL_ORDER.find(Model.COLUMNS - 1) * Model.ARRIVAL_STAGGER + float(index) * clearance),
 			"repeated use of the seventh slot retains its stagger and real lane clearance")
-		check(is_equal_approx(Model.arrival_contact_at(tile), Model.arrival_delay(tile) + Motion.contact_at(tile))
-			and is_equal_approx(Model.settle_duration(tile), Model.arrival_delay(tile) + Motion.ready_at(tile)),
+		check(is_equal_approx(Model.arrival_contact_at(tile), Model.arrival_delay(tile) + Motion.contact_at(tile, Model.FALL_SPEED_SCALE))
+			and is_equal_approx(Model.settle_duration(tile), Model.arrival_delay(tile) + Motion.ready_at(tile, Model.FALL_SPEED_SCALE)),
 			"contact and input readiness use the stored lane delay")
 		for slot in range(Model.COLUMNS - 1):
 			check(model.upcoming[slot] == waiting[slot] and model.cell(int(waiting[slot].id)).is_empty(),
@@ -4218,7 +4219,7 @@ func _assert_arrival_lane_clearance(model, label: String) -> void:
 			if age < 0.0:
 				continue
 			tile.age = age
-			var y: float = float(tile.row) - float(Motion.sample(tile).lift_rows)
+			var y: float = float(tile.row) - float(Motion.sample(tile, Model.FALL_SPEED_SCALE).lift_rows)
 			var column: int = int(tile.column)
 			check(y + 1.0 <= float(previous_y.get(column, INF)) + Model.EPSILON,
 				label + ": arrivals retain one full row of physical clearance in actual launch order")
@@ -4251,7 +4252,7 @@ func _test_arrival_mixed_lane_readiness() -> void:
 	var final_slot_ready: float = Model.settle_duration(model.cell(incoming[2]))
 	check(last_id == final_id and final_slot_ready < last_ready,
 		"repeated use of slot zero can recover after the first dispatch's last admitted preview")
-	check(is_equal_approx(Model.arrival_delay(model.cell(final_id)), 0.8),
+	check(is_equal_approx(Model.arrival_delay(model.cell(final_id)), 2.0 * maxf(Model.ARRIVAL_SLOT_CLEARANCE, 0.4 / Model.FALL_SPEED_SCALE)),
 		"the third slot-zero root waits behind both earlier same-column arrivals")
 	_assert_arrival_lane_clearance(model, "uneven-lane batch")
 	model.step(final_slot_ready)

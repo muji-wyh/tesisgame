@@ -92,6 +92,11 @@ func request(owner: Node, source: Texture2D, material: ShaderMaterial, extent: V
 			uniforms[parameter] = DEFAULT_PARAMETERS[parameter]
 	if is_zero_approx(float(uniforms[&"completion_strength"])):
 		uniforms[&"completion_glint"] = -2.0
+	var mesh_scale: float = 1.0 + smoothstep(0.35, 0.7, float(uniforms[&"completion_strength"])) * 0.32
+	var capture_extent := Vector2(extent) * mesh_scale
+	if ceili(capture_extent.x) > CELL_EDGE - PADDING * 2 or ceili(capture_extent.y) > CELL_EDGE - PADDING * 2:
+		_fallbacks += 1
+		return {}
 	for parameter: StringName in PARAMETERS:
 		var value: Variant = uniforms[parameter]
 		signature.append(value.get_rid().get_id() if value is Texture2D else value)
@@ -109,7 +114,8 @@ func request(owner: Node, source: Texture2D, material: ShaderMaterial, extent: V
 		_misses += 1
 		_entries[key] = {"slot": slot, "source": source, "shader": material.shader,
 			"uniforms": uniforms, "extent": extent, "stretch_mode": stretch_mode,
-			"owners": {}, "ready": false, "texture": null, "used": _clock}
+			"mesh_scale": mesh_scale, "capture_extent": capture_extent,
+			"owners": {}, "ready": false, "texture": null, "display_material": null, "used": _clock}
 		_pending.append(key)
 	var id: int = owner.get_instance_id()
 	if _owners.has(id) and _owners[id] != key:
@@ -119,7 +125,8 @@ func request(owner: Node, source: Texture2D, material: ShaderMaterial, extent: V
 	_entries[key].used = _clock
 	_unused_age = 0.0
 	set_process(not _pending.is_empty() or not _rendering.is_empty())
-	return {"key": key, "texture": _entries[key].texture if bool(_entries[key].ready) else null}
+	return {"key": key, "texture": _entries[key].texture if bool(_entries[key].ready) else null,
+		"material": _entries[key].display_material if bool(_entries[key].ready) else null}
 
 func release(owner: Node) -> void:
 	var id: int = owner.get_instance_id()
@@ -198,8 +205,14 @@ func _prepare_cell(key: String, entry: Dictionary) -> void:
 	paint.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	paint.stretch_mode = int(entry.stretch_mode)
 	paint.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	paint.position = Vector2(origin + Vector2i.ONE * PADDING)
-	paint.size = Vector2(entry.extent)
+	var logical_size: Vector2 = entry.uniforms[&"surface_size"]
+	var capture_origin := Vector2(origin + Vector2i.ONE * PADDING)
+	# The authored shader expands around its logical surface center. Rasterize
+	# in that coordinate system, then scale once into backing pixels so every
+	# directional light and the entire padded glow fit inside the atlas cell.
+	paint.size = logical_size
+	paint.scale = Vector2(entry.extent) / logical_size
+	paint.position = capture_origin + (Vector2(entry.capture_extent) - Vector2(entry.extent)) * 0.5
 	var material := ShaderMaterial.new()
 	material.shader = entry.shader
 	for parameter: StringName in entry.uniforms:
@@ -210,9 +223,19 @@ func _prepare_cell(key: String, entry: Dictionary) -> void:
 	_bake_nodes.append(paint)
 	var texture := AtlasTexture.new()
 	texture.atlas = _atlas.get_texture()
-	texture.region = Rect2(paint.position, paint.size)
+	texture.region = Rect2(capture_origin, Vector2(entry.capture_extent))
 	texture.filter_clip = true
 	entry.texture = texture
+	if is_equal_approx(float(entry.mesh_scale), 1.0):
+		entry.display_material = display_material()
+	else:
+		# Entry-owned variants are bounded by the atlas capacity and reused by
+		# identical targets. Ordinary bodies keep the shared display material.
+		var display := ShaderMaterial.new()
+		display.shader = DISPLAY_SHADER
+		display.set_shader_parameter("surface_size", logical_size)
+		display.set_shader_parameter("mesh_scale", float(entry.mesh_scale))
+		entry.display_material = display
 	_rendering.append(key)
 
 func _finish_bake() -> void:
@@ -228,7 +251,7 @@ func _finish_bake() -> void:
 		for id: int in entry.owners.keys():
 			var owner: Node = entry.owners[id].get_ref()
 			if is_instance_valid(owner) and not owner.is_queued_for_deletion():
-				owner.call("_idle_cache_ready", key, entry.texture)
+				owner.call("_idle_cache_ready", key, entry.texture, entry.display_material)
 			else:
 				entry.owners.erase(id)
 				_owners.erase(id)

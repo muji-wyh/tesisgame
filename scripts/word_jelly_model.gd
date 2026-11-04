@@ -40,6 +40,8 @@ const INITIAL_SETTLED_TILES: int = COLUMNS * StageRun.Catalog.OPENING_ROWS
 const DROP_COUNT: int = COLUMNS
 const UPCOMING_COUNT: int = COLUMNS
 const SETTLE_SECONDS: float = 0.36
+const FALL_SPEED_SCALE: float = 1.4
+const FALL_CONTACT_RATIO: float = 0.70 / FALL_SPEED_SCALE
 const DRAG_GRAVITY_DELAY_SECONDS: float = 0.60
 const ARRIVAL_STAGGER: float = 0.15
 const ARRIVAL_SLOT_CLEARANCE: float = 0.36
@@ -163,6 +165,10 @@ var _powerup_uses: Dictionary = {"auto_merge": 0, "family_merge": 0}
 var _powerup_ids: Array[int] = []
 var _auto_merge_preview_key: Array = []
 var _auto_merge_preview_cache: Dictionary = {}
+var _family_merge_preview_key: Array = []
+var _family_merge_preview_cache: Dictionary = {}
+var _family_merge_timing_keys: Dictionary = {}
+var _pending_powerup_quote: Dictionary = {}
 var _powerup_availability_key: Array = []
 var _powerup_availability: bool = false
 var _powerup_vocabulary_revision: int = 0
@@ -267,6 +273,10 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_powerup_ids.clear()
 	_auto_merge_preview_key.clear()
 	_auto_merge_preview_cache.clear()
+	_family_merge_preview_key.clear()
+	_family_merge_preview_cache.clear()
+	_family_merge_timing_keys.clear()
+	_pending_powerup_quote.clear()
 	_powerup_availability_key.clear()
 	_powerup_availability = false
 	_finish_after_purchase = false
@@ -653,8 +663,123 @@ func _auto_merge_hit_stop_remaining() -> float:
 	return maxf(0.0, BLAST_FREEZE_SECONDS - float(_powerup.clock))
 
 
-func powerup_price(kind: String) -> int:
-	return CoinEconomy.powerup_price(kind, int(_powerup_uses.get(kind, 0))) if POWERUP_PRICES.has(kind) else 0
+func powerup_price(kind: String, family: String = "") -> int:
+	if not POWERUP_PRICES.has(kind):
+		return 0
+	var reduction: int = _family_merge_reduction(family) if kind == "family_merge" and not family.is_empty() else 1
+	return CoinEconomy.powerup_price(kind, int(_powerup_uses.get(kind, 0)), auto_merge_level, reduction)
+
+
+func powerup_quote_is_current(event_id: String, kind: String, price: int) -> bool:
+	# Payment callbacks run with the board locked. Validate the captured quote,
+	# rather than recomputing a family preview that is unavailable under that lock.
+	if not _pending_powerup_quote.is_empty():
+		return event_id == _pending_powerup_quote.event_id and kind == _pending_powerup_quote.kind \
+			and price == int(_pending_powerup_quote.price)
+	return price == powerup_price(kind)
+
+
+func family_merge_quotes(families: Array[String]) -> Dictionary:
+	var ready: bool = _powerup_inputs_ready()
+	if ready:
+		_refresh_family_merge_preview_key()
+	var quotes: Dictionary = {}
+	for family: String in families:
+		var reduction: int = _cached_family_merge_reduction(family, ready)
+		quotes[family] = {"reduction_count": reduction, "available": ready and reduction > 0,
+			"price": CoinEconomy.powerup_price("family_merge", int(_powerup_uses.family_merge), auto_merge_level, reduction)}
+	return quotes
+
+
+func _family_merge_reduction(family: String) -> int:
+	var ready: bool = _powerup_inputs_ready()
+	if ready:
+		_refresh_family_merge_preview_key()
+	return _cached_family_merge_reduction(family, ready)
+
+
+func _refresh_family_merge_preview_key() -> void:
+	# All cards share one legal-board key. Idle age and pointer motion do not
+	# trigger repeated timeline forecasts on a crowded board.
+	var key: Array = _powerup_availability_state()
+	if key != _family_merge_preview_key:
+		_family_merge_preview_key = key.duplicate(true)
+		_family_merge_preview_cache.clear()
+		_family_merge_timing_keys.clear()
+
+
+func _cached_family_merge_reduction(family: String, ready: bool) -> int:
+	if not ready:
+		return int(_family_merge_preview_cache.get(family, 0))
+	if _family_merge_preview_cache.has(family) and not _family_merge_timing_keys.has(family):
+		return int(_family_merge_preview_cache[family])
+	var simple: int = _simple_family_merge_reduction(family)
+	if simple >= 0:
+		_family_merge_preview_cache[family] = simple
+		_family_merge_timing_keys.erase(family)
+		return simple
+	# Complex paths can include captured incoming bodies. Their landing time
+	# affects reservations and capped results, unlike settled idle age.
+	var timing: Array = []
+	for tile: Dictionary in cells:
+		if not is_settled(tile):
+			timing.append([tile.id, tile.age])
+	if _family_merge_preview_cache.has(family) and timing == _family_merge_timing_keys.get(family, []):
+		return int(_family_merge_preview_cache[family])
+	_family_merge_timing_keys[family] = timing
+	if authored_completion_plan(false, family).get("status") != "complete":
+		_family_merge_preview_cache[family] = 0
+		return 0
+	var forecast: WordJellyModel = _powerup_forecast()
+	forecast._begin_powerup_timeline("family_merge", "family-merge-preview", family)
+	forecast.finish_powerup()
+	var reduction: int = maxi(0, cells.size() - forecast.cells.size())
+	if forecast.powerup_active() or not forecast.error.is_empty():
+		push_error("Word auto merge could not preview its complete legal paths. " + forecast.error)
+		reduction = 0
+	_family_merge_preview_cache[family] = reduction
+	return reduction
+
+
+func _simple_family_merge_reduction(family: String) -> int:
+	# Below the cap, settled one-cell word bodies must eventually join into
+	# one result regardless of flight order or gravity. Count that exact case
+	# without replaying an entire board for every sidebar card.
+	if not _words_by_id.has(family):
+		return -1
+	var merged_count: int = 0
+	var levels: int = 0
+	var roots: int = 0
+	var pictures: int = 0
+	for tile: Dictionary in cells:
+		if _family_for_cell(tile) != family or is_lifted(int(tile.id)) or not boss_interactable(int(tile.id), false):
+			continue
+		if not is_settled(tile) or int(tile.width) != 1 or int(tile.height) != 1:
+			return -1
+		match str(tile.get("jelly_kind", "")):
+			"merged":
+				var level: int = int(tile.get("merge_level", 1))
+				if level >= merged_level_limit:
+					continue
+				if level < 1 or str(tile.get("word", {}).get("id", "")) != family:
+					return -1
+				merged_count += 1
+				levels += level
+			"root":
+				# Partial morphology still needs the placement-aware resolver.
+				if str(tile.get("word_candidate", {}).get("id", "")) != family:
+					return -1
+				roots += 1
+			"picture":
+				pictures += 1
+			_:
+				return -1
+	var pairs: int = mini(roots, pictures)
+	if merged_level_limit == 1:
+		return pairs
+	if levels + pairs > merged_level_limit:
+		return -1
+	return pairs + maxi(0, merged_count + pairs - 1)
 
 
 func auto_merge_capacity() -> int:
@@ -746,6 +871,21 @@ func auto_merge_preview() -> Dictionary:
 		return _auto_merge_preview_cache.duplicate(true)
 	# Replay the real timeline on isolated board data, including arrivals and
 	# gravity. Only the pure composition resolver is shared, never callbacks.
+	var forecast: WordJellyModel = _powerup_forecast()
+	forecast._begin_powerup_timeline("auto_merge", "auto-merge-preview")
+	forecast.finish_powerup()
+	_auto_merge_preview_key = key.duplicate(true)
+	if forecast.powerup_active() or not forecast.error.is_empty():
+		var message: String = "Auto merge could not preview its complete legal paths. " + forecast.error
+		_auto_merge_preview_cache = {"capacity": capacity, "result_count": 0, "input_ids": [], "error": message}
+		push_error(message)
+		return _auto_merge_preview_cache.duplicate(true)
+	_auto_merge_preview_cache = {"capacity": capacity, "result_count": int(forecast._powerup.completed_results),
+		"input_ids": forecast._powerup.used_input_ids.keys()}
+	return _auto_merge_preview_cache.duplicate(true)
+
+
+func _powerup_forecast() -> WordJellyModel:
 	var forecast := WordJellyModel.new()
 	forecast.phase = "playing"
 	forecast.cells.assign(cells.duplicate(true))
@@ -770,17 +910,7 @@ func auto_merge_preview() -> Dictionary:
 	forecast._blast_rng.state = _blast_rng.state
 	forecast.boss._statuses = boss._statuses.duplicate(true)
 	forecast.boss.broken_remaining = boss.broken_remaining
-	forecast._begin_powerup_timeline("auto_merge", "auto-merge-preview")
-	forecast.finish_powerup()
-	_auto_merge_preview_key = key.duplicate(true)
-	if forecast.powerup_active() or not forecast.error.is_empty():
-		var message: String = "Auto merge could not preview its complete legal paths. " + forecast.error
-		_auto_merge_preview_cache = {"capacity": capacity, "result_count": 0, "input_ids": [], "error": message}
-		push_error(message)
-		return _auto_merge_preview_cache.duplicate(true)
-	_auto_merge_preview_cache = {"capacity": capacity, "result_count": int(forecast._powerup.completed_results),
-		"input_ids": forecast._powerup.used_input_ids.keys()}
-	return _auto_merge_preview_cache.duplicate(true)
+	return forecast
 
 
 func activate_powerup(kind: String, selected_id: int = -1) -> bool:
@@ -821,11 +951,15 @@ func _purchase_powerup(kind: String, family: String = "", selected_id: int = -1)
 	var generation: int = _generation
 	var receipt_id: String = _event_id("powerup-" + kind)
 	var previous_timeline: String = str(_powerup.get("receipt_id", ""))
-	var price: int = powerup_price(kind)
+	var price: int = powerup_price(kind, family)
+	if kind == "family_merge" and _family_merge_reduction(family) <= 0:
+		return false
 	# Lock the board while persistence runs, including reentrant lifecycle calls.
+	_pending_powerup_quote = {"event_id": receipt_id, "kind": kind, "price": price}
 	_powerup_purchasing = true
 	var response: Variant = purchase_powerup.call(receipt_id, kind, price) if purchase_powerup.is_valid() else {}
 	_powerup_purchasing = false
+	_pending_powerup_quote.clear()
 	if generation != _generation:
 		return false
 	if not response is Dictionary or not bool(response.get("ok", false)) or bool(response.get("duplicate", false)):
@@ -2297,7 +2431,7 @@ func is_contactable(tile: Dictionary) -> bool:
 
 
 static func arrival_contact_at(tile: Dictionary) -> float:
-	return arrival_delay(tile) + Motion.contact_at(tile)
+	return arrival_delay(tile) + Motion.contact_at(tile, FALL_SPEED_SCALE)
 
 
 static func arrival_delay(tile: Dictionary) -> float:
@@ -2308,7 +2442,7 @@ static func arrival_slot_clearance(tile: Dictionary) -> float:
 	if not bool(tile.get("fill_stream", false)):
 		return ARRIVAL_SLOT_CLEARANCE
 	var speed: float = clampf(float(tile.get("motion_speed_scale", 1.0)), 1.0, 2.2)
-	return sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed
+	return sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed / FALL_SPEED_SCALE
 
 
 static func _scheduled_arrival_delay(slot: int) -> float:
@@ -2317,7 +2451,7 @@ static func _scheduled_arrival_delay(slot: int) -> float:
 
 static func settle_duration(tile: Dictionary) -> float:
 	if bool(tile.get("arrival", false)):
-		return arrival_delay(tile) + Motion.ready_at(tile)
+		return arrival_delay(tile) + Motion.ready_at(tile, FALL_SPEED_SCALE)
 	return float(tile.get("settle_seconds", SETTLE_SECONDS))
 
 
@@ -3126,7 +3260,7 @@ func _arrival_entry_delays(streaming: bool = false) -> Dictionary:
 			var slot: int = int(tile.get("arrival_index", 0))
 			var departure: float = arrival_delay(tile) - float(tile.age)
 			var speed: float = clampf(float(tile.get("motion_speed_scale", 1.0)), 1.0, 2.2) if streaming else 1.0
-			var clearance: float = departure + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed
+			var clearance: float = departure + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed / FALL_SPEED_SCALE
 			for column in range(int(tile.column), int(tile.column) + int(tile.width)):
 				column_delays[column] = maxf(float(column_delays.get(column, -INF)), clearance)
 			slot_delays[slot] = maxf(float(slot_delays.get(slot, -INF)),
@@ -3172,7 +3306,7 @@ func _spawn_drop(streaming: bool = false) -> void:
 				tile.arrival_delay = maxf(float(tile.arrival_delay), float(column_delays[column]))
 		for column in range(int(tile.column), int(tile.column) + int(tile.width)):
 			var speed: float = clampf(float(tile.get("motion_speed_scale", 1.0)), 1.0, 2.2) if streaming else 1.0
-			column_delays[column] = float(tile.arrival_delay) + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed
+			column_delays[column] = float(tile.arrival_delay) + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed / FALL_SPEED_SCALE
 	if generated_tiles > previous_generated:
 		# Completed collections set the next packet's pace. Keep the current
 		# Next timer intact so a late Collect cannot unexpectedly release it.

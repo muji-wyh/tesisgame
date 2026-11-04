@@ -263,6 +263,65 @@ func _check_completion_enlargement() -> void:
 		tile.set_completion_hint(false, 0.0, false)
 	tile.free()
 
+func _check_static_completion_hint() -> void:
+	var tile := Tile.new()
+	root.add_child(tile)
+	tile.size = Vector2.ONE * 100.0
+	for face_kind: String in ["root", "picture", "merged"]:
+		tile.configure(_cell(face_kind, "cat", "cat", 3 if face_kind == "merged" else 0),
+			SKIN, PICTURE, CHEST, Color("#357d70"))
+		tile.deform(0.0, 0.0)
+		var bounds: Rect2 = tile.get_rect()
+		var outline: PackedVector2Array = tile.contact_outline()
+		var label: Rect2 = tile._label.get_rect()
+		var picture: Rect2 = tile._picture.get_rect()
+		tile.set_completion_hint(true, 0.0, false, false)
+		check(tile.completion_hint and not tile._completion_animated
+			and is_equal_approx(tile.completion_scale, Tile.COMPLETION_HELD_SCALE),
+			"An unbudgeted matching target keeps the full enlarged held posture")
+		check(is_equal_approx(float(tile._gel.get_shader_parameter("completion_strength")), 0.95)
+			and is_equal_approx(float(tile._gel.get_shader_parameter("completion_glint")), -2.0)
+			and is_equal_approx(float(tile._gel.get_shader_parameter("rim_strength")), 1.0),
+			"Still guidance preserves the strong authored light and silhouette rim without a moving sweep")
+		tile.set_completion_hint(true, 0.01, false, true)
+		check(tile.completion_scale >= Tile.COMPLETION_HELD_SCALE - 0.0001
+			and is_equal_approx(float(tile._gel.get_shader_parameter("completion_strength")), 0.95),
+			"Hovering a newly still target wakes its full held posture and light without restarting entry")
+		for elapsed: float in [0.02, 0.05, 0.10]:
+			tile.set_completion_hint(true, elapsed, false, true)
+			check(tile.completion_scale >= Tile.COMPLETION_HELD_SCALE - 0.0001
+				and is_equal_approx(float(tile._gel.get_shader_parameter("completion_strength")), 0.95),
+				"An early promoted target never shrinks or regrows its completed entry light")
+		tile.set_completion_hint(true, 1.11, false, true)
+		check(tile.completion_scale > Tile.COMPLETION_HELD_SCALE + 0.02,
+			"A newly awakened held target resumes the authored breath after preserving its initial size")
+		tile.set_completion_hint(true, 1.11, false, false)
+		var pose: Vector2 = tile._surface.scale
+		for elapsed: float in [0.1, 0.6, 2.2, 5.1, 12.0]:
+			tile.set_completion_hint(true, elapsed, false, false)
+			tile.deform(0.0, elapsed)
+			check(tile._surface.scale == pose and is_equal_approx(float(tile._gel.get_shader_parameter("completion_glint")), -2.0)
+				and tile._idle_cache_eligible(), "A long-held still target never breathes, sweeps or rejects static paint")
+		check(tile.get_rect() == bounds and tile.contact_outline() == outline
+			and tile._label.get_rect() == label and tile._picture.get_rect() == picture,
+			"Still matching guidance preserves the hit contour and undistorted learning face")
+		tile.set_completion_hint(true, 12.0, false, true)
+		var glint: float = float(tile._gel.get_shader_parameter("completion_glint"))
+		tile.set_completion_hint(true, 12.0, false, true)
+		check(tile._completion_animated and float(tile._gel.get_shader_parameter("completion_glint")) == glint,
+			"Promoting a hint to animation preserves same-frame pose calls")
+		tile.set_completion_hint(true, 12.1, false, true)
+		check(float(tile._gel.get_shader_parameter("completion_glint")) != glint and not tile._idle_cache_eligible(),
+			"Budgeted guidance resumes its authored animated sweep")
+		tile.set_completion_hint(true, 12.1, true, false)
+		check(tile.completion_hint and is_equal_approx(tile.completion_scale, 1.0)
+			and is_equal_approx(float(tile._gel.get_shader_parameter("completion_strength")), 0.82),
+			"Reduced motion retains strong still guidance without enlargement")
+		tile.set_completion_hint(false, 12.1, false, false)
+		check(not tile.completion_hint and is_equal_approx(tile.completion_scale, 1.0),
+			"Clearing a still hint removes every residual held enlargement")
+	tile.free()
+
 func _check_match_dimming() -> void:
 	var tile := Tile.new()
 	root.add_child(tile)
@@ -383,6 +442,7 @@ func _run() -> void:
 	_check_picture_clarity()
 	_check_picture_motion_binding()
 	_check_completion_enlargement()
+	_check_static_completion_hint()
 	_check_match_dimming()
 	print("Word Jelly hybrid tile: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

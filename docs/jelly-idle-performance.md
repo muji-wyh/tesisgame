@@ -5,13 +5,49 @@ body rendering, dirty presentation updates and a bounded ambient animation cohor
 Physics, input dispatch, release resolution and gameplay clocks keep their
 existing cadence.
 
+The subsequent [interaction performance report](jelly-interaction-performance.md)
+records crowded-board hint and preview budgets plus canonical publication
+encoding. The historical idle timings below remain attached to their original
+exports.
+
 ## Runtime behavior
+
+Merged levels now add one sourced-texture effect plane per completed word,
+using a shared 1536 by 1728 RGBA atlas (about 10.1 MiB before renderer overhead).
+It follows the same three-owner idle cohort and interaction priorities, holds
+its local phase when suspended, and presents a steady frame under reduced
+motion. The gel cache's 0.35 idle completion strength stays unchanged. Active
+frame interpolation uses a small separate shader; held fractional phases also
+sample both neighboring frames. The historical rendered measurements below
+predate this additional plane and do not establish its crowded-board GPU cost.
+Source and regeneration details are in the
+[merged-level effect asset record](../assets/images/jelly-level-fx/README.md).
+
+The standalone `word_jelly_merged_level_fx_tests` suite uses the production
+word catalog, tile and game-area components without unrelated chest bootstrap.
+It checks all nine identities, stable learning geometry, node reuse, reduced
+motion, actual hover and dragging, and the full 56-body animation cohort.
+Native captures in `build/qa/jelly-level-fx/` include the nine-tier gallery,
+desktop and phone boards, collection hover, and a complete effect loop.
+These local captures use Godot's ANGLE compatibility renderer and do not
+constitute a new Chrome frame-time measurement.
+
+The focused level-FX run passed 636 headless and 712 native assertions.
+Supporting regressions passed tile performance (506), hybrid tiles (3,396),
+Auto Collect hover (397), interaction budgets (80), and native body-cache
+rendering (36). The runner's own smoke tests passed three of four cases;
+its all-files registration check currently reports the concurrently added
+`tests/pirate-asset.test.cjs` as unregistered. The complete repository suite
+was not run for this change.
 
 Settled bodies use the original acquired gel shader to paint a shared GPU atlas.
 The cache retains the original contour, palette and static lighting. Pictures,
 labels, support shadows and input rectangles remain separate. Contact, selection,
-deformation, moving sheen, expanded completion light and geometry changes restore
-the live material synchronously. Other Jelly Match consumers remain opt-in.
+deformation, moving sheen and geometry changes restore the live material
+synchronously. The subsequent [interaction optimization](jelly-interaction-performance.md)
+also caches held completion light, including its expanded envelope; entering or
+moving completion sweeps retain live rendering. Other Jelly Match consumers
+remain opt-in.
 
 Each viewport has at most one 2048 by 2048 RGBA atlas: 64 cells, approximately
 16 MiB before renderer overhead. At most two new states warm in a frame. Bodies
@@ -28,8 +64,10 @@ supply motion, collection effects and active Boss feedback retain their cadence.
 
 Three eligible idle board owners animate. The cohort advances every 2.8 seconds,
 introducing at most one new idle owner per rotation. Pointer hover, focus, held
-bodies, contact, falling, hints and collecting
-owners receive priority immediately. Frozen duplicates share a separate poster
+bodies, contact, falling, animated hints and collecting
+owners receive priority immediately. The subsequent interaction budget keeps
+every matching target highlighted while animating three fixed nearest hints per
+gesture. Frozen duplicates share a separate poster
 wrapper, so another copy's animated atlas cannot animate them accidentally.
 Posters and motion sheets retain the existing vocabulary artwork. Merged bodies
 outside the cohort keep steady readiness accents while their sheen and glints

@@ -1842,7 +1842,7 @@ func _check_collection_stack_fall(view) -> void:
 				and is_equal_approx(float(view.game.cell(int(lower.id)).age), paused_age),
 				"pause freezes collection gravity at the visible intermediate pose")
 			view.pause(false)
-			var motion_to_contact: float = Model.SETTLE_SECONDS * 0.70 - paused_age - 0.001
+			var motion_to_contact: float = Model.SETTLE_SECONDS * Model.FALL_CONTACT_RATIO - paused_age - 0.001
 			var slow: Dictionary = view.game.hit_stop_snapshot()
 			var slow_remaining: float = float(slow.remaining)
 			var slow_motion: float = slow_remaining * float(slow.time_scale)

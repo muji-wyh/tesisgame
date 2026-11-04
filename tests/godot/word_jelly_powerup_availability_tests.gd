@@ -215,7 +215,7 @@ func _test_fresh_activation_and_reset() -> void:
 	model.reject_plan = false
 	var before_calls: int = model.plan_calls
 	check(model.activate_powerup("auto_merge") and model.plan_calls > before_calls \
-		and payments.size() == 1 and payments[0][2] == 600,
+		and payments.size() == 1 and payments[0][2] == 200,
 		"A fresh successful activation preserves the exact single saved purchase")
 	model.purchase_powerup = Callable()
 	model.finish_powerup()

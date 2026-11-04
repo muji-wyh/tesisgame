@@ -117,7 +117,9 @@ func description() -> String:
 
 func coin_description() -> String:
 	if _kind == "auto_merge":
-		return "Saved across rounds. Use costs 600 / 900 / 1200 coins."
+		return "Saved across rounds. Use costs %d / %d / %d coins." % [
+			Economy.powerup_price("auto_merge", 0, _level), Economy.powerup_price("auto_merge", 1, _level),
+			Economy.powerup_price("auto_merge", 2, _level)]
 	var bonus: String = "No pickup coin bonus" if _level == 1 else "%d%% chance of +%d coins" % [
 		roundi(Economy.jelly_bonus_chance(_level) * 100.0), Economy.jelly_bonus(_level)]
 	return "%s  ·  Base Boss hit: %d" % [bonus, BossCatalog.DAMAGE[_level]]

@@ -115,7 +115,7 @@ func test_auto_hover(app) -> void:
 	await settle()
 	app.set_reduced_motion(false)
 	var words: Array = await prepare(app)
-	check(app.coin_wallet.credit_amount("fixture:auto-hover-funding", 600).ok, "Fund only this isolated Auto merge use")
+	check(app.coin_wallet.credit_amount("fixture:auto-hover-funding", 200).ok, "Fund only this isolated Auto merge use")
 	app._coin_flight.sync(app.coin_wallet.balance)
 	var view = app._word_jelly
 	var model = view.game
@@ -192,7 +192,7 @@ func test_auto_hover(app) -> void:
 	var consumed: Array = model._powerup.used_input_ids.keys()
 	consumed.sort()
 	expected.sort()
-	check(consumed == expected and app.coin_wallet.balance == balance - 600
+	check(consumed == expected and app.coin_wallet.balance == balance - 200
 		and model.powerup_snapshot().completed_results == 3,
 		"The saved actual click consumes exactly the highlighted originals for one existing price")
 	check(not view.snapshot().auto_merge_hover.active and view._tiles.values().all(
@@ -252,10 +252,19 @@ func test_selection(app) -> void:
 	check(not view.powerup_buttons.has("family_merge") and view.find_child("PowerupMagnet", true, false) == null,
 		"Magnet is removed, including its native focus and input target")
 	var button = goal_button(view, str(words[0].id))
-	check(button != null and not button.disabled and button.snapshot().price == 50,
+	check(button != null and not button.disabled and button.snapshot().price == 150,
 		"The actual pending goal advertises its exact first family-merge price")
 	if button == null:
 		return
+	var other_button = goal_button(view, str(words[1].id))
+	var balance_callback: Callable = view.coin_balance
+	view.coin_balance = func() -> int: return 100
+	view._refresh_controls()
+	check(other_button != null and button.snapshot().price == 150 and not button.snapshot().affordable
+		and other_button.snapshot().price == 50 and other_button.snapshot().affordable,
+		"The same wallet affords the smaller family while the larger family's own quantity quote remains unaffordable")
+	view.coin_balance = balance_callback
+	view._refresh_controls()
 	await capture("goal-idle")
 	await move_mouse(button.get_global_rect().get_center())
 	view._process(0.25)
@@ -279,20 +288,29 @@ func test_selection(app) -> void:
 	await click(button)
 	check(model.powerup_active() and model.powerup_snapshot().kind == "family_merge"
 		and model.powerup_snapshot().family_word_id == words[0].id
-		and app.coin_wallet.balance == before - 50 and app.coin_wallet._receipts.size() == receipts + 1
+		and app.coin_wallet.balance == before - 150 and app.coin_wallet._receipts.size() == receipts + 1
 		and app._status_announcement.contains("Auto merge " + str(words[0].text)),
 		"One actual goal click durably buys only the named family, without a second target-selection gesture")
-	check(app._coin_flight.snapshot().debit_active and app._coin_flight.snapshot().debit_amount == 50
+	check(app._coin_flight.snapshot().debit_active and app._coin_flight.snapshot().debit_amount == 150
 		and app._coin_flight._debit.destination.is_equal_approx(destination)
-		and app._coin_counter.target == before - 50
-		and app._coin_counter.displayed >= float(before - 50) and app._coin_counter.displayed <= float(before),
+		and app._coin_counter.target == before - 150
+		and app._coin_counter.displayed >= float(before - 150) and app._coin_counter.displayed <= float(before),
 		"The accepted receipt owns the downward wallet roll, exact negative amount and coin flight into this goal")
 	check(not app._coin_flight._debit.inline_caption,
 		"A desktop goal puts its debit below the wallet, never across the neighboring Pause control")
-	check(button.snapshot().spent_coins == 50 and button.snapshot().price == 75,
+	check(button.snapshot().spent_coins == 150 and button.snapshot().price == 225,
 		"The paid feedback keeps its actual debit separate from the next advertised price")
+	var paid_receipt: String = str(model.powerup_snapshot().receipt_id)
+	var mismatched: Dictionary = app._purchase_word_jelly_powerup(paid_receipt, "family_merge", 225)
+	check(not bool(mismatched.get("ok", false)) and app.coin_wallet.balance == before - 150
+		and app.coin_wallet._receipts.size() == receipts + 1,
+		"The next family quote cannot rewrite the amount of the already paid receipt")
+	var duplicate: Dictionary = app._purchase_word_jelly_powerup(paid_receipt, "family_merge", 150)
+	check(bool(duplicate.get("ok", false)) and bool(duplicate.get("duplicate", false))
+		and app.coin_wallet.balance == before - 150 and app.coin_wallet._receipts.size() == receipts + 1,
+		"Retrying the original quantity-priced receipt preserves its exact amount without a second debit")
 	await click(button)
-	check(app.coin_wallet._receipts.size() == receipts + 1 and app.coin_wallet.balance == before - 50,
+	check(app.coin_wallet._receipts.size() == receipts + 1 and app.coin_wallet.balance == before - 150,
 		"A repeat press during the paid operation cannot debit another goal")
 	view._process(0.16)
 	app._coin_flight.advance(0.16)
@@ -307,10 +325,11 @@ func test_selection(app) -> void:
 		"Roots, pictures and different levels of the chosen family finish one real Lv6 Jelly")
 	check(not model.cell(unrelated[0]).is_empty() and not model.cell(unrelated[1]).is_empty()
 		and spoken.is_empty() and model.cleared_pairs == 0 and model.combo_coins == 0
-		and app.growth.snapshot().streaks == growth and app.coin_wallet.balance == before - 50,
+		and app.growth.snapshot().streaks == growth and app.coin_wallet.balance == before - 150,
 		"A paid goal cannot accidentally collect, pronounce, spend again or consume another family")
-	check(view.snapshot().practice.words.all(func(item: Dictionary) -> bool: return item.purchase.price == 75),
-		"All goal rows share the existing per-round family purchase tier")
+	check(button.disabled and button.snapshot().price == 75
+		and other_button.snapshot().price == 75 and not other_button.disabled,
+		"Settlement recomputes each family's remaining quantity and disables a card without another complete path")
 	view._process(1.3)
 	await settle()
 	check(not button.snapshot().targeting and not button.has_focus()
@@ -321,9 +340,9 @@ func test_selection(app) -> void:
 	check(view.snapshot().goal_hover.word_id.is_empty()
 		and view._tiles.values().all(func(tile) -> bool: return not tile.completion_hint and not tile.match_dimmed),
 		"Moving away after purchasing cannot leave a mouse-acquired focus or board-family highlight behind")
-	await move_mouse(button.get_global_rect().get_center())
-	check(button.snapshot().targeting and view.snapshot().goal_hover.word_id == str(words[0].id),
-		"A fresh hover can preview the family again without spending")
+	await move_mouse(other_button.get_global_rect().get_center())
+	check(other_button.snapshot().targeting and view.snapshot().goal_hover.word_id == str(words[1].id),
+		"A fresh hover can preview the remaining legal family without spending")
 	await move_mouse(Vector2(1300, 720))
 	view.word_requested.disconnect(on_word)
 

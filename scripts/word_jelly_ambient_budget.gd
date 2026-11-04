@@ -15,6 +15,29 @@ var _cursor: int = 0
 var _elapsed: float = 0.0
 var _playing: bool = true
 var _reduced: bool = false
+var _priority_depth: int = 0
+var _refresh_pending: bool = false
+var _refreshes: int = 0
+
+
+func begin_priority_update() -> void:
+	_priority_depth += 1
+
+
+func end_priority_update() -> void:
+	if _priority_depth <= 0:
+		return
+	_priority_depth -= 1
+	if _priority_depth == 0 and _refresh_pending:
+		_refresh_pending = false
+		_refresh()
+
+
+func _request_refresh() -> void:
+	if _priority_depth > 0:
+		_refresh_pending = true
+	else:
+		_refresh()
 
 
 func register(tile: CanvasItem) -> void:
@@ -22,7 +45,7 @@ func register(tile: CanvasItem) -> void:
 		return
 	var id: int = int(tile.get("tile_id"))
 	if _owners.has(id) and _owners[id].get_ref() == tile:
-		_refresh()
+		_request_refresh()
 		return
 	if _owners.has(id):
 		unregister(id)
@@ -38,7 +61,7 @@ func register(tile: CanvasItem) -> void:
 	_connections[id] = callbacks
 	tile.call("set_ambient_animation", false)
 	_changed[id] = true
-	_refresh()
+	_request_refresh()
 
 
 func unregister(id: int) -> void:
@@ -56,7 +79,7 @@ func unregister(id: int) -> void:
 	_animated.erase(id)
 	_changed.erase(id)
 	_cursor = 0 if _order.is_empty() else _cursor % _order.size()
-	_refresh()
+	_request_refresh()
 
 
 func set_priority(id: int, enabled: bool) -> void:
@@ -66,7 +89,7 @@ func set_priority(id: int, enabled: bool) -> void:
 		_priority[id] = true
 	else:
 		_priority.erase(id)
-	_refresh()
+	_request_refresh()
 
 
 func set_playing(enabled: bool) -> void:
@@ -74,7 +97,7 @@ func set_playing(enabled: bool) -> void:
 		return
 	_playing = enabled
 	_elapsed = 0.0
-	_refresh()
+	_request_refresh()
 
 
 func set_reduced_motion(enabled: bool) -> void:
@@ -82,7 +105,7 @@ func set_reduced_motion(enabled: bool) -> void:
 		return
 	_reduced = enabled
 	_elapsed = 0.0
-	_refresh()
+	_request_refresh()
 
 
 func advance(delta: float) -> Array[int]:
@@ -94,7 +117,7 @@ func advance(delta: float) -> Array[int]:
 				# Replace one idle slot at a time instead of uploading three new
 				# vocabulary sheets together at every rotation boundary.
 				_cursor = (_cursor + 1) % _order.size()
-			_refresh()
+			_request_refresh()
 	var result: Array[int] = []
 	result.assign(_changed.keys())
 	_changed.clear()
@@ -122,6 +145,8 @@ func clear() -> void:
 	_changed.clear()
 	_cursor = 0
 	_elapsed = 0.0
+	_priority_depth = 0
+	_refresh_pending = false
 
 
 func _disconnect(tile: CanvasItem, id: int) -> void:
@@ -148,10 +173,11 @@ func _set_native_priority(id: int, kind: StringName, enabled: bool) -> void:
 	# Native focus also changes body rims. Repose even if this owner already
 	# occupies an idle slot so a released focus can reacquire its cached body.
 	_changed[id] = true
-	_refresh()
+	_request_refresh()
 
 
 func _refresh() -> void:
+	_refreshes += 1
 	var next: Dictionary = {}
 	var stale: Array[int] = []
 	var idle: int = 0
@@ -192,3 +218,9 @@ func _set_enabled(id: int, enabled: bool) -> void:
 	if is_instance_valid(tile):
 		tile.call("set_ambient_animation", enabled)
 		_changed[id] = true
+
+
+func snapshot() -> Dictionary:
+	return {"owners": _owners.size(), "animated_ids": animated_ids(),
+		"refreshes": _refreshes, "priority_depth": _priority_depth,
+		"refresh_pending": _refresh_pending}

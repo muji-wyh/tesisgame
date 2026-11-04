@@ -187,15 +187,16 @@ func _set_surface_parameter(parameter: StringName, value: Variant) -> void:
 	_gel.set_shader_parameter(parameter, value)
 
 func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
-	if amount != 0.0 or stretch != Vector2.ONE:
+	if amount != 0.0:
 		_invalidate_idle_cache()
 	_set_surface_parameter(&"bend", amount)
-	_set_surface_parameter(&"beat", beat)
+	_set_surface_parameter(&"beat", 0.0 if is_zero_approx(amount) else beat)
 	var pivot: Vector2 = size * Vector2(0.5, Motion.FOOT_Y)
 	if _surface.pivot_offset != pivot:
 		_surface.pivot_offset = pivot
 	_base_stretch = stretch * (Vector2(1.025, 0.97) if _mark == 3 and not _reduced_motion else Vector2.ONE)
 	if _surface.scale != _base_stretch:
+		_invalidate_idle_cache()
 		_surface.scale = _base_stretch
 
 func set_preview_pressure(pressure: float, sway: float, pull: float = 0.0) -> void:
@@ -300,7 +301,7 @@ func _layout() -> void:
 
 
 func set_idle_cached(enabled: bool) -> void:
-	# Board presentation opts in only for settled, unbudgeted ambient bodies.
+	# Board presentation opts in only for settled paint outside live animation.
 	# Other modes keep their existing live shader until explicitly opted in.
 	if not enabled:
 		_invalidate_idle_cache()
@@ -328,13 +329,11 @@ func set_idle_cached(enabled: bool) -> void:
 	_idle_cache_fallback = "warming"
 	set_notify_transform(true)
 	if request.texture != null:
-		_idle_cache_ready(request.key, request.texture)
+		_idle_cache_ready(request.key, request.texture, request.material)
 
 func _idle_cache_eligible() -> bool:
 	if not is_inside_tree() or _surface.texture == null or _gel.shader != Surface \
-		or _projection or _mark != 0 or _contact_kind != "none" \
-		or _base_stretch != Vector2.ONE or _surface.position != Vector2.ZERO \
-		or _surface.scale != Vector2.ONE or _visual.position != Vector2.ZERO:
+		or _projection or _mark != 0 or _contact_kind != "none":
 		return false
 	for parameter: StringName in [&"bend", &"preview_pressure", &"preview_sway", &"preview_pull", &"contact_strength"]:
 		var value: Variant = _gel.get_shader_parameter(parameter)
@@ -344,15 +343,16 @@ func _idle_cache_eligible() -> bool:
 	var completion: float = 0.0 if completion_value == null else float(completion_value)
 	var glint_value: Variant = _gel.get_shader_parameter("completion_glint")
 	var glint: float = -2.0 if glint_value == null else float(glint_value)
-	# Full completion lights extend the mesh and remain high priority live effects.
-	return completion <= 0.35 and (is_zero_approx(completion) or glint <= -1.0)
+	# Static full-strength hints capture their entire expanded light. Intermediate
+	# entry brightness and moving sweeps retain the original live shader.
+	return (completion <= 0.35 or completion >= 0.7) and (is_zero_approx(completion) or glint <= -1.0)
 
 func _idle_pixel_extent() -> Vector2i:
 	# Screen coordinates include the viewport stretch and backing pixel scale.
 	var pixels: Vector2 = _surface.get_screen_transform().get_scale().abs() * size
 	return Vector2i(ceili(pixels.x), ceili(pixels.y))
 
-func _idle_cache_ready(key: String, texture: Texture2D) -> void:
+func _idle_cache_ready(key: String, texture: Texture2D, material: ShaderMaterial = null) -> void:
 	if not _idle_cache_requested or key != _idle_cache_key:
 		return
 	if not _idle_cache_eligible() or _idle_pixel_extent() != _idle_raster_size:
@@ -360,7 +360,7 @@ func _idle_cache_ready(key: String, texture: Texture2D) -> void:
 		return
 	_surface.texture = texture
 	_surface.stretch_mode = TextureRect.STRETCH_SCALE
-	_surface.material = IdleBodyCache.display_material()
+	_surface.material = material if material != null else IdleBodyCache.display_material()
 	_idle_cache_fallback = ""
 
 func _invalidate_idle_cache() -> void:

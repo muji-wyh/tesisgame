@@ -64,7 +64,7 @@ func check_item(kind: String, continuous: bool, speed: float) -> void:
 	var model = f.model
 	var generated: int = model.generated_tiles
 	var remaining: float = model.stage_run.remaining
-	var price: int = model.powerup_price(kind)
+	var price: int = model.powerup_price(kind, model.family_word_id(int(f.selected)) if kind == "family_merge" else "")
 	check(model.can_activate_powerup(kind), "%s remains available with airborne supply, Fill=%s speed=%s" % [kind, continuous, speed])
 	var accepted: bool = model.activate_powerup(kind, int(f.selected) if kind == "family_merge" else -1)
 	check(accepted, "A legal " + kind + " can really be purchased during the fall")

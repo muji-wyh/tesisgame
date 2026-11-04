@@ -63,16 +63,40 @@ func _test_economy_ladder() -> void:
 		extra_time.append(Economy.powerup_price("extra_time", use))
 	check(hints == [100, 150, 200, 200, 200], "Match starts accessible and charges more for repeated help")
 	check(peeks == [0, 100, 200, 300, 300], "Memory preserves a free first look and its existing capped ladder")
-	check(auto == [600, 900, 1200, 1200, 1200], "Auto Merge remains the premium item at every repeat level")
-	check(family == [50, 75, 100, 100, 100], "Goal-family merges cost exactly half the previous tier and cap at one hundred")
+	check(auto == [200, 300, 400, 400, 400], "Free Lv1 Auto Merge has an affordable capped successful-use ladder")
+	check(family == [50, 75, 100, 100, 100], "A family merge freeing one space uses the capped unit-price ladder")
 	check(treasure == [200, 300, 400, 400, 400], "Treasure is a smaller decision with increasing repeat prices")
 	check(extra_time == [100, 150, 200, 250, 300], "Extra time retains its independent fifty-coin repeat increment")
 	for price: int in hints + peeks + auto + family + treasure + extra_time:
 		check(price >= 0 and price % 25 == 0, "Every configured price fits the wallet's quarter-hundred purchase unit")
 	check(Economy.match_hint_price(-1) == 100 and Economy.memory_peek_price(-1) == 0
-		and Economy.powerup_price("auto_merge", -1) == 600
+		and Economy.powerup_price("auto_merge", -1) == 200
 		and Economy.powerup_price("family_merge", -1) == 50, "Negative counters cannot discount a first purchase")
 	check(Economy.powerup_price("unknown", 0) == 0, "Unknown item kinds have no purchasable price")
+	for level in range(1, 10):
+		var base: int = 200 + (level - 1) * 50
+		for use in range(5):
+			var price: int = Economy.powerup_price("auto_merge", use, level)
+			check(price == base + int(base / 2) * mini(use, 2) and price % 25 == 0,
+				"Every owned Auto Merge level has its exact wallet-compatible repeat quote")
+			if level > 1:
+				check(price > Economy.powerup_price("auto_merge", use, level - 1),
+					"A lower owned Auto Merge level always costs less for the same use count")
+	check(Economy.powerup_price("auto_merge", 0, -5) == 200
+		and Economy.powerup_price("auto_merge", 2, 99) == 1200,
+		"Owned Auto Merge price levels are bounded to the actual upgrade ladder")
+	for use in range(5):
+		var unit_price: int = Economy.powerup_price("family_merge", use)
+		for freed_spaces in range(1, 12):
+			var price: int = Economy.powerup_price("family_merge", use, 1, freed_spaces)
+			check(price == unit_price * freed_spaces and price % 25 == 0,
+				"Chosen-family quotes charge once for each net board space freed")
+			if freed_spaces > 1:
+				check(price > Economy.powerup_price("family_merge", use, 1, freed_spaces - 1),
+					"A family operation freeing more spaces costs more at the same use tier")
+	check(Economy.powerup_price("family_merge", 0, 1, 0) == 50
+		and Economy.powerup_price("family_merge", 0, 1, -1) == 50,
+		"The shared family quote cannot discount its minimum unit with an invalid reduction")
 	var chances: Array[float] = [0.0, 0.02, 0.04, 0.12, 0.20, 0.30, 0.40, 0.50, 0.80]
 	var amounts: Array[int] = [0, 50, 100, 150, 200, 250, 300, 350, 450]
 	# Higher merged levels improve both the chance and potential payout.
@@ -149,6 +173,8 @@ func _test_supply_and_budget() -> void:
 	var report: Dictionary = Report.build_report()
 	check(report == Report.build_report(), "Economy reports reproduce exactly from the fixed supply seed")
 	for row: Dictionary in report.scenarios:
+		check(int(row.auto_merge_level) == 9,
+			"The retained 600-coin workload comparison explicitly identifies owned Auto Merge Lv9")
 		check(float(row.free_play_total) > 0.0, "Playing without paid help always builds savings in the modeled workloads")
 		check(float(row.free_play_bonus) == 0.0 and float(row.free_play_chest) == float(row.free_play_total),
 			"Collecting ordinary Lv1 words earns only the unchanged chest income")
@@ -156,7 +182,7 @@ func _test_supply_and_budget() -> void:
 			check(float(row.one_treasure_every_three_sessions_net_average) > 0.0,
 				"Larger ordinary workloads can save while buying a first-price Treasure every three rounds")
 		check(float(row.one_auto_merge_net) < 0.0 and float(row.three_auto_merge_net) < float(row.one_auto_merge_net),
-			"A premium purchase every modeled round drains savings; repeated use drains faster")
+			"An owned Lv9 purchase every modeled round drains savings; repeated use drains faster")
 		check(float(row.three_treasure_net) < 0.0,
 			"Three Treasure purchases cannot sustain themselves even when every paid fragment is retained")
 		if is_equal_approx(float(row.success_probability), 1.0):
@@ -173,10 +199,22 @@ func _test_supply_and_budget() -> void:
 		check(is_equal_approx(float(row.expected_bonus_per_source_word), expected_per_source[int(row.merge_level) - 1]),
 			"The source-word budget accounts for additive merges instead of same-level doubling")
 	check(source_counts == [1, 2, 3, 4, 5, 6, 7, 8, 9], "Each playable collection level retains its completed source-word count")
-	check(Report.purchase_total("auto_merge", 3) == 2700 and Report.purchase_total("fragments", 3) == 900,
-		"Constant-use scenarios include escalating prices rather than repeating the opening discount")
+	check(report.auto_merge_prices.size() == 9, "The live report includes every owned Auto Merge price level")
+	for row: Dictionary in report.auto_merge_prices:
+		var level: int = int(row.owned_level)
+		check(int(row.capacity) == Economy.auto_merge_capacity(level)
+			and int(row.first_use) == Economy.powerup_price("auto_merge", 0, level)
+			and int(row.second_use) == Economy.powerup_price("auto_merge", 1, level)
+			and int(row.third_and_later) == Economy.powerup_price("auto_merge", 2, level),
+			"Reported owned-level prices and capacities use the exact live economy")
+	check(Report.purchase_total("auto_merge", 3, 9) == 2700
+		and Report.purchase_total("auto_merge", 3, 1) == 900
+		and Report.purchase_total("fragments", 3) == 900,
+		"Workload comparisons distinguish owned levels while retaining successful-use escalation")
 	check(Report.purchase_total("family_merge", 3) == 225,
-		"Three family purchases cost the actual fifty, seventy-five and one-hundred tiers")
+		"Three one-space family purchases cost the actual fifty, seventy-five and one-hundred tiers")
+	check(Report.purchase_total("family_merge", 3, 1, 3) == 675,
+		"A report for three-space family operations multiplies each exact successful-use tier")
 
 
 func _test_treasure_cannot_self_fund() -> void:
@@ -218,16 +256,16 @@ func _test_paid_model_and_wallet() -> void:
 		charges.append(price)
 		return wallet.spend(id, price)
 	var before: Array[Dictionary] = game.cells.duplicate(true)
-	check(not game.activate_powerup("auto_merge") and game.cells == before and game.powerup_price("auto_merge") == 600,
+	check(not game.activate_powerup("auto_merge") and game.cells == before and game.powerup_price("auto_merge") == 200,
 		"An unaffordable first Auto merge cannot change the board or increase its next price")
 	check(wallet.credit("earned:old-chest", 20).ok and wallet.balance == 1000, "Existing chest values fund a saved-wallet purchase")
 	check(wallet.credit("earned:auto-merge-help", 40).ok and wallet.balance == 3000,
 		"Additional earned fixture chests fund the live automatic-use ladder")
 	storage.fail_write = true
-	check(not game.activate_powerup("auto_merge") and wallet.balance == 3000 and game.powerup_price("auto_merge") == 600,
+	check(not game.activate_powerup("auto_merge") and wallet.balance == 3000 and game.powerup_price("auto_merge") == 200,
 		"Failed persistence leaves both balance and successful-use price untouched")
 	storage.fail_write = false
-	for expected_price: int in [600, 900, 1200]:
+	for expected_price: int in [200, 300, 400]:
 		prepare.call()
 		var previous_balance: int = wallet.balance
 		check(game.activate_powerup("auto_merge"), "A live Auto merge starts after a durable debit")
@@ -238,18 +276,18 @@ func _test_paid_model_and_wallet() -> void:
 			and game.cells.size() == 2
 			and game.cells.reduce(func(total: int, tile: Dictionary) -> int: return total + int(tile.fragments), 0) == 4,
 			"The two available complete pairs survive as two products without inventing a third or losing fragments")
-	check(wallet.balance == 300,
-		"Three successful live purchases spend twenty-seven hundred saved coins")
+	check(wallet.balance == 2100,
+		"Three successful Lv1 purchases spend nine hundred saved coins")
 	check(game.fragment_count == 0 and game.collected_coins == 0,
 		"Automatic construction cannot grant chest progress or refund coins before word collection")
-	check(game.powerup_price("auto_merge") == 1200 and game.powerup_price("family_merge") == 50
+	check(game.powerup_price("auto_merge") == 400 and game.powerup_price("family_merge") == 50
 		and game.powerup_price("fragments") == 0,
 		"Repeat prices cap and independent item kinds do not inflate one another")
 	game.configure(Report.fixture_words(), 3, 20)
-	check(game.powerup_price("family_merge") == 50 and game.powerup_price("auto_merge") == 600
+	check(game.powerup_price("family_merge") == 50 and game.powerup_price("auto_merge") == 200
 		and game.auto_merge_level == 1, "A new isolated round resets use prices and starts with free capacity")
 	var reloaded := Wallet.new("user://unused-economy-wallet.cfg", storage)
-	check(reloaded.load_state() and reloaded.balance == 300 and reloaded.credit("earned:old-chest", 20).duplicate,
+	check(reloaded.load_state() and reloaded.balance == 2100 and reloaded.credit("earned:old-chest", 20).duplicate,
 		"New price policy preserves the saved balance and old chest receipt identity")
 	game.purchase_powerup = Callable()
 

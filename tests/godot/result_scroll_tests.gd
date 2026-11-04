@@ -15,6 +15,7 @@ var failures := 0
 var _activations := 0
 var _focus_events := 0
 var _held: Button
+var _user_scroll_events: Array[Dictionary] = []
 
 
 func _initialize() -> void:
@@ -78,6 +79,8 @@ func _run() -> void:
 	root.add_child(probe)
 	var scroll := ResultScroll.new()
 	scroll.held_button_changed.connect(func(button: Button) -> void: _held = button)
+	scroll.user_scroll_delta.connect(func(distance: float) -> void:
+		_user_scroll_events.append({"distance": distance, "offset": scroll._offset()}))
 	scroll.position = Vector2(20, 20)
 	scroll.size = Vector2(350, 350)
 	root.add_child(scroll)
@@ -110,8 +113,14 @@ func _run() -> void:
 			check(_held != null, "A stationary owned contact exposes its exact painted-button feedback target")
 			for distance in [20.0, 40.0, 60.0, 50.0]:
 				var moved := point - Vector2(0, distance * factor)
+				var events_before: int = _user_scroll_events.size()
+				var offset_before: int = scroll.scroll_vertical
 				await motion(moved, touch_first)
 				await motion(moved, not touch_first)
+				check(_user_scroll_events.size() == events_before + 1
+					and int(_user_scroll_events.back().offset) == scroll.scroll_vertical
+					and is_equal_approx(float(_user_scroll_events.back().distance), float(scroll.scroll_vertical - offset_before)),
+					"Paired drag streams publish one actual signed displacement after the position changes")
 				check(absi(scroll.scroll_vertical - before - roundi(distance)) <= 1,
 					"Drag follows absolute finger movement once at scale %.2f, touch first=%s, distance=%.0f, scroll=%d" % [
 						factor, touch_first, distance, scroll.scroll_vertical - before])
@@ -128,11 +137,86 @@ func _run() -> void:
 	await _check_cancellations(scroll, body.get_child(0))
 	await _check_touch_only_exit(scroll, probe)
 	await _check_native_controls(scroll, body.get_child(0))
+	await _check_user_scroll_provenance(scroll)
 	scroll.queue_free()
 	probe.queue_free()
 	await process_frame
 	print("Result scrolling: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _scroll_event_total() -> float:
+	var result: float = 0.0
+	for event: Dictionary in _user_scroll_events:
+		result += float(event.distance)
+	return result
+
+
+func _check_user_scroll_provenance(scroll: ResultScroll) -> void:
+	scroll.cancel_drag()
+	scroll.scroll_vertical = 240
+	await settle()
+	_user_scroll_events.clear()
+	scroll.scroll_vertical = 300
+	await process_frame
+	check(_user_scroll_events.is_empty(), "Direct focus or layout repositioning cannot masquerade as user scrolling")
+	scroll.scroll_by_user(48.0)
+	check(_user_scroll_events.size() == 1 and scroll.scroll_vertical == 348
+		and _user_scroll_events[0] == {"distance": 48.0, "offset": 348},
+		"User page movement publishes its actual distance after assigning the visible offset")
+	scroll.scroll_by_user(-30.0)
+	check(_user_scroll_events.size() == 2 and _user_scroll_events[1] == {"distance": -30.0, "offset": 318},
+		"Reversing user scrolling preserves the signed displacement")
+	scroll.scroll_by_user(0.0)
+	scroll.scroll_by_user(NAN)
+	scroll.scroll_by_user(INF)
+	check(_user_scroll_events.size() == 2 and scroll.scroll_vertical == 318,
+		"Zero and invalid user distances cannot issue a motion event or corrupt the offset")
+	scroll.scroll_by_user(-99999.0)
+	check(_user_scroll_events.back() == {"distance": -318.0, "offset": 0},
+		"An edge-clamped user move reports the consumed travel rather than the requested overshoot")
+	var events_before: int = _user_scroll_events.size()
+	scroll.scroll_by_user(-48.0)
+	check(_user_scroll_events.size() == events_before,
+		"Repeated attempts beyond the same edge never issue a false shake")
+	scroll.scroll_by_user(99999.0)
+	check(int(_user_scroll_events.back().offset) == roundi(scroll._maximum())
+		and is_equal_approx(float(_user_scroll_events.back().distance), scroll._maximum()),
+		"The opposite edge also reports only its actual clamped movement")
+
+	scroll.scroll_vertical = 300
+	await settle()
+	_user_scroll_events.clear()
+	var wheel := InputEventMouseButton.new()
+	wheel.button_index = MOUSE_BUTTON_WHEEL_DOWN
+	wheel.pressed = true
+	wheel.position = scroll.get_global_transform_with_canvas() * Vector2(160, 240)
+	root.push_input(wheel, true)
+	scroll.set_process(false)
+	var immediate_offset: int = scroll.scroll_vertical
+	check(scroll.is_coasting() and not _user_scroll_events.is_empty()
+		and int(_user_scroll_events.back().offset) == immediate_offset
+		and is_equal_approx(_scroll_event_total(), float(immediate_offset - 300)),
+		"A real wheel event acknowledges its immediate consumed travel once")
+	for step in range(24):
+		scroll._process(1.0 / 60.0)
+		scroll.set_process(false)
+	check(scroll.scroll_vertical > immediate_offset and _user_scroll_events.size() > 1
+		and is_equal_approx(_scroll_event_total(), float(scroll.scroll_vertical - 300)),
+		"Wheel momentum publishes all subsequent actual movement without duplicating its first step")
+	scroll.cancel_drag()
+	_user_scroll_events.clear()
+	var pan := InputEventPanGesture.new()
+	pan.position = wheel.position
+	pan.delta = Vector2(0, -1)
+	var offset_before: int = scroll.scroll_vertical
+	root.push_input(pan, true)
+	check(not scroll.is_coasting() and _user_scroll_events.size() == 1
+		and float(_user_scroll_events[0].distance) < 0.0
+		and int(_user_scroll_events[0].offset) == scroll.scroll_vertical
+		and is_equal_approx(_scroll_event_total(), float(scroll.scroll_vertical - offset_before)),
+		"Trackpad movement remains identifiable even though it cancels synthesized momentum")
+	scroll.cancel_drag()
 
 
 func _check_tap(scroll: ResultScroll, button: Button, touch_first: bool) -> void:

@@ -31,6 +31,163 @@ func _sleep(pip) -> void:
 	check(pip.rest_snapshot().state == "sleeping", "Three quiet seconds put the actual guide to sleep")
 
 
+func _sleep_to(pip, seconds: float) -> void:
+	_advance(pip, maxf(0.0, seconds - float(pip.rest_snapshot().sleep_elapsed)))
+
+
+func _pose_distance(left: Array[Transform2D], right: Array[Transform2D]) -> float:
+	var distance: float = 0.0
+	for index in range(mini(left.size(), right.size())):
+		for point: Vector2 in [Vector2(60, 40), Vector2(60, 100)]:
+			distance = maxf(distance, (left[index] * point).distance_to(right[index] * point))
+	return distance
+
+
+func _head_joint(pip, transforms: Array[Transform2D]) -> Vector2:
+	var joint: Vector2 = pip.GAMEPLAY_PIVOTS[1]
+	var joints: Array = pip._growth_stage.get("motionPivots", [])
+	if joints.size() == pip.GAMEPLAY_PIVOTS.size():
+		joint = Vector2(float(joints[1][0]), float(joints[1][1]))
+	return transforms[1] * joint
+
+
+func _check_staged_sleep(view) -> void:
+	var pip = view._pip
+	pip.set_audio_enabled(true)
+	_sleep(pip)
+	var count: int = int(pip.rest_snapshot().wake_count)
+	var peeps: int = int(pip.rest_snapshot().audio.wake_requests)
+	var geometry: Array = _geometry(view)
+	var support: Array = pip.rest_snapshot().support
+	var upright: Array[Transform2D] = []
+	var prone: Array[Transform2D] = []
+	var tucked: Array[Transform2D] = []
+	var samples: Array = [
+		[2.8, "upright-snoring"], [6.3, "nestling"], [9.5, "prone-snoring"],
+		[13.0, "sleep-drifting"], [13.9, "sleep-slipping"], [14.5, "sleep-catching"],
+		[16.0, "sleep-resettling"], [18.5, "tucked-snoring"], [20.3, "untucking"],
+		[21.2, "upright-snoring"]]
+	for sample: Array in samples:
+		_sleep_to(pip, float(sample[0]))
+		var current: Dictionary = pip.rest_snapshot()
+		check(current.sleep_stage == str(sample[1]) and current.state == "sleeping"
+			and pip.expression_name() == "sleepy",
+			"The quiet performance reaches %s while Pip keeps its closed eyes" % str(sample[1]))
+		check(int(current.wake_count) == count and int(current.audio.wake_requests) == peeps
+			and current.support == support and _geometry(view) == geometry,
+			"Sleeping antics cannot issue an awake peep or move native map targets")
+		check(absf(float(current.sleep_cycle_elapsed) - fposmod(float(sample[0]), 21.0)) < 0.005,
+			"The sleep clock keeps the actual elapsed time across its first cycle")
+		if str(sample[1]) == "sleep-catching":
+			check(not current.snoring and not current.audio.snore_playing,
+				"The sleepy catch interrupts both the visible snore and its audio")
+			check(_snores_hidden(pip), "No snore glyph floats away during the sleepy catch")
+		if is_equal_approx(float(sample[0]), 2.8):
+			upright = pip.rest_transforms()
+		elif str(sample[1]) == "prone-snoring":
+			prone = pip.rest_transforms()
+		elif str(sample[1]) == "tucked-snoring":
+			tucked = pip.rest_transforms()
+		if str(sample[1]) in ["prone-snoring", "tucked-snoring"]:
+			check(current.snoring, "Pip resumes snoring during the long supported rest")
+	check(_pose_distance(upright, prone) > 3.0 and _pose_distance(upright, tucked) > 3.0
+		and _head_joint(pip, prone).y > _head_joint(pip, upright).y + 2.0,
+		"Prone and tucked rest actually lower Pip's head rather than only changing a state label")
+
+	_sleep(pip)
+	for boundary: float in [5.6, 7.0, 12.6, 13.6, 14.2, 14.8, 17.4, 19.6, 21.0]:
+		_sleep_to(pip, boundary - 0.001)
+		var before: Array[Transform2D] = pip.rest_transforms()
+		_advance(pip, 0.002)
+		check(_pose_distance(before, pip.rest_transforms()) < 0.5,
+			"Authored parts stay continuous across the sleep beat at %.1f seconds" % boundary)
+	check(float(pip.rest_snapshot().sleep_elapsed) > 21.0
+		and float(pip.rest_snapshot().sleep_cycle_elapsed) < 0.01
+		and pip.rest_snapshot().sleep_stage == "upright-snoring",
+		"The cycle returns smoothly to upright rest without resetting the accumulated sleep clock")
+
+	for sample: Array in samples.slice(0, 9):
+		_sleep(pip)
+		_sleep_to(pip, float(sample[0]))
+		var before: Array[Transform2D] = pip.rest_transforms()
+		count = int(pip.rest_snapshot().wake_count)
+		pip.pointer_activity()
+		check(pip.rest_snapshot().state != "sleeping" and not pip.rest_snapshot().snoring
+			and int(pip.rest_snapshot().wake_count) == count + 1,
+			"A disturbance immediately wakes Pip from %s" % str(sample[1]))
+		check(_pose_distance(before, pip.rest_transforms()) < 0.001,
+			"Hover keeps the exact supported pose on the input frame of %s" % str(sample[1]))
+		_advance(pip, 0.016)
+		check(_pose_distance(before, pip.rest_transforms()) < 4.0,
+			"The first recovery frame joins smoothly from %s" % str(sample[1]))
+		_advance(pip, 1.8)
+		check(pip.rest_snapshot().state == "awake" and pip.rest_snapshot().support == support
+			and _geometry(view) == geometry,
+			"Every sleeping pose can finish recovery on the same perch")
+
+	var inward_drops: Array[Vector2] = []
+	var art_source: String = pip._outfit_dance_sheet.resource_path
+	for highest: int in [55, 57]:
+		view.open(_state(highest), false)
+		await _settle()
+		view._nodes[highest].button.release_focus()
+		_freeze(view)
+		_sleep(pip)
+		_sleep_to(pip, 2.8)
+		var resting_joint: Vector2 = _head_joint(pip, pip.rest_transforms())
+		_sleep_to(pip, 14.0)
+		inward_drops.append(_head_joint(pip, pip.rest_transforms()) - resting_joint)
+		check(pip._outfit_dance_sheet.resource_path == art_source and pip.scale.x > 0.0,
+			"Inward sleeping motion retains the original unmirrored character artwork")
+	check(inward_drops[0].x < -2.0 and inward_drops[1].x > 2.0
+		and inward_drops[0].y > 2.0 and inward_drops[1].y > 2.0,
+		"The actual right and left frontier perches both produce a downward slip toward the map interior")
+
+	_sleep(pip)
+	_sleep_to(pip, 9.5)
+	var sleep_age: float = float(pip.rest_snapshot().sleep_elapsed)
+	view.configure(_state(57), false)
+	_freeze(view)
+	check(pip.rest_snapshot().sleep_stage == "prone-snoring"
+		and float(pip.rest_snapshot().sleep_elapsed) == sleep_age,
+		"Refreshing saved map state preserves a deep sleep instead of restarting the performance")
+	view.set_active(false)
+	var paused: Dictionary = pip.rest_snapshot()
+	_advance(pip, 25.0)
+	check(pip.rest_snapshot() == paused and not pip.rest_snapshot().audio.snore_playing
+		and not pip.rest_snapshot().audio.wake_playing,
+		"Backgrounding during prone rest cancels the cycle and both character voices")
+	view.set_active(true)
+	await _settle()
+	_freeze(view)
+	_sleep(pip)
+	check(pip.rest_snapshot().sleep_stage == "upright-snoring"
+		and float(pip.rest_snapshot().sleep_elapsed) < 0.02,
+		"A resumed map starts its next rest upright without catching up an unseen sleepy fall")
+	_sleep_to(pip, 9.5)
+	view.set_reduced_motion(true)
+	_freeze(view)
+	var reduced_pose: Array[Transform2D] = pip.rest_transforms()
+	count = int(pip.rest_snapshot().wake_count)
+	_advance(pip, 45.0)
+	check(pip.rest_snapshot().state == "sleeping" and pip.rest_snapshot().sleep_stage == "upright-snoring"
+		and pip.rest_transforms() == reduced_pose and int(pip.rest_snapshot().wake_count) == count,
+		"Reduced motion keeps one upright sleeping pose through more than two ordinary cycles")
+	pip.reset_rest()
+	check(float(pip.rest_snapshot().sleep_elapsed) == 0.0 and pip.rest_snapshot().state == "awake"
+		and int(pip.rest_snapshot().wake_count) == count,
+		"Reset clears the sleeping choreography without turning it into a startled wake event")
+	pip.set_audio_enabled(false)
+	await create_timer(0.1).timeout
+
+
+func _snores_hidden(pip) -> bool:
+	for snore: Label in pip._snores:
+		if snore.visible:
+			return false
+	return true
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1366, 768)
@@ -207,6 +364,7 @@ func _run() -> void:
 	pip.pointer_activity()
 	check(float(pip.rest_snapshot().wake_direction) > 0.0,
 		"At leftmost stage 58, Pip slips inward without mirroring its artwork")
+	await _check_staged_sleep(view)
 	view.close()
 	_holder.free()
 	_finish()

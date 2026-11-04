@@ -228,13 +228,19 @@ one-, two- or three-star rating. Replaying cannot downgrade it or skip an unlock
 Progress and frozen word recipes are separate for Everyday English and each
 professional career/module. A recipe remains replayable after its words have
 been mastered, provided the original reviewed identities are still available.
-After a new contiguous clear, sourced golden light travels along the route from
-the completed node to the next over 850 ms, using the same real connecting road
-when the next stage belongs to another chapter. That node then opens its padlock and
-pops into its available state over 650 ms. Every later locked node retains a
+After a new contiguous clear, Pip starts on the completed stage's rim, steps
+down over 180 ms, and runs along the actual connecting road for 1.12 seconds.
+Alternating feet, a leaning torso and following wings make the movement readable
+at map scale. Pip then jumps onto the next stage over 520 ms and settles back
+into its supported perch over 240 ms. Sourced golden route light and the next
+padlock's opening share this clock. The camera frames both stages when they fit,
+or follows Pip on short screens, including chapter crossings. Scrolling and stage
+selection remain available during the journey. Every later locked node retains a
 padlock with restrained light. Reopening the map, replaying an old clear or
 changing learning context cannot replay a progression unlock. Reduced motion
 presents the final state directly; hidden/background maps stop their effect clock.
+Wallet refreshes and resizing preserve the travel beat; landing starts a fresh
+three-second quiet countdown before Pip sleeps.
 Pip accompanies the real next stage using the learner's earned appearance or
 requested career wardrobe, resting with folded wings on its upper rim.
 Quiet breathing and blinks replace the map companion's standing age tricks;
@@ -640,7 +646,16 @@ becomes merged as soon as its spelling is complete. Invalid combinations separat
 with elastic feedback and a negative sound, without creating a merged body.
 
 Merged Jellies show the word and its available picture, with a brighter rim and
-glints. New Jelly World journeys start with only Lv1 unlocked. Two merged
+glints. Each level also has its own permanent rim effect: pearl bubbles, twin
+ripples, a lifting spiral, golden flamelets, falling rose blossoms, prismatic
+shards, aurora ribbons, a constellation, or a golden star crown at Lv9.
+The effects share one acquired-source atlas and the existing three-owner idle
+animation budget. Other bodies hold their last effect pose; hover, dragging and
+other active interactions resume their motion. Reduced motion keeps a distinct
+still effect for every level. Pictures, spelling, fragment corners and native
+hit areas keep their existing layout. See the
+[merged-level effect asset record](../assets/images/jelly-level-fx/README.md).
+New Jelly World journeys start with only Lv1 unlocked. Two merged
 Jellies of the same word add their levels, including different levels; the result
 clamps to the permanently unlocked coin-bought cap rather than rejecting an overflow.
 With Lv4 unlocked, Lv2 + Lv3 produces Lv4 in either direction, manually or through
@@ -870,7 +885,12 @@ Lv1-Lv3 stay unchanged. Board effects, reading art and ambient motion use the
 model's actual consumed motion segments, so a coarse frame cannot skip the freeze.
 The interface/audio keep their own clocks and `Engine.time_scale` remains one.
 
-Auto merge costs 600, 900, then 1200 coins for further uses in the same round.
+Auto merge costs 200, 300, then 400 coins at owned Lv1 in the same round.
+Its first-use base adds 50 coins per owned level, reaching 600 at Lv9; the second
+successful use costs 1.5 times that base and later uses cost twice the base.
+Word-goal purchases use their shared 50, 75, then 100 coin unit tier multiplied
+by the net board spaces the chosen family's complete legal operation will free.
+Unmatched, capped, frozen and locked leftovers do not increase the quote.
 Its button displays the next price and current Jelly capacity. The Treasure and +30 sec purchase cards and
 their live purchase routes are removed; naturally earned chest fragments and
 ordinary treasure settlement remain. Auto merge follows validated paths of root joins, picture matches and

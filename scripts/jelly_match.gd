@@ -10,8 +10,10 @@ signal round_finished(result: Dictionary)
 signal finish_requested
 signal pause_requested
 signal changed(state: Dictionary)
+signal serialized_changed(serialized: String)
 
 const JellyMatchModel = preload("res://scripts/jelly_match_model.gd")
+const PublicationJSON = preload("res://scripts/jelly_publication_json.gd")
 const Tile = preload("res://scripts/jelly_tile.gd")
 const FinishButton = preload("res://scripts/jelly_finish_button.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
@@ -32,6 +34,7 @@ const DRAG_STRETCH := Vector2(0.985, 1.06)
 
 var game = JellyMatchModel.new()
 var interaction_allowed: Callable
+var publication_overrides: Callable
 var reduced_motion: bool = false
 var finish_button: FinishButton
 var drop_button: Button
@@ -276,6 +279,7 @@ func _ready() -> void:
 	_layout()
 
 func _exit_tree() -> void:
+	publication_overrides = Callable()
 	if has_header_chest() and not _header_chest_host.is_queued_for_deletion():
 		_header_chest_host.hide()
 		_header_chest_host.queue_free()
@@ -1653,7 +1657,14 @@ func _control(button: Button) -> Dictionary:
 func _publish() -> void:
 	_publish_elapsed = 0.0
 	var state: Dictionary = snapshot()
-	var serialized: String = JSON.stringify(state)
-	if serialized != _last_published:
-		_last_published = serialized
-		changed.emit(state)
+	var encoded: Dictionary = PublicationJSON.encode_base(state) if publication_overrides.is_valid() else {}
+	var serialized: String = encoded.serialized if not encoded.is_empty() else JSON.stringify(state)
+	if serialized == _last_published:
+		return
+	_last_published = serialized
+	var host_serialized: String = serialized
+	if publication_overrides.is_valid():
+		var overrides: Dictionary = publication_overrides.call(state)
+		host_serialized = PublicationJSON.encode_host(state, encoded, overrides)
+	serialized_changed.emit(host_serialized)
+	changed.emit(state)

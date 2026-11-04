@@ -3,7 +3,12 @@ extends "res://tests/godot/word_jelly_interaction_tests.gd"
 
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
-	check(data.load_all(), "Falling contact uses production vocabulary")
+	var catalog: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
+	check(catalog is Array and Data.validate_words(catalog).is_empty(), "Falling contact uses validated production vocabulary without unrelated chest bootstrap")
+	if failures > 0:
+		quit(1)
+		return
+	data.words.assign(catalog)
 	for word: Dictionary in data.words:
 		if str(word.id) in ["cat", "apple", "carrot", "tooth", "bird", "walk", "hear", "chair"]:
 			words.append(word)

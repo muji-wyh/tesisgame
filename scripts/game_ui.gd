@@ -874,7 +874,8 @@ func _build_controls() -> void:
 	_jelly.round_finished.connect(_jelly_finished.bind("jelly"))
 	_jelly.finish_requested.connect(_request_jelly_finish.bind("jelly"))
 	_jelly.pause_requested.connect(_pause_jelly)
-	_jelly.changed.connect(_publish_jelly.bind("jelly"))
+	_jelly.publication_overrides = _jelly_publication_overrides.bind("jelly")
+	_jelly.serialized_changed.connect(_publish_serialized_jelly.bind("jelly"))
 	_jelly.hide()
 	column.add_child(_jelly)
 	_jelly.finish_button.finish_committed.connect(_jelly_finish_pulled.bind("jelly"))
@@ -911,7 +912,8 @@ func _build_controls() -> void:
 	_word_jelly.round_finished.connect(_jelly_finished.bind("word_jelly"))
 	_word_jelly.finish_requested.connect(_request_jelly_finish.bind("word_jelly"))
 	_word_jelly.pause_requested.connect(_pause_jelly)
-	_word_jelly.changed.connect(_publish_jelly.bind("word_jelly"))
+	_word_jelly.publication_overrides = _jelly_publication_overrides.bind("word_jelly")
+	_word_jelly.serialized_changed.connect(_publish_serialized_jelly.bind("word_jelly"))
 	_word_jelly.hide()
 	column.add_child(_word_jelly)
 	_word_jelly.finish_button.finish_committed.connect(_jelly_finish_pulled.bind("word_jelly"))
@@ -2633,7 +2635,7 @@ func _purchase_word_jelly_powerup(event_id: String, kind: String, price: int) ->
 	var receipt: String = _round_id + ":" + event_id
 	# An old callback still refers to its paid price after the next price rises.
 	# The wallet rechecks the saved snapshot before accepting that duplicate.
-	if price != _word_jelly.game.powerup_price(kind) and not coin_wallet.has_purchase(receipt, price):
+	if not _word_jelly.game.powerup_quote_is_current(event_id, kind, price) and not coin_wallet.has_purchase(receipt, price):
 		return {"ok": false, "error": "This powerup price is no longer current."}
 	var result: Dictionary = coin_wallet.spend(receipt, price)
 	_coin_counter.available = coin_wallet.ready and coin_wallet.error.is_empty()
@@ -2969,17 +2971,31 @@ func _publish_jelly(state: Dictionary, source_mode: String = "") -> void:
 	if _releasing_professional_views or _host == null or (not source_mode.is_empty() and source_mode != _mode_id):
 		return
 	var value: Dictionary = state.duplicate()
-	value["visible"] = _is_jelly_mode() and _active_jelly().is_visible_in_tree() and not _jelly_rewards_shown and not _round_celebration_active() and not collection_page.visible and not _page_hidden and not _mode_menu_open() and not (_campaign != null and _campaign.is_open())
-	value["mode"] = _mode_id
-	value["round_id"] = _round_id
-	value["finish_confirmation"] = _finish_confirmation.snapshot() if is_instance_valid(_finish_confirmation) else {"visible": false}
-	value["pause_button"] = value.get("finish", {}).duplicate(true)
-	value["pause_menu"] = {"visible": false, "retired": true}
-	value["pause"] = {"active": _jelly_pause_open(), "shade_visible": _jelly_pause_shade.is_visible_in_tree()}
-	value["campaign_map"] = _campaign.snapshot() if _campaign != null else {"visible": false}
-	value["game_over"] = _settlement_dialog.snapshot() if is_instance_valid(_settlement_dialog) else {"visible": false}
-	value["game_over_sequence"] = _round_end.snapshot() if is_instance_valid(_round_end) else {"active": false}
+	value.merge(_jelly_publication_overrides(state, source_mode), true)
 	_host.jellyStatus(JSON.stringify(value))
+
+
+func _publish_serialized_jelly(serialized: String, source_mode: String = "") -> void:
+	if _releasing_professional_views or _host == null or (not source_mode.is_empty() and source_mode != _mode_id):
+		return
+	_host.jellyStatus(serialized)
+
+
+func _jelly_publication_overrides(state: Dictionary, source_mode: String = "") -> Dictionary:
+	if _releasing_professional_views or _host == null or (not source_mode.is_empty() and source_mode != _mode_id):
+		return {}
+	return {
+		"visible": _is_jelly_mode() and _active_jelly().is_visible_in_tree() and not _jelly_rewards_shown and not _round_celebration_active() and not collection_page.visible and not _page_hidden and not _mode_menu_open() and not (_campaign != null and _campaign.is_open()),
+		"mode": _mode_id,
+		"round_id": _round_id,
+		"finish_confirmation": _finish_confirmation.snapshot() if is_instance_valid(_finish_confirmation) else {"visible": false},
+		"pause_button": state.get("finish", {}).duplicate(true),
+		"pause_menu": {"visible": false, "retired": true},
+		"pause": {"active": _jelly_pause_open(), "shade_visible": _jelly_pause_shade.is_visible_in_tree()},
+		"campaign_map": _campaign.snapshot() if _campaign != null else {"visible": false},
+		"game_over": _settlement_dialog.snapshot() if is_instance_valid(_settlement_dialog) else {"visible": false},
+		"game_over_sequence": _round_end.snapshot() if is_instance_valid(_round_end) else {"active": false},
+	}
 
 
 func _publish_jelly_rewards(state: Dictionary) -> void:

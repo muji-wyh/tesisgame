@@ -87,7 +87,7 @@ func _test_three_completed_results() -> void:
 		check(tile.jelly_kind == "merged" and tile.merge_level == 1 and tile.word.id == "cat",
 			"Each surviving product is a complete Lv1 word, not three animations folded into one upgrade")
 	check(fragments == 6 and model.cleared_pairs == 0 and model.collected_coins == 0
-		and paid.size() == 1 and paid[0][2] == 600,
+		and paid.size() == 1 and paid[0][2] == 200,
 		"The three outputs preserve fragments, learning ownership and one exact debit")
 	model.purchase_powerup = Callable()
 
@@ -173,9 +173,10 @@ func _test_exact_capacities() -> void:
 			remaining_fragments += int(tile.fragments)
 		check(remaining_fragments == fragments and model.cleared_pairs == 0 and model.collected_coins == 0,
 			"Capacity limiting preserves all carried fragments and never collects or grants pickup income")
-		check(paid.size() == 1 and paid[0][1] == "auto_merge" and paid[0][2] == 600
-			and model.powerup_price("auto_merge") == 900,
-			"Permanent capacity does not change the existing per-round use-price policy")
+		var first_use_price: int = 200 + 50 * (level - 1)
+		check(paid.size() == 1 and paid[0][1] == "auto_merge" and paid[0][2] == first_use_price
+			and model.powerup_price("auto_merge") == first_use_price * 3 / 2,
+			"Owned capacity sets the exact first debit and the next successful-use tier at every level")
 		check(model.snapshot().auto_merge_level == level and model.snapshot().auto_merge_capacity == capacity,
 			"The public game snapshot advertises the same level and capacity that actually executed")
 		model.purchase_powerup = Callable()
@@ -248,8 +249,8 @@ func _test_family_is_independent() -> void:
 	var paid: Array = payments(model)
 	check(model.activate_family_merge("cat"), "Paid goal-family merging is still available at Auto merge Lv1")
 	drain(model)
-	check(model.cells.size() == 1 and model.merged_count == 6 and paid.size() == 1 and paid[0][2] == 50,
-		"The new Auto merge budget does not cap goal-family purchases or their distinct price")
+	check(model.cells.size() == 1 and model.merged_count == 6 and paid.size() == 1 and paid[0][2] == 300,
+		"Goal-family merging remains uncapped and charges for all six removed board Jellies")
 	model.purchase_powerup = Callable()
 
 

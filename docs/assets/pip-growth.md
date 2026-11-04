@@ -106,14 +106,43 @@ resource import. Original Pip and wardrobe files remain editable historical
 sources, rather than a second visual style for the loading or speech UI.
 
 The Jelly Journey map reuses the acquired growth and professional part atlases
-for a supported perch, closed-eye breathing, and a 1.6-second startled slip and
-climb. Its November 4, 2026 choreography rotates the existing rigid body, head,
-and shoulder-attached wings; it adds no replacement character artwork or baked
-animation. The motion turns toward the map's center to keep the near-fall visible
-on narrow screens. Three quiet seconds start sleep, and quiet timing resumes
-after a wake recovery. Small drifting sleep letters reuse the existing interface font.
-Reduced motion retains static sleep and awake faces with bounded timers instead
-of animated poses. Map-only sound provenance is recorded in [Pip sounds](pip-sounds.md).
+for a supported perch and a 21-second sleep cycle: upright snoring, gradual
+nestling, prone snoring, a sleepy drift and near-fall, a wing catch, then tucked
+snoring before returning upright. Its November 4, 2026 choreography rotates the
+existing rigid body, head and shoulder-attached wings; it adds no replacement
+character artwork or baked animation. The small slip turns toward the map's
+center to remain visible on narrow screens. Three quiet seconds start sleep.
+Hover interrupts any sleep phase with the existing 1.6-second startled slip and
+climb, blending from the current posture; quiet timing resumes after recovery.
+Small drifting sleep letters follow the head and reuse the existing interface
+font. Snores pause during the sleepy catch and resume with the supported sleep
+posture. Reduced motion retains static sleep and awake faces with bounded timers
+instead of animated poses. Map-only sound provenance is recorded in
+[Pip sounds](pip-sounds.md).
+
+After a newly saved contiguous Jelly Journey clear, the same acquired six-part
+rig travels from the completed stage to the next. The map samples its cached
+connecting road while the rig performs departure, alternating grounded steps,
+a tucked-foot jump and a supported landing. Existing foot cells become visible
+during travel and fold out of sight at the perch; wings and head retain their
+authored joints. The torso and feet fade into the foreground during departure
+and return behind the platform rim during landing, so stage faces cannot hide
+the airborne body. No new artwork, audio or baked animation is acquired. Sleep,
+pointer wake and scroll inertia pause during this short journey, then the normal
+three-second rest deadline resumes. Reduced motion presents the next perch
+directly. Native map captures live in `build/qa/jelly-map-journey`.
+
+User scrolling also wakes a visible sleeping map companion. Actual drag, wheel,
+trackpad and keyboard page movement, including their momentum, drive a bounded
+spring in the artwork's 120-unit frame. Pip briefly reacts to the disturbance,
+holds the stage rim with the existing feather tips, and lets its torso and head
+lag behind changes in scroll speed before settling. The grip reuses the authored
+wing contours and age-specific joints; no physics character mesh or replacement
+art is introduced. Repeated movement does not replay the startled voice. Automatic
+focus reveal and layout changes do not trigger a scroll wake. Reduced motion
+suppresses spring swaying and uses a bounded static grip and release response.
+The original three-second quiet deadline is preserved. Backgrounding,
+closing and offscreen visibility cancel the response instead of catching up later.
 
 | Sheet | Cells | Content |
 | --- | --- | --- |

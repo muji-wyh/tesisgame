@@ -68,6 +68,15 @@ func _frames(count: int) -> void:
 		page.advance(0.05)
 
 
+func _advance_to_marker() -> void:
+	for frame in range(24):
+		if not page.snapshot().milestone_pending:
+			break
+		page.advance(0.025)
+	check(not page.snapshot().milestone_pending,
+		"The earned stored marker is reached within its bounded presentation glide")
+
+
 func _reset(state: Dictionary = {}) -> void:
 	holder.show()
 	page.set_active(true)
@@ -265,7 +274,7 @@ func _test_committed_feedback_and_independent_tracks() -> void:
 	_frames(2)
 	check(page.snapshot().visual_progress < 1.0 and page.snapshot().payoff == 0.0 and cues.size() == 2,
 		"The saved rail approaches the milestone before its success effect")
-	_frames(1)
+	_advance_to_marker()
 	check(page.snapshot().visual_progress == 1.0 and page.snapshot().payoff > 0.0
 		and not page.snapshot().milestone_pending and cues == ["upgrade_coin", "upgrade_coin", "goal_complete"],
 		"Reaching the exact saved marker starts the milestone rays and fanfare together")
@@ -394,9 +403,10 @@ func _test_continuous_charge_feedback() -> void:
 	page.start_charging()
 	check(page.snapshot().milestone_pending and page.snapshot().selected_level == 2,
 		"A quick repress retains the earned level until its pending milestone is revealed")
-	_frames(3)
-	check(page.snapshot().payoff > 0.0 and page.snapshot().selected_level == 2 and requests.is_empty(),
-		"The exact marker reveals its earned preview before a fresh hold can request more coins")
+	_advance_to_marker()
+	check(page.snapshot().payoff > 0.0 and page.snapshot().selected_level == 2 and requests.size() <= 1
+		and requests.all(func(request: Dictionary) -> bool: return request == {"kind": "jelly", "amount": 25}),
+		"The pending earned preview survives a quick repress and any unacknowledged next contribution")
 	page.stop_charging()
 	page.start_charging()
 	check(page.snapshot().payoff > 0.0 and page.snapshot().selected_level == 2,
@@ -412,7 +422,7 @@ func _test_continuous_charge_feedback() -> void:
 	page.stop_charging()
 	_reset()
 	page.configure(state)
-	_frames(3)
+	_advance_to_marker()
 	page.select_level(9)
 	check(page.snapshot().payoff == 0.0 and page.snapshot().selected_level == 9,
 		"Inspecting a locked preview clears the previous earned level's celebration")
@@ -453,7 +463,7 @@ func _test_displayed_level_milestones() -> void:
 		and page.snapshot().milestone_pending and page._tier.text == "Lv 1"
 		and page._name.text == Preview.NAMES[1] and page._hero.merge_level == 1,
 		"The prior Lv remains visible for the full rail approach")
-	_frames(1)
+	_advance_to_marker()
 	check(page.snapshot().payoff > 0.0 and not page.snapshot().milestone_pending
 		and page.snapshot().level_reveal_pending and page.snapshot().displayed_level == 1
 		and page._tier.text == "Lv 1" and page._name.text == Preview.NAMES[1]
@@ -490,7 +500,7 @@ func _test_displayed_level_milestones() -> void:
 			page.configure(earned)
 			page.stop_charging()
 			if beat == "reveal":
-				_frames(3)
+				_advance_to_marker()
 			var cue_count: int = cues.size()
 			match action:
 				"hide": page.hide()
@@ -520,6 +530,201 @@ func _test_displayed_level_milestones() -> void:
 	page.stop_charging()
 
 
+func _check_progress_caption(message: String) -> void:
+	var actual: Dictionary = page.snapshot()
+	var visual: float = float(actual.visual_progress)
+	if int(actual.owned_level) == 9 and visual >= 8.0 - 0.0000001:
+		check(page._progress.text.replace(" ", "") == "Lv9" and not page._progress_coin.visible,
+			"%s settles on the completed Lv9 caption at the final marker" % message)
+		return
+	var parts: PackedStringArray = page._progress.text.split(" / ", false)
+	var valid: bool = parts.size() == 2 and parts[0].is_valid_int() and parts[1].is_valid_int()
+	check(valid, "%s keeps one readable funded amount and price" % message)
+	if not valid:
+		return
+	var segment: int = clampi(floori(visual + 0.0000001), 0, 7)
+	var price: int = Page.Economy.permanent_upgrade_price(actual.kind, segment + 2)
+	var phase: float = clampf(visual - segment, 0.0, 1.0)
+	var amount: int = int(parts[0])
+	var paid_limit: int = int(actual.funded) if segment == int(actual.owned_level) - 1 else price
+	check(int(parts[1]) == price and absf(float(amount) - phase * price) <= 1.000001,
+		"%s aligns its visible amount and denominator with the moving rail segment: %s at %.6f" % [message, page._progress.text, visual])
+	check(amount >= 0 and amount <= paid_limit,
+		"%s never displays coins beyond the acknowledged funding of that segment" % message)
+	var accessible: bool = page._progress.accessibility_name.contains("All milestones complete") \
+		if int(actual.owned_level) == 9 else page._progress.accessibility_name.contains("%d of %d" % [actual.funded, actual.price])
+	check(accessible,
+		"%s preserves the exact committed amount and current price for accessibility" % message)
+
+
+func _test_held_progress_continuity() -> void:
+	var state: Dictionary = _initial_state()
+	state.level = 8
+	state.intro = "complete"
+	_reset(state)
+	var layouts: int = page.snapshot().layout_count
+	var receipts: Array[int] = []
+	var baseline_deposits: int = page.snapshot().deposit_count
+	var commit := func(kind: String, amount: int) -> void:
+		state.balance -= amount
+		state.funded[kind] += amount
+		page.configure(state)
+		receipts.append(amount)
+	page.contribution_requested.connect(commit)
+	page.start_charging()
+	var first_receipt := false
+	var still_frames := 0
+	var longest_still := 0
+	var elapsed_frames := 0
+	for frame in range(180):
+		var previous: Dictionary = page.snapshot()
+		page.advance(1.0 / 60.0)
+		var actual: Dictionary = page.snapshot()
+		_check_progress_caption("A held Lv8 funding frame")
+		check(is_finite(actual.visual_progress) and actual.visual_progress >= previous.visual_progress
+			and actual.visual_progress <= actual.progress + 0.000001,
+			"Held funding moves forward without displaying unsaved rail progress")
+		check(actual.balance == state.balance and actual.funded == state.funded.jelly
+			and actual.owned_level == 8 and actual.deposit_count == baseline_deposits + receipts.size(),
+			"Every visible held receipt corresponds to one acknowledged deposit on the current track")
+		if first_receipt:
+			elapsed_frames += 1
+			if actual.visual_progress <= previous.visual_progress + 0.0000001:
+				still_frames += 1
+				longest_still = maxi(longest_still, still_frames)
+			else:
+				still_frames = 0
+			check(actual.visual_balance < previous.visual_balance,
+				"The visible wallet keeps decreasing between acknowledged held receipts")
+		first_receipt = first_receipt or not receipts.is_empty()
+	check(receipts.size() >= 10 and elapsed_frames >= 150 and longest_still <= 1,
+		"A sustained three-second hold has no perceptible stop between committed funding pulses")
+	check(page.snapshot().charging and charge_states == [true]
+		and page.snapshot().layout_count == layouts and page.snapshot().coin_flights == 0,
+		"One uninterrupted hold keeps its charging channel and layout without restarted coin flights")
+	page.stop_charging()
+	var frozen_receipts: int = receipts.size()
+	_frames(16)
+	check(receipts.size() == frozen_receipts and charge_states == [true, false]
+		and page.snapshot().visual_progress == page.snapshot().progress,
+		"Release settles on the exact last committed progress without requesting another payment")
+	var resting: Dictionary = page.snapshot()
+	check(page._progress.text == "%d / %d" % [resting.funded, resting.price],
+		"The resting funding caption settles on the exact acknowledged amount")
+	page.start_charging()
+	_frames(2)
+	page.stop_charging()
+	check(receipts.size() == frozen_receipts and charge_states == [true, false, true, false],
+		"A short repeated hold restarts acknowledgement and cancels before another debit")
+	page.contribution_requested.disconnect(commit)
+
+
+func _test_milestone_funding_cadence() -> void:
+	for kind: String in ["jelly", "auto_merge"]:
+		var state: Dictionary = _initial_state()
+		state["level" if kind == "jelly" else "auto_merge_level"] = 7
+		state.funded[kind] = Page.Economy.permanent_upgrade_price(kind, 8) - Page.PULSE_AMOUNT
+		state.intro = "complete"
+		_reset(state)
+		if kind == "auto_merge":
+			page.select_upgrade(kind)
+		var clock := {"elapsed": 0.0}
+		var receipts: Array[float] = []
+		var baseline_milestones: int = page.snapshot().level_up_count
+		var commit := func(track: String, amount: int) -> void:
+			state.balance -= amount
+			state.funded[track] += amount
+			var key: String = "level" if track == "jelly" else "auto_merge_level"
+			if state.funded[track] == Page.Economy.permanent_upgrade_price(track, int(state[key]) + 1):
+				state[key] += 1
+				state.funded[track] = 0
+			page.configure(state)
+			receipts.append(clock.elapsed)
+		page.contribution_requested.connect(commit)
+		page.start_charging()
+		var saw_old_level := false
+		var saw_earned_level := false
+		var first_receipt := false
+		var still_frames := 0
+		var longest_still := 0
+		for frame in range(150):
+			var previous: Dictionary = page.snapshot()
+			clock.elapsed += 1.0 / 60.0
+			page.advance(1.0 / 60.0)
+			var actual: Dictionary = page.snapshot()
+			_check_progress_caption("The %s milestone funding frame" % kind)
+			saw_old_level = saw_old_level or actual.displayed_level == 7
+			saw_earned_level = saw_earned_level or actual.displayed_level == 8
+			check(actual.charging and charge_states == [true]
+				and actual.visual_progress <= actual.progress + 0.000001,
+				"A committed %s milestone preserves the held gesture without speculative funding" % kind)
+			if first_receipt:
+				if actual.visual_progress <= previous.visual_progress + 0.0000001:
+					still_frames += 1
+					longest_still = maxi(longest_still, still_frames)
+				else:
+					still_frames = 0
+			first_receipt = first_receipt or not receipts.is_empty()
+		check(receipts.size() >= 10 and saw_old_level and saw_earned_level,
+			"A sustained %s hold reveals the earned Lv and keeps funding the next one" % kind)
+		var longest_gap := 0.0
+		for index in range(1, receipts.size()):
+			longest_gap = maxf(longest_gap, receipts[index] - receipts[index - 1])
+		check(longest_gap <= 0.25 and page.snapshot().owned_level == 8,
+			"A %s upgrade adds no artificial funding pause around its level-switch effect" % kind)
+		check(longest_still <= 1,
+			"The %s rail keeps moving across its milestone and next receipt without a stationary beat" % kind)
+		check(page.snapshot().level_up_count == baseline_milestones + 1
+			and cues.count("goal_complete") == 1,
+			"The %s marker triggers one milestone even when another deposit retargets the moving rail" % kind)
+		page.configure(state)
+		check(cues.count("goal_complete") == 1,
+			"Repeating the final saved %s snapshot cannot replay its level-switch sound" % kind)
+		page.stop_charging()
+		_frames(16)
+		var resting: Dictionary = page.snapshot()
+		check(page._progress.text == "%d / %d" % [resting.funded, resting.price],
+			"The %s post-milestone caption settles on exact next-tier funding" % kind)
+		page.contribution_requested.disconnect(commit)
+
+
+func _test_final_funding_caption() -> void:
+	var state: Dictionary = _initial_state()
+	state.level = 8
+	state.intro = "complete"
+	state.funded.jelly = Page.Economy.permanent_upgrade_price("jelly", 9) - Page.PULSE_AMOUNT
+	_reset(state)
+	_check_progress_caption("The last paid segment before Lv9")
+	page.start_charging()
+	state.balance -= Page.PULSE_AMOUNT
+	state.level = 9
+	state.funded.jelly = 0
+	page.configure(state)
+	check(page.snapshot().owned_level == 9 and not page.snapshot().charging
+		and not page.snapshot().buy.enabled,
+		"The final saved receipt stops further charging while its marker approaches")
+	_check_progress_caption("The committed Lv9 receipt before its visual crossing")
+	for frame in range(20):
+		page.advance(1.0 / 60.0)
+		_check_progress_caption("The final marker approach and completed caption")
+	check(page.snapshot().visual_progress == 8.0 and cues.count("goal_complete") == 1,
+		"The final caption reaches Lv9 once with its earned marker effect")
+	page.configure(state)
+	check(cues.count("goal_complete") == 1,
+		"A duplicate final receipt cannot repeat its completed caption milestone")
+	state.level = 8
+	state.funded.jelly = Page.Economy.permanent_upgrade_price("jelly", 9) - Page.PULSE_AMOUNT
+	_reset(state)
+	page.set_reduced_motion(true)
+	state.balance -= Page.PULSE_AMOUNT
+	state.level = 9
+	state.funded.jelly = 0
+	page.configure(state)
+	_check_progress_caption("The reduced-motion final milestone")
+	check(page.snapshot().visual_progress == 8.0,
+		"Reduced motion settles the final caption on its committed marker immediately")
+
+
 func _test_reduced_motion_and_charge_gates() -> void:
 	_reset()
 	page.set_reduced_motion(true)
@@ -528,6 +733,7 @@ func _test_reduced_motion_and_charge_gates() -> void:
 	state.balance = 4975
 	page.configure(state)
 	_frames(1)
+	_check_progress_caption("A reduced-motion partial contribution")
 	check(page.snapshot().visual_progress == 0.5 and page.snapshot().coin_flights == 0
 		and page._hero.scale == Vector2.ONE and page._hero.position == page._hero_base
 		and cues == ["upgrade_coin"],
@@ -539,6 +745,7 @@ func _test_reduced_motion_and_charge_gates() -> void:
 	state.intro = "complete"
 	page.configure(state)
 	_frames(4)
+	_check_progress_caption("A reduced-motion milestone")
 	check(page.snapshot().preview.elapsed == elapsed and page.snapshot().preview.reduced_motion
 		and page.snapshot().visual_progress == 1.0 and page.snapshot().payoff > 0.0
 		and page.snapshot().coin_flights == 0 and page._hero.scale == Vector2.ONE
@@ -729,6 +936,58 @@ func _test_responsive_layout() -> void:
 		page.select_upgrade("jelly")
 
 
+func _test_rail_marker_bounds() -> void:
+	for dimensions: Vector2i in [Vector2i(320, 480), Vector2i(393, 852), Vector2i(844, 390), Vector2i(1366, 768)]:
+		root.size = dimensions
+		holder.size = Vector2(dimensions)
+		page.size = Vector2(dimensions)
+		for level in range(1, 10):
+			var state: Dictionary = _initial_state()
+			state.level = level
+			state.intro = "complete"
+			state.funded.jelly = 125 if level == 8 else 0
+			_reset(state)
+			page.select_level(level)
+			await process_frame
+			page._layout()
+			var u: float = 1.0 / page.Style.ui_scale(page)
+			var bounds := Rect2(Vector2.ZERO, page._levels.size)
+			var rail_top: float = page._rail_origin.y - 7 * u
+			for index in range(page._tabs.size()):
+				var button: Button = page._tabs[index].button
+				check(bounds.grow(0.1).encloses(button.get_rect())
+					and button.size.x <= page._rail_pitch + 0.1
+					and button.get_rect().end.y <= rail_top + 0.1,
+					"Lv%d stays within its marker slot and above the rail at %s" % [index + 1, dimensions])
+				check(button.size.x * page.Style.ui_scale(page) >= 44.0 - 0.1
+					and button.size.y * page.Style.ui_scale(page) >= 44.0 - 0.1,
+					"A compact marker retains its full preview touch target")
+				if index > 0:
+					check(not button.get_rect().intersects(page._tabs[index - 1].button.get_rect()),
+						"Adjacent level preview markers never cover one another")
+				for style_name: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+					var surface: StyleBox = button.get_theme_stylebox(style_name)
+					check(surface is StyleBoxEmpty or surface is StyleBoxFlat and surface.bg_color.a == 0.0,
+						"The %s marker state cannot paint an opaque panel across the rail" % style_name)
+			page._scroll.scroll_horizontal = 100000
+			await process_frame
+			check(page._scroll.get_global_rect().grow(0.1).encloses(page._tabs.back().button.get_global_rect()),
+				"The whole Lv9 label and preview target remain reachable without edge clipping")
+		var screenshot: Dictionary = _initial_state()
+		screenshot.level = 8
+		screenshot.intro = "complete"
+		screenshot.funded.jelly = 125
+		_reset(screenshot)
+		await process_frame
+		page.select_level(7)
+		page._tabs.back().button.grab_focus()
+		var motion := InputEventMouseMotion.new()
+		motion.position = page._tabs[6].button.get_global_rect().get_center()
+		motion.global_position = motion.position
+		root.push_input(motion)
+		await capture_ui("rail-owned8-selected7-%dx%d" % [dimensions.x, dimensions.y])
+
+
 func _capture_charge_feedback() -> void:
 	if not OS.get_cmdline_user_args().has("--capture") or DisplayServer.get_name() == "headless":
 		return
@@ -765,6 +1024,42 @@ func _capture_charge_feedback() -> void:
 		page.contribution_requested.disconnect(commit)
 
 
+func _capture_charge_motion() -> void:
+	if not OS.get_cmdline_user_args().has("--capture-motion") or DisplayServer.get_name() == "headless":
+		return
+	for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(1366, 768)]:
+		root.size = dimensions
+		holder.size = Vector2(dimensions)
+		page.size = Vector2(dimensions)
+		var state: Dictionary = _initial_state()
+		state.level = 7
+		state.intro = "complete"
+		state.funded.jelly = Page.Economy.permanent_upgrade_price("jelly", 8) - Page.PULSE_AMOUNT
+		_reset(state)
+		page._layout()
+		var directory: String = "res://build/qa/jelly-upgrades/motion-%dx%d" % [dimensions.x, dimensions.y]
+		check(DirAccess.make_dir_recursive_absolute(directory) == OK,
+			"Keep charging motion captures in ignored QA output")
+		var commit := func(kind: String, amount: int) -> void:
+			state.balance -= amount
+			state.funded[kind] += amount
+			if state.funded[kind] == Page.Economy.permanent_upgrade_price(kind, int(state.level) + 1):
+				state.level += 1
+				state.funded[kind] = 0
+			page.configure(state)
+		page.contribution_requested.connect(commit)
+		page.start_charging()
+		for frame in range(65):
+			page.advance(1.0 / 20.0)
+			await process_frame
+			await RenderingServer.frame_post_draw
+			check(root.get_texture().get_image().save_png(directory + "/frame-%04d.png" % frame) == OK,
+				"Capture the continuous held deposit and earned level reveal")
+		page.stop_charging()
+		page.contribution_requested.disconnect(commit)
+		print("Charging motion: %s (65 frames at 20 fps)" % directory)
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(393, 852)
@@ -784,10 +1079,15 @@ func _run() -> void:
 	_test_committed_feedback_and_independent_tracks()
 	_test_continuous_charge_feedback()
 	_test_displayed_level_milestones()
+	_test_held_progress_continuity()
+	_test_milestone_funding_cadence()
+	_test_final_funding_caption()
 	_test_reduced_motion_and_charge_gates()
 	await _test_wallet_digit_boundary()
 	await _test_responsive_layout()
+	await _test_rail_marker_bounds()
 	await _capture_charge_feedback()
+	await _capture_charge_motion()
 	page.free()
 	print("Jelly hold-to-charge view: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

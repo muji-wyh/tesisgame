@@ -8,8 +8,10 @@ the icon. Actual four-digit prices retain readable lettering. Neutral
 cream surfaces share one border treatment; the sourced artwork identifies the
 tool instead of giving every card a different colored frame.
 Their artwork stays separate from the stable touch target, title, and coin price.
-Auto merge costs 600, 900, then 1200 coins per round;
-Goal-family merges cost 50, 75, then 100.
+Auto merge costs 200, 300, then 400 coins per round at owned Lv1.
+Each owned level adds 50 coins to the first-use base through 600 at Lv9;
+repeat use multiplies that base by 1.5, then 2.
+Goal-family merges cost 50, 75, then 100 per net board space freed.
 Each item tracks successful purchases separately
 and shows its next price without resetting the current feedback animation.
 Treasure and the paid +30 sec card are retired. Neither is constructed in the
@@ -41,13 +43,22 @@ state remain accessible to screen readers.
 One quiet cream backing groups the controls; only Collect is a strong green
 primary action. The divider remains visible but uses the same fine neutral edge.
 
+Hovering or focusing Auto Collect previews the batch's actual captured Jelly
+IDs with the existing matching halo and dims the other board bodies. Completed
+Jellies still landing and maximum-level Jellies remain eligible; unfinished,
+held, fusing, frozen and locked bodies do not. The existing animation budget
+limits moving highlights while every eligible body retains a visible halo.
+Leaving, disabling or activating the button clears the preview, as do pause,
+drag and view cancellation. Collection blasts remain separate downstream effects.
+
 ## Permanent Auto merge capacity
 
 The existing **Jelly Upgrades** page has separate **Merged Jelly** and **Auto
 merge** category controls. Auto merge starts at free Lv1 with up to three completed,
 collectable Jellies per use. Each next level adds one output, reaching eleven at Lv9.
 The independent permanent upgrades cost 50, 100, 200, 350, 550, 800, 1100 and
-1500 coins. These do not replace the per-round 600 / 900 / 1200 use prices.
+1500 coins. The owned level also determines its per-use price base; repeat
+purchase counters reset each round, while permanent ownership remains saved.
 The existing v4 Jelly ownership and pending receipts migrate without repricing;
 v5 records both levels and the pending upgrade kind. A paid final-save retry
 always follows that kind, even after switching category.
@@ -129,6 +140,13 @@ grants construction mastery or mints manual-merge combo coins. A later successfu
 collection owns its usual learning and rewards. All goal rows share the existing
 per-round family-use price tier, independent of Auto merge; the price does not
 reset for a different goal.
+Each goal multiplies this unit tier by the net board reduction forecast for its
+full legal family timeline. Combining four existing bodies into one frees three
+spaces and costs 150 coins at the first tier. Unmatched roots, capped Jellies,
+frozen or locked bodies and other untouched leftovers do not inflate the quote.
+Intermediate joins are accounted for through the net reduction, without double
+counting. The selected quote is captured before the wallet call; display,
+affordability, saved debit and shortage feedback use that same exact amount.
 
 A newly saved payment reuses the existing wallet debit: rolling digits, an exact
 negative amount, and one acquired gold coin traveling from the wallet to the

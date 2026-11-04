@@ -18,15 +18,15 @@ static func travel_rows(cell: Dictionary) -> float:
 	return maxf(0.0, minf(float(cell.get("falling_rows", 0)), float(cell.get("row", 0))))
 
 
-static func contact_at(cell: Dictionary) -> float:
+static func contact_at(cell: Dictionary, descent_speed: float = 1.0) -> float:
 	# Distance is measured in board rows, so gravity feels the same at every size.
 	var gravity: float = ARRIVAL_GRAVITY if bool(cell.get("arrival", false)) else COLLAPSE_GRAVITY
 	var speed: float = clampf(float(cell.get("motion_speed_scale", 1.0)), 1.0, 2.2) if bool(cell.get("arrival", false)) else 1.0
-	return sqrt(2.0 * maxf(1.0, travel_rows(cell)) / gravity) / speed
+	return sqrt(2.0 * maxf(1.0, travel_rows(cell)) / gravity) / speed / descent_speed
 
 
-static func ready_at(cell: Dictionary) -> float:
-	return contact_at(cell) + COMPRESSION_SECONDS + REBOUND_SECONDS + RECOVERY_SECONDS
+static func ready_at(cell: Dictionary, descent_speed: float = 1.0) -> float:
+	return contact_at(cell, descent_speed) + COMPRESSION_SECONDS + REBOUND_SECONDS + RECOVERY_SECONDS
 
 
 static func preview(elapsed: float, interval: float, index: int, reduced: bool = false) -> Dictionary:
@@ -51,9 +51,9 @@ static func preview(elapsed: float, interval: float, index: int, reduced: bool =
 		"beat": phase, "intensity": anticipation}
 
 
-static func sample(cell: Dictionary) -> Dictionary:
+static func sample(cell: Dictionary, descent_speed: float = 1.0) -> Dictionary:
 	var age: float = maxf(0.0, float(cell.get("age", 0.0)))
-	var contact: float = contact_at(cell)
+	var contact: float = contact_at(cell, descent_speed)
 	var fall: float = clampf(age / contact, 0.0, 1.0)
 	var after: float = maxf(0.0, age - contact)
 	var impact: float = sqrt(clampf(travel_rows(cell) / 6.0, 0.0, 1.0))
@@ -66,7 +66,7 @@ static func sample(cell: Dictionary) -> Dictionary:
 		height = lerpf(1.0 + extension, 1.0 - squash, sin(after / COMPRESSION_SECONDS * PI * 0.5))
 	elif after < COMPRESSION_SECONDS + REBOUND_SECONDS:
 		height = lerpf(1.0 - squash, 1.035, smoothstep(0.0, REBOUND_SECONDS, after - COMPRESSION_SECONDS))
-	elif age < ready_at(cell):
+	elif age < ready_at(cell, descent_speed):
 		height = lerpf(1.035, 1.0, smoothstep(0.0, RECOVERY_SECONDS, after - COMPRESSION_SECONDS - REBOUND_SECONDS))
 	return {
 		"lift_rows": travel_rows(cell) * (1.0 - fall * fall),

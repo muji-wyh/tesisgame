@@ -54,6 +54,7 @@ var _rail_start_velocity := 0.0
 var _rail_time := 0.0
 var _rail_duration := 0.18
 var _pending_milestone := false
+var _milestone_progress := 0.0
 var _level_up_count := 0
 var _deposit_count := 0
 var _charge_energy := 0.0
@@ -68,6 +69,8 @@ var _hero_edge := 1.0
 var _hero_lift_room := 0.0
 var _rail_pitch := 76.0
 var _rail_origin := Vector2.ZERO
+var _rail_unit := 1.0
+var _rail_scroll_offset := 0.0
 var _sky := TextureRect.new()
 var _back := Button.new()
 var _heading: Label
@@ -295,7 +298,6 @@ func configure(state: Dictionary) -> void:
 		_pulse = 1.0
 		if level_changed:
 			_level_up_count += 1
-			_charge_wait = 0.64
 			_preview_wait = 0.9
 			_set_displayed_level(mini(_displayed_level, _owned_level() - 1))
 			_reveal_level = _owned_level()
@@ -304,8 +306,10 @@ func configure(state: Dictionary) -> void:
 				_selected = _owned_level()
 				_present_preview()
 			_pending_milestone = true
+			_milestone_progress = float(_owned_level() - 1)
 			_follow_rail.call_deferred()
-	_set_rail_target(_target_progress(), 0.12 if level_changed else 0.18)
+	# Receipts overlap their approaches, retaining motion between saved debits.
+	_set_rail_target(_target_progress(), 0.30)
 	if _pending_milestone and _reduced:
 		_begin_milestone()
 	if not _can_charge():
@@ -427,6 +431,7 @@ func start_charging() -> void:
 	if not celebrating:
 		_set_displayed_level(_owned_level())
 	_charging = true
+	_rail_scroll_offset = float(_scroll.scroll_horizontal)
 	_charge_energy = maxf(_charge_energy, 0.28)
 	_charge_wait = HOLD_LEAD
 	charging_changed.emit(true)
@@ -481,8 +486,7 @@ func _refresh() -> void:
 	for tab: Dictionary in _tabs:
 		tab.button.disabled = busy
 		tab.button.accessibility_name = "Preview Lv%d. %s" % [tab.level, "Owned" if int(tab.level) <= owned else "Locked"]
-	_progress.text = "%d / %d" % [_funded(), _price()] if owned < 9 else "Lv 9"
-	_progress_coin.visible = owned < 9
+	_update_funding_text()
 	_progress.accessibility_name = "%d of %d coins saved toward Lv%d. %d coins remaining." % [_funded(), _price(), mini(9, owned + 1), maxi(0, _price() - _funded())]
 	if owned == 9:
 		_progress.accessibility_name = "Lv9. All milestones complete."
@@ -504,6 +508,7 @@ func _refresh() -> void:
 	_offer.visible = _offering
 	if _layout_state != _presentation_layout_state():
 		_layout()
+	_layout_funding()
 	_levels.queue_redraw()
 	_effects.queue_redraw()
 	_animate_wallet()
@@ -527,6 +532,7 @@ func set_reduced_motion(value: bool) -> void:
 			_begin_milestone()
 		elif _level_reveal_pending:
 			_reveal_earned_level()
+	_update_funding_text()
 	_animate_subject()
 	_animate_wallet()
 	_effects.queue_redraw()
@@ -585,7 +591,7 @@ func _advance_rail(step: float) -> void:
 		if _rail_time >= _rail_duration:
 			_visual_progress = _rail_to
 			_rail_velocity = 0.0
-	if _pending_milestone and is_equal_approx(_visual_progress, _target_progress()):
+	if _pending_milestone and _visual_progress >= _milestone_progress - 0.000001:
 		_begin_milestone()
 
 func _begin_milestone() -> void:
@@ -663,6 +669,8 @@ func advance(delta: float) -> void:
 			_present_preview()
 			_refresh()
 	_advance_rail(step)
+	_update_funding_text()
+	_advance_rail_scroll(step)
 	if _charging:
 		if not _can_charge():
 			stop_charging()
@@ -683,7 +691,7 @@ func advance(delta: float) -> void:
 	_effects.queue_redraw()
 
 func _animate_subject() -> void:
-	var squash: float = _pulse * 0.045 + _charge_energy * (0.012 + sin(_elapsed * 11.0) * 0.018)
+	var squash: float = _pulse * 0.012 + _charge_energy * (0.012 + sin(_elapsed * 7.0) * 0.012)
 	var lift: float = _hero_edge * _charge_energy * (0.020 + sin(_elapsed * 7.0) * 0.008)
 	var tier_scale := Vector2.ONE
 	if _payoff > 0.0 and not _reduced:
@@ -710,8 +718,17 @@ func _animate_subject() -> void:
 	_hero.set_merged_presentation(0.0 if _reduced else _elapsed, _reduced)
 
 func _follow_rail() -> void:
-	if _rail_pitch > 0.0:
+	if _rail_pitch > 0.0 and not _charging:
 		_scroll.scroll_horizontal = roundi(maxf(0.0, (_owned_level() - 1.6) * _rail_pitch - _scroll.size.x * 0.23))
+		_rail_scroll_offset = float(_scroll.scroll_horizontal)
+
+func _advance_rail_scroll(step: float) -> void:
+	if not _charging:
+		return
+	var maximum: float = maxf(0.0, _levels.size.x - _scroll.size.x)
+	var target: float = clampf(_rail_origin.x + _visual_progress * _rail_pitch - _scroll.size.x * 0.62, 0.0, maximum)
+	_rail_scroll_offset = lerpf(_rail_scroll_offset, target, 1.0 - exp(-step * 10.0))
+	_scroll.scroll_horizontal = roundi(_rail_scroll_offset)
 
 func navigation_controls() -> Array[Control]:
 	var controls: Array[Control] = []
@@ -739,10 +756,14 @@ func _layout() -> void:
 	if size.x <= 0.0 or size.y <= 0.0 or _notice == null:
 		return
 	var u: float = 1.0 / Style.ui_scale(self)
+	_rail_unit = u
 	_layout_state = _presentation_layout_state()
 	_layout_count += 1
-	_rail_base_style = Style.box(Color("#739ab9"), Color("#d6e5f1"), ceili(7 * u), ceili(u))
-	_rail_fill_style = Style.box(GOLD, Color("#fff2bb"), ceili(7 * u), ceili(u))
+	_rail_base_style = Style.box(Color("#6987ab"), Color("#c7dbed"), ceili(7 * u), ceili(u))
+	_rail_base_style.shadow_color = Color("#476480", 0.22)
+	_rail_base_style.shadow_size = ceili(u)
+	_rail_base_style.shadow_offset = Vector2(0, 2 * u)
+	_rail_fill_style = Style.box(GOLD, Color("#fff4c2"), ceili(7 * u), ceili(u))
 	var width: float = minf(size.x - 32.0 * u, 940.0 * u)
 	var left: float = (size.x - width) * 0.5
 	var short: bool = size.y < 620.0 * u
@@ -775,7 +796,7 @@ func _layout() -> void:
 		category.add_theme_font_size_override("font_size", ceili(15 * u))
 		category_index += 1
 	var error_height: float = 44 * u if not _notice.text.is_empty() else 0.0
-	_footer.size = Vector2(width * 0.48 if landscape else width, (164 if short else 214) * u + error_height)
+	_footer.size = Vector2(width * 0.48 if landscape else width, (184 if short else 214) * u + error_height)
 	_footer.position = Vector2(left, size.y - _footer.size.y - 12 * u)
 	if landscape:
 		_footer.position.x = left + width - _footer.size.x
@@ -824,29 +845,25 @@ func _layout() -> void:
 	_description.visible = not short
 	_benefits.hide()
 	_scroll.position = Vector2.ZERO
-	_scroll.size = Vector2(footer_width, (72 if short else 88) * u)
+	_scroll.size = Vector2(footer_width, (80 if short else 88) * u)
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
-	_rail_pitch = maxf(70 * u, (footer_width - 56 * u) / 8.0)
-	_levels.custom_minimum_size = Vector2(_rail_pitch * 8 + 56 * u, (64 if short else 76) * u)
+	_rail_pitch = maxf(58 * u, (footer_width - 56 * u) / 8.0)
+	_levels.custom_minimum_size = Vector2(_rail_pitch * 8 + 56 * u, 76 * u)
 	_levels.size = _levels.custom_minimum_size
-	_rail_origin = Vector2(28 * u, (53 if short else 61) * u)
+	_rail_origin = Vector2(28 * u, 56 * u)
 	for tab: Dictionary in _tabs:
 		var button: Button = tab.button
-		Style.quiet_button(button, Style.GOOD, 0)
-		button.custom_minimum_size = Vector2.ZERO
-		button.position = Vector2((int(tab.level) - 1) * _rail_pitch, 0)
-		button.size = Vector2(56, 48) * u
-		button.add_theme_font_size_override("font_size", ceili(16 * u))
-		button.add_theme_color_override("font_color", Style.INK if int(tab.level) <= _owned_level() else Color("#42657f"))
-		if int(tab.level) == _selected:
-			button.add_theme_stylebox_override("normal", Style.box(Color("#fff5ce"), Color.TRANSPARENT, ceili(22 * u), 0))
-	_progress.position = Vector2((footer_width - 156 * u) * 0.5, (65 if short else 88) * u)
+		_style_level_button(button, int(tab.level), u)
+		button.position = Vector2(6 * u + (int(tab.level) - 1) * _rail_pitch, 0)
+		button.size = Vector2.ONE * 44 * u
+	_progress.position = Vector2((footer_width - 156 * u) * 0.5, (80 if short else 88) * u)
 	_progress.size = Vector2(180, 32) * u
 	_progress.add_theme_font_size_override("font_size", ceili(19 * u))
 	_progress_coin.position = Vector2(_progress.position.x - 4 * u, _progress.position.y + 5 * u)
 	_progress_coin.size = Vector2.ONE * 22 * u
+	_layout_funding()
 	_buy.size = Vector2(minf(308 * u, footer_width), (60 if short else 70) * u)
-	_buy.position = Vector2((footer_width - _buy.size.x) * 0.5, (102 if short else 130) * u)
+	_buy.position = Vector2((footer_width - _buy.size.x) * 0.5, (120 if short else 130) * u)
 	_style_charge_button(u)
 	_buy_coin.position = Vector2(_buy.size.x * 0.5 - 104 * u, (_buy.size.y - 32 * u) * 0.5 - 2 * u)
 	_buy_coin.size = Vector2.ONE * 32 * u
@@ -866,6 +883,47 @@ func _layout() -> void:
 func _presentation_layout_state() -> Array:
 	return [_kind, _selected, _owned_level(), _offering, not _notice.text.is_empty(),
 		bool(_state.get("retry", false)), Style.ui_scale(self)]
+
+func _layout_funding() -> void:
+	if _footer.size.x <= 0.0:
+		return
+	var u: float = _rail_unit
+	var font: Font = _progress.get_theme_font("font")
+	var pixels: int = _progress.get_theme_font_size("font_size")
+	var text_width: float = font.get_string_size(_progress.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
+	var icon_width: float = 28 * u if _progress_coin.visible else 0.0
+	var left: float = (_footer.size.x - text_width - icon_width) * 0.5
+	_progress.size.x = text_width
+	_progress.position.x = left + icon_width
+	_progress_coin.position = Vector2(left, _progress.position.y + 5 * u)
+
+func _update_funding_text() -> void:
+	# The numeral and fill describe the same acknowledged segment during its glide.
+	var level: int = clampi(floori(_visual_progress + 0.0000001) + 1, 1, _owned_level())
+	var price: int = Economy.permanent_upgrade_price(_kind, level + 1) if level < 9 else 0
+	var amount: int = clampi(roundi((_visual_progress - float(level - 1)) * price), 0, price)
+	var text: String = "%d / %d" % [amount, price] if level < 9 else "Lv 9"
+	if _progress.text != text or _progress_coin.visible != (level < 9):
+		_progress.text = text
+		_progress_coin.visible = level < 9
+		_layout_funding()
+
+func _style_level_button(button: Button, level: int, u: float) -> void:
+	button.focus_mode = Control.FOCUS_ALL
+	button.mouse_default_cursor_shape = Control.CURSOR_POINTING_HAND
+	button.custom_minimum_size = Vector2.ZERO
+	button.add_theme_font_override("font", Style.HEADING_FONT)
+	button.add_theme_font_size_override("font_size", ceili(16 * u))
+	for mode: String in ["normal", "hover", "pressed", "hover_pressed", "disabled"]:
+		button.add_theme_stylebox_override(mode, StyleBoxEmpty.new())
+	var focus: StyleBoxFlat = Style.box(Color.TRANSPARENT, Color(GOLD_DARK, 0.65), ceili(10 * u), ceili(u))
+	focus.set_content_margin_all(0.0)
+	button.add_theme_stylebox_override("focus", focus)
+	var ink: Color = GOLD_DARK if level == _selected else Style.INK if level <= _owned_level() else Color("#536e8f")
+	button.add_theme_color_override("font_color", ink)
+	for mode: String in ["font_hover_color", "font_pressed_color", "font_hover_pressed_color", "font_focus_color"]:
+		button.add_theme_color_override(mode, GOLD_DARK)
+	button.add_theme_color_override("font_disabled_color", Style.MUTED)
 
 func _style_charge_button(u: float) -> void:
 	Style.action_button(_buy, GOLD_DARK)
@@ -936,22 +994,41 @@ func _draw_stage() -> void:
 		_stage.draw_set_transform(Vector2.ZERO)
 
 func _draw_rail() -> void:
-	var u: float = 1.0 / Style.ui_scale(self)
+	var u: float = _rail_unit
 	var rail := Rect2(_rail_origin - Vector2(0, 7 * u), Vector2(_rail_pitch * 8, 14 * u))
 	if _rail_base_style == null or _rail_fill_style == null:
 		return
 	_levels.draw_style_box(_rail_base_style, rail)
 	if _visual_progress > 0.0:
 		_levels.draw_style_box(_rail_fill_style, Rect2(rail.position, Vector2(maxf(2 * u, _visual_progress * _rail_pitch), rail.size.y)))
+		if _charge_energy > 0.01 and not _reduced:
+			# Sourced light moves inside the paid segment while the hold remains active.
+			var start: float = maxf(0.0, _visual_progress - 1.0) * _rail_pitch
+			var span: float = _visual_progress * _rail_pitch - start
+			for index in range(3):
+				var phase: float = fposmod(_elapsed * 0.72 + float(index) / 3.0, 1.0)
+				var point: Vector2 = _rail_origin + Vector2(start + span * phase, 0)
+				var extent := Vector2(minf(30 * u, span), 12 * u)
+				_levels.draw_texture_rect(GLOW, Rect2(point - extent * 0.5, extent), false,
+					Color(1.0, 0.99, 0.81, _charge_energy * sin(phase * PI) * 0.85))
 	for level in range(1, 10):
 		var at: Vector2 = _rail_origin + Vector2((level - 1) * _rail_pitch, 0)
 		var reached: bool = level <= _owned_level()
 		_levels.draw_circle(at, 8 * u, GOLD_DARK if reached else Color("#638bb2"))
 		_levels.draw_circle(at, 5 * u, Color("#fff4c4") if reached else Color("#c8dcec"))
+		if level == _selected:
+			_levels.draw_arc(at, 11 * u, 0, TAU, 24, Color("#fff0b4"), 2 * u, true)
 		if level == _owned_level() + 1:
-			_levels.draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * 12 * u, Vector2.ONE * 24 * u), false, Color(1, 0.95, 0.64, 0.6 + _pulse * 0.4))
+			_levels.draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * 9 * u, Vector2.ONE * 18 * u), false,
+				Color(1, 0.95, 0.64, 0.35 + _charge_energy * 0.35))
 	var tip: Vector2 = _rail_origin + Vector2(_visual_progress * _rail_pitch, 0)
-	_levels.draw_texture_rect(GLOW, Rect2(tip - Vector2.ONE * 26 * u, Vector2.ONE * 52 * u), false, Color(1, 0.87, 0.45, 0.55 + _pulse * 0.3))
+	_levels.draw_texture_rect(GLOW, Rect2(tip - Vector2.ONE * 18 * u, Vector2.ONE * 36 * u), false,
+		Color(1, 0.87, 0.45, 0.45 + _charge_energy * 0.35))
+	if _payoff > 0.0:
+		var marker: Vector2 = _rail_origin + Vector2(_milestone_progress * _rail_pitch, 0)
+		var edge: float = (20.0 if _reduced else 20.0 + (1.0 - _payoff) * 18.0) * u
+		_levels.draw_texture_rect(SPARKLE, Rect2(marker - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false,
+			Color(1.0, 0.98, 0.76, _payoff))
 
 func _draw_effects() -> void:
 	var u: float = 1.0 / Style.ui_scale(self)
@@ -1035,6 +1112,9 @@ func snapshot() -> Dictionary:
 		"funding": _state.get("funded", {}).duplicate(true), "price": _price(),
 		"remaining": maxi(0, _price() - _funded()), "charging": _charging,
 		"progress": _target_progress(), "visual_progress": _visual_progress,
+		"rail": {"origin": [_rail_origin.x, _rail_origin.y], "pitch": _rail_pitch,
+			"velocity": _rail_velocity, "marker_progress": _milestone_progress,
+			"viewport_rect": _rect(_scroll), "charge_interval": lerpf(0.23, 0.14, float(_funded()) / maxf(1.0, _price()))},
 		"level_up_count": _level_up_count, "deposit_count": _deposit_count, "payoff": _payoff,
 		"milestone_pending": _pending_milestone,
 		"coin_flights": 0, "balance": int(_state.get("balance", 0)), "visual_balance": _visual_balance,

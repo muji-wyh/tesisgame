@@ -321,7 +321,8 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /The nine levels have distinct collection effects and sounds/);
   assert.match(help, /same-word pairs remain mergeable even at Lv9/);
   assert.doesNotMatch(help, /up to Lv6\b|two identical words of the same level/);
-  assert.match(help, /Auto merge costs 600, 900, then 1200 coins/);
+  assert.match(help, /Auto merge costs 200, 300, then 400 coins at owned Lv1/);
+  assert.match(help, /first-use base rises by 50 coins per owned level[\s\S]*600, 900, then 1200 at Lv9/);
   assert.match(help, /Hover or focus Auto merge to highlight the exact original Jellies its next use will merge, not every Jelly in the same family/);
   assert.match(help, /Multi-step paths include all needed roots and pictures[\s\S]*without spending coins, pronouncing words or pausing play/);
   assert.match(help, /pointer clicks release their acquired focus so selection cannot latch after completion/);
@@ -329,7 +330,8 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /standalone Magnet button is removed[\s\S]*pending word goal[\s\S]*never substitutes a random target/);
   assert.match(help, /Treasure and the paid extra-time item are retired[\s\S]*Naturally earned chest fragments and treasure rewards remain unchanged/);
   assert.doesNotMatch(help, /Treasure independently costs|Extra time adds 30 seconds for 100 coins/);
-  assert.match(help, /Goal-family purchases share the 50, 75, then 100 coin tier per round/);
+  assert.match(help, /Goal-family purchases share the 50, 75, then 100 coin unit tier per round/);
+  assert.match(help, /multiplies that unit by the net board spaces[\s\S]*exact selected quote is locked before payment/);
   assert.match(help, /two independent progress bars[\s\S]*Three actions earn the first level-up[\s\S]*COMBO BONUS/);
   assert.match(help, /Lv7 adds four outer-ring targets, Lv8 reaches its capped two rings and Lv9 reaches the board/);
   assert.match(help, /New journeys start with merged Lv1 for free[\s\S]*permanently unlock Lv2 through Lv9 in order for 50, 100, 200, 350, 550, 800, 1100 and 1500 coins/);
