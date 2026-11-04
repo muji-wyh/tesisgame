@@ -125,6 +125,7 @@ test('whole-word roots match pictures and merged words remain compact and collec
   expect(live.rect[2]).toBeCloseTo(live.rect[3], 3);
   expect(live.label_font_pixels).toBeGreaterThanOrEqual(13);
   expect(phone.tiles.find(tile => tile.jelly_kind === 'picture').label_visible).toBe(false);
+  expect(phone.read_detail.visible).toBe(false);
   await page.screenshot({ path: info.outputPath('hybrid-phone.png') });
   const holdPoint = point(live, await metrics(page));
   const holdTouch = info.project.name === 'android-chromium' ? await page.context().newCDPSession(page) : null;
@@ -135,10 +136,17 @@ test('whole-word roots match pictures and merged words remain compact and collec
       await page.mouse.move(holdPoint.x, holdPoint.y);
       await page.mouse.down();
     }
-    await expect.poll(async () => (await state(page)).drag.source).toBe(merged.id);
-    if (holdTouch) await expect.poll(async () => (await state(page)).drag.pointer,
-      { message: 'Android holding is owned by a real touch pointer' }).toBeGreaterThanOrEqual(0);
-    await page.waitForTimeout(650);
+    if (live.requires_read) {
+      await expect.poll(async () => {
+        const current = await state(page);
+        return current.read_detail.visible && current.read_detail.text === merged.word.text;
+      }, { message: 'Holding a clipped phone label opens its own Read dialog' }).toBe(true);
+    } else {
+      await expect.poll(async () => (await state(page)).drag.source).toBe(merged.id);
+      if (holdTouch) await expect.poll(async () => (await state(page)).drag.pointer,
+        { message: 'Android holding is owned by a real touch pointer' }).toBeGreaterThanOrEqual(0);
+      await page.waitForTimeout(650);
+    }
   } finally {
     if (holdTouch) {
       try {
