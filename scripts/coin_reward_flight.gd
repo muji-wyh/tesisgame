@@ -9,7 +9,7 @@ signal settled
 signal completed
 const Style = preload("res://scripts/ui_style.gd")
 const COINS = preload("res://assets/coins/gold-coins.png")
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const COIN = preload("res://assets/coins/gold-coin.png")
 const DEBIT_SECONDS: float = 0.76
 const BURST_SECONDS: float = 0.46

@@ -2,9 +2,9 @@ extends Control
 
 const Style = preload("res://scripts/ui_style.gd")
 const MEDAL = preload("res://assets/images/ui/mastery-medal.webp")
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
-const RAYS = preload("res://assets/chests/milestone/rays.png")
-const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
+const RAYS = preload("res://assets/chests/shared/effects/rays.png")
+const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const DURATION: float = 1.6
 var reduced_motion: bool = false
 var value: int = -1

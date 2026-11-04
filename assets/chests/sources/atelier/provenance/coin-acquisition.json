@@ -1,0 +1,123 @@
+{
+  "version": 1,
+  "acquired_on": "2026-11-03",
+  "creator_repository": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+  "commit": "b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07",
+  "license": "CC0-1.0",
+  "license_sha256": "c5f17abf619731f57f6bbff450f6484214605c13aa96bb75bbcfc70930941ff7",
+  "license_git_blob_sha1": "686cf4ee3931b75d4ecfac6308f9d3287553748c",
+  "inspection": "Actual original GLB JSON and binary POSITION accessors inspected; triangle counts, nonzero three-axis extents, nodes, clips, and dependencies recorded. Source visual render review is separate.",
+  "files": [
+    {
+      "path": "sources/kaykit-dungeon/coin.gltf.glb",
+      "creator": "Kay Lousberg",
+      "title": "KayKit Dungeon Remastered 1.0",
+      "source_url": "https://raw.githubusercontent.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/coin.gltf.glb",
+      "source_path": "addons/kaykit_dungeon_remastered/Assets/gltf/coin.gltf.glb",
+      "commit": "b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07",
+      "git_blob_sha1": "f7cdef3c8bf9d08b6a5c644b049a0bb7e98cd8af",
+      "sha256": "97d3abdd239d8fa365b14957f7bf45c892aad9d211b3c3b47b4b2311bf947297",
+      "bytes": 21776,
+      "license": "CC0-1.0",
+      "license_file": "sources/kaykit-dungeon/LICENSE.txt",
+      "status": "downloaded-original-verified-static-source-model",
+      "nodes": [
+        "coin"
+      ],
+      "animation_clips": [],
+      "external_dependencies": [],
+      "images": 1,
+      "geometry": [
+        {
+          "mesh": "Cube.15966",
+          "vertices": 132,
+          "triangles": 80,
+          "bounds_min": [
+            -0.179996058344841,
+            -0.06250369548797607,
+            -0.1800275593996048
+          ],
+          "bounds_max": [
+            0.18001559376716614,
+            0.06250226497650146,
+            0.17998410761356354
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+      "creator": "Kay Lousberg",
+      "title": "KayKit Dungeon Remastered 1.0",
+      "source_url": "https://raw.githubusercontent.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/coin_stack_small.gltf.glb",
+      "source_path": "addons/kaykit_dungeon_remastered/Assets/gltf/coin_stack_small.gltf.glb",
+      "commit": "b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07",
+      "git_blob_sha1": "0a07fbd0b1890e19ee42db256a472941f1dcfd22",
+      "sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+      "bytes": 38404,
+      "license": "CC0-1.0",
+      "license_file": "sources/kaykit-dungeon/LICENSE.txt",
+      "status": "downloaded-original-verified-static-source-model",
+      "nodes": [
+        "coin_stack_small"
+      ],
+      "animation_clips": [],
+      "external_dependencies": [],
+      "images": 1,
+      "geometry": [
+        {
+          "mesh": "Cube.15969",
+          "vertices": 588,
+          "triangles": 416,
+          "bounds_min": [
+            -0.4452475607395172,
+            -5.960464477539062e-07,
+            -0.4608292579650879
+          ],
+          "bounds_max": [
+            0.5138642191886902,
+            0.4782329797744751,
+            0.43551626801490784
+          ]
+        }
+      ]
+    },
+    {
+      "path": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+      "creator": "Kay Lousberg",
+      "title": "KayKit Dungeon Remastered 1.0",
+      "source_url": "https://raw.githubusercontent.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/coin_stack_medium.gltf.glb",
+      "source_path": "addons/kaykit_dungeon_remastered/Assets/gltf/coin_stack_medium.gltf.glb",
+      "commit": "b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07",
+      "git_blob_sha1": "8d371ebea5090dff9a6229dc34d5044b5786d546",
+      "sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+      "bytes": 63996,
+      "license": "CC0-1.0",
+      "license_file": "sources/kaykit-dungeon/LICENSE.txt",
+      "status": "downloaded-original-verified-static-source-model",
+      "nodes": [
+        "coin_stack_medium"
+      ],
+      "animation_clips": [],
+      "external_dependencies": [],
+      "images": 1,
+      "geometry": [
+        {
+          "mesh": "Cube.15968",
+          "vertices": 1284,
+          "triangles": 968,
+          "bounds_min": [
+            -0.44633805751800537,
+            -5.997717380523682e-07,
+            -0.5073903799057007
+          ],
+          "bounds_max": [
+            0.5470346212387085,
+            0.6406723260879517,
+            0.5267181396484375
+          ]
+        }
+      ]
+    }
+  ]
+}

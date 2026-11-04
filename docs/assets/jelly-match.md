@@ -285,7 +285,7 @@ text during the transition. One gentle recovery leads into compression from
 drops briefly express two pressure lobes from their actual held pose; edge drops
 retain their existing separation. The existing pop cue at 0.70 seconds
 starts that release. Five small pieces reuse the acquired gel illustration; a
-brief supporting bloom reuses `assets/chests/particles/portal_glow.png`, from
+brief supporting bloom reuses `assets/chests/shared/effects/portal_glow.png`, from
 Bobardo's already acquired Modern 2D Animated Chests Pack_FREE Demo 1.0.2 under
 the recorded [Unity Asset Store EULA](../voice-pop-treasure.md). Particle artwork
 and its license remain unchanged. The material sounds below use newly acquired
@@ -402,8 +402,8 @@ Match and ten-second Words rescue windows and audio stay unchanged.
 The rim reuses the acquired `portal_glow.png` from Bobardo's Modern 2D Animated
 Chests Pack_FREE Demo 1.0.2, under the existing Standard Unity Asset Store EULA
 record in [treasure assets](../voice-pop-treasure.md). Its local source mapping
-remains in `assets/chests/SOURCE.txt`. The elongated highlights reuse
-`assets/chests/milestone/sparkle.png` from Kenneth Foldal Moe / Archanor VFX's
+remains in `assets/chests/sources/sprites/SOURCE.txt`. The elongated highlights reuse
+`assets/chests/shared/effects/sparkle.png` from Kenneth Foldal Moe / Archanor VFX's
 acquired Toon FX 1.52, under the same EULA; original source, license, acquisition
 status and byte-identical hash remain in [the fragment record](jelly-fragments.md#extra-motion-textures).
 Both integrated files are static 512 x 512 textures, inspected over a dark
@@ -511,11 +511,11 @@ Those acquired and integrated vocabulary sources remain catalogued in
 is synthesized.
 
 The short light accent uses the already integrated
-`assets/chests/particles/portal_glow.png` from Bobardo's Modern 2D Animated Chests.
-The painted glints reuse `assets/chests/milestone/sparkle.png` from Toon FX 1.52,
+`assets/chests/shared/effects/portal_glow.png` from Bobardo's Modern 2D Animated Chests.
+The painted glints reuse `assets/chests/shared/effects/sparkle.png` from Toon FX 1.52,
 by Kenneth Foldal Moe / Archanor VFX, under the Standard Unity Asset Store EULA.
 The original sources, acquisition records and texture hashes are preserved in
-`assets/chests/SOURCE.txt` and [Jelly fragments](jelly-fragments.md). These are
+`assets/chests/sources/sprites/SOURCE.txt` and [Jelly fragments](jelly-fragments.md). These are
 static production textures animated by the reveal; no new assets are acquired.
 
 Each collection creates an independent content-sized burst in the upper

@@ -57,6 +57,8 @@ func configure(app, path: String, host: Object = null) -> void:
 	map.retry_requested.connect(retry)
 	map.upgrades_requested.connect(open_upgrades)
 	map.changed.connect(_publish)
+	if app.audio.has_signal("status_changed"):
+		app.audio.connect("status_changed", func(_message: String) -> void: _sync_map_audio())
 	upgrades = Upgrades.new()
 	app.add_child(upgrades)
 	upgrades.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -82,7 +84,14 @@ func _publish() -> void:
 
 func set_active(active: bool) -> void:
 	map.set_active(active and not upgrades.visible)
+	_sync_map_audio()
 	upgrades.set_active(active)
+
+
+func _sync_map_audio() -> void:
+	if is_instance_valid(map):
+		map.set_audio_enabled(_app.audio.get("available") == true \
+			and _app.audio.get("muted") != true and not _app._page_hidden)
 
 
 func set_reduced_motion(value: bool) -> void:
@@ -378,6 +387,7 @@ func open_map() -> void:
 
 func _show_map() -> void:
 	upgrades.close()
+	_sync_map_audio()
 	map.open(_map_state(), _app.reduced_motion)
 	_app._sync_jelly()
 	_app._refresh()

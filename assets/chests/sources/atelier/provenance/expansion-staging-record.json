@@ -1,0 +1,1986 @@
+{
+  "version": 1,
+  "staged_at_utc": "2026-11-03T16:33:02.546745+00:00",
+  "status": "acquired-original-cc0-byte-copies-not-integrated",
+  "collection": "User-provided Kenney Game Assets All-in-1 3.7.0",
+  "packs": [
+    {
+      "id": "kenney-blaster",
+      "title": "Blaster Kit",
+      "version": "2.1",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/blaster-kit",
+      "license": "CC0-1.0",
+      "original_license": "sources/expansion/kenney-blaster/LICENSE.txt",
+      "models": [
+        {
+          "file": "crate-small.glb",
+          "triangles": 628,
+          "nodes": [
+            {
+              "children": [
+                1
+              ],
+              "mesh": 0,
+              "name": "crate-small"
+            },
+            {
+              "mesh": 1,
+              "translation": [
+                0.25,
+                0.19,
+                -7.219114e-16
+              ],
+              "name": "lid"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": [
+            {
+              "name": "open",
+              "duration_seconds": 0.6000000238418579,
+              "keys": 18,
+              "targets": [
+                {
+                  "node": 1,
+                  "path": "rotation"
+                }
+              ]
+            },
+            {
+              "name": "close",
+              "duration_seconds": 1.0,
+              "keys": 30,
+              "targets": [
+                {
+                  "node": 1,
+                  "path": "rotation"
+                }
+              ]
+            },
+            {
+              "name": "open-close",
+              "duration_seconds": 2.0,
+              "keys": 60,
+              "targets": [
+                {
+                  "node": 1,
+                  "path": "rotation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "file": "crate-medium.glb",
+          "triangles": 628,
+          "nodes": [
+            {
+              "children": [
+                1
+              ],
+              "mesh": 0,
+              "name": "crate-medium"
+            },
+            {
+              "mesh": 1,
+              "translation": [
+                0.25,
+                0.19,
+                -5.41433571e-16
+              ],
+              "name": "lid"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": [
+            {
+              "name": "open",
+              "duration_seconds": 0.6000000238418579,
+              "keys": 18,
+              "targets": [
+                {
+                  "node": 1,
+                  "path": "rotation"
+                }
+              ]
+            },
+            {
+              "name": "close",
+              "duration_seconds": 1.0,
+              "keys": 30,
+              "targets": [
+                {
+                  "node": 1,
+                  "path": "rotation"
+                }
+              ]
+            },
+            {
+              "name": "open-close",
+              "duration_seconds": 2.0,
+              "keys": 60,
+              "targets": [
+                {
+                  "node": 1,
+                  "path": "rotation"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "file": "crate-wide.glb",
+          "triangles": 628,
+          "nodes": [
+            {
+              "children": [
+                1
+              ],
+              "mesh": 0,
+              "name": "crate-wide"
+            },
+            {
+              "mesh": 1,
+              "translation": [
+                0.25,
+                0.19,
+                -5.41433571e-16
+              ],
+              "name": "lid"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": [
+            {
+              "name": "open",
+              "duration_seconds": 0.6000000238418579,
+              "keys": 18,
+              "targets": [
+                {
+                  "node": 1,
+                  "path": "rotation"
+                }
+              ]
+            },
+            {
+              "name": "close",
+              "duration_seconds": 1.0,
+              "keys": 30,
+              "targets": [
+                {
+                  "node": 1,
+                  "path": "rotation"
+                }
+              ]
+            },
+            {
+              "name": "open-close",
+              "duration_seconds": 2.0,
+              "keys": 60,
+              "targets": [
+                {
+                  "node": 1,
+                  "path": "rotation"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "kenney-space-station",
+      "title": "Space Station Kit",
+      "version": "1.0",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/space-station-kit",
+      "license": "CC0-1.0",
+      "original_license": "sources/expansion/kenney-space-station/LICENSE.txt",
+      "models": [
+        {
+          "file": "container.glb",
+          "triangles": 88,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "container"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "container-wide.glb",
+          "triangles": 116,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "container-wide"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "container-tall.glb",
+          "triangles": 116,
+          "nodes": [
+            {
+              "children": [
+                1
+              ],
+              "mesh": 0,
+              "name": "container-tall"
+            },
+            {
+              "mesh": 1,
+              "translation": [
+                0.25,
+                0.0,
+                -0.25
+              ],
+              "name": "Group"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "container-flat.glb",
+          "triangles": 116,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "container-flat"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "container-flat-open.glb",
+          "triangles": 132,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "container-flat-open"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "computer-screen.glb",
+          "triangles": 198,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "computer-screen"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "computer-system.glb",
+          "triangles": 176,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "computer-system"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "computer-wide.glb",
+          "triangles": 174,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "computer-wide"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        }
+      ]
+    },
+    {
+      "id": "kenney-factory",
+      "title": "Factory Kit",
+      "version": "3.0",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/factory-kit",
+      "license": "CC0-1.0",
+      "original_license": "sources/expansion/kenney-factory/LICENSE.txt",
+      "models": [
+        {
+          "file": "box-small.glb",
+          "triangles": 70,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "box-small"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "box-large.glb",
+          "triangles": 70,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "box-large"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "box-long.glb",
+          "triangles": 70,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "box-long"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "box-wide.glb",
+          "triangles": 70,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "box-wide"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "machine-window.glb",
+          "triangles": 428,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "machine-window"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            },
+            {
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.7707153,
+                  0.8318492,
+                  1.0,
+                  0.101960786
+                ],
+                "metallicFactor": 0.5,
+                "roughnessFactor": 0.5
+              },
+              "alphaMode": "BLEND",
+              "name": "material-glass"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "machine-connection-hole.glb",
+          "triangles": 294,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "machine-connection-hole"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "robot-arm-a.glb",
+          "triangles": 472,
+          "nodes": [
+            {
+              "children": [
+                1
+              ],
+              "mesh": 0,
+              "name": "robot-arm-a"
+            },
+            {
+              "children": [
+                2
+              ],
+              "mesh": 1,
+              "translation": [
+                0.0,
+                0.3,
+                1.44382282e-15
+              ],
+              "name": "element-a"
+            },
+            {
+              "children": [
+                3
+              ],
+              "mesh": 2,
+              "translation": [
+                0.0,
+                0.3,
+                -1.22724944e-14
+              ],
+              "name": "element-b"
+            },
+            {
+              "children": [
+                4
+              ],
+              "mesh": 3,
+              "translation": [
+                0.0,
+                0.6,
+                0.0
+              ],
+              "name": "element-c"
+            },
+            {
+              "children": [
+                5
+              ],
+              "mesh": 4,
+              "translation": [
+                0.0,
+                0.3,
+                1.22724944e-14
+              ],
+              "name": "element-d"
+            },
+            {
+              "children": [
+                6
+              ],
+              "mesh": 5,
+              "translation": [
+                0.0,
+                0.6,
+                0.0
+              ],
+              "name": "element-e"
+            },
+            {
+              "children": [
+                7,
+                8
+              ],
+              "mesh": 6,
+              "translation": [
+                0.0,
+                0.1,
+                -1.37163171e-14
+              ],
+              "name": "element-f"
+            },
+            {
+              "mesh": 7,
+              "translation": [
+                0.175000191,
+                0.5000004,
+                0.0
+              ],
+              "name": "claw-a"
+            },
+            {
+              "mesh": 8,
+              "translation": [
+                -0.175000191,
+                0.5000004,
+                0.0
+              ],
+              "name": "claw-b"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "screen-panel-flat.glb",
+          "triangles": 138,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "screen-panel-flat"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "screen-panel-small.glb",
+          "triangles": 144,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "screen-panel-small"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        },
+        {
+          "file": "screen-panel-wide.glb",
+          "triangles": 162,
+          "nodes": [
+            {
+              "mesh": 0,
+              "name": "screen-panel-wide"
+            }
+          ],
+          "materials": [
+            {
+              "pbrMetallicRoughness": {
+                "baseColorTexture": {
+                  "index": 0,
+                  "extensions": {
+                    "KHR_texture_transform": {
+                      "texCoord": 0
+                    }
+                  }
+                },
+                "metallicFactor": 0.0
+              },
+              "doubleSided": true,
+              "name": "colormap"
+            }
+          ],
+          "images": [
+            {
+              "uri": "Textures/colormap.png",
+              "name": "colormap"
+            }
+          ],
+          "animations": []
+        }
+      ]
+    },
+    {
+      "id": "kenney-space",
+      "title": "Space Kit",
+      "version": "2.0",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/space-kit",
+      "license": "CC0-1.0",
+      "original_license": "sources/expansion/kenney-space/LICENSE.txt",
+      "models": [
+        {
+          "file": "machine_generator.glb",
+          "triangles": 406,
+          "nodes": [
+            {
+              "children": [
+                1
+              ],
+              "name": "tmpParent",
+              "translation": [
+                0,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            {
+              "children": [
+                2
+              ],
+              "name": "machine_generator",
+              "translation": [
+                2,
+                0,
+                1.5
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ],
+              "mesh": 0
+            },
+            {
+              "name": "cable",
+              "translation": [
+                -0.399999976,
+                0,
+                0.0249999762
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ],
+              "mesh": 1
+            }
+          ],
+          "materials": [
+            {
+              "name": "metalDark",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.6750623,
+                  0.7100219,
+                  0.7735849,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "metalRed",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  1,
+                  0.628524244,
+                  0.2028302,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "metal",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.843137264,
+                  0.870588243,
+                  0.9098039,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "_defaultMat",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  1,
+                  1,
+                  1,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "dark",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.274509817,
+                  0.298039228,
+                  0.34117648,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            }
+          ],
+          "images": [],
+          "animations": []
+        },
+        {
+          "file": "machine_generatorLarge.glb",
+          "triangles": 126,
+          "nodes": [
+            {
+              "children": [
+                1
+              ],
+              "name": "tmpParent",
+              "translation": [
+                0,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            {
+              "name": "machine_generatorLarge",
+              "translation": [
+                2,
+                0,
+                1.5
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ],
+              "mesh": 0
+            }
+          ],
+          "materials": [
+            {
+              "name": "metalRed",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  1,
+                  0.628524244,
+                  0.2028302,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "dark",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.274509817,
+                  0.298039228,
+                  0.34117648,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "metalDark",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.6750623,
+                  0.7100219,
+                  0.7735849,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "metal",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.843137264,
+                  0.870588243,
+                  0.9098039,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            }
+          ],
+          "images": [],
+          "animations": []
+        },
+        {
+          "file": "machine_barrel.glb",
+          "triangles": 338,
+          "nodes": [
+            {
+              "children": [
+                1
+              ],
+              "name": "tmpParent",
+              "translation": [
+                0,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            {
+              "children": [
+                2
+              ],
+              "name": "machine_barrel",
+              "translation": [
+                2,
+                0,
+                1.5
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ],
+              "mesh": 0
+            },
+            {
+              "name": "cables",
+              "translation": [
+                0.0232050419,
+                -9.38300747e-14,
+                0.149999976
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ],
+              "mesh": 1
+            }
+          ],
+          "materials": [
+            {
+              "name": "dark",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.274509817,
+                  0.298039228,
+                  0.34117648,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "metalRed",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  1,
+                  0.628524244,
+                  0.2028302,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "metal",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.843137264,
+                  0.870588243,
+                  0.9098039,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "metalDark",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.6750623,
+                  0.7100219,
+                  0.7735849,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            }
+          ],
+          "images": [],
+          "animations": []
+        },
+        {
+          "file": "machine_barrelLarge.glb",
+          "triangles": 192,
+          "nodes": [
+            {
+              "children": [
+                1
+              ],
+              "name": "tmpParent",
+              "translation": [
+                0,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            {
+              "name": "machine_barrelLarge",
+              "translation": [
+                2,
+                0,
+                1.5
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ],
+              "mesh": 0
+            }
+          ],
+          "materials": [
+            {
+              "name": "metalDark",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.6750623,
+                  0.7100219,
+                  0.7735849,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "metalRed",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  1,
+                  0.628524244,
+                  0.2028302,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "metal",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.843137264,
+                  0.870588243,
+                  0.9098039,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "dark",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.274509817,
+                  0.298039228,
+                  0.34117648,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            }
+          ],
+          "images": [],
+          "animations": []
+        },
+        {
+          "file": "barrel.glb",
+          "triangles": 56,
+          "nodes": [
+            {
+              "children": [
+                1
+              ],
+              "name": "tmpParent",
+              "translation": [
+                0,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            {
+              "name": "barrel",
+              "translation": [
+                2,
+                0,
+                1.5
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ],
+              "mesh": 0
+            }
+          ],
+          "materials": [
+            {
+              "name": "metalRed",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  1,
+                  0.628524244,
+                  0.2028302,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "metal",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.843137264,
+                  0.870588243,
+                  0.9098039,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            }
+          ],
+          "images": [],
+          "animations": []
+        },
+        {
+          "file": "desk_computerScreen.glb",
+          "triangles": 108,
+          "nodes": [
+            {
+              "children": [
+                1
+              ],
+              "name": "tmpParent",
+              "translation": [
+                0,
+                0,
+                0
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ]
+            },
+            {
+              "name": "desk_computerScreen",
+              "translation": [
+                2,
+                0,
+                1.5
+              ],
+              "rotation": [
+                0,
+                0,
+                0,
+                1
+              ],
+              "scale": [
+                1,
+                1,
+                1
+              ],
+              "mesh": 0
+            }
+          ],
+          "materials": [
+            {
+              "name": "metal",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.843137264,
+                  0.870588243,
+                  0.9098039,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "dark",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.274509817,
+                  0.298039228,
+                  0.34117648,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            },
+            {
+              "name": "metalDark",
+              "pbrMetallicRoughness": {
+                "baseColorFactor": [
+                  0.6750623,
+                  0.7100219,
+                  0.7735849,
+                  1
+                ],
+                "metallicFactor": 1,
+                "roughnessFactor": 1
+              },
+              "doubleSided": false,
+              "alphaMode": "OPAQUE"
+            }
+          ],
+          "images": [],
+          "animations": []
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "path": "sources/expansion/kenney-blaster/LICENSE.txt",
+      "kind": "original-license",
+      "source_id": "kenney-blaster",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Blaster Kit/License.txt",
+      "sha256": "bece5f4d99cca9dcf86931221a69909862ff6cc95e1735462ee678516a1063e2",
+      "bytes": 700
+    },
+    {
+      "path": "sources/expansion/kenney-blaster/crate-small.glb",
+      "kind": "original-model",
+      "source_id": "kenney-blaster",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Blaster Kit/Models/GLB format/crate-small.glb",
+      "sha256": "00ed47c02a5016c11ce5ea0bd54888d120f3a112c5eab79dc4bd4ab878ceb805",
+      "bytes": 59020
+    },
+    {
+      "path": "sources/expansion/kenney-blaster/crate-medium.glb",
+      "kind": "original-model",
+      "source_id": "kenney-blaster",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Blaster Kit/Models/GLB format/crate-medium.glb",
+      "sha256": "187c32592fedaecbbb84152102bbf536f733cbc0c2cfee60828fb18a4803619c",
+      "bytes": 59344
+    },
+    {
+      "path": "sources/expansion/kenney-blaster/crate-wide.glb",
+      "kind": "original-model",
+      "source_id": "kenney-blaster",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Blaster Kit/Models/GLB format/crate-wide.glb",
+      "sha256": "0a17a51b274d238c09ade21674b70742bd5f1703f7b0e8974b6d0b2b92a58c8b",
+      "bytes": 59404
+    },
+    {
+      "path": "sources/expansion/kenney-blaster/Textures/colormap.png",
+      "kind": "original-texture",
+      "source_id": "kenney-blaster",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Blaster Kit/Models/GLB format/Textures/colormap.png",
+      "sha256": "4d0867c3c3c8c539106f91fbc0987d0e1b7d2811362d1daed593169c7d3b0fdc",
+      "bytes": 10223
+    },
+    {
+      "path": "sources/expansion/kenney-space-station/LICENSE.txt",
+      "kind": "original-license",
+      "source_id": "kenney-space-station",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Station Kit/License.txt",
+      "sha256": "e8de83b5cb2f01810e32f07691cb1dcf9494dc4a7f8cce0ec8175dfb8c5d98d9",
+      "bytes": 720
+    },
+    {
+      "path": "sources/expansion/kenney-space-station/container.glb",
+      "kind": "original-model",
+      "source_id": "kenney-space-station",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Station Kit/Models/GLB format/container.glb",
+      "sha256": "719b77f62979e9e02047489fcc1e86432be300ac35ed02fe496a2dfc6a3fcdd6",
+      "bytes": 9716
+    },
+    {
+      "path": "sources/expansion/kenney-space-station/container-wide.glb",
+      "kind": "original-model",
+      "source_id": "kenney-space-station",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Station Kit/Models/GLB format/container-wide.glb",
+      "sha256": "3bed318d187ce26b816b7f84b706ecb57cffef94ab1bb8266ca91aa35073e6f0",
+      "bytes": 12212
+    },
+    {
+      "path": "sources/expansion/kenney-space-station/container-tall.glb",
+      "kind": "original-model",
+      "source_id": "kenney-space-station",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Station Kit/Models/GLB format/container-tall.glb",
+      "sha256": "e790f12cdab2e50d266d54e1bbb8a05a1cd77629a065254be3734a67b6053358",
+      "bytes": 13052
+    },
+    {
+      "path": "sources/expansion/kenney-space-station/container-flat.glb",
+      "kind": "original-model",
+      "source_id": "kenney-space-station",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Station Kit/Models/GLB format/container-flat.glb",
+      "sha256": "f76bdebf96ad858dd8a6be5cb71694616a63488cbac3f61d01485dccde99fd0c",
+      "bytes": 12196
+    },
+    {
+      "path": "sources/expansion/kenney-space-station/container-flat-open.glb",
+      "kind": "original-model",
+      "source_id": "kenney-space-station",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Station Kit/Models/GLB format/container-flat-open.glb",
+      "sha256": "b85823ea93a830fe515732e800e515f66432453369a2f3ff42597bdf3588d832",
+      "bytes": 13028
+    },
+    {
+      "path": "sources/expansion/kenney-space-station/computer-screen.glb",
+      "kind": "original-model",
+      "source_id": "kenney-space-station",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Station Kit/Models/GLB format/computer-screen.glb",
+      "sha256": "dd2a95a9c46f430e6fd0d2af6c6a94b4542d0501dda2700504642cecc33369e3",
+      "bytes": 19584
+    },
+    {
+      "path": "sources/expansion/kenney-space-station/computer-system.glb",
+      "kind": "original-model",
+      "source_id": "kenney-space-station",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Station Kit/Models/GLB format/computer-system.glb",
+      "sha256": "87666d5211fdce8830d1abf55fab16bc21d67714d78f9525f1399c33c4cb54bb",
+      "bytes": 17552
+    },
+    {
+      "path": "sources/expansion/kenney-space-station/computer-wide.glb",
+      "kind": "original-model",
+      "source_id": "kenney-space-station",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Station Kit/Models/GLB format/computer-wide.glb",
+      "sha256": "62420ce928f288f91ce85e2245e80e6c9efbee9b6e91b7ea9b83d0289fa647c4",
+      "bytes": 17136
+    },
+    {
+      "path": "sources/expansion/kenney-space-station/Textures/colormap.png",
+      "kind": "original-texture",
+      "source_id": "kenney-space-station",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Station Kit/Models/GLB format/Textures/colormap.png",
+      "sha256": "6ca023be9f12e8c2358fcf94320c8a894b4c05a3dd0bad1f5c268312053caca1",
+      "bytes": 7440
+    },
+    {
+      "path": "sources/expansion/kenney-factory/LICENSE.txt",
+      "kind": "original-license",
+      "source_id": "kenney-factory",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/License.txt",
+      "sha256": "61e86565dd297e143ad631594980eda0a17fc81a4cd7c6d71acf2f5e0cad30b6",
+      "bytes": 700
+    },
+    {
+      "path": "sources/expansion/kenney-factory/box-small.glb",
+      "kind": "original-model",
+      "source_id": "kenney-factory",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/box-small.glb",
+      "sha256": "fd2ea1ac4f24a9515dc9c53a4a589a8897c824fa5865771799f965a252f684f0",
+      "bytes": 7500
+    },
+    {
+      "path": "sources/expansion/kenney-factory/box-large.glb",
+      "kind": "original-model",
+      "source_id": "kenney-factory",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/box-large.glb",
+      "sha256": "f5c7a7b4d7ec48c2695dc5241d62a38dbb54b487e6be0f089548582c91bacdfd",
+      "bytes": 7496
+    },
+    {
+      "path": "sources/expansion/kenney-factory/box-long.glb",
+      "kind": "original-model",
+      "source_id": "kenney-factory",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/box-long.glb",
+      "sha256": "6a6d7bfed3058809a9833606a6a3e78a156b6f3d898fba59fc054c62b5499c94",
+      "bytes": 7492
+    },
+    {
+      "path": "sources/expansion/kenney-factory/box-wide.glb",
+      "kind": "original-model",
+      "source_id": "kenney-factory",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/box-wide.glb",
+      "sha256": "41507d9e035b23e586cbf6bcc63427c810aefd428620264bebefc25c98922ff4",
+      "bytes": 7496
+    },
+    {
+      "path": "sources/expansion/kenney-factory/machine-window.glb",
+      "kind": "original-model",
+      "source_id": "kenney-factory",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/machine-window.glb",
+      "sha256": "1387bd337354fca7c7cb4163e6bd4bef8711373bbe23dae01ba9d42cd35681b7",
+      "bytes": 38812
+    },
+    {
+      "path": "sources/expansion/kenney-factory/machine-connection-hole.glb",
+      "kind": "original-model",
+      "source_id": "kenney-factory",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/machine-connection-hole.glb",
+      "sha256": "e49c9d701f802ca1b125c7ae55d8992e03710ea10838bf536bd4ddbb3da4bf9c",
+      "bytes": 27936
+    },
+    {
+      "path": "sources/expansion/kenney-factory/robot-arm-a.glb",
+      "kind": "original-model",
+      "source_id": "kenney-factory",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/robot-arm-a.glb",
+      "sha256": "ad3f766791adadd1cfb5ccc27d2b2ac8787848282f2a15b3c407f350dc281b68",
+      "bytes": 50592
+    },
+    {
+      "path": "sources/expansion/kenney-factory/screen-panel-flat.glb",
+      "kind": "original-model",
+      "source_id": "kenney-factory",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/screen-panel-flat.glb",
+      "sha256": "6cd45b028859c216860b6436fb2660749038390b60cb3d1b5cc5e7d88072dd4b",
+      "bytes": 13136
+    },
+    {
+      "path": "sources/expansion/kenney-factory/screen-panel-small.glb",
+      "kind": "original-model",
+      "source_id": "kenney-factory",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/screen-panel-small.glb",
+      "sha256": "e3b43cfb99a49382de983f476bc19c0c76b79c199008f663d19b7faf9b8543a3",
+      "bytes": 13956
+    },
+    {
+      "path": "sources/expansion/kenney-factory/screen-panel-wide.glb",
+      "kind": "original-model",
+      "source_id": "kenney-factory",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/screen-panel-wide.glb",
+      "sha256": "092066a198f1f81c857ceab23497dd3ea6066d261a91497cf0f83f7ba951c4d0",
+      "bytes": 16000
+    },
+    {
+      "path": "sources/expansion/kenney-factory/Textures/colormap.png",
+      "kind": "original-texture",
+      "source_id": "kenney-factory",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Factory Kit/Models/GLB format/Textures/colormap.png",
+      "sha256": "35d7bd6900dde0208429eeaec87fa17fbf024ed59f3f4eab54bc92802eba9dd7",
+      "bytes": 11813
+    },
+    {
+      "path": "sources/expansion/kenney-space/LICENSE.txt",
+      "kind": "original-license",
+      "source_id": "kenney-space",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Kit/License.txt",
+      "sha256": "bd4e050e69d41351282c4d53f943cd4d80a80b968593e60653ba5292637941b7",
+      "bytes": 610
+    },
+    {
+      "path": "sources/expansion/kenney-space/machine_generator.glb",
+      "kind": "original-model",
+      "source_id": "kenney-space",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Kit/Models/GLTF format/machine_generator.glb",
+      "sha256": "98e8ac6aceada3b2483ed1eceb59bff7190ee774edac799350ccc11ad140f7f3",
+      "bytes": 28044
+    },
+    {
+      "path": "sources/expansion/kenney-space/machine_generatorLarge.glb",
+      "kind": "original-model",
+      "source_id": "kenney-space",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Kit/Models/GLTF format/machine_generatorLarge.glb",
+      "sha256": "bbfa33a2e7c7eff7d9ee12f64255249b7e2f5d4b2ada2d681aa35cf38ba599bc",
+      "bytes": 10220
+    },
+    {
+      "path": "sources/expansion/kenney-space/machine_barrel.glb",
+      "kind": "original-model",
+      "source_id": "kenney-space",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Kit/Models/GLTF format/machine_barrel.glb",
+      "sha256": "ecd46823928292bbb01718966bd4602a71e37a09320f3ba232d9044e909ce4ed",
+      "bytes": 23960
+    },
+    {
+      "path": "sources/expansion/kenney-space/machine_barrelLarge.glb",
+      "kind": "original-model",
+      "source_id": "kenney-space",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Kit/Models/GLTF format/machine_barrelLarge.glb",
+      "sha256": "3c156127373395cd45bfb7772936c56b06e4bcf33101da7a5030f17e5d8acae5",
+      "bytes": 13880
+    },
+    {
+      "path": "sources/expansion/kenney-space/barrel.glb",
+      "kind": "original-model",
+      "source_id": "kenney-space",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Kit/Models/GLTF format/barrel.glb",
+      "sha256": "8a95781be23b35ebb39ad90278affc03140c75d4d055027e98be0313de084451",
+      "bytes": 4656
+    },
+    {
+      "path": "sources/expansion/kenney-space/desk_computerScreen.glb",
+      "kind": "original-model",
+      "source_id": "kenney-space",
+      "original_path": "Q:/uwok/Kenney Game Assets All-in-1 3.7.0/3D assets/Space Kit/Models/GLTF format/desk_computerScreen.glb",
+      "sha256": "3a7526fff69a29bd1c793cea34c2bf9d6a96dcc7ef0c7b3c1286f691b8835074",
+      "bytes": 8248
+    }
+  ]
+}

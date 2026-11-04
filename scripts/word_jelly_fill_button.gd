@@ -6,7 +6,7 @@ const LOCK = preload("res://assets/images/ui/controls/lock.svg")
 const GEL = preload("res://assets/images/jelly-match/gel-mint.png")
 const SKY = preload("res://assets/images/jelly-match/gel-sky.png")
 const GEL_REGION := Rect2(11, 34, 298, 252)
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const FLOW_SECONDS: float = 1.4
 const SWITCH_SECONDS: float = 0.16
 

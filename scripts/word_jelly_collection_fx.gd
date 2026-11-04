@@ -1,9 +1,9 @@
 extends Control
 ## Noninteractive, collection-clock effects made from acquired particle textures.
 
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
-const RAYS = preload("res://assets/chests/milestone/rays.png")
-const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
+const RAYS = preload("res://assets/chests/shared/effects/rays.png")
+const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const MAX_ACTIVE: int = 12
 const PROFILES: Array[Dictionary] = [
 	{"name": "Pearl pop", "pattern": "pearl", "seconds": 0.80, "radius": 40.0, "sparks": 9, "bursts": 1, "hue": 0.44},

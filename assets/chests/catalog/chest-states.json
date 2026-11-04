@@ -1,0 +1,2316 @@
+{
+  "version": 1,
+  "title": "Complete chest state compositions",
+  "coordinate_space": "Original GLB scene coordinates, +Y up, before viewer normalization. Sprite outputs share a 1024-pixel canvas.",
+  "magic_envelope": "Position is the base cavity anchor; size is centered in X/Z and extends upward by size.y, including sprite extents.",
+  "state_semantics": {
+    "closed": "Closed lid; treasure and magic hidden",
+    "open": "Opened lid with empty cavity; treasure and magic hidden",
+    "treasure": "Opened lid with real sourced treasure visible; magic hidden",
+    "magic": "Opened lid with textured light and spark effects; treasure hidden"
+  },
+  "authorship": "State compositions supplement the acquired original models and sprites; they do not claim new source animation clips.",
+  "asset_catalog": "assets/chests/catalog/chest-state-assets.json",
+  "variant_count": 24,
+  "variants": [
+    {
+      "id": "game-kenney-survival",
+      "name": "Kenney Survival",
+      "level": 1,
+      "asset_type": "model",
+      "model": "assets/chests/models/cc0/kenney-survival/kenney-survival.glb",
+      "model_sha256": "93e2375d6cb12f8e939c9c23d6879d0b2c84d2e5c27800f6d90b0d34946dc774",
+      "scene": "assets/chests/models/cc0/kenney-survival/kenney-survival-states.tscn",
+      "style": {
+        "kind": "model",
+        "source_style": "kenney-survival",
+        "open_animation": "open",
+        "open_start": 0.041666666666666664,
+        "open_end": 0.3333333333333333,
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "normalize_model": true,
+        "model_parts": [
+          {
+            "node": "lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.6022122533307945
+          }
+        ]
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "open",
+        "start": 0.041666666666666664,
+        "end": 0.3333333333333333,
+        "authorship": "Existing Kenney source animation retained through edge polish"
+      },
+      "treasure": {
+        "mode": "model",
+        "model": "assets/chests/shared/rewards/coin-pile-medium.glb",
+        "position": [
+          -0.008211,
+          0.091834,
+          0.002132
+        ],
+        "rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.163093,
+          0.163093,
+          0.163093
+        ],
+        "authorship": "Game-authored fitted composition of the original acquired KayKit medium coin pile"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          0.139314,
+          -0.005812
+        ],
+        "size": [
+          0.203112,
+          0.177072,
+          0.184977
+        ],
+        "color": "#FFD995",
+        "seed": 18036249,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -0.1302,
+          0,
+          -0.141825
+        ],
+        "max": [
+          0.1302,
+          0.167679,
+          0.1302
+        ]
+      },
+      "cavity": [
+        0,
+        0.132804,
+        -0.005812
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "game-kenney-platformer",
+      "name": "Kenney Platformer",
+      "level": 2,
+      "asset_type": "model",
+      "model": "assets/chests/models/cc0/kenney-platformer/kenney-platformer.glb",
+      "model_sha256": "fca0376c3e024def2a5c590ace4fa44dd8851735dfdacac794829bb34d0954d2",
+      "scene": "assets/chests/models/cc0/kenney-platformer/kenney-platformer-states.tscn",
+      "style": {
+        "kind": "model",
+        "source_style": "kenney-platformer",
+        "open_animation": "open",
+        "open_start": 0.041666666666666664,
+        "open_end": 0.3333333333333333,
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "normalize_model": true,
+        "model_parts": [
+          {
+            "node": "lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.6022122533307945
+          }
+        ]
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "open",
+        "start": 0.041666666666666664,
+        "end": 0.3333333333333333,
+        "authorship": "Existing Kenney source animation retained through edge polish"
+      },
+      "treasure": {
+        "mode": "model",
+        "model": "assets/chests/shared/rewards/coin-pile-medium.glb",
+        "position": [
+          -0.01226,
+          0.092,
+          0.015147
+        ],
+        "rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.243494,
+          0.243494,
+          0.243494
+        ],
+        "authorship": "Game-authored fitted composition of the original acquired KayKit medium coin pile"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          0.2125,
+          0
+        ],
+        "size": [
+          0.39,
+          0.34,
+          0.34
+        ],
+        "color": "#FFE6B0",
+        "seed": 227266829,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -0.25,
+          0,
+          -0.25
+        ],
+        "max": [
+          0.25,
+          0.2,
+          0.25
+        ]
+      },
+      "cavity": [
+        0,
+        0.2,
+        0
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "game-kenney-mini-dungeon",
+      "name": "Kenney Mini Dungeon",
+      "level": 3,
+      "asset_type": "model",
+      "model": "assets/chests/models/cc0/kenney-mini-dungeon/kenney-mini-dungeon.glb",
+      "model_sha256": "574c0365a500efdd1daaad734757c607919687a5609272c8882366a798113e57",
+      "scene": "assets/chests/models/cc0/kenney-mini-dungeon/kenney-mini-dungeon-states.tscn",
+      "style": {
+        "kind": "model",
+        "source_style": "kenney-mini-dungeon",
+        "open_animation": "open",
+        "open_start": 0.041666666666666664,
+        "open_end": 0.3333333333333333,
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "normalize_model": true,
+        "model_parts": [
+          {
+            "node": "lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.6022122533307945
+          }
+        ]
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "open",
+        "start": 0.041666666666666664,
+        "end": 0.3333333333333333,
+        "authorship": "Existing Kenney source animation retained through edge polish"
+      },
+      "treasure": {
+        "mode": "model",
+        "model": "assets/chests/shared/rewards/coin-pile-medium.glb",
+        "position": [
+          -0.01226,
+          0.092,
+          0.015147
+        ],
+        "rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.243494,
+          0.243494,
+          0.243494
+        ],
+        "authorship": "Game-authored fitted composition of the original acquired KayKit medium coin pile"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          0.2125,
+          0
+        ],
+        "size": [
+          0.39,
+          0.34,
+          0.34
+        ],
+        "color": "#D7BEFF",
+        "seed": 170768267,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -0.25,
+          0,
+          -0.25
+        ],
+        "max": [
+          0.25,
+          0.2,
+          0.25
+        ]
+      },
+      "cavity": [
+        0,
+        0.2,
+        0
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "game-kaykit-dungeon",
+      "name": "KayKit Dungeon",
+      "level": 4,
+      "asset_type": "model",
+      "model": "assets/chests/models/cc0/kaykit-dungeon/kaykit-dungeon.glb",
+      "model_sha256": "163bbbc98fea8370a3c85c269360cb642f1946b1167d12e5efd6bdd3039ff5ff",
+      "scene": "assets/chests/models/cc0/kaykit-dungeon/kaykit-dungeon-states.tscn",
+      "style": {
+        "kind": "model",
+        "source_style": "kaykit-dungeon",
+        "open_animation": null,
+        "open_start": 0,
+        "open_end": 0.3,
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "normalize_model": true,
+        "model_parts": [
+          {
+            "node": "chest_lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.6022122533307945
+          }
+        ]
+      },
+      "opening": {
+        "kind": "hinge",
+        "node": "chest_lid",
+        "axis": [
+          1,
+          0,
+          0
+        ],
+        "angle": -1.6022122533307945,
+        "duration": 1,
+        "authorship": "Existing game-authored hinge on the acquired static KayKit lid"
+      },
+      "treasure": {
+        "mode": "model",
+        "model": "assets/chests/shared/rewards/coin-pile-medium.glb",
+        "position": [
+          -0.036779,
+          0.276,
+          0.059445
+        ],
+        "rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.730482,
+          0.730482,
+          0.730482
+        ],
+        "authorship": "Game-authored fitted composition of the original acquired KayKit medium coin pile"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          0.54,
+          0.022901
+        ],
+        "size": [
+          1.248,
+          1.088,
+          0.847146
+        ],
+        "color": "#FFE2A8",
+        "seed": 252166195,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -0.8,
+          0,
+          -0.6
+        ],
+        "max": [
+          0.8,
+          0.6,
+          0.645803
+        ]
+      },
+      "cavity": [
+        0,
+        0.5,
+        0.022901
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "game-meadow-explorer",
+      "name": "Meadow Explorer",
+      "level": 5,
+      "asset_type": "model",
+      "model": "assets/chests/models/licensed/meadow-explorer/meadow-explorer.glb",
+      "model_sha256": "91374649ef7abf27d4b8c9bece4543cbbf3be77c6ebcbecebea31b23b98b9d79",
+      "scene": "assets/chests/models/licensed/meadow-explorer/meadow-explorer-states.tscn",
+      "style": {
+        "kind": "model",
+        "source_style": "bramble",
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": 1.6057029118347832
+          }
+        ],
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "normalize_model": false
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "model",
+        "model": "assets/chests/shared/rewards/coin-pile-medium.glb",
+        "position": [
+          -0.043102,
+          0.887975,
+          0.041702
+        ],
+        "rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.856072,
+          0.856072,
+          0.856072
+        ],
+        "authorship": "Game-authored fitted composition of the original acquired KayKit medium coin pile"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          1.23371,
+          0
+        ],
+        "size": [
+          1.56,
+          1.36,
+          0.970943
+        ],
+        "color": "#BCF1C0",
+        "seed": 215954496,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -1,
+          0,
+          -0.713929
+        ],
+        "max": [
+          1,
+          1.216437,
+          0.713929
+        ]
+      },
+      "cavity": [
+        0,
+        1.18371,
+        0
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "game-harvest-keepsake",
+      "name": "Harvest Keepsake",
+      "level": 6,
+      "asset_type": "model",
+      "model": "assets/chests/models/licensed/harvest-keepsake/harvest-keepsake.glb",
+      "model_sha256": "ca526de26b5c8b0483b981c7fd6b9dc0a91fc245c01bcc4647c21a16195198ec",
+      "scene": "assets/chests/models/licensed/harvest-keepsake/harvest-keepsake-states.tscn",
+      "style": {
+        "kind": "model",
+        "source_style": "harvest",
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": 1.6057029118347832
+          }
+        ],
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "normalize_model": false
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "model",
+        "model": "assets/chests/shared/rewards/coin-pile-medium.glb",
+        "position": [
+          -0.044546,
+          0.647735,
+          0.0431
+        ],
+        "rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.884763,
+          0.884763,
+          0.884763
+        ],
+        "authorship": "Game-authored fitted composition of the original acquired KayKit medium coin pile"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          0.899306,
+          0
+        ],
+        "size": [
+          1.56,
+          1.36,
+          1.003484
+        ],
+        "color": "#FFD993",
+        "seed": 522360,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -1,
+          0,
+          -0.737856
+        ],
+        "max": [
+          1,
+          0.994579,
+          0.737856
+        ]
+      },
+      "cavity": [
+        0,
+        0.849306,
+        0
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "tideguard",
+      "name": "Tideguard",
+      "level": 7,
+      "asset_type": "model",
+      "model": "assets/chests/models/atelier/tideguard/tideguard.glb",
+      "model_sha256": "2f948c069d5e152150cf1e262cfd4a2aee9b3135dc52184ab3d1e3328dd6b260",
+      "scene": "assets/chests/models/atelier/tideguard/tideguard-states.tscn",
+      "style": {
+        "model": "assets/chests/models/atelier/tideguard/tideguard.glb",
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0215951204299927,
+            0,
+            -0.8504728078842163
+          ],
+          "max": [
+            1.0212681293487549,
+            1.5570719242095947,
+            0.8504727482795715
+          ]
+        }
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "embedded",
+        "nodes": [
+          "Treasure"
+        ],
+        "authorship": "Existing sourced KayKit coin-pile geometry embedded in the Atelier model"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          -0.000163,
+          0.639307,
+          0.008438
+        ],
+        "size": [
+          1.593433,
+          1.389147,
+          1.09132
+        ],
+        "color": "#C2FFD7",
+        "seed": 57890399,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -1.021595,
+          0,
+          -0.794003
+        ],
+        "max": [
+          1.021268,
+          0.705882,
+          0.81088
+        ]
+      },
+      "cavity": [
+        -0.000163,
+        0.588236,
+        0.008438
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "game-energy",
+      "name": "Energy",
+      "level": 8,
+      "asset_type": "sprites",
+      "scene": "assets/chests/sprites/energy/energy-states.tscn",
+      "authorship": "Game-authored source-derived 2D state composites; original acquired sprites retained",
+      "states": {
+        "closed": "assets/chests/sprites/energy/states/closed.png",
+        "open": "assets/chests/sprites/energy/states/open.png",
+        "treasure": "assets/chests/sprites/energy/states/treasure.png",
+        "magic": "assets/chests/sprites/energy/states/magic.png"
+      },
+      "source_manifest": "assets/chests/catalog/sprites.json"
+    },
+    {
+      "id": "game-strawberry-bonbon",
+      "name": "Strawberry Bonbon",
+      "level": 9,
+      "asset_type": "model",
+      "model": "assets/chests/models/licensed/strawberry-bonbon/strawberry-bonbon.glb",
+      "model_sha256": "84bad846f896ce74c8af17b790be5f928630ca3444566ef103c9d454cde5f96c",
+      "scene": "assets/chests/models/licensed/strawberry-bonbon/strawberry-bonbon-states.tscn",
+      "style": {
+        "kind": "model",
+        "source_style": "bonbon",
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": 1.6057029118347832
+          }
+        ],
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "normalize_model": false
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "model",
+        "model": "assets/chests/shared/rewards/coin-pile-medium.glb",
+        "position": [
+          -0.03862,
+          0.289822,
+          0.041611
+        ],
+        "rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.767062,
+          0.767062,
+          0.767062
+        ],
+        "authorship": "Game-authored fitted composition of the original acquired KayKit medium coin pile"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          0.588821,
+          0
+        ],
+        "size": [
+          1.56,
+          1.36,
+          0.952456
+        ],
+        "color": "#FFC9E1",
+        "seed": 238536131,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -1,
+          0,
+          -0.70382
+        ],
+        "max": [
+          1,
+          0.630046,
+          0.69685
+        ]
+      },
+      "cavity": [
+        0,
+        0.538821,
+        0
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "sunward",
+      "name": "Sunward",
+      "level": 10,
+      "asset_type": "model",
+      "model": "assets/chests/models/atelier/sunward/sunward.glb",
+      "model_sha256": "a497d6ce1e1b04c9015032f4c9d6f3a28644a272d264a9052e3203ce555b5543",
+      "scene": "assets/chests/models/atelier/sunward/sunward-states.tscn",
+      "style": {
+        "model": "assets/chests/models/atelier/sunward/sunward.glb",
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0000001192092896,
+            0,
+            -1.0937646627426147
+          ],
+          "max": [
+            1.0000001192092896,
+            2.002803325653076,
+            1.1751537322998047
+          ]
+        }
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "embedded",
+        "nodes": [
+          "Treasure"
+        ],
+        "authorship": "Existing sourced KayKit coin-pile geometry embedded in the Atelier model"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          1.07,
+          0.040695
+        ],
+        "size": [
+          1.56,
+          1.36,
+          1.542865
+        ],
+        "color": "#FFF4B8",
+        "seed": 44381427,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -1,
+          0,
+          -1.093765
+        ],
+        "max": [
+          1,
+          1.287857,
+          1.175154
+        ]
+      },
+      "cavity": [
+        0,
+        1.02,
+        0.040695
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "moonbound",
+      "name": "Moonbound",
+      "level": 11,
+      "asset_type": "model",
+      "model": "assets/chests/models/atelier/moonbound/moonbound.glb",
+      "model_sha256": "caabad89ceb5ced45f51a9bf1a929b19ff506208bde851e2c4ad41bfa7cde73b",
+      "scene": "assets/chests/models/atelier/moonbound/moonbound-states.tscn",
+      "style": {
+        "model": "assets/chests/models/atelier/moonbound/moonbound.glb",
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0597866773605347,
+            0,
+            -1.061177134513855
+          ],
+          "max": [
+            1.0597866773605347,
+            1.8271660804748535,
+            1.130510687828064
+          ]
+        }
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "embedded",
+        "nodes": [
+          "Treasure"
+        ],
+        "authorship": "Existing sourced KayKit coin-pile geometry embedded in the Atelier model"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          0.852989,
+          0.034667
+        ],
+        "size": [
+          1.653267,
+          1.44131,
+          1.490348
+        ],
+        "color": "#E6BCFF",
+        "seed": 190333295,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -1.059787,
+          0,
+          -1.061177
+        ],
+        "max": [
+          1.059787,
+          0.838105,
+          1.130511
+        ]
+      },
+      "cavity": [
+        0,
+        0.8,
+        0.034667
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "royal-rose",
+      "name": "Royal Rose",
+      "level": 12,
+      "asset_type": "model",
+      "model": "assets/chests/models/atelier/royal-rose/royal-rose.glb",
+      "model_sha256": "e79297c282c23b201ce5b2b6a811145f63dd824a3deb7823d965d20af34fe067",
+      "scene": "assets/chests/models/atelier/royal-rose/royal-rose-states.tscn",
+      "style": {
+        "model": "assets/chests/models/atelier/royal-rose/royal-rose.glb",
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.1088517904281616,
+            0,
+            -1.061177134513855
+          ],
+          "max": [
+            1.1088517904281616,
+            1.8271660804748535,
+            1.1285187005996704
+          ]
+        }
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "embedded",
+        "nodes": [
+          "Treasure"
+        ],
+        "authorship": "Existing sourced KayKit coin-pile geometry embedded in the Atelier model"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          0.855443,
+          0.033671
+        ],
+        "size": [
+          1.729809,
+          1.508038,
+          1.488993
+        ],
+        "color": "#FFE6A5",
+        "seed": 20696038,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -1.108852,
+          0,
+          -1.061177
+        ],
+        "max": [
+          1.108852,
+          0.838105,
+          1.128519
+        ]
+      },
+      "cavity": [
+        0,
+        0.8,
+        0.033671
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "game-lagoon-pearl",
+      "name": "Lagoon Pearl",
+      "level": 13,
+      "asset_type": "model",
+      "model": "assets/chests/models/licensed/lagoon-pearl/lagoon-pearl.glb",
+      "model_sha256": "47ef7a9a1a6a131b2039465ab3f09d01d59de609f8875ff07341b1e6fa683ed9",
+      "scene": "assets/chests/models/licensed/lagoon-pearl/lagoon-pearl-states.tscn",
+      "style": {
+        "kind": "model",
+        "source_style": "tide",
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": 1.6057029118347832
+          }
+        ],
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "normalize_model": false
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "model",
+        "model": "assets/chests/shared/rewards/coin-pile-medium.glb",
+        "position": [
+          -0.035313,
+          0.426261,
+          0.034166
+        ],
+        "rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.701369,
+          0.701369,
+          0.701369
+        ],
+        "authorship": "Game-authored fitted composition of the original acquired KayKit medium coin pile"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          0.70699,
+          0
+        ],
+        "size": [
+          0.97232,
+          0.847664,
+          0.795481
+        ],
+        "color": "#ACF3FF",
+        "seed": 65128642,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -0.623282,
+          0,
+          -0.584916
+        ],
+        "max": [
+          0.623282,
+          0.738487,
+          0.584909
+        ]
+      },
+      "cavity": [
+        0,
+        0.675826,
+        0
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "game-moonstone-vault",
+      "name": "Moonstone Vault",
+      "level": 14,
+      "asset_type": "model",
+      "model": "assets/chests/models/licensed/moonstone-vault/moonstone-vault.glb",
+      "model_sha256": "59d7111f5ed48daceb8ecfaa78d32275a441c4d22a9a181136d22bd2025a0911",
+      "scene": "assets/chests/models/licensed/moonstone-vault/moonstone-vault-states.tscn",
+      "style": {
+        "kind": "model",
+        "source_style": "nebula",
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": 0,
+            "lift": [
+              0,
+              0.7069644018023594,
+              0
+            ]
+          }
+        ],
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "normalize_model": false
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "model",
+        "model": "assets/chests/shared/rewards/coin-pile-medium.glb",
+        "position": [
+          -0.037699,
+          0.744753,
+          0.036475
+        ],
+        "rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "scale": [
+          0.748763,
+          0.748763,
+          0.748763
+        ],
+        "authorship": "Game-authored fitted composition of the original acquired KayKit medium coin pile"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          1.062805,
+          0
+        ],
+        "size": [
+          1.483465,
+          1.293277,
+          0.849235
+        ],
+        "color": "#D5B6FF",
+        "seed": 260439675,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -0.95094,
+          0,
+          -0.701964
+        ],
+        "max": [
+          0.950938,
+          1.015258,
+          0.54691
+        ]
+      },
+      "cavity": [
+        0,
+        1.015258,
+        0
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "prism-signal",
+      "name": "Prism Signal",
+      "level": 15,
+      "asset_type": "model",
+      "model": "assets/chests/models/atelier/prism-signal/prism-signal.glb",
+      "model_sha256": "7ba78d357e08ad4b4dd9f91f4761e812978ce712805f9076cdcf3d1bce5a0331",
+      "scene": "assets/chests/models/atelier/prism-signal/prism-signal-states.tscn",
+      "style": {
+        "model": "assets/chests/models/atelier/prism-signal/prism-signal.glb",
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0975003242492676,
+            0,
+            -0.7508200407028198
+          ],
+          "max": [
+            1.0975003242492676,
+            1.274980902671814,
+            0.788800060749054
+          ]
+        }
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "embedded",
+        "nodes": [
+          "Treasure"
+        ],
+        "authorship": "Existing sourced KayKit coin-pile geometry embedded in the Atelier model"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          0.965808,
+          0.01899
+        ],
+        "size": [
+          1.712101,
+          1.4926,
+          1.046942
+        ],
+        "color": "#FF88EF",
+        "seed": 3616953,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -1.0975,
+          0,
+          -0.75082
+        ],
+        "max": [
+          1.0975,
+          0.944933,
+          0.7888
+        ]
+      },
+      "cavity": [
+        0,
+        0.910933,
+        0.01899
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "frost-relay",
+      "name": "Frost Relay",
+      "level": 16,
+      "asset_type": "model",
+      "model": "assets/chests/models/atelier/frost-relay/frost-relay.glb",
+      "model_sha256": "6a4e0cd025ff305f5076085ec59295c107eb4fbe5cf7add50e45df7a8bde202b",
+      "scene": "assets/chests/models/atelier/frost-relay/frost-relay-states.tscn",
+      "style": {
+        "model": "assets/chests/models/atelier/frost-relay/frost-relay.glb",
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.097500205039978,
+            0,
+            -0.7508202195167542
+          ],
+          "max": [
+            1.097500205039978,
+            1.3549813032150269,
+            0.7960001826286316
+          ]
+        }
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "embedded",
+        "nodes": [
+          "Treasure"
+        ],
+        "authorship": "Existing sourced KayKit coin-pile geometry embedded in the Atelier model"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          1.025542,
+          0.02259
+        ],
+        "size": [
+          1.7121,
+          1.4926,
+          1.051838
+        ],
+        "color": "#68FFFF",
+        "seed": 153338752,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -1.0975,
+          0,
+          -0.75082
+        ],
+        "max": [
+          1.0975,
+          1.004316,
+          0.796
+        ]
+      },
+      "cavity": [
+        0,
+        0.970667,
+        0.02259
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "solar-relay",
+      "name": "Solar Relay",
+      "level": 17,
+      "asset_type": "model",
+      "model": "assets/chests/models/atelier/solar-relay/solar-relay.glb",
+      "model_sha256": "a104857980bf69ae54f53242d538f86604f19061ce04aca52a8e28b2cc2cad3f",
+      "scene": "assets/chests/models/atelier/solar-relay/solar-relay-states.tscn",
+      "style": {
+        "model": "assets/chests/models/atelier/solar-relay/solar-relay.glb",
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.097500205039978,
+            0,
+            -0.7508202195167542
+          ],
+          "max": [
+            1.097500205039978,
+            1.3549813032150269,
+            0.7960001826286316
+          ]
+        }
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "embedded",
+        "nodes": [
+          "Treasure"
+        ],
+        "authorship": "Existing sourced KayKit coin-pile geometry embedded in the Atelier model"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          1.025542,
+          0.02259
+        ],
+        "size": [
+          1.7121,
+          1.4926,
+          1.051838
+        ],
+        "color": "#59F3FF",
+        "seed": 258127915,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -1.0975,
+          0,
+          -0.75082
+        ],
+        "max": [
+          1.0975,
+          1.004316,
+          0.796
+        ]
+      },
+      "cavity": [
+        0,
+        0.970667,
+        0.02259
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "nova-buddy",
+      "name": "Nova Buddy",
+      "level": 18,
+      "asset_type": "model",
+      "model": "assets/chests/models/atelier/nova-buddy/nova-buddy.glb",
+      "model_sha256": "a0e34b900a30cc5a514e35d2a3cc3a97bd88e9c8d777400a672c6ac6a66756b6",
+      "scene": "assets/chests/models/atelier/nova-buddy/nova-buddy-states.tscn",
+      "style": {
+        "model": "assets/chests/models/atelier/nova-buddy/nova-buddy.glb",
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.097500205039978,
+            0,
+            -0.7508202791213989
+          ],
+          "max": [
+            1.097500205039978,
+            1.4031248092651367,
+            0.7666558027267456
+          ]
+        }
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "embedded",
+        "nodes": [
+          "Treasure"
+        ],
+        "authorship": "Existing sourced KayKit coin-pile geometry embedded in the Atelier model"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          0.966875,
+          0.007918
+        ],
+        "size": [
+          1.7121,
+          1.4926,
+          1.031884
+        ],
+        "color": "#65E9FF",
+        "seed": 205162776,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -1.0975,
+          0,
+          -0.75082
+        ],
+        "max": [
+          1.0975,
+          0.945649,
+          0.766656
+        ]
+      },
+      "cavity": [
+        0,
+        0.912,
+        0.007918
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "jade-reliquary",
+      "name": "Jade Reliquary",
+      "level": 19,
+      "asset_type": "model",
+      "model": "assets/chests/models/atelier/jade-reliquary/jade-reliquary.glb",
+      "model_sha256": "c13697148d58680a6c746afde499b71915ffb033f6cd7c11e455f6208bbc562d",
+      "scene": "assets/chests/models/atelier/jade-reliquary/jade-reliquary-states.tscn",
+      "style": {
+        "model": "assets/chests/models/atelier/jade-reliquary/jade-reliquary.glb",
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0975003242492676,
+            0,
+            -0.7508200407028198
+          ],
+          "max": [
+            1.0975003242492676,
+            1.274980902671814,
+            0.8530000448226929
+          ]
+        }
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "embedded",
+        "nodes": [
+          "Treasure"
+        ],
+        "authorship": "Existing sourced KayKit coin-pile geometry embedded in the Atelier model"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          0.965808,
+          0.05109
+        ],
+        "size": [
+          1.712101,
+          1.4926,
+          1.090598
+        ],
+        "color": "#9CFFD4",
+        "seed": 190519242,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -1.0975,
+          0,
+          -0.75082
+        ],
+        "max": [
+          1.0975,
+          0.944933,
+          0.853
+        ]
+      },
+      "cavity": [
+        0,
+        0.910933,
+        0.05109
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "crimson-citadel",
+      "name": "Crimson Citadel",
+      "level": 20,
+      "asset_type": "model",
+      "model": "assets/chests/models/atelier/crimson-citadel/crimson-citadel.glb",
+      "model_sha256": "867677aa2a7e3dad6c7d47aa82e88be0af4afc3254986f884483d876c6dee225",
+      "scene": "assets/chests/models/atelier/crimson-citadel/crimson-citadel-states.tscn",
+      "style": {
+        "model": "assets/chests/models/atelier/crimson-citadel/crimson-citadel.glb",
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0975003242492676,
+            0,
+            -0.7508200407028198
+          ],
+          "max": [
+            1.0975003242492676,
+            1.274980902671814,
+            0.8107672333717346
+          ]
+        }
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "embedded",
+        "nodes": [
+          "Treasure"
+        ],
+        "authorship": "Existing sourced KayKit coin-pile geometry embedded in the Atelier model"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          0.965808,
+          0.029974
+        ],
+        "size": [
+          1.712101,
+          1.4926,
+          1.061879
+        ],
+        "color": "#FFAFAD",
+        "seed": 236465369,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -1.0975,
+          0,
+          -0.75082
+        ],
+        "max": [
+          1.0975,
+          0.944933,
+          0.810767
+        ]
+      },
+      "cavity": [
+        0,
+        0.910933,
+        0.029974
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "cobalt-vault",
+      "name": "Cobalt Vault",
+      "level": 21,
+      "asset_type": "model",
+      "model": "assets/chests/models/atelier/cobalt-vault/cobalt-vault.glb",
+      "model_sha256": "080210d19c5d15267605c8ada6d0d8c8c26a798c0d8932dbe85d23732f3ff72d",
+      "scene": "assets/chests/models/atelier/cobalt-vault/cobalt-vault-states.tscn",
+      "style": {
+        "model": "assets/chests/models/atelier/cobalt-vault/cobalt-vault.glb",
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0975003242492676,
+            0,
+            -0.8008201122283936
+          ],
+          "max": [
+            1.0975004434585571,
+            1.6059669256210327,
+            0.9132376909255981
+          ]
+        }
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "embedded",
+        "nodes": [
+          "Treasure"
+        ],
+        "authorship": "Existing sourced KayKit coin-pile geometry embedded in the Atelier model"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          1.234608,
+          0.056209
+        ],
+        "size": [
+          1.712101,
+          1.492601,
+          1.165559
+        ],
+        "color": "#67E9FF",
+        "seed": 263483553,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -1.0975,
+          0,
+          -0.80082
+        ],
+        "max": [
+          1.0975,
+          1.213733,
+          0.913238
+        ]
+      },
+      "cavity": [
+        0,
+        1.179733,
+        0.056209
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "aether-vault",
+      "name": "Aether Vault",
+      "level": 22,
+      "asset_type": "model",
+      "model": "assets/chests/models/atelier/aether-vault/aether-vault.glb",
+      "model_sha256": "2a3ebb2635dec4f3a25b11393001401635c26b36c5ef359dd78e988333627101",
+      "scene": "assets/chests/models/atelier/aether-vault/aether-vault-states.tscn",
+      "style": {
+        "model": "assets/chests/models/atelier/aether-vault/aether-vault.glb",
+        "open_animation": "Open",
+        "open_start": 0,
+        "open_end": 1,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1,
+              0,
+              0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0,
+          0,
+          0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0975003242492676,
+            0,
+            -0.8008201122283936
+          ],
+          "max": [
+            1.0975004434585571,
+            1.6059669256210327,
+            0.9132376909255981
+          ]
+        }
+      },
+      "opening": {
+        "kind": "animation",
+        "clip": "Open",
+        "start": 0,
+        "end": 1,
+        "authorship": "Existing game-authored animation embedded in the chest model"
+      },
+      "treasure": {
+        "mode": "embedded",
+        "nodes": [
+          "Treasure"
+        ],
+        "authorship": "Existing sourced KayKit coin-pile geometry embedded in the Atelier model"
+      },
+      "magic": {
+        "textures": {
+          "glow": "assets/chests/shared/effects/kenney-light-01.png",
+          "ray": "assets/chests/shared/effects/kenney-light-02.png",
+          "spark": "assets/chests/shared/effects/kenney-star-04.png"
+        },
+        "position": [
+          0,
+          1.234608,
+          0.056209
+        ],
+        "size": [
+          1.712101,
+          1.492601,
+          1.165559
+        ],
+        "color": "#E6BDFF",
+        "seed": 89833501,
+        "authorship": "Game-authored glow, light rays and spark motion using acquired Kenney Particle Pack 1.1 artwork"
+      },
+      "body_bounds": {
+        "min": [
+          -1.0975,
+          0,
+          -0.80082
+        ],
+        "max": [
+          1.0975,
+          1.213733,
+          0.913238
+        ]
+      },
+      "cavity": [
+        0,
+        1.179733,
+        0.056209
+      ],
+      "states": [
+        "closed",
+        "open",
+        "treasure",
+        "magic"
+      ]
+    },
+    {
+      "id": "game-royal",
+      "name": "Royal",
+      "level": 23,
+      "asset_type": "sprites",
+      "scene": "assets/chests/sprites/royal/royal-states.tscn",
+      "authorship": "Game-authored source-derived 2D state composites; original acquired sprites retained",
+      "states": {
+        "closed": "assets/chests/sprites/royal/states/closed.png",
+        "open": "assets/chests/sprites/royal/states/open.png",
+        "treasure": "assets/chests/sprites/royal/states/treasure.png",
+        "magic": "assets/chests/sprites/royal/states/magic.png"
+      },
+      "source_manifest": "assets/chests/catalog/sprites.json"
+    },
+    {
+      "id": "game-crystal",
+      "name": "Crystal",
+      "level": 24,
+      "asset_type": "sprites",
+      "scene": "assets/chests/sprites/crystal/crystal-states.tscn",
+      "authorship": "Game-authored source-derived 2D state composites; original acquired sprites retained",
+      "states": {
+        "closed": "assets/chests/sprites/crystal/states/closed.png",
+        "open": "assets/chests/sprites/crystal/states/open.png",
+        "treasure": "assets/chests/sprites/crystal/states/treasure.png",
+        "magic": "assets/chests/sprites/crystal/states/magic.png"
+      },
+      "source_manifest": "assets/chests/catalog/sprites.json"
+    }
+  ]
+}

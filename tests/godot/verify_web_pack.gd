@@ -268,9 +268,9 @@ func _verify() -> void:
 		if ResourceLoader.exists(path) or FileAccess.file_exists(path):
 			printerr("A retired Voice Pop report is still bundled: " + path)
 			failures += 1
-	for path in ["res://scripts/celebration.gd", "res://assets/chests/particles/ring.png",
-		"res://assets/chests/particles/sparkle3.png", "res://assets/chests/particles/lightray1.png",
-		"res://assets/chests/particles/explosion_spike01.png", "res://assets/chests/particles/magic_orb2.png"]:
+	for path in ["res://scripts/celebration.gd", "res://assets/chests/shared/effects/ring.png",
+		"res://assets/chests/shared/effects/sparkle3.png", "res://assets/chests/shared/effects/lightray1.png",
+		"res://assets/chests/shared/effects/explosion_spike01.png", "res://assets/chests/shared/effects/magic_orb2.png"]:
 		if ResourceLoader.exists(path) or FileAccess.file_exists(path):
 			printerr("A retired collectible effect is still bundled: " + path)
 			failures += 1
@@ -567,7 +567,7 @@ func _verify_excluded_content_absent() -> int:
 			var source_path: String = "res://assets/audio/chests/%s-%s.wav" % [theme, cue]
 			archived_chest_imports["res://.godot/imported/%s-%s.sample" % [source_path.get_file(), source_path.md5_text()]] = true
 	for name: String in ["star", "ball", "rocket", "kite", "robot", "doll"]:
-		var source_path: String = "res://assets/chests/surprises/%s.svg" % name
+		var source_path: String = "res://assets/chests/shared/rewards/%s.svg" % name
 		archived_chest_imports["res://.godot/imported/%s-%s.ctex" % [source_path.get_file(), source_path.md5_text()]] = true
 	var historical_word_imports: Dictionary = {}
 	var original_words: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://words.json"))
@@ -609,7 +609,9 @@ func _verify_excluded_content_absent() -> int:
 			if path.contains("talk_quest") or path.contains("assets/audio/quest/"):
 				printerr("Retired Talk Quest content is still bundled: " + path)
 				failures += 1
-			if path.begins_with("res://assets/audio/chests/") or path.begins_with("res://assets/chests/surprises/") \
+			var archived_reward: bool = path.begins_with("res://assets/chests/shared/rewards/") \
+				and (path.ends_with(".svg") or path.ends_with(".svg.import"))
+			if path.begins_with("res://assets/audio/chests/") or archived_reward \
 				or archived_chest_imports.has(path):
 				printerr("Archived chest audio or surprise artwork is still bundled: " + path)
 				failures += 1

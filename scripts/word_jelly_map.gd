@@ -23,9 +23,9 @@ const MEDAL = preload("res://assets/images/ui/mastery-medal.webp")
 const COIN = preload("res://assets/coins/gold-coin.png")
 const PLAY = preload("res://assets/images/ui/controls/player-play.svg")
 const LOCK = preload("res://assets/images/ui/controls/lock.svg")
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
-const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
-const RAYS = preload("res://assets/chests/milestone/rays.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
+const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
+const RAYS = preload("res://assets/chests/shared/effects/rays.png")
 const ROUTE_SECONDS: float = 0.85
 const UNLOCK_SECONDS: float = 0.65
 const STAGES_PER_CHAPTER: int = 9
@@ -298,6 +298,7 @@ func configure(state: Dictionary, reduced_motion: bool = false) -> void:
 	if previous != highest or not same_context:
 		_scroll.cancel_drag()
 		_clear_response()
+		_pip.reset_rest()
 		_chapter_index = mini(highest, 98) / STAGES_PER_CHAPTER
 	_reduced_motion = reduced_motion
 	if previous >= 0 and highest == previous + 1 and highest < 99 \
@@ -370,6 +371,7 @@ func set_reduced_motion(value: bool) -> void:
 func open(state: Dictionary, reduced_motion: bool = false) -> void:
 	configure(state, reduced_motion)
 	show()
+	_pip.reset_rest()
 	_layout()
 	focus_frontier.call_deferred()
 
@@ -387,6 +389,23 @@ func _hover_stage(number: int) -> void:
 	_pose_nodes()
 	_sync_guide()
 	_queue_changed()
+
+
+func _observe_pip_input(event: InputEvent) -> void:
+	if not _active or not _pip.is_visible_in_tree() or _pip._idle_paused:
+		return
+	var point: Vector2
+	if event is InputEventMouseMotion or event is InputEventScreenDrag:
+		point = event.position
+	elif event is InputEventMouseButton or event is InputEventScreenTouch:
+		if not event.pressed:
+			return
+		point = event.position
+	else:
+		return
+	# Observe input without taking it from the medallion or scroll container.
+	if _scroll.get_global_rect().has_point(point) and _pip.get_global_rect().has_point(point):
+		_pip.pointer_activity()
 
 
 func _set_pressed(number: int) -> void:
@@ -475,6 +494,7 @@ func _reveal_stage(number: int) -> void:
 func _input(event: InputEvent) -> void:
 	if not is_visible_in_tree() or not _active:
 		return
+	_observe_pip_input(event)
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode in [KEY_PAGEUP, KEY_PAGEDOWN]:
 		if not _state.get("loading", false) and str(_state.get("error", "")).is_empty():
 			_scroll.cancel_drag()
@@ -744,6 +764,10 @@ func set_active(active: bool) -> void:
 	_layout()
 
 
+func set_audio_enabled(value: bool) -> void:
+	_pip.set_audio_enabled(value)
+
+
 func _sync_guide() -> void:
 	if not is_inside_tree() or _nodes.is_empty():
 		return
@@ -755,8 +779,8 @@ func _sync_guide() -> void:
 		and viewport.intersects(supported_node.get_global_rect())
 	var on_screen: bool = _pip.is_visible_in_tree() \
 		and _scroll.get_global_rect().intersects(_pip.get_global_rect())
-	_pip.set_idle_paused(not on_screen or not _active or _reduced_motion)
-	_pip.set_awake(on_screen and _active and highest < 99 \
+	_pip.set_idle_paused(not on_screen or not _active)
+	_pip.set_interaction_active(on_screen and _active and highest < 99 \
 		and (_hovered_stage == highest + 1 or _pressed_stage == highest + 1 \
 			or _reduced_motion and _nodes[highest].button.has_focus()))
 
@@ -769,6 +793,8 @@ func _position_guide() -> void:
 	var face: TextureRect = item.face
 	var support: Vector2 = item.button.position + face.get_transform() * Vector2(face.size.x * 0.5, 0.0)
 	_pip.position = support - _pip.support_point()
+	_pip.perch_direction = -1.0 if _pip.get_global_rect().get_center().x \
+		> _scroll.get_global_rect().get_center().x else 1.0
 
 
 func _refresh_viewport() -> void:

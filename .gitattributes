@@ -1,5 +1,5 @@
-assets/chests/manifest.json text eol=lf
-assets/chests/SOURCE.txt text eol=lf
+assets/chests/catalog/sprites.json text eol=lf
+assets/chests/sources/sprites/SOURCE.txt text eol=lf
 docs/qa/2026-10-03-performance-baseline-sparkle.patch text eol=lf -whitespace
 # Preserve the upstream license's original line endings and whitespace.
 assets/audio/jelly-match/LICENSE-Kenney.txt -text -whitespace
@@ -7,7 +7,9 @@ assets/images/jelly-match/garden/LICENSE-CC0.txt -text -whitespace
 assets/images/jelly-match/sky/LICENSE-CC0.txt -text -whitespace
 assets/images/jelly-campaign/LICENSE-CC0.txt -text -whitespace
 assets/images/ui/jelly-map/LICENSE-CC0.txt -text -whitespace
-assets/chests/catalog-cc0/*/LICENSE.txt -whitespace
+assets/chests/sources/cc0/*/LICENSE.txt -whitespace
+assets/chests/sources/atelier/** -text -whitespace
+assets/chests/sources/states/** -text -whitespace
 
 # Keep authored Professional content and domain contracts stable across checkouts.
 data/professional/** text eol=lf

@@ -12,7 +12,7 @@ const Mascot = preload("res://scripts/duck_mascot.gd")
 const RewardLayout = preload("res://scripts/round_reward_layout.gd")
 const CoinBreakdown = preload("res://scripts/chest_coin_breakdown.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
-const TREASURE_LIGHT = preload("res://assets/chests/particles/portal_glow.png")
+const TREASURE_LIGHT = preload("res://assets/chests/shared/effects/portal_glow.png")
 
 var pip: Mascot
 var chest: ChestView

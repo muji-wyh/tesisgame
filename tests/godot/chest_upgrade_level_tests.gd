@@ -3,8 +3,8 @@ extends SceneTree
 const Celebration = preload("res://scripts/jelly_chest_celebration.gd")
 const Flight = preload("res://scripts/chest_reward_flight.gd")
 const Style = preload("res://scripts/ui_style.gd")
-const BEFORE = preload("res://assets/chests/energy/closed.png")
-const AFTER = preload("res://assets/chests/royal/closed.png")
+const BEFORE = preload("res://assets/chests/sprites/energy/closed.png")
+const AFTER = preload("res://assets/chests/sprites/royal/closed.png")
 var checks := 0
 var failures := 0
 var baseline := false

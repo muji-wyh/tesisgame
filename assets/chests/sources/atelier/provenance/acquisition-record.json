@@ -1,0 +1,1354 @@
+{
+  "version": 1,
+  "recorded_at": "2026-10-25T17:42:56.877645+00:00",
+  "status": {
+    "raw_assets": "original-cc0-byte-copies",
+    "tier_presets": "integrated-native-four-view-reviewed",
+    "material_adaptations": "per-instance-source-atlas-role-styling",
+    "engine_import": "imported-and-native-geometry-verified"
+  },
+  "counts": {
+    "native_chest_base_families": 9,
+    "modular_tier_recipes": 30,
+    "cc0_chest_bases": 4,
+    "private_chest_base_references": 5,
+    "ornament_geometry_types": 6,
+    "model_files_copied": 10,
+    "texture_files_copied": 4,
+    "original_license_files_copied": 5
+  },
+  "runtime_review": {
+    "status": "All thirty modular assemblies integrated; front, side, back and opened actual native renders inspected.",
+    "captures": "build/qa/chest-thirty-tiers/",
+    "capture_index": "build/qa/chest-thirty-tiers/capture-index.json",
+    "geometry_suite": "tests/godot/chest_tier_models_tests.gd",
+    "scope": "Nine native base families with genuine sourced three-dimensional fittings, not thirty native meshes. Original file/acquisition facts below remain unchanged.",
+    "browser": "Browser integration verification is separate; native rendering is not a physical-device performance claim."
+  },
+  "source_notes": {
+    "scope": "Only raw CC0 GLBs, required original palette PNGs and original CC0 license files are copied here. No private Unity model, archive, source texture, shader, controller or import sidecar is copied. Existing private GLBs are metadata-only references.",
+    "geometry_verification": "GLB JSON/binary inspected directly: actual POSITION spatial rank 3 for every primitive; unsigned index ranges and triangle topology checked. Vertex count sums per-primitive accessors, not unique geometric points. No engine, GPU render, importer or runtime integration was used.",
+    "hash_verification": "source_sha256 is calculated on the original acquired file before copying; output_sha256 is recalculated on byte-identical output. No geometry, material, image, UV, clip or license normalization/conversion is applied.",
+    "byte_preservation": "The scoped .gitattributes disables text conversion for raw GLB/PNG/LICENSE.txt inputs so original/output hashes remain stable across checkout line-ending settings. Original license bytes are not normalized.",
+    "excluded_duplicates": [
+      "Pirate Kit chest shares normalized body/lid geometry with Platformer Kit; it is not copied or counted as another base.",
+      "KayKit chest_gold adds interior gold to the same chest exterior; it is not copied or counted as another native base.",
+      "Bronze/silver/gold coin files share one geometry; only coin-gold is copied as a source medallion. Color changes are proposed material styling, not new meshes.",
+      "Snow/non-snow crystal palettes share geometry; only the single original crystal is copied. The rock/crystal cluster is not needed by these recipes."
+    ],
+    "materials": "Kenney inputs and the KayKit base use source palette/gradient atlases with metallicFactor 0. Source-painted silver/gold is not already a metallic PBR finish. Semantic wood/trim/ornament/gem styling in tier-presets.json is a proposed in-game adaptation, not a raw source-material claim.",
+    "opening": "Three distinct Kenney bases supply open/close/open-close clips and separate rigid lids. KayKit supplies a separate rigid chest_lid but no animation clips; later game-authored hinge motion is required. Existing five private GLBs contain their existing game-authored Open(1s) clips. Static ornaments have no clips.",
+    "child_friendly_selection": "Kenney/KayKit chest and attachment source previews were inspected for this review; no skull/teeth/horror assets are selected. The retained private Harvest model is the already cleaned version documented in docs/assets/chest-refresh.md, not the original skull-decorated source prefab. Full thirty-preset art review is still pending.",
+    "portable_tests": "Node tests use only committed CC0 inputs and tracked private-model metadata; installed private GLB hash comparisons are conditional. No machine-specific original source path is needed on another checkout.",
+    "licensing": "CC0 inputs and original notices may be stored in Git. Referenced Unity assets remain private build inputs under their separate Standard EULA; this catalog does not relicence them as CC0."
+  },
+  "sources": [
+    {
+      "id": "kenney-survival",
+      "title": "Survival Kit",
+      "version": "2.0",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/survival-kit",
+      "license_id": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_file": "assets/chests/catalog-cc0/kenney-survival/LICENSE.txt",
+      "acquisition_status": "verified-copy-from-acquired-source",
+      "raw_asset_status": "original-byte-copies-not-imported-not-integrated",
+      "source_collection": "User-provided Kenney Game Assets All-in-1 3.7.0",
+      "preview_review": "Source listing/source PNGs inspected during bounded review; no new tier render has been made",
+      "source_version_note": "Version from acquired original License.txt; the public product page can describe a newer release"
+    },
+    {
+      "id": "kenney-platformer",
+      "title": "Platformer Kit",
+      "version": "4.1",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/platformer-kit",
+      "license_id": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_file": "assets/chests/catalog-cc0/kenney-platformer/LICENSE.txt",
+      "acquisition_status": "verified-copy-from-acquired-source",
+      "raw_asset_status": "original-byte-copies-not-imported-not-integrated",
+      "source_collection": "User-provided Kenney Game Assets All-in-1 3.7.0",
+      "preview_review": "Source listing/source PNGs inspected during bounded review; no new tier render has been made",
+      "source_version_note": "Version from acquired original License.txt; the public product page can describe a newer release"
+    },
+    {
+      "id": "kenney-mini-dungeon",
+      "title": "Mini Dungeon",
+      "version": "2.0",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/mini-dungeon",
+      "license_id": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_file": "assets/chests/catalog-cc0/kenney-mini-dungeon/LICENSE.txt",
+      "acquisition_status": "verified-copy-from-acquired-source",
+      "raw_asset_status": "original-byte-copies-not-imported-not-integrated",
+      "source_collection": "User-provided Kenney Game Assets All-in-1 3.7.0",
+      "preview_review": "Source listing/source PNGs inspected during bounded review; no new tier render has been made",
+      "source_version_note": "Version from acquired original License.txt; the public product page can describe a newer release"
+    },
+    {
+      "id": "kenney-tower-defense",
+      "title": "Tower Defense Kit",
+      "version": "2.0",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/tower-defense-kit",
+      "license_id": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_file": "assets/chests/catalog-cc0/kenney-tower-defense/LICENSE.txt",
+      "acquisition_status": "verified-copy-from-acquired-source",
+      "raw_asset_status": "original-byte-copies-not-imported-not-integrated",
+      "source_collection": "User-provided Kenney Game Assets All-in-1 3.7.0",
+      "preview_review": "Source listing/source PNGs inspected during bounded review; no new tier render has been made",
+      "source_version_note": "Version from acquired original License.txt; the public product page can describe a newer release"
+    },
+    {
+      "id": "kaykit-dungeon-1.0",
+      "title": "KayKit : Dungeon Remastered",
+      "version": "1.0",
+      "creator": "Kay Lousberg",
+      "url": "https://kaylousberg.itch.io/kaykit-dungeon-pack",
+      "license_id": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "license_file": "assets/chests/catalog-cc0/kaykit-dungeon/LICENSE.txt",
+      "acquisition_status": "verified-copy-from-acquired-source",
+      "raw_asset_status": "original-byte-copies-not-imported-not-integrated",
+      "source_collection": "Official creator GitHub source, pinned commit",
+      "preview_review": "Source listing/source PNGs inspected during bounded review; no new tier render has been made",
+      "repository": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+      "commit": "b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07",
+      "edition": "Free CC0 version 1.0; paid EXTRA/SOURCE content not used"
+    }
+  ],
+  "files": [
+    {
+      "path": "assets/chests/catalog-cc0/kenney-survival/LICENSE.txt",
+      "kind": "license",
+      "source_id": "kenney-survival",
+      "original_relative_path": "License.txt",
+      "source_sha256": "62c8356876481204fa4d40dc59183dfed777adf987d7f2a1390fffe8a699f3ff",
+      "output_sha256": "62c8356876481204fa4d40dc59183dfed777adf987d7f2a1390fffe8a699f3ff",
+      "output_bytes": 715,
+      "status": "raw-original-not-integrated"
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-survival/chest.glb",
+      "kind": "model",
+      "source_id": "kenney-survival",
+      "original_relative_path": "Models/GLB format/chest.glb",
+      "source_sha256": "84b03023e425cc1f96c6d0b0f352608be9e8e01b112790e6b00b8651bf84379b",
+      "output_sha256": "84b03023e425cc1f96c6d0b0f352608be9e8e01b112790e6b00b8651bf84379b",
+      "output_bytes": 35172,
+      "status": "raw-original-not-integrated",
+      "role": "chest-base",
+      "geometry_family_id": "kenney-survival-chest",
+      "geometry": {
+        "mesh_count": 2,
+        "primitive_count": 2,
+        "vertex_count": 558,
+        "triangle_count": 322,
+        "primitive_spatial_ranks": [
+          3,
+          3
+        ]
+      },
+      "nodes": [
+        {
+          "children": [
+            1
+          ],
+          "mesh": 0,
+          "name": "chest"
+        },
+        {
+          "mesh": 1,
+          "translation": [
+            2.88764564e-15,
+            0.132803991,
+            -0.1243875
+          ],
+          "name": "lid"
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0.0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "name": "colormap",
+          "location": "external",
+          "uri": "Textures/colormap.png",
+          "path": "assets/chests/catalog-cc0/kenney-survival/Textures/colormap.png",
+          "sha256": "6ca023be9f12e8c2358fcf94320c8a894b4c05a3dd0bad1f5c268312053caca1",
+          "dimensions": {
+            "width": 512,
+            "height": 512
+          }
+        }
+      ],
+      "dependencies": [
+        "assets/chests/catalog-cc0/kenney-survival/Textures/colormap.png"
+      ],
+      "animation": {
+        "authorship": "source-original",
+        "opening_support": "separate-lid-with-source-clips",
+        "clips": [
+          {
+            "name": "open",
+            "time_min": 0.0,
+            "time_max": 0.30000001192092896,
+            "duration_seconds": 0.30000001192092896,
+            "channel_count": 1,
+            "target_nodes": [
+              "lid"
+            ],
+            "properties": [
+              "rotation"
+            ]
+          },
+          {
+            "name": "close",
+            "time_min": 0.0,
+            "time_max": 1.0,
+            "duration_seconds": 1.0,
+            "channel_count": 1,
+            "target_nodes": [
+              "lid"
+            ],
+            "properties": [
+              "rotation"
+            ]
+          },
+          {
+            "name": "open-close",
+            "time_min": 0.0,
+            "time_max": 2.0,
+            "duration_seconds": 2.0,
+            "channel_count": 1,
+            "target_nodes": [
+              "lid"
+            ],
+            "properties": [
+              "rotation"
+            ]
+          }
+        ],
+        "skin_count": 0,
+        "lid_node": "lid"
+      }
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-survival/Textures/colormap.png",
+      "kind": "texture",
+      "source_id": "kenney-survival",
+      "original_relative_path": "Models/GLB format/Textures/colormap.png",
+      "source_sha256": "6ca023be9f12e8c2358fcf94320c8a894b4c05a3dd0bad1f5c268312053caca1",
+      "output_sha256": "6ca023be9f12e8c2358fcf94320c8a894b4c05a3dd0bad1f5c268312053caca1",
+      "output_bytes": 7440,
+      "status": "raw-original-not-integrated"
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-platformer/LICENSE.txt",
+      "kind": "license",
+      "source_id": "kenney-platformer",
+      "original_relative_path": "License.txt",
+      "source_sha256": "e1185354d8f0f055c325c7204602326c8cf0c47ee5ae1db7ed16f0465b91bb9a",
+      "output_sha256": "e1185354d8f0f055c325c7204602326c8cf0c47ee5ae1db7ed16f0465b91bb9a",
+      "output_bytes": 703,
+      "status": "raw-original-not-integrated"
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-platformer/chest.glb",
+      "kind": "model",
+      "source_id": "kenney-platformer",
+      "original_relative_path": "Models/GLB format/chest.glb",
+      "source_sha256": "ba92d21be71649e608de4c76859f04e83308efc699508b2ddb1221678102e274",
+      "output_sha256": "ba92d21be71649e608de4c76859f04e83308efc699508b2ddb1221678102e274",
+      "output_bytes": 28012,
+      "status": "raw-original-not-integrated",
+      "role": "chest-base",
+      "geometry_family_id": "kenney-platformer-chest",
+      "geometry": {
+        "mesh_count": 2,
+        "primitive_count": 2,
+        "vertex_count": 378,
+        "triangle_count": 232,
+        "primitive_spatial_ranks": [
+          3,
+          3
+        ]
+      },
+      "nodes": [
+        {
+          "children": [
+            1
+          ],
+          "mesh": 0,
+          "name": "chest"
+        },
+        {
+          "mesh": 1,
+          "translation": [
+            -3.72529829e-09,
+            0.2,
+            -0.2
+          ],
+          "name": "lid"
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0.0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "name": "colormap",
+          "location": "external",
+          "uri": "Textures/colormap.png",
+          "path": "assets/chests/catalog-cc0/kenney-platformer/Textures/colormap.png",
+          "sha256": "439dfcac935cfd75dc16f28333a4c8284fffcc4b24f857c61cfb4c8a964a15bd",
+          "dimensions": {
+            "width": 512,
+            "height": 512
+          }
+        }
+      ],
+      "dependencies": [
+        "assets/chests/catalog-cc0/kenney-platformer/Textures/colormap.png"
+      ],
+      "animation": {
+        "authorship": "source-original",
+        "opening_support": "separate-lid-with-source-clips",
+        "clips": [
+          {
+            "name": "open",
+            "time_min": 0.0,
+            "time_max": 0.30000001192092896,
+            "duration_seconds": 0.30000001192092896,
+            "channel_count": 3,
+            "target_nodes": [
+              "lid"
+            ],
+            "properties": [
+              "rotation",
+              "scale",
+              "translation"
+            ]
+          },
+          {
+            "name": "close",
+            "time_min": 0.0,
+            "time_max": 1.0,
+            "duration_seconds": 1.0,
+            "channel_count": 3,
+            "target_nodes": [
+              "lid"
+            ],
+            "properties": [
+              "rotation",
+              "scale",
+              "translation"
+            ]
+          },
+          {
+            "name": "open-close",
+            "time_min": 0.0,
+            "time_max": 2.0,
+            "duration_seconds": 2.0,
+            "channel_count": 3,
+            "target_nodes": [
+              "lid"
+            ],
+            "properties": [
+              "rotation",
+              "scale",
+              "translation"
+            ]
+          }
+        ],
+        "skin_count": 0,
+        "lid_node": "lid"
+      }
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-platformer/Textures/colormap.png",
+      "kind": "texture",
+      "source_id": "kenney-platformer",
+      "original_relative_path": "Models/GLB format/Textures/colormap.png",
+      "source_sha256": "439dfcac935cfd75dc16f28333a4c8284fffcc4b24f857c61cfb4c8a964a15bd",
+      "output_sha256": "439dfcac935cfd75dc16f28333a4c8284fffcc4b24f857c61cfb4c8a964a15bd",
+      "output_bytes": 11140,
+      "status": "raw-original-not-integrated"
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb",
+      "kind": "model",
+      "source_id": "kenney-platformer",
+      "original_relative_path": "Models/GLB format/jewel.glb",
+      "source_sha256": "cec20d8ae2678c292b3885aaee468ba39d165a7e2043af5ba8102b6cd974c2c3",
+      "output_sha256": "cec20d8ae2678c292b3885aaee468ba39d165a7e2043af5ba8102b6cd974c2c3",
+      "output_bytes": 3580,
+      "status": "raw-original-not-integrated",
+      "role": "ornament",
+      "geometry_family_id": "kenney-faceted-jewel",
+      "geometry": {
+        "mesh_count": 1,
+        "primitive_count": 1,
+        "vertex_count": 36,
+        "triangle_count": 12,
+        "primitive_spatial_ranks": [
+          3
+        ]
+      },
+      "nodes": [
+        {
+          "mesh": 0,
+          "name": "jewel"
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0.0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "name": "colormap",
+          "location": "external",
+          "uri": "Textures/colormap.png",
+          "path": "assets/chests/catalog-cc0/kenney-platformer/Textures/colormap.png",
+          "sha256": "439dfcac935cfd75dc16f28333a4c8284fffcc4b24f857c61cfb4c8a964a15bd",
+          "dimensions": {
+            "width": 512,
+            "height": 512
+          }
+        }
+      ],
+      "dependencies": [
+        "assets/chests/catalog-cc0/kenney-platformer/Textures/colormap.png"
+      ],
+      "animation": {
+        "authorship": "source-original",
+        "opening_support": "static-attachment",
+        "clips": [],
+        "skin_count": 0
+      },
+      "source_role": "Original gem or padlock geometry"
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-platformer/lock.glb",
+      "kind": "model",
+      "source_id": "kenney-platformer",
+      "original_relative_path": "Models/GLB format/lock.glb",
+      "source_sha256": "08d32c7723718afaac9896e0ee650624dfd1364da37952e3882f8a22f4ca8145",
+      "output_sha256": "08d32c7723718afaac9896e0ee650624dfd1364da37952e3882f8a22f4ca8145",
+      "output_bytes": 9372,
+      "status": "raw-original-not-integrated",
+      "role": "ornament",
+      "geometry_family_id": "kenney-padlock",
+      "geometry": {
+        "mesh_count": 1,
+        "primitive_count": 1,
+        "vertex_count": 152,
+        "triangle_count": 100,
+        "primitive_spatial_ranks": [
+          3
+        ]
+      },
+      "nodes": [
+        {
+          "mesh": 0,
+          "name": "lock"
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0.0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "name": "colormap",
+          "location": "external",
+          "uri": "Textures/colormap.png",
+          "path": "assets/chests/catalog-cc0/kenney-platformer/Textures/colormap.png",
+          "sha256": "439dfcac935cfd75dc16f28333a4c8284fffcc4b24f857c61cfb4c8a964a15bd",
+          "dimensions": {
+            "width": 512,
+            "height": 512
+          }
+        }
+      ],
+      "dependencies": [
+        "assets/chests/catalog-cc0/kenney-platformer/Textures/colormap.png"
+      ],
+      "animation": {
+        "authorship": "source-original",
+        "opening_support": "static-attachment",
+        "clips": [],
+        "skin_count": 0
+      },
+      "source_role": "Original gem or padlock geometry"
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb",
+      "kind": "model",
+      "source_id": "kenney-platformer",
+      "original_relative_path": "Models/GLB format/coin-gold.glb",
+      "source_sha256": "cf2179e57721b943d88283d38678c4b1b8422e9a4dd44f631acfb35007c223a8",
+      "output_sha256": "cf2179e57721b943d88283d38678c4b1b8422e9a4dd44f631acfb35007c223a8",
+      "output_bytes": 10608,
+      "status": "raw-original-not-integrated",
+      "role": "ornament",
+      "geometry_family_id": "kenney-medallion",
+      "geometry": {
+        "mesh_count": 1,
+        "primitive_count": 1,
+        "vertex_count": 176,
+        "triangle_count": 124,
+        "primitive_spatial_ranks": [
+          3
+        ]
+      },
+      "nodes": [
+        {
+          "mesh": 0,
+          "name": "coin-gold"
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0.0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "name": "colormap",
+          "location": "external",
+          "uri": "Textures/colormap.png",
+          "path": "assets/chests/catalog-cc0/kenney-platformer/Textures/colormap.png",
+          "sha256": "439dfcac935cfd75dc16f28333a4c8284fffcc4b24f857c61cfb4c8a964a15bd",
+          "dimensions": {
+            "width": 512,
+            "height": 512
+          }
+        }
+      ],
+      "dependencies": [
+        "assets/chests/catalog-cc0/kenney-platformer/Textures/colormap.png"
+      ],
+      "animation": {
+        "authorship": "source-original",
+        "opening_support": "static-attachment",
+        "clips": [],
+        "skin_count": 0
+      },
+      "source_role": "Coin reused as a medallion"
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-mini-dungeon/LICENSE.txt",
+      "kind": "license",
+      "source_id": "kenney-mini-dungeon",
+      "original_relative_path": "License.txt",
+      "source_sha256": "f8b470068a1c043854101c9ff7161d376ba02c36239da3c1dbdfa928b08444b6",
+      "output_sha256": "f8b470068a1c043854101c9ff7161d376ba02c36239da3c1dbdfa928b08444b6",
+      "output_bytes": 701,
+      "status": "raw-original-not-integrated"
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-mini-dungeon/chest.glb",
+      "kind": "model",
+      "source_id": "kenney-mini-dungeon",
+      "original_relative_path": "Models/GLB format/chest.glb",
+      "source_sha256": "64cc6c44786a0833bbe53c694cbad9f10d4fdd9e99d4b5ec03fcb3b8b5dd71e0",
+      "output_sha256": "64cc6c44786a0833bbe53c694cbad9f10d4fdd9e99d4b5ec03fcb3b8b5dd71e0",
+      "output_bytes": 34048,
+      "status": "raw-original-not-integrated",
+      "role": "chest-base",
+      "geometry_family_id": "kenney-mini-dungeon-chest",
+      "geometry": {
+        "mesh_count": 2,
+        "primitive_count": 2,
+        "vertex_count": 490,
+        "triangle_count": 288,
+        "primitive_spatial_ranks": [
+          3,
+          3
+        ]
+      },
+      "nodes": [
+        {
+          "children": [
+            1
+          ],
+          "mesh": 0,
+          "name": "chest"
+        },
+        {
+          "mesh": 1,
+          "translation": [
+            -3.72529829e-09,
+            0.2,
+            -0.2
+          ],
+          "name": "lid"
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0.0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "name": "colormap",
+          "location": "external",
+          "uri": "Textures/colormap.png",
+          "path": "assets/chests/catalog-cc0/kenney-mini-dungeon/Textures/colormap.png",
+          "sha256": "bc492d755caf9e64924447f065681be0d5438a33cd0acddc72f3d00fd75893be",
+          "dimensions": {
+            "width": 512,
+            "height": 512
+          }
+        }
+      ],
+      "dependencies": [
+        "assets/chests/catalog-cc0/kenney-mini-dungeon/Textures/colormap.png"
+      ],
+      "animation": {
+        "authorship": "source-original",
+        "opening_support": "separate-lid-with-source-clips",
+        "clips": [
+          {
+            "name": "open",
+            "time_min": 0.0,
+            "time_max": 0.30000001192092896,
+            "duration_seconds": 0.30000001192092896,
+            "channel_count": 3,
+            "target_nodes": [
+              "lid"
+            ],
+            "properties": [
+              "rotation",
+              "scale",
+              "translation"
+            ]
+          },
+          {
+            "name": "close",
+            "time_min": 0.0,
+            "time_max": 1.0,
+            "duration_seconds": 1.0,
+            "channel_count": 3,
+            "target_nodes": [
+              "lid"
+            ],
+            "properties": [
+              "rotation",
+              "scale",
+              "translation"
+            ]
+          },
+          {
+            "name": "open-close",
+            "time_min": 0.0,
+            "time_max": 2.0,
+            "duration_seconds": 2.0,
+            "channel_count": 3,
+            "target_nodes": [
+              "lid"
+            ],
+            "properties": [
+              "rotation",
+              "scale",
+              "translation"
+            ]
+          }
+        ],
+        "skin_count": 0,
+        "lid_node": "lid"
+      }
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-mini-dungeon/Textures/colormap.png",
+      "kind": "texture",
+      "source_id": "kenney-mini-dungeon",
+      "original_relative_path": "Models/GLB format/Textures/colormap.png",
+      "source_sha256": "bc492d755caf9e64924447f065681be0d5438a33cd0acddc72f3d00fd75893be",
+      "output_sha256": "bc492d755caf9e64924447f065681be0d5438a33cd0acddc72f3d00fd75893be",
+      "output_bytes": 10838,
+      "status": "raw-original-not-integrated"
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-rectangle.glb",
+      "kind": "model",
+      "source_id": "kenney-mini-dungeon",
+      "original_relative_path": "Models/GLB format/shield-rectangle.glb",
+      "source_sha256": "16e3d0131666e7ad9bdad313253ff5dcc70cddfb86c28864b3b965ee5c65ac3b",
+      "output_sha256": "16e3d0131666e7ad9bdad313253ff5dcc70cddfb86c28864b3b965ee5c65ac3b",
+      "output_bytes": 13196,
+      "status": "raw-original-not-integrated",
+      "role": "ornament",
+      "geometry_family_id": "kenney-rectangle-escutcheon",
+      "geometry": {
+        "mesh_count": 1,
+        "primitive_count": 1,
+        "vertex_count": 228,
+        "triangle_count": 134,
+        "primitive_spatial_ranks": [
+          3
+        ]
+      },
+      "nodes": [
+        {
+          "mesh": 0,
+          "name": "shield-rectangle"
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0.0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "name": "colormap",
+          "location": "external",
+          "uri": "Textures/colormap.png",
+          "path": "assets/chests/catalog-cc0/kenney-mini-dungeon/Textures/colormap.png",
+          "sha256": "bc492d755caf9e64924447f065681be0d5438a33cd0acddc72f3d00fd75893be",
+          "dimensions": {
+            "width": 512,
+            "height": 512
+          }
+        }
+      ],
+      "dependencies": [
+        "assets/chests/catalog-cc0/kenney-mini-dungeon/Textures/colormap.png"
+      ],
+      "animation": {
+        "authorship": "source-original",
+        "opening_support": "static-attachment",
+        "clips": [],
+        "skin_count": 0
+      },
+      "source_role": "Shield reused as an escutcheon"
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb",
+      "kind": "model",
+      "source_id": "kenney-mini-dungeon",
+      "original_relative_path": "Models/GLB format/shield-round.glb",
+      "source_sha256": "1527cc9a27891efe1019e22cf68d99c98f6fce9a45b3d6e1e4cf034956e08e54",
+      "output_sha256": "1527cc9a27891efe1019e22cf68d99c98f6fce9a45b3d6e1e4cf034956e08e54",
+      "output_bytes": 15512,
+      "status": "raw-original-not-integrated",
+      "role": "ornament",
+      "geometry_family_id": "kenney-round-escutcheon",
+      "geometry": {
+        "mesh_count": 1,
+        "primitive_count": 1,
+        "vertex_count": 264,
+        "triangle_count": 160,
+        "primitive_spatial_ranks": [
+          3
+        ]
+      },
+      "nodes": [
+        {
+          "mesh": 0,
+          "name": "shield-round"
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0.0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "name": "colormap",
+          "location": "external",
+          "uri": "Textures/colormap.png",
+          "path": "assets/chests/catalog-cc0/kenney-mini-dungeon/Textures/colormap.png",
+          "sha256": "bc492d755caf9e64924447f065681be0d5438a33cd0acddc72f3d00fd75893be",
+          "dimensions": {
+            "width": 512,
+            "height": 512
+          }
+        }
+      ],
+      "dependencies": [
+        "assets/chests/catalog-cc0/kenney-mini-dungeon/Textures/colormap.png"
+      ],
+      "animation": {
+        "authorship": "source-original",
+        "opening_support": "static-attachment",
+        "clips": [],
+        "skin_count": 0
+      },
+      "source_role": "Shield reused as an escutcheon"
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-tower-defense/LICENSE.txt",
+      "kind": "license",
+      "source_id": "kenney-tower-defense",
+      "original_relative_path": "License.txt",
+      "source_sha256": "f67d4098842a15a1478a95cde1b6c44a0261901271e2709f7313c330975eccaf",
+      "output_sha256": "f67d4098842a15a1478a95cde1b6c44a0261901271e2709f7313c330975eccaf",
+      "output_bytes": 720,
+      "status": "raw-original-not-integrated"
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb",
+      "kind": "model",
+      "source_id": "kenney-tower-defense",
+      "original_relative_path": "Models/GLB format/detail-crystal.glb",
+      "source_sha256": "51c49ba3c9bafacbcee120132c2234dcd7093ba8feec27fb3ac596ca35a27a19",
+      "output_sha256": "51c49ba3c9bafacbcee120132c2234dcd7093ba8feec27fb3ac596ca35a27a19",
+      "output_bytes": 8996,
+      "status": "raw-original-not-integrated",
+      "role": "ornament",
+      "geometry_family_id": "kenney-single-crystal",
+      "geometry": {
+        "mesh_count": 1,
+        "primitive_count": 1,
+        "vertex_count": 144,
+        "triangle_count": 68,
+        "primitive_spatial_ranks": [
+          3
+        ]
+      },
+      "nodes": [
+        {
+          "mesh": 0,
+          "name": "detail-crystal"
+        }
+      ],
+      "materials": [
+        {
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "extensions": {
+                "KHR_texture_transform": {
+                  "texCoord": 0
+                }
+              }
+            },
+            "metallicFactor": 0.0
+          },
+          "doubleSided": true,
+          "name": "colormap"
+        }
+      ],
+      "images": [
+        {
+          "name": "colormap",
+          "location": "external",
+          "uri": "Textures/colormap.png",
+          "path": "assets/chests/catalog-cc0/kenney-tower-defense/Textures/colormap.png",
+          "sha256": "1ce81aab65734b29dbe322f0f0dc8eaa219ebd1c35b7bf056bd2a23eb8f8cba8",
+          "dimensions": {
+            "width": 512,
+            "height": 512
+          }
+        }
+      ],
+      "dependencies": [
+        "assets/chests/catalog-cc0/kenney-tower-defense/Textures/colormap.png"
+      ],
+      "animation": {
+        "authorship": "source-original",
+        "opening_support": "static-attachment",
+        "clips": [],
+        "skin_count": 0
+      },
+      "source_role": "Original gem or padlock geometry"
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kenney-tower-defense/Textures/colormap.png",
+      "kind": "texture",
+      "source_id": "kenney-tower-defense",
+      "original_relative_path": "Models/GLB format/Textures/colormap.png",
+      "source_sha256": "1ce81aab65734b29dbe322f0f0dc8eaa219ebd1c35b7bf056bd2a23eb8f8cba8",
+      "output_sha256": "1ce81aab65734b29dbe322f0f0dc8eaa219ebd1c35b7bf056bd2a23eb8f8cba8",
+      "output_bytes": 11228,
+      "status": "raw-original-not-integrated"
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kaykit-dungeon/LICENSE.txt",
+      "kind": "license",
+      "source_id": "kaykit-dungeon-1.0",
+      "original_relative_path": "LICENSE.txt",
+      "source_sha256": "c5f17abf619731f57f6bbff450f6484214605c13aa96bb75bbcfc70930941ff7",
+      "output_sha256": "c5f17abf619731f57f6bbff450f6484214605c13aa96bb75bbcfc70930941ff7",
+      "output_bytes": 829,
+      "status": "raw-original-not-integrated",
+      "original_url": "https://raw.githubusercontent.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/LICENSE.txt"
+    },
+    {
+      "path": "assets/chests/catalog-cc0/kaykit-dungeon/chest.glb",
+      "kind": "model",
+      "source_id": "kaykit-dungeon-1.0",
+      "original_relative_path": "addons/kaykit_dungeon_remastered/Assets/gltf/chest.glb",
+      "source_sha256": "f72fd2201cd42ad399928a0b7bcc34d5b0e6d0624aeaf824fef81852109955f8",
+      "output_sha256": "f72fd2201cd42ad399928a0b7bcc34d5b0e6d0624aeaf824fef81852109955f8",
+      "output_bytes": 81412,
+      "status": "raw-original-not-integrated",
+      "original_url": "https://raw.githubusercontent.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/chest.glb",
+      "role": "chest-base",
+      "geometry_family_id": "kaykit-dungeon-chest",
+      "geometry": {
+        "mesh_count": 2,
+        "primitive_count": 2,
+        "vertex_count": 1204,
+        "triangle_count": 728,
+        "primitive_spatial_ranks": [
+          3,
+          3
+        ]
+      },
+      "nodes": [
+        {
+          "mesh": 0,
+          "name": "chest_lid",
+          "translation": [
+            0,
+            0.5,
+            -0.5648832321166992
+          ]
+        },
+        {
+          "children": [
+            0
+          ],
+          "mesh": 1,
+          "name": "chest"
+        }
+      ],
+      "materials": [
+        {
+          "name": "texture",
+          "pbrMetallicRoughness": {
+            "baseColorTexture": {
+              "index": 0,
+              "texCoord": 0
+            },
+            "metallicFactor": 0,
+            "roughnessFactor": 0.44999998807907104
+          }
+        }
+      ],
+      "images": [
+        {
+          "name": "dungeon_texture",
+          "location": "embedded",
+          "mime_type": "image/png",
+          "sha256": "f9ae182518f908bd09461a56a430b9ca7369812ac10890224cc6f32e7da3e1ee",
+          "dimensions": {
+            "width": 1024,
+            "height": 1024
+          }
+        }
+      ],
+      "dependencies": [],
+      "animation": {
+        "authorship": "source-original",
+        "opening_support": "separate-static-lid-no-clip",
+        "clips": [],
+        "skin_count": 0,
+        "lid_node": "chest_lid"
+      }
+    }
+  ],
+  "referenced_private_sources": [
+    {
+      "id": "poly-style-fantasy-chest",
+      "title": "POLY STYLE - Fantasy Treasure Chest",
+      "publisher": "Batata Studio",
+      "version": "1.15",
+      "product_id": "280107",
+      "url": "https://assetstore.unity.com/packages/3d/props/poly-style-fantasy-treasure-chest-280107",
+      "package_sha256": "ca35e6d033bf29cf3b247d866d8b3db0b4a8800e691a97bbc31002712ac0b75e",
+      "license": "Unity Asset Store Standard EULA; embedded game artwork only",
+      "source_package_hash_status": "Retained acquisition metadata; original package bytes not revalidated in this environment"
+    },
+    {
+      "id": "stylized-chests",
+      "title": "Stylized 3D Animated Chests – FREE Demo",
+      "publisher": "Bobardo",
+      "version": "1.0",
+      "product_id": "360542",
+      "url": "https://assetstore.unity.com/packages/slug/360542",
+      "package_sha256": "2356a6173afd53692fec5fb0360fbfcb9eb3f73549d13600e5446d66c8f18375",
+      "license": "Unity Asset Store Standard EULA; embedded game artwork only",
+      "source_package_hash_status": "Retained acquisition metadata; original package bytes not revalidated in this environment"
+    },
+    {
+      "id": "low-poly-chest-animated",
+      "title": "Low Poly Chest Animated",
+      "publisher": "Ekrem C.",
+      "version": "1.0",
+      "product_id": "247127",
+      "url": "https://assetstore.unity.com/packages/3d/props/low-poly-chest-animated-247127",
+      "package_sha256": "a0022b1fbe2f1762114774f10a2ecdacf2db169f9c01d51dbe42497213fd8397",
+      "license": "Unity Asset Store Standard EULA; embedded game artwork only",
+      "source_package_hash_status": "Retained acquisition metadata; original package bytes not revalidated in this environment"
+    }
+  ],
+  "referenced_private_models": [
+    {
+      "path": "assets/chests/models/harvest-keepsake.glb",
+      "role": "chest-base",
+      "source_id": "poly-style-fantasy-chest",
+      "geometry_family_id": "batata-treasure-chest-4a",
+      "name": "Harvest Keepsake",
+      "status": "existing-private-build-input-reference-only",
+      "output_sha256": "ca526de26b5c8b0483b981c7fd6b9dc0a91fc245c01bcc4647c21a16195198ec",
+      "output_bytes": 1167920,
+      "geometry": {
+        "mesh_count": 2,
+        "primitive_count": 8,
+        "vertex_count": 27549,
+        "triangle_count": 46068,
+        "primitive_spatial_ranks": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      },
+      "animation": {
+        "authorship": "game-authored-existing-conversion",
+        "opening_support": "separate-lid-existing-game-clip",
+        "lid_node": "Lid",
+        "skin_count": 0,
+        "clips": [
+          {
+            "name": "Open",
+            "time_min": 0.0,
+            "time_max": 1.0,
+            "duration_seconds": 1.0,
+            "channel_count": 1,
+            "target_nodes": [
+              "Lid"
+            ],
+            "properties": [
+              "rotation"
+            ]
+          }
+        ]
+      },
+      "license": "Unity Asset Store Standard EULA; existing private build input, not copied into the CC0 catalog",
+      "provenance": "assets/chests/downloaded/manifest.json",
+      "source_geometry_and_motion_note": "Existing converted source geometry/material adaptations, with a game-authored continuous Open take. This is not a new source-authored clip. Original source package availability is not required by metadata tests."
+    },
+    {
+      "path": "assets/chests/models/lagoon-pearl.glb",
+      "role": "chest-base",
+      "source_id": "poly-style-fantasy-chest",
+      "geometry_family_id": "batata-treasure-chest-1a",
+      "name": "Lagoon Pearl",
+      "status": "existing-private-build-input-reference-only",
+      "output_sha256": "47ef7a9a1a6a131b2039465ab3f09d01d59de609f8875ff07341b1e6fa683ed9",
+      "output_bytes": 708056,
+      "geometry": {
+        "mesh_count": 2,
+        "primitive_count": 12,
+        "vertex_count": 16773,
+        "triangle_count": 26354,
+        "primitive_spatial_ranks": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      },
+      "animation": {
+        "authorship": "game-authored-existing-conversion",
+        "opening_support": "separate-lid-existing-game-clip",
+        "lid_node": "Lid",
+        "skin_count": 0,
+        "clips": [
+          {
+            "name": "Open",
+            "time_min": 0.0,
+            "time_max": 1.0,
+            "duration_seconds": 1.0,
+            "channel_count": 1,
+            "target_nodes": [
+              "Lid"
+            ],
+            "properties": [
+              "rotation"
+            ]
+          }
+        ]
+      },
+      "license": "Unity Asset Store Standard EULA; existing private build input, not copied into the CC0 catalog",
+      "provenance": "assets/chests/downloaded/manifest.json",
+      "source_geometry_and_motion_note": "Existing converted source geometry/material adaptations, with a game-authored continuous Open take. This is not a new source-authored clip. Original source package availability is not required by metadata tests."
+    },
+    {
+      "path": "assets/chests/models/moonstone-vault.glb",
+      "role": "chest-base",
+      "source_id": "stylized-chests",
+      "geometry_family_id": "bobardo-epic-chest",
+      "name": "Moonstone Vault",
+      "status": "existing-private-build-input-reference-only",
+      "output_sha256": "59d7111f5ed48daceb8ecfaa78d32275a441c4d22a9a181136d22bd2025a0911",
+      "output_bytes": 400140,
+      "geometry": {
+        "mesh_count": 2,
+        "primitive_count": 3,
+        "vertex_count": 7011,
+        "triangle_count": 10180,
+        "primitive_spatial_ranks": [
+          3,
+          3,
+          3
+        ]
+      },
+      "animation": {
+        "authorship": "game-authored-existing-conversion",
+        "opening_support": "separate-lid-existing-game-clip",
+        "lid_node": "Lid",
+        "skin_count": 0,
+        "clips": [
+          {
+            "name": "Open",
+            "time_min": 0.0,
+            "time_max": 1.0,
+            "duration_seconds": 1.0,
+            "channel_count": 1,
+            "target_nodes": [
+              "Lid"
+            ],
+            "properties": [
+              "translation"
+            ]
+          }
+        ]
+      },
+      "license": "Unity Asset Store Standard EULA; existing private build input, not copied into the CC0 catalog",
+      "provenance": "assets/chests/downloaded/manifest.json",
+      "source_geometry_and_motion_note": "Existing converted source geometry/material adaptations, with a game-authored continuous Open take. This is not a new source-authored clip. Original source package availability is not required by metadata tests."
+    },
+    {
+      "path": "assets/chests/models/meadow-explorer.glb",
+      "role": "chest-base",
+      "source_id": "low-poly-chest-animated",
+      "geometry_family_id": "ekrem-chest-animated",
+      "name": "Meadow Explorer",
+      "status": "existing-private-build-input-reference-only",
+      "output_sha256": "91374649ef7abf27d4b8c9bece4543cbbf3be77c6ebcbecebea31b23b98b9d79",
+      "output_bytes": 666448,
+      "geometry": {
+        "mesh_count": 2,
+        "primitive_count": 6,
+        "vertex_count": 15469,
+        "triangle_count": 27274,
+        "primitive_spatial_ranks": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      },
+      "animation": {
+        "authorship": "game-authored-existing-conversion",
+        "opening_support": "separate-lid-existing-game-clip",
+        "lid_node": "Lid",
+        "skin_count": 0,
+        "clips": [
+          {
+            "name": "Open",
+            "time_min": 0.0,
+            "time_max": 1.0,
+            "duration_seconds": 1.0,
+            "channel_count": 1,
+            "target_nodes": [
+              "Lid"
+            ],
+            "properties": [
+              "rotation"
+            ]
+          }
+        ]
+      },
+      "license": "Unity Asset Store Standard EULA; existing private build input, not copied into the CC0 catalog",
+      "provenance": "assets/chests/downloaded/manifest.json",
+      "source_geometry_and_motion_note": "Existing converted source geometry/material adaptations, with a game-authored continuous Open take. This is not a new source-authored clip. Original source package availability is not required by metadata tests."
+    },
+    {
+      "path": "assets/chests/models/strawberry-bonbon.glb",
+      "role": "chest-base",
+      "source_id": "poly-style-fantasy-chest",
+      "geometry_family_id": "batata-treasure-chest-2a",
+      "name": "Strawberry Bonbon",
+      "status": "existing-private-build-input-reference-only",
+      "output_sha256": "84bad846f896ce74c8af17b790be5f928630ca3444566ef103c9d454cde5f96c",
+      "output_bytes": 619736,
+      "geometry": {
+        "mesh_count": 2,
+        "primitive_count": 13,
+        "vertex_count": 14407,
+        "triangle_count": 24078,
+        "primitive_spatial_ranks": [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      },
+      "animation": {
+        "authorship": "game-authored-existing-conversion",
+        "opening_support": "separate-lid-existing-game-clip",
+        "lid_node": "Lid",
+        "skin_count": 0,
+        "clips": [
+          {
+            "name": "Open",
+            "time_min": 0.0,
+            "time_max": 1.0,
+            "duration_seconds": 1.0,
+            "channel_count": 1,
+            "target_nodes": [
+              "Lid"
+            ],
+            "properties": [
+              "rotation"
+            ]
+          }
+        ]
+      },
+      "license": "Unity Asset Store Standard EULA; existing private build input, not copied into the CC0 catalog",
+      "provenance": "assets/chests/downloaded/manifest.json",
+      "source_geometry_and_motion_note": "Existing converted source geometry/material adaptations, with a game-authored continuous Open take. This is not a new source-authored clip. Original source package availability is not required by metadata tests."
+    }
+  ]
+}

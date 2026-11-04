@@ -4,7 +4,7 @@ const Tap = preload("res://scripts/jelly_chest_tap.gd")
 const Jelly = preload("res://scripts/jelly_match.gd")
 const WordJellyView = preload("res://scripts/word_jelly.gd")
 const Data = preload("res://scripts/game_data.gd")
-const CHEST = preload("res://assets/chests/energy/closed.png")
+const CHEST = preload("res://assets/chests/sprites/energy/closed.png")
 
 var checks: int = 0
 var failures: int = 0

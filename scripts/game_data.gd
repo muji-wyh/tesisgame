@@ -375,7 +375,7 @@ func load_all() -> bool:
 			if ResourceLoader.exists("res://" + reviewed_image):
 				word.image = reviewed_image
 				word.art_key = "lv3/" + str(word.id)
-	value = _read_json("res://assets/chests/manifest.json")
+	value = _read_json("res://assets/chests/catalog/sprites.json")
 	if not error.is_empty():
 		return false
 	if not value is Dictionary or value.get("version") != 1:
@@ -405,7 +405,7 @@ func load_all() -> bool:
 		if not ResourceLoader.exists("res://" + path):
 			error = "Could not load chest artwork. Please rebuild the game."
 			return false
-	var downloaded: Variant = _read_json("res://assets/chests/downloaded/manifest.json")
+	var downloaded: Variant = _read_json("res://assets/chests/catalog/licensed-models.json")
 	if not error.is_empty():
 		return false
 	if not downloaded is Dictionary or downloaded.get("version") != 2 or not downloaded.get("styles") is Dictionary:
@@ -417,7 +417,7 @@ func load_all() -> bool:
 			error = "An animated chest model is missing."
 			return false
 		var path: String = style.model
-		if not path.begins_with("assets/chests/models/") or not path.ends_with(".glb") or path.contains("..") or path.contains("\\"):
+		if not path.begins_with("assets/chests/models/licensed/") or not path.ends_with(".glb") or path.contains("..") or path.contains("\\"):
 			error = "An animated chest model path is invalid."
 			return false
 		if not ResourceLoader.exists("res://" + path):

@@ -1,0 +1,5422 @@
+{
+  "version": 1,
+  "collection": "Treasure Atelier",
+  "license": "CC0-1.0",
+  "runtime_manifest_version": 1,
+  "authoring_manifest_version": 1,
+  "authoring_revision": 3,
+  "runtime_manifest_sha256": "57d91ef256b5ff61f243ad7e3c53d30be42b44998f3d025186dce747d5b0327c",
+  "authoring_manifest_sha256": "50f23c6afc4211c1c8cb8c09145286bc4ba6fae21625c99801924f72815f70a2",
+  "publication_status": "published-asset-library",
+  "catalog_selection": "not-selected",
+  "runtime_status": "native-verified",
+  "native_validation": {
+    "status": "passed",
+    "passed": true,
+    "report": "../sources/atelier/validation/native-godot-report.json",
+    "report_sha256": "d3b09aac55205389b611a78f9f0a39c3b4f21276e76cfc5085915ef8c8eba12a",
+    "checks": 1296,
+    "godot": "4.7.2-stable (official)",
+    "display": "Windows",
+    "rendering_method": "gl_compatibility",
+    "scope": "Exact-byte native import, structural checks and graphics readback; physical phone performance is separate",
+    "issues": []
+  },
+  "model_bytes": 18986876,
+  "source_model_bytes": 27013324,
+  "renderer": "Godot 4.7 GL Compatibility / Web",
+  "optimization": "Reduced hardware and loot; single-UV baked standard PBR; color512/normal1024/ORM512/loot256; localized emission512 where present",
+  "models": [
+    {
+      "id": "royal-rose",
+      "name": "Royal Rose",
+      "revision": 2,
+      "model": "assets/chests/models/atelier/royal-rose/royal-rose.glb",
+      "resource": "res://assets/chests/models/atelier/royal-rose/royal-rose.glb",
+      "bytes": 1237636,
+      "sha256": "e79297c282c23b201ce5b2b6a811145f63dd824a3deb7823d965d20af34fe067",
+      "triangles": 13123,
+      "mesh_resources": 3,
+      "mesh_instances": 3,
+      "primitives": 3,
+      "vertices": 17599,
+      "materials": 2,
+      "images": [
+        {
+          "name": "normal",
+          "mime_type": "image/png",
+          "size": [
+            1024,
+            1024
+          ],
+          "bytes": 241240,
+          "sha256": "41b911872d84a69661b41c995e0f1fad6d3e44c5d7b29f3c1c9245e2da302405"
+        },
+        {
+          "name": "color",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 194612,
+          "sha256": "8e3bfd864f4f767f5285e00b2f0cd0179d57c5b3f03ce58c827ad176a60de7ec"
+        },
+        {
+          "name": "orm",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 144914,
+          "sha256": "f0b474ea646d15a4407ca6c124471614fada492440ad2237a9938330cbc4a0f7"
+        },
+        {
+          "name": "dungeon_texture",
+          "mime_type": "image/png",
+          "size": [
+            256,
+            256
+          ],
+          "bytes": 8301,
+          "sha256": "a3999e53408e7a1aaeefdbe36b4c111ca84fdfd16148b8b744e6e9a2a40ba826"
+        }
+      ],
+      "animations": [
+        {
+          "name": "Open",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        },
+        {
+          "name": "Close",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        }
+      ],
+      "nodes": {
+        "root": "ChestRoot",
+        "body": "Body",
+        "lid_pivot": "Lid",
+        "lid": "LidShell",
+        "treasure": "Treasure"
+      },
+      "coordinate_system": {
+        "up": "+Y",
+        "front": "+Z",
+        "right": "+X",
+        "source_shell_width": 2.0,
+        "feet_y": 0.0
+      },
+      "closed_bounds_3d": {
+        "min": [
+          -1.1088517904281616,
+          0.0,
+          -1.061177134513855
+        ],
+        "max": [
+          1.1088517904281616,
+          1.8271660804748535,
+          1.1285187005996704
+        ]
+      },
+      "opened_bounds_3d": {
+        "min": [
+          -1.1088517904281616,
+          0.0,
+          -2.1241278648376465
+        ],
+        "max": [
+          1.1088517904281616,
+          2.6073834896087646,
+          1.1285187005996704
+        ]
+      },
+      "bounds_transform": "Blender (x,y,z) -> glTF/Godot (x,z,-y)",
+      "style": {
+        "model": "assets/chests/models/atelier/royal-rose/royal-rose.glb",
+        "open_animation": "Open",
+        "open_start": 0.0,
+        "open_end": 1.0,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1.0
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.1088517904281616,
+            0.0,
+            -1.061177134513855
+          ],
+          "max": [
+            1.1088517904281616,
+            1.8271660804748535,
+            1.1285187005996704
+          ]
+        }
+      },
+      "license": "CC0-1.0",
+      "source": {
+        "creator": "Kenney",
+        "title": "Platformer Kit",
+        "url": "https://kenney.nl/assets/platformer-kit",
+        "license": "CC0-1.0"
+      },
+      "source_inputs": [
+        {
+          "source_id": "kenney-platformer",
+          "creator": "Kenney",
+          "url": "https://kenney.nl/assets/platformer-kit",
+          "role": "Original production body and separate lid",
+          "collection_source": "sources/kenney-platformer/chest.glb",
+          "original_source_sha256": "ba92d21be71649e608de4c76859f04e83308efc699508b2ddb1221678102e274",
+          "bytes": 28012,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kenney-platformer-LICENSE.txt"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "creator": "Kay Lousberg",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+          "role": "Treasure pile",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+          "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+          "bytes": 63996,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "creator": "Kay Lousberg",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+          "role": "Treasure stack",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+          "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+          "bytes": 38404,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt"
+        },
+        {
+          "source_id": "kenney-platformer",
+          "creator": "Kenney",
+          "url": "https://kenney.nl/assets/platformer-kit",
+          "role": "Ruby or aquamarine fittings",
+          "collection_source": "sources/kenney-platformer/jewel.glb",
+          "original_source_sha256": "cec20d8ae2678c292b3885aaee468ba39d165a7e2043af5ba8102b6cd974c2c3",
+          "bytes": 3580,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kenney-platformer-LICENSE.txt"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "creator": "Kay Lousberg",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+          "role": "Extracted genuine keyhole escutcheon and receiver",
+          "collection_source": "sources/kaykit-dungeon/chest.glb",
+          "original_source_sha256": "f72fd2201cd42ad399928a0b7bcc34d5b0e6d0624aeaf824fef81852109955f8",
+          "bytes": 81412,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt"
+        }
+      ],
+      "collection": "Fantasy",
+      "authoring_glb_sha256": "38877d4df4da5fec2662ce487131594676ba623c920cd5e1148bf3fbae6b5ab0",
+      "original_base_sha256": "ba92d21be71649e608de4c76859f04e83308efc699508b2ddb1221678102e274",
+      "authored_changes": [
+        "Secondary UV wood/enamel normal finishing",
+        "Source base-color atlases and UVs preserved",
+        "Scored board joints and fine brushed-metal normal maps",
+        "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+        "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+        "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+        "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+        "Theme-specific crafted trim: royal-rose."
+      ],
+      "runtime_source_record": {
+        "id": "royal-rose",
+        "source_glb_sha256": "38877d4df4da5fec2662ce487131594676ba623c920cd5e1148bf3fbae6b5ab0",
+        "source_triangles": 36872,
+        "triangles": 13123,
+        "closed_bounds_blender": {
+          "min": [
+            -1.1088517904281616,
+            -1.1285187005996704,
+            0.0
+          ],
+          "max": [
+            1.1088517904281616,
+            1.061177134513855,
+            1.8271660804748535
+          ]
+        },
+        "opened_bounds_blender": {
+          "min": [
+            -1.1088517904281616,
+            -1.1285187005996704,
+            0.0
+          ],
+          "max": [
+            1.1088517904281616,
+            2.1241278648376465,
+            2.6073834896087646
+          ]
+        },
+        "settings": {
+          "hardware_ratio": 0.5,
+          "loot_ratio": 0.1,
+          "bake_resolution": 1024,
+          "runtime_color": 512,
+          "runtime_normal": 1024,
+          "runtime_orm": 512,
+          "loot_color": 256
+        },
+        "materials": "Single UV baked color/normal/metallic-roughness; original loot palette",
+        "animation": "Original Open and Close tracks retained at 61 samples over one second",
+        "file": "models/royal-rose.glb",
+        "bytes": 1237636,
+        "sha256": "e79297c282c23b201ce5b2b6a811145f63dd824a3deb7823d965d20af34fe067",
+        "images": [
+          {
+            "role": "normal",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              1024,
+              1024
+            ],
+            "bytes": 241240
+          },
+          {
+            "role": "color",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 194612
+          },
+          {
+            "role": "orm",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 144914
+          },
+          {
+            "role": "loot",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              256,
+              256
+            ],
+            "bytes": 8301
+          }
+        ],
+        "name": "Royal Rose",
+        "source_bytes": 1914416,
+        "source": {
+          "creator": "Kenney",
+          "title": "Platformer Kit",
+          "url": "https://kenney.nl/assets/platformer-kit",
+          "license": "CC0-1.0"
+        },
+        "saved_bytes": 676780
+      },
+      "authoring_source_record": {
+        "id": "royal-rose",
+        "name": "Royal Rose",
+        "subtitle": "ROSE ENAMEL / GILDED BRASS",
+        "description": "Chased raspberry enamel, layered gilded rails, a pierced keyhole clasp and ruby-set ring handles. A crowned double border finishes the inside of the lid.",
+        "palette": [
+          "#BC3975",
+          "#EDB950",
+          "#F35780",
+          "#451D37"
+        ],
+        "source": {
+          "creator": "Kenney",
+          "title": "Platformer Kit",
+          "url": "https://kenney.nl/assets/platformer-kit",
+          "license": "CC0-1.0"
+        },
+        "model": "assets/royal-rose/chest.glb",
+        "blend": "assets/royal-rose/chest.blend",
+        "spritesheet": "assets/royal-rose/states.png",
+        "renders": {
+          "closed": "assets/royal-rose/closed.png",
+          "open": "assets/royal-rose/open.png",
+          "treasure": "assets/royal-rose/treasure.png",
+          "magic": "assets/royal-rose/magic.png"
+        },
+        "animations": [
+          "Open",
+          "Close"
+        ],
+        "triangles": 36872,
+        "source_sha256": "ba92d21be71649e608de4c76859f04e83308efc699508b2ddb1221678102e274",
+        "sha256": "38877d4df4da5fec2662ce487131594676ba623c920cd5e1148bf3fbae6b5ab0",
+        "bytes": 1914416,
+        "dimensions": {
+          "width": 2,
+          "up": "+Y",
+          "front": "+Z"
+        },
+        "glow_color": "#FFE6A5",
+        "magic_origin": [
+          0.427229106426239,
+          0.616571307182312
+        ],
+        "source_status": "acquired-verified-converted",
+        "integration_status": "standalone-review-assets-not-game-integrated",
+        "animation_authorship": "New one-second rigid hinge Open and Close; source native clips not retained",
+        "nodes": {
+          "body": "Body",
+          "lid_pivot": "Lid",
+          "treasure": "Treasure"
+        },
+        "revision": 2,
+        "detail_notes": [
+          "Secondary UV wood/enamel normal finishing",
+          "Source base-color atlases and UVs preserved",
+          "Scored board joints and fine brushed-metal normal maps",
+          "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+          "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+          "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+          "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+          "Theme-specific crafted trim: royal-rose."
+        ],
+        "detail_objects": 2,
+        "authored_detail_pieces": 75,
+        "detail_authorship": "New fitted hardware and surface normal/roughness finishing added to acquired production shell geometry",
+        "component_sources": [
+          "components/kaykit-keyplate.glb"
+        ],
+        "magic_effect": {
+          "source": "Kenney Particle Pack 1.1",
+          "license": "CC0-1.0",
+          "layer": "assets/royal-rose/magic-fx.png",
+          "scope": "PNG composite; not baked into GLB",
+          "sprites": [
+            "light_01.png",
+            "star_04.png"
+          ]
+        }
+      }
+    },
+    {
+      "id": "moonbound",
+      "name": "Moonbound",
+      "revision": 2,
+      "model": "assets/chests/models/atelier/moonbound/moonbound.glb",
+      "resource": "res://assets/chests/models/atelier/moonbound/moonbound.glb",
+      "bytes": 1295512,
+      "sha256": "caabad89ceb5ced45f51a9bf1a929b19ff506208bde851e2c4ad41bfa7cde73b",
+      "triangles": 13077,
+      "mesh_resources": 3,
+      "mesh_instances": 3,
+      "primitives": 3,
+      "vertices": 18536,
+      "materials": 2,
+      "images": [
+        {
+          "name": "normal",
+          "mime_type": "image/png",
+          "size": [
+            1024,
+            1024
+          ],
+          "bytes": 265045,
+          "sha256": "b4ae84799239e6d843724b0d114540c9dd8ab938b73c4c2c433329d7fe84793d"
+        },
+        {
+          "name": "color",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 197111,
+          "sha256": "e93622aaaf8724be997ef7731135f7900814ced0034c74754235eb08ac0d44df"
+        },
+        {
+          "name": "orm",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 146769,
+          "sha256": "76ea02e75dec886b2075359db116bee75692a31e0768fd12a99f6fb7a351df86"
+        },
+        {
+          "name": "dungeon_texture",
+          "mime_type": "image/png",
+          "size": [
+            256,
+            256
+          ],
+          "bytes": 8301,
+          "sha256": "a3999e53408e7a1aaeefdbe36b4c111ca84fdfd16148b8b744e6e9a2a40ba826"
+        }
+      ],
+      "animations": [
+        {
+          "name": "Open",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        },
+        {
+          "name": "Close",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        }
+      ],
+      "nodes": {
+        "root": "ChestRoot",
+        "body": "Body",
+        "lid_pivot": "Lid",
+        "lid": "LidShell",
+        "treasure": "Treasure"
+      },
+      "coordinate_system": {
+        "up": "+Y",
+        "front": "+Z",
+        "right": "+X",
+        "source_shell_width": 2.0,
+        "feet_y": 0.0
+      },
+      "closed_bounds_3d": {
+        "min": [
+          -1.0597866773605347,
+          0.0,
+          -1.061177134513855
+        ],
+        "max": [
+          1.0597866773605347,
+          1.8271660804748535,
+          1.130510687828064
+        ]
+      },
+      "opened_bounds_3d": {
+        "min": [
+          -1.0597866773605347,
+          0.0,
+          -2.1241278648376465
+        ],
+        "max": [
+          1.0597866773605347,
+          2.6073834896087646,
+          1.130510687828064
+        ]
+      },
+      "bounds_transform": "Blender (x,y,z) -> glTF/Godot (x,z,-y)",
+      "style": {
+        "model": "assets/chests/models/atelier/moonbound/moonbound.glb",
+        "open_animation": "Open",
+        "open_start": 0.0,
+        "open_end": 1.0,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1.0
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0597866773605347,
+            0.0,
+            -1.061177134513855
+          ],
+          "max": [
+            1.0597866773605347,
+            1.8271660804748535,
+            1.130510687828064
+          ]
+        }
+      },
+      "license": "CC0-1.0",
+      "source": {
+        "creator": "Kenney",
+        "title": "Mini Dungeon",
+        "url": "https://kenney.nl/assets/mini-dungeon",
+        "license": "CC0-1.0"
+      },
+      "source_inputs": [
+        {
+          "source_id": "kenney-mini-dungeon",
+          "creator": "Kenney",
+          "url": "https://kenney.nl/assets/mini-dungeon",
+          "role": "Original production body and separate lid",
+          "collection_source": "sources/kenney-mini-dungeon/chest.glb",
+          "original_source_sha256": "64cc6c44786a0833bbe53c694cbad9f10d4fdd9e99d4b5ec03fcb3b8b5dd71e0",
+          "bytes": 34048,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kenney-mini-dungeon-LICENSE.txt"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "creator": "Kay Lousberg",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+          "role": "Treasure pile",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+          "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+          "bytes": 63996,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "creator": "Kay Lousberg",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+          "role": "Treasure stack",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+          "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+          "bytes": 38404,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt"
+        },
+        {
+          "source_id": "kenney-tower-defense",
+          "creator": "Kenney",
+          "url": "https://kenney.nl/assets/tower-defense-kit",
+          "role": "Side amethyst fittings",
+          "collection_source": "sources/kenney-tower-defense/detail-crystal.glb",
+          "original_source_sha256": "51c49ba3c9bafacbcee120132c2234dcd7093ba8feec27fb3ac596ca35a27a19",
+          "bytes": 8996,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kenney-tower-defense-LICENSE.txt"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "creator": "Kay Lousberg",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+          "role": "Extracted genuine keyhole escutcheon and receiver",
+          "collection_source": "sources/kaykit-dungeon/chest.glb",
+          "original_source_sha256": "f72fd2201cd42ad399928a0b7bcc34d5b0e6d0624aeaf824fef81852109955f8",
+          "bytes": 81412,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt"
+        }
+      ],
+      "collection": "Fantasy",
+      "authoring_glb_sha256": "19364c91291886cbb74969254f5c594749fd779b39c1d089339e74399206b889",
+      "original_base_sha256": "64cc6c44786a0833bbe53c694cbad9f10d4fdd9e99d4b5ec03fcb3b8b5dd71e0",
+      "authored_changes": [
+        "Secondary UV wood/enamel normal finishing",
+        "Source base-color atlases and UVs preserved",
+        "Scored board joints and fine brushed-metal normal maps",
+        "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+        "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+        "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+        "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+        "Theme-specific crafted trim: moonbound."
+      ],
+      "runtime_source_record": {
+        "id": "moonbound",
+        "source_glb_sha256": "19364c91291886cbb74969254f5c594749fd779b39c1d089339e74399206b889",
+        "source_triangles": 36748,
+        "triangles": 13077,
+        "closed_bounds_blender": {
+          "min": [
+            -1.0597866773605347,
+            -1.130510687828064,
+            0.0
+          ],
+          "max": [
+            1.0597866773605347,
+            1.061177134513855,
+            1.8271660804748535
+          ]
+        },
+        "opened_bounds_blender": {
+          "min": [
+            -1.0597866773605347,
+            -1.130510687828064,
+            0.0
+          ],
+          "max": [
+            1.0597866773605347,
+            2.1241278648376465,
+            2.6073834896087646
+          ]
+        },
+        "settings": {
+          "hardware_ratio": 0.5,
+          "loot_ratio": 0.1,
+          "bake_resolution": 1024,
+          "runtime_color": 512,
+          "runtime_normal": 1024,
+          "runtime_orm": 512,
+          "loot_color": 256
+        },
+        "materials": "Single UV baked color/normal/metallic-roughness; original loot palette",
+        "animation": "Original Open and Close tracks retained at 61 samples over one second",
+        "file": "models/moonbound.glb",
+        "bytes": 1295512,
+        "sha256": "caabad89ceb5ced45f51a9bf1a929b19ff506208bde851e2c4ad41bfa7cde73b",
+        "images": [
+          {
+            "role": "normal",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              1024,
+              1024
+            ],
+            "bytes": 265045
+          },
+          {
+            "role": "color",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 197111
+          },
+          {
+            "role": "orm",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 146769
+          },
+          {
+            "role": "loot",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              256,
+              256
+            ],
+            "bytes": 8301
+          }
+        ],
+        "name": "Moonbound",
+        "source_bytes": 2562508,
+        "source": {
+          "creator": "Kenney",
+          "title": "Mini Dungeon",
+          "url": "https://kenney.nl/assets/mini-dungeon",
+          "license": "CC0-1.0"
+        },
+        "saved_bytes": 1266996
+      },
+      "authoring_source_record": {
+        "id": "moonbound",
+        "name": "Moonbound",
+        "subtitle": "VIOLET WOOD / MOON SILVER",
+        "description": "Scored violet timber, segmented moon-silver collars, rolled handles and a deep keyhole clasp. A crescent and amethyst mark the framed inner lid.",
+        "palette": [
+          "#55327B",
+          "#A9BCD9",
+          "#A98BF2",
+          "#251A3E"
+        ],
+        "source": {
+          "creator": "Kenney",
+          "title": "Mini Dungeon",
+          "url": "https://kenney.nl/assets/mini-dungeon",
+          "license": "CC0-1.0"
+        },
+        "model": "assets/moonbound/chest.glb",
+        "blend": "assets/moonbound/chest.blend",
+        "spritesheet": "assets/moonbound/states.png",
+        "renders": {
+          "closed": "assets/moonbound/closed.png",
+          "open": "assets/moonbound/open.png",
+          "treasure": "assets/moonbound/treasure.png",
+          "magic": "assets/moonbound/magic.png"
+        },
+        "animations": [
+          "Open",
+          "Close"
+        ],
+        "triangles": 36748,
+        "source_sha256": "64cc6c44786a0833bbe53c694cbad9f10d4fdd9e99d4b5ec03fcb3b8b5dd71e0",
+        "sha256": "19364c91291886cbb74969254f5c594749fd779b39c1d089339e74399206b889",
+        "bytes": 2562508,
+        "dimensions": {
+          "width": 2,
+          "up": "+Y",
+          "front": "+Z"
+        },
+        "glow_color": "#E6BCFF",
+        "magic_origin": [
+          0.4335903227329254,
+          0.6155423521995544
+        ],
+        "source_status": "acquired-verified-converted",
+        "integration_status": "standalone-review-assets-not-game-integrated",
+        "animation_authorship": "New one-second rigid hinge Open and Close; source native clips not retained",
+        "nodes": {
+          "body": "Body",
+          "lid_pivot": "Lid",
+          "treasure": "Treasure"
+        },
+        "revision": 2,
+        "detail_notes": [
+          "Secondary UV wood/enamel normal finishing",
+          "Source base-color atlases and UVs preserved",
+          "Scored board joints and fine brushed-metal normal maps",
+          "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+          "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+          "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+          "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+          "Theme-specific crafted trim: moonbound."
+        ],
+        "detail_objects": 2,
+        "authored_detail_pieces": 78,
+        "detail_authorship": "New fitted hardware and surface normal/roughness finishing added to acquired production shell geometry",
+        "component_sources": [
+          "components/kaykit-keyplate.glb"
+        ],
+        "magic_effect": {
+          "source": "Kenney Particle Pack 1.1",
+          "license": "CC0-1.0",
+          "layer": "assets/moonbound/magic-fx.png",
+          "scope": "PNG composite; not baked into GLB",
+          "sprites": [
+            "light_01.png",
+            "star_04.png"
+          ]
+        }
+      }
+    },
+    {
+      "id": "sunward",
+      "name": "Sunward",
+      "revision": 2,
+      "model": "assets/chests/models/atelier/sunward/sunward.glb",
+      "resource": "res://assets/chests/models/atelier/sunward/sunward.glb",
+      "bytes": 1294424,
+      "sha256": "a497d6ce1e1b04c9015032f4c9d6f3a28644a272d264a9052e3203ce555b5543",
+      "triangles": 12986,
+      "mesh_resources": 3,
+      "mesh_instances": 3,
+      "primitives": 3,
+      "vertices": 18975,
+      "materials": 2,
+      "images": [
+        {
+          "name": "normal",
+          "mime_type": "image/png",
+          "size": [
+            1024,
+            1024
+          ],
+          "bytes": 299725,
+          "sha256": "2edb6fe1b3ca83fcd5d100904ca5d62c376d3164a852c7f215bf80cb61adcfa8"
+        },
+        {
+          "name": "color",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 157050,
+          "sha256": "4cf27ba5b43e60e7d55edb3a07a75f3fead4d88f64c22b35a5506ee2f47fc5ae"
+        },
+        {
+          "name": "orm",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 137498,
+          "sha256": "c5fafd588f367b644571b304ed01ac7f1238de2ef8805add1d6e9f7e0e05200c"
+        },
+        {
+          "name": "dungeon_texture",
+          "mime_type": "image/png",
+          "size": [
+            256,
+            256
+          ],
+          "bytes": 8301,
+          "sha256": "a3999e53408e7a1aaeefdbe36b4c111ca84fdfd16148b8b744e6e9a2a40ba826"
+        }
+      ],
+      "animations": [
+        {
+          "name": "Open",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        },
+        {
+          "name": "Close",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        }
+      ],
+      "nodes": {
+        "root": "ChestRoot",
+        "body": "Body",
+        "lid_pivot": "Lid",
+        "lid": "LidShell",
+        "treasure": "Treasure"
+      },
+      "coordinate_system": {
+        "up": "+Y",
+        "front": "+Z",
+        "right": "+X",
+        "source_shell_width": 2.0,
+        "feet_y": 0.0
+      },
+      "closed_bounds_3d": {
+        "min": [
+          -1.0000001192092896,
+          0.0,
+          -1.0937646627426147
+        ],
+        "max": [
+          1.0000001192092896,
+          2.002803325653076,
+          1.1751537322998047
+        ]
+      },
+      "opened_bounds_3d": {
+        "min": [
+          -1.0000001192092896,
+          0.0,
+          -2.210378885269165
+        ],
+        "max": [
+          1.0000001192092896,
+          2.961702823638916,
+          1.1751537322998047
+        ]
+      },
+      "bounds_transform": "Blender (x,y,z) -> glTF/Godot (x,z,-y)",
+      "style": {
+        "model": "assets/chests/models/atelier/sunward/sunward.glb",
+        "open_animation": "Open",
+        "open_start": 0.0,
+        "open_end": 1.0,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1.0
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0000001192092896,
+            0.0,
+            -1.0937646627426147
+          ],
+          "max": [
+            1.0000001192092896,
+            2.002803325653076,
+            1.1751537322998047
+          ]
+        }
+      },
+      "license": "CC0-1.0",
+      "source": {
+        "creator": "Kenney",
+        "title": "Survival Kit",
+        "url": "https://kenney.nl/assets/survival-kit",
+        "license": "CC0-1.0"
+      },
+      "source_inputs": [
+        {
+          "source_id": "kenney-survival",
+          "creator": "Kenney",
+          "url": "https://kenney.nl/assets/survival-kit",
+          "role": "Original production body and separate lid",
+          "collection_source": "sources/kenney-survival/chest.glb",
+          "original_source_sha256": "84b03023e425cc1f96c6d0b0f352608be9e8e01b112790e6b00b8651bf84379b",
+          "bytes": 35172,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kenney-survival-LICENSE.txt"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "creator": "Kay Lousberg",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+          "role": "Treasure pile",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+          "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+          "bytes": 63996,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "creator": "Kay Lousberg",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+          "role": "Treasure stack",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+          "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+          "bytes": 38404,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "creator": "Kay Lousberg",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+          "role": "Extracted genuine keyhole escutcheon and receiver",
+          "collection_source": "sources/kaykit-dungeon/chest.glb",
+          "original_source_sha256": "f72fd2201cd42ad399928a0b7bcc34d5b0e6d0624aeaf824fef81852109955f8",
+          "bytes": 81412,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt"
+        }
+      ],
+      "collection": "Fantasy",
+      "authoring_glb_sha256": "ada71e3be30b6f692a53453898a99810f4309811ecc1ead9341eeeb158a8a1d8",
+      "original_base_sha256": "84b03023e425cc1f96c6d0b0f352608be9e8e01b112790e6b00b8651bf84379b",
+      "authored_changes": [
+        "Secondary UV wood/enamel normal finishing",
+        "Source base-color atlases and UVs preserved",
+        "Scored board joints and fine brushed-metal normal maps",
+        "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+        "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+        "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+        "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+        "Theme-specific crafted trim: sunward."
+      ],
+      "runtime_source_record": {
+        "id": "sunward",
+        "source_glb_sha256": "ada71e3be30b6f692a53453898a99810f4309811ecc1ead9341eeeb158a8a1d8",
+        "source_triangles": 36241,
+        "triangles": 12986,
+        "closed_bounds_blender": {
+          "min": [
+            -1.0000001192092896,
+            -1.1751537322998047,
+            -1.6392746715609974e-07
+          ],
+          "max": [
+            1.0000001192092896,
+            1.0937646627426147,
+            2.002803325653076
+          ]
+        },
+        "opened_bounds_blender": {
+          "min": [
+            -1.0000001192092896,
+            -1.1751537322998047,
+            -1.6392746715609974e-07
+          ],
+          "max": [
+            1.0000001192092896,
+            2.210378885269165,
+            2.961702823638916
+          ]
+        },
+        "settings": {
+          "hardware_ratio": 0.5,
+          "loot_ratio": 0.1,
+          "bake_resolution": 1024,
+          "runtime_color": 512,
+          "runtime_normal": 1024,
+          "runtime_orm": 512,
+          "loot_color": 256
+        },
+        "materials": "Single UV baked color/normal/metallic-roughness; original loot palette",
+        "animation": "Original Open and Close tracks retained at 61 samples over one second",
+        "file": "models/sunward.glb",
+        "bytes": 1294424,
+        "sha256": "a497d6ce1e1b04c9015032f4c9d6f3a28644a272d264a9052e3203ce555b5543",
+        "images": [
+          {
+            "role": "normal",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              1024,
+              1024
+            ],
+            "bytes": 299725
+          },
+          {
+            "role": "color",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 157050
+          },
+          {
+            "role": "orm",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 137498
+          },
+          {
+            "role": "loot",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              256,
+              256
+            ],
+            "bytes": 8301
+          }
+        ],
+        "name": "Sunward",
+        "source_bytes": 2570696,
+        "source": {
+          "creator": "Kenney",
+          "title": "Survival Kit",
+          "url": "https://kenney.nl/assets/survival-kit",
+          "license": "CC0-1.0"
+        },
+        "saved_bytes": 1276272
+      },
+      "authoring_source_record": {
+        "id": "sunward",
+        "name": "Sunward",
+        "subtitle": "HONEY WOOD / SUNLIT GOLD",
+        "description": "Honey timber with carved board joints, cast-gold rails, bolted ring handles and a pierced lock. A sun emblem, lined lid and exposed rear hinges finish the adventure chest.",
+        "palette": [
+          "#AE612C",
+          "#F2C34F",
+          "#FFDC70",
+          "#492618"
+        ],
+        "source": {
+          "creator": "Kenney",
+          "title": "Survival Kit",
+          "url": "https://kenney.nl/assets/survival-kit",
+          "license": "CC0-1.0"
+        },
+        "model": "assets/sunward/chest.glb",
+        "blend": "assets/sunward/chest.blend",
+        "spritesheet": "assets/sunward/states.png",
+        "renders": {
+          "closed": "assets/sunward/closed.png",
+          "open": "assets/sunward/open.png",
+          "treasure": "assets/sunward/treasure.png",
+          "magic": "assets/sunward/magic.png"
+        },
+        "animations": [
+          "Open",
+          "Close"
+        ],
+        "triangles": 36241,
+        "source_sha256": "84b03023e425cc1f96c6d0b0f352608be9e8e01b112790e6b00b8651bf84379b",
+        "sha256": "ada71e3be30b6f692a53453898a99810f4309811ecc1ead9341eeeb158a8a1d8",
+        "bytes": 2570696,
+        "dimensions": {
+          "width": 2,
+          "up": "+Y",
+          "front": "+Z"
+        },
+        "glow_color": "#FFF4B8",
+        "magic_origin": [
+          0.43387919664382935,
+          0.5468904972076416
+        ],
+        "source_status": "acquired-verified-converted",
+        "integration_status": "standalone-review-assets-not-game-integrated",
+        "animation_authorship": "New one-second rigid hinge Open and Close; source native clips not retained",
+        "nodes": {
+          "body": "Body",
+          "lid_pivot": "Lid",
+          "treasure": "Treasure"
+        },
+        "revision": 2,
+        "detail_notes": [
+          "Secondary UV wood/enamel normal finishing",
+          "Source base-color atlases and UVs preserved",
+          "Scored board joints and fine brushed-metal normal maps",
+          "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+          "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+          "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+          "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+          "Theme-specific crafted trim: sunward."
+        ],
+        "detail_objects": 2,
+        "authored_detail_pieces": 72,
+        "detail_authorship": "New fitted hardware and surface normal/roughness finishing added to acquired production shell geometry",
+        "component_sources": [
+          "components/kaykit-keyplate.glb"
+        ],
+        "magic_effect": {
+          "source": "Kenney Particle Pack 1.1",
+          "license": "CC0-1.0",
+          "layer": "assets/sunward/magic-fx.png",
+          "scope": "PNG composite; not baked into GLB",
+          "sprites": [
+            "light_01.png",
+            "star_04.png"
+          ]
+        }
+      }
+    },
+    {
+      "id": "tideguard",
+      "name": "Tideguard",
+      "revision": 2,
+      "model": "assets/chests/models/atelier/tideguard/tideguard.glb",
+      "resource": "res://assets/chests/models/atelier/tideguard/tideguard.glb",
+      "bytes": 1549360,
+      "sha256": "2f948c069d5e152150cf1e262cfd4a2aee9b3135dc52184ab3d1e3328dd6b260",
+      "triangles": 16873,
+      "mesh_resources": 3,
+      "mesh_instances": 3,
+      "primitives": 3,
+      "vertices": 20546,
+      "materials": 2,
+      "images": [
+        {
+          "name": "normal",
+          "mime_type": "image/png",
+          "size": [
+            1024,
+            1024
+          ],
+          "bytes": 378723,
+          "sha256": "dc49fca861a254491a120b939deefab15e98aad960d7d16463d7528476d430a7"
+        },
+        {
+          "name": "color",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 216838,
+          "sha256": "d713aed70528c22ed07b2221bc17db08b8b1a5b0dac225d96179d1c0b97483c4"
+        },
+        {
+          "name": "orm",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 180066,
+          "sha256": "fd65796672978afb478d61ec95d559a013d1078f74de0ba4972bc0f34b704d50"
+        },
+        {
+          "name": "dungeon_texture",
+          "mime_type": "image/png",
+          "size": [
+            256,
+            256
+          ],
+          "bytes": 8301,
+          "sha256": "a3999e53408e7a1aaeefdbe36b4c111ca84fdfd16148b8b744e6e9a2a40ba826"
+        }
+      ],
+      "animations": [
+        {
+          "name": "Open",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        },
+        {
+          "name": "Close",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        }
+      ],
+      "nodes": {
+        "root": "ChestRoot",
+        "body": "Body",
+        "lid_pivot": "Lid",
+        "lid": "LidShell",
+        "treasure": "Treasure"
+      },
+      "coordinate_system": {
+        "up": "+Y",
+        "front": "+Z",
+        "right": "+X",
+        "source_shell_width": 2.0,
+        "feet_y": 0.0
+      },
+      "closed_bounds_3d": {
+        "min": [
+          -1.0215951204299927,
+          0.0,
+          -0.8504728078842163
+        ],
+        "max": [
+          1.0212681293487549,
+          1.5570719242095947,
+          0.8504727482795715
+        ]
+      },
+      "opened_bounds_3d": {
+        "min": [
+          -1.0215951204299927,
+          0.0,
+          -1.9133912324905396
+        ],
+        "max": [
+          1.0212681293487549,
+          2.140124797821045,
+          0.8108798265457153
+        ]
+      },
+      "bounds_transform": "Blender (x,y,z) -> glTF/Godot (x,z,-y)",
+      "style": {
+        "model": "assets/chests/models/atelier/tideguard/tideguard.glb",
+        "open_animation": "Open",
+        "open_start": 0.0,
+        "open_end": 1.0,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1.0
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0215951204299927,
+            0.0,
+            -0.8504728078842163
+          ],
+          "max": [
+            1.0212681293487549,
+            1.5570719242095947,
+            0.8504727482795715
+          ]
+        }
+      },
+      "license": "CC0-1.0",
+      "source": {
+        "creator": "Kay Lousberg",
+        "title": "KayKit Dungeon Remastered",
+        "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+        "license": "CC0-1.0"
+      },
+      "source_inputs": [
+        {
+          "source_id": "kaykit-dungeon",
+          "creator": "Kay Lousberg",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+          "role": "Original production body and separate lid",
+          "collection_source": "sources/kaykit-dungeon/chest.glb",
+          "original_source_sha256": "f72fd2201cd42ad399928a0b7bcc34d5b0e6d0624aeaf824fef81852109955f8",
+          "bytes": 81412,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "creator": "Kay Lousberg",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+          "role": "Treasure pile",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+          "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+          "bytes": 63996,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "creator": "Kay Lousberg",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+          "role": "Treasure stack",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+          "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+          "bytes": 38404,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt"
+        },
+        {
+          "source_id": "kenney-platformer",
+          "creator": "Kenney",
+          "url": "https://kenney.nl/assets/platformer-kit",
+          "role": "Ruby or aquamarine fittings",
+          "collection_source": "sources/kenney-platformer/jewel.glb",
+          "original_source_sha256": "cec20d8ae2678c292b3885aaee468ba39d165a7e2043af5ba8102b6cd974c2c3",
+          "bytes": 3580,
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kenney-platformer-LICENSE.txt"
+        }
+      ],
+      "collection": "Fantasy",
+      "authoring_glb_sha256": "4e8a973db993719a62c60a1c103eed3cf4a75dd5761050b238f60b8f02ced523",
+      "original_base_sha256": "f72fd2201cd42ad399928a0b7bcc34d5b0e6d0624aeaf824fef81852109955f8",
+      "authored_changes": [
+        "Secondary UV wood/enamel normal finishing",
+        "Source base-color atlases and UVs preserved",
+        "Scored board joints and fine brushed-metal normal maps",
+        "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+        "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+        "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+        "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+        "Theme-specific crafted trim: tideguard."
+      ],
+      "runtime_source_record": {
+        "id": "tideguard",
+        "source_glb_sha256": "4e8a973db993719a62c60a1c103eed3cf4a75dd5761050b238f60b8f02ced523",
+        "source_triangles": 40208,
+        "triangles": 16873,
+        "closed_bounds_blender": {
+          "min": [
+            -1.0215951204299927,
+            -0.8504727482795715,
+            0.0
+          ],
+          "max": [
+            1.0212681293487549,
+            0.8504728078842163,
+            1.5570719242095947
+          ]
+        },
+        "opened_bounds_blender": {
+          "min": [
+            -1.0215951204299927,
+            -0.8108798265457153,
+            0.0
+          ],
+          "max": [
+            1.0212681293487549,
+            1.9133912324905396,
+            2.140124797821045
+          ]
+        },
+        "settings": {
+          "hardware_ratio": 0.5,
+          "loot_ratio": 0.1,
+          "bake_resolution": 1024,
+          "runtime_color": 512,
+          "runtime_normal": 1024,
+          "runtime_orm": 512,
+          "loot_color": 256
+        },
+        "materials": "Single UV baked color/normal/metallic-roughness; original loot palette",
+        "animation": "Original Open and Close tracks retained at 61 samples over one second",
+        "file": "models/tideguard.glb",
+        "bytes": 1549360,
+        "sha256": "2f948c069d5e152150cf1e262cfd4a2aee9b3135dc52184ab3d1e3328dd6b260",
+        "images": [
+          {
+            "role": "normal",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              1024,
+              1024
+            ],
+            "bytes": 378723
+          },
+          {
+            "role": "color",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 216838
+          },
+          {
+            "role": "orm",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 180066
+          },
+          {
+            "role": "loot",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              256,
+              256
+            ],
+            "bytes": 8301
+          }
+        ],
+        "name": "Tideguard",
+        "source_bytes": 2721788,
+        "source": {
+          "creator": "Kay Lousberg",
+          "title": "KayKit Dungeon Remastered",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+          "license": "CC0-1.0"
+        },
+        "saved_bytes": 1172428
+      },
+      "authoring_source_record": {
+        "id": "tideguard",
+        "name": "Tideguard",
+        "subtitle": "CORAL TIMBER / OXIDIZED TEAL",
+        "description": "Coral planks, layered teal framing, pearl-headed rivets and aquamarine hardware. Rolled side handles and a compass-lined lid bring out its seafaring character.",
+        "palette": [
+          "#A94443",
+          "#418B9B",
+          "#8CE2E5",
+          "#242C3B"
+        ],
+        "source": {
+          "creator": "Kay Lousberg",
+          "title": "KayKit Dungeon Remastered",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+          "license": "CC0-1.0"
+        },
+        "model": "assets/tideguard/chest.glb",
+        "blend": "assets/tideguard/chest.blend",
+        "spritesheet": "assets/tideguard/states.png",
+        "renders": {
+          "closed": "assets/tideguard/closed.png",
+          "open": "assets/tideguard/open.png",
+          "treasure": "assets/tideguard/treasure.png",
+          "magic": "assets/tideguard/magic.png"
+        },
+        "animations": [
+          "Open",
+          "Close"
+        ],
+        "triangles": 40208,
+        "source_sha256": "f72fd2201cd42ad399928a0b7bcc34d5b0e6d0624aeaf824fef81852109955f8",
+        "sha256": "4e8a973db993719a62c60a1c103eed3cf4a75dd5761050b238f60b8f02ced523",
+        "bytes": 2721788,
+        "dimensions": {
+          "width": 2,
+          "up": "+Y",
+          "front": "+Z"
+        },
+        "glow_color": "#C2FFD7",
+        "magic_origin": [
+          0.4179842174053192,
+          0.6061640381813049
+        ],
+        "source_status": "acquired-verified-converted",
+        "integration_status": "standalone-review-assets-not-game-integrated",
+        "animation_authorship": "New one-second rigid hinge Open and Close; source native clips not retained",
+        "nodes": {
+          "body": "Body",
+          "lid_pivot": "Lid",
+          "treasure": "Treasure"
+        },
+        "revision": 2,
+        "detail_notes": [
+          "Secondary UV wood/enamel normal finishing",
+          "Source base-color atlases and UVs preserved",
+          "Scored board joints and fine brushed-metal normal maps",
+          "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+          "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+          "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+          "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+          "Theme-specific crafted trim: tideguard."
+        ],
+        "detail_objects": 2,
+        "authored_detail_pieces": 72,
+        "detail_authorship": "New fitted hardware and surface normal/roughness finishing added to acquired production shell geometry",
+        "component_sources": [],
+        "magic_effect": {
+          "source": "Kenney Particle Pack 1.1",
+          "license": "CC0-1.0",
+          "layer": "assets/tideguard/magic-fx.png",
+          "scope": "PNG composite; not baked into GLB",
+          "sprites": [
+            "light_01.png",
+            "star_04.png"
+          ]
+        }
+      }
+    },
+    {
+      "id": "aether-vault",
+      "name": "Aether Vault",
+      "revision": 3,
+      "model": "assets/chests/models/atelier/aether-vault/aether-vault.glb",
+      "resource": "res://assets/chests/models/atelier/aether-vault/aether-vault.glb",
+      "bytes": 1650892,
+      "sha256": "2a3ebb2635dec4f3a25b11393001401635c26b36c5ef359dd78e988333627101",
+      "triangles": 19113,
+      "mesh_resources": 3,
+      "mesh_instances": 3,
+      "primitives": 3,
+      "vertices": 33590,
+      "materials": 2,
+      "images": [
+        {
+          "name": "emission",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 24010,
+          "sha256": "c1079779c61dac0c00ccf2aa738c190a6e0acf605251bacbde0ffafb87530a58"
+        },
+        {
+          "name": "normal",
+          "mime_type": "image/png",
+          "size": [
+            1024,
+            1024
+          ],
+          "bytes": 88248,
+          "sha256": "5e52a1628b593d1251a2081d7a9be70e0abf153db800a2367e9154ccc123e3c4"
+        },
+        {
+          "name": "color",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 192863,
+          "sha256": "eb8d60a99ec542a9c9c4c2d3fa0895c5f92ad7251ae51c52397af9dd2c2f94a6"
+        },
+        {
+          "name": "orm",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 140988,
+          "sha256": "cc84851ec53049466ded4b8af1bebb7b1b5977fbd529727b345a98f9a83bf475"
+        },
+        {
+          "name": "dungeon_texture",
+          "mime_type": "image/png",
+          "size": [
+            256,
+            256
+          ],
+          "bytes": 8301,
+          "sha256": "a3999e53408e7a1aaeefdbe36b4c111ca84fdfd16148b8b744e6e9a2a40ba826"
+        }
+      ],
+      "animations": [
+        {
+          "name": "Open",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        },
+        {
+          "name": "Close",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        }
+      ],
+      "nodes": {
+        "root": "ChestRoot",
+        "body": "Body",
+        "lid_pivot": "Lid",
+        "lid": "LidShell",
+        "treasure": "Treasure"
+      },
+      "coordinate_system": {
+        "up": "+Y",
+        "front": "+Z",
+        "right": "+X",
+        "source_shell_width": 2.0,
+        "feet_y": 0.0
+      },
+      "closed_bounds_3d": {
+        "min": [
+          -1.0975003242492676,
+          0.0,
+          -0.8008201122283936
+        ],
+        "max": [
+          1.0975004434585571,
+          1.6059669256210327,
+          0.9132376909255981
+        ]
+      },
+      "opened_bounds_3d": {
+        "min": [
+          -1.0975003242492676,
+          0.0,
+          -1.333308219909668
+        ],
+        "max": [
+          1.0975004434585571,
+          2.5570414066314697,
+          0.9132376909255981
+        ]
+      },
+      "bounds_transform": "Blender (x,y,z) -> glTF/Godot (x,z,-y)",
+      "style": {
+        "model": "assets/chests/models/atelier/aether-vault/aether-vault.glb",
+        "open_animation": "Open",
+        "open_start": 0.0,
+        "open_end": 1.0,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1.0
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0975003242492676,
+            0.0,
+            -0.8008201122283936
+          ],
+          "max": [
+            1.0975004434585571,
+            1.6059669256210327,
+            0.9132376909255981
+          ]
+        }
+      },
+      "license": "CC0-1.0",
+      "source": {
+        "creator": "Kenney",
+        "title": "Blaster Kit 2.1",
+        "url": "https://kenney.nl/assets/blaster-kit",
+        "license": "CC0-1.0"
+      },
+      "source_inputs": [
+        {
+          "source_id": "kenney-blaster",
+          "collection_source": "sources/expansion/kenney-blaster/crate-small.glb",
+          "original_source_sha256": "00ed47c02a5016c11ce5ea0bd54888d120f3a112c5eab79dc4bd4ab878ceb805",
+          "bytes": 59020,
+          "role": "Acquired production case body and independent lid",
+          "creator": "Kenney",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kenney-blaster-LICENSE.txt",
+          "url": "https://kenney.nl/assets/blaster-kit"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+          "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+          "bytes": 63996,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+          "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+          "bytes": 38404,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        },
+        {
+          "source_id": "kenney-platformer",
+          "collection_source": "sources/kenney-platformer/jewel.glb",
+          "original_source_sha256": "cec20d8ae2678c292b3885aaee468ba39d165a7e2043af5ba8102b6cd974c2c3",
+          "bytes": 3580,
+          "creator": "Kenney",
+          "title": "Platformer Kit",
+          "url": "https://kenney.nl/assets/platformer-kit",
+          "license": "CC0-1.0",
+          "role": "actual faceted core jewel",
+          "license_file": "../sources/atelier/licenses/kenney-platformer-LICENSE.txt"
+        }
+      ],
+      "collection": "Arcane Vaults",
+      "authoring_glb_sha256": "bb8e4429fe88d39857a7d5b58d9b9f6deeb14c22f6c7d5c1e8f5c7353458341b",
+      "original_base_sha256": "00ed47c02a5016c11ce5ea0bd54888d120f3a112c5eab79dc4bd4ab878ceb805",
+      "authored_changes": [
+        "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+        "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+        "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+        "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+        "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+        "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+        "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: vault.",
+        "Source-derived jewel facets retained and mounted in authored claws.",
+        "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+      ],
+      "runtime_source_record": {
+        "id": "aether-vault",
+        "source_glb_sha256": "bb8e4429fe88d39857a7d5b58d9b9f6deeb14c22f6c7d5c1e8f5c7353458341b",
+        "source_triangles": 45402,
+        "triangles": 19113,
+        "closed_bounds_blender": {
+          "min": [
+            -1.0975003242492676,
+            -0.9132376909255981,
+            -1.0361663527191922e-07
+          ],
+          "max": [
+            1.0975004434585571,
+            0.8008201122283936,
+            1.6059669256210327
+          ]
+        },
+        "opened_bounds_blender": {
+          "min": [
+            -1.0975003242492676,
+            -0.9132376909255981,
+            -1.0361663527191922e-07
+          ],
+          "max": [
+            1.0975004434585571,
+            1.333308219909668,
+            2.5570414066314697
+          ]
+        },
+        "settings": {
+          "hardware_ratio": 0.5,
+          "loot_ratio": 0.1,
+          "bake_resolution": 1024,
+          "runtime_color": 512,
+          "runtime_normal": 1024,
+          "runtime_orm": 512,
+          "loot_color": 256,
+          "runtime_emission": 512
+        },
+        "materials": "Single UV baked color/normal/metallic-roughness; original loot palette",
+        "animation": "Original Open and Close tracks retained at 61 samples over one second",
+        "file": "models/aether-vault.glb",
+        "bytes": 1650892,
+        "sha256": "2a3ebb2635dec4f3a25b11393001401635c26b36c5ef359dd78e988333627101",
+        "images": [
+          {
+            "role": "emission",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 24010
+          },
+          {
+            "role": "normal",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              1024,
+              1024
+            ],
+            "bytes": 88248
+          },
+          {
+            "role": "color",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 192863
+          },
+          {
+            "role": "orm",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 140988
+          },
+          {
+            "role": "loot",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              256,
+              256
+            ],
+            "bytes": 8301
+          }
+        ],
+        "name": "Aether Vault",
+        "source_bytes": 2080944,
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "saved_bytes": 430052
+      },
+      "authoring_source_record": {
+        "id": "aether-vault",
+        "name": "Aether Vault",
+        "subtitle": "IVORY CERAMIC / AMETHYST GOLD",
+        "description": "An ivory arcane case with gilded corner clamps, inset amethyst plates and a luminous faceted diamond seal.",
+        "palette": [
+          "#ECE4CE",
+          "#EDB52B",
+          "#A84FE5",
+          "#433159"
+        ],
+        "style": "vault",
+        "collection": "Arcane Vaults",
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "source_inputs": [
+          {
+            "source_id": "kenney-blaster",
+            "collection_source": "sources/expansion/kenney-blaster/crate-small.glb",
+            "original_source_sha256": "00ed47c02a5016c11ce5ea0bd54888d120f3a112c5eab79dc4bd4ab878ceb805",
+            "bytes": 59020,
+            "role": "Acquired production case body and independent lid",
+            "creator": "Kenney",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kenney-blaster-LICENSE.txt",
+            "url": "https://kenney.nl/assets/blaster-kit"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+            "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+            "bytes": 63996,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+            "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+            "bytes": 38404,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          },
+          {
+            "source_id": "kenney-platformer",
+            "collection_source": "sources/kenney-platformer/jewel.glb",
+            "original_source_sha256": "cec20d8ae2678c292b3885aaee468ba39d165a7e2043af5ba8102b6cd974c2c3",
+            "bytes": 3580,
+            "creator": "Kenney",
+            "title": "Platformer Kit",
+            "url": "https://kenney.nl/assets/platformer-kit",
+            "license": "CC0-1.0",
+            "role": "actual faceted core jewel",
+            "license_file": "licenses/kenney-platformer-LICENSE.txt"
+          }
+        ],
+        "model": "assets/aether-vault/chest.glb",
+        "blend": "assets/aether-vault/chest.blend",
+        "renders": {
+          "closed": "assets/aether-vault/closed.png",
+          "open": "assets/aether-vault/open.png",
+          "treasure": "assets/aether-vault/treasure.png",
+          "magic": "assets/aether-vault/magic.png"
+        },
+        "spritesheet": "assets/aether-vault/states.png",
+        "animations": [
+          "Open",
+          "Close"
+        ],
+        "triangles": 45402,
+        "source_sha256": "00ed47c02a5016c11ce5ea0bd54888d120f3a112c5eab79dc4bd4ab878ceb805",
+        "sha256": "bb8e4429fe88d39857a7d5b58d9b9f6deeb14c22f6c7d5c1e8f5c7353458341b",
+        "bytes": 2080944,
+        "dimensions": {
+          "width": 2,
+          "up": "+Y",
+          "front": "+Z"
+        },
+        "glow_color": "#E6BDFF",
+        "magic_origin": [
+          0.4551115036010742,
+          0.5269780457019806
+        ],
+        "revision": 3,
+        "source_status": "acquired-verified-converted",
+        "integration_status": "authoring-review-runtime-copy-tracked-separately",
+        "nodes": {
+          "body": "Body",
+          "lid_pivot": "Lid",
+          "treasure": "Treasure"
+        },
+        "animation_authorship": "New one-second Open and Close tracks; original source clips are retained only in acquired originals",
+        "detail_notes": [
+          "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+          "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+          "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+          "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+          "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+          "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+          "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: vault.",
+          "Source-derived jewel facets retained and mounted in authored claws.",
+          "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+        ],
+        "detail_objects": 139,
+        "authored_detail_pieces": 139,
+        "magic_effect": {
+          "source": "Kenney Particle Pack 1.1",
+          "license": "CC0-1.0",
+          "layer": "assets/aether-vault/magic-fx.png",
+          "scope": "PNG composite; not baked into GLB",
+          "sprites": [
+            "light_01.png",
+            "star_04.png"
+          ]
+        }
+      }
+    },
+    {
+      "id": "cobalt-vault",
+      "name": "Cobalt Vault",
+      "revision": 3,
+      "model": "assets/chests/models/atelier/cobalt-vault/cobalt-vault.glb",
+      "resource": "res://assets/chests/models/atelier/cobalt-vault/cobalt-vault.glb",
+      "bytes": 1634188,
+      "sha256": "080210d19c5d15267605c8ada6d0d8c8c26a798c0d8932dbe85d23732f3ff72d",
+      "triangles": 19113,
+      "mesh_resources": 3,
+      "mesh_instances": 3,
+      "primitives": 3,
+      "vertices": 33590,
+      "materials": 2,
+      "images": [
+        {
+          "name": "emission",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 24534,
+          "sha256": "38a18ca292ea2249ebea561005a55dab566b288f8b30e3e371b1fc665ce18d95"
+        },
+        {
+          "name": "normal",
+          "mime_type": "image/png",
+          "size": [
+            1024,
+            1024
+          ],
+          "bytes": 88232,
+          "sha256": "394a0768b818a885ef24fb7468c8c016c55d487601e077669ed9ec87d40ff185"
+        },
+        {
+          "name": "color",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 175650,
+          "sha256": "b203c1c14832d9ad26c5109df0845b83b6a2348732a20a5008f5534f0f8d2bff"
+        },
+        {
+          "name": "orm",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 140988,
+          "sha256": "cc84851ec53049466ded4b8af1bebb7b1b5977fbd529727b345a98f9a83bf475"
+        },
+        {
+          "name": "dungeon_texture",
+          "mime_type": "image/png",
+          "size": [
+            256,
+            256
+          ],
+          "bytes": 8301,
+          "sha256": "a3999e53408e7a1aaeefdbe36b4c111ca84fdfd16148b8b744e6e9a2a40ba826"
+        }
+      ],
+      "animations": [
+        {
+          "name": "Open",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        },
+        {
+          "name": "Close",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        }
+      ],
+      "nodes": {
+        "root": "ChestRoot",
+        "body": "Body",
+        "lid_pivot": "Lid",
+        "lid": "LidShell",
+        "treasure": "Treasure"
+      },
+      "coordinate_system": {
+        "up": "+Y",
+        "front": "+Z",
+        "right": "+X",
+        "source_shell_width": 2.0,
+        "feet_y": 0.0
+      },
+      "closed_bounds_3d": {
+        "min": [
+          -1.0975003242492676,
+          0.0,
+          -0.8008201122283936
+        ],
+        "max": [
+          1.0975004434585571,
+          1.6059669256210327,
+          0.9132376909255981
+        ]
+      },
+      "opened_bounds_3d": {
+        "min": [
+          -1.0975003242492676,
+          0.0,
+          -1.333308219909668
+        ],
+        "max": [
+          1.0975004434585571,
+          2.5570414066314697,
+          0.9132376909255981
+        ]
+      },
+      "bounds_transform": "Blender (x,y,z) -> glTF/Godot (x,z,-y)",
+      "style": {
+        "model": "assets/chests/models/atelier/cobalt-vault/cobalt-vault.glb",
+        "open_animation": "Open",
+        "open_start": 0.0,
+        "open_end": 1.0,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1.0
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0975003242492676,
+            0.0,
+            -0.8008201122283936
+          ],
+          "max": [
+            1.0975004434585571,
+            1.6059669256210327,
+            0.9132376909255981
+          ]
+        }
+      },
+      "license": "CC0-1.0",
+      "source": {
+        "creator": "Kenney",
+        "title": "Blaster Kit 2.1",
+        "url": "https://kenney.nl/assets/blaster-kit",
+        "license": "CC0-1.0"
+      },
+      "source_inputs": [
+        {
+          "source_id": "kenney-blaster",
+          "collection_source": "sources/expansion/kenney-blaster/crate-small.glb",
+          "original_source_sha256": "00ed47c02a5016c11ce5ea0bd54888d120f3a112c5eab79dc4bd4ab878ceb805",
+          "bytes": 59020,
+          "role": "Acquired production case body and independent lid",
+          "creator": "Kenney",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kenney-blaster-LICENSE.txt",
+          "url": "https://kenney.nl/assets/blaster-kit"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+          "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+          "bytes": 63996,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+          "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+          "bytes": 38404,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        },
+        {
+          "source_id": "kenney-platformer",
+          "collection_source": "sources/kenney-platformer/jewel.glb",
+          "original_source_sha256": "cec20d8ae2678c292b3885aaee468ba39d165a7e2043af5ba8102b6cd974c2c3",
+          "bytes": 3580,
+          "creator": "Kenney",
+          "title": "Platformer Kit",
+          "url": "https://kenney.nl/assets/platformer-kit",
+          "license": "CC0-1.0",
+          "role": "actual faceted core jewel",
+          "license_file": "../sources/atelier/licenses/kenney-platformer-LICENSE.txt"
+        }
+      ],
+      "collection": "Arcane Vaults",
+      "authoring_glb_sha256": "b8a2a7ce573585fec902dc98e5a5a6a3181603c9dcfe695d40db62d845fb0f9c",
+      "original_base_sha256": "00ed47c02a5016c11ce5ea0bd54888d120f3a112c5eab79dc4bd4ab878ceb805",
+      "authored_changes": [
+        "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+        "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+        "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+        "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+        "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+        "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+        "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: vault.",
+        "Source-derived jewel facets retained and mounted in authored claws.",
+        "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+      ],
+      "runtime_source_record": {
+        "id": "cobalt-vault",
+        "source_glb_sha256": "b8a2a7ce573585fec902dc98e5a5a6a3181603c9dcfe695d40db62d845fb0f9c",
+        "source_triangles": 45402,
+        "triangles": 19113,
+        "closed_bounds_blender": {
+          "min": [
+            -1.0975003242492676,
+            -0.9132376909255981,
+            -1.0361663527191922e-07
+          ],
+          "max": [
+            1.0975004434585571,
+            0.8008201122283936,
+            1.6059669256210327
+          ]
+        },
+        "opened_bounds_blender": {
+          "min": [
+            -1.0975003242492676,
+            -0.9132376909255981,
+            -1.0361663527191922e-07
+          ],
+          "max": [
+            1.0975004434585571,
+            1.333308219909668,
+            2.5570414066314697
+          ]
+        },
+        "settings": {
+          "hardware_ratio": 0.5,
+          "loot_ratio": 0.1,
+          "bake_resolution": 1024,
+          "runtime_color": 512,
+          "runtime_normal": 1024,
+          "runtime_orm": 512,
+          "loot_color": 256,
+          "runtime_emission": 512
+        },
+        "materials": "Single UV baked color/normal/metallic-roughness/emission; original loot palette",
+        "animation": "Original Open and Close tracks retained at 61 samples over one second",
+        "file": "models/cobalt-vault.glb",
+        "bytes": 1634188,
+        "sha256": "080210d19c5d15267605c8ada6d0d8c8c26a798c0d8932dbe85d23732f3ff72d",
+        "images": [
+          {
+            "role": "emission",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 24534
+          },
+          {
+            "role": "normal",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              1024,
+              1024
+            ],
+            "bytes": 88232
+          },
+          {
+            "role": "color",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 175650
+          },
+          {
+            "role": "orm",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 140988
+          },
+          {
+            "role": "loot",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              256,
+              256
+            ],
+            "bytes": 8301
+          }
+        ],
+        "name": "Cobalt Vault",
+        "source_bytes": 2077724,
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "saved_bytes": 443536
+      },
+      "authoring_source_record": {
+        "id": "cobalt-vault",
+        "name": "Cobalt Vault",
+        "subtitle": "OBSIDIAN ALLOY / GLACIER SILVER",
+        "description": "An obsidian vault with silver corner cages, blue glass insets and a cyan diamond held above a recessed lock bed.",
+        "palette": [
+          "#263347",
+          "#A9C6DE",
+          "#218CCD",
+          "#67E9FF"
+        ],
+        "style": "vault",
+        "collection": "Arcane Vaults",
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "source_inputs": [
+          {
+            "source_id": "kenney-blaster",
+            "collection_source": "sources/expansion/kenney-blaster/crate-small.glb",
+            "original_source_sha256": "00ed47c02a5016c11ce5ea0bd54888d120f3a112c5eab79dc4bd4ab878ceb805",
+            "bytes": 59020,
+            "role": "Acquired production case body and independent lid",
+            "creator": "Kenney",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kenney-blaster-LICENSE.txt",
+            "url": "https://kenney.nl/assets/blaster-kit"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+            "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+            "bytes": 63996,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+            "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+            "bytes": 38404,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          },
+          {
+            "source_id": "kenney-platformer",
+            "collection_source": "sources/kenney-platformer/jewel.glb",
+            "original_source_sha256": "cec20d8ae2678c292b3885aaee468ba39d165a7e2043af5ba8102b6cd974c2c3",
+            "bytes": 3580,
+            "creator": "Kenney",
+            "title": "Platformer Kit",
+            "url": "https://kenney.nl/assets/platformer-kit",
+            "license": "CC0-1.0",
+            "role": "actual faceted core jewel",
+            "license_file": "licenses/kenney-platformer-LICENSE.txt"
+          }
+        ],
+        "model": "assets/cobalt-vault/chest.glb",
+        "blend": "assets/cobalt-vault/chest.blend",
+        "renders": {
+          "closed": "assets/cobalt-vault/closed.png",
+          "open": "assets/cobalt-vault/open.png",
+          "treasure": "assets/cobalt-vault/treasure.png",
+          "magic": "assets/cobalt-vault/magic.png"
+        },
+        "spritesheet": "assets/cobalt-vault/states.png",
+        "animations": [
+          "Open",
+          "Close"
+        ],
+        "triangles": 45402,
+        "source_sha256": "00ed47c02a5016c11ce5ea0bd54888d120f3a112c5eab79dc4bd4ab878ceb805",
+        "sha256": "b8a2a7ce573585fec902dc98e5a5a6a3181603c9dcfe695d40db62d845fb0f9c",
+        "bytes": 2077724,
+        "dimensions": {
+          "width": 2,
+          "up": "+Y",
+          "front": "+Z"
+        },
+        "glow_color": "#67E9FF",
+        "magic_origin": [
+          0.4551115036010742,
+          0.5269780457019806
+        ],
+        "revision": 3,
+        "source_status": "acquired-verified-converted",
+        "integration_status": "authoring-review-runtime-copy-tracked-separately",
+        "nodes": {
+          "body": "Body",
+          "lid_pivot": "Lid",
+          "treasure": "Treasure"
+        },
+        "animation_authorship": "New one-second Open and Close tracks; original source clips are retained only in acquired originals",
+        "detail_notes": [
+          "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+          "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+          "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+          "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+          "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+          "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+          "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: vault.",
+          "Source-derived jewel facets retained and mounted in authored claws.",
+          "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+        ],
+        "detail_objects": 139,
+        "authored_detail_pieces": 139,
+        "magic_effect": {
+          "source": "Kenney Particle Pack 1.1",
+          "license": "CC0-1.0",
+          "layer": "assets/cobalt-vault/magic-fx.png",
+          "scope": "PNG composite; not baked into GLB",
+          "sprites": [
+            "light_01.png",
+            "star_04.png"
+          ]
+        }
+      }
+    },
+    {
+      "id": "solar-relay",
+      "name": "Solar Relay",
+      "revision": 3,
+      "model": "assets/chests/models/atelier/solar-relay/solar-relay.glb",
+      "resource": "res://assets/chests/models/atelier/solar-relay/solar-relay.glb",
+      "bytes": 1845100,
+      "sha256": "a104857980bf69ae54f53242d538f86604f19061ce04aca52a8e28b2cc2cad3f",
+      "triangles": 21759,
+      "mesh_resources": 3,
+      "mesh_instances": 3,
+      "primitives": 3,
+      "vertices": 39010,
+      "materials": 2,
+      "images": [
+        {
+          "name": "emission",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 27998,
+          "sha256": "f16895b987ad7ac31ed4edcd8715e4e7dca3f5a83eb790003a723ad96726e783"
+        },
+        {
+          "name": "normal",
+          "mime_type": "image/png",
+          "size": [
+            1024,
+            1024
+          ],
+          "bytes": 89395,
+          "sha256": "1ec1489f2077ec9fb3d3b1e6d9fff388a9482c47e54a9f325ef8edcdcb09da6c"
+        },
+        {
+          "name": "color",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 185987,
+          "sha256": "6f05d57d20b0c18c35355745175c8b04877462a6e25ad1012fbe3c9698fd2a91"
+        },
+        {
+          "name": "orm",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 147620,
+          "sha256": "cf6ed4476e436de5974edd24ed3b39dab543d3713d9dd07b493536206cd95970"
+        },
+        {
+          "name": "dungeon_texture",
+          "mime_type": "image/png",
+          "size": [
+            256,
+            256
+          ],
+          "bytes": 8301,
+          "sha256": "a3999e53408e7a1aaeefdbe36b4c111ca84fdfd16148b8b744e6e9a2a40ba826"
+        }
+      ],
+      "animations": [
+        {
+          "name": "Open",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        },
+        {
+          "name": "Close",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        }
+      ],
+      "nodes": {
+        "root": "ChestRoot",
+        "body": "Body",
+        "lid_pivot": "Lid",
+        "lid": "LidShell",
+        "treasure": "Treasure"
+      },
+      "coordinate_system": {
+        "up": "+Y",
+        "front": "+Z",
+        "right": "+X",
+        "source_shell_width": 2.0,
+        "feet_y": 0.0
+      },
+      "closed_bounds_3d": {
+        "min": [
+          -1.097500205039978,
+          0.0,
+          -0.7508202195167542
+        ],
+        "max": [
+          1.097500205039978,
+          1.3549813032150269,
+          0.7960001826286316
+        ]
+      },
+      "opened_bounds_3d": {
+        "min": [
+          -1.097500205039978,
+          0.0,
+          -1.2298651933670044
+        ],
+        "max": [
+          1.097500205039978,
+          2.256826162338257,
+          0.7960001826286316
+        ]
+      },
+      "bounds_transform": "Blender (x,y,z) -> glTF/Godot (x,z,-y)",
+      "style": {
+        "model": "assets/chests/models/atelier/solar-relay/solar-relay.glb",
+        "open_animation": "Open",
+        "open_start": 0.0,
+        "open_end": 1.0,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1.0
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.097500205039978,
+            0.0,
+            -0.7508202195167542
+          ],
+          "max": [
+            1.097500205039978,
+            1.3549813032150269,
+            0.7960001826286316
+          ]
+        }
+      },
+      "license": "CC0-1.0",
+      "source": {
+        "creator": "Kenney",
+        "title": "Blaster Kit 2.1",
+        "url": "https://kenney.nl/assets/blaster-kit",
+        "license": "CC0-1.0"
+      },
+      "source_inputs": [
+        {
+          "source_id": "kenney-blaster",
+          "collection_source": "sources/expansion/kenney-blaster/crate-medium.glb",
+          "original_source_sha256": "187c32592fedaecbbb84152102bbf536f733cbc0c2cfee60828fb18a4803619c",
+          "bytes": 59344,
+          "role": "Acquired production case body and independent lid",
+          "creator": "Kenney",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kenney-blaster-LICENSE.txt",
+          "url": "https://kenney.nl/assets/blaster-kit"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+          "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+          "bytes": 63996,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+          "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+          "bytes": 38404,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        }
+      ],
+      "collection": "Reactor Cases",
+      "authoring_glb_sha256": "5dd2dea9a791239cdfb9f1d5b753ee98c6f0ded4da4c6791f2c26ecd6d883f01",
+      "original_base_sha256": "187c32592fedaecbbb84152102bbf536f733cbc0c2cfee60828fb18a4803619c",
+      "authored_changes": [
+        "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+        "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+        "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+        "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+        "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+        "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+        "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: relay.",
+        "Core fittings are authored mechanical trim on the acquired production shell.",
+        "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+      ],
+      "runtime_source_record": {
+        "id": "solar-relay",
+        "source_glb_sha256": "5dd2dea9a791239cdfb9f1d5b753ee98c6f0ded4da4c6791f2c26ecd6d883f01",
+        "source_triangles": 50758,
+        "triangles": 21759,
+        "closed_bounds_blender": {
+          "min": [
+            -1.097500205039978,
+            -0.7960001826286316,
+            -1.037758110555842e-07
+          ],
+          "max": [
+            1.097500205039978,
+            0.7508202195167542,
+            1.3549813032150269
+          ]
+        },
+        "opened_bounds_blender": {
+          "min": [
+            -1.097500205039978,
+            -0.7960001826286316,
+            -1.037758110555842e-07
+          ],
+          "max": [
+            1.097500205039978,
+            1.2298651933670044,
+            2.256826162338257
+          ]
+        },
+        "settings": {
+          "hardware_ratio": 0.5,
+          "loot_ratio": 0.1,
+          "bake_resolution": 1024,
+          "runtime_color": 512,
+          "runtime_normal": 1024,
+          "runtime_orm": 512,
+          "loot_color": 256,
+          "runtime_emission": 512
+        },
+        "materials": "Single UV baked color/normal/metallic-roughness/emission; original loot palette",
+        "animation": "Original Open and Close tracks retained at 61 samples over one second",
+        "file": "models/solar-relay.glb",
+        "bytes": 1845100,
+        "sha256": "a104857980bf69ae54f53242d538f86604f19061ce04aca52a8e28b2cc2cad3f",
+        "images": [
+          {
+            "role": "emission",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 27998
+          },
+          {
+            "role": "normal",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              1024,
+              1024
+            ],
+            "bytes": 89395
+          },
+          {
+            "role": "color",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 185987
+          },
+          {
+            "role": "orm",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 147620
+          },
+          {
+            "role": "loot",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              256,
+              256
+            ],
+            "bytes": 8301
+          }
+        ],
+        "name": "Solar Relay",
+        "source_bytes": 2322704,
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "saved_bytes": 477604
+      },
+      "authoring_source_record": {
+        "id": "solar-relay",
+        "name": "Solar Relay",
+        "subtitle": "AMBER ARMOR / CYAN REACTOR",
+        "description": "A reinforced amber relay case with segmented shoulder armor, a nested energy port, inset vents and protected luminous seams.",
+        "palette": [
+          "#F3AF21",
+          "#354153",
+          "#A9B7C7",
+          "#59F3FF"
+        ],
+        "style": "relay",
+        "collection": "Reactor Cases",
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "source_inputs": [
+          {
+            "source_id": "kenney-blaster",
+            "collection_source": "sources/expansion/kenney-blaster/crate-medium.glb",
+            "original_source_sha256": "187c32592fedaecbbb84152102bbf536f733cbc0c2cfee60828fb18a4803619c",
+            "bytes": 59344,
+            "role": "Acquired production case body and independent lid",
+            "creator": "Kenney",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kenney-blaster-LICENSE.txt",
+            "url": "https://kenney.nl/assets/blaster-kit"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+            "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+            "bytes": 63996,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+            "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+            "bytes": 38404,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          }
+        ],
+        "model": "assets/solar-relay/chest.glb",
+        "blend": "assets/solar-relay/chest.blend",
+        "renders": {
+          "closed": "assets/solar-relay/closed.png",
+          "open": "assets/solar-relay/open.png",
+          "treasure": "assets/solar-relay/treasure.png",
+          "magic": "assets/solar-relay/magic.png"
+        },
+        "spritesheet": "assets/solar-relay/states.png",
+        "animations": [
+          "Open",
+          "Close"
+        ],
+        "triangles": 50758,
+        "source_sha256": "187c32592fedaecbbb84152102bbf536f733cbc0c2cfee60828fb18a4803619c",
+        "sha256": "5dd2dea9a791239cdfb9f1d5b753ee98c6f0ded4da4c6791f2c26ecd6d883f01",
+        "bytes": 2322704,
+        "dimensions": {
+          "width": 2,
+          "up": "+Y",
+          "front": "+Z"
+        },
+        "glow_color": "#59F3FF",
+        "magic_origin": [
+          0.45572447776794434,
+          0.5429193675518036
+        ],
+        "revision": 3,
+        "source_status": "acquired-verified-converted",
+        "integration_status": "authoring-review-runtime-copy-tracked-separately",
+        "nodes": {
+          "body": "Body",
+          "lid_pivot": "Lid",
+          "treasure": "Treasure"
+        },
+        "animation_authorship": "New one-second Open and Close tracks; original source clips are retained only in acquired originals",
+        "detail_notes": [
+          "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+          "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+          "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+          "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+          "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+          "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+          "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: relay.",
+          "Core fittings are authored mechanical trim on the acquired production shell.",
+          "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+        ],
+        "detail_objects": 157,
+        "authored_detail_pieces": 157,
+        "magic_effect": {
+          "source": "Kenney Particle Pack 1.1",
+          "license": "CC0-1.0",
+          "layer": "assets/solar-relay/magic-fx.png",
+          "scope": "PNG composite; not baked into GLB",
+          "sprites": [
+            "light_01.png",
+            "star_04.png"
+          ]
+        }
+      }
+    },
+    {
+      "id": "frost-relay",
+      "name": "Frost Relay",
+      "revision": 3,
+      "model": "assets/chests/models/atelier/frost-relay/frost-relay.glb",
+      "resource": "res://assets/chests/models/atelier/frost-relay/frost-relay.glb",
+      "bytes": 1857808,
+      "sha256": "6a4e0cd025ff305f5076085ec59295c107eb4fbe5cf7add50e45df7a8bde202b",
+      "triangles": 21759,
+      "mesh_resources": 3,
+      "mesh_instances": 3,
+      "primitives": 3,
+      "vertices": 39010,
+      "materials": 2,
+      "images": [
+        {
+          "name": "emission",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 28471,
+          "sha256": "932d6e83b06250aa564da4803128a31b4efd29fce4338ce3e2f4ce848def0d0e"
+        },
+        {
+          "name": "normal",
+          "mime_type": "image/png",
+          "size": [
+            1024,
+            1024
+          ],
+          "bytes": 89395,
+          "sha256": "1ec1489f2077ec9fb3d3b1e6d9fff388a9482c47e54a9f325ef8edcdcb09da6c"
+        },
+        {
+          "name": "color",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 198222,
+          "sha256": "91e8e607c7ec0fadd88411defed804982700dfc287b15cfad13790ed2539b98a"
+        },
+        {
+          "name": "orm",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 147620,
+          "sha256": "cf6ed4476e436de5974edd24ed3b39dab543d3713d9dd07b493536206cd95970"
+        },
+        {
+          "name": "dungeon_texture",
+          "mime_type": "image/png",
+          "size": [
+            256,
+            256
+          ],
+          "bytes": 8301,
+          "sha256": "a3999e53408e7a1aaeefdbe36b4c111ca84fdfd16148b8b744e6e9a2a40ba826"
+        }
+      ],
+      "animations": [
+        {
+          "name": "Open",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        },
+        {
+          "name": "Close",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        }
+      ],
+      "nodes": {
+        "root": "ChestRoot",
+        "body": "Body",
+        "lid_pivot": "Lid",
+        "lid": "LidShell",
+        "treasure": "Treasure"
+      },
+      "coordinate_system": {
+        "up": "+Y",
+        "front": "+Z",
+        "right": "+X",
+        "source_shell_width": 2.0,
+        "feet_y": 0.0
+      },
+      "closed_bounds_3d": {
+        "min": [
+          -1.097500205039978,
+          0.0,
+          -0.7508202195167542
+        ],
+        "max": [
+          1.097500205039978,
+          1.3549813032150269,
+          0.7960001826286316
+        ]
+      },
+      "opened_bounds_3d": {
+        "min": [
+          -1.097500205039978,
+          0.0,
+          -1.2298651933670044
+        ],
+        "max": [
+          1.097500205039978,
+          2.256826162338257,
+          0.7960001826286316
+        ]
+      },
+      "bounds_transform": "Blender (x,y,z) -> glTF/Godot (x,z,-y)",
+      "style": {
+        "model": "assets/chests/models/atelier/frost-relay/frost-relay.glb",
+        "open_animation": "Open",
+        "open_start": 0.0,
+        "open_end": 1.0,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1.0
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.097500205039978,
+            0.0,
+            -0.7508202195167542
+          ],
+          "max": [
+            1.097500205039978,
+            1.3549813032150269,
+            0.7960001826286316
+          ]
+        }
+      },
+      "license": "CC0-1.0",
+      "source": {
+        "creator": "Kenney",
+        "title": "Blaster Kit 2.1",
+        "url": "https://kenney.nl/assets/blaster-kit",
+        "license": "CC0-1.0"
+      },
+      "source_inputs": [
+        {
+          "source_id": "kenney-blaster",
+          "collection_source": "sources/expansion/kenney-blaster/crate-medium.glb",
+          "original_source_sha256": "187c32592fedaecbbb84152102bbf536f733cbc0c2cfee60828fb18a4803619c",
+          "bytes": 59344,
+          "role": "Acquired production case body and independent lid",
+          "creator": "Kenney",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kenney-blaster-LICENSE.txt",
+          "url": "https://kenney.nl/assets/blaster-kit"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+          "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+          "bytes": 63996,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+          "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+          "bytes": 38404,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        }
+      ],
+      "collection": "Reactor Cases",
+      "authoring_glb_sha256": "6f24fb70a622d0303d840469ef9f09f8b2a6af7d5ad595561b42ce8d23c90afa",
+      "original_base_sha256": "187c32592fedaecbbb84152102bbf536f733cbc0c2cfee60828fb18a4803619c",
+      "authored_changes": [
+        "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+        "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+        "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+        "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+        "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+        "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+        "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: relay.",
+        "Core fittings are authored mechanical trim on the acquired production shell.",
+        "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+      ],
+      "runtime_source_record": {
+        "id": "frost-relay",
+        "source_glb_sha256": "6f24fb70a622d0303d840469ef9f09f8b2a6af7d5ad595561b42ce8d23c90afa",
+        "source_triangles": 50758,
+        "triangles": 21759,
+        "closed_bounds_blender": {
+          "min": [
+            -1.097500205039978,
+            -0.7960001826286316,
+            -1.037758110555842e-07
+          ],
+          "max": [
+            1.097500205039978,
+            0.7508202195167542,
+            1.3549813032150269
+          ]
+        },
+        "opened_bounds_blender": {
+          "min": [
+            -1.097500205039978,
+            -0.7960001826286316,
+            -1.037758110555842e-07
+          ],
+          "max": [
+            1.097500205039978,
+            1.2298651933670044,
+            2.256826162338257
+          ]
+        },
+        "settings": {
+          "hardware_ratio": 0.5,
+          "loot_ratio": 0.1,
+          "bake_resolution": 1024,
+          "runtime_color": 512,
+          "runtime_normal": 1024,
+          "runtime_orm": 512,
+          "loot_color": 256,
+          "runtime_emission": 512
+        },
+        "materials": "Single UV baked color/normal/metallic-roughness/emission; original loot palette",
+        "animation": "Original Open and Close tracks retained at 61 samples over one second",
+        "file": "models/frost-relay.glb",
+        "bytes": 1857808,
+        "sha256": "6a4e0cd025ff305f5076085ec59295c107eb4fbe5cf7add50e45df7a8bde202b",
+        "images": [
+          {
+            "role": "emission",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 28471
+          },
+          {
+            "role": "normal",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              1024,
+              1024
+            ],
+            "bytes": 89395
+          },
+          {
+            "role": "color",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 198222
+          },
+          {
+            "role": "orm",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 147620
+          },
+          {
+            "role": "loot",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              256,
+              256
+            ],
+            "bytes": 8301
+          }
+        ],
+        "name": "Frost Relay",
+        "source_bytes": 2324136,
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "saved_bytes": 466328
+      },
+      "authoring_source_record": {
+        "id": "frost-relay",
+        "name": "Frost Relay",
+        "subtitle": "ICE BLUE / POLAR CERAMIC",
+        "description": "A polar research chest with chamfered white armor, blue inset panels, a recessed cyan reactor and precision cooling slots.",
+        "palette": [
+          "#1398C5",
+          "#E8F4FB",
+          "#174E70",
+          "#68FFFF"
+        ],
+        "style": "relay",
+        "collection": "Reactor Cases",
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "source_inputs": [
+          {
+            "source_id": "kenney-blaster",
+            "collection_source": "sources/expansion/kenney-blaster/crate-medium.glb",
+            "original_source_sha256": "187c32592fedaecbbb84152102bbf536f733cbc0c2cfee60828fb18a4803619c",
+            "bytes": 59344,
+            "role": "Acquired production case body and independent lid",
+            "creator": "Kenney",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kenney-blaster-LICENSE.txt",
+            "url": "https://kenney.nl/assets/blaster-kit"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+            "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+            "bytes": 63996,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+            "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+            "bytes": 38404,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          }
+        ],
+        "model": "assets/frost-relay/chest.glb",
+        "blend": "assets/frost-relay/chest.blend",
+        "renders": {
+          "closed": "assets/frost-relay/closed.png",
+          "open": "assets/frost-relay/open.png",
+          "treasure": "assets/frost-relay/treasure.png",
+          "magic": "assets/frost-relay/magic.png"
+        },
+        "spritesheet": "assets/frost-relay/states.png",
+        "animations": [
+          "Open",
+          "Close"
+        ],
+        "triangles": 50758,
+        "source_sha256": "187c32592fedaecbbb84152102bbf536f733cbc0c2cfee60828fb18a4803619c",
+        "sha256": "6f24fb70a622d0303d840469ef9f09f8b2a6af7d5ad595561b42ce8d23c90afa",
+        "bytes": 2324136,
+        "dimensions": {
+          "width": 2,
+          "up": "+Y",
+          "front": "+Z"
+        },
+        "glow_color": "#68FFFF",
+        "magic_origin": [
+          0.45572447776794434,
+          0.5429193675518036
+        ],
+        "revision": 3,
+        "source_status": "acquired-verified-converted",
+        "integration_status": "authoring-review-runtime-copy-tracked-separately",
+        "nodes": {
+          "body": "Body",
+          "lid_pivot": "Lid",
+          "treasure": "Treasure"
+        },
+        "animation_authorship": "New one-second Open and Close tracks; original source clips are retained only in acquired originals",
+        "detail_notes": [
+          "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+          "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+          "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+          "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+          "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+          "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+          "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: relay.",
+          "Core fittings are authored mechanical trim on the acquired production shell.",
+          "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+        ],
+        "detail_objects": 157,
+        "authored_detail_pieces": 157,
+        "magic_effect": {
+          "source": "Kenney Particle Pack 1.1",
+          "license": "CC0-1.0",
+          "layer": "assets/frost-relay/magic-fx.png",
+          "scope": "PNG composite; not baked into GLB",
+          "sprites": [
+            "light_01.png",
+            "star_04.png"
+          ]
+        }
+      }
+    },
+    {
+      "id": "prism-signal",
+      "name": "Prism Signal",
+      "revision": 3,
+      "model": "assets/chests/models/atelier/prism-signal/prism-signal.glb",
+      "resource": "res://assets/chests/models/atelier/prism-signal/prism-signal.glb",
+      "bytes": 1605224,
+      "sha256": "7ba78d357e08ad4b4dd9f91f4761e812978ce712805f9076cdcf3d1bce5a0331",
+      "triangles": 19079,
+      "mesh_resources": 3,
+      "mesh_instances": 3,
+      "primitives": 3,
+      "vertices": 32824,
+      "materials": 2,
+      "images": [
+        {
+          "name": "emission",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 24810,
+          "sha256": "d8f3da4328308b9ab7c87dd482527ab5abacdca159978d1a4c2618e10eeec2ca"
+        },
+        {
+          "name": "normal",
+          "mime_type": "image/png",
+          "size": [
+            1024,
+            1024
+          ],
+          "bytes": 82489,
+          "sha256": "0a9033accec5508cd8fa1110faf8b416c44427250505754009d7dee71b57fa3b"
+        },
+        {
+          "name": "color",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 182119,
+          "sha256": "e12f138a22297c053c589680becbdd01e6f5911c4e1db3f8671a453d122a6c17"
+        },
+        {
+          "name": "orm",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 135733,
+          "sha256": "19e035f5270c3da1c8d740e3e09302c705369131d2c810db7c797348f89eeb99"
+        },
+        {
+          "name": "dungeon_texture",
+          "mime_type": "image/png",
+          "size": [
+            256,
+            256
+          ],
+          "bytes": 8301,
+          "sha256": "a3999e53408e7a1aaeefdbe36b4c111ca84fdfd16148b8b744e6e9a2a40ba826"
+        }
+      ],
+      "animations": [
+        {
+          "name": "Open",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        },
+        {
+          "name": "Close",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        }
+      ],
+      "nodes": {
+        "root": "ChestRoot",
+        "body": "Body",
+        "lid_pivot": "Lid",
+        "lid": "LidShell",
+        "treasure": "Treasure"
+      },
+      "coordinate_system": {
+        "up": "+Y",
+        "front": "+Z",
+        "right": "+X",
+        "source_shell_width": 2.0,
+        "feet_y": 0.0
+      },
+      "closed_bounds_3d": {
+        "min": [
+          -1.0975003242492676,
+          0.0,
+          -0.7508200407028198
+        ],
+        "max": [
+          1.0975003242492676,
+          1.274980902671814,
+          0.788800060749054
+        ]
+      },
+      "opened_bounds_3d": {
+        "min": [
+          -1.0975003242492676,
+          0.0,
+          -1.209882140159607
+        ],
+        "max": [
+          1.0975003242492676,
+          2.196516990661621,
+          0.788800060749054
+        ]
+      },
+      "bounds_transform": "Blender (x,y,z) -> glTF/Godot (x,z,-y)",
+      "style": {
+        "model": "assets/chests/models/atelier/prism-signal/prism-signal.glb",
+        "open_animation": "Open",
+        "open_start": 0.0,
+        "open_end": 1.0,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1.0
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0975003242492676,
+            0.0,
+            -0.7508200407028198
+          ],
+          "max": [
+            1.0975003242492676,
+            1.274980902671814,
+            0.788800060749054
+          ]
+        }
+      },
+      "license": "CC0-1.0",
+      "source": {
+        "creator": "Kenney",
+        "title": "Blaster Kit 2.1",
+        "url": "https://kenney.nl/assets/blaster-kit",
+        "license": "CC0-1.0"
+      },
+      "source_inputs": [
+        {
+          "source_id": "kenney-blaster",
+          "collection_source": "sources/expansion/kenney-blaster/crate-wide.glb",
+          "original_source_sha256": "0a17a51b274d238c09ade21674b70742bd5f1703f7b0e8974b6d0b2b92a58c8b",
+          "bytes": 59404,
+          "role": "Acquired production case body and independent lid",
+          "creator": "Kenney",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kenney-blaster-LICENSE.txt",
+          "url": "https://kenney.nl/assets/blaster-kit"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+          "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+          "bytes": 63996,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+          "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+          "bytes": 38404,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        }
+      ],
+      "collection": "Signal Chests",
+      "authoring_glb_sha256": "c79d2bfa2c90684cd3c4dc63e2535a25acedda811ebe76dc7e95f8722d8825f6",
+      "original_base_sha256": "0a17a51b274d238c09ade21674b70742bd5f1703f7b0e8974b6d0b2b92a58c8b",
+      "authored_changes": [
+        "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+        "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+        "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+        "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+        "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+        "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+        "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: prism.",
+        "Core fittings are authored mechanical trim on the acquired production shell.",
+        "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+      ],
+      "runtime_source_record": {
+        "id": "prism-signal",
+        "source_glb_sha256": "c79d2bfa2c90684cd3c4dc63e2535a25acedda811ebe76dc7e95f8722d8825f6",
+        "source_triangles": 45126,
+        "triangles": 19079,
+        "closed_bounds_blender": {
+          "min": [
+            -1.0975003242492676,
+            -0.788800060749054,
+            -9.556745084182694e-08
+          ],
+          "max": [
+            1.0975003242492676,
+            0.7508200407028198,
+            1.274980902671814
+          ]
+        },
+        "opened_bounds_blender": {
+          "min": [
+            -1.0975003242492676,
+            -0.788800060749054,
+            -9.556745084182694e-08
+          ],
+          "max": [
+            1.0975003242492676,
+            1.209882140159607,
+            2.196516990661621
+          ]
+        },
+        "settings": {
+          "hardware_ratio": 0.5,
+          "loot_ratio": 0.1,
+          "bake_resolution": 1024,
+          "runtime_color": 512,
+          "runtime_normal": 1024,
+          "runtime_orm": 512,
+          "loot_color": 256,
+          "runtime_emission": 512
+        },
+        "materials": "Single UV baked color/normal/metallic-roughness/emission; original loot palette",
+        "animation": "Original Open and Close tracks retained at 61 samples over one second",
+        "file": "models/prism-signal.glb",
+        "bytes": 1605224,
+        "sha256": "7ba78d357e08ad4b4dd9f91f4761e812978ce712805f9076cdcf3d1bce5a0331",
+        "images": [
+          {
+            "role": "emission",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 24810
+          },
+          {
+            "role": "normal",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              1024,
+              1024
+            ],
+            "bytes": 82489
+          },
+          {
+            "role": "color",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 182119
+          },
+          {
+            "role": "orm",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 135733
+          },
+          {
+            "role": "loot",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              256,
+              256
+            ],
+            "bytes": 8301
+          }
+        ],
+        "name": "Prism Signal",
+        "source_bytes": 2054276,
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "saved_bytes": 449052
+      },
+      "authoring_source_record": {
+        "id": "prism-signal",
+        "name": "Prism Signal",
+        "subtitle": "PORCELAIN SHELL / MAGENTA SIGNAL",
+        "description": "A wide porcelain case with a layered inverted-triangle signal lens, magenta lid bridges and circular side couplers.",
+        "palette": [
+          "#E2E9F2",
+          "#CE27CB",
+          "#374159",
+          "#FF88EF"
+        ],
+        "style": "prism",
+        "collection": "Signal Chests",
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "source_inputs": [
+          {
+            "source_id": "kenney-blaster",
+            "collection_source": "sources/expansion/kenney-blaster/crate-wide.glb",
+            "original_source_sha256": "0a17a51b274d238c09ade21674b70742bd5f1703f7b0e8974b6d0b2b92a58c8b",
+            "bytes": 59404,
+            "role": "Acquired production case body and independent lid",
+            "creator": "Kenney",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kenney-blaster-LICENSE.txt",
+            "url": "https://kenney.nl/assets/blaster-kit"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+            "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+            "bytes": 63996,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+            "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+            "bytes": 38404,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          }
+        ],
+        "model": "assets/prism-signal/chest.glb",
+        "blend": "assets/prism-signal/chest.blend",
+        "renders": {
+          "closed": "assets/prism-signal/closed.png",
+          "open": "assets/prism-signal/open.png",
+          "treasure": "assets/prism-signal/treasure.png",
+          "magic": "assets/prism-signal/magic.png"
+        },
+        "spritesheet": "assets/prism-signal/states.png",
+        "animations": [
+          "Open",
+          "Close"
+        ],
+        "triangles": 45126,
+        "source_sha256": "0a17a51b274d238c09ade21674b70742bd5f1703f7b0e8974b6d0b2b92a58c8b",
+        "sha256": "c79d2bfa2c90684cd3c4dc63e2535a25acedda811ebe76dc7e95f8722d8825f6",
+        "bytes": 2054276,
+        "dimensions": {
+          "width": 2,
+          "up": "+Y",
+          "front": "+Z"
+        },
+        "glow_color": "#FF88EF",
+        "magic_origin": [
+          0.4561075270175934,
+          0.5511023104190826
+        ],
+        "revision": 3,
+        "source_status": "acquired-verified-converted",
+        "integration_status": "authoring-review-runtime-copy-tracked-separately",
+        "nodes": {
+          "body": "Body",
+          "lid_pivot": "Lid",
+          "treasure": "Treasure"
+        },
+        "animation_authorship": "New one-second Open and Close tracks; original source clips are retained only in acquired originals",
+        "detail_notes": [
+          "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+          "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+          "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+          "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+          "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+          "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+          "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: prism.",
+          "Core fittings are authored mechanical trim on the acquired production shell.",
+          "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+        ],
+        "detail_objects": 137,
+        "authored_detail_pieces": 137,
+        "magic_effect": {
+          "source": "Kenney Particle Pack 1.1",
+          "license": "CC0-1.0",
+          "layer": "assets/prism-signal/magic-fx.png",
+          "scope": "PNG composite; not baked into GLB",
+          "sprites": [
+            "light_01.png",
+            "star_04.png"
+          ]
+        }
+      }
+    },
+    {
+      "id": "jade-reliquary",
+      "name": "Jade Reliquary",
+      "revision": 3,
+      "model": "assets/chests/models/atelier/jade-reliquary/jade-reliquary.glb",
+      "resource": "res://assets/chests/models/atelier/jade-reliquary/jade-reliquary.glb",
+      "bytes": 1632244,
+      "sha256": "c13697148d58680a6c746afde499b71915ffb033f6cd7c11e455f6208bbc562d",
+      "triangles": 19193,
+      "mesh_resources": 3,
+      "mesh_instances": 3,
+      "primitives": 3,
+      "vertices": 33882,
+      "materials": 2,
+      "images": [
+        {
+          "name": "emission",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 24696,
+          "sha256": "c6222185cd98a8485601d6ebea113f6f7898f3b5d51813c0a2403f070fbec52a"
+        },
+        {
+          "name": "normal",
+          "mime_type": "image/png",
+          "size": [
+            1024,
+            1024
+          ],
+          "bytes": 82341,
+          "sha256": "3cdc746f8c8011158ac4370f0ad2ccebd134befa72c9f7c8c4416ca993747825"
+        },
+        {
+          "name": "color",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 176243,
+          "sha256": "09e2a24675f7a3ecb71099d3f6a877da9739f02aed9b45812c659eb0e58a140b"
+        },
+        {
+          "name": "orm",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 134356,
+          "sha256": "ce2fdd9d1f21cc1416550c48c03b44d778fae861210a95c16438fa86154a9f11"
+        },
+        {
+          "name": "dungeon_texture",
+          "mime_type": "image/png",
+          "size": [
+            256,
+            256
+          ],
+          "bytes": 8301,
+          "sha256": "a3999e53408e7a1aaeefdbe36b4c111ca84fdfd16148b8b744e6e9a2a40ba826"
+        }
+      ],
+      "animations": [
+        {
+          "name": "Open",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        },
+        {
+          "name": "Close",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        }
+      ],
+      "nodes": {
+        "root": "ChestRoot",
+        "body": "Body",
+        "lid_pivot": "Lid",
+        "lid": "LidShell",
+        "treasure": "Treasure"
+      },
+      "coordinate_system": {
+        "up": "+Y",
+        "front": "+Z",
+        "right": "+X",
+        "source_shell_width": 2.0,
+        "feet_y": 0.0
+      },
+      "closed_bounds_3d": {
+        "min": [
+          -1.0975003242492676,
+          0.0,
+          -0.7508200407028198
+        ],
+        "max": [
+          1.0975003242492676,
+          1.274980902671814,
+          0.8530000448226929
+        ]
+      },
+      "opened_bounds_3d": {
+        "min": [
+          -1.0975003242492676,
+          0.0,
+          -1.209882140159607
+        ],
+        "max": [
+          1.0975003242492676,
+          2.196516990661621,
+          0.8530000448226929
+        ]
+      },
+      "bounds_transform": "Blender (x,y,z) -> glTF/Godot (x,z,-y)",
+      "style": {
+        "model": "assets/chests/models/atelier/jade-reliquary/jade-reliquary.glb",
+        "open_animation": "Open",
+        "open_start": 0.0,
+        "open_end": 1.0,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1.0
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0975003242492676,
+            0.0,
+            -0.7508200407028198
+          ],
+          "max": [
+            1.0975003242492676,
+            1.274980902671814,
+            0.8530000448226929
+          ]
+        }
+      },
+      "license": "CC0-1.0",
+      "source": {
+        "creator": "Kenney",
+        "title": "Blaster Kit 2.1",
+        "url": "https://kenney.nl/assets/blaster-kit",
+        "license": "CC0-1.0"
+      },
+      "source_inputs": [
+        {
+          "source_id": "kenney-blaster",
+          "collection_source": "sources/expansion/kenney-blaster/crate-wide.glb",
+          "original_source_sha256": "0a17a51b274d238c09ade21674b70742bd5f1703f7b0e8974b6d0b2b92a58c8b",
+          "bytes": 59404,
+          "role": "Acquired production case body and independent lid",
+          "creator": "Kenney",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kenney-blaster-LICENSE.txt",
+          "url": "https://kenney.nl/assets/blaster-kit"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+          "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+          "bytes": 63996,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+          "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+          "bytes": 38404,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        },
+        {
+          "source_id": "kenney-platformer",
+          "collection_source": "sources/kenney-platformer/jewel.glb",
+          "original_source_sha256": "cec20d8ae2678c292b3885aaee468ba39d165a7e2043af5ba8102b6cd974c2c3",
+          "bytes": 3580,
+          "creator": "Kenney",
+          "title": "Platformer Kit",
+          "url": "https://kenney.nl/assets/platformer-kit",
+          "license": "CC0-1.0",
+          "role": "actual faceted core jewel",
+          "license_file": "../sources/atelier/licenses/kenney-platformer-LICENSE.txt"
+        }
+      ],
+      "collection": "Gemguard Chests",
+      "authoring_glb_sha256": "d351c7335d35fc99d2a9539e9c09332d16d8c729f0a8d4cc7a2e9f407f729b63",
+      "original_base_sha256": "0a17a51b274d238c09ade21674b70742bd5f1703f7b0e8974b6d0b2b92a58c8b",
+      "authored_changes": [
+        "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+        "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+        "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+        "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+        "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+        "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+        "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: jade.",
+        "Source-derived jewel facets retained and mounted in authored claws.",
+        "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+      ],
+      "runtime_source_record": {
+        "id": "jade-reliquary",
+        "source_glb_sha256": "d351c7335d35fc99d2a9539e9c09332d16d8c729f0a8d4cc7a2e9f407f729b63",
+        "source_triangles": 45354,
+        "triangles": 19193,
+        "closed_bounds_blender": {
+          "min": [
+            -1.0975003242492676,
+            -0.8530000448226929,
+            -9.556745084182694e-08
+          ],
+          "max": [
+            1.0975003242492676,
+            0.7508200407028198,
+            1.274980902671814
+          ]
+        },
+        "opened_bounds_blender": {
+          "min": [
+            -1.0975003242492676,
+            -0.8530000448226929,
+            -9.556745084182694e-08
+          ],
+          "max": [
+            1.0975003242492676,
+            1.209882140159607,
+            2.196516990661621
+          ]
+        },
+        "settings": {
+          "hardware_ratio": 0.5,
+          "loot_ratio": 0.1,
+          "bake_resolution": 1024,
+          "runtime_color": 512,
+          "runtime_normal": 1024,
+          "runtime_orm": 512,
+          "loot_color": 256,
+          "runtime_emission": 512
+        },
+        "materials": "Single UV baked color/normal/metallic-roughness/emission; original loot palette",
+        "animation": "Original Open and Close tracks retained at 61 samples over one second",
+        "file": "models/jade-reliquary.glb",
+        "bytes": 1632244,
+        "sha256": "c13697148d58680a6c746afde499b71915ffb033f6cd7c11e455f6208bbc562d",
+        "images": [
+          {
+            "role": "emission",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 24696
+          },
+          {
+            "role": "normal",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              1024,
+              1024
+            ],
+            "bytes": 82341
+          },
+          {
+            "role": "color",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 176243
+          },
+          {
+            "role": "orm",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 134356
+          },
+          {
+            "role": "loot",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              256,
+              256
+            ],
+            "bytes": 8301
+          }
+        ],
+        "name": "Jade Reliquary",
+        "source_bytes": 2092228,
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "saved_bytes": 459984
+      },
+      "authoring_source_record": {
+        "id": "jade-reliquary",
+        "name": "Jade Reliquary",
+        "subtitle": "JADE ENAMEL / GILDED GEM SETTING",
+        "description": "A jade reward chest with broad gold bridges, an inset emerald seal, jeweled side clasps and dark recessed panel lines.",
+        "palette": [
+          "#48A939",
+          "#EBC14A",
+          "#17473F",
+          "#3DDC8E"
+        ],
+        "style": "jade",
+        "collection": "Gemguard Chests",
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "source_inputs": [
+          {
+            "source_id": "kenney-blaster",
+            "collection_source": "sources/expansion/kenney-blaster/crate-wide.glb",
+            "original_source_sha256": "0a17a51b274d238c09ade21674b70742bd5f1703f7b0e8974b6d0b2b92a58c8b",
+            "bytes": 59404,
+            "role": "Acquired production case body and independent lid",
+            "creator": "Kenney",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kenney-blaster-LICENSE.txt",
+            "url": "https://kenney.nl/assets/blaster-kit"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+            "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+            "bytes": 63996,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+            "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+            "bytes": 38404,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          },
+          {
+            "source_id": "kenney-platformer",
+            "collection_source": "sources/kenney-platformer/jewel.glb",
+            "original_source_sha256": "cec20d8ae2678c292b3885aaee468ba39d165a7e2043af5ba8102b6cd974c2c3",
+            "bytes": 3580,
+            "creator": "Kenney",
+            "title": "Platformer Kit",
+            "url": "https://kenney.nl/assets/platformer-kit",
+            "license": "CC0-1.0",
+            "role": "actual faceted core jewel",
+            "license_file": "licenses/kenney-platformer-LICENSE.txt"
+          }
+        ],
+        "model": "assets/jade-reliquary/chest.glb",
+        "blend": "assets/jade-reliquary/chest.blend",
+        "renders": {
+          "closed": "assets/jade-reliquary/closed.png",
+          "open": "assets/jade-reliquary/open.png",
+          "treasure": "assets/jade-reliquary/treasure.png",
+          "magic": "assets/jade-reliquary/magic.png"
+        },
+        "spritesheet": "assets/jade-reliquary/states.png",
+        "animations": [
+          "Open",
+          "Close"
+        ],
+        "triangles": 45354,
+        "source_sha256": "0a17a51b274d238c09ade21674b70742bd5f1703f7b0e8974b6d0b2b92a58c8b",
+        "sha256": "d351c7335d35fc99d2a9539e9c09332d16d8c729f0a8d4cc7a2e9f407f729b63",
+        "bytes": 2092228,
+        "dimensions": {
+          "width": 2,
+          "up": "+Y",
+          "front": "+Z"
+        },
+        "glow_color": "#9CFFD4",
+        "magic_origin": [
+          0.4561075270175934,
+          0.5511023104190826
+        ],
+        "revision": 3,
+        "source_status": "acquired-verified-converted",
+        "integration_status": "authoring-review-runtime-copy-tracked-separately",
+        "nodes": {
+          "body": "Body",
+          "lid_pivot": "Lid",
+          "treasure": "Treasure"
+        },
+        "animation_authorship": "New one-second Open and Close tracks; original source clips are retained only in acquired originals",
+        "detail_notes": [
+          "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+          "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+          "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+          "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+          "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+          "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+          "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: jade.",
+          "Source-derived jewel facets retained and mounted in authored claws.",
+          "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+        ],
+        "detail_objects": 139,
+        "authored_detail_pieces": 139,
+        "magic_effect": {
+          "source": "Kenney Particle Pack 1.1",
+          "license": "CC0-1.0",
+          "layer": "assets/jade-reliquary/magic-fx.png",
+          "scope": "PNG composite; not baked into GLB",
+          "sprites": [
+            "light_01.png",
+            "star_04.png"
+          ]
+        }
+      }
+    },
+    {
+      "id": "crimson-citadel",
+      "name": "Crimson Citadel",
+      "revision": 3,
+      "model": "assets/chests/models/atelier/crimson-citadel/crimson-citadel.glb",
+      "resource": "res://assets/chests/models/atelier/crimson-citadel/crimson-citadel.glb",
+      "bytes": 1745060,
+      "sha256": "867677aa2a7e3dad6c7d47aa82e88be0af4afc3254986f884483d876c6dee225",
+      "triangles": 20891,
+      "mesh_resources": 3,
+      "mesh_instances": 3,
+      "primitives": 3,
+      "vertices": 35846,
+      "materials": 2,
+      "images": [
+        {
+          "name": "emission",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 22718,
+          "sha256": "d563d6dd81b619004d7370edd0a7a64090121cf966eec8a059f017a2338fe339"
+        },
+        {
+          "name": "normal",
+          "mime_type": "image/png",
+          "size": [
+            1024,
+            1024
+          ],
+          "bytes": 99774,
+          "sha256": "3490ebd60be9cdd45fd8e8db9ac22c7e12f10239af64f6ada5e17acaef206b57"
+        },
+        {
+          "name": "color",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 189490,
+          "sha256": "0f3c97933bc93e356b69c4d76c83b0385d69508c56a5f197378b2853ab981b09"
+        },
+        {
+          "name": "orm",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 145430,
+          "sha256": "bcee823de022bb82c591676ffea6985eed03a6ce983bf413c59d204d1f946fa5"
+        },
+        {
+          "name": "dungeon_texture",
+          "mime_type": "image/png",
+          "size": [
+            256,
+            256
+          ],
+          "bytes": 8301,
+          "sha256": "a3999e53408e7a1aaeefdbe36b4c111ca84fdfd16148b8b744e6e9a2a40ba826"
+        }
+      ],
+      "animations": [
+        {
+          "name": "Open",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        },
+        {
+          "name": "Close",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        }
+      ],
+      "nodes": {
+        "root": "ChestRoot",
+        "body": "Body",
+        "lid_pivot": "Lid",
+        "lid": "LidShell",
+        "treasure": "Treasure"
+      },
+      "coordinate_system": {
+        "up": "+Y",
+        "front": "+Z",
+        "right": "+X",
+        "source_shell_width": 2.0,
+        "feet_y": 0.0
+      },
+      "closed_bounds_3d": {
+        "min": [
+          -1.0975003242492676,
+          0.0,
+          -0.7508200407028198
+        ],
+        "max": [
+          1.0975003242492676,
+          1.274980902671814,
+          0.8107672333717346
+        ]
+      },
+      "opened_bounds_3d": {
+        "min": [
+          -1.0975003242492676,
+          0.0,
+          -1.209882140159607
+        ],
+        "max": [
+          1.0975003242492676,
+          2.196516990661621,
+          0.8107672333717346
+        ]
+      },
+      "bounds_transform": "Blender (x,y,z) -> glTF/Godot (x,z,-y)",
+      "style": {
+        "model": "assets/chests/models/atelier/crimson-citadel/crimson-citadel.glb",
+        "open_animation": "Open",
+        "open_start": 0.0,
+        "open_end": 1.0,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1.0
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.0975003242492676,
+            0.0,
+            -0.7508200407028198
+          ],
+          "max": [
+            1.0975003242492676,
+            1.274980902671814,
+            0.8107672333717346
+          ]
+        }
+      },
+      "license": "CC0-1.0",
+      "source": {
+        "creator": "Kenney",
+        "title": "Blaster Kit 2.1",
+        "url": "https://kenney.nl/assets/blaster-kit",
+        "license": "CC0-1.0"
+      },
+      "source_inputs": [
+        {
+          "source_id": "kenney-blaster",
+          "collection_source": "sources/expansion/kenney-blaster/crate-wide.glb",
+          "original_source_sha256": "0a17a51b274d238c09ade21674b70742bd5f1703f7b0e8974b6d0b2b92a58c8b",
+          "bytes": 59404,
+          "role": "Acquired production case body and independent lid",
+          "creator": "Kenney",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kenney-blaster-LICENSE.txt",
+          "url": "https://kenney.nl/assets/blaster-kit"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+          "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+          "bytes": 63996,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+          "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+          "bytes": 38404,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        }
+      ],
+      "collection": "Gemguard Chests",
+      "authoring_glb_sha256": "ff8fdc1bd5c0c5f6a569917ea291d5e79428ad3e4d88f8d20f725590390f3b76",
+      "original_base_sha256": "0a17a51b274d238c09ade21674b70742bd5f1703f7b0e8974b6d0b2b92a58c8b",
+      "authored_changes": [
+        "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+        "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+        "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+        "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+        "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+        "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+        "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: citadel.",
+        "Core fittings are authored mechanical trim on the acquired production shell.",
+        "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+      ],
+      "runtime_source_record": {
+        "id": "crimson-citadel",
+        "source_glb_sha256": "ff8fdc1bd5c0c5f6a569917ea291d5e79428ad3e4d88f8d20f725590390f3b76",
+        "source_triangles": 48750,
+        "triangles": 20891,
+        "closed_bounds_blender": {
+          "min": [
+            -1.0975003242492676,
+            -0.8107672333717346,
+            -9.556745084182694e-08
+          ],
+          "max": [
+            1.0975003242492676,
+            0.7508200407028198,
+            1.274980902671814
+          ]
+        },
+        "opened_bounds_blender": {
+          "min": [
+            -1.0975003242492676,
+            -0.8107672333717346,
+            -9.556745084182694e-08
+          ],
+          "max": [
+            1.0975003242492676,
+            1.209882140159607,
+            2.196516990661621
+          ]
+        },
+        "settings": {
+          "hardware_ratio": 0.5,
+          "loot_ratio": 0.1,
+          "bake_resolution": 1024,
+          "runtime_color": 512,
+          "runtime_normal": 1024,
+          "runtime_orm": 512,
+          "loot_color": 256,
+          "runtime_emission": 512
+        },
+        "materials": "Single UV baked color/normal/metallic-roughness; original loot palette",
+        "animation": "Original Open and Close tracks retained at 61 samples over one second",
+        "file": "models/crimson-citadel.glb",
+        "bytes": 1745060,
+        "sha256": "867677aa2a7e3dad6c7d47aa82e88be0af4afc3254986f884483d876c6dee225",
+        "images": [
+          {
+            "role": "emission",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 22718
+          },
+          {
+            "role": "normal",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              1024,
+              1024
+            ],
+            "bytes": 99774
+          },
+          {
+            "role": "color",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 189490
+          },
+          {
+            "role": "orm",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 145430
+          },
+          {
+            "role": "loot",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              256,
+              256
+            ],
+            "bytes": 8301
+          }
+        ],
+        "name": "Crimson Citadel",
+        "source_bytes": 2188932,
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "saved_bytes": 443872
+      },
+      "authoring_source_record": {
+        "id": "crimson-citadel",
+        "name": "Crimson Citadel",
+        "subtitle": "CRIMSON ENAMEL / RUBY CITADEL",
+        "description": "A crimson armored coffer with a layered hexagonal ruby escutcheon, gold clasp wings, side jewels and cast protective feet.",
+        "palette": [
+          "#B92B42",
+          "#E8B446",
+          "#442344",
+          "#FC5D73"
+        ],
+        "style": "citadel",
+        "collection": "Gemguard Chests",
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "source_inputs": [
+          {
+            "source_id": "kenney-blaster",
+            "collection_source": "sources/expansion/kenney-blaster/crate-wide.glb",
+            "original_source_sha256": "0a17a51b274d238c09ade21674b70742bd5f1703f7b0e8974b6d0b2b92a58c8b",
+            "bytes": 59404,
+            "role": "Acquired production case body and independent lid",
+            "creator": "Kenney",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kenney-blaster-LICENSE.txt",
+            "url": "https://kenney.nl/assets/blaster-kit"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+            "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+            "bytes": 63996,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+            "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+            "bytes": 38404,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          }
+        ],
+        "model": "assets/crimson-citadel/chest.glb",
+        "blend": "assets/crimson-citadel/chest.blend",
+        "renders": {
+          "closed": "assets/crimson-citadel/closed.png",
+          "open": "assets/crimson-citadel/open.png",
+          "treasure": "assets/crimson-citadel/treasure.png",
+          "magic": "assets/crimson-citadel/magic.png"
+        },
+        "spritesheet": "assets/crimson-citadel/states.png",
+        "animations": [
+          "Open",
+          "Close"
+        ],
+        "triangles": 48750,
+        "source_sha256": "0a17a51b274d238c09ade21674b70742bd5f1703f7b0e8974b6d0b2b92a58c8b",
+        "sha256": "ff8fdc1bd5c0c5f6a569917ea291d5e79428ad3e4d88f8d20f725590390f3b76",
+        "bytes": 2188932,
+        "dimensions": {
+          "width": 2,
+          "up": "+Y",
+          "front": "+Z"
+        },
+        "glow_color": "#FFAFAD",
+        "magic_origin": [
+          0.4561075270175934,
+          0.5511023104190826
+        ],
+        "revision": 3,
+        "source_status": "acquired-verified-converted",
+        "integration_status": "authoring-review-runtime-copy-tracked-separately",
+        "nodes": {
+          "body": "Body",
+          "lid_pivot": "Lid",
+          "treasure": "Treasure"
+        },
+        "animation_authorship": "New one-second Open and Close tracks; original source clips are retained only in acquired originals",
+        "detail_notes": [
+          "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+          "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+          "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+          "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+          "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+          "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+          "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: citadel.",
+          "Core fittings are authored mechanical trim on the acquired production shell.",
+          "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+        ],
+        "detail_objects": 147,
+        "authored_detail_pieces": 147,
+        "magic_effect": {
+          "source": "Kenney Particle Pack 1.1",
+          "license": "CC0-1.0",
+          "layer": "assets/crimson-citadel/magic-fx.png",
+          "scope": "PNG composite; not baked into GLB",
+          "sprites": [
+            "light_01.png",
+            "star_04.png"
+          ]
+        }
+      }
+    },
+    {
+      "id": "nova-buddy",
+      "name": "Nova Buddy",
+      "revision": 3,
+      "model": "assets/chests/models/atelier/nova-buddy/nova-buddy.glb",
+      "resource": "res://assets/chests/models/atelier/nova-buddy/nova-buddy.glb",
+      "bytes": 1639428,
+      "sha256": "a0e34b900a30cc5a514e35d2a3cc3a97bd88e9c8d777400a672c6ac6a66756b6",
+      "triangles": 19573,
+      "mesh_resources": 3,
+      "mesh_instances": 3,
+      "primitives": 3,
+      "vertices": 34118,
+      "materials": 2,
+      "images": [
+        {
+          "name": "emission",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 23452,
+          "sha256": "1813cbb456a64277418c8fd69264a41dcc7519245d198bc35bf58aa200048021"
+        },
+        {
+          "name": "normal",
+          "mime_type": "image/png",
+          "size": [
+            1024,
+            1024
+          ],
+          "bytes": 78751,
+          "sha256": "09d7fc5b504d742e458912e224adf9adf7ef2edea7ff2c2b057e65e2d0606c32"
+        },
+        {
+          "name": "color",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 178723,
+          "sha256": "ca5be002801eb79dac6b57d598283c0a34e8ea7b3f8854e4893e19b2f4134153"
+        },
+        {
+          "name": "orm",
+          "mime_type": "image/png",
+          "size": [
+            512,
+            512
+          ],
+          "bytes": 134058,
+          "sha256": "6b47db0099690c8025c3963173749a21701118d21a1cbe75fe50eeaa6f3bf42b"
+        },
+        {
+          "name": "dungeon_texture",
+          "mime_type": "image/png",
+          "size": [
+            256,
+            256
+          ],
+          "bytes": 8301,
+          "sha256": "a3999e53408e7a1aaeefdbe36b4c111ca84fdfd16148b8b744e6e9a2a40ba826"
+        }
+      ],
+      "animations": [
+        {
+          "name": "Open",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        },
+        {
+          "name": "Close",
+          "duration_seconds": 1.0,
+          "samples": 61,
+          "targets": [
+            "Lid"
+          ]
+        }
+      ],
+      "nodes": {
+        "root": "ChestRoot",
+        "body": "Body",
+        "lid_pivot": "Lid",
+        "lid": "LidShell",
+        "treasure": "Treasure"
+      },
+      "coordinate_system": {
+        "up": "+Y",
+        "front": "+Z",
+        "right": "+X",
+        "source_shell_width": 2.0,
+        "feet_y": 0.0
+      },
+      "closed_bounds_3d": {
+        "min": [
+          -1.097500205039978,
+          0.0,
+          -0.7508202791213989
+        ],
+        "max": [
+          1.097500205039978,
+          1.4031248092651367,
+          0.7666558027267456
+        ]
+      },
+      "opened_bounds_3d": {
+        "min": [
+          -1.097500205039978,
+          0.0,
+          -1.3350528478622437
+        ],
+        "max": [
+          1.097500205039978,
+          2.2005181312561035,
+          0.7666558027267456
+        ]
+      },
+      "bounds_transform": "Blender (x,y,z) -> glTF/Godot (x,z,-y)",
+      "style": {
+        "model": "assets/chests/models/atelier/nova-buddy/nova-buddy.glb",
+        "open_animation": "Open",
+        "open_start": 0.0,
+        "open_end": 1.0,
+        "model_parts": [
+          {
+            "node": "Lid",
+            "role": "lid",
+            "axis": [
+              1.0,
+              0.0,
+              0.0
+            ],
+            "angle": -1.7453292519943295
+          }
+        ],
+        "normalize_model": false,
+        "source_rotation_degrees": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "camera_direction": [
+          0.56,
+          0.46,
+          1.0
+        ],
+        "camera_margin": 1.12,
+        "material_profile": {},
+        "closed_bounds_3d": {
+          "min": [
+            -1.097500205039978,
+            0.0,
+            -0.7508202791213989
+          ],
+          "max": [
+            1.097500205039978,
+            1.4031248092651367,
+            0.7666558027267456
+          ]
+        }
+      },
+      "license": "CC0-1.0",
+      "source": {
+        "creator": "Kenney",
+        "title": "Blaster Kit 2.1",
+        "url": "https://kenney.nl/assets/blaster-kit",
+        "license": "CC0-1.0"
+      },
+      "source_inputs": [
+        {
+          "source_id": "kenney-blaster",
+          "collection_source": "sources/expansion/kenney-blaster/crate-medium.glb",
+          "original_source_sha256": "187c32592fedaecbbb84152102bbf536f733cbc0c2cfee60828fb18a4803619c",
+          "bytes": 59344,
+          "role": "Acquired production case body and independent lid",
+          "creator": "Kenney",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kenney-blaster-LICENSE.txt",
+          "url": "https://kenney.nl/assets/blaster-kit"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+          "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+          "bytes": 63996,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        },
+        {
+          "source_id": "kaykit-dungeon",
+          "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+          "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+          "bytes": 38404,
+          "role": "Acquired treasure mesh",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "license_file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+          "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+        }
+      ],
+      "collection": "Companion Chests",
+      "authoring_glb_sha256": "ca165acc51493672cf2e2b0120e6b36c5ab598d073b4e0bbe6a108fc929b8da5",
+      "original_base_sha256": "187c32592fedaecbbb84152102bbf536f733cbc0c2cfee60828fb18a4803619c",
+      "authored_changes": [
+        "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+        "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+        "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+        "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+        "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+        "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+        "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: robot.",
+        "Core fittings are authored mechanical trim on the acquired production shell.",
+        "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+      ],
+      "runtime_source_record": {
+        "id": "nova-buddy",
+        "source_glb_sha256": "ca165acc51493672cf2e2b0120e6b36c5ab598d073b4e0bbe6a108fc929b8da5",
+        "source_triangles": 46128,
+        "triangles": 19573,
+        "closed_bounds_blender": {
+          "min": [
+            -1.097500205039978,
+            -0.7666558027267456,
+            -9.734825567875305e-08
+          ],
+          "max": [
+            1.097500205039978,
+            0.7508202791213989,
+            1.4031248092651367
+          ]
+        },
+        "opened_bounds_blender": {
+          "min": [
+            -1.097500205039978,
+            -0.7666558027267456,
+            -9.734825567875305e-08
+          ],
+          "max": [
+            1.097500205039978,
+            1.3350528478622437,
+            2.2005181312561035
+          ]
+        },
+        "settings": {
+          "hardware_ratio": 0.5,
+          "loot_ratio": 0.1,
+          "bake_resolution": 1024,
+          "runtime_color": 512,
+          "runtime_normal": 1024,
+          "runtime_orm": 512,
+          "loot_color": 256,
+          "runtime_emission": 512
+        },
+        "materials": "Single UV baked color/normal/metallic-roughness; original loot palette",
+        "animation": "Original Open and Close tracks retained at 61 samples over one second",
+        "file": "models/nova-buddy.glb",
+        "bytes": 1639428,
+        "sha256": "a0e34b900a30cc5a514e35d2a3cc3a97bd88e9c8d777400a672c6ac6a66756b6",
+        "images": [
+          {
+            "role": "emission",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 23452
+          },
+          {
+            "role": "normal",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              1024,
+              1024
+            ],
+            "bytes": 78751
+          },
+          {
+            "role": "color",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 178723
+          },
+          {
+            "role": "orm",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              512,
+              512
+            ],
+            "bytes": 134058
+          },
+          {
+            "role": "loot",
+            "source_size": [
+              1024,
+              1024
+            ],
+            "size": [
+              256,
+              256
+            ],
+            "bytes": 8301
+          }
+        ],
+        "name": "Nova Buddy",
+        "source_bytes": 2102972,
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "saved_bytes": 463544
+      },
+      "authoring_source_record": {
+        "id": "nova-buddy",
+        "name": "Nova Buddy",
+        "subtitle": "WHITE CERAMIC / CHERRY RED",
+        "description": "A friendly companion chest with a curved signal canopy, two softly lit eyes, protective porcelain shoulders and recessed service panels.",
+        "palette": [
+          "#EBF0F6",
+          "#DD365C",
+          "#283650",
+          "#65E9FF"
+        ],
+        "style": "robot",
+        "collection": "Companion Chests",
+        "source": {
+          "creator": "Kenney",
+          "title": "Blaster Kit 2.1",
+          "url": "https://kenney.nl/assets/blaster-kit",
+          "license": "CC0-1.0"
+        },
+        "source_inputs": [
+          {
+            "source_id": "kenney-blaster",
+            "collection_source": "sources/expansion/kenney-blaster/crate-medium.glb",
+            "original_source_sha256": "187c32592fedaecbbb84152102bbf536f733cbc0c2cfee60828fb18a4803619c",
+            "bytes": 59344,
+            "role": "Acquired production case body and independent lid",
+            "creator": "Kenney",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kenney-blaster-LICENSE.txt",
+            "url": "https://kenney.nl/assets/blaster-kit"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+            "original_source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+            "bytes": 63996,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          },
+          {
+            "source_id": "kaykit-dungeon",
+            "collection_source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+            "original_source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+            "bytes": 38404,
+            "role": "Acquired treasure mesh",
+            "creator": "Kay Lousberg",
+            "license": "CC0-1.0",
+            "license_file": "licenses/kaykit-dungeon-LICENSE.txt",
+            "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0"
+          }
+        ],
+        "model": "assets/nova-buddy/chest.glb",
+        "blend": "assets/nova-buddy/chest.blend",
+        "renders": {
+          "closed": "assets/nova-buddy/closed.png",
+          "open": "assets/nova-buddy/open.png",
+          "treasure": "assets/nova-buddy/treasure.png",
+          "magic": "assets/nova-buddy/magic.png"
+        },
+        "spritesheet": "assets/nova-buddy/states.png",
+        "animations": [
+          "Open",
+          "Close"
+        ],
+        "triangles": 46128,
+        "source_sha256": "187c32592fedaecbbb84152102bbf536f733cbc0c2cfee60828fb18a4803619c",
+        "sha256": "ca165acc51493672cf2e2b0120e6b36c5ab598d073b4e0bbe6a108fc929b8da5",
+        "bytes": 2102972,
+        "dimensions": {
+          "width": 2,
+          "up": "+Y",
+          "front": "+Z"
+        },
+        "glow_color": "#65E9FF",
+        "magic_origin": [
+          0.4486021101474762,
+          0.5562746226787567
+        ],
+        "revision": 3,
+        "source_status": "acquired-verified-converted",
+        "integration_status": "authoring-review-runtime-copy-tracked-separately",
+        "nodes": {
+          "body": "Body",
+          "lid_pivot": "Lid",
+          "treasure": "Treasure"
+        },
+        "animation_authorship": "New one-second Open and Close tracks; original source clips are retained only in acquired originals",
+        "detail_notes": [
+          "Acquired Kenney Blaster Kit body and real lid meshes retain their source geometry and UV artwork.",
+          "Authored fitted segmented corner armor, lower sills, recessed side grilles, fasteners, sampled roof ribs and interleaved rear hinge knuckles.",
+          "Substantial upper corner castings wrap three lid faces with recessed enamel pockets; split brow clamps and layered planar roof plaques finish the upper shell.",
+          "The opened lid reveals a source-fitted full border and layered metal/enamel family medallion, including a friendly heart for Nova Buddy.",
+          "All fixed details are parented to Body; roof armor, fitted brow clasps and moving hinge leaves inherit the real Lid pivot.",
+          "The roof identity plaque has a continuous source-fitted mounting pedestal; no detached seam-height latch is added.",
+          "Style-specific layered bezel, core, enamel, metal roughness and glTF emissive glass: robot.",
+          "Core fittings are authored mechanical trim on the acquired production shell.",
+          "Original production shell topology and color UVs retained; authored ceramic machining and PBR finish"
+        ],
+        "detail_objects": 136,
+        "authored_detail_pieces": 136,
+        "magic_effect": {
+          "source": "Kenney Particle Pack 1.1",
+          "license": "CC0-1.0",
+          "layer": "assets/nova-buddy/magic-fx.png",
+          "scope": "PNG composite; not baked into GLB",
+          "sprites": [
+            "light_01.png",
+            "star_04.png"
+          ]
+        }
+      }
+    }
+  ],
+  "licenses": [
+    {
+      "file": "../sources/atelier/licenses/kenney-platformer-LICENSE.txt",
+      "bytes": 703,
+      "sha256": "e1185354d8f0f055c325c7204602326c8cf0c47ee5ae1db7ed16f0465b91bb9a",
+      "license": "CC0-1.0"
+    },
+    {
+      "file": "../sources/atelier/licenses/kenney-mini-dungeon-LICENSE.txt",
+      "bytes": 701,
+      "sha256": "f8b470068a1c043854101c9ff7161d376ba02c36239da3c1dbdfa928b08444b6",
+      "license": "CC0-1.0"
+    },
+    {
+      "file": "../sources/atelier/licenses/kenney-survival-LICENSE.txt",
+      "bytes": 715,
+      "sha256": "62c8356876481204fa4d40dc59183dfed777adf987d7f2a1390fffe8a699f3ff",
+      "license": "CC0-1.0"
+    },
+    {
+      "file": "../sources/atelier/licenses/kaykit-dungeon-LICENSE.txt",
+      "bytes": 829,
+      "sha256": "c5f17abf619731f57f6bbff450f6484214605c13aa96bb75bbcfc70930941ff7",
+      "license": "CC0-1.0"
+    },
+    {
+      "file": "../sources/atelier/licenses/kenney-tower-defense-LICENSE.txt",
+      "bytes": 720,
+      "sha256": "f67d4098842a15a1478a95cde1b6c44a0261901271e2709f7313c330975eccaf",
+      "license": "CC0-1.0"
+    },
+    {
+      "file": "../sources/atelier/licenses/kenney-blaster-LICENSE.txt",
+      "bytes": 700,
+      "sha256": "bece5f4d99cca9dcf86931221a69909862ff6cc95e1735462ee678516a1063e2",
+      "license": "CC0-1.0"
+    }
+  ],
+  "provenance_path_scope": "Preserved provenance records use authoring-collection-relative paths",
+  "godot_sidecars": "Existing extracted PNGs and .import files are preserved; their bytes are separate from model_bytes",
+  "provenance_directory": "../sources/atelier/provenance/",
+  "path_scopes": {
+    "models": "game-project-relative",
+    "licenses": "catalog-relative",
+    "native_validation.report": "catalog-relative",
+    "provenance_directory": "catalog-relative",
+    "source_inputs.collection_source": "authoring-collection-relative",
+    "source_inputs.license_file": "catalog-relative",
+    "authoring_source_record": "original authoring-collection-relative record",
+    "runtime_source_record": "original runtime-collection-relative record"
+  }
+}

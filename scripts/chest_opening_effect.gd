@@ -1,9 +1,9 @@
 extends Node2D
 ## A finite flourish sampled by the chest's existing, pausable presentation clock.
 
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
-const RAYS = preload("res://assets/chests/milestone/rays.png")
-const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
+const RAYS = preload("res://assets/chests/shared/effects/rays.png")
+const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const DURATION: float = 2.4
 const COLORS: Array[Color] = [Color("#ff92b7"), Color("#ffd36c"), Color("#a6edb2"),
 	Color("#8ae9f0"), Color("#b3b7ff"), Color("#e0a6fa")]

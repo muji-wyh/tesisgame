@@ -4,9 +4,9 @@ const { createHash } = require('node:crypto');
 
 const DEFAULT_SOURCE_DIRECTORY = 'C:/uworks/AssetsSource/Toon FX [1.52]/Textures';
 const TEXTURES = Object.freeze([
-  Object.freeze({ source: 'glowlines.png', destination: 'assets/chests/milestone/rays.png', bytes: 19013,
+  Object.freeze({ source: 'glowlines.png', destination: 'assets/chests/shared/effects/rays.png', bytes: 19013,
     sha256: '75ecb9a8d2c20b4892dc45160decb6d18387ce3892f7fc8ee2401d5f8773d8c1' }),
-  Object.freeze({ source: 'sparkle.png', destination: 'assets/chests/milestone/sparkle.png', bytes: 50052,
+  Object.freeze({ source: 'sparkle.png', destination: 'assets/chests/shared/effects/sparkle.png', bytes: 50052,
     sha256: 'e8387f9328d38d0b10706814f0c3500debaf1ba2133a8c80a65ef636a8238856' })
 ]);
 const sha256 = bytes => createHash('sha256').update(bytes).digest('hex');

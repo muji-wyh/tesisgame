@@ -20,9 +20,9 @@ const SKY = preload("res://assets/images/jelly-match/sky/day.png")
 const COIN = preload("res://assets/coins/gold-coin.png")
 const SKIN = preload("res://assets/images/jelly-match/gel-mint.png")
 const WAND = preload("res://assets/images/ui/jelly-powerups/auto-merge-wand.svg")
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
-const RAYS = preload("res://assets/chests/milestone/rays.png")
-const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
+const RAYS = preload("res://assets/chests/shared/effects/rays.png")
+const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const GOLD := Color("#ffdb6f")
 const GOLD_DARK := Color("#a36927")
 const PULSE_AMOUNT := 25
@@ -32,6 +32,9 @@ var _state: Dictionary = {}
 var _word: Dictionary = {}
 var _picture: Texture2D
 var _selected := 2
+var _displayed_level := 2
+var _level_reveal_pending := false
+var _reveal_level := 2
 var _kind := "jelly"
 var _offering := false
 var _active := true
@@ -62,6 +65,7 @@ var _rail_base_style: StyleBoxFlat
 var _rail_fill_style: StyleBoxFlat
 var _hero_base := Vector2.ZERO
 var _hero_edge := 1.0
+var _hero_lift_room := 0.0
 var _rail_pitch := 76.0
 var _rail_origin := Vector2.ZERO
 var _sky := TextureRect.new()
@@ -69,6 +73,8 @@ var _back := Button.new()
 var _heading: Label
 var _wallet: Label
 var _wallet_icon := TextureRect.new()
+var _wallet_roll := Control.new()
+var _wallet_right := 0.0
 var _categories := Control.new()
 var _category_buttons: Dictionary = {}
 var _stage := Control.new()
@@ -116,6 +122,11 @@ func _init() -> void:
 	_wallet = _label(self, "", 20)
 	_wallet.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_texture(_wallet_icon, COIN, self)
+	_wallet_roll.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_wallet_roll.clip_contents = true
+	_wallet_roll.hide()
+	add_child(_wallet_roll)
+	_wallet_roll.draw.connect(_draw_wallet_digits)
 	add_child(_categories)
 	for kind: String in ["jelly", "auto_merge"]:
 		var category := Button.new()
@@ -202,8 +213,9 @@ func _init() -> void:
 	resized.connect(_layout)
 	visibility_changed.connect(func() -> void:
 		if not is_visible_in_tree():
-			_pending_milestone = false
-			stop_charging())
+			stop_charging()
+			_settle_showcase()
+		_animate_wallet())
 	hide()
 
 func _texture(control: TextureRect, texture: Texture2D, parent: Node) -> void:
@@ -227,6 +239,8 @@ func present(state: Dictionary, word: Dictionary, steady: bool, selected: int = 
 	_offering = offer
 	_kind = "jelly"
 	_selected = clampi(selected if selected > 0 else mini(9, _owned_level() + 1), 1, 9)
+	_displayed_level = _selected
+	_level_reveal_pending = false
 	_visual_progress = _target_progress()
 	_reset_rail()
 	_pending_milestone = false
@@ -283,6 +297,9 @@ func configure(state: Dictionary) -> void:
 			_level_up_count += 1
 			_charge_wait = 0.64
 			_preview_wait = 0.9
+			_set_displayed_level(mini(_displayed_level, _owned_level() - 1))
+			_reveal_level = _owned_level()
+			_level_reveal_pending = true
 			if _selected != _owned_level():
 				_selected = _owned_level()
 				_present_preview()
@@ -311,6 +328,8 @@ func select_level(level: int) -> void:
 	_pulse = 0.0
 	_preview_wait = 0.0
 	_selected = level
+	_displayed_level = level
+	_level_reveal_pending = false
 	_present_preview()
 	_refresh()
 	changed.emit()
@@ -325,6 +344,8 @@ func select_upgrade(kind: String) -> void:
 	_pulse = 0.0
 	_preview_wait = 0.0
 	_selected = mini(9, _owned_level() + 1)
+	_displayed_level = _selected
+	_level_reveal_pending = false
 	_visual_progress = _target_progress()
 	_reset_rail()
 	_present_preview()
@@ -340,11 +361,39 @@ func _present_preview() -> bool:
 		return false
 	var valid: bool = _preview.present_auto_merge(_selected, _word, _reduced) if _kind == "auto_merge" else _preview.present(_selected, _word, _reduced)
 	_picture = WordArt.texture(str(_word.get("image", "")), self)
-	_hero.configure(_tile_data(_selected), SKIN, _picture, null, Style.GOOD, true)
+	_hero.configure(_tile_data(_displayed_level), SKIN, _picture, null, Style.GOOD, true)
+	_hero._level_badge.hide()
 	_hero.set_merged_presentation(0.0, _reduced)
 	_hero.visible = _kind == "jelly"
 	_wand.visible = _kind == "auto_merge"
+	_preview.set_charge_feedback(_charge_energy, _pulse)
+	_preview.set_upgrade_feedback(_payoff)
 	return valid
+
+func _set_displayed_level(level: int) -> void:
+	var next: int = clampi(level, 1, 9)
+	if next != _displayed_level:
+		_displayed_level = next
+		_hero.configure(_tile_data(next), SKIN, _picture, null, Style.GOOD, true)
+		_hero._level_badge.hide()
+	_tier.text = "Lv %d" % _displayed_level
+	_name.text = "Auto merge" if _kind == "auto_merge" else Preview.NAMES[_displayed_level]
+
+func _reveal_earned_level() -> void:
+	_level_reveal_pending = false
+	_set_displayed_level(_reveal_level)
+
+func _settle_showcase() -> void:
+	_pending_milestone = false
+	_level_reveal_pending = false
+	_payoff = 0.0
+	_pulse = 0.0
+	_preview_wait = 0.0
+	_charge_energy = 0.0
+	_set_displayed_level(_selected)
+	_preview.set_charge_feedback(0.0, 0.0)
+	_preview.set_upgrade_feedback(0.0)
+	_animate_subject()
 
 func _owned_level() -> int:
 	return int(_state.get("auto_merge_level" if _kind == "auto_merge" else "level", 1))
@@ -375,6 +424,8 @@ func start_charging() -> void:
 	if _selected != selected:
 		_selected = selected
 		_present_preview()
+	if not celebrating:
+		_set_displayed_level(_owned_level())
 	_charging = true
 	_charge_energy = maxf(_charge_energy, 0.28)
 	_charge_wait = HOLD_LEAD
@@ -417,11 +468,10 @@ func _refresh() -> void:
 	var error: String = str(_state.get("error", ""))
 	_update_wallet_text()
 	_wallet.accessibility_name = "%d saved coins" % int(_state.get("balance", 0))
-	_tier.text = "Lv %d" % _selected
-	_name.text = "Auto merge" if _kind == "auto_merge" else Preview.NAMES[_selected]
+	_tier.text = "Lv %d" % _displayed_level
+	_name.text = "Auto merge" if _kind == "auto_merge" else Preview.NAMES[_displayed_level]
 	_description.text = "%d ready Jellies" % Economy.auto_merge_capacity(_selected) if _kind == "auto_merge" \
-		else "%d nearby Jellies" % _preview.snapshot().target_count if _selected <= 4 else "Full column" if _selected == 5 \
-		else "Row + column" if _selected == 6 else "Extended ring" if _selected == 7 else "Double ring" if _selected == 8 else "Whole board"
+		else "%d nearby Jellies" % _preview.snapshot().target_count
 	_benefits.text = "Lv %d  >  Lv %d" % [owned, mini(9, owned + 1)] if owned < 9 else "Lv 9"
 	_benefits.accessibility_name = _preview.coin_description()
 	for kind: String in _category_buttons:
@@ -456,13 +506,13 @@ func _refresh() -> void:
 		_layout()
 	_levels.queue_redraw()
 	_effects.queue_redraw()
+	_animate_wallet()
 
 func set_active(value: bool) -> void:
 	_active = value
 	if not value:
 		stop_charging()
-		_pending_milestone = false
-		_payoff = 0.0
+		_settle_showcase()
 	_refresh()
 
 func set_reduced_motion(value: bool) -> void:
@@ -475,6 +525,9 @@ func set_reduced_motion(value: bool) -> void:
 		_reset_rail()
 		if _pending_milestone:
 			_begin_milestone()
+		elif _level_reveal_pending:
+			_reveal_earned_level()
+	_animate_subject()
 	_animate_wallet()
 	_effects.queue_redraw()
 
@@ -482,6 +535,22 @@ func _update_wallet_text() -> void:
 	var text: String = str(roundi(_visual_balance))
 	if _wallet.text != text:
 		_wallet.text = text
+		_layout_wallet()
+
+func _layout_wallet() -> void:
+	if _wallet_right <= 0.0:
+		return
+	var u: float = 1.0 / Style.ui_scale(self)
+	var font: Font = _wallet.get_theme_font("font")
+	var pixels: int = _wallet.get_theme_font_size("font_size")
+	var width: float = font.get_string_size(_wallet.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
+	_wallet.position = Vector2(_wallet_right - width, 12 * u)
+	_wallet.size = Vector2(width, 44 * u)
+	_wallet.pivot_offset = Vector2(width, _wallet.size.y * 0.5)
+	_wallet_icon.position = Vector2(_wallet.position.x - 6 * u - _wallet_icon.size.x, 22 * u)
+	var row: float = font.get_height(pixels)
+	_wallet_roll.position = _wallet.position + Vector2(0, (_wallet.size.y - row) * 0.5)
+	_wallet_roll.size = Vector2(width, row)
 
 func _reset_rail() -> void:
 	_rail_from = _visual_progress
@@ -522,6 +591,8 @@ func _advance_rail(step: float) -> void:
 func _begin_milestone() -> void:
 	_pending_milestone = false
 	_payoff = 1.0
+	if _reduced and _level_reveal_pending:
+		_reveal_earned_level()
 	audio_requested.emit("goal_complete")
 
 func _advance_charge_feedback(step: float) -> void:
@@ -540,8 +611,35 @@ func _advance_charge_feedback(step: float) -> void:
 
 func _animate_wallet() -> void:
 	_wallet.modulate = Color.WHITE.lerp(Color("#b47722"), _wallet_energy * 0.68)
+	_wallet_roll.visible = _active and is_visible_in_tree() and not _offering and not _reduced \
+		and _visual_balance > float(_state.get("balance", 0)) + 0.001
+	_wallet.self_modulate.a = 0.0 if _wallet_roll.visible else 1.0
+	_wallet_roll.queue_redraw()
 	var scale_amount: float = 1.0 if _reduced else 1.0 + _wallet_energy * (0.045 + sin(_elapsed * 10.0) * 0.018)
 	_wallet_icon.scale = Vector2.ONE * scale_amount
+
+func _draw_wallet_digits() -> void:
+	if not _wallet_roll.visible:
+		return
+	var font: Font = _wallet.get_theme_font("font")
+	var pixels: int = _wallet.get_theme_font_size("font_size")
+	var digits: int = str(ceili(_visual_balance)).length()
+	var cell: float = font.get_string_size("0", HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
+	var row: float = font.get_height(pixels)
+	var baseline: float = (_wallet_roll.size.y - row) * 0.5 + font.get_ascent(pixels)
+	var color: Color = Style.INK.lerp(GOLD_DARK, _wallet_energy * 0.9)
+	# Retain a single clipped number strip; no nodes or tweens are created per tick.
+	for index in range(digits):
+		var place: float = pow(10.0, digits - index - 1)
+		var value: float = _visual_balance / place
+		var digit: int = floori(value) % 10
+		var offset: float = clampf((fmod(value, 1.0) - (1.0 - 1.0 / place)) * place, 0.0, 1.0)
+		var at := Vector2(_wallet_roll.size.x - (digits - index) * cell, baseline - offset * row)
+		if index > 0 or digit > 0 or digits == 1:
+			_wallet_roll.draw_string(font, at, str(digit), HORIZONTAL_ALIGNMENT_LEFT, -1, pixels, color)
+		if offset > 0.0:
+			_wallet_roll.draw_string(font, at + Vector2(0, row), str((digit + 1) % 10),
+				HORIZONTAL_ALIGNMENT_LEFT, -1, pixels, Color(color, offset))
 
 func advance(delta: float) -> void:
 	if not _active or not is_visible_in_tree() or _offering or not is_finite(delta) or delta <= 0.0:
@@ -553,6 +651,8 @@ func advance(delta: float) -> void:
 	_elapsed += step
 	_pulse = maxf(0.0, _pulse - step * 4.5)
 	_payoff = maxf(0.0, _payoff - step / 0.9)
+	if _level_reveal_pending and not _pending_milestone and _payoff <= 1.0 - 0.10 / 0.9:
+		_reveal_earned_level()
 	_preview.advance(step)
 	if _preview_wait > 0.0:
 		_preview_wait = maxf(0.0, _preview_wait - step)
@@ -575,24 +675,38 @@ func advance(delta: float) -> void:
 				if is_equal_approx(before, _target_progress()):
 					stop_charging()
 	_advance_charge_feedback(step)
+	_preview.set_charge_feedback(_charge_energy, _pulse)
+	_preview.set_upgrade_feedback(_payoff)
 	_animate_subject()
 	_stage.queue_redraw()
 	_levels.queue_redraw()
 	_effects.queue_redraw()
 
 func _animate_subject() -> void:
-	var squash: float = _pulse * 0.055
-	var lift: float = 0.0
+	var squash: float = _pulse * 0.045 + _charge_energy * (0.012 + sin(_elapsed * 11.0) * 0.018)
+	var lift: float = _hero_edge * _charge_energy * (0.020 + sin(_elapsed * 7.0) * 0.008)
+	var tier_scale := Vector2.ONE
 	if _payoff > 0.0 and not _reduced:
 		var t: float = 1.0 - _payoff
-		squash += sin(t * TAU * 1.5) * exp(-t * 5.0) * 0.23
-		lift = sin(minf(1.0, t * 1.6) * PI) * _hero_edge * 0.13
+		squash += 0.16 * exp(-t * 18.0) - sin(t * TAU * 1.4) * exp(-t * 5.0) * 0.23
+		lift += sin(minf(1.0, t * 1.5) * PI) * _hero_edge * 0.14
+		var seconds: float = t * 0.9
+		if seconds < 0.1:
+			tier_scale = Vector2(1.0 + seconds * 1.5, 1.0 - seconds * 7.0)
+		else:
+			var reveal: float = seconds - 0.1
+			tier_scale = Vector2.ONE * (1.0 + sin(reveal * 14.0) * exp(-reveal * 7.0) * 0.32)
+			tier_scale.y *= minf(1.0, 0.30 + reveal * 13.0)
 	if _reduced:
 		squash = 0.0
+		lift = 0.0
+	lift = minf(lift, _hero_lift_room)
 	_hero.scale = Vector2(1.0 + squash, 1.0 - squash)
 	_hero.position = _hero_base - Vector2(0, lift)
 	_wand.position = _hero_base + Vector2(_hero_edge * 0.48, -_hero_edge * 0.04) - Vector2(0, lift)
 	_wand.rotation = 0.0 if _reduced else sin(_elapsed * 2.0) * 0.05 + _pulse * 0.09
+	_tier.scale = tier_scale
+	_tier.modulate = Color.WHITE.lerp(Color("#b9771b"), minf(1.0, _payoff * 1.5))
 	_hero.set_merged_presentation(0.0 if _reduced else _elapsed, _reduced)
 
 func _follow_rail() -> void:
@@ -638,12 +752,11 @@ func _layout() -> void:
 	Style.action_button(_back, Style.GOOD)
 	_back.custom_minimum_size = Vector2.ZERO
 	_back.size = Vector2(64, 44) * u
-	_wallet_icon.position = Vector2(left + width - 100 * u, 22 * u)
 	_wallet_icon.size = Vector2.ONE * 25 * u
 	_wallet_icon.pivot_offset = _wallet_icon.size * 0.5
-	_wallet.position = Vector2(left + width - 72 * u, 12 * u)
-	_wallet.size = Vector2(72, 44) * u
 	_wallet.add_theme_font_size_override("font_size", ceili(20 * u))
+	_wallet_right = left + width
+	_layout_wallet()
 	_heading.position = Vector2(left + 76 * u, 12 * u)
 	_heading.text = "Upgrades" if width < 340 * u else "Jelly Upgrades"
 	_heading.size = Vector2(maxf(1.0, width - 184 * u), 44 * u)
@@ -671,36 +784,45 @@ func _layout() -> void:
 		maxf(90 * u, (size.y - 12 * u if landscape else _footer.position.y - 8 * u) - _stage.position.y))
 	var body_width: float = _stage.size.x
 	var footer_width: float = _footer.size.x
-	var wide: bool = body_width > 620 * u
-	var title_height: float = (48 if short else 74) * u
-	_tier.position = Vector2.ZERO
-	_tier.size = Vector2(body_width * (0.6 if wide else 1.0), (28 if short else 46) * u)
-	_tier.add_theme_font_size_override("font_size", ceili((24 if short else 38) * u))
-	_name.position = Vector2(0, (26 if short else 44) * u)
-	_name.size = Vector2(_tier.size.x, (22 if short else 30) * u)
-	_name.add_theme_font_size_override("font_size", ceili((16 if short else 21) * u))
-	var art_height: float = maxf(42 * u, _stage.size.y - title_height - (0 if short else 68) * u)
-	_hero_edge = minf((216 if wide else 198) * u, art_height * 0.88)
-	var hero_x: float = body_width * (0.30 if wide else 0.34)
-	_hero_base = Vector2(hero_x - _hero_edge * 0.5, title_height + (art_height - _hero_edge) * 0.44)
+	_tier.add_theme_font_size_override("font_size", ceili((24 if short else 36) * u))
+	_name.add_theme_font_size_override("font_size", ceili((15 if short else 20) * u))
+	var tier_height: float = maxf((28 if short else 42) * u, _tier.get_minimum_size().y)
+	var name_height: float = maxf((22 if short else 28) * u, _name.get_minimum_size().y)
+	var title_height: float = tier_height + name_height + (4 if short else 8) * u
+	var caption_height: float = 0.0 if short else 38 * u
+	var art_height: float = minf(282 * u, maxf(42 * u, _stage.size.y - title_height - caption_height))
+	var top: float = maxf(0.0, (_stage.size.y - title_height - art_height - caption_height) * 0.5)
+	var gap: float = clampf(body_width * 0.045, 12 * u, 32 * u)
+	var group_width: float = minf(body_width, 540 * u)
+	_hero_edge = minf(256 * u, minf((group_width - gap) * 0.51, art_height * 0.86))
+	var preview_width: float = minf(240 * u, minf(group_width - gap - _hero_edge, art_height / 1.10))
+	group_width = _hero_edge + gap + preview_width
+	art_height = maxf(_hero_edge, preview_width * 1.10)
+	top = maxf(0.0, (_stage.size.y - title_height - art_height - caption_height) * 0.5)
+	var group_left: float = (body_width - group_width) * 0.5
+	_tier.position = Vector2(group_left, top)
+	_tier.size = Vector2(_hero_edge, tier_height)
+	_tier.pivot_offset = _tier.size * 0.5
+	_name.position = Vector2(maxf(0.0, group_left - 8 * u), top + tier_height + 2 * u)
+	_name.size = Vector2(_hero_edge + 16 * u, name_height)
+	_hero_base = Vector2(group_left, top + title_height + (art_height - _hero_edge) * 0.5)
+	_hero_lift_room = maxf(0.0, _hero_base.y - (_name.position.y + _name.size.y) - 3 * u)
 	_hero.size = Vector2.ONE * _hero_edge
+	_hero._level_badge.hide()
 	_hero.pivot_offset = _hero.size * 0.5
 	_wand.size = _hero.size * 0.36
 	_wand.pivot_offset = _wand.size * 0.5
-	_preview.size = Vector2(minf(body_width * 0.30, 222 * u), minf(art_height, 240 * u))
-	_preview.position = Vector2(body_width * (0.69 if wide else 0.82) - _preview.size.x * 0.5, title_height + (art_height - _preview.size.y) * 0.5)
-	_preview_label.position = Vector2(_preview.position.x - 12 * u, _preview.position.y - 20 * u)
-	_preview_label.size = Vector2(_preview.size.x + 24 * u, 20 * u)
-	_preview_label.add_theme_font_size_override("font_size", ceili(10 * u))
-	_preview_label.visible = not short and _preview.size.y > 105 * u
-	_description.position = Vector2(0, _stage.size.y - 62 * u)
-	_description.size = Vector2(body_width, 28 * u)
+	_preview.size = Vector2(preview_width, preview_width * 1.10)
+	_preview.position = Vector2(group_left + _hero_edge + gap, top + title_height + (art_height - _preview.size.y) * 0.5)
+	_preview_label.hide()
+	_description.position = Vector2(_preview.position.x - 8 * u, top + title_height + art_height + 6 * u)
+	_description.size = Vector2(_preview.size.x + 16 * u, 28 * u)
 	_description.add_theme_font_size_override("font_size", ceili(17 * u))
 	_benefits.position = Vector2(0, _stage.size.y - 32 * u)
 	_benefits.size = Vector2(body_width, 24 * u)
 	_benefits.add_theme_font_size_override("font_size", ceili(13 * u))
 	_description.visible = not short
-	_benefits.visible = not short
+	_benefits.hide()
 	_scroll.position = Vector2.ZERO
 	_scroll.size = Vector2(footer_width, (72 if short else 88) * u)
 	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_SHOW_NEVER
@@ -783,19 +905,28 @@ func _layout_offer(u: float) -> void:
 func _draw_stage() -> void:
 	var center: Vector2 = _hero_base + Vector2.ONE * _hero_edge * 0.5
 	var charge: float = float(_funded()) / maxf(1.0, _price())
-	var edge: float = _hero_edge * (1.7 + charge * 0.3 + (0.0 if _reduced else _pulse * 0.15))
-	_stage.draw_texture_rect(GLOW, Rect2(center - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false, Color(1.0, 0.91, 0.57, 0.5 + charge * 0.2))
+	var breath: float = 1.0 if _reduced else 0.92 + sin(_elapsed * 7.0) * 0.08
+	var energy: float = _charge_energy * breath
+	var edge: float = _hero_edge * (1.40 + energy * 0.40 + _payoff * 0.25)
+	_stage.draw_texture_rect(GLOW, Rect2(center - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false,
+		Color(1.0, 0.86 + charge * 0.08, 0.44, 0.24 + energy * 0.60 + _payoff * 0.36))
+	var footing: Vector2 = _hero_base + Vector2(_hero_edge * 0.5, _hero_edge * 0.94)
+	var ground := Vector2(_hero_edge * (1.35 + energy * 0.15), _hero_edge * 0.24)
+	_stage.draw_texture_rect(GLOW, Rect2(footing - ground * 0.5, ground), false,
+		Color(1.0, 0.91, 0.52, 0.38 + energy * 0.35))
+	if energy > 0.01:
+		var charge_edge: float = _hero_edge * 1.62
+		_stage.draw_set_transform(center, 0.0 if _reduced else _elapsed * 0.16)
+		_stage.draw_texture_rect(RAYS, Rect2(-Vector2.ONE * charge_edge * 0.5, Vector2.ONE * charge_edge), false,
+			Color(1.0, 0.90, 0.51, energy * (0.16 + charge * 0.12)))
+		_stage.draw_set_transform(Vector2.ZERO)
 	if _payoff > 0.0:
-		var ray_edge: float = _hero_edge * (2.5 if _reduced else 2.6 + (1.0 - _payoff) * 0.8)
+		var ray_edge: float = _hero_edge * (1.8 if _reduced else 1.65 + (1.0 - _payoff) * 1.25)
 		_stage.draw_set_transform(center, 0.0 if _reduced else (1.0 - _payoff) * 0.4)
-		_stage.draw_texture_rect(RAYS, Rect2(-Vector2.ONE * ray_edge * 0.5, Vector2.ONE * ray_edge), false, Color(1.0, 0.94, 0.64, _payoff * 0.86))
+		_stage.draw_texture_rect(RAYS, Rect2(-Vector2.ONE * ray_edge * 0.5, Vector2.ONE * ray_edge), false, Color(1.0, 0.96, 0.72, minf(1.0, _payoff * 1.5)))
 		_stage.draw_set_transform(Vector2.ZERO)
 	if _kind == "auto_merge":
-		var lift := 0.0
-		if not _reduced and _payoff > 0.0:
-			lift = sin(minf(1.0, (1.0 - _payoff) * 1.6) * PI) * _hero_edge * 0.13
-		var squash: float = 0.0 if _reduced else _pulse * 0.07
-		_stage.draw_set_transform(center - Vector2(0, lift), 0.0, Vector2(1 + squash, 1 - squash))
+		_stage.draw_set_transform(_hero.position + Vector2.ONE * _hero_edge * 0.5, 0.0, _hero.scale)
 		var jelly_edge: float = _hero_edge * 0.60
 		for offset: Vector2 in [Vector2(-0.25, -0.15), Vector2(0.25, -0.15), Vector2(0, 0.22)]:
 			var at: Vector2 = offset * _hero_edge
@@ -826,14 +957,33 @@ func _draw_effects() -> void:
 	var u: float = 1.0 / Style.ui_scale(self)
 	var center: Vector2 = _stage.position + _hero_base + Vector2.ONE * _hero_edge * 0.5
 	_draw_charge_feedback(u)
+	if _charge_energy > 0.01:
+		for index in range(3 if _reduced else 6):
+			var phase: float = 0.45 if _reduced else fposmod(_elapsed * 0.75 + index / 6.0, 1.0)
+			var angle: float = index * TAU / (3 if _reduced else 6) + (0.0 if _reduced else phase * 0.28)
+			var radius: float = _hero_edge * (0.88 - phase * 0.49)
+			var at: Vector2 = center + Vector2(cos(angle), sin(angle) * 0.44) * radius
+			var edge: float = (12 + sin(phase * PI) * 12) * u
+			_effects.draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false,
+				Color(1.0, 0.96, 0.64, _charge_energy * (0.45 if _reduced else sin(phase * PI)) * 0.92))
 	if _payoff > 0.0:
 		var t: float = 1.0 - _payoff
-		for index in range(4 if _reduced else 10):
-			var angle: float = index * TAU / (4 if _reduced else 10) - PI * 0.5
-			var radius: float = _hero_edge * (0.67 if _reduced else 0.48 + t * 0.65)
-			var at: Vector2 = center + Vector2.from_angle(angle) * radius
-			var edge: float = (26 if _reduced else 16 + 17 * _payoff) * u
+		var flash: float = _payoff * 0.28 if _reduced else exp(-t * 13.0) * 0.70
+		var flash_edge: float = _hero_edge * (1.05 if _reduced else 0.8 + t * 1.8)
+		_effects.draw_texture_rect(GLOW, Rect2(center - Vector2.ONE * flash_edge * 0.5, Vector2.ONE * flash_edge), false,
+			Color(1.0, 0.99, 0.82, flash))
+		for index in range(4 if _reduced else 12):
+			var angle: float = index * TAU / (4 if _reduced else 12) - PI * 0.5
+			var radius: float = _hero_edge * (0.61 if _reduced else 0.40 + (1.0 - pow(1.0 - t, 3.0)) * 0.50)
+			var at: Vector2 = center + Vector2(cos(angle), sin(angle) * 0.44) * radius
+			var edge: float = (22 if _reduced else 12 + 28 * _payoff) * u
 			_effects.draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false, Color(1, 0.97, 0.75, _payoff))
+		var tier_center: Vector2 = _stage.position + _tier.position + _tier.size * 0.5
+		var wipe: float = 0.5 if _reduced else clampf(t * 0.9 / 0.25, 0.0, 1.0)
+		var at: Vector2 = tier_center + Vector2(minf(50 * u, _tier.size.x * 0.43) + (wipe - 0.5) * 8 * u, 0)
+		var glint_edge: float = (16 if _reduced else 16 + 8 * sin(wipe * PI)) * u
+		_effects.draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * glint_edge * 0.5, Vector2.ONE * glint_edge), false,
+			Color(1.0, 0.97, 0.72, _payoff * (0.5 if _reduced else 1.0 - smoothstep(0.20, 0.40, t))))
 
 func _draw_charge_feedback(u: float) -> void:
 	if _charge_energy > 0.01:
@@ -860,6 +1010,17 @@ func _draw_charge_feedback(u: float) -> void:
 		var glint_edge: float = 13 * u
 		_effects.draw_texture_rect(SPARKLE, Rect2(glint - Vector2.ONE * glint_edge * 0.5, Vector2.ONE * glint_edge), false,
 			Color(1.0, 0.94, 0.56, _wallet_energy))
+		var number: Rect2 = _wallet.get_rect()
+		var light := Vector2(number.size.x + 14 * u, 30 * u)
+		_effects.draw_texture_rect(GLOW, Rect2(number.get_center() - light * 0.5, light), false,
+			Color(1.0, 0.84, 0.39, _wallet_energy * 0.22))
+		for index in range(2):
+			var fall: float = 0.35 if _reduced else fposmod(_elapsed * 1.8 + index * 0.5, 1.0)
+			var spark := Vector2(number.position.x + number.size.x * (0.3 + index * 0.45),
+				number.get_center().y + (7 + fall * 12) * u)
+			var spark_edge: float = (7 - fall * 3) * u
+			_effects.draw_texture_rect(SPARKLE, Rect2(spark - Vector2.ONE * spark_edge * 0.5, Vector2.ONE * spark_edge), false,
+				Color(1.0, 0.93, 0.57, _wallet_energy * (1.0 - fall)))
 
 func _rect(control: Control) -> Array:
 	var rect: Rect2 = control.get_global_rect()
@@ -869,6 +1030,8 @@ func snapshot() -> Dictionary:
 	return {"visible": is_visible_in_tree(), "mode": "offer" if _offering else "page", "kind": _kind,
 		"owned_level": _owned_level(), "auto_merge_level": int(_state.get("auto_merge_level", 1)),
 		"selected_level": _selected, "level": int(_state.get("level", 1)), "funded": _funded(),
+		"displayed_level": _displayed_level, "level_reveal_pending": _level_reveal_pending,
+		"stage": _rect(_stage), "hero": _rect(_hero),
 		"funding": _state.get("funded", {}).duplicate(true), "price": _price(),
 		"remaining": maxi(0, _price() - _funded()), "charging": _charging,
 		"progress": _target_progress(), "visual_progress": _visual_progress,
@@ -876,6 +1039,8 @@ func snapshot() -> Dictionary:
 		"milestone_pending": _pending_milestone,
 		"coin_flights": 0, "balance": int(_state.get("balance", 0)), "visual_balance": _visual_balance,
 		"charge_energy": _charge_energy, "wallet_energy": _wallet_energy, "layout_count": _layout_count,
+		"subject_charge_energy": _charge_energy,
+		"wallet_digits_rolling": _wallet_roll.visible,
 		"intro": str(_state.get("intro", "unseen")), "error": str(_state.get("error", "")), "notice": _notice.text,
 		"preview": _preview.snapshot(), "pending": _state.get("pending", {}).duplicate(true),
 		"buy": {"rect": _rect(_buy), "enabled": not _buy.disabled, "text": _buy.text,

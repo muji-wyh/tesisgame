@@ -56,9 +56,16 @@ func _test_capped_upgrades() -> void:
 		var left: Dictionary = _ready(model, int(levels[0]), 0, "cat", 3)
 		var right: Dictionary = _ready(model, int(levels[1]), 1, "cat", 4)
 		var mass: int = int(left.mass) + int(right.mass)
-		check(model.parts_compatible(left, right), "Over-cap words remain valid matching partners: " + str(levels))
+		var capped_input: bool = int(levels[0]) >= Model.MAX_MERGE_LEVEL or int(levels[1]) >= Model.MAX_MERGE_LEVEL
+		check(model.parts_compatible(left, right) == (not capped_input),
+			"Only inputs below the cap can be matching upgrade partners: " + str(levels))
 		var status: String = model.try_merge(int(left.id), int(right.id))
-		check(status == "merged", "Accept same-word levels even when their sum exceeds the cap: " + str(levels))
+		if capped_input:
+			check(status == "ignored" and model.fusions.is_empty() and model.cells.size() == 2
+				and left.fragments == 3 and right.fragments == 4,
+				"A capped input makes the attempt neutral without consuming either word: " + str(levels))
+			continue
+		check(status == "merged", "Accept uncapped same-word inputs even when their sum exceeds the cap: " + str(levels))
 		if status != "merged":
 			continue
 		model.step(1.0)
@@ -78,6 +85,11 @@ func _test_unlocked_cap_upgrades() -> void:
 				var right: Dictionary = _ready(model, right_level, 1, "cat", 4)
 				for reverse: bool in [false, true]:
 					var candidate: Dictionary = model.merge_candidate(right, left) if reverse else model.merge_candidate(left, right)
+					if left_level == cap or right_level == cap:
+						check(candidate.status == "level_capped" and candidate.result.is_empty()
+							and not model.parts_compatible(left, right),
+							"An input at the unlocked cap is neutral in both directions")
+						continue
 					check(candidate.status == "complete" and candidate.result.merge_level == mini(cap, left_level + right_level)
 						and candidate.result.fragments == 7 and candidate.result.mass == left.mass + right.mass,
 						"Every same-word sum clamps to its actual unlocked cap in both directions while conserving contents")

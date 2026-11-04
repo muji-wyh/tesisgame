@@ -4,8 +4,8 @@ extends Control
 signal skip_requested
 
 const Style = preload("res://scripts/ui_style.gd")
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
-const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
+const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 
 var remaining: float = 0.0
 var duration: float = 0.0

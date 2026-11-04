@@ -55,7 +55,7 @@ round receipt; retrying that same settlement cannot pay twice or downgrade stars
 Newly earned chests stop upgrading at **Lv30**. Existing historical quotes and
 their paid receipts remain valid without silently changing their original tier
 or amount. Real 3D tier presentation is documented in
-[the chest catalog](../assets/chests/catalog-cc0/README.md).
+[the chest catalog](../assets/chests/sources/cc0/README.md).
 
 `CoinWallet` version 5 retains the chest quotes introduced in version 4: each chest's original
 receipt ID, tier, Pip level, base, bonus and total. The first settlement

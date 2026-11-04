@@ -2,9 +2,9 @@ extends Control
 ## Persistent stage progress and a brief, input-transparent stage arrival.
 
 const Style = preload("res://scripts/ui_style.gd")
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
-const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
-const RAYS = preload("res://assets/chests/milestone/rays.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
+const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
+const RAYS = preload("res://assets/chests/shared/effects/rays.png")
 const STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 const STAR_TEXTURES: Array[Texture2D] = [
 	preload("res://assets/images/ui/jelly-goals/rating-bronze.png"),

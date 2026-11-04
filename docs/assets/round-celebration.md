@@ -19,10 +19,10 @@ repository does not identify a separate individual illustrator.
 The closed chest reuses the current world's integrated chest art. The
 Royal, Energy and Crystal designs come from the user-provided Modern 2D Animated
 Chests Pack_FREE Demo 1.0.2. Its original source paths and file hashes are
-recorded in `assets/chests/SOURCE.txt` and `assets/chests/manifest.json`; those
+recorded in `assets/chests/sources/sprites/SOURCE.txt` and `assets/chests/catalog/sprites.json`; those
 records do not independently identify an artist or assert additional rights.
 The five other world designs retain the acquired models and Unity Asset Store
-Standard EULA records in `assets/chests/downloaded/manifest.json`. Previewing
+Standard EULA records in `assets/chests/catalog/licensed-models.json`. Previewing
 a closed chest does not invoke its charge, opening, persistence or saved-reward
 callbacks.
 

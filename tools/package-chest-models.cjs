@@ -25,7 +25,7 @@ for (const [style, [id, source, name]] of Object.entries(definitions)) {
   const model = models.get(id);
   if (!model || !model.model_parts?.some(part => part.role === 'lid')) throw new Error(`Missing articulated model: ${id}`);
   const modelPath = model.model.replace(/^res:\/\//, '');
-  if (!/^assets\/chests\/models\/[a-z-]+\.glb$/.test(modelPath)) throw new Error(`Invalid model path: ${modelPath}`);
+  if (modelPath !== `assets/chests/models/licensed/${id}/${id}.glb`) throw new Error(`Invalid model path: ${modelPath}`);
   const bytes = fs.readFileSync(path.join(root, modelPath));
   const sha256 = crypto.createHash('sha256').update(bytes).digest('hex');
   if (bytes.length !== model.bytes || sha256 !== model.sha256) throw new Error(`Model changed after conversion: ${id}`);
@@ -50,7 +50,8 @@ for (const [style, [id, source, name]] of Object.entries(definitions)) {
   manifest.styles[style] = skin;
   manifest.assets.push({ path: modelPath, bytes: bytes.length, sha256 });
 }
-const destination = path.join(root, 'assets/chests/downloaded/manifest.json');
+const destination = path.join(root, 'assets/chests/catalog/licensed-models.json');
+fs.mkdirSync(path.dirname(destination), { recursive: true });
 fs.writeFileSync(destination + '.tmp', JSON.stringify(manifest, null, 2) + '\n');
 fs.renameSync(destination + '.tmp', destination);
 console.log(`Validated and catalogued ${manifest.assets.length} animated chest models (${(manifest.assets.reduce((sum, asset) => sum + asset.bytes, 0) / 1e6).toFixed(2)} MB).`);

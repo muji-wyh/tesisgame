@@ -41,16 +41,16 @@
       "animations": "Static vector artwork; placement authored at runtime"
     },
     {
-      "path": "assets/chests/particles/portal_glow.png",
+      "path": "assets/chests/shared/effects/portal_glow.png",
       "creator": "Bobardo",
       "pack": "Modern 2D Animated Chests FREE Demo 1.0.2",
       "license": "Standard Unity Asset Store EULA",
       "status": "Already acquired and integrated; reused unchanged",
-      "sourceRecord": "assets/chests/SOURCE.txt",
+      "sourceRecord": "assets/chests/sources/sprites/SOURCE.txt",
       "animations": "Static texture; local glow placement and opacity authored at runtime"
     },
     {
-      "path": "assets/chests/milestone/sparkle.png",
+      "path": "assets/chests/shared/effects/sparkle.png",
       "creator": "Kenneth Foldal Moe / Archanor VFX",
       "pack": "Toon FX 1.52",
       "license": "Standard Unity Asset Store EULA",

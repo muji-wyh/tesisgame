@@ -91,7 +91,7 @@ game-authored hinges and Moonstone's magnetic cover lift animate continuously,
 with pressure feedback and real interior lighting. They retain the shared
 2.65-second performance, cancellation, reduced motion, and exactly-once rewards. Source package hashes,
 license references, and motion provenance are recorded in
-`assets/chests/downloaded/SOURCE.txt` and its manifest. Exact source designs,
+`assets/chests/sources/licensed/SOURCE.txt` and its manifest. Exact source designs,
 geometry adaptations and available source animations are documented in
 [the chest asset record](assets/chest-refresh.md).
 

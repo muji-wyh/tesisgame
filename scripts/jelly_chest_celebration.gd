@@ -7,9 +7,9 @@ signal confetti_requested
 const RewardModel = preload("res://scripts/chest_reward_model.gd")
 const Flight = preload("res://scripts/chest_reward_flight.gd")
 const Style = preload("res://scripts/ui_style.gd")
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
-const RAYS = preload("res://assets/chests/milestone/rays.png")
-const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
+const RAYS = preload("res://assets/chests/shared/effects/rays.png")
+const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const ARRIVAL_SECONDS: float = 0.65
 const REVEAL_SECONDS: float = Flight.REVEAL_SECONDS
 const PERFORMANCE_SECONDS: float = Flight.PERFORMANCE_SECONDS

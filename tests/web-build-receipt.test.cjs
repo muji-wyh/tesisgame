@@ -33,7 +33,7 @@ function fixture(t) {
   };
   write('project.godot', 'config_version=5');
   write('scripts/game.gd', 'extends Node');
-  write('assets/chests/models/private.glb', 'private model bytes');
+  write('assets/chests/models/licensed/private.glb', 'private model bytes');
   write('web/shell.html', 'source shell');
   const pack = Buffer.from('A complete native game pack with bundled art and audio');
   const mainPack = `game-${createHash('sha256').update(pack).digest('hex').slice(0, 16)}.pck.br`;
@@ -62,7 +62,7 @@ test('a successful receipt verifies exact source and output bytes without relyin
   const { root, write, record, receipt } = fixture(t);
   const recorded = record();
   assert.deepEqual(verifyBuildReceipt(root), recorded);
-  assert.ok(recorded.sources.some(file => file.path === 'assets/chests/models/private.glb'),
+  assert.ok(recorded.sources.some(file => file.path === 'assets/chests/models/licensed/private.glb'),
     'Ignored licensed build inputs are part of source verification');
   assert.equal(recorded.output.some(file => file.path.includes('web-build.json')), false,
     'The local source inventory is never put in the published output');
@@ -94,7 +94,7 @@ test('localhost preview edits do not stale production builds while runtime and d
 test('edits to private assets, new scripts and deleted runtime inputs reject an older export', t => {
   const { root, write, record } = fixture(t);
   record();
-  write('assets/chests/models/private.glb', 'revised model bytes');
+  write('assets/chests/models/licensed/private.glb', 'revised model bytes');
   assert.throws(() => verifyBuildReceipt(root), /Stale Web build.*private\.glb/);
   record();
   write('scripts/new_mode.gd', 'extends Control');

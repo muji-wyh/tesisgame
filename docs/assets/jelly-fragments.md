@@ -38,7 +38,7 @@ chest rotates. The existing two-surface pool and independent reward ownership
 remain. The first twelve tiers also use Blender-refined CC0 bases; original
 files, separate lids, source UVs and opening clips are preserved. Source,
 creator, license, conversion hashes and animations are recorded in
-`assets/chests/polished-cc0/manifest.json`; the five private designs retain their
+`assets/chests/catalog/cc0-models.json`; the five private designs retain their
 existing softer three-segment source conversion. No replacement geometric chest
 or new audio is introduced.
 Intermediate chests never run final opening or saving callbacks; the gameplay
@@ -84,7 +84,7 @@ The local light and glints reuse the already acquired Bobardo
 `particles/portal_glow.png` and Kenneth Foldal Moe / Archanor VFX Toon FX 1.52
 `milestone/sparkle.png`, under their recorded Standard Unity Asset Store licenses.
 Both are static textures with game-authored placement and opacity; acquisition,
-source mappings and hashes remain in the records below and `assets/chests/SOURCE.txt`.
+source mappings and hashes remain in the records below and `assets/chests/sources/sprites/SOURCE.txt`.
 No new chest, particles or audio is acquired. The former Tabler connector is no
 longer drawn in this presentation.
 
@@ -230,8 +230,8 @@ remains in use. Every additional five fragments still produces an upgrade.
 The first four sources, their Unity Asset Store Standard EULA, source and output
 hashes, separate body/lid geometry, and available animation clips are documented
 in [the chest replacement record](chest-refresh.md) and
-`assets/chests/downloaded/manifest.json`. Royal and Crystal retain the source
-record in `assets/chests/SOURCE.txt`, `assets/chests/manifest.json`, and
+`assets/chests/catalog/licensed-models.json`. Royal and Crystal retain the source
+record in `assets/chests/sources/sprites/SOURCE.txt`, `assets/chests/catalog/sprites.json`, and
 [round completion](round-celebration.md). The tier system does not introduce a
 new acquisition or claim a new license for those existing assets.
 
@@ -280,7 +280,7 @@ settings before starting Godot import. It does not restore or replace an asset
 silently. The focused `jelly-reward-art` Node suite covers missing and altered
 inputs, import-setting failures, exact copying and idempotent restoration.
 
-The existing `assets/chests/particles/portal_glow.png` supplies the local light
+The existing `assets/chests/shared/effects/portal_glow.png` supplies the local light
 accent under its recorded source rights. Existing chest cue recordings can be
 reused without copying a new soundtrack from this motion reference; their
 provenance and extraction limits remain in
@@ -298,8 +298,8 @@ no Unity prefab, shader or script is executed, and no video frames are shipped.
 
 | Acquired source | Private runtime input | Bytes | Source / output SHA-256 |
 | --- | --- | ---: | --- |
-| `Textures/glowlines.png` | `assets/chests/milestone/rays.png` | 19,013 | `75ecb9a8d2c20b4892dc45160decb6d18387ce3892f7fc8ee2401d5f8773d8c1` |
-| `Textures/sparkle.png` | `assets/chests/milestone/sparkle.png` | 50,052 | `e8387f9328d38d0b10706814f0c3500debaf1ba2133a8c80a65ef636a8238856` |
+| `Textures/glowlines.png` | `assets/chests/shared/effects/rays.png` | 19,013 | `75ecb9a8d2c20b4892dc45160decb6d18387ce3892f7fc8ee2401d5f8773d8c1` |
+| `Textures/sparkle.png` | `assets/chests/shared/effects/sparkle.png` | 50,052 | `e8387f9328d38d0b10706814f0c3500debaf1ba2133a8c80a65ef636a8238856` |
 
 Restore these byte-for-byte private inputs with
 `node tools/prepare-chest-milestone-art.cjs`, then run `npm run import`.

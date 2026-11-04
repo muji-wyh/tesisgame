@@ -1,0 +1,805 @@
+{
+	"capture_requested": true,
+	"checks": 1296,
+	"display": "Windows",
+	"failures": [],
+	"godot": "4.7.2-stable (official)",
+	"models": [
+		{
+			"animations": {
+				"Close": 1.0,
+				"Open": 1.0,
+				"hinge_degrees": 99.9999868456455
+			},
+			"bytes": 1237636,
+			"camera_size": 4.86768341064453,
+			"captures": [
+				"Q:/uwok/chest/build/expansion-native-final/royal-rose-closed.png",
+				"Q:/uwok/chest/build/expansion-native-final/royal-rose-open.png",
+				"Q:/uwok/chest/build/expansion-native-final/royal-rose-treasure.png"
+			],
+			"emissive_surfaces": 0,
+			"expected_emission": false,
+			"id": "royal-rose",
+			"import_source_md5": "a4f2f8997e4e2517dca7398e78a2c77e",
+			"materials": [
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": false,
+					"emission_size": [
+						0,
+						0
+					],
+					"mesh": "Body",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				},
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": false,
+					"emission_size": [
+						0,
+						0
+					],
+					"mesh": "LidShell",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				}
+			],
+			"mesh_instances": 3,
+			"model": "res://assets/chests/atelier/royal-rose.glb",
+			"passed": true,
+			"sha256": "e79297c282c23b201ce5b2b6a811145f63dd824a3deb7823d965d20af34fe067",
+			"structural_passed": true,
+			"triangles": 13123
+		},
+		{
+			"animations": {
+				"Close": 1.0,
+				"Open": 1.0,
+				"hinge_degrees": 99.9999868456455
+			},
+			"bytes": 1295512,
+			"camera_size": 4.8473744392395,
+			"captures": [
+				"Q:/uwok/chest/build/expansion-native-final/moonbound-closed.png",
+				"Q:/uwok/chest/build/expansion-native-final/moonbound-open.png",
+				"Q:/uwok/chest/build/expansion-native-final/moonbound-treasure.png"
+			],
+			"emissive_surfaces": 0,
+			"expected_emission": false,
+			"id": "moonbound",
+			"import_source_md5": "c8304d58a0f65d1d77edbce03797f47a",
+			"materials": [
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": false,
+					"emission_size": [
+						0,
+						0
+					],
+					"mesh": "Body",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				},
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": false,
+					"emission_size": [
+						0,
+						0
+					],
+					"mesh": "LidShell",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				}
+			],
+			"mesh_instances": 3,
+			"model": "res://assets/chests/atelier/moonbound.glb",
+			"passed": true,
+			"sha256": "caabad89ceb5ced45f51a9bf1a929b19ff506208bde851e2c4ad41bfa7cde73b",
+			"structural_passed": true,
+			"triangles": 13077
+		},
+		{
+			"animations": {
+				"Close": 1.0,
+				"Open": 1.0,
+				"hinge_degrees": 99.9999868456455
+			},
+			"bytes": 1294424,
+			"camera_size": 5.19769811630249,
+			"captures": [
+				"Q:/uwok/chest/build/expansion-native-final/sunward-closed.png",
+				"Q:/uwok/chest/build/expansion-native-final/sunward-open.png",
+				"Q:/uwok/chest/build/expansion-native-final/sunward-treasure.png"
+			],
+			"emissive_surfaces": 0,
+			"expected_emission": false,
+			"id": "sunward",
+			"import_source_md5": "664ecdb038e2c3416b899e9a12c3ad77",
+			"materials": [
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": false,
+					"emission_size": [
+						0,
+						0
+					],
+					"mesh": "Body",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				},
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": false,
+					"emission_size": [
+						0,
+						0
+					],
+					"mesh": "LidShell",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				}
+			],
+			"mesh_instances": 3,
+			"model": "res://assets/chests/atelier/sunward.glb",
+			"passed": true,
+			"sha256": "a497d6ce1e1b04c9015032f4c9d6f3a28644a272d264a9052e3203ce555b5543",
+			"structural_passed": true,
+			"triangles": 12986
+		},
+		{
+			"animations": {
+				"Close": 1.0,
+				"Open": 1.0,
+				"hinge_degrees": 99.9999868456455
+			},
+			"bytes": 1549360,
+			"camera_size": 4.13539886474609,
+			"captures": [
+				"Q:/uwok/chest/build/expansion-native-final/tideguard-closed.png",
+				"Q:/uwok/chest/build/expansion-native-final/tideguard-open.png",
+				"Q:/uwok/chest/build/expansion-native-final/tideguard-treasure.png"
+			],
+			"emissive_surfaces": 0,
+			"expected_emission": false,
+			"id": "tideguard",
+			"import_source_md5": "372fc0e792267954033592ddf2208810",
+			"materials": [
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": false,
+					"emission_size": [
+						0,
+						0
+					],
+					"mesh": "Body",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				},
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": false,
+					"emission_size": [
+						0,
+						0
+					],
+					"mesh": "LidShell",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				}
+			],
+			"mesh_instances": 3,
+			"model": "res://assets/chests/atelier/tideguard.glb",
+			"passed": true,
+			"sha256": "2f948c069d5e152150cf1e262cfd4a2aee9b3135dc52184ab3d1e3328dd6b260",
+			"structural_passed": true,
+			"triangles": 16873
+		},
+		{
+			"animations": {
+				"Close": 1.0,
+				"Open": 1.0,
+				"hinge_degrees": 99.9999868456455
+			},
+			"bytes": 1650892,
+			"camera_size": 4.21634864807129,
+			"captures": [
+				"Q:/uwok/chest/build/expansion-native-final/aether-vault-closed.png",
+				"Q:/uwok/chest/build/expansion-native-final/aether-vault-open.png",
+				"Q:/uwok/chest/build/expansion-native-final/aether-vault-treasure.png"
+			],
+			"emissive_surfaces": 2,
+			"expected_emission": true,
+			"id": "aether-vault",
+			"import_source_md5": "f81f350790a569ba144098f2d5c68613",
+			"materials": [
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "Body",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				},
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "LidShell",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				}
+			],
+			"mesh_instances": 3,
+			"model": "res://assets/chests/atelier/aether-vault.glb",
+			"passed": true,
+			"sha256": "2a3ebb2635dec4f3a25b11393001401635c26b36c5ef359dd78e988333627101",
+			"structural_passed": true,
+			"triangles": 19113
+		},
+		{
+			"animations": {
+				"Close": 1.0,
+				"Open": 1.0,
+				"hinge_degrees": 99.9999868456455
+			},
+			"bytes": 1634188,
+			"camera_size": 4.21634864807129,
+			"captures": [
+				"Q:/uwok/chest/build/expansion-native-final/cobalt-vault-closed.png",
+				"Q:/uwok/chest/build/expansion-native-final/cobalt-vault-open.png",
+				"Q:/uwok/chest/build/expansion-native-final/cobalt-vault-treasure.png"
+			],
+			"emissive_surfaces": 2,
+			"expected_emission": true,
+			"id": "cobalt-vault",
+			"import_source_md5": "be7ca6324cdf6d9a5e9af01812a1a746",
+			"materials": [
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "Body",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				},
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "LidShell",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				}
+			],
+			"mesh_instances": 3,
+			"model": "res://assets/chests/atelier/cobalt-vault.glb",
+			"passed": true,
+			"sha256": "080210d19c5d15267605c8ada6d0d8c8c26a798c0d8932dbe85d23732f3ff72d",
+			"structural_passed": true,
+			"triangles": 19113
+		},
+		{
+			"animations": {
+				"Close": 1.0,
+				"Open": 1.0,
+				"hinge_degrees": 99.9999868456455
+			},
+			"bytes": 1845100,
+			"camera_size": 3.7943594455719,
+			"captures": [
+				"Q:/uwok/chest/build/expansion-native-final/solar-relay-closed.png",
+				"Q:/uwok/chest/build/expansion-native-final/solar-relay-open.png",
+				"Q:/uwok/chest/build/expansion-native-final/solar-relay-treasure.png"
+			],
+			"emissive_surfaces": 2,
+			"expected_emission": true,
+			"id": "solar-relay",
+			"import_source_md5": "d830c22588e0c498e53fc8ef95a5d4b2",
+			"materials": [
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "Body",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				},
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "LidShell",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				}
+			],
+			"mesh_instances": 3,
+			"model": "res://assets/chests/atelier/solar-relay.glb",
+			"passed": true,
+			"sha256": "a104857980bf69ae54f53242d538f86604f19061ce04aca52a8e28b2cc2cad3f",
+			"structural_passed": true,
+			"triangles": 21759
+		},
+		{
+			"animations": {
+				"Close": 1.0,
+				"Open": 1.0,
+				"hinge_degrees": 99.9999868456455
+			},
+			"bytes": 1857808,
+			"camera_size": 3.7943594455719,
+			"captures": [
+				"Q:/uwok/chest/build/expansion-native-final/frost-relay-closed.png",
+				"Q:/uwok/chest/build/expansion-native-final/frost-relay-open.png",
+				"Q:/uwok/chest/build/expansion-native-final/frost-relay-treasure.png"
+			],
+			"emissive_surfaces": 2,
+			"expected_emission": true,
+			"id": "frost-relay",
+			"import_source_md5": "bf60a1becddaa77ca1e7ab6314c03284",
+			"materials": [
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "Body",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				},
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "LidShell",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				}
+			],
+			"mesh_instances": 3,
+			"model": "res://assets/chests/atelier/frost-relay.glb",
+			"passed": true,
+			"sha256": "6a4e0cd025ff305f5076085ec59295c107eb4fbe5cf7add50e45df7a8bde202b",
+			"structural_passed": true,
+			"triangles": 21759
+		},
+		{
+			"animations": {
+				"Close": 1.0,
+				"Open": 1.0,
+				"hinge_degrees": 99.9999868456455
+			},
+			"bytes": 1605224,
+			"camera_size": 3.7122859954834,
+			"captures": [
+				"Q:/uwok/chest/build/expansion-native-final/prism-signal-closed.png",
+				"Q:/uwok/chest/build/expansion-native-final/prism-signal-open.png",
+				"Q:/uwok/chest/build/expansion-native-final/prism-signal-treasure.png"
+			],
+			"emissive_surfaces": 2,
+			"expected_emission": true,
+			"id": "prism-signal",
+			"import_source_md5": "254c2361a796cf317bd868e6f97e1711",
+			"materials": [
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "Body",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				},
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "LidShell",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				}
+			],
+			"mesh_instances": 3,
+			"model": "res://assets/chests/atelier/prism-signal.glb",
+			"passed": true,
+			"sha256": "7ba78d357e08ad4b4dd9f91f4761e812978ce712805f9076cdcf3d1bce5a0331",
+			"structural_passed": true,
+			"triangles": 19079
+		},
+		{
+			"animations": {
+				"Close": 1.0,
+				"Open": 1.0,
+				"hinge_degrees": 99.9999868456455
+			},
+			"bytes": 1632244,
+			"camera_size": 3.73690557479858,
+			"captures": [
+				"Q:/uwok/chest/build/expansion-native-final/jade-reliquary-closed.png",
+				"Q:/uwok/chest/build/expansion-native-final/jade-reliquary-open.png",
+				"Q:/uwok/chest/build/expansion-native-final/jade-reliquary-treasure.png"
+			],
+			"emissive_surfaces": 2,
+			"expected_emission": true,
+			"id": "jade-reliquary",
+			"import_source_md5": "104f4f2f59389fff82f5b3aefcdd84b4",
+			"materials": [
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "Body",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				},
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "LidShell",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				}
+			],
+			"mesh_instances": 3,
+			"model": "res://assets/chests/atelier/jade-reliquary.glb",
+			"passed": true,
+			"sha256": "c13697148d58680a6c746afde499b71915ffb033f6cd7c11e455f6208bbc562d",
+			"structural_passed": true,
+			"triangles": 19193
+		},
+		{
+			"animations": {
+				"Close": 1.0,
+				"Open": 1.0,
+				"hinge_degrees": 99.9999868456455
+			},
+			"bytes": 1745060,
+			"camera_size": 3.72071027755737,
+			"captures": [
+				"Q:/uwok/chest/build/expansion-native-final/crimson-citadel-closed.png",
+				"Q:/uwok/chest/build/expansion-native-final/crimson-citadel-open.png",
+				"Q:/uwok/chest/build/expansion-native-final/crimson-citadel-treasure.png"
+			],
+			"emissive_surfaces": 2,
+			"expected_emission": true,
+			"id": "crimson-citadel",
+			"import_source_md5": "fb72f0405e159cdea8d138a9196a2b35",
+			"materials": [
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "Body",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				},
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "LidShell",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				}
+			],
+			"mesh_instances": 3,
+			"model": "res://assets/chests/atelier/crimson-citadel.glb",
+			"passed": true,
+			"sha256": "867677aa2a7e3dad6c7d47aa82e88be0af4afc3254986f884483d876c6dee225",
+			"structural_passed": true,
+			"triangles": 20891
+		},
+		{
+			"animations": {
+				"Close": 1.0,
+				"Open": 1.0,
+				"hinge_degrees": 99.9999868456455
+			},
+			"bytes": 1639428,
+			"camera_size": 3.79129338264465,
+			"captures": [
+				"Q:/uwok/chest/build/expansion-native-final/nova-buddy-closed.png",
+				"Q:/uwok/chest/build/expansion-native-final/nova-buddy-open.png",
+				"Q:/uwok/chest/build/expansion-native-final/nova-buddy-treasure.png"
+			],
+			"emissive_surfaces": 2,
+			"expected_emission": true,
+			"id": "nova-buddy",
+			"import_source_md5": "1fdddd18579832d997f046806a32c673",
+			"materials": [
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "Body",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				},
+				{
+					"color_size": [
+						512,
+						512
+					],
+					"emission_enabled": true,
+					"emission_size": [
+						512,
+						512
+					],
+					"mesh": "LidShell",
+					"normal_size": [
+						1024,
+						1024
+					],
+					"roughness_size": [
+						512,
+						512
+					]
+				}
+			],
+			"mesh_instances": 3,
+			"model": "res://assets/chests/atelier/nova-buddy.glb",
+			"passed": true,
+			"sha256": "a0e34b900a30cc5a514e35d2a3cc3a97bd88e9c8d777400a672c6ac6a66756b6",
+			"structural_passed": true,
+			"triangles": 19573
+		}
+	],
+	"passed": true,
+	"rendering_method": "gl_compatibility",
+	"selection_manifest": "Q:/uwok/chest/runtime/manifest.json",
+	"verified_at_utc": "2026-11-04T00:14:28"
+}

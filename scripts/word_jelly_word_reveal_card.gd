@@ -5,8 +5,8 @@ const Style = preload("res://scripts/ui_style.gd")
 const WordArt = preload("res://scripts/word_art.gd")
 const WordModel = preload("res://scripts/word_jelly_model.gd")
 const LevelEffects = preload("res://scripts/word_jelly_reveal_fx.gd")
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
-const GLINT = preload("res://assets/chests/milestone/sparkle.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
+const GLINT = preload("res://assets/chests/shared/effects/sparkle.png")
 
 var entry_id: int = 0
 var elapsed: float = 0.0

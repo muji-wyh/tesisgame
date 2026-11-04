@@ -7,7 +7,7 @@ const Style = preload("res://scripts/ui_style.gd")
 const WordArt = preload("res://scripts/word_art.gd")
 const SKIN = preload("res://assets/images/jelly-match/gel-mint.png")
 const PICTURE = preload("res://assets/images/ui/modes/cat.webp")
-const CHEST = preload("res://assets/chests/royal/closed.png")
+const CHEST = preload("res://assets/chests/sprites/royal/closed.png")
 
 var checks: int = 0
 var failures: int = 0

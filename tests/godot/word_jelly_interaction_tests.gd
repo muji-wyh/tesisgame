@@ -13,6 +13,8 @@ func _run() -> void:
 	root.add_child(view)
 	view.word_requested.connect(func(word: Dictionary) -> void: heard.append(word))
 	view.audio_requested.connect(func(cue: String) -> void: cues.append(cue))
+	view.word_attempted.connect(func(id: String, ids: Array[String], correct: bool) -> void:
+		attempts.append({"id": id, "words": ids, "correct": correct}))
 	view.game.collection_started.connect(func(operation: Dictionary) -> void: _tap_collections.append(operation.duplicate(true)))
 	view.collected.connect(func(id: String, word: Dictionary, amount: int, fragments: int, origin: Vector2) -> void:
 		payouts.append({"id": id, "word": word, "amount": amount, "fragments": fragments, "origin": origin}))
@@ -21,6 +23,7 @@ func _run() -> void:
 		for reduced: bool in [false, true]:
 			_check_cross_level_hints(view, reduced)
 			_check_max_level_drop(view, reduced)
+			_check_matching_merged_partner_drop(view, reduced)
 			_check_early_match(view, reduced)
 			_check_match_edges(view, reduced)
 			_check_crowded_match(view, reduced)
@@ -88,6 +91,45 @@ func _check_max_level_drop(view, reduced: bool) -> void:
 				_advance(view, 0.5)
 				check(view.game.fusions.is_empty() and view.game.combo_count == 3 and cues.count("wrong") == 0,
 					"Snapback finishes without a delayed mismatch or combo reset")
+
+func _check_matching_merged_partner_drop(view, reduced: bool) -> void:
+	for kind: String in ["root", "picture"]:
+		for merged_source: bool in [false, true]:
+			for pointer: int in [-1, 7]:
+				_reset(view, reduced)
+				_tap_collections.clear()
+				var ids: Array[int] = _completion_board(view, [kind + ":cat", "merged:cat:2"], [2, 3])
+				var source: int = ids[1] if merged_source else ids[0]
+				var target: int = ids[0] if merged_source else ids[1]
+				var cells_before: Array = view.game.cells.duplicate(true)
+				view.game.combo_count = 3
+				view.game.combo_progress = 2
+				view.game._combo_remaining = 5.0
+				var combo: Dictionary = view.game.combo_snapshot()
+				var destination: Vector2 = _center(view, target)
+				check(view._press(pointer, _center(view, source)), "A matching merged partner can be picked up with mouse and touch")
+				_assert_completion_hints(view, [], "matching merged partner")
+				view._move(destination)
+				check(view._dragging and view._target == target and view._contact_state().kind == "touch",
+					"A word or picture touching its merged Jelly keeps neutral physical feedback in both directions")
+				view._release(destination)
+				check(view.game.fusions.is_empty() and view._rejection.is_empty()
+					and cues.count("wrong") == 0 and cues.count("merge") == 0,
+					"A matching merged partner drop has no merge, rejection animation or mismatch sound")
+				check(view.game.combo_snapshot() == combo and attempts.is_empty() and payouts.is_empty() and _tap_collections.is_empty(),
+					"A matching merged partner drop preserves the active combo without learning or collection rewards")
+				check(view.game.cells.size() == cells_before.size(), "A neutral merged partner drop retains both original bodies")
+				for original: Dictionary in cells_before:
+					var retained: Dictionary = view.game.cell(int(original.id))
+					var payload_unchanged: bool = not retained.is_empty()
+					for key: String in ["jelly_kind", "text", "word", "word_candidate", "image_word", "merge_level", "fragments", "mass", "mastery_eligible"]:
+						payload_unchanged = payload_unchanged and retained.get(key) == original.get(key)
+					check(payload_unchanged, "A neutral merged partner drop preserves each word identity, level and carried fragment")
+				_advance(view, 0.5)
+				check(view.game.fusions.is_empty() and view._rejection.is_empty() and view.game.combo_count == 3
+					and cues.count("wrong") == 0 and attempts.is_empty() and payouts.is_empty() and _tap_collections.is_empty(),
+					"Matching merged partners snap back without a delayed mismatch, collection or combo reset")
+
 
 func _check_early_match(view, reduced: bool) -> void:
 	for target: String in ["picture:cat", "picture:apple"]:

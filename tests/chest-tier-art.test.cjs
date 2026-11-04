@@ -6,9 +6,9 @@ const crypto = require('node:crypto');
 const { readModelContainer, imageDimensions, readFloatAccessor } = require('./helpers/chest-model-assets.cjs');
 
 const root = path.resolve(__dirname, '..');
-const catalogPath = 'assets/chests/catalog-cc0/sources.json';
-const presetsPath = 'assets/chests/tier-presets.json';
-const catalogPrefix = 'assets/chests/catalog-cc0/';
+const catalogPath = 'assets/chests/catalog/cc0-sources.json';
+const presetsPath = 'assets/chests/catalog/tier-presets.json';
+const catalogPrefix = 'assets/chests/sources/cc0/';
 const slots = ['front', 'left', 'right', 'front-left', 'front-right'];
 const sha256 = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 const absolute = relative => path.join(root, ...relative.split('/'));
@@ -79,7 +79,7 @@ function registry(catalog) {
 }
 
 test('refined CC0 chests retain source identities, separate real lids, original clips and bounded geometry', () => {
-  const refinement = readJson('assets/chests/polished-cc0/manifest.json');
+  const refinement = readJson('assets/chests/catalog/cc0-models.json');
   const catalog = readJson(catalogPath);
   assert.equal(refinement.models.length, 4);
   for (const entry of refinement.models) {
@@ -343,7 +343,7 @@ test('preciousness increases through coherent families while early tiers stay mo
 
 test('private bases remain portable metadata references rather than redistributed restricted model files', () => {
   const catalog = readJson(catalogPath);
-  const retained = readJson('assets/chests/downloaded/manifest.json');
+  const retained = readJson('assets/chests/catalog/licensed-models.json');
   const originals = new Map(retained.assets.map(file => [file.path, file]));
   assert.equal(catalog.referenced_private_sources.length, 3);
   for (const source of catalog.referenced_private_sources) {

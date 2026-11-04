@@ -4,7 +4,7 @@ extends Node
 const Chest = preload("res://scripts/chest_view.gd")
 const Data = preload("res://scripts/game_data.gd")
 const Progress = preload("res://scripts/jelly_reward_progress.gd")
-const FALLBACK = preload("res://assets/chests/royal/closed.png")
+const FALLBACK = preload("res://assets/chests/sprites/royal/closed.png")
 
 var _manifest: Dictionary = {}
 var _cache: Dictionary = {}

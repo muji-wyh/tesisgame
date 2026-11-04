@@ -1,8 +1,8 @@
 extends ColorRect
 ## Rim light follows the rescue clock; this node never advances gameplay.
 
-const LIGHT = preload("res://assets/chests/particles/portal_glow.png")
-const GLINT = preload("res://assets/chests/milestone/sparkle.png")
+const LIGHT = preload("res://assets/chests/shared/effects/portal_glow.png")
+const GLINT = preload("res://assets/chests/shared/effects/sparkle.png")
 const FRAME_SHADER = preload("res://scripts/jelly_danger_frame.gdshader")
 const HALO_MARGIN: float = 128.0
 

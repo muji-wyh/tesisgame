@@ -1,0 +1,354 @@
+{
+  "version": 1,
+  "collection": "Chest State Assets",
+  "license": "CC0-1.0",
+  "publisher": "tools/publish_state_assets.py in the chest authoring repository",
+  "asset_policy": "Original acquired model and sprite bytes, UVs, palettes and embedded images preserved. Chest GLBs are never modified.",
+  "state_contract": {
+    "open": "Opened empty chest; hide built-in Treasure and shared loot; no magic effects",
+    "treasure": "Opened chest with genuine KayKit loot fitted to that chest cavity; prefer existing embedded Treasure when present",
+    "magic": "Opened empty chest with tinted Kenney particle sprites emitted from the cavity; hide all coin geometry"
+  },
+  "source_preview": {
+    "path": "assets/chests/sources/states/source-preview.png",
+    "sha256": "5ca578071d0f566ef4d602c06d0db67de4bb8bb368fa689a00d2db380586c8a6",
+    "status": "Actual original source meshes rendered in Blender; original particle sprites shown on a dark background; game fit is separate"
+  },
+  "sources": {
+    "kaykit-dungeon": {
+      "title": "KayKit Dungeon Remastered 1.0",
+      "creator": "Kay Lousberg",
+      "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+      "commit": "b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07",
+      "license": "CC0-1.0"
+    },
+    "kenney-particles": {
+      "title": "Particle Pack 1.1",
+      "creator": "Kenney",
+      "url": "https://kenney.nl/assets/particle-pack",
+      "license": "CC0-1.0"
+    }
+  },
+  "notices": [
+    {
+      "path": "assets/chests/sources/states/kaykit-dungeon/coin-acquisition.json",
+      "bytes": 4912,
+      "sha256": "68fe809c31b41a1bdcdfd07a8d43f91693aa9ae21496a03efdd29d95c2a01057",
+      "status": "original-byte-copy"
+    },
+    {
+      "path": "assets/chests/sources/states/kaykit-dungeon/LICENSE.txt",
+      "bytes": 829,
+      "sha256": "c5f17abf619731f57f6bbff450f6484214605c13aa96bb75bbcfc70930941ff7",
+      "status": "original-byte-copy"
+    },
+    {
+      "path": "assets/chests/sources/states/kenney-particles/acquisition.json",
+      "bytes": 2298,
+      "sha256": "9b441e02b44b3f81c954ff7e4154fbfbe13c3621b5737b771c227e449683c6a4",
+      "status": "original-byte-copy"
+    },
+    {
+      "path": "assets/chests/sources/states/kenney-particles/LICENSE.txt",
+      "bytes": 682,
+      "sha256": "7a026aade177ce497b0b925849ddb9f142417e29f877baca99ef816b4481843e",
+      "status": "original-byte-copy"
+    }
+  ],
+  "assets": [
+    {
+      "id": "coin-pile-small",
+      "kind": "glb",
+      "role": "treasure",
+      "source_id": "kaykit-dungeon",
+      "source_record": "assets/chests/sources/states/kaykit-dungeon/coin-acquisition.json",
+      "source": "sources/kaykit-dungeon/coin_stack_small.gltf.glb",
+      "source_url": "https://raw.githubusercontent.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/coin_stack_small.gltf.glb",
+      "creator": "Kay Lousberg",
+      "license_file": "assets/chests/sources/states/kaykit-dungeon/LICENSE.txt",
+      "bounds_3d": {
+        "min": [
+          -0.4452475607395172,
+          -5.960464477539062e-07,
+          -0.4608292579650879
+        ],
+        "max": [
+          0.5138642191886902,
+          0.4782329797744751,
+          0.43551626801490784
+        ]
+      },
+      "coordinate_system": "glTF and Godot local coordinates, right-handed Y-up; all source node transforms composed",
+      "triangles": 416,
+      "mesh_instances": 1,
+      "position_vertices": 588,
+      "nodes": [
+        "coin_stack_small"
+      ],
+      "animations": [],
+      "texture_dependencies": {
+        "self_contained": true,
+        "external": [],
+        "embedded_images": [
+          {
+            "name": "dungeon_texture",
+            "mime_type": "image/png",
+            "dimensions": [
+              1024,
+              1024
+            ],
+            "bytes": 15794,
+            "sha256": "f9ae182518f908bd09461a56a430b9ca7369812ac10890224cc6f32e7da3e1ee"
+          }
+        ]
+      },
+      "path": "assets/chests/shared/rewards/coin-pile-small.glb",
+      "resource": "res://assets/chests/shared/rewards/coin-pile-small.glb",
+      "bytes": 38404,
+      "sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+      "source_sha256": "b7395adb0c3f8d392f42f483d667af672232a25de4e0cdb23c58fca8bab1dd8f",
+      "license": "CC0-1.0",
+      "status": "published-original-byte-copy; scene integration and cavity fit recorded separately"
+    },
+    {
+      "id": "coin-pile-medium",
+      "kind": "glb",
+      "role": "treasure",
+      "source_id": "kaykit-dungeon",
+      "source_record": "assets/chests/sources/states/kaykit-dungeon/coin-acquisition.json",
+      "source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+      "source_url": "https://raw.githubusercontent.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/coin_stack_medium.gltf.glb",
+      "creator": "Kay Lousberg",
+      "license_file": "assets/chests/sources/states/kaykit-dungeon/LICENSE.txt",
+      "bounds_3d": {
+        "min": [
+          -0.44633805751800537,
+          -5.997717380523682e-07,
+          -0.5073903799057007
+        ],
+        "max": [
+          0.5470346212387085,
+          0.6406723260879517,
+          0.5267181396484375
+        ]
+      },
+      "coordinate_system": "glTF and Godot local coordinates, right-handed Y-up; all source node transforms composed",
+      "triangles": 968,
+      "mesh_instances": 1,
+      "position_vertices": 1284,
+      "nodes": [
+        "coin_stack_medium"
+      ],
+      "animations": [],
+      "texture_dependencies": {
+        "self_contained": true,
+        "external": [],
+        "embedded_images": [
+          {
+            "name": "dungeon_texture",
+            "mime_type": "image/png",
+            "dimensions": [
+              1024,
+              1024
+            ],
+            "bytes": 15794,
+            "sha256": "f9ae182518f908bd09461a56a430b9ca7369812ac10890224cc6f32e7da3e1ee"
+          }
+        ]
+      },
+      "path": "assets/chests/shared/rewards/coin-pile-medium.glb",
+      "resource": "res://assets/chests/shared/rewards/coin-pile-medium.glb",
+      "bytes": 63996,
+      "sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+      "source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+      "license": "CC0-1.0",
+      "status": "published-original-byte-copy; scene integration and cavity fit recorded separately"
+    },
+    {
+      "id": "coin",
+      "kind": "glb",
+      "role": "treasure",
+      "source_id": "kaykit-dungeon",
+      "source_record": "assets/chests/sources/states/kaykit-dungeon/coin-acquisition.json",
+      "source": "sources/kaykit-dungeon/coin.gltf.glb",
+      "source_url": "https://raw.githubusercontent.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0/b0ca9bd96a8072ab36a3a5464f00ed1e06a16d07/addons/kaykit_dungeon_remastered/Assets/gltf/coin.gltf.glb",
+      "creator": "Kay Lousberg",
+      "license_file": "assets/chests/sources/states/kaykit-dungeon/LICENSE.txt",
+      "bounds_3d": {
+        "min": [
+          -0.179996058344841,
+          -0.06250369548797607,
+          -0.1800275593996048
+        ],
+        "max": [
+          0.18001559376716614,
+          0.06250226497650146,
+          0.17998410761356354
+        ]
+      },
+      "coordinate_system": "glTF and Godot local coordinates, right-handed Y-up; all source node transforms composed",
+      "triangles": 80,
+      "mesh_instances": 1,
+      "position_vertices": 132,
+      "nodes": [
+        "coin"
+      ],
+      "animations": [],
+      "texture_dependencies": {
+        "self_contained": true,
+        "external": [],
+        "embedded_images": [
+          {
+            "name": "dungeon_texture",
+            "mime_type": "image/png",
+            "dimensions": [
+              1024,
+              1024
+            ],
+            "bytes": 15794,
+            "sha256": "f9ae182518f908bd09461a56a430b9ca7369812ac10890224cc6f32e7da3e1ee"
+          }
+        ]
+      },
+      "path": "assets/chests/shared/rewards/coin.glb",
+      "resource": "res://assets/chests/shared/rewards/coin.glb",
+      "bytes": 21776,
+      "sha256": "97d3abdd239d8fa365b14957f7bf45c892aad9d211b3c3b47b4b2311bf947297",
+      "source_sha256": "97d3abdd239d8fa365b14957f7bf45c892aad9d211b3c3b47b4b2311bf947297",
+      "license": "CC0-1.0",
+      "status": "published-original-byte-copy; scene integration and cavity fit recorded separately"
+    },
+    {
+      "id": "kenney-light-01",
+      "kind": "png",
+      "role": "magic",
+      "source_id": "kenney-particles",
+      "source_record": "assets/chests/sources/states/kenney-particles/acquisition.json",
+      "source": "sources/kenney-particles/light_01.png",
+      "source_url": "https://kenney.nl/assets/particle-pack",
+      "creator": "Kenney",
+      "license_file": "assets/chests/sources/states/kenney-particles/LICENSE.txt",
+      "dimensions": [
+        512,
+        512
+      ],
+      "source_mode": "P",
+      "decoded_mode": "RGBA",
+      "alpha_range": [
+        0,
+        251
+      ],
+      "animations": [],
+      "texture_dependencies": {
+        "self_contained": true,
+        "external": []
+      },
+      "path": "assets/chests/shared/effects/kenney-light-01.png",
+      "resource": "res://assets/chests/shared/effects/kenney-light-01.png",
+      "bytes": 93470,
+      "sha256": "caedcc5df5bcac4470244d2520d6a64b45b20c1ccf4d918da516c55e3fa365a6",
+      "source_sha256": "caedcc5df5bcac4470244d2520d6a64b45b20c1ccf4d918da516c55e3fa365a6",
+      "license": "CC0-1.0",
+      "status": "published-original-byte-copy; scene integration and cavity fit recorded separately"
+    },
+    {
+      "id": "kenney-light-02",
+      "kind": "png",
+      "role": "magic",
+      "source_id": "kenney-particles",
+      "source_record": "assets/chests/sources/states/kenney-particles/acquisition.json",
+      "source": "sources/kenney-particles/light_02.png",
+      "source_url": "https://kenney.nl/assets/particle-pack",
+      "creator": "Kenney",
+      "license_file": "assets/chests/sources/states/kenney-particles/LICENSE.txt",
+      "dimensions": [
+        512,
+        512
+      ],
+      "source_mode": "P",
+      "decoded_mode": "RGBA",
+      "alpha_range": [
+        0,
+        240
+      ],
+      "animations": [],
+      "texture_dependencies": {
+        "self_contained": true,
+        "external": []
+      },
+      "path": "assets/chests/shared/effects/kenney-light-02.png",
+      "resource": "res://assets/chests/shared/effects/kenney-light-02.png",
+      "bytes": 93415,
+      "sha256": "f1bdb57478703fec539f7b8eeceb494c4a23664652b296389f310104be80cfe0",
+      "source_sha256": "f1bdb57478703fec539f7b8eeceb494c4a23664652b296389f310104be80cfe0",
+      "license": "CC0-1.0",
+      "status": "published-original-byte-copy; scene integration and cavity fit recorded separately"
+    },
+    {
+      "id": "kenney-star-04",
+      "kind": "png",
+      "role": "magic",
+      "source_id": "kenney-particles",
+      "source_record": "assets/chests/sources/states/kenney-particles/acquisition.json",
+      "source": "sources/kenney-particles/star_04.png",
+      "source_url": "https://kenney.nl/assets/particle-pack",
+      "creator": "Kenney",
+      "license_file": "assets/chests/sources/states/kenney-particles/LICENSE.txt",
+      "dimensions": [
+        512,
+        512
+      ],
+      "source_mode": "P",
+      "decoded_mode": "RGBA",
+      "alpha_range": [
+        0,
+        223
+      ],
+      "animations": [],
+      "texture_dependencies": {
+        "self_contained": true,
+        "external": []
+      },
+      "path": "assets/chests/shared/effects/kenney-star-04.png",
+      "resource": "res://assets/chests/shared/effects/kenney-star-04.png",
+      "bytes": 30613,
+      "sha256": "6485ac16c773663bd39346f3bedae04465ac14c661eb47cc5cfa935cdbf6c2ec",
+      "source_sha256": "6485ac16c773663bd39346f3bedae04465ac14c661eb47cc5cfa935cdbf6c2ec",
+      "license": "CC0-1.0",
+      "status": "published-original-byte-copy; scene integration and cavity fit recorded separately"
+    },
+    {
+      "id": "kenney-star-09",
+      "kind": "png",
+      "role": "magic",
+      "source_id": "kenney-particles",
+      "source_record": "assets/chests/sources/states/kenney-particles/acquisition.json",
+      "source": "sources/kenney-particles/star_09.png",
+      "source_url": "https://kenney.nl/assets/particle-pack",
+      "creator": "Kenney",
+      "license_file": "assets/chests/sources/states/kenney-particles/LICENSE.txt",
+      "dimensions": [
+        512,
+        512
+      ],
+      "source_mode": "P",
+      "decoded_mode": "RGBA",
+      "alpha_range": [
+        0,
+        255
+      ],
+      "animations": [],
+      "texture_dependencies": {
+        "self_contained": true,
+        "external": []
+      },
+      "path": "assets/chests/shared/effects/kenney-star-09.png",
+      "resource": "res://assets/chests/shared/effects/kenney-star-09.png",
+      "bytes": 50142,
+      "sha256": "4255985e312a0058dc0c4f8b5befc902da17e6be5e5252007f3c7b02bb150157",
+      "source_sha256": "4255985e312a0058dc0c4f8b5befc902da17e6be5e5252007f3c7b02bb150157",
+      "license": "CC0-1.0",
+      "status": "published-original-byte-copy; scene integration and cavity fit recorded separately"
+    }
+  ]
+}

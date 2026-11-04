@@ -1412,7 +1412,7 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dic
 			candidate.result.row = destination.y
 	if candidate.status == "needs_room":
 		return "needs_room"
-	if candidate.status == "level_capped":
+	if candidate.status in ["level_capped", "already_merged"]:
 		return "ignored"
 	if not candidate.status in ["partial", "complete"]:
 		var generation: int = _generation
@@ -2677,6 +2677,8 @@ func merge_candidate(left: Dictionary, right: Dictionary, check_space: bool = tr
 		return {"status": "blocked", "result": {}}
 	var left_kind: String = str(left.get("jelly_kind", "root"))
 	var right_kind: String = str(right.get("jelly_kind", "root"))
+	if (left_kind == "merged" or right_kind == "merged") and _is_redundant_merged_pair(left, right):
+		return {"status": "already_merged", "result": {}}
 	var tile: Dictionary = {}
 	var merge_kind: String = "roots"
 	if left_kind == "merged" and right_kind == "merged":
@@ -2729,6 +2731,23 @@ static func _merged_upgrade_level(left: Dictionary, right: Dictionary) -> int:
 func is_max_level_merged(tile: Dictionary) -> bool:
 	return str(tile.get("jelly_kind", "")) == "merged" \
 		and int(tile.get("merge_level", 1)) >= merged_level_limit
+
+
+static func _is_redundant_merged_pair(left: Dictionary, right: Dictionary) -> bool:
+	var left_merged: bool = left.get("jelly_kind") == "merged"
+	var merged: Dictionary = left if left_merged else right
+	var partner: Dictionary = right if left_merged else left
+	if merged.get("jelly_kind") != "merged":
+		return false
+	var word_id: String = str(merged.get("word", {}).get("id", ""))
+	if word_id.is_empty():
+		return false
+	var partner_kind: String = str(partner.get("jelly_kind", "root"))
+	# Only a complete word or its exact picture is a neutral redundant match.
+	# Partial spelling and another sense with the same text remain ordinary errors.
+	var identity: Dictionary = partner.get("word_candidate", {}) if partner_kind == "root" \
+		else partner.get("image_word", {}) if partner_kind == "picture" else {}
+	return str(identity.get("id", "")) == word_id
 
 
 func parts_compatible(left: Dictionary, right: Dictionary) -> bool:

@@ -146,7 +146,7 @@ func configure(style: Dictionary) -> bool:
 		var ornament_path: String = str(entry.get("model", ""))
 		if not ornament_path.begins_with("res://"):
 			ornament_path = "res://" + ornament_path
-		if not ornament_path.begins_with("res://assets/chests/catalog-cc0/") \
+		if not ornament_path.begins_with("res://assets/chests/sources/cc0/") \
 			or ornament_path.contains("..") or ornament_path.contains("\\") \
 			or not ResourceLoader.exists(ornament_path, "PackedScene"):
 			return _unavailable("Required source ornament is missing or unimported: " + ornament_path)
@@ -385,7 +385,7 @@ func _add_decoration(entry: Dictionary, profile: Dictionary, entries: Array) -> 
 	var path: String = str(entry.get("model", ""))
 	if not path.begins_with("res://"):
 		path = "res://" + path
-	if not path.begins_with("res://assets/chests/catalog-cc0/") or path.contains("..") \
+	if not path.begins_with("res://assets/chests/sources/cc0/") or path.contains("..") \
 		or path.contains("\\") or not ResourceLoader.exists(path, "PackedScene"):
 		last_error = "Required source ornament is missing or unimported: " + path
 		return false

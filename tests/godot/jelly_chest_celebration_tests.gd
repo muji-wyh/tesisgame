@@ -6,8 +6,8 @@ const RewardModel = preload("res://scripts/chest_reward_model.gd")
 const ChestModel = preload("res://scripts/chest_model_view.gd")
 const Jelly = preload("res://scripts/jelly_match.gd")
 const Data = preload("res://scripts/game_data.gd")
-const BEFORE = preload("res://assets/chests/energy/closed.png")
-const AFTER = preload("res://assets/chests/royal/closed.png")
+const BEFORE = preload("res://assets/chests/sprites/energy/closed.png")
+const AFTER = preload("res://assets/chests/sprites/royal/closed.png")
 
 var checks: int = 0
 var failures: int = 0

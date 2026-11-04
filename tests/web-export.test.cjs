@@ -115,7 +115,11 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   assert.match(preset, /platform="Web"/);
   assert.match(preset, /variant\/thread_support=false/);
   assert.match(preset, /variant\/extensions_support=false/);
-  assert.match(preset, /include_filter="[^"]*words\.json[^"]*assets\/chests\/manifest\.json/);
+  assert.match(preset, /include_filter="[^"]*words\.json[^"]*assets\/chests\/catalog\/sprites\.json/);
+  const included = preset.match(/^include_filter="([^"]*)"$/m)[1].split(',');
+  for (const name of ['sprites', 'sprite-rigs', 'licensed-models', 'cc0-models', 'cc0-sources', 'atelier', 'tier-presets', 'chest-levels', 'chest-states', 'chest-state-assets', 'chest-sprite-states']) {
+    assert.ok(included.includes(`assets/chests/catalog/${name}.json`), `The Web pack retains the chest catalog: ${name}`);
+  }
   assert.ok(preset.match(/^include_filter="([^"]*)"$/m)[1].split(',').includes('phrases.json'),
     'The raw phrase catalog must be available to the exported native game');
   assert.ok(preset.match(/^include_filter="([^"]*)"$/m)[1].split(',').includes('data/word-motion.json'),
@@ -156,12 +160,22 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   for (const source of ['assets/audio/voice/ocean-arrive.wav', 'assets/audio/voice/ocean-open.wav']) {
     assert.ok(excluded.some(pattern => path.matchesGlob(source, pattern)), `Retired audio stays excluded: ${source}`);
   }
-  for (const directory of ['assets/audio/chests', 'assets/chests/surprises']) {
+  for (const directory of ['assets/audio/chests']) {
     for (const filename of fs.readdirSync(path.join(root, directory))) {
       const source = `${directory}/${filename}`;
       assert.ok(excluded.some(pattern => path.matchesGlob(source, pattern)),
         `Archived chest sources and imports stay out of the game pack: ${source}`);
     }
+  }
+  for (const filename of fs.readdirSync(path.join(root, 'assets/chests/shared/rewards')).filter(name => name.endsWith('.svg'))) {
+    const source = `assets/chests/shared/rewards/${filename}`;
+    assert.ok(excluded.some(pattern => path.matchesGlob(source, pattern)),
+      `Archived vector rewards stay out of the game pack: ${source}`);
+  }
+  const stateAssets = JSON.parse(fs.readFileSync(path.join(root, 'assets/chests/catalog/chest-state-assets.json'), 'utf8'));
+  for (const asset of stateAssets.assets) {
+    assert.equal(excluded.some(pattern => path.matchesGlob(asset.path, pattern)), false,
+      `Reusable chest state artwork stays available to native scenes: ${asset.path}`);
   }
   for (const name of ['ready.wav', 'high-five.wav', 'round-20.wav']) {
     const source = `assets/audio/pop/${name}`;

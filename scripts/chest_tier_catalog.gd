@@ -2,12 +2,12 @@ extends RefCounted
 ## Game-authored assemblies of nine acquired bases, not thirty native meshes.
 
 const MAX_TIER: int = 30
-const PRESETS_PATH: String = "res://assets/chests/tier-presets.json"
+const PRESETS_PATH: String = "res://assets/chests/catalog/tier-presets.json"
 const POLISHED_MODELS: Dictionary = {
-	"assets/chests/catalog-cc0/kenney-survival/chest.glb": "assets/chests/polished-cc0/kenney-survival.glb",
-	"assets/chests/catalog-cc0/kenney-platformer/chest.glb": "assets/chests/polished-cc0/kenney-platformer.glb",
-	"assets/chests/catalog-cc0/kenney-mini-dungeon/chest.glb": "assets/chests/polished-cc0/kenney-mini-dungeon.glb",
-	"assets/chests/catalog-cc0/kaykit-dungeon/chest.glb": "assets/chests/polished-cc0/kaykit-dungeon.glb"
+	"assets/chests/sources/cc0/kenney-survival/chest.glb": "assets/chests/models/cc0/kenney-survival/kenney-survival.glb",
+	"assets/chests/sources/cc0/kenney-platformer/chest.glb": "assets/chests/models/cc0/kenney-platformer/kenney-platformer.glb",
+	"assets/chests/sources/cc0/kenney-mini-dungeon/chest.glb": "assets/chests/models/cc0/kenney-mini-dungeon/kenney-mini-dungeon.glb",
+	"assets/chests/sources/cc0/kaykit-dungeon/chest.glb": "assets/chests/models/cc0/kaykit-dungeon/kaykit-dungeon.glb"
 }
 const THEME_TIERS: Dictionary = {
 	"spring": 30, "royal": 30,
@@ -45,7 +45,7 @@ static func style(tier: int, manifest: Dictionary) -> Dictionary:
 		return {}
 	var path: String = str(recipe.base_model)
 	var result: Dictionary = {}
-	if path.begins_with("assets/chests/models/"):
+	if path.begins_with("assets/chests/models/licensed/"):
 		for source: Variant in manifest.get("styles", {}).values():
 			if source is Dictionary and source.get("model", "") == path:
 				result = source.duplicate(true)

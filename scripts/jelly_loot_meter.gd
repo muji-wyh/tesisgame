@@ -1,7 +1,7 @@
 extends Control
 ## A quiet segmented halo that charges when a fragment reaches the chest.
 
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const FILL_SECONDS: float = 0.32
 const PULSE_SECONDS: float = 0.55
 

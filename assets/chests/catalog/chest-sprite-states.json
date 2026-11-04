@@ -1,0 +1,482 @@
+{
+  "version": 1,
+  "collection": "Original Sprite Chest States",
+  "design_size": 1024,
+  "generator": "Q:/uwok/chest/tools/build_sprite_states.py",
+  "status": "source-derived-raster-publication; native import and scene integration recorded separately",
+  "chest_artwork": {
+    "title": "Modern 2D Animated Chests Pack_FREE Demo 1.0.2",
+    "creator": "The original pack creator is not named in the retained source record",
+    "license": "Inherited original source-pack terms for the existing private game artwork; no CC0 claim or new rights granted for chest pixels",
+    "source_record": "assets/chests/sources/sprites/SOURCE.txt"
+  },
+  "loot_and_effects": {
+    "catalog": "assets/chests/catalog/chest-state-assets.json",
+    "loot": "Kay Lousberg, KayKit Dungeon Remastered 1.0, CC0-1.0; actual source mesh rendered with original source UV/palette, then a warm gold bitmap material grade",
+    "effects": "Kenney Particle Pack 1.1, CC0-1.0; original transparent sprites tinted and composited"
+  },
+  "derivation": {
+    "royal_energy": "Original closed/open painted source silhouettes retained. Original inner-lid texture is perspective-projected into the cavity floor to remove baked golden or flat yellow fill for an empty Open pose. Treasure adds rendered source coin geometry behind the original rim/latch occlusion; Magic uses the empty pose and sourced rays/stars without coins.",
+    "crystal": "New authored magnetic opening, not an imported source animation. The actual 805x609 base image is split at its lower cyan cover seam; original source roof and upper corner ornaments lift together by220canvaspixels while lower shell/feet remain fixed. Newly exposed inner walls/floor/under-lid use perspective-warped brushed-silver pixels from that same acquired source image with dark teal material shading. All original nine prefab-part transforms and sort orders are retained in the closed assembly.",
+    "crystal_lid_seam_source_pixels": [
+      [
+        0,
+        164
+      ],
+      [
+        10,
+        168
+      ],
+      [
+        590,
+        233
+      ],
+      [
+        805,
+        128
+      ]
+    ],
+    "crystal_lid_lift_canvas_pixels": 220,
+    "shared_canvas": "1024x1024 transparent RGBA. Each family's four states share one fixed placement and anchor; no per-state fitting."
+  },
+  "sources": [
+    {
+      "path": "assets/chests/sprites/crystal/base.png",
+      "sha256": "6894ab71a9d0fe02b23ac534a298d66b56c5f64fe04cae457196b88ff77da0a7",
+      "bytes": 637574
+    },
+    {
+      "path": "assets/chests/sprites/crystal/part_01.png",
+      "sha256": "5d12441d6349a1cd042e1aa93f9956d98ce7589e4c36f5f65ee2dfaea5fdf8f1",
+      "bytes": 352601
+    },
+    {
+      "path": "assets/chests/sprites/crystal/part_02.png",
+      "sha256": "0232267cf3d21b4ce77e2fedd334b8021a990d296ad6e6bd2990deee613c36b6",
+      "bytes": 112553
+    },
+    {
+      "path": "assets/chests/sprites/crystal/part_03.png",
+      "sha256": "70fe55547087fed10b02f852733a1472903b1f368a56b019df87d95f71442018",
+      "bytes": 164753
+    },
+    {
+      "path": "assets/chests/sprites/crystal/part_04.png",
+      "sha256": "45801609bd5395141ecc88378cff5f383326a51daf36c6707a5b24e8bab65cc3",
+      "bytes": 44520
+    },
+    {
+      "path": "assets/chests/sprites/crystal/part_05.png",
+      "sha256": "5c45b9f0b9f8fcca4759884dab671b15bf012bf41b0d1cb98cb3f387fb90fb73",
+      "bytes": 177906
+    },
+    {
+      "path": "assets/chests/sprites/crystal/part_06.png",
+      "sha256": "fc1d3a2a7d3d55fdd6efa24dc0a20ec81eb6b2109fe4bcde319a59aa749c748e",
+      "bytes": 151523
+    },
+    {
+      "path": "assets/chests/sprites/crystal/part_07.png",
+      "sha256": "fbbd9bfc3718ab901e6b9eba98220c82ff9355f26f2ed4d908bd795454d1d56e",
+      "bytes": 68559
+    },
+    {
+      "path": "assets/chests/sprites/crystal/part_08.png",
+      "sha256": "555c4731eafc4432c1feefa250b5957c43075b0bfcfff4d1426a15a9abe31341",
+      "bytes": 177043
+    },
+    {
+      "path": "assets/chests/sprites/royal/closed.png",
+      "sha256": "5d56092692cfff431c49856c40237ae31285a8344b20ace4d375b901e201946d",
+      "bytes": 555892
+    },
+    {
+      "path": "assets/chests/sprites/royal/open.png",
+      "sha256": "95c5d1710ba4d33dce489d7a782a4cd10ce6e7d6465f32c07afa55ccfb9631b3",
+      "bytes": 1136076
+    },
+    {
+      "path": "assets/chests/sprites/energy/closed.png",
+      "sha256": "fde353205c24986d7fdad4c72055b88b53eecc8987a6a407935b8b4933c2c1e8",
+      "bytes": 471562
+    },
+    {
+      "path": "assets/chests/sprites/energy/open.png",
+      "sha256": "276af1f68e908556831be6d5a466c89f626834624828940f9a501f493070bc75",
+      "bytes": 632655
+    },
+    {
+      "path": "assets/chests/shared/effects/kenney-light-01.png",
+      "sha256": "caedcc5df5bcac4470244d2520d6a64b45b20c1ccf4d918da516c55e3fa365a6",
+      "bytes": 93470
+    },
+    {
+      "path": "assets/chests/shared/effects/kenney-star-04.png",
+      "sha256": "6485ac16c773663bd39346f3bedae04465ac14c661eb47cc5cfa935cdbf6c2ec",
+      "bytes": 30613
+    },
+    {
+      "path": "assets/chests/shared/effects/kenney-star-09.png",
+      "sha256": "4255985e312a0058dc0c4f8b5befc902da17e6be5e5252007f3c7b02bb150157",
+      "bytes": 50142
+    },
+    {
+      "path": "assets/chests/shared/rewards/coin-pile-medium.glb",
+      "sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+      "bytes": 63996
+    }
+  ],
+  "loot_render": {
+    "path": "assets/chests/shared/rewards/coin-pile-medium.png",
+    "original_render_sha256": "f8b964f488d2309dccb5674ac99467d752cda30bad360e80181bf959dbec089e",
+    "renderer": "Blender5.2Cycles; actual original GLB mesh;1024transparent; original embedded palette; camera(1.5,-2.4,1.65)relativebounds;24samples"
+  },
+  "source_preview": {
+    "path": "assets/chests/sources/states/sprite-state-contact.png",
+    "sha256": "bb401c7fa4fc13d9f2e88b3e08381cbe317ea9de26e89746fbba21c11ceec8fd"
+  },
+  "families": {
+    "royal": {
+      "states": {
+        "closed": "assets/chests/sprites/royal/states/closed.png",
+        "open": "assets/chests/sprites/royal/states/open.png",
+        "treasure": "assets/chests/sprites/royal/states/treasure.png",
+        "magic": "assets/chests/sprites/royal/states/magic.png"
+      },
+      "magic_origin": [
+        457,
+        548
+      ]
+    },
+    "energy": {
+      "states": {
+        "closed": "assets/chests/sprites/energy/states/closed.png",
+        "open": "assets/chests/sprites/energy/states/open.png",
+        "treasure": "assets/chests/sprites/energy/states/treasure.png",
+        "magic": "assets/chests/sprites/energy/states/magic.png"
+      },
+      "magic_origin": [
+        497,
+        506
+      ]
+    },
+    "crystal": {
+      "states": {
+        "closed": "assets/chests/sprites/crystal/states/closed.png",
+        "open": "assets/chests/sprites/crystal/states/open.png",
+        "treasure": "assets/chests/sprites/crystal/states/treasure.png",
+        "magic": "assets/chests/sprites/crystal/states/magic.png"
+      },
+      "magic_origin": [
+        484,
+        470
+      ]
+    }
+  },
+  "files": [
+    {
+      "path": "assets/chests/shared/rewards/coin-pile-medium.png",
+      "role": "source-model-rendered-loot",
+      "bytes": 403842,
+      "sha256": "b62faafa218456834d71be75954e0bf8eb3e9930bb34dd6bff94b4c7d82e0ba2",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        133,
+        242,
+        839,
+        878
+      ],
+      "resource": "res://assets/chests/shared/rewards/coin-pile-medium.png"
+    },
+    {
+      "path": "assets/chests/sprites/royal/states/closed.png",
+      "role": "royal-closed",
+      "bytes": 536241,
+      "sha256": "794f70be24d04aa44fab288bb4dfc602e9cb29a4f656b6247ce6f17d72b65d77",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        39,
+        309,
+        837,
+        905
+      ],
+      "resource": "res://assets/chests/sprites/royal/states/closed.png"
+    },
+    {
+      "path": "assets/chests/sprites/royal/states/open.png",
+      "role": "royal-open",
+      "bytes": 676351,
+      "sha256": "4d764037e1b555a9c139b8ce456c8283f9d9540c04c340b7613ff9faea252a6c",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        44,
+        157,
+        835,
+        906
+      ],
+      "resource": "res://assets/chests/sprites/royal/states/open.png"
+    },
+    {
+      "path": "assets/chests/sprites/royal/states/treasure.png",
+      "role": "royal-treasure",
+      "bytes": 680731,
+      "sha256": "39b3c092fdeb042a0672e693202aaceee3f4c9e98ed752aa9bc1b6f12170b060",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        44,
+        157,
+        835,
+        906
+      ],
+      "resource": "res://assets/chests/sprites/royal/states/treasure.png"
+    },
+    {
+      "path": "assets/chests/sprites/royal/states/magic.png",
+      "role": "royal-magic",
+      "bytes": 688257,
+      "sha256": "b8e0b4191dbfd0c87dd6c4d29cab4b684ccbea74ad7900097bd77ce1e6f7fa42",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        44,
+        157,
+        835,
+        906
+      ],
+      "resource": "res://assets/chests/sprites/royal/states/magic.png"
+    },
+    {
+      "path": "assets/chests/sprites/energy/states/closed.png",
+      "role": "energy-closed",
+      "bytes": 446705,
+      "sha256": "a280337dd518d5232e632686747ff96b04742615ff37811705e7f661691b79d6",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        128,
+        319,
+        883,
+        1001
+      ],
+      "resource": "res://assets/chests/sprites/energy/states/closed.png"
+    },
+    {
+      "path": "assets/chests/sprites/energy/states/open.png",
+      "role": "energy-open",
+      "bytes": 598143,
+      "sha256": "9dedda5706daa776012aea0bad2fbe1db82fd34c7e752cded755088b65200850",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        126,
+        23,
+        899,
+        1000
+      ],
+      "resource": "res://assets/chests/sprites/energy/states/open.png"
+    },
+    {
+      "path": "assets/chests/sprites/energy/states/treasure.png",
+      "role": "energy-treasure",
+      "bytes": 613203,
+      "sha256": "fb85d30412ba403a4021b90c74875e06e5f028a8336e795de0e7a901c49b0067",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        126,
+        23,
+        899,
+        1000
+      ],
+      "resource": "res://assets/chests/sprites/energy/states/treasure.png"
+    },
+    {
+      "path": "assets/chests/sprites/energy/states/magic.png",
+      "role": "energy-magic",
+      "bytes": 631247,
+      "sha256": "c73f01b3257b98c8abc1849f26a4fccbfa874e0b30e47f986d106eadbe43f1d8",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        126,
+        23,
+        899,
+        1000
+      ],
+      "resource": "res://assets/chests/sprites/energy/states/magic.png"
+    },
+    {
+      "path": "assets/chests/sprites/crystal/states/closed.png",
+      "role": "crystal-closed",
+      "bytes": 654407,
+      "sha256": "d6a292e63262762e3447600364401053a9cf7fd4652aab9c6a3ebcc1c38562dc",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        156,
+        314,
+        866,
+        926
+      ],
+      "resource": "res://assets/chests/sprites/crystal/states/closed.png"
+    },
+    {
+      "path": "assets/chests/sprites/crystal/states/open.png",
+      "role": "crystal-open",
+      "bytes": 759438,
+      "sha256": "205159651d4f3a8e31f0bcc5e6d33eab7076e14fbadbb154276f7353cb0fdae3",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        156,
+        94,
+        866,
+        926
+      ],
+      "resource": "res://assets/chests/sprites/crystal/states/open.png"
+    },
+    {
+      "path": "assets/chests/sprites/crystal/states/treasure.png",
+      "role": "crystal-treasure",
+      "bytes": 760136,
+      "sha256": "37e0049684e6cf33b4f1ef281dd8aa22053aed05c3d2d0ce99aed75d82973340",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        156,
+        94,
+        866,
+        926
+      ],
+      "resource": "res://assets/chests/sprites/crystal/states/treasure.png"
+    },
+    {
+      "path": "assets/chests/sprites/crystal/states/magic.png",
+      "role": "crystal-magic",
+      "bytes": 798466,
+      "sha256": "02739488c226e2d8d48e8c09bca45a84e6b50b9101c79390397514aefd25470e",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        156,
+        94,
+        866,
+        926
+      ],
+      "resource": "res://assets/chests/sprites/crystal/states/magic.png"
+    },
+    {
+      "path": "assets/chests/sprites/crystal/states/layers/body.png",
+      "role": "crystal-source-derived-rig-layer",
+      "bytes": 339088,
+      "sha256": "8aea019b26065165e082918151b82336b01511cab7da8e94fed5e3e7a08b81ea",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        209,
+        451,
+        821,
+        884
+      ],
+      "resource": "res://assets/chests/sprites/crystal/states/layers/body.png"
+    },
+    {
+      "path": "assets/chests/sprites/crystal/states/layers/lid.png",
+      "role": "crystal-source-derived-rig-layer",
+      "bytes": 159598,
+      "sha256": "88199715209c37dec1583d43f9b237f911c8abcb53d3601fb62a380bf5e23eb5",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        209,
+        120,
+        821,
+        327
+      ],
+      "resource": "res://assets/chests/sprites/crystal/states/layers/lid.png"
+    },
+    {
+      "path": "assets/chests/sprites/crystal/states/layers/lid-inner.png",
+      "role": "crystal-source-derived-rig-layer",
+      "bytes": 63416,
+      "sha256": "7c6fb1a310baae341d30c39d05d8bb37a1d07d650d60bfa41f1e6d4b5593429c",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        212,
+        167,
+        819,
+        315
+      ],
+      "resource": "res://assets/chests/sprites/crystal/states/layers/lid-inner.png"
+    },
+    {
+      "path": "assets/chests/sprites/crystal/states/layers/interior.png",
+      "role": "crystal-source-derived-rig-layer",
+      "bytes": 79825,
+      "sha256": "47f359921197a0817db715009ed9ab163520634ac4fb64d6aa41b98a58f8901f",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        211,
+        391,
+        821,
+        547
+      ],
+      "resource": "res://assets/chests/sprites/crystal/states/layers/interior.png"
+    },
+    {
+      "path": "assets/chests/sprites/crystal/states/layers/body-ornaments.png",
+      "role": "crystal-source-derived-rig-layer",
+      "bytes": 212487,
+      "sha256": "1f8325d087eef36302fd52b8a9f18169a82dc4a988d6333c9d932c9726965351",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        156,
+        507,
+        861,
+        926
+      ],
+      "resource": "res://assets/chests/sprites/crystal/states/layers/body-ornaments.png"
+    },
+    {
+      "path": "assets/chests/sprites/crystal/states/layers/lid-ornaments.png",
+      "role": "crystal-source-derived-rig-layer",
+      "bytes": 183476,
+      "sha256": "f03ff0c3be78069442bc553c3f78c3c51835236fb5e9bba35331478545428fc3",
+      "width": 1024,
+      "height": 1024,
+      "mode": "RGBA",
+      "alpha_bounds": [
+        163,
+        94,
+        866,
+        402
+      ],
+      "resource": "res://assets/chests/sprites/crystal/states/layers/lid-ornaments.png"
+    }
+  ]
+}

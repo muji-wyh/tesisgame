@@ -4,7 +4,7 @@ extends Control
 const Surface = preload("res://scripts/jelly_union.gdshader")
 const BeadSurface = preload("res://scripts/jelly_surface.gdshader")
 const SHAPE_SDF = preload("res://assets/images/jelly-match/gel-coral-material.png")
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 var stage: String = "contact"
 var _paint: ColorRect
 var _gel: ShaderMaterial

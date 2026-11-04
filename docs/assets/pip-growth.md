@@ -105,6 +105,16 @@ art. The directory's `.gdignore` keeps these web-only sources out of the Godot
 resource import. Original Pip and wardrobe files remain editable historical
 sources, rather than a second visual style for the loading or speech UI.
 
+The Jelly Journey map reuses the acquired growth and professional part atlases
+for a supported perch, closed-eye breathing, and a 1.6-second startled slip and
+climb. Its November 4, 2026 choreography rotates the existing rigid body, head,
+and shoulder-attached wings; it adds no replacement character artwork or baked
+animation. The motion turns toward the map's center to keep the near-fall visible
+on narrow screens. Three quiet seconds start sleep, and quiet timing resumes
+after a wake recovery. Small drifting sleep letters reuse the existing interface font.
+Reduced motion retains static sleep and awake faces with bounded timers instead
+of animated poses. Map-only sound provenance is recorded in [Pip sounds](pip-sounds.md).
+
 | Sheet | Cells | Content |
 | --- | --- | --- |
 | Ordinary | 4 | Neutral, speaking, blink, wave |

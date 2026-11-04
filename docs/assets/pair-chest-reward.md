@@ -83,7 +83,7 @@ It replaces only Match's pair discovery cue and adds no Pip voice.
 The existing closed theme design is
 rendered through `ChestView`, including the original Royal, Energy and Crystal
 illustration and the five integrated 3D replacements. The illustration source
-mapping remains in `assets/chests/SOURCE.txt`; the downloaded models, creators,
+mapping remains in `assets/chests/sources/sprites/SOURCE.txt`; the downloaded models, creators,
 Unity Asset Store Standard EULA, acquisition records and available source clips
 remain in [the chest replacement record](chest-refresh.md). This presentation
 does not run any source opening clip. `chest_reward_model.gd` reuses the acquired

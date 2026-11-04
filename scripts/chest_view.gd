@@ -10,8 +10,8 @@ const OPEN_SWAY_SECONDS: float = 6.0
 const CHARGE_STEPS: int = 3
 const CROWN_COLORS: Array[Color] = [Color("#ff7189"), Color("#ffb354"), Color("#f5dc66"),
 	Color("#73d99b"), Color("#66d5e6"), Color("#799ff2"), Color("#bd8bea")]
-const CHARGE_GLOW = preload("res://assets/chests/particles/portal_glow.png")
-const CHARGE_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const CHARGE_GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
+const CHARGE_SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const RAINBOW_LIGHT = preload("res://scripts/chest_rainbow_light.gdshader")
 const OpeningEffect = preload("res://scripts/chest_opening_effect.gd")
 const SURFACE_LIGHT = preload("res://scripts/chest_surface.gdshader")
@@ -234,7 +234,7 @@ func _sync_model_surface() -> void:
 
 
 func _load_rig() -> bool:
-	const RIG_PATH: String = "res://assets/chests/rigs.json"
+	const RIG_PATH: String = "res://assets/chests/catalog/sprite-rigs.json"
 	if not FileAccess.file_exists(RIG_PATH):
 		return false
 	var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(RIG_PATH))

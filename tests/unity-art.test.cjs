@@ -10,7 +10,7 @@ const root = path.resolve(__dirname, '..');
 const python = process.env.UNITY_ART_PYTHON || 'python';
 const helper = path.join(root, 'tools', 'unity-art-package.py');
 const hash = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
-const png = fs.readFileSync(path.join(root, 'assets/chests/royal/closed.png'));
+const png = fs.readFileSync(path.join(root, 'assets/chests/sprites/royal/closed.png'));
 
 function run(args) {
   return spawnSync(python, [helper, ...args], { encoding: 'utf8', cwd: root });

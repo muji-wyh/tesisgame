@@ -167,7 +167,14 @@ recovery does not debit it again. Partial funding survives leaving and reloading
 Only a committed pulse advances the gold progress rail. No coins fly toward the
 upgrade. The held button instead carries continuous local light and glints,
 while the top-right wallet rolls its count toward the saved balance and lights
-the coin artwork as it decreases. Both envelopes retarget without restarting on
+the coin artwork as it decreases. The upgrade header fits the number's actual
+text width and keeps a six-unit gap to the coin, including changes in digit count.
+During a saved debit, a retained clipped strip rolls the numeral columns downward,
+with a gold tint, local glow and two small fading glints beneath the digits.
+It reuses the existing interface font and the acquired glow/sparkle textures;
+no new artwork, shaders, audio, or per-tick nodes are introduced. Reduced motion
+keeps the light accents stationary while counting to the saved balance.
+Both envelopes retarget without restarting on
 every receipt. A saved wallet debit plays the acquired Kenney RPG Audio
 `handleCoins2` recording through `assets/audio/coins/collect.wav` at a quieter
 gain on the existing bounded coin pool, with the unchanged CC0 license and
@@ -193,7 +200,21 @@ These are integrated production assets with game-authored motion, not new
 acquisitions or source animation clips. Milestones use effects and sound without
 notification copy; levels and exact coin progress remain visible. In normal
 motion a saved level reaches its rail marker within 120 ms before the burst and
-milestone sound start together. Reduced motion keeps a stationary light accent,
+milestone sound start together. The old visible Lv compresses through the first
+100 ms of that burst, then a moving glint reveals the earned Lv and its rebound.
+The main Jelly retains its current owned level during a hold while the adjacent
+board previews the next ability. Holding adds continuous subject-local light,
+an inward flow of six acquired glints, and restrained elastic motion; a saved
+milestone releases twelve outward glints, rays and a compact core flash.
+The paired showcase keeps its hero and board close at desktop and phone sizes.
+The preview reuses the acquired mint, sky and lilac gel artwork, with one source
+face and a rounded contrast backplate. Exact selected targets change skin in one
+outward wave, with at most eight cached traveling accents. Auto merge retains its
+actual capacity and staggers the existing Jelly artwork into place.
+All effect layers use retained controls and bounded drawing; no per-frame
+resource loads, layout rebuilds, particle nodes, or notification copy are added.
+Hiding, changing category, selecting a preview or deactivating the page settles
+any queued Lv reveal without replaying its milestone. Reduced motion keeps a stationary light accent,
 immediate exact saved progress and the decreasing count, without subject
 deformation or traveling glints.
 
@@ -205,7 +226,7 @@ it in a stacked phone header to keep the Hint bulb clear. One existing front-fac
 travels from the wallet to the Hint along a short arc. It reuses the acquired
 coin texture above and the integrated Modern 2D Animated Chests
 `particles/portal_glow.png` (source and Unity Asset Store license recorded in
-`assets/chests/SOURCE.txt`). These are static textures with game-authored motion;
+`assets/chests/sources/sprites/SOURCE.txt`). These are static textures with game-authored motion;
 no new asset acquisition or animation clip is claimed.
 
 Word-goal payments use the same saved receipt and send the coin to the clicked

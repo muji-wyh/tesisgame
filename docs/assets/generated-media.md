@@ -142,7 +142,7 @@ Selected artwork is imported from the user-provided **Modern 2D Animated Chests 
 | Candy | Crystal | Elastic compression, a two-beat opening, pops and sugar rattles. |
 
 `scripts/chest_feel.gd` defines shared cue times and per-world motion profiles.
-`assets/chests/rigs.json` describes derived Royal/Energy layers; the original
+`assets/chests/catalog/sprite-rigs.json` describes derived Royal/Energy layers; the original
 source manifest retains the 14 images used by the current chest. The derived art reuses the original
 pixels and textures rather than replacing the silhouette with a new illustration.
 

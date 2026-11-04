@@ -7,17 +7,17 @@ const SOURCE_NAME = 'Modern 2D Animated Chests Pack_FREE Demo 1.0.2';
 const root = path.join(__dirname, '..');
 const partNames = ['chest', ...Array.from({ length: 8 }, (_, index) => String(index + 1).padStart(2, '0'))];
 const particles = {
-  glow: 'assets/chests/particles/portal_glow.png'
+  glow: 'assets/chests/shared/effects/portal_glow.png'
 };
 const crystalImages = partNames.map((name) => ({
   name,
-  path: `assets/chests/crystal/${name === 'chest' ? 'base' : `part_${name}`}.png`,
+  path: `assets/chests/sprites/crystal/${name === 'chest' ? 'base' : `part_${name}`}.png`,
   source: `Chests/Crystal/Sprites/SPR_${name}.png`
 }));
 const selectedImages = [
   ...['Royal', 'Energy'].flatMap((style) => [
-    { path: `assets/chests/${style.toLowerCase()}/closed.png`, source: `Chests/${style}/Sprites/SPR_${style}_Close.png` },
-    { path: `assets/chests/${style.toLowerCase()}/open.png`, source: `Chests/${style}/Sprites/SPR_${style}_Open.png` }
+    { path: `assets/chests/sprites/${style.toLowerCase()}/closed.png`, source: `Chests/${style}/Sprites/SPR_${style}_Close.png` },
+    { path: `assets/chests/sprites/${style.toLowerCase()}/open.png`, source: `Chests/${style}/Sprites/SPR_${style}_Open.png` }
   ]),
   ...crystalImages,
   ...Object.values(particles).map((filename) => ({
@@ -25,7 +25,7 @@ const selectedImages = [
   }))
 ];
 const allowedOutputs = new Set([
-  ...selectedImages.map((image) => image.path), 'assets/chests/SOURCE.txt', 'assets/chests/manifest.json'
+  ...selectedImages.map((image) => image.path), 'assets/chests/sources/sprites/SOURCE.txt', 'assets/chests/catalog/sprites.json'
 ]);
 const sha256 = (bytes) => crypto.createHash('sha256').update(bytes).digest('hex');
 const resolvePath = (directory, relativePath) => path.join(directory, ...relativePath.split('/'));
@@ -342,8 +342,8 @@ function importChests(sourceRoot = DEFAULT_SOURCE) {
     version: 1,
     source: SOURCE_NAME,
     styles: {
-      royal: { closed: 'assets/chests/royal/closed.png', open: 'assets/chests/royal/open.png' },
-      energy: { closed: 'assets/chests/energy/closed.png', open: 'assets/chests/energy/open.png' },
+      royal: { closed: 'assets/chests/sprites/royal/closed.png', open: 'assets/chests/sprites/royal/open.png' },
+      energy: { closed: 'assets/chests/sprites/energy/closed.png', open: 'assets/chests/sprites/energy/open.png' },
       crystal: { parts: buildCrystalParts(prefab, sprites) }
     },
     particles,
@@ -351,8 +351,8 @@ function importChests(sourceRoot = DEFAULT_SOURCE) {
   };
   const outputs = [
     ...images.map((image) => ({ path: image.file.path, bytes: image.bytes })),
-    { path: 'assets/chests/SOURCE.txt', bytes: Buffer.from(sourceDescription(), 'utf8') },
-    { path: 'assets/chests/manifest.json', bytes: Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`, 'utf8') }
+    { path: 'assets/chests/sources/sprites/SOURCE.txt', bytes: Buffer.from(sourceDescription(), 'utf8') },
+    { path: 'assets/chests/catalog/sprites.json', bytes: Buffer.from(`${JSON.stringify(manifest, null, 2)}\n`, 'utf8') }
   ];
   return { manifest, ...writeImportFiles(outputs) };
 }

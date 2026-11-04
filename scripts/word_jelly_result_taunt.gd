@@ -3,8 +3,8 @@ extends Control
 
 const Style = preload("res://scripts/ui_style.gd")
 const Actor = preload("res://scripts/word_jelly_boss_actor.gd")
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
-const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
+const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const DURATION: float = 2.4
 const TAUNT_SECONDS: float = 2.0
 const STEADY_SAMPLE: float = 1.0

@@ -10,15 +10,15 @@ const chestRoot = path.join(root, 'assets', 'chests');
 const partNames = ['chest', ...Array.from({ length: 8 }, (_, index) => String(index + 1).padStart(2, '0'))];
 const pngSignature = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]);
 const expectedParticles = {
-  glow: 'assets/chests/particles/portal_glow.png'
+  glow: 'assets/chests/shared/effects/portal_glow.png'
 };
 const expectedFiles = [
   ...['Royal', 'Energy'].flatMap((style) => [
-    { path: `assets/chests/${style.toLowerCase()}/closed.png`, source: `Chests/${style}/Sprites/SPR_${style}_Close.png` },
-    { path: `assets/chests/${style.toLowerCase()}/open.png`, source: `Chests/${style}/Sprites/SPR_${style}_Open.png` }
+    { path: `assets/chests/sprites/${style.toLowerCase()}/closed.png`, source: `Chests/${style}/Sprites/SPR_${style}_Close.png` },
+    { path: `assets/chests/sprites/${style.toLowerCase()}/open.png`, source: `Chests/${style}/Sprites/SPR_${style}_Open.png` }
   ]),
   ...partNames.map((name) => ({
-    path: `assets/chests/crystal/${name === 'chest' ? 'base' : `part_${name}`}.png`,
+    path: `assets/chests/sprites/crystal/${name === 'chest' ? 'base' : `part_${name}`}.png`,
     source: `Chests/Crystal/Sprites/SPR_${name}.png`
   })),
   ...Object.values(expectedParticles).map((filename) => ({
@@ -133,7 +133,7 @@ test('the chest reference importer preserves installed files when the supplied v
 });
 
 function readManifest() {
-  const filename = path.join(chestRoot, 'manifest.json');
+  const filename = path.join(chestRoot, 'catalog', 'sprites.json');
   assert.ok(fs.existsSync(filename), 'Missing imported chest manifest');
   return JSON.parse(fs.readFileSync(filename, 'utf8'));
 }
@@ -236,7 +236,7 @@ SpriteRenderer:
     transforms.push(transformDocument);
     renderers.push(rendererDocument);
     return {
-      name, texture: `assets/chests/crystal/${name === 'chest' ? 'base' : `part_${name}`}.png`,
+      name, texture: `assets/chests/sprites/crystal/${name === 'chest' ? 'base' : `part_${name}`}.png`,
       guid, ppu: name === '01' ? 50 : 100, pivot: name === '01' ? [0.25, 0.75] : [0.5, 0.5]
     };
   });
@@ -261,8 +261,8 @@ test('the chest manifest has exactly the required three styles and particle mapp
   assert.deepEqual(Object.keys(manifest.styles).sort(), ['crystal', 'energy', 'royal']);
   for (const style of ['royal', 'energy']) {
     assert.deepEqual(manifest.styles[style], {
-      closed: `assets/chests/${style}/closed.png`,
-      open: `assets/chests/${style}/open.png`
+      closed: `assets/chests/sprites/${style}/closed.png`,
+      open: `assets/chests/sprites/${style}/open.png`
     });
   }
   assert.deepEqual(Object.keys(manifest.styles.crystal), ['parts']);
@@ -276,7 +276,7 @@ test('Crystal has nine unique parts with finite nonsingular Godot transforms and
   assert.equal(new Set(parts.map(({ texture }) => texture)).size, 9);
   for (const part of parts) {
     assert.deepEqual(Object.keys(part).sort(), ['name', 'texture', 'transform', 'pivot', 'order', 'flip_h', 'flip_v'].sort());
-    assert.equal(part.texture, `assets/chests/crystal/${part.name === 'chest' ? 'base' : `part_${part.name}`}.png`);
+    assert.equal(part.texture, `assets/chests/sprites/crystal/${part.name === 'chest' ? 'base' : `part_${part.name}`}.png`);
     assert.equal(part.transform.length, 6);
     assert.ok(part.transform.every(Number.isFinite), part.name);
     const [a, b, c, d] = part.transform;
@@ -307,27 +307,33 @@ test('the manifest records exactly fourteen original paths, hashes and image dim
 
 test('every chest image belongs to original art, derived rigs, verified milestone effects or an embedded model material', () => {
   const files = listFiles(chestRoot);
-  const rigs = JSON.parse(fs.readFileSync(path.join(chestRoot, 'rigs.json'), 'utf8'));
+  const rigs = JSON.parse(fs.readFileSync(path.join(chestRoot, 'catalog', 'sprite-rigs.json'), 'utf8'));
   assert.equal(rigs.version, 1);
   assert.deepEqual(Object.keys(rigs.styles).sort(), ['energy', 'royal']);
   const parts = Object.values(rigs.styles).flatMap((style) => style.parts);
   assert.equal(parts.length, 10);
   assert.equal(new Set(parts.map((part) => part.texture)).size, 10);
   for (const part of parts) {
-    assert.match(part.texture, /^assets\/chests\/rigs\/(?:royal|energy)\/[a-z_]+\.png$/);
+    assert.match(part.texture, /^assets\/chests\/sprites\/(?:royal|energy)\/rig\/[a-z_]+\.png$/);
     const image = readPng(part.texture);
     assert.equal(sha256(image.bytes), part.sha256, part.texture);
     assert.equal(image.bytes.length, part.bytes, part.texture);
     assert.equal(image.width, part.width, part.texture);
     assert.equal(image.height, part.height, part.texture);
   }
-  const downloaded = JSON.parse(fs.readFileSync(path.join(chestRoot, 'downloaded', 'manifest.json'), 'utf8'));
+  const downloaded = JSON.parse(fs.readFileSync(path.join(chestRoot, 'catalog', 'licensed-models.json'), 'utf8'));
   const modelImages = downloaded.assets.flatMap(asset => embeddedModelImages(asset.path, readGlb(asset.path)));
-  const cc0 = JSON.parse(fs.readFileSync(path.join(chestRoot, 'catalog-cc0', 'sources.json'), 'utf8'));
-  const cc0Images = cc0.files.filter(file => file.kind === 'model').flatMap(file => {
-    const model = readModelContainer(absolute(file.path));
+  const cc0 = JSON.parse(fs.readFileSync(path.join(chestRoot, 'catalog', 'cc0-sources.json'), 'utf8'));
+  const polished = JSON.parse(fs.readFileSync(path.join(chestRoot, 'catalog', 'cc0-models.json'), 'utf8'));
+  const atelier = JSON.parse(fs.readFileSync(path.join(chestRoot, 'catalog', 'atelier.json'), 'utf8'));
+  const stateAssets = JSON.parse(fs.readFileSync(path.join(chestRoot, 'catalog', 'chest-state-assets.json'), 'utf8'));
+  const spriteStates = JSON.parse(fs.readFileSync(path.join(chestRoot, 'catalog', 'chest-sprite-states.json'), 'utf8'));
+  const stateModels = stateAssets.assets.filter(asset => asset.kind === 'glb').map(asset => asset.path);
+  const cc0Images = [...cc0.files.filter(file => file.kind === 'model').map(file => file.path),
+    ...polished.models.map(model => model.file), ...atelier.models.map(model => model.model), ...stateModels].flatMap(filename => {
+    const model = readModelContainer(absolute(filename));
     return model.gltf.images?.some(image => Number.isInteger(image.bufferView))
-      ? embeddedModelImages(file.path, model) : [];
+      ? embeddedModelImages(filename, model) : [];
   });
   for (const image of [...modelImages, ...cc0Images]) {
     const actual = fs.readFileSync(absolute(image.path));
@@ -335,19 +341,33 @@ test('every chest image belongs to original art, derived rigs, verified mileston
     assert.deepEqual(imageDimensions(actual), imageDimensions(image.bytes), `${image.path} retains source dimensions`);
   }
   const milestoneTextures = require('../tools/prepare-chest-milestone-art.cjs').checkChestMilestoneArt(root);
+  const stateImages = stateAssets.assets.filter(asset => asset.kind === 'png');
+  for (const asset of [...stateImages, ...spriteStates.files, stateAssets.source_preview, spriteStates.source_preview]) {
+    assert.equal(sha256(fs.readFileSync(absolute(asset.path))), asset.sha256, asset.path);
+  }
+  for (const source of spriteStates.sources) {
+    assert.equal(sha256(fs.readFileSync(absolute(source.path))), source.sha256,
+      `${source.path} retains the original acquired source bytes`);
+  }
+  for (const file of spriteStates.files) {
+    assert.deepEqual(imageDimensions(fs.readFileSync(absolute(file.path))),
+      { width: file.width, height: file.height }, `${file.path} retains its authored state canvas`);
+  }
   assert.deepEqual(milestoneTextures.map(texture => texture.path), [
-    'assets/chests/milestone/rays.png', 'assets/chests/milestone/sparkle.png'
+    'assets/chests/shared/effects/rays.png', 'assets/chests/shared/effects/sparkle.png'
   ]);
   assert.deepEqual(files.filter((file) => /\.(?:png|jpe?g)$/i.test(file)).sort(), [
     ...expectedFiles.map(({ path: filename }) => filename), ...parts.map((part) => part.texture),
     ...modelImages.map(image => image.path), ...milestoneTextures.map(texture => texture.path),
-    ...cc0.files.filter(file => file.kind === 'texture').map(file => file.path), ...cc0Images.map(image => image.path)
+    ...cc0.files.filter(file => file.kind === 'texture').map(file => file.path), ...cc0Images.map(image => image.path),
+    ...stateImages.map(asset => asset.path), ...spriteStates.files.map(file => file.path),
+    stateAssets.source_preview.path, spriteStates.source_preview.path
   ].sort());
   assert.deepEqual(files.filter((file) => /\.(?:meta|prefab|anim|mat|cs)$/i.test(file)), []);
 });
 
 test('five detailed chest models have distinct geometry, continuous articulation and verified provenance', () => {
-  const downloaded = JSON.parse(fs.readFileSync(path.join(chestRoot, 'downloaded', 'manifest.json'), 'utf8'));
+  const downloaded = JSON.parse(fs.readFileSync(path.join(chestRoot, 'catalog', 'licensed-models.json'), 'utf8'));
   assert.equal(downloaded.version, 2);
   assert.deepEqual(Object.keys(downloaded.styles).sort(), ['bonbon', 'bramble', 'harvest', 'nebula', 'tide']);
   const designReferences = Object.values(downloaded.styles).map(style => style.design_reference);
@@ -366,7 +386,7 @@ test('five detailed chest models have distinct geometry, continuous articulation
   };
   for (const [style, catalog] of Object.entries(downloaded.styles)) {
     assert.ok(!Object.hasOwn(catalog, 'frames'), `${style} uses continuous geometry instead of sparse images`);
-    assert.match(catalog.model, /^assets\/chests\/models\/[a-z-]+\.glb$/);
+    assert.match(catalog.model, /^assets\/chests\/models\/licensed\/([a-z-]+)\/\1\.glb$/);
     const record = checksums.get(catalog.model);
     assert.ok(record, catalog.model);
     const model = readGlb(catalog.model);
@@ -437,7 +457,7 @@ test('five detailed chest models have distinct geometry, continuous articulation
     assert.match(source.license, /embedded game artwork/);
   }
   assert.equal(modelHashes.size, 5, 'Each theme owns a different model');
-  assert.deepEqual(listFiles(path.join(chestRoot, 'models')).filter(file => file.endsWith('.glb')).sort(), [...checksums.keys()].sort());
+  assert.deepEqual(listFiles(path.join(chestRoot, 'models', 'licensed')).filter(file => file.endsWith('.glb')).sort(), [...checksums.keys()].sort());
   assert.ok(totalBytes < 20000000, 'The five embedded models stay below the 20 MB download budget');
   const data = fs.readFileSync(absolute('scripts/game_data.gd'), 'utf8');
   const themeSection = data.slice(data.indexOf('const THEMES:'), data.indexOf('const REWARD_NAMES:'));
@@ -448,7 +468,7 @@ test('five detailed chest models have distinct geometry, continuous articulation
 });
 
 test('derived rigs preserve original source hashes and share exact lid hinges', () => {
-  const rigs = JSON.parse(fs.readFileSync(path.join(chestRoot, 'rigs.json'), 'utf8'));
+  const rigs = JSON.parse(fs.readFileSync(path.join(chestRoot, 'catalog', 'sprite-rigs.json'), 'utf8'));
   const originals = readManifest().files;
   assert.equal(rigs.sources.length, 4);
   for (const source of rigs.sources) {
@@ -479,7 +499,7 @@ test('derived rigs preserve original source hashes and share exact lid hinges', 
 });
 
 test('SOURCE documents the free demo version, selected paths and non-imported Unity behavior', () => {
-  const filename = path.join(chestRoot, 'SOURCE.txt');
+  const filename = path.join(chestRoot, 'sources', 'sprites', 'SOURCE.txt');
   assert.ok(fs.existsSync(filename), 'Missing chest source documentation');
   const source = fs.readFileSync(filename, 'utf8');
   assert.match(source, /Modern 2D Animated Chests Pack_FREE Demo 1\.0\.2/);
@@ -641,7 +661,7 @@ test('source checksums agree and a real importer rerun leaves every imported byt
     return;
   }
   const manifest = readManifest();
-  const snapshotPaths = [...manifest.files.map((file) => file.path), 'assets/chests/manifest.json', 'assets/chests/SOURCE.txt'];
+  const snapshotPaths = [...manifest.files.map((file) => file.path), 'assets/chests/catalog/sprites.json', 'assets/chests/sources/sprites/SOURCE.txt'];
   const snapshot = new Map(snapshotPaths.map((filename) => [filename, {
     hash: sha256(fs.readFileSync(absolute(filename))),
     mtime: fs.statSync(absolute(filename), { bigint: true }).mtimeNs

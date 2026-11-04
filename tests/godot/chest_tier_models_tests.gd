@@ -6,9 +6,9 @@ const RewardModel = preload("res://scripts/chest_reward_model.gd")
 const Data = preload("res://scripts/game_data.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
 const CATALOG_PATH: String = "res://scripts/chest_tier_catalog.gd"
-const PRESETS_PATH: String = "res://assets/chests/tier-presets.json"
-const SOURCES_PATH: String = "res://assets/chests/catalog-cc0/sources.json"
-const MANIFEST_PATH: String = "res://assets/chests/downloaded/manifest.json"
+const PRESETS_PATH: String = "res://assets/chests/catalog/tier-presets.json"
+const SOURCES_PATH: String = "res://assets/chests/catalog/cc0-sources.json"
+const MANIFEST_PATH: String = "res://assets/chests/catalog/licensed-models.json"
 const CAPTURE_PATH: String = "res://build/qa/chest-thirty-tiers"
 const THEMES: Array[String] = [
 	"spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"
@@ -157,7 +157,7 @@ func _check_catalog(presets: Dictionary) -> void:
 			and style.get("material_profile", {}) == profile,
 			"Tier %d exposes role-specific, explicitly game-authored material styling" % tier)
 		previous_rank = rank
-		if source.begins_with("assets/chests/models/"):
+		if source.begins_with("assets/chests/models/licensed/"):
 			var legacy: Dictionary = _legacy_style_for_model(source)
 			check(not legacy.is_empty() and style.get("model_parts", []) == legacy.get("model_parts", [])
 				and style.get("open_animation", "") == legacy.get("open_animation", "")
@@ -465,7 +465,7 @@ func _body_surface(base: Node3D, model: SubViewport, center: Vector3,
 
 func _check_source_materials(tier: int, base: Node3D, style: Dictionary) -> void:
 	var path: String = _resource_path(str(style.model))
-	if not path.contains("/catalog-cc0/"):
+	if not path.begins_with("res://assets/chests/models/cc0/"):
 		return
 	var resource := load(path) as PackedScene
 	if resource == null:
@@ -653,7 +653,7 @@ func _check_missing_geometry() -> void:
 	root.add_child(model)
 	check(model.configure(_style(2)), "Missing-resource validation first owns a real styled source model")
 	var style: Dictionary = _style(2)
-	style["model"] = "assets/chests/catalog-cc0/missing-chest.glb"
+	style["model"] = "assets/chests/sources/cc0/missing-chest.glb"
 	check(not model.configure(style) and not model.last_error.is_empty()
 		and not bool(model.snapshot().get("available", true)) and int(model.snapshot().get("mesh_count", -1)) == 0,
 		"A missing acquired base reports unavailable instead of substituting a card")
@@ -661,7 +661,7 @@ func _check_missing_geometry() -> void:
 	style = _style(2)
 	var decorations: Array = style.get("decorations", [])
 	if not decorations.is_empty():
-		decorations[0]["model"] = "assets/chests/catalog-cc0/missing-ornament.glb"
+		decorations[0]["model"] = "assets/chests/sources/cc0/missing-ornament.glb"
 	check(not model.configure(style) and not model.last_error.is_empty()
 		and not bool(model.snapshot().get("available", true)) and int(model.snapshot().get("mesh_count", -1)) == 0,
 		"A missing required real ornament rejects the recipe instead of claiming a complete tier")

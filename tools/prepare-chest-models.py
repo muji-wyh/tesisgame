@@ -21,7 +21,7 @@ def optimize_published_textures(work, output):
     import io
     import struct
     from PIL import Image
-    for target in output.glob('*.glb'):
+    for target in sorted(output.glob('*/*.glb')):
         content = target.read_bytes()
         json_length = struct.unpack_from('<I', content, 12)[0]
         document = json.loads(content[20:20 + json_length])
@@ -76,7 +76,7 @@ if '--optimize' in sys.argv:
     optimizer = argparse.ArgumentParser(description='Pack existing chest textures without lowering their resolution.')
     optimizer.add_argument('--optimize', action='store_true')
     optimizer.add_argument('--work', type=Path, default=Path('build/chest-quality'))
-    optimizer.add_argument('--output', type=Path, default=Path('assets/chests/models'))
+    optimizer.add_argument('--output', type=Path, default=Path('assets/chests/models/licensed'))
     optimization = optimizer.parse_args(sys.argv[1:])
     if not optimization.work.is_dir() or not optimization.output.is_dir():
         optimizer.error('Both --work and --output must point to completed Blender outputs.')
@@ -419,7 +419,8 @@ def convert(kind, sources, output, work, skip_previews=False):
         if action not in selected:
             bpy.data.actions.remove(action)
     scene.frame_start, scene.frame_end = 0, last_frame
-    target = output / (kind + '.glb')
+    target = output / kind / (kind + '.glb')
+    target.parent.mkdir(parents=True, exist_ok=True)
     bpy.ops.export_scene.gltf(filepath=str(target), export_format='GLB',
         export_animation_mode='NLA_TRACKS', export_anim_slide_to_zero=True,
         export_frame_range=False, export_force_sampling=True,
@@ -440,7 +441,7 @@ def convert(kind, sources, output, work, skip_previews=False):
     parts = [{'node': 'Lid', 'role': 'lid', 'axis': [1, 0, 0], 'angle': motion['opening_angle_radians']}]
     if kind == 'moonstone-vault':
         parts[0]['lift'] = [0, 1.16 * scale, 0]
-    result = {'id': kind, 'model': 'res://assets/chests/models/' + target.name,
+    result = {'id': kind, 'model': f'res://assets/chests/models/licensed/{kind}/{target.name}',
               'sha256': sha256(target), 'bytes': target.stat().st_size,
               'source_model': str(model), 'source_sha256': sha256(model),
               'materials': materials, 'motion': motion, 'design_reference': motion['design_reference'],
@@ -469,7 +470,7 @@ def convert(kind, sources, output, work, skip_previews=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--source-root', type=Path, default=Path('C:/uworks/TalkQuest/sources'))
-    parser.add_argument('--output', type=Path, default=Path('assets/chests/models'))
+    parser.add_argument('--output', type=Path, default=Path('assets/chests/models/licensed'))
     parser.add_argument('--work', type=Path, default=Path('build/chest-quality'))
     parser.add_argument('--only', choices=list(DESIGNS))
     parser.add_argument('--skip-previews', action='store_true')

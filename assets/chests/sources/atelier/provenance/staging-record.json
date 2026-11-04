@@ -1,0 +1,143 @@
+{
+  "version": 1,
+  "staged_on": "2026-11-03",
+  "status": "acquired-original-cc0-byte-copies",
+  "copied_from": "Q:/uwok/tesisgame/assets/chests/catalog-cc0",
+  "original_acquisition_record": "sources/acquisition-record.json",
+  "acquisition_record_sha256": "678511aa8f49f8a60d793e539c09d28e3862a07fe3c5a7956c9cef0ff0727f07",
+  "files": [
+    {
+      "path": "sources/kenney-survival/LICENSE.txt",
+      "sha256": "62c8356876481204fa4d40dc59183dfed777adf987d7f2a1390fffe8a699f3ff",
+      "bytes": 715,
+      "source_id": "kenney-survival",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-survival/LICENSE.txt"
+    },
+    {
+      "path": "sources/kenney-survival/chest.glb",
+      "sha256": "84b03023e425cc1f96c6d0b0f352608be9e8e01b112790e6b00b8651bf84379b",
+      "bytes": 35172,
+      "source_id": "kenney-survival",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-survival/chest.glb"
+    },
+    {
+      "path": "sources/kenney-survival/Textures/colormap.png",
+      "sha256": "6ca023be9f12e8c2358fcf94320c8a894b4c05a3dd0bad1f5c268312053caca1",
+      "bytes": 7440,
+      "source_id": "kenney-survival",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-survival/Textures/colormap.png"
+    },
+    {
+      "path": "sources/kenney-platformer/LICENSE.txt",
+      "sha256": "e1185354d8f0f055c325c7204602326c8cf0c47ee5ae1db7ed16f0465b91bb9a",
+      "bytes": 703,
+      "source_id": "kenney-platformer",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-platformer/LICENSE.txt"
+    },
+    {
+      "path": "sources/kenney-platformer/chest.glb",
+      "sha256": "ba92d21be71649e608de4c76859f04e83308efc699508b2ddb1221678102e274",
+      "bytes": 28012,
+      "source_id": "kenney-platformer",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-platformer/chest.glb"
+    },
+    {
+      "path": "sources/kenney-platformer/Textures/colormap.png",
+      "sha256": "439dfcac935cfd75dc16f28333a4c8284fffcc4b24f857c61cfb4c8a964a15bd",
+      "bytes": 11140,
+      "source_id": "kenney-platformer",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-platformer/Textures/colormap.png"
+    },
+    {
+      "path": "sources/kenney-platformer/jewel.glb",
+      "sha256": "cec20d8ae2678c292b3885aaee468ba39d165a7e2043af5ba8102b6cd974c2c3",
+      "bytes": 3580,
+      "source_id": "kenney-platformer",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-platformer/jewel.glb"
+    },
+    {
+      "path": "sources/kenney-platformer/lock.glb",
+      "sha256": "08d32c7723718afaac9896e0ee650624dfd1364da37952e3882f8a22f4ca8145",
+      "bytes": 9372,
+      "source_id": "kenney-platformer",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-platformer/lock.glb"
+    },
+    {
+      "path": "sources/kenney-platformer/coin-gold.glb",
+      "sha256": "cf2179e57721b943d88283d38678c4b1b8422e9a4dd44f631acfb35007c223a8",
+      "bytes": 10608,
+      "source_id": "kenney-platformer",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-platformer/coin-gold.glb"
+    },
+    {
+      "path": "sources/kenney-mini-dungeon/LICENSE.txt",
+      "sha256": "f8b470068a1c043854101c9ff7161d376ba02c36239da3c1dbdfa928b08444b6",
+      "bytes": 701,
+      "source_id": "kenney-mini-dungeon",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-mini-dungeon/LICENSE.txt"
+    },
+    {
+      "path": "sources/kenney-mini-dungeon/chest.glb",
+      "sha256": "64cc6c44786a0833bbe53c694cbad9f10d4fdd9e99d4b5ec03fcb3b8b5dd71e0",
+      "bytes": 34048,
+      "source_id": "kenney-mini-dungeon",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-mini-dungeon/chest.glb"
+    },
+    {
+      "path": "sources/kenney-mini-dungeon/Textures/colormap.png",
+      "sha256": "bc492d755caf9e64924447f065681be0d5438a33cd0acddc72f3d00fd75893be",
+      "bytes": 10838,
+      "source_id": "kenney-mini-dungeon",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-mini-dungeon/Textures/colormap.png"
+    },
+    {
+      "path": "sources/kenney-mini-dungeon/shield-rectangle.glb",
+      "sha256": "16e3d0131666e7ad9bdad313253ff5dcc70cddfb86c28864b3b965ee5c65ac3b",
+      "bytes": 13196,
+      "source_id": "kenney-mini-dungeon",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-rectangle.glb"
+    },
+    {
+      "path": "sources/kenney-mini-dungeon/shield-round.glb",
+      "sha256": "1527cc9a27891efe1019e22cf68d99c98f6fce9a45b3d6e1e4cf034956e08e54",
+      "bytes": 15512,
+      "source_id": "kenney-mini-dungeon",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-mini-dungeon/shield-round.glb"
+    },
+    {
+      "path": "sources/kenney-tower-defense/LICENSE.txt",
+      "sha256": "f67d4098842a15a1478a95cde1b6c44a0261901271e2709f7313c330975eccaf",
+      "bytes": 720,
+      "source_id": "kenney-tower-defense",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-tower-defense/LICENSE.txt"
+    },
+    {
+      "path": "sources/kenney-tower-defense/detail-crystal.glb",
+      "sha256": "51c49ba3c9bafacbcee120132c2234dcd7093ba8feec27fb3ac596ca35a27a19",
+      "bytes": 8996,
+      "source_id": "kenney-tower-defense",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-tower-defense/detail-crystal.glb"
+    },
+    {
+      "path": "sources/kenney-tower-defense/Textures/colormap.png",
+      "sha256": "1ce81aab65734b29dbe322f0f0dc8eaa219ebd1c35b7bf056bd2a23eb8f8cba8",
+      "bytes": 11228,
+      "source_id": "kenney-tower-defense",
+      "original_record_path": "assets/chests/catalog-cc0/kenney-tower-defense/Textures/colormap.png"
+    },
+    {
+      "path": "sources/kaykit-dungeon/LICENSE.txt",
+      "sha256": "c5f17abf619731f57f6bbff450f6484214605c13aa96bb75bbcfc70930941ff7",
+      "bytes": 829,
+      "source_id": "kaykit-dungeon-1.0",
+      "original_record_path": "assets/chests/catalog-cc0/kaykit-dungeon/LICENSE.txt"
+    },
+    {
+      "path": "sources/kaykit-dungeon/chest.glb",
+      "sha256": "f72fd2201cd42ad399928a0b7bcc34d5b0e6d0624aeaf824fef81852109955f8",
+      "bytes": 81412,
+      "source_id": "kaykit-dungeon-1.0",
+      "original_record_path": "assets/chests/catalog-cc0/kaykit-dungeon/chest.glb"
+    }
+  ]
+}

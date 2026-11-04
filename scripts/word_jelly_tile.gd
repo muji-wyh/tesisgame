@@ -21,9 +21,9 @@ var _fragment_count: Label
 var _fragment_arrival_age: float = -1.0
 var _unit: float = 60.0
 var palette_index: int = -1
-const COMPLETION_GLOW = preload("res://assets/chests/particles/portal_glow.png")
+const COMPLETION_GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const COMPLETION_LIGHT = preload("res://scripts/jelly_completion_glow.gdshader")
-const COMPLETION_SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const COMPLETION_SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const COMPLETION_GROW_SECONDS: float = 0.20
 const COMPLETION_HELD_SCALE: float = 1.12
 const COMPLETION_BREATH_AMOUNT: float = 0.025

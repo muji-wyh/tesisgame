@@ -119,8 +119,8 @@ func _run() -> void:
 	for step in range(3):
 		view._pip._process(0.1)
 	check(view._pip.rest_snapshot().awake and view._pip._wake_blend > 0.99
-		and view._pip.expression_name() == "neutral" and _geometry(view) == geometry,
-		"Actual hover raises the head without moving stage targets or starting a purchase")
+		and view._pip.expression_name() == "surprised" and _geometry(view) == geometry,
+		"Actual hover immediately startles Pip without moving stage targets or starting a purchase")
 	for pressed: bool in [true, false]:
 		var event := InputEventMouseButton.new()
 		event.button_index = MOUSE_BUTTON_LEFT
@@ -131,6 +131,11 @@ func _run() -> void:
 		root.push_input(event)
 		await process_frame
 	check(_stage_events == [52], "A real stage click emits immediately without waiting for Pip to wake")
+	for step in range(14):
+		view._pip._process(0.1)
+	check(view._pip.rest_snapshot().state == "awake" and view._pip.expression_name() == "neutral"
+		and _geometry(view) == geometry,
+		"The complete slip-and-climb settles back to an awake face while stage targets remain fixed")
 	view.set_reduced_motion(true)
 	var still: Array[Transform2D] = view._pip.rest_transforms()
 	clock = view._pip._idle_time

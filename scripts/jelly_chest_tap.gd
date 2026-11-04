@@ -2,9 +2,9 @@ extends Button
 ## A local chest response; it never opens a chest or issues a reward.
 
 const Style = preload("res://scripts/ui_style.gd")
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
-const RAYS = preload("res://assets/chests/milestone/rays.png")
-const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
+const RAYS = preload("res://assets/chests/shared/effects/rays.png")
+const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const DURATION: float = 0.92
 const REDUCED_DURATION: float = 0.40
 

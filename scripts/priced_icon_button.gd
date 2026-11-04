@@ -3,8 +3,8 @@ extends "res://scripts/icon_button.gd"
 
 const COIN = preload("res://assets/coins/gold-coin.png")
 const FEEDBACK_SECONDS: float = 0.38
-const GLOW = preload("res://assets/chests/particles/portal_glow.png")
-const SPARKLE = preload("res://assets/chests/milestone/sparkle.png")
+const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
+const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 
 var cost: int = 0:
 	set(value):

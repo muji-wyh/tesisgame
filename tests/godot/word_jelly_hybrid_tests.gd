@@ -18,6 +18,7 @@ func check(condition: bool, message: String) -> void:
 
 func _run() -> void:
 	_test_whole_and_picture()
+	_test_merged_partner_drops()
 	_test_authored_spelling()
 	_test_no_picture()
 	_test_levels_and_fragments()
@@ -124,6 +125,84 @@ func _test_whole_and_picture() -> void:
 	var supplied_roots: Array = model.upcoming.filter(func(tile: Dictionary) -> bool: return tile.get("jelly_kind") == "root")
 	check(not supplied_roots.is_empty() and supplied_roots.all(func(tile: Dictionary) -> bool: return tile.text == "cat"),
 		"Unreviewed words reach the supply preview as whole roots")
+
+
+func _check_ignored_partner(model: RefCounted, left: Dictionary, right: Dictionary, context: String) -> void:
+	model.combo_count = 3
+	model.combo_progress = 2
+	model._combo_remaining = 5.0
+	var combo: Dictionary = model.combo_snapshot()
+	var cells_before: Array = model.cells.duplicate(true)
+	var next_tile: int = model._next_tile_id
+	var next_event: int = model._next_event_id
+	var supply_rng: int = model._rng.state
+	var coin_rng: int = model._coin_rng.state
+	var coins: int = model.collected_coins
+	var fragments: int = model.fragment_count
+	var events: Array[String] = []
+	model.changed.connect(func(): events.append("changed"))
+	model.cue_requested.connect(func(_cue: String): events.append("cue"))
+	model.combo_changed.connect(func(_state: Dictionary): events.append("combo"))
+	model.word_attempted.connect(func(_event: String, _ids: Array[String], _correct: bool): events.append("learning"))
+	model.fusion_started.connect(func(_payload: Dictionary): events.append("fusion"))
+	model.collection_started.connect(func(_payload: Dictionary): events.append("collection"))
+	model.collected.connect(func(_event: String, _word: Dictionary, _coins: int, _fragments: int): events.append("reward"))
+	check(not model.parts_compatible(left, right) and not model.parts_compatible(right, left)
+		and not model.can_merge(left, right) and not model.can_merge(right, left),
+		context + " stays neutral rather than advertising a merge")
+	check(model.try_merge(left.id, right.id) == "ignored", context + " is ignored in the requested drag direction")
+	check(model.cells == cells_before and model.fusions.is_empty()
+		and model._next_tile_id == next_tile and model._next_event_id == next_event,
+		context + " preserves both Jellies, fragments and operation identities")
+	check(model.combo_snapshot() == combo and events.is_empty(),
+		context + " preserves the combo without audio, learning, merge or reward events")
+	check(model.collected_coins == coins and model.fragment_count == fragments
+		and model._rng.state == supply_rng and model._coin_rng.state == coin_rng,
+		context + " leaves rewards and supply randomness untouched")
+
+
+func _test_merged_partner_drops() -> void:
+	for kind: String in ["root", "picture"]:
+		for level: int in [1, 4, 8, Model.MAX_MERGE_LEVEL]:
+			for merged_source: bool in [false, true]:
+				var model: RefCounted = _model()
+				var word: Dictionary = _word()
+				var partner: Dictionary = _put(model, model._new_word_root(word, 2) if kind == "root" else model._new_picture_tile(word, 2))
+				var merged: Dictionary = _ready(model, word, level, 3)
+				_check_ignored_partner(model, merged if merged_source else partner, partner if merged_source else merged,
+					"Matching %s and Lv%d merged Jelly, merged source %s" % [kind, level, merged_source])
+		for other: Dictionary in [_word("dog"), {"id": "other-cat-sense", "text": "cat", "min_age": 3,
+			"image": "assets/images/words/cat.png", "audio": "assets/audio/words/cat.wav"}]:
+			for merged_source: bool in [false, true]:
+				var model: RefCounted = _model([_word(), other])
+				var partner: Dictionary = _put(model, model._new_word_root(other) if kind == "root" else model._new_picture_tile(other))
+				var merged: Dictionary = _ready(model, _word(), 2)
+				var cues: Array[String] = []
+				model.cue_requested.connect(func(cue: String): cues.append(cue))
+				model.combo_count = 3
+				model.combo_progress = 2
+				model._combo_remaining = 5.0
+				check(model.try_merge(merged.id if merged_source else partner.id, partner.id if merged_source else merged.id) == "wrong"
+					and cues == ["wrong"] and model.combo_count == 0 and model.cells.size() == 2,
+					"A different word identity remains a mismatch even when the spelling is identical")
+	# A completed reviewed spelling is still a whole word while awaiting its picture.
+	for merged_source: bool in [false, true]:
+		var word: Dictionary = _composed()
+		var model: RefCounted = _model([word])
+		var roots: Array[Dictionary] = _roots(model, word, 1)
+		var partial: Dictionary = _join(model, roots[1], roots[2])
+		var spelled: Dictionary = _join(model, roots[0], partial)
+		var merged: Dictionary = _ready(model, word, 2, 4)
+		_check_ignored_partner(model, merged if merged_source else spelled, spelled if merged_source else merged,
+			"Completed authored spelling and its merged Jelly")
+	for merged_source: bool in [false, true]:
+		var word: Dictionary = _composed()
+		var model: RefCounted = _model([word])
+		var roots: Array[Dictionary] = _roots(model, word)
+		var partial: Dictionary = _join(model, roots[1], roots[2])
+		var merged: Dictionary = _ready(model, word, 2)
+		check(model.try_merge(merged.id if merged_source else partial.id, partial.id if merged_source else merged.id) == "wrong",
+			"An unfinished authored spelling is not treated as its complete merged word")
 
 
 func _test_authored_spelling() -> void:

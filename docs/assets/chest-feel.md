@@ -16,7 +16,7 @@ paper surface. The existing chest artwork and contact shadows remain the focus;
 the old floral backdrop and large card borders are removed from this room.
 The already integrated `particles/portal_glow.png` from the Modern 2D Animated
 Chests demo supplies a subtle, static golden light behind each chest. Its source
-mapping remains in `assets/chests/SOURCE.txt`; no new art or audio is acquired.
+mapping remains in `assets/chests/sources/sprites/SOURCE.txt`; no new art or audio is acquired.
 
 A compact instruction reads "Hold to open", "Keep holding...", or "You can let
 go!" at the actual input boundaries, then "Opened!". Keyboard/controller focus
@@ -53,7 +53,7 @@ semantic progress remains available to screen readers.
 The cavity glow reuses the integrated `portal_glow.png` from Bobardo's **Modern 2D
 Animated Chests Pack_FREE Demo 1.0.2**, under the Standard Unity Asset Store EULA
 recorded in [treasure assets](../voice-pop-treasure.md), with source mapping in
-`assets/chests/SOURCE.txt`. Glints reuse `sparkle.png` from Kenneth Foldal Moe /
+`assets/chests/sources/sprites/SOURCE.txt`. Glints reuse `sparkle.png` from Kenneth Foldal Moe /
 Archanor VFX's **Toon FX 1.52**, acquired under the Standard Unity Asset Store
 EULA; its integration record is in [Jelly fragments](jelly-fragments.md).
 These are existing static texture assets with game-authored shading and motion;
@@ -141,7 +141,7 @@ The cosmetic toy reveal was replaced by saved coin rewards in commit
 been removed. Current openings use the finite sparkle flourish documented above
 and the separate coin flight; restoration and background settlement remain quiet.
 
-`assets/chests/surprises/` retains the six historical transparent SVGs: star,
+`assets/chests/shared/rewards/` retains the six historical transparent SVGs: star,
 ball, rocket, kite, robot and doll. They were derived from the existing hand-drawn
 word icons, retaining their outlines, colors and details while removing only the
 pale circular backplate and floor shadow. These files are retained source

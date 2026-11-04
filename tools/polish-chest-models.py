@@ -10,8 +10,9 @@ import bpy
 from mathutils import Vector
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCES = ROOT / "assets/chests/catalog-cc0"
-OUTPUT = ROOT / "assets/chests/polished-cc0"
+SOURCES = ROOT / "assets/chests/sources/cc0"
+OUTPUT = ROOT / "assets/chests/models/cc0"
+CATALOG = ROOT / "assets/chests/catalog"
 BASES = ("kenney-survival", "kenney-platformer", "kenney-mini-dungeon", "kaykit-dungeon")
 
 
@@ -20,7 +21,7 @@ def digest(path):
 
 
 def main():
-    record = json.loads((SOURCES / "sources.json").read_text(encoding="utf-8"))
+    record = json.loads((CATALOG / "cc0-sources.json").read_text(encoding="utf-8"))
     OUTPUT.mkdir(parents=True, exist_ok=True)
     entries = []
     for family in BASES:
@@ -58,7 +59,8 @@ def main():
             normals = obj.modifiers.new("Weighted source panels", "WEIGHTED_NORMAL")
             normals.keep_sharp = True
             bpy.ops.object.modifier_apply(modifier=normals.name)
-        target = OUTPUT / f"{family}.glb"
+        target = OUTPUT / family / f"{family}.glb"
+        target.parent.mkdir(parents=True, exist_ok=True)
         bpy.ops.object.select_all(action="SELECT")
         bpy.ops.export_scene.gltf(
             filepath=str(target), export_format="GLB", use_selection=True,
@@ -83,7 +85,8 @@ def main():
             "processing": "Weld coincident source positions without changing UV loops; 0.8%-width two-segment edge bevel and weighted panel normals. Original separate lid, local transforms, palette, materials and animation tracks retained.",
             "status": "Converted from acquired CC0 originals; native runtime review is separate from this conversion record.",
         })
-    (OUTPUT / "manifest.json").write_text(json.dumps({
+    CATALOG.mkdir(parents=True, exist_ok=True)
+    (CATALOG / "cc0-models.json").write_text(json.dumps({
         "version": 1, "blender": bpy.app.version_string,
         "converter": "tools/polish-chest-models.py",
         "source_policy": "Original acquired files are never overwritten. These are source-derived CC0 chest bases, not new geometric stand-ins.",

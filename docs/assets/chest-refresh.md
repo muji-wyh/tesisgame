@@ -13,8 +13,8 @@ It retains original UV loops, separate lids, local transforms, materials and
 available opening clips; a 0.8%-width two-segment bevel and weighted panel normals
 create readable edge highlights. These are adaptations of the actual production
 models, not newly generated stand-in chests. Original source bytes remain in
-`assets/chests/catalog-cc0/`. Derived GLBs and full creator/license/source/hash/
-animation records live in `assets/chests/polished-cc0/manifest.json`.
+`assets/chests/sources/cc0/`. Derived GLBs and full creator/license/source/hash/
+animation records live in `assets/chests/catalog/cc0-models.json`.
 The original Kenney and Kay Lousberg CC0 notices remain referenced alongside the
 acquired inputs. The five private bases below already have a separate softer
 three-segment conversion; their licenses and original source records are unchanged.
@@ -62,7 +62,7 @@ source/preview validation. These hashes identify local acquired bytes; they
 are not publisher-supplied checksums.
 
 Source contact sheets and model previews were inspected before conversion.
-The [runtime manifest](../../assets/chests/downloaded/manifest.json) identifies
+The [runtime manifest](../../assets/chests/catalog/licensed-models.json) identifies
 the converted and integrated files separately, including their source design,
 model, texture, and output hashes. Private GLBs and import sidecars remain
 ignored build inputs and ship inside the compiled game pack only. No reusable

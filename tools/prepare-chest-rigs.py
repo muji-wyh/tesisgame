@@ -13,6 +13,7 @@ from PIL import Image, ImageChops, ImageDraw, ImageFilter, __version__ as pillow
 
 
 ROOT = Path(__file__).resolve().parents[1]
+SPRITES = ROOT / "assets/chests/sprites"
 CANVAS = (1024, 1024)
 CHECKSUMS = {
     "royal/closed.png": "5d56092692cfff431c49856c40237ae31285a8344b20ace4d375b901e201946d",
@@ -145,7 +146,7 @@ def write_part(style: str, role: str, image: Image.Image, anchor: tuple[int, int
     if not bounds:
         raise ValueError(f"Empty {style}/{role} layer")
     trimmed = image.crop(bounds)
-    path = ROOT / "assets/chests/rigs" / style / f"{role}.png"
+    path = SPRITES / style / "rig" / f"{role}.png"
     path.parent.mkdir(parents=True, exist_ok=True)
     trimmed.save(path, optimize=False, compress_level=9)
     width, height = trimmed.size
@@ -295,7 +296,7 @@ def main() -> None:
     images = {}
     sources = []
     for relative, expected in CHECKSUMS.items():
-        path = ROOT / "assets/chests" / relative
+        path = SPRITES / relative
         actual = digest(path)
         if actual != expected:
             raise ValueError(f"Source checksum mismatch for {relative}: {actual}")
@@ -323,13 +324,14 @@ def main() -> None:
             raise ValueError(f"Closed footprint changed for {style}")
         if metrics["closed_mean_absolute_channel_error"] > 0.005:
             raise ValueError(f"Closed artwork reconstruction drifted for {style}")
-    manifest_path = ROOT / "assets/chests/rigs.json"
+    manifest_path = ROOT / "assets/chests/catalog/sprite-rigs.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(manifest, indent=2) + "\n", encoding="utf-8")
     report["derived_bytes"] = sum(part["bytes"] for rig in manifest["styles"].values() for part in rig["parts"])
     report["manifest_sha256"] = digest(manifest_path)
     (args.qa_dir / "report.json").write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
     for relative, expected in CHECKSUMS.items():
-        assert digest(ROOT / "assets/chests" / relative) == expected
+        assert digest(SPRITES / relative) == expected
     print(json.dumps(report, indent=2))
 
 

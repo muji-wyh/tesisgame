@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Page = preload("res://scripts/word_jelly_upgrades.gd")
+const Preview = preload("res://scripts/word_jelly_ability_preview.gd")
 const Model = preload("res://scripts/word_jelly_model.gd")
 const Store = preload("res://scripts/word_jelly_campaign_store.gd")
 const Wallet = preload("res://scripts/coin_wallet.gd")
@@ -118,6 +119,8 @@ func _test_previews_and_no_fake_progress() -> void:
 		and stalled.deposit_count == deposits and stalled.level_up_count == milestones
 		and stalled.coin_flights == 0 and cues.is_empty() and stalled.notice.is_empty(),
 		"An unacknowledged hold cannot fake saved progress, debit, visual feedback or audio")
+	check(not stalled.wallet_digits_rolling,
+		"An unacknowledged hold cannot animate a debit through the wallet digits")
 	page.select_upgrade("auto_merge")
 	for level in range(1, 10):
 		page.select_level(level)
@@ -314,11 +317,21 @@ func _test_continuous_charge_feedback() -> void:
 	var energy: float = page.snapshot().charge_energy
 	check(energy > 0.0 and charge_states == [true] and page.snapshot().wallet_energy == 0.0,
 		"Press acknowledges charging immediately without pretending to debit the wallet")
+	check(page.snapshot().displayed_level == 1 and page.snapshot().selected_level == 2
+		and page._tier.text == "Lv 1" and page._name.text == Preview.NAMES[1]
+		and page._hero.merge_level == 1,
+		"The first hold shows the current owned level while previewing its next ability")
+	check(not page.snapshot().wallet_digits_rolling,
+		"Holding the charge button alone leaves the saved wallet digits still")
 	for index in range(5):
 		page.advance(0.025)
 		var next_energy: float = page.snapshot().charge_energy
 		check(next_energy > energy and next_energy < 1.0 and page.snapshot().balance == 5000,
 			"Held button energy grows between payment pulses without changing saved coins")
+		check(is_equal_approx(page.snapshot().subject_charge_energy, next_energy)
+			and (not page._hero.scale.is_equal_approx(Vector2.ONE)
+				or not page._hero.position.is_equal_approx(page._hero_base)),
+			"The subject continuously responds to the same held-charge energy before any debit")
 		energy = next_energy
 	page.stop_charging()
 	page.stop_charging()
@@ -342,6 +355,8 @@ func _test_continuous_charge_feedback() -> void:
 		var next_displayed: float = page.snapshot().visual_balance
 		check(next_displayed < displayed and next_displayed > 4975.0,
 			"The wallet count decreases on consecutive frames between committed receipts")
+		check(page.snapshot().wallet_digits_rolling,
+			"A real saved debit keeps the visible numeral transition active between receipts")
 		displayed = next_displayed
 	state.balance = 4950
 	state.funded.jelly = 50
@@ -354,6 +369,8 @@ func _test_continuous_charge_feedback() -> void:
 	check(page.snapshot().visual_balance == 4950.0 and page._wallet.text == "4950"
 		and page.snapshot().wallet_energy < 0.02 and page.snapshot().charge_energy < 0.02,
 		"The count settles on the exact saved balance and both local effects become quiet")
+	check(not page.snapshot().wallet_digits_rolling and page._wallet.self_modulate.a > 0.99,
+		"Settling restores one fully visible exact balance without a lingering rolling layer")
 	page.set_reduced_motion(true)
 	page.start_charging()
 	state.balance = 4925
@@ -363,6 +380,11 @@ func _test_continuous_charge_feedback() -> void:
 	check(page.snapshot().charge_energy > 0.0 and page.snapshot().wallet_energy > 0.0
 		and page._wallet_icon.scale == Vector2.ONE and page.snapshot().coin_flights == 0,
 		"Reduced motion preserves charging and spend light while suppressing moving wallet artwork")
+	check(is_equal_approx(page.snapshot().subject_charge_energy, page.snapshot().charge_energy)
+		and page._hero.scale == Vector2.ONE and page._hero.position == page._hero_base,
+		"Reduced motion retains subject charge light without moving or squashing the Jelly")
+	check(not page.snapshot().wallet_digits_rolling and page._wallet.self_modulate.a > 0.99,
+		"Reduced motion keeps the saved amount readable without sliding numeral columns")
 	page.stop_charging()
 	_reset()
 	state = _initial_state()
@@ -406,6 +428,96 @@ func _test_continuous_charge_feedback() -> void:
 	check(not page.snapshot().milestone_pending and page.snapshot().payoff == 0.0
 		and cues == ["upgrade_coin"],
 		"Background cancellation cannot replay a queued milestone sound on return")
+
+
+func _test_displayed_level_milestones() -> void:
+	_reset()
+	page.start_charging()
+	check(page.snapshot().displayed_level == 1 and page.snapshot().selected_level == 2
+		and page._tier.text == "Lv 1" and page._name.text == Preview.NAMES[1]
+		and page._hero.merge_level == 1 and not page.snapshot().level_reveal_pending,
+		"A normal first hold begins with the current Lv rather than displaying an unearned Lv")
+	var earned: Dictionary = _initial_state()
+	earned.level = 2
+	earned.balance = 4950
+	earned.intro = "complete"
+	page.configure(earned)
+	page.stop_charging()
+	check(page.snapshot().selected_level == 2 and page.snapshot().displayed_level == 1
+		and page.snapshot().milestone_pending and page.snapshot().level_reveal_pending
+		and page.snapshot().payoff == 0.0 and page._tier.text == "Lv 1"
+		and page._name.text == Preview.NAMES[1] and page._hero.merge_level == 1,
+		"A committed level keeps the current visible Lv while its earned marker approaches")
+	_frames(2)
+	check(page.snapshot().displayed_level == 1 and page.snapshot().payoff == 0.0
+		and page.snapshot().milestone_pending and page._tier.text == "Lv 1"
+		and page._name.text == Preview.NAMES[1] and page._hero.merge_level == 1,
+		"The prior Lv remains visible for the full rail approach")
+	_frames(1)
+	check(page.snapshot().payoff > 0.0 and not page.snapshot().milestone_pending
+		and page.snapshot().level_reveal_pending and page.snapshot().displayed_level == 1
+		and page._tier.text == "Lv 1" and page._name.text == Preview.NAMES[1]
+		and page._hero.merge_level == 1 and cues == ["upgrade_coin", "goal_complete"],
+		"The saved marker begins its burst and sound before replacing the visible Lv")
+	page.advance(0.04)
+	page.configure(earned)
+	check(page.snapshot().displayed_level == 1 and page.snapshot().level_reveal_pending
+		and page._tier.text == "Lv 1" and page._name.text == Preview.NAMES[1]
+		and page._hero.merge_level == 1 and cues == ["upgrade_coin", "goal_complete"],
+		"A repeated saved state preserves the short old-Lv reveal beat without repeating audio")
+	_frames(3)
+	check(page.snapshot().displayed_level == 2 and not page.snapshot().level_reveal_pending
+		and page.snapshot().payoff > 0.0 and page._tier.text == "Lv 2"
+		and page._name.text == Preview.NAMES[2] and page._hero.merge_level == 2,
+		"The earned Lv replaces the old Lv during the milestone's visible payoff")
+	page.configure(earned)
+	_frames(20)
+	check(page.snapshot().displayed_level == 2 and page._tier.text == "Lv 2"
+		and page._name.text == Preview.NAMES[2] and page._hero.merge_level == 2
+		and not page.snapshot().level_reveal_pending and cues == ["upgrade_coin", "goal_complete"],
+		"The earned Lv settles once and duplicate configuration cannot replay its reveal")
+	page.start_charging()
+	_frames(1)
+	check(page.snapshot().selected_level == 3 and page.snapshot().displayed_level == 2
+		and page._tier.text == "Lv 2" and page._name.text == Preview.NAMES[2]
+		and page._hero.merge_level == 2,
+		"A subsequent hold keeps the earned Lv visible while previewing the next ability")
+	page.stop_charging()
+	for beat: String in ["rail", "reveal"]:
+		for action: String in ["hide", "inactive", "category", "selection", "present"]:
+			_reset()
+			page.start_charging()
+			page.configure(earned)
+			page.stop_charging()
+			if beat == "reveal":
+				_frames(3)
+			var cue_count: int = cues.size()
+			match action:
+				"hide": page.hide()
+				"inactive": page.set_active(false)
+				"category": page.select_upgrade("auto_merge")
+				"selection": page.select_level(8)
+				"present": page.present(earned, word, false)
+			var settled: Dictionary = page.snapshot()
+			check(not settled.level_reveal_pending and settled.displayed_level == settled.selected_level
+				and page._tier.text == "Lv %d" % settled.selected_level,
+				"The %s action settles the selected Lv and cancels the queued %s reveal" % [action, beat])
+			page.show()
+			page.set_active(true)
+			_frames(8)
+			check(cues.size() == cue_count and not page.snapshot().level_reveal_pending,
+				"Returning after %s cannot replay the cancelled %s reveal or sound" % [action, beat])
+	_reset()
+	page.set_reduced_motion(true)
+	page.start_charging()
+	page.configure(earned)
+	check(page.snapshot().visual_progress == 1.0 and page.snapshot().payoff > 0.0
+		and page.snapshot().displayed_level == 2 and not page.snapshot().level_reveal_pending
+		and page._tier.text == "Lv 2" and page._name.text == Preview.NAMES[2]
+		and page._hero.merge_level == 2 and page._hero.scale == Vector2.ONE
+		and page._hero.position == page._hero_base and cues == ["upgrade_coin", "goal_complete"],
+		"Reduced motion reveals the earned Lv immediately with milestone light and sound")
+	page.stop_charging()
 
 
 func _test_reduced_motion_and_charge_gates() -> void:
@@ -473,10 +585,80 @@ func capture_ui(name: String) -> void:
 		"Capture the actual " + name)
 
 
+func _wallet_ink_bounds() -> Rect2:
+	var ink := Rect2()
+	for index in range(page._wallet.text.length()):
+		var glyph: Rect2 = page._wallet.get_character_bounds(index)
+		if glyph.has_area():
+			ink = ink.merge(glyph) if ink.has_area() else glyph
+	return page._wallet.get_global_transform() * ink
+
+
+func _coin_ink_bounds() -> Rect2:
+	var icon: TextureRect = page._wallet_icon
+	var texture: Texture2D = icon.texture
+	var source_size := Vector2(texture.get_width(), texture.get_height())
+	var scale: float = minf(icon.size.x / source_size.x, icon.size.y / source_size.y)
+	var offset: Vector2 = (icon.size - source_size * scale) * 0.5
+	var painted: Rect2i = texture.get_image().get_used_rect()
+	var local := Rect2(offset + Vector2(painted.position) * scale, Vector2(painted.size) * scale)
+	return icon.get_global_transform() * local
+
+
+func _check_wallet_spacing(message: String) -> void:
+	var ink: Rect2 = _wallet_ink_bounds()
+	var coin: Rect2 = _coin_ink_bounds()
+	var gap: float = (ink.position.x - coin.end.x) * page.Style.ui_scale(page)
+	check(ink.has_area() and gap >= 3.0 and gap <= 16.0,
+		"%s keeps the painted coin close to the visible digits: %.2f design pixels" % [message, gap])
+	check(Rect2(Vector2.ZERO, page.size).grow(0.1).encloses(ink)
+		and not page._heading.get_global_rect().intersects(coin),
+		"%s leaves the amount on screen and clear of the title" % message)
+
+
+func _test_wallet_digit_boundary() -> void:
+	var state: Dictionary = _initial_state()
+	state.balance = 1000
+	_reset(state)
+	await process_frame
+	check(page._wallet.text == "1000", "The boundary transition starts from the real four-digit balance")
+	var layouts: int = page.snapshot().layout_count
+	var right_edge: float = _wallet_ink_bounds().end.x
+	state.balance = 975
+	state.funded.jelly = 25
+	page.configure(state)
+	var saw_three_digits: bool = false
+	for index in range(60):
+		page.advance(1.0 / 60.0)
+		await process_frame
+		if page._wallet.text.length() == 3:
+			saw_three_digits = true
+		_check_wallet_spacing("A debit crossing 1000 to 975")
+		check(absf(_wallet_ink_bounds().end.x - right_edge) * page.Style.ui_scale(page) <= 2.0
+			and page.snapshot().layout_count == layouts,
+			"Digit-width changes keep the wallet's right edge fixed without rebuilding the upgrade page")
+	check(saw_three_digits and not page.snapshot().wallet_digits_rolling and page._wallet.text == "975",
+		"Crossing to three digits completes on the exact committed amount and ends the transition")
+	state.balance = 950
+	state.funded.jelly = 50
+	page.configure(state)
+	check(page.snapshot().wallet_digits_rolling, "A subsequent saved debit can start another visible numeral transition")
+	page.set_active(false)
+	check(not page.snapshot().wallet_digits_rolling,
+		"Backgrounding removes the moving numeral layer immediately")
+	_reset(state)
+	state.balance = 925
+	state.funded.jelly = 75
+	page.configure(state)
+	page.close()
+	check(not page.snapshot().wallet_digits_rolling,
+		"Closing the upgrade page cannot leave a hidden debit animation running")
+
+
 func _test_responsive_layout() -> void:
 	_reset()
 	for dimensions: Vector2i in [Vector2i(320, 480), Vector2i(390, 664), Vector2i(393, 852),
-			Vector2i(844, 390), Vector2i(1366, 900)]:
+			Vector2i(844, 390), Vector2i(1280, 720), Vector2i(1366, 900)]:
 		root.size = dimensions
 		holder.size = Vector2(dimensions)
 		page.size = Vector2(dimensions)
@@ -488,6 +670,19 @@ func _test_responsive_layout() -> void:
 			and bounds.grow(0.1).encloses(page._footer.get_rect())
 			and not page._stage.get_rect().intersects(page._footer.get_rect()),
 			"The Jelly stage and charge footer remain separate within %s" % dimensions)
+		var stage_values: Array = page.snapshot().stage
+		var hero_values: Array = page.snapshot().hero
+		var stage := Rect2(stage_values[0], stage_values[1], stage_values[2], stage_values[3])
+		var hero := Rect2(hero_values[0], hero_values[1], hero_values[2], hero_values[3])
+		var preview: Rect2 = page._preview.get_global_rect()
+		var showcase: Rect2 = hero.merge(preview)
+		check(stage.grow(0.1).encloses(showcase)
+			and not showcase.intersects(page._tier.get_global_rect())
+			and not showcase.intersects(page._name.get_global_rect()),
+			"The hero and readable ability preview stay together inside the stage below its title at %s" % dimensions)
+		check(not stage.intersects(page._heading.get_global_rect())
+			and not stage.intersects(footer_bounds) and not hero.intersects(footer_bounds),
+			"The showcase stage and hero remain clear of the page title and charge footer at %s" % dimensions)
 		check(footer_bounds.grow(0.1).encloses(page._scroll.get_global_rect())
 			and footer_bounds.grow(0.1).encloses(page._buy.get_global_rect())
 			and not page._scroll.get_global_rect().intersects(page._buy.get_global_rect())
@@ -499,6 +694,14 @@ func _test_responsive_layout() -> void:
 		check(not page._back.get_rect().intersects(page._heading.get_rect())
 			and not page._heading.get_rect().intersects(page._wallet_icon.get_rect()),
 			"Back, title and saved coins keep distinct header space")
+		for balance: int in [437, 0, 99, 1000, 100000]:
+			var state: Dictionary = _initial_state()
+			state.balance = balance
+			_reset(state)
+			await process_frame
+			_check_wallet_spacing("Wallet %d at %s" % [balance, dimensions])
+		_reset()
+		await process_frame
 		for category: Button in page._category_buttons.values():
 			check(category.size.y * page.Style.ui_scale(page) >= 44.0 - 0.1
 				and bounds.grow(0.1).encloses(category.get_global_rect())
@@ -580,7 +783,9 @@ func _run() -> void:
 	_test_hold_cancellation()
 	_test_committed_feedback_and_independent_tracks()
 	_test_continuous_charge_feedback()
+	_test_displayed_level_milestones()
 	_test_reduced_motion_and_charge_gates()
+	await _test_wallet_digit_boundary()
 	await _test_responsive_layout()
 	await _capture_charge_feedback()
 	page.free()

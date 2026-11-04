@@ -3,7 +3,7 @@ extends Node
 
 const ModelView = preload("res://scripts/chest_model_view.gd")
 const TierCatalog = preload("res://scripts/chest_tier_catalog.gd")
-const MANIFEST_PATH: String = "res://assets/chests/downloaded/manifest.json"
+const MANIFEST_PATH: String = "res://assets/chests/catalog/licensed-models.json"
 const POOL_LIMIT: int = 2
 
 var _styles: Dictionary = {}
