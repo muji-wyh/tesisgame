@@ -82,10 +82,13 @@ test('whole-word roots match pictures and merged words remain compact and collec
       current.tiles.every(tile => tile.settled);
   }, { timeout: 30000 }).toBe(true);
   const before = await state(page);
+  expect(before.stage.kind).toBe('main');
   expect(before.stage.number).toBe(1);
   expect(before.stage.total).toBe(3);
   expect(before.stage.remaining_ids).toHaveLength(3);
-  expect(before.stage.label).toMatch(/Stage 1[\s\S]*\d+:\d{2}/);
+  const seconds = Math.ceil(before.stage.seconds_remaining);
+  expect(seconds).toBeGreaterThan(0);
+  expect(before.stage.label).toBe(`${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`);
   expect(before.stage.stars_now).toBe(3);
   expect(before.practice.visible).toBe(true);
   expect(before.practice.words).toHaveLength(3);
