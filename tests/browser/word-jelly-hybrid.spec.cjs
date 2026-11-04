@@ -8,6 +8,16 @@ const point = (tile, bounds) => ({
   y: bounds.y + (tile.rect[1] + tile.rect[3] / 2) * bounds.scale,
 });
 
+function settledGridOffsets(current) {
+  const [left, top, width] = current.board_rect;
+  const pitch = width / current.columns;
+  return current.tiles.filter(tile => tile.settled).flatMap(tile => {
+    const dx = tile.rect[0] + tile.rect[2] / 2 - left - (tile.column + tile.width / 2) * pitch;
+    const dy = tile.rect[1] + tile.rect[3] / 2 - top - (tile.row + tile.height / 2) * pitch;
+    return Math.abs(dx) <= 0.5 && Math.abs(dy) <= 0.5 ? [] : [{ id: tile.id, dx, dy }];
+  });
+}
+
 async function join(page, first, second, projectName) {
   const before = await state(page), bounds = await metrics(page);
   const source = before.tiles.find(tile => tile.id === first);
@@ -114,10 +124,16 @@ test('whole-word roots match pictures and merged words remain compact and collec
   await page.screenshot({ path: info.outputPath('hybrid-word-and-picture.png') });
   await page.setViewportSize({ width: 390, height: 844 });
   await rendered(page);
-  await expect.poll(async () => {
-    const current = await state(page), live = current.tiles.find(tile => tile.id === merged.id);
-    return !current.layout_paused && live?.picture_visible && live?.label_visible;
-  }).toBe(true);
+  try {
+    await expect.poll(async () => {
+      const current = await state(page), live = current.tiles.find(tile => tile.id === merged.id);
+      return { ready: !current.layout_paused && Boolean(live?.settled && live.picture_visible && live.label_visible),
+        offsets: settledGridOffsets(current) };
+    }, { message: 'Resized settled bodies align with their model grid before input' }).toEqual({ ready: true, offsets: [] });
+  } finally {
+    await info.attach('phone-layout-state', { body: JSON.stringify(await state(page), null, 2),
+      contentType: 'application/json' });
+  }
   const phone = await state(page), live = phone.tiles.find(tile => tile.id === merged.id);
   expect(phone.stage.visible).toBe(true);
   expect(phone.stage.rect[1] + phone.stage.rect[3]).toBeLessThanOrEqual(phone.preview.rect[1]);
@@ -136,6 +152,8 @@ test('whole-word roots match pictures and merged words remain compact and collec
       await page.mouse.move(holdPoint.x, holdPoint.y);
       await page.mouse.down();
     }
+    await info.attach('phone-press-state', { body: JSON.stringify(await state(page), null, 2),
+      contentType: 'application/json' });
     if (live.requires_read) {
       await expect.poll(async () => {
         const current = await state(page);

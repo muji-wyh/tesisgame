@@ -1,5 +1,8 @@
 # Jelly Words drag performance
 
+The later [settled-board implementation and validation](jelly-idle-performance.md)
+covers shared gel rendering, dirty updates and the ambient animation budget.
+
 The 2026-10-22 five-pair CPU diagnostic reduced mean drag-update time by 69.7%-90.2%
 across eight scenarios, with matching per-frame interaction traces. These are
 headless CPU measurements, not mobile FPS or touch-to-screen latency results.

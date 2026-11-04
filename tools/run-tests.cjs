@@ -88,6 +88,8 @@ groups['word-jelly'].godot.push('jelly_pause_tests', 'word_jelly_practice_tests'
   'word_jelly_auto_merge_upgrades_tests',
   'word_jelly_powerup_availability_tests',
   'word_jelly_feedback_space_tests',
+  'word_jelly_ambient_budget_tests',
+  'jelly_idle_body_cache_tests',
   'game_library_publication_tests',
   'word_jelly_upgrade_view_tests',
   'word_jelly_upgrade_flow_tests',

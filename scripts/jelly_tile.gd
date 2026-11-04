@@ -5,6 +5,7 @@ const Style = preload("res://scripts/ui_style.gd")
 const WordArt = preload("res://scripts/word_art.gd")
 const Surface = preload("res://scripts/jelly_surface.gdshader")
 const Motion = preload("res://scripts/jelly_motion.gd")
+const IdleBodyCache = preload("res://scripts/jelly_idle_body_cache.gd")
 const CONTACT_SHADOW = preload("res://assets/images/jelly-match/contact-shadow.png")
 const SHAPE_SDF = preload("res://assets/images/jelly-match/gel-coral-material.png")
 
@@ -39,6 +40,13 @@ var _support_lift: float = NAN
 var _support_compression: float = NAN
 var _support_drop: float = NAN
 var _support_visible: bool = false
+var _idle_cache_requested: bool = false
+var _idle_cache_key: String = ""
+var _idle_cache_pool: WeakRef
+var _idle_source_texture: Texture2D
+var _idle_source_stretch_mode: int = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+var _idle_raster_size := Vector2i.ZERO
+var _idle_cache_fallback: String = "disabled"
 
 func _init() -> void:
 	text = ""
@@ -86,6 +94,7 @@ func _texture() -> TextureRect:
 	return image
 
 func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: Texture2D, accent: Color, show_both: bool = false) -> void:
+	_invalidate_idle_cache()
 	tile_id = int(cell.id)
 	word = cell.word
 	kind = str(cell.kind)
@@ -123,6 +132,7 @@ func set_marked(value: bool, picked: bool = false, enabled: bool = true, reduced
 	_refresh_feedback(motion_changed)
 
 func _refresh_feedback(reset_motion: bool = false) -> void:
+	_invalidate_idle_cache()
 	# Pointer selection, drop contact and keyboard focus have separate weights.
 	var mark: int = (3 if highlighted else 2 if selected else 1 if has_focus() else 0) if _feedback_enabled else 0
 	_gel.set_shader_parameter("rim_color", Color("#507968") if _projection else Color("#ae702b") if mark == 3 else _accent)
@@ -172,10 +182,13 @@ func _set_surface_parameter(parameter: StringName, value: Variant) -> void:
 	# the rim directly, so their feedback parameters stay outside this cache.
 	if _surface_parameters.has(parameter) and _surface_parameters[parameter] == value:
 		return
+	_invalidate_idle_cache()
 	_surface_parameters[parameter] = value
 	_gel.set_shader_parameter(parameter, value)
 
 func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
+	if amount != 0.0 or stretch != Vector2.ONE:
+		_invalidate_idle_cache()
 	_set_surface_parameter(&"bend", amount)
 	_set_surface_parameter(&"beat", beat)
 	var pivot: Vector2 = size * Vector2(0.5, Motion.FOOT_Y)
@@ -194,6 +207,7 @@ func set_preview_pressure(pressure: float, sway: float, pull: float = 0.0) -> vo
 func set_contact(kind_value: String, direction: Vector2 = Vector2.ZERO, strength: float = 0.0, reduced: bool = false) -> void:
 	if kind_value == "none" and _contact_kind == "none":
 		return
+	_invalidate_idle_cache()
 	_contact_kind = kind_value
 	# Both learning faces stay above the overlapping skins during contact.
 	_picture.z_index = 45 if kind_value != "none" else 0
@@ -259,6 +273,7 @@ func _update_support(lift: float, compression: float, visible_shadow: bool, drop
 func _layout() -> void:
 	if _visual == null:
 		return
+	_invalidate_idle_cache()
 	_visual.size = size
 	_content_offset = Vector2.ZERO
 	_surface.size = size
@@ -282,3 +297,102 @@ func _layout() -> void:
 	_badge.position = size * Vector2(0.69, 0.70)
 	_badge.size = size * 0.30
 	set_support(0.0, 0.0, not _projection)
+
+
+func set_idle_cached(enabled: bool) -> void:
+	# Board presentation opts in only for settled, unbudgeted ambient bodies.
+	# Other modes keep their existing live shader until explicitly opted in.
+	if not enabled:
+		_invalidate_idle_cache()
+		return
+	if _idle_cache_requested and not _idle_cache_key.is_empty():
+		return
+	if not _idle_cache_eligible():
+		_idle_cache_fallback = "active_feedback"
+		return
+	var pool = IdleBodyCache.obtain(get_viewport())
+	if pool == null:
+		_idle_cache_fallback = "renderer_unavailable"
+		return
+	var extent: Vector2i = _idle_pixel_extent()
+	var request: Dictionary = pool.request(self, _surface.texture, _gel, extent, _surface.stretch_mode)
+	if request.is_empty():
+		_idle_cache_fallback = "capacity_or_resolution"
+		return
+	_idle_cache_requested = true
+	_idle_cache_key = request.key
+	_idle_cache_pool = weakref(pool)
+	_idle_source_texture = _surface.texture
+	_idle_source_stretch_mode = _surface.stretch_mode
+	_idle_raster_size = extent
+	_idle_cache_fallback = "warming"
+	set_notify_transform(true)
+	if request.texture != null:
+		_idle_cache_ready(request.key, request.texture)
+
+func _idle_cache_eligible() -> bool:
+	if not is_inside_tree() or _surface.texture == null or _gel.shader != Surface \
+		or _projection or _mark != 0 or _contact_kind != "none" \
+		or _base_stretch != Vector2.ONE or _surface.position != Vector2.ZERO \
+		or _surface.scale != Vector2.ONE or _visual.position != Vector2.ZERO:
+		return false
+	for parameter: StringName in [&"bend", &"preview_pressure", &"preview_sway", &"preview_pull", &"contact_strength"]:
+		var value: Variant = _gel.get_shader_parameter(parameter)
+		if value != null and not is_zero_approx(float(value)):
+			return false
+	var completion_value: Variant = _gel.get_shader_parameter("completion_strength")
+	var completion: float = 0.0 if completion_value == null else float(completion_value)
+	var glint_value: Variant = _gel.get_shader_parameter("completion_glint")
+	var glint: float = -2.0 if glint_value == null else float(glint_value)
+	# Full completion lights extend the mesh and remain high priority live effects.
+	return completion <= 0.35 and (is_zero_approx(completion) or glint <= -1.0)
+
+func _idle_pixel_extent() -> Vector2i:
+	# Screen coordinates include the viewport stretch and backing pixel scale.
+	var pixels: Vector2 = _surface.get_screen_transform().get_scale().abs() * size
+	return Vector2i(ceili(pixels.x), ceili(pixels.y))
+
+func _idle_cache_ready(key: String, texture: Texture2D) -> void:
+	if not _idle_cache_requested or key != _idle_cache_key:
+		return
+	if not _idle_cache_eligible() or _idle_pixel_extent() != _idle_raster_size:
+		_invalidate_idle_cache()
+		return
+	_surface.texture = texture
+	_surface.stretch_mode = TextureRect.STRETCH_SCALE
+	_surface.material = IdleBodyCache.display_material()
+	_idle_cache_fallback = ""
+
+func _invalidate_idle_cache() -> void:
+	if not _idle_cache_requested:
+		return
+	_idle_cache_requested = false
+	set_notify_transform(false)
+	if _idle_source_texture != null:
+		_surface.texture = _idle_source_texture
+		_surface.stretch_mode = _idle_source_stretch_mode
+		_surface.material = _gel
+	_idle_source_texture = null
+	_idle_cache_key = ""
+	_idle_cache_fallback = "disabled"
+	if _idle_cache_pool != null:
+		var pool: Node = _idle_cache_pool.get_ref()
+		if is_instance_valid(pool) and not pool.is_queued_for_deletion():
+			pool.release(self)
+	_idle_cache_pool = null
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_TRANSFORM_CHANGED and _idle_cache_requested \
+		and _idle_pixel_extent() != _idle_raster_size:
+		_invalidate_idle_cache()
+
+func _exit_tree() -> void:
+	_invalidate_idle_cache()
+
+func idle_cache_snapshot() -> Dictionary:
+	var pool: Node = _idle_cache_pool.get_ref() if _idle_cache_pool != null else null
+	return {"requested": _idle_cache_requested,
+		"cached": _idle_cache_requested and _surface.material != _gel,
+		"raster_size": [_idle_raster_size.x, _idle_raster_size.y],
+		"fallback": _idle_cache_fallback,
+		"atlas": pool.snapshot() if is_instance_valid(pool) else {}}

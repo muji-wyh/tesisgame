@@ -1040,8 +1040,8 @@ func _process(delta: float) -> void:
 	_begin_view_update()
 	_sync_tiles()
 	_refresh_fusion()
-	_refresh_hud()
-	queue_redraw()
+	_refresh_frame_hud()
+	_redraw_board_frame()
 	_end_view_update()
 	_publish_elapsed += delta
 	if _publish_elapsed >= 0.1:
@@ -1056,6 +1056,12 @@ func _process(delta: float) -> void:
 				break
 	if generation == _generation:
 		_sound_contact()
+
+func _refresh_frame_hud() -> void:
+	_refresh_hud()
+
+func _redraw_board_frame() -> void:
+	queue_redraw()
 
 func _landing_contact_at(cell: Dictionary) -> float:
 	return Motion.contact_at(cell)

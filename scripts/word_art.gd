@@ -19,6 +19,7 @@ static var _profiles: Dictionary = {}
 static var _manifest_read := false
 static var _clips: Dictionary = {}
 static var _reduced := false
+static var _frozen_posters: Dictionary = {}
 
 
 static func motion_catalog() -> Dictionary:
@@ -90,6 +91,48 @@ static func bind(value: Texture2D, owner: CanvasItem) -> void:
 	if not _clips.has(id) or _clips[id].texture.get_ref() != value:
 		return
 	_clips[id].owners[owner.get_instance_id()] = weakref(owner)
+
+
+static func set_owner_animation(owner: CanvasItem, enabled: bool) -> bool:
+	# A shared animated wrapper alone cannot budget duplicate picture owners:
+	# settled copies need a different, shared poster wrapper for the same word.
+	if not is_instance_valid(owner) or not (owner is TextureRect or owner is Button):
+		return false
+	var current: Texture2D = owner.texture if owner is TextureRect else owner.icon
+	if current == null or not current.has_meta("word_art_id"):
+		return false
+	var frozen: bool = bool(current.get_meta("word_art_frozen", false))
+	if frozen == (not enabled):
+		return false
+	var source: String = source_path(current)
+	var id: String = str(current.get_meta("word_art_id"))
+	var replacement: Texture2D
+	if enabled:
+		replacement = texture(source, owner)
+	else:
+		if _clips.has(id):
+			_clips[id].owners.erase(owner.get_instance_id())
+		replacement = _frozen_poster(source, id)
+	if owner is TextureRect:
+		owner.texture = replacement
+	else:
+		owner.icon = replacement
+	return true
+
+
+static func _frozen_poster(source: String, id: String) -> AtlasTexture:
+	var result: AtlasTexture = _frozen_posters[id].get_ref() if _frozen_posters.has(id) else null
+	if result != null:
+		return result
+	result = AtlasTexture.new()
+	result.filter_clip = true
+	result.set_meta("word_art_source", source)
+	result.set_meta("word_art_id", id)
+	result.set_meta("word_art_frozen", true)
+	result.atlas = _poster_texture(source)
+	result.region = Rect2(0, 0, FRAME_SIDE, FRAME_SIDE)
+	_frozen_posters[id] = weakref(result)
+	return result
 
 
 static func source_path(value: Texture2D) -> String:
@@ -166,7 +209,13 @@ static func _poster_texture(path: String) -> Texture2D:
 static func _set_poster(clip: Dictionary, atlas: AtlasTexture) -> void:
 	# Replacing the only sheet reference releases it; frozen slices retain their
 	# shallow copy only until their own short effect lifetime ends.
-	atlas.atlas = _poster_texture(str(clip.source))
+	# Keep one small poster beside a live wrapper. Rotating every duplicate into
+	# motion must not force another image readback, resize or texture upload.
+	var poster: AtlasTexture = clip.get("poster")
+	if poster == null:
+		poster = _frozen_poster(str(clip.source), str(clip.id))
+		clip.poster = poster
+	atlas.atlas = poster.atlas
 	atlas.region = Rect2(0, 0, FRAME_SIDE, FRAME_SIDE)
 	clip.loaded = false
 	clip.frame = -1

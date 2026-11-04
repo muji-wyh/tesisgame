@@ -43,6 +43,8 @@ var _merged_geometry_active: bool = false
 var _merged_pose_elapsed: float = -1.0
 var _merged_pose_reduced: bool = false
 var _merged_pose_id: int = -1
+var _ambient_animation: bool = true
+static var _shared_light_material: ShaderMaterial
 var _level_badge: Label
 var _picture_shadow: TextureRect
 var _boss_status: Dictionary = {}
@@ -127,8 +129,29 @@ func _draw_boss_status() -> void:
 		_boss_overlay.draw_style_box(Style.box(Color("#fff0c3"), Color("#b98b38"), 5, 1), rect)
 		_boss_overlay.draw_texture_rect(preload("res://assets/images/ui/controls/lock.svg"), rect.grow(-2 / s), false)
 
+static func _completion_light_material() -> ShaderMaterial:
+	if _shared_light_material == null:
+		_shared_light_material = ShaderMaterial.new()
+		_shared_light_material.shader = COMPLETION_LIGHT
+	return _shared_light_material
+
+
+func set_ambient_animation(enabled: bool) -> void:
+	if _ambient_animation == enabled:
+		return
+	_ambient_animation = enabled
+	WordArt.set_owner_animation(_picture, enabled)
+	_sync_picture_shadow()
+	set_merged_presentation(_merged_elapsed, _reduced_motion)
+
+
+func has_ambient_animation() -> bool:
+	return not _projection and (valid_word or jelly_kind == "picture")
+
+
 func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 	_merged_elapsed = elapsed
+	var still: bool = reduced or not _ambient_animation
 	var active: bool = valid_word and not _projection
 	if active and _merged_glow == null:
 		_merged_glow = TextureRect.new()
@@ -138,9 +161,7 @@ func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 		_merged_glow.stretch_mode = TextureRect.STRETCH_SCALE
 		_merged_glow.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_merged_glow.self_modulate.a = 0.25 if match_dimmed else 1.0
-		var light := ShaderMaterial.new()
-		light.shader = COMPLETION_LIGHT
-		_merged_glow.material = light
+		_merged_glow.material = _completion_light_material()
 		add_child(_merged_glow)
 		move_child(_merged_glow, _visual.get_index())
 		for index in range(2):
@@ -174,19 +195,19 @@ func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 				glint.pivot_offset = glint.size * 0.5
 				# Readiness accents stay on the gel rim, behind the learning faces.
 				glint.position = size * (Vector2(0.04, 0.47) if index == 0 else Vector2(0.96, 0.47)) - glint.size * 0.5
-		if active and (geometry_changed or reduced != _merged_pose_reduced \
-			or not reduced and (elapsed != _merged_pose_elapsed or tile_id != _merged_pose_id)):
+		if active and (geometry_changed or still != _merged_pose_reduced \
+			or not still and (elapsed != _merged_pose_elapsed or tile_id != _merged_pose_id)):
 			for index in range(_merged_glints.size()):
 				var glint: TextureRect = _merged_glints[index]
-				var twinkle: float = 0.5 if reduced else (sin(elapsed * TAU / 2.8 + index * PI + tile_id * 0.41) + 1.0) * 0.5
-				glint.scale = Vector2.ONE * (1.0 if reduced else 0.85 + twinkle * 0.20)
+				var twinkle: float = 0.5 if still else (sin(elapsed * TAU / 2.8 + index * PI + tile_id * 0.41) + 1.0) * 0.5
+				glint.scale = Vector2.ONE * (1.0 if still else 0.85 + twinkle * 0.20)
 				glint.modulate = Color(1.0, 0.98, 0.86, 0.68 + twinkle * 0.24)
 		_merged_pose_elapsed = elapsed
-		_merged_pose_reduced = reduced
+		_merged_pose_reduced = still
 		_merged_pose_id = tile_id
 	if not completion_hint:
 		_set_surface_parameter(&"completion_strength", 0.35 if active else 0.0)
-		_set_surface_parameter(&"completion_glint", -2.0 if reduced or not active else -0.3 + fposmod(elapsed + tile_id * 0.13, 4.2) * 0.40)
+		_set_surface_parameter(&"completion_glint", -2.0 if still or not active else -0.3 + fposmod(elapsed + tile_id * 0.13, 4.2) * 0.40)
 
 func set_completion_hint(active: bool, elapsed: float, reduced: bool) -> void:
 	var was_active: bool = completion_hint
@@ -277,6 +298,8 @@ func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: 
 	face.word = {"text": _spelling} if not valid_word else cell.word
 	face.kind = "picture" if jelly_kind == "picture" else "word"
 	super.configure(face, surface, picture, chest, accent, valid_word)
+	if not _ambient_animation:
+		WordArt.set_owner_animation(_picture, false)
 	_fragment_texture = chest
 	_surface.stretch_mode = TextureRect.STRETCH_SCALE
 	_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

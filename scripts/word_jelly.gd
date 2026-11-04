@@ -23,6 +23,7 @@ const ReadPanel = preload("res://scripts/jelly_read_panel.gd")
 const ComboHUD = preload("res://scripts/word_jelly_combo.gd")
 const BossView = preload("res://scripts/word_jelly_boss_view.gd")
 const LevelBadge = preload("res://scripts/word_jelly_level_badge.gd")
+const AmbientBudget = preload("res://scripts/word_jelly_ambient_budget.gd")
 const COLLECTION_GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const POWERUP_SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const POWERUP_RAYS = preload("res://assets/chests/shared/effects/rays.png")
@@ -102,8 +103,6 @@ var _view_space_return_area: int = 0
 var _view_drop_known: bool = false
 var _view_drop_available: bool = false
 var _view_palette_ready: bool = false
-var _view_hints_ready: bool = false
-var _view_hint_source: int = -1
 var _boss_view: BossView
 var _merged_level_badge := LevelBadge.new()
 var _recovery_hint := Style.label("", 12)
@@ -112,6 +111,38 @@ var _processing_generation: int = -1
 var _tiles_pending: bool = false
 var _publish_pending: bool = false
 var _idle_collection_visual: Dictionary = {}
+var _ambient_budget := AmbientBudget.new()
+var _ambient_hover_id: int = -1
+var _view_fusing: Dictionary = {}
+var _view_settled: Dictionary = {}
+var _view_arrivals: Dictionary = {}
+var _view_live_ids: Array[int] = []
+var _view_board_key: Array = []
+var _view_board_revision: int = 0
+var _view_raster_key: Array = []
+var _view_topology_dirty: bool = true
+var _pose_revision: int = 0
+var _tile_pose_keys: Dictionary = {}
+var _tile_pose_dirty: Dictionary = {}
+var _active_tile_ids: Dictionary = {}
+var _palette_key: Array = []
+var _controls_key: Array = []
+var _hud_key: Array = []
+var _hint_key: Array = []
+var _hint_matching_ids: Array[int] = []
+var _marks_key: Array = []
+var _contact_tile_ids: Dictionary = {}
+var _boss_statuses: Dictionary = {}
+var _boss_status_revision: int = 0
+var _boss_idle_key: Array = []
+var _boss_rects: Dictionary = {}
+var _boss_rect_key: Array = []
+var _powerup_pose_active: bool = false
+var _powerup_fragment_ids: Array[int] = []
+var _board_had_loot_flights: bool = false
+var _presentation_work: Dictionary = {"view_passes": 0, "tiles_classified": 0,
+	"tiles_posed": 0, "topology_passes": 0, "palette_passes": 0,
+	"mark_passes": 0, "control_passes": 0, "hint_searches": 0, "boss_passes": 0}
 const READ_HOLD_SECONDS: float = 0.45
 const COLLECTION_CLICK_MAX_MS: int = 500
 const STAGE_WARNING_SECONDS: float = 10.0
@@ -291,6 +322,32 @@ func _powerup_insufficient(kind: String, missing_coins: int) -> void:
 	_publish()
 
 func stop() -> void:
+	_ambient_hover_id = -1
+	_ambient_budget.clear()
+	_view_fusing.clear()
+	_view_settled.clear()
+	_view_arrivals.clear()
+	_view_live_ids.clear()
+	_view_board_key.clear()
+	_view_raster_key.clear()
+	_view_topology_dirty = true
+	_tile_pose_keys.clear()
+	_tile_pose_dirty.clear()
+	_active_tile_ids.clear()
+	_palette_key.clear()
+	_controls_key.clear()
+	_hud_key.clear()
+	_hint_key.clear()
+	_hint_matching_ids.clear()
+	_marks_key.clear()
+	_contact_tile_ids.clear()
+	_boss_statuses.clear()
+	_boss_idle_key.clear()
+	_boss_rects.clear()
+	_boss_rect_key.clear()
+	_powerup_pose_active = false
+	_powerup_fragment_ids.clear()
+	_board_had_loot_flights = false
 	_fill_button.reset()
 	_fill_button.hide()
 	_queued_collections.clear()
@@ -391,6 +448,12 @@ func _read_action_at(point: Vector2) -> bool:
 	return false
 
 func set_reduced_motion(value: bool) -> void:
+	_pose_revision += 1
+	_hint_key.clear()
+	_palette_key.clear()
+	_controls_key.clear()
+	_hud_key.clear()
+	_ambient_budget.set_reduced_motion(value)
 	_practice_panel.reduced_motion = value
 	for row: Dictionary in _practice_panel._rows:
 		row.surface.set_reduced_motion(value)
@@ -427,6 +490,7 @@ func _finish_feedback_ready() -> bool:
 		and not _stage_banner.rating_feedback_active()
 
 func cancel_input() -> void:
+	_set_ambient_hover(-1)
 	_end_view_update()
 	_goal_hover_word = ""
 	_goal_hover_elapsed = 0.0
@@ -457,6 +521,10 @@ func set_learning_backdrop(active: bool) -> void:
 	_well_art.visible = not active
 
 func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
+	_pose_revision += 1
+	_palette_key.clear()
+	_controls_key.clear()
+	_hud_key.clear()
 	if _placement_tile != null:
 		_placement_tile.tile_id = -1
 	super.apply_theme(theme, chests)
@@ -477,6 +545,9 @@ func _apply_chest_texture(texture: Texture2D) -> void:
 		visual.merged.set_chest_texture(texture)
 
 func _input(event: InputEvent) -> void:
+	if event is InputEventMouseMotion and _pointer == NO_POINTER:
+		var point: Vector2 = get_global_transform().affine_inverse() * event.position
+		_set_ambient_hover(_tile_at(point) if _can_play() else -1)
 	if _read_panel != null and _read_panel.visible:
 		if event.is_action_pressed("ui_cancel"):
 			_close_read()
@@ -510,6 +581,19 @@ func _input(event: InputEvent) -> void:
 					get_viewport().set_input_as_handled()
 					return
 	super._input(event)
+
+
+func _set_ambient_hover(id: int) -> void:
+	if _ambient_hover_id == id:
+		return
+	var previous: int = _ambient_hover_id
+	_ambient_hover_id = id
+	if previous >= 0:
+		_ambient_budget.set_priority(previous, _active_tile_ids.has(previous))
+		_tile_pose_dirty[previous] = true
+	if id >= 0:
+		_ambient_budget.set_priority(id, true)
+		_tile_pose_dirty[id] = true
 
 func _press(pointer: int, global_point: Vector2) -> bool:
 	# A completed tap speaks; pressing before a drag never reveals a partial root.
@@ -907,6 +991,9 @@ func _configure_tile(tile: Tile, cell: Dictionary, combined: bool = false) -> vo
 	tile.configure(presented, _surfaces[0], _picture(cell.get("image_word", cell.get("word", {}))), _chest_texture, _theme.get("accent", Style.GOOD), combined)
 	tile.set_merged_presentation(_presentation_elapsed, reduced_motion)
 	_apply_palette(tile, int(cell.id))
+	_tile_pose_dirty[int(cell.id)] = true
+	if _tiles.get(int(cell.id)) == tile:
+		_ambient_budget.register(tile)
 
 func _apply_palette(tile: WordTile, id: int) -> void:
 	var index: int = int(_palette_indices.get(id, _palette_cache.get(id, 0)))
@@ -917,14 +1004,73 @@ func _begin_view_update() -> void:
 	# These caches live only across a presentation pass, after model.step().
 	# No time-, occupancy-, or return-space decision survives a simulation step.
 	_view_update_active = true
+	var raster_key: Array = [get_screen_transform().get_scale(), get_viewport_rect().size] if is_inside_tree() else [Vector2.ONE, size]
+	if raster_key != _view_raster_key:
+		_view_raster_key = raster_key
+		_pose_revision += 1
 	_view_cells.clear()
+	_view_fusing.clear()
+	_view_settled.clear()
+	_view_arrivals.clear()
+	for fusion: Dictionary in game.fusions:
+		_view_fusing[int(fusion.a_id)] = true
+		_view_fusing[int(fusion.b_id)] = true
+	var ids: Array[int] = []
+	var board_key: Array = [game._generation, game.generated_tiles, game.merged_level_limit,
+		game.auto_merge_level, game.allow_cross_age, game._powerup_vocabulary_revision,
+		game._campaign_level_rules, game.fall_speed_scale, game.boss.broken_remaining > WordModel.EPSILON]
+	var active: Dictionary = {}
+	var powerup_ids: Dictionary = {}
+	for drag: Dictionary in game._powerup.get("drags", []):
+		powerup_ids[int(drag.get("source_id", -1))] = true
+	for arrival: Dictionary in _powerup_arrivals:
+		powerup_ids[int(arrival.tile_id)] = true
 	for cell: Dictionary in game.cells:
-		_view_cells[int(cell.id)] = cell
+		var id: int = int(cell.id)
+		ids.append(id)
+		_view_cells[id] = cell
+		if not _tiles.has(id):
+			_view_topology_dirty = true
+		var settled: bool = game.is_settled(cell)
+		_view_settled[id] = settled
+		if bool(cell.get("arrival", false)) and not settled:
+			_view_arrivals[id] = cell
+		var arriving: bool = bool(cell.get("arrival", false)) and float(cell.age) >= _arrival_delay(cell)
+		var pose_key: Array = [cell.column, cell.row, cell.width, cell.height, settled,
+			bool(cell.get("lifted", false)), _view_fusing.has(id), _pose_revision,
+			id == _source, id == _target, _dragging, arriving]
+		if _tile_pose_keys.get(id, []) != pose_key:
+			_tile_pose_dirty[id] = true
+			_tile_pose_keys[id] = pose_key
+		board_key.append([id, cell.column, cell.row, cell.width, cell.height, settled, arriving,
+			cell.get("jelly_kind", "root"), cell.get("merge_level", 1), cell.get("text", ""),
+			cell.get("fragments", 0), hash(cell.get("composition", {})),
+			cell.get("word", {}).get("id", ""), cell.get("image_word", {}).get("id", ""),
+			bool(cell.get("lifted", false)), _view_fusing.has(id)])
+		var interactive: bool = id == _source or id == _target or _queued_collections.has(id) or powerup_ids.has(id)
+		var moving: bool = not settled or _snapbacks.has(id) or _reflow.has(id)
+		var hinting: bool = _tiles.has(id) and _tiles[id].completion_hint
+		if moving or interactive or hinting:
+			active[id] = true
+		_ambient_budget.set_priority(id, moving or interactive or hinting or id == _ambient_hover_id)
+	for id: int in _active_tile_ids:
+		if not active.has(id):
+			_tile_pose_dirty[id] = true
+	_active_tile_ids = active
+	if ids != _view_live_ids or _tiles.size() != ids.size():
+		_view_topology_dirty = true
+		_view_live_ids = ids
+	if board_key != _view_board_key:
+		_view_board_key = board_key
+		_view_board_revision += 1
+	_ambient_budget.set_playing(_can_play() and is_visible_in_tree())
+	_ambient_budget.set_reduced_motion(reduced_motion)
+	_presentation_work.view_passes += 1
+	_presentation_work.tiles_classified += game.cells.size()
 	_view_mergeable.clear()
 	_view_space_known = false
 	_view_drop_known = false
 	_view_palette_ready = false
-	_view_hints_ready = false
 
 func _end_view_update() -> void:
 	_view_update_active = false
@@ -992,6 +1138,16 @@ func _refresh_palette() -> void:
 	if _view_update_active and _view_palette_ready:
 		return
 	_view_palette_ready = true
+	var key: Array = [_view_board_revision, _source, _keyboard_source, game.generated_tiles]
+	for item: Dictionary in game.upcoming:
+		key.append([item.get("id", -1), item.get("text", "")])
+	for fusion: Dictionary in game.fusions:
+		key.append([fusion.attempt_id, fusion.a_id, fusion.b_id,
+			fusion.get("result", {}).get("id", -1)])
+	if key == _palette_key:
+		return
+	_palette_key = key
+	_presentation_work.palette_passes += 1
 	var items: Array[Dictionary] = []
 	var reserved: Array[int] = []
 	for cell: Dictionary in game.cells:
@@ -1028,6 +1184,16 @@ func _sync_tiles() -> void:
 	var owns_update: bool = not _view_update_active
 	if owns_update:
 		_begin_view_update()
+	if not _view_topology_dirty:
+		_refresh_marks()
+		_sync_positions()
+		_refresh_controls()
+		_sync_boss()
+		if owns_update:
+			_end_view_update()
+		return
+	_view_topology_dirty = false
+	_presentation_work.topology_passes += 1
 	if _preview_first_id >= 0 and _preview_generated != game.generated_tiles:
 		_preview_canceled = true
 		_set_preview_pressed(false)
@@ -1057,8 +1223,10 @@ func _sync_tiles() -> void:
 			add_child(tile)
 			_tiles[id] = tile
 			_configure_tile(tile, cell)
+			_ambient_budget.register(tile)
 	for id in _tiles.keys():
 		if not live.has(id):
+			_ambient_budget.unregister(int(id))
 			_tiles[id].hide()
 			_tiles[id].queue_free()
 			_tiles.erase(id)
@@ -1066,6 +1234,10 @@ func _sync_tiles() -> void:
 			_rest_rects.erase(id)
 			_reflow.erase(id)
 			_arrival_origins.erase(id)
+			_tile_pose_keys.erase(id)
+			_tile_pose_dirty.erase(id)
+			_active_tile_ids.erase(id)
+			_boss_statuses.erase(id)
 	_refresh_marks()
 	_sync_positions()
 	_refresh_controls()
@@ -1083,13 +1255,37 @@ func _sync_boss() -> void:
 			_apply_pause_reasons()
 			push_error(game.error)
 		return
-	var rects: Dictionary = {}
-	for tile: Dictionary in game.cells:
-		rects[int(tile.id)] = _tile_rect(tile)
-	for id: int in _tiles:
-		_tiles[id].set_boss_status(game.boss.status(id), reduced_motion)
+	var idle_key: Array = [game.boss.active(), _generation, reduced_motion, _can_play(), _pose_revision]
+	if not game.boss.active() and idle_key == _boss_idle_key:
+		return
+	_boss_idle_key = idle_key
+	_presentation_work.boss_passes += 1
+	var rect_key: Array = [_view_board_revision, _pose_revision]
+	if game.boss.active() and rect_key != _boss_rect_key:
+		_boss_rect_key = rect_key
+		_boss_rects.clear()
+		for tile: Dictionary in game.cells:
+			_boss_rects[int(tile.id)] = _tile_rect(tile)
+	var status_ids: Dictionary = {}
+	for id: int in game.boss._statuses:
+		status_ids[id] = true
+	status_ids.merge(_boss_statuses, false)
+	for id: int in status_ids:
+		if not _tiles.has(id):
+			continue
+		var status: Dictionary = game.boss.status(id)
+		var previous: Dictionary = _boss_statuses.get(id, {})
+		if previous != status or _tiles[id]._boss_overlay.size != _tiles[id].size:
+			_boss_statuses[id] = status.duplicate(true)
+			_tiles[id].set_boss_status(status, reduced_motion)
+			if (float(previous.get("freeze", 0.0)) > 0.0) != (float(status.get("freeze", 0.0)) > 0.0) \
+				or (float(previous.get("ink", 0.0)) > 0.0) != (float(status.get("ink", 0.0)) > 0.0) \
+				or int(previous.get("locks", 0)) != int(status.get("locks", 0)):
+				_tile_pose_dirty[id] = true
+				_hint_key.clear()
+				_boss_status_revision += 1
 	_boss_view.reduced_motion = reduced_motion
-	if not _boss_view.sync(game.boss.snapshot(), rects, _generation, _can_play(), _tiles):
+	if not _boss_view.sync(game.boss.snapshot(), _boss_rects, _generation, _can_play(), _tiles):
 		game.error = _boss_view._actor.last_error
 		_requested_pause = true
 		_apply_pause_reasons()
@@ -1116,10 +1312,13 @@ func _sync_positions() -> void:
 	var owns_update: bool = not _view_update_active
 	if owns_update:
 		_begin_view_update()
+	# Native focus and pause transitions can change membership outside the clock.
+	for id: int in _ambient_budget.advance(0.0):
+		_tile_pose_dirty[id] = true
 	_refresh_completion_hints()
 	var preview_owners: Dictionary = {}
 	if not reduced_motion:
-		for cell: Dictionary in game.cells:
+		for cell: Dictionary in _view_arrivals.values():
 			var id: int = int(cell.id)
 			if not bool(cell.get("arrival", false)) or not _arrival_origins.has(id):
 				continue
@@ -1129,19 +1328,35 @@ func _sync_positions() -> void:
 			var slot: int = int(_arrival_origins[id].slot)
 			if not preview_owners.has(slot) or departure < float(preview_owners[slot].departure):
 				preview_owners[slot] = {"id": id, "departure": departure}
-	for cell: Dictionary in game.cells:
-		var id: int = int(cell.id)
+	var pose_ids: Dictionary = _tile_pose_dirty.duplicate()
+	pose_ids.merge(_active_tile_ids, true)
+	var ambient_ids: Array[int] = _ambient_budget.animated_ids()
+	for id: int in ambient_ids:
+		if _tiles.has(id) and _tiles[id].valid_word:
+			pose_ids[id] = true
+	_tile_pose_dirty.clear()
+	for id: int in pose_ids:
+		var cell: Dictionary = _cell(id)
 		if not _tiles.has(id):
 			continue
 		var tile: WordTile = _tiles[id]
-		if game.is_fusing(id):
+		if cell.is_empty():
+			continue
+		_presentation_work.tiles_posed += 1
+		if _view_fusing.has(id):
 			# The union owns both captured bodies, including an interrupted fall.
+			tile.set_idle_cached(false)
 			tile.hide()
 			continue
+		var live: bool = _active_tile_ids.has(id) or (tile.valid_word and id in ambient_ids)
+		if live:
+			tile.set_idle_cached(false)
 		tile.set_merged_presentation(_presentation_elapsed, reduced_motion)
 		var rect: Rect2 = _tile_rect(cell)
 		if _rest_rects.has(id) and _rest_rects[id] != rect and not reduced_motion:
 			_reflow[id] = {"from": tile.position, "started": 0.0 if bool(cell.get("falling", false)) else float(cell.age), "falling": bool(cell.get("falling", false))}
+			_active_tile_ids[id] = true
+			_ambient_budget.set_priority(id, true)
 			if bool(cell.get("falling", false)):
 				# One motion owns the new destination. Continuing a snapback first
 				# would rewind the body when the slower fall takes over afterward.
@@ -1215,6 +1430,9 @@ func _sync_positions() -> void:
 		tile.deform(0.0, 0.0, DRAG_STRETCH if dragging and not reduced_motion else stretch)
 		var support_lift: float = maxf(0.0, rect.position.y - tile.position.y) if arrival or bool(cell.get("falling", false)) else 0.0
 		tile.set_support(6.0 / Style.ui_scale(self) if dragging else support_lift, compression, shadow_visible)
+		# Request only after the final static pose; changed geometry falls back live.
+		if not live:
+			tile.set_idle_cached(bool(_view_settled.get(id, false)))
 	# Pose the pending body before testing contact, including on frames without
 	# pointer motion while its two lobes continue to join.
 	if not _fusion_drag.is_empty():
@@ -1278,7 +1496,7 @@ func _goal_hovered(word_id: String) -> void:
 		return
 	_goal_hover_word = next
 	_goal_hover_elapsed = 0.0
-	_view_hints_ready = false
+	_hint_key.clear()
 	_refresh_marks()
 	_publish()
 
@@ -1288,7 +1506,7 @@ func _auto_merge_hover_changed(active: bool) -> void:
 		return
 	_auto_merge_hovered = active
 	_auto_merge_hover_elapsed = 0.0
-	_view_hints_ready = false
+	_hint_key.clear()
 	_refresh_marks()
 	_publish()
 
@@ -1348,8 +1566,14 @@ func _powerup_stamp(stamps: Array[Dictionary], texture: Texture2D, center: Vecto
 func _pose_powerup() -> void:
 	if _powerup_effects == null:
 		return
-	for tile: WordTile in _tiles.values():
-		tile.set_fragment_arrival(-1.0, reduced_motion)
+	var active: bool = game.powerup_active() or not game._collection_hit_stop.is_empty() or not _powerup_arrivals.is_empty()
+	if not active and not _powerup_pose_active:
+		return
+	_powerup_pose_active = active
+	for id: int in _powerup_fragment_ids:
+		if _tiles.has(id):
+			_tiles[id].set_fragment_arrival(-1.0, reduced_motion)
+	_powerup_fragment_ids.clear()
 	_powerup_effects.visible = _can_play()
 	var state: Dictionary = game.powerup_snapshot()
 	var stamps: Array[Dictionary] = []
@@ -1391,6 +1615,7 @@ func _pose_powerup() -> void:
 			var p: float = t if reduced_motion else smoothstep(0.0, 1.0, t)
 			var lift: float = 0.0 if reduced_motion else sin(p * PI) * minf(unit * 0.65, from.get_center().distance_to(to) * 0.18)
 			var tile: WordTile = _tiles[id]
+			tile.set_idle_cached(false)
 			tile.position = from.get_center().lerp(to, p) - from.size * 0.5 - Vector2(0.0, lift)
 			tile.z_index = 42
 			tile.deform(0.0, 0.0, Vector2.ONE if reduced_motion else Vector2(1.0 + sin(p * PI) * 0.09, 1.0 - sin(p * PI) * 0.05))
@@ -1406,6 +1631,7 @@ func _pose_powerup() -> void:
 		if not _tiles.has(id):
 			continue
 		_tiles[id].set_fragment_arrival(float(arrival.elapsed), reduced_motion)
+		_powerup_fragment_ids.append(id)
 		var t: float = clampf(float(arrival.elapsed) / 0.48, 0.0, 1.0)
 		var center: Vector2 = _tiles[id].get_rect().get_center()
 		var envelope: float = 1.0 - t
@@ -1547,6 +1773,8 @@ func _advance_board_presentation(delta: float) -> void:
 	if not _configured or not _can_play() or not is_visible_in_tree():
 		return
 	_presentation_elapsed += delta
+	for id: int in _ambient_budget.advance(delta):
+		_tile_pose_dirty[id] = true
 	_collection_effects.advance(delta)
 	_word_reveal.advance(delta)
 	if _completion_source >= 0:
@@ -1636,54 +1864,91 @@ func _process(delta: float) -> void:
 func _refresh_marks() -> void:
 	var feedback_enabled: bool = _can_play()
 	var completing: bool = _contact_state().kind == "match"
+	var key: Array = [_view_board_revision, _source, _target, _keyboard_source,
+		completing, feedback_enabled, reduced_motion, _queued_collections.keys()]
+	if key == _marks_key:
+		_refresh_palette()
+		_refresh_completion_hints()
+		return
+	_marks_key = key
+	_presentation_work.mark_passes += 1
 	for id: int in _tiles:
-		_tiles[id].set_marked(id == _target and completing, id == _source or _queued_collections.has(id),
-			feedback_enabled and not game.is_fusing(id), reduced_motion)
+		var tile: WordTile = _tiles[id]
+		var highlighted: bool = id == _target and completing
+		var selected: bool = id == _source or id == _keyboard_source or _queued_collections.has(id)
+		var enabled: bool = feedback_enabled and (id == _keyboard_source or not game.is_fusing(id))
+		var changed: bool = tile.highlighted != highlighted or tile.selected != selected \
+			or tile._feedback_enabled != enabled or tile._reduced_motion != reduced_motion
+		tile.set_marked(highlighted, selected, enabled, reduced_motion)
+		if changed:
+			_tile_pose_dirty[id] = true
 	_refresh_contact()
 	_refresh_palette()
-	if _keyboard_source >= 0 and _tiles.has(_keyboard_source):
-		_tiles[_keyboard_source].set_marked(false, true, _can_play(), reduced_motion)
 	_refresh_completion_hints()
 
 func _refresh_completion_hints() -> void:
-	if not _goal_hover_word.is_empty() and _can_play() and _source < 0 and _keyboard_source < 0 \
+	var playing: bool = _can_play()
+	var source: int = (_source if _source >= 0 else _keyboard_source) if playing and not game.collection_batch_active() else -1
+	var key: Array = [_view_board_revision, _boss_status_revision, source, _goal_hover_word,
+		_auto_merge_hovered, playing, game.powerup_active(), game.collection_batch_active(),
+		_pointer, _finish_is_pulling(), str(_fusion_drag.get("event_id", "")), reduced_motion]
+	var elapsed: float = _completion_elapsed
+	if not _goal_hover_word.is_empty() and playing and _source < 0 and _keyboard_source < 0 \
 		and not game.powerup_active() and not game.collection_batch_active():
-		var matching_ids: Array[int] = []
+		elapsed = _goal_hover_elapsed
+	elif _auto_merge_hovered:
+		elapsed = _auto_merge_hover_elapsed
+	if key == _hint_key:
+		for id: int in _hint_matching_ids:
+			if _tiles.has(id):
+				_tiles[id].set_completion_hint(true, elapsed, reduced_motion)
+		return
+	_hint_key = key
+	_presentation_work.hint_searches += 1
+	var matching_ids: Array[int] = []
+	var hover: bool = false
+	if not _goal_hover_word.is_empty() and playing and _source < 0 and _keyboard_source < 0 \
+		and not game.powerup_active() and not game.collection_batch_active():
+		hover = true
 		for id: int in _tiles:
 			if game.family_word_id(id) == _goal_hover_word and not game.is_fusing(id) and game.boss_interactable(id, false):
 				matching_ids.append(id)
-		_set_hover_matching(matching_ids, _goal_hover_elapsed)
-		return
-	var automatic: Dictionary = _auto_merge_hover_preview()
-	if int(automatic.result_count) > 0:
-		var matching_ids: Array[int] = []
-		matching_ids.assign(automatic.input_ids)
-		_set_hover_matching(matching_ids, _auto_merge_hover_elapsed)
-		return
-	var source: int = (_source if _source >= 0 else _keyboard_source) if _can_play() and not game.collection_batch_active() else -1
-	if _view_update_active and _view_hints_ready and _view_hint_source == source:
-		return
-	_view_hints_ready = true
-	_view_hint_source = source
-	if source != _completion_source:
-		_completion_source = source
-		_completion_elapsed = 0.0
-	var prefix: Dictionary = _feedback_source() if source == _source else _cell(source)
-	var has_matches: bool = false
+	else:
+		var automatic: Dictionary = _auto_merge_hover_preview()
+		if int(automatic.result_count) > 0:
+			hover = true
+			matching_ids.assign(automatic.input_ids)
+	if not hover:
+		if source != _completion_source:
+			_completion_source = source
+			_completion_elapsed = 0.0
+			elapsed = 0.0
+		var prefix: Dictionary = _feedback_source() if source == _source else _cell(source)
+		if not prefix.is_empty():
+			for id: int in _tiles:
+				var target: Dictionary = _cell(id)
+				if (not _fusion_drag.is_empty() or _settled(prefix)) and game.is_contactable(target) \
+					and _can_merge_for_feedback(prefix, target):
+					matching_ids.append(id)
+	_set_completion_ids(matching_ids, -1 if hover else source, elapsed)
+
+
+func _set_completion_ids(ids: Array[int], source: int, elapsed: float) -> void:
 	for id: int in _tiles:
-		var target: Dictionary = _cell(id)
-		var eligible: bool = not prefix.is_empty() and (not _fusion_drag.is_empty() or _settled(prefix)) and game.is_contactable(target) \
-			and _can_merge_for_feedback(prefix, target)
-		_tiles[id].set_completion_hint(eligible, _completion_elapsed, reduced_motion)
-		has_matches = has_matches or eligible
-	for id: int in _tiles:
-		_tiles[id].set_match_dimmed(has_matches and id != source and not _tiles[id].completion_hint)
+		var active: bool = id in ids
+		var tile: WordTile = _tiles[id]
+		if active or tile.completion_hint:
+			tile.set_completion_hint(active, elapsed, reduced_motion)
+			_tile_pose_dirty[id] = true
+		tile.set_match_dimmed(not ids.is_empty() and id != source and not active)
+		if active:
+			_active_tile_ids[id] = true
+		_ambient_budget.set_priority(id, _active_tile_ids.has(id) or active or id == _ambient_hover_id)
+	_hint_matching_ids = ids
 
 
 func _set_hover_matching(ids: Array[int], elapsed: float) -> void:
-	for id: int in _tiles:
-		_tiles[id].set_completion_hint(id in ids, elapsed, reduced_motion)
-		_tiles[id].set_match_dimmed(not ids.is_empty() and id not in ids)
+	_set_completion_ids(ids, -1, elapsed)
 
 
 func _drag_target() -> int:
@@ -1866,8 +2131,20 @@ func _contact_state() -> Dictionary:
 	return state
 
 func _refresh_contact() -> void:
-	super._refresh_contact()
 	var state: Dictionary = _contact_state()
+	var involved: Dictionary = {}
+	if state.kind != "none":
+		for id: int in [int(state.source), int(state.target)]:
+			if id >= 0 and _tiles.has(id):
+				involved[id] = true
+	for id: int in _contact_tile_ids:
+		if not involved.has(id) and _tiles.has(id):
+			_tiles[id].set_contact("none", Vector2.ZERO, 0.0, reduced_motion)
+			_tile_pose_dirty[id] = true
+	for id: int in involved:
+		var direction: Vector2 = Vector2(state.direction) * (1.0 if id == int(state.source) else -1.0)
+		_tiles[id].set_contact(str(state.kind), direction, float(state.strength), reduced_motion)
+	_contact_tile_ids = involved
 	for event_id: String in _fusion_visuals:
 		var visual: Dictionary = _fusion_visuals[event_id]
 		var held: bool = event_id == str(_fusion_drag.get("event_id", ""))
@@ -2138,6 +2415,7 @@ func _landing_contact_at(cell: Dictionary) -> float:
 	return WordModel.SETTLE_SECONDS * (0.70 if bool(cell.get("falling", false)) else 1.0)
 
 func _refresh_hud() -> void:
+	_hud_key = _frame_hud_content_key()
 	super._refresh_hud()
 	if _combo_hud != null:
 		# Learning callbacks can refresh the HUD before combo_changed. Consume
@@ -2157,6 +2435,35 @@ func _refresh_hud() -> void:
 		_error_notice_reserved = has_error
 		_layout.call_deferred()
 	_refresh_collect_button()
+
+
+func _frame_hud_content_key() -> Array:
+	return [_generation, _view_board_revision, _pose_revision, _configured, game.phase,
+		game.fragment_count, game.chest_tier, _displayed_chest_tier, _loot_flights.size(),
+		_compact_hud, has_header_chest(), ceili(game.full_elapsed), game.error,
+		game._collection_batch_active, game._collection_batch_cursor,
+		game._collection_batch_event_id, game._collection_batch_ids.size(),
+		game.pip_level, _can_play(), _pointer, game.powerup_active(), _finish_is_pulling()]
+
+
+func _refresh_frame_hud() -> void:
+	# Static labels, reward accessibility and collectability only change at model
+	# boundaries. Their clocks and the seven supply slots retain frame cadence.
+	if _hud_key != _frame_hud_content_key():
+		_refresh_hud()
+		return
+	_refresh_danger()
+	_sync_preview()
+	if _combo_hud != null and game.phase == "playing" and game.combo_count > 0:
+		var combo: Dictionary = game.combo_snapshot()
+		_combo_hud.set_timer(float(combo.remaining), float(combo.seconds))
+
+
+func _redraw_board_frame() -> void:
+	var flying: bool = not _loot_flights.is_empty()
+	if flying or _board_had_loot_flights:
+		queue_redraw()
+	_board_had_loot_flights = flying
 
 func _can_play() -> bool:
 	return super._can_play() and game._combo_pending.is_empty()
@@ -2254,6 +2561,19 @@ func _recovery_reading_bounds() -> Array[Rect2]:
 
 
 func _refresh_controls() -> void:
+	var balance: int = int(coin_balance.call()) if coin_balance.is_valid() else -1
+	var key: Array = [_view_board_revision, _boss_status_revision, _pose_revision,
+		_configured, game.phase, _paused, _can_play(), _pointer, _preview_first_id,
+		_keyboard_source, _layout_too_small, _finish_is_pulling(), finish_button.paused_state,
+		game.collection_batch_active(), game.powerup_active(), game.stage_ending(),
+		game.full_elapsed >= 0.0, game.fill_mode, game.fill_mode_locked(), game.pip_level,
+		game._held_tile_id, game._dragged_tile_id, game._growth_pending, game._gravity_pending,
+		hash(game._drag_gravity_delays), game.fall_speed_scale, game.boss.broken_remaining > WordModel.EPSILON,
+		balance, _stage_banner.visible, _stage_banner.ready_pending()]
+	if key == _controls_key:
+		return
+	_controls_key = key
+	_presentation_work.control_passes += 1
 	var show_recovery: bool = _configured and game.stage_run != null and game.full_elapsed >= 0.0 \
 		and game.phase == "playing" and not game.stage_ending()
 	if _word_reveal != null:
@@ -2364,6 +2684,9 @@ func _refresh_danger() -> void:
 func _layout() -> void:
 	if _loot_icon == null or size.x <= 0.0 or size.y <= 0.0:
 		return
+	_pose_revision += 1
+	_controls_key.clear()
+	_hud_key.clear()
 	var s: float = Style.ui_scale(self)
 	var authored: bool = game.uses_authored_morphology()
 	var edge: float = (4.0 if authored else 6.0) / s
@@ -2677,6 +3000,10 @@ func _layout() -> void:
 		_word_reveal.configure_layout(Rect2(Vector2.ONE * edge,
 			Vector2(size.x - edge * 2.0, minf(280.0 / s, size.y * reveal_fraction) - edge)), s,
 			effect_exclusions, firework_area)
+	# Layout can run inside an existing presentation pass, before another
+	# classification observes the revision. Move hit targets in this same pass.
+	for id: int in _tiles:
+		_tile_pose_dirty[id] = true
 	_sync_positions()
 	_refresh_fusion()
 	_refresh_hud()
@@ -2703,11 +3030,25 @@ func _fit_layout_pitch(available: Vector2, s: float) -> float:
 	height_pitch = minf(height_pitch, (available.y - 48.0 / s) / WordModel.ROWS)
 	return maxf(8.0 / s, minf(available.x / WordModel.COLUMNS, height_pitch))
 
+
+func presentation_work_snapshot() -> Dictionary:
+	var result: Dictionary = _presentation_work.duplicate()
+	result["dirty_ids"] = _tile_pose_dirty.keys()
+	result["active_ids"] = _active_tile_ids.keys()
+	result["animated_ids"] = _ambient_budget.animated_ids()
+	result["board_revision"] = _view_board_revision
+	result["cached_bodies"] = 0
+	for tile: WordTile in _tiles.values():
+		if tile._idle_cache_requested and tile._surface.material != tile._gel:
+			result.cached_bodies += 1
+	return result
+
 func snapshot() -> Dictionary:
 	# A pause or collection may publish before the next presentation pass.
 	# Refresh once so all preview slots describe the current model state.
 	_preview_drop_available = _can_drop_preview()
 	var state: Dictionary = super.snapshot()
+	state["presentation_work"] = presentation_work_snapshot()
 	state["stage"] = _stage_banner.snapshot() if _stage_banner != null else {}
 	state["boss_view"] = _boss_view.snapshot() if _boss_view != null else {}
 	state["practice"] = _practice_panel.snapshot() if _practice_panel != null else {"visible": false, "words": []}

@@ -13,14 +13,16 @@ const baselineOption = option('baseline');
 if (!baselineOption) throw new Error('Pass --baseline with the path to a frozen source snapshot.');
 const baseline = path.resolve(root, baselineOption);
 const automatic = args.includes('--automatic');
-const protocol = automatic ? 'word-jelly-auto-cpu-v1' : 'word-jelly-drag-cpu-v1';
-const script = automatic ? 'word_jelly_automatic_benchmark' : 'word_jelly_drag_benchmark';
+const idle = args.includes('--idle');
+if (automatic && idle) throw new Error('Choose either --idle or --automatic.');
+const protocol = idle ? 'word-jelly-idle-cpu-v1' : automatic ? 'word-jelly-auto-cpu-v1' : 'word-jelly-drag-cpu-v1';
+const script = idle ? 'word_jelly_idle_benchmark' : automatic ? 'word_jelly_automatic_benchmark' : 'word_jelly_drag_benchmark';
 const label = option('label', 'jelly-drag-cpu');
 if (!/^[a-z0-9-]+$/.test(label)) throw new Error('Use a lowercase output label.');
 const output = path.join(root, 'build', 'performance', label);
 if (fs.existsSync(output)) throw new Error(`Refusing to overwrite ${output}`);
 const repeats = Number(option('repeats', 5));
-const samples = Number(option('samples', automatic ? 600 : 120));
+const samples = Number(option('samples', idle ? 180 : automatic ? 600 : 120));
 if (!Number.isInteger(repeats) || repeats < 1 || !Number.isInteger(samples) || samples < 1) {
   throw new Error('Repeats and samples must be positive integers.');
 }
@@ -63,7 +65,7 @@ for (let repeat = 0; repeat < repeats; repeat++) {
       '--', `--samples=${samples}`, `--output=${file.replaceAll('\\', '/')}`], { timeout: 300000 });
     fs.writeFileSync(path.join(output, `${name}-${repeat + 1}.log`), result.stdout + result.stderr);
     const report = JSON.parse(fs.readFileSync(file, 'utf8'));
-    if (report.protocol !== protocol || report.rows.length !== (automatic ? 2 : 8) || report.rows.some(row => row.samples_us.length !== samples)) {
+    if (report.protocol !== protocol || report.rows.length !== (idle ? 4 : automatic ? 2 : 8) || report.rows.some(row => row.samples_us.length !== samples)) {
       throw new Error('Incomplete diagnostic report');
     }
     reports[name].push(report);
