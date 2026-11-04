@@ -17,8 +17,16 @@ async function metrics(page) {
 async function tap(page, x, y, bounds) {
   bounds ||= await metrics(page);
   const point = { x: bounds.x + x * bounds.scale, y: bounds.y + y * bounds.scale };
-  if (await page.evaluate(() => navigator.maxTouchPoints > 0)) await page.touchscreen.tap(point.x, point.y);
-  else await page.mouse.click(point.x, point.y);
+  if (await page.evaluate(() => navigator.maxTouchPoints > 0)) {
+    try {
+      await page.touchscreen.tap(point.x, point.y);
+      return;
+    } catch (error) {
+      // The OS can expose touch points while this context disables touch input.
+      if (!error.message.includes('hasTouch must be enabled')) throw error;
+    }
+  }
+  await page.mouse.click(point.x, point.y);
 }
 
 function uiScale(bounds) {

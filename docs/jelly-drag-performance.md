@@ -579,10 +579,35 @@ preview transition. The engine-mixed peak was -11.6 dBFS. Capture, event/frame
 samples and screenshots are in `build/qa/jelly-upgrades/`; this fixed-time render
 does not establish real-time frame pacing or physical speaker quality.
 
-The final Web pack `game-a7c9742331c0da76.pck.br` passed desktop 1366x768 and
+The initial local Web pack `game-a7c9742331c0da76.pck.br` passed desktop 1366x768 and
 portrait 393x852 browser charging checks. Both verified no flying coins,
 continuous local feedback, an intermediate displayed wallet balance, stable
 layout during ordinary contributions and no spending after release. The final
 build receipt verified 13,920 source inputs and 117 output files. Additional
 view checks cover release/repress during a milestone and retain the earned
 preview until its effect finishes.
+
+### Production release verification
+
+Runtime commit `a8272740` was published on 2026-11-04 from an isolated copy of
+tracked source with the existing reviewed private build inputs restored by hash.
+The release omits the unrelated local Atelier chest library. Its source receipt
+and parsed startup pack contain no Atelier source files, direct resources or
+matching imported resources.
+
+Release pack: `game-c40f8539e941fccd.pck.br`, 39,944,961 compressed bytes. Core
+startup is 47.10 MB, about 9.07 MB smaller than the initial local export. The
+deployment verified 13,768 source inputs and 117 output files before publishing.
+
+Both local release checks and both production checks passed at desktop 1366x768
+and portrait 393x852. Production HTML and actual browser pack requests matched
+the release hash. The checks verified charging feedback, smooth displayed
+debits, zero coin flights, stable contribution layout and no spending after
+release. Both sizes use mouse-held charging; portrait navigation uses touch.
+The browser helper falls back to mouse when the OS exposes touch points but
+the test context disables touch, preserving other input failures.
+
+Production: <https://gentle-forest-02ff42900.3.azurestaticapps.net/>. Release
+receipts, exclusion proof, deployment log and browser captures are retained in
+`build/qa/jelly-upgrades/`. This release does not establish physical-PC Chrome
+frame rates or subjective audio quality.
