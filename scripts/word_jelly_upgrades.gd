@@ -5,6 +5,7 @@ signal back_requested
 signal purchase_requested(level: int, kind: String)
 signal contribution_requested(kind: String, amount: int)
 signal audio_requested(cue: String)
+signal charging_changed(active: bool)
 signal intro_accepted
 signal intro_dismissed
 signal retry_requested
@@ -43,9 +44,22 @@ var _pulse := 0.0
 var _payoff := 0.0
 var _preview_wait := 0.0
 var _visual_progress := 0.0
+var _rail_from := 0.0
+var _rail_to := 0.0
+var _rail_velocity := 0.0
+var _rail_start_velocity := 0.0
+var _rail_time := 0.0
+var _rail_duration := 0.18
+var _pending_milestone := false
 var _level_up_count := 0
 var _deposit_count := 0
-var _coins: Array[Dictionary] = []
+var _charge_energy := 0.0
+var _wallet_energy := 0.0
+var _visual_balance := 0.0
+var _layout_state: Array = []
+var _layout_count := 0
+var _rail_base_style: StyleBoxFlat
+var _rail_fill_style: StyleBoxFlat
 var _hero_base := Vector2.ZERO
 var _hero_edge := 1.0
 var _rail_pitch := 76.0
@@ -188,6 +202,7 @@ func _init() -> void:
 	resized.connect(_layout)
 	visibility_changed.connect(func() -> void:
 		if not is_visible_in_tree():
+			_pending_milestone = false
 			stop_charging())
 	hide()
 
@@ -213,10 +228,15 @@ func present(state: Dictionary, word: Dictionary, steady: bool, selected: int = 
 	_kind = "jelly"
 	_selected = clampi(selected if selected > 0 else mini(9, _owned_level() + 1), 1, 9)
 	_visual_progress = _target_progress()
+	_reset_rail()
+	_pending_milestone = false
 	_payoff = 0.0
 	_pulse = 0.0
 	_preview_wait = 0.0
-	_coins.clear()
+	_charge_energy = 0.0
+	_wallet_energy = 0.0
+	_visual_balance = float(_state.get("balance", 0))
+	_update_wallet_text()
 	if not _present_preview():
 		return false
 	if offer:
@@ -229,6 +249,7 @@ func present(state: Dictionary, word: Dictionary, steady: bool, selected: int = 
 	return true
 
 func configure(state: Dictionary) -> void:
+	var previous_balance: int = int(_state.get("balance", 0))
 	var committed_kind := ""
 	var level_changed := false
 	for kind: String in ["jelly", "auto_merge"]:
@@ -238,6 +259,13 @@ func configure(state: Dictionary) -> void:
 			committed_kind = kind
 			level_changed = advanced
 	_state = state.duplicate(true)
+	var balance: int = int(_state.get("balance", 0))
+	if balance > previous_balance or not is_visible_in_tree() or not _active or _offering:
+		_visual_balance = float(balance)
+	elif balance < previous_balance:
+		# A saved wallet debit is real even when its funding journal needs recovery.
+		_wallet_energy = maxf(_wallet_energy, 0.28)
+		audio_requested.emit("upgrade_coin")
 	var deposited: bool = not committed_kind.is_empty()
 	if deposited and is_visible_in_tree() and _active and not _offering:
 		# Recovery follows the paid receipt even if another power was inspected.
@@ -246,30 +274,29 @@ func configure(state: Dictionary) -> void:
 			_kind = committed_kind
 			_selected = mini(9, _owned_level() + 1)
 			_visual_progress = _target_progress()
+			_reset_rail()
 			_present_preview()
 			_follow_rail.call_deferred()
 		_deposit_count += 1
 		_pulse = 1.0
-		if not _reduced:
-			_coins.append({"age": 0.0, "side": -1.0 if _deposit_count % 2 == 0 else 1.0})
-		audio_requested.emit("upgrade_coin")
 		if level_changed:
-			_visual_progress = _target_progress()
 			_level_up_count += 1
-			_payoff = 1.0
 			_charge_wait = 0.64
 			_preview_wait = 0.9
-			_selected = _owned_level()
-			_present_preview()
-			audio_requested.emit("goal_complete")
+			if _selected != _owned_level():
+				_selected = _owned_level()
+				_present_preview()
+			_pending_milestone = true
 			_follow_rail.call_deferred()
+	_set_rail_target(_target_progress(), 0.12 if level_changed else 0.18)
+	if _pending_milestone and _reduced:
+		_begin_milestone()
 	if not _can_charge():
 		stop_charging()
 	_refresh()
 
 func close() -> void:
 	stop_charging()
-	_coins.clear()
 	hide()
 
 func is_offer() -> bool:
@@ -279,6 +306,9 @@ func select_level(level: int) -> void:
 	if not _active or _offering or not is_visible_in_tree() or bool(_state.get("busy", false)) or level < 1 or level > 9:
 		return
 	stop_charging()
+	_pending_milestone = false
+	_payoff = 0.0
+	_pulse = 0.0
 	_preview_wait = 0.0
 	_selected = level
 	_present_preview()
@@ -289,13 +319,14 @@ func select_upgrade(kind: String) -> void:
 	if not _active or _offering or not is_visible_in_tree() or bool(_state.get("busy", false)) or not _category_buttons.has(kind) or kind == _kind:
 		return
 	stop_charging()
+	_pending_milestone = false
 	_kind = kind
-	_coins.clear()
 	_payoff = 0.0
 	_pulse = 0.0
 	_preview_wait = 0.0
 	_selected = mini(9, _owned_level() + 1)
 	_visual_progress = _target_progress()
+	_reset_rail()
 	_present_preview()
 	_refresh()
 	_follow_rail.call_deferred()
@@ -336,12 +367,20 @@ func _can_charge() -> bool:
 func start_charging() -> void:
 	if _charging or not _can_charge():
 		return
-	_selected = mini(9, _owned_level() + 1)
-	_preview_wait = 0.0
-	_present_preview()
+	# A quick release and repress preserves the earned level through its payoff.
+	var celebrating: bool = _pending_milestone or _payoff > 0.0
+	var selected: int = _owned_level() if celebrating else mini(9, _owned_level() + 1)
+	if not celebrating:
+		_preview_wait = 0.0
+	if _selected != selected:
+		_selected = selected
+		_present_preview()
 	_charging = true
+	_charge_energy = maxf(_charge_energy, 0.28)
 	_charge_wait = HOLD_LEAD
+	charging_changed.emit(true)
 	_refresh()
+	_effects.queue_redraw()
 	_follow_rail()
 	changed.emit()
 
@@ -350,6 +389,7 @@ func stop_charging() -> void:
 	_charging = false
 	_charge_wait = 0.0
 	if was_charging:
+		charging_changed.emit(false)
 		changed.emit()
 
 
@@ -375,14 +415,14 @@ func _refresh() -> void:
 	var owned: int = _owned_level()
 	var busy: bool = bool(_state.get("busy", false)) or not _active
 	var error: String = str(_state.get("error", ""))
-	_wallet.text = str(int(_state.get("balance", 0)))
-	_wallet.accessibility_name = "%s saved coins" % _wallet.text
+	_update_wallet_text()
+	_wallet.accessibility_name = "%d saved coins" % int(_state.get("balance", 0))
 	_tier.text = "Lv %d" % _selected
 	_name.text = "Auto merge" if _kind == "auto_merge" else Preview.NAMES[_selected]
 	_description.text = "%d ready Jellies" % Economy.auto_merge_capacity(_selected) if _kind == "auto_merge" \
 		else "%d nearby Jellies" % _preview.snapshot().target_count if _selected <= 4 else "Full column" if _selected == 5 \
 		else "Row + column" if _selected == 6 else "Extended ring" if _selected == 7 else "Double ring" if _selected == 8 else "Whole board"
-	_benefits.text = "Lv %d  →  Lv %d" % [owned, mini(9, owned + 1)] if owned < 9 else "Lv 9"
+	_benefits.text = "Lv %d  >  Lv %d" % [owned, mini(9, owned + 1)] if owned < 9 else "Lv 9"
 	_benefits.accessibility_name = _preview.coin_description()
 	for kind: String in _category_buttons:
 		var category: Button = _category_buttons[kind]
@@ -412,12 +452,17 @@ func _refresh() -> void:
 		control.visible = not _offering
 	_shade.visible = _offering
 	_offer.visible = _offering
-	_layout()
+	if _layout_state != _presentation_layout_state():
+		_layout()
+	_levels.queue_redraw()
+	_effects.queue_redraw()
 
 func set_active(value: bool) -> void:
 	_active = value
 	if not value:
 		stop_charging()
+		_pending_milestone = false
+		_payoff = 0.0
 	_refresh()
 
 func set_reduced_motion(value: bool) -> void:
@@ -426,8 +471,77 @@ func set_reduced_motion(value: bool) -> void:
 	_hero.set_merged_presentation(0.0, value)
 	_offer_jelly.set_merged_presentation(0.0, value)
 	if value:
-		_coins.clear()
 		_visual_progress = _target_progress()
+		_reset_rail()
+		if _pending_milestone:
+			_begin_milestone()
+	_animate_wallet()
+	_effects.queue_redraw()
+
+func _update_wallet_text() -> void:
+	var text: String = str(roundi(_visual_balance))
+	if _wallet.text != text:
+		_wallet.text = text
+
+func _reset_rail() -> void:
+	_rail_from = _visual_progress
+	_rail_to = _visual_progress
+	_rail_velocity = 0.0
+	_rail_start_velocity = 0.0
+	_rail_time = _rail_duration
+
+func _set_rail_target(target: float, duration: float) -> void:
+	if _reduced:
+		_visual_progress = target
+		_reset_rail()
+		return
+	if is_equal_approx(target, _rail_to):
+		return
+	_rail_from = _visual_progress
+	_rail_to = target
+	_rail_duration = duration
+	_rail_time = 0.0
+	var distance: float = _rail_to - _rail_from
+	_rail_start_velocity = clampf(_rail_velocity, 0.0, maxf(0.0, 3.0 * distance / duration))
+
+func _advance_rail(step: float) -> void:
+	if _rail_time < _rail_duration:
+		_rail_time = minf(_rail_duration, _rail_time + step)
+		var t: float = _rail_time / _rail_duration
+		var t2: float = t * t
+		var t3: float = t2 * t
+		var tangent: float = _rail_start_velocity * _rail_duration
+		_visual_progress = (2 * t3 - 3 * t2 + 1) * _rail_from + (t3 - 2 * t2 + t) * tangent + (-2 * t3 + 3 * t2) * _rail_to
+		_rail_velocity = ((6 * t2 - 6 * t) * _rail_from + (3 * t2 - 4 * t + 1) * tangent + (-6 * t2 + 6 * t) * _rail_to) / _rail_duration
+		if _rail_time >= _rail_duration:
+			_visual_progress = _rail_to
+			_rail_velocity = 0.0
+	if _pending_milestone and is_equal_approx(_visual_progress, _target_progress()):
+		_begin_milestone()
+
+func _begin_milestone() -> void:
+	_pending_milestone = false
+	_payoff = 1.0
+	audio_requested.emit("goal_complete")
+
+func _advance_charge_feedback(step: float) -> void:
+	# Retarget the continuous envelopes instead of restarting a tween per debit.
+	var blend: float = 1.0 - exp(-step * 14.0)
+	_charge_energy = lerpf(_charge_energy, 1.0 if _charging else 0.0, blend)
+	var balance: float = float(_state.get("balance", 0))
+	var decreasing: bool = _visual_balance > balance + 0.15
+	_wallet_energy = lerpf(_wallet_energy, 1.0 if decreasing else 0.0, blend)
+	if decreasing:
+		_visual_balance = maxf(balance, lerpf(_visual_balance, balance, 1.0 - exp(-step * 12.0)))
+	else:
+		_visual_balance = balance
+	_update_wallet_text()
+	_animate_wallet()
+
+func _animate_wallet() -> void:
+	_wallet.modulate = Color.WHITE.lerp(Color("#b47722"), _wallet_energy * 0.68)
+	var scale_amount: float = 1.0 if _reduced else 1.0 + _wallet_energy * (0.045 + sin(_elapsed * 10.0) * 0.018)
+	_wallet_icon.scale = Vector2.ONE * scale_amount
 
 func advance(delta: float) -> void:
 	if not _active or not is_visible_in_tree() or _offering or not is_finite(delta) or delta <= 0.0:
@@ -441,15 +555,14 @@ func advance(delta: float) -> void:
 	_payoff = maxf(0.0, _payoff - step / 0.9)
 	_preview.advance(step)
 	if _preview_wait > 0.0:
-		_preview_wait -= step
-		if _preview_wait <= 0.0 and _charging:
-			_selected = mini(9, _owned_level() + 1)
+		_preview_wait = maxf(0.0, _preview_wait - step)
+	if _preview_wait <= 0.0 and _charging and not _pending_milestone and _payoff <= 0.0:
+		var next_level: int = mini(9, _owned_level() + 1)
+		if _selected != next_level:
+			_selected = next_level
 			_present_preview()
 			_refresh()
-	_visual_progress = _target_progress() if _reduced else move_toward(_visual_progress, _target_progress(), step * 4.0)
-	for coin: Dictionary in _coins:
-		coin.age = float(coin.age) + step
-	_coins = _coins.filter(func(coin: Dictionary) -> bool: return float(coin.age) < 0.46)
+	_advance_rail(step)
 	if _charging:
 		if not _can_charge():
 			stop_charging()
@@ -461,6 +574,7 @@ func advance(delta: float) -> void:
 				contribution_requested.emit(_kind, PULSE_AMOUNT)
 				if is_equal_approx(before, _target_progress()):
 					stop_charging()
+	_advance_charge_feedback(step)
 	_animate_subject()
 	_stage.queue_redraw()
 	_levels.queue_redraw()
@@ -511,6 +625,10 @@ func _layout() -> void:
 	if size.x <= 0.0 or size.y <= 0.0 or _notice == null:
 		return
 	var u: float = 1.0 / Style.ui_scale(self)
+	_layout_state = _presentation_layout_state()
+	_layout_count += 1
+	_rail_base_style = Style.box(Color("#739ab9"), Color("#d6e5f1"), ceili(7 * u), ceili(u))
+	_rail_fill_style = Style.box(GOLD, Color("#fff2bb"), ceili(7 * u), ceili(u))
 	var width: float = minf(size.x - 32.0 * u, 940.0 * u)
 	var left: float = (size.x - width) * 0.5
 	var short: bool = size.y < 620.0 * u
@@ -522,6 +640,7 @@ func _layout() -> void:
 	_back.size = Vector2(64, 44) * u
 	_wallet_icon.position = Vector2(left + width - 100 * u, 22 * u)
 	_wallet_icon.size = Vector2.ONE * 25 * u
+	_wallet_icon.pivot_offset = _wallet_icon.size * 0.5
 	_wallet.position = Vector2(left + width - 72 * u, 12 * u)
 	_wallet.size = Vector2(72, 44) * u
 	_wallet.add_theme_font_size_override("font_size", ceili(20 * u))
@@ -622,6 +741,10 @@ func _layout() -> void:
 	_levels.queue_redraw()
 	_effects.queue_redraw()
 
+func _presentation_layout_state() -> Array:
+	return [_kind, _selected, _owned_level(), _offering, not _notice.text.is_empty(),
+		bool(_state.get("retry", false)), Style.ui_scale(self)]
+
 func _style_charge_button(u: float) -> void:
 	Style.action_button(_buy, GOLD_DARK)
 	_buy.custom_minimum_size = Vector2.ZERO
@@ -684,9 +807,11 @@ func _draw_stage() -> void:
 func _draw_rail() -> void:
 	var u: float = 1.0 / Style.ui_scale(self)
 	var rail := Rect2(_rail_origin - Vector2(0, 7 * u), Vector2(_rail_pitch * 8, 14 * u))
-	_levels.draw_style_box(Style.box(Color("#739ab9"), Color("#d6e5f1"), ceili(7 * u), ceili(u)), rail)
+	if _rail_base_style == null or _rail_fill_style == null:
+		return
+	_levels.draw_style_box(_rail_base_style, rail)
 	if _visual_progress > 0.0:
-		_levels.draw_style_box(Style.box(GOLD, Color("#fff2bb"), ceili(7 * u), ceili(u)), Rect2(rail.position, Vector2(maxf(2 * u, _visual_progress * _rail_pitch), rail.size.y)))
+		_levels.draw_style_box(_rail_fill_style, Rect2(rail.position, Vector2(maxf(2 * u, _visual_progress * _rail_pitch), rail.size.y)))
 	for level in range(1, 10):
 		var at: Vector2 = _rail_origin + Vector2((level - 1) * _rail_pitch, 0)
 		var reached: bool = level <= _owned_level()
@@ -700,14 +825,7 @@ func _draw_rail() -> void:
 func _draw_effects() -> void:
 	var u: float = 1.0 / Style.ui_scale(self)
 	var center: Vector2 = _stage.position + _hero_base + Vector2.ONE * _hero_edge * 0.5
-	if not _reduced:
-		var start: Vector2 = _footer.position + _buy.position + _buy.size * 0.5
-		for coin: Dictionary in _coins:
-			var t: float = clampf(float(coin.age) / 0.46, 0.0, 1.0)
-			var at: Vector2 = start.lerp(center, t * t * (3.0 - 2.0 * t)) + Vector2(sin(t * PI) * 48 * u * float(coin.side), 0)
-			var edge: float = lerpf(25 * u, 17 * u, t)
-			_effects.draw_texture_rect(GLOW, Rect2(at - Vector2.ONE * edge, Vector2.ONE * edge * 2), false, Color(1, 0.89, 0.5, 0.5))
-			_effects.draw_texture_rect(COIN, Rect2(at - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false, Color(1, 1, 1, 1.0 - smoothstep(0.83, 1.0, t)))
+	_draw_charge_feedback(u)
 	if _payoff > 0.0:
 		var t: float = 1.0 - _payoff
 		for index in range(4 if _reduced else 10):
@@ -716,6 +834,32 @@ func _draw_effects() -> void:
 			var at: Vector2 = center + Vector2.from_angle(angle) * radius
 			var edge: float = (26 if _reduced else 16 + 17 * _payoff) * u
 			_effects.draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false, Color(1, 0.97, 0.75, _payoff))
+
+func _draw_charge_feedback(u: float) -> void:
+	if _charge_energy > 0.01:
+		var button_center: Vector2 = _footer.position + _buy.position + _buy.size * 0.5
+		var breath: float = 0.82 if _reduced else 0.82 + sin(_elapsed * 7.0) * 0.12
+		var glow_size := Vector2(_buy.size.x + 34 * u, _buy.size.y * 1.28)
+		_effects.draw_texture_rect(GLOW, Rect2(button_center - glow_size * 0.5, glow_size), false,
+			Color(1.0, 0.89, 0.36, _charge_energy * breath * 0.3))
+		for index in range(2 if _reduced else 4):
+			var phase: float = float(index) / (2 if _reduced else 4)
+			if not _reduced:
+				phase = fposmod(phase + _elapsed * 0.42, 1.0)
+			var at: Vector2 = button_center + Vector2(cos(phase * TAU) * (_buy.size.x * 0.49), sin(phase * TAU) * (_buy.size.y * 0.47))
+			var edge: float = (16.0 if _reduced else 13.0 + sin(phase * TAU + _elapsed * 5.0) * 3.0) * u
+			_effects.draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false,
+				Color(1.0, 0.98, 0.72, _charge_energy * 0.95))
+	if _wallet_energy > 0.01:
+		var at: Vector2 = _wallet_icon.position + _wallet_icon.size * 0.5
+		var edge: float = 54 * u
+		_effects.draw_texture_rect(GLOW, Rect2(at - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false,
+			Color(1.0, 0.79, 0.25, _wallet_energy * 0.45))
+		var phase: float = 0.0 if _reduced else _elapsed * 3.0
+		var glint: Vector2 = at + Vector2(cos(phase) * 13, sin(phase) * 10) * u
+		var glint_edge: float = 13 * u
+		_effects.draw_texture_rect(SPARKLE, Rect2(glint - Vector2.ONE * glint_edge * 0.5, Vector2.ONE * glint_edge), false,
+			Color(1.0, 0.94, 0.56, _wallet_energy))
 
 func _rect(control: Control) -> Array:
 	var rect: Rect2 = control.get_global_rect()
@@ -729,7 +873,9 @@ func snapshot() -> Dictionary:
 		"remaining": maxi(0, _price() - _funded()), "charging": _charging,
 		"progress": _target_progress(), "visual_progress": _visual_progress,
 		"level_up_count": _level_up_count, "deposit_count": _deposit_count, "payoff": _payoff,
-		"coin_flights": _coins.size(), "balance": int(_state.get("balance", 0)),
+		"milestone_pending": _pending_milestone,
+		"coin_flights": 0, "balance": int(_state.get("balance", 0)), "visual_balance": _visual_balance,
+		"charge_energy": _charge_energy, "wallet_energy": _wallet_energy, "layout_count": _layout_count,
 		"intro": str(_state.get("intro", "unseen")), "error": str(_state.get("error", "")), "notice": _notice.text,
 		"preview": _preview.snapshot(), "pending": _state.get("pending", {}).duplicate(true),
 		"buy": {"rect": _rect(_buy), "enabled": not _buy.disabled, "text": _buy.text,

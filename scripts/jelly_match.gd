@@ -483,6 +483,7 @@ func _sync_chest_tap() -> void:
 	var shown: bool = _configured and not _reward_presentation.visible
 	if has_header_chest():
 		_header_chest_host.visible = _can_play()
+		_header_chest_level.visible = shown
 	_chest_tap.visible = shown
 	_chest_tap.disabled = not _can_tap_chest()
 	_loot_icon.visible = shown and not _chest_tap.is_active()

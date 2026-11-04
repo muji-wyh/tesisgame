@@ -6000,7 +6000,8 @@ func _advance_ui(delta: float, hold_delta: float = -1.0) -> void:
 		_publish_round_celebration()
 		_publish_growth_view()
 		_publish_coins()
-		_publish_library()
+		if _mode_menu_open():
+			_publish_library()
 	_update_duck()
 	if Engine.get_process_frames() != _voice_match_origin_frame:
 		_advance_voice_match_feedback(delta)

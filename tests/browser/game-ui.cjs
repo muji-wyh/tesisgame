@@ -16,8 +16,9 @@ async function metrics(page) {
 
 async function tap(page, x, y, bounds) {
   bounds ||= await metrics(page);
-  if (page.touchscreen) await page.touchscreen.tap(bounds.x + x * bounds.scale, bounds.y + y * bounds.scale);
-  else await page.locator('#canvas').tap({ position: { x: x * bounds.scale, y: y * bounds.scale } });
+  const point = { x: bounds.x + x * bounds.scale, y: bounds.y + y * bounds.scale };
+  if (await page.evaluate(() => navigator.maxTouchPoints > 0)) await page.touchscreen.tap(point.x, point.y);
+  else await page.mouse.click(point.x, point.y);
 }
 
 function uiScale(bounds) {

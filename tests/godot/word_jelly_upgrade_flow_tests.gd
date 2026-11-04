@@ -179,8 +179,8 @@ func _run() -> void:
 		and campaign.store.upgrade_state().funded.jelly == 0
 		and not page.snapshot().charging and not page.snapshot().error.is_empty(),
 		"A blocked contribution write retains its paid twenty-five-coin receipt without faking saved progress")
-	check(charge_audio.count("upgrade_coin") == 0 and charge_audio.count("goal_complete") == 0,
-		"A wallet debit with an unsaved contribution plays neither the saved-deposit cue nor a level celebration")
+	check(charge_audio.count("upgrade_coin") == 1 and charge_audio.count("goal_complete") == 0,
+		"A saved wallet debit sounds once while its unsaved funding cannot celebrate a level")
 	await capture_ui("paid-upgrade-retry")
 	host.campaign_writable = true
 	await tap(view, page._buy.get_global_rect().get_center())
@@ -190,7 +190,7 @@ func _run() -> void:
 		and campaign.store.upgrade_state().intro == "guide",
 		"The real Retry commits the already-paid contribution once and preserves the remaining Lv2 funding")
 	check(charge_audio.count("upgrade_coin") == 1 and charge_audio.count("goal_complete") == 0,
-		"The retried saved deposit receives one coin accent while its unfinished level stays silent")
+		"Retry preserves the original debit accent count while its unfinished level stays silent")
 	check(page.snapshot().funded == 25 and page.snapshot().remaining == 25
 		and is_equal_approx(float(page.snapshot().progress), 0.5),
 		"The visible progress reports the saved half-charge and exact remaining coins before Lv2")
@@ -202,6 +202,10 @@ func _run() -> void:
 	check(page.snapshot().level == 2 and page.snapshot().buy.enabled == (app.coin_wallet.balance >= 25)
 		and not page.snapshot().buy.guided and not page.snapshot().charging,
 		"Only a saved unlock completes the introduction while further charging follows the available balance")
+	check(page.snapshot().milestone_pending and charge_audio.count("goal_complete") == 0,
+		"The earned level waits for its visible rail marker before success feedback")
+	for frame in range(3):
+		page.advance(0.05)
 	check(charge_audio.count("upgrade_coin") == 2 and charge_audio.count("goal_complete") == 1
 		and page.snapshot().level_up_count == 1,
 		"The actual Lv2 milestone gives one level effect and reward cue after two saved coin pulses")
@@ -266,6 +270,8 @@ func _run() -> void:
 		and campaign.store.upgrade_state().funded.auto_merge == 0
 		and page.snapshot().buy.enabled == (app.coin_wallet.balance >= 25)
 		and page.snapshot().preview.capacity == 4, "Only the committed Auto merge upgrade owns four output slots")
+	for frame in range(3):
+		page.advance(0.05)
 	check(charge_audio.count("upgrade_coin") == 4 and charge_audio.count("goal_complete") == 2
 		and page.snapshot().level_up_count == 2,
 		"The independent Auto merge milestone adds two deposits and one celebration (coins=%d, rewards=%d, effects=%d)" % [

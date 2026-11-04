@@ -86,7 +86,12 @@ func _init() -> void:
 
 
 func set_boss_status(state: Dictionary, reduced: bool) -> void:
-	_boss_status = state
+	# Ordinary stages keep the same empty overlay between layout changes.
+	# A nonempty previous state must still run once to restore inked faces.
+	if state.is_empty() and _boss_status.is_empty() and _boss_overlay.size == size:
+		return
+	# Keep the presented state stable if a caller reuses its dictionary.
+	_boss_status = state.duplicate()
 	var obscured: bool = float(state.get("ink", 0.0)) > 0.0
 	_label.modulate.a = 0.06 if obscured else 1.0
 	_picture.modulate.a = 0.06 if obscured else 1.0

@@ -54,6 +54,7 @@ func _run() -> void:
 		check(view.snapshot().has("level_transition"), "The presentation exposes the real previous-to-new level treatment")
 		if view.snapshot().has("level_transition"):
 			await check_levels(view)
+			check_switch(view)
 			check_queue(view)
 			check_model_upgrade()
 	for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(320, 480), Vector2i(1366, 768), Vector2i(844, 390)]:
@@ -66,6 +67,19 @@ func _run() -> void:
 		await capture(view, "%dx%d-lv3-lv4" % [dimensions.x, dimensions.y])
 		if not baseline and view.snapshot().has("level_transition"):
 			check_layout(view)
+	if not baseline:
+		for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(1366, 768)]:
+			root.size = dimensions
+			view.size = Vector2(dimensions)
+			view.set_chest_anchor(Rect2(194, 16, 44, 44))
+			begin(view, 3, 4)
+			view.advance(Celebration.ARRIVAL_SECONDS + Flight.TOP_SECONDS + 0.1)
+			await capture(view, "%dx%d-current" % [dimensions.x, dimensions.y])
+			view.advance(Flight.REVEAL_SECONDS - Flight.TOP_SECONDS - 0.1)
+			await capture(view, "%dx%d-switch" % [dimensions.x, dimensions.y])
+			view.advance(0.3)
+			await capture(view, "%dx%d-earned" % [dimensions.x, dimensions.y])
+
 	root.size = Vector2i(393, 852)
 	view.size = Vector2(root.size)
 	view.set_chest_anchor(Rect2(194, 16, 44, 44))
@@ -117,6 +131,24 @@ func check_levels(view) -> void:
 	view.set_chest_anchor(Rect2(194, 16, 44, 44))
 
 
+func check_switch(view) -> void:
+	for reduced: bool in [false, true]:
+		begin(view, 3, 4, reduced)
+		view.advance(Celebration.ARRIVAL_SECONDS + Flight.TOP_SECONDS + 0.10)
+		var current: Dictionary = view.snapshot().level_transition
+		check(current.visible and current.displayed_tier == 3 and current.displayed_text == "Lv3" and not current.switched,
+			"Only the current level is shown while the chest charges toward its real reveal")
+		check_layout(view)
+		view.advance(Flight.REVEAL_SECONDS - Flight.TOP_SECONDS - 0.10 + 0.001)
+		var revealed: Dictionary = view.snapshot().level_transition
+		check(revealed.visible and revealed.displayed_tier == 4 and revealed.displayed_text == "Lv4" and revealed.switched,
+			"The level switches once on the same committed reveal as the new chest and reward cue")
+		check(is_equal_approx(float(revealed.flash), 0.0) if reduced else float(revealed.flash) > 0.9,
+			"Normal motion masks the number swap with local sourced light; reduced motion avoids flashing")
+		view.advance(0.30)
+		check(view.snapshot().level_transition.displayed_text == "Lv4", "The earned level persists after the switch effect settles")
+
+
 func check_queue(view) -> void:
 	begin(view, 1, 2)
 	view.enqueue(2, 3, BEFORE, AFTER)
@@ -137,12 +169,14 @@ func check_layout(view) -> void:
 	var values: Array = level.rect
 	var rect := Rect2(values[0], values[1], values[2], values[3])
 	check(view._flight_bounds().grow(0.01).encloses(rect), "The complete transition fits the actual viewport")
+	if level.visible:
+		check(rect.end.y <= float(level.chest_top) + 0.1, "The single level sits above the chest instead of below or across it")
 	var from: Array = level.from_rect
 	var to: Array = level.to_rect
 	check(Style.HEADING_FONT.get_string_size(str(level.from_text), HORIZONTAL_ALIGNMENT_LEFT, -1, int(level.from_font)).x <= from[2] + 0.1
 		and Style.HEADING_FONT.get_string_size(str(level.to_text), HORIZONTAL_ALIGNMENT_LEFT, -1, int(level.to_font)).x <= to[2] + 0.1
 		and Style.HEADING_FONT.get_height(int(level.to_font)) <= to[3] + 0.1,
-		"Both real numbers fit their own areas instead of clipping or overlapping")
+		"Both possible level values fit the shared number area without clipping")
 
 
 func check_model_upgrade() -> void:

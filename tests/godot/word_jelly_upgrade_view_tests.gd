@@ -13,6 +13,7 @@ var requests: Array[Dictionary] = []
 var cues: Array[String] = []
 var legacy_requests := 0
 var retries := 0
+var charge_states: Array[bool] = []
 
 
 class Host extends RefCounted:
@@ -71,6 +72,7 @@ func _reset(state: Dictionary = {}) -> void:
 	page.set_active(true)
 	requests.clear()
 	cues.clear()
+	charge_states.clear()
 	check(page.present(_initial_state() if state.is_empty() else state, word, false),
 		"Present acquired Jelly and cat artwork with a saved upgrade state")
 
@@ -215,10 +217,10 @@ func _test_committed_feedback_and_independent_tracks() -> void:
 	_frames(4)
 	var partial: Dictionary = page.snapshot()
 	check(partial.charging and partial.funded == 25 and partial.remaining == 25 and partial.progress == 0.5
-		and partial.balance == 975 and partial.owned_level == 1 and partial.coin_flights == 1
+		and partial.balance == 975 and partial.owned_level == 1 and partial.coin_flights == 0
 		and partial.deposit_count == baseline.deposit_count + 1 and partial.level_up_count == baseline.level_up_count
 		and cues == ["upgrade_coin"] and partial.notice.is_empty(),
-		"One committed partial deposit fills the real rail and emits one coin flight and coin cue")
+		"One committed partial deposit fills the real rail and cues the wallet without a coin flight")
 	page.configure(_saved_state(store, wallet))
 	check(cues == ["upgrade_coin"] and page.snapshot().deposit_count == partial.deposit_count,
 		"Repeated configuration of the same saved state never repeats deposit feedback")
@@ -228,8 +230,8 @@ func _test_committed_feedback_and_independent_tracks() -> void:
 	check(not blocked.charging and blocked.funded == 25 and blocked.owned_level == 1
 		and blocked.balance == 950 and not blocked.pending.is_empty()
 		and blocked.deposit_count == partial.deposit_count and blocked.level_up_count == baseline.level_up_count
-		and cues == ["upgrade_coin"],
-		"A paid but uncommitted milestone produces no pretend unlock, deposit effect or success audio")
+		and cues == ["upgrade_coin", "upgrade_coin"],
+		"A saved debit cues the wallet while an uncommitted milestone produces no pretend unlock or success audio")
 	var retry_count: int = retries
 	page._buy.button_up.emit()
 	page._buy.pressed.emit()
@@ -252,11 +254,18 @@ func _test_committed_feedback_and_independent_tracks() -> void:
 	page.configure(_saved_state(store, wallet))
 	var unlocked: Dictionary = page.snapshot()
 	check(unlocked.owned_level == 2 and unlocked.funded == 0 and unlocked.progress == 1.0
-		and unlocked.selected_level == 2 and unlocked.payoff > 0.0 and unlocked.notice.is_empty()
+		and unlocked.selected_level == 2 and unlocked.milestone_pending and unlocked.payoff == 0.0 and unlocked.notice.is_empty()
 		and unlocked.deposit_count == baseline.deposit_count + 2
 		and unlocked.level_up_count == baseline.level_up_count + 1
-		and cues == ["upgrade_coin", "upgrade_coin", "goal_complete"],
-		"Only the committed level diff triggers the milestone rays, sound and newly earned preview")
+		and cues == ["upgrade_coin", "upgrade_coin"],
+		"A committed recovered level queues its milestone without replaying the already saved debit")
+	_frames(2)
+	check(page.snapshot().visual_progress < 1.0 and page.snapshot().payoff == 0.0 and cues.size() == 2,
+		"The saved rail approaches the milestone before its success effect")
+	_frames(1)
+	check(page.snapshot().visual_progress == 1.0 and page.snapshot().payoff > 0.0
+		and not page.snapshot().milestone_pending and cues == ["upgrade_coin", "upgrade_coin", "goal_complete"],
+		"Reaching the exact saved marker starts the milestone rays and fanfare together")
 	page.configure(_saved_state(store, wallet))
 	check(cues.size() == 3 and page.snapshot().level_up_count == unlocked.level_up_count,
 		"A repeated saved milestone cannot repeat its fanfare")
@@ -293,6 +302,110 @@ func _test_committed_feedback_and_independent_tracks() -> void:
 		and requests.back() == {"kind": "auto_merge", "amount": 25},
 		"Charging from a distant preview still funds only the next Auto merge level")
 	page.contribution_requested.disconnect(commit)
+
+
+func _test_continuous_charge_feedback() -> void:
+	_reset()
+	page.advance(0.05)
+	var preview_clock: float = page.snapshot().preview.elapsed
+	page.start_charging()
+	check(page.snapshot().preview.elapsed == preview_clock,
+		"Charging the visible next level preserves its running demonstration")
+	var energy: float = page.snapshot().charge_energy
+	check(energy > 0.0 and charge_states == [true] and page.snapshot().wallet_energy == 0.0,
+		"Press acknowledges charging immediately without pretending to debit the wallet")
+	for index in range(5):
+		page.advance(0.025)
+		var next_energy: float = page.snapshot().charge_energy
+		check(next_energy > energy and next_energy < 1.0 and page.snapshot().balance == 5000,
+			"Held button energy grows between payment pulses without changing saved coins")
+		energy = next_energy
+	page.stop_charging()
+	page.stop_charging()
+	check(charge_states == [true, false], "Repeated cancellation releases the continuous charging sound only once")
+	page.advance(0.025)
+	check(page.snapshot().charge_energy < energy, "Release lets the button light settle without a visual cut")
+	var state: Dictionary = _initial_state()
+	state.balance = 4975
+	state.funded.jelly = 25
+	var styles: StyleBox = page._buy.get_theme_stylebox("normal")
+	var layouts: int = page.snapshot().layout_count
+	page.configure(state)
+	check(page.snapshot().visual_balance == 5000.0 and cues == ["upgrade_coin"]
+		and page.snapshot().wallet_energy > 0.0 and page.snapshot().coin_flights == 0,
+		"A saved debit starts wallet feedback and retargets the count without flying coins")
+	check(page.snapshot().layout_count == layouts and page._buy.get_theme_stylebox("normal") == styles,
+		"Ordinary deposits retain the existing layout and button styles")
+	var displayed: float = page.snapshot().visual_balance
+	for index in range(10):
+		page.advance(1.0 / 60.0)
+		var next_displayed: float = page.snapshot().visual_balance
+		check(next_displayed < displayed and next_displayed > 4975.0,
+			"The wallet count decreases on consecutive frames between committed receipts")
+		displayed = next_displayed
+	state.balance = 4950
+	state.funded.jelly = 50
+	page.configure(state)
+	check(page.snapshot().visual_balance == displayed and page.snapshot().layout_count == layouts,
+		"The next debit retargets the running count without resetting its position or rebuilding the page")
+	page.configure(state)
+	check(cues == ["upgrade_coin", "upgrade_coin"], "Repeated saved state cannot replay a wallet debit sound")
+	_frames(30)
+	check(page.snapshot().visual_balance == 4950.0 and page._wallet.text == "4950"
+		and page.snapshot().wallet_energy < 0.02 and page.snapshot().charge_energy < 0.02,
+		"The count settles on the exact saved balance and both local effects become quiet")
+	page.set_reduced_motion(true)
+	page.start_charging()
+	state.balance = 4925
+	state.funded.jelly = 75
+	page.configure(state)
+	page.advance(0.05)
+	check(page.snapshot().charge_energy > 0.0 and page.snapshot().wallet_energy > 0.0
+		and page._wallet_icon.scale == Vector2.ONE and page.snapshot().coin_flights == 0,
+		"Reduced motion preserves charging and spend light while suppressing moving wallet artwork")
+	page.stop_charging()
+	_reset()
+	state = _initial_state()
+	state.level = 2
+	state.balance = 4950
+	page.configure(state)
+	page.start_charging()
+	check(page.snapshot().milestone_pending and page.snapshot().selected_level == 2,
+		"A quick repress retains the earned level until its pending milestone is revealed")
+	_frames(3)
+	check(page.snapshot().payoff > 0.0 and page.snapshot().selected_level == 2 and requests.is_empty(),
+		"The exact marker reveals its earned preview before a fresh hold can request more coins")
+	page.stop_charging()
+	page.start_charging()
+	check(page.snapshot().payoff > 0.0 and page.snapshot().selected_level == 2,
+		"Repressing during an active milestone preserves the earned preview under its rays")
+	page._charge_wait = 2.0
+	var earned_preview_retained := true
+	for index in range(20):
+		page.advance(0.05)
+		if page.snapshot().payoff > 0.0 and page.snapshot().selected_level != 2:
+			earned_preview_retained = false
+	check(earned_preview_retained and page.snapshot().payoff == 0.0 and page.snapshot().selected_level == 3,
+		"The next preview appears only after the earned milestone finishes")
+	page.stop_charging()
+	_reset()
+	page.configure(state)
+	_frames(3)
+	page.select_level(9)
+	check(page.snapshot().payoff == 0.0 and page.snapshot().selected_level == 9,
+		"Inspecting a locked preview clears the previous earned level's celebration")
+	page.stop_charging()
+	_reset()
+	state = _initial_state()
+	state.level = 2
+	state.balance = 4950
+	page.configure(state)
+	page.set_active(false)
+	page.set_active(true)
+	_frames(8)
+	check(not page.snapshot().milestone_pending and page.snapshot().payoff == 0.0
+		and cues == ["upgrade_coin"],
+		"Background cancellation cannot replay a queued milestone sound on return")
 
 
 func _test_reduced_motion_and_charge_gates() -> void:
@@ -413,6 +526,42 @@ func _test_responsive_layout() -> void:
 		page.select_upgrade("jelly")
 
 
+func _capture_charge_feedback() -> void:
+	if not OS.get_cmdline_user_args().has("--capture") or DisplayServer.get_name() == "headless":
+		return
+	for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(1366, 768)]:
+		root.size = dimensions
+		holder.size = Vector2(dimensions)
+		page.size = Vector2(dimensions)
+		var state: Dictionary = _initial_state()
+		state.level = 3
+		_reset(state)
+		page._layout()
+		var commit := func(_kind: String, _amount: int) -> void:
+			state.balance -= 25
+			state.funded.jelly += 25
+			page.configure(state)
+		page.contribution_requested.connect(commit)
+		page.start_charging()
+		for frame in range(24):
+			page.advance(1.0 / 60.0)
+			await process_frame
+		await capture_ui("charging-%dx%d" % [dimensions.x, dimensions.y])
+		page.stop_charging()
+		for frame in range(8):
+			page.advance(1.0 / 60.0)
+			await process_frame
+		await capture_ui("charge-release-%dx%d" % [dimensions.x, dimensions.y])
+		page.set_reduced_motion(true)
+		page.start_charging()
+		for frame in range(12):
+			page.advance(1.0 / 60.0)
+			await process_frame
+		await capture_ui("charging-reduced-%dx%d" % [dimensions.x, dimensions.y])
+		page.stop_charging()
+		page.contribution_requested.disconnect(commit)
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(393, 852)
@@ -425,12 +574,15 @@ func _run() -> void:
 		requests.append({"kind": kind, "amount": amount}))
 	page.purchase_requested.connect(func(_level: int, _kind: String) -> void: legacy_requests += 1)
 	page.audio_requested.connect(func(cue: String) -> void: cues.append(cue))
+	page.charging_changed.connect(func(active: bool) -> void: charge_states.append(active))
 	page.retry_requested.connect(func() -> void: retries += 1)
 	_test_previews_and_no_fake_progress()
 	_test_hold_cancellation()
 	_test_committed_feedback_and_independent_tracks()
+	_test_continuous_charge_feedback()
 	_test_reduced_motion_and_charge_gates()
 	await _test_responsive_layout()
+	await _capture_charge_feedback()
 	page.free()
 	print("Jelly hold-to-charge view: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

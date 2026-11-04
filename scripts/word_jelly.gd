@@ -94,6 +94,11 @@ var _tile_press_started_ms: int = -1
 var _view_update_active: bool = false
 var _view_cells: Dictionary = {}
 var _view_mergeable: Dictionary = {}
+var _view_space_known: bool = false
+var _view_space_area: int = 0
+var _view_space_cells: Dictionary = {}
+var _view_space_dragged: int = -1
+var _view_space_return_area: int = 0
 var _view_drop_known: bool = false
 var _view_drop_available: bool = false
 var _view_palette_ready: bool = false
@@ -916,6 +921,7 @@ func _begin_view_update() -> void:
 	for cell: Dictionary in game.cells:
 		_view_cells[int(cell.id)] = cell
 	_view_mergeable.clear()
+	_view_space_known = false
 	_view_drop_known = false
 	_view_palette_ready = false
 	_view_hints_ready = false
@@ -924,6 +930,8 @@ func _end_view_update() -> void:
 	_view_update_active = false
 	_view_cells.clear()
 	_view_mergeable.clear()
+	_view_space_cells.clear()
+	_view_space_known = false
 
 func _cell(id: int) -> Dictionary:
 	return _view_cells.get(id, {}) if _view_update_active else super._cell(id)
@@ -941,8 +949,42 @@ func _can_merge_for_feedback(source: Dictionary, target: Dictionary) -> bool:
 		return game.can_merge(source, target)
 	var pair := Vector2i(int(source.get("id", -1)), int(target.get("id", -1)))
 	if not _view_mergeable.has(pair):
-		_view_mergeable[pair] = game.can_merge(source, target)
+		if _feedback_space_guaranteed(pair.x, pair.y):
+			_view_mergeable[pair] = game.parts_compatible(source, target) \
+				and not game.boss.frozen(pair.x) and not game.boss.frozen(pair.y)
+		else:
+			_view_mergeable[pair] = game.can_merge(source, target)
 	return bool(_view_mergeable[pair])
+
+func _feedback_space_guaranteed(source_id: int, target_id: int) -> bool:
+	if not _view_space_known:
+		_view_space_known = true
+		_view_space_area = 0
+		_view_space_cells.clear()
+		_view_space_dragged = game._dragged_tile_id
+		_view_space_return_area = 0
+		for cell: Dictionary in game.cells:
+			if not bool(cell.get("lifted", false)):
+				var area: int = maxi(0, int(cell.width)) * maxi(0, int(cell.height))
+				_view_space_area += area
+				var id: int = int(cell.id)
+				_view_space_cells[id] = int(_view_space_cells.get(id, 0)) + area
+		for fusion: Dictionary in game.fusions:
+			if str(fusion.operation) == "merge":
+				_view_space_area += maxi(0, int(fusion.result.width)) * maxi(0, int(fusion.result.height))
+		var anchor: Dictionary = _view_cells.get(_view_space_dragged, {})
+		if not anchor.is_empty():
+			_view_space_return_area = maxi(0, int(anchor.width)) * maxi(0, int(anchor.height)) \
+				if anchor.has("composition") else 1
+	# can_merge only asks whether any 1x1 destination exists. Counting every
+	# footprint, including overlaps and a possible return reservation, bounds
+	# occupied cells from above without approximating falling or fusion geometry.
+	var area: int = _view_space_area - int(_view_space_cells.get(source_id, 0))
+	if target_id != source_id:
+		area -= int(_view_space_cells.get(target_id, 0))
+	if _view_space_dragged >= 0 and _view_space_dragged != source_id and _view_space_dragged != target_id:
+		area += _view_space_return_area
+	return area < WordModel.COLUMNS * WordModel.ROWS
 
 func _refresh_palette() -> void:
 	if not _configured:
@@ -2248,14 +2290,15 @@ func _refresh_controls() -> void:
 	if collect_button == null:
 		return
 	_refresh_collect_button()
-	_refresh_powerup_buttons()
-	_refresh_goal_buttons()
+	var merge_available: bool = game.can_activate_powerup("auto_merge")
+	_refresh_powerup_buttons(merge_available)
+	_refresh_goal_buttons(merge_available)
 	_fill_button.visible = _configured and game.phase == "playing"
 	_fill_button.disabled = not _can_play() or board_locked or _finish_is_pulling() or _pointer != NO_POINTER or game.fill_mode_locked()
 	_fill_button.set_state(game.fill_mode, game.fill_mode_locked(), reduced_motion)
 	_fill_button.pause_feedback(_paused)
 
-func _refresh_powerup_buttons() -> void:
+func _refresh_powerup_buttons(available: bool) -> void:
 	var balance: int = int(coin_balance.call()) if coin_balance.is_valid() else -1
 	for kind: String in powerup_buttons:
 		var button: PowerupButton = powerup_buttons[kind]
@@ -2264,18 +2307,17 @@ func _refresh_powerup_buttons() -> void:
 		if kind == "auto_merge":
 			button.set_auto_merge_level(game.auto_merge_level)
 		button.visible = _configured and game.phase == "playing"
-		var available: bool = game.can_activate_powerup(kind)
 		button.set_availability(_can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and _keyboard_source < 0 and available,
 			balance >= price, game.powerup_active() and not available, balance >= 0)
 
-func _refresh_goal_buttons() -> void:
+func _refresh_goal_buttons(available: Variant = null) -> void:
 	if _practice_panel == null:
 		return
 	var balance: int = int(coin_balance.call()) if coin_balance.is_valid() else -1
 	_practice_panel.set_purchase_state(game.powerup_price("family_merge"), balance,
 		_can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and _keyboard_source < 0,
 		game.powerup_active() or game.collection_batch_active() or game.stage_ending(), _paused,
-		game.can_activate_powerup("family_merge"))
+		game.can_activate_powerup("family_merge") if available == null else bool(available))
 
 func _refresh_collect_button() -> void:
 	if collect_button == null:

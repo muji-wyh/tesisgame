@@ -64,6 +64,7 @@ func configure(app, path: String, host: Object = null) -> void:
 	upgrades.purchase_requested.connect(purchase_upgrade)
 	upgrades.contribution_requested.connect(contribute_upgrade)
 	upgrades.audio_requested.connect(_upgrade_audio)
+	upgrades.charging_changed.connect(_upgrade_charging_changed)
 	upgrades.retry_requested.connect(retry)
 	upgrades.intro_accepted.connect(_accept_upgrade_intro)
 	upgrades.intro_dismissed.connect(_dismiss_upgrade_intro)
@@ -225,9 +226,15 @@ func _pending_upgrade_amount(pending: Dictionary) -> int:
 	return int(pending.get("amount", pending.get("price", 0)))
 
 
+func _upgrade_charging_changed(charging: bool) -> void:
+	if charging:
+		_app.audio.interact(_app.model.theme_id, true)
+	_app.audio.set_upgrade_charging(charging)
+
+
 func _upgrade_audio(cue: String) -> void:
 	if cue == "upgrade_coin":
-		_app.audio.play_coin_spend()
+		_app.audio.play_upgrade_coin_spend()
 	elif cue == "goal_complete":
 		_app.audio.play_upgrade_milestone()
 	else:
@@ -284,10 +291,9 @@ func contribute_upgrade(kind: String, amount: int = 25, resume_pending: bool = f
 	_upgrade_error = ""
 	_last_unlocked = store.upgrade_level(kind) if store.upgrade_level(kind) > previous_level else 0
 	_last_unlocked_kind = kind
-	_app._coin_flight.sync(_app.coin_wallet.balance)
+	_app._coin_flight.sync(_app.coin_wallet.balance, false)
 	upgrades.configure(_upgrade_state())
-	_app._sync_jelly()
-	_app._refresh()
+	# The upgrade page owns this receipt; hidden game controls refresh on exit.
 	_publish()
 
 

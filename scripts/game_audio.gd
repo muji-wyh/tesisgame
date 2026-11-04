@@ -29,6 +29,9 @@ const COIN_RELEASE_PATH := "res://assets/audio/coins/release.wav"
 const COIN_CHANNELS := 4
 const COIN_GAIN := 0.60
 const COIN_SPEECH_DB := -6.0
+const UPGRADE_COIN_GAIN := 0.28
+const UPGRADE_CHARGE_PATH := "res://assets/audio/chest-kenney/charge.wav"
+const UPGRADE_CHARGE_GAIN := 0.14
 const FRAGMENT_APPEAR_PATH := "res://assets/audio/fragments/appear.wav"
 const FRAGMENT_ARRIVE_PATH := "res://assets/audio/fragments/arrive.wav"
 const FRAGMENT_CHANNELS := 4
@@ -128,6 +131,7 @@ var pair_feedback: AudioStreamPlayer
 var pair_chest_discovery: AudioStreamPlayer
 var ui_click: AudioStreamPlayer
 var upgrade_milestone: AudioStreamPlayer
+var upgrade_charge: AudioStreamPlayer
 var chest_charge: AudioStreamPlayer
 var muted: bool = false
 var active: bool = false
@@ -175,6 +179,10 @@ var _jelly_cues: Dictionary = {}
 var _jelly_next_player: int = 0
 var _coin_players: Array[AudioStreamPlayer] = []
 var _coin_next_player: int = 0
+var _coin_gains: Dictionary = {}
+var _upgrade_charging := false
+var _upgrade_charge_mix := 0.0
+var _upgrade_charge_time := 0.0
 var _fragment_players: Array[AudioStreamPlayer] = []
 var _fragment_next_player: int = 0
 var _fragment_last_ms: Dictionary = {}
@@ -218,6 +226,7 @@ func _ready() -> void:
 	_stream(UI_CLICK_PATH)
 	_stream(COIN_PATH)
 	_stream(COIN_RELEASE_PATH)
+	_stream(UPGRADE_CHARGE_PATH, true)
 	_stream(FRAGMENT_APPEAR_PATH)
 	_stream(FRAGMENT_ARRIVE_PATH)
 	music = _player(0.12)
@@ -338,7 +347,12 @@ func play_coin_spend() -> void:
 	_play_coin(COIN_PATH)
 
 
-func _play_coin(path: String) -> void:
+func play_upgrade_coin_spend() -> void:
+	# Frequent wallet debits sit below the sustained charge and milestone cues.
+	_play_coin(COIN_PATH, UPGRADE_COIN_GAIN)
+
+
+func _play_coin(path: String, gain: float = COIN_GAIN) -> void:
 	if muted or not active or not available:
 		return
 	if _coin_players.is_empty():
@@ -347,6 +361,7 @@ func _play_coin(path: String) -> void:
 	# Four short tails can overlap without stealing chest cues or pronunciation.
 	var player: AudioStreamPlayer = _coin_players[_coin_next_player]
 	_coin_next_player = (_coin_next_player + 1) % COIN_CHANNELS
+	_coin_gains[player] = gain
 	_update_coin_gain()
 	_play(player, path)
 	set_process(true)
@@ -362,7 +377,7 @@ func stop_coin_sounds() -> void:
 func _update_coin_gain() -> void:
 	var duck: float = COIN_SPEECH_DB if voice != null and voice.playing else 0.0
 	for player: AudioStreamPlayer in _coin_players:
-		player.volume_db = linear_to_db(COIN_GAIN) + duck
+		player.volume_db = linear_to_db(float(_coin_gains.get(player, COIN_GAIN))) + duck
 
 
 func play_fragment_appearance() -> void:
@@ -459,6 +474,54 @@ func play_jelly_cue(cue_name: String) -> void:
 	player.pitch_scale = 1.0
 	_play(player, JELLY_PATHS[cue_name])
 	set_process(true)
+
+
+func set_upgrade_charging(value: bool) -> void:
+	if not value:
+		_upgrade_charging = false
+		# Cancel preparation immediately; an audible loop gets a short release.
+		if upgrade_charge != null and not upgrade_charge.playing:
+			_stop(upgrade_charge)
+			upgrade_charge.stream = null
+		if upgrade_charge != null:
+			set_process(true)
+		return
+	if muted or not active or not available or _upgrade_charging:
+		return
+	_upgrade_charging = true
+	if upgrade_charge == null:
+		upgrade_charge = _player(0.0001)
+	set_process(true)
+	if upgrade_charge.playing:
+		return
+	_upgrade_charge_time = 0.0
+	await _play(upgrade_charge, UPGRADE_CHARGE_PATH, true)
+	if not _upgrade_charging:
+		_stop(upgrade_charge)
+		upgrade_charge.stream = null
+
+
+func stop_upgrade_charge() -> void:
+	_upgrade_charging = false
+	_upgrade_charge_mix = 0.0
+	if upgrade_charge != null:
+		_stop(upgrade_charge)
+		upgrade_charge.stream = null
+
+
+func _advance_upgrade_charge(delta: float) -> void:
+	if upgrade_charge == null or (not _upgrade_charging and upgrade_charge.stream == null):
+		return
+	var step: float = clampf(delta, 0.0, 0.05)
+	_upgrade_charge_time += step
+	var target: float = 1.0 if _upgrade_charging and upgrade_charge.playing else 0.0
+	_upgrade_charge_mix = move_toward(_upgrade_charge_mix, target, step / (0.08 if _upgrade_charging else 0.07))
+	var duck: float = 0.45 if upgrade_milestone != null and upgrade_milestone.playing else 1.0
+	var speech_db: float = COIN_SPEECH_DB if voice != null and voice.playing else 0.0
+	upgrade_charge.volume_db = linear_to_db(maxf(0.0001, UPGRADE_CHARGE_GAIN * _upgrade_charge_mix * duck)) + speech_db
+	upgrade_charge.pitch_scale = 1.0 + sin(_upgrade_charge_time * 2.2) * 0.025
+	if not _upgrade_charging and is_zero_approx(_upgrade_charge_mix):
+		stop_upgrade_charge()
 
 
 func play_upgrade_milestone() -> void:
@@ -613,7 +676,8 @@ func stop_round_celebration() -> void:
 		player.stream = null
 		player.volume_db = linear_to_db(float(_round_celebration_gains.get(player, 1.0)))
 	set_process(not _jelly_players.is_empty() or not _jelly_level_players.is_empty() or not _jelly_combo_players.is_empty() or not _coin_players.is_empty() or not _fragment_players.is_empty() \
-		or (upgrade_milestone != null and upgrade_milestone.playing))
+		or (upgrade_milestone != null and upgrade_milestone.playing) or _upgrade_charging \
+		or (upgrade_charge != null and upgrade_charge.playing))
 	_update_music_gain()
 
 
@@ -624,17 +688,20 @@ func _update_round_celebration_gain() -> void:
 		player.volume_db = linear_to_db(float(_round_celebration_gains.get(player, 1.0))) + duck
 
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if muted or not active or not available:
 		stop_round_celebration()
 		stop_pair_chest_discovery()
 		stop_jelly_sounds()
 		stop_upgrade_milestone()
+		stop_upgrade_charge()
 		stop_coin_sounds()
 		set_process(false)
 		return
 	var jelly_playing: bool = (pair_chest_discovery != null and pair_chest_discovery.playing) \
-		or (upgrade_milestone != null and upgrade_milestone.playing)
+		or (upgrade_milestone != null and upgrade_milestone.playing) or _upgrade_charging \
+		or (upgrade_charge != null and upgrade_charge.playing)
+	_advance_upgrade_charge(delta)
 	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players + _jelly_combo_players:
 		jelly_playing = jelly_playing or player.playing
 	_update_jelly_gain()
@@ -1111,6 +1178,7 @@ func halt(keep_pair_feedback: bool = false) -> void:
 	stop_pop_sounds()
 	stop_jelly_sounds()
 	stop_upgrade_milestone()
+	stop_upgrade_charge()
 	stop_coin_sounds()
 	stop_round_celebration()
 	stop_round_end()

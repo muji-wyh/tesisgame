@@ -191,6 +191,32 @@ func _run() -> void:
 		check(description.contains("No bonus coins at this level.") if level == 1
 			else description.contains("%d%% chance of %d bonus coins." % [chances[level - 1], coins[level - 1]]),
 			"Level %d accessibility describes its own collection reward" % level)
+	var boss_status: Dictionary = {"ink": 2.0, "freeze": 0.0, "locks": 1}
+	tile.set_boss_status(boss_status, false)
+	check(is_equal_approx(tile._label.modulate.a, 0.06) and is_equal_approx(tile._picture.modulate.a, 0.06)
+		and is_equal_approx(tile._picture_shadow.modulate.a, 0.06),
+		"Boss ink still obscures every part of the learning face")
+	# A caller may clear and reuse its status dictionary before presenting it.
+	boss_status.clear()
+	tile.set_boss_status(boss_status, false)
+	check(tile._boss_status.is_empty() and tile._label.modulate.a == 1.0
+		and tile._picture.modulate.a == 1.0 and tile._picture_shadow.modulate.a == 1.0,
+		"Clearing a reused Boss status restores the learning face")
+	for index in range(60):
+		tile.set_boss_status({}, index % 2 == 0)
+	check(tile._boss_status.is_empty() and tile._label.modulate.a == 1.0,
+		"Repeated clean Boss updates preserve the restored face across motion preferences")
+	tile.size = Vector2.ONE * 96.0
+	tile.set_boss_status({}, true)
+	check(tile._boss_overlay.size == tile.size,
+		"A clean Boss overlay still follows responsive tile size changes")
+	tile.set_completion_hint(true, 0.6, false)
+	tile.set_boss_status({"freeze": 3.0}, false)
+	check(tile.disabled and not tile.completion_hint,
+		"Freezing after clean Boss updates still disables collection and matching feedback")
+	tile.disabled = false
+	tile.set_boss_status({"freeze": 3.0}, false)
+	check(tile.disabled, "An unchanged frozen status still enforces the gameplay control lock")
 	tile.free()
 	print("Word Jelly tile performance: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

@@ -208,9 +208,12 @@ func check_level_badge(view, tier: int, visible: bool, label: String) -> void:
 	check(is_instance_valid(view._header_chest_level) and view._header_chest_level.text == text
 		and badge.get("text", "") == text,
 		label + ": the actual header badge and its snapshot both show " + text)
-	check(is_instance_valid(view._header_chest_level) and view._header_chest_level.is_visible_in_tree() == visible
-		and badge.get("visible", not visible) == visible,
-		label + ": the badge follows gameplay header visibility")
+	var expected_visible: bool = visible and not view._reward_presentation.is_visible_in_tree()
+	check(view._header_chest_host.is_visible_in_tree() == visible,
+		label + ": the gameplay header retains its own visibility during celebration")
+	check(is_instance_valid(view._header_chest_level) and view._header_chest_level.is_visible_in_tree() == expected_visible
+		and badge.get("visible", not expected_visible) == expected_visible,
+		label + ": the badge follows its visible header and yields to the visible chest celebration")
 
 
 func check_queued_finish(mode: String, retained: bool, fail_first_save: bool) -> void:
@@ -222,6 +225,17 @@ func check_queued_finish(mode: String, retained: bool, fail_first_save: bool) ->
 	var room = app._jelly_rewards
 	var old_entry: Dictionary = {}
 	check_level_badge(view, 0, true, label + " initial")
+	if not retained:
+		# Presentation cancellation must restore the ordinary badge without
+		# inventing a model milestone or waiting for the abandoned reveal.
+		view._reward_presentation.enqueue(1, 2, view._reward_texture(1), view._reward_texture(2))
+		view.advance_reward_presentation(Celebration.ARRIVAL_SECONDS + 0.1)
+		check_level_badge(view, 0, true, label + " cancel pending")
+		check(not view._header_chest_level.is_visible_in_tree(), label + ": a visible celebration suppresses the duplicate badge")
+		view._reward_presentation.clear()
+		view._sync_chest_tap()
+		check_level_badge(view, 0, true, label + " canceled presentation")
+		check(view._header_chest_level.is_visible_in_tree(), label + ": canceling the presentation restores the badge immediately")
 	if retained:
 		# Another pending reward can coexist with this in-progress round. Use the
 		# real inventory API so its identity and earlier index are both preserved.

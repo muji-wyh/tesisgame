@@ -66,25 +66,27 @@ Each earned tier keeps its own reveal sound and model-owned progress; presentati
 neither manufactures intermediate chests nor skips a final level. The source
 chest, rays and local flashes remain the same acquired artwork.
 
-An upgrade also shows its real **previous level → new level** beneath the enlarged
-chest, such as **Lv3 → Lv4**. One compact dark-teal strip keeps the old value
-smaller and muted and the new value larger and warm gold. Its values come from
-the committed milestone payload, not the current HUD tier or target-minus-one.
-The strip fades in as the chest reaches its upper destination and leaves with
-the existing return, without extending the performance or pausing play. Each
-queued upgrade retains the just-revealed pair for 450 ms before showing the next
-turn's pair, so a completed level cannot disappear on the same frame as its cue.
-First-chest synthesis does not invent a Lv0 transition. Reduced motion keeps a
-static level pair near the existing HUD chest. Pause, hiding and round cleanup
-hide the same input-transparent presentation.
+An upgrade shows one level above the enlarged chest. It first displays the
+committed previous value, such as **Lv3**, and switches to **Lv4** on the existing
+material-reveal event. A short local glow masks the switch; the new gold number
+settles with three finite glints. The caption reserves space above the acquired
+chest within the viewport rather than sitting beneath it or showing both values
+simultaneously. Values still come from the committed milestone payload, never the
+current HUD tier or target-minus-one. The presentation shares the existing chest
+reveal sound and timeline, without extending the performance or pausing play.
+Each queued upgrade keeps its just-revealed level for 450 ms before showing the
+next turn's current level. First-chest synthesis does not invent a Lv0 transition.
+Reduced motion uses a static chest and single level, clamped below the viewport's
+top edge when required so the number fits above; it omits flash, bounce and glints.
+Pause, hiding and round cleanup hide the same input-transparent presentation.
 
-The connector reuses Paweł Kuna's already acquired Tabler Icons 3.35.0
-`assets/images/ui/controls/chevron-right.svg`, MIT, with unchanged source paths.
-Its original URL and hashes remain in `assets/images/ui/controls/sources.json`
-and its license in `assets/images/ui/LICENSE-Tabler.txt`. The source-scale icon
-review and the actual chest turn were inspected before reuse. This is static
-source artwork with no animation clips; the text, panel and timing are ordinary
-game-authored interface presentation. No new chest, particles or audio is acquired.
+The local light and glints reuse the already acquired Bobardo
+`particles/portal_glow.png` and Kenneth Foldal Moe / Archanor VFX Toon FX 1.52
+`milestone/sparkle.png`, under their recorded Standard Unity Asset Store licenses.
+Both are static textures with game-authored placement and opacity; acquisition,
+source mappings and hashes remain in the records below and `assets/chests/SOURCE.txt`.
+No new chest, particles or audio is acquired. The former Tabler connector is no
+longer drawn in this presentation.
 
 The flight draws on a noninteractive viewport layer, outside gameplay clipping.
 Its source coordinates and actual turned silhouette remain tied to the current

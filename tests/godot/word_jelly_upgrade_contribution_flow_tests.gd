@@ -42,8 +42,14 @@ class Host extends RefCounted:
 class Sound extends RefCounted:
 	var cues: Array[String] = []
 
-	func play_coin_spend() -> void:
+	func play_upgrade_coin_spend() -> void:
 		cues.append("upgrade_coin")
+
+	func interact(_theme: String, _music: bool) -> void:
+		pass
+
+	func set_upgrade_charging(_charging: bool) -> void:
+		pass
 
 	func play_jelly_cue(cue: String) -> void:
 		cues.append(cue)
@@ -55,12 +61,13 @@ class Sound extends RefCounted:
 class CoinFlight extends RefCounted:
 	var balance := 0
 
-	func sync(value: int) -> void:
+	func sync(value: int, _cancel_sound: bool = true) -> void:
 		balance = value
 
 
 class Harness extends Node:
 	var coin_wallet
+	var model := {"theme_id": "spring"}
 	var audio := Sound.new()
 	var _coin_flight := CoinFlight.new()
 	var _page_hidden := false
@@ -125,6 +132,8 @@ func _run() -> void:
 		"Only committed funding reaches the view without disabling the held control")
 	check(campaign._upgrade_state().pending.is_empty() and not campaign._upgrade_state().paid,
 		"A completed contribution clears its temporary paid journal")
+	check(app.refreshes == 0 and app.syncs == 0 and app._coin_flight.balance == 475,
+		"Ordinary receipts update the wallet and upgrade page without refreshing hidden game controls")
 	var saved := Store.new("user://contribution-flow-campaign.cfg", host)
 	check(saved.load_state() and saved.upgrade_state().funded.jelly == 25,
 		"Partial funding survives a fresh store reload")
@@ -158,6 +167,8 @@ func _run() -> void:
 	check(app.coin_wallet.balance == 450 and campaign.store.merged_level() == 2
 		and campaign.store.upgrade_state().funded.jelly == 0 and campaign._last_unlocked == 2,
 		"The exact fifty-coin milestone unlocks Lv2 and resets its next-level funding")
+	check(app.refreshes == 0 and app.syncs == 0,
+		"A held milestone also avoids rebuilding the paused game behind the upgrade page")
 	for frame in range(6):
 		page.advance(0.05)
 	check(app.announcements.is_empty(), "Successful contributions and milestones add no status prose")
@@ -245,6 +256,8 @@ func _run() -> void:
 	check(unpaid.campaign._upgrade_state().retry and unpaid.campaign.upgrades.snapshot().buy.enabled
 		and not unpaid.campaign.upgrades.snapshot().pending.is_empty(),
 		"A reloaded unpaid reservation exposes a usable resume action")
+	unpaid.campaign.upgrades._buy.button_down.emit()
+	unpaid.campaign.upgrades._buy.button_up.emit()
 	unpaid.campaign.upgrades._buy.pressed.emit()
 	check(unpaid.app.coin_wallet.balance == 25 and unpaid.campaign.store.upgrade_state().funded.auto_merge == 25
 		and unpaid.campaign.store.upgrade_state().funded.jelly == 0

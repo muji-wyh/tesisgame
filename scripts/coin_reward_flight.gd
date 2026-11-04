@@ -31,11 +31,12 @@ func _init() -> void:
 	z_index = 85
 
 
-func sync(balance: int) -> void:
+func sync(balance: int, cancel_sound: bool = true) -> void:
 	_events.clear()
 	_debit.clear()
 	_sound_cooldown = 0.0
-	settled.emit()
+	if cancel_sound:
+		settled.emit()
 	_visual_total = balance
 	if is_instance_valid(counter):
 		counter.sync(balance)

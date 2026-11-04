@@ -164,11 +164,24 @@ and partial funding. Their existing Lv2–9 prices remain 50, 100, 200, 350, 550
 then commits funding. A failed final write retains its paid receipt for Retry;
 recovery does not debit it again. Partial funding survives leaving and reloading.
 
-Only a committed pulse advances the gold progress rail and sends the existing
-`gold-coin.png` toward the upgrade. It plays the acquired Kenney RPG Audio
-`handleCoins2` recording through `assets/audio/coins/collect.wav`, with the
-unchanged CC0 license, source record and coin-channel lifecycle above. An
-unsaved contribution has no successful deposit effect or sound.
+Only a committed pulse advances the gold progress rail. No coins fly toward the
+upgrade. The held button instead carries continuous local light and glints,
+while the top-right wallet rolls its count toward the saved balance and lights
+the coin artwork as it decreases. Both envelopes retarget without restarting on
+every receipt. A saved wallet debit plays the acquired Kenney RPG Audio
+`handleCoins2` recording through `assets/audio/coins/collect.wav` at a quieter
+gain on the existing bounded coin pool, with the unchanged CC0 license and
+source record above. A paid receipt whose funding journal needs Retry still
+shows its actual wallet debit; recovery never plays that debit again.
+
+Press starts a separate sustained charging voice using the already acquired
+Kenney RPG Audio `creak1` periodic texture in
+`assets/audio/chest-kenney/charge.wav`. Its creator, CC0 license, acquisition,
+source windows and conversion remain in [Kenney chest audio](chest-kenney-audio.md)
+and its manifest. The same 800 ms WAV loops on one retained voice without
+restarting for each payment. Gain attacks over 80 ms and releases over 70 ms;
+mute, background and shutdown cancel immediately. No new audio asset or source
+animation is claimed.
 
 A saved level milestone adds one local light burst, subject rebound and the
 existing `assets/audio/chest-kenney/reward.wav`: Kenney Interface Sounds
@@ -178,9 +191,11 @@ The acquired Bobardo portal glow and Archanor Toon FX rays/glints retain their
 source mappings and Unity Asset Store licenses in [Jelly fragments](jelly-fragments.md).
 These are integrated production assets with game-authored motion, not new
 acquisitions or source animation clips. Milestones use effects and sound without
-notification copy; levels and exact coin progress remain visible. Reduced motion
-keeps a stationary light accent and the saved progress, without coin flight or
-subject deformation.
+notification copy; levels and exact coin progress remain visible. In normal
+motion a saved level reaches its rail marker within 120 ms before the burst and
+milestone sound start together. Reduced motion keeps a stationary light accent,
+immediate exact saved progress and the decreasing count, without subject
+deformation or traveling glints.
 
 ## Match Hint and word-goal payments
 

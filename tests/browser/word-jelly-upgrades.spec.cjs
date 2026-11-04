@@ -115,7 +115,7 @@ test('a recovered first clear charges Lv2 with retained progress and a fresh pai
   await expect.poll(async () => (await shop(page)).funded).toBe(25);
   const partial = await shop(page);
   expect(partial).toMatchObject({ level: 1, funded: 25, remaining: 25, progress: 0.5,
-    intro: 'guide', error: '', pending: {}, level_up_count: 0 });
+    intro: 'guide', error: '', pending: {}, level_up_count: 0, coin_flights: 0 });
   expect((await wallet(page)).balance).toBe(before - 25);
   expect(await page.evaluate(() => window.jellyUpgradeWrites.wallet)).toBe(1);
 
@@ -202,7 +202,7 @@ test('Auto merge charging migrates independently and recovers its own paid progr
   await expect.poll(async () => (await shop(page)).funding.auto_merge).toBe(25);
   const partial = await shop(page);
   expect(partial).toMatchObject({ kind: 'auto_merge', level: 2, auto_merge_level: 1,
-    funded: 25, remaining: 25, funding: { jelly: 0, auto_merge: 25 }, error: '', pending: {} });
+    funded: 25, remaining: 25, funding: { jelly: 0, auto_merge: 25 }, error: '', pending: {}, coin_flights: 0 });
   expect((await wallet(page)).balance).toBe(1975);
   expect(await page.evaluate(() => window.autoMergeUpgradeWrites.wallet)).toBe(1);
 

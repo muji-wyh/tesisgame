@@ -52,27 +52,36 @@ void fragment() {
 	float glow = smoothstep(0.35, 0.7, completion_strength);
 	vec2 skin_uv = (UV - vec2(0.5)) * (1.0 + glow * 0.32) + vec2(0.5);
 	vec2 sample_uv = skin_uv;
-	sample_uv.x += sin(skin_uv.y * 3.14159265) * sin(beat + skin_uv.y * 3.14159265) * bend;
-	sample_uv.y += sin(skin_uv.x * 3.14159265) * cos(beat + skin_uv.x * 3.14159265) * bend * 0.55;
-	// The crown resists while gravity stretches the acquired lower lobe.
-	// A pinched shoulder preserves volume as the skin extends downwards.
-	float height = clamp((0.890625 - skin_uv.y) / 0.784375, 0.0, 1.0);
-	// Keep lateral pressure inside the acquired texture's transparent margin.
-	float bulge = sin(height * 3.14159265) * preview_pressure * 0.28;
-	sample_uv.x = 0.5 + (sample_uv.x - 0.5) / (1.0 + bulge - preview_pull * smoothstep(0.15, 0.9, height) * 0.42);
-	sample_uv.x -= preview_sway * height * height;
-	sample_uv.y -= preview_pressure * 0.784375 * pow(height, 1.35);
+	// Uniform zero-strength effects leave the acquired paint unchanged.
+	if (bend != 0.0) {
+		sample_uv.x += sin(skin_uv.y * 3.14159265) * sin(beat + skin_uv.y * 3.14159265) * bend;
+		sample_uv.y += sin(skin_uv.x * 3.14159265) * cos(beat + skin_uv.x * 3.14159265) * bend * 0.55;
+	}
+	if (preview_pressure != 0.0 || preview_sway != 0.0 || preview_pull != 0.0) {
+		// The crown resists while gravity stretches the acquired lower lobe.
+		// A pinched shoulder preserves volume as the skin extends downwards.
+		float height = clamp((0.890625 - skin_uv.y) / 0.784375, 0.0, 1.0);
+		// Keep lateral pressure inside the acquired texture's transparent margin.
+		float bulge = sin(height * 3.14159265) * preview_pressure * 0.28;
+		sample_uv.x = 0.5 + (sample_uv.x - 0.5) / (1.0 + bulge - preview_pull * smoothstep(0.15, 0.9, height) * 0.42);
+		sample_uv.x -= preview_sway * height * height;
+		sample_uv.y -= preview_pressure * 0.784375 * pow(height, 1.35);
+	}
 	vec2 local = skin_uv - vec2(0.5);
-	float pressure = exp(-pow(dot(local, vec2(-contact_direction.y, contact_direction.x)) * 4.0, 2.0));
-	sample_uv -= contact_direction * pressure * contact_strength * (contact_match ? 0.025 : -0.02);
+	if (contact_strength != 0.0) {
+		float pressure = exp(-pow(dot(local, vec2(-contact_direction.y, contact_direction.x)) * 4.0, 2.0));
+		sample_uv -= contact_direction * pressure * contact_strength * (contact_match ? 0.025 : -0.02);
+	}
 	vec4 gel = texture(TEXTURE, clamp(sample_uv, vec2(0.0), vec2(1.0)));
 	gel.rgb = palette(gel.rgb);
 	gel.rgb = jelly_source_light(gel.rgb, shape_sdf, sample_uv, surface_size);
-	// A soft sweep lights the acquired paint without moving the learning label.
-	float sweep = 1.0 - smoothstep(0.02, 0.18, abs(sample_uv.x * 0.7 + sample_uv.y * 0.3 - completion_glint));
-	float illumination = mix(0.12 + sweep * 0.42, 0.025 + sweep * 0.52, glow);
-	vec3 sheen_color = mix(vec3(1.0, 0.995, 0.89), vec3(0.98, 1.0, 1.0), glow);
-	gel.rgb = mix(gel.rgb, sheen_color, completion_strength * illumination);
+	if (completion_strength != 0.0) {
+		// A soft sweep lights the acquired paint without moving the learning label.
+		float sweep = 1.0 - smoothstep(0.02, 0.18, abs(sample_uv.x * 0.7 + sample_uv.y * 0.3 - completion_glint));
+		float illumination = mix(0.12 + sweep * 0.42, 0.025 + sweep * 0.52, glow);
+		vec3 sheen_color = mix(vec3(1.0, 0.995, 0.89), vec3(0.98, 1.0, 1.0), glow);
+		gel.rgb = mix(gel.rgb, sheen_color, completion_strength * illumination);
+	}
 	float light_alpha = 0.0;
 	vec3 light_color = vec3(0.0);
 	if (glow > 0.0) {
@@ -96,8 +105,10 @@ void fragment() {
 		light_alpha = exp(-pow(distance / 0.08, 2.0)) * (1.0 - smoothstep(0.1, 0.15, distance))
 			* (crown * 0.95 + shoulder * 0.62) * glow * 0.42;
 	}
-	float gleam = exp(-pow((local.x + 0.22) * 13.0, 2.0) - pow((local.y + 0.14) * 5.0, 2.0));
-	gel.rgb = mix(gel.rgb, vec3(1.0, 0.995, 0.95), gleam * contact_strength * 0.28);
+	if (contact_strength != 0.0) {
+		float gleam = exp(-pow((local.x + 0.22) * 13.0, 2.0) - pow((local.y + 0.14) * 5.0, 2.0));
+		gel.rgb = mix(gel.rgb, vec3(1.0, 0.995, 0.95), gleam * contact_strength * 0.28);
+	}
 	if (rim_strength > 0.0) {
 		// Both edges follow the acquired artwork and deform with its gel surface.
 		float outer = 0.0;

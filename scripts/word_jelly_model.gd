@@ -163,6 +163,9 @@ var _powerup_uses: Dictionary = {"auto_merge": 0, "family_merge": 0}
 var _powerup_ids: Array[int] = []
 var _auto_merge_preview_key: Array = []
 var _auto_merge_preview_cache: Dictionary = {}
+var _powerup_availability_key: Array = []
+var _powerup_availability: bool = false
+var _powerup_vocabulary_revision: int = 0
 var _powerup_purchasing: bool = false
 var _powerup_activating: bool = false
 var _powerup_committing: bool = false
@@ -264,6 +267,8 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_powerup_ids.clear()
 	_auto_merge_preview_key.clear()
 	_auto_merge_preview_cache.clear()
+	_powerup_availability_key.clear()
+	_powerup_availability = false
 	_finish_after_purchase = false
 	_finish_reason = ""
 	_settle_after_purchase = false
@@ -306,6 +311,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 		error = _morphology.error
 		changed.emit()
 		return false
+	_powerup_vocabulary_revision += 1
 	authored_morphology = not analyses.is_empty()
 	_powerup_uses = {"auto_merge": 0, "family_merge": 0}
 	phase = "playing"
@@ -471,6 +477,7 @@ func _sync_challenge_pressure() -> void:
 	if not _morphology.configure(analyses):
 		error = "The next challenge vocabulary cannot be composed: " + _morphology.error
 		return
+	_powerup_vocabulary_revision += 1
 	_sense_resolvers.clear()
 	_words.assign(stage_run.words_for_pressure())
 	_schedule_spawn_interval()
@@ -572,6 +579,7 @@ func replace_stage_words(words: Array, level: int) -> bool:
 	_word_lookup.merge(next_texts, true)
 	_authored_words = authored
 	_morphology = next_morphology
+	_powerup_vocabulary_revision += 1
 	_sense_resolvers.clear()
 	authored_morphology = not analyses.is_empty()
 	_fill_upcoming()
@@ -671,6 +679,42 @@ func powerup_snapshot() -> Dictionary:
 
 
 func can_activate_powerup(kind: String) -> bool:
+	if not POWERUP_PRICES.has(kind) or not _powerup_inputs_ready():
+		return false
+	var key: Array = _powerup_availability_state()
+	if key != _powerup_availability_key:
+		_powerup_availability = not _powerup_pair(false).is_empty()
+		# Keep an isolated key: public board and rule dictionaries can change in place.
+		_powerup_availability_key = key.duplicate(true)
+	return _powerup_availability
+
+
+func _powerup_availability_state() -> Array:
+	# Toolbar availability needs one legal path, not another complete search for
+	# every button on every idle frame. Only settlement boundaries change which
+	# current inputs the planner can use; their intervening age does not.
+	var key: Array = [_generation, merged_level_limit, auto_merge_level, allow_cross_age,
+		fall_speed_scale, authored_morphology, _campaign_level_rules, _growth_pending,
+		_gravity_pending, _dragged_tile_id, _drag_gravity_delays, _powerup_vocabulary_revision,
+		_morphology.get_instance_id(), boss.broken_remaining > EPSILON]
+	for tile: Dictionary in cells:
+		var word: Dictionary = tile.get("word", {})
+		var candidate: Dictionary = tile.get("word_candidate", {})
+		var picture: Dictionary = tile.get("image_word", {})
+		# Keep legal body geometry/composition and word identities, not repeated
+		# artwork/audio/editorial payloads. Vocabulary changes advance the revision.
+		key.append([tile.id, tile.column, tile.row, tile.width, tile.height,
+			tile.get("jelly_kind", "root"), tile.get("merge_level", 1), tile.get("lifted", false),
+			is_settled(tile), tile.get("composition", {}), tile.get("text", ""),
+			tile.get("mass", 1), tile.get("fragments", 0), not word.is_empty(),
+			word.get("id", ""), candidate.get("id", ""), picture.get("id", ""),
+			boss.frozen(int(tile.id)), boss.locks(int(tile.id))])
+	return key
+
+
+func _can_activate_powerup_now(kind: String) -> bool:
+	# Activation and payment always revalidate the real board, independently of
+	# the read-only toolbar cache and its previous advertised availability.
 	return POWERUP_PRICES.has(kind) and _powerup_inputs_ready() and not _powerup_pair(false).is_empty()
 
 
@@ -740,7 +784,7 @@ func auto_merge_preview() -> Dictionary:
 
 
 func activate_powerup(kind: String, selected_id: int = -1) -> bool:
-	if _powerup_activating or not can_activate_powerup(kind):
+	if _powerup_activating or not _can_activate_powerup_now(kind):
 		return false
 	var family: String = family_word_id(selected_id) if kind == "family_merge" else ""
 	if kind == "family_merge" and (family.is_empty() or not boss_interactable(selected_id, false) \
@@ -759,7 +803,7 @@ func activate_powerup(kind: String, selected_id: int = -1) -> bool:
 
 
 func activate_family_merge(word_id: String) -> bool:
-	if not can_activate_powerup("family_merge"):
+	if not _can_activate_powerup_now("family_merge"):
 		return false
 	var plan: Dictionary = authored_completion_plan(false, word_id) if not word_id.is_empty() and _words_by_id.has(word_id) else {}
 	if plan.get("status") != "complete":
