@@ -518,8 +518,15 @@ async function currentSupplyLayout(page) {
 function expectSupplyLayout(state, bounds) {
   const board = state.board_rect, tray = state.preview.rect, area = state.playfield_rect;
   const collect = state.collect_button.rect, paidTools = Object.values(state.powerup_buttons).map(button => button.rect);
+  const fill = state.fill_control.rect;
   const autoMerge = state.powerup_buttons.auto_merge.rect, divider = state.action_divider.rect;
   const scale = Math.max(2 / 3, bounds.scale), tolerance = 0.25 / bounds.scale;
+  const mergeRects = (left, right) => {
+    const x = Math.min(left[0], right[0]), y = Math.min(left[1], right[1]);
+    return [x, y, Math.max(left[0] + left[2], right[0] + right[2]) - x,
+      Math.max(left[1] + left[3], right[1] + right[3]) - y];
+  };
+  const freeArea = mergeRects(fill, collect), paidArea = paidTools.reduce(mergeRects);
   const inside = (rect, parent, label) => {
     expect(rect.every(Number.isFinite), `${label} has finite bounds`).toBe(true);
     expect(rect[2], `${label} has visible width`).toBeGreaterThan(0);
@@ -549,7 +556,7 @@ function expectSupplyLayout(state, bounds) {
     expect(Math.abs(slot.rect[0] + slot.rect[2] / 2 - (board[0] + (index + body.width / 2) * board[2] / state.columns)),
       `Preview ${index} is centered over its reserved well columns`).toBeLessThan(tolerance);
   }
-  const regions = [['well', board], ['supply tray', tray], ['Collect words', collect], ['Action divider', divider],
+  const regions = [['well', board], ['supply tray', tray], ['Fill', fill], ['Collect words', collect], ['Action divider', divider],
     ...Object.entries(state.powerup_buttons).map(([kind, button]) => [kind, button.rect])];
   inside(area, [0, 0, bounds.width, bounds.height], 'Jelly Words playfield');
   for (const [index, [label, rect]] of regions.entries()) {
@@ -560,13 +567,12 @@ function expectSupplyLayout(state, bounds) {
       expect(width <= tolerance || height <= tolerance, `${label} and ${otherLabel} do not overlap`).toBe(true);
     }
   }
-  expect(Math.abs(collect[0] - autoMerge[0]), 'Collect aligns directly above Auto merge').toBeLessThan(tolerance);
+  expect(Math.abs(freeArea[0] - autoMerge[0]), 'Fill and Collect align above Auto merge as one free-control group')
+    .toBeLessThan(tolerance);
   expect(Math.abs(autoMerge[1] - collect[1] - collect[3] - 14 / scale),
     'A fourteen-pixel separator gap keeps Collect adjacent to the paid tools').toBeLessThan(tolerance);
-  const railWidth = Math.max(...paidTools.map(rect => rect[0] + rect[2])) - autoMerge[0];
-  const sideRail = autoMerge[0] >= board[0] + board[2] - tolerance;
-  expect(Math.abs(collect[2] - (sideRail ? railWidth : autoMerge[2])),
-    'Primary Collect spans the complete side rail without covering footer status').toBeLessThan(tolerance);
+  expect(Math.abs(freeArea[2] - paidArea[2]),
+    'Fill and Collect together span the complete paid-control group').toBeLessThan(tolerance);
   expect(state.action_divider.visible, 'The free Collect action has a visible divider from paid tools').toBe(true);
   expect(divider[1], 'The divider stays below Collect').toBeGreaterThanOrEqual(collect[1] + collect[3] - tolerance);
   for (const rect of paidTools) {
@@ -574,12 +580,12 @@ function expectSupplyLayout(state, bounds) {
     expect(divider[0], 'The divider spans each paid tool center').toBeLessThanOrEqual(rect[0] + rect[2] / 2 + tolerance);
     expect(divider[0] + divider[2], 'The divider spans each paid tool center').toBeGreaterThanOrEqual(rect[0] + rect[2] / 2 - tolerance);
   }
-  if (collect[0] >= board[0] + board[2] - tolerance) {
+  if (freeArea[0] >= board[0] + board[2] - tolerance) {
     for (const rect of paidTools) {
-      expect(Math.abs(rect[0] - collect[0]), 'Paid tools share the Collect rail').toBeLessThan(tolerance);
+      expect(Math.abs(rect[0] - freeArea[0]), 'Paid tools share the free-control rail').toBeLessThan(tolerance);
     }
   } else {
-    expect(collect[1], 'Collect remains with the tools below the well on narrow layouts')
+    expect(freeArea[1], 'Fill and Collect remain with the tools below the well on narrow layouts')
       .toBeGreaterThanOrEqual(board[1] + board[3] - tolerance);
     for (const rect of paidTools) {
       expect(rect[1], 'Paid tools remain below the well on narrow layouts')
@@ -607,7 +613,7 @@ function expectSupplyLayout(state, bounds) {
     'Collect words keeps a separate sixteen-pixel gap below Finish').toBeGreaterThanOrEqual(16 / scale - tolerance);
   expect(tray[3] * scale, 'The supply tray retains a forty-four-pixel target height within viewport rounding').toBeGreaterThanOrEqual(43.75);
   expect(state.finish.rect[3] * scale, 'Finish retains a forty-four-pixel target height within viewport rounding').toBeGreaterThanOrEqual(43.75);
-  for (const [label, rect] of [['Collect words', collect],
+  for (const [label, rect] of [['Fill', fill], ['Collect words', collect],
     ...Object.entries(state.powerup_buttons).map(([kind, button]) => [kind, button.rect])]) {
     expect(rect[2] * scale, `${label} retains a forty-four-pixel target width within viewport rounding`).toBeGreaterThanOrEqual(43.75);
     expect(rect[3] * scale, `${label} retains a forty-four-pixel target height within viewport rounding`).toBeGreaterThanOrEqual(43.75);
@@ -705,7 +711,7 @@ async function observeArrival(page, before) {
   }, before);
 }
 
-async function verifyArrival(page, info, before, label) {
+async function verifyArrival(page, info, before, label, { continuous = false } = {}) {
   await expect.poll(async () => {
     const state = await jelly(page);
     return before.upcoming.filter(root => root.id).every(root => state.tiles.some(tile => tile.id === root.id && tile.settled));
@@ -771,11 +777,20 @@ async function verifyArrival(page, info, before, label) {
   if (crossLanePairs.length) expect(timeline.some(frame => crossLanePairs.some(({ early, late }) =>
     travel(frame, early) > pitch * 0.15 && Math.abs(travel(frame, late)) < 1)),
   `${label}: a later column visibly falls while an earlier column still waits at the tray`).toBe(true);
-  if (arrivals.length > 1) expect(timeline.some(frame => arrivals.some(early => travel(frame, early) > pitch * 0.25 &&
-    frame.preview[early.slot].visible && frame.preview[early.slot].id !== early.id) &&
-    arrivals.some(late => Math.abs(travel(frame, late)) < 1 && !frame.preview[late.slot].visible)),
-  `${label}: cleared preview slots refill while other departing roots still wait`).toBe(true);
-  expect(after.generated_tiles).toBe(before.generated_tiles + arrivals.length);
+  if (continuous) {
+    expect(timeline.every(frame => frame.tiles.every(tile =>
+      !frame.preview.some(slot => slot.visible && slot.id === tile.id))),
+    `${label}: departing tracked roots are never duplicated in the visible preview`).toBe(true);
+    expect(after.generated_tiles).toBeGreaterThanOrEqual(before.generated_tiles + arrivals.length);
+    expect(after.tiles.reduce((sum, tile) => sum + tile.width * tile.height, 0),
+      `${label}: continuous supply keeps occupied footprints within board capacity`).toBeLessThanOrEqual(after.rows * after.columns);
+  } else {
+    if (arrivals.length > 1) expect(timeline.some(frame => arrivals.some(early => travel(frame, early) > pitch * 0.25 &&
+      frame.preview[early.slot].visible && frame.preview[early.slot].id !== early.id) &&
+      arrivals.some(late => Math.abs(travel(frame, late)) < 1 && !frame.preview[late.slot].visible)),
+    `${label}: cleared preview slots refill while other departing roots still wait`).toBe(true);
+    expect(after.generated_tiles).toBe(before.generated_tiles + arrivals.length);
+  }
   expect(after.merged_count).toBe(before.merged_count);
   expect(after.cleared_pairs).toBe(before.cleared_pairs);
   expect(after.collected_coins).toBe(before.collected_coins);
@@ -795,7 +810,7 @@ async function verifyArrival(page, info, before, label) {
 
 test('manual and automatic preview packets naturally fall into the well', async ({ page }, info) => {
   test.setTimeout(120000);
-  const errors = await startWordJelly(page), manual = await jelly(page);
+  const errors = await startWordJelly(page, { challenge: false }), manual = await jelly(page);
   expectSupplyLayout(manual, await metrics(page));
   expectMixedRootPacket(manual.tiles, 'Starter supply');
   expectMixedRootPacket(manual.upcoming, 'Manual supply');
@@ -810,7 +825,8 @@ test('manual and automatic preview packets naturally fall into the well', async 
   const automatic = await jelly(page);
   expectMixedRootPacket(automatic.upcoming, 'Automatic supply');
   await observeArrival(page, automatic);
-  await verifyArrival(page, info, automatic, 'automatic-supply');
+  await pressRect(page, automatic.fill_control.rect);
+  await verifyArrival(page, info, automatic, 'automatic-supply', { continuous: true });
   expect(errors).toEqual([]);
 });
 
@@ -944,7 +960,7 @@ test('blocked preview lanes retain their roots while open columns release and re
 
 test('collecting a lower word makes the stack above it visibly fall onto support', async ({ page }, info) => {
   test.setTimeout(180000);
-  const errors = await startWordJelly(page, { age: 3 }), opening = await jelly(page), startingWallet = await wallet(page);
+  const errors = await startWordJelly(page, { age: 3, challenge: false }), opening = await jelly(page), startingWallet = await wallet(page);
   const supportedStack = (state, support) => {
     return state.tiles.filter(tile => tile.mass === 1 && tile.settled && !tile.placement_locked &&
       tile.row + tile.height === support.row && tile.column < support.column + support.width &&
