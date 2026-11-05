@@ -1,7 +1,6 @@
 extends SceneTree
 
 const StatePlayer = preload("res://scripts/chest_asset_states.gd")
-const SpriteStates = preload("res://scripts/chest_sprite_states.gd")
 const CATALOG_PATH: String = "res://assets/chests/catalog/chest-states.json"
 const CAPTURE_PATH: String = "res://build/qa/chest-asset-states"
 const STATES: Array[String] = ["closed", "open", "treasure", "magic"]
@@ -9,7 +8,6 @@ const STATES: Array[String] = ["closed", "open", "treasure", "magic"]
 var checks: int = 0
 var failures: int = 0
 var _variants: Array = []
-var _sprite_variants: Array = []
 
 
 func _initialize() -> void:
@@ -36,15 +34,21 @@ func _run() -> void:
 		return
 	_variants = catalog.variants.filter(func(row: Dictionary) -> bool:
 		return str(row.get("asset_type", "")) == "model")
-	check(_variants.size() == 21, "All twenty-one acquired chest models have reusable state scenes")
+	var level_catalog: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://assets/chests/catalog/chest-levels.json"))
+	var ranked_ids: Dictionary = {}
+	if level_catalog is Dictionary:
+		for row: Dictionary in level_catalog.get("levels", []):
+			if str(row.get("asset_type", "")) == "model":
+				ranked_ids[str(row.asset_id)] = true
+	var expected_models: int = ranked_ids.size()
+	check(expected_models == 28 and _variants.size() == expected_models
+		and int(catalog.get("variant_count", 0)) == expected_models
+		and catalog.variants.size() == expected_models,
+		"Every ranked chest model has a reusable state scene")
 	for row: Dictionary in _variants:
+		check(str(row.model).begins_with("assets/chests/models/atelier/") and ranked_ids.has(str(row.id)),
+			"Every active state scene uses a retained Atelier identity rather than an old chest source")
 		_check_model(row)
-	_sprite_variants = catalog.variants.filter(func(row: Dictionary) -> bool:
-		return str(row.get("asset_type", "")) == "sprites")
-	if not OS.get_cmdline_user_args().has("--models-only"):
-		check(_sprite_variants.size() == 3, "All three legacy sprite families have complete state compositions")
-		for row: Dictionary in _sprite_variants:
-			_check_sprite(row)
 	_check_reconfiguration()
 	if OS.get_cmdline_user_args().has("--capture") and failures == 0:
 		await _capture_states()
@@ -54,6 +58,8 @@ func _run() -> void:
 
 func _check_model(row: Dictionary) -> void:
 	var id: String = str(row.id)
+	check(FileAccess.get_sha256(_resource_path(str(row.model))) == str(row.get("model_sha256", "")),
+		id + " uses the exact cataloged source bytes")
 	var scene_path: String = _resource_path(str(row.get("scene", "")))
 	check(ResourceLoader.exists(scene_path, "PackedScene"), id + " has a sibling native state scene")
 	if not ResourceLoader.exists(scene_path, "PackedScene"):
@@ -121,45 +127,6 @@ func _source_pose(player: Node3D) -> Array:
 	if source != null:
 		_collect_pose(source, result)
 	return result
-
-
-func _check_sprite(row: Dictionary) -> void:
-	var id: String = str(row.id)
-	var scene_path: String = _resource_path(str(row.get("scene", "")))
-	check(ResourceLoader.exists(scene_path, "PackedScene"), id + " has a sibling native sprite state scene")
-	if not ResourceLoader.exists(scene_path, "PackedScene"):
-		return
-	var scene := load(scene_path) as PackedScene
-	var sprite: Sprite2D = scene.instantiate() as Sprite2D
-	root.add_child(sprite)
-	check(sprite.get_script() == SpriteStates, id + " scene uses the source image state loader")
-	check(bool(sprite.debug_state().configured), id + " configures all four real illustrations: " + sprite.last_error)
-	var hashes: Dictionary = {}
-	for state: String in STATES:
-		check(sprite.set_state(state), id + " displays " + state)
-		var info: Dictionary = sprite.debug_state()
-		check(str(info.state) == state and str(info.texture) == _resource_path(str(row.states[state])),
-			id + " displays the exact cataloged source-derived " + state + " texture")
-		check(info.dimensions == Vector2(1024, 1024), id + " preserves the shared 1024-pixel framing")
-		if sprite.texture == null:
-			continue
-		var image: Image = sprite.texture.get_image()
-		check(image != null and not image.is_empty(), id + " " + state + " decodes in native Godot")
-		if image == null or image.is_empty():
-			continue
-		image.convert(Image.FORMAT_RGBA8)
-		check(_clear_border(image), id + " " + state + " retains transparent stage padding")
-		var digest: String = image.get_data().hex_encode().sha256_text()
-		check(not hashes.has(digest), id + " " + state + " contains distinct artwork")
-		hashes[digest] = state
-		var selected: Texture2D = sprite.texture
-		sprite.set_state("closed")
-		sprite.set_state(state)
-		check(sprite.texture == selected, id + " repeats " + state + " without changing the source illustration")
-	check(not sprite.set_state("unknown"), id + " rejects unknown state images")
-	check(not sprite.configure("missing-chest") and sprite.texture == null,
-		id + " clears stale artwork when the requested asset is missing")
-	sprite.free()
 
 
 func _collect_pose(node: Node, result: Array) -> void:
@@ -265,38 +232,11 @@ func _capture_states() -> void:
 		strip.save_png(CAPTURE_PATH + "/" + str(row.id) + ".png")
 		strips.append(strip)
 		rows.append({"id": row.id, "states": STATES, "render_sha256": image_hashes,
-			"source_model": row.model, "scene": row.scene, "camera_size": camera.size})
+			"source_model": row.model, "sha256": FileAccess.get_sha256(_resource_path(str(row.model))),
+			"bytes": FileAccess.open(_resource_path(str(row.model)), FileAccess.READ).get_length(),
+			"scene": row.scene, "camera_size": camera.size,
+			"capture": str(row.id) + ".png"})
 		player.free()
-	var sprite_rows: Array = []
-	if not OS.get_cmdline_user_args().has("--models-only"):
-		for row: Dictionary in _sprite_variants:
-			var sprite := SpriteStates.new()
-			viewport.add_child(sprite)
-			check(sprite.configure(str(row.id)), str(row.id) + " configures for native sprite capture")
-			sprite.position = Vector2(192, 192)
-			sprite.scale = Vector2.ONE * (360.0 / 1024.0)
-			var strip := Image.create_empty(1536, 384, false, Image.FORMAT_RGBA8)
-			var image_hashes: Array[String] = []
-			for index in range(STATES.size()):
-				sprite.set_state(STATES[index])
-				await process_frame
-				await RenderingServer.frame_post_draw
-				var image: Image = viewport.get_texture().get_image()
-				check(image != null and not image.is_empty(), str(row.id) + " renders native " + STATES[index])
-				if image == null or image.is_empty():
-					continue
-				image.convert(Image.FORMAT_RGBA8)
-				strip.blit_rect(image, Rect2i(0, 0, 384, 384), Vector2i(index * 384, 0))
-				image_hashes.append(image.get_data().hex_encode().sha256_text())
-				check(_clear_border(image), str(row.id) + " " + STATES[index] + " clears the native 2D frame")
-			check(image_hashes.size() == 4 and image_hashes[1] != image_hashes[2]
-				and image_hashes[1] != image_hashes[3] and image_hashes[2] != image_hashes[3],
-				str(row.id) + " Open, Treasure and Magic render distinct native 2D pixels")
-			strip.save_png(CAPTURE_PATH + "/" + str(row.id) + ".png")
-			strips.append(strip)
-			sprite_rows.append({"id": row.id, "states": STATES, "render_sha256": image_hashes,
-				"source_images": row.states, "scene": row.scene})
-			sprite.free()
 	var contact := Image.create_empty(1536, strips.size() * 384, false, Image.FORMAT_RGBA8)
 	for index in range(strips.size()):
 		contact.blit_rect(strips[index], Rect2i(0, 0, 1536, 384), Vector2i(0, index * 384))
@@ -304,7 +244,11 @@ func _capture_states() -> void:
 	contact.save_png(CAPTURE_PATH + "/all-asset-states.png")
 	var file := FileAccess.open(CAPTURE_PATH + "/capture-report.json", FileAccess.WRITE)
 	file.store_string(JSON.stringify({"renderer": RenderingServer.get_video_adapter_name(),
-		"states": STATES, "models": rows, "sprites": sprite_rows}, "\t") + "\n")
+		"godot": Engine.get_version_info().string, "display": DisplayServer.get_name(),
+		"rendering_method": RenderingServer.get_current_rendering_method(),
+		"checks": checks, "failures": failures, "passed": failures == 0,
+		"capture_root": ProjectSettings.globalize_path(CAPTURE_PATH),
+		"states": STATES, "models": rows, "sprites": []}, "\t") + "\n")
 	viewport.free()
 
 

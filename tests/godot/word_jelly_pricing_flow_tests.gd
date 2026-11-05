@@ -129,29 +129,30 @@ func _run() -> void:
 		app.free()
 		quit(1)
 		return
-	check(cat_button.snapshot().price == 150 and dog_button.snapshot().price == 50
+	check(cat_button.snapshot().price == 75 and dog_button.snapshot().price == 25
 		and not cat_button.disabled and not dog_button.disabled,
-		"The larger legal family advertises 150 coins while a single root-picture reduction advertises 50")
-	view.coin_balance = func() -> int: return 100
+		"The larger legal family advertises 75 coins while a single root-picture reduction advertises 25")
+	view.coin_balance = func() -> int: return 50
 	view._refresh_controls()
 	check(not cat_button.snapshot().affordable and dog_button.snapshot().affordable
 		and not cat_button.disabled and not dog_button.disabled,
 		"One wallet balance computes affordability separately while preserving insufficient-funds feedback")
 	view.coin_balance = func() -> int: return app.coin_wallet.balance
-	for item: Dictionary in [{"level": 1, "price": 200}, {"level": 2, "price": 250}, {"level": 9, "price": 600}]:
-		model.auto_merge_level = int(item.level)
+	for level: int in [1, 2, 9]:
+		model.auto_merge_level = level
 		view._refresh_controls()
-		check(view.powerup_buttons.auto_merge.snapshot().price == int(item.price)
-			and model.powerup_price("auto_merge") == int(item.price),
-			"The visible Auto merge quote follows its actual owned level")
+		var reduction: int = int(model.auto_merge_preview().reduction_count)
+		check(reduction > 0 and view.powerup_buttons.auto_merge.snapshot().price == 25 * reduction
+			and model.powerup_price("auto_merge") == 25 * reduction,
+			"The visible Auto merge quote charges actual useful quantity within its owned capacity")
 	model.auto_merge_level = 1
 	view._refresh_controls()
 	var payments: Array[Dictionary] = []
 	view.purchase_powerup = func(event_id: String, kind: String, price: int) -> Dictionary:
 		var before: int = app.coin_wallet.balance
-		check(model._powerup_purchasing and price == 150 and kind == "family_merge",
+		check(model._powerup_purchasing and price == 75 and kind == "family_merge",
 			"The chosen card captures its quantity price before the durable host callback locks the board")
-		var wrong_price: Dictionary = app._purchase_word_jelly_powerup(event_id, kind, 50)
+		var wrong_price: Dictionary = app._purchase_word_jelly_powerup(event_id, kind, 25)
 		var wrong_receipt: Dictionary = app._purchase_word_jelly_powerup(event_id + ":stale", kind, price)
 		check(not bool(wrong_price.get("ok", false)) and not bool(wrong_receipt.get("ok", false))
 			and app.coin_wallet.balance == before,
@@ -162,22 +163,22 @@ func _run() -> void:
 	var receipts: int = app.coin_wallet._receipts.size()
 	cat_button.pressed.emit()
 	check(payments.size() == 1 and bool(payments[0].get("ok", false)) and model.powerup_active()
-		and app.coin_wallet.balance == 850 and app.coin_wallet._receipts.size() == receipts + 1,
-		"The actual goal activation debits its displayed 150 coins through the production host exactly once")
-	check(cat_button.snapshot().spent_coins == 150 and cat_button.snapshot().price == 225
-		and app._coin_flight.snapshot().debit_amount == 150 and app._coin_counter.target == 850,
+		and app.coin_wallet.balance == 925 and app.coin_wallet._receipts.size() == receipts + 1,
+		"The actual goal activation debits its displayed 75 coins through the production host exactly once")
+	check(cat_button.snapshot().spent_coins == 75 and cat_button.snapshot().price == 150
+		and app._coin_flight.snapshot().debit_amount == 75 and app._coin_counter.target == 925,
 		"Paid feedback retains the exact debit while the cached busy quantity uses the next successful-use tier")
 	var receipt: String = str(model.powerup_snapshot().receipt_id)
-	var mismatch: Dictionary = app._purchase_word_jelly_powerup(receipt, "family_merge", 225)
-	var duplicate: Dictionary = app._purchase_word_jelly_powerup(receipt, "family_merge", 150)
+	var mismatch: Dictionary = app._purchase_word_jelly_powerup(receipt, "family_merge", 150)
+	var duplicate: Dictionary = app._purchase_word_jelly_powerup(receipt, "family_merge", 75)
 	check(not bool(mismatch.get("ok", false)) and bool(duplicate.get("ok", false))
-		and bool(duplicate.get("duplicate", false)) and app.coin_wallet.balance == 850
+		and bool(duplicate.get("duplicate", false)) and app.coin_wallet.balance == 925
 		and app.coin_wallet._receipts.size() == receipts + 1,
 		"An immutable quantity-priced receipt rejects the new quote and accepts only its original exact duplicate")
 	model.finish_powerup()
 	view._refresh_controls()
-	check(model.cells.size() == 3 and cat_button.disabled and cat_button.snapshot().price == 75
-		and not dog_button.disabled and dog_button.snapshot().price == 75,
+	check(model.cells.size() == 3 and cat_button.disabled and cat_button.snapshot().price == 50
+		and not dog_button.disabled and dog_button.snapshot().price == 50,
 		"After settlement each goal recomputes its legal remaining reduction without retaining an expensive stale quote")
 	view.purchase_powerup = Callable()
 	app.free()

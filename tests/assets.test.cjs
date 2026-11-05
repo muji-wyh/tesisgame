@@ -89,49 +89,29 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   const imports = ['chests', 'images'].flatMap(group => fs.readdirSync(path.join(root, 'assets', group), {
     recursive: true
   }).filter(name => name.endsWith('.import')).map(name => path.join(root, 'assets', group, name)));
-  const chestManifest = JSON.parse(fs.readFileSync(path.join(root, 'assets/chests/catalog/licensed-models.json'), 'utf8'));
-  const chestModels = Object.values(chestManifest.styles).map(style => style.model);
-  const cc0Manifest = JSON.parse(fs.readFileSync(path.join(root, 'assets/chests/catalog/cc0-sources.json'), 'utf8'));
-  const cc0Models = cc0Manifest.files.filter(file => file.kind === 'model').map(file => file.path);
-  const polishedModels = JSON.parse(fs.readFileSync(path.join(root, 'assets/chests/catalog/cc0-models.json'), 'utf8'))
-    .models.map(model => model.file);
+  const chestManifest = JSON.parse(fs.readFileSync(path.join(root, 'assets/chests/catalog/gameplay-chests.json'), 'utf8'));
+  const chestModels = [...new Set(Object.values(chestManifest.styles).map(style => style.model))];
   const atelierModels = JSON.parse(fs.readFileSync(path.join(root, 'assets/chests/catalog/atelier.json'), 'utf8'))
     .models.map(model => model.model);
   const stateAssets = JSON.parse(fs.readFileSync(path.join(root, 'assets/chests/catalog/chest-state-assets.json'), 'utf8'));
-  const spriteStates = JSON.parse(fs.readFileSync(path.join(root, 'assets/chests/catalog/chest-sprite-states.json'), 'utf8'));
   const stateModels = stateAssets.assets.filter(asset => asset.kind === 'glb').map(asset => asset.path);
   const stateModelImages = stateModels.flatMap(filename => embeddedModelImages(filename, readModelContainer(path.join(root, filename))));
   const stateImages = stateAssets.assets.filter(asset => asset.kind === 'png').map(asset => asset.path);
-  const stateImports = new Set([...stateImages, ...stateModelImages.map(image => image.path), ...spriteStates.files.map(file => file.path)]
+  const stateImports = new Set([...stateImages, ...stateModelImages.map(image => image.path)]
     .map(filename => path.join(root, filename + '.import')));
-  assert.equal(new Set(chestModels).size, 5, 'The five added chest designs use separate live models');
+  assert.equal(chestModels.length, 28, 'The selected collection has 28 distinct source models');
+  assert.deepEqual(chestModels.slice().sort(), atelierModels.slice().sort(),
+    'Gameplay uses the exact published Atelier model collection');
+  assert.equal(chestManifest.max_tier, 99);
   assert.ok(imports.every(filename => !filename.startsWith(path.join(root, 'assets/chests/downloaded') + path.sep)),
     'Retired 320-pixel opening frames are not imported into the game');
   const modelImports = imports.filter(filename => filename.endsWith('.glb.import'));
-  assert.deepEqual(modelImports.sort(), [...chestModels, ...cc0Models, ...polishedModels, ...atelierModels, ...stateModels]
+  assert.deepEqual(modelImports.sort(), [...chestModels, ...stateModels]
     .map(filename => path.join(root, filename + '.import')).sort());
   for (const filename of modelImports) {
     const metadata = fs.readFileSync(filename, 'utf8');
     assert.match(metadata, /^type="PackedScene"$/m, filename);
     assert.match(metadata, /^importer="scene"$/m, filename);
-  }
-  const modelImages = chestModels.flatMap(filename => embeddedModelImages(filename, readModelContainer(path.join(root, filename))));
-  const modelTextureImports = imports.filter(filename => !filename.endsWith('.glb.import')
-    && filename.startsWith(path.join(root, 'assets/chests/models/licensed') + path.sep));
-  assert.deepEqual(modelTextureImports.sort(), modelImages.map(image => path.join(root, image.path + '.import')).sort(),
-    'Every imported model texture comes from an embedded source image');
-  for (const image of modelImages) {
-    const filename = path.join(root, image.path);
-    const bytes = fs.readFileSync(filename);
-    assert.equal(sha256(bytes), sha256(image.bytes), `${image.path} preserves all source texture bytes`);
-    const dimensions = imageDimensions(bytes);
-    assert.deepEqual(dimensions, imageDimensions(image.bytes), `${image.path} preserves source resolution`);
-    assert.ok(dimensions.width >= 512 && dimensions.height >= 512, `${image.path} retains detailed source material maps`);
-    const metadata = fs.readFileSync(filename + '.import', 'utf8');
-    assert.match(metadata, /^compress\/mode=1$/m, filename);
-    assert.match(metadata, /^compress\/lossy_quality=0\.85$/m, filename);
-    assert.match(metadata, /^process\/size_limit=0$/m, filename);
-    assert.match(metadata, /^mipmaps\/generate=true$/m, `${image.path} retains mipmaps for stable 3D sampling`);
   }
   const atelierImages = atelierModels.flatMap(filename => embeddedModelImages(filename, readModelContainer(path.join(root, filename))));
   const atelierTextureImports = imports.filter(filename => !filename.endsWith('.glb.import')
@@ -141,6 +121,8 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   for (const image of atelierImages) {
     assert.deepEqual(fs.readFileSync(path.join(root, image.path)), image.bytes,
       `${image.path} preserves the exact embedded runtime texture bytes`);
+    assert.deepEqual(imageDimensions(fs.readFileSync(path.join(root, image.path))), imageDimensions(image.bytes),
+      `${image.path} preserves the source material resolution`);
     const metadata = fs.readFileSync(path.join(root, image.path + '.import'), 'utf8');
     assert.match(metadata, /^compress\/mode=1$/m, image.path);
     assert.match(metadata, /^compress\/lossy_quality=0\.85$/m, image.path);
@@ -148,18 +130,11 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     assert.match(metadata, /^mipmaps\/generate=true$/m, image.path);
   }
   const textureImports = imports.filter(filename => !filename.endsWith('.glb.import')
-    && !filename.startsWith(path.join(root, 'assets/chests/models/licensed') + path.sep)
     && !filename.startsWith(path.join(root, 'assets/chests/models/atelier') + path.sep));
-  const cc0Images = [...cc0Models, ...polishedModels].flatMap(filename => {
-    const model = readModelContainer(path.join(root, filename));
-    return model.gltf.images?.some(image => Number.isInteger(image.bufferView))
-      ? embeddedModelImages(filename, model) : [];
-  });
-  for (const image of cc0Images) assert.deepEqual(fs.readFileSync(path.join(root, image.path)), image.bytes,
-    `${image.path} retains the original embedded CC0 texture bytes`);
-  const cc0Textures = [...cc0Manifest.files.filter(file => file.kind === 'texture').map(file => file.path),
-    ...cc0Images.map(image => image.path)];
-  const cc0EmbeddedImports = new Set([...cc0Images, ...stateModelImages].map(image => path.join(root, image.path + '.import')));
+  assert.ok(imports.every(filename => !['sprites', 'sources/cc0', 'models/cc0', 'models/licensed']
+    .some(directory => filename.startsWith(path.join(root, 'assets/chests', directory) + path.sep))),
+    'Retired chest sprites, models and ornament sources have no live imports');
+  const treasureTextureImports = new Set(stateModelImages.map(image => path.join(root, image.path + '.import')));
   for (const image of stateModelImages) assert.deepEqual(fs.readFileSync(path.join(root, image.path)), image.bytes,
     `${image.path} retains the original acquired treasure material bytes`);
   const campaignArt = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/jelly-campaign/sources.json'), 'utf8'));
@@ -182,14 +157,15 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     'assets/images/ui/modes/microphone.webp',
     'assets/images/ui/jelly-powerups/auto-merge-wand.svg',
     ...powerupArt.assets.map(image => image.file),
-    ...cc0Textures,
+    'assets/chests/shared/ui/chest.png',
+    'assets/chests/shared/ui/chest-open.png',
     ...campaignArt.images.map(image => `assets/images/jelly-campaign/${image.path}`),
     ...mapArt.images.map(image => `assets/images/ui/jelly-map/${image.file}`),
     ...[...goalArt.assets, ...goalArt.shared_illustrations].map(image => image.file)
   ];
   const addedImports = new Set(addedArtwork.map(filename => path.join(root, filename + '.import')));
-  assert.equal(addedImports.size, 42,
-    'Scenery, Home previews, mastery, tools, CC0 model atlases, campaign and goal artwork have separate imports');
+  assert.equal(addedImports.size, 35,
+    'Scenery, Home previews, mastery, tools, matched chest portraits, campaign and goal artwork have separate imports');
   assert.deepEqual(textureImports.filter(filename => addedImports.has(filename)).sort(), [...addedImports].sort());
   for (const filename of addedArtwork) assert.ok(fs.existsSync(path.join(root, filename)), filename);
   const professionalPreviews = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/professional-themes.json'), 'utf8')).previews;
@@ -233,11 +209,22 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   assert.equal(careerImports.size, 100, 'Twenty career wardrobes retain five source atlases each');
   assert.deepEqual(textureImports.filter(filename => filename.startsWith(path.join(root, 'assets/images/mascots/professional') + path.sep)).sort(),
     [...careerImports].sort(), 'Career imports match the existing wardrobe catalog exactly');
+  const levelEffects = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/jelly-level-fx/sources.json'), 'utf8'));
+  assert.equal(levelEffects.atlas.path, 'assets/images/jelly-level-fx/atlas.png');
+  const levelEffectBytes = fs.readFileSync(path.join(root, levelEffects.atlas.path));
+  assert.equal(sha256(levelEffectBytes), levelEffects.atlas.sha256,
+    'The merged Jelly effect atlas preserves its inspected source composition');
+  assert.deepEqual(imageDimensions(levelEffectBytes), {
+    width: levelEffects.atlas.dimensions[0], height: levelEffects.atlas.dimensions[1]
+  }, 'The merged Jelly effect atlas retains every source frame at its recorded resolution');
+  const levelEffectImports = new Set([path.join(root, levelEffects.atlas.path + '.import')]);
+  assert.deepEqual(textureImports.filter(filename => filename.startsWith(path.join(root, 'assets/images/jelly-level-fx') + path.sep)),
+    [...levelEffectImports], 'All nine merged levels share one lossless effect atlas');
   // Preserved imports, vocabulary motion atlases, Baby Pip sheets and acquired reward textures.
   assert.deepEqual(textureImports.filter(filename => stateImports.has(filename)).sort(), [...stateImports].sort(),
     'Sourced state artwork has an exact cataloged set of texture imports');
-  assert.equal(textureImports.filter(filename => !addedImports.has(filename) && !reviewedImports.has(filename) && !controlImports.has(filename) && !careerImports.has(filename) && !stateImports.has(filename)).length,
-    2862 + 1277 + 5 + 3);
+  assert.equal(textureImports.filter(filename => !addedImports.has(filename) && !reviewedImports.has(filename) && !controlImports.has(filename) && !careerImports.has(filename) && !stateImports.has(filename) && !levelEffectImports.has(filename)).length,
+    4115 + 6 + 3);
   const jellyMaterials = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/jelly-material.json'), 'utf8'));
   const materialImports = new Set(jellyMaterials.images.map(file => path.join(root, file.import)));
   assert.equal(materialImports.size, 4);
@@ -258,7 +245,7 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
       assert.match(metadata, /^compress\/mode=0$/m, filename);
       assert.match(metadata, /^process\/fix_alpha_border=false$/m, filename);
       assert.match(metadata, /^process\/premult_alpha=false$/m, filename);
-    } else if (rewardImports.has(filename) || pipImports.has(filename) || careerImports.has(filename)) {
+    } else if (rewardImports.has(filename) || pipImports.has(filename) || careerImports.has(filename) || levelEffectImports.has(filename)) {
       assert.match(metadata, /^compress\/mode=0$/m, filename);
       assert.match(metadata, /^process\/premult_alpha=false$/m, filename);
     } else {
@@ -266,7 +253,7 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     }
     if (!pipImports.has(filename) && !careerImports.has(filename)) assert.match(metadata, /^compress\/lossy_quality=0\.85$/m, filename);
     assert.match(metadata, /^process\/size_limit=0$/m, filename);
-    assert.match(metadata, cc0EmbeddedImports.has(filename) ? /^mipmaps\/generate=true$/m
+    assert.match(metadata, treasureTextureImports.has(filename) ? /^mipmaps\/generate=true$/m
       : /^mipmaps\/generate=false$/m, filename);
   }
 });

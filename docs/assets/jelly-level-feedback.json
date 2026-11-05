@@ -86,7 +86,7 @@
       "source_path": "Modern 2D Animated Chests Pack_FREE Demo 1.0.2/Particles/Textures/portal_glow.png",
       "license": "Standard Unity Asset Store EULA",
       "license_url": "https://unity.com/legal/as-terms",
-      "source_record": "assets/chests/catalog/sprites.json",
+      "source_record": "assets/chests/sources/sprites/SOURCE.txt",
       "sha256": "bd68c67e5db6347f12237150c84d6e83055480b11a37906a0d140d3e2294a17c",
       "status": "Previously acquired and integrated texture, inspected and reused",
       "animations": "Static authored wisp texture; collection animation authored in the game"

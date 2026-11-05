@@ -1,5 +1,7 @@
 extends RefCounted
 
+const ChestTiers = preload("res://scripts/chest_tier_catalog.gd")
+
 const GAME_NAME: String = "Pip's world"
 const PIECES_PER_MEDAL: int = 3
 const AGE_BANDS: Array[Dictionary] = [
@@ -375,23 +377,21 @@ func load_all() -> bool:
 			if ResourceLoader.exists("res://" + reviewed_image):
 				word.image = reviewed_image
 				word.art_key = "lv3/" + str(word.id)
-	value = _read_json("res://assets/chests/catalog/sprites.json")
-	if not error.is_empty():
+	value = ChestTiers.manifest()
+	if value.is_empty():
+		error = ChestTiers.error()
 		return false
-	if not value is Dictionary or value.get("version") != 1:
+	if value.get("version") != 1:
 		error = "The chest artwork manifest is missing or unsupported."
 		return false
 	if not value.get("styles") is Dictionary or not value.get("particles") is Dictionary:
 		error = "The chest artwork manifest is incomplete."
 		return false
-	for style in ["royal", "energy", "crystal"]:
+	for style in ["royal", "energy", "harvest", "crystal", "tide", "nebula", "bramble", "bonbon"]:
 		if not value.styles.get(style) is Dictionary:
 			error = "The " + style + " chest is missing."
 			return false
-	if not value.styles.crystal.get("parts") is Array or value.styles.crystal.parts.size() != 9:
-		error = "The Crystal chest needs all nine pieces."
-		return false
-	if not value.get("files") is Array or value.files.size() != 14:
+	if not value.get("files") is Array or value.files.is_empty():
 		error = "The chest artwork import is incomplete."
 		return false
 	for file in value.files:
@@ -405,28 +405,27 @@ func load_all() -> bool:
 		if not ResourceLoader.exists("res://" + path):
 			error = "Could not load chest artwork. Please rebuild the game."
 			return false
-	var downloaded: Variant = _read_json("res://assets/chests/catalog/licensed-models.json")
-	if not error.is_empty():
-		return false
-	if not downloaded is Dictionary or downloaded.get("version") != 2 or not downloaded.get("styles") is Dictionary:
-		error = "The downloaded chest artwork manifest is missing or unsupported."
-		return false
-	for style_id in downloaded.styles:
-		var style: Variant = downloaded.styles[style_id]
+	for style_id in value.material_ids:
+		var style: Variant = value.styles.get(style_id, {})
 		if not style is Dictionary or not style.get("model") is String:
 			error = "An animated chest model is missing."
 			return false
 		var path: String = style.model
-		if not path.begins_with("assets/chests/models/licensed/") or not path.ends_with(".glb") or path.contains("..") or path.contains("\\"):
+		if not path.begins_with("assets/chests/models/atelier/") or not path.ends_with(".glb") or path.contains("..") or path.contains("\\"):
 			error = "An animated chest model path is invalid."
 			return false
 		if not ResourceLoader.exists("res://" + path):
 			error = "Could not load animated chest artwork. Please rebuild the game."
 			return false
-		if not style.get("closed_bounds_3d") is Dictionary or not style.get("motion_bounds_3d") is Dictionary or not style.get("cavity_3d") is Array or style.cavity_3d.size() != 3:
+		if not style.get("closed_bounds_3d") is Dictionary or not style.get("motion_bounds_3d") is Dictionary \
+			or (style.has("cavity_3d") and (not style.cavity_3d is Array or style.cavity_3d.size() != 3)):
 			error = "An animated chest has incomplete placement information."
 			return false
-		value.styles[style_id] = style
+		var state_path: String = str(style.get("state_scene", ""))
+		if not state_path.begins_with("assets/chests/models/atelier/") or not state_path.ends_with("-states.tscn") \
+			or state_path.contains("..") or state_path.contains("\\") or not ResourceLoader.exists("res://" + state_path):
+			error = "An animated chest state composition is missing or invalid."
+			return false
 	var mapped_styles: Dictionary = {}
 	for palette in THEMES.values():
 		if not value.styles.has(palette.chest) or mapped_styles.has(palette.chest):

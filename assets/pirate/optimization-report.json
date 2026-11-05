@@ -1,0 +1,3443 @@
+{
+  "budgets": {
+    "triangles": 12000,
+    "surfaces": 6,
+    "materials": 6,
+    "meshes": 2,
+    "bytes_exclusive": 2000000
+  },
+  "bytes": 876588,
+  "triangles": 10583,
+  "exported_vertices": 5782,
+  "mesh_count": 2,
+  "surface_count": 5,
+  "material_count": 5,
+  "materials": [
+    "Pirate / Skin",
+    "Pirate / Leather",
+    "Pirate / Face",
+    "Pirate / Cloth",
+    "Pirate / Gold"
+  ],
+  "skin_count": 0,
+  "texture_count": 0,
+  "extensions_used": [],
+  "morph_names": [
+    "Bite_Open",
+    "Eye_Squint",
+    "Smile_Smirk",
+    "Tongue_Out"
+  ],
+  "taunt_count": 10,
+  "taunts_distinct": true,
+  "meshes": [
+    {
+      "mesh": 0,
+      "name": "Pirate_Body",
+      "vertices": 4059,
+      "triangles": 7494,
+      "target_names": [
+        "Bite_Open",
+        "Eye_Squint",
+        "Smile_Smirk",
+        "Tongue_Out"
+      ],
+      "default_weights": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "surfaces": [
+        {
+          "surface": 0,
+          "material": 0,
+          "vertices": 2878,
+          "triangles": 5559,
+          "morph_targets": 4,
+          "normal_length_min": 1.0,
+          "normal_length_max": 1.0
+        },
+        {
+          "surface": 1,
+          "material": 1,
+          "vertices": 413,
+          "triangles": 760,
+          "morph_targets": 4,
+          "normal_length_min": 1.0,
+          "normal_length_max": 1.0
+        },
+        {
+          "surface": 2,
+          "material": 2,
+          "vertices": 768,
+          "triangles": 1175,
+          "morph_targets": 4,
+          "normal_length_min": 1.0,
+          "normal_length_max": 1.0
+        }
+      ]
+    },
+    {
+      "mesh": 1,
+      "name": "Pirate_Hat",
+      "vertices": 1723,
+      "triangles": 3089,
+      "target_names": [],
+      "default_weights": [],
+      "surfaces": [
+        {
+          "surface": 0,
+          "material": 3,
+          "vertices": 1296,
+          "triangles": 2239,
+          "morph_targets": 0,
+          "normal_length_min": 1.0,
+          "normal_length_max": 1.0
+        },
+        {
+          "surface": 1,
+          "material": 4,
+          "vertices": 427,
+          "triangles": 850,
+          "morph_targets": 0,
+          "normal_length_min": 1.0,
+          "normal_length_max": 1.0
+        }
+      ]
+    }
+  ],
+  "clips": [
+    {
+      "name": "Attack_L",
+      "duration_seconds": 0.65,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": null,
+      "maximum_rotation_travel_degrees": 22.161
+    },
+    {
+      "name": "Attack_M",
+      "duration_seconds": 1.05,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": null,
+      "maximum_rotation_travel_degrees": 69.765
+    },
+    {
+      "name": "Attack_P",
+      "duration_seconds": 1.55,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": null,
+      "maximum_rotation_travel_degrees": 74.458
+    },
+    {
+      "name": "Hit_L",
+      "duration_seconds": 0.5,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": null,
+      "maximum_rotation_travel_degrees": 16.555
+    },
+    {
+      "name": "Hit_M",
+      "duration_seconds": 0.9,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": null,
+      "maximum_rotation_travel_degrees": 38.989
+    },
+    {
+      "name": "Hit_P",
+      "duration_seconds": 1.45,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": null,
+      "maximum_rotation_travel_degrees": 66.911
+    },
+    {
+      "name": "Idle",
+      "duration_seconds": 3.0,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": null,
+      "maximum_rotation_travel_degrees": 0.6
+    },
+    {
+      "name": "Special_BigBite",
+      "duration_seconds": 1.6,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.55
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": null,
+      "maximum_rotation_travel_degrees": 35.481
+    },
+    {
+      "name": "Special_GiantRam",
+      "duration_seconds": 2.3,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": null,
+      "maximum_rotation_travel_degrees": 50.389
+    },
+    {
+      "name": "Taunt_BellyLaugh",
+      "duration_seconds": 2.1,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.5,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.9
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.5
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": "8bdbf937cfcd3b5eb65bd42d48ec97a8e8a15fdc9e93817e7a741477b55c1031",
+      "maximum_rotation_travel_degrees": 58.195
+    },
+    {
+      "name": "Taunt_FakeSleep",
+      "duration_seconds": 2.6,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.2,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 2.05
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.7
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": "87b3478a89c022cdbf0445bea0680b48458ab8130c93ea9292109f0fb7d59b15",
+      "maximum_rotation_travel_degrees": 52.195
+    },
+    {
+      "name": "Taunt_HatTip",
+      "duration_seconds": 1.5,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.65
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.85,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.65
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": "b2496e0a49558b49dd711a265172d299ecef4851a0d42bfebbdf29edd6e4206f",
+      "maximum_rotation_travel_degrees": 70.012
+    },
+    {
+      "name": "Taunt_MockBow",
+      "duration_seconds": 2.0,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.95
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 1.2
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": "a1a12bbb89c656623341863acba010b59319bf5d86744cc49d647cb561aa6266",
+      "maximum_rotation_travel_degrees": 82.738
+    },
+    {
+      "name": "Taunt_NopeWag",
+      "duration_seconds": 1.5,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 0.7,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.7,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.25
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.7,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.25
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": "284be6489d717ae78c5b6288258f9268479c0fe2efb587847e4ebb986663354b",
+      "maximum_rotation_travel_degrees": 198.598
+    },
+    {
+      "name": "Taunt_Peekaboo",
+      "duration_seconds": 2.0,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.5
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.6,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 1.05
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": "845fc93222c5e32772a9ec9af5b345a520620e059dac766f2527bf69b1a6085f",
+      "maximum_rotation_travel_degrees": 293.999
+    },
+    {
+      "name": "Taunt_SideEye",
+      "duration_seconds": 1.7,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.45,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.633333
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.633333
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": "37e52b618c0bac4e6bf362de12f7dbc09a93b9cb3f04234a6da60b1fa11ba707",
+      "maximum_rotation_travel_degrees": 65.747
+    },
+    {
+      "name": "Taunt_Swagger",
+      "duration_seconds": 2.1,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 0.8,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.3,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.45
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.8,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.45
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": "9d565d0532c5bf087a143f81c5f2e52cefe6080d6039e35c0c2ce554d1c6f0a4",
+      "maximum_rotation_travel_degrees": 66.064
+    },
+    {
+      "name": "Taunt_TongueTease",
+      "duration_seconds": 1.8,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.75,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.7
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.55,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.7
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 1.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.7
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": "45b9a4abc742ef0aac80d182d499702e354b7dfe1824dbf889d64ea83a5995be",
+      "maximum_rotation_travel_degrees": 44.736
+    },
+    {
+      "name": "Taunt_VictoryLap",
+      "duration_seconds": 2.5,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 0.85,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.85,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 1.9
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.85,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 1.9
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": "5339950552ebaadd7156c682fbd81305dd6f6a99dd9996eab01bfc9884c4cf3a",
+      "maximum_rotation_travel_degrees": 391.53
+    },
+    {
+      "name": "Ultimate_CaptainsDrop",
+      "duration_seconds": 2.5,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": null,
+      "maximum_rotation_travel_degrees": 71.013
+    },
+    {
+      "name": "Ultimate_CrescentSpin",
+      "duration_seconds": 2.25,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": null,
+      "maximum_rotation_travel_degrees": 806.191
+    },
+    {
+      "name": "Ultimate_TidalRush",
+      "duration_seconds": 2.25,
+      "channels": 10,
+      "starts_at_rest": true,
+      "ends_at_rest": true,
+      "morph_tracks": [
+        {
+          "node": "Pirate_Body",
+          "minimum": 0.0,
+          "maximum": 0.0,
+          "start": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "end": [
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "targets": [
+            {
+              "name": "Bite_Open",
+              "index": 0,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Eye_Squint",
+              "index": 1,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Smile_Smirk",
+              "index": 2,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            },
+            {
+              "name": "Tongue_Out",
+              "index": 3,
+              "minimum": 0.0,
+              "maximum": 0.0,
+              "start": 0.0,
+              "end": 0.0,
+              "peak_time_seconds": 0.0
+            }
+          ]
+        }
+      ],
+      "has_motion": true,
+      "taunt_trajectory_sha256": null,
+      "maximum_rotation_travel_degrees": 156.616
+    }
+  ],
+  "errors": [],
+  "input": "Q:\\uwok\\tesisgame\\build\\pirate\\pirate-game.raw.glb",
+  "output": "Q:\\uwok\\tesisgame\\assets\\pirate\\pirate-game.glb",
+  "input_bytes": 1036480,
+  "bytes_saved": 159892,
+  "input_sha256": "14786f0dabce1304afb0d9059cc41dca2c4ffbb7df89a80acc841af1e94d205b",
+  "sha256": "1c94000a309a9a0847248bfa554117bfbf76fe0fc4691b87c7b9b1281827ac93",
+  "animation_postprocess": [
+    {
+      "name": "Attack_L",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 0.66666669,
+      "duration_seconds": 0.65,
+      "channels_preserved": 10,
+      "samples_before": 400,
+      "samples_after": 275,
+      "constant_tracks": 3,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 40,
+          "after_samples": 40,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 40,
+          "after_samples": 40,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 40,
+          "after_samples": 33,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 40,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 40,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 40,
+          "after_samples": 40,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 40,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 40,
+          "after_samples": 40,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 40,
+          "after_samples": 40,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 40,
+          "after_samples": 36,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Attack_M",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 1.06666672,
+      "duration_seconds": 1.05,
+      "channels_preserved": 10,
+      "samples_before": 640,
+      "samples_after": 444,
+      "constant_tracks": 3,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 64,
+          "after_samples": 64,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 64,
+          "after_samples": 64,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 64,
+          "after_samples": 62,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 64,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 64,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 64,
+          "after_samples": 64,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 64,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 64,
+          "after_samples": 64,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 64,
+          "after_samples": 64,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 64,
+          "after_samples": 56,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Attack_P",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 1.56666672,
+      "duration_seconds": 1.55,
+      "channels_preserved": 10,
+      "samples_before": 940,
+      "samples_after": 638,
+      "constant_tracks": 3,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 94,
+          "after_samples": 94,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 94,
+          "after_samples": 92,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 94,
+          "after_samples": 82,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 94,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 94,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 94,
+          "after_samples": 92,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 94,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 94,
+          "after_samples": 92,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 94,
+          "after_samples": 92,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 94,
+          "after_samples": 88,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Hit_L",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 0.51666665,
+      "duration_seconds": 0.5,
+      "channels_preserved": 10,
+      "samples_before": 310,
+      "samples_after": 219,
+      "constant_tracks": 3,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 31,
+          "after_samples": 31,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 31,
+          "after_samples": 31,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 31,
+          "after_samples": 28,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 31,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 31,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 31,
+          "after_samples": 31,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 31,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 31,
+          "after_samples": 31,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 31,
+          "after_samples": 31,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 31,
+          "after_samples": 30,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Hit_M",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 0.91666669,
+      "duration_seconds": 0.9,
+      "channels_preserved": 10,
+      "samples_before": 550,
+      "samples_after": 385,
+      "constant_tracks": 3,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 55,
+          "after_samples": 55,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 55,
+          "after_samples": 55,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 55,
+          "after_samples": 52,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 55,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 55,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 55,
+          "after_samples": 55,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 55,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 55,
+          "after_samples": 55,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 55,
+          "after_samples": 55,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 55,
+          "after_samples": 52,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Hit_P",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 1.4666667,
+      "duration_seconds": 1.45,
+      "channels_preserved": 10,
+      "samples_before": 880,
+      "samples_after": 598,
+      "constant_tracks": 3,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 88,
+          "after_samples": 88,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 88,
+          "after_samples": 88,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 88,
+          "after_samples": 75,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 88,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 88,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 88,
+          "after_samples": 88,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 88,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 88,
+          "after_samples": 88,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 88,
+          "after_samples": 88,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 88,
+          "after_samples": 77,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Idle",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 3.01666665,
+      "duration_seconds": 3.0,
+      "channels_preserved": 10,
+      "samples_before": 1810,
+      "samples_after": 641,
+      "constant_tracks": 6,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 181,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 181,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 181,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 181,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 181,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 181,
+          "after_samples": 181,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 181,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 181,
+          "after_samples": 181,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 181,
+          "after_samples": 181,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 181,
+          "after_samples": 86,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Special_BigBite",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 1.61666667,
+      "duration_seconds": 1.6,
+      "channels_preserved": 10,
+      "samples_before": 970,
+      "samples_after": 680,
+      "constant_tracks": 2,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 97,
+          "after_samples": 97,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 97,
+          "after_samples": 97,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 97,
+          "after_samples": 71,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 97,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 97,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 97,
+          "after_samples": 87,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 97,
+          "after_samples": 46,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 97,
+          "after_samples": 87,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 97,
+          "after_samples": 97,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 97,
+          "after_samples": 94,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Special_GiantRam",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 2.3166666,
+      "duration_seconds": 2.3,
+      "channels_preserved": 10,
+      "samples_before": 1390,
+      "samples_after": 946,
+      "constant_tracks": 3,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 139,
+          "after_samples": 139,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 139,
+          "after_samples": 139,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 139,
+          "after_samples": 127,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 139,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 139,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 139,
+          "after_samples": 139,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 139,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 139,
+          "after_samples": 139,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 139,
+          "after_samples": 139,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 139,
+          "after_samples": 118,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Taunt_BellyLaugh",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 2.11666656,
+      "duration_seconds": 2.1,
+      "channels_preserved": 10,
+      "samples_before": 1270,
+      "samples_after": 977,
+      "constant_tracks": 2,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 127,
+          "after_samples": 127,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 127,
+          "after_samples": 127,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 127,
+          "after_samples": 110,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 127,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 127,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 127,
+          "after_samples": 127,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 127,
+          "after_samples": 127,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 127,
+          "after_samples": 127,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 127,
+          "after_samples": 127,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 127,
+          "after_samples": 101,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Taunt_FakeSleep",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 2.61666656,
+      "duration_seconds": 2.6,
+      "channels_preserved": 10,
+      "samples_before": 1570,
+      "samples_after": 1008,
+      "constant_tracks": 2,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 157,
+          "after_samples": 157,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 157,
+          "after_samples": 86,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 157,
+          "after_samples": 83,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 157,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 157,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 157,
+          "after_samples": 157,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 157,
+          "after_samples": 63,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 157,
+          "after_samples": 157,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 157,
+          "after_samples": 157,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 157,
+          "after_samples": 144,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Taunt_HatTip",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 1.51666665,
+      "duration_seconds": 1.5,
+      "channels_preserved": 10,
+      "samples_before": 910,
+      "samples_after": 518,
+      "constant_tracks": 2,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 91,
+          "after_samples": 56,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 91,
+          "after_samples": 56,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 91,
+          "after_samples": 32,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 91,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 91,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 91,
+          "after_samples": 56,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 91,
+          "after_samples": 91,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 91,
+          "after_samples": 91,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 91,
+          "after_samples": 80,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 91,
+          "after_samples": 52,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Taunt_MockBow",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 2.01666665,
+      "duration_seconds": 2.0,
+      "channels_preserved": 10,
+      "samples_before": 1210,
+      "samples_after": 739,
+      "constant_tracks": 2,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 121,
+          "after_samples": 107,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 121,
+          "after_samples": 107,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 121,
+          "after_samples": 72,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 121,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 121,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 121,
+          "after_samples": 78,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 121,
+          "after_samples": 121,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 121,
+          "after_samples": 78,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 121,
+          "after_samples": 107,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 121,
+          "after_samples": 65,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Taunt_NopeWag",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 1.51666665,
+      "duration_seconds": 1.5,
+      "channels_preserved": 10,
+      "samples_before": 910,
+      "samples_after": 505,
+      "constant_tracks": 4,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 91,
+          "after_samples": 91,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 91,
+          "after_samples": 91,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 91,
+          "after_samples": 85,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 91,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 91,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 91,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 91,
+          "after_samples": 56,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 91,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 91,
+          "after_samples": 91,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 91,
+          "after_samples": 83,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Taunt_Peekaboo",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 2.01666665,
+      "duration_seconds": 2.0,
+      "channels_preserved": 10,
+      "samples_before": 1210,
+      "samples_after": 730,
+      "constant_tracks": 2,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 121,
+          "after_samples": 87,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 121,
+          "after_samples": 87,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 121,
+          "after_samples": 64,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 121,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 121,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 121,
+          "after_samples": 101,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 121,
+          "after_samples": 101,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 121,
+          "after_samples": 101,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 121,
+          "after_samples": 101,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 121,
+          "after_samples": 84,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Taunt_SideEye",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 1.7166667,
+      "duration_seconds": 1.7,
+      "channels_preserved": 10,
+      "samples_before": 1030,
+      "samples_after": 440,
+      "constant_tracks": 4,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 103,
+          "after_samples": 76,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 103,
+          "after_samples": 76,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 103,
+          "after_samples": 71,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 103,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 103,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 103,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 103,
+          "after_samples": 76,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 103,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 103,
+          "after_samples": 76,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 103,
+          "after_samples": 57,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Taunt_Swagger",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 2.11666656,
+      "duration_seconds": 2.1,
+      "channels_preserved": 10,
+      "samples_before": 1270,
+      "samples_after": 821,
+      "constant_tracks": 2,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 127,
+          "after_samples": 127,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 127,
+          "after_samples": 107,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 127,
+          "after_samples": 94,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 127,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 127,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 127,
+          "after_samples": 107,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 127,
+          "after_samples": 71,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 127,
+          "after_samples": 107,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 127,
+          "after_samples": 107,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 127,
+          "after_samples": 97,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Taunt_TongueTease",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 1.81666672,
+      "duration_seconds": 1.8,
+      "channels_preserved": 10,
+      "samples_before": 1090,
+      "samples_after": 785,
+      "constant_tracks": 2,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 109,
+          "after_samples": 109,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 109,
+          "after_samples": 109,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 109,
+          "after_samples": 96,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 109,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 109,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 109,
+          "after_samples": 86,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 109,
+          "after_samples": 86,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 109,
+          "after_samples": 98,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 109,
+          "after_samples": 109,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 109,
+          "after_samples": 88,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Taunt_VictoryLap",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 2.51666665,
+      "duration_seconds": 2.5,
+      "channels_preserved": 10,
+      "samples_before": 1510,
+      "samples_after": 958,
+      "constant_tracks": 2,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 151,
+          "after_samples": 116,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 151,
+          "after_samples": 116,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 151,
+          "after_samples": 99,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 151,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 151,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 151,
+          "after_samples": 116,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 151,
+          "after_samples": 89,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 151,
+          "after_samples": 151,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 151,
+          "after_samples": 151,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 151,
+          "after_samples": 116,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Ultimate_CaptainsDrop",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 2.51666665,
+      "duration_seconds": 2.5,
+      "channels_preserved": 10,
+      "samples_before": 1510,
+      "samples_after": 917,
+      "constant_tracks": 3,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 151,
+          "after_samples": 137,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 151,
+          "after_samples": 134,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 151,
+          "after_samples": 114,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 151,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 151,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 151,
+          "after_samples": 137,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 151,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 151,
+          "after_samples": 137,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 151,
+          "after_samples": 134,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 151,
+          "after_samples": 118,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Ultimate_CrescentSpin",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 2.26666665,
+      "duration_seconds": 2.25,
+      "channels_preserved": 10,
+      "samples_before": 1360,
+      "samples_after": 857,
+      "constant_tracks": 3,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 136,
+          "after_samples": 125,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 136,
+          "after_samples": 125,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 136,
+          "after_samples": 116,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 136,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 136,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 136,
+          "after_samples": 125,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 136,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 136,
+          "after_samples": 125,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 136,
+          "after_samples": 125,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 136,
+          "after_samples": 110,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    },
+    {
+      "name": "Ultimate_TidalRush",
+      "source_start_seconds": 0.01666667,
+      "source_end_seconds": 2.26666665,
+      "duration_seconds": 2.25,
+      "channels_preserved": 10,
+      "samples_before": 1360,
+      "samples_after": 933,
+      "constant_tracks": 3,
+      "tracks": [
+        {
+          "sampler": 0,
+          "before_samples": 136,
+          "after_samples": 136,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 1,
+          "before_samples": 136,
+          "after_samples": 136,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 2,
+          "before_samples": 136,
+          "after_samples": 129,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 3,
+          "before_samples": 136,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 4,
+          "before_samples": 136,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 5,
+          "before_samples": 136,
+          "after_samples": 136,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 6,
+          "before_samples": 136,
+          "after_samples": 2,
+          "constant": true,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 7,
+          "before_samples": 136,
+          "after_samples": 136,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 8,
+          "before_samples": 136,
+          "after_samples": 136,
+          "constant": false,
+          "interpolation": "LINEAR"
+        },
+        {
+          "sampler": 9,
+          "before_samples": 136,
+          "after_samples": 118,
+          "constant": false,
+          "interpolation": "LINEAR"
+        }
+      ]
+    }
+  ],
+  "neutral_defaults_updated": [
+    {
+      "node": "Captain Clover | animated root",
+      "property": "translation"
+    },
+    {
+      "node": "Captain Clover | animated root",
+      "property": "rotation"
+    },
+    {
+      "node": "Captain Clover | animated root",
+      "property": "scale"
+    },
+    {
+      "node": "Pirate | elastic body pivot",
+      "property": "translation"
+    },
+    {
+      "node": "Pirate | elastic body pivot",
+      "property": "rotation"
+    },
+    {
+      "node": "Pirate | elastic body pivot",
+      "property": "scale"
+    },
+    {
+      "node": "Pirate_Body",
+      "property": "weights"
+    },
+    {
+      "node": "Pirate | rigid hat pivot",
+      "property": "translation"
+    },
+    {
+      "node": "Pirate | rigid hat pivot",
+      "property": "rotation"
+    },
+    {
+      "node": "Pirate | rigid hat pivot",
+      "property": "scale"
+    }
+  ],
+  "postprocess_policy": "Exact flat samples only; reset channels and quaternion signs retained",
+  "status": "passed"
+}

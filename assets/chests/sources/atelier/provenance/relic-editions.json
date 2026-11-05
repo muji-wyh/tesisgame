@@ -1,0 +1,814 @@
+{
+  "version": 1,
+  "title": "Relic Atelier Editions",
+  "generator": "Blender 5.2 CLI",
+  "status": "source-derived-optimized-runtime-published-and-native-verified",
+  "license_policy": "CC0 source mesh derivatives; user screenshots are visual references and are not reused as texture artwork",
+  "path_scope": {
+    "authoring_and_reference_root": "Q:/uwok/chest",
+    "optimized_model_root": "Q:/uwok/tesisgame",
+    "source_files": "source.file, source.license_file, component_sources.file and visual_reference.image are relative to the chest review root",
+    "game_files": "optimized.model and source.game_license_file are relative to the tesisgame project root"
+  },
+  "original_model_preservation": [
+    {
+      "id": "wayfarer-oak",
+      "path": "assets/chests/models/atelier/wayfarer-oak/wayfarer-oak.glb",
+      "bytes": 914248,
+      "sha256": "c8a8748c4c1e69cac55bb5bce050c732937ada320e1f8922610ef9f17a18be0b"
+    },
+    {
+      "id": "ironbound-trail",
+      "path": "assets/chests/models/atelier/ironbound-trail/ironbound-trail.glb",
+      "bytes": 919192,
+      "sha256": "57f607faddc8bbd9705df5a1b04d1d7fff803283903f7ef3c8490a90291d872d"
+    },
+    {
+      "id": "duskwatch-coffer",
+      "path": "assets/chests/models/atelier/duskwatch-coffer/duskwatch-coffer.glb",
+      "bytes": 914784,
+      "sha256": "b313cda13f9505817dbeb73b368af18a1649cbd57026c70e7540e8fdfbb776e7"
+    },
+    {
+      "id": "dungeon-keeper",
+      "path": "assets/chests/models/atelier/dungeon-keeper/dungeon-keeper.glb",
+      "bytes": 1080920,
+      "sha256": "b3184407553b3319d1691b01101cca15042c0a2236d0537530fb4e2b0b7fe8d1"
+    },
+    {
+      "id": "tideguard",
+      "path": "assets/chests/models/atelier/tideguard/tideguard.glb",
+      "bytes": 1549360,
+      "sha256": "2f948c069d5e152150cf1e262cfd4a2aee9b3135dc52184ab3d1e3328dd6b260"
+    },
+    {
+      "id": "meadow-cabinet",
+      "path": "assets/chests/models/atelier/meadow-cabinet/meadow-cabinet.glb",
+      "bytes": 982836,
+      "sha256": "e49d086e0dea5f5ffcfd62cc9855c02d65459a0318df227f2030aec7ec03cf12"
+    },
+    {
+      "id": "sunward",
+      "path": "assets/chests/models/atelier/sunward/sunward.glb",
+      "bytes": 1294424,
+      "sha256": "a497d6ce1e1b04c9015032f4c9d6f3a28644a272d264a9052e3203ce555b5543"
+    },
+    {
+      "id": "harvest-strongbox",
+      "path": "assets/chests/models/atelier/harvest-strongbox/harvest-strongbox.glb",
+      "bytes": 1821764,
+      "sha256": "a70717e286d7dd21281ec120c724128bdeaf3f1ff2457e430f1d749239bfe10f"
+    },
+    {
+      "id": "bonbon-keepsake",
+      "path": "assets/chests/models/atelier/bonbon-keepsake/bonbon-keepsake.glb",
+      "bytes": 1135260,
+      "sha256": "1e2f6a368c9b33a97253e554ecf14cf195cacc5f691e41bc2d549ca34762ee2c"
+    },
+    {
+      "id": "moonbound",
+      "path": "assets/chests/models/atelier/moonbound/moonbound.glb",
+      "bytes": 1295512,
+      "sha256": "caabad89ceb5ced45f51a9bf1a929b19ff506208bde851e2c4ad41bfa7cde73b"
+    },
+    {
+      "id": "royal-rose",
+      "path": "assets/chests/models/atelier/royal-rose/royal-rose.glb",
+      "bytes": 1237636,
+      "sha256": "e79297c282c23b201ce5b2b6a811145f63dd824a3deb7823d965d20af34fe067"
+    },
+    {
+      "id": "lagoon-reliquary",
+      "path": "assets/chests/models/atelier/lagoon-reliquary/lagoon-reliquary.glb",
+      "bytes": 1145704,
+      "sha256": "f35701a1ddb32e4fd4fae294e8f9924ab668020204a5b8635b11c044e62c9999"
+    },
+    {
+      "id": "moonstone-crown",
+      "path": "assets/chests/models/atelier/moonstone-crown/moonstone-crown.glb",
+      "bytes": 998008,
+      "sha256": "071c58a9755d1d8e25d511b6f9290de9c6b1861acd14d22939602c1c11502c40"
+    },
+    {
+      "id": "prism-signal",
+      "path": "assets/chests/models/atelier/prism-signal/prism-signal.glb",
+      "bytes": 1605224,
+      "sha256": "7ba78d357e08ad4b4dd9f91f4761e812978ce712805f9076cdcf3d1bce5a0331"
+    },
+    {
+      "id": "frost-relay",
+      "path": "assets/chests/models/atelier/frost-relay/frost-relay.glb",
+      "bytes": 1857808,
+      "sha256": "6a4e0cd025ff305f5076085ec59295c107eb4fbe5cf7add50e45df7a8bde202b"
+    },
+    {
+      "id": "solar-relay",
+      "path": "assets/chests/models/atelier/solar-relay/solar-relay.glb",
+      "bytes": 1845100,
+      "sha256": "a104857980bf69ae54f53242d538f86604f19061ce04aca52a8e28b2cc2cad3f"
+    },
+    {
+      "id": "nova-buddy",
+      "path": "assets/chests/models/atelier/nova-buddy/nova-buddy.glb",
+      "bytes": 1639428,
+      "sha256": "a0e34b900a30cc5a514e35d2a3cc3a97bd88e9c8d777400a672c6ac6a66756b6"
+    },
+    {
+      "id": "jade-reliquary",
+      "path": "assets/chests/models/atelier/jade-reliquary/jade-reliquary.glb",
+      "bytes": 1632244,
+      "sha256": "c13697148d58680a6c746afde499b71915ffb033f6cd7c11e455f6208bbc562d"
+    },
+    {
+      "id": "crimson-citadel",
+      "path": "assets/chests/models/atelier/crimson-citadel/crimson-citadel.glb",
+      "bytes": 1745060,
+      "sha256": "867677aa2a7e3dad6c7d47aa82e88be0af4afc3254986f884483d876c6dee225"
+    },
+    {
+      "id": "cobalt-vault",
+      "path": "assets/chests/models/atelier/cobalt-vault/cobalt-vault.glb",
+      "bytes": 1634188,
+      "sha256": "080210d19c5d15267605c8ada6d0d8c8c26a798c0d8932dbe85d23732f3ff72d"
+    },
+    {
+      "id": "aether-vault",
+      "path": "assets/chests/models/atelier/aether-vault/aether-vault.glb",
+      "bytes": 1650892,
+      "sha256": "2a3ebb2635dec4f3a25b11393001401635c26b36c5ef359dd78e988333627101"
+    }
+  ],
+  "confirmed_deletions_since_snapshot": [],
+  "editions": [
+    {
+      "id": "gilded-waywatch",
+      "name": "Gilded Waywatch",
+      "original_family": "kenney-platformer",
+      "source": {
+        "creator": "Kenney",
+        "title": "Platformer Kit",
+        "url": "https://kenney.nl/assets/platformer-kit",
+        "license": "CC0-1.0",
+        "file": "sources/kenney-platformer/chest.glb",
+        "license_file": "sources/kenney-platformer/LICENSE.txt",
+        "license_sha256": "e1185354d8f0f055c325c7204602326c8cf0c47ee5ae1db7ed16f0465b91bb9a",
+        "game_license_file": "assets/chests/sources/atelier/licenses/gilded-waywatch-LICENSE.txt"
+      },
+      "source_sha256": "ba92d21be71649e608de4c76859f04e83308efc699508b2ddb1221678102e274",
+      "reference": "User-provided stylized treasure chest screenshot used as a visual inspiration only; screenshot artwork is not embedded or reused",
+      "reference_image": "sources/relic/references/reference-1.png",
+      "details": [
+        "Secondary UV wood/enamel normal finishing",
+        "Source base-color atlases and UVs preserved",
+        "Scored board joints and fine brushed-metal normal maps",
+        "Long-fiber albedo grain, warped knots and dark board joints reinforce the acquired source UV timber artwork.",
+        "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+        "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+        "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+        "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+        "Theme-specific crafted trim: gilded-waywatch.",
+        "Broad brass corner blocks, domed bolted iron straps and a pierced scalloped receiver frame the timber.",
+        "An enlarged raised compass rosette, cast leaf scrolls and nested engraved ring create the ornate central lock.",
+        "The acquired center clasp and sourced tongue/receiver use cast-brass finish, exposing the scalloped hero lock below the opening seam.",
+        "Reference-led hero ornament, detailed albedo wood grain and differentiated crafted armor complete the acquired source shell",
+        "Fitted source-connected KayKit keyplate with moving tongue and fixed receiver; KayKit original clasp retained on its own shell",
+        "Source wood grain and secondary normal detail baked into the optimized runtime atlas"
+      ],
+      "component_sources": [
+        {
+          "file": "components/kaykit-keyplate.glb",
+          "sha256": "a9d4a304c983efaba3f09b81e343727f7fae2b5f7ebe7bdb59ea5d80d02f6096",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "source_record": "components/provenance.json"
+        }
+      ],
+      "optimization": {
+        "hardware_ratio": 0.4723225030084236,
+        "materials": 1,
+        "mesh_instances": 2,
+        "method": "Decimate added hardware; retain source shells; two rigid mesh batches; full single-UV PBR bake; embedded PNG1024color/1024normal/256ORM/512emission; no required compression extensions",
+        "saved_bytes": 968704,
+        "authoring_bytes": 2405552,
+        "runtime_bytes": 1436848,
+        "authoring_triangles": 29032,
+        "runtime_triangles": 14960
+      },
+      "validation": {
+        "source_bytes_unchanged": true,
+        "runtime_rendered": true,
+        "native_engine_validation": "pending-root-integration"
+      },
+      "license": "CC0-1.0",
+      "visual_reference": {
+        "image": "sources/relic/references/reference-1.png",
+        "sha256": "e7557f7eb0c2ccbd06c807e1f36b70b85fb59fbb5b136c9caa81f64965bff037",
+        "status": "user-provided-visual-inspiration-only",
+        "rights": "Unknown original screenshot rights; screenshot pixels are not runtime artwork"
+      },
+      "authoring": {
+        "model": "assets/gilded-waywatch/chest.glb",
+        "bytes": 2405552,
+        "sha256": "f3995bc65b180ce1ff01263b35192f0a1a844e37b717f562b1d871d2ce402e29",
+        "triangles": 29032
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/gilded-waywatch/gilded-waywatch.glb",
+        "bytes": 1436848,
+        "sha256": "98c827611386194a960163dc5b2809b2e71845f61a98e4ae50d734fccb3bda49",
+        "triangles": 14960,
+        "bytes_saved_percent": 40.27,
+        "triangles_saved_percent": 48.47
+      },
+      "animation_authorship": "New rigid Lid hinge Open and Close clips, 61 sampled keys over one second; acquired source clips not reused"
+    },
+    {
+      "id": "verdant-oath",
+      "name": "Verdant Oath",
+      "original_family": "kenney-survival",
+      "source": {
+        "creator": "Kenney",
+        "title": "Survival Kit",
+        "url": "https://kenney.nl/assets/survival-kit",
+        "license": "CC0-1.0",
+        "file": "sources/kenney-survival/chest.glb",
+        "license_file": "sources/kenney-survival/LICENSE.txt",
+        "license_sha256": "62c8356876481204fa4d40dc59183dfed777adf987d7f2a1390fffe8a699f3ff",
+        "game_license_file": "assets/chests/sources/atelier/licenses/verdant-oath-LICENSE.txt"
+      },
+      "source_sha256": "84b03023e425cc1f96c6d0b0f352608be9e8e01b112790e6b00b8651bf84379b",
+      "reference": "User-provided stylized treasure chest screenshot used as a visual inspiration only; screenshot artwork is not embedded or reused",
+      "reference_image": "sources/relic/references/reference-2.png",
+      "details": [
+        "Secondary UV wood/enamel normal finishing",
+        "Source base-color atlases and UVs preserved",
+        "Scored board joints and fine brushed-metal normal maps",
+        "Long-fiber albedo grain, warped knots and dark board joints reinforce the acquired source UV timber artwork.",
+        "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+        "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+        "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+        "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+        "Theme-specific crafted trim: verdant-oath.",
+        "An enlarged acquired Kenney jewel mesh is seated in a fitted sculpted cover bezel on the upper front lid.",
+        "The source jewel topology and UV face shading remain intact; deep green non-emissive PBR keeps its facets readable at gallery size.",
+        "Hero emerald geometry is protected from hardware decimation; the exact exported GLB is re-imported for visual review.",
+        "Dark green fitted bands, a pointed layered shield receiver, pale corner bolts and chased bright rims define the woodland chest.",
+        "Reference-led hero ornament, detailed albedo wood grain and differentiated crafted armor complete the acquired source shell",
+        "Fitted source-connected KayKit keyplate with moving tongue and fixed receiver; KayKit original clasp retained on its own shell",
+        "Source wood grain and secondary normal detail baked into the optimized runtime atlas"
+      ],
+      "component_sources": [
+        {
+          "file": "components/kaykit-keyplate.glb",
+          "sha256": "a9d4a304c983efaba3f09b81e343727f7fae2b5f7ebe7bdb59ea5d80d02f6096",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "source_record": "components/provenance.json"
+        },
+        {
+          "file": "sources/kenney-platformer/jewel.glb",
+          "sha256": "cec20d8ae2678c292b3885aaee468ba39d165a7e2043af5ba8102b6cd974c2c3",
+          "creator": "Kenney",
+          "license": "CC0-1.0",
+          "source_record": "sources/acquisition-record.json",
+          "role": "Acquired original faceted jewel topology and UV shading, resized and recolored for the hero emerald"
+        }
+      ],
+      "optimization": {
+        "hardware_ratio": 0.4760248752147942,
+        "materials": 1,
+        "mesh_instances": 2,
+        "method": "Decimate added hardware; retain source shells; two rigid mesh batches; full single-UV PBR bake; embedded PNG1024color/1024normal/256ORM/512emission; no required compression extensions",
+        "saved_bytes": 942108,
+        "authoring_bytes": 2421960,
+        "runtime_bytes": 1479852,
+        "authoring_triangles": 27807,
+        "runtime_triangles": 15115
+      },
+      "validation": {
+        "source_bytes_unchanged": true,
+        "runtime_rendered": true,
+        "native_engine_validation": "pending-root-integration"
+      },
+      "license": "CC0-1.0",
+      "visual_reference": {
+        "image": "sources/relic/references/reference-2.png",
+        "sha256": "dcc24904bfa180b7bc9382667b578dea5b9dfd018aff521f89fd49e5605c2c3f",
+        "status": "user-provided-visual-inspiration-only",
+        "rights": "Unknown original screenshot rights; screenshot pixels are not runtime artwork"
+      },
+      "authoring": {
+        "model": "assets/verdant-oath/chest.glb",
+        "bytes": 2421960,
+        "sha256": "1e86899c7732c2c199ca5a29117b7424a0ec16bc106606c570081d503e5b103b",
+        "triangles": 27807
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/verdant-oath/verdant-oath.glb",
+        "bytes": 1479852,
+        "sha256": "707efe011039bba813e2566181c6c35bbfa6a6aa98c40929b7d3c4ba7099e519",
+        "triangles": 15115,
+        "bytes_saved_percent": 38.9,
+        "triangles_saved_percent": 45.64
+      },
+      "animation_authorship": "New rigid Lid hinge Open and Close clips, 61 sampled keys over one second; acquired source clips not reused"
+    },
+    {
+      "id": "rune-sentinel",
+      "name": "Rune Sentinel",
+      "original_family": "kenney-mini-dungeon",
+      "source": {
+        "creator": "Kenney",
+        "title": "Mini Dungeon",
+        "url": "https://kenney.nl/assets/mini-dungeon",
+        "license": "CC0-1.0",
+        "file": "sources/kenney-mini-dungeon/chest.glb",
+        "license_file": "sources/kenney-mini-dungeon/LICENSE.txt",
+        "license_sha256": "f8b470068a1c043854101c9ff7161d376ba02c36239da3c1dbdfa928b08444b6",
+        "game_license_file": "assets/chests/sources/atelier/licenses/rune-sentinel-LICENSE.txt"
+      },
+      "source_sha256": "64cc6c44786a0833bbe53c694cbad9f10d4fdd9e99d4b5ec03fcb3b8b5dd71e0",
+      "reference": "User-provided stylized treasure chest screenshot used as a visual inspiration only; screenshot artwork is not embedded or reused",
+      "reference_image": "sources/relic/references/reference-3.png",
+      "details": [
+        "Secondary UV wood/enamel normal finishing",
+        "Source base-color atlases and UVs preserved",
+        "Scored board joints and fine brushed-metal normal maps",
+        "Long-fiber albedo grain, warped knots and dark board joints reinforce the acquired source UV timber artwork.",
+        "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+        "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+        "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+        "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+        "Theme-specific crafted trim: rune-sentinel.",
+        "Segmented iron armor carries modeled blue glyph inlays on the body and curved cover.",
+        "A filled blue-silver circular lock disk has a pierced keyhole, chased inner circle, polished rim and domed fasteners.",
+        "The keyhole has a subtle blue inset; emission is retained in an embedded runtime map.",
+        "Reference-led hero ornament, detailed albedo wood grain and differentiated crafted armor complete the acquired source shell",
+        "Fitted source-connected KayKit keyplate with moving tongue and fixed receiver; KayKit original clasp retained on its own shell",
+        "Source wood grain and secondary normal detail baked into the optimized runtime atlas"
+      ],
+      "component_sources": [
+        {
+          "file": "components/kaykit-keyplate.glb",
+          "sha256": "a9d4a304c983efaba3f09b81e343727f7fae2b5f7ebe7bdb59ea5d80d02f6096",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "source_record": "components/provenance.json"
+        }
+      ],
+      "optimization": {
+        "hardware_ratio": 0.4797794117647059,
+        "materials": 1,
+        "mesh_instances": 2,
+        "method": "Decimate added hardware; retain source shells; two rigid mesh batches; full single-UV PBR bake; embedded PNG1024color/1024normal/256ORM/512emission; no required compression extensions",
+        "saved_bytes": 914072,
+        "authoring_bytes": 2406896,
+        "runtime_bytes": 1492824,
+        "authoring_triangles": 28584,
+        "runtime_triangles": 14982
+      },
+      "validation": {
+        "source_bytes_unchanged": true,
+        "runtime_rendered": true,
+        "native_engine_validation": "pending-root-integration"
+      },
+      "license": "CC0-1.0",
+      "visual_reference": {
+        "image": "sources/relic/references/reference-3.png",
+        "sha256": "57445c7c0c1b76dc0586fe5f03c659cbac4adc37469f25a8f77b3d567837469f",
+        "status": "user-provided-visual-inspiration-only",
+        "rights": "Unknown original screenshot rights; screenshot pixels are not runtime artwork"
+      },
+      "authoring": {
+        "model": "assets/rune-sentinel/chest.glb",
+        "bytes": 2406896,
+        "sha256": "e24a548f650c1391db29dff436258c929dd4b12585fa07e0e367c5debe300ab4",
+        "triangles": 28584
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/rune-sentinel/rune-sentinel.glb",
+        "bytes": 1492824,
+        "sha256": "0db284997bb5644cc91a8f5386b4779196e4e52f18fd8a6d0453ea5e3ae07bee",
+        "triangles": 14982,
+        "bytes_saved_percent": 37.98,
+        "triangles_saved_percent": 47.59
+      },
+      "animation_authorship": "New rigid Lid hinge Open and Close clips, 61 sampled keys over one second; acquired source clips not reused"
+    },
+    {
+      "id": "aegis-transit",
+      "name": "Aegis Transit",
+      "original_family": "kenney-blaster",
+      "source": {
+        "creator": "Kenney",
+        "title": "Blaster Kit 2.1",
+        "url": "https://kenney.nl/assets/blaster-kit",
+        "license": "CC0-1.0",
+        "file": "sources/expansion/kenney-blaster/crate-small.glb",
+        "license_file": "sources/expansion/kenney-blaster/LICENSE.txt",
+        "acquisition_status": "acquired-local-original-source; source preview and mesh inspected",
+        "animations": [
+          "open",
+          "close",
+          "open-close"
+        ],
+        "derived_animation": "Authored rigid Open and Close clips",
+        "license_sha256": "bece5f4d99cca9dcf86931221a69909862ff6cc95e1735462ee678516a1063e2",
+        "game_license_file": "assets/chests/sources/atelier/licenses/aegis-transit-LICENSE.txt"
+      },
+      "source_sha256": "00ed47c02a5016c11ce5ea0bd54888d120f3a112c5eab79dc4bd4ab878ceb805",
+      "reference": {
+        "file": "sources/relic/references/reference-4.png",
+        "status": "user-supplied visual inspiration only; no screenshot pixels reused"
+      },
+      "details": [
+        "Acquired animated Blaster case topology and original panel UVs retained",
+        "Layered ceramic cap, navy foot guards and fitted side corner castings",
+        "Open shield bezel, cyan enamel glass and nested shield etching",
+        "Carry-handle shoes, hollow bail, anchored grip and slotted fasteners",
+        "Cap gaskets, matching latch receiver, side vents and cyan indicators",
+        "Interleaved rear hinges, framed inner cap and matching inner shield"
+      ],
+      "component_sources": [],
+      "optimization": {
+        "hardware_ratio": 0.26,
+        "materials": 1,
+        "mesh_instances": 2,
+        "method": "Preserve acquired production shell and source UV artwork; protect open handles, shield/compass bezels and angular hoops; reduce repeated fittings; join two rigid mesh batches and bake embedded standard PBR maps",
+        "saved_bytes": 156832,
+        "authoring_bytes": 1082588,
+        "runtime_bytes": 925756,
+        "authoring_triangles": 18336,
+        "runtime_triangles": 11896
+      },
+      "validation": {
+        "source_bytes_unchanged": true,
+        "runtime_rendered": true,
+        "native_engine_validation": "pending-root-integration",
+        "visual_review": "Actual optimized closed/open PNGs inspected at full size; hollow lid, fitted bands and focal ornament checked"
+      },
+      "license": "CC0-1.0",
+      "visual_reference": {
+        "image": "sources/relic/references/reference-4.png",
+        "sha256": "dd116bb2c22287ec63418e03fbdf19d605750669eda33a86b1ba26cb171e25c6",
+        "status": "user-provided-visual-inspiration-only",
+        "rights": "Unknown original screenshot rights; screenshot pixels are not runtime artwork"
+      },
+      "authoring": {
+        "model": "assets/aegis-transit/chest.glb",
+        "bytes": 1082588,
+        "sha256": "4fc64ca28b01c36539d74bca611c97f53cb4625f728a8501fa92178ce33aa7c4",
+        "triangles": 18336
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/aegis-transit/aegis-transit.glb",
+        "bytes": 925756,
+        "sha256": "080a56d3fa36f1d678858415d19f9ac9cbff65ef0993132941905bce1743f556",
+        "triangles": 11896,
+        "bytes_saved_percent": 14.49,
+        "triangles_saved_percent": 35.12
+      },
+      "animation_authorship": "Authored Lid pivot; one-second 61-key eased Open and Close clips"
+    },
+    {
+      "id": "cooper-star",
+      "name": "Cooper Star",
+      "original_family": "kenney-survival-barrel",
+      "source": {
+        "creator": "Kenney",
+        "title": "Survival Kit 2.0",
+        "url": "https://kenney.nl/assets/survival-kit",
+        "license": "CC0-1.0",
+        "file": "sources/relic/utility/kenney-survival/barrel-open.glb",
+        "license_file": "sources/relic/utility/kenney-survival/LICENSE.txt",
+        "acquisition_status": "acquired-local-original-source; source preview and mesh inspected",
+        "animations": [],
+        "derived_animation": "Authored rigid Open and Close clips",
+        "license_sha256": "62c8356876481204fa4d40dc59183dfed777adf987d7f2a1390fffe8a699f3ff",
+        "game_license_file": "assets/chests/sources/atelier/licenses/cooper-star-LICENSE.txt"
+      },
+      "source_sha256": "f24ab1c5ab3685fc758f7e7298bf4f255f039fc6dfc7463711fbe90c4c011a41",
+      "reference": {
+        "file": "sources/relic/references/reference-5.png",
+        "status": "user-supplied visual inspiration only; no screenshot pixels reused"
+      },
+      "details": [
+        "Acquired hollow Survival barrel mesh and its UV artwork retained",
+        "Original closed-barrel wooden cap separated into a moving lid with solid wooden backing",
+        "Measured silver hoops follow every angular source face, with rolled beads and radial rivets",
+        "Layered compass receiver with pierced silver bezel and four-point gold star",
+        "Long walnut fibers, modeled stave strap edges and wood pore normals",
+        "Framed cap underside, interleaved rear hinges and mounted rolled ring handles"
+      ],
+      "component_sources": [
+        {
+          "file": "sources/relic/utility/kenney-survival/barrel.glb",
+          "sha256": "3a0d12f6bdd1badd361f64ce0fbbf878a4ccfc2de8ff1ac4ed4c1aea2a9ee04a",
+          "creator": "Kenney",
+          "license": "CC0-1.0",
+          "role": "Actual acquired wooden cap and bung separated from closed-barrel source",
+          "source_record": "sources/relic/utility/acquisition.json"
+        }
+      ],
+      "optimization": {
+        "hardware_ratio": 0.26,
+        "materials": 1,
+        "mesh_instances": 2,
+        "method": "Preserve acquired production shell and source UV artwork; protect open handles, shield/compass bezels and angular hoops; reduce repeated fittings; join two rigid mesh batches and bake embedded standard PBR maps",
+        "saved_bytes": 1107532,
+        "authoring_bytes": 2607624,
+        "runtime_bytes": 1500092,
+        "authoring_triangles": 37112,
+        "runtime_triangles": 17644
+      },
+      "validation": {
+        "source_bytes_unchanged": true,
+        "runtime_rendered": true,
+        "native_engine_validation": "pending-root-integration",
+        "visual_review": "Actual optimized closed/open PNGs inspected at full size; hollow lid, fitted bands and focal ornament checked"
+      },
+      "state_dependencies": {
+        "treasure": {
+          "model": "assets/chests/shared/rewards/coin-pile-tall.glb",
+          "sha256": "960965f8c4172d942cf30975665328ba40d469ccb1d555c8d425a66873614b5a",
+          "source_record": "assets/chests/sources/atelier/provenance/relic-coins.json",
+          "derivation": {
+            "method": "linked-source-instance-stack",
+            "instances": 4,
+            "source_triangles": 968,
+            "composition": {
+              "method": "Four linked original medium-pile instances, with uniform scale, slight rotations and small offsets; successive layers overlap vertically",
+              "height": 2.2,
+              "source_layer_height": 0.6753000057364891,
+              "layer_step": 0.5082333314211703,
+              "vertical_overlap": 0.16706667431531874,
+              "transforms": [
+                {
+                  "layer": 1,
+                  "uniform_source_scale": 1.0540479837357493,
+                  "rotation_about_up_radians": 0,
+                  "position_blender": [
+                    0,
+                    0,
+                    0
+                  ],
+                  "position_gltf": [
+                    0,
+                    0,
+                    0
+                  ]
+                },
+                {
+                  "layer": 2,
+                  "uniform_source_scale": 1.0540479837357493,
+                  "rotation_about_up_radians": 0.045,
+                  "position_blender": [
+                    0.006000000052154064,
+                    -0.004000000189989805,
+                    0.5082333087921143
+                  ],
+                  "position_gltf": [
+                    0.006000000052154064,
+                    0.5082333087921143,
+                    0.004000000189989805
+                  ]
+                },
+                {
+                  "layer": 3,
+                  "uniform_source_scale": 1.0540479837357493,
+                  "rotation_about_up_radians": -0.035,
+                  "position_blender": [
+                    -0.004999999888241291,
+                    0.003000000026077032,
+                    1.0164666175842285
+                  ],
+                  "position_gltf": [
+                    -0.004999999888241291,
+                    1.0164666175842285,
+                    -0.003000000026077032
+                  ]
+                },
+                {
+                  "layer": 4,
+                  "uniform_source_scale": 1.0540479837357493,
+                  "rotation_about_up_radians": 0.022,
+                  "position_blender": [
+                    0.003000000026077032,
+                    -0.0020000000949949026,
+                    1.5247000455856323
+                  ],
+                  "position_gltf": [
+                    0.003000000026077032,
+                    1.5247000455856323,
+                    0.0020000000949949026
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      },
+      "license": "CC0-1.0",
+      "visual_reference": {
+        "image": "sources/relic/references/reference-5.png",
+        "sha256": "f326c79c852aaa7e51ee1651a854fe1cc21a8025145449e74d4833289114dc7f",
+        "status": "user-provided-visual-inspiration-only",
+        "rights": "Unknown original screenshot rights; screenshot pixels are not runtime artwork"
+      },
+      "authoring": {
+        "model": "assets/cooper-star/chest.glb",
+        "bytes": 2607624,
+        "sha256": "823c69032d02d062f6f0518914637729525757dc9f7907af9c7c0ee15f3044b7",
+        "triangles": 37112
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/cooper-star/cooper-star.glb",
+        "bytes": 1500092,
+        "sha256": "873f710c22832c6e9664e6d691364842e54edb42e28f791570c3a2c7a5edc999",
+        "triangles": 17644,
+        "bytes_saved_percent": 42.47,
+        "triangles_saved_percent": 52.46
+      },
+      "animation_authorship": "Authored Lid pivot; one-second 61-key eased Open and Close clips"
+    },
+    {
+      "id": "velvet-parcel",
+      "name": "Velvet Parcel",
+      "original_family": "kenney-blaster",
+      "source": {
+        "creator": "Kenney",
+        "title": "Blaster Kit 2.1",
+        "url": "https://kenney.nl/assets/blaster-kit",
+        "license": "CC0-1.0",
+        "file": "sources/expansion/kenney-blaster/crate-wide.glb",
+        "license_file": "sources/expansion/kenney-blaster/LICENSE.txt",
+        "license_sha256": "bece5f4d99cca9dcf86931221a69909862ff6cc95e1735462ee678516a1063e2",
+        "game_license_file": "assets/chests/sources/atelier/licenses/velvet-parcel-LICENSE.txt"
+      },
+      "source_sha256": "0a17a51b274d238c09ade21674b70742bd5f1703f7b0e8974b6d0b2b92a58c8b",
+      "reference": {
+        "file": "sources/relic/references/reference-6.png",
+        "use": "User-supplied visual inspiration only; no screenshot pixels embedded in asset textures"
+      },
+      "details": [
+        "Acquired palette artwork retained on the source case; diamond-chased lacquer normal and roughness finishing.",
+        "Actual solid satin bow loops retain open holes, rolled folds, gathered knot and shaped tails.",
+        "Crimson wrapping strips and roof bands are sampled from the acquired source surface and follow the separate lid.",
+        "Acquired Kenney coin medallions, gilt corner studs, articulated rear hinges and rolled side handles complete the lacquered case.",
+        "A fitted interior frame and broad bow seal finish the empty source cavity."
+      ],
+      "component_sources": [
+        {
+          "file": "sources/kenney-platformer/coin-gold.glb",
+          "creator": "Kenney",
+          "license": "CC0-1.0",
+          "source_record": "sources/acquisition-record.json",
+          "sha256": "cf2179e57721b943d88283d38678c4b1b8422e9a4dd44f631acfb35007c223a8"
+        }
+      ],
+      "optimization": {
+        "hardware_ratio": 0.26,
+        "materials": 1,
+        "mesh_instances": 2,
+        "method": "Source meshes retained; added rigid detail reduced; two rigid batches; embedded single-UV PBR PNG512color/1024normal/256ORM.",
+        "saved_bytes": 402808,
+        "authoring_bytes": 1512612,
+        "runtime_bytes": 1109804,
+        "authoring_triangles": 25348,
+        "runtime_triangles": 15977
+      },
+      "validation": {
+        "source_bytes_unchanged": true,
+        "runtime_rendered": true,
+        "native_engine_validation": "pending-root-integration"
+      },
+      "license": "CC0-1.0",
+      "visual_reference": {
+        "image": "sources/relic/references/reference-6.png",
+        "sha256": "54f937028a3ebea164ecdd6fcc9a4024a29ce81906083b6e160b840f7eea9fdb",
+        "status": "user-provided-visual-inspiration-only",
+        "rights": "Unknown original screenshot rights; screenshot pixels are not runtime artwork"
+      },
+      "authoring": {
+        "model": "assets/velvet-parcel/chest.glb",
+        "bytes": 1512612,
+        "sha256": "fc5b553fa9b436d572364c1d0b06b359ee84562d05e8c90b09f932dc00f5feb9",
+        "triangles": 25348
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/velvet-parcel/velvet-parcel.glb",
+        "bytes": 1109804,
+        "sha256": "7c9febbde445b26f0f6f5b45609f6a04255533579c08bd825e9df008d4681eba",
+        "triangles": 15977,
+        "bytes_saved_percent": 26.63,
+        "triangles_saved_percent": 36.97
+      },
+      "animation_authorship": "New one-second rigid hinge clips with 61 sampled keys; acquired originals unchanged"
+    },
+    {
+      "id": "regent-wings",
+      "name": "Regent Wings",
+      "original_family": "kenney-platformer",
+      "source": {
+        "creator": "Kenney",
+        "title": "Platformer Kit 4.1",
+        "url": "https://kenney.nl/assets/platformer-kit",
+        "license": "CC0-1.0",
+        "file": "sources/kenney-platformer/chest.glb",
+        "license_file": "sources/kenney-platformer/LICENSE.txt",
+        "license_sha256": "e1185354d8f0f055c325c7204602326c8cf0c47ee5ae1db7ed16f0465b91bb9a",
+        "game_license_file": "assets/chests/sources/atelier/licenses/regent-wings-LICENSE.txt"
+      },
+      "source_sha256": "ba92d21be71649e608de4c76859f04e83308efc699508b2ddb1221678102e274",
+      "reference": {
+        "file": "sources/relic/references/reference-7.png",
+        "use": "User-supplied visual inspiration only; no screenshot pixels embedded in asset textures"
+      },
+      "details": [
+        "Secondary UV wood/enamel normal finishing",
+        "Source base-color atlases and UVs preserved",
+        "Scored board joints and fine brushed-metal normal maps",
+        "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+        "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+        "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+        "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+        "Theme-specific crafted trim: royal-rose.",
+        "Six swept solid gold wing feathers have separate relief layers, modeled ridges and recessed joints.",
+        "A three-point crown setting frames the original acquired Kenney ruby geometry; side rubies remain source-derived.",
+        "The winged crest and curved center hoop move with the actual hinged lid; fixed receiver and moving tongue remain separate.",
+        "Red painted timber has continuous grain, knots, board joints and source gradient shading beneath fitted goldwork."
+      ],
+      "component_sources": [
+        {
+          "file": "sources/kenney-platformer/jewel.glb",
+          "creator": "Kenney",
+          "license": "CC0-1.0",
+          "source_record": "sources/acquisition-record.json",
+          "sha256": "cec20d8ae2678c292b3885aaee468ba39d165a7e2043af5ba8102b6cd974c2c3"
+        },
+        {
+          "file": "components/kaykit-keyplate.glb",
+          "creator": "Kay Lousberg",
+          "license": "CC0-1.0",
+          "source_record": "components/provenance.json",
+          "sha256": "a9d4a304c983efaba3f09b81e343727f7fae2b5f7ebe7bdb59ea5d80d02f6096"
+        }
+      ],
+      "optimization": {
+        "hardware_ratio": 0.26,
+        "materials": 1,
+        "mesh_instances": 2,
+        "method": "Source meshes retained; added rigid detail reduced; two rigid batches; embedded single-UV PBR PNG512color/1024normal/256ORM.",
+        "saved_bytes": 1134936,
+        "authoring_bytes": 2068464,
+        "runtime_bytes": 933528,
+        "authoring_triangles": 20628,
+        "runtime_triangles": 9020
+      },
+      "validation": {
+        "source_bytes_unchanged": true,
+        "runtime_rendered": true,
+        "native_engine_validation": "pending-root-integration"
+      },
+      "license": "CC0-1.0",
+      "visual_reference": {
+        "image": "sources/relic/references/reference-7.png",
+        "sha256": "84fa93ba3e97c73000605639b27a3729df9099720c67ba9e1f1b28a7b35b9105",
+        "status": "user-provided-visual-inspiration-only",
+        "rights": "Unknown original screenshot rights; screenshot pixels are not runtime artwork"
+      },
+      "authoring": {
+        "model": "assets/regent-wings/chest.glb",
+        "bytes": 2068464,
+        "sha256": "1ae1e70470b4276d55374c0edcea97c4ba70e53a9cd5eadbebb1203c0ffab53b",
+        "triangles": 20628
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/regent-wings/regent-wings.glb",
+        "bytes": 933528,
+        "sha256": "3fb4280c3552420040e87f8c1be86a9c82f135d7bf62fd37b217314fac7c71c6",
+        "triangles": 9020,
+        "bytes_saved_percent": 54.87,
+        "triangles_saved_percent": 56.27
+      },
+      "animation_authorship": "New one-second rigid hinge clips with 61 sampled keys; acquired originals unchanged"
+    }
+  ],
+  "native_validation": {
+    "status": "passed",
+    "passed": true,
+    "checks": 1912,
+    "failures": 0,
+    "report_sha256": "e41814ab82f10d71f31d2ba867a9bd19a39a57a70b09050423fa2da79f7925cf",
+    "game_report": "assets/chests/sources/atelier/validation/relic-state-report.json",
+    "review_report": "sources/relic/validation/native-state-report.json",
+    "model_count": 28,
+    "sprite_count": 3,
+    "captured_frames": 124,
+    "godot": "4.7.2-stable (official)",
+    "display": "Windows",
+    "rendering_method": "gl_compatibility",
+    "review_capture_directory": "sources/relic/validation",
+    "scope": "Current exact-byte model and sprite scenes with actual four-state native graphics readback"
+  }
+}

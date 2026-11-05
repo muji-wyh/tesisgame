@@ -13,6 +13,7 @@ const Data = preload("res://scripts/game_data.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const Mascot = preload("res://scripts/duck_mascot.gd")
 const ChestView = preload("res://scripts/chest_view.gd")
+const JellyRewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
 const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const DURATION: float = Mascot.CELEBRATION_SECONDS
@@ -168,7 +169,7 @@ func apply_theme(theme_id: String, chest_manifest: Dictionary) -> void:
 	_theme_id = theme_id if Data.THEMES.has(theme_id) else "spring"
 	_palette = Data.theme(_theme_id)
 	pip.set_outfit_theme(_theme_id)
-	chest.configure_tier(clampi(_chest_tier, 1, 30), _palette, chest_manifest)
+	chest.configure_tier(clampi(_chest_tier, 1, JellyRewardProgress.MAX_TIER), _palette, chest_manifest)
 	chest.set_process(false)
 	_layout()
 

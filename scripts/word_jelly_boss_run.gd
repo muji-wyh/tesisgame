@@ -259,7 +259,7 @@ func _launch(candidates: Array[Dictionary]) -> void:
 	match kind:
 		"clones":
 			clones = 2
-			_event("clones", {"count": clones, "text": "Which Bramble is real?"})
+			_event("clones", {"count": clones, "text": "Which Pirate is real?"})
 		"kick":
 			_specials.append({"kind": "kick", "remaining": WINDUP_SECONDS})
 			_event("kick_windup", {"text": "Watch the sky!"})

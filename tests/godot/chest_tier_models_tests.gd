@@ -6,10 +6,10 @@ const RewardModel = preload("res://scripts/chest_reward_model.gd")
 const Data = preload("res://scripts/game_data.gd")
 const Feel = preload("res://scripts/chest_feel.gd")
 const CATALOG_PATH: String = "res://scripts/chest_tier_catalog.gd"
-const PRESETS_PATH: String = "res://assets/chests/catalog/tier-presets.json"
-const SOURCES_PATH: String = "res://assets/chests/catalog/cc0-sources.json"
-const MANIFEST_PATH: String = "res://assets/chests/catalog/licensed-models.json"
-const CAPTURE_PATH: String = "res://build/qa/chest-thirty-tiers"
+const PRESETS_PATH: String = "res://assets/chests/catalog/gameplay-chests.json"
+const SOURCES_PATH: String = "res://assets/chests/catalog/atelier.json"
+const MANIFEST_PATH: String = "res://assets/chests/catalog/gameplay-chests.json"
+const CAPTURE_PATH: String = "res://build/qa/chest-ninety-nine-tiers"
 const THEMES: Array[String] = [
 	"spring", "summer", "autumn", "winter", "ocean", "space", "jungle", "candy"
 ]
@@ -38,19 +38,20 @@ func _run() -> void:
 	var presets: Dictionary = _read_json(PRESETS_PATH)
 	_source_catalog = _read_json(SOURCES_PATH)
 	_recipes = presets.get("tiers", [])
-	check(_recipes.size() == 30, "Acquired recipes define exactly thirty modular tiers")
+	check(_recipes.size() == 99, "Acquired Atelier materials define exactly ninety-nine gameplay tiers")
 	_check_entry_points()
 	if _load_catalog():
 		_check_catalog(presets)
-		for tier in range(1, 31):
+		for tier in range(1, int(_manifest.get("material_count", 0)) + 1):
 			_check_tier_model(tier)
+		_check_tier_model(99)
 		_check_legacy_themes()
 		_check_exact_tier_reconfiguration()
 		_check_missing_geometry()
 	await _check_reward_pool()
 	if OS.get_cmdline_user_args().has("--capture") and _catalog != null and failures == 0:
 		await _capture_contact_sheets()
-	print("Thirty-tier chest models: %d checks, %d failures" % [checks, failures])
+	print("Ninety-nine-tier Atelier chest models: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
 
 
@@ -103,105 +104,78 @@ func _style(tier: int) -> Dictionary:
 
 func _check_catalog(presets: Dictionary) -> void:
 	var constants: Dictionary = _catalog.get_script_constant_map()
-	check(int(constants.get("MAX_TIER", 0)) == 30, "The rendering catalog caps tiers at thirty")
+	check(int(constants.get("MAX_TIER", 0)) == 99, "The rendering catalog caps gameplay tiers at ninety-nine")
+	var ranking: Dictionary = _read_json("res://assets/chests/catalog/chest-levels.json")
+	var ranked_models: Array[Dictionary] = []
+	var ranked_ids: Dictionary = {}
+	for row: Dictionary in ranking.get("levels", []):
+		if str(row.get("asset_type", "")) == "model" and not ranked_ids.has(str(row.asset_id)):
+			ranked_ids[str(row.asset_id)] = true
+			ranked_models.append(row)
+	check(ranked_models.size() == 28 and int(presets.get("material_count", 0)) == ranked_models.size(),
+		"The replacement uses all twenty-eight retained ranked Atelier models")
 	var ids: Dictionary = {}
-	var structures: Dictionary = {}
-	var families: Dictionary = {}
-	var previous_rank: int = 0
-	var profiles: Dictionary = presets.get("source_notes", {}).get("material_styles", {})
-	for tier in range(1, 31):
+	var models: Dictionary = {}
+	for tier in range(1, 100):
 		var preset: Dictionary = _preset(tier)
 		var style: Dictionary = _style(tier)
-		if preset.is_empty() or style.is_empty():
+		if preset.is_empty() or style.is_empty() or ranked_models.is_empty():
 			check(false, "Tier %d has an explicit preset and renderable style" % tier)
 			continue
+		var selected: Dictionary = ranked_models[mini(tier - 1, ranked_models.size() - 1)]
 		check(int(preset.get("level", 0)) == tier and int(style.get("tier", 0)) == tier,
-			"Tier %d keeps its exact contiguous level" % tier)
+			"Tier %d keeps its exact contiguous gameplay level" % tier)
 		check(str(preset.get("id", "")).begins_with("tier-%02d-" % tier)
 			and style.get("preset_id", "") == preset.get("id"),
-			"Tier %d keeps the acquired recipe identity through rendering" % tier)
+			"Tier %d keeps its independent tier identity through rendering" % tier)
 		ids[preset.get("id", "")] = true
 		var source: String = str(preset.get("base_model", ""))
-		check(_resource_path(str(style.get("source_model", ""))) == _resource_path(source)
-			and _resource_path(str(style.get("model", ""))) == _resource_path(
-				str(constants.POLISHED_MODELS.get(source, source))),
-			"Tier %d uses the documented refined source base, never a different tier or flat art" % tier)
-		check(_known_model(source), "Tier %d base resolves to a documented source artifact" % tier)
-		check(FileAccess.file_exists(_resource_path(source)),
-			"Tier %d acquired base file is present" % tier)
-		families[source] = true
-		var geometry: Array = []
-		var slots: Dictionary = {}
-		var decorations: Array = preset.get("decorations", [])
-		check(style.get("decorations", []) == decorations,
-			"Tier %d preserves its structurally distinct source ornament recipe" % tier)
-		for entry: Dictionary in decorations:
-			var ornament: String = str(entry.get("model", ""))
-			var slot: String = str(entry.get("slot", ""))
-			check(_known_model(ornament) and FileAccess.file_exists(_resource_path(ornament)),
-				"Tier %d %s ornament is a real acquired model" % [tier, slot])
-			check(not slots.has(slot) and slot in ["front", "left", "right", "front-left", "front-right"],
-				"Tier %d has one model per semantic body anchor" % tier)
-			slots[slot] = true
-			geometry.append([ornament, slot])
-		var signature: String = source + JSON.stringify(geometry)
-		check(not structures.has(signature),
-			"Tier %d differs by geometry or composition, not just tint or overall size" % tier)
-		structures[signature] = true
-		var profile_id: String = str(preset.get("material_style", ""))
-		var profile: Dictionary = profiles.get(profile_id, {})
-		var rank: int = int(profile.get("preciousness_rank", 0))
-		check(not profile.is_empty() and rank >= previous_rank,
-			"Tier %d advances through the declared preciousness direction" % tier)
-		check(style.get("material_style", "") == profile_id
-			and style.get("material_profile", {}) == profile,
-			"Tier %d exposes role-specific, explicitly game-authored material styling" % tier)
-		previous_rank = rank
-		if source.begins_with("assets/chests/models/licensed/"):
-			var legacy: Dictionary = _legacy_style_for_model(source)
-			check(not legacy.is_empty() and style.get("model_parts", []) == legacy.get("model_parts", [])
-				and style.get("open_animation", "") == legacy.get("open_animation", "")
-				and is_equal_approx(float(style.get("open_start", -1.0)), float(legacy.get("open_start", 0.0)))
-				and is_equal_approx(float(style.get("open_end", -1.0)), float(legacy.get("open_end", 1.0))),
-				"Tier %d preserves the existing private model's bones and opening curve range" % tier)
-	check(ids.size() == 30 and structures.size() == 30 and families.size() == 9,
-		"Thirty unique modular recipes use nine honest native base families")
+		check(source == str(selected.model) and _resource_path(str(style.get("model", ""))) == _resource_path(source)
+			and preset.get("base_source_id", "") == selected.asset_id,
+			"Tier %d selects its ordered Atelier material and repeats only the final source after material twenty-eight" % tier)
+		check(source.begins_with("assets/chests/models/atelier/") and _known_model(source)
+			and FileAccess.file_exists(_resource_path(source)),
+			"Tier %d uses an acquired Atelier model without selecting an old CC0, licensed base or sprite family" % tier)
+		models[source] = true
+		check(style.get("decorations", []).is_empty() and preset.get("decorations", []).is_empty(),
+			"Tier %d preserves its already fitted source artwork without adding old modular ornaments" % tier)
+		var acquired: Dictionary = _acquired_model(source)
+		check(not acquired.is_empty() and style.get("model_parts", []) == acquired.get("style", {}).get("model_parts", [])
+			and style.get("open_animation", "") == "Open" and acquired.get("animations", []).any(
+				func(clip: Dictionary) -> bool: return str(clip.name) == "Open"),
+			"Tier %d preserves its actual authored Atelier opening and model parts" % tier)
+		check(style.get("state_asset_id", "") == selected.asset_id and not str(style.get("state_scene", "")).is_empty(),
+			"Tier %d binds the reusable source state scene to its actual Atelier identity" % tier)
+	check(ids.size() == 99 and models.size() == ranked_models.size(),
+		"Ninety-nine independent tiers use every retained Atelier model, with the final material continuing through Lv99")
 	check(_preset(0).is_empty() and not str(_catalog.call("error")).is_empty(),
 		"Tier zero returns an explicit catalog validation error without engine noise")
-	check(_preset(31).is_empty() and not str(_catalog.call("error")).is_empty()
-		and _style(31).is_empty() and not str(_catalog.call("error")).is_empty(),
+	check(_preset(100).is_empty() and not str(_catalog.call("error")).is_empty()
+		and _style(100).is_empty() and not str(_catalog.call("error")).is_empty(),
 		"Out-of-range tiers fail explicitly instead of wrapping or silently clamping")
 	var first: Dictionary = _preset(2)
 	check(str(_catalog.call("error")).is_empty(),
 		"A valid catalog lookup clears its preceding input validation error")
 	var original: Dictionary = first.duplicate(true)
 	first["id"] = "mutated"
-	var nested: Array = first.get("decorations", [])
-	if not nested.is_empty():
-		nested[0]["model"] = "mutated"
-	check(_preset(2) == original, "Callers cannot mutate the cached source recipe or nested decorations")
-	var styled: Dictionary = _style(30)
+	check(_preset(2) == original, "Callers cannot mutate the cached source recipe")
+	var styled: Dictionary = _style(99)
 	var original_style: Dictionary = styled.duplicate(true)
-	styled.get("decorations", []).clear()
-	styled.get("material_profile", {}).clear()
-	check(_style(30) == original_style, "Callers cannot mutate the cached material profile or render recipe")
+	var parts: Array = styled.get("model_parts", [])
+	if not parts.is_empty():
+		parts[0]["node"] = "mutated"
+	check(_style(99) == original_style, "Callers cannot mutate the cached nested model-part recipe")
+
+
+func _acquired_model(path: String) -> Dictionary:
+	for entry: Dictionary in _source_catalog.get("models", []):
+		if entry.get("model", "") == path:
+			return entry
+	return {}
 
 
 func _known_model(path: String) -> bool:
-	for entry: Dictionary in _source_catalog.get("files", []):
-		if entry.get("path", "") == path and entry.get("kind", "") == "model":
-			return true
-	for entry: Dictionary in _source_catalog.get("referenced_private_models", []):
-		if entry.get("path", "") == path:
-			return true
-	return false
-
-
-func _legacy_style_for_model(path: String) -> Dictionary:
-	for style: Dictionary in _manifest.get("styles", {}).values():
-		if style.get("model", "") == path:
-			return style
-	return {}
+	return not _acquired_model(path).is_empty()
 
 
 func _resource_path(path: String) -> String:
@@ -221,17 +195,22 @@ func _check_tier_model(tier: int) -> void:
 		return
 	var rig: Node3D = model.get("_rig") as Node3D
 	var meshes: Array[MeshInstance3D] = []
-	_collect_meshes(rig, meshes)
+	meshes.assign(model.get("_meshes"))
 	var state: Dictionary = model.snapshot()
 	check(not meshes.is_empty() and int(state.get("mesh_count", 0)) == meshes.size(),
-		"Tier %d includes every base and ornament mesh in its renderer statistics" % tier)
+		"Tier %d measures its actual shell surfaces independently from hidden treasure and magic" % tier)
 	var genuine: bool = true
 	for mesh in meshes:
 		genuine = genuine and mesh.mesh is ArrayMesh and _has_spatial_volume(mesh.mesh)
 	check(genuine, "Tier %d has genuine volumetric source meshes, never a quad or primitive substitute" % tier)
-	check(rig.find_children("*", "Sprite3D", true, false).is_empty()
-		and rig.find_children("*", "SpriteBase3D", true, false).is_empty(),
+	var source: Node3D = model.get("_model") as Node3D
+	check(source != null and source.find_children("*", "Sprite3D", true, false).is_empty()
+		and source.find_children("*", "SpriteBase3D", true, false).is_empty(),
 		"Tier %d does not hide a camera-facing card among its source geometry" % tier)
+	check(int(state.get("composer_source_instances", 0)) == 1
+		and str(state.get("content_source", "")) == str(style.state_asset_id)
+		and str(state.get("content_state", "")) == "closed",
+		"Tier %d owns one exact source state composition and begins with its contents hidden" % tier)
 	var closed_box: AABB = model.get("_closed_box")
 	var motion_box: AABB = model.get("_motion_box")
 	check(_volume_valid(closed_box) and _volume_valid(motion_box)
@@ -244,13 +223,12 @@ func _check_tier_model(tier: int) -> void:
 		var base_meshes: Array[MeshInstance3D] = []
 		_collect_meshes(base_roots[0], base_meshes)
 		var base_box: AABB = _bounds(base_meshes, rig)
-		check(is_equal_approx(base_box.size.x, 2.0)
-			and absf(base_box.position.y) < 0.005
-			and absf(base_box.get_center().x) < 0.005 and absf(base_box.get_center().z) < 0.005,
-			"Tier %d normalizes its real base to +Y up, centered X/Z and two units wide" % tier)
-		_check_attachments(tier, model, base_roots[0], base_box, style)
+		check(_volume_valid(base_box) and base_box.size.x >= 1.5 and base_box.size.x <= 3.0
+			and absf(base_box.position.y) < 0.005,
+			"Tier %d keeps its grounded +Y-up acquired body and fitted dimensional artwork without flattening its silhouette" % tier)
 		_check_source_materials(tier, base_roots[0], style)
 	_check_opening_and_camera(tier, model, style)
+	_check_runtime_contents(tier, model, style)
 	model.free()
 
 
@@ -337,6 +315,8 @@ func _project_geometry_bounds(model: SubViewport) -> Rect2:
 	var result := Rect2()
 	var first: bool = true
 	for mesh in meshes:
+		if not mesh.is_visible_in_tree():
+			continue
 		var transform: Transform3D = view * _relative_transform(mesh, rig)
 		for surface in range(mesh.mesh.get_surface_count()):
 			var arrays: Array = mesh.mesh.surface_get_arrays(surface)
@@ -349,123 +329,43 @@ func _project_geometry_bounds(model: SubViewport) -> Rect2:
 	return result
 
 
-func _check_attachments(tier: int, model: SubViewport, base: Node3D,
-		base_box: AABB, style: Dictionary) -> void:
-	var rig: Node3D = model.get("_rig") as Node3D
-	var cavity: Vector3 = model.get("_cavity")
-	var closed_box: AABB = model.get("_closed_box")
-	var decorations: Array = style.get("decorations", [])
-	var sources: Dictionary = {}
-	var assigned: Array[Node3D] = []
-	for entry: Dictionary in decorations:
-		var path: String = _resource_path(str(entry.model))
-		if not sources.has(path):
-			var roots: Array[Node3D] = []
-			_find_source_roots(rig, path, roots)
-			sources[path] = roots
-		var candidates: Array = sources[path]
-		var ornament: Node3D
-		for candidate: Node3D in candidates:
-			if not assigned.has(candidate):
-				ornament = candidate
-				break
-		check(ornament != null, "Tier %d instantiates its real %s source ornament" % [tier, entry.slot])
-		if ornament == null:
-			continue
-		assigned.append(ornament)
-		check(not base.is_ancestor_of(ornament),
-			"Tier %d %s fitting attaches to the body frame, outside the animated source hierarchy" % [tier, entry.slot])
-		var meshes: Array[MeshInstance3D] = []
-		_collect_meshes(ornament, meshes)
-		var box: AABB = _bounds(meshes, rig)
-		check(not meshes.is_empty() and _volume_valid(box) and closed_box.grow(0.001).encloses(box),
-			"Tier %d %s ornament remains volumetric and participates in closed framing" % [tier, entry.slot])
-		check(box.position.y >= base_box.position.y - 0.002
-			and box.end.y <= cavity.y - base_box.size.x * 0.002,
-			"Tier %d %s fitting stays entirely below the measured lid seam" % [tier, entry.slot])
-		var normal: Vector3 = _slot_normal(str(entry.slot))
-		var center: Vector3 = box.get_center()
-		var surface: Variant = _body_surface(base, model, center, normal, base_box.size.x)
-		check(surface is Vector3, "Tier %d %s anchor lands on actual body triangles" % [tier, entry.slot])
-		if surface is Vector3:
-			var nearest: float = INF
-			for corner in range(8):
-				nearest = minf(nearest, normal.dot(box.get_endpoint(corner) - surface))
-			check(nearest >= -base_box.size.x * 0.008 and nearest <= base_box.size.x * 0.055,
-				"Tier %d %s fitting sits just outside its body panel, not inside it or floating away" % [tier, entry.slot])
-		var rest: Transform3D = _relative_transform(ornament, rig)
-		var stationary: bool = true
-		var lid_clear: bool = true
-		for amount: float in [0.0, 0.15, 0.5, 1.0]:
-			model.call("set_pose", amount, 0.0, 0.0, 0.0, 0.0, Color.WHITE, true)
-			stationary = stationary and _relative_transform(ornament, rig).is_equal_approx(rest)
-			var parts: Array = model.get("_parts")
-			for part: Dictionary in parts:
-				if part.get("role", "") != "lid" or int(part.get("bone", -1)) >= 0:
-					continue
-				var lid_meshes: Array[MeshInstance3D] = []
-				_collect_meshes(part.node, lid_meshes)
-				lid_clear = lid_clear and not box.intersects(_bounds(lid_meshes, rig))
-		check(stationary, "Tier %d %s fitting follows the body rather than the opening lid" % [tier, entry.slot])
-		check(lid_clear, "Tier %d %s fitting clears the actual moving lid volume" % [tier, entry.slot])
-		model.call("set_pose", 0.0, 0.0, 0.0, 0.0, 0.0, Color.WHITE, true)
-	var ornament_count: int = 0
-	for roots: Array in sources.values():
-		ornament_count += roots.size()
-	check(ornament_count == decorations.size(),
-		"Tier %d creates exactly its declared ornaments without duplicate attachment leaks" % tier)
-
-
-func _slot_normal(slot: String) -> Vector3:
-	match slot:
-		"left":
-			return Vector3.LEFT
-		"right":
-			return Vector3.RIGHT
-	return Vector3.BACK
-
-
-func _body_surface(base: Node3D, model: SubViewport, center: Vector3,
-		normal: Vector3, width: float) -> Variant:
-	var rig: Node3D = model.get("_rig") as Node3D
-	var meshes: Array[MeshInstance3D] = []
-	_collect_meshes(base, meshes)
-	var ray: Vector3 = center + normal * width * 3.0
-	var nearest_distance: float = INF
-	var nearest: Variant = null
-	var parts: Array = model.get("_parts")
-	for mesh in meshes:
-		var moving: bool = false
-		for part: Dictionary in parts:
-			var node: Node = part.get("node")
-			if part.get("role", "") == "lid" and int(part.get("bone", -1)) < 0 \
-				and (node == mesh or node.is_ancestor_of(mesh)):
-				moving = true
-		if moving:
-			continue
-		var transform: Transform3D = _relative_transform(mesh, rig)
-		for surface in range(mesh.mesh.get_surface_count()):
-			var arrays: Array = mesh.mesh.surface_get_arrays(surface)
-			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
-			var indices: PackedInt32Array = arrays[Mesh.ARRAY_INDEX]
-			var count: int = indices.size() if not indices.is_empty() else vertices.size()
-			for offset in range(0, count - 2, 3):
-				var a: int = indices[offset] if not indices.is_empty() else offset
-				var b: int = indices[offset + 1] if not indices.is_empty() else offset + 1
-				var c: int = indices[offset + 2] if not indices.is_empty() else offset + 2
-				var hit: Variant = Geometry3D.ray_intersects_triangle(ray, -normal,
-					transform * vertices[a], transform * vertices[b], transform * vertices[c])
-				if hit is Vector3:
-					var distance: float = ray.distance_squared_to(hit)
-					if distance < nearest_distance:
-						nearest_distance = distance
-						nearest = hit
-	return nearest
+func _check_runtime_contents(tier: int, model: SubViewport, style: Dictionary) -> void:
+	model.call("set_pose", 0.45, 0.0, 0.0, 0.0, 0.0, Color.WHITE, false)
+	var source: Node3D = model.get("_model") as Node3D
+	var pose: Array = model.call("snapshot").get("parts", []).duplicate(true)
+	for content_state: String in ["closed", "open", "treasure", "magic"]:
+		check(model.call("set_contents", content_state, 0.25, 0.8, false),
+			"Tier %d samples actual sourced %s contents through the runtime viewer" % [tier, content_state])
+		var state: Dictionary = model.call("snapshot")
+		var content: Dictionary = state.get("content", {})
+		check(model.get("_model") == source and state.get("parts", []) == pose
+			and is_equal_approx(float(state.get("open_amount", 0.0)), 0.45)
+			and int(state.get("composer_source_instances", 0)) == 1,
+			"Tier %d changes %s contents without duplicating the source or seeking its fractional lid pose" % [tier, content_state])
+		check(bool(content.get("caller_owned", false)) and not bool(content.get("auto_processing", true))
+			and str(content.get("state_scene", "")) == str(style.state_scene),
+			"Tier %d samples %s from its actual scene using only the owner clock" % [tier, content_state])
+		check(bool(content.get("loot_visible", false)) == (content_state == "treasure")
+			and bool(content.get("magic_visible", false)) == (content_state == "magic"),
+			"Tier %d keeps empty, treasure and magic presentations distinct" % tier)
+		if content_state == "magic":
+			check(is_equal_approx(float(content.get("content_time", -1.0)), 0.25)
+				and is_equal_approx(float(content.get("magic_strength", -1.0)), 0.8)
+				and not bool(content.get("magic_clipped", true)),
+				"Tier %d samples continuous sourced magic within its authored envelope" % tier)
+	check(model.call("set_contents", "magic", 4.0, 0.8, true)
+		and is_zero_approx(float(model.call("snapshot").get("content", {}).get("content_time", -1.0))),
+		"Tier %d retains sourced magic in a static reduced-motion state" % tier)
+	var before: Dictionary = model.call("snapshot").duplicate(true)
+	check(not model.call("set_contents", "unknown", 0.0)
+		and model.call("snapshot") == before,
+		"Tier %d rejects unknown contents without mutating its real source composition" % tier)
+	model.call("set_closed_turn", 0.0)
 
 
 func _check_source_materials(tier: int, base: Node3D, style: Dictionary) -> void:
 	var path: String = _resource_path(str(style.model))
-	if not path.begins_with("res://assets/chests/models/cc0/"):
+	if not path.begins_with("res://assets/chests/models/atelier/"):
 		return
 	var resource := load(path) as PackedScene
 	if resource == null:
@@ -477,9 +377,9 @@ func _check_source_materials(tier: int, base: Node3D, style: Dictionary) -> void
 	_collect_meshes(original, source_meshes)
 	_collect_meshes(base, instance_meshes)
 	check(source_meshes.size() == instance_meshes.size(),
-		"Tier %d preserves the source atlas base's geometry structure" % tier)
+		"Tier %d preserves the acquired Atelier model's geometry structure" % tier)
 	var preserved: bool = source_meshes.size() == instance_meshes.size()
-	var textured: bool = false
+	var source_surfaces: int = 0
 	for index in range(mini(source_meshes.size(), instance_meshes.size())):
 		var source_mesh: MeshInstance3D = source_meshes[index]
 		var instance: MeshInstance3D = instance_meshes[index]
@@ -490,17 +390,20 @@ func _check_source_materials(tier: int, base: Node3D, style: Dictionary) -> void
 			preserved = preserved and source_arrays[Mesh.ARRAY_TEX_UV] == instance_arrays[Mesh.ARRAY_TEX_UV]
 			var source_material: BaseMaterial3D = source_mesh.get_active_material(surface) as BaseMaterial3D
 			var material: Material = instance.get_active_material(surface)
-			if source_material == null or source_material.albedo_texture == null:
+			if source_material == null:
 				continue
-			textured = true
-			preserved = preserved and material != source_material \
-				and _retains_source_texture(material, source_material.albedo_texture)
+			source_surfaces += 1
+			if source_material.albedo_texture != null:
+				preserved = preserved and _retains_source_texture(material, source_material.albedo_texture)
 			if material is BaseMaterial3D:
 				preserved = preserved and material.albedo_color == source_material.albedo_color \
 					and (is_equal_approx(material.metallic, source_material.metallic)
-						or material.metallic_texture != null)
-	check(textured and preserved,
-		"Tier %d keeps source UV/atlas detail and never blanket-tints or metallizes wood with trim" % tier)
+						or material.metallic_texture != null) \
+					and material.vertex_color_use_as_albedo == source_material.vertex_color_use_as_albedo
+			elif source_material.albedo_texture == null:
+				preserved = false
+	check(source_surfaces > 0 and preserved,
+		"Tier %d preserves authored UVs, source textures or vertex palette and differentiated material surfaces" % tier)
 	original.free()
 
 
@@ -529,12 +432,10 @@ func _check_opening_and_camera(tier: int, model: SubViewport, style: Dictionary)
 		var clip: String = str(rest.get("source_animation", ""))
 		check(clip.get_slice("/", clip.get_slice_count("/") - 1) == style.open_animation,
 			"Tier %d uses the acquired source opening clip" % tier)
-		if str(style.model).contains("/kenney-"):
-			check(absf(float(model.get("_clip_end")) - 0.3) < 0.0001,
-				"Tier %d plays the complete original 0.3-second Kenney opening" % tier)
+		check(absf(float(model.get("_clip_end")) - 1.0) < 0.0001,
+			"Tier %d plays the complete authored one-second Atelier opening" % tier)
 	else:
-		check(str(style.model).contains("/kaykit-") and not style.get("model_parts", []).is_empty(),
-			"Tier %d gives the static KayKit lid a real game-authored hinge" % tier)
+		check(false, "Tier %d must retain its actual Atelier Open clip" % tier)
 	model.call("set_pose", 0.25, 0.0, 0.0, 0.0, 0.0, Color.WHITE, true)
 	var quarter: Array = model.call("snapshot").get("parts", []).duplicate(true)
 	model.call("set_pose", 0.26, 0.0, 0.0, 0.0, 0.0, Color.WHITE, true)
@@ -604,7 +505,7 @@ func _check_legacy_themes() -> void:
 	chest.size = Vector2(320, 280)
 	for theme in THEMES:
 		var tier: int = int(_catalog.call("theme_tier", theme))
-		check(tier >= 1 and tier <= 30, theme + " maps to an actual catalog tier")
+		check(tier >= 1 and tier <= 99, theme + " maps to an actual catalog tier")
 		chest.configure_skin(Data.theme(theme), _manifest)
 		chest.set_process(false)
 		var state: Dictionary = chest.hold_effect_snapshot()
@@ -628,7 +529,7 @@ func _check_exact_tier_reconfiguration() -> void:
 		chest.free()
 		return
 	var palette: Dictionary = Data.theme("autumn")
-	for tier in range(1, 31):
+	for tier in range(1, 100):
 		chest.call("configure_tier", tier, palette, _manifest)
 		chest.set_process(false)
 		var state: Dictionary = chest.hold_effect_snapshot()
@@ -640,11 +541,11 @@ func _check_exact_tier_reconfiguration() -> void:
 	chest.start_open(false)
 	chest._advance_animation(Feel.RELEASE_TIME + 0.1)
 	var before: Dictionary = chest.hold_effect_snapshot().duplicate(true)
-	chest.call("configure_tier", 30, palette, _manifest)
+	chest.call("configure_tier", 99, palette, _manifest)
 	check(chest.get("_model_view") == model and chest.hold_effect_snapshot() == before,
 		"Reconfiguring the same actual tier preserves its ongoing model, opening and sound clock")
 	check(chest.get_child_count() < 20,
-		"Changing thirty exact tiers does not retain old model viewports")
+		"Changing ninety-nine exact tiers does not retain old model viewports")
 	chest.free()
 
 
@@ -653,18 +554,16 @@ func _check_missing_geometry() -> void:
 	root.add_child(model)
 	check(model.configure(_style(2)), "Missing-resource validation first owns a real styled source model")
 	var style: Dictionary = _style(2)
-	style["model"] = "assets/chests/sources/cc0/missing-chest.glb"
+	style["model"] = "assets/chests/models/atelier/missing-chest.glb"
 	check(not model.configure(style) and not model.last_error.is_empty()
 		and not bool(model.snapshot().get("available", true)) and int(model.snapshot().get("mesh_count", -1)) == 0,
 		"A missing acquired base reports unavailable instead of substituting a card")
 	check(model.configure(_style(2)), "A valid recipe can recover from a rejected base")
 	style = _style(2)
-	var decorations: Array = style.get("decorations", [])
-	if not decorations.is_empty():
-		decorations[0]["model"] = "assets/chests/sources/cc0/missing-ornament.glb"
+	style["open_animation"] = "MissingAuthoredOpening"
 	check(not model.configure(style) and not model.last_error.is_empty()
-		and not bool(model.snapshot().get("available", true)) and int(model.snapshot().get("mesh_count", -1)) == 0,
-		"A missing required real ornament rejects the recipe instead of claiming a complete tier")
+		and not bool(model.snapshot().get("available", true)),
+		"A missing authored opening rejects the source recipe rather than presenting an inert chest")
 	model.free()
 
 
@@ -673,7 +572,7 @@ func _check_reward_pool() -> void:
 	root.add_child(models)
 	models.set_active(false)
 	var retired: Array[WeakRef] = []
-	for tier in range(1, 31):
+	for tier in range(1, 100):
 		var sample: Dictionary = models.sample(tier, 0.0)
 		var pool: Dictionary = models.get("_pool")
 		check(pool.has(tier) and not sample.is_empty(),
@@ -719,21 +618,21 @@ func _check_reward_pool() -> void:
 		retired.append(weakref(model))
 		await process_frame
 	var before_invalid: Array = models.get("_order").duplicate()
-	check(models.sample(0, 0.0).is_empty() and models.sample(31, 0.0).is_empty()
-		and models.sample(30, NAN).is_empty() and models.sample(30, 0.0, INF).is_empty()
+	check(models.sample(0, 0.0).is_empty() and models.sample(100, 0.0).is_empty()
+		and models.sample(99, NAN).is_empty() and models.sample(99, 0.0, INF).is_empty()
 		and models.get("_order") == before_invalid and not models.last_error.is_empty(),
 		"Invalid tier/angle samples are explicitly unavailable and cannot mutate the bounded pool")
-	if models.get("_pool").has(30):
+	if models.get("_pool").has(99):
 		models.set_active(true)
-		models.sample(30, 0.37)
+		models.sample(99, 0.37)
 		check(models.last_error.is_empty(), "A valid real-model sample clears its prior input validation error")
-		var active: SubViewport = models.get("_pool")[30]
+		var active: SubViewport = models.get("_pool")[99]
 		check(active.render_target_update_mode == SubViewport.UPDATE_ONCE,
-			"A changed thirtieth-tier turn requests exactly one render")
+			"A changed ninety-ninth-tier turn requests exactly one render")
 		active.render_target_update_mode = SubViewport.UPDATE_DISABLED
-		models.sample(30, 0.37)
+		models.sample(99, 0.37)
 		check(active.render_target_update_mode == SubViewport.UPDATE_DISABLED,
-			"An unchanged thirtieth-tier turn does not repeatedly render")
+			"An unchanged ninety-ninth-tier turn does not repeatedly render")
 		models.set_active(false)
 	models.clear()
 	check(models.get("_pool").is_empty() and models.get("_order").is_empty()
@@ -759,7 +658,7 @@ func _capture_contact_sheets() -> void:
 	var index: Array[Dictionary] = []
 	var sheet: Image
 	var labels: Array[String] = ["front", "side", "back", "opened"]
-	for tier in range(1, 31):
+	for tier in range(1, 100):
 		if (tier - 1) % 5 == 0:
 			sheet = Image.create(1024, 1280, false, Image.FORMAT_RGBA8)
 			sheet.fill(Color("#edf1f2"))
@@ -794,9 +693,10 @@ func _capture_contact_sheets() -> void:
 			index.append({"tier": tier, "preset_id": _preset(tier).get("id", ""),
 				"view": labels[column], "file": filename})
 		model.free()
-		if tier % 5 == 0:
-			check(sheet.save_png(CAPTURE_PATH + "/tiers-%02d-%02d.png" % [tier - 4, tier]) == OK,
-				"Tier %d-%d four-view contact sheet is persisted" % [tier - 4, tier])
+		if tier % 5 == 0 or tier == 99:
+			var first_tier: int = tier - ((tier - 1) % 5)
+			check(sheet.save_png(CAPTURE_PATH + "/tiers-%02d-%02d.png" % [first_tier, tier]) == OK,
+				"Tier %d-%d four-view contact sheet is persisted" % [first_tier, tier])
 	var file := FileAccess.open(CAPTURE_PATH + "/capture-index.json", FileAccess.WRITE)
 	check(file != null, "Actual capture index can be persisted")
 	if file != null:

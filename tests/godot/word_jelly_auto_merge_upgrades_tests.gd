@@ -87,7 +87,7 @@ func _test_three_completed_results() -> void:
 		check(tile.jelly_kind == "merged" and tile.merge_level == 1 and tile.word.id == "cat",
 			"Each surviving product is a complete Lv1 word, not three animations folded into one upgrade")
 	check(fragments == 6 and model.cleared_pairs == 0 and model.collected_coins == 0
-		and paid.size() == 1 and paid[0][2] == 200,
+		and paid.size() == 1 and paid[0][2] == 75,
 		"The three outputs preserve fragments, learning ownership and one exact debit")
 	model.purchase_powerup = Callable()
 
@@ -173,10 +173,19 @@ func _test_exact_capacities() -> void:
 			remaining_fragments += int(tile.fragments)
 		check(remaining_fragments == fragments and model.cleared_pairs == 0 and model.collected_coins == 0,
 			"Capacity limiting preserves all carried fragments and never collects or grants pickup income")
-		var first_use_price: int = 200 + 50 * (level - 1)
-		check(paid.size() == 1 and paid[0][1] == "auto_merge" and paid[0][2] == first_use_price
-			and model.powerup_price("auto_merge") == first_use_price * 3 / 2,
-			"Owned capacity sets the exact first debit and the next successful-use tier at every level")
+		var first_use_price: int = 25 * capacity
+		check(paid.size() == 1 and paid[0][1] == "auto_merge" and paid[0][2] == first_use_price,
+			"Each capacity saves one exact debit for its actual removed bodies")
+		# Releasing the completed timeline can start ordinary stack settlement.
+		# A disabled item retains its previous quantity until that movement ends.
+		for frame in range(200):
+			if model._powerup_inputs_ready():
+				break
+			model.step(0.025)
+		check(model._powerup_inputs_ready(), "The completed operation returns a settled board to item input")
+		var next_reduction: int = int(model.auto_merge_preview().reduction_count)
+		check(next_reduction > 0 and model.powerup_price("auto_merge") == 50 * next_reduction,
+			"The next ready board quotes its actual removed bodies at the second-use rate")
 		check(model.snapshot().auto_merge_level == level and model.snapshot().auto_merge_capacity == capacity,
 			"The public game snapshot advertises the same level and capacity that actually executed")
 		model.purchase_powerup = Callable()
@@ -232,8 +241,8 @@ func _test_shortage() -> void:
 	drain(model)
 	check(model.powerup_snapshot().completed_results == 2 and model.collectable_ids().size() == 2
 		and model.cells.size() == 3 and model.cells.any(func(tile: Dictionary) -> bool: return tile.jelly_kind == "root")
-		and paid.size() == 1,
-		"A missing picture preserves the unmatched root and cannot forge a third result")
+		and paid.size() == 1 and paid[0][2] == 50,
+		"A missing picture preserves the unmatched root and charges only for the two actual results")
 	model.purchase_powerup = Callable()
 	var missing = pictured_fixture(1)
 	missing.cells.pop_back()
@@ -249,7 +258,7 @@ func _test_family_is_independent() -> void:
 	var paid: Array = payments(model)
 	check(model.activate_family_merge("cat"), "Paid goal-family merging is still available at Auto merge Lv1")
 	drain(model)
-	check(model.cells.size() == 1 and model.merged_count == 6 and paid.size() == 1 and paid[0][2] == 300,
+	check(model.cells.size() == 1 and model.merged_count == 6 and paid.size() == 1 and paid[0][2] == 150,
 		"Goal-family merging remains uncapped and charges for all six removed board Jellies")
 	model.purchase_powerup = Callable()
 
@@ -270,7 +279,7 @@ func _test_read_only_preview() -> void:
 		model.changed.connect(func() -> void: events.append("changed"))
 		model.cue_requested.connect(func(_cue: String) -> void: events.append("cue"))
 		var preview: Dictionary = model.auto_merge_preview()
-		check(preview.capacity == capacity and preview.result_count == capacity
+		check(preview.capacity == capacity and preview.result_count == capacity and preview.reduction_count == capacity
 			and preview.input_ids.size() == capacity * 2,
 			"The owned output capacity previews only the inputs of its complete legal paths")
 		check(model.snapshot() == before and model._next_tile_id == allocation and model._next_event_id == receipt
@@ -286,8 +295,9 @@ func _test_read_only_preview() -> void:
 		var consumed: Array = model._powerup.used_input_ids.keys()
 		consumed.sort()
 		expected.sort()
-		check(consumed == expected and model.powerup_snapshot().completed_results == capacity and paid.size() == 1,
-			"The highlighted originals match exactly what the subsequent saved use consumes")
+		check(consumed == expected and model.powerup_snapshot().completed_results == capacity and paid.size() == 1
+			and paid[0][2] == 25 * int(preview.reduction_count),
+			"The highlighted originals and their reduction quote match what the subsequent saved use consumes")
 		model.purchase_powerup = Callable()
 	for triple: bool in [false, true]:
 		var authored: Dictionary = authored_word(triple)
@@ -301,17 +311,19 @@ func _test_read_only_preview() -> void:
 			model.cells.append(model._new_picture_tile(authored))
 		settle_board(model)
 		var preview: Dictionary = model.auto_merge_preview()
-		check(preview.result_count == 3 and preview.input_ids.size() == (12 if triple else 9),
+		check(preview.result_count == 3 and preview.input_ids.size() == (12 if triple else 9)
+			and preview.reduction_count == (9 if triple else 6),
 			"Hover names every intermediate ingredient and required picture, not just the first join")
 		var expected: Array = preview.input_ids.duplicate()
-		payments(model)
+		var paid: Array = payments(model)
 		model.activate_powerup("auto_merge")
 		drain(model)
 		var consumed: Array = model._powerup.used_input_ids.keys()
 		consumed.sort()
 		expected.sort()
-		check(consumed == expected and model.powerup_snapshot().completed_results == 3,
-			"Full authored hover paths agree with actual original-input consumption")
+		check(consumed == expected and model.powerup_snapshot().completed_results == 3
+			and paid.size() == 1 and paid[0][2] == (225 if triple else 150),
+			"Full authored hover paths and quantity prices count each net join exactly once")
 		model.purchase_powerup = Callable()
 	var unavailable = pictured_fixture(1)
 	unavailable.cells.pop_back()

@@ -8,7 +8,7 @@ const Model = preload("res://scripts/word_jelly_model.gd")
 const Economy = preload("res://scripts/coin_economy.gd")
 const WAND = preload("res://assets/images/ui/jelly-powerups/auto-merge-wand.svg")
 const MAGNET = preload("res://assets/images/ui/jelly-powerups/family-magnet.webp")
-const CHEST = preload("res://assets/chests/sprites/royal/closed.png")
+const CHEST = preload("res://assets/chests/shared/ui/chest.png")
 const COIN = preload("res://assets/coins/gold-coin.png")
 const CLOCK = preload("res://assets/images/ui/jelly-goals/clock.webp")
 const GEL = preload("res://assets/images/jelly-match/gel-mint.png")
@@ -40,7 +40,7 @@ var _feedback_serial: int = 0
 var _missing_coins: int = 0
 var _price_position := Vector2.ZERO
 var _chest: Texture2D = CHEST
-var _chest_region := Rect2(39, 309, 798, 595)
+var _chest_region := Rect2(Vector2.ZERO, CHEST.get_size())
 var _icon_rect := Rect2()
 var _coin_rect := Rect2()
 var _price_pill := Rect2()
@@ -206,7 +206,7 @@ func set_chest_texture(texture: Texture2D) -> void:
 	_chest = texture
 	# The owner supplies its cropped chest renderer. Reading a ViewportTexture
 	# back here fails before its first frame and stalls ordinary GPU rendering.
-	_chest_region = Rect2(39, 309, 798, 595) if texture == CHEST else Rect2(Vector2.ZERO, texture.get_size())
+	_chest_region = Rect2(Vector2.ZERO, texture.get_size())
 	queue_redraw()
 
 
@@ -535,7 +535,7 @@ func _draw() -> void:
 		# cropped render. Keep the acquired fallback visible during that warmup.
 		var warming: bool = _chest is ViewportTexture or not _chest_region.has_area()
 		var texture: Texture2D = CHEST if warming else _chest
-		var region := Rect2(39, 309, 798, 595) if warming else _chest_region
+		var region := Rect2(Vector2.ZERO, CHEST.get_size()) if warming else _chest_region
 		var extent: Vector2 = region.size * (_icon_rect.size.x / maxf(1.0, region.size.x))
 		draw_texture_rect_region(texture, Rect2(-extent * 0.5, extent), region, tint)
 	draw_set_transform(Vector2.ZERO)

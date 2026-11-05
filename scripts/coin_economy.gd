@@ -9,7 +9,8 @@ const LEGACY_CHEST_REWARD_POLICY: String = "legacy-chest-v1"
 const MATCH_HINT_PRICES: Array[int] = [100, 150, 200]
 const MEMORY_PEEK_PRICES: Array[int] = [0, 100, 200, 300]
 # Retired quotes remain available to historical reports, not the live tool catalog.
-const POWERUP_BASE_PRICES: Dictionary = {"auto_merge": 200, "family_merge": 50, "fragments": 200, "extra_time": 100}
+const POWERUP_BASE_PRICES: Dictionary = {"auto_merge": 25, "family_merge": 25, "fragments": 200, "extra_time": 100}
+const MERGE_UNIT_PRICES: Array[int] = [25, 50, 75]
 const JELLY_BONUS_CHANCES: Array[float] = [0.0, 0.02, 0.04, 0.12, 0.20, 0.30, 0.40, 0.50, 0.80]
 const JELLY_BONUS_AMOUNTS: Array[int] = [0, 50, 100, 150, 200, 250, 300, 350, 450]
 const TREASURE_FRAGMENT_MIN: int = 2
@@ -46,17 +47,13 @@ static func memory_peek_price(successful_uses: int) -> int:
 	return MEMORY_PEEK_PRICES[clampi(successful_uses, 0, MEMORY_PEEK_PRICES.size() - 1)]
 
 
-static func powerup_price(kind: String, successful_uses: int, auto_merge_level: int = 1, reduction_count: int = 1) -> int:
+static func powerup_price(kind: String, successful_uses: int, _auto_merge_level: int = 1, reduction_count: int = 1) -> int:
 	if not POWERUP_BASE_PRICES.has(kind):
 		return 0
 	if kind == "extra_time":
 		return 100 + 50 * clampi(successful_uses, 0, 4095)
-	var tier: int = clampi(successful_uses, 0, 2)
-	if kind == "auto_merge":
-		var base: int = 200 + 50 * (clampi(auto_merge_level, 1, MAX_UPGRADE_LEVEL) - 1)
-		return base + (base / 2) * tier
-	if kind == "family_merge":
-		return (50 + 25 * tier) * maxi(1, reduction_count)
+	if kind in ["auto_merge", "family_merge"]:
+		return MERGE_UNIT_PRICES[clampi(successful_uses, 0, MERGE_UNIT_PRICES.size() - 1)] * maxi(1, reduction_count)
 	var extra: int = 100
 	return int(POWERUP_BASE_PRICES[kind]) + extra * clampi(successful_uses, 0, 2)
 

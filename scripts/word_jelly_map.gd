@@ -34,7 +34,7 @@ const ROUTE_SECONDS: float = DEPART_SECONDS + RUN_SECONDS
 const UNLOCK_SECONDS: float = JUMP_SECONDS + LAND_SECONDS
 const RUN_ROUTE_END: float = 0.82
 const STAGES_PER_CHAPTER: int = 9
-const BOSS_PORTRAIT = preload("res://assets/jelly-boss/private/bramble-portrait.png")
+const BOSS_PORTRAIT = preload("res://assets/pirate/pirate-portrait.png")
 const SCENERY: Array[Texture2D] = [
 	preload("res://assets/images/jelly-match/garden/hills.png"),
 	preload("res://assets/images/jelly-match/garden/tree.png"),
@@ -352,9 +352,9 @@ func configure(state: Dictionary, reduced_motion: bool = false) -> void:
 		item.boss.visible = bool(item.boss_marker)
 		item.boss.disabled = item.button.disabled
 		if item.boss.visible:
-			item.button.accessibility_name += " Bramble Boss encounter."
+			item.button.accessibility_name += " Pirate Boss encounter."
 			item.boss.accessibility_name = item.button.accessibility_name
-			item.boss.tooltip_text = "Bramble. Boss in stage %d" % number
+			item.boss.tooltip_text = "Pirate. Boss in stage %d" % number
 	_challenge.disabled = blocked
 	_challenge.focus_mode = Control.FOCUS_NONE if blocked else Control.FOCUS_ALL
 	_upgrades.disabled = blocked
@@ -629,7 +629,7 @@ func _layout() -> void:
 	var highest: int = int(_state.get("highest_cleared", 0))
 	var target: int = BossCatalog.chase_target(highest)
 	if highest > 0 and target > 0:
-		_subtitle.text = "Bramble · Stage %d" % target if narrow else "Catch Bramble · Stage %d" % target
+		_subtitle.text = "Pirate · Stage %d" % target if narrow else "Catch Pirate · Stage %d" % target
 	elif highest == 99:
 		_subtitle.text = "Compass recovered!" if 8 in _state.get("boss_victories", []) \
 			else "99 adventures complete"

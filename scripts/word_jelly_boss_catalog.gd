@@ -6,7 +6,7 @@ const LEGACY_STAGES: Array[int] = [9, 18, 27, 36, 45, 63, 81, 99]
 const DAMAGE: Array[int] = [0, 14, 38, 72, 116, 176, 248, 344, 464, 620]
 const TITLES: Array[String] = [
 	"The Compass Thief", "Ink at the Crossing", "The Locksmith",
-	"Three Brambles", "The Broken Sky", "Catch and Release",
+	"Three Pirates", "The Broken Sky", "Catch and Release",
 	"The Borrowed Crown", "The Last Laugh"]
 const ABILITIES: Array[String] = ["freeze", "ink", "lock", "clones", "kick", "snatch", "ward", "storm"]
 const HEALTH: Array[int] = [98, 196, 320, 480, 650, 840, 1120, 1400]
@@ -42,16 +42,16 @@ const REPLIES: Array[String] = [
 
 static func encounter(number: int, intro: bool = false) -> Dictionary:
 	if intro and number == 1:
-		return {"id": 0, "stage": 1, "intro": true, "name": "Bramble", "title": "A Sneaky Visitor",
+		return {"id": 0, "stage": 1, "intro": true, "name": "Pirate", "title": "A Sneaky Visitor",
 			"health": 98, "interval": 8.0, "abilities": ["freeze"], "new_ability": "freeze",
 			"retreat": "swagger", "entrance": "What a fine compass!\nI'll take it!",
 			"next_stage": STAGES[0],
 			"escape": "Mine now!\nCatch me at Stage 3!",
-			"reply": "That compass is ours.\nWe're coming, Bramble!"}
+			"reply": "That compass is ours.\nWe're coming, Pirate!"}
 	var index: int = STAGES.find(number)
 	if index < 0:
 		return {}
-	return {"id": index + 1, "stage": number, "intro": false, "name": "Bramble",
+	return {"id": index + 1, "stage": number, "intro": false, "name": "Pirate",
 		"title": TITLES[index], "health": HEALTH[index], "interval": maxf(2.8, 6.5 - index * 0.55),
 		"starting_clones": 2 if number == 99 else 1 if number == 9 else 0,
 		"abilities": ABILITIES.slice(0, index + 1), "new_ability": ABILITIES[index],

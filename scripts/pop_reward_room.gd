@@ -1243,7 +1243,7 @@ func _refresh() -> void:
 				_result_caption.text = "Your rewards are saved." if _stage_failure_ready \
 					else "Saving your results..." if offers_upgrades() else "Saving your stars and returning to the map..."
 				if _result_context.get("boss", {}).get("outcome") == "ambushed":
-					_result_caption.text = "The chase begins. Find Bramble at stage %d!" % BossCatalog.STAGES[0]
+					_result_caption.text = "The chase begins. Find Pirate at stage %d!" % BossCatalog.STAGES[0]
 				_result_caption.visible = true
 		if _result_context.has("campaign"):
 			var ready: bool = _challenge_return_ready or _stage_failure_ready

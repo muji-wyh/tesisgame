@@ -233,32 +233,6 @@ func _sync_model_surface() -> void:
 	sprite.transform = pose
 
 
-func _load_rig() -> bool:
-	const RIG_PATH: String = "res://assets/chests/catalog/sprite-rigs.json"
-	if not FileAccess.file_exists(RIG_PATH):
-		return false
-	var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(RIG_PATH))
-	if not manifest is Dictionary or not manifest.get("styles") is Dictionary:
-		return false
-	var rig: Variant = manifest.styles.get(_style)
-	if not rig is Dictionary or not rig.get("parts") is Array or rig.parts.is_empty():
-		return false
-	for part in rig.parts:
-		if not part is Dictionary or not part.has_all(["texture", "pivot", "position", "role"]):
-			return false
-		if not ResourceLoader.exists("res://" + str(part.texture)):
-			return false
-	for part in rig.parts:
-		var pivot := Vector2(float(part.pivot[0]), float(part.pivot[1]))
-		var position := Vector2(float(part.position[0]), float(part.position[1]))
-		# Derived rig pivots use top-left coordinates. Original Crystal geometry
-		# retains its imported bottom-left pivot convention in _add_piece.
-		_add_piece(str(part.texture), str(part.role), Transform2D(0.0, position),
-			Vector2(pivot.x, 1.0 - pivot.y), int(part.get("order", 0)))
-	_rigged = true
-	return true
-
-
 func _add_piece(path: String, role: String, pose: Transform2D, pivot: Vector2, order: int = 0, flip_h: bool = false, flip_v: bool = false) -> void:
 	var sprite := Sprite2D.new()
 	sprite.texture = load("res://" + path)
@@ -1512,6 +1486,19 @@ func _apply_pose(_progress: float) -> void:
 		_model_view.set_pose(opening, pressure, pulse, _model_time,
 			light, _release_color, reduced_motion,
 			_hold_active or mode == "opening" or _cancel_remaining > 0.0)
+		var contents: String = "closed"
+		var content_strength: float = 0.0
+		if mode == "opened" or (mode == "opening" and _elapsed >= Feel.SETTLE_TIME):
+			contents = "treasure"
+		elif _hold_active or mode == "opening" or _cancel_remaining > 0.0:
+			contents = "magic"
+			content_strength = maxf(pressure, _visual_performance_progress()) * 0.55
+			if mode == "opening":
+				content_strength = maxf(content_strength,
+					smoothstep(Feel.RELEASE_TIME, Feel.RELEASE_TIME + 0.12, _elapsed))
+		# Source contents share the same paused/cancelled pose clock as the lid.
+		# The real treasure replaces the magic at the existing mechanical stop.
+		_model_view.set_contents(contents, _model_time, content_strength, reduced_motion)
 	var returning: float = smoothstep(0.0, Feel.CANCEL_SECONDS, _cancel_remaining)
 	for index in range(_pieces.size()):
 		var state: Dictionary = _piece_pose(index, _elapsed, mode in ["opening", "opened"])

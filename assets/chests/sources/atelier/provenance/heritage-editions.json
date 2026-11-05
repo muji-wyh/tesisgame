@@ -1,0 +1,510 @@
+{
+  "version": 1,
+  "title": "Heritage Atelier Editions",
+  "generator": "Blender 5.2 CLI",
+  "status": "source-derived-authoring-and-optimized-runtime-published; exact-byte-native-states-verified",
+  "license_policy": "Original source terms remain applicable to derived models; Atelier is a collection, not a license classification",
+  "original_model_preservation": [
+    {
+      "path": "assets/chests/models/atelier/aether-vault/aether-vault.glb",
+      "bytes": 1650892,
+      "sha256": "2a3ebb2635dec4f3a25b11393001401635c26b36c5ef359dd78e988333627101"
+    },
+    {
+      "path": "assets/chests/models/atelier/cobalt-vault/cobalt-vault.glb",
+      "bytes": 1634188,
+      "sha256": "080210d19c5d15267605c8ada6d0d8c8c26a798c0d8932dbe85d23732f3ff72d"
+    },
+    {
+      "path": "assets/chests/models/atelier/crimson-citadel/crimson-citadel.glb",
+      "bytes": 1745060,
+      "sha256": "867677aa2a7e3dad6c7d47aa82e88be0af4afc3254986f884483d876c6dee225"
+    },
+    {
+      "path": "assets/chests/models/atelier/frost-relay/frost-relay.glb",
+      "bytes": 1857808,
+      "sha256": "6a4e0cd025ff305f5076085ec59295c107eb4fbe5cf7add50e45df7a8bde202b"
+    },
+    {
+      "path": "assets/chests/models/atelier/jade-reliquary/jade-reliquary.glb",
+      "bytes": 1632244,
+      "sha256": "c13697148d58680a6c746afde499b71915ffb033f6cd7c11e455f6208bbc562d"
+    },
+    {
+      "path": "assets/chests/models/atelier/moonbound/moonbound.glb",
+      "bytes": 1295512,
+      "sha256": "caabad89ceb5ced45f51a9bf1a929b19ff506208bde851e2c4ad41bfa7cde73b"
+    },
+    {
+      "path": "assets/chests/models/atelier/nova-buddy/nova-buddy.glb",
+      "bytes": 1639428,
+      "sha256": "a0e34b900a30cc5a514e35d2a3cc3a97bd88e9c8d777400a672c6ac6a66756b6"
+    },
+    {
+      "path": "assets/chests/models/atelier/prism-signal/prism-signal.glb",
+      "bytes": 1605224,
+      "sha256": "7ba78d357e08ad4b4dd9f91f4761e812978ce712805f9076cdcf3d1bce5a0331"
+    },
+    {
+      "path": "assets/chests/models/atelier/royal-rose/royal-rose.glb",
+      "bytes": 1237636,
+      "sha256": "e79297c282c23b201ce5b2b6a811145f63dd824a3deb7823d965d20af34fe067"
+    },
+    {
+      "path": "assets/chests/models/atelier/solar-relay/solar-relay.glb",
+      "bytes": 1845100,
+      "sha256": "a104857980bf69ae54f53242d538f86604f19061ce04aca52a8e28b2cc2cad3f"
+    },
+    {
+      "path": "assets/chests/models/atelier/sunward/sunward.glb",
+      "bytes": 1294424,
+      "sha256": "a497d6ce1e1b04c9015032f4c9d6f3a28644a272d264a9052e3203ce555b5543"
+    },
+    {
+      "path": "assets/chests/models/atelier/tideguard/tideguard.glb",
+      "bytes": 1549360,
+      "sha256": "2f948c069d5e152150cf1e262cfd4a2aee9b3135dc52184ab3d1e3328dd6b260"
+    },
+    {
+      "path": "assets/chests/models/cc0/kaykit-dungeon/kaykit-dungeon.glb",
+      "bytes": 203460,
+      "sha256": "163bbbc98fea8370a3c85c269360cb642f1946b1167d12e5efd6bdd3039ff5ff"
+    },
+    {
+      "path": "assets/chests/models/cc0/kenney-mini-dungeon/kenney-mini-dungeon.glb",
+      "bytes": 99540,
+      "sha256": "574c0365a500efdd1daaad734757c607919687a5609272c8882366a798113e57"
+    },
+    {
+      "path": "assets/chests/models/cc0/kenney-platformer/kenney-platformer.glb",
+      "bytes": 99560,
+      "sha256": "fca0376c3e024def2a5c590ace4fa44dd8851735dfdacac794829bb34d0954d2"
+    },
+    {
+      "path": "assets/chests/models/cc0/kenney-survival/kenney-survival.glb",
+      "bytes": 92640,
+      "sha256": "93e2375d6cb12f8e939c9c23d6879d0b2c84d2e5c27800f6d90b0d34946dc774"
+    },
+    {
+      "path": "assets/chests/models/licensed/harvest-keepsake/harvest-keepsake.glb",
+      "bytes": 1167920,
+      "sha256": "ca526de26b5c8b0483b981c7fd6b9dc0a91fc245c01bcc4647c21a16195198ec"
+    },
+    {
+      "path": "assets/chests/models/licensed/lagoon-pearl/lagoon-pearl.glb",
+      "bytes": 708056,
+      "sha256": "47ef7a9a1a6a131b2039465ab3f09d01d59de609f8875ff07341b1e6fa683ed9"
+    },
+    {
+      "path": "assets/chests/models/licensed/meadow-explorer/meadow-explorer.glb",
+      "bytes": 666448,
+      "sha256": "91374649ef7abf27d4b8c9bece4543cbbf3be77c6ebcbecebea31b23b98b9d79"
+    },
+    {
+      "path": "assets/chests/models/licensed/moonstone-vault/moonstone-vault.glb",
+      "bytes": 400140,
+      "sha256": "59d7111f5ed48daceb8ecfaa78d32275a441c4d22a9a181136d22bd2025a0911"
+    },
+    {
+      "path": "assets/chests/models/licensed/strawberry-bonbon/strawberry-bonbon.glb",
+      "bytes": 619736,
+      "sha256": "84bad846f896ce74c8af17b790be5f928630ca3444566ef103c9d454cde5f96c"
+    }
+  ],
+  "editions": [
+    {
+      "id": "wayfarer-oak",
+      "name": "Wayfarer Oak",
+      "reference_id": "game-kenney-survival",
+      "reference_model": "assets/chests/models/cc0/kenney-survival/kenney-survival.glb",
+      "reference_sha256": "93e2375d6cb12f8e939c9c23d6879d0b2c84d2e5c27800f6d90b0d34946dc774",
+      "source": {
+        "creator": "Kenney",
+        "title": "Survival Kit",
+        "url": "https://kenney.nl/assets/survival-kit",
+        "license": "CC0-1.0",
+        "file": "sources/kenney-survival/chest.glb",
+        "license_file": "sources/kenney-survival/LICENSE.txt",
+        "license_sha256": "62c8356876481204fa4d40dc59183dfed777adf987d7f2a1390fffe8a699f3ff"
+      },
+      "license": "CC0-1.0",
+      "authoring": {
+        "model": "assets/wayfarer-oak/chest.glb",
+        "bytes": 2106200,
+        "sha256": "54b8353bf8616118235ff1d2464ecd7f570936647003a4e310636696552584c8",
+        "triangles": 20937
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/wayfarer-oak/wayfarer-oak.glb",
+        "bytes": 914248,
+        "sha256": "c8a8748c4c1e69cac55bb5bce050c732937ada320e1f8922610ef9f17a18be0b",
+        "triangles": 9077,
+        "triangle_budget": 24000,
+        "bytes_saved_percent": 56.59,
+        "triangles_saved_percent": 56.65
+      },
+      "details": [
+        "Secondary UV wood/enamel normal finishing",
+        "Source base-color atlases and UVs preserved",
+        "Scored board joints and fine brushed-metal normal maps",
+        "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+        "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+        "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+        "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+        "Theme-specific crafted trim: wayfarer-oak.",
+        "Brown wood and silvery iron identity retained; no palette-only duplicate source shell",
+        "Fitted source-connected KayKit keyplate with moving tongue and fixed receiver; KayKit original clasp retained on its own shell",
+        "Source wood grain and secondary normal detail baked into the optimized runtime atlas"
+      ],
+      "animation_authorship": "New rigid Lid hinge Open and Close clips, 61 sampled keys over one second; acquired source clips not reused"
+    },
+    {
+      "id": "ironbound-trail",
+      "name": "Ironbound Trail",
+      "reference_id": "game-kenney-platformer",
+      "reference_model": "assets/chests/models/cc0/kenney-platformer/kenney-platformer.glb",
+      "reference_sha256": "fca0376c3e024def2a5c590ace4fa44dd8851735dfdacac794829bb34d0954d2",
+      "source": {
+        "creator": "Kenney",
+        "title": "Platformer Kit",
+        "url": "https://kenney.nl/assets/platformer-kit",
+        "license": "CC0-1.0",
+        "file": "sources/kenney-platformer/chest.glb",
+        "license_file": "sources/kenney-platformer/LICENSE.txt",
+        "license_sha256": "e1185354d8f0f055c325c7204602326c8cf0c47ee5ae1db7ed16f0465b91bb9a"
+      },
+      "license": "CC0-1.0",
+      "authoring": {
+        "model": "assets/ironbound-trail/chest.glb",
+        "bytes": 2021008,
+        "sha256": "596027fcadb237378a47fc5dfe88720c020d4c2f3b243e3bd5813ec78b4754dd",
+        "triangles": 19820
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/ironbound-trail/ironbound-trail.glb",
+        "bytes": 919192,
+        "sha256": "57f607faddc8bbd9705df5a1b04d1d7fff803283903f7ef3c8490a90291d872d",
+        "triangles": 9016,
+        "triangle_budget": 24000,
+        "bytes_saved_percent": 54.52,
+        "triangles_saved_percent": 54.51
+      },
+      "details": [
+        "Secondary UV wood/enamel normal finishing",
+        "Source base-color atlases and UVs preserved",
+        "Scored board joints and fine brushed-metal normal maps",
+        "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+        "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+        "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+        "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+        "Theme-specific crafted trim: ironbound-trail.",
+        "Brown wood and silvery iron identity retained; no palette-only duplicate source shell",
+        "Fitted source-connected KayKit keyplate with moving tongue and fixed receiver; KayKit original clasp retained on its own shell",
+        "Source wood grain and secondary normal detail baked into the optimized runtime atlas"
+      ],
+      "animation_authorship": "New rigid Lid hinge Open and Close clips, 61 sampled keys over one second; acquired source clips not reused"
+    },
+    {
+      "id": "duskwatch-coffer",
+      "name": "Duskwatch Coffer",
+      "reference_id": "game-kenney-mini-dungeon",
+      "reference_model": "assets/chests/models/cc0/kenney-mini-dungeon/kenney-mini-dungeon.glb",
+      "reference_sha256": "574c0365a500efdd1daaad734757c607919687a5609272c8882366a798113e57",
+      "source": {
+        "creator": "Kenney",
+        "title": "Mini Dungeon",
+        "url": "https://kenney.nl/assets/mini-dungeon",
+        "license": "CC0-1.0",
+        "file": "sources/kenney-mini-dungeon/chest.glb",
+        "license_file": "sources/kenney-mini-dungeon/LICENSE.txt",
+        "license_sha256": "f8b470068a1c043854101c9ff7161d376ba02c36239da3c1dbdfa928b08444b6"
+      },
+      "license": "CC0-1.0",
+      "authoring": {
+        "model": "assets/duskwatch-coffer/chest.glb",
+        "bytes": 2023624,
+        "sha256": "ac23dff6448a58e48bca3d73163b0f27265a97314abf0645371e7a5e650b0aa0",
+        "triangles": 19852
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/duskwatch-coffer/duskwatch-coffer.glb",
+        "bytes": 914784,
+        "sha256": "b313cda13f9505817dbeb73b368af18a1649cbd57026c70e7540e8fdfbb776e7",
+        "triangles": 9018,
+        "triangle_budget": 24000,
+        "bytes_saved_percent": 54.79,
+        "triangles_saved_percent": 54.57
+      },
+      "details": [
+        "Secondary UV wood/enamel normal finishing",
+        "Source base-color atlases and UVs preserved",
+        "Scored board joints and fine brushed-metal normal maps",
+        "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+        "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+        "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+        "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+        "Theme-specific crafted trim: duskwatch-coffer.",
+        "Brown wood and silvery iron identity retained; no palette-only duplicate source shell",
+        "Fitted source-connected KayKit keyplate with moving tongue and fixed receiver; KayKit original clasp retained on its own shell",
+        "Source wood grain and secondary normal detail baked into the optimized runtime atlas"
+      ],
+      "animation_authorship": "New rigid Lid hinge Open and Close clips, 61 sampled keys over one second; acquired source clips not reused"
+    },
+    {
+      "id": "dungeon-keeper",
+      "name": "Dungeon Keeper",
+      "reference_id": "game-kaykit-dungeon",
+      "reference_model": "assets/chests/models/cc0/kaykit-dungeon/kaykit-dungeon.glb",
+      "reference_sha256": "163bbbc98fea8370a3c85c269360cb642f1946b1167d12e5efd6bdd3039ff5ff",
+      "source": {
+        "creator": "Kay Lousberg",
+        "title": "KayKit Dungeon Remastered",
+        "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+        "license": "CC0-1.0",
+        "file": "sources/kaykit-dungeon/chest.glb",
+        "license_file": "sources/kaykit-dungeon/LICENSE.txt",
+        "license_sha256": "c5f17abf619731f57f6bbff450f6484214605c13aa96bb75bbcfc70930941ff7"
+      },
+      "license": "CC0-1.0",
+      "authoring": {
+        "model": "assets/dungeon-keeper/chest.glb",
+        "bytes": 2299436,
+        "sha256": "50a4eef2e7d0e2995714059b2c8d50c5a0c7b35b68ee802c9914eff8c1a62287",
+        "triangles": 24812
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/dungeon-keeper/dungeon-keeper.glb",
+        "bytes": 1080920,
+        "sha256": "b3184407553b3319d1691b01101cca15042c0a2236d0537530fb4e2b0b7fe8d1",
+        "triangles": 12147,
+        "triangle_budget": 24000,
+        "bytes_saved_percent": 52.99,
+        "triangles_saved_percent": 51.04
+      },
+      "details": [
+        "Secondary UV wood/enamel normal finishing",
+        "Source base-color atlases and UVs preserved",
+        "Scored board joints and fine brushed-metal normal maps",
+        "Authored layered edge rails, corner shoes, domed fasteners and physical rear hinges on the acquired source shell.",
+        "Side handle backplates are fitted by raycast to the actual body; rolled handles include mounting bolts and a hinge pin.",
+        "Curved lid band inlays are sampled from source lid geometry and follow the real Lid pivot.",
+        "Authored hardware is joined into separate rigid Body and Lid batches, preserving source shell meshes and material slots.",
+        "Theme-specific crafted trim: dungeon-keeper.",
+        "Brown wood and silvery iron identity retained; no palette-only duplicate source shell",
+        "Fitted source-connected KayKit keyplate with moving tongue and fixed receiver; KayKit original clasp retained on its own shell",
+        "Source wood grain and secondary normal detail baked into the optimized runtime atlas"
+      ],
+      "animation_authorship": "New rigid Lid hinge Open and Close clips, 61 sampled keys over one second; acquired source clips not reused"
+    },
+    {
+      "id": "meadow-cabinet",
+      "name": "Meadow Cabinet",
+      "reference_id": "game-meadow-explorer",
+      "reference_model": "assets/chests/models/licensed/meadow-explorer/meadow-explorer.glb",
+      "reference_sha256": "91374649ef7abf27d4b8c9bece4543cbbf3be77c6ebcbecebea31b23b98b9d79",
+      "source": {
+        "creator": "Ekrem C.",
+        "title": "Low Poly Chest Animated",
+        "url": "https://assetstore.unity.com/packages/3d/props/low-poly-chest-animated-247127",
+        "license": "Unity Asset Store Standard EULA; private embedded game artwork only"
+      },
+      "license": "Unity Asset Store Standard EULA; embedded game artwork only",
+      "authoring": {
+        "model": "assets/meadow-cabinet/chest.glb",
+        "bytes": 1363596,
+        "sha256": "bb2ca5c7cf4e3391c4af54afe58aa33badb1f3c83230e17a2aa346ab2d71dfd0",
+        "triangles": 45590
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/meadow-cabinet/meadow-cabinet.glb",
+        "bytes": 982836,
+        "sha256": "e49d086e0dea5f5ffcfd62cc9855c02d65459a0318df227f2030aec7ec03cf12",
+        "triangles": 15090,
+        "triangle_budget": 24000,
+        "bytes_saved_percent": 27.92,
+        "triangles_saved_percent": 66.9
+      },
+      "details": [
+        "Actual acquired licensed shell, chains, gem settings and original palette retained",
+        "New ray-fitted layered mouldings, corner caps, raised lips and dome-headed rivets",
+        "New cast pierced escutcheon, recessed inset, mounted rolled handles and physical pivot pins",
+        "New rear hinge leaves/knuckles or magnetic guide mounts attached to the source mechanism",
+        "New underside double moulding and individually themed cast enamel emblem",
+        "Fine source-color-preserving wood grain and brushed metal normal/roughness finishing"
+      ],
+      "animation_authorship": "New one-second Open/Close on the actual source lid pivot or separate lifted cover"
+    },
+    {
+      "id": "harvest-strongbox",
+      "name": "Harvest Strongbox",
+      "reference_id": "game-harvest-keepsake",
+      "reference_model": "assets/chests/models/licensed/harvest-keepsake/harvest-keepsake.glb",
+      "reference_sha256": "ca526de26b5c8b0483b981c7fd6b9dc0a91fc245c01bcc4647c21a16195198ec",
+      "source": {
+        "creator": "Batata Studio",
+        "title": "POLY STYLE - Fantasy Treasure Chest",
+        "url": "https://assetstore.unity.com/packages/3d/props/poly-style-fantasy-treasure-chest-280107",
+        "license": "Unity Asset Store Standard EULA; private embedded game artwork only"
+      },
+      "license": "Unity Asset Store Standard EULA; embedded game artwork only",
+      "authoring": {
+        "model": "assets/harvest-strongbox/chest.glb",
+        "bytes": 1942568,
+        "sha256": "7144032de0752d1bf5665f7f8d9b411e312e0941bef72ee3ecfc463169ebc104",
+        "triangles": 62704
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/harvest-strongbox/harvest-strongbox.glb",
+        "bytes": 1821764,
+        "sha256": "a70717e286d7dd21281ec120c724128bdeaf3f1ff2457e430f1d749239bfe10f",
+        "triangles": 49938,
+        "triangle_budget": 50000,
+        "constraint": "Preserve the acquired overlapping shell and its imported corner normals; reduce added hardware without damaging source shading",
+        "bytes_saved_percent": 6.22,
+        "triangles_saved_percent": 20.36
+      },
+      "details": [
+        "Actual acquired licensed shell, chains, gem settings and original palette retained",
+        "New ray-fitted layered mouldings, corner caps, raised lips and dome-headed rivets",
+        "New cast pierced escutcheon, recessed inset, mounted rolled handles and physical pivot pins",
+        "New rear hinge leaves/knuckles or magnetic guide mounts attached to the source mechanism",
+        "New underside double moulding and individually themed cast enamel emblem",
+        "Original source and new cast/enamel palette PBR retained without procedural normal finishing",
+        "New fitted solid brown inner-lid lining closes the acquired underside back-face gap behind the moulding and cast emblem"
+      ],
+      "animation_authorship": "New one-second Open/Close on the actual source lid pivot or separate lifted cover"
+    },
+    {
+      "id": "bonbon-keepsake",
+      "name": "Bonbon Keepsake",
+      "reference_id": "game-strawberry-bonbon",
+      "reference_model": "assets/chests/models/licensed/strawberry-bonbon/strawberry-bonbon.glb",
+      "reference_sha256": "84bad846f896ce74c8af17b790be5f928630ca3444566ef103c9d454cde5f96c",
+      "source": {
+        "creator": "Batata Studio",
+        "title": "POLY STYLE - Fantasy Treasure Chest",
+        "url": "https://assetstore.unity.com/packages/3d/props/poly-style-fantasy-treasure-chest-280107",
+        "license": "Unity Asset Store Standard EULA; private embedded game artwork only"
+      },
+      "license": "Unity Asset Store Standard EULA; embedded game artwork only",
+      "authoring": {
+        "model": "assets/bonbon-keepsake/chest.glb",
+        "bytes": 1335056,
+        "sha256": "9bf0c6a155d9e57eb472113e0e2a1b4803093c92261cb5e17de6386101c04c99",
+        "triangles": 42572
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/bonbon-keepsake/bonbon-keepsake.glb",
+        "bytes": 1135260,
+        "sha256": "1e2f6a368c9b33a97253e554ecf14cf195cacc5f691e41bc2d549ca34762ee2c",
+        "triangles": 20031,
+        "triangle_budget": 24000,
+        "bytes_saved_percent": 14.97,
+        "triangles_saved_percent": 52.95
+      },
+      "details": [
+        "Actual acquired licensed shell, chains, gem settings and original palette retained",
+        "New ray-fitted layered mouldings, corner caps, raised lips and dome-headed rivets",
+        "New cast pierced escutcheon, recessed inset, mounted rolled handles and physical pivot pins",
+        "New rear hinge leaves/knuckles or magnetic guide mounts attached to the source mechanism",
+        "New underside double moulding and individually themed cast enamel emblem",
+        "Fine source-color-preserving wood grain and brushed metal normal/roughness finishing"
+      ],
+      "animation_authorship": "New one-second Open/Close on the actual source lid pivot or separate lifted cover"
+    },
+    {
+      "id": "lagoon-reliquary",
+      "name": "Lagoon Reliquary",
+      "reference_id": "game-lagoon-pearl",
+      "reference_model": "assets/chests/models/licensed/lagoon-pearl/lagoon-pearl.glb",
+      "reference_sha256": "47ef7a9a1a6a131b2039465ab3f09d01d59de609f8875ff07341b1e6fa683ed9",
+      "source": {
+        "creator": "Batata Studio",
+        "title": "POLY STYLE - Fantasy Treasure Chest",
+        "url": "https://assetstore.unity.com/packages/3d/props/poly-style-fantasy-treasure-chest-280107",
+        "license": "Unity Asset Store Standard EULA; private embedded game artwork only"
+      },
+      "license": "Unity Asset Store Standard EULA; embedded game artwork only",
+      "authoring": {
+        "model": "assets/lagoon-reliquary/chest.glb",
+        "bytes": 1439484,
+        "sha256": "38f295b5c0bc2a52110a4ff0a8771d8c78cfb219bad5b2ef9b58e8d0cec31160",
+        "triangles": 45286
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/lagoon-reliquary/lagoon-reliquary.glb",
+        "bytes": 1145704,
+        "sha256": "f35701a1ddb32e4fd4fae294e8f9924ab668020204a5b8635b11c044e62c9999",
+        "triangles": 20678,
+        "triangle_budget": 24000,
+        "bytes_saved_percent": 20.41,
+        "triangles_saved_percent": 54.34
+      },
+      "details": [
+        "Actual acquired licensed shell, chains, gem settings and original palette retained",
+        "New ray-fitted layered mouldings, corner caps, raised lips and dome-headed rivets",
+        "New cast pierced escutcheon, recessed inset, mounted rolled handles and physical pivot pins",
+        "New rear hinge leaves/knuckles or magnetic guide mounts attached to the source mechanism",
+        "New underside double moulding and individually themed cast enamel emblem",
+        "Fine source-color-preserving wood grain and brushed metal normal/roughness finishing"
+      ],
+      "animation_authorship": "New one-second Open/Close on the actual source lid pivot or separate lifted cover"
+    },
+    {
+      "id": "moonstone-crown",
+      "name": "Moonstone Crown",
+      "reference_id": "game-moonstone-vault",
+      "reference_model": "assets/chests/models/licensed/moonstone-vault/moonstone-vault.glb",
+      "reference_sha256": "59d7111f5ed48daceb8ecfaa78d32275a441c4d22a9a181136d22bd2025a0911",
+      "source": {
+        "creator": "Bobardo",
+        "title": "Stylized 3D Animated Chests – FREE Demo",
+        "url": "https://assetstore.unity.com/packages/slug/360542",
+        "license": "Unity Asset Store Standard EULA; private embedded game artwork only"
+      },
+      "license": "Unity Asset Store Standard EULA; embedded game artwork only",
+      "authoring": {
+        "model": "assets/moonstone-crown/chest.glb",
+        "bytes": 1336344,
+        "sha256": "e5c2f1916c6933e79ae438386557c1ee271fbbe47743ebad26eabe7646c55f89",
+        "triangles": 26536
+      },
+      "optimized": {
+        "model": "assets/chests/models/atelier/moonstone-crown/moonstone-crown.glb",
+        "bytes": 998008,
+        "sha256": "071c58a9755d1d8e25d511b6f9290de9c6b1861acd14d22939602c1c11502c40",
+        "triangles": 14100,
+        "triangle_budget": 24000,
+        "bytes_saved_percent": 25.32,
+        "triangles_saved_percent": 46.86
+      },
+      "details": [
+        "Actual acquired licensed shell, chains, gem settings and original palette retained",
+        "New ray-fitted layered mouldings, corner caps, raised lips and dome-headed rivets",
+        "New cast pierced escutcheon, recessed inset, mounted rolled handles and physical pivot pins",
+        "New rear hinge leaves/knuckles or magnetic guide mounts attached to the source mechanism",
+        "New underside double moulding and individually themed cast enamel emblem",
+        "Original source and new cast/enamel palette PBR retained without procedural normal finishing",
+        "Original lavender panel and silver rim regions retained in the source UV atlas, packed as a portable embedded PNG"
+      ],
+      "animation_authorship": "New one-second Open/Close on the actual source lid pivot or separate lifted cover"
+    }
+  ],
+  "native_validation": {
+    "status": "passed",
+    "passed": true,
+    "checks": 2026,
+    "failures": 0,
+    "report_sha256": "da9e3a2dbb2a00fee1a2f26035c82639297afe94ad548b6a4a215ab315c76d67",
+    "game_report": "assets/chests/sources/atelier/validation/heritage-state-report.json",
+    "review_report": "sources/heritage/validation/native-state-report.json",
+    "review_capture_directory": "sources/heritage/validation",
+    "model_count": 30,
+    "sprite_count": 3,
+    "captured_frames": 132,
+    "godot": "4.7.2-stable (official)",
+    "display": "Windows",
+    "rendering_method": "gl_compatibility",
+    "scope": "Exact-byte native state scenes and four-state graphics readback; physical phone performance is separate"
+  }
+}

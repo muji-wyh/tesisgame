@@ -115,9 +115,9 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   assert.match(preset, /platform="Web"/);
   assert.match(preset, /variant\/thread_support=false/);
   assert.match(preset, /variant\/extensions_support=false/);
-  assert.match(preset, /include_filter="[^"]*words\.json[^"]*assets\/chests\/catalog\/sprites\.json/);
+  assert.match(preset, /include_filter="[^"]*words\.json[^"]*assets\/chests\/catalog\/gameplay-chests\.json/);
   const included = preset.match(/^include_filter="([^"]*)"$/m)[1].split(',');
-  for (const name of ['sprites', 'sprite-rigs', 'licensed-models', 'cc0-models', 'cc0-sources', 'atelier', 'tier-presets', 'chest-levels', 'chest-states', 'chest-state-assets', 'chest-sprite-states']) {
+  for (const name of ['gameplay-chests', 'atelier', 'chest-levels', 'chest-states', 'chest-state-assets']) {
     assert.ok(included.includes(`assets/chests/catalog/${name}.json`), `The Web pack retains the chest catalog: ${name}`);
   }
   assert.ok(preset.match(/^include_filter="([^"]*)"$/m)[1].split(',').includes('phrases.json'),
@@ -176,6 +176,18 @@ test('the delivery preset exports a single-threaded Godot Web game with JSON dat
   for (const asset of stateAssets.assets) {
     assert.equal(excluded.some(pattern => path.matchesGlob(asset.path, pattern)), false,
       `Reusable chest state artwork stays available to native scenes: ${asset.path}`);
+  }
+  const chestCatalog = JSON.parse(fs.readFileSync(path.join(root, 'assets/chests/catalog/gameplay-chests.json'), 'utf8'));
+  assert.ok(included.includes('assets/chests/catalog/gameplay-chests.json'));
+  assert.equal(chestCatalog.max_tier, 99);
+  for (const source of [...new Set(Object.values(chestCatalog.styles).map(style => style.model)),
+    'assets/chests/shared/ui/chest.png', 'assets/chests/shared/ui/chest-open.png']) {
+    assert.equal(excluded.some(pattern => path.matchesGlob(source, pattern)), false,
+      `Selected chest models and matched portraits stay available to gameplay: ${source}`);
+  }
+  for (const retired of ['sprites', 'sprite-rigs', 'chest-sprite-states', 'licensed-models', 'cc0-models', 'cc0-sources', 'tier-presets']) {
+    assert.ok(!included.includes(`assets/chests/catalog/${retired}.json`),
+      `Retired chest catalogs are no longer game-pack dependencies: ${retired}`);
   }
   for (const name of ['ready.wav', 'high-five.wav', 'round-20.wav']) {
     const source = `assets/audio/pop/${name}`;
@@ -319,10 +331,12 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /press R, to pause and read its full spelling/);
   assert.match(help, /Collect gathers all ready words at 120 ms intervals without pronunciation/);
   assert.match(help, /The nine levels have distinct collection effects and sounds/);
-  assert.match(help, /same-word pairs remain mergeable even at Lv9/);
+  assert.match(help, /A merged jelly at the owned level cap cannot merge again/);
+  assert.match(help, /a corresponding merged jelly, in either direction, does not count as a mismatch/);
   assert.doesNotMatch(help, /up to Lv6\b|two identical words of the same level/);
-  assert.match(help, /Auto merge costs 200, 300, then 400 coins at owned Lv1/);
-  assert.match(help, /first-use base rises by 50 coins per owned level[\s\S]*600, 900, then 1200 at Lv9/);
+  assert.match(help, /Auto merge and word goals use the same 25, 50, then 75 coin unit price/);
+  assert.match(help, /multiplied by the net board spaces[\s\S]*unit price caps after the third use/);
+  assert.match(help, /Owned capacity changes the available results rather than adding a flat surcharge/);
   assert.match(help, /Hover or focus Auto merge to highlight the exact original Jellies its next use will merge, not every Jelly in the same family/);
   assert.match(help, /Multi-step paths include all needed roots and pictures[\s\S]*without spending coins, pronouncing words or pausing play/);
   assert.match(help, /pointer clicks release their acquired focus so selection cannot latch after completion/);
@@ -330,8 +344,9 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /standalone Magnet button is removed[\s\S]*pending word goal[\s\S]*never substitutes a random target/);
   assert.match(help, /Treasure and the paid extra-time item are retired[\s\S]*Naturally earned chest fragments and treasure rewards remain unchanged/);
   assert.doesNotMatch(help, /Treasure independently costs|Extra time adds 30 seconds for 100 coins/);
-  assert.match(help, /Goal-family purchases share the 50, 75, then 100 coin unit tier per round/);
-  assert.match(help, /multiplies that unit by the net board spaces[\s\S]*exact selected quote is locked before payment/);
+  assert.match(help, /Each action has its own successful-use counter; all word goals share one counter/);
+  assert.match(help, /Successful-use counters reset each round/);
+  assert.match(help, /exact selected quote is locked before payment/);
   assert.match(help, /two independent progress bars[\s\S]*Three actions earn the first level-up[\s\S]*COMBO BONUS/);
   assert.match(help, /Lv7 adds four outer-ring targets, Lv8 reaches its capped two rings and Lv9 reaches the board/);
   assert.match(help, /New journeys start with merged Lv1 for free[\s\S]*permanently unlock Lv2 through Lv9 in order for 50, 100, 200, 350, 550, 800, 1100 and 1500 coins/);
@@ -368,7 +383,7 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /best saved stars[\s\S]*Main-stage settlement saves treasure[\s\S]*A saved clear returns to the map/);
   assert.match(help, /numbered-stage Game over stays on its saved result until the player chooses Try again, Jelly Upgrades or Back to map/);
   assert.match(help, /Jelly Upgrades opens the existing permanent Jelly and Auto merge page without spending automatically, repeating rewards/);
-  assert.match(help, /Bramble's real raised-hand taunt and wink[\s\S]*never delays Try again, Jelly Upgrades or Back to map/);
+  assert.match(help, /Pirate's playful belly laugh[\s\S]*never delays Try again, Jelly Upgrades or Back to map/);
   assert.match(help, /Cleared stages, voluntary exits and storage errors do not trigger the taunt/);
   assert.match(help, /Pending Jelly Words goals stay in a vertical column to the left of the board on phones and larger screens/);
   assert.doesNotMatch(help, /Narrow layouts use horizontally scrollable illustrated word chips/);
@@ -387,7 +402,8 @@ test('accessible help describes current paid items, Home navigation and Jelly se
   assert.match(help, /medal with an animated number displays the saved highest Stage/);
   assert.match(help, /Lv2 Jelly contributes two goal units, Lv3 contributes three/);
   assert.doesNotMatch(help, /Endless Challenge has no countdown|keeps its Done marker/);
-  assert.match(help, /Newly earned chests stop at Level 30/);
+  assert.match(help, /Newly earned chests stop at Level 99/);
+  assert.match(help, /Levels 29 through 99 reuse the final Aether Vault material while preserving their actual level and upgrade effects/);
   assert.doesNotMatch(help, /140 ms|If the total exceeds Lv9, both jellies stay separate|opens Paused with Resume/);
   assert.match(help, /75 base coins per tier plus up to 24 more[\s\S]*Lv0 to Lv99/);
   assert.match(help, /A final wrong answer tied to a live target resets that word's streak/);

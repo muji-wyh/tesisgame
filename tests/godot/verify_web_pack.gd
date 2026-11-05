@@ -57,13 +57,13 @@ func _verify() -> void:
 					instance.free()
 			model_sources[resource_path] = true
 			chest_models += 1
-	if catalog.chests.styles.size() != 8 or chest_models != 5 or model_sources.size() != 5:
-		printerr("The startup pack must preserve the three original chest styles and five distinct live models.")
+	if catalog.chests.styles.size() != 36 or chest_models != 36 or model_sources.size() != 28:
+		printerr("The startup pack must preserve twenty-eight selected Atelier models and eight palette aliases.")
 		failures += 1
 	print("Treasure: %d chest types and %d live animated models checked in the startup pack." % [catalog.chests.styles.size(), chest_models])
 	var tiers = load("res://scripts/chest_tier_catalog.gd")
 	var tier_sources: Dictionary = {}
-	for number in range(1, 31):
+	for number in range(1, 100):
 		var style: Dictionary = tiers.style(number, catalog.chests)
 		var path: String = str(style.get("model", ""))
 		if not path.begins_with("res://"):
@@ -80,17 +80,17 @@ func _verify() -> void:
 			if not ResourceLoader.exists(source):
 				printerr("A sourced chest fitting is missing from the startup pack: " + source)
 				failures += 1
-	if tier_sources.size() != 9:
-		printerr("Thirty chest assemblies must retain their nine genuine source base families.")
+	if tier_sources.size() != 28:
+		printerr("Ninety-nine chest levels must retain their twenty-eight selected Atelier materials.")
 		failures += 1
 	for path: String in ["res://assets/images/ui/jelly-goals/star.webp", "res://assets/images/ui/jelly-goals/clock.webp"]:
 		if not ResourceLoader.exists(path):
 			printerr("Campaign UI artwork must load before any age media pack: " + path)
 			failures += 1
-	print("Campaign: 99-stage catalog and 30 volumetric chest assemblies with nine base sources checked.")
-	var boss_model: PackedScene = load("res://assets/jelly-boss/private/bramble.glb")
+	print("Campaign: 99 stages and 99 chest levels with twenty-eight Atelier models checked.")
+	var boss_model: PackedScene = load("res://assets/pirate/pirate-game.glb")
 	if boss_model == null:
-		printerr("The acquired Bramble model must ship in the startup pack.")
+		printerr("The optimized Pirate model must ship in the startup pack.")
 		failures += 1
 	else:
 		var boss: Node = boss_model.instantiate()
@@ -99,16 +99,16 @@ func _verify() -> void:
 			printerr("The Boss character has no real animation player.")
 			failures += 1
 		else:
-			for clip: String in ["Idle", "Throw", "Kick", "Snatch", "Hit", "Taunt", "Celebrate", "Escape"]:
+			for clip: String in load("res://scripts/pirate_asset_actor.gd").CLIPS:
 				if not players[0].has_animation(clip):
 					printerr("The Boss character is missing its authored " + clip + " clip.")
 					failures += 1
 		boss.free()
-	print("Boss: acquired skinned Bramble and eight authored skeletal clips checked in startup.")
+	print("Boss: optimized Pirate and twenty-two authored clips checked in startup.")
 	var boss_view: Script = load("res://scripts/word_jelly_boss_view.gd")
 	if boss_view == null or not boss_view.can_instantiate() \
 		or not ResourceLoader.exists("res://assets/jelly-boss/compass.webp") \
-		or not ResourceLoader.exists("res://assets/jelly-boss/private/bramble-portrait.png"):
+		or not ResourceLoader.exists("res://assets/pirate/pirate-portrait.png"):
 		printerr("Boss presentation and its story compass must load without an age-twelve vocabulary pack.")
 		failures += 1
 	var confetti := load("res://assets/images/jelly-match/confetti.png") as Texture2D

@@ -1,0 +1,81 @@
+{
+  "version": 1,
+  "character": "Pirate / Captain Clover",
+  "source_module": "Q:/uwok/boss/taunt_library.py",
+  "morph_targets": ["Bite_Open", "Eye_Squint", "Smile_Smirk", "Tongue_Out"],
+  "playback": "Ten one-shot gestures; each begins and finishes at neutral rest with all four morph weights zero.",
+  "tone": "Playful pirate teasing with a friendly face, a rigid cloth hat and elastic slime motion.",
+  "clips": [
+    {
+      "name": "Taunt_HatTip",
+      "duration_seconds": 1.5,
+      "peak_time_seconds": 0.65,
+      "gesture": "Tips the rigid hat while the body stays composed, then returns it to its resting position.",
+      "expression": "A brief wink."
+    },
+    {
+      "name": "Taunt_BellyLaugh",
+      "duration_seconds": 2.1,
+      "peak_time_seconds": 0.95,
+      "gesture": "Three uneven laugh pulses compress and lift the elastic body.",
+      "expression": "An open smile and a closed eye."
+    },
+    {
+      "name": "Taunt_SideEye",
+      "duration_seconds": 1.7,
+      "peak_time_seconds": 0.8,
+      "gesture": "Turns slowly to the side by 32 degrees and holds the look before returning.",
+      "expression": "A held cheeky smirk."
+    },
+    {
+      "name": "Taunt_NopeWag",
+      "duration_seconds": 1.5,
+      "peak_time_seconds": 0.64,
+      "gesture": "Three quick alternating yaw movements suggest a mischievous refusal.",
+      "expression": "A teasing smile."
+    },
+    {
+      "name": "Taunt_Peekaboo",
+      "duration_seconds": 2.0,
+      "peak_time_seconds": 0.65,
+      "gesture": "Tilts the rigid hat by 68 degrees, moves it 0.65 meters forward and 0.30 meters down to conceal the eye, then pops it back up twice.",
+      "expression": "Two concealed peeks followed by playful reveals."
+    },
+    {
+      "name": "Taunt_MockBow",
+      "duration_seconds": 2.0,
+      "peak_time_seconds": 0.7,
+      "gesture": "Makes a theatrical whole-body bow of 30 degrees, then rises cheekily.",
+      "expression": "A knowing smirk."
+    },
+    {
+      "name": "Taunt_Swagger",
+      "duration_seconds": 2.1,
+      "peak_time_seconds": 1.15,
+      "gesture": "Two lateral hops alternate the body lean and finish at the original position.",
+      "expression": "A confident pirate grin."
+    },
+    {
+      "name": "Taunt_TongueTease",
+      "duration_seconds": 1.8,
+      "peak_time_seconds": 0.9,
+      "gesture": "The actual rounded tongue extends from a partly opened mouth, then retracts.",
+      "expression": "A squint and a gentle tongue-out tease."
+    },
+    {
+      "name": "Taunt_VictoryLap",
+      "duration_seconds": 2.5,
+      "peak_time_seconds": 1.2,
+      "gesture": "One complete 360-degree turn follows a small orbit and ends with a hat salute.",
+      "expression": "A pleased smile."
+    },
+    {
+      "name": "Taunt_FakeSleep",
+      "duration_seconds": 2.6,
+      "peak_time_seconds": 1.2,
+      "gesture": "Settles into a slow tilted doze, then startles awake at 2.05 seconds.",
+      "expression": "A closed eye during the doze, reopening during the startle."
+    }
+  ],
+  "validation": "The optimization audit records per-target morph ranges, neutral resets and distinct normalized trajectory hashes; native QA samples the actual exported clips."
+}

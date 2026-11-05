@@ -90,7 +90,7 @@ func test_selected_family() -> void:
 			"Availability and target identity are read-only and never choose or charge at random")
 		check(model.activate_family_merge(str(cat.id)) if selected_kind == "root" else model.activate_powerup("family_merge", selected),
 			"The goal identity and legacy direct targets both choose only their own word family")
-		check(f.payments.size() == 1 and f.payments[0].kind == "family_merge" and f.payments[0].price == 150
+		check(f.payments.size() == 1 and f.payments[0].kind == "family_merge" and f.payments[0].price == 75
 			and model.powerup_snapshot().family_word_id == str(cat.id),
 			"One explicit target owns exactly one quoted purchase and its visible family")
 		drain(model)
@@ -296,7 +296,7 @@ func test_family_payment_lifecycle() -> void:
 		model.purchase_powerup = func(_id: String, _kind: String, _price: int) -> Dictionary:
 			return response.duplicate()
 		check(not model.activate_family_merge(str(cat.id)) and model.cells == before.cells
-			and model.powerup_price("family_merge") == 50 and not model.powerup_active()
+			and model.powerup_price("family_merge") == 25 and not model.powerup_active()
 			and model.snapshot().powerup_uses.family_merge == 0,
 			"Failed and duplicate chosen-family payments preserve inputs, use count and quoted price")
 	for interruption: String in ["pause", "finish", "configure"]:
@@ -317,12 +317,12 @@ func test_family_payment_lifecycle() -> void:
 		model.finish_powerup()
 		check(f.payments.size() == 1 and model.cells.size() == 1 and model.cells[0].word.id == cat.id
 			and model.cells[0].fragments == 5 and not model.powerup_active()
-			and model.powerup_price("family_merge") == 75,
+			and model.powerup_price("family_merge") == 50,
 			"A reentrant pause, exit or rejected reconfigure settles the chosen family exactly once")
 		model.purchase_powerup = Callable()
 	var f: Dictionary = fixture()
 	var model = f.model
-	var prices: Array[int] = [50, 75, 100, 100]
+	var prices: Array[int] = [25, 50, 75, 75]
 	for index in range(prices.size()):
 		model.cells.clear()
 		var root: Dictionary = put(model, model._new_word_root(cat))
@@ -332,7 +332,7 @@ func test_family_payment_lifecycle() -> void:
 		check(model.activate_powerup("family_merge", int(root.id)),
 			"Each selected-family repeat pays its own exact capped use tier")
 		drain(model)
-		check(f.payments.back().price == prices[index] and model.powerup_price("auto_merge") == 200
+		check(f.payments.back().price == prices[index] and model.powerup_price("auto_merge") == 25
 			and model.auto_merge_level == 1 and model.powerup_price("fragments") == 0,
 			"A family purchase changes neither Auto merge prices nor capacity and cannot restore retired tools")
 
@@ -355,9 +355,9 @@ func test_family_quantity_prices() -> void:
 		var next_tile: int = model._next_tile_id
 		var next_receipt: int = model._next_event_id
 		var rng_state: int = model._rng.state
-		var expected_price: int = 50 * (count - 1)
+		var expected_price: int = 25 * (count - 1)
 		check(model.powerup_price("family_merge", str(cat.id)) == expected_price
-			and model.powerup_price("family_merge", str(dog.id)) == 50,
+			and model.powerup_price("family_merge", str(dog.id)) == 25,
 			"Each family quote scales with actual removed Jellies without borrowing another family's count")
 		var forecast_calls: int = model.forecast_calls
 		check(model.powerup_price("family_merge", str(cat.id)) == expected_price
@@ -370,7 +370,7 @@ func test_family_quantity_prices() -> void:
 			and model.forecast_calls == forecast_calls,
 			"Idle age on settled bodies reuses the family forecast instead of simulating the board again")
 		var added: Dictionary = merged(model, cat, 1)
-		check(model.powerup_price("family_merge", str(cat.id)) == expected_price + 50,
+		check(model.powerup_price("family_merge", str(cat.id)) == expected_price + 25,
 			"A newly eligible Jelly invalidates the cached board and raises only its family's quantity charge")
 		model.cells.remove_at(model._index_for_id(int(added.id)))
 		check(model.powerup_price("family_merge", str(cat.id)) == expected_price,
@@ -414,7 +414,7 @@ func test_simple_family_quote_parity() -> void:
 		check(model.forecast_calls == 0 and model.activate_family_merge(str(cat.id)),
 			"Settled one-cell families can obtain an exact useful quote without a timeline forecast")
 		drain(model)
-		check(price == 50 * (before_count - model.cells.size()) and f.payments.size() == 1
+		check(price == 25 * (before_count - model.cells.size()) and f.payments.size() == 1
 			and f.payments[0].price == price,
 			"The inexpensive settled-family quote agrees with actual merge reduction, including an exact cap and unpaired leftovers")
 		model.purchase_powerup = Callable()
@@ -426,11 +426,11 @@ func test_simple_family_quote_parity() -> void:
 		put(capped.model, capped.model._new_word_root(cat))
 		put(capped.model, capped.model._new_picture_tile(cat))
 	merged(capped.model, cat, 1)
-	check(capped.model.powerup_price("family_merge", str(cat.id)) == 150
+	check(capped.model.powerup_price("family_merge", str(cat.id)) == 75
 		and capped.model.forecast_calls == 0 and capped.model.activate_family_merge(str(cat.id)),
 		"At the first unlocked cap, each complete pair has an exact cheap quote while capped bodies are excluded")
 	drain(capped.model)
-	check(capped.model.cells.size() == 4 and capped.payments.size() == 1 and capped.payments[0].price == 150,
+	check(capped.model.cells.size() == 4 and capped.payments.size() == 1 and capped.payments[0].price == 75,
 		"The capped first-level operation frees exactly three spaces and preserves every completed body")
 	capped.model.purchase_powerup = Callable()
 
@@ -452,7 +452,7 @@ func test_family_fallback_timing(compound: Dictionary) -> void:
 				tile.age = maxf(0.0, Model.settle_duration(tile) - 0.3)
 	var first: int = model.powerup_price("family_merge", str(compound.id))
 	var calls: int = model.forecast_calls
-	check(first >= 50 and calls == 1 and model.powerup_price("family_merge", str(compound.id)) == first
+	check(first >= 25 and calls == 1 and model.powerup_price("family_merge", str(compound.id)) == first
 		and model.forecast_calls == calls,
 		"A complex family reuses its actual forecast while the captured landing times remain unchanged")
 	for tile: Dictionary in model.cells:
@@ -465,7 +465,7 @@ func test_family_fallback_timing(compound: Dictionary) -> void:
 	var before_count: int = model.cells.size()
 	check(model.activate_family_merge(str(compound.id)), "The timing-aware quote still owns a real useful family purchase")
 	drain(model)
-	check(second == 50 * (before_count - model.cells.size()) and f.payments.size() == 1
+	check(second == 25 * (before_count - model.cells.size()) and f.payments.size() == 1
 		and f.payments[0].price == second,
 		"The refreshed airborne forecast agrees with the subsequently paid legal timeline")
 	model.purchase_powerup = Callable()

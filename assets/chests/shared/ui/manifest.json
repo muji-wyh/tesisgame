@@ -1,0 +1,27 @@
+{
+  "acquisition": "Rendered from the integrated chest01 Atelier model; not a source preview.",
+  "animation": "Authored Open clip sampled at 0 and 1 seconds.",
+  "asset_id": "wayfarer-oak",
+  "creator": "See the source model's Atelier provenance record.",
+  "framing": "One camera and one union alpha crop preserve body alignment across both states.",
+  "license": "See the source model's Atelier license record; no new rights are asserted.",
+  "outputs": [
+    {
+      "height": 512,
+      "path": "assets/chests/shared/ui/chest.png",
+      "sha256": "138210a9bcdbe2e472a7a396b7765636251749a4811e2c9f7b790fd124f2c42b",
+      "state": "closed",
+      "width": 512
+    },
+    {
+      "height": 512,
+      "path": "assets/chests/shared/ui/chest-open.png",
+      "sha256": "91899656ee2cc4182afee8242d5d29e1bc316ca59b49a909306ba9f09de4b180",
+      "state": "open",
+      "width": 512
+    }
+  ],
+  "source_model": "assets/chests/models/atelier/wayfarer-oak/wayfarer-oak.glb",
+  "source_model_sha256": "c8a8748c4c1e69cac55bb5bce050c732937ada320e1f8922610ef9f17a18be0b",
+  "version": 1
+}

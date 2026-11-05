@@ -3,7 +3,6 @@ extends Node
 
 const ModelView = preload("res://scripts/chest_model_view.gd")
 const TierCatalog = preload("res://scripts/chest_tier_catalog.gd")
-const MANIFEST_PATH: String = "res://assets/chests/catalog/licensed-models.json"
 const POOL_LIMIT: int = 2
 
 var _styles: Dictionary = {}
@@ -18,20 +17,18 @@ var _reported_errors: Dictionary = {}
 
 func prepare(tier: int) -> void:
 	if tier < 1 or tier > TierCatalog.MAX_TIER:
-		_report_error("tier-%d" % tier, "Reward chest tier must be 1..30, received %d" % tier, false)
+		_report_error("tier-%d" % tier, "Reward chest tier must be 1..99, received %d" % tier, false)
 		return
 	if _pool.has(tier):
 		return
 	if not _loaded:
 		_loaded = true
-		var content: Variant = null
-		if FileAccess.file_exists(MANIFEST_PATH):
-			content = JSON.parse_string(FileAccess.get_file_as_string(MANIFEST_PATH))
+		var content: Dictionary = TierCatalog.manifest()
 		if content is Dictionary and content.get("styles") is Dictionary:
 			_manifest = content
 			_styles = content.styles
 	if _manifest.is_empty():
-		_report_error("manifest", "Reward chest source manifest is missing or invalid: " + MANIFEST_PATH)
+		_report_error("manifest", "Reward chest source manifest is missing or invalid: " + TierCatalog.error())
 		return
 	var style: Dictionary = TierCatalog.style(tier, _manifest)
 	if style.is_empty():
@@ -49,7 +46,7 @@ func prepare(tier: int) -> void:
 		view.free()
 		_report_error("model-%d" % tier, "Reward chest tier %d is unavailable: %s" % [tier, reason])
 		return
-	# Measure first: the new CC0 sources do not need exported manifest bounds.
+	# Use the selected model's measured source geometry.
 	# Only this private surface receives the closed-flight camera envelope.
 	var box: AABB = view.closed_box()
 	if not box.position.is_finite() or not box.size.is_finite() \

@@ -1,50 +1,11 @@
 # Chest library organization
 
-The chest library is organized by role under `assets/chests/`. Read
-[the library guide](../../assets/chests/README.md) for the current tree and catalog
-entry points. Each runtime model family has its own directory, including its
-extracted textures and Godot import sidecars.
+The game selects all28 retained chest01 Atelier models. [The library guide](../../assets/chests/README.md) describes the current contract, source terms and99-level mapping.
 
-## Catalog entry points
+Live resources are under `assets/chests/models/atelier/<asset-id>/`. Each folder keeps its GLB, textures, import sidecars, state scene and license. `catalog/gameplay-chests.json` defines99 gameplay levels and8 palette aliases. `catalog/chest-levels.json` records the ordered material mapping. The final material is reused from Lv29 through Lv99.
 
-| Previous location under `assets/chests/` | Current location |
-| --- | --- |
-| `chest-levels.json` | `catalog/chest-levels.json` |
-| `tier-presets.json` | `catalog/tier-presets.json` |
-| `manifest.json` | `catalog/sprites.json` |
-| `rigs.json` | `catalog/sprite-rigs.json` |
-| `downloaded/manifest.json` | `catalog/licensed-models.json` |
-| `polished-cc0/manifest.json` | `catalog/cc0-models.json` |
-| `catalog-cc0/sources.json` | `catalog/cc0-sources.json` |
-| `atelier/manifest.json` | `catalog/atelier.json` |
+`catalog/chest-states.json` describes the28 actual state compositions, and `catalog/chest-state-assets.json` records shared sourced treasure and effect assets. The game samples each native Open clip continuously and renders sourced Treasure/Magic contents with the same caller-owned clock. Shared UI portraits use one camera and a union alpha crop so the closed/open body stays aligned.
 
-## Resource and source locations
+The former sprite artwork, source chest base resources and modular tier catalogs have been removed. Shared game effects, audio, reward geometry and provenance notices remain. Original acquisition and validation records preserve their historical paths and capture counts; their labels describe the earlier validation context rather than active game resources.
 
-| Previous location | Current location |
-| --- | --- |
-| `atelier/<id>.glb` and `<id>_*.png` | `models/atelier/<id>/` |
-| `models/<id>.glb` and `<id>_*.jpg` | `models/licensed/<id>/` |
-| `polished-cc0/<id>.glb` and `<id>_*.png` | `models/cc0/<id>/` |
-| `royal/`, `energy/`, `crystal/` | `sprites/royal/`, `sprites/energy/`, `sprites/crystal/` |
-| `rigs/<style>/` | `sprites/<style>/rig/` |
-| `particles/`, `milestone/` | `shared/effects/` |
-| `surprises/` | `shared/rewards/` |
-| `catalog-cc0/<pack>/` | `sources/cc0/<pack>/` |
-| `atelier/licenses/`, `atelier/provenance/`, `atelier/validation/` | `sources/atelier/` with the same child names |
-| `SOURCE.txt`, `downloaded/SOURCE.txt`, `rigs/SOURCE.md` | `sources/sprites/`, `sources/licensed/`, `sources/sprite-rigs/` |
-
-Filenames, case-sensitive source `Textures/` directories, model/image/license
-bytes, import UIDs, stable asset IDs and assigned levels are retained. The active
-game scripts, tests, preparation tools, export rules and local review studio use
-the new locations. The Web export explicitly includes the catalog JSON files.
-Private licensed models and milestone effects retain their Git ignore rules.
-
-Historical acquisition records and native validation reports preserve their
-original bytes, hashes and path labels. Their current locations are recorded in
-the catalog; those original labels describe the earlier validation context.
-Old QA snapshots under `docs/qa/` are historical evidence and are not rewritten.
-
-The local migration inventory and original byte hashes are retained in
-`build/chest-layout-migration.json`. It records every relocated file, including
-Godot sidecars. Regenerating or republishing artwork should use the maintained
-preparation and publishing tools, which target this layout.
+Private source-derived Atelier editions retain their Git ignore rules and original source terms. Runtime copies ship inside the verified game package. Historical QA snapshots under `docs/qa/` are retained as evidence.

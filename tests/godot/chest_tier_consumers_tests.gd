@@ -5,6 +5,8 @@ const Progress = preload("res://scripts/jelly_reward_progress.gd")
 const Pair = preload("res://scripts/pair_chest_reward.gd")
 const Badge = preload("res://scripts/memory_reward_badge.gd")
 const Celebration = preload("res://scripts/round_celebration.gd")
+const Catalog = preload("res://scripts/chest_tier_catalog.gd")
+const Chest = preload("res://scripts/chest_view.gd")
 var checks: int = 0
 var failures: int = 0
 
@@ -30,12 +32,14 @@ func _run() -> void:
 	check(pair._model_tier == 6 and pair._models._pool.has(6)
 		and int(pair.chest.hold_effect_snapshot().get("chest_tier", 0)) == 6,
 		"Pair tier six must use the same volumetric tier for its closed preview and full turn")
+	check(pair.chest.hold_effect_snapshot().live_model.source == "res://" + str(Catalog.style(6, data.chests).model),
+		"Pair rewards select the actual new Atelier source for their earned tier")
 	pair.free()
 	var badge := Badge.new()
 	root.add_child(badge)
 	check(badge.configure("tier-consumer", 6, data.chests, Data.theme("spring"), false)
 		and int(badge.chest.hold_effect_snapshot().get("chest_tier", 0)) == 6,
-		"Memory's actual potential level six is not silently replaced by a legacy theme's level28 skin")
+		"Memory's actual potential level six is not silently replaced by a theme's representative skin")
 	badge._animating = true
 	badge._tier = 5
 	badge._elapsed = 0.20
@@ -49,6 +53,20 @@ func _run() -> void:
 	check(int(celebration.chest.hold_effect_snapshot().get("chest_tier", 0)) == 12,
 		"The shared completion performance retains the earned chest's exact level")
 	celebration.free()
+	for tier: int in [1, 28, 29, 99]:
+		var chest := Chest.new()
+		root.add_child(chest)
+		chest.configure_tier(tier, Data.theme("spring"), data.chests)
+		chest.set_process(false)
+		var state: Dictionary = chest.hold_effect_snapshot()
+		var style: Dictionary = Catalog.style(tier, data.chests)
+		check(int(state.chest_tier) == tier and state.preset_id == Catalog.preset(tier).id
+			and state.live_model.source == "res://" + str(style.model),
+			"The shared consumer retains independent Lv%d identity and its actual Atelier geometry" % tier)
+		if tier >= 28:
+			check(str(style.model).ends_with("/aether-vault/aether-vault.glb"),
+				"The last material continues through Lv%d without wrapping or selecting old art" % tier)
+		chest.free()
 	await process_frame
 	print("Chest tier consumers: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

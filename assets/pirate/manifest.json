@@ -1,0 +1,398 @@
+{
+  "version": 1,
+  "character": "Pirate / Captain Clover",
+  "status": "Integrated optimized Pirate replaces the live Jelly World Boss",
+  "reference": {
+    "path": "Q:/uwok/boss/reference.png",
+    "bytes": 66521,
+    "sha256": "3ed4f69bbb46d5cc4119a0c71f281dc8c570b02b6386241fc3319d860e6aed4d",
+    "creator": "Unknown; supplied by the user",
+    "license": "Not provided; no third-party reference license is claimed",
+    "acquisition": "User-provided design reference copied locally"
+  },
+  "authoring": {
+    "creator": "Locally authored with Blender CLI at the user request",
+    "tool": "Blender 5.2.2 LTS",
+    "editable_source": {
+      "path": "Q:/uwok/boss/pirate-slime.blend",
+      "bytes": 3801298,
+      "sha256": "77d2fcf115c6f21c8aae72bba2639d2e4b0c7f291716c0891295fd528faa83d0"
+    },
+    "animation_source": {
+      "path": "Q:/uwok/boss/animation_library.py",
+      "bytes": 16545,
+      "sha256": "6a7f19258bf4b94fb197980fafccf86d0e255be6c63662672b4b1c53ed357e84"
+    },
+    "mouth_source": {
+      "path": "Q:/uwok/boss/bite_geometry.py",
+      "bytes": 11795,
+      "sha256": "77ec02f2244639483b8715c41da0f78ef4424c3112ced1ae69a75794cb37e073"
+    },
+    "taunt_source": {
+      "path": "Q:/uwok/boss/taunt_library.py",
+      "bytes": 9206,
+      "sha256": "fc36177f5d3d9313cb63a4108b8fcc250ee6794026bfb613257bedfe57de01ec"
+    }
+  },
+  "source_model": {
+    "path": "Q:/uwok/boss/pirate-slime.glb",
+    "bytes": 5373620,
+    "sha256": "6064e133ccc4e0f4adff3b5222453e61cca3278c5a2eebc92a3c07cf6e9c93d9",
+    "triangles": 149628,
+    "exported_vertices": 76596,
+    "meshes": 23,
+    "surfaces": 24,
+    "materials": 17
+  },
+  "model": {
+    "path": "assets/pirate/pirate-game.glb",
+    "bytes": 876588,
+    "sha256": "1c94000a309a9a0847248bfa554117bfbf76fe0fc4691b87c7b9b1281827ac93",
+    "triangles": 10583,
+    "exported_vertices": 5782,
+    "meshes": 2,
+    "surfaces": 5,
+    "materials": 5,
+    "animations": [
+      "Attack_L",
+      "Attack_M",
+      "Attack_P",
+      "Hit_L",
+      "Hit_M",
+      "Hit_P",
+      "Idle",
+      "Special_BigBite",
+      "Special_GiantRam",
+      "Taunt_BellyLaugh",
+      "Taunt_FakeSleep",
+      "Taunt_HatTip",
+      "Taunt_MockBow",
+      "Taunt_NopeWag",
+      "Taunt_Peekaboo",
+      "Taunt_SideEye",
+      "Taunt_Swagger",
+      "Taunt_TongueTease",
+      "Taunt_VictoryLap",
+      "Ultimate_CaptainsDrop",
+      "Ultimate_CrescentSpin",
+      "Ultimate_TidalRush"
+    ],
+    "morph_targets": [
+      "Bite_Open",
+      "Eye_Squint",
+      "Smile_Smirk",
+      "Tongue_Out"
+    ],
+    "front_axis": "+Z",
+    "up_axis": "+Y",
+    "animation_origin": "Locally authored object pivots, mouth and expression morphs; no skeletal bones",
+    "renderer": "Godot GL Compatibility",
+    "actor": "scripts/pirate_asset_actor.gd",
+    "preview_scene": "scenes/pirate_asset_preview.tscn",
+    "import_hook": {
+      "path": "assets/pirate/pirate_import.gd",
+      "bytes": 1190,
+      "sha256": "36e8ce1c6cd27f54f469548e192a88d3af73c9db687b02d4c69443672ddb955a"
+    },
+    "color_adapter": {
+      "path": "scripts/pirate_asset_color.gd",
+      "bytes": 1534,
+      "sha256": "fd330f606a3375ebcc4dd00aaff3fdafa3b23380431b3bb2140de7ae27e23c21"
+    },
+    "color_encoding": "glTF stores linear COLOR_0; Godot converts the vertex palette once to sRGB storage for Compatibility and enables vertex-color albedo"
+  },
+  "optimization": {
+    "bytes_reduction_percent": 83.69,
+    "triangles_reduction_percent": 92.93,
+    "method": "Visible-pose proxy simplification, fixed barycentric morph transfer, motion-group mesh merge, vertex color finish consolidation and exact flat animation sample packing",
+    "geometry_tool": {
+      "path": "tools/optimize-pirate.py",
+      "bytes": 12713,
+      "sha256": "a57a6f3cea393173d74de253380cacda5062066fdba1d6408ac37d14ed17d73f"
+    },
+    "packing_tool": {
+      "path": "tools/pack-pirate-gltf.py",
+      "bytes": 35114,
+      "sha256": "796ff38bbc8ca524e04ce0ce4891b3269a618f185670857cdd5d303cee28ca5b"
+    },
+    "audit": "assets/pirate/optimization-report.json"
+  },
+  "animation_contract": {
+    "strength_codes": {
+      "L": "Light",
+      "M": "Medium",
+      "P": "Heavy"
+    },
+    "loop": "Idle",
+    "one_shots": [
+      "Attack_L",
+      "Attack_M",
+      "Attack_P",
+      "Hit_L",
+      "Hit_M",
+      "Hit_P",
+      "Special_BigBite",
+      "Special_GiantRam",
+      "Taunt_BellyLaugh",
+      "Taunt_FakeSleep",
+      "Taunt_HatTip",
+      "Taunt_MockBow",
+      "Taunt_NopeWag",
+      "Taunt_Peekaboo",
+      "Taunt_SideEye",
+      "Taunt_Swagger",
+      "Taunt_TongueTease",
+      "Taunt_VictoryLap",
+      "Ultimate_CaptainsDrop",
+      "Ultimate_CrescentSpin",
+      "Ultimate_TidalRush"
+    ],
+    "start_time_seconds": 0,
+    "reset": "Every clip begins and finishes at rest with all four morph weights zero",
+    "morph_reset": {
+      "Bite_Open": 0,
+      "Eye_Squint": 0,
+      "Smile_Smirk": 0,
+      "Tongue_Out": 0
+    },
+    "rigid_hat": true,
+    "body_growth_peak": 1.7,
+    "clip_timings": [
+      {
+        "name": "Attack_L",
+        "duration_seconds": 0.65
+      },
+      {
+        "name": "Attack_M",
+        "duration_seconds": 1.05
+      },
+      {
+        "name": "Attack_P",
+        "duration_seconds": 1.55
+      },
+      {
+        "name": "Hit_L",
+        "duration_seconds": 0.5
+      },
+      {
+        "name": "Hit_M",
+        "duration_seconds": 0.9
+      },
+      {
+        "name": "Hit_P",
+        "duration_seconds": 1.45
+      },
+      {
+        "name": "Idle",
+        "duration_seconds": 3.0
+      },
+      {
+        "name": "Special_BigBite",
+        "duration_seconds": 1.6
+      },
+      {
+        "name": "Special_GiantRam",
+        "duration_seconds": 2.3
+      },
+      {
+        "name": "Taunt_BellyLaugh",
+        "duration_seconds": 2.1
+      },
+      {
+        "name": "Taunt_FakeSleep",
+        "duration_seconds": 2.6
+      },
+      {
+        "name": "Taunt_HatTip",
+        "duration_seconds": 1.5
+      },
+      {
+        "name": "Taunt_MockBow",
+        "duration_seconds": 2.0
+      },
+      {
+        "name": "Taunt_NopeWag",
+        "duration_seconds": 1.5
+      },
+      {
+        "name": "Taunt_Peekaboo",
+        "duration_seconds": 2.0
+      },
+      {
+        "name": "Taunt_SideEye",
+        "duration_seconds": 1.7
+      },
+      {
+        "name": "Taunt_Swagger",
+        "duration_seconds": 2.1
+      },
+      {
+        "name": "Taunt_TongueTease",
+        "duration_seconds": 1.8
+      },
+      {
+        "name": "Taunt_VictoryLap",
+        "duration_seconds": 2.5
+      },
+      {
+        "name": "Ultimate_CaptainsDrop",
+        "duration_seconds": 2.5
+      },
+      {
+        "name": "Ultimate_CrescentSpin",
+        "duration_seconds": 2.25
+      },
+      {
+        "name": "Ultimate_TidalRush",
+        "duration_seconds": 2.25
+      }
+    ],
+    "taunt_count": 10,
+    "taunt_designs": {
+      "path": "assets/pirate/taunt-designs.json",
+      "bytes": 3206,
+      "sha256": "1657a9b256fb85679d5cdd0f96d3e790584a9a14d97cea937dfb7ba8b50bdcdf"
+    },
+    "taunts": [
+      {
+        "name": "Taunt_HatTip",
+        "duration_seconds": 1.5,
+        "peak_time_seconds": 0.65,
+        "gesture": "Tips the rigid hat while the body stays composed, then returns it to its resting position.",
+        "expression": "A brief wink.",
+        "trajectory_sha256": "b2496e0a49558b49dd711a265172d299ecef4851a0d42bfebbdf29edd6e4206f"
+      },
+      {
+        "name": "Taunt_BellyLaugh",
+        "duration_seconds": 2.1,
+        "peak_time_seconds": 0.95,
+        "gesture": "Three uneven laugh pulses compress and lift the elastic body.",
+        "expression": "An open smile and a closed eye.",
+        "trajectory_sha256": "8bdbf937cfcd3b5eb65bd42d48ec97a8e8a15fdc9e93817e7a741477b55c1031"
+      },
+      {
+        "name": "Taunt_SideEye",
+        "duration_seconds": 1.7,
+        "peak_time_seconds": 0.8,
+        "gesture": "Turns slowly to the side by 32 degrees and holds the look before returning.",
+        "expression": "A held cheeky smirk.",
+        "trajectory_sha256": "37e52b618c0bac4e6bf362de12f7dbc09a93b9cb3f04234a6da60b1fa11ba707"
+      },
+      {
+        "name": "Taunt_NopeWag",
+        "duration_seconds": 1.5,
+        "peak_time_seconds": 0.64,
+        "gesture": "Three quick alternating yaw movements suggest a mischievous refusal.",
+        "expression": "A teasing smile.",
+        "trajectory_sha256": "284be6489d717ae78c5b6288258f9268479c0fe2efb587847e4ebb986663354b"
+      },
+      {
+        "name": "Taunt_Peekaboo",
+        "duration_seconds": 2.0,
+        "peak_time_seconds": 0.65,
+        "gesture": "Tilts the rigid hat by 68 degrees, moves it 0.65 meters forward and 0.30 meters down to conceal the eye, then pops it back up twice.",
+        "expression": "Two concealed peeks followed by playful reveals.",
+        "trajectory_sha256": "845fc93222c5e32772a9ec9af5b345a520620e059dac766f2527bf69b1a6085f"
+      },
+      {
+        "name": "Taunt_MockBow",
+        "duration_seconds": 2.0,
+        "peak_time_seconds": 0.7,
+        "gesture": "Makes a theatrical whole-body bow of 30 degrees, then rises cheekily.",
+        "expression": "A knowing smirk.",
+        "trajectory_sha256": "a1a12bbb89c656623341863acba010b59319bf5d86744cc49d647cb561aa6266"
+      },
+      {
+        "name": "Taunt_Swagger",
+        "duration_seconds": 2.1,
+        "peak_time_seconds": 1.15,
+        "gesture": "Two lateral hops alternate the body lean and finish at the original position.",
+        "expression": "A confident pirate grin.",
+        "trajectory_sha256": "9d565d0532c5bf087a143f81c5f2e52cefe6080d6039e35c0c2ce554d1c6f0a4"
+      },
+      {
+        "name": "Taunt_TongueTease",
+        "duration_seconds": 1.8,
+        "peak_time_seconds": 0.9,
+        "gesture": "The actual rounded tongue extends from a partly opened mouth, then retracts.",
+        "expression": "A squint and a gentle tongue-out tease.",
+        "trajectory_sha256": "45b9a4abc742ef0aac80d182d499702e354b7dfe1824dbf889d64ea83a5995be"
+      },
+      {
+        "name": "Taunt_VictoryLap",
+        "duration_seconds": 2.5,
+        "peak_time_seconds": 1.2,
+        "gesture": "One complete 360-degree turn follows a small orbit and ends with a hat salute.",
+        "expression": "A pleased smile.",
+        "trajectory_sha256": "5339950552ebaadd7156c682fbd81305dd6f6a99dd9996eab01bfc9884c4cf3a"
+      },
+      {
+        "name": "Taunt_FakeSleep",
+        "duration_seconds": 2.6,
+        "peak_time_seconds": 1.2,
+        "gesture": "Settles into a slow tilted doze, then startles awake at 2.05 seconds.",
+        "expression": "A closed eye during the doze, reopening during the startle.",
+        "trajectory_sha256": "87b3478a89c022cdbf0445bea0680b48458ab8130c93ea9292109f0fb7d59b15"
+      }
+    ]
+  },
+  "portrait": {
+    "path": "assets/pirate/pirate-portrait.png",
+    "bytes": 40833,
+    "sha256": "7594183d6cbce8248ef5e87fe50e283b721d4c92c3490c1915438d1b79516e9f",
+    "width": 256,
+    "height": 256,
+    "acquisition": "Approved transparent Godot portrait retained while extending the action pack",
+    "source_model_sha256": "fe222ca50b975404077c02007b54a34ecf69d73532059a3a9ab52491be3a866d",
+    "current_idle_verification": {
+      "model_sha256": "1c94000a309a9a0847248bfa554117bfbf76fe0fc4691b87c7b9b1281827ac93",
+      "path": "res://build/qa/pirate-asset/idle-portrait-check.png",
+      "sha256": "83d1062e06f5027cbe4834f4d0bd6f1a989089e5a5a57b2d4d02d387842d143e",
+      "clip": "Idle",
+      "time": 0.45
+    }
+  },
+  "validation": {
+    "gltf_audit": "passed",
+    "native_renderer": "GL Compatibility",
+    "native_pose_count": 22,
+    "taunt_pose_count": 10,
+    "additional_pose_count": 4,
+    "native_viewport": [
+      384,
+      576
+    ],
+    "mouth_closeup": {
+      "path": "res://build/qa/pirate-asset/big-bite-closeup.png",
+      "sha256": "8fd425a42149921e358ffdb26e108f5eb4b2371a6b7ae3d7f54c3e46e47ba386",
+      "width": 512,
+      "height": 512,
+      "clip": "Special_BigBite",
+      "time": 0.6
+    },
+    "render_report": {
+      "path": "build/qa/pirate-asset/render-report.json",
+      "bytes": 9551,
+      "sha256": "cac5b31843b0a3f36edc3b711ea0aa6ca65fce023198ad7ab5102f8e5cb70483"
+    },
+    "browser": "passed",
+    "browser_report": {
+      "path": "build/qa/pirate-asset/browser-report.json",
+      "bytes": 5850,
+      "sha256": "360385f2855a4a5905896f70fa0fcc903b9e7f757d56688c22ec155186c8d7c7"
+    },
+    "browser_one_shots": 10,
+    "mobile_viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "mobile_scroll_preserved": true,
+    "reduced_motion_reset": true
+  },
+  "offline_preview": {
+    "path": "Q:/uwok/boss/game-ready/index.html",
+    "bytes": 1790914,
+    "sha256": "e512fdacc4b1a82d9151ed83d48de8ab64f66a444ee0bf22925b0706d2950bc8",
+    "package_path": "preview/pirate.html"
+  }
+}

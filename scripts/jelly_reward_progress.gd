@@ -4,7 +4,8 @@ extends RefCounted
 const THEMES: Array[String] = ["jungle", "autumn", "ocean", "space", "spring", "winter"]
 const CHEST_UNLOCK_FRAGMENTS: int = 4
 const CHEST_UPGRADE_FRAGMENTS: int = 5
-const MAX_TIER: int = 30
+const TierCatalog = preload("res://scripts/chest_tier_catalog.gd")
+const MAX_TIER: int = TierCatalog.MAX_TIER
 
 
 static func reward_progress(total: int) -> Dictionary:

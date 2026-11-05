@@ -3,7 +3,7 @@
   "collection": "Chest State Assets",
   "license": "CC0-1.0",
   "publisher": "tools/publish_state_assets.py in the chest authoring repository",
-  "asset_policy": "Original acquired model and sprite bytes, UVs, palettes and embedded images preserved. Chest GLBs are never modified.",
+  "asset_policy": "Original acquired assets remain byte-preserved. A supported linked-instance coin stack is separately recorded as a source-derived composition; chest GLBs are unchanged.",
   "state_contract": {
     "open": "Opened empty chest; hide built-in Treasure and shared loot; no magic effects",
     "treasure": "Opened chest with genuine KayKit loot fitted to that chest cavity; prefer existing embedded Treasure when present",
@@ -69,7 +69,7 @@
       "bounds_3d": {
         "min": [
           -0.4452475607395172,
-          -5.960464477539062e-07,
+          -5.960464477539062e-7,
           -0.4608292579650879
         ],
         "max": [
@@ -123,7 +123,7 @@
       "bounds_3d": {
         "min": [
           -0.44633805751800537,
-          -5.997717380523682e-07,
+          -5.997717380523682e-7,
           -0.5073903799057007
         ],
         "max": [
@@ -349,6 +349,130 @@
       "source_sha256": "4255985e312a0058dc0c4f8b5befc902da17e6be5e5252007f3c7b02bb150157",
       "license": "CC0-1.0",
       "status": "published-original-byte-copy; scene integration and cavity fit recorded separately"
+    },
+    {
+      "id": "coin-pile-tall",
+      "kind": "glb",
+      "role": "treasure",
+      "path": "assets/chests/shared/rewards/coin-pile-tall.glb",
+      "resource": "res://assets/chests/shared/rewards/coin-pile-tall.glb",
+      "bytes": 65036,
+      "sha256": "960965f8c4172d942cf30975665328ba40d469ccb1d555c8d425a66873614b5a",
+      "source": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+      "source_sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+      "creator": "Kay Lousberg",
+      "source_id": "kaykit-dungeon",
+      "source_url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+      "license": "CC0-1.0",
+      "license_file": "assets/chests/sources/states/kaykit-dungeon/LICENSE.txt",
+      "source_record": "assets/chests/sources/atelier/provenance/relic-coins.json",
+      "bounds_3d": {
+        "min": [
+          -0.5285311983898282,
+          0,
+          -0.5479999571107328
+        ],
+        "max": [
+          0.529531198553741,
+          2.200000047683716,
+          0.5489999572746456
+        ]
+      },
+      "radial_extent_3d": 0.6091497333448096,
+      "triangles": 3872,
+      "mesh_instances": 4,
+      "animations": [],
+      "derivation": {
+        "method": "linked-source-instance-stack",
+        "instances": 4,
+        "source_triangles": 968,
+        "composition": {
+          "method": "Four linked original medium-pile instances, with uniform scale, slight rotations and small offsets; successive layers overlap vertically",
+          "height": 2.2,
+          "source_layer_height": 0.6753000057364891,
+          "layer_step": 0.5082333314211703,
+          "vertical_overlap": 0.16706667431531874,
+          "transforms": [
+            {
+              "layer": 1,
+              "uniform_source_scale": 1.0540479837357493,
+              "rotation_about_up_radians": 0,
+              "position_blender": [
+                0,
+                0,
+                0
+              ],
+              "position_gltf": [
+                0,
+                0,
+                0
+              ]
+            },
+            {
+              "layer": 2,
+              "uniform_source_scale": 1.0540479837357493,
+              "rotation_about_up_radians": 0.045,
+              "position_blender": [
+                0.006000000052154064,
+                -0.004000000189989805,
+                0.5082333087921143
+              ],
+              "position_gltf": [
+                0.006000000052154064,
+                0.5082333087921143,
+                0.004000000189989805
+              ]
+            },
+            {
+              "layer": 3,
+              "uniform_source_scale": 1.0540479837357493,
+              "rotation_about_up_radians": -0.035,
+              "position_blender": [
+                -0.004999999888241291,
+                0.003000000026077032,
+                1.0164666175842285
+              ],
+              "position_gltf": [
+                -0.004999999888241291,
+                1.0164666175842285,
+                -0.003000000026077032
+              ]
+            },
+            {
+              "layer": 4,
+              "uniform_source_scale": 1.0540479837357493,
+              "rotation_about_up_radians": 0.022,
+              "position_blender": [
+                0.003000000026077032,
+                -0.0020000000949949026,
+                1.5247000455856323
+              ],
+              "position_gltf": [
+                0.003000000026077032,
+                1.5247000455856323,
+                0.0020000000949949026
+              ]
+            }
+          ]
+        }
+      },
+      "texture_dependencies": {
+        "self_contained": true,
+        "external": [],
+        "embedded_images": [
+          {
+            "name": "dungeon_texture",
+            "mime_type": "image/png",
+            "dimensions": [
+              1024,
+              1024
+            ],
+            "bytes": 15794,
+            "sha256": "f9ae182518f908bd09461a56a430b9ca7369812ac10890224cc6f32e7da3e1ee"
+          }
+        ]
+      },
+      "status": "published-source-derived-supported-stack; acquired input geometry and palette preserved"
     }
   ]
 }

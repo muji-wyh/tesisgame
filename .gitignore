@@ -29,6 +29,12 @@ assets/talk_quest/monsters/*.png
 assets/talk_quest/monsters/*.png.import
 # Licensed chest models and their source maps remain private build inputs.
 assets/chests/models/licensed/
+# Private source-derived Atelier editions retain the original store license.
+assets/chests/models/atelier/meadow-cabinet/
+assets/chests/models/atelier/harvest-strongbox/
+assets/chests/models/atelier/bonbon-keepsake/
+assets/chests/models/atelier/lagoon-reliquary/
+assets/chests/models/atelier/moonstone-crown/
 # Licensed Boss character inputs are embedded only in the compiled game.
 assets/jelly-boss/private/
 # Retired treasure-stage particles remain private archived inputs.

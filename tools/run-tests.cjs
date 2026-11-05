@@ -76,6 +76,7 @@ groups['word-jelly'].godot.push('jelly_pause_tests', 'word_jelly_practice_tests'
   'word_jelly_fill_items_tests',
   'word_jelly_funds_feedback_tests',
   'word_jelly_pricing_flow_tests',
+  'word_jelly_merge_pricing_cache_tests',
   'word_jelly_auto_collect_hover_tests',
   'word_jelly_boss_tests', 'word_jelly_boss_progress_tests', 'word_jelly_boss_view_tests', 'word_jelly_boss_flow_tests', 'word_jelly_boss_portrait_tests', 'word_jelly_presentation_tests',
   'word_jelly_rules_tests', 'word_jelly_board_burst_tests', 'word_jelly_collection_learning_tests',
@@ -108,7 +109,7 @@ groups['chest-charge'].godot.push('chest_upgrade_level_tests', 'chest_asset_stat
 groups['word-jelly'].godot.push('chest_upgrade_level_tests');
 groups.jelly.godot.push('jelly_publication_json_tests');
 groups['word-jelly'].godot.push('jelly_publication_json_tests');
-groups.jelly.node.push('jelly-campaign-art', 'jelly-campaign-host', 'chest-tier-art', 'jelly-boss-art');
+groups.jelly.node.push('jelly-campaign-art', 'jelly-campaign-host', 'chest-tier-art', 'jelly-boss-art', 'pirate-asset');
 
 function createPlan(names = ['all']) {
   const godot = new Set(), node = new Set();

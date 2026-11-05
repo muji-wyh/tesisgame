@@ -1,10 +1,11 @@
 extends Control
-## A side-standing acquired character and sourced energy effects; BossRun owns combat.
+## The optimized Pirate and sourced energy effects; BossRun owns combat.
 
 signal audio_requested(cue: String)
 
 const Style = preload("res://scripts/ui_style.gd")
 const Actor = preload("res://scripts/word_jelly_boss_actor.gd")
+const Pirate = preload("res://scripts/pirate_asset_actor.gd")
 const Run = preload("res://scripts/word_jelly_boss_run.gd")
 const Model = preload("res://scripts/word_jelly_model.gd")
 const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
@@ -34,12 +35,15 @@ var _scale: float = 1.0
 var _generation: int = -1
 var _last_event: int = 0
 var _gesture: String = "Idle"
+var _gesture_clip: String = "Idle"
+var _taunt_serial: int = 0
 var _gesture_at: float = 0.0
 var _dialogue_until: float = 0.0
 var _sparks: Array[Dictionary] = []
 var _tile_rects: Dictionary = {}
 var _last_pose_frame: int = -1
 var _last_pose_clip: String = ""
+var _last_pose_reduced: bool = false
 var _snatch: Dictionary = {}
 var _thrown: Array[Dictionary] = []
 var _health_from: float = 1.0
@@ -124,6 +128,8 @@ func sync(state: Dictionary, tiles: Dictionary, generation: int, active_clock: b
 		_generation = generation
 		_last_event = 0
 		_gesture = "Taunt"
+		_taunt_serial = int(state.get("definition", {}).get("id", 0))
+		_gesture_clip = _next_taunt()
 		_gesture_at = -100.0
 		_last_pose_frame = -1
 		_last_pose_clip = ""
@@ -137,7 +143,7 @@ func sync(state: Dictionary, tiles: Dictionary, generation: int, active_clock: b
 			continue
 		_last_event = int(event.id)
 		_handle_event(event, active_clock, visuals)
-	set("accessibility_name", "Bramble. %d percent energy remaining." % roundi(target_health * 100.0))
+	set("accessibility_name", "Pirate. %d percent energy remaining." % roundi(target_health * 100.0))
 	_pose()
 	return true
 
@@ -145,13 +151,31 @@ func sync(state: Dictionary, tiles: Dictionary, generation: int, active_clock: b
 func _handle_event(event: Dictionary, audible: bool, visuals: Dictionary) -> void:
 	var kind: String = str(event.kind)
 	var clips: Dictionary = {"entrance": "Taunt", "throw": "Throw", "kick_windup": "Kick", "snatch": "Snatch",
-		"taunt": "Taunt", "clones": "Taunt", "ward": "Celebrate"}
-	if clips.has(kind):
+		"taunt": "Taunt", "clones": "Taunt", "ward": "Celebrate", "storm": "Storm"}
+	var storm_active: bool = _gesture == "Storm" and float(event.at) - _gesture_at < 2.5
+	var snatch_contact: bool = kind == "snatch" and not _snatch.is_empty()
+	if clips.has(kind) and not (kind == "throw" and storm_active) and not snatch_contact:
 		_gesture = clips[kind]
 		_gesture_at = float(event.at)
+		match kind:
+			"entrance", "taunt":
+				_gesture_clip = _next_taunt()
+			"clones":
+				_gesture_clip = "Taunt_Peekaboo"
+			"ward":
+				_gesture_clip = "Taunt_VictoryLap"
+			"kick_windup":
+				_gesture_clip = "Special_GiantRam"
+			"snatch":
+				_gesture_clip = "Special_BigBite"
+			"storm":
+				_gesture_clip = ["Ultimate_TidalRush", "Ultimate_CrescentSpin", "Ultimate_CaptainsDrop"][int(event.id) % 3]
+			"throw":
+				_gesture_clip = "Attack_L" if event.get("status") == "freeze" else "Attack_M" if event.get("status") == "ink" else "Attack_P"
 	if kind == "throw" and event.get("status") == "snatch":
 		_snatch = event.duplicate(true)
 		_gesture = "Snatch"
+		_gesture_clip = "Special_BigBite"
 	if kind == "snatch":
 		var id: int = int(event.target)
 		if visuals.has(id):
@@ -203,6 +227,7 @@ func _present_impacts(elapsed: float) -> void:
 			_gesture = "Hit"
 			_gesture_at = _health_at
 			_impact_level = int(event.level)
+			_gesture_clip = _hit_clip(_impact_level)
 			if _audible_clock:
 				audio_requested.emit("boss-hit")
 	if _state.outcome == "defeated" and float(_state.ending_elapsed) >= _victory_delay() and not _victory_announced:
@@ -222,6 +247,63 @@ func _victory_delay() -> float:
 	return HIT_FLIGHT_SECONDS if not reduced_motion and _finishing_hit() else 0.0
 
 
+func _next_taunt() -> String:
+	var clip: String = Pirate.TAUNTS[_taunt_serial % Pirate.TAUNTS.size()]
+	_taunt_serial += 1
+	return clip
+
+
+func _hit_clip(level: int) -> String:
+	return "Hit_L" if level <= 3 else "Hit_M" if level <= 6 else "Hit_P"
+
+
+func _action_clip(gesture: String) -> String:
+	if gesture == "Idle":
+		return "Idle"
+	if gesture == "Hit":
+		return _hit_clip(_impact_level)
+	if gesture == "Escape":
+		return "Taunt_Swagger"
+	if gesture == _gesture:
+		return _gesture_clip
+	return "Taunt_BellyLaugh"
+
+
+func _action_span(gesture: String, native_clip: String) -> float:
+	match gesture:
+		"Hit": return HIT_RECOVERY_SECONDS
+		"Throw": return Run.WINDUP_SECONDS + Run.FLIGHT_SECONDS
+		"Kick": return 1.4
+		"Snatch": return Run.WINDUP_SECONDS + Run.FLIGHT_SECONDS + 0.7
+		"Storm": return _actor.clip_duration(native_clip)
+	return _actor.clip_duration(native_clip)
+
+
+func _native_action_time(gesture: String, age: float, native_clip: String) -> float:
+	var duration: float = _actor.clip_duration(native_clip)
+	var span: float = _action_span(gesture, native_clip)
+	var contact: float = Run.WINDUP_SECONDS
+	var native_contact: float = 0.0
+	match gesture:
+		"Throw":
+			native_contact = {"Attack_L": 0.22, "Attack_M": 0.40, "Attack_P": 0.69}.get(native_clip, 0.40)
+		"Kick":
+			native_contact = 1.05
+		"Snatch":
+			contact = Run.WINDUP_SECONDS + Run.FLIGHT_SECONDS
+			native_contact = 0.72
+		_:
+			return clampf(age / maxf(0.001, span), 0.0, 1.0) * duration if gesture != "Idle" else age
+	if age <= contact:
+		return native_contact * clampf(age / contact, 0.0, 1.0)
+	return lerpf(native_contact, duration, clampf((age - contact) / maxf(0.001, span - contact), 0.0, 1.0))
+
+
+func _anchor_point(anchor: String) -> Vector2:
+	var point: Vector2 = _actor.project_anchor(anchor) / Vector2(_actor.size)
+	return _character.get_transform() * (point * _character.size)
+
+
 func _pose() -> void:
 	if _state.is_empty() or not visible:
 		return
@@ -230,7 +312,7 @@ func _pose() -> void:
 	var ending: bool = _state.phase in ["ending", "done"]
 	_layout_dialogue(ending)
 	var ending_time: float = float(_state.ending_elapsed)
-	var clip: String = _gesture if elapsed - _gesture_at < 1.1 else "Idle"
+	var clip: String = _gesture if elapsed - _gesture_at < _action_span(_gesture, _gesture_clip) else "Idle"
 	if _state.phase == "exhausted":
 		clip = "Hit"
 		_snatch.clear()
@@ -255,7 +337,7 @@ func _pose() -> void:
 			_character.position.y -= sin(departure * PI) * (72.0 if style in ["panic", "scramble"] else 30.0) / _scale
 			_character.rotation = sin(departure * TAU * 2.0) * 0.12 if style == "panic" else -0.08 * departure if style == "swagger" else 0.0
 		_character.modulate.a = 1.0 - departure if reduced_motion or _state.definition.retreat == "trick" else 1.0
-		_speaker_text = "Pip" if ending_time >= 3.0 and ending_time < 4.8 else "Bramble"
+		_speaker_text = "Pip" if ending_time >= 3.0 and ending_time < 4.8 else "Pirate"
 		var end_event: Dictionary = {}
 		for event: Dictionary in _state.events:
 			if event.kind in ["victory", "taunt"]:
@@ -266,12 +348,11 @@ func _pose() -> void:
 			_dialogue.text = "Hey! Our Word Compass!"
 		elif _state.outcome == "defeated" and ending_time >= impact_at and ending_time < 1.7:
 			_speaker_text = "Pip"
-			_dialogue.text = "Bramble beaten!"
+			_dialogue.text = "Pirate beaten!"
 	else:
 		if not reduced_motion:
 			if _gesture == "Kick" and elapsed - _gesture_at < 1.4:
 				var kick: float = sin(clampf((elapsed - _gesture_at) / 1.4, 0, 1) * PI)
-				_character.size *= 1.0 + kick * 0.65
 				var contact: Vector2 = _preview.get_center() - _character.size * Vector2(0.5, Actor.FOOT_Y)
 				_character.position = _character_rect.position.lerp(contact, kick)
 			if not _snatch.is_empty():
@@ -289,7 +370,7 @@ func _pose() -> void:
 					_character.position.y -= sin(back * PI) * 54.0 / _scale
 					if back >= 1.0:
 						_snatch.clear()
-		_speaker_text = "Bramble"
+		_speaker_text = "Pirate"
 	_character.pivot_offset = _character.size * Vector2(0.5, Actor.FOOT_Y)
 	if not reduced_motion:
 		if ending and _finishing_hit():
@@ -305,13 +386,22 @@ func _pose() -> void:
 	_dialogue.visible = ((_state.phase == "ending" and ending_time < 6.4) \
 		or not ending and elapsed < _dialogue_until) and not _dialogue.text.is_empty()
 	var sample: int = floori(elapsed * 24.0)
-	if sample != _last_pose_frame or clip != _last_pose_clip:
+	var native_clip: String = _action_clip(clip)
+	if sample != _last_pose_frame or native_clip != _last_pose_clip or reduced_motion != _last_pose_reduced:
 		var pose_time: float = elapsed - _gesture_at
+		var native_time: float = _native_action_time(clip, pose_time, native_clip)
 		if ending and _state.outcome == "defeated":
-			pose_time = ending_time - (HIT_FLIGHT_SECONDS if clip == "Hit" else 1.7 if clip == "Escape" else 0.0)
-		_actor.pose(clip, pose_time, reduced_motion)
+			pose_time = ending_time - (_victory_delay() if clip == "Hit" else 1.7 if clip == "Escape" else 0.0)
+			if clip == "Hit":
+				native_time = clampf(pose_time / (1.7 - _victory_delay()), 0.0, 1.0) * _actor.clip_duration(native_clip)
+			else:
+				native_time = pose_time
+		elif ending:
+			native_time = ending_time - (5.0 if clip == "Escape" else 0.0)
+		_actor.pose(native_clip, native_time, reduced_motion)
 		_last_pose_frame = sample
-		_last_pose_clip = clip
+		_last_pose_clip = native_clip
+		_last_pose_reduced = reduced_motion
 	for index in range(2):
 		var clone: TextureRect = _doubles[index]
 		var arriving_hits: int = 0
@@ -398,7 +488,7 @@ func _draw() -> void:
 		var origin: Dictionary = event.get("origin", {})
 		var start: Vector2 = _board.position + Vector2(float(origin.get("column", floori(Model.COLUMNS * 0.5))) + 0.5,
 			float(origin.get("row", 4)) + 0.5) * _board.size.x / Model.COLUMNS
-		var target: Vector2 = _character.position + _character.size * Vector2(0.5, 0.42)
+		var target: Vector2 = _anchor_point("face")
 		var p: float = clampf(age / HIT_FLIGHT_SECONDS, 0.0, 1.0)
 		var at: Vector2 = start.lerp(target, p)
 		at.y -= sin(p * PI) * 48.0 / _scale
@@ -420,7 +510,7 @@ func _draw() -> void:
 			draw_string(Style.HEADING_FONT, target - Vector2(width * 0.5, 12.0 / _scale),
 				text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels, Color("#75426f"))
 	if _state.phase not in ["ending", "done"]:
-		var held_compass: Vector2 = _character.get_transform() * (_character.size * Vector2(0.77, 0.62))
+		var held_compass: Vector2 = _anchor_point("compass")
 		var edge: float = 28.0 / _scale
 		draw_texture_rect(GLOW, Rect2(held_compass - Vector2.ONE * edge, Vector2.ONE * edge * 2.0),
 			false, Color(1.0, 0.86, 0.42, 0.26))
@@ -428,7 +518,7 @@ func _draw() -> void:
 	if _state.phase in ["ending", "done"]:
 		var compass_edge: float = (64.0 if _state.outcome == "ambushed" \
 			or int(_state.definition.get("id", 0)) == 8 and _state.outcome == "defeated" else 42.0) / _scale
-		var compass_target: Vector2 = _character.get_transform() * (_character.size * Vector2(0.77, 0.62))
+		var compass_target: Vector2 = _anchor_point("compass")
 		if _state.outcome == "ambushed":
 			var steal: float = clampf((float(_state.ending_elapsed) - 0.5) / 1.4, 0, 1)
 			var from: Vector2 = _board.position + Vector2(_board.size.x * 0.20, 40 / _scale)
@@ -456,7 +546,7 @@ func _draw() -> void:
 		var progress: float = clampf((float(projectile.elapsed) - float(projectile.windup)) / float(projectile.duration), 0.0, 1.0)
 		var destination: Vector2 = _board.position + Vector2(float(projectile.column) + 0.5,
 			float(projectile.row) + 0.5) * _board.size.x / Model.COLUMNS
-		var start: Vector2 = _character.position + _character.size * Vector2(0.35, 0.5)
+		var start: Vector2 = _anchor_point("face")
 		var at: Vector2 = start.lerp(destination, progress)
 		at.y -= 4.0 * progress * (1.0 - progress) * maxf(30 / _scale, start.distance_to(destination) * 0.24)
 		var tint: Color = COLORS.get(projectile.status, Color.WHITE)
@@ -494,7 +584,8 @@ func snapshot() -> Dictionary:
 	return {"visible": is_visible_in_tree(), "rect": [_hud.position.x, _hud.position.y, _hud.size.x, _hud.size.y],
 		"base_character_rect": [_character_rect.position.x, _character_rect.position.y, _character_rect.size.x, _character_rect.size.y],
 		"character_rect": [_character.position.x, _character.position.y, _character.size.x, _character.size.y],
-		"presentation": "side_character", "clip": _last_pose_clip, "heading": "", "health_text": "",
+		"presentation": "side_character", "clip": _last_pose_clip, "gesture": _gesture,
+		"model": Actor.MODEL, "actor": _actor.snapshot(), "heading": "", "health_text": "",
 		"health_fraction": float(_state.get("health", 0)) / maxf(1.0, float(_state.get("max_health", 1))),
 		"energy_fraction": _energy_ratio(), "energy_segments": 8,
 		"impact_serial": _last_impact_event, "victory_announced": _victory_announced,

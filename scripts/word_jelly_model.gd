@@ -666,7 +666,14 @@ func _auto_merge_hit_stop_remaining() -> float:
 func powerup_price(kind: String, family: String = "") -> int:
 	if not POWERUP_PRICES.has(kind):
 		return 0
-	var reduction: int = _family_merge_reduction(family) if kind == "family_merge" and not family.is_empty() else 1
+	var reduction: int = 1
+	if kind == "auto_merge":
+		if _powerup_inputs_ready():
+			reduction = int(auto_merge_preview().get("reduction_count", 0))
+		else:
+			reduction = int(_auto_merge_preview_cache.get("reduction_count", 0))
+	elif not family.is_empty():
+		reduction = _family_merge_reduction(family)
 	return CoinEconomy.powerup_price(kind, int(_powerup_uses.get(kind, 0)), auto_merge_level, reduction)
 
 
@@ -831,7 +838,7 @@ func _powerup_availability_state() -> Array:
 		key.append([tile.id, tile.column, tile.row, tile.width, tile.height,
 			tile.get("jelly_kind", "root"), tile.get("merge_level", 1), tile.get("lifted", false),
 			is_settled(tile), tile.get("composition", {}), tile.get("text", ""),
-			tile.get("mass", 1), tile.get("fragments", 0), not word.is_empty(),
+			tile.get("mass", 1), tile.get("fragments", 0), tile.get("placement_locked", false), not word.is_empty(),
 			word.get("id", ""), candidate.get("id", ""), picture.get("id", ""),
 			boss.frozen(int(tile.id)), boss.locks(int(tile.id))])
 	return key
@@ -855,19 +862,22 @@ func _powerup_inputs_ready() -> bool:
 
 func auto_merge_preview() -> Dictionary:
 	var capacity: int = auto_merge_capacity()
-	var empty: Dictionary = {"capacity": capacity, "result_count": 0, "input_ids": []}
+	var empty: Dictionary = {"capacity": capacity, "result_count": 0, "reduction_count": 0, "input_ids": []}
 	if not _powerup_inputs_ready():
 		return empty
-	var key: Array = [_generation, capacity, merged_level_limit, allow_cross_age,
-		fall_speed_scale, authored_morphology, _campaign_level_rules, _words_by_id,
-		_growth_pending, _gravity_pending, _drag_gravity_delays, boss.broken_remaining > EPSILON]
+	# Pricing and hover share one forecast. Keep the key compact, as the price
+	# stays visible even when the pointer is away from the Auto Merge button.
+	var key: Array = _powerup_availability_state()
 	for tile: Dictionary in cells:
-		var state: Dictionary = tile.duplicate()
 		# Idle age is irrelevant after landing; airborne timing still changes the forecast.
-		if is_settled(tile):
-			state.erase("age")
-		key.append([state, boss.frozen(int(tile.id)), boss.locks(int(tile.id))])
+		if not is_settled(tile):
+			key.append([tile.id, tile.age, settle_duration(tile)])
 	if key == _auto_merge_preview_key:
+		return _auto_merge_preview_cache.duplicate(true)
+	var simple: Dictionary = _simple_auto_merge_preview(capacity)
+	if not simple.is_empty():
+		_auto_merge_preview_key = key.duplicate(true)
+		_auto_merge_preview_cache = simple
 		return _auto_merge_preview_cache.duplicate(true)
 	# Replay the real timeline on isolated board data, including arrivals and
 	# gravity. Only the pure composition resolver is shared, never callbacks.
@@ -877,12 +887,69 @@ func auto_merge_preview() -> Dictionary:
 	_auto_merge_preview_key = key.duplicate(true)
 	if forecast.powerup_active() or not forecast.error.is_empty():
 		var message: String = "Auto merge could not preview its complete legal paths. " + forecast.error
-		_auto_merge_preview_cache = {"capacity": capacity, "result_count": 0, "input_ids": [], "error": message}
+		_auto_merge_preview_cache = {"capacity": capacity, "result_count": 0, "reduction_count": 0, "input_ids": [], "error": message}
 		push_error(message)
 		return _auto_merge_preview_cache.duplicate(true)
 	_auto_merge_preview_cache = {"capacity": capacity, "result_count": int(forecast._powerup.completed_results),
+		"reduction_count": maxi(0, cells.size() - forecast.cells.size()),
 		"input_ids": forecast._powerup.used_input_ids.keys()}
 	return _auto_merge_preview_cache.duplicate(true)
+
+
+func _simple_auto_merge_preview(capacity: int) -> Dictionary:
+	# Settled one-cell complete words have placement-independent one-step
+	# paths. Preserve the production planner's ordering without replaying
+	# flights, fusions and gravity just to display an ordinary price.
+	if _growth_pending or _gravity_pending or not _drag_gravity_delays.is_empty():
+		return {}
+	for tile: Dictionary in cells:
+		if not is_settled(tile) or int(tile.width) != 1 or int(tile.height) != 1 \
+			or is_lifted(int(tile.id)) or bool(tile.get("placement_locked", false)):
+			return {}
+		match str(tile.get("jelly_kind", "")):
+			"root":
+				if tile.get("word_candidate", {}).is_empty():
+					return {}
+			"merged", "picture":
+				pass
+			_:
+				return {}
+	# This read-only planner owns its cell array and derived caches. Immutable
+	# vocabulary and the pure composition resolver need no deep asset copies.
+	var planner := WordJellyModel.new()
+	planner.phase = "playing"
+	planner.cells.assign(cells.duplicate())
+	planner._words_by_id = _words_by_id
+	planner._word_lookup = _word_lookup
+	planner._authored_words = _authored_words
+	planner._morphology = _morphology
+	planner.authored_morphology = authored_morphology
+	planner.allow_cross_age = allow_cross_age
+	planner.merged_level_limit = merged_level_limit
+	planner._campaign_level_rules = _campaign_level_rules
+	planner.boss._statuses = boss._statuses
+	planner.boss.broken_remaining = boss.broken_remaining
+	var input_ids: Array[int] = []
+	var results: int = 0
+	for slot in range(capacity):
+		var plan: Dictionary = planner.authored_completion_plan(false)
+		if plan.get("status") == "unavailable":
+			break
+		if plan.get("status") != "complete" or plan.steps.size() != 1 \
+			or not planner.is_valid_word(plan.tile):
+			return {}
+		var consumed: Array[int] = _plan_input_ids(plan)
+		if consumed.size() != 2:
+			return {}
+		input_ids.append_array(consumed)
+		results += 1
+		# Completed outputs are excluded from the current use's captured set.
+		# Their ordinary cell cannot block the next one-cell target's own slot.
+		for index in range(planner.cells.size() - 1, -1, -1):
+			if int(planner.cells[index].id) in consumed:
+				planner.cells.remove_at(index)
+	return {"capacity": capacity, "result_count": results,
+		"reduction_count": input_ids.size() - results, "input_ids": input_ids}
 
 
 func _powerup_forecast() -> WordJellyModel:
@@ -952,6 +1019,8 @@ func _purchase_powerup(kind: String, family: String = "", selected_id: int = -1)
 	var receipt_id: String = _event_id("powerup-" + kind)
 	var previous_timeline: String = str(_powerup.get("receipt_id", ""))
 	var price: int = powerup_price(kind, family)
+	if kind == "auto_merge" and int(_auto_merge_preview_cache.get("reduction_count", 0)) <= 0:
+		return false
 	if kind == "family_merge" and _family_merge_reduction(family) <= 0:
 		return false
 	# Lock the board while persistence runs, including reentrant lifecycle calls.

@@ -349,7 +349,7 @@ func _approximately_equal_state(left: Variant, right: Variant) -> bool:
 
 
 func _test_powerup_eligibility() -> void:
-	check(Model.POWERUP_PRICES == {"auto_merge": 200, "family_merge": 50},
+	check(Model.POWERUP_PRICES == {"auto_merge": 25, "family_merge": 25},
 		"The live paid catalog exposes the lowest-level first-use prices")
 	for kind: String in ["auto_merge"]:
 		for blocked_by: String in ["paused", "held", "settling", "fusion", "collection", "batch", "finished", "empty"]:
@@ -453,7 +453,7 @@ func _test_powerup_price_progression() -> void:
 	for kind: String in ["auto_merge"]:
 		var model = _model([_word("cat")])
 		var other: String = "family_merge"
-		var prices: Array = [200, 300, 400, 400]
+		var prices: Array = [25, 50, 75, 75]
 		for index in range(prices.size()):
 			_board(model, ["cat", "picture:cat"])
 			var expected: int = prices[index]
@@ -480,7 +480,9 @@ func _test_powerup_price_progression() -> void:
 			model.set_paused(false)
 			check(model.snapshot().powerup_uses[kind] == index + 1,
 				"pausing or completing the animation preserves the successful-use count")
-		check(model.configure([_word("cat")], 3, 42) and model.powerup_price(kind) == prices[0]
+		check(model.configure([_word("cat")], 3, 42), "A new round accepts the same word catalog")
+		_board(model, ["cat", "picture:cat"])
+		check(model.powerup_price(kind) == prices[0]
 			and model.snapshot().powerup_uses == {"auto_merge": 0, "family_merge": 0},
 			"only a new round resets both powerup prices to their first-use tier")
 		model.purchase_powerup = Callable()

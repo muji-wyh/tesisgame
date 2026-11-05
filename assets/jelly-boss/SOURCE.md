@@ -1,5 +1,9 @@
 # Bramble, the Jelly World compass thief
 
+Bramble is retained as an archived acquired asset. The active Jelly World Boss
+is now the user-supplied optimized Pirate pack, documented in
+[Pirate's source record](../pirate/SOURCE.md) and [integration record](../pirate/README.md).
+
 ## Character
 
 - Original: **Frog** from [Low Poly Monsters Pack / product 380750](https://assetstore.unity.com/packages/3d/characters/low-poly-monsters-pack-380750).
@@ -45,7 +49,7 @@ the old mode, monster roster, environments, or gameplay.
 ## Map portrait
 
 The Boss map marker is a real transparent portrait of Bramble, not a text capsule.
-`tools/render-jelly-boss-portrait.gd` samples the integrated model's authored
+The retired portrait tool sampled the integrated model's authored
 `Idle` at 0.45 seconds, preserves the complete face and ears, and proportionally
 fits the actual rendered upper-body image into a 256-pixel transparent canvas.
 It is a static in-game portrait of the converted Frog face and shoulder silhouette,
@@ -57,7 +61,7 @@ records their model-source hash, image hash, dimensions and acquisition status.
 Regenerate after restoring the acquired model:
 
 ```powershell
-node tools\run-godot.cjs --path . --rendering-method gl_compatibility --script res://tools/render-jelly-boss-portrait.gd
+# Historical Bramble capture command retired; active Pirate QA uses tools/render-pirate-qa.gd.
 ```
 
 The portrait is also a touch target for its unlocked stage. The stage numeral and

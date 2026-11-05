@@ -4,7 +4,7 @@ extends SceneTree
 const Tile = preload("res://scripts/jelly_tile.gd")
 const Cache = preload("res://scripts/jelly_idle_body_cache.gd")
 const SKIN = preload("res://assets/images/jelly-match/gel-coral.png")
-const CHEST = preload("res://assets/chests/sprites/royal/closed.png")
+const CHEST = preload("res://assets/chests/shared/ui/chest.png")
 var checks: int = 0
 var failures: int = 0
 

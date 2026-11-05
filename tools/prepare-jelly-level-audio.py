@@ -200,7 +200,7 @@ def generate():
               "visual_sources": [
                   {"path": "assets/chests/shared/effects/portal_glow.png", "creator": "Bobardo", "source": "Modern 2D Animated Chests Pack_FREE Demo 1.0.2",
                    "source_path": "Modern 2D Animated Chests Pack_FREE Demo 1.0.2/Particles/Textures/portal_glow.png", "license": "Standard Unity Asset Store EULA",
-                   "license_url": "https://unity.com/legal/as-terms", "source_record": "assets/chests/catalog/sprites.json", "sha256": digest(ROOT / "assets/chests/shared/effects/portal_glow.png"),
+                   "license_url": "https://unity.com/legal/as-terms", "source_record": "assets/chests/sources/sprites/SOURCE.txt", "sha256": digest(ROOT / "assets/chests/shared/effects/portal_glow.png"),
                    "status": "Previously acquired and integrated texture, inspected and reused", "animations": "Static authored wisp texture; collection animation authored in the game"},
                   {"paths": ["assets/chests/shared/effects/rays.png", "assets/chests/shared/effects/sparkle.png"], "creator": "Kenneth Foldal Moe (Archanor VFX)", "source": "Toon FX 1.52",
                    "source_page": "https://assetstore.unity.com/packages/vfx/particles/toon-fx-25601", "license": "Standard Unity Asset Store EULA", "license_url": "https://unity.com/legal/as-terms",

@@ -238,7 +238,7 @@ test('Auto merge charging migrates independently and recovers its own paid progr
   const before = await jelly(page);
   expect(before.powerup_buttons.auto_merge).toMatchObject({ auto_merge_level: 2, capacity: 4,
     capacity_badge: { visible: true, text: '4' } });
-  expect(before.powerup_buttons.auto_merge.price).toBe(250);
+  expect(before.powerup_buttons.auto_merge.price, 'Four simple word pairs use the shared first-use rate').toBe(100);
   await press(page, before.powerup_buttons.auto_merge.rect);
   await expect.poll(async () => (await wallet(page)).balance)
     .toBe(1950 - before.powerup_buttons.auto_merge.price);

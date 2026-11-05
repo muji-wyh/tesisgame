@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "title": "Sourced tall coin reward composition",
+  "status": "acquired-source-derived-linked-composition",
+  "models": [
+    {
+      "id": "kaykit-coin-pile-tall",
+      "file": "sources/relic/rewards/coin-pile-tall.glb",
+      "sha256": "960965f8c4172d942cf30975665328ba40d469ccb1d555c8d425a66873614b5a",
+      "bytes": 65036,
+      "triangles": 3872,
+      "unique_mesh_triangles": 968,
+      "instances": 4,
+      "shared_meshes": 1,
+      "bounds_3d": {
+        "min": [
+          -0.5285311937332153,
+          0,
+          -0.5479999780654907
+        ],
+        "max": [
+          0.5295311808586121,
+          2.200000047683716,
+          0.5489999651908875
+        ]
+      },
+      "extent_3d": [
+        1.0580623745918274,
+        2.200000047683716,
+        1.0969999432563782
+      ],
+      "floor_y": 0,
+      "animations": [],
+      "palette": "Unmodified acquired KayKit embedded dungeon texture",
+      "source": {
+        "creator": "Kay Lousberg",
+        "title": "KayKit Dungeon Remastered 1.0",
+        "url": "https://github.com/KayKit-Game-Assets/KayKit-Dungeon-Remastered-1.0",
+        "license": "CC0-1.0",
+        "license_file": "sources/kaykit-dungeon/LICENSE.txt",
+        "license_sha256": "c5f17abf619731f57f6bbff450f6484214605c13aa96bb75bbcfc70930941ff7",
+        "file": "sources/kaykit-dungeon/coin_stack_medium.gltf.glb",
+        "sha256": "a6b3f67cf395820c75fafb09337009be7faf1d6a9de93a3f77cfc04c565374b2",
+        "acquisition_status": "verified existing acquired original; linked composition"
+      },
+      "composition": {
+        "method": "Four linked original medium-pile instances, with uniform scale, slight rotations and small offsets; successive layers overlap vertically",
+        "height": 2.2,
+        "source_layer_height": 0.6753000057364891,
+        "layer_step": 0.5082333314211703,
+        "vertical_overlap": 0.16706667431531874,
+        "transforms": [
+          {
+            "layer": 1,
+            "uniform_source_scale": 1.0540479837357493,
+            "rotation_about_up_radians": 0,
+            "position_blender": [
+              0,
+              0,
+              0
+            ],
+            "position_gltf": [
+              0,
+              0,
+              0
+            ]
+          },
+          {
+            "layer": 2,
+            "uniform_source_scale": 1.0540479837357493,
+            "rotation_about_up_radians": 0.045,
+            "position_blender": [
+              0.006000000052154064,
+              -0.004000000189989805,
+              0.5082333087921143
+            ],
+            "position_gltf": [
+              0.006000000052154064,
+              0.5082333087921143,
+              0.004000000189989805
+            ]
+          },
+          {
+            "layer": 3,
+            "uniform_source_scale": 1.0540479837357493,
+            "rotation_about_up_radians": -0.035,
+            "position_blender": [
+              -0.004999999888241291,
+              0.003000000026077032,
+              1.0164666175842285
+            ],
+            "position_gltf": [
+              -0.004999999888241291,
+              1.0164666175842285,
+              -0.003000000026077032
+            ]
+          },
+          {
+            "layer": 4,
+            "uniform_source_scale": 1.0540479837357493,
+            "rotation_about_up_radians": 0.022,
+            "position_blender": [
+              0.003000000026077032,
+              -0.0020000000949949026,
+              1.5247000455856323
+            ],
+            "position_gltf": [
+              0.003000000026077032,
+              1.5247000455856323,
+              0.0020000000949949026
+            ]
+          }
+        ]
+      },
+      "validation": {
+        "source_bytes_unchanged": true,
+        "coin_proportions_unchanged": true,
+        "clips_absent": true,
+        "embedded_original_palette": true,
+        "visual_review": "Actual 640px composition render inspected: continuous supported coin columns, overlapping layers, no isolated floating coins",
+        "palette_png_sha256": "f9ae182518f908bd09461a56a430b9ca7369812ac10890224cc6f32e7da3e1ee",
+        "original_palette_bytes_unchanged": true
+      }
+    }
+  ]
+}

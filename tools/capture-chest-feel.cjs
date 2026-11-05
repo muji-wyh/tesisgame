@@ -68,7 +68,7 @@ function run(binary, args) {
 
 function provenance() {
   const files = ['scripts/chest_view.gd', 'scripts/chest_surface.gdshader', 'scripts/chest_feel.gd', 'scripts/game_audio.gd',
-    'scripts/chest_sound_bank.gd', 'tools/capture-chest-feel.gd', 'assets/chests/catalog/sprite-rigs.json', 'docs/assets/chest-kenney-audio.json',
+    'scripts/chest_sound_bank.gd', 'tools/capture-chest-feel.gd', 'assets/chests/catalog/gameplay-chests.json', 'docs/assets/chest-kenney-audio.json',
     ...require('../docs/assets/chest-kenney-audio.json').assets.map(asset => asset.destination)];
   return Object.fromEntries(files.map(file => [file,
     crypto.createHash('sha256').update(fs.readFileSync(path.join(root, file))).digest('hex')]));

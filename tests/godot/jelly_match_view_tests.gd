@@ -6,6 +6,7 @@ const Motion = preload("res://scripts/jelly_motion.gd")
 const WordModel = preload("res://scripts/word_jelly_model.gd")
 const Style = preload("res://scripts/ui_style.gd")
 const DangerFrame = preload("res://scripts/jelly_danger_frame.gd")
+const ChestTiers = preload("res://scripts/chest_tier_catalog.gd")
 
 var checks: int = 0
 var failures: int = 0
@@ -90,7 +91,7 @@ func _run() -> void:
 	_check_pauses_and_new_round(view)
 	await _check_deferred_release(view)
 	_check_result_gate(view)
-	_check_reduced_motion_and_cache(view)
+	await _check_reduced_motion_and_cache(view)
 	_check_publication_budget(view)
 	_check_signal_reentry(view)
 	await _check_picture_disposal(view)
@@ -2094,12 +2095,41 @@ func _check_reduced_motion_and_cache(view) -> void:
 		"Reduced motion removes flight while preserving the actual reward")
 	var texture: Texture2D = view._chest_texture
 	view.apply_theme(Data.theme("spring"), data.chests)
-	check(view._chest_texture == texture, "Repeated theme refreshes share one live-rendered chest texture")
-	for index in range(7):
+	check(view._chest_texture == texture and texture is AtlasTexture,
+		"Repeated theme refreshes preserve one stable cached chest texture wrapper")
+	var final_texture: Texture2D = view._reward_texture(28)
+	var cache_count: int = view._chest_cache.size()
+	check(view._reward_texture(99) == final_texture and view._chest_cache.size() == cache_count,
+		"Lv28 and Lv99 share one final source image without creating another 3D renderer")
+	var final_source: String = str(ChestTiers.preset(28).asset_id)
+	var final_cache: Dictionary = view._chest_cache[final_source]
+	var viewport_reference: WeakRef = weakref(final_cache.viewport) if is_instance_valid(final_cache.viewport) else null
+	var art_reference: WeakRef = weakref(final_cache.art) if is_instance_valid(final_cache.art) else null
+	for index in range(12):
 		view._process(0.01)
-	var cache: Dictionary = view._chest_cache["tier:1"]
-	check(cache.viewport.render_target_update_mode == SubViewport.UPDATE_DISABLED and not cache.art.is_processing(),
-		"Static theme chest previews stop rendering once their source pose is cached")
+		await process_frame
+		if DisplayServer.get_name() != "headless":
+			await RenderingServer.frame_post_draw
+	await process_frame
+	for source_id: String in [str(ChestTiers.preset(1).asset_id), final_source]:
+		var cache: Dictionary = view._chest_cache[source_id]
+		check(cache.asset_id == source_id and cache.texture is AtlasTexture,
+			"Static chest artwork is cached by its exact source asset identity")
+		if DisplayServer.get_name() == "headless":
+			check(is_instance_valid(cache.viewport) and is_instance_valid(cache.art)
+				and cache.viewport.render_target_update_mode == SubViewport.UPDATE_DISABLED
+				and not cache.art.is_processing() and cache.texture.atlas is ViewportTexture,
+				"Headless previews retain a paused working source renderer when image readback is unavailable")
+		else:
+			check(cache.viewport == null and cache.art == null and bool(cache.cropped)
+				and cache.texture.atlas is ImageTexture and cache.texture.atlas == cache.image_texture,
+				"Captured static chest images release their nested source renderer and preserve the stable wrapper")
+	check(view._chest_texture == texture and view._reward_texture(99) == final_texture,
+		"Source image capture keeps texture references already held by tiles and rewards valid")
+	if DisplayServer.get_name() != "headless":
+		check((viewport_reference == null or viewport_reference.get_ref() == null)
+			and (art_reference == null or art_reference.get_ref() == null),
+			"Successful source image capture actually disposes the renderer and its owned art tree")
 	view.stop()
 	check(view._tiles.is_empty() and view._fusion_visuals.is_empty() and not view.finish_button.visible
 		and not view._loot_icon.visible and not bool(view.snapshot().preview.visible) and view._ghosts.is_empty(),

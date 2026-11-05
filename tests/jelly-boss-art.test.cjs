@@ -7,9 +7,10 @@ const { readModelContainer, readFloatAccessor, imageDimensions } = require('./he
 
 const root = path.resolve(__dirname, '..');
 const manifest = JSON.parse(fs.readFileSync(path.join(root, 'assets', 'jelly-boss', 'manifest.json'), 'utf8'));
+const pirate = JSON.parse(fs.readFileSync(path.join(root, 'assets', 'pirate', 'manifest.json'), 'utf8'));
 const sha = bytes => crypto.createHash('sha256').update(bytes).digest('hex');
 
-test('Bramble retains the real acquired source, source rights and private reusable input', () => {
+test('archived Bramble retains the acquired source, source rights and private reusable input', () => {
   assert.equal(manifest.source.creator, 'Wabu');
   assert.match(manifest.source.url, /380750$/);
   assert.equal(manifest.source.license, 'Standard Unity Asset Store EULA');
@@ -22,7 +23,7 @@ test('Bramble retains the real acquired source, source rights and private reusab
   assert.equal(sha(bytes), manifest.model.sha256);
 });
 
-test('the acquired Boss uses skinned production meshes and eight actually moving skeletal clips', () => {
+test('archived Bramble retains its eight original moving skeletal clips', () => {
   const model = readModelContainer(path.join(root, manifest.model.path));
   const { gltf } = model;
   assert.ok(gltf.skins?.length, 'The Boss is not a rigid placeholder silhouette');
@@ -71,19 +72,40 @@ test('the story compass is an exact startup UI copy, independent of deferred age
     /preload\("res:\/\/assets\/jelly-boss\/compass\.webp"\)/);
 });
 
-test('the map uses an actual transparent portrait rendered from the same acquired Boss', () => {
-  const portrait = manifest.portrait;
-  assert.ok(portrait, 'The map portrait has a source and acquisition record');
-  assert.equal(portrait.creator, manifest.source.creator);
-  assert.equal(portrait.license, manifest.source.license);
-  assert.equal(portrait.source_model_sha256, manifest.model.sha256);
-  assert.match(portrait.path, /^assets\/jelly-boss\/private\//);
+test('the active Pirate uses the exact optimized authored action pack', () => {
+  const model = readModelContainer(path.join(root, pirate.model.path));
+  assert.equal(model.bytes.length, pirate.model.bytes);
+  assert.equal(sha(model.bytes), pirate.model.sha256);
+  assert.ok(model.bytes.length < 1_000_000, 'The full action pack remains a bounded mobile build input');
+  assert.equal(model.gltf.meshes.length, 2, 'The optimized elastic body and rigid hat remain distinct');
+  assert.deepEqual(model.gltf.animations.map(animation => animation.name).sort(), [...pirate.model.animations].sort());
+  assert.equal(pirate.model.animations.length, 22);
+  assert.equal(pirate.animation_contract.taunt_count, 10);
+  assert.deepEqual([...pirate.model.morph_targets].sort(), ['Bite_Open', 'Eye_Squint', 'Smile_Smirk', 'Tongue_Out'].sort());
+  for (const animation of model.gltf.animations) {
+    const moving = animation.channels.some(channel => {
+      const samples = readFloatAccessor(model, animation.samplers[channel.sampler].output);
+      return samples.some(sample => sample.some((value, index) => Math.abs(value - samples[0][index]) > 0.0001));
+    });
+    assert.ok(moving, `${animation.name} retains an actual authored motion or expression`);
+  }
+  const actor = fs.readFileSync(path.join(root, 'scripts', 'word_jelly_boss_actor.gd'), 'utf8');
+  assert.match(actor, /preload\("res:\/\/scripts\/pirate_asset_actor\.gd"\)/);
+  assert.doesNotMatch(actor, /res:\/\/assets\/jelly-boss\/private\/bramble\.glb/);
+});
+
+test('the map uses the approved transparent Pirate portrait with current idle verification', () => {
+  const portrait = pirate.portrait;
+  assert.ok(portrait.acquisition, 'The approved map portrait keeps its acquisition record');
+  assert.equal(portrait.current_idle_verification.model_sha256, pirate.model.sha256);
+  assert.equal(portrait.current_idle_verification.clip, 'Idle');
+  assert.match(portrait.path, /^assets\/pirate\//);
   const bytes = fs.readFileSync(path.join(root, portrait.path));
   assert.equal(bytes.length, portrait.bytes);
   assert.equal(sha(bytes), portrait.sha256);
   assert.deepEqual(imageDimensions(bytes), { width: 256, height: 256 });
   assert.equal(bytes[25], 6, 'The rendered PNG retains transparency, not a flat-color badge background');
   const map = fs.readFileSync(path.join(root, 'scripts', 'word_jelly_map.gd'), 'utf8');
-  assert.match(map, /BOSS_PORTRAIT = preload\("res:\/\/assets\/jelly-boss\/private\/bramble-portrait\.png"\)/);
+  assert.match(map, /BOSS_PORTRAIT = preload\("res:\/\/assets\/pirate\/pirate-portrait\.png"\)/);
   assert.doesNotMatch(map, /_label\(button, "BOSS"/);
 });

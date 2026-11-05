@@ -9,12 +9,8 @@ const MIC = preload("res://assets/images/ui/modes/microphone.webp")
 const MINT = preload("res://assets/images/jelly-match/gel-mint.png")
 const LILAC = preload("res://assets/images/jelly-match/gel-lilac.png")
 const COIN = preload("res://assets/coins/gold-coin.png")
-const CHEST = preload("res://assets/chests/sprites/royal/closed.png")
-const CHEST_BODY = preload("res://assets/chests/sprites/royal/rig/body.png")
-const CHEST_INTERIOR = preload("res://assets/chests/sprites/royal/rig/interior.png")
-const CHEST_LID = preload("res://assets/chests/sprites/royal/rig/lid_outer.png")
-const CHEST_INNER_LID = preload("res://assets/chests/sprites/royal/rig/lid_inner.png")
-const CHEST_LATCH = preload("res://assets/chests/sprites/royal/rig/latch.png")
+const CHEST = preload("res://assets/chests/shared/ui/chest.png")
+const CHEST_OPEN = preload("res://assets/chests/shared/ui/chest-open.png")
 const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const DESIGN_SIZE := Vector2(220, 112)
@@ -314,11 +310,10 @@ func _draw_jelly_words(moving: bool) -> void:
 		_text("cat", center + Vector2(0, 15), roundi(lerpf(18, 25, collect)), Color(Style.INK, content_alpha))
 	if moving:
 		_tap(Vector2(80, 85), 2.35, PURPLE)
-	# The same acquired Royal layers and hinge as the full-size chest, without
-	# creating a reward system or a 3D viewport for a decorative Home card.
+	# Matched Atelier portraits preserve the chest body alignment while opening.
 	var anticipation: float = _hop(3.0, 0.25, 1.5) if moving else 0.0
 	var chest_center := Vector2(164, 103 - anticipation)
-	var chest_scale: float = lerpf(0.108, 0.121, opening)
+	var chest_scale: float = lerpf(0.90, 1.0, opening)
 	var mouth := Vector2(164, 60)
 	if opening > 0.0:
 		var glow_size := Vector2(114, 102)
@@ -329,8 +324,8 @@ func _draw_jelly_words(moving: bool) -> void:
 		var origin := Vector2(84, 42)
 		var point: Vector2 = origin.lerp(mouth, flight) - Vector2(0, sin(flight * PI) * 29)
 		var alpha: float = (1.0 - smoothstep(0.88, 1.0, flight)) * smoothstep(1.4, 1.6, _elapsed)
-		var fragment_size := Vector2(21, 16) * (1.0 + sin(flight * PI) * 0.20)
-		draw_texture_rect_region(CHEST, Rect2(point - fragment_size * 0.5, fragment_size), Rect2(39, 309, 798, 596), Color(1, 1, 1, alpha))
+		var fragment_size: Vector2 = CHEST.get_size() * (21.0 / maxf(1.0, CHEST.get_width())) * (1.0 + sin(flight * PI) * 0.20)
+		_art(CHEST, Rect2(point - fragment_size * 0.5, fragment_size), alpha)
 		if flight > 0.0:
 			_art(SPARKLE, Rect2(point - Vector2(16, 5), Vector2(11, 11)), alpha * 0.8)
 	if opening > 0.55:
@@ -348,23 +343,14 @@ func _draw_jelly_words(moving: bool) -> void:
 
 
 func _draw_preview_chest(base: Vector2, factor: float, opening: float) -> void:
-	# Crop positions are the original 1024px Royal canvas coordinates in rigs.json.
-	var origin: Vector2 = base - Vector2(438, 905) * factor
-	var lid_height: float = cos(opening * PI)
-	if lid_height < 0.0:
-		_preview_chest_layer(CHEST_INNER_LID, Vector2(122, 157), origin, factor, -lid_height)
+	var canvas: Vector2 = CHEST_OPEN.get_size()
+	var scale_value: float = minf(102.0 / maxf(1.0, canvas.x), 88.0 / maxf(1.0, canvas.y)) * factor
+	var dimensions: Vector2 = canvas * scale_value
+	var rect := Rect2(base - Vector2(dimensions.x * 0.5, dimensions.y), dimensions)
+	if opening < 1.0:
+		_art(CHEST, rect, 1.0 - opening)
 	if opening > 0.0:
-		_preview_chest_layer(CHEST_INTERIOR, Vector2(100, 439), origin, factor)
-	_preview_chest_layer(CHEST_BODY, Vector2(39, 514), origin, factor)
-	if lid_height > 0.0:
-		_preview_chest_layer(CHEST_LID, Vector2(46, 309), origin, factor, lid_height)
-	_preview_chest_layer(CHEST_LATCH, Vector2(207, 495 + opening * 18), origin, factor)
-
-
-func _preview_chest_layer(texture: Texture2D, crop: Vector2, origin: Vector2, factor: float, hinge_scale: float = 1.0) -> void:
-	var point := Vector2(crop.x, 475 + (crop.y - 475) * hinge_scale)
-	var dimensions: Vector2 = texture.get_size() * Vector2(1.0, hinge_scale) * factor
-	_art(texture, Rect2(origin + point * factor, dimensions))
+		_art(CHEST_OPEN, rect, opening)
 
 
 func _draw_merge_demo() -> void:

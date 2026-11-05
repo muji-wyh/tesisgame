@@ -4,7 +4,7 @@ const Tap = preload("res://scripts/jelly_chest_tap.gd")
 const Jelly = preload("res://scripts/jelly_match.gd")
 const WordJellyView = preload("res://scripts/word_jelly.gd")
 const Data = preload("res://scripts/game_data.gd")
-const CHEST = preload("res://assets/chests/sprites/energy/closed.png")
+const CHEST = preload("res://assets/chests/shared/ui/chest.png")
 
 var checks: int = 0
 var failures: int = 0
@@ -66,8 +66,8 @@ func _check_component() -> void:
 		peak_light = maxf(peak_light, float(state.light))
 		check(tap.get_rect().is_equal_approx(resting),
 			"Chest artwork motion retains its original center and hit target")
-	check(peak_scale > 1.15 and peak_rotation > 0.05 and peak_light > 0.1,
-		"An ordinary tap visibly enlarges, turns and illuminates the sourced chest")
+	check(peak_scale > 3.10 and peak_rotation > 0.05 and peak_light > 0.1,
+		"An ordinary tap triples the former scale amplitude while retaining its turn and light")
 	check(not tap.is_active(), "The chest response finishes within a short finite timeline")
 	var idle: Dictionary = tap.snapshot()
 	check(is_equal_approx(float(idle.scale), 1.0) and is_zero_approx(float(idle.rotation))
@@ -128,7 +128,8 @@ func _check_owner_presentation(view) -> void:
 		view._process(0.1)
 	check(not view._chest_tap.is_active() and view._loot_icon.visible
 		and view._loot_icon.get_rect().is_equal_approx(anchor),
-		"The ordinary chest returns to the same position after feedback finishes")
+		"%s returns the ordinary chest after feedback: active=%s visible=%s rect=%s anchor=%s" % [
+			view.name, view._chest_tap.is_active(), view._loot_icon.visible, view._loot_icon.get_rect(), anchor])
 	check(view.game.fragment_count == int(model.fragment_count) and view.game.chest_tier == int(model.chest_tier),
 		"Completing decorative feedback preserves all earned chest ownership")
 	view.audio_requested.disconnect(on_cue)

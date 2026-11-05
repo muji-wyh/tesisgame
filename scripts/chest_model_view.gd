@@ -9,6 +9,7 @@ const MIN_RESOLUTION: int = 512
 const MAX_RESOLUTION: int = 1536
 const IDLE_POSE_FPS: float = 15.0
 const Catalog = preload("res://scripts/chest_tier_catalog.gd")
+const AssetStates = preload("res://scripts/chest_asset_states.gd")
 
 static var _studio_sky: Sky
 static var _atlas_shader: Shader
@@ -19,6 +20,7 @@ var _rig := Node3D.new()
 var _camera := Camera3D.new()
 var _interior_light := OmniLight3D.new()
 var _model: Node3D
+var _composer: AssetStates
 var _base_frame: Node3D
 var _fittings: Node3D
 var _player: AnimationPlayer
@@ -40,6 +42,7 @@ var _camera_direction := Vector3(3.8, 2.7, 6.0)
 var _camera_margin: float = 1.12
 var _closed_box := AABB()
 var _motion_box := AABB()
+var _content_box := AABB()
 var _design_closed := Rect2()
 var _design_motion := Rect2()
 var _cavity := Vector3.ZERO
@@ -55,6 +58,10 @@ var _idle_time: float = 0.0
 var _light_strength: float = 0.0
 var _reduced_motion: bool = false
 var _source_path: String = ""
+var _content_state: String = "closed"
+var _content_time: float = 0.0
+var _content_strength: float = 0.0
+var _content_key: Array = []
 var _max_resolution: int = 1024
 var last_error: String = ""
 
@@ -150,17 +157,25 @@ func configure(style: Dictionary) -> bool:
 			or ornament_path.contains("..") or ornament_path.contains("\\") \
 			or not ResourceLoader.exists(ornament_path, "PackedScene"):
 			return _unavailable("Required source ornament is missing or unimported: " + ornament_path)
-	var resource := load(path) as PackedScene
-	if resource == null:
-		return _unavailable("Unable to load acquired chest scene: " + path)
-	var candidate := resource.instantiate() as Node3D
-	if candidate == null:
-		return _unavailable("Acquired chest scene has no 3D root: " + path)
 	_base_frame = Node3D.new()
 	_base_frame.name = "SourceFrame"
 	_rig.add_child(_base_frame)
-	_model = candidate
-	_base_frame.add_child(_model)
+	# The state composer owns the only source instance and its fitted sourced
+	# contents. The viewport continues to own the native fractional lid pose.
+	_composer = AssetStates.new()
+	_composer.name = "ChestComposition"
+	_base_frame.add_child(_composer)
+	var state_id: String = str(style.get("state_asset_id",
+		style.get("base_source_id", path.get_file().get_basename())))
+	if not _composer.configure(state_id):
+		return _unavailable("Acquired chest states are unavailable: " + _composer.last_error)
+	var state_source: String = str(_composer.debug_state().get("model", ""))
+	if not state_source.begins_with("res://"):
+		state_source = "res://" + state_source
+	_model = _composer.source_model()
+	if _model == null or state_source != path:
+		return _unavailable("Acquired chest state composition has a different source model: " + path)
+	_composer.sample_contents("closed", 0.0, 0.0, false, 0.0)
 	_source_path = path
 	_tier = int(style.get("tier", 0))
 	_preset_id = str(style.get("preset_id", ""))
@@ -172,6 +187,8 @@ func configure(style: Dictionary) -> bool:
 		return _unavailable("Acquired chest has no renderable meshes: " + path)
 	_base_meshes.assign(_meshes)
 	_find_clip(str(style.get("open_animation", "Open")))
+	if not str(style.get("open_animation", "Open")).is_empty() and _clip.is_empty():
+		return _unavailable("The declared authored opening clip is missing: " + path)
 	if _player != null and not _clip.is_empty():
 		var animation: Animation = _player.get_animation(_clip)
 		_clip_start = clampf(float(style.get("open_start", 0.0)), 0.0, animation.length)
@@ -223,6 +240,16 @@ func configure(style: Dictionary) -> bool:
 	for index in range(13):
 		_pose_mechanism(float(index) / 12.0, 0.0, 0.0, 0.0, false)
 		_motion_box = _motion_box.merge(_measure_model())
+	# Body and cavity measurements use source panels only. The camera also
+	# reserves the actual treasure and full authored magic drift envelope.
+	_composer.sample_contents("treasure", 0.0, 1.0, true)
+	_content_box = _relative_transform(_composer) * _composer.content_bounds()
+	_composer.sample_contents("magic", 0.0, 1.0, true)
+	var magic_box: AABB = _relative_transform(_composer) * _composer.content_bounds(true)
+	_content_box = _content_box.merge(magic_box) if _box_valid(_content_box) else magic_box
+	if _box_valid(_content_box):
+		_motion_box = _motion_box.merge(_content_box)
+	_composer.sample_contents("closed", 0.0, 0.0, false, 0.0)
 	_pose_mechanism(0.0, 0.0, 0.0, 0.0, false)
 	if _tier > 0:
 		_motion_box = _motion_box.merge(_turn_envelope(_closed_box, 0.24))
@@ -245,6 +272,8 @@ func configure(style: Dictionary) -> bool:
 
 
 func _scan(node: Node, profile: Dictionary = {}, atlas: Dictionary = {}, role: String = "") -> void:
+	if _composer != null and _composer.is_embedded_content(node):
+		return
 	if node is MeshInstance3D and node.mesh != null:
 		_meshes.append(node)
 		# Every instance owns its finish. Atlas adaptations mask verified metal
@@ -271,6 +300,7 @@ func _clear_model() -> void:
 	_base_frame = null
 	_fittings = null
 	_model = null
+	_composer = null
 	_player = null
 	_parts.clear()
 	_meshes.clear()
@@ -287,6 +317,7 @@ func _clear_model() -> void:
 	_available = false
 	_closed_box = AABB()
 	_motion_box = AABB()
+	_content_box = AABB()
 	_body_box = AABB()
 	_lid_motion_box = AABB()
 	_design_closed = Rect2()
@@ -295,6 +326,10 @@ func _clear_model() -> void:
 	_seam.clear()
 	_pose_key.clear()
 	_idle_sample_key.clear()
+	_content_key.clear()
+	_content_state = "closed"
+	_content_time = 0.0
+	_content_strength = 0.0
 	_rig.transform = Transform3D.IDENTITY
 	_interior_light.light_energy = 0.0
 	_open_amount = 0.0
@@ -654,8 +689,31 @@ func set_pose(open_amount: float, pressure: float, pulse: float, idle_time: floa
 		sin(_idle_time * 0.67) * 0.006, sin(_idle_time * 0.48) * 0.026, 0.0)
 	_interior_light.position = _rig.transform * _cavity
 	set_interior_light(_light_strength, light_color)
+	set_contents(_content_state, _content_time, _content_strength, reduce)
 	_dirty = true
 	_request_render()
+
+
+func set_contents(value: String, time: float = 0.0, strength: float = 1.0,
+		reduce: bool = false) -> bool:
+	if not is_instance_valid(_composer) or not value in AssetStates.STATES:
+		return false
+	var clock: float = maxf(0.0, time) if value == "magic" and is_finite(time) and not reduce else 0.0
+	var intensity: float = clampf(strength, 0.0, 1.0) if is_finite(strength) else 0.0
+	if value != "magic":
+		intensity = 0.0
+	var key: Array = [value, clock, intensity, _open_amount, reduce]
+	if key == _content_key:
+		return true
+	if not _composer.sample_contents(value, clock, _open_amount, reduce, intensity):
+		return false
+	_content_state = value
+	_content_time = clock
+	_content_strength = intensity
+	_content_key = key
+	_dirty = true
+	_request_render()
+	return true
 
 
 func set_closed_turn(yaw: float, pitch: float = 0.0) -> void:
@@ -664,7 +722,7 @@ func set_closed_turn(yaw: float, pitch: float = 0.0) -> void:
 	# Reward turns use the acquired closed geometry, independently of the
 	# opening mechanism. The caller supplies the entire deterministic clock.
 	var key: Array = ["closed-turn", yaw, pitch]
-	if key == _pose_key:
+	if key == _pose_key and _content_state == "closed":
 		return
 	_pose_key = key
 	_idle_sample_key.clear()
@@ -677,6 +735,7 @@ func set_closed_turn(yaw: float, pitch: float = 0.0) -> void:
 	_rig.rotation = Vector3(pitch, yaw, 0.0)
 	_interior_light.position = _rig.transform * _cavity
 	set_interior_light(0.0, Color.WHITE)
+	set_contents("closed", 0.0, 0.0)
 	_dirty = true
 	_request_render()
 
@@ -843,6 +902,10 @@ func snapshot() -> Dictionary:
 	return {"source": _source_path, "resolution": size.x, "virtual_size": DESIGN_SIZE,
 		"available": _available, "chest_tier": _tier, "preset_id": _preset_id,
 		"closed_box": _closed_box, "motion_box": _motion_box, "body_box": _body_box,
+		"content_box": _content_box, "content_state": _content_state,
+		"content_source": _composer.asset_id if is_instance_valid(_composer) else "",
+		"composer_source_instances": 1 if is_instance_valid(_composer) and _composer.source_model() == _model else 0,
+		"content": _composer.debug_state() if is_instance_valid(_composer) else {},
 		"lid_motion_box": _lid_motion_box, "last_error": last_error,
 		"decorations": _decorations.duplicate(true),
 		"active": _active, "open_amount": _open_amount, "pressure": _pressure,

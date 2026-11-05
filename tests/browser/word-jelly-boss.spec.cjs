@@ -53,15 +53,32 @@ async function start(page, number) {
         window.bossActionEvidence.impact = { age: boss.elapsed - impact.at, event: impact };
       let key = '';
       const base = view.base_character_rect || [];
-      if (view.clip === 'Kick' && view.character_rect[2] > base[2] * 1.35) key = 'giant-kick';
-      if (view.clip === 'Snatch' && view.character_rect[0] < base[0] - 12) key = 'jump-snatch';
+      const actor = view.actor || {}, anchors = actor.anchors || {}, sources = actor.anchor_sources || {};
+      const left = anchors.body_left || [], right = anchors.body_right || [];
+      // Undo the fitted camera's zoom so the authored elastic body is measured independently of its viewport.
+      const bodySpan = Math.hypot(right[0] - left[0], right[1] - left[1]) * actor.camera_height;
+      const pirateSource = actor.model === 'res://assets/pirate/pirate-game.glb'
+        && /Pirate_Body$/.test(sources.body || '') && /Pirate_Hat$/.test(sources.hat || '');
+      if (pirateSource && actor.clip === 'Idle' && Number.isFinite(bodySpan) && bodySpan > 0
+        && !window.bossActionEvidence.idleBodySpan) window.bossActionEvidence.idleBodySpan = bodySpan;
+      const bodyGrowth = bodySpan / window.bossActionEvidence.idleBodySpan;
+      if (pirateSource && view.gesture === 'Kick' && view.clip === 'Special_GiantRam'
+        && actor.clip === 'Special_GiantRam' && bodyGrowth > 1.35) {
+        key = 'giant-kick';
+        if (!window.bossActionEvidence.giant) window.bossActionEvidence.giant = {
+          clip: actor.clip, model: actor.model, bodySource: sources.body, hatSource: sources.hat,
+          bodyGrowth, bodySpan, idleBodySpan: window.bossActionEvidence.idleBodySpan,
+          cameraHeight: actor.camera_height, nativeTime: actor.time
+        };
+      }
+      if (view.gesture === 'Snatch' && view.clip === 'Special_BigBite' && view.character_rect[0] < base[0] - 12) key = 'jump-snatch';
       if (boss.phase === 'ending' && boss.ending_elapsed > 1.7 && boss.ending_elapsed < 2.5)
         key = boss.outcome === 'ambushed' ? 'compass-theft' : 'victory-banter';
       if (boss.phase === 'ending' && boss.ending_elapsed > 5.2 && boss.ending_elapsed < 5.8) key = 'retreat';
       if (key && !window.bossActionFrames[key])
         window.bossActionFrames[key] = document.getElementById('canvas').toDataURL('image/png').split(',')[1];
       if (key === 'victory-banter' && !window.bossActionEvidence.victory)
-        window.bossActionEvidence.victory = { clip: view.clip, dialogue: view.dialogue };
+        window.bossActionEvidence.victory = { clip: view.clip, gesture: view.gesture, dialogue: view.dialogue };
     });
     window.bossActionObserver.observe(status, { attributes: true, attributeFilter: ['data-jelly'] });
   });
@@ -102,7 +119,11 @@ test('a real first Boss victory celebrates and saves its story record without un
   const opening = await jelly(page);
   expect(opening.max_merge_level).toBe(1);
   expect(opening.boss_view.compass_visible).toBe(true);
-  expect(opening.boss_view.animations).toEqual(expect.arrayContaining(['Idle', 'Throw', 'Kick', 'Snatch', 'Hit', 'Taunt', 'Escape']));
+  expect(opening.boss.definition.name).toBe('Pirate');
+  expect(opening.boss_view.animations).toHaveLength(22);
+  expect(opening.boss_view.animations).toEqual(expect.arrayContaining(['Idle', 'Attack_L', 'Attack_M', 'Attack_P',
+    'Hit_L', 'Hit_M', 'Hit_P', 'Special_GiantRam', 'Special_BigBite', 'Taunt_HatTip', 'Taunt_BellyLaugh',
+    'Ultimate_CaptainsDrop', 'Ultimate_CrescentSpin', 'Ultimate_TidalRush']));
   await page.screenshot({ path: info.outputPath('boss-first-battle.png'), scale: 'css' });
   for (let round = 0; round < 3; round++) {
     const state = await jelly(page);
@@ -128,7 +149,7 @@ test('a real first Boss victory celebrates and saves its story record without un
   const dramaticBeats = await page.evaluate(() => window.bossActionEvidence);
   expect(dramaticBeats.impact.age).toBeGreaterThanOrEqual(0.55 - 1e-6);
   expect(dramaticBeats.impact.event.health_after).toBeGreaterThanOrEqual(0);
-  expect(dramaticBeats.victory.clip).not.toBe('Taunt');
+  expect(dramaticBeats.victory.gesture).not.toBe('Taunt');
   expect(dramaticBeats.victory.dialogue).not.toBe('');
   await page.screenshot({ path: info.outputPath('boss-no-free-upgrade-map.png'), scale: 'css' });
   const balance = (await wallet(page)).balance;
@@ -185,6 +206,14 @@ test('the giant kick limits actual preview releases to two and repairs after eig
   const repair = repaired.boss.events.find(event => event.kind === 'sky_repaired');
   expect(repair.at - kick.at).toBeCloseTo(8, 4);
   await retainAction(page, info, 'giant-kick');
+  const giant = await page.evaluate(() => window.bossActionEvidence.giant);
+  expect(giant.clip).toBe('Special_GiantRam');
+  expect(giant.model).toBe('res://assets/pirate/pirate-game.glb');
+  expect(giant.bodySource).toMatch(/Pirate_Body$/);
+  expect(giant.hatSource).toMatch(/Pirate_Hat$/);
+  expect(giant.bodyGrowth).toBeGreaterThan(1.35);
+  expect(giant.nativeTime).toBeGreaterThan(0);
+  fs.writeFileSync(info.outputPath('giant-kick-evidence.json'), JSON.stringify(giant, null, 2));
   expect(errors).toEqual([]);
 });
 
@@ -196,7 +225,7 @@ test('the recurring rival jumps into the well and returns a snatched body with i
   const state = await jelly(page);
   const taken = state.boss.events.find(event => event.kind === 'snatch');
   expect(taken.tile.jelly_kind).not.toBe('merged');
-  expect(state.boss_view.animations).toContain('Snatch');
+  expect(state.boss_view.animations).toContain('Special_BigBite');
   await page.screenshot({ path: info.outputPath('boss-snatch.png'), scale: 'css' });
   await expect.poll(async () => {
     const live = await jelly(page);

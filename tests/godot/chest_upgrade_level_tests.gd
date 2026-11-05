@@ -3,8 +3,8 @@ extends SceneTree
 const Celebration = preload("res://scripts/jelly_chest_celebration.gd")
 const Flight = preload("res://scripts/chest_reward_flight.gd")
 const Style = preload("res://scripts/ui_style.gd")
-const BEFORE = preload("res://assets/chests/sprites/energy/closed.png")
-const AFTER = preload("res://assets/chests/sprites/royal/closed.png")
+const BEFORE = preload("res://assets/chests/shared/ui/chest.png")
+const AFTER = preload("res://assets/chests/shared/ui/chest-open.png")
 var checks := 0
 var failures := 0
 var baseline := false
@@ -83,9 +83,9 @@ func _run() -> void:
 	root.size = Vector2i(393, 852)
 	view.size = Vector2(root.size)
 	view.set_chest_anchor(Rect2(194, 16, 44, 44))
-	begin(view, 29, 30)
+	begin(view, 98, 99)
 	view.advance(Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS + 0.20)
-	await capture(view, "393x852-lv29-lv30")
+	await capture(view, "393x852-lv98-lv99")
 	view.clear()
 	view.free()
 	await process_frame
@@ -95,14 +95,14 @@ func _run() -> void:
 
 
 func check_levels(view) -> void:
-	for previous in range(1, 30):
+	for previous in range(1, 99):
 		begin(view, previous, previous + 1, true)
 		check(not view.snapshot().level_transition.visible, "No level label precedes the real pickup arrival")
 		view.advance(Celebration.ARRIVAL_SECONDS + 0.01)
 		var level: Dictionary = view.snapshot().level_transition
 		check(level.visible and level.from_tier == previous and level.to_tier == previous + 1
 			and level.from_text == "Lv%d" % previous and level.to_text == "Lv%d" % (previous + 1),
-			"Every real chest upgrade retains its exact old and new levels, including 29 to 30")
+			"Every real chest upgrade retains its exact old and new levels through ninety-nine")
 		check_layout(view)
 		view.set_paused(true)
 		check(not view.snapshot().level_transition.visible, "Pause hides the viewport annotation with its chest")
@@ -112,10 +112,10 @@ func check_levels(view) -> void:
 	begin(view, 0, 1, true)
 	view.advance(Celebration.ARRIVAL_SECONDS + Celebration.REVEAL_SECONDS)
 	check(not view.snapshot().level_transition.visible, "The first chest never invents a level-zero upgrade")
-	begin(view, 30, 30, true)
+	begin(view, 99, 99, true)
 	view.advance(10.0)
 	check(not view.is_active() and not view.snapshot().level_transition.visible,
-		"A capped chest never invents a level-thirty-one upgrade")
+		"A capped chest never invents a level-one-hundred upgrade")
 	begin(view, 4, 7, true)
 	view.advance(Celebration.ARRIVAL_SECONDS + 0.01)
 	check(view.snapshot().level_transition.from_tier == 4 and view.snapshot().level_transition.to_tier == 7,

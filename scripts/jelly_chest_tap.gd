@@ -7,6 +7,7 @@ const RAYS = preload("res://assets/chests/shared/effects/rays.png")
 const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const DURATION: float = 0.92
 const REDUCED_DURATION: float = 0.40
+const SCALE_AMPLITUDE: float = 3.0
 
 var _texture: Texture2D
 var _opacity: float = 1.0
@@ -96,6 +97,7 @@ func snapshot() -> Dictionary:
 				zoom = lerpf(1.08, 1.0, p)
 				turn = lerpf(-0.07, 0.0, p)
 			light = (0.28 + 0.72 * smoothstep(0.0, 0.14, t)) * (1.0 - smoothstep(0.36, 0.88, t))
+			zoom = 1.0 + (zoom - 1.0) * SCALE_AMPLITUDE
 	return {"active": _active, "elapsed": _elapsed, "scale": zoom, "rotation": turn, "light": light}
 
 
@@ -106,15 +108,29 @@ func _draw() -> void:
 	var center: Vector2 = size * 0.5
 	var edge: float = minf(size.x, size.y)
 	var light: float = float(state.light)
-	# The existing acquired light textures radiate from the fixed chest center.
+	var artwork_size: Vector2 = _texture.get_size()
+	artwork_size *= edge * 0.67 / maxf(artwork_size.x, artwork_size.y)
+	# Keep the larger response inside the viewport without changing its hit area.
+	var turn: float = float(state.rotation)
+	var rotated_extent := Vector2(absf(cos(turn)) * artwork_size.x + absf(sin(turn)) * artwork_size.y,
+		absf(sin(turn)) * artwork_size.x + absf(cos(turn)) * artwork_size.y)
+	var radius: Vector2 = rotated_extent * float(state.scale) * 0.5
+	var transform: Transform2D = get_global_transform_with_canvas()
+	var canvas_scale := Vector2(transform.x.length(), transform.y.length())
+	var viewport_size: Vector2 = get_viewport_rect().size
+	var global_center: Vector2 = transform * center
+	var global_radius: Vector2 = radius * canvas_scale
+	var fitted_center := Vector2(clampf(global_center.x, global_radius.x + 4.0,
+		viewport_size.x - global_radius.x - 4.0), clampf(global_center.y,
+		global_radius.y + 4.0, viewport_size.y - global_radius.y - 4.0))
+	center = transform.affine_inverse() * fitted_center
+	# The existing acquired light textures follow the same fitted chest center.
 	draw_texture_rect(GLOW, Rect2(center - Vector2.ONE * edge * 0.75, Vector2.ONE * edge * 1.50),
 		false, Color("#efb342", light * 0.90))
 	if not _reduced:
 		draw_set_transform(center, _elapsed * 0.22)
 		draw_texture_rect(RAYS, Rect2(-Vector2.ONE * edge * 0.90, Vector2.ONE * edge * 1.80),
 			false, Color("#eaa431", light * 0.95))
-	var artwork_size: Vector2 = _texture.get_size()
-	artwork_size *= edge * 0.67 / maxf(artwork_size.x, artwork_size.y)
 	draw_set_transform(center, float(state.rotation), Vector2.ONE * float(state.scale))
 	draw_texture_rect(_texture, Rect2(-artwork_size * 0.5, artwork_size), false,
 		Color(1.0, 1.0, 1.0, lerpf(_opacity, 1.0, light)))

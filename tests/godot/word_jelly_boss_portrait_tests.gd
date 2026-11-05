@@ -1,7 +1,7 @@
 extends SceneTree
 
 const Map = preload("res://scripts/word_jelly_map.gd")
-const PORTRAIT: String = "res://assets/jelly-boss/private/bramble-portrait.png"
+const PORTRAIT: String = "res://assets/pirate/pirate-portrait.png"
 var checks: int = 0
 var failures: int = 0
 var selections: Array[int] = []
@@ -40,7 +40,7 @@ func _run() -> void:
 		check(picture is TextureButton, "The Boss marker is a tappable picture, not a BOSS text capsule")
 		if picture is TextureButton:
 			check(picture.texture_normal != null and picture.texture_normal.resource_path == PORTRAIT,
-				"The Boss marker uses the actual acquired Bramble portrait")
+				"The Boss marker uses the actual optimized Pirate portrait")
 			check(picture.size.x >= 44 and picture.size.y >= 44,
 				"The portrait keeps a full touch target at %s" % dimensions)
 			check(not picture.get_global_rect().intersects(item.label.get_global_rect()),
@@ -65,7 +65,7 @@ func _run() -> void:
 		"Portraits preserve unlocked Bosses plus only the next future Boss")
 	check(view._nodes[4].button.disabled, "The upcoming portrait cannot unlock a later stage")
 	view.configure({"highest_cleared": 0, "boss_markers": [1, 3], "merged_level": 1})
-	check(not view._nodes[0].boss.visible and not view._subtitle.text.contains("Bramble"),
+	check(not view._nodes[0].boss.visible and not view._subtitle.text.contains("Pirate"),
 		"Neither a stale opening marker nor the subtitle reveals the first-stage surprise")
 	view.free()
 	print("Boss map portrait: %d checks, %d failures" % [checks, failures])

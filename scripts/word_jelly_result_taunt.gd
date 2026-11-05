@@ -8,8 +8,8 @@ const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const DURATION: float = 2.4
 const TAUNT_SECONDS: float = 2.0
 const STEADY_SAMPLE: float = 1.0
-# Nine inspected source poses, with padding around the complete hands and feet.
-const FRAME := Rect2(4, 139, 362, 368)
+# Fixed Pirate framing keeps the rigid hat and elastic body in the result area.
+const FRAME := Rect2(0, 60, 384, 450)
 
 var last_error: String = ""
 var reduced_motion: bool = false
@@ -27,11 +27,12 @@ var _image := TextureRect.new()
 var _effects := Control.new()
 var _caption: Label
 var _image_base := Rect2()
-var _hands: Array[Vector2] = []
+var _anchors: Array[Vector2] = []
+var _clip: String = "Taunt_BellyLaugh"
 
 
 func _init() -> void:
-	name = "GameOverBramble"
+	name = "GameOverPirate"
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	focus_mode = Control.FOCUS_NONE
 	clip_contents = true
@@ -73,16 +74,18 @@ func present(round_id: String, steady: bool, new_record: bool = false) -> bool:
 	if not _actor.load_character():
 		last_error = _actor.last_error
 		return false
+	_actor.set_framing(4.0, 1.2)
 	last_error = ""
 	if round_id != _round_id:
 		_round_id = round_id
 		_elapsed = DURATION if steady else 0.0
 		_record = new_record
+		_clip = "Taunt_HatTip" if _record else "Taunt_BellyLaugh"
 		_last_sample = -1
 		_pose_count = 0
 		reduced_motion = steady
 		_caption.text = "Nice run!\nOne more round?" if _record else "Catch me next time!"
-		accessibility_name = "Bramble. " + _caption.text.replace("\n", " ")
+		accessibility_name = "Pirate. " + _caption.text.replace("\n", " ")
 	else:
 		set_reduced_motion(steady)
 	show()
@@ -95,7 +98,7 @@ func reset() -> void:
 	_active = false
 	_round_id = ""
 	_elapsed = 0.0
-	_hands.clear()
+	_anchors.clear()
 	_actor.render_target_update_mode = SubViewport.UPDATE_DISABLED
 	hide()
 
@@ -169,9 +172,9 @@ func _sample() -> void:
 	if frame != _last_sample:
 		_last_sample = frame
 		_pose_time = STEADY_SAMPLE if reduced_motion else minf(_elapsed, TAUNT_SECONDS - 0.001)
-		_actor.pose("Taunt", _pose_time)
+		_actor.pose(_clip, _pose_time, false, TAUNT_SECONDS)
 		_pose_count += 1
-		_hands = [_actor.project_bone("Middle1.L"), _actor.project_bone("Middle1.R")]
+		_anchors = [_actor.project_anchor("hat"), _actor.project_anchor("body")]
 	var entrance: float = 1.0 if reduced_motion else smoothstep(0.0, 0.3, _elapsed)
 	_image.position = _image_base.position + Vector2(0, (1.0 - entrance) * 8.0 / _scale)
 	_image.size = _image_base.size
@@ -186,11 +189,11 @@ func _image_rect() -> Rect2:
 	return Rect2(_image.position + (_image.size - extent) * 0.5, extent)
 
 
-func _hand_points() -> Array[Vector2]:
+func _anchor_points() -> Array[Vector2]:
 	var rect: Rect2 = _image_rect()
 	var points: Array[Vector2] = []
-	for hand: Vector2 in _hands:
-		points.append(rect.position + (hand - FRAME.position) / FRAME.size * rect.size)
+	for anchor: Vector2 in _anchors:
+		points.append(rect.position + (anchor - FRAME.position) / FRAME.size * rect.size)
 	return points
 
 
@@ -203,24 +206,24 @@ func effect_strength() -> float:
 
 
 func _draw_effects() -> void:
-	if not _active or not is_visible_in_tree() or _hands.is_empty():
+	if not _active or not is_visible_in_tree() or _anchors.is_empty():
 		return
 	var strength: float = effect_strength()
 	if strength <= 0.0:
 		return
 	var unit: float = 1.0 / _scale
 	var edge: float = minf(54.0 * unit, _image_rect().size.x * 0.42)
-	var points: Array[Vector2] = _hand_points()
-	for hand_index in range(points.size()):
-		var hand: Vector2 = points[hand_index]
-		_effects.draw_texture_rect(GLOW, Rect2(hand - Vector2.ONE * edge * 0.5, Vector2.ONE * edge),
+	var points: Array[Vector2] = _anchor_points()
+	for anchor_index in range(points.size()):
+		var anchor: Vector2 = points[anchor_index]
+		_effects.draw_texture_rect(GLOW, Rect2(anchor - Vector2.ONE * edge * 0.5, Vector2.ONE * edge),
 			false, Color(0.80, 0.63, 1.0, strength * 0.62))
 		if reduced_motion:
 			continue
 		var travel: float = clampf((_elapsed - 0.45) / 1.1, 0.0, 1.0)
 		for index in range(3):
-			var angle: float = -PI * 0.9 + float(index) * PI * 0.42 + hand_index * 0.24
-			var point: Vector2 = hand + Vector2(cos(angle), sin(angle)) * (8.0 + travel * 20.0) * unit
+			var angle: float = -PI * 0.9 + float(index) * PI * 0.42 + anchor_index * 0.24
+			var point: Vector2 = anchor + Vector2(cos(angle), sin(angle)) * (8.0 + travel * 20.0) * unit
 			var sparkle_edge: float = (7.0 + strength * 5.0) * unit
 			_effects.draw_texture_rect(SPARKLE, Rect2(point - Vector2.ONE * sparkle_edge * 0.5,
 				Vector2.ONE * sparkle_edge), false, Color(0.82, 0.62, 1.0, strength))
@@ -230,8 +233,8 @@ func snapshot() -> Dictionary:
 	var rect: Rect2 = _image_rect()
 	return {"visible": is_visible_in_tree(), "round_id": _round_id, "active": _active,
 		"elapsed": _elapsed, "duration": DURATION, "reduced_motion": reduced_motion,
-		"clip": "Taunt", "pose_time": _pose_time, "pose_count": _pose_count,
+		"clip": _clip, "pose_time": _pose_time, "pose_count": _pose_count,
 		"model_loaded": _actor._loaded, "caption": _caption.text,
 		"effects": effect_strength() if _active and is_visible_in_tree() else 0.0,
 		"image_rect": [rect.position.x, rect.position.y, rect.size.x, rect.size.y],
-		"hand_points": _hand_points().map(func(point: Vector2) -> Array: return [point.x, point.y])}
+		"anchor_points": _anchor_points().map(func(point: Vector2) -> Array: return [point.x, point.y])}

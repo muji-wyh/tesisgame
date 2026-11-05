@@ -24,6 +24,8 @@ var _age: float = 0.0
 var _sprites: Array[Dictionary] = []
 var _magic_envelope := AABB()
 var _opening_amount: float = 0.0
+var _magic_strength: float = 1.0
+var _caller_owned: bool = false
 
 
 func _ready() -> void:
@@ -101,19 +103,47 @@ func configure(id: String) -> bool:
 func set_state(value: String) -> bool:
 	if not value in STATES or _source == null or _entry.is_empty():
 		return false
+	var amount: float = 0.0 if value == "closed" else 1.0
+	_pose_opening(amount)
+	if not sample_contents(value, 0.0, amount, reduced_motion):
+		return false
+	_caller_owned = false
+	set_process(value == "magic" and not reduced_motion)
+	return true
+
+
+func sample_contents(value: String, time: float, openness: float,
+		reduce: bool = false, strength: float = 1.0) -> bool:
+	if not value in STATES or _source == null or _entry.is_empty():
+		return false
+	# Runtime callers own both clocks. Sampling contents never seeks the lid,
+	# restarts its source animation, or creates an independent animation loop.
+	set_process(false)
+	_caller_owned = true
 	_state = value
-	_age = 0.0
-	_opening_amount = 0.0 if value == "closed" else 1.0
-	_pose_opening(_opening_amount)
+	_age = maxf(0.0, time) if is_finite(time) and not reduce else 0.0
+	_opening_amount = clampf(openness, 0.0, 1.0) if is_finite(openness) else 0.0
+	_magic_strength = clampf(strength, 0.0, 1.0) if is_finite(strength) else 0.0
+	reduced_motion = reduce
 	for node: Node3D in _embedded_loot:
 		node.visible = value == "treasure"
 	if _loot != null:
 		_loot.visible = value == "treasure"
 	if _magic != null:
-		_magic.visible = value == "magic"
-	_sample_magic(0.0)
-	set_process(value == "magic" and not reduced_motion)
+		_magic.visible = value == "magic" and _magic_strength > 0.0
+	_sample_magic(_age)
 	return true
+
+
+func source_model() -> Node3D:
+	return _source
+
+
+func is_embedded_content(node: Node) -> bool:
+	for content: Node3D in _embedded_loot:
+		if node == content or content.is_ancestor_of(node):
+			return true
+	return false
 
 
 func _process(delta: float) -> void:
@@ -232,14 +262,31 @@ func _sample_magic(time: float) -> void:
 		sprite.position = piece.rest
 		if piece.role == "spark":
 			sprite.position.y += sin(clock * 0.8 + phase) * float(piece.height) * 0.025
-			sprite.modulate.a = float(piece.alpha) * (0.76 + 0.24 * sin(clock * 1.2 + phase))
+			sprite.modulate.a = float(piece.alpha) * _magic_strength * (0.76 + 0.24 * sin(clock * 1.2 + phase))
 		else:
-			sprite.modulate.a = float(piece.alpha) * (0.90 + 0.10 * sin(clock * 0.7 + phase))
+			sprite.modulate.a = float(piece.alpha) * _magic_strength * (0.90 + 0.10 * sin(clock * 0.7 + phase))
 
 
 func state_bounds() -> AABB:
 	var boxes: Array[AABB] = []
 	_collect_bounds(self, true, boxes)
+	return _merge_bounds(boxes)
+
+
+func content_bounds(include_magic_envelope: bool = false) -> AABB:
+	var boxes: Array[AABB] = []
+	for content: Node3D in _embedded_loot:
+		_collect_bounds(content, true, boxes)
+	if _loot != null:
+		_collect_bounds(_loot, true, boxes)
+	if _magic != null:
+		_collect_bounds(_magic, true, boxes)
+	if include_magic_envelope and _magic_envelope.size.length_squared() > 0.0:
+		boxes.append(_magic_envelope)
+	return _merge_bounds(boxes)
+
+
+func _merge_bounds(boxes: Array[AABB]) -> AABB:
 	if boxes.is_empty():
 		return AABB()
 	var result: AABB = boxes[0]
@@ -279,6 +326,10 @@ func debug_state() -> Dictionary:
 		clipped = clipped or not _magic_envelope.grow(0.0001).encloses(box)
 	return {"id": asset_id, "state": _state, "configured": _source != null and last_error.is_empty(),
 		"model": _entry.get("model", ""), "openness": _opening_amount,
+		"state_scene": _entry.get("scene", ""), "state_catalog": CATALOG_PATH,
+		"caller_owned": _caller_owned, "auto_processing": is_processing(),
+		"content_time": _age, "magic_strength": _magic_strength,
+		"source_instances": 1 if _source != null else 0,
 		"loot_visible": loot_meshes > 0, "visible_loot_meshes": loot_meshes,
 		"loot_mode": _entry.get("treasure", {}).get("mode", ""),
 		"loot_resource": _entry.get("treasure", {}).get("model", "embedded"),
@@ -305,6 +356,7 @@ func _clear() -> void:
 	_embedded_loot.clear()
 	_players.clear()
 	_sprites.clear()
+	_magic_envelope = AABB()
 	_source = null
 	_loot = null
 	_magic = null
@@ -313,6 +365,9 @@ func _clear() -> void:
 	_clip = &""
 	_state = "closed"
 	_opening_amount = 0.0
+	_age = 0.0
+	_magic_strength = 1.0
+	_caller_owned = false
 	last_error = ""
 
 

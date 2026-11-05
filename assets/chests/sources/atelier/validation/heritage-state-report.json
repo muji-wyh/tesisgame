@@ -1,0 +1,716 @@
+{
+	"capture_root": "Q:/uwok/tesisgame/build/qa/chest-asset-states",
+	"checks": 2026,
+	"display": "Windows",
+	"failures": 0,
+	"godot": "4.7.2-stable (official)",
+	"models": [
+		{
+			"bytes": 92640,
+			"camera_size": 0.580071985721588,
+			"capture": "game-kenney-survival.png",
+			"id": "game-kenney-survival",
+			"render_sha256": [
+				"5512a02082ab692ceb3f1263e0fd5ccb18cd3e8e4047e29b7a9b724d430b1bed",
+				"aad3d69f0de10097b52170562d75d358885f84e2dedf8d2f42691bfa62ff6884",
+				"0ec501387601a80b2f7165512cc625804bfd84e734e18c1015e0173234d9d933",
+				"684cfbd4f8e25d0e2b471549bc05fc47af48fb4c9aa0022a016a50207e6c6f47"
+			],
+			"scene": "assets/chests/models/cc0/kenney-survival/kenney-survival-states.tscn",
+			"sha256": "93e2375d6cb12f8e939c9c23d6879d0b2c84d2e5c27800f6d90b0d34946dc774",
+			"source_model": "assets/chests/models/cc0/kenney-survival/kenney-survival.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 99560,
+			"camera_size": 1.04777836799622,
+			"capture": "game-kenney-platformer.png",
+			"id": "game-kenney-platformer",
+			"render_sha256": [
+				"f7bb9d3fbb3d5694e283dbe52afd98e35bc8778e61e4c345bc2b384ef55a1b05",
+				"d969edebb62bfd050b86fcfcd13159296e45f7a8dc682984d9a0f2d297898b9f",
+				"09e818828ed94e134a580b6c166c072f5b2f0bfc213b63024ae2abf3ae7fe77a",
+				"792272f7ea9ad71460c5c8fe8f126af73d794506e9b1c354bdac6b62e4055d8a"
+			],
+			"scene": "assets/chests/models/cc0/kenney-platformer/kenney-platformer-states.tscn",
+			"sha256": "fca0376c3e024def2a5c590ace4fa44dd8851735dfdacac794829bb34d0954d2",
+			"source_model": "assets/chests/models/cc0/kenney-platformer/kenney-platformer.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 99540,
+			"camera_size": 1.04777836799622,
+			"capture": "game-kenney-mini-dungeon.png",
+			"id": "game-kenney-mini-dungeon",
+			"render_sha256": [
+				"02eac130423fb2b1c10f96855d2cdb4aec9a703c0b157ce897772916bf82d7e8",
+				"12b355612fcddea8f16107e85254089e9a11bf947ca7873586bc55546600f4ef",
+				"1e92bde95b1708365c73bf33349f648ace200eab9a57c90014fa1ccbdd5987e7",
+				"35a9c1d0923ba5245e5e1c98f2f93c195d49c73f3753cc6ae5b286eab4b207ef"
+			],
+			"scene": "assets/chests/models/cc0/kenney-mini-dungeon/kenney-mini-dungeon-states.tscn",
+			"sha256": "574c0365a500efdd1daaad734757c607919687a5609272c8882366a798113e57",
+			"source_model": "assets/chests/models/cc0/kenney-mini-dungeon/kenney-mini-dungeon.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 203460,
+			"camera_size": 2.9624240398407,
+			"capture": "game-kaykit-dungeon.png",
+			"id": "game-kaykit-dungeon",
+			"render_sha256": [
+				"9196d02970e79892287e5a038cd629b36f97a7c0d0928eaf0ef4790717d94936",
+				"9b8a802aec12f7d6b3ad8e3fcb5fcb4d79414fe019f24264e8a7651896cb980d",
+				"3ce7623df7f6609e282d445b1779dc75a521d4b0e904ce2b2357f1c343db7a61",
+				"53dcdbf9f3b184cbe43d4d73c76b45833aaf8eaec3dfe43999aa3e1cebd616bf"
+			],
+			"scene": "assets/chests/models/cc0/kaykit-dungeon/kaykit-dungeon-states.tscn",
+			"sha256": "163bbbc98fea8370a3c85c269360cb642f1946b1167d12e5efd6bdd3039ff5ff",
+			"source_model": "assets/chests/models/cc0/kaykit-dungeon/kaykit-dungeon.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 666448,
+			"camera_size": 3.76690745353699,
+			"capture": "game-meadow-explorer.png",
+			"id": "game-meadow-explorer",
+			"render_sha256": [
+				"eca13839ac451a6c8406aee817f56b4aaa71328f7701694ebf23dbfae7794df7",
+				"02f69a3c0057fa07445596e3ebda8fe4a64bc4230bd2a42837c079cae4974148",
+				"a9c6ba36264a4b986c2135718b49e89fe7ee7e7cae044afc03c3aefedf5612db",
+				"8957f59884fbb743f2135afc18f52c5b8aea5f3dc8d71a7ca6d7a5026ffe0cae"
+			],
+			"scene": "assets/chests/models/licensed/meadow-explorer/meadow-explorer-states.tscn",
+			"sha256": "91374649ef7abf27d4b8c9bece4543cbbf3be77c6ebcbecebea31b23b98b9d79",
+			"source_model": "assets/chests/models/licensed/meadow-explorer/meadow-explorer.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1167920,
+			"camera_size": 3.16270804405212,
+			"capture": "game-harvest-keepsake.png",
+			"id": "game-harvest-keepsake",
+			"render_sha256": [
+				"810291beb39a397c5c601ce0ca3b9746342b2a12002f7fde2e17816d6202a212",
+				"158f7d5ecfd7c5192872e6358c7fd90caaba0cd1602ee5ce0a67b2f070f7d96a",
+				"8b4bfdf26e7ba4a6fae1727e2b5ec66a138bbbf87e8946d5dd13db97c92f3dc5",
+				"227d5c926681c1c4132125bc043e6d9cfbd94617f6c631e565253b6cdf192c16"
+			],
+			"scene": "assets/chests/models/licensed/harvest-keepsake/harvest-keepsake-states.tscn",
+			"sha256": "ca526de26b5c8b0483b981c7fd6b9dc0a91fc245c01bcc4647c21a16195198ec",
+			"source_model": "assets/chests/models/licensed/harvest-keepsake/harvest-keepsake.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 914248,
+			"camera_size": 4.79278326034546,
+			"capture": "wayfarer-oak.png",
+			"id": "wayfarer-oak",
+			"render_sha256": [
+				"6f976add9e4e2037515c5c359fe9bc3da342945744aa72ab93842fcaf55491f2",
+				"893ab119d5e3e7d09bc1e6604735fb9eb8d4d1dcaefaa21a4c9359e673bc02a0",
+				"13cb4b911cf7baa1e8d1d9fef7dcc982b1eea5be7eeaddb1e74c2dd18c3b10b4",
+				"5a42603d0b3d24a563d395f7b332372c2590bddd10caa8ef4846717b3e2c7af7"
+			],
+			"scene": "assets/chests/models/atelier/wayfarer-oak/wayfarer-oak-states.tscn",
+			"sha256": "c8a8748c4c1e69cac55bb5bce050c732937ada320e1f8922610ef9f17a18be0b",
+			"source_model": "assets/chests/models/atelier/wayfarer-oak/wayfarer-oak.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 919192,
+			"camera_size": 4.34753894805908,
+			"capture": "ironbound-trail.png",
+			"id": "ironbound-trail",
+			"render_sha256": [
+				"891390b9c7cacaaacaa6ebd411f3f1cae7b77e71b4914c56f529f794f189b66b",
+				"4db2beabeeb99cbd233d0678bae6fd638d6894e628df6334696136df3fb70b8c",
+				"74d78c075053a9506c22f3394243ffb6050294355df149c755a7e228d4184588",
+				"10070164575631c112e6346e533a12cc4cabebe0a8507010eceaaa36f9b8035d"
+			],
+			"scene": "assets/chests/models/atelier/ironbound-trail/ironbound-trail-states.tscn",
+			"sha256": "57f607faddc8bbd9705df5a1b04d1d7fff803283903f7ef3c8490a90291d872d",
+			"source_model": "assets/chests/models/atelier/ironbound-trail/ironbound-trail.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 914784,
+			"camera_size": 4.19535827636719,
+			"capture": "duskwatch-coffer.png",
+			"id": "duskwatch-coffer",
+			"render_sha256": [
+				"cf514e16c9c3629ceb3d31f2f645905c95123325d9882cab463cfc09082fcb6a",
+				"35cbc9376242984c15f8e58ca58ae1f81c65a2a0aea8eb8235a2ae1b5c74de1d",
+				"88284bb2522258861c8a86e47130938939724484d5eb126abe37c52898912576",
+				"2cf042b7fb8aa6de510af61f4a35606b91037e3cf1afbf870c422d21d0c16b1f"
+			],
+			"scene": "assets/chests/models/atelier/duskwatch-coffer/duskwatch-coffer-states.tscn",
+			"sha256": "b313cda13f9505817dbeb73b368af18a1649cbd57026c70e7540e8fdfbb776e7",
+			"source_model": "assets/chests/models/atelier/duskwatch-coffer/duskwatch-coffer.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1080920,
+			"camera_size": 3.50339889526367,
+			"capture": "dungeon-keeper.png",
+			"id": "dungeon-keeper",
+			"render_sha256": [
+				"4012c4205b0e4c9af7cbc049fe24a1549ee5311e93cdfdf50c20e4222b62dc76",
+				"ca12cea0ccb9a8e27931b6b98b7d409938613da5b49ade3effce68f8df04b76b",
+				"635198faebc516255aa95ad387fa5a71d3733b07f52b1cb0fd0edf94d52de9a2",
+				"a9ca9738d9f60f694add0cc1b0139a4b294ec1ed4488ce92cda3405343fbe85d"
+			],
+			"scene": "assets/chests/models/atelier/dungeon-keeper/dungeon-keeper-states.tscn",
+			"sha256": "b3184407553b3319d1691b01101cca15042c0a2236d0537530fb4e2b0b7fe8d1",
+			"source_model": "assets/chests/models/atelier/dungeon-keeper/dungeon-keeper.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1549360,
+			"camera_size": 3.58173775672913,
+			"capture": "tideguard.png",
+			"id": "tideguard",
+			"render_sha256": [
+				"93d3f91a71f36bccfdf935adec5bcbea306529684b42f550786cfcbe93aa6d6f",
+				"3d254e8ab0a32a727064c36693299f3626f61132aa9c9385a9a006edf4ce303f",
+				"c32b08233063d82b56b1e3d0112d67ec0b2b4d8547e9e060d69e657a8c08c5c9",
+				"5e9bd12ca2d24be0576bac463a234c917b40dd1c2e9e92c381f57d225193c599"
+			],
+			"scene": "assets/chests/models/atelier/tideguard/tideguard-states.tscn",
+			"sha256": "2f948c069d5e152150cf1e262cfd4a2aee9b3135dc52184ab3d1e3328dd6b260",
+			"source_model": "assets/chests/models/atelier/tideguard/tideguard.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 982836,
+			"camera_size": 3.7817440032959,
+			"capture": "meadow-cabinet.png",
+			"id": "meadow-cabinet",
+			"render_sha256": [
+				"18a7fba4a62b82a7fa73700598ec10786166895a259f66fb66dcca3b3d07208e",
+				"b599682c6bc0463ee1e018d9ee6a6560742f48600f5fed564f45f62ec3f3a2ba",
+				"c7448e940423da41d28cfdb38504232c617777a1f95c7c9f0e701098e616423f",
+				"dbe5185d523b9de70b116dd1a70da846be97b6084be5149229bd7239cc63fdb5"
+			],
+			"scene": "assets/chests/models/atelier/meadow-cabinet/meadow-cabinet-states.tscn",
+			"sha256": "e49d086e0dea5f5ffcfd62cc9855c02d65459a0318df227f2030aec7ec03cf12",
+			"source_model": "assets/chests/models/atelier/meadow-cabinet/meadow-cabinet.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 619736,
+			"camera_size": 2.96883416175842,
+			"capture": "game-strawberry-bonbon.png",
+			"id": "game-strawberry-bonbon",
+			"render_sha256": [
+				"8ecd4833f43230d5e3ce58b9404e8111ad5c88fc541820e2b18a95ba0bf1beb5",
+				"338747b9077d58a8baa0d4df8a81652cb761c5dad97110cda7a667f3534aa75a",
+				"e57a4e4cd2c2185e0916f00322cbd3e3f3913a3f4bfa42ce22b5816a7528e85f",
+				"62c19812a1df9e9a8039d46d1ad809f93ffb7c369dc5ee99c83457d3141358d0"
+			],
+			"scene": "assets/chests/models/licensed/strawberry-bonbon/strawberry-bonbon-states.tscn",
+			"sha256": "84bad846f896ce74c8af17b790be5f928630ca3444566ef103c9d454cde5f96c",
+			"source_model": "assets/chests/models/licensed/strawberry-bonbon/strawberry-bonbon.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1294424,
+			"camera_size": 4.63409852981567,
+			"capture": "sunward.png",
+			"id": "sunward",
+			"render_sha256": [
+				"80806d27f1fb983ca292ab60f9922537fd30bc9afa63968600e2eac46ff42898",
+				"92f1344a1dad684fdab945aeb5955da40e04521612c5de84318c8ddd9a3ccc59",
+				"42a8e00ef16641e6efe75a823b35a444c2b6c26290cf851ec3ebe76a55969b44",
+				"8944271f369493b9264460abb26072b18de159a508db4d23e589f48b67d02b8b"
+			],
+			"scene": "assets/chests/models/atelier/sunward/sunward-states.tscn",
+			"sha256": "a497d6ce1e1b04c9015032f4c9d6f3a28644a272d264a9052e3203ce555b5543",
+			"source_model": "assets/chests/models/atelier/sunward/sunward.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1821764,
+			"camera_size": 2.99329829216003,
+			"capture": "harvest-strongbox.png",
+			"id": "harvest-strongbox",
+			"render_sha256": [
+				"dacb14c440f76d4f2036ac55599a64487cda930351532e60c01382e029a5b02a",
+				"425bc996fb7057ad059ad40acc67c548c00b33e85e9e3a00633d8ce242545693",
+				"1e70f937cd7607b5c4f882fea000cf4fac607e9f79382a16a0fb5c8e0c6fa039",
+				"bf0a6ab3821dd9ea024ce7ac5a013b1daa1f5ff682b1d5d6e000a3d8e7dbb9c4"
+			],
+			"scene": "assets/chests/models/atelier/harvest-strongbox/harvest-strongbox-states.tscn",
+			"sha256": "a70717e286d7dd21281ec120c724128bdeaf3f1ff2457e430f1d749239bfe10f",
+			"source_model": "assets/chests/models/atelier/harvest-strongbox/harvest-strongbox.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1135260,
+			"camera_size": 2.9041154384613,
+			"capture": "bonbon-keepsake.png",
+			"id": "bonbon-keepsake",
+			"render_sha256": [
+				"596d83e4fdd9380a6a132d7da718522a53f8ce9764ba75f2d92908b6da9da05f",
+				"a40b559bcefa7b501eb6046fee08a854456010314b224c5db353c12ce2403697",
+				"a76a29d02e1a38dd4359a89d7b11fc504818b3dd979096c2bf862a367f5519e5",
+				"d6632495ac17764e9a7c4851bdce506914a2d538a031f94b821eb50cdfd8fa21"
+			],
+			"scene": "assets/chests/models/atelier/bonbon-keepsake/bonbon-keepsake-states.tscn",
+			"sha256": "1e2f6a368c9b33a97253e554ecf14cf195cacc5f691e41bc2d549ca34762ee2c",
+			"source_model": "assets/chests/models/atelier/bonbon-keepsake/bonbon-keepsake.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1295512,
+			"camera_size": 4.2495379447937,
+			"capture": "moonbound.png",
+			"id": "moonbound",
+			"render_sha256": [
+				"2a4ace51b3108cecde09b8eac7f881f874ac1bac2c2b538ae27c1cabfd30b5eb",
+				"5a0637ce1d3e0534e86fef4673c2a506821b426dc747dc576d2422a0dcd97221",
+				"2ce737f7e18065dc04af95fbe501cc2a93ac7ccac449785d541fa60133007506",
+				"077feb1f3df08eb1d7ddfa885dd583aa4dd999c7ca752061c421d8f440f46e88"
+			],
+			"scene": "assets/chests/models/atelier/moonbound/moonbound-states.tscn",
+			"sha256": "caabad89ceb5ced45f51a9bf1a929b19ff506208bde851e2c4ad41bfa7cde73b",
+			"source_model": "assets/chests/models/atelier/moonbound/moonbound.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1237636,
+			"camera_size": 4.26847076416016,
+			"capture": "royal-rose.png",
+			"id": "royal-rose",
+			"render_sha256": [
+				"c4ca9ed6d0c47d883775af69f7da8e07c4837d661e14ea68646e22b3bd22bcc0",
+				"9f1b56aee3b123c909a106163e542fb19c173196ec8d062f1d59dd5bbea34a9d",
+				"df5a6db90c5a230d9cb00efac9eb68bf453a06a02b95d7d83c26ca55889f99d4",
+				"942a073aa8664bc511e9cd192be0194d6ea16d9edc2e3cb275cf82a393d90bc1"
+			],
+			"scene": "assets/chests/models/atelier/royal-rose/royal-rose-states.tscn",
+			"sha256": "e79297c282c23b201ce5b2b6a811145f63dd824a3deb7823d965d20af34fe067",
+			"source_model": "assets/chests/models/atelier/royal-rose/royal-rose.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 708056,
+			"camera_size": 2.96147990226746,
+			"capture": "game-lagoon-pearl.png",
+			"id": "game-lagoon-pearl",
+			"render_sha256": [
+				"d9564583be20e6e1129346576314275dc9d0df6bb1e4d54129e4f9f7aa57023d",
+				"5718451eeb5871d7eceea44f038f5151909df813d1e66442385b48b9cea74c06",
+				"94740d154b41b2e337c5ce7e89f9b834aef9af7f6703eb0e321dcf894cbda9ab",
+				"11b7d7b8b039653cef2a13691b8909a7fe41aeccf84ceb07715f9564ecaae829"
+			],
+			"scene": "assets/chests/models/licensed/lagoon-pearl/lagoon-pearl-states.tscn",
+			"sha256": "47ef7a9a1a6a131b2039465ab3f09d01d59de609f8875ff07341b1e6fa683ed9",
+			"source_model": "assets/chests/models/licensed/lagoon-pearl/lagoon-pearl.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 400140,
+			"camera_size": 3.89792442321777,
+			"capture": "game-moonstone-vault.png",
+			"id": "game-moonstone-vault",
+			"render_sha256": [
+				"b3fb5be511d5c7581a0d4350812c17f3b621dd8b7487d36c2f59032d8c6a3604",
+				"8fd1a1c015b05a28be72ebdddcf70a33734cdced40ec9ea69d9d54dcd35cca80",
+				"15d568a5b0beb98f581cc3d19827f7cbb23a24c1ecb5ad591be41ad29f248db0",
+				"d9a057e344a489385e32124c296892a04cd1c42852c5aadf06e96c7f3fe11bda"
+			],
+			"scene": "assets/chests/models/licensed/moonstone-vault/moonstone-vault-states.tscn",
+			"sha256": "59d7111f5ed48daceb8ecfaa78d32275a441c4d22a9a181136d22bd2025a0911",
+			"source_model": "assets/chests/models/licensed/moonstone-vault/moonstone-vault.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1145704,
+			"camera_size": 2.97372221946716,
+			"capture": "lagoon-reliquary.png",
+			"id": "lagoon-reliquary",
+			"render_sha256": [
+				"d0c2c6fc201f16d8de73632b1b580bf8a57e9e84520865496c4aaf15d15037aa",
+				"6addf5636718acb4cca1b52114afec3f486d42eacd341d5b43429189105a0129",
+				"8237c5d3f46c992cb2a7640189da01c52ba44d954af86e7ec8e52b562dc96635",
+				"3077bb920543317117529ac2264f80d0c7f240834f17360aa9824bf9123fc2c8"
+			],
+			"scene": "assets/chests/models/atelier/lagoon-reliquary/lagoon-reliquary-states.tscn",
+			"sha256": "f35701a1ddb32e4fd4fae294e8f9924ab668020204a5b8635b11c044e62c9999",
+			"source_model": "assets/chests/models/atelier/lagoon-reliquary/lagoon-reliquary.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 998008,
+			"camera_size": 3.89792227745056,
+			"capture": "moonstone-crown.png",
+			"id": "moonstone-crown",
+			"render_sha256": [
+				"13fb967d391a4a20caf0e62a801bcc4ce0ef3f2e5f49536c4aa8a5a9c72a2d1b",
+				"47da10cf4a2119ffec1098a1bee457a411d9d00a497250a303d3b600eef0c991",
+				"33b85a6de7a7c9f8436f1ef4df3cdea341fce6f96d8051b3abe9685443e7942d",
+				"7c48415b0979e0b5b8631a9e0967ddd1a49ee218cec7890665d5ca3696149aa8"
+			],
+			"scene": "assets/chests/models/atelier/moonstone-crown/moonstone-crown-states.tscn",
+			"sha256": "071c58a9755d1d8e25d511b6f9290de9c6b1861acd14d22939602c1c11502c40",
+			"source_model": "assets/chests/models/atelier/moonstone-crown/moonstone-crown.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1605224,
+			"camera_size": 3.39622235298157,
+			"capture": "prism-signal.png",
+			"id": "prism-signal",
+			"render_sha256": [
+				"6960f289c8580fe70d51eebac29d6861a11dd3bc8745b8bf81453c321e8ee7fa",
+				"d0bcd03fa5c553f5441d8d0cf997c4002c84bcbe11d671610513a0a828e07f56",
+				"c4dff29375656de718ca46f4bbcb790503b0d1d24c7f66a8bbed695399e6063b",
+				"ef5889fd7e7c5b9286c2865e603b287a2a1331b33a15c135f403da2e0d39c14a"
+			],
+			"scene": "assets/chests/models/atelier/prism-signal/prism-signal-states.tscn",
+			"sha256": "7ba78d357e08ad4b4dd9f91f4761e812978ce712805f9076cdcf3d1bce5a0331",
+			"source_model": "assets/chests/models/atelier/prism-signal/prism-signal.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1857808,
+			"camera_size": 3.46750736236572,
+			"capture": "frost-relay.png",
+			"id": "frost-relay",
+			"render_sha256": [
+				"c866ab377a3bfb62d6b0b9fcf203b750d81e33ef0df322bb188a98a792fadb66",
+				"cc52c42259f3851309cde478868baa6b1a6cf0e744d03660a63ad131d33b5ad3",
+				"bf95f5b9d3aeba459d0793750fa39089dbff090201b551f2961e287aec5e19af",
+				"1eb9b755430485c9bc3e21ca1e66c30e9dbb201ce87de1d81b4193259246d035"
+			],
+			"scene": "assets/chests/models/atelier/frost-relay/frost-relay-states.tscn",
+			"sha256": "6a4e0cd025ff305f5076085ec59295c107eb4fbe5cf7add50e45df7a8bde202b",
+			"source_model": "assets/chests/models/atelier/frost-relay/frost-relay.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1845100,
+			"camera_size": 3.46750736236572,
+			"capture": "solar-relay.png",
+			"id": "solar-relay",
+			"render_sha256": [
+				"6678e04a30aa668883f8f392a75e5894455f5a3c9dd55c1478025197665ede0e",
+				"cb79e06433d85cf9a10c4c3dff2578defc2fe8316084cff1110c472174a0aeb2",
+				"2a28a8442ca2ccc5b5ff713fdbbc15dd16997e874ec9a48d9bbd06fbdd7e6dcf",
+				"3dbc96645de11abbbb7213d567edde15debd78d4b387f47e26fa7dcdc6d06153"
+			],
+			"scene": "assets/chests/models/atelier/solar-relay/solar-relay-states.tscn",
+			"sha256": "a104857980bf69ae54f53242d538f86604f19061ce04aca52a8e28b2cc2cad3f",
+			"source_model": "assets/chests/models/atelier/solar-relay/solar-relay.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1639428,
+			"camera_size": 3.43713784217834,
+			"capture": "nova-buddy.png",
+			"id": "nova-buddy",
+			"render_sha256": [
+				"7c03d37fb6605d0397d0620bcb546fc394734e553e41d6b430113148eeafa52c",
+				"052906e548900bf90b9328f6ca64653dd72c70ba8d71b9f1d9c1f4d05d95c7a5",
+				"a3df9b318badab6d3394cd396aa8a4f13621565cf726e1b76f205e95c8236e69",
+				"3766fa3ef53f3b82a28f98e23aa42cfff6a9998e8bdc7ad1673f6f0889c0f8f1"
+			],
+			"scene": "assets/chests/models/atelier/nova-buddy/nova-buddy-states.tscn",
+			"sha256": "a0e34b900a30cc5a514e35d2a3cc3a97bd88e9c8d777400a672c6ac6a66756b6",
+			"source_model": "assets/chests/models/atelier/nova-buddy/nova-buddy.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1632244,
+			"camera_size": 3.42566609382629,
+			"capture": "jade-reliquary.png",
+			"id": "jade-reliquary",
+			"render_sha256": [
+				"deeedaf025e7978684651cc2003f4249800810132e8e93e4040d403242b39444",
+				"efbfb606d6a8c1e8c7268e552608af5b750754482723a2233a2603752c0166f1",
+				"5dcca85f8c5d0a7da66a15313838078c9c79b37af215f5cbb2a04dadd10f226d",
+				"fb1a77280c47bd9e8c716bb2655a7c40dfd9dbd327ab574551a378b666bed103"
+			],
+			"scene": "assets/chests/models/atelier/jade-reliquary/jade-reliquary-states.tscn",
+			"sha256": "c13697148d58680a6c746afde499b71915ffb033f6cd7c11e455f6208bbc562d",
+			"source_model": "assets/chests/models/atelier/jade-reliquary/jade-reliquary.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1745060,
+			"camera_size": 3.40407586097717,
+			"capture": "crimson-citadel.png",
+			"id": "crimson-citadel",
+			"render_sha256": [
+				"f98f132c36d22a6896c1fa9373a7b85225b3f7cbc5f37b56f4524ebe5f3504df",
+				"deb634a5de0bafe4e80281e5ce6384ecd5d6f108b070ed500b5d3247ddbb03e0",
+				"c95c91c95c19d605b55f2eb22a99d58f5893f87e9cea300c567f2adfbe573a8c",
+				"dd364469540ce1e17c7a033719bec74c63744a93b40ab68be08f05136ed5976e"
+			],
+			"scene": "assets/chests/models/atelier/crimson-citadel/crimson-citadel-states.tscn",
+			"sha256": "867677aa2a7e3dad6c7d47aa82e88be0af4afc3254986f884483d876c6dee225",
+			"source_model": "assets/chests/models/atelier/crimson-citadel/crimson-citadel.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1634188,
+			"camera_size": 3.85287070274353,
+			"capture": "cobalt-vault.png",
+			"id": "cobalt-vault",
+			"render_sha256": [
+				"a9142ad435c4300ceca309b30b1a790743b9e6405cd644219d9465060818dcd7",
+				"b058be6311df009796dd73be6ead90d3bb9f11121bd41572c581bdaa8e14ce39",
+				"abbc9851f81d5fc1a9bbf9a7bc2aef8942d75b3a1b4a86b94af1f41222b8145a",
+				"f3787a4943b57be5d4a99420374d7c8aebec0b209aa321b99635306e1610f890"
+			],
+			"scene": "assets/chests/models/atelier/cobalt-vault/cobalt-vault-states.tscn",
+			"sha256": "080210d19c5d15267605c8ada6d0d8c8c26a798c0d8932dbe85d23732f3ff72d",
+			"source_model": "assets/chests/models/atelier/cobalt-vault/cobalt-vault.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"bytes": 1650892,
+			"camera_size": 3.85287070274353,
+			"capture": "aether-vault.png",
+			"id": "aether-vault",
+			"render_sha256": [
+				"b23f1e6092c1d5b8dbd2463bd7dcd76c2d70eac5c120b5d616a9a2f911fae2af",
+				"c08751eff9d741252f4778cbc17fd280a30fc93833c711a82692c3f74aa20ce2",
+				"3fff57ab9453f51ad69731880596776edf56f64d9b5df3fd55d0f16c77390cf4",
+				"c1a01cfeb6d7d0110d6afd08e34a08fa4e404c2c7fb7b8c7998a8fa1332cb290"
+			],
+			"scene": "assets/chests/models/atelier/aether-vault/aether-vault-states.tscn",
+			"sha256": "2a3ebb2635dec4f3a25b11393001401635c26b36c5ef359dd78e988333627101",
+			"source_model": "assets/chests/models/atelier/aether-vault/aether-vault.glb",
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		}
+	],
+	"passed": true,
+	"renderer": "ANGLE (Microsoft, Microsoft Basic Render Driver (0x0000008C) Direct3D11 vs_5_0 ps_5_0, D3D11-10.0.26100.9711)",
+	"rendering_method": "gl_compatibility",
+	"sprites": [
+		{
+			"id": "game-energy",
+			"render_sha256": [
+				"766ba4e7be7b0889e26d9855a4385e0a367332ea2921098740434d5b4410132a",
+				"d0f4bfecb9851d75b73752abef8900385b9ba00b957289b0791a2d43b34a2a84",
+				"dbd7d6fef1ee9aee402a1da251e37e299494d73399ab4bd3a1657e1c5dae5a1a",
+				"92f13cb9e127c88660d0acbdd364957d6594674e5a01fe2ec89a19336ea7262f"
+			],
+			"scene": "assets/chests/sprites/energy/energy-states.tscn",
+			"source_images": {
+				"closed": "assets/chests/sprites/energy/states/closed.png",
+				"magic": "assets/chests/sprites/energy/states/magic.png",
+				"open": "assets/chests/sprites/energy/states/open.png",
+				"treasure": "assets/chests/sprites/energy/states/treasure.png"
+			},
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"id": "game-royal",
+			"render_sha256": [
+				"a41d1a530842ce699f4b43d7bcd68ab80931607acd17558b0d348b6f888b6903",
+				"beb665a12ce2e74b032adb09fb0547800ec397751d8138bb16de65ad5c5e3348",
+				"016517f597101e14c8b36dc307d1030ca5182ed1d763524fd5ff3c3d5184bb25",
+				"8c81346741019f8ee251d4fce61b4554e61d11a1ce38c16585c6a7c9a7e19f0b"
+			],
+			"scene": "assets/chests/sprites/royal/royal-states.tscn",
+			"source_images": {
+				"closed": "assets/chests/sprites/royal/states/closed.png",
+				"magic": "assets/chests/sprites/royal/states/magic.png",
+				"open": "assets/chests/sprites/royal/states/open.png",
+				"treasure": "assets/chests/sprites/royal/states/treasure.png"
+			},
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		},
+		{
+			"id": "game-crystal",
+			"render_sha256": [
+				"0238bb644f4e830ee21a35508e2f7f5b5a954594f6c0619f1667f8e36a7eb6b7",
+				"a203d4ad392281fc5994c7329744d46861937463d04ec26396a089c92fbf7efd",
+				"6e45600faff41ff6be9ebb9e3524a9c9d660b82847e73a80ca154ca49ad2794d",
+				"ae8156901f4c7d6a1d3df6e40c8439cf3d76d49f410e167d7979d90eef658d43"
+			],
+			"scene": "assets/chests/sprites/crystal/crystal-states.tscn",
+			"source_images": {
+				"closed": "assets/chests/sprites/crystal/states/closed.png",
+				"magic": "assets/chests/sprites/crystal/states/magic.png",
+				"open": "assets/chests/sprites/crystal/states/open.png",
+				"treasure": "assets/chests/sprites/crystal/states/treasure.png"
+			},
+			"states": [
+				"closed",
+				"open",
+				"treasure",
+				"magic"
+			]
+		}
+	],
+	"states": [
+		"closed",
+		"open",
+		"treasure",
+		"magic"
+	]
+}

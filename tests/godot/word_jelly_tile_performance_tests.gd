@@ -3,7 +3,7 @@ extends SceneTree
 
 const SKIN = preload("res://assets/images/jelly-match/gel-mint.png")
 const PICTURE = preload("res://assets/images/ui/modes/cat.webp")
-const CHEST = preload("res://assets/chests/sprites/royal/closed.png")
+const CHEST = preload("res://assets/chests/shared/ui/chest.png")
 const BaseTile = preload("res://scripts/jelly_tile.gd")
 
 class ProbeTile:

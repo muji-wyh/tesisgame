@@ -6,8 +6,8 @@ const RewardModel = preload("res://scripts/chest_reward_model.gd")
 const ChestModel = preload("res://scripts/chest_model_view.gd")
 const Jelly = preload("res://scripts/jelly_match.gd")
 const Data = preload("res://scripts/game_data.gd")
-const BEFORE = preload("res://assets/chests/sprites/energy/closed.png")
-const AFTER = preload("res://assets/chests/sprites/royal/closed.png")
+const BEFORE = preload("res://assets/chests/shared/ui/chest.png")
+const AFTER = preload("res://assets/chests/shared/ui/chest-open.png")
 
 var checks: int = 0
 var failures: int = 0
@@ -526,7 +526,7 @@ func _check_closed_models() -> void:
 	var models := RewardModel.new()
 	root.add_child(models)
 	models.set_active(false)
-	for tier in [1, 4, 5, 10, 20, 30]:
+	for tier in [1, 4, 5, 10, 20, 28, 29, 99]:
 		models.prepare(tier)
 		check(models._pool.has(tier), "Chest tier %d loads its acquired articulated model" % tier)
 		if not models._pool.has(tier):
@@ -592,10 +592,10 @@ func _check_closed_models() -> void:
 		model.set_display_size(Vector2(2000, 2000))
 		check(model.snapshot().resolution == 512 and _models_stopped(models),
 			"Tier %d respects the small HUD render budget and stays disabled when inactive" % tier)
-	check(models._pool.size() == 2 and models._pool.has(20) and models._pool.has(30),
+	check(models._pool.size() == 2 and models._pool.has(29) and models._pool.has(99),
 		"Advancing through early and late tiers retains only the latest two reusable model surfaces")
 	var before_invalid: Array = models._order.duplicate()
-	check(models.sample(0, 0.0).is_empty() and models.sample(31, 0.0).is_empty()
+	check(models.sample(0, 0.0).is_empty() and models.sample(100, 0.0).is_empty()
 		and models.sample(4, NAN).is_empty() and models.sample(4, INF).is_empty()
 		and models.sample(4, 0.0, NAN).is_empty() and models.sample(4, 0.0, INF).is_empty()
 		and models._order == before_invalid,

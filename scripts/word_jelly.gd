@@ -2648,7 +2648,7 @@ func _refresh_hud() -> void:
 func _frame_hud_content_key() -> Array:
 	return [_generation, _view_board_revision, _pose_revision, _configured, game.phase,
 		game.fragment_count, game.chest_tier, _displayed_chest_tier, _loot_flights.size(),
-		_compact_hud, has_header_chest(), ceili(game.full_elapsed), game.error,
+		_compact_hud, has_header_chest(), _chest_tap.is_active(), ceili(game.full_elapsed), game.error,
 		game._collection_batch_active, game._collection_batch_cursor,
 		game._collection_batch_event_id, game._collection_batch_ids.size(),
 		game.pip_level, _can_play(), _pointer, game.powerup_active(), _finish_is_pulling()]

@@ -98,16 +98,20 @@ static func scenario(supplied_words: int, success: float) -> Dictionary:
 	var bonus: float = supplied_words * success * Economy.jelly_bonus_chance(1) * Economy.jelly_bonus(1)
 	var total: float = chest + bonus
 	var with_treasure: float = expected_chest(marked, success, 1) + bonus - purchase_total("fragments", 1)
+	# Model full-capacity root/picture paths, each freeing exactly one board body.
+	# Real quotes instead use the current legal forecast, including partial capacity.
+	var auto_level: int = Economy.MAX_UPGRADE_LEVEL
+	var auto_reduction: int = Economy.auto_merge_capacity(auto_level)
 	return {
 		"supplied_words": supplied_words, "success_probability": success,
-		"auto_merge_level": Economy.MAX_UPGRADE_LEVEL,
+		"auto_merge_level": auto_level, "auto_merge_reduction_count": auto_reduction,
 		"expected_collected_words": supplied_words * success, "natural_marked_groups": marked,
 		"free_play_chest": chest, "free_play_bonus": bonus, "free_play_total": total,
 		"one_treasure_net": with_treasure,
 		"one_treasure_every_three_sessions_net_average": (total * 2.0 + with_treasure) / 3.0,
-		"one_auto_merge_net": total - purchase_total("auto_merge", 1, Economy.MAX_UPGRADE_LEVEL),
+		"one_auto_merge_net": total - purchase_total("auto_merge", 1, auto_level, auto_reduction),
 		"three_treasure_net": expected_chest(marked, success, 3) + bonus - purchase_total("fragments", 3),
-		"three_auto_merge_net": total - purchase_total("auto_merge", 3, Economy.MAX_UPGRADE_LEVEL)
+		"three_auto_merge_net": total - purchase_total("auto_merge", 3, auto_level, auto_reduction)
 	}
 
 
@@ -116,10 +120,12 @@ static func build_report() -> Dictionary:
 	var upgraded_collections: Array[Dictionary] = []
 	var auto_merge_prices: Array[Dictionary] = []
 	for level in range(1, Jelly.MAX_MERGE_LEVEL + 1):
-		auto_merge_prices.append({"owned_level": level, "capacity": Economy.auto_merge_capacity(level),
-			"first_use": Economy.powerup_price("auto_merge", 0, level),
-			"second_use": Economy.powerup_price("auto_merge", 1, level),
-			"third_and_later": Economy.powerup_price("auto_merge", 2, level)})
+		var capacity: int = Economy.auto_merge_capacity(level)
+		auto_merge_prices.append({"owned_level": level, "capacity": capacity,
+			"model": "Full-capacity root/picture paths", "reduction_count": capacity,
+			"first_use": Economy.powerup_price("auto_merge", 0, level, capacity),
+			"second_use": Economy.powerup_price("auto_merge", 1, level, capacity),
+			"third_and_later": Economy.powerup_price("auto_merge", 2, level, capacity)})
 		var expected_bonus: float = Economy.jelly_bonus_chance(level) * Economy.jelly_bonus(level)
 		upgraded_collections.append({"merge_level": level,
 			"chance": Economy.jelly_bonus_chance(level), "winning_amount": Economy.jelly_bonus(level),
@@ -137,8 +143,10 @@ static func build_report() -> Dictionary:
 			"All injected Treasure fragments are collected: this overestimates paid returns.",
 			"Net budgets assume enough previously saved coins to buy the specified items.",
 			"Auto Merge uses the same completed workload; no automatic collection or bonus income is assumed.",
-			"Workload Auto Merge comparisons use owned Lv9; the live owned-level price ladder is reported separately.",
-			"Family merge totals multiply the successful-use unit price by forecast board spaces freed; a default example frees one space per purchase.",
+			"Workload Auto Merge comparisons model owned Lv9 using all 11 output slots with two-piece root/picture paths, freeing 11 board bodies per purchase.",
+			"The Auto Merge table models full-capacity root/picture paths: reduction_count equals capacity. Live partial or morphology paths can have different reductions and prices.",
+			"Both merge items cost 25, 50, then at most 75 coins per forecast board body removed. Owned level changes Auto Merge capacity, not the unit price.",
+			"Family merge totals use a separate shared goal counter; Auto Merge uses its own counter. A default purchase_total example frees one board body per purchase.",
 			"One modeled session is one round; fresh rounds reset repeat prices."
 		],
 		"scenarios": scenarios, "upgraded_collections": upgraded_collections,
