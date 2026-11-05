@@ -287,8 +287,15 @@ func _check_board_updates() -> void:
 	for id: int in arrivals:
 		if view._tiles.has(id) and view._tiles[id].is_visible_in_tree() and not view.game.is_settled(view.game.cell(id)):
 			airborne.append(id)
-	check(not airborne.is_empty() and airborne.all(func(id: int) -> bool: return view._ambient_budget.animated_ids().has(id)),
-		"Every airborne supply owner receives unbudgeted motion feedback")
+	check(not airborne.is_empty() and airborne.all(func(id: int) -> bool: return view._active_tile_ids.has(id))
+		and view._ambient_budget.animated_ids().size() <= AmbientBudget.IDLE_SLOTS,
+		"Every airborne supply body keeps a live physical pose while decorative motion stays bounded")
+	var airborne_positions: Dictionary = {}
+	for id: int in airborne:
+		airborne_positions[id] = view._tiles[id].position
+	_frames(view, 1)
+	check(airborne.any(func(id: int) -> bool: return view._tiles[id].position.y > Vector2(airborne_positions[id]).y),
+		"Budgeted supply owners continue their downward trajectory on the next presentation frame")
 	var settling_seconds: float = 0.0
 	for id: int in arrivals:
 		var cell: Dictionary = view.game.cell(id)
@@ -300,7 +307,89 @@ func _check_board_updates() -> void:
 			and view._tiles[id].get_rect().is_equal_approx(view._tile_rect(view.game.cell(id)))
 	check(settled,
 		"Spawn and settling finish at their exact reserved board rectangles")
+	_check_bulk_fill(view, data)
+	_check_bulk_collapse(view, data)
 	view.stop()
 	check(view._ambient_budget.animated_ids().is_empty() and view._tiles.is_empty(),
 		"Stopping a real game removes every old owner and budget membership")
 	view.free()
+
+
+func _check_bulk_fill(view, data) -> void:
+	Fixture.install(view, data, Model.INITIAL_SETTLED_TILES)
+	check(view.game.set_fill_mode(true), "The falling-budget regression enables the real Fill stream")
+	var maximum_airborne: int = 0
+	var bounded: bool = true
+	var poster_fell: bool = false
+	var previous_positions: Dictionary = {}
+	for frame in range(240):
+		_frames(view, 1)
+		var airborne: int = 0
+		var animated: Array[int] = view._ambient_budget.animated_ids()
+		bounded = bounded and animated.size() <= AmbientBudget.IDLE_SLOTS
+		for cell: Dictionary in view.game.cells:
+			var id: int = int(cell.id)
+			var tile = view._tiles[id]
+			if not view.game.is_settled(cell):
+				airborne += 1
+				if tile.jelly_kind == "picture" and id not in animated and tile.visible \
+					and previous_positions.has(id) and tile.position.y > Vector2(previous_positions[id]).y:
+					poster_fell = poster_fell or bool(tile._picture.texture.get_meta("word_art_frozen", false))
+			previous_positions[id] = tile.position
+		maximum_airborne = maxi(maximum_airborne, airborne)
+		if view.game.cells.size() == Model.CAPACITY and airborne == 0:
+			break
+	check(maximum_airborne > AmbientBudget.IDLE_SLOTS and bounded,
+		"Overlapping Fill waves never promote the entire airborne cohort into picture/effect animation")
+	check(poster_fell, "A noncohort Fill picture keeps its exact learning poster while its body visibly falls")
+	check(view.game.cells.size() == Model.CAPACITY and _grid_matches(view),
+		"The budgeted Fill stream still fills and settles every reserved board cell")
+
+
+func _check_bulk_collapse(view, data) -> void:
+	Fixture.install(view, data, 49)
+	for column in range(Model.COLUMNS):
+		view.game.cells.remove_at(0)
+	view.game._gravity_pending = true
+	var before: Dictionary = {}
+	for cell: Dictionary in view.game.cells:
+		before[int(cell.id)] = view._tiles[int(cell.id)].position
+	_frames(view, 2)
+	var falling: Array[int] = []
+	var moved: int = 0
+	var noncohort: int = -1
+	var animated: Array[int] = view._ambient_budget.animated_ids()
+	for cell: Dictionary in view.game.cells:
+		var id: int = int(cell.id)
+		if bool(cell.get("falling", false)) and not view.game.is_settled(cell):
+			falling.append(id)
+			if view._tiles[id].position.y > Vector2(before[id]).y:
+				moved += 1
+			if id not in animated and view._tiles[id].has_ambient_animation():
+				noncohort = id
+	check(falling.size() == 42 and moved == falling.size()
+		and animated.size() <= AmbientBudget.IDLE_SLOTS,
+		"Removing seven supports moves all 42 surviving bodies without granting unbounded decorative priority")
+	check(noncohort >= 0, "The collapse has a real picture outside the decorative cohort")
+	if noncohort >= 0:
+		view._set_ambient_hover(noncohort)
+		check(view._ambient_budget.animated_ids().has(noncohort),
+			"Hover immediately animates a particular falling picture")
+		view._set_ambient_hover(-1)
+		check(not view._ambient_budget.animated_ids().has(noncohort),
+			"Leaving a falling picture releases hover priority despite its ongoing physical motion")
+		view._tiles[noncohort].focus_entered.emit()
+		check(view._ambient_budget.animated_ids().has(noncohort),
+			"Native keyboard focus remains an immediate priority during collapse")
+		view._tiles[noncohort].focus_exited.emit()
+	view._set_completion_ids(falling, -1, 0.1)
+	check(view._hint_live_ids.size() <= view.ANIMATED_MATCH_HINT_LIMIT
+		and view._ambient_budget.animated_ids().size() <= AmbientBudget.IDLE_SLOTS + view.ANIMATED_MATCH_HINT_LIMIT,
+		"A hint covering many falling bodies animates only its limited teaching cohort")
+	var no_matches: Array[int] = []
+	view._set_completion_ids(no_matches, -1, 0.0)
+	check(view._ambient_budget.animated_ids().size() <= AmbientBudget.IDLE_SLOTS,
+		"Ending the hint restores the ordinary budget while collapse is still moving")
+	_frames(view, 60)
+	check(_grid_matches(view) and view.game.cells.size() == 42,
+		"All collapsed bodies finish on their original gravity destinations")

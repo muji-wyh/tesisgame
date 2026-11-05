@@ -137,6 +137,7 @@ var _tile_pose_keys: Dictionary = {}
 var _tile_pose_dirty: Dictionary = {}
 var _active_tile_ids: Dictionary = {}
 var _dynamic_tile_ids: Dictionary = {}
+var _interactive_tile_ids: Dictionary = {}
 var _ambient_priority_batch_open: bool = false
 var _palette_key: Array = []
 var _controls_key: Array = []
@@ -357,6 +358,7 @@ func stop() -> void:
 	_tile_pose_dirty.clear()
 	_active_tile_ids.clear()
 	_dynamic_tile_ids.clear()
+	_interactive_tile_ids.clear()
 	_ambient_priority_batch_open = false
 	_placement_cache_key.clear()
 	_drop_cache_key.clear()
@@ -624,7 +626,7 @@ func _set_ambient_hover(id: int) -> void:
 	var previous: int = _ambient_hover_id
 	_ambient_hover_id = id
 	if previous >= 0:
-		_ambient_budget.set_priority(previous, _active_tile_ids.has(previous))
+		_ambient_budget.set_priority(previous, _interactive_tile_ids.has(previous) or _hint_live_ids.has(previous))
 		_tile_pose_dirty[previous] = true
 	if id >= 0:
 		_ambient_budget.set_priority(id, true)
@@ -1046,7 +1048,7 @@ func _configure_tile(tile: Tile, cell: Dictionary, combined: bool = false) -> vo
 		# Classification precedes registration for a newly arriving body. Apply
 		# its already established priority before this pass selects its cohort.
 		var id: int = int(cell.id)
-		_ambient_budget.set_priority(id, _active_tile_ids.has(id) or _dynamic_tile_ids.has(id)
+		_ambient_budget.set_priority(id, _interactive_tile_ids.has(id)
 			or _hint_live_ids.has(id) or id == _ambient_hover_id)
 
 func _apply_palette(tile: WordTile, id: int) -> void:
@@ -1079,6 +1081,7 @@ func _begin_view_update() -> void:
 		game._campaign_level_rules, game.fall_speed_scale, game.boss.broken_remaining > WordModel.EPSILON]
 	var active: Dictionary = {}
 	var dynamic: Dictionary = {}
+	var interactive_ids: Dictionary = {}
 	_view_geometry_stable = game.fusions.is_empty() and game._drag_gravity_delays.is_empty()
 	for fusion: Dictionary in game.fusions:
 		var result: Dictionary = fusion.get("result", {})
@@ -1114,21 +1117,26 @@ func _begin_view_update() -> void:
 			cell.get("word", {}).get("id", ""), cell.get("image_word", {}).get("id", ""),
 			bool(cell.get("lifted", false)), _view_fusing.has(id)])
 		var interactive: bool = id == _source or id == _target or id == _keyboard_source \
-			or _queued_collections.has(id) or powerup_ids.has(id) \
+			or _queued_collections.has(id) or powerup_ids.has(id) or _snapbacks.has(id) \
 			or id == int(_rejection.get("a", -1)) or id == int(_rejection.get("b", -1))
 		var moving: bool = not settled or _snapbacks.has(id) or _reflow.has(id)
 		var hinting: bool = id in _hint_matching_ids and (id in _hint_animated_ids \
 			or id == _ambient_hover_id or (_tiles.has(id) and _tiles[id].has_focus()))
 		if moving or interactive:
 			dynamic[id] = true
+		if interactive:
+			interactive_ids[id] = true
 		if moving or interactive or hinting:
 			active[id] = true
-		_ambient_budget.set_priority(id, moving or interactive or hinting or id == _ambient_hover_id)
+		# Falling bodies keep their physical poses live without promoting every
+		# picture sheet and merged accent into unbounded decorative animation.
+		_ambient_budget.set_priority(id, interactive or hinting or id == _ambient_hover_id)
 	for id: int in _active_tile_ids:
 		if not active.has(id):
 			_tile_pose_dirty[id] = true
 	_active_tile_ids = active
 	_dynamic_tile_ids = dynamic
+	_interactive_tile_ids = interactive_ids
 	if ids != _view_live_ids or _tiles.size() != ids.size():
 		_view_topology_dirty = true
 		_view_live_ids = ids
@@ -1451,7 +1459,6 @@ func _sync_positions() -> void:
 			_reflow[id] = {"from": tile.position, "started": 0.0 if bool(cell.get("falling", false)) else float(cell.age), "falling": bool(cell.get("falling", false))}
 			_active_tile_ids[id] = true
 			_dynamic_tile_ids[id] = true
-			_ambient_budget.set_priority(id, true)
 			live = true
 			tile.set_idle_cached(false)
 			if bool(cell.get("falling", false)):
@@ -2103,7 +2110,7 @@ func _set_completion_ids(ids: Array[int], source: int, elapsed: float) -> void:
 			_active_tile_ids[id] = true
 		elif not _dynamic_tile_ids.has(id):
 			_active_tile_ids.erase(id)
-		_ambient_budget.set_priority(id, _dynamic_tile_ids.has(id) or animated or id == _ambient_hover_id)
+		_ambient_budget.set_priority(id, _interactive_tile_ids.has(id) or animated or id == _ambient_hover_id)
 	_ambient_budget.end_priority_update()
 	_apply_completion_hint_poses(elapsed)
 
@@ -2125,7 +2132,7 @@ func _select_hint_cohort(ids: Array[int], source: int) -> void:
 	_hint_animated_ids.assign(ordered.slice(0, mini(ANIMATED_MATCH_HINT_LIMIT, ordered.size())))
 
 func _hint_should_animate(id: int) -> bool:
-	return id in _hint_animated_ids or _dynamic_tile_ids.has(id) or id == _source \
+	return id in _hint_animated_ids or _interactive_tile_ids.has(id) or id == _source \
 		or id == _target or id == _keyboard_source or id == _ambient_hover_id \
 		or (_tiles.has(id) and _tiles[id].has_focus())
 
@@ -2134,7 +2141,7 @@ func _apply_completion_hint_poses(elapsed: float) -> void:
 	for id: int in _hint_animated_ids:
 		if id in _hint_matching_ids and _tiles.has(id):
 			live[id] = true
-	for id: int in _dynamic_tile_ids:
+	for id: int in _interactive_tile_ids:
 		if id in _hint_matching_ids and _tiles.has(id):
 			live[id] = true
 	var focused: Control = get_viewport().gui_get_focus_owner() if is_inside_tree() else null
@@ -2154,7 +2161,7 @@ func _apply_completion_hint_poses(elapsed: float) -> void:
 			_tile_pose_dirty[id] = true
 			if not _dynamic_tile_ids.has(id):
 				_active_tile_ids.erase(id)
-			_ambient_budget.set_priority(id, _dynamic_tile_ids.has(id) or id == _ambient_hover_id)
+			_ambient_budget.set_priority(id, _interactive_tile_ids.has(id) or id == _ambient_hover_id)
 	for id: int in live:
 		_tiles[id].set_completion_hint(true, elapsed, reduced_motion, true)
 		_active_tile_ids[id] = true
