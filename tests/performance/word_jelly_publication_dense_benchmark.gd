@@ -121,12 +121,34 @@ func _run() -> void:
 	var samples: int = int(options.get("samples", 80))
 	var warmup: int = int(options.get("warmup", 20))
 	var output_path: String = str(options.get("output", "user://word-jelly-publication-dense-cpu-v1.json"))
+	var reference_path: String = str(options.get("reference-cache", ""))
+	var reference_script: Script
+	var reference_label: String = "Fragmented native reference"
+	var reference_key: String = "fragmented_reference"
 	if samples <= 0 or warmup < 0:
 		_fail("Samples must be positive and warmup cannot be negative.")
 		return
 	if FileAccess.file_exists(output_path):
 		_fail("Refusing to overwrite existing output: " + output_path)
 		return
+	if not reference_path.is_empty():
+		if not reference_path.begins_with("res://") or reference_path.contains("..") \
+			or reference_path.contains("\\") or reference_path.get_extension() != "gd":
+			_fail("The reference cache must be a project-local res:// GDScript path.")
+			return
+		reference_path = ProjectSettings.localize_path(ProjectSettings.globalize_path(reference_path))
+		if not ResourceLoader.exists(reference_path, "Script"):
+			_fail("The reference cache script is unavailable: " + reference_path)
+			return
+		reference_script = load(reference_path) as Script
+		if reference_script == null:
+			_fail("The reference cache script could not be loaded: " + reference_path)
+			return
+		reference_label = "Reference cache: " + reference_path
+		reference_key = "reference_cache"
+	var reference_source: String = reference_path if reference_script != null else "res://scripts/jelly_publication_json.gd"
+	var reference_hash: String = _source_hash(reference_source)
+	print("Dense publication reference: %s; SHA-256 %s" % [reference_label, reference_hash])
 	var data := Data.new()
 	if not data.load_all():
 		_fail("Production GameData failed to load.")
@@ -165,6 +187,14 @@ func _run() -> void:
 	for scenario: String in ["age-only", "falling-pose", "persistent-nested-metadata"]:
 		var state: Dictionary = fixture.duplicate(true)
 		var production := ProductionCache.new()
+		var reference_cache: RefCounted
+		if reference_script != null:
+			var instance: Variant = reference_script.new()
+			if not instance is RefCounted or not instance.has_method("encode_base") or not instance.has_method("encode_host"):
+				view.free()
+				_fail("The reference script must provide a RefCounted base and host encoder.")
+				return
+			reference_cache = instance
 		var times: Array = [[], []]
 		var sampled_min_characters: int = 9223372036854775807
 		var sampled_max_characters: int = 0
@@ -178,8 +208,12 @@ func _run() -> void:
 				var encoded: Dictionary
 				var hosted: String
 				if kind == 0:
-					encoded = Publication.encode_base(state)
-					hosted = Publication.encode_host(state, encoded, overrides)
+					if reference_cache != null:
+						encoded = reference_cache.encode_base(state)
+						hosted = reference_cache.encode_host(state, encoded, overrides)
+					else:
+						encoded = Publication.encode_base(state)
+						hosted = Publication.encode_host(state, encoded, overrides)
 				else:
 					encoded = production.encode_base(state)
 					hosted = production.encode_host(state, encoded, overrides)
@@ -201,19 +235,22 @@ func _run() -> void:
 				sampled_max_characters = maxi(sampled_max_characters, native_base.length())
 		var row: Dictionary = {"scenario": scenario, "samples": samples, "warmup": warmup,
 			"snapshot_min_characters": sampled_min_characters, "snapshot_max_characters": sampled_max_characters,
-			"native_byte_parity": true, "fragmented_reference": _statistics(times[0]),
+			"native_byte_parity": true,
 			"production_encoder": _statistics(times[1]),
-			"samples_us": {"fragmented_reference": times[0], "production_encoder": times[1]}}
+			"samples_us": {"production_encoder": times[1]}}
+		row[reference_key] = _statistics(times[0])
+		row.samples_us[reference_key] = times[0]
 		rows.append(row)
-		print("Dense publication CPU: %s, reference %.3f ms, production %.3f ms" % [scenario,
-			float(row.fragmented_reference.mean_us) / 1000.0, float(row.production_encoder.mean_us) / 1000.0])
+		print("Dense publication CPU: %s, %s %.3f ms, production %.3f ms" % [scenario, reference_label,
+			float(row[reference_key].mean_us) / 1000.0, float(row.production_encoder.mean_us) / 1000.0])
 	var report: Dictionary = {"protocol": "word-jelly-publication-dense-native-cpu-v1", "engine": Engine.get_version_info(),
-		"encoder_sha256": {"reference": _source_hash("res://scripts/jelly_publication_json.gd"),
+		"encoder_sha256": {"reference": reference_hash,
 			"production": _source_hash("res://scripts/word_jelly_publication_cache.gd")},
+		"reference_label": reference_label, "reference_source": reference_source,
 		"source_tiles": Model.CAPACITY, "viewport": [1366, 768], "seed": SEED,
 		"cohort": COHORT, "merge_levels": [1, 2, 3, 4, 5, 6, 7, 8, 9],
 		"fixture_snapshot_characters": fixture_characters, "native_byte_parity": true,
-		"scope": "Headless native CPU encoding only: complete base and shallow host JSON for a real 56-body mixed-merged Word Jelly model/view snapshot using nine reviewed production Age 3 vocabulary entries and all nine merge levels. Snapshot construction, mutations, native parity comparisons and fixture setup are outside timing; reference and production call order alternates. Excludes rendering, bridge, signals, Auto Collect callbacks, audio and physical FPS. Compares the actual production encoder at measurement time with the native fragmented reference; no isolated experiment is measured.",
+		"scope": "Headless native CPU encoding only: complete base and shallow host JSON for a real 56-body mixed-merged Word Jelly model/view snapshot using nine reviewed production Age 3 vocabulary entries and all nine merge levels. Snapshot construction, mutations, native parity comparisons and fixture setup are outside timing; reference and production call order alternates in the same process, with one independent encoder instance per scenario. Excludes rendering, bridge, signals, Auto Collect callbacks, audio and physical FPS. Compares the actual production encoder at measurement time with " + reference_label + ".",
 		"rows": rows}
 	var directory_error: Error = DirAccess.make_dir_recursive_absolute(ProjectSettings.globalize_path(output_path).get_base_dir())
 	if directory_error != OK:

@@ -55,8 +55,7 @@ func _encode_records(name: String, records: Array) -> String:
 	var members := PackedStringArray()
 	for index in range(records.size()):
 		var record: Variant = records[index]
-		if not record is Dictionary or not record.has("age") or not record.has("id") \
-			or not Publication._has_string_like_keys(record):
+		if not record is Dictionary or not record.has("age") or not record.has("id"):
 			members.append(JSON.stringify(record))
 			continue
 		var id: Variant = record.id
@@ -64,6 +63,12 @@ func _encode_records(name: String, records: Array) -> String:
 		body.erase("age")
 		var entry: Dictionary = previous.get(id, {})
 		if entry.is_empty() or entry.body != body:
+			# Cache entries contain only validated string-like keys. An unchanged
+			# body retains that schema, so its native equality check also avoids
+			# another per-field GDScript scan. Unsupported records stay uncached.
+			if not Publication._has_string_like_keys(record):
+				members.append(JSON.stringify(record))
+				continue
 			var left: Dictionary = {}
 			var right: Dictionary = {}
 			for key: Variant in body:

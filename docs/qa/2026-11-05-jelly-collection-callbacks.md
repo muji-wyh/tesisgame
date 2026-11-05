@@ -1,5 +1,7 @@
 # Jelly collection callback performance
 
+The subsequent [reward preparation and publication follow-up](2026-11-05-jelly-reward-preparation.md) records the next optimization and its separate paired measurements.
+
 This follow-up targets game-page full-board Auto Collect after release `aa6c1223`. The physical acceptance target remains PC Chrome at 1366 x 768, 60 FPS during idle, drag, merge and collection. The available Hyper-V software adapters cannot establish that acceptance result; the user will test the deployed game on a physical PC.
 
 ## Measured cause and implementation

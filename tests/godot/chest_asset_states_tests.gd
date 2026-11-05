@@ -50,6 +50,7 @@ func _run() -> void:
 			"Every active state scene uses a retained Atelier identity rather than an old chest source")
 		_check_model(row)
 	_check_reconfiguration()
+	_check_catalog_cache()
 	if OS.get_cmdline_user_args().has("--capture") and failures == 0:
 		await _capture_states()
 	print("Chest asset states: %d checks, %d failures" % [checks, failures])
@@ -72,6 +73,7 @@ func _check_model(row: Dictionary) -> void:
 	check(bool(initial.configured), id + " configures without missing resources: " + str(initial.error))
 	check(str(initial.id) == id, id + " scene retains its exact catalog identity")
 	check(str(initial.model) == str(row.model), id + " retains the actual source GLB")
+	check(player.source_model_path() == str(row.model), id + " exposes its source path without traversing render bounds")
 	if not bool(initial.configured):
 		player.free()
 		return
@@ -146,7 +148,72 @@ func _check_reconfiguration() -> void:
 	check(not player.configure("missing-chest"), "Unknown asset fails without substituting a different chest")
 	check(player.get_child_count() == 0, "Failed reconfiguration clears stale source models and effects")
 	check(not bool(player.debug_state().configured), "Failed reconfiguration reports unavailable state")
+	check(player.source_model_path().is_empty(), "Failed reconfiguration clears the direct source path")
 	player.free()
+
+
+func _check_catalog_cache() -> void:
+	if _variants.is_empty():
+		return
+	var first: Dictionary = _variants[0].duplicate(true)
+	var id: String = str(first.id)
+	first["cache_probe"] = {"marker": "original", "nested": [{"marker": "original"}]}
+	var later: Dictionary = first.duplicate(true)
+	later.cache_probe.marker = "later-duplicate"
+	var original_text: String = JSON.stringify({"variants": [17, first, later]})
+	var original: Variant = StatePlayer._entry_for_catalog_text(original_text, id)
+	check(original is Dictionary and original.get("cache_probe", {}).get("marker") == "original",
+		"An exact-text catalog cache preserves the first matching dictionary variant")
+	if not original is Dictionary:
+		return
+	original.cache_probe.nested[0].marker = "mutated-copy"
+	original.model = "mutated-copy"
+	var repeated: Variant = StatePlayer._entry_for_catalog_text(original_text, id)
+	check(repeated is Dictionary and repeated.get("model") == first.model \
+		and repeated.get("cache_probe", {}).get("nested", [])[0].marker == "original",
+		"Repeated source text returns detached nested entry data rather than shared cached dictionaries")
+	var changed: Dictionary = first.duplicate(true)
+	changed.cache_probe.marker = "changed-source"
+	var changed_text: String = JSON.stringify({"variants": [changed]})
+	var updated: Variant = StatePlayer._entry_for_catalog_text(changed_text, id)
+	check(updated is Dictionary and updated.get("cache_probe", {}).get("marker") == "changed-source",
+		"Changed source text replaces the previous parsed catalog immediately")
+	for invalid_text: String in ["{", "null", "[]", "{\"variants\":{}}"]:
+		check(StatePlayer._entry_for_catalog_text(invalid_text, id) == null,
+			"Malformed or structurally invalid current text never falls back to the last valid catalog")
+		var restored: Variant = StatePlayer._entry_for_catalog_text(original_text, id)
+		check(restored is Dictionary and restored.get("cache_probe", {}).get("marker") == "original" \
+			and restored.get("model") == first.model,
+			"Restored valid source text recovers the original selected recipe after invalid text")
+	var non_model: Dictionary = first.duplicate(true)
+	non_model.asset_type = "sprite"
+	var first_match: Variant = StatePlayer._entry_for_catalog_text(JSON.stringify({"variants": [non_model, first]}), id)
+	check(first_match is Dictionary and first_match.get("asset_type") == "sprite",
+		"A first matching non-model variant remains selected for the existing unknown-model failure")
+	var empty: Variant = StatePlayer._entry_for_catalog_text("{\"variants\":[]}", id)
+	check(empty is Dictionary and empty.is_empty(),
+		"A valid empty variants array remains an unknown-asset result rather than an invalid catalog")
+	var missing: Variant = StatePlayer._entry_for_catalog_text(original_text, "missing-cache-entry")
+	check(missing is Dictionary and missing.is_empty(), "An unknown cached ID never substitutes another chest")
+	var owner := StatePlayer.new()
+	var sibling := StatePlayer.new()
+	root.add_child(owner)
+	root.add_child(sibling)
+	var ready: bool = owner.configure(id) and sibling.configure(id)
+	check(ready, "Real configure rereads the production catalog after synthetic cached source changes")
+	if ready:
+		var expected_model: String = sibling.source_model_path()
+		owner._entry.magic.textures.glow = "instance-only-mutation"
+		owner._entry["model"] = "instance-only-model"
+		check(sibling.source_model_path() == expected_model \
+			and sibling._entry.magic.textures.glow == first.magic.textures.glow,
+			"Each configured instance owns both top-level source identity and nested content entries")
+		owner._clear()
+		check(owner.source_model_path().is_empty() and sibling.source_model_path() == expected_model \
+			and sibling.configure(id) and sibling._entry.magic.textures.glow == first.magic.textures.glow,
+			"Clearing a mutated instance cannot alter another instance or the privately cached catalog")
+	owner.free()
+	sibling.free()
 
 
 func _capture_states() -> void:

@@ -1584,8 +1584,8 @@
     },
     {
       "path": "scripts/chest_asset_states.gd",
-      "sha256": "ea187459731b1a98b54833424f2c512f910f55cf0a283f0886076564c24e8896",
-      "text_sha256": "ea187459731b1a98b54833424f2c512f910f55cf0a283f0886076564c24e8896"
+      "sha256": "a605d73f33464c12b2881c5ee1ff0dec0316bddf5d9ece5447ebab2924c0b5bb",
+      "text_sha256": "a605d73f33464c12b2881c5ee1ff0dec0316bddf5d9ece5447ebab2924c0b5bb"
     },
     {
       "path": "scripts/chest_feel.gd",
@@ -1594,8 +1594,8 @@
     },
     {
       "path": "scripts/chest_model_view.gd",
-      "sha256": "35d40975e7975145ba13ae04fd2b7e5642c19e06b4f8e9acc2476cc17841087e",
-      "text_sha256": "0d107c1a32d7b4cf7f15a28fe1f6e7909e4198d4705a9440bc72636681867c74"
+      "sha256": "4fbcdf68e3969438ea28a27055633e5afd51c883a0fa41b54c1faaa4c45a5f90",
+      "text_sha256": "894d53331f2855f3e8c80ce1793f5b5ee53b50456d1555497303fc68ed991b86"
     },
     {
       "path": "scripts/chest_opening_effect.gd",

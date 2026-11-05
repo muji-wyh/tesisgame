@@ -49,6 +49,7 @@ func _run() -> void:
 	view.clear()
 	view.free()
 	_check_closed_models()
+	await _check_closed_preparation()
 	_check_owner_lifecycle()
 	print("Jelly chest celebration: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -649,6 +650,82 @@ func _check_original_opening(models) -> void:
 		and model.design_bounds() == framing,
 		"Normal continuous opening can resume exactly after a closed-turn sample")
 	model.free()
+
+
+func _check_closed_preparation() -> void:
+	var catalog: Dictionary = RewardModel.TierCatalog.manifest()
+	for tier: int in [1, 4, 10, 28, 99]:
+		var style: Dictionary = RewardModel.TierCatalog.style(tier, catalog)
+		style["camera_margin"] = 1.12
+		style["max_resolution"] = 512
+		var reference := ChestModel.new()
+		var closed := ChestModel.new()
+		root.add_child(reference)
+		root.add_child(closed)
+		var ready: bool = reference.configure(style) and reference.frame_closed_turn(0.24) \
+			and closed.configure_closed_turn(style)
+		check(ready, "Tier %d prepares both genuine closed-model paths" % tier)
+		if not ready:
+			reference.free()
+			closed.free()
+			continue
+		check(_same_closed_framing(reference, closed),
+			"Tier %d skips only the discarded opening/content envelope and preserves exact reward framing" % tier)
+		var reference_state: Dictionary = reference.snapshot()
+		var closed_state: Dictionary = closed.snapshot()
+		reference_state.erase("content_box")
+		closed_state.erase("content_box")
+		check(reference_state == closed_state,
+			"Tier %d preserves its source identity, articulated parts, content state, and render settings" % tier)
+		var pose_parity: bool = true
+		for pose: Vector2 in [Vector2.ZERO, Vector2(PI * 0.5, 0.24), Vector2(PI, -0.24), Vector2(TAU, 0.0)]:
+			reference.set_closed_turn(pose.x, pose.y)
+			closed.set_closed_turn(pose.x, pose.y)
+			pose_parity = pose_parity and reference.snapshot().parts == closed.snapshot().parts \
+				and reference._rig.transform == closed._rig.transform \
+				and reference.closed_turn_bounds() == closed.closed_turn_bounds() \
+				and reference.cavity_point() == closed.cavity_point() \
+				and reference.seam_points() == closed.seam_points() \
+				and _same_closed_framing(reference, closed)
+			if OS.get_cmdline_user_args().has("--capture-preparation") and DisplayServer.get_name() != "headless":
+				reference.set_render_active(true)
+				closed.set_render_active(true)
+				for frame in range(4):
+					await process_frame
+				await RenderingServer.frame_post_draw
+				var expected: Image = reference.get_texture().get_image()
+				var actual: Image = closed.get_texture().get_image()
+				check(expected.get_size() == actual.get_size() and expected.get_data() == actual.get_data(),
+					"Tier %d closed preparation preserves exact rendered pixels at yaw %.3f/pitch %.3f" % [tier, pose.x, pose.y])
+		check(pose_parity, "Tier %d preserves exact yaw/pitch poses, projected bounds, seam, and cavity anchors" % tier)
+		reference.set_pose(0.78, 0.3, 0.2, 0.45, 0.9, Color.YELLOW, false)
+		closed.set_pose(0.78, 0.3, 0.2, 0.45, 0.9, Color.YELLOW, false)
+		check(reference.snapshot().parts == closed.snapshot().parts \
+			and reference._rig.transform == closed._rig.transform \
+			and reference._interior_light.light_energy == closed._interior_light.light_energy,
+			"Tier %d retains genuine opening and lighting mechanisms after closed-only preparation" % tier)
+		var previous_model = closed._model
+		var previous_camera: Transform3D = closed._camera.transform
+		var previous_bounds: Rect2 = closed.design_bounds()
+		for invalid: float in [NAN, INF, -0.01, PI * 0.25 + 0.01]:
+			check(not closed.configure_closed_turn(style, invalid) and closed._model == previous_model \
+				and closed._camera.transform == previous_camera and closed.design_bounds() == previous_bounds \
+				and closed._available,
+				"Invalid closed preparation pitch preserves tier %d's current model and framing" % tier)
+		for pitch_limit: float in [0.0, PI * 0.25]:
+			check(reference.frame_closed_turn(pitch_limit) and closed.configure_closed_turn(style, pitch_limit) \
+				and _same_closed_framing(reference, closed),
+				"Tier %d preserves reference framing at the closed pitch contract boundaries" % tier)
+		reference.free()
+		closed.free()
+
+
+func _same_closed_framing(reference, closed) -> bool:
+	return reference.closed_box() == closed.closed_box() and reference._motion_box == closed._motion_box \
+		and reference._body_box == closed._body_box and reference._cavity == closed._cavity \
+		and reference._seam == closed._seam and reference._camera.transform == closed._camera.transform \
+		and reference._camera.size == closed._camera.size and reference._camera.far == closed._camera.far \
+		and reference.closed_bounds() == closed.closed_bounds() and reference.design_bounds() == closed.design_bounds()
 
 
 func _advance_owner(view, seconds: float) -> void:

@@ -138,6 +138,17 @@ func _add_light(label: String, angles: Vector3, color: Color, energy: float, sha
 
 
 func configure(style: Dictionary) -> bool:
+	return _configure_model(style, false, 0.24)
+
+
+func configure_closed_turn(style: Dictionary, pitch_limit: float = 0.24) -> bool:
+	if not is_finite(pitch_limit) or pitch_limit < 0.0 or pitch_limit > PI * 0.25:
+		last_error = "Invalid closed chest pitch envelope"
+		return false
+	return _configure_model(style, true, pitch_limit)
+
+
+func _configure_model(style: Dictionary, closed_turn: bool, pitch_limit: float) -> bool:
 	_clear_model()
 	var path: String = str(style.get("model", ""))
 	if not path.begins_with("res://"):
@@ -169,7 +180,7 @@ func configure(style: Dictionary) -> bool:
 		style.get("base_source_id", path.get_file().get_basename())))
 	if not _composer.configure(state_id):
 		return _unavailable("Acquired chest states are unavailable: " + _composer.last_error)
-	var state_source: String = str(_composer.debug_state().get("model", ""))
+	var state_source: String = _composer.source_model_path()
 	if not state_source.begins_with("res://"):
 		state_source = "res://" + state_source
 	_model = _composer.source_model()
@@ -233,26 +244,33 @@ func configure(style: Dictionary) -> bool:
 	_closed_box = _read_box(style.get("closed_bounds_3d", {}))
 	if _tier > 0 or not _box_valid(_closed_box):
 		_closed_box = _measure_model()
-	_motion_box = _read_box(style.get("motion_bounds_3d", {}))
-	if _box_valid(_motion_box) and bool(style.get("normalize_model", false)):
-		_motion_box = source_frame * _motion_box
-	_motion_box = _motion_box.merge(_closed_box) if _box_valid(_motion_box) else _closed_box
-	for index in range(13):
-		_pose_mechanism(float(index) / 12.0, 0.0, 0.0, 0.0, false)
-		_motion_box = _motion_box.merge(_measure_model())
-	# Body and cavity measurements use source panels only. The camera also
-	# reserves the actual treasure and full authored magic drift envelope.
-	_composer.sample_contents("treasure", 0.0, 1.0, true)
-	_content_box = _relative_transform(_composer) * _composer.content_bounds()
-	_composer.sample_contents("magic", 0.0, 1.0, true)
-	var magic_box: AABB = _relative_transform(_composer) * _composer.content_bounds(true)
-	_content_box = _content_box.merge(magic_box) if _box_valid(_content_box) else magic_box
-	if _box_valid(_content_box):
-		_motion_box = _motion_box.merge(_content_box)
-	_composer.sample_contents("closed", 0.0, 0.0, false, 0.0)
+	if closed_turn:
+		if not _box_valid(_closed_box):
+			return _unavailable("Acquired chest has invalid measured closed bounds: " + path)
+		# Reward surfaces keep the real articulated model, but never need the
+		# opening/content envelope that frame_closed_turn would replace.
+		_motion_box = _turn_envelope(_closed_box, pitch_limit)
+	else:
+		_motion_box = _read_box(style.get("motion_bounds_3d", {}))
+		if _box_valid(_motion_box) and bool(style.get("normalize_model", false)):
+			_motion_box = source_frame * _motion_box
+		_motion_box = _motion_box.merge(_closed_box) if _box_valid(_motion_box) else _closed_box
+		for index in range(13):
+			_pose_mechanism(float(index) / 12.0, 0.0, 0.0, 0.0, false)
+			_motion_box = _motion_box.merge(_measure_model())
+		# Body and cavity measurements use source panels only. The camera also
+		# reserves the actual treasure and full authored magic drift envelope.
+		_composer.sample_contents("treasure", 0.0, 1.0, true)
+		_content_box = _relative_transform(_composer) * _composer.content_bounds()
+		_composer.sample_contents("magic", 0.0, 1.0, true)
+		var magic_box: AABB = _relative_transform(_composer) * _composer.content_bounds(true)
+		_content_box = _content_box.merge(magic_box) if _box_valid(_content_box) else magic_box
+		if _box_valid(_content_box):
+			_motion_box = _motion_box.merge(_content_box)
+		_composer.sample_contents("closed", 0.0, 0.0, false, 0.0)
+		if _tier > 0:
+			_motion_box = _motion_box.merge(_turn_envelope(_closed_box, 0.24))
 	_pose_mechanism(0.0, 0.0, 0.0, 0.0, false)
-	if _tier > 0:
-		_motion_box = _motion_box.merge(_turn_envelope(_closed_box, 0.24))
 	if not _box_valid(_motion_box):
 		return _unavailable("Acquired chest has invalid measured motion bounds: " + path)
 	# This one envelope stays fixed through tension, release, and the open pose.

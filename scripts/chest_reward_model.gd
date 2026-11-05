@@ -40,7 +40,7 @@ func prepare(tier: int) -> void:
 		_release(_order[0])
 	var view := ModelView.new()
 	add_child(view)
-	if not view.configure(style):
+	if not view.configure_closed_turn(style, 0.24):
 		var reason: String = view.last_error
 		remove_child(view)
 		view.free()
@@ -50,8 +50,7 @@ func prepare(tier: int) -> void:
 	# Only this private surface receives the closed-flight camera envelope.
 	var box: AABB = view.closed_box()
 	if not box.position.is_finite() or not box.size.is_finite() \
-		or box.size.x <= 0.0 or box.size.y <= 0.0 or box.size.z <= 0.0 \
-		or not view.frame_closed_turn(0.24):
+		or box.size.x <= 0.0 or box.size.y <= 0.0 or box.size.z <= 0.0:
 		remove_child(view)
 		view.free()
 		_report_error("bounds-%d" % tier, "Reward chest tier %d has no finite measured turn envelope" % tier)

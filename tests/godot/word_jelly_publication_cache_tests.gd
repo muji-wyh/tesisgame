@@ -6,6 +6,54 @@ const Reference = preload("res://scripts/jelly_publication_json.gd")
 func _initialize() -> void:
 	_run.call_deferred()
 
+
+func _check_native_pair(cache: Cache, state: Dictionary, overlay: Dictionary) -> int:
+	var expected: Dictionary = Reference.encode_base(state)
+	var encoded: Dictionary = cache.encode_base(state)
+	assert(encoded.serialized == expected.serialized)
+	assert(cache.encode_host(state, encoded, overlay) == Reference.encode_host(state, expected, overlay))
+	return 2
+
+
+func _check_record_key_transitions() -> int:
+	var checks: int = 0
+	var overlay: Dictionary = {"visible": false, "round_id": "record-key-transitions"}
+	for unsupported: Variant in [7, NodePath("word"), Vector2(1, 2), true]:
+		var cache := Cache.new()
+		var record: Dictionary = {"id": 9, "age": 0.0, "7": "same-size schema change",
+			"word": {"id": "cat", "meaning": "a small cat"}}
+		var state: Dictionary = {"cells": [record], "tiles": []}
+		for frame in range(2):
+			record.age += 0.1
+			checks += _check_native_pair(cache, state, overlay)
+		assert(cache._records.cells.has(9))
+		checks += 1
+		# Keep the field count unchanged while replacing an accepted key type.
+		# The unsupported record must use native fallback on every subsequent call.
+		record.erase("7")
+		record[unsupported] = "same-size schema change"
+		for frame in range(3):
+			record.age += 0.1
+			checks += _check_native_pair(cache, state, overlay)
+			assert(not cache._records.cells.has(9))
+			checks += 1
+		record.erase(unsupported)
+		record[StringName("7")] = "same-size schema change"
+		checks += _check_native_pair(cache, state, overlay)
+		assert(cache._records.cells.has(9))
+		checks += 1
+		# StringName and String aliases remain valid on the unchanged-body path.
+		var word: Dictionary = record.word
+		record.erase("word")
+		record[StringName("word")] = word
+		record.age += 0.1
+		checks += _check_native_pair(cache, state, overlay)
+		word.meaning = "a changed meaning with the same vocabulary identity"
+		record[StringName("quotes\"and}braces")] = "line one\nline two"
+		checks += _check_native_pair(cache, state, overlay)
+	return checks
+
+
 func _run() -> void:
 	var cache := Cache.new()
 	var state: Dictionary = {"visible": true, "phase": "playing",
@@ -68,5 +116,6 @@ func _run() -> void:
 	assert(not cache._prefer_native_records(dense.cells) and not cache._prefer_native_records(dense.tiles))
 	assert(not cache._prefer_native_records(dense.cells.slice(0, 7)))
 	checks += 2
+	checks += _check_record_key_transitions()
 	print("Word Jelly publication cache: %d checks, 0 failures" % checks)
 	quit()

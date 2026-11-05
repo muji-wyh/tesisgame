@@ -4,6 +4,10 @@ extends Node3D
 const CATALOG_PATH: String = "res://assets/chests/catalog/chest-states.json"
 const STATES: Array[String] = ["closed", "open", "treasure", "magic"]
 
+static var _cached_catalog_text: String = ""
+static var _cached_catalog: Dictionary = {}
+static var _has_cached_catalog: bool = false
+
 @export var asset_id: String = ""
 @export_enum("closed", "open", "treasure", "magic") var initial_state: String = "closed"
 @export var reduced_motion: bool = false
@@ -39,13 +43,12 @@ func configure(id: String) -> bool:
 	asset_id = id
 	if not FileAccess.file_exists(CATALOG_PATH):
 		return _fail("Chest state catalog is missing")
-	var catalog: Variant = JSON.parse_string(FileAccess.get_file_as_string(CATALOG_PATH))
-	if not catalog is Dictionary or not catalog.get("variants") is Array:
+	# Read every time so edited, unreadable, or removed catalogs cannot reuse
+	# stale recipes. Only parsing is shared, for one exact current source text.
+	var selected: Variant = _entry_for_catalog_text(FileAccess.get_file_as_string(CATALOG_PATH), id)
+	if not selected is Dictionary:
 		return _fail("Chest state catalog is invalid")
-	for candidate: Variant in catalog.variants:
-		if candidate is Dictionary and str(candidate.get("id", "")) == id:
-			_entry = candidate.duplicate(true)
-			break
+	_entry = selected
 	if _entry.is_empty() or str(_entry.get("asset_type", "")) != "model":
 		return _fail("Unknown 3D chest asset: " + id)
 	_source = _instantiate_model(str(_entry.get("model", "")))
@@ -100,6 +103,25 @@ func configure(id: String) -> bool:
 	return set_state("closed")
 
 
+static func _entry_for_catalog_text(source_text: String, id: String) -> Variant:
+	if not _has_cached_catalog or source_text != _cached_catalog_text:
+		_cached_catalog_text = source_text
+		_cached_catalog = {}
+		_has_cached_catalog = true
+		var parser := JSON.new()
+		if parser.parse(source_text) == OK:
+			var parsed: Variant = parser.data
+			if parsed is Dictionary and parsed.get("variants") is Array:
+				_cached_catalog = parsed
+	if _cached_catalog.is_empty():
+		return null
+	for candidate: Variant in _cached_catalog.variants:
+		if candidate is Dictionary and str(candidate.get("id", "")) == id:
+			# Every instance owns all mutable recipe data, including nested arrays.
+			return candidate.duplicate(true)
+	return {}
+
+
 func set_state(value: String) -> bool:
 	if not value in STATES or _source == null or _entry.is_empty():
 		return false
@@ -137,6 +159,10 @@ func sample_contents(value: String, time: float, openness: float,
 
 func source_model() -> Node3D:
 	return _source
+
+
+func source_model_path() -> String:
+	return str(_entry.get("model", ""))
 
 
 func is_embedded_content(node: Node) -> bool:
