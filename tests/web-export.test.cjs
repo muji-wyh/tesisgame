@@ -1164,11 +1164,146 @@ test('the generated startup patch rejects missing, duplicate, and changed templa
   const { patchWebEngine } = require('../tools/patch-web-engine.cjs');
   assert.throws(() => patchWebEngine('unrecognized engine'), /Godot Web startup patch/);
   assert.throws(() => patchWebEngine(startupFixture.repeat(2)), /Godot Web startup patch/);
-  for (const marker of ['Module["instantiateWasm"](info', "'instantiateWasm': function", 'function doInit(promise)', 'getDB:(name,callback)', 'function getTrackedResponse(response, load_status)', '_restart(){if(this._source!=null)', 'GodotAudio.ctx=ctx;ctx.onstatechange', 'GodotAudio.ctx=null;if(!ctx)', 'function _godot_audio_resume()', 'GodotAudio.audioPositionWorkletPromise=ctx.audioWorklet.addModule(path)', 'async connectPositionWorklet(start){await']) {
+  for (const marker of ['var findStringEnd=(heapOrArray,idx,maxBytesToRead,ignoreNul)=>', 'Module["instantiateWasm"](info', "'instantiateWasm': function", 'function doInit(promise)', 'getDB:(name,callback)', 'function getTrackedResponse(response, load_status)', '_restart(){if(this._source!=null)', 'GodotAudio.ctx=ctx;ctx.onstatechange', 'GodotAudio.ctx=null;if(!ctx)', 'function _godot_audio_resume()', 'GodotAudio.audioPositionWorkletPromise=ctx.audioWorklet.addModule(path)', 'async connectPositionWorklet(start){await']) {
     assert.ok(startupFixture.includes(marker));
     assert.throws(() => patchWebEngine(startupFixture.replace(marker, `${marker} changed`)), /Godot Web startup patch/);
   }
   assert.throws(() => patchWebEngine(patchWebEngine(startupFixture)), /Godot Web startup patch/);
+});
+
+test('the UTF-8 terminator patch rejects isolated missing, duplicate and changed engine helpers', () => {
+  const { patchWebEngine } = require('../tools/patch-web-engine.cjs');
+  const anchor = 'var findStringEnd=(heapOrArray,idx,maxBytesToRead,ignoreNul)=>{var maxIdx=idx+maxBytesToRead;if(ignoreNul)return maxIdx;while(heapOrArray[idx]&&!(idx>=maxIdx))++idx;return idx};';
+  assert.ok(startupFixture.includes(anchor));
+  for (const replacement of ['', anchor.repeat(2), anchor.replace('++idx', 'idx+=1')]) {
+    assert.throws(() => patchWebEngine(startupFixture.replace(anchor, replacement)), /Godot Web startup patch/);
+  }
+});
+
+function utf8EngineHarness({ patched = true, countSearches = false } = {}) {
+  const vm = require('node:vm');
+  const context = vm.createContext({ TextDecoder, structuredClone, nativeSearches: 0, UTF8Decoder: null });
+  if (countSearches) vm.runInContext(`
+    const originalByteSearch = Uint8Array.prototype.indexOf;
+    Uint8Array.prototype.indexOf = function (...args) {
+      nativeSearches++;
+      return originalByteSearch.apply(this, args);
+    };`, context);
+  vm.runInContext(patched ? require('../tools/patch-web-engine.cjs').patchWebEngine(startupFixture) : startupFixture, context);
+  return { context, make: expression => vm.runInContext(expression, context) };
+}
+
+function utf8Outcome(callback) {
+  try { return { value: callback() }; }
+  catch (error) { return { error: error.name, message: error.message }; }
+}
+
+test('UTF-8 terminators retain original index, bound and ignore-NUL semantics across realms', () => {
+  const original = utf8EngineHarness({ patched: false });
+  const patched = utf8EngineHarness();
+  const shapes = ['new Uint8Array([])', 'new Uint8Array([0])', 'new Uint8Array([65,0,66])',
+    'new Uint8Array([65,66,0])', 'new Uint8Array([65,66,67])',
+    'new Uint8Array([0,65,66,0,0]).subarray(1,4)', 'new Uint8Array([0,65,66,0]).subarray(1,3)'];
+  const indices = [0, -0, 1, 2, 3, 10, -1, 0.5, NaN, Infinity, -Infinity, '0', false, null, undefined, 0n, Symbol('index')];
+  const bounds = [undefined, null, 0, 1, 2, 100, -1, NaN, Infinity, '2'];
+  for (const crossRealm of [false, true]) {
+    for (const shape of shapes) {
+      const before = crossRealm ? require('node:vm').runInNewContext(shape) : original.make(shape);
+      const after = crossRealm ? before : patched.make(shape);
+      for (const index of indices) for (const bound of bounds) for (const ignore of [undefined, false, true]) {
+        assert.deepEqual(utf8Outcome(() => patched.context.findStringEnd(after, index, bound, ignore)),
+          utf8Outcome(() => original.context.findStringEnd(before, index, bound, ignore)),
+          `${shape}; crossRealm=${crossRealm}; index=${String(index)}; bound=${String(bound)}; ignore=${ignore}`);
+      }
+    }
+  }
+  assert.ok(Object.is(patched.context.findStringEnd(patched.make('new Uint8Array([0])'), -0), -0));
+  const traced = source => {
+    const reads = [];
+    const bytes = new Proxy({ 0: 65, 1: 0 }, { get(target, key) { reads.push(key); return target[key]; } });
+    return { value: source(bytes, 0, 0), reads };
+  };
+  assert.deepEqual(traced(patched.context.findStringEnd), traced(original.context.findStringEnd),
+    'The fallback still reads the byte before checking a zero bound');
+});
+
+test('native byte search uses genuine attached byte views and preserves exotic fallbacks', () => {
+  const original = utf8EngineHarness({ patched: false });
+  const patched = utf8EngineHarness({ countSearches: true });
+  const cases = [
+    ['new Uint8Array([65,0,66])', 1],
+    ['new Uint8Array([0,65,66,0]).subarray(1,3)', 1],
+    ['Object.defineProperties(new Uint8Array([65,0]), {length:{get(){throw Error("length")}}, indexOf:{get(){throw Error("indexOf")}}, buffer:{get(){throw Error("buffer")}}, [Symbol.toStringTag]:{get(){throw Error("tag")}}})', 1],
+    ['[65,0,66]', 0], ['null', 0], ['undefined', 0], ['new Int8Array([65,0,66])', 0], ['new Uint8ClampedArray([65,0,66])', 0],
+    ['new DataView(new ArrayBuffer(4))', 0], ['new Proxy(new Uint8Array([65,0]), {})', 0],
+    ['Object.setPrototypeOf(new Float32Array([NaN,0]), Uint8Array.prototype)', 0],
+    ['Object.setPrototypeOf(new BigInt64Array([1n,0n,2n]), Uint8Array.prototype)', 0],
+    ['Object.defineProperty(new Float32Array([NaN,0]), Symbol.toStringTag, {value:"Uint8Array"})', 0],
+    ['(() => {const a=new Uint8Array([65,0]);structuredClone(a.buffer,{transfer:[a.buffer]});return a;})()', 0],
+    ['(() => {const a=new Uint8Array(new SharedArrayBuffer(3));a.set([65,0,66]);return a;})()', 0],
+    ['(() => {const b=new SharedArrayBuffer(3);const a=new Uint8Array(b);a.set([65,0,66]);Object.setPrototypeOf(b,ArrayBuffer.prototype);return a;})()', 0]
+  ];
+  for (const [expression, searches] of cases) {
+    const before = original.make(expression), after = patched.make(expression);
+    const started = patched.context.nativeSearches;
+    assert.deepEqual(utf8Outcome(() => patched.context.findStringEnd(after, 0)),
+      utf8Outcome(() => original.context.findStringEnd(before, 0)), expression);
+    assert.equal(patched.context.nativeSearches - started, searches, expression);
+  }
+  const foreign = require('node:vm').runInNewContext('new Uint8Array([65,0])');
+  const started = patched.context.nativeSearches;
+  assert.equal(patched.context.findStringEnd(foreign, 0), 1);
+  assert.equal(patched.context.nativeSearches - started, 1, 'Intrinsic brands support genuine cross-realm byte arrays');
+  for (const [index, bound, ignore] of [[2], [-1], [0.5], [0, 1], [0, null], [0, NaN], [0, undefined, true]]) {
+    const started = patched.context.nativeSearches;
+    const bytes = patched.make('new Uint8Array([65,0])');
+    patched.context.findStringEnd(bytes, index, bound, ignore);
+    assert.equal(patched.context.nativeSearches, started, 'Bounded, ignored-NUL and invalid-index calls retain the loop');
+  }
+});
+
+test('the unchanged engine UTF-8 decoder returns identical short and full-publication strings', () => {
+  const original = utf8EngineHarness({ patched: false });
+  const patched = utf8EngineHarness();
+  const texts = ['', 'Pip', 'Pip caf\u00e9 \u{1f36e}', JSON.stringify({ visible: true, cells: Array(56).fill({
+    word: 'friendly jelly', meaning: 'A child-friendly vocabulary entry', presentation: 'charged \u2728'
+  }) })];
+  for (const useDecoder of [false, true]) {
+    original.context.UTF8Decoder = useDecoder ? new TextDecoder('utf-8') : null;
+    patched.context.UTF8Decoder = useDecoder ? new TextDecoder('utf-8') : null;
+    for (const text of texts) for (const terminated of [false, true]) for (const crossRealm of [false, true]) {
+      const bytes = [...new TextEncoder().encode(text), ...(terminated ? [0, 88] : [])];
+      const expression = `new Uint8Array([0,${bytes.join(',')}]).subarray(1)`;
+      const before = crossRealm ? Uint8Array.from(bytes) : original.make(expression);
+      const after = crossRealm ? before : patched.make(expression);
+      assert.equal(patched.context.UTF8ArrayToString(after), text);
+      assert.equal(patched.context.UTF8ArrayToString(after), original.context.UTF8ArrayToString(before));
+      for (const [index, bound, ignore] of [[0, 0], [0, 2], [1, 4], [0, undefined, false], [0, bytes.length, true]]) {
+        assert.deepEqual(utf8Outcome(() => patched.context.UTF8ArrayToString(after, index, bound, ignore)),
+          utf8Outcome(() => original.context.UTF8ArrayToString(before, index, bound, ignore)));
+      }
+    }
+  }
+});
+
+test('malformed UTF-8 keeps the engine decoder behavior before and after the scanner patch', () => {
+  const original = utf8EngineHarness({ patched: false });
+  const patched = utf8EngineHarness();
+  const malformed = [[0x80, 65, 0], [0xe2, 0x82, 0], [0xf0, 0x9f, 0], [0xc0, 0xaf, 0], [0xed, 0xa0, 0x80, 0]];
+  for (const useDecoder of [false, true]) {
+    original.context.UTF8Decoder = useDecoder ? new TextDecoder('utf-8') : null;
+    patched.context.UTF8Decoder = useDecoder ? new TextDecoder('utf-8') : null;
+    for (const prefix of [[], Array(20).fill(65)]) for (const bytes of malformed) for (const crossRealm of [false, true]) {
+      const input = [...prefix, ...bytes], expression = `new Uint8Array([${input.join(',')}])`;
+      const before = crossRealm ? Uint8Array.from(input) : original.make(expression);
+      const after = crossRealm ? before : patched.make(expression);
+      for (const bound of [undefined, input.length - 1, input.length]) {
+        assert.deepEqual(utf8Outcome(() => patched.context.UTF8ArrayToString(after, 0, bound)),
+          utf8Outcome(() => original.context.UTF8ArrayToString(before, 0, bound)),
+          `decoder=${useDecoder}; prefix=${prefix.length}; crossRealm=${crossRealm}; bytes=${bytes}`);
+      }
+    }
+  }
 });
 
 test('the patched engine shares and releases its existing context and tolerates blocked audio resumes', async () => {
@@ -1468,6 +1603,8 @@ test('normal IDB connections remain cached and access denial keeps its original 
 
 // Kept independently from the patch strings so template drift cannot silently pass.
 const startupFixture = String.raw`// Snapshot of the relevant unmodified Godot 4.7.1 release-template code.
+var findStringEnd=(heapOrArray,idx,maxBytesToRead,ignoreNul)=>{var maxIdx=idx+maxBytesToRead;if(ignoreNul)return maxIdx;while(heapOrArray[idx]&&!(idx>=maxIdx))++idx;return idx};
+var UTF8ArrayToString=(heapOrArray,idx=0,maxBytesToRead,ignoreNul)=>{var endPtr=findStringEnd(heapOrArray,idx,maxBytesToRead,ignoreNul);if(endPtr-idx>16&&heapOrArray.buffer&&UTF8Decoder){return UTF8Decoder.decode(heapOrArray.subarray(idx,endPtr))}var str="";while(idx<endPtr){var u0=heapOrArray[idx++];if(!(u0&128)){str+=String.fromCharCode(u0);continue}var u1=heapOrArray[idx++]&63;if((u0&224)==192){str+=String.fromCharCode((u0&31)<<6|u1);continue}var u2=heapOrArray[idx++]&63;if((u0&240)==224){u0=(u0&15)<<12|u1<<6|u2}else{u0=(u0&7)<<18|u1<<12|u2<<6|heapOrArray[idx++]&63}if(u0<65536){str+=String.fromCharCode(u0)}else{var ch=u0-65536;str+=String.fromCharCode(55296|ch>>10,56320|ch&1023)}}return str};
 	function getTrackedResponse(response, load_status) {
 		function onloadprogress(reader, controller) {
 			return reader.read().then(function (result) {

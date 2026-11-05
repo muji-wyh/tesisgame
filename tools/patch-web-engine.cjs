@@ -2,6 +2,36 @@
 // upgrade must be reviewed, not silently packaged with broken startup or audio.
 const patches = [
   {
+    name: "use native byte search for unbounded UTF-8 terminators",
+    // Keep bounded reads and unusual inputs on the original Emscripten loop.
+    // Intrinsic brands also reject re-prototyped non-byte or shared storage.
+    before: `var findStringEnd=(heapOrArray,idx,maxBytesToRead,ignoreNul)=>{var maxIdx=idx+maxBytesToRead;if(ignoreNul)return maxIdx;while(heapOrArray[idx]&&!(idx>=maxIdx))++idx;return idx};`,
+    after: `var findStringEnd=(()=>{
+const isArrayBufferView=ArrayBuffer.isView;
+const byteIndexOf=Uint8Array.prototype.indexOf;
+const typedArrayPrototype=Object.getPrototypeOf(Uint8Array.prototype);
+const typedArrayLength=Object.getOwnPropertyDescriptor(typedArrayPrototype,"length").get;
+const typedArrayBuffer=Object.getOwnPropertyDescriptor(typedArrayPrototype,"buffer").get;
+const typedArrayTag=Object.getOwnPropertyDescriptor(typedArrayPrototype,Symbol.toStringTag).get;
+const ordinaryBufferLength=Object.getOwnPropertyDescriptor(ArrayBuffer.prototype,"byteLength").get;
+return(heapOrArray,idx,maxBytesToRead,ignoreNul)=>{
+var maxIdx=idx+maxBytesToRead;
+if(ignoreNul)return maxIdx;
+if(maxBytesToRead===undefined&&Number.isInteger(idx)&&idx>=0&&isArrayBufferView(heapOrArray)&&typedArrayTag.call(heapOrArray)==="Uint8Array"){
+const length=typedArrayLength.call(heapOrArray);
+let ordinary=false;
+if(idx<length){try{ordinaryBufferLength.call(typedArrayBuffer.call(heapOrArray));ordinary=true}catch{}}
+if(ordinary){
+const end=byteIndexOf.call(heapOrArray,0,idx);
+return end<0?length:end===idx?idx:end;
+}
+}
+while(heapOrArray[idx]&&!(idx>=maxIdx))++idx;
+return idx;
+};
+})();`
+  },
+  {
     name: "preserve fetched response while tracking download progress",
     before: `	function getTrackedResponse(response, load_status) {
 		function onloadprogress(reader, controller) {
