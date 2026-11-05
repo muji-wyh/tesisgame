@@ -2117,8 +2117,9 @@ func step(delta: float) -> void:
 			if _finishing_powerup and not powerup_active():
 				break
 			continue
-		_refresh_full_recovery()
 		var blocked: bool = not _has_board_space()
+		if full_elapsed >= 0.0 and not blocked:
+			full_elapsed = -1.0
 		if blocked and full_elapsed < 0.0 and _settling_remaining() <= EPSILON:
 			_begin_full_warning()
 			if not _can_continue(generation):
@@ -3818,6 +3819,16 @@ func _settle_collected_stack() -> void:
 	_gravity_pending = false
 	var ordered: Array[Dictionary] = cells.duplicate()
 	ordered.sort_custom(_gravity_order)
+	# Each footprint keeps its own contribution, including overlapping fusion
+	# reservations. Removing one body must not erase another body's support.
+	var occupied: Dictionary = {}
+	for tile: Dictionary in cells:
+		if not bool(tile.get("lifted", false)):
+			_count_gravity_footprint(occupied, int(tile.column), int(tile.row), int(tile.width), int(tile.height), 1)
+	for active: Dictionary in fusions:
+		if str(active.operation) == "merge":
+			var result: Dictionary = active.result
+			_count_gravity_footprint(occupied, int(result.column), int(result.row), int(result.width), int(result.height), 1)
 	for tile: Dictionary in ordered:
 		if is_fusing(int(tile.id)) or int(tile.id) == _held_tile_id or _reserved_for_collection(int(tile.id)) \
 			or _reserved_for_powerup(int(tile.id)) or not is_settled(tile):
@@ -3825,16 +3836,22 @@ func _settle_collected_stack() -> void:
 			# operation or settlement boundary retries their support settlement.
 			_gravity_pending = true
 			continue
-		var occupied: Dictionary = _occupied([int(tile.id)], false)
+		var contributes: bool = not bool(tile.get("lifted", false))
+		if contributes:
+			_count_gravity_footprint(occupied, int(tile.column), int(tile.row), int(tile.width), int(tile.height), -1)
 		var row: int = int(tile.row)
 		if _drag_gravity_delays.has(int(tile.id)):
 			if row + int(tile.height) < ROWS and _fits(occupied, int(tile.column), row + 1, int(tile.width), int(tile.height)):
+				if contributes:
+					_count_gravity_footprint(occupied, int(tile.column), row, int(tile.width), int(tile.height), 1)
 				_gravity_pending = true
 				continue
 			# Returning the support before the deadline cancels this pending fall.
 			_drag_gravity_delays.erase(int(tile.id))
 		while row + int(tile.height) < ROWS and _fits(occupied, int(tile.column), row + 1, int(tile.width), int(tile.height)):
 			row += 1
+		if contributes:
+			_count_gravity_footprint(occupied, int(tile.column), row, int(tile.width), int(tile.height), 1)
 		if row == int(tile.row):
 			continue
 		tile.falling_rows = row - int(tile.row)
@@ -3845,6 +3862,17 @@ func _settle_collected_stack() -> void:
 		tile.falling = true
 		_gravity_pending = true
 		_growth_pending = true
+
+
+func _count_gravity_footprint(occupied: Dictionary, column: int, row: int, width: int, height: int, amount: int) -> void:
+	for y in range(row, row + height):
+		for x in range(column, column + width):
+			var key: int = y * COLUMNS + x
+			var count: int = int(occupied.get(key, 0)) + amount
+			if count > 0:
+				occupied[key] = count
+			else:
+				occupied.erase(key)
 
 
 func _gravity_order(a: Dictionary, b: Dictionary) -> bool:

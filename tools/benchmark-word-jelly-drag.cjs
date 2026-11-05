@@ -67,7 +67,7 @@ for (let repeat = 0; repeat < repeats; repeat++) {
       '--', `--samples=${samples}`, `--output=${file.replaceAll('\\', '/')}`], { timeout: 300000 });
     fs.writeFileSync(path.join(output, `${name}-${repeat + 1}.log`), result.stdout + result.stderr);
     const report = JSON.parse(fs.readFileSync(file, 'utf8'));
-    if (report.protocol !== protocol || report.rows.length !== (idle ? 4 : automatic ? 2 : 8) || report.rows.some(row => row.samples_us.length !== samples)) {
+    if (report.protocol !== protocol || report.rows.length !== (idle ? 6 : automatic ? 4 : authored ? 16 : 12) || report.rows.some(row => row.samples_us.length !== samples)) {
       throw new Error('Incomplete diagnostic report');
     }
     reports[name].push(report);

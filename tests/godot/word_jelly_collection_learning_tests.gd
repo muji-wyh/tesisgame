@@ -47,6 +47,8 @@ func _run() -> void:
 	Fixture.unlock_auto_collect(app)
 	check(app.coin_wallet.credit_amount("learning-fixture", 6000).ok, "Fund the actual saved Auto merge purchases")
 	app._coin_flight.sync(app.coin_wallet.balance)
+	var opening_coins: int = app.coin_wallet.balance
+	var paid_coins: int = 0
 	var receipts: Dictionary = {}
 	view.collected.connect(func(event: String, word: Dictionary, _coins: int, _fragments: int, _origin: Vector2) -> void:
 		receipts[str(word.id)] = event)
@@ -63,6 +65,7 @@ func _run() -> void:
 			tile.falling = false
 			tile.arrival = false
 			view.game.cells.append(tile)
+		paid_coins += view.game.powerup_price("auto_merge")
 		check(view.game.activate_powerup("auto_merge"), "Purchase actual automatic matches before collection %d" % answer)
 		view.game.finish_powerup(false)
 		view.game.step(1.0)
@@ -85,7 +88,7 @@ func _run() -> void:
 	check(reloaded.configure(app.data.words) and reloaded.load_state()
 		and reloaded.streak("cat") == 3 and reloaded.streak("dog") == 3,
 		"Both Auto Collect masteries survive reopening the actual learner save")
-	check(app.coin_wallet.balance == 3300 and view.game.combo_coins == 0,
+	check(app.coin_wallet.balance == opening_coins - paid_coins and view.game.combo_coins == 0,
 		"Three paid automatic batches preserve exact purchase costs without inventing automatic combo coins")
 	app.audio.halt()
 	app.free()

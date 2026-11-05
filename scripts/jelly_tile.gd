@@ -1,6 +1,8 @@
 extends Button
 ## Authored gel artwork with a separate, undistorted learning label.
 
+signal idle_paint_changed
+
 const Style = preload("res://scripts/ui_style.gd")
 const WordArt = preload("res://scripts/word_art.gd")
 const Surface = preload("res://scripts/jelly_surface.gdshader")
@@ -348,8 +350,9 @@ func _idle_cache_eligible() -> bool:
 	return (completion <= 0.35 or completion >= 0.7) and (is_zero_approx(completion) or glint <= -1.0)
 
 func _idle_pixel_extent() -> Vector2i:
-	# Screen coordinates include the viewport stretch and backing pixel scale.
-	var pixels: Vector2 = _surface.get_screen_transform().get_scale().abs() * size
+	# Viewport coordinates include content stretch even for embedded windows.
+	var raster: Transform2D = _surface.get_viewport_transform() * _surface.get_global_transform()
+	var pixels: Vector2 = raster.get_scale().abs() * size
 	return Vector2i(ceili(pixels.x), ceili(pixels.y))
 
 func _idle_cache_ready(key: String, texture: Texture2D, material: ShaderMaterial = null) -> void:
@@ -362,6 +365,7 @@ func _idle_cache_ready(key: String, texture: Texture2D, material: ShaderMaterial
 	_surface.stretch_mode = TextureRect.STRETCH_SCALE
 	_surface.material = material if material != null else IdleBodyCache.display_material()
 	_idle_cache_fallback = ""
+	idle_paint_changed.emit()
 
 func _invalidate_idle_cache() -> void:
 	if not _idle_cache_requested:
@@ -380,11 +384,14 @@ func _invalidate_idle_cache() -> void:
 		if is_instance_valid(pool) and not pool.is_queued_for_deletion():
 			pool.release(self)
 	_idle_cache_pool = null
+	idle_paint_changed.emit()
 
 func _notification(what: int) -> void:
-	if what == NOTIFICATION_TRANSFORM_CHANGED and _idle_cache_requested \
-		and _idle_pixel_extent() != _idle_raster_size:
-		_invalidate_idle_cache()
+	if what == NOTIFICATION_TRANSFORM_CHANGED and _idle_cache_requested:
+		if _idle_pixel_extent() != _idle_raster_size:
+			_invalidate_idle_cache()
+		else:
+			idle_paint_changed.emit()
 
 func _exit_tree() -> void:
 	_invalidate_idle_cache()

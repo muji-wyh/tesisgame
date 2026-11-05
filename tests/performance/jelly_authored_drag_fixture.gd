@@ -8,7 +8,7 @@ const Legacy = preload("res://tests/performance/jelly_drag_fixture.gd")
 
 static func install(view, data, count: int, source_kind: String) -> Array[int]:
 	assert(source_kind in ["root", "merged"])
-	assert(count >= Model.COLUMNS and count <= Model.CAPACITY - Model.COLUMNS)
+	assert(count >= Model.COLUMNS and count <= Model.CAPACITY)
 	var word_id: String = "cat" if source_kind == "root" else "friendly"
 	var word: Dictionary = {}
 	for candidate: Dictionary in data.words:
@@ -42,7 +42,10 @@ static func install(view, data, count: int, source_kind: String) -> Array[int]:
 		view.game.cells.append(tile)
 	view._sync_tiles()
 	view._layout()
-	var pair: Array[int] = [int(view.game.cells[count - Model.COLUMNS].id), int(view.game.cells[count - Model.COLUMNS + 1].id)]
+	var source_index: int = count - Model.COLUMNS
+	if source_kind == "root" and source_index % 2 != 0:
+		source_index += 1
+	var pair: Array[int] = [int(view.game.cells[source_index].id), int(view.game.cells[source_index + 1].id)]
 	assert(view.game.cell(pair[0]).has("composition"))
 	assert(view.game.parts_compatible(view.game.cell(pair[0]), view.game.cell(pair[1])))
 	return pair

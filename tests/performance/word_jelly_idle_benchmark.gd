@@ -33,7 +33,7 @@ func _run() -> void:
 	assert(data.load_all())
 	var cat: Dictionary = data.words.filter(func(word: Dictionary) -> bool: return str(word.id) == "cat")[0]
 	var rows: Array[Dictionary] = []
-	for count: int in [21, 49]:
+	for count: int in [21, 49, 56]:
 		for mix: String in ["ordinary", "merged"]:
 			var view := ObservedJelly.new()
 			root.add_child(view)

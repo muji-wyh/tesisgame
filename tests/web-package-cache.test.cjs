@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const os = require('node:os');
 const path = require('node:path');
 const { brotliCompressSync, brotliDecompressSync, constants } = require('node:zlib');
-const { compressWebAsset } = require('../tools/package-web.cjs');
+const { compressWebAsset, packageWebExport } = require('../tools/package-web.cjs');
 
 function fixture(t) {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'web-compression-'));
@@ -51,5 +51,20 @@ test('a valid Brotli prefix cannot conceal trailing garbage or a second stream i
     const decoded = brotliDecompressSync(result, { info: true });
     assert.deepEqual(decoded.buffer, bytes);
     assert.equal(decoded.engine.bytesWritten, result.length);
+  }
+});
+
+test('benchmark compression preserves decoded bytes while production defaults retain quality 11', () => {
+  const bytes = Buffer.from('game engine and authored assets '.repeat(1024));
+  const benchmark = compressWebAsset(bytes, [], { compressionQuality: 4 });
+  assert.deepEqual(benchmark, brotliCompressSync(bytes, { params: { [constants.BROTLI_PARAM_QUALITY]: 4 } }));
+  assert.deepEqual(brotliDecompressSync(benchmark), bytes);
+  assert.deepEqual(compressWebAsset(bytes), brotliCompressSync(bytes, { params: { [constants.BROTLI_PARAM_QUALITY]: 11 } }));
+});
+
+test('invalid compression quality fails before packaging or cache lookup', () => {
+  for (const compressionQuality of [-1, 12, 4.5, '4', null, NaN]) {
+    assert.throws(() => compressWebAsset(Buffer.from('data'), [], { compressionQuality }), /integer from 0 through 11/);
+    assert.throws(() => packageWebExport('unused-directory', {}, { compressionQuality }), /integer from 0 through 11/);
   }
 });

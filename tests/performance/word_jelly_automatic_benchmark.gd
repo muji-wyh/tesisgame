@@ -56,7 +56,10 @@ func _run() -> void:
 	assert(data.load_all())
 	var cat: Dictionary = data.words.filter(func(word: Dictionary) -> bool: return str(word.id) == "cat")[0]
 	var rows: Array[Dictionary] = []
-	for mode: String in ["auto-merge", "auto-collect"]:
+	for scenario: Dictionary in [{"tiles": 49, "mode": "auto-merge"}, {"tiles": 49, "mode": "auto-collect"},
+		{"tiles": Model.CAPACITY, "mode": "auto-merge"}, {"tiles": Model.CAPACITY, "mode": "auto-collect"}]:
+		var count: int = int(scenario.tiles)
+		var mode: String = str(scenario.mode)
 		var view := ObservedJelly.new()
 		root.add_child(view)
 		view.size = Vector2(390, 844)
@@ -70,7 +73,6 @@ func _run() -> void:
 		view.game.credit_combo = func(_id: String, _amount: int) -> Dictionary: return {"ok": true}
 		view.game.cells.clear()
 		view.game.spawn_interval = 10000.0
-		var count: int = Model.CAPACITY - Model.COLUMNS
 		for index in range(count):
 			var tile: Dictionary = view.game._new_word_root(cat) \
 				if mode == "auto-collect" or index % 2 == 0 else view.game._new_picture_tile(cat)

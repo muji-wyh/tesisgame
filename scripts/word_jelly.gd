@@ -24,6 +24,8 @@ const ComboHUD = preload("res://scripts/word_jelly_combo.gd")
 const BossView = preload("res://scripts/word_jelly_boss_view.gd")
 const LevelBadge = preload("res://scripts/word_jelly_level_badge.gd")
 const AmbientBudget = preload("res://scripts/word_jelly_ambient_budget.gd")
+const SettledBodyLayer = preload("res://scripts/jelly_settled_body_layer.gd")
+const PublicationCache = preload("res://scripts/word_jelly_publication_cache.gd")
 const COLLECTION_GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const POWERUP_SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const POWERUP_RAYS = preload("res://assets/chests/shared/effects/rays.png")
@@ -119,6 +121,8 @@ var _tiles_pending: bool = false
 var _publish_pending: bool = false
 var _idle_collection_visual: Dictionary = {}
 var _ambient_budget := AmbientBudget.new()
+var _settled_body_layer := SettledBodyLayer.new()
+var _publication_cache := PublicationCache.new()
 var _ambient_hover_id: int = -1
 var _view_fusing: Dictionary = {}
 var _view_settled: Dictionary = {}
@@ -165,6 +169,8 @@ const ANIMATED_MATCH_HINT_LIMIT: int = 3
 func _init() -> void:
 	super()
 	name = "WordJelly"
+	add_child(_settled_body_layer)
+	move_child(_settled_body_layer, 0)
 	_well_art.name = "CloudPatternWell"
 	_well_art.texture = WELL_CLOUDS
 	_well_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
@@ -1055,7 +1061,8 @@ func _begin_view_update() -> void:
 	if not _ambient_priority_batch_open:
 		_ambient_budget.begin_priority_update()
 		_ambient_priority_batch_open = true
-	var raster_key: Array = [get_screen_transform().get_scale(), get_viewport_rect().size] if is_inside_tree() else [Vector2.ONE, size]
+	var raster_key: Array = [(get_viewport_transform() * get_global_transform()).get_scale(),
+		get_viewport_rect().size] if is_inside_tree() else [Vector2.ONE, size]
 	if raster_key != _view_raster_key:
 		_view_raster_key = raster_key
 		_pose_revision += 1
@@ -1308,6 +1315,7 @@ func _sync_tiles() -> void:
 			_tiles[id] = tile
 			_configure_tile(tile, cell)
 			_ambient_budget.register(tile)
+			_settled_body_layer.watch(tile)
 	for id in _tiles.keys():
 		if not live.has(id):
 			_ambient_budget.unregister(int(id))
@@ -1522,6 +1530,7 @@ func _sync_positions() -> void:
 		# Request only after the final static pose; changed geometry falls back live.
 		if not live:
 			tile.set_idle_cached(bool(_view_settled.get(id, false)))
+		_settled_body_layer.refresh(tile, not live and id != _ambient_hover_id)
 	_ambient_budget.end_priority_update()
 	# Pose the pending body before testing contact, including on frames without
 	# pointer motion while its two lobes continue to join.
@@ -1950,8 +1959,8 @@ func _process(delta: float) -> void:
 		_stage_banner.advance(delta)
 		_practice_panel.advance(delta)
 		_practice_panel.queue_redraw()
-		var powerup: Dictionary = game.powerup_snapshot()
-		if bool(powerup.active) and str(powerup.kind) == "fragments":
+		if game.powerup_active() and str(game._powerup.get("kind", "")) == "fragments":
+			var powerup: Dictionary = game.powerup_snapshot()
 			_powerup_frame_end = float(powerup.elapsed) + delta
 			_powerup_frame_receipt = str(powerup.receipt_id)
 			_powerup_frame_generation = _generation
@@ -2089,6 +2098,7 @@ func _set_completion_ids(ids: Array[int], source: int, elapsed: float) -> void:
 			tile.set_completion_hint(active, elapsed, reduced_motion, animated)
 			_tile_pose_dirty[id] = true
 		tile.set_match_dimmed(not ids.is_empty() and id != source and not active)
+		_settled_body_layer.refresh(tile, not _active_tile_ids.has(id) and id != _ambient_hover_id)
 		if animated:
 			_active_tile_ids[id] = true
 		elif not _dynamic_tile_ids.has(id):
@@ -2681,7 +2691,19 @@ func _publish() -> void:
 	if _processing_generation == _generation:
 		_publish_pending = true
 		return
-	super._publish()
+	_publish_elapsed = 0.0
+	var state: Dictionary = snapshot()
+	var encoded: Dictionary = _publication_cache.encode_base(state)
+	var serialized: String = encoded.serialized
+	if serialized == _last_published:
+		return
+	_last_published = serialized
+	var host_serialized: String = serialized
+	if publication_overrides.is_valid():
+		var overrides: Dictionary = publication_overrides.call(state)
+		host_serialized = _publication_cache.encode_host(state, encoded, overrides)
+	serialized_changed.emit(host_serialized)
+	changed.emit(state)
 
 func _combo_changed(state: Dictionary) -> void:
 	if _combo_hud == null:
@@ -3250,9 +3272,15 @@ func presentation_work_snapshot() -> Dictionary:
 	result["animated_ids"] = _ambient_budget.animated_ids()
 	result["board_revision"] = _view_board_revision
 	result["cached_bodies"] = 0
+	result["cached_merged_cores"] = 0
+	result["settled_body_layer"] = _settled_body_layer.snapshot()
 	for tile: WordTile in _tiles.values():
 		if tile._idle_cache_requested and tile._surface.material != tile._gel:
 			result.cached_bodies += 1
+		if tile._merged_core_proxy.is_visible_in_tree():
+			result.cached_merged_cores += 1
+	var core_atlas: Node = get_viewport().get_node_or_null("JellyMergedCoreAtlas") if is_inside_tree() else null
+	result["merged_core_atlas"] = core_atlas.snapshot() if core_atlas != null else {}
 	return result
 
 func snapshot() -> Dictionary:

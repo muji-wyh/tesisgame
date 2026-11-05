@@ -80,9 +80,12 @@ func present(origin: Vector2, level: int, accent: Color, batch: bool = false,
 	if initial_age >= wait + duration:
 		return
 	_serial += 1
-	_entries.append({"id": _serial, "origin": origin - position, "profile": selected,
+	var entry: Dictionary = {"id": _serial, "origin": origin - position, "profile": selected,
 		"accent": accent, "batch": batch, "elapsed": maxf(0.0, initial_age),
-		"delay": wait, "duration": duration, "anchor_id": anchor_id, "burst_only": burst_only})
+		"delay": wait, "duration": duration, "anchor_id": anchor_id, "burst_only": burst_only}
+	if int(selected.level) >= 4:
+		entry["fireworks"] = _prepare_fireworks(entry)
+	_entries.append(entry)
 	while _entries.size() > MAX_ACTIVE:
 		_entries.pop_front()
 	show()
@@ -259,8 +262,7 @@ func _trajectory(pattern: String, angle: float, p: float, phase: float, group: i
 	return direction * reach * release
 
 
-func _draw_fireworks(entry: Dictionary, progress: float) -> void:
-	var radius: float = _radius(entry)
+func _prepare_fireworks(entry: Dictionary) -> Array[Dictionary]:
 	var level: int = int(entry.profile.level)
 	var group_count: int = int(entry.profile.bursts)
 	var count: int = int(entry.profile.sparks)
@@ -272,9 +274,50 @@ func _draw_fireworks(entry: Dictionary, progress: float) -> void:
 		count = roundi(float(count) * 0.45)
 	var main_count: int = roundi(float(count) * (0.50 if level == 4 else 0.34))
 	var secondary_count: int = maxi(5, (count - main_count) / (group_count - 1))
-	# Every colored layer launches from the collected body, including delayed blooms.
+	var trail_count: int = 3 if bool(entry.batch) else mini(10, 7 + level - 4)
+	if burst_only:
+		trail_count = 2
+	var groups: Array[Dictionary] = []
 	for group in range(group_count):
-		var delay: float = _firework_delay(level, group)
+		var spokes: int = main_count if group == 0 else secondary_count
+		var tint: Color = _palette(entry, group)
+		var directions := PackedVector2Array()
+		var phases := PackedFloat64Array()
+		var phase_sines := PackedFloat64Array()
+		var angles := PackedFloat64Array()
+		var edges := PackedFloat64Array()
+		var colors := PackedColorArray()
+		for index in range(spokes):
+			var phase: float = float(posmod(index * 7 + group * 3, 13)) / 13.0
+			var angle: float = TAU * float(index) / float(spokes) - PI * 0.5 + group * 0.38 + float(entry.id % 7) * 0.09
+			directions.append(Vector2.from_angle(angle))
+			phases.append(phase)
+			phase_sines.append(sin(phase * TAU))
+			angles.append(angle)
+			edges.append(12.0 + phase * 4.0 + float(level - 4) * 0.8)
+			colors.append(tint.lerp(_palette(entry, group + 1), 0.18 if index % 3 == 0 else 0.0))
+		var tail_releases: Array[float] = []
+		var tail_falling_ages: Array[float] = []
+		var tail_drops: Array[float] = []
+		tail_releases.resize(trail_count)
+		tail_falling_ages.resize(trail_count)
+		tail_drops.resize(trail_count)
+		groups.append({"group": group, "delay": _firework_delay(level, group),
+			"reach": _firework_reach(level, group), "tint": tint, "directions": directions,
+			"phases": phases, "phase_sines": phase_sines, "angles": angles, "edges": edges,
+			"colors": colors, "trail_count": trail_count, "tail_releases": tail_releases,
+			"tail_falling_ages": tail_falling_ages, "tail_drops": tail_drops})
+	return groups
+
+
+func _draw_fireworks(entry: Dictionary, progress: float) -> void:
+	var radius: float = _radius(entry)
+	var level: int = int(entry.profile.level)
+	var burst_only: bool = bool(entry.get("burst_only", false))
+	# Every colored layer launches from the collected body, including delayed blooms.
+	for geometry: Dictionary in entry.fireworks:
+		var group: int = int(geometry.group)
+		var delay: float = float(geometry.delay)
 		var age: float = (progress - delay) * float(entry.profile.seconds)
 		if burst_only:
 			age = progress * float(entry.duration) - float(group) * 0.045
@@ -284,37 +327,66 @@ func _draw_fireworks(entry: Dictionary, progress: float) -> void:
 		if burst_only:
 			life = float(entry.duration) - float(group) * 0.045
 		var base: Vector2 = entry.origin
-		var reach: float = radius * _firework_reach(level, group)
-		var spokes: int = main_count if group == 0 else secondary_count
-		var tint: Color = _palette(entry, group)
+		var reach: float = radius * float(geometry.reach)
+		var directions: PackedVector2Array = geometry.directions
+		var phases: PackedFloat64Array = geometry.phases
+		var phase_sines: PackedFloat64Array = geometry.phase_sines
+		var angles: PackedFloat64Array = geometry.angles
+		var edges: PackedFloat64Array = geometry.edges
+		var colors: PackedColorArray = geometry.colors
+		var tint: Color = geometry.tint
 		var peak: float = (1.0 - smoothstep(0.05, 0.38, age)) * (0.85 + smoothstep(0.0, 0.035, age) * 0.15)
 		_stamp(GLOW, base, Vector2.ONE * reach * (0.55 + minf(age, 0.4) * 2.0), Color(tint, peak * 0.32))
 		_stamp(RAYS, base, Vector2.ONE * reach * (0.60 + minf(age, 0.35) * 2.2), Color(tint, peak * 0.48), group * 0.37)
-		for index in range(spokes):
-			var phase: float = float(posmod(index * 7 + group * 3, 13)) / 13.0
-			var angle: float = TAU * float(index) / float(spokes) - PI * 0.5 + group * 0.38 + float(entry.id % 7) * 0.09
-			var point: Vector2 = base + _firework_trajectory(angle, age, phase, reach, level, burst_only)
+		# All spokes in a blossom and each of their tails share the same clock.
+		# Keep the acquired sprite count and trajectories while sampling drag once.
+		var release: float = 1.0 - exp(-age * 5.0)
+		var falling_age: float = maxf(0.0, age - 0.16)
+		var drop: float = reach * falling_age * falling_age * (0.115 if level == 5 else 0.095)
+		var trail_count: int = int(geometry.trail_count)
+		var tail_releases: Array[float] = geometry.tail_releases
+		var tail_falling_ages: Array[float] = geometry.tail_falling_ages
+		var tail_drops: Array[float] = geometry.tail_drops
+		var first_tail: int = trail_count
+		for tail_slot in range(trail_count):
+			var prior_age: float = age - float(trail_count - tail_slot) * 0.05
+			if prior_age < 0.0:
+				continue
+			first_tail = mini(first_tail, tail_slot)
+			tail_releases[tail_slot] = 1.0 - exp(-prior_age * 5.0)
+			tail_falling_ages[tail_slot] = maxf(0.0, prior_age - 0.16)
+			tail_drops[tail_slot] = reach * tail_falling_ages[tail_slot] * tail_falling_ages[tail_slot] * (0.115 if level == 5 else 0.095)
+		for index in range(directions.size()):
+			var phase: float = phases[index]
+			var angle: float = angles[index]
+			var point: Vector2 = base + _firework_precomputed_trajectory(directions[index], phase, phase_sines[index],
+				reach, release, falling_age, drop, burst_only)
 			var fade: float = 1.0 - smoothstep(life * (0.60 + phase * 0.10), life, age)
 			# Ember flicker changes luminance, not trajectory or visibility ownership.
 			var flicker: float = lerpf(1.0, 0.90 + 0.10 * sin(age * 12.0 + phase * TAU), smoothstep(0.55, 1.4, age))
-			var edge: float = (12.0 + phase * 4.0 + float(level - 4) * 0.8) / _ui_scale
+			var edge: float = edges[index] / _ui_scale
 			if burst_only:
 				edge = minf(edge, _board_pitch * 0.18)
 			edge *= lerpf(1.08, 0.62, clampf(age / life, 0.0, 1.0))
-			var spark_tint: Color = tint.lerp(_palette(entry, group + 1), 0.18 if index % 3 == 0 else 0.0)
-			var trail_count: int = 3 if bool(entry.batch) else mini(10, 7 + level - 4)
-			if burst_only:
-				trail_count = 2
-			for tail in range(trail_count, 0, -1):
-				var prior_age: float = age - float(tail) * 0.05
-				if prior_age < 0.0:
-					continue
-				var behind: Vector2 = base + _firework_trajectory(angle, prior_age, phase, reach, level, burst_only)
+			var spark_tint: Color = colors[index]
+			for tail_slot in range(first_tail, trail_count):
+				var tail: int = trail_count - tail_slot
+				var behind: Vector2 = base + _firework_precomputed_trajectory(directions[index], phase, phase_sines[index],
+					reach, tail_releases[tail_slot], tail_falling_ages[tail_slot], tail_drops[tail_slot], burst_only)
 				var taper: float = 1.0 - float(tail) / float(trail_count + 1)
 				_stamp(SPARKLE, behind, Vector2.ONE * edge * (0.40 + taper * 0.50),
 					Color(spark_tint, fade * taper * 0.70), angle)
 			_stamp(SPARKLE, point, Vector2.ONE * edge, Color(spark_tint, fade * flicker), angle + age * 0.35)
 			_stamp(SPARKLE, point, Vector2.ONE * edge * 0.35, Color(1.0, 0.98, 0.84, fade * flicker * 0.90), -angle)
+
+
+func _firework_precomputed_trajectory(direction: Vector2, phase: float, phase_sine: float,
+		reach: float, release: float, falling_age: float, drop: float, burst_only: bool) -> Vector2:
+	var spread: Vector2 = direction * reach * (0.72 + phase * 0.28) * release
+	if burst_only:
+		return spread
+	var drift: float = phase_sine * reach * 0.035 * falling_age
+	return spread + Vector2(drift, drop)
 
 
 func _firework_delay(level: int, group: int) -> float:

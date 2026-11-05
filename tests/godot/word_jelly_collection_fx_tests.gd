@@ -105,6 +105,7 @@ func _run() -> void:
 	check(outward.x > 60.0, "Firework spokes make a decisive initial radial release")
 	check(ember.x - blossom.x < blossom.x - outward.x, "Radial velocity decays after the initial explosion")
 	check(ember.y - blossom.y > 20.0, "Embers descend rather than only fading in their expanded positions")
+	_check_precomputed_trajectories(fx)
 	for level in range(4, 10):
 		for group in range(1, int(Effects.profile(level).bursts)):
 			check(fx._firework_delay(level, group) > 0.0 and fx._firework_delay(level, group) < 0.46,
@@ -134,3 +135,50 @@ func _run() -> void:
 	fx.free()
 	print("Jelly level collection effects: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
+
+
+func _check_precomputed_trajectories(fx) -> void:
+	# Compare the shared-clock path with the original independent-spoke sampler.
+	# Cover both board-sized and full celebrations, including automatic batches.
+	for burst_only: bool in [false, true]:
+		fx._board_pitch = 52.0 if burst_only else 0.0
+		for batch: bool in [false, true]:
+			for level in range(4, 10):
+				fx.reset()
+				fx.present(Vector2(180.0, 300.0), level, Color("#4bafa3"), batch)
+				var entry: Dictionary = fx._entries[0]
+				var group_count: int = int(entry.profile.bursts)
+				var count: int = int(entry.profile.sparks)
+				if burst_only:
+					group_count = mini(group_count, 4)
+					count = roundi(float(count) * 0.45)
+				if batch:
+					count = roundi(float(count) * 0.45)
+				var main_count: int = roundi(float(count) * (0.50 if level == 4 else 0.34))
+				var secondary_count: int = maxi(5, (count - main_count) / (group_count - 1))
+				var equivalent: bool = entry.fireworks.size() == group_count
+				for group in range(group_count):
+					var geometry: Dictionary = entry.fireworks[group]
+					var spokes: int = main_count if group == 0 else secondary_count
+					var reach: float = fx._radius(entry) * fx._firework_reach(level, group)
+					var expected_trails: int = 2 if burst_only else 3 if batch else mini(10, 7 + level - 4)
+					equivalent = equivalent and geometry.directions.size() == spokes \
+						and int(geometry.trail_count) == expected_trails
+					for index in range(spokes):
+						var phase: float = float(posmod(index * 7 + group * 3, 13)) / 13.0
+						var angle: float = TAU * float(index) / float(spokes) - PI * 0.5 + group * 0.38 + float(entry.id % 7) * 0.09
+						var tint: Color = fx._palette(entry, group).lerp(fx._palette(entry, group + 1), 0.18 if index % 3 == 0 else 0.0)
+						equivalent = equivalent and geometry.colors[index].is_equal_approx(tint) \
+							and geometry.phases[index] == phase and geometry.angles[index] == angle
+						for age: float in [0.0, 0.025, 0.05, 0.15, 0.20, 0.62, 1.4, 3.8]:
+							var falling_age: float = maxf(0.0, age - 0.16)
+							var drop: float = reach * falling_age * falling_age * (0.115 if level == 5 else 0.095)
+							var expected: Vector2 = fx._firework_trajectory(angle, age, phase, reach, level, burst_only)
+							var actual: Vector2 = fx._firework_precomputed_trajectory(geometry.directions[index],
+								geometry.phases[index], geometry.phase_sines[index], reach,
+								1.0 - exp(-age * 5.0), falling_age, drop, burst_only)
+							equivalent = equivalent and actual.is_equal_approx(expected)
+				check(equivalent, "Lv%d precomputed %s %s particles retain original count, color, angles and trajectories" % [
+					level, "board" if burst_only else "full", "batch" if batch else "manual"])
+	fx._board_pitch = 0.0
+	fx.reset()

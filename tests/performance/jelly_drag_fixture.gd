@@ -33,6 +33,10 @@ static func motion(view, point: Vector2, pointer: int = 7) -> void:
 static func point(view, pair: Array[int], frame: int, sample: int, bursts: int, contact: bool) -> Vector2:
 	var phase: float = (float(frame) + float(sample) / bursts) * 0.08
 	var local: Vector2 = view._board.position + Vector2(view._pitch * (1.4 + sin(phase) * 0.8), view._pitch * 0.45)
+	if not contact and view.game.cells.size() == Model.CAPACITY:
+		# A full board has no empty top row. Keep this diagnostic's empty-space
+		# trajectory above the well while contact scenarios still cross bodies.
+		local.y = view._board.position.y - view._pitch * 0.65
 	if contact:
 		var target: Vector2 = view._tiles[pair[1]].get_rect().get_center()
 		local = target + Vector2(view._pitch * 0.85 * sin(phase), -view._pitch * 0.65 * (1.0 + cos(phase)))

@@ -84,7 +84,7 @@ func _run() -> void:
 	var data := Data.new()
 	assert(data.load_all())
 	var rows: Array[Dictionary] = []
-	for count: int in [Model.INITIAL_SETTLED_TILES, Model.CAPACITY - Model.COLUMNS]:
+	for count: int in [Model.INITIAL_SETTLED_TILES, Model.CAPACITY - Model.COLUMNS, Model.CAPACITY]:
 		for contact: bool in [false, true]:
 			for bursts: int in [1, 4]:
 				var view := ObservedJelly.new()

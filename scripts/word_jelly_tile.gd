@@ -26,6 +26,7 @@ const COMPLETION_LIGHT = preload("res://scripts/jelly_completion_glow.gdshader")
 const COMPLETION_SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const MERGED_EFFECT_ATLAS = preload("res://assets/images/jelly-level-fx/atlas.png")
 const MERGED_EFFECT_SHADER = preload("res://scripts/word_jelly_merged_level_fx.gdshader")
+const MergedCoreCache = preload("res://scripts/jelly_merged_core_cache.gd")
 const MERGED_EFFECT_IDS: Array[String] = ["pearl", "ripple", "spiral", "firework", "cascade",
 	"bouquet", "aurora", "constellation", "grand_bouquet"]
 const MERGED_EFFECT_FRAMES: float = 32.0
@@ -60,12 +61,31 @@ var _level_badge: Label
 var _picture_shadow: TextureRect
 var _boss_status: Dictionary = {}
 var _boss_overlay := Control.new()
+var _merged_core_proxy := Node2D.new()
+var _merged_core_allowed: bool = false
+var _merged_core_enabled: bool = true
+var _merged_core_requested: bool = false
+var _merged_core_revision: int = 0
+var _merged_core_rejected_revision: int = -1
+var _merged_core_key: String = ""
+var _merged_core_pool: WeakRef
+var _merged_core_texture: Texture2D
+var _merged_core_size := Vector2.ZERO
+var _merged_core_hidden: Array[CanvasItem] = []
 const MERGED_COLORS: Array[Color] = [Color("#f7c45c"), Color("#f7c45c"), Color("#9ee8f3"),
 	Color("#b6c3ff"), Color("#ffd16f"), Color("#ffb4dc"), Color("#f4daff"),
 	Color("#b3f1dd"), Color("#cbd9ff"), Color("#ffe397")]
 
 func _init() -> void:
 	super()
+	_merged_core_proxy.name = "MergedCorePaint"
+	_merged_core_proxy.material = MergedCoreCache.display_material()
+	_merged_core_proxy.draw.connect(_draw_merged_core)
+	add_child(_merged_core_proxy)
+	move_child(_merged_core_proxy, _visual.get_index())
+	_merged_core_proxy.hide()
+	idle_paint_changed.connect(_merged_body_paint_changed)
+	visibility_changed.connect(_merged_visibility_changed)
 	_picture_shadow = _texture()
 	_picture_shadow.name = "WordPictureShadow"
 	_picture_shadow.self_modulate = Color(0.12, 0.18, 0.22, 0.56)
@@ -104,6 +124,8 @@ func set_boss_status(state: Dictionary, reduced: bool) -> void:
 	if state.is_empty() and _boss_status.is_empty() and _boss_overlay.size == size:
 		return
 	# Keep the presented state stable if a caller reuses its dictionary.
+	if (float(state.get("ink", 0.0)) > 0.0) != (float(_boss_status.get("ink", 0.0)) > 0.0):
+		_invalidate_merged_core()
 	_boss_status = state.duplicate()
 	var obscured: bool = float(state.get("ink", 0.0)) > 0.0
 	_label.modulate.a = 0.06 if obscured else 1.0
@@ -150,6 +172,7 @@ static func _completion_light_material() -> ShaderMaterial:
 func set_ambient_animation(enabled: bool) -> void:
 	if _ambient_animation == enabled:
 		return
+	_invalidate_merged_core()
 	_ambient_animation = enabled
 	WordArt.set_owner_animation(_picture, enabled)
 	_sync_picture_shadow()
@@ -164,6 +187,9 @@ func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 	_merged_elapsed = elapsed
 	var still: bool = reduced or not _ambient_animation
 	var active: bool = valid_word and not _projection
+	if active and (not still or size != _merged_geometry_size or merge_level != _merged_geometry_level \
+		or still != _merged_pose_reduced or reduced and _merged_effect_frame != 0.0):
+		_invalidate_merged_core()
 	if active and _merged_glow == null:
 		_merged_glow = TextureRect.new()
 		_merged_glow.name = "MergedLight"
@@ -247,6 +273,7 @@ func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 	if not completion_hint:
 		_set_surface_parameter(&"completion_strength", 0.35 if active else 0.0)
 		_set_surface_parameter(&"completion_glint", -2.0 if still or not active else -0.3 + fposmod(elapsed + tile_id * 0.13, 4.2) * 0.40)
+	_request_merged_core()
 
 func set_completion_hint(active: bool, elapsed: float, reduced: bool, animated: bool = true) -> void:
 	var next_hint: bool = active and not _projection
@@ -287,6 +314,7 @@ func set_match_dimmed(value: bool) -> void:
 	value = value and not _projection
 	if match_dimmed == value:
 		return
+	_invalidate_merged_core()
 	match_dimmed = value
 	# Lower competing material light, keeping learning faces and badges readable.
 	_surface.self_modulate = Color(0.68, 0.72, 0.76) if value else Color.WHITE
@@ -335,6 +363,7 @@ func set_palette(index: int, hue: float) -> void:
 	_set_surface_parameter(&"palette_hue", hue)
 
 func configure(cell: Dictionary, surface: Texture2D, picture: Texture2D, chest: Texture2D, accent: Color, show_both: bool = false) -> void:
+	_invalidate_merged_core()
 	_authored = not cell.get("composition", {}).is_empty()
 	var legacy_complete: bool = not cell.get("word", {}).is_empty() and (_authored or int(cell.get("mass", 1)) > 1)
 	jelly_kind = str(cell.get("jelly_kind", "merged" if legacy_complete else "root"))
@@ -410,6 +439,7 @@ func _refresh_feedback(reset_motion: bool = false) -> void:
 func _layout() -> void:
 	if _visual == null:
 		return
+	_invalidate_merged_core()
 	super._layout()
 	_badge.hide()
 	_surface.stretch_mode = TextureRect.STRETCH_SCALE
@@ -569,7 +599,181 @@ func set_fragment_arrival(age: float, reduced: bool = false) -> void:
 		pop = sin(minf(age / 0.11, 1.0) * PI * 0.5) * exp(-maxf(0.0, age - 0.11) * 10.0)
 	var target_scale := Vector2.ONE * float(_fragment_holder.get_meta("fit", 1.0)) * (1.0 + pop * 0.12)
 	if _fragment_holder.scale != target_scale:
+		_invalidate_merged_core()
 		_fragment_holder.scale = target_scale
+
+
+func set_idle_cached(enabled: bool) -> void:
+	_merged_core_allowed = enabled
+	super.set_idle_cached(enabled)
+	if enabled:
+		_request_merged_core()
+	else:
+		_invalidate_merged_core()
+
+
+func _merged_body_paint_changed() -> void:
+	_invalidate_merged_core()
+	_request_merged_core()
+
+
+func _merged_visibility_changed() -> void:
+	_invalidate_merged_core()
+	_request_merged_core()
+
+
+func _merged_core_eligible() -> bool:
+	return _merged_core_enabled and _merged_core_allowed and is_inside_tree() and is_visible_in_tree() \
+		and valid_word and not _projection and not _ambient_animation and z_index == 1 \
+		and _mark == 0 and _contact_kind == "none" and not has_focus() and not is_hovered() \
+		and (not completion_hint or not _completion_animated or _completion_reduced) \
+		and (_fragment_arrival_age < 0.0 or _fragment_arrival_age >= 0.48 or _reduced_motion) \
+		and _idle_cache_requested and _surface.material != _gel and _idle_cache_eligible()
+
+
+func set_merged_core_cache_enabled(enabled: bool) -> void:
+	_merged_core_enabled = enabled
+	if enabled:
+		_request_merged_core()
+	else:
+		_invalidate_merged_core()
+
+
+func _request_merged_core() -> void:
+	if _merged_core_requested or _merged_core_rejected_revision == _merged_core_revision \
+		or not _merged_core_eligible():
+		return
+	var pool = MergedCoreCache.obtain(get_viewport())
+	if pool == null:
+		return
+	var request: Dictionary = pool.request(self, _merged_core_revision)
+	if request.is_empty():
+		return
+	_merged_core_requested = true
+	_merged_core_key = request.key
+	_merged_core_pool = weakref(pool)
+	if request.texture != null:
+		_merged_core_ready(request.key, request.texture, request.bounds)
+
+
+func _invalidate_merged_core() -> void:
+	_merged_core_revision += 1
+	for subject: CanvasItem in _merged_core_hidden:
+		if is_instance_valid(subject):
+			RenderingServer.canvas_item_set_visible(subject.get_canvas_item(), subject.is_visible_in_tree())
+	_merged_core_hidden.clear()
+	if _merged_core_proxy != null:
+		_merged_core_proxy.hide()
+	_merged_core_texture = null
+	_merged_core_requested = false
+	_merged_core_key = ""
+	if _merged_core_pool != null:
+		var pool: Node = _merged_core_pool.get_ref()
+		if is_instance_valid(pool) and not pool.is_queued_for_deletion():
+			pool.release(self)
+	_merged_core_pool = null
+
+
+func _reject_merged_core() -> void:
+	_invalidate_merged_core()
+	_merged_core_rejected_revision = _merged_core_revision
+
+
+func _core_painted_nodes(subject: Node, result: Array[Control]) -> void:
+	if subject == _label or subject == _level_badge or subject == _fragment_holder:
+		return
+	if subject is TextureRect or subject is Label:
+		var control: Control = subject
+		if control.is_visible_in_tree():
+			result.append(control)
+	for child: Node in subject.get_children():
+		_core_painted_nodes(child, result)
+
+
+func _render_global_transform(subject: CanvasItem) -> Transform2D:
+	var transform := Transform2D.IDENTITY
+	var ancestor: Node = subject
+	var snap: bool = get_viewport().is_snap_controls_to_pixels_enabled()
+	while ancestor is CanvasItem:
+		var canvas: CanvasItem = ancestor
+		var local: Transform2D = canvas.get_transform()
+		var gui: Control = canvas as Control
+		if snap and gui != null and absf(sin(gui.rotation * 4.0)) < 0.00001:
+			local.origin = (local.origin + Vector2(0.5, 0.5)).floor()
+		transform = local * transform
+		ancestor = ancestor.get_parent()
+	# Embedded windows omit content stretch from their popup/screen transform.
+	# The viewport transform includes the actual canvas backing-pixel scale.
+	return subject.get_viewport_transform() * transform
+
+
+func _capture_merged_core() -> Dictionary:
+	var painted: Array[Control] = []
+	if _merged_glow != null:
+		_core_painted_nodes(_merged_glow, painted)
+	_core_painted_nodes(_visual, painted)
+	var sources: Array[Dictionary] = []
+	var bounds := Rect2()
+	for source: Control in painted:
+		var transform: Transform2D = _render_global_transform(source)
+		var extent: Rect2 = Rect2(Vector2.ZERO, source.size)
+		if source == _surface:
+			var paint_material: ShaderMaterial = source.material as ShaderMaterial
+			var mesh: Variant = paint_material.get_shader_parameter("mesh_scale")
+			var expansion: float = 1.0 if mesh == null else float(mesh)
+			extent = Rect2(source.size * (1.0 - expansion) * 0.5, source.size * expansion)
+		if source is Label:
+			extent = extent.grow(maxf(2.0, source.get_theme_constant("outline_size")))
+		var source_bounds: Rect2 = transform * extent
+		bounds = source_bounds if not bounds.has_area() else bounds.merge(source_bounds)
+		var tint: Color = source.self_modulate
+		var ancestor: Node = source
+		while ancestor is CanvasItem:
+			var canvas: CanvasItem = ancestor
+			tint *= canvas.modulate
+			ancestor = ancestor.get_parent()
+		sources.append({"node": source, "transform": transform, "color": tint})
+	var origin: Vector2 = bounds.position.floor()
+	bounds = Rect2(origin, bounds.end.ceil() - origin)
+	return {"bounds": bounds, "sources": sources}
+
+
+func _merged_core_ready(key: String, texture: Texture2D, bounds: Rect2) -> void:
+	if not _merged_core_requested or _merged_core_key != key or not _merged_core_eligible():
+		return
+	_merged_core_texture = texture
+	_merged_core_size = bounds.size
+	var screen := Transform2D.IDENTITY
+	screen.origin = bounds.position
+	_merged_core_proxy.transform = _render_global_transform(self).affine_inverse() * screen
+	var painted: Array[Control] = []
+	if _merged_glow != null:
+		_core_painted_nodes(_merged_glow, painted)
+	_core_painted_nodes(_visual, painted)
+	# Preserve logical visibility, layout, accessibility and source resources.
+	# Only the rendering server hides paint replaced by the same tile's proxy.
+	for subject: Control in painted:
+		RenderingServer.canvas_item_set_visible(subject.get_canvas_item(), false)
+		_merged_core_hidden.append(subject)
+	_merged_core_proxy.show()
+	_merged_core_proxy.queue_redraw()
+
+
+func _draw_merged_core() -> void:
+	if _merged_core_texture != null:
+		_merged_core_proxy.draw_texture_rect(_merged_core_texture, Rect2(Vector2.ZERO, _merged_core_size), false)
+
+
+func merged_core_snapshot() -> Dictionary:
+	var pool: Node = _merged_core_pool.get_ref() if _merged_core_pool != null else null
+	return {"cached": _merged_core_proxy.is_visible_in_tree(), "requested": _merged_core_requested,
+		"revision": _merged_core_revision, "size": [_merged_core_size.x, _merged_core_size.y],
+		"atlas": pool.snapshot() if is_instance_valid(pool) else {}}
+
+
+func _exit_tree() -> void:
+	_invalidate_merged_core()
+	super._exit_tree()
 
 func fragment_badge_snapshot() -> Dictionary:
 	if _fragment_holder == null:

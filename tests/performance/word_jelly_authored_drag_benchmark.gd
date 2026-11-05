@@ -12,14 +12,16 @@ func _run() -> void:
 			options[pair[0]] = pair[1]
 	var samples: int = int(options.get("samples", 120))
 	var warmup: int = 30
-	var count: int = Model.CAPACITY - Model.COLUMNS
 	var dimensions := Vector2i(int(options.get("width", 1366)), int(options.get("height", 768)))
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = dimensions
 	var data := Data.new()
 	assert(data.load_all())
 	var rows: Array[Dictionary] = []
-	for source_kind: String in ["root", "merged"]:
+	for scenario: Dictionary in [{"tiles": 49, "source_kind": "root"}, {"tiles": 49, "source_kind": "merged"},
+		{"tiles": Model.CAPACITY, "source_kind": "root"}, {"tiles": Model.CAPACITY, "source_kind": "merged"}]:
+		var count: int = int(scenario.tiles)
+		var source_kind: String = str(scenario.source_kind)
 		for contact: bool in [false, true]:
 			for bursts: int in [1, 4]:
 				var view := ObservedJelly.new()
@@ -73,7 +75,7 @@ func _run() -> void:
 				view.free()
 				await process_frame
 	var report := {"protocol": "word-jelly-authored-drag-cpu-v1", "engine": Engine.get_version_info(),
-		"scope": "Headless CPU: full49 real-art desktop boards, reviewed Growth cat roots/pictures and friendly authored merged composition, all matching semantic hints, coalesced touch input, 60Hz model/view and shared artwork clock, host snapshot copy/JSON serialization. Excludes renderer, browser bridge, audio playback and physical input latency.",
+		"scope": "Headless CPU: 49/56-body real-art desktop boards, reviewed Growth cat roots/pictures and friendly authored merged composition, all matching semantic hints, coalesced touch input, 60Hz model/view and shared artwork clock, host snapshot copy/JSON serialization. Excludes renderer, browser bridge, audio playback and physical input latency.",
 		"rows": rows}
 	var file := FileAccess.open(str(options.get("output", "user://word-jelly-authored-drag-cpu.json")), FileAccess.WRITE)
 	assert(file != null)

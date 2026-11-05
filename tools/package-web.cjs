@@ -10,7 +10,10 @@ const { readChestKenneyAudio } = require('./chest-kenney-audio.cjs');
 const THEMES = ['spring', 'summer', 'autumn', 'winter', 'ocean', 'space', 'jungle', 'candy'];
 const POP_REFERENCE_IDS = ['quick', 'juicy', 'crisp'];
 
-function compressWebAsset(bytes, candidates = []) {
+function compressWebAsset(bytes, candidates = [], { compressionQuality = 11 } = {}) {
+  if (!Number.isInteger(compressionQuality) || compressionQuality < 0 || compressionQuality > 11) {
+    throw new Error('Brotli compression quality must be an integer from 0 through 11.');
+  }
   for (const filename of candidates) {
     try {
       const compressed = fs.readFileSync(filename);
@@ -23,7 +26,7 @@ function compressWebAsset(bytes, candidates = []) {
       // Missing, truncated or stale caches are disposable; rebuild them below.
     }
   }
-  return brotliCompressSync(bytes, { params: { [constants.BROTLI_PARAM_QUALITY]: 11 } });
+  return brotliCompressSync(bytes, { params: { [constants.BROTLI_PARAM_QUALITY]: compressionQuality } });
 }
 
 function importedAudio(root, source) {
@@ -212,7 +215,10 @@ function removeLocalPipPreview(directory) {
   if (fs.readdirSync(previewRoot).length === 0) fs.rmdirSync(previewRoot);
 }
 
-function packageWebExport(directory, vocabularyPacks = {}) {
+function packageWebExport(directory, vocabularyPacks = {}, { compressionQuality = 11 } = {}) {
+  if (!Number.isInteger(compressionQuality) || compressionQuality < 0 || compressionQuality > 11) {
+    throw new Error('Brotli compression quality must be an integer from 0 through 11.');
+  }
   const page = path.join(directory, 'index.html');
   const html = fs.readFileSync(page, 'utf8');
   const match = html.match(/const config = (\{[^\r\n]*\});/);
@@ -282,7 +288,7 @@ function packageWebExport(directory, vocabularyPacks = {}) {
       (file.deferred ? name.startsWith(`vocabulary-${file.bundle}-`) : !name.startsWith('vocabulary-')))
       .sort((first, second) => Number(second === compressedName) - Number(first === compressedName))
       .map(name => path.join(directory, name));
-    const compressed = compressWebAsset(file.bytes, candidates);
+    const compressed = compressWebAsset(file.bytes, candidates, { compressionQuality });
     if (!file.compressedOnly) {
       fs.writeFileSync(path.join(directory, file.name), file.bytes);
       retained.add(file.name);
