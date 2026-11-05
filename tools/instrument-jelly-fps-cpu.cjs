@@ -12,9 +12,44 @@ const targets = [
   { file: 'scripts/word_jelly.gd', method: '_sync_positions', parameters: '', arguments: '', returns: 'void', label: 'WordJelly._sync_positions' },
   { file: 'scripts/word_jelly.gd', method: 'snapshot', parameters: '', arguments: '', returns: 'Dictionary', label: 'WordJelly.snapshot' },
   { file: 'scripts/jelly_match.gd', method: '_publish', parameters: '', arguments: '', returns: 'void', label: 'JellyMatch._publish' },
+  { file: 'scripts/jelly_match.gd', method: '_chest_milestone', parameters: 'previous_tier: int, tier: int', arguments: 'previous_tier, tier', returns: 'void', label: 'JellyMatch._chest_milestone' },
+  { file: 'scripts/jelly_match.gd', method: '_chest_for_theme', parameters: 'id: String, tier: int = 0', arguments: 'id, tier', returns: 'Texture2D', label: 'JellyMatch._chest_for_theme' },
+  { file: 'scripts/jelly_match.gd', method: '_reward_texture', parameters: 'tier: int = -1', arguments: 'tier', returns: 'Texture2D', label: 'JellyMatch._reward_texture' },
+  { file: 'scripts/jelly_chest_celebration.gd', method: 'enqueue', parameters: 'previous_tier: int, tier: int, before: Texture2D, after: Texture2D', arguments: 'previous_tier, tier, before, after', returns: 'void', label: 'ChestCelebration.enqueue' },
   { file: 'scripts/word_jelly.gd', method: '_publish', parameters: '', arguments: '', returns: 'void', label: 'WordJelly._publish', optional: true },
   { file: 'scripts/word_jelly_model.gd', method: 'step', parameters: 'delta: float', arguments: 'delta', returns: 'void', label: 'WordModel.step' },
   { file: 'scripts/word_jelly_model.gd', method: 'snapshot', parameters: '', arguments: '', returns: 'Dictionary', label: 'WordModel.snapshot' },
+  { file: 'scripts/word_jelly_model.gd', method: '_complete_operation', parameters: 'event_id: String', arguments: 'event_id', returns: 'void', label: 'WordModel._complete_operation' },
+  { file: 'scripts/word_jelly_model.gd', method: '_complete_collection', parameters: 'completed: Dictionary', arguments: 'completed', returns: 'void', label: 'WordModel._complete_collection' },
+  { file: 'scripts/word_jelly_model.gd', method: '_queue_collection_blast', parameters: 'completed: Dictionary', arguments: 'completed', returns: 'void', label: 'WordModel._queue_collection_blast' },
+  { file: 'scripts/word_jelly_model.gd', method: '_blast_target_ids', parameters: 'origin: Dictionary, level: int', arguments: 'origin, level', returns: 'Array[int]', label: 'WordModel._blast_target_ids' },
+  { file: 'scripts/word_jelly_model.gd', method: '_restore_growth', parameters: 'excluded_id: int = -1', arguments: 'excluded_id', returns: 'void', label: 'WordModel._restore_growth' },
+  { file: 'scripts/word_jelly_boss_run.gd', method: 'collect_hit', parameters: 'receipt: String, level: int, combo: int, origin: Dictionary, wait_for_goals: bool = false', arguments: 'receipt, level, combo, origin, wait_for_goals', returns: 'bool', label: 'BossRun.collect_hit' },
+  { file: 'scripts/word_jelly.gd', method: '_collected', parameters: 'event_id: String, word: Dictionary, coins: int, fragments: int', arguments: 'event_id, word, coins, fragments', returns: 'void', label: 'WordJelly._collected' },
+  { file: 'scripts/word_jelly.gd', method: '_refresh_hud', parameters: '', arguments: '', returns: 'void', label: 'WordJelly._refresh_hud' },
+  { file: 'scripts/word_jelly.gd', method: '_refresh_controls', parameters: '', arguments: '', returns: 'void', label: 'WordJelly._refresh_controls' },
+  { file: 'scripts/word_jelly.gd', method: '_combo_changed', parameters: 'state: Dictionary', arguments: 'state', returns: 'void', label: 'WordJelly._combo_changed' },
+  { file: 'scripts/word_jelly.gd', method: 'set_stage_progress', parameters: 'state: Dictionary, celebrate: bool = false', arguments: 'state, celebrate', returns: 'void', label: 'WordJelly.set_stage_progress' },
+  { file: 'scripts/game_ui.gd', method: '_record_growth', parameters: 'attempt_id: String, words: Array, correct: bool', arguments: 'attempt_id, words, correct', returns: 'void', label: 'GameUI._record_growth' },
+  { file: 'scripts/game_ui.gd', method: '_refresh_growth', parameters: '', arguments: '', returns: 'void', label: 'GameUI._refresh_growth' },
+  { file: 'scripts/game_ui.gd', method: '_refresh_jelly_stage_targets', parameters: '', arguments: '', returns: 'void', label: 'GameUI._refresh_jelly_stage_targets' },
+  { file: 'scripts/game_ui.gd', method: '_credit_word_jelly', parameters: 'event_id: String, amount: int', arguments: 'event_id, amount', returns: 'Dictionary', label: 'GameUI._credit_word_jelly' },
+  { file: 'scripts/game_ui.gd', method: '_credit_coins', parameters: 'id: String, tier: int', arguments: 'id, tier', returns: 'Dictionary', label: 'GameUI._credit_coins' },
+  { file: 'scripts/game_ui.gd', method: '_publish_coins', parameters: '', arguments: '', returns: 'void', label: 'GameUI._publish_coins' },
+  { file: 'scripts/game_ui.gd', method: '_present_word_jelly_credit', parameters: 'event_id: String, origin: Vector2, combo: bool = false', arguments: 'event_id, origin, combo', returns: 'void', label: 'GameUI._present_word_jelly_credit' },
+  { file: 'scripts/game_library.gd', method: 'configure_growth', parameters: 'state: Dictionary', arguments: 'state', returns: 'void', label: 'GameLibrary.configure_growth' },
+  { file: 'scripts/game_library.gd', method: 'configure_professional', parameters: 'profile: Dictionary = {}', arguments: 'profile', returns: 'void', label: 'GameLibrary.configure_professional' },
+  { file: 'scripts/game_library.gd', method: '_show_growth_hero', parameters: '', arguments: '', returns: 'void', label: 'GameLibrary._show_growth_hero' },
+  { file: 'scripts/game_library.gd', method: '_sync_professional_hero', parameters: '', arguments: '', returns: 'void', label: 'GameLibrary._sync_professional_hero' },
+  { file: 'scripts/game_library.gd', method: '_layout_hero', parameters: '', arguments: '', returns: 'void', label: 'GameLibrary._layout_hero' },
+  { file: 'scripts/growth_state.gd', method: 'record_attempt', parameters: 'event_id: String, word_ids: Array, correct: bool, allow_cross_age: bool = false', arguments: 'event_id, word_ids, correct, allow_cross_age', returns: 'Dictionary', label: 'GrowthState.record_attempt' },
+  { file: 'scripts/growth_state.gd', method: 'retry_pending', parameters: '', arguments: '', returns: 'Dictionary', label: 'GrowthState.retry_pending' },
+  { file: 'scripts/growth_state.gd', method: '_read_state', parameters: '', arguments: '', returns: 'Dictionary', label: 'GrowthState._read_state' },
+  { file: 'scripts/growth_state.gd', method: '_persist', parameters: 'next_level: int, next_age: int, next_streaks: Dictionary, next_mastered: Dictionary,\n\tnext_receipts: Array, expected_text: Variant = null', arguments: 'next_level, next_age, next_streaks, next_mastered, next_receipts, expected_text', returns: 'bool', label: 'GrowthState._persist' },
+  { file: 'scripts/growth_state.gd', method: 'snapshot', parameters: '', arguments: '', returns: 'Dictionary', label: 'GrowthState.snapshot' },
+  { file: 'scripts/coin_wallet.gd', method: '_credit_amount', parameters: 'receipt_id: String, amount: int', arguments: 'receipt_id, amount', returns: 'Dictionary', label: 'CoinWallet._credit_amount' },
+  { file: 'scripts/coin_wallet.gd', method: '_persist', parameters: 'next_balance: int, next_receipts: Dictionary, next_rewards: Variant = null', arguments: 'next_balance, next_receipts, next_rewards', returns: 'bool', label: 'CoinWallet._persist' },
+  { file: 'scripts/coin_wallet.gd', method: '_read_snapshot', parameters: '', arguments: '', returns: 'Dictionary', label: 'CoinWallet._read_snapshot' },
   { file: 'scripts/word_jelly_publication_cache.gd', method: 'encode_base', parameters: 'state: Dictionary', arguments: 'state', returns: 'Dictionary', label: 'PublicationCache.encode_base', optional: true },
   { file: 'scripts/word_jelly_publication_cache.gd', method: 'encode_host', parameters: 'state: Dictionary, encoded: Dictionary, overrides: Dictionary', arguments: 'state, encoded, overrides', returns: 'String', label: 'PublicationCache.encode_host', optional: true }
 ];
@@ -50,13 +85,25 @@ function replaceOnce(source, needle, replacement, description) {
   return source.slice(0, first) + replacement + source.slice(first + needle.length);
 }
 
-function wrapMethod(source, target) {
-  const signature = `func ${target.method}(${target.parameters}) -> ${target.returns}:`;
+function methodSignature(target, newline = '\n') {
+  return `func ${target.method}(${target.parameters}) -> ${target.returns}:`.replace(/\r?\n/g, newline);
+}
+
+function validateMethodSignature(source, target) {
   const lines = source.split(/\r?\n/);
-  if (lines.filter(line => line === signature).length !== 1) {
+  const declarations = lines.map((line, index) => line.startsWith(`func ${target.method}(`) ? index : -1)
+    .filter(index => index >= 0);
+  const signature = methodSignature(target);
+  const signatureLines = signature.split('\n');
+  if (declarations.length !== 1 || lines.slice(declarations[0], declarations[0] + signatureLines.length).join('\n') !== signature) {
     throw new Error(`Expected one nonstatic signature in ${target.file}: ${signature}`);
   }
+}
+
+function wrapMethod(source, target) {
+  validateMethodSignature(source, target);
   const newline = source.includes('\r\n') ? '\r\n' : '\n';
+  const signature = methodSignature(target, newline);
   // A derived override and its base implementation can both be instrumented.
   // Scope private declarations by script so super calls cannot redispatch to
   // an identically named derived "original" and recurse into the wrapper.
@@ -65,7 +112,7 @@ function wrapMethod(source, target) {
   if (source.includes(`func ${original}(`)) throw new Error(`Method is already instrumented: ${target.label}`);
   // Rename only the declaration. Its original body, explicit super calls,
   // public self calls and signal-bound public method names remain intact.
-  source = replaceOnce(source, signature, `func ${original}(${target.parameters}) -> ${target.returns}:`, target.label);
+  source = replaceOnce(source, signature, signature.replace(`func ${target.method}(`, `func ${original}(`), target.label);
   const call = `${original}(${target.arguments})`;
   const wrapper = [
     marker,
@@ -183,10 +230,7 @@ function instrument(project) {
     const source = patches.get(target.file).before;
     const declarations = source.split(/\r?\n/).filter(line => line.startsWith(`func ${target.method}(`));
     if (!declarations.length) return false;
-    const signature = `func ${target.method}(${target.parameters}) -> ${target.returns}:`;
-    if (declarations.length !== 1 || declarations[0] !== signature) {
-      throw new Error(`Expected one supported optional declaration in ${target.file}: ${signature}`);
-    }
+    validateMethodSignature(source, target);
     return true;
   });
   // Validate and generate every patch before writing any copied source file.
@@ -199,7 +243,7 @@ function instrument(project) {
   const report = {
     protocol: 'jelly-gdscript-inclusive-cpu-v1', diagnostic_only: true, project,
     created_at: new Date().toISOString(), production_project_modified: false,
-    methods: activeTargets.map(({ file, method, label, returns }) => ({ file, method, label, returns })),
+    methods: activeTargets.map(({ file, method, label, parameters, arguments, returns }) => ({ file, method, label, parameters, arguments, returns })),
     boundary_probes: [{ field: 'before.base_snapshot_characters',
       scope: 'Fresh complete base snapshot JSON character count after the warmup boundary and before sampling reset/start. This diagnostic sizing call is outside all sampled timings; host overrides are excluded.' }],
     files: [...patches].map(([file, patch]) => ({ file, original_sha256: digest(patch.before), instrumented_sha256: digest(patch.after) })),

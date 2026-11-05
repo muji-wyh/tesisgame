@@ -19,7 +19,6 @@ const FinishButton = preload("res://scripts/jelly_finish_button.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
 const FusionArt = preload("res://scripts/jelly_fusion.gd")
 const Style = preload("res://scripts/ui_style.gd")
-const Chest = preload("res://scripts/chest_view.gd")
 const ChestTiers = preload("res://scripts/chest_tier_catalog.gd")
 const Data = preload("res://scripts/game_data.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
@@ -235,29 +234,21 @@ func _chest_for_theme(id: String, tier: int = 0) -> Texture2D:
 	# reward presentation continue to own their exact level metadata.
 	var key: String = str(recipe.asset_id)
 	if not _chest_cache.has(key):
-		var viewport := SubViewport.new()
-		viewport.name = "JellyChest_" + key
-		viewport.size = Vector2i(768, 768)
-		viewport.transparent_bg = true
-		viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
-		add_child(viewport)
-		var art := Chest.new()
-		viewport.add_child(art)
-		art.size = Vector2(768, 768)
-		art.reduced_motion = true
-		if tier > 0:
-			art.configure_tier(clampi(tier, 1, RewardProgress.MAX_TIER), Data.theme(id), _manifest)
-		else:
-			art.configure_skin(Data.theme(id), _manifest)
-		# Keep one stable texture reference for tiles, taps and queued rewards.
-		# Its backing changes from the ready render to a captured image in place.
+		var path: String = "res://assets/chests/models/atelier/%s/closed-jelly.png" % key
+		if not ResourceLoader.exists(path, "Texture2D"):
+			push_error("Missing baked Jelly chest icon: " + path)
+			return null
+		var image: Texture2D = load(path) as Texture2D
+		if image == null or image.get_width() <= 0 or image.get_height() <= 0:
+			push_error("Invalid baked Jelly chest icon: " + path)
+			return null
+		# The offline native bake already includes the exact closed pose, shadow
+		# and alpha crop. Icons never create or read back a runtime 3D surface.
 		var texture := AtlasTexture.new()
-		texture.atlas = viewport.get_texture()
-		texture.region = Rect2(Vector2.ZERO, Vector2(viewport.size))
+		texture.atlas = image
+		texture.region = Rect2(Vector2.ZERO, image.get_size())
 		texture.filter_clip = true
-		_chest_cache[key] = {"asset_id": key, "viewport": viewport, "art": art,
-			"frames": 0, "texture": texture, "image_texture": null,
-			"cropped": false, "paused": false, "capture_wait": 0}
+		_chest_cache[key] = {"asset_id": key, "path": path, "texture": texture}
 	return _chest_cache[key].texture
 
 func _reward_texture(tier: int = -1) -> Texture2D:
@@ -271,65 +262,6 @@ func _apply_chest_texture(texture: Texture2D) -> void:
 		tile.set_chest_texture(texture)
 	for preview: Tile in _preview_tiles:
 		preview.set_chest_texture(texture)
-
-func _cache_chest_image(id: String, cache: Dictionary) -> bool:
-	# Source chests reserve an opening envelope. Trim the rendered closed pose once
-	# so treasure markers and chest celebrations use actual artwork dimensions.
-	if DisplayServer.get_name() == "headless":
-		return false
-	var viewport: SubViewport = cache.get("viewport")
-	if not is_instance_valid(viewport):
-		return false
-	var picture: Image = viewport.get_texture().get_image()
-	if picture == null or picture.is_empty():
-		return false
-	var bounds: Rect2i = picture.get_used_rect()
-	if not bounds.has_area():
-		return false
-	bounds = bounds.grow(2).intersection(Rect2i(Vector2i.ZERO, picture.get_size()))
-	var captured := ImageTexture.create_from_image(picture.get_region(bounds))
-	var texture: AtlasTexture = cache.texture
-	texture.atlas = captured
-	texture.region = Rect2(Vector2.ZERO, captured.get_size())
-	cache.image_texture = captured
-	cache.cropped = true
-	cache.viewport = null
-	cache.art = null
-	_chest_cache[id] = cache
-	if _chest_texture == texture:
-		_apply_chest_texture(texture)
-	_chest_tap.queue_redraw()
-	queue_redraw()
-	# The wrapper no longer references this render texture. Removing the
-	# renderer also releases its nested 3D viewport, model and material copies.
-	remove_child(viewport)
-	viewport.queue_free()
-	return true
-
-
-func _advance_chest_cache() -> void:
-	for id: String in _chest_cache.keys():
-		var cache: Dictionary = _chest_cache[id]
-		var viewport: SubViewport = cache.get("viewport")
-		if not is_instance_valid(viewport):
-			continue
-		cache.frames = mini(6, int(cache.frames) + 1)
-		if int(cache.frames) < 6:
-			continue
-		if not bool(cache.paused):
-			cache.art.set_idle_paused(true)
-			viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
-			cache.paused = true
-		if DisplayServer.get_name() == "headless":
-			continue
-		if int(cache.capture_wait) > 0:
-			cache.capture_wait -= 1
-			continue
-		if not _cache_chest_image(id, cache):
-			# A not-yet-readable render stays available and retries at a bounded
-			# cadence; a failed capture never replaces working artwork with blank.
-			cache.capture_wait = 5
-			viewport.render_target_update_mode = SubViewport.UPDATE_ONCE
 
 func _ready() -> void:
 	_prepare_chest()
@@ -1042,7 +974,6 @@ func _refresh_contact() -> void:
 
 func _process(delta: float) -> void:
 	_consume_drag_motion()
-	_advance_chest_cache()
 	finish_button.set_hint_allowed(_finish_hint_allowed())
 	if not _allowed() or delta > 0.5:
 		_chest_tap.clear()

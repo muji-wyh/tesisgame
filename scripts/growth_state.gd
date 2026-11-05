@@ -350,7 +350,7 @@ func snapshot() -> Dictionary:
 		if is_mastered(id):
 			mastered += 1
 	var total_mastered: int = 0
-	for id in _word_ages:
+	for id in _streaks:
 		if is_mastered(id):
 			total_mastered += 1
 	var max_level: bool = level == LAST_LEVEL

@@ -27,6 +27,7 @@ require('./word-library-motion.cjs').checkWordLibraryMotion(root);
 require('./prepare-jelly-reward-art.cjs').checkJellyRewardArt(root);
 require('./prepare-chest-milestone-art.cjs').checkChestMilestoneArt(root);
 require('./prepare-coin-art.cjs').checkCoinArt(root);
+require('./jelly-chest-icons.cjs').checkJellyChestIcons(root);
 runGodot(['--headless', '--path', root, '--import']);
 const vocabulary = writeVocabularyPlan(root);
 console.log('Packing all age and shared vocabulary bundles.');

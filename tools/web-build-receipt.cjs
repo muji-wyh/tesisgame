@@ -11,6 +11,7 @@ const INPUTS = [
   'docs/assets/ui-click-audio.json', 'docs/assets/chest-reference-audio.json',
   'docs/assets/chest-kenney-audio.json',
   'tools/import-chest-kenney.py',
+  'tools/render-jelly-chest-icons.gd', 'tools/jelly-chest-icons.cjs',
   'docs/assets/lv3-vocabulary.json', 'tools/lv3-vocabulary-art.cjs',
   'docs/assets/lv3-word-motion.json',
   'docs/assets/word-library.json', 'tools/word-library-art.cjs',

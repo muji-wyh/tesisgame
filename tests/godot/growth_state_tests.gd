@@ -55,6 +55,8 @@ func _run() -> void:
 	_root = "user://growth_state_tests_%d_%d" % [OS.get_process_id(), Time.get_ticks_usec()]
 	check(DirAccess.make_dir_absolute(_root) == OK, "Create isolated learning fixtures")
 	_test_streaks_and_receipts()
+	_test_snapshot_mastery_counts()
+	_test_snapshot_resets_and_vocabulary_changes()
 	_test_levels()
 	_test_level_curve()
 	_test_migration()
@@ -142,6 +144,97 @@ func _test_streaks_and_receipts() -> void:
 	var snapshot: Dictionary = state.snapshot()
 	snapshot.streaks["ball"] = 3
 	check(state.streak("ball") == 0, "Snapshots cannot mutate saved progress")
+
+
+func _test_snapshot_mastery_counts() -> void:
+	var words: Array = []
+	var dense: Dictionary = {}
+	var zeros: Dictionary = {}
+	var history: Array[String] = []
+	for cohort in range(State.FIRST_AGE, State.LAST_AGE + 1):
+		for index in range(4):
+			var id: String = "cohort-%d-%d" % [cohort, index]
+			words.append({"id": id, "min_age": cohort})
+			dense[id] = index
+			zeros[id] = 0
+			if index == State.MASTERY_STREAK:
+				history.append(id)
+	var scenarios: Array[Dictionary] = [
+		{"name": "empty", "streaks": {}, "history": [], "mastered": 0, "positive": 0},
+		{"name": "sparse", "streaks": {"cohort-3-3": 3, "cohort-4-2": 2, "cohort-12-3": 3, "cohort-8-0": 0},
+			"history": ["cohort-3-3", "cohort-12-3"], "mastered": 2, "positive": 3},
+		{"name": "dense", "streaks": dense, "history": history, "mastered": 10, "positive": 30},
+		{"name": "reset", "streaks": zeros, "history": ["cohort-3-3"], "mastered": 0, "positive": 0},
+	]
+	for scenario: Dictionary in scenarios:
+		var storage := Storage.new()
+		var state := State.new("user://unused-growth-test.cfg", storage)
+		check(state.configure(words), "Configure the %s snapshot curriculum" % scenario.name)
+		for earned_age in [0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]:
+			var earned_level: int = State.level_for_mastered(scenario.history.size())
+			storage.text = _saved_current(earned_level, earned_age, scenario.streaks, scenario.history)
+			check(state.load_state(), "Load %s current mastery at earned age %d" % [scenario.name, earned_age])
+			var snapshot: Dictionary = state.snapshot()
+			var learning: int = State.FIRST_AGE if earned_age == 0 else mini(earned_age + 1, State.LAST_AGE)
+			var mastered: int = 0
+			var steps: int = 0
+			if scenario.name == "dense":
+				mastered = 1
+				steps = 6
+			elif scenario.name == "sparse":
+				mastered = 1 if learning in [3, 12] else 0
+				steps = 3 if learning in [3, 12] else 2 if learning == 4 else 0
+			check(snapshot.total_mastered == scenario.mastered and snapshot.lifetime_mastered == scenario.history.size(),
+				"%s age %d separates current curriculum mastery from permanent history" % [scenario.name, earned_age])
+			check(snapshot.learning_age == learning and snapshot.mastered == mastered and snapshot.total == 4
+				and snapshot.total_words == 40 and is_equal_approx(snapshot.progress, float(mastered) / 4.0),
+				"%s age %d counts only the current cohort in its age progress" % [scenario.name, earned_age])
+			check(is_equal_approx(snapshot.practice_progress, float(steps) / 12.0)
+				and snapshot.streaks.size() == scenario.positive,
+				"%s age %d keeps partial practice and removes explicit zero streaks" % [scenario.name, earned_age])
+			check(snapshot.age == earned_age and snapshot.completed == (earned_age == State.LAST_AGE)
+				and snapshot.level == earned_level,
+				"%s age %d preserves earned age, completion and unique-word level" % [scenario.name, earned_age])
+		check(storage.writes == 0, "%s snapshot reads do not rewrite or normalize the current save" % scenario.name)
+
+
+func _test_snapshot_resets_and_vocabulary_changes() -> void:
+	var fixture: Dictionary = _fixture()
+	var state = fixture.state
+	_practice(state, "apple", "snapshot-current")
+	for index in range(State.MASTERY_STREAK):
+		check(state.record_attempt("snapshot-future-%d" % index, ["age-12"], true, true).save_ok,
+			"Persist cross-age Jelly mastery for snapshot totals")
+	var snapshot: Dictionary = state.snapshot()
+	check(snapshot.total_mastered == 2 and snapshot.lifetime_mastered == 2 and snapshot.mastered == 1
+		and snapshot.age == 0 and snapshot.learning_age == 3,
+		"A mastered future-age Jelly counts in curriculum totals while Baby's current cohort stays independent")
+	state.record_attempt("snapshot-current-reset", ["apple"], false)
+	snapshot = state.snapshot()
+	check(snapshot.total_mastered == 1 and snapshot.lifetime_mastered == 2 and snapshot.mastered == 0
+		and not snapshot.streaks.has("apple") and snapshot.level == 1,
+		"A saved reset removes current mastery without erasing lifetime experience or future mastery")
+	_practice(state, "apple", "snapshot-current-relearn")
+	snapshot = state.snapshot()
+	check(snapshot.total_mastered == 2 and snapshot.lifetime_mastered == 2 and snapshot.level == 1,
+		"Relearning restores current mastery without creating another lifetime word")
+	snapshot.streaks.clear()
+	check(state.snapshot().total_mastered == 2 and state.is_mastered("apple") and state.is_mastered("age-12"),
+		"A caller cannot erase counted mastery by mutating the snapshot's copied streaks")
+	var retained: Array = _words().filter(func(word: Dictionary) -> bool: return word.id != "apple")
+	var writes: int = fixture.storage.writes
+	check(state.configure(retained), "Replace the vocabulary after a mastered word is removed")
+	snapshot = state.snapshot()
+	check(not snapshot.ready and snapshot.streaks.get("apple") == State.MASTERY_STREAK
+		and not state.is_mastered("apple") and snapshot.total_mastered == 1,
+		"A removed ID retained before reload cannot count toward the replacement curriculum")
+	check(snapshot.lifetime_mastered == 2 and snapshot.mastered == 0 and snapshot.total == 1
+		and snapshot.total_words == 10 and snapshot.level == 1,
+		"Replacing vocabulary preserves existing history while counting only the remaining current cohort")
+	check(not state.load_state() and fixture.storage.writes == writes,
+		"Loading rejects the removed saved ID without silently deleting it or rewriting learning history")
+	check(state.configure(_words()) and state.load_state() and state.snapshot().total_mastered == 2,
+		"Restoring the original vocabulary recovers both intact saved masteries")
 
 
 func _test_levels() -> void:
@@ -340,20 +433,23 @@ func _test_max_level() -> void:
 	var state := State.new("user://unused-growth-test.cfg", storage)
 	check(state.configure(words) and state.load_state(), "Load a learner one word below the maximum level")
 	var before: Dictionary = state.snapshot()
-	check(before.level_mastered == 29 and before.level_required == 30 and before.level_remaining == 1,
+	check(before.level_mastered == 29 and before.level_required == 30 and before.level_remaining == 1
+		and before.total_mastered == 1549,
 		"The final step shows exactly one new word remaining")
 	var outcome: Dictionary = state.record_attempt("last-new-word", ["word-1549"], true)
 	var done: Dictionary = state.snapshot()
 	check(outcome.leveled_up and outcome.aged_up and state.level == 99 and state.age == 3,
 		"The final unique word can award Lv99 and an age independently in one transaction")
 	check(done.level_completed and done.level_progress == 1.0 and done.level_remaining == 0
-		and done.level_required == 0 and done.level_mastered == 0,
+		and done.level_required == 0 and done.level_mastered == 0 and done.total_mastered == 1550,
 		"Lv99 is a terminal filled level with no invented next requirement")
 	state.record_attempt("maximum-reset", ["word-1549"], false)
-	check(state.level == 99 and state.age == 3 and state.snapshot().lifetime_mastered == 1550,
+	check(state.level == 99 and state.age == 3 and state.snapshot().lifetime_mastered == 1550
+		and state.snapshot().total_mastered == 1549,
 		"A mistake after Lv99 does not demote or erase unique history")
 	_practice(state, "word-1549", "maximum-relearn")
-	check(state.level == 99 and state.snapshot().lifetime_mastered == 1550, "Relearning cannot exceed the maximum or count twice")
+	check(state.level == 99 and state.snapshot().lifetime_mastered == 1550 and state.snapshot().total_mastered == 1550,
+		"Relearning cannot exceed the maximum or count twice")
 
 
 func _test_history_concurrency() -> void:
@@ -423,12 +519,13 @@ func _test_pending_order() -> void:
 	fixture.storage.writable = false
 	state.record_attempt("first-level-pending", ["apple"], true)
 	state.record_attempt("first-level-then-wrong", ["apple"], false)
-	check(state.level == 0 and state.snapshot().lifetime_mastered == 0 and state.streak("apple") == State.MASTERY_STREAK - 1,
+	check(state.level == 0 and state.snapshot().lifetime_mastered == 0 and state.snapshot().total_mastered == 0
+		and state.streak("apple") == State.MASTERY_STREAK - 1,
 		"Failed writes publish neither a new lifetime word nor its later reset")
 	fixture.storage.writable = true
 	var first_level: Dictionary = state.retry_pending()
 	check(first_level.leveled_up and first_level.previous_level == 0 and state.level == 1
-		and state.streak("apple") == 0 and state.snapshot().lifetime_mastered == 1,
+		and state.streak("apple") == 0 and state.snapshot().lifetime_mastered == 1 and state.snapshot().total_mastered == 0,
 		"Replaying mastery followed by a mistake keeps earned experience and the correct current streak")
 
 
@@ -565,6 +662,7 @@ func _test_invalid_saves() -> void:
 		_saved_v2(1, 0, {}, ["age-4"]), _saved_v2(0, 0, {"apple": 6}),
 		_saved_v2(0, 0, {}, ["apple"]), _saved_v2(1, 0), _saved(0, {}, [], 2),
 		_saved_current(1, 0, {"apple": 4}, ["apple"]), _saved_current(0, 0, {"apple": 3}),
+		_saved_current(0, 0, {"ghost": 0}), _saved_current(0, 0, {"ghost": 3}),
 		_saved_v2(0, 0, {"apple": 7}), _saved_v2(0, 0, {"apple": 3.5}),
 		_saved_v2(1, 0, {"apple": 3}), _saved_current(0, 0, {"apple": 6})]:
 		var storage := Storage.new()

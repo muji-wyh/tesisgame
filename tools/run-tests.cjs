@@ -34,7 +34,7 @@ const groups = {
     node: [
       'assets', 'chest-assets', 'web-export', 'web-templates', 'web-scrollbars', 'voice-generation', 'deployment', 'memory-input-host',
       'unity-art', 'test-runner', 'web-package-cache', 'web-build-receipt', 'web-server', 'performance-benchmark', 'ui-click-assets', 'interface-click-host',
-      'vocabulary-library-preparation', 'word-library-motion', 'coin-wallet-host'
+      'vocabulary-library-preparation', 'word-library-motion', 'coin-wallet-host', 'jelly-fps-instrumentation'
     ]
   },
   flow: {
@@ -102,6 +102,7 @@ groups['word-jelly'].godot.push('jelly_pause_tests', 'word_jelly_practice_tests'
   'jelly_merged_core_cache_tests',
   'word_jelly_publication_cache_tests',
   'game_library_publication_tests',
+  'game_library_deferred_hero_tests',
   'word_jelly_upgrade_view_tests',
   'word_jelly_upgrade_flow_tests',
   'word_jelly_failure_upgrades_tests',
@@ -113,7 +114,9 @@ groups['chest-charge'].godot.push('chest_upgrade_level_tests', 'chest_asset_stat
 groups['word-jelly'].godot.push('chest_upgrade_level_tests');
 groups.jelly.godot.push('jelly_publication_json_tests');
 groups['word-jelly'].godot.push('jelly_publication_json_tests');
-groups.jelly.node.push('jelly-campaign-art', 'jelly-campaign-host', 'chest-tier-art', 'jelly-boss-art', 'pirate-asset');
+groups.jelly.godot.push('jelly_chest_icons_tests');
+groups['word-jelly'].godot.push('jelly_chest_icons_tests');
+groups.jelly.node.push('jelly-campaign-art', 'jelly-campaign-host', 'chest-tier-art', 'jelly-boss-art', 'pirate-asset', 'jelly-chest-icons');
 
 function createPlan(names = ['all']) {
   const godot = new Set(), node = new Set();

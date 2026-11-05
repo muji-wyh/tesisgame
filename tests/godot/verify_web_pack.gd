@@ -83,6 +83,13 @@ func _verify() -> void:
 	if tier_sources.size() != 28:
 		printerr("Ninety-nine chest levels must retain their twenty-eight selected Atelier materials.")
 		failures += 1
+	for model_path: String in tier_sources:
+		var icon_path: String = model_path.get_base_dir() + "/closed-jelly.png"
+		var icon: Texture2D = load(icon_path) as Texture2D
+		if icon == null or icon.get_width() <= 0 or icon.get_height() <= 0:
+			printerr("A baked Jelly chest icon is missing from the startup pack: " + icon_path)
+			failures += 1
+	print("Jelly chest icons: %d acquired source portraits checked in the startup pack." % tier_sources.size())
 	for path: String in ["res://assets/images/ui/jelly-goals/star.webp", "res://assets/images/ui/jelly-goals/clock.webp"]:
 		if not ResourceLoader.exists(path):
 			printerr("Campaign UI artwork must load before any age media pack: " + path)

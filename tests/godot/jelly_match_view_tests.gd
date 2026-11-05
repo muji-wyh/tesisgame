@@ -2102,34 +2102,27 @@ func _check_reduced_motion_and_cache(view) -> void:
 	check(view._reward_texture(99) == final_texture and view._chest_cache.size() == cache_count,
 		"Lv28 and Lv99 share one final source image without creating another 3D renderer")
 	var final_source: String = str(ChestTiers.preset(28).asset_id)
-	var final_cache: Dictionary = view._chest_cache[final_source]
-	var viewport_reference: WeakRef = weakref(final_cache.viewport) if is_instance_valid(final_cache.viewport) else null
-	var art_reference: WeakRef = weakref(final_cache.art) if is_instance_valid(final_cache.art) else null
-	for index in range(12):
-		view._process(0.01)
-		await process_frame
-		if DisplayServer.get_name() != "headless":
-			await RenderingServer.frame_post_draw
-	await process_frame
+	var backing: Texture2D = (texture as AtlasTexture).atlas
+	var final_backing: Texture2D = (final_texture as AtlasTexture).atlas
 	for source_id: String in [str(ChestTiers.preset(1).asset_id), final_source]:
 		var cache: Dictionary = view._chest_cache[source_id]
 		check(cache.asset_id == source_id and cache.texture is AtlasTexture,
 			"Static chest artwork is cached by its exact source asset identity")
-		if DisplayServer.get_name() == "headless":
-			check(is_instance_valid(cache.viewport) and is_instance_valid(cache.art)
-				and cache.viewport.render_target_update_mode == SubViewport.UPDATE_DISABLED
-				and not cache.art.is_processing() and cache.texture.atlas is ViewportTexture,
-				"Headless previews retain a paused working source renderer when image readback is unavailable")
-		else:
-			check(cache.viewport == null and cache.art == null and bool(cache.cropped)
-				and cache.texture.atlas is ImageTexture and cache.texture.atlas == cache.image_texture,
-				"Captured static chest images release their nested source renderer and preserve the stable wrapper")
-	check(view._chest_texture == texture and view._reward_texture(99) == final_texture,
-		"Source image capture keeps texture references already held by tiles and rewards valid")
-	if DisplayServer.get_name() != "headless":
-		check((viewport_reference == null or viewport_reference.get_ref() == null)
-			and (art_reference == null or art_reference.get_ref() == null),
-			"Successful source image capture actually disposes the renderer and its owned art tree")
+		var expected_path: String = "res://assets/chests/models/atelier/%s/closed-jelly.png" % source_id
+		var image: Texture2D = cache.texture.atlas
+		check(image != null and not image is ViewportTexture and image.resource_path == expected_path
+			and cache.path == expected_path and not cache.has("viewport") and not cache.has("art"),
+			"Closed chest icons are ready imported artwork immediately, including in headless previews")
+		check(cache.texture.region == Rect2(Vector2.ZERO, image.get_size()) and cache.texture.filter_clip,
+			"The stable wrapper preserves the offline native alpha crop without another runtime fit")
+	for index in range(2):
+		view._process(0.01)
+		await process_frame
+	check(view._chest_texture == texture and view._reward_texture(99) == final_texture
+		and (texture as AtlasTexture).atlas == backing and (final_texture as AtlasTexture).atlas == final_backing,
+		"Rendering and reward requests preserve the ready texture references already held by tiles and rewards")
+	check(not view.get_children().any(func(node: Node) -> bool: return node is SubViewport),
+		"Static chest icons never attach a live source renderer to the game view")
 	view.stop()
 	check(view._tiles.is_empty() and view._fusion_visuals.is_empty() and not view.finish_button.visible
 		and not view._loot_icon.visible and not bool(view.snapshot().preview.visible) and view._ghosts.is_empty(),

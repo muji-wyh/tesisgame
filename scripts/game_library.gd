@@ -49,6 +49,7 @@ var _body: VBoxContainer
 var _games_heading: Label
 var _games_notice: Label
 var _hero: Control
+var _hero_layout_pending: bool = false
 var _pip_caption: Label
 var _journey: Panel
 var _journey_heading: Label
@@ -629,6 +630,8 @@ func ensure_mode_visible(id: String) -> void:
 func _sync_pip_visibility() -> void:
 	if pip == null:
 		return
+	if is_visible_in_tree() and _hero_layout_pending:
+		_layout_hero()
 	pip.set_idle_paused(not is_visible_in_tree())
 	pip.set_proactive_allowed(is_visible_in_tree())
 
@@ -743,9 +746,27 @@ func _style_tile(tile: Dictionary) -> void:
 
 
 func _layout_hero() -> void:
-	if pip == null or _hero.size.x <= 0:
+	_hero_layout_pending = true
+	if pip == null:
 		return
 	var wide: bool = _hero.size.x * _factor >= 640.0
+	# Keep snapshot text current even while Home's expensive layout is hidden.
+	var active_progress: Dictionary = _professional_profile if _professional_selected() else _growth
+	var ready: bool = active_progress.get("ready", false)
+	var completed: bool = active_progress.get("completed", false)
+	if _professional_selected() and ready:
+		if active_progress.get("level_completed", false):
+			_journey_count.text = "%d career words learned" % int(active_progress.get("lifetime_mastered", 0))
+		else:
+			_journey_count.text = "%d / %d to Lv%d\n%d career words learned" % [int(active_progress.get("level_mastered", 0)), int(active_progress.get("level_required", 0)), int(active_progress.get("level", 0)) + 1, int(active_progress.get("lifetime_mastered", 0))]
+	elif not ready:
+		_journey_count.text = "Progress is unavailable." if wide else "Progress is\nunavailable."
+	elif completed:
+		_journey_count.text = ("%d words learned together" if wide else "%d words learned\ntogether") % int(_growth.get("lifetime_mastered", 0))
+	else:
+		_journey_count.text = ("%d / %d mastered" if wide else "%d / %d\nmastered") % [_growth.get("mastered", 0), _growth.get("total", 0)]
+	if _hero.size.x <= 0 or (is_inside_tree() and not is_visible_in_tree()):
+		return
 	var group_width: float = minf(_hero.size.x, 920.0 / _factor)
 	var left: float = (_hero.size.x - group_width) * 0.5
 	var css_width: float = group_width * _factor
@@ -797,22 +818,10 @@ func _layout_hero() -> void:
 	_journey_count.position = Vector2(copy_x, (143.0 if wide else 144.0) / _factor)
 	_journey_count.size = Vector2(copy_width, (28.0 if wide else 40.0) / _factor)
 	_journey_count.add_theme_font_size_override("font_size", ceili((13.0 if wide else 11.0) / _factor))
-	var active_progress: Dictionary = _professional_profile if _professional_selected() else _growth
-	var ready: bool = active_progress.get("ready", false)
-	var completed: bool = active_progress.get("completed", false)
 	if _professional_selected() and ready:
-		if active_progress.get("level_completed", false):
-			_journey_count.text = "%d career words learned" % int(active_progress.get("lifetime_mastered", 0))
-		else:
-			_journey_count.text = "%d / %d to Lv%d\n%d career words learned" % [int(active_progress.get("level_mastered", 0)), int(active_progress.get("level_required", 0)), int(active_progress.get("level", 0)) + 1, int(active_progress.get("lifetime_mastered", 0))]
 		_journey_count.size.y = 40.0 / _factor
-	elif not ready:
-		_journey_count.text = "Progress is unavailable." if wide else "Progress is\nunavailable."
-	elif completed:
-		_journey_count.text = ("%d words learned together" if wide else "%d words learned\ntogether") % int(_growth.get("lifetime_mastered", 0))
-	else:
-		_journey_count.text = ("%d / %d mastered" if wide else "%d / %d\nmastered") % [_growth.get("mastered", 0), _growth.get("total", 0)]
 	_sync_growth_meter()
+	_hero_layout_pending = false
 
 
 func _layout_tile(tile: Dictionary) -> void:

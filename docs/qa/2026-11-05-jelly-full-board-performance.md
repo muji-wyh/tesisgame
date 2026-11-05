@@ -2,6 +2,8 @@
 
 Target: the game page in PC Chrome at 1366 x 768, DPR 1, with 56 Jellies, normal motion and audio. The game map is excluded from this change.
 
+The subsequent [collection callback follow-up](2026-11-05-jelly-collection-callbacks.md) records the next round of Growth, hidden Home layout and static chest icon optimization with matched callback and bare browser captures.
+
 | Evidence | Status |
 | --- | --- |
 | Native publication encoding and gravity CPU comparisons | Verified, with semantic parity |

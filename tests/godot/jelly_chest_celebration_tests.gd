@@ -616,7 +616,7 @@ func _check_closed_models() -> void:
 	models.clear()
 	var detached: bool = true
 	for model in retired:
-		detached = detached and model.get_parent() == null and not model.snapshot().active \
+		detached = detached and model.get_parent() == null and not model._active \
 			and model.render_target_update_mode == SubViewport.UPDATE_DISABLED
 	check(detached and models._pool.is_empty() and models._order.is_empty(),
 		"Clearing the pool disables and detaches every viewport before deferred disposal")
@@ -625,7 +625,7 @@ func _check_closed_models() -> void:
 
 
 func _check_original_opening(models) -> void:
-	var catalog: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(RewardModel.MANIFEST_PATH))
+	var catalog: Dictionary = models.TierCatalog.manifest()
 	var style: Dictionary = catalog.styles.harvest
 	var original: Dictionary = style.duplicate(true)
 	var model := ChestModel.new()
