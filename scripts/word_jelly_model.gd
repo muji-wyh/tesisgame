@@ -1934,8 +1934,9 @@ func _collection_batch_boundary() -> float:
 func _collection_batch_settling_remaining() -> float:
 	var remaining: float = 0.0
 	for tile_id: int in _collection_batch_ids:
-		var tile: Dictionary = cell(tile_id)
-		if not tile.is_empty():
+		var index: int = _index_for_id(tile_id)
+		if index >= 0:
+			var tile: Dictionary = cells[index]
 			remaining = maxf(remaining, settle_duration(tile) - float(tile.age))
 	return remaining
 
@@ -3816,6 +3817,20 @@ func _resume_pending_motion() -> void:
 func _settle_collected_stack() -> void:
 	if _authored_auto_active():
 		return
+	if collection_batch_active():
+		# Captured bodies all wait for pickup; none can enter the gravity pass.
+		# Rebuild from current IDs so cancellation and new supply keep their rules.
+		var captured: Dictionary = {}
+		for tile_id: int in _collection_batch_ids:
+			captured[tile_id] = true
+		var all_captured: bool = true
+		for tile: Dictionary in cells:
+			if not captured.has(int(tile.id)):
+				all_captured = false
+				break
+		if all_captured:
+			_gravity_pending = not cells.is_empty()
+			return
 	_gravity_pending = false
 	var ordered: Array[Dictionary] = cells.duplicate()
 	ordered.sort_custom(_gravity_order)

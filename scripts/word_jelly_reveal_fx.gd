@@ -338,6 +338,16 @@ func _firework_point(origin: Vector2, direction: Vector2, reach: float, age: flo
 	return origin + offset
 
 
+func _firework_clock_point(origin: Vector2, direction: Vector2, reach: float,
+		time: float, travel: float, falling: float, vertical_scale: float) -> Vector2:
+	# Keep the original Float64 scalar and Vector2 multiplication order.
+	var spread: Vector2 = direction * Vector2(1.16, 0.88) * reach * travel
+	var drop: float = reach * 1.40 * falling * falling
+	var offset: Vector2 = spread + Vector2(direction.x * reach * 0.045 * time * time, drop)
+	offset.y *= vertical_scale
+	return origin + offset
+
+
 func _draw_explosion(fade: float) -> void:
 	var selected: Dictionary = PROFILES[level - 1]
 	var groups: int = int(selected.bursts)
@@ -351,6 +361,11 @@ func _draw_explosion(fade: float) -> void:
 			_stamp(GLOW, _card.get_center(), _card.size * 1.12, Color(color_at(), fade * 0.24))
 			return
 		groups = mini(groups, count)
+	# These values are invariant during this synchronous draw. The public
+	# _firework_point helper remains unchanged for every other caller.
+	var vertical_scale: float = _firework_vertical_scale()
+	var tail_clocks := PackedFloat64Array()
+	tail_clocks.resize(trails * 6)
 	for group in range(groups):
 		var spokes: int = count / groups + (1 if group < count % groups else 0)
 		var delay: float = span * float(group) / float(maxi(1, groups - 1))
@@ -365,24 +380,47 @@ func _draw_explosion(fade: float) -> void:
 		_stamp(GLOW, origin, Vector2.ONE * radius * 1.5, Color(tint, opening * fade * 0.55))
 		_stamp(RAYS, origin, Vector2.ONE * radius * (0.7 + smoothstep(0.0, life * 0.2, age)),
 			Color(tint, opening * fade * 0.8), group * 0.7)
+		var head_time: float = clampf(age / life, 0.0, 1.0)
+		var head_travel: float = (1.0 - exp(-head_time * 4.5)) / (1.0 - exp(-4.5))
+		var head_falling: float = maxf(0.0, (head_time - 0.08) / 0.92)
+		var valid_tails: int = 0
+		for tail in range(trails, 0, -1):
+			var previous_age: float = age - float(tail) * life * 0.045
+			if previous_age <= 0.0:
+				continue
+			valid_tails |= 1 << (tail - 1)
+			var index: int = (tail - 1) * 6
+			var previous_time: float = clampf(previous_age / life, 0.0, 1.0)
+			tail_clocks[index] = previous_time
+			tail_clocks[index + 1] = (1.0 - exp(-previous_time * 4.5)) / (1.0 - exp(-4.5))
+			tail_clocks[index + 2] = maxf(0.0, (previous_time - 0.08) / 0.92)
+			# Keep the original addition expression; neighboring samples can round
+			# differently from recomputing age - (tail - 1) * life * 0.045.
+			var ahead_time: float = clampf((previous_age + life * 0.045) / life, 0.0, 1.0)
+			tail_clocks[index + 3] = ahead_time
+			tail_clocks[index + 4] = (1.0 - exp(-ahead_time * 4.5)) / (1.0 - exp(-4.5))
+			tail_clocks[index + 5] = maxf(0.0, (ahead_time - 0.08) / 0.92)
 		for spoke in range(spokes):
 			var phase: float = float(posmod(spoke * 7 + group * 3, 13)) / 13.0
 			var angle: float = TAU * float(spoke) / float(spokes) + group * 0.43
 			var direction := Vector2.from_angle(angle)
 			# The alternating inner and outer petals share one unmistakable origin.
 			var reach: float = radius * (0.72 + phase * 0.28)
-			var point: Vector2 = _firework_point(origin, direction, reach, age, life)
+			var point: Vector2 = _firework_clock_point(origin, direction, reach,
+				head_time, head_travel, head_falling, vertical_scale)
 			var opacity: float = fade * smoothstep(0.0, 0.015, age) * (1.0 - smoothstep(life * 0.68, life, age))
 			var edge: float = minf((9.0 + level * 0.75 + phase * 3.5) * 1.50 / _ui_scale, radius * 0.38)
 			var ember: Color = tint.lerp(Color(1.0, 0.78, 0.32), smoothstep(life * 0.5, life, age) * 0.55)
 			# Consecutive trajectory samples bend the tail with the falling tip;
 			# a line back toward the burst would pin late embers into radial spokes.
 			for tail in range(trails, 0, -1):
-				var previous_age: float = age - float(tail) * life * 0.045
-				if previous_age <= 0.0:
+				if (valid_tails & (1 << (tail - 1))) == 0:
 					continue
-				var behind: Vector2 = _firework_point(origin, direction, reach, previous_age, life)
-				var ahead: Vector2 = _firework_point(origin, direction, reach, previous_age + life * 0.045, life)
+				var index: int = (tail - 1) * 6
+				var behind: Vector2 = _firework_clock_point(origin, direction, reach,
+					tail_clocks[index], tail_clocks[index + 1], tail_clocks[index + 2], vertical_scale)
+				var ahead: Vector2 = _firework_clock_point(origin, direction, reach,
+					tail_clocks[index + 3], tail_clocks[index + 4], tail_clocks[index + 5], vertical_scale)
 				var strength: float = 1.0 - float(tail) / float(trails + 1)
 				var tangent: Vector2 = ahead - behind
 				_stamp(STAR, behind.lerp(ahead, 0.5),
@@ -391,7 +429,6 @@ func _draw_explosion(fade: float) -> void:
 			var shrink: float = lerpf(1.0, 0.56, smoothstep(life * 0.2, life, age))
 			_stamp(STAR, point, Vector2.ONE * edge * shrink, Color(ember, opacity), angle)
 			_stamp(STAR, point, Vector2.ONE * edge * shrink * 0.32, Color(1.0, 0.99, 0.86, opacity))
-
 
 func snapshot() -> Dictionary:
 	var selected: Dictionary = PROFILES[level - 1]
