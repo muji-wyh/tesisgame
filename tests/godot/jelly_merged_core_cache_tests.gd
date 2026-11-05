@@ -118,6 +118,82 @@ func _within_rgba8_budget(error: Dictionary) -> bool:
 		and int(error.different_pixels) <= float(error.pixel_count) * MAX_RGBA8_OUTLIER_RATIO
 
 
+func _check_subset_parity(tiles: Array, changed: Array, label: String) -> void:
+	var cached: Image = await _image()
+	var cached_draws: int = RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)
+	for tile in changed:
+		tile.set_merged_core_cache_enabled(false)
+	var original: Image = await _image()
+	var source_draws: int = RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)
+	var error: Dictionary = _pixel_error(original, cached, label)
+	print("%s merged core pixel error: %s draws: %d -> %d" % [label, str(error), source_draws, cached_draws])
+	check(_within_rgba8_budget(error), label + " preserves exact source tints, neighbor order, text and effect phases within the existing RGBA8 budget")
+	check(cached_draws < source_draws, label + " replaces source paint with fewer real rendered draw calls")
+	for tile in changed:
+		tile.set_merged_core_cache_enabled(true)
+	check(await _settle_cores(tiles), label + " restores bounded shared-atlas ownership after the reference capture")
+
+
+func _check_dim_reacquisition(tiles: Array) -> void:
+	var changed: Array = tiles.slice(0, 18)
+	for dimmed: bool in [true, false]:
+		var requested: bool = true
+		var restored: bool = true
+		for tile in changed:
+			tile.set_match_dimmed(dimmed)
+			requested = requested and bool(tile.merged_core_snapshot().requested)
+			restored = restored and not bool(tile.merged_core_snapshot().cached) and tile._merged_core_hidden.is_empty()
+		check(restored, "Changing component tint restores all original source paint in the same call stack")
+		check(requested, "Static dimming and undimming automatically request a replacement core without another pose or idle-cache call")
+		check(await _settle_cores(tiles), "Every dimmed or undimmed neighbor automatically reacquires its full cached core")
+		await _check_subset_parity(tiles, changed, "automatic-dim" if dimmed else "automatic-undim")
+
+
+func _check_static_hint_layer(tiles: Array) -> void:
+	var hints: Array = []
+	for index in range(tiles.size()):
+		var tile = tiles[index]
+		if not tile.valid_word or index % 3 == 0:
+			continue
+		tile.set_completion_hint(true, 1.0, false, false)
+		tile.z_index = 4
+		tile.deform(0.0, 0.0)
+		tile.set_idle_cached(true)
+		hints.append(tile)
+	check(not hints.is_empty(), "Mixed neighbors include raised static completion hints at every retained source layer")
+	check(await _settle_bodies(tiles), "Raised static hints warm their exact expanded source skins")
+	check(await _settle_cores(tiles), "Raised static hints reacquire full cores alongside ordinary and unraised merged neighbors")
+	var retained_layers: bool = true
+	for tile in hints:
+		retained_layers = retained_layers and tile.z_index == 4 and tile._merged_core_eligible() \
+			and bool(tile.merged_core_snapshot().cached) and tile._merged_core_proxy.get_parent() == tile \
+			and tile._merged_core_proxy.z_index == 0 and tile._merged_core_proxy.z_as_relative \
+			and tile._label.visible and tile._level_badge.z_index == 46 and tile._shadow.z_index == -1 \
+			and not tile._merged_core_hidden.has(tile._label) and not tile._merged_core_hidden.has(tile._level_badge) \
+			and not tile._merged_core_hidden.has(tile._fragment_holder) and not tile._merged_core_hidden.has(tile._shadow)
+	check(retained_layers, "A raised proxy inherits its tile layer while labels, badges, fragments and contact shadows retain their native layers")
+	await _check_subset_parity(tiles, hints, "raised-static-hint-neighbors")
+	var selected = hints[0]
+	selected.set_completion_hint(true, 1.1, false, true)
+	check(not selected._merged_core_eligible() and not selected.merged_core_snapshot().cached,
+		"An animated raised hint restores the original live breathing and light effects")
+	selected.set_completion_hint(true, 1.1, false, false)
+	selected.set_idle_cached(true)
+	check(await _settle_cores(tiles), "A hint returning to its static raised pose reacquires its existing source artwork")
+	selected.set_completion_hint(false, 1.1, false, false)
+	selected.set_idle_cached(true)
+	check(not selected._merged_core_eligible(), "A non-hint at layer four cannot opt into the raised-hint exception")
+	selected.set_completion_hint(true, 1.1, false, false)
+	selected.z_index = 5
+	selected.set_idle_cached(true)
+	check(not selected._merged_core_eligible(), "Arbitrary raised layers remain outside the bounded cache-layer contract")
+	selected.set_completion_hint(false, 1.1, false, false)
+	selected.z_index = 1
+	selected.set_idle_cached(true)
+	check(await _settle_bodies(tiles), "Layer-guard checks restore the original body-cache pose")
+	check(await _settle_cores(tiles), "Layer-guard checks leave no missing merged-core owners")
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1366, 768)
@@ -201,7 +277,6 @@ func _run() -> void:
 	check(await _settle_cores(tiles), "A newly frozen source reenters at its current coherent phase")
 	selected.set_match_dimmed(true)
 	check(not selected.merged_core_snapshot().cached, "Component-specific dimming restores original paint immediately")
-	selected.set_idle_cached(true)
 	check(await _settle_cores(tiles), "A dimmed static source can capture its real component tints")
 	selected.set_marked(true, true, true, false)
 	check(not selected.merged_core_snapshot().cached, "Selected and marked feedback remains live")
@@ -209,6 +284,7 @@ func _run() -> void:
 	selected.set_match_dimmed(false)
 	selected.set_idle_cached(true)
 	check(await _settle_cores(tiles), "Released feedback returns to its stable source capture")
+	await _check_dim_reacquisition(tiles)
 	for tile in tiles:
 		tile.set_merged_core_cache_enabled(false)
 	holder.modulate = Color(0.84, 0.92, 0.98, 0.64)
@@ -237,6 +313,7 @@ func _run() -> void:
 	error = _pixel_error(original, cached, "mixed-neighbors")
 	print("Mixed-neighbor merged core pixel error: ", error)
 	check(_within_rgba8_budget(error), "Mixed ordinary and merged sibling order preserves all glow overlaps")
+	await _check_static_hint_layer(tiles)
 	selected = tiles[1]
 	selected.set_projection(true)
 	check(not selected.merged_core_snapshot().cached and not selected.presentation_snapshot().merged_effect.visible,

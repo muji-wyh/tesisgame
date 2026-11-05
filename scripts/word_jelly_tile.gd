@@ -324,6 +324,9 @@ func set_match_dimmed(value: bool) -> void:
 		_merged_effect.self_modulate.a = 0.25 if value else 1.0
 	for glint: TextureRect in _merged_glints:
 		glint.self_modulate.a = 0.25 if value else 1.0
+	# Static neighbors may not be posed again when a gesture only changes tint.
+	# Reacquire after every captured component has received its final color.
+	_request_merged_core()
 
 func set_projection(value: bool) -> void:
 	if _projection == value:
@@ -623,8 +626,12 @@ func _merged_visibility_changed() -> void:
 
 
 func _merged_core_eligible() -> bool:
+	# A static completion hint keeps the same child ordering at its raised
+	# tile layer. The proxy inherits that layer; text, badges and shadows stay native.
+	var cache_layer: bool = z_index == 1 or (z_index == 4 and completion_hint \
+		and (not _completion_animated or _completion_reduced))
 	return _merged_core_enabled and _merged_core_allowed and is_inside_tree() and is_visible_in_tree() \
-		and valid_word and not _projection and not _ambient_animation and z_index == 1 \
+		and valid_word and not _projection and not _ambient_animation and cache_layer \
 		and _mark == 0 and _contact_kind == "none" and not has_focus() and not is_hovered() \
 		and (not completion_hint or not _completion_animated or _completion_reduced) \
 		and (_fragment_arrival_age < 0.0 or _fragment_arrival_age >= 0.48 or _reduced_motion) \

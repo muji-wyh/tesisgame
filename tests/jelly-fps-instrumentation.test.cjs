@@ -85,7 +85,10 @@ test('every current target matches its production declaration without changing t
     'GrowthState.record_attempt', 'GrowthState._persist', 'CoinWallet._persist',
     'JellyMatch._chest_milestone', 'JellyMatch._chest_for_theme', 'JellyMatch._reward_texture',
     'ChestCelebration.enqueue', 'WordModel._queue_collection_blast', 'WordModel._blast_target_ids',
-    'WordModel._restore_growth', 'WordJelly._refresh_controls', 'WordJelly._combo_changed', 'BossRun.collect_hit']) {
+    'WordModel._restore_growth', 'WordJelly._refresh_controls', 'WordJelly._combo_changed', 'BossRun.collect_hit',
+    'GameUI._jelly_publication_overrides', 'GameUI._publish_serialized_jelly', 'JellyMatch.snapshot',
+    'WordJelly._can_drop_preview', 'WordJelly.presentation_work_snapshot',
+    'WordModel.can_drop_now', 'WordModel.danger_recovery_snapshot']) {
     assert(labels.has(required), `Required completion diagnostic is missing: ${required}`);
   }
 });
