@@ -35,6 +35,8 @@ const DRAG_STRETCH := Vector2(0.985, 1.06)
 var game = JellyMatchModel.new()
 var interaction_allowed: Callable
 var publication_overrides: Callable
+var publication_status: Callable
+var publication_diagnostics: bool = true
 var reduced_motion: bool = false
 var finish_button: FinishButton
 var drop_button: Button
@@ -88,6 +90,8 @@ var _reward_presentation: ChestCelebration
 var _displayed_chest_tier: int = 0
 var _notice: Label
 var _last_published: String = ""
+var _last_status_published: String = ""
+var _publication_is_lean: bool = false
 var _publish_elapsed: float = 0.0
 var _chest_cache: Dictionary = {}
 var _chest_texture: Texture2D
@@ -269,6 +273,7 @@ func _ready() -> void:
 
 func _exit_tree() -> void:
 	publication_overrides = Callable()
+	publication_status = Callable()
 	if has_header_chest() and not _header_chest_host.is_queued_for_deletion():
 		_header_chest_host.hide()
 		_header_chest_host.queue_free()
@@ -1635,7 +1640,32 @@ func _rect(rect: Rect2) -> Array:
 func _control(button: Button) -> Dictionary:
 	return {"visible": button.is_visible_in_tree(), "disabled": button.disabled, "text": button.text, "rect": _rect(button.get_global_rect())}
 
+func _publish_lean() -> bool:
+	# Native snapshot observers explicitly retain the complete publication path.
+	var lean: bool = not publication_diagnostics and publication_status.is_valid() \
+		and get_signal_connection_list("changed").is_empty()
+	if lean != _publication_is_lean:
+		_publication_is_lean = lean
+		# The host may currently hold the other payload schema. Publish once on
+		# entry, then retain ordinary deduplication within the selected policy.
+		if lean:
+			_last_status_published = ""
+		else:
+			_last_published = ""
+	if not lean:
+		return false
+	_publish_elapsed = 0.0
+	var status: Dictionary = publication_status.call()
+	var serialized: String = JSON.stringify(status)
+	if serialized != _last_status_published:
+		_last_status_published = serialized
+		serialized_changed.emit(serialized)
+	return true
+
+
 func _publish() -> void:
+	if _publish_lean():
+		return
 	_publish_elapsed = 0.0
 	var state: Dictionary = snapshot()
 	var encoded: Dictionary = PublicationJSON.encode_base(state) if publication_overrides.is_valid() else {}

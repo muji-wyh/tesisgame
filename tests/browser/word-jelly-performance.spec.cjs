@@ -28,7 +28,7 @@ async function press(page, rect, mouse = false) {
 
 async function fillBoard(page, first, mouse) {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
-  if (first) await page.goto('/');
+  if (first) await page.goto('/?jellyDiagnostics=1');
   else await page.reload();
   await expect(page.locator('#status')).toHaveAttribute('data-state', 'ready', { timeout: 180000 });
   await enterGame(page, { home: true });
@@ -228,7 +228,7 @@ for (const scenario of scenarios) {
     }
     const report = { protocol: 'word-jelly-browser-intervals-v2', label, scenario, board_tiles: boardTiles, project: info.project.name,
       browser: page.context().browser().version(), viewport: page.viewportSize(), repeats: results,
-      scope: 'Windows-hosted browser lab; normal motion, no CPU/network throttle. rAF intervals include drawing and driver work; renderer and DPR are recorded. Auto Collect uses the requested crowded board minus one manual merge; the native fixture covers Lv1-9 batch targets. Not the user PC, a physical mobile device, or field RUM.' };
+      scope: 'Windows-hosted browser lab; normal motion, no CPU/network throttle. Full Jelly diagnostics are explicitly enabled for geometry and state observations; their overhead is included and differs from lean production. rAF intervals include drawing and driver work; renderer and DPR are recorded. Auto Collect uses the requested crowded board minus one manual merge; the native fixture covers Lv1-9 batch targets. Not the user PC, a physical mobile device, or field RUM.' };
     fs.writeFileSync(info.outputPath(`${label}-${scenario}.json`), JSON.stringify(report, null, 2));
     console.log(JSON.stringify({ label, scenario, project: info.project.name,
       p95_ms: results.map(row => row.p95_ms), over_50ms: results.map(row => row.over_50ms) }));

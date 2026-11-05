@@ -82,6 +82,10 @@ func request(owner: Node, revision: int) -> Dictionary:
 		_entries[key] = {"slot": slot, "owner": weakref(owner), "ready": false,
 			"texture": null, "bounds": Rect2(), "used": _clock}
 		_pending.append(key)
+	elif not bool(_entries[key].ready) and not _pending.has(key) and not _rendering.has(key):
+		# A transient pose can become ineligible before its queued bake begins.
+		# Resume the same reserved cell when its owner returns to neutral paint.
+		_pending.append(key)
 	_owners[id] = key
 	_entries[key].used = _clock
 	_watch_tints(owner)

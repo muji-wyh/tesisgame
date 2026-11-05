@@ -35,7 +35,7 @@ async function openHome(page, { reducedMotion = 'reduce' } = {}) {
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   await page.addInitScript(() => { window.SpeechRecognition = undefined; window.webkitSpeechRecognition = undefined; });
   await page.emulateMedia({ reducedMotion });
-  await page.goto('/');
+  await page.goto('/?jellyDiagnostics=1');
   await expect(page).toHaveTitle("Pip's world");
   await expect(page.locator('#loading-title')).toHaveText("Pip's world");
   await expect(page.locator('#canvas')).toHaveAttribute('aria-label', "Pip's world word game");

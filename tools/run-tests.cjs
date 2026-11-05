@@ -97,6 +97,7 @@ groups['word-jelly'].godot.push('jelly_pause_tests', 'word_jelly_practice_tests'
   'word_jelly_interaction_budget_tests',
   'word_jelly_preview_cache_tests',
   'word_jelly_gravity_cache_tests',
+  'word_jelly_motion_pose_tests',
   'word_jelly_collect_model_tests',
   'word_jelly_reveal_clock_tests',
   'jelly_idle_body_cache_tests',

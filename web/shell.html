@@ -3191,6 +3191,9 @@
           const jelly = JSON.parse(document.getElementById('game-status').dataset.jelly || '{}');
           canvas.style.touchAction = value.visible || jelly.visible ? 'pinch-zoom' : 'manipulation';
         },
+        jellyDiagnosticsEnabled() {
+          return new URLSearchParams(window.location.search).get('jellyDiagnostics') === '1';
+        },
         jellyStatus(text) {
           let value;
           try { value = JSON.parse(text); } catch { return; }

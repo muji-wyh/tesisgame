@@ -116,6 +116,32 @@ func _run() -> void:
 	assert(not cache._prefer_native_records(dense.cells) and not cache._prefer_native_records(dense.tiles))
 	assert(not cache._prefer_native_records(dense.cells.slice(0, 7)))
 	checks += 2
+	# Gravity preserves falling history after landing; current settlement still
+	# permits the age-only cache without changing any published field or bytes.
+	for record: Dictionary in dense.cells:
+		record.falling = true
+		record.settling = false
+	for record: Dictionary in dense.tiles:
+		record.falling = true
+		record.settled = true
+	assert(not cache._prefer_native_records(dense.cells) and not cache._prefer_native_records(dense.tiles))
+	checks += 1
+	checks += _check_native_pair(cache, dense, overlay)
+	assert(cache._records.has("cells") and cache._records.has("tiles"))
+	checks += 1
+	for record: Dictionary in dense.cells:
+		record.settling = true
+	for record: Dictionary in dense.tiles:
+		record.settled = false
+	assert(cache._prefer_native_records(dense.cells) and cache._prefer_native_records(dense.tiles))
+	checks += 1
+	checks += _check_native_pair(cache, dense, overlay)
+	var arrival: Dictionary = {"id": 80, "age": 0.0, "arrival": true, "arrival_index": 0,
+		"arrival_delay": 0.0, "row": 7, "height": 1, "width": 1, "settling": false, "falling": false}
+	assert(cache._record_is_moving(arrival))
+	arrival.age = 100.0
+	assert(not cache._record_is_moving(arrival))
+	checks += 2
 	checks += _check_record_key_transitions()
 	print("Word Jelly publication cache: %d checks, 0 failures" % checks)
 	quit()

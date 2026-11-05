@@ -57,7 +57,7 @@ for (const count of [21, 49]) test(`settled ${count}-body idle budget`, async ({
     localStorage.setItem('growWithPip.coinWallet.v1', '[wallet]\nversion=2\nbalance=100000\nreceipts={"campaign-opening-coins":100000}\n');
     localStorage.setItem('pipAndWords.presentation.v1', JSON.stringify({ muted: true }));
   }, plan);
-  await page.goto('/');
+  await page.goto('/?jellyDiagnostics=1');
   await enterGame(page, { home: true });
   const mode = (await metrics(page)).library.controls.find(item => item.name === 'Mode_word_jelly' && item.visible);
   expect(mode).toBeTruthy(); await click(page, mode.rect);
@@ -80,6 +80,7 @@ for (const count of [21, 49]) test(`settled ${count}-body idle budget`, async ({
       protocol: 'word-jelly-idle-budget-browser-v1', label, count,
       browser: page.context().browser().version(), viewport: page.viewportSize(), before, windows, errors,
       scope: 'Authored campaign recipe with matched body count/type composition, normal motion, no deliberate throttle. '
+        + 'Full Jelly diagnostics are explicitly enabled for geometry and state observations; this includes their overhead and is not the lean production default. '
         + 'The recipe seed does not seed GameUI.new_round; placement and word allocation vary, so this is not an exact same-board comparison. '
         + 'Three consecutive windows per process are not independent samples or physical PC FPS. Renderer, viewport and raw intervals retained.'
     }, null, 2));

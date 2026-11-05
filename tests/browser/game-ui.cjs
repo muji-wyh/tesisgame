@@ -544,12 +544,12 @@ async function enterGame(scope, { home = false } = {}) {
   if (!home) await chooseMode(scope, 'match');
 }
 
-async function openGame(page, { reducedMotion = 'reduce', mode = 'match', expectedStatus = 'Find 5 word–picture pairs.', home = false } = {}) {
+async function openGame(page, { reducedMotion = 'reduce', mode = 'match', expectedStatus = 'Find 5 word–picture pairs.', home = false, jellyDiagnostics = true } = {}) {
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
   await page.emulateMedia({ reducedMotion });
-  await page.goto('/');
+  await page.goto(jellyDiagnostics ? '/?jellyDiagnostics=1' : '/');
   await enterGame(page, { home });
   if (!home) await expect(page.locator('#game-status')).toContainText(expectedStatus);
   await rendered(page);

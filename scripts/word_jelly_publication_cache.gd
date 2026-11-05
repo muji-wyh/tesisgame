@@ -2,6 +2,7 @@ extends RefCounted
 ## Reuse unchanged native JSON paint while each body's age continues normally.
 
 const Publication = preload("res://scripts/jelly_publication_json.gd")
+const WordModel = preload("res://scripts/word_jelly_model.gd")
 var _fields: Dictionary = {}
 var _overrides: Dictionary = {}
 var _records: Dictionary = {}
@@ -95,6 +96,19 @@ func _prefer_native_records(records: Array) -> bool:
 	var moving: int = 0
 	for sample in range(8):
 		var record: Variant = records[int(sample * (records.size() - 1) / 7)]
-		if record is Dictionary and (bool(record.get("falling", false)) or not bool(record.get("settled", true))):
+		if record is Dictionary and _record_is_moving(record):
 			moving += 1
 	return moving > 4
+
+
+func _record_is_moving(record: Dictionary) -> bool:
+	# Falling records retain their motion history after landing. Prefer current
+	# settlement without changing the model or the published historical fields.
+	if record.has("settled"):
+		return not bool(record.settled)
+	if record.has("age") and record.has("arrival") \
+		and (not bool(record.arrival) or record.has("row") and record.has("height")):
+		return float(record.age) + WordModel.EPSILON < WordModel.settle_duration(record)
+	if record.has("settling"):
+		return bool(record.settling)
+	return bool(record.get("falling", false))

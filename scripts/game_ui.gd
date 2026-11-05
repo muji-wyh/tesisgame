@@ -913,6 +913,7 @@ func _build_controls() -> void:
 	_word_jelly.finish_requested.connect(_request_jelly_finish.bind("word_jelly"))
 	_word_jelly.pause_requested.connect(_pause_jelly)
 	_word_jelly.publication_overrides = _jelly_publication_overrides.bind("word_jelly")
+	_word_jelly.publication_status = _jelly_publication_status.bind("word_jelly")
 	_word_jelly.serialized_changed.connect(_publish_serialized_jelly.bind("word_jelly"))
 	_word_jelly.hide()
 	column.add_child(_word_jelly)
@@ -2461,7 +2462,7 @@ func _jelly_finish_pulled(source_mode: String) -> void:
 
 func _publish_jelly_pause() -> void:
 	if _is_jelly_mode() and is_instance_valid(_active_jelly()):
-		_publish_jelly(_active_jelly().snapshot())
+		_publish_active_jelly()
 
 
 func _finish_confirmation_open() -> bool:
@@ -2470,7 +2471,7 @@ func _finish_confirmation_open() -> bool:
 
 func _publish_finish_confirmation() -> void:
 	if _finish_confirmation_open():
-		_publish_jelly(_active_jelly().snapshot())
+		_publish_active_jelly()
 
 
 func _request_jelly_finish(source_mode: String, return_home: bool = false) -> void:
@@ -2504,7 +2505,7 @@ func _request_jelly_finish(source_mode: String, return_home: bool = false) -> vo
 	_finish_confirmation.keep_playing_button.grab_focus()
 	_announce_status("Leave Jelly Words? Keep playing, or Exit to collect and settle your rewards before returning Home."
 		if return_home else "Finish this round? Keep playing, or Finish to see your score. Your collected rewards will be kept.")
-	_publish_jelly(_active_jelly().snapshot())
+	_publish_active_jelly()
 
 
 func _close_finish_confirmation(resume_game: bool = true, restore_focus: bool = true) -> void:
@@ -2586,7 +2587,7 @@ func _sync_jelly() -> void:
 		_jelly_rewards.resume()
 	if _settlement_dialog_open() and not _valid_focus(get_viewport().gui_get_focus_owner()):
 		_default_focus().grab_focus()
-	_publish_jelly(_active_jelly().snapshot())
+	_publish_active_jelly()
 	_publish_jelly_rewards(_jelly_rewards.snapshot())
 
 
@@ -2970,9 +2971,39 @@ func _restore_jelly_reward_host() -> void:
 func _publish_jelly(state: Dictionary, source_mode: String = "") -> void:
 	if _releasing_professional_views or _host == null or (not source_mode.is_empty() and source_mode != _mode_id):
 		return
+	if _mode_id == "word_jelly" and _word_jelly._publish_lean():
+		return
 	var value: Dictionary = state.duplicate()
 	value.merge(_jelly_publication_overrides(state, source_mode), true)
 	_host.jellyStatus(JSON.stringify(value))
+
+
+func _publish_active_jelly() -> void:
+	if _releasing_professional_views or _host == null:
+		return
+	var view = _active_jelly()
+	if _mode_id == "word_jelly" and view._publish_lean():
+		return
+	_publish_jelly(view.snapshot())
+
+
+func _jelly_publication_status(source_mode: String = "") -> Dictionary:
+	if _releasing_professional_views or _host == null or (not source_mode.is_empty() and source_mode != _mode_id):
+		return {}
+	var view = _active_jelly()
+	return {
+		"schema": 1, "diagnostics": false, "mode": _mode_id, "round_id": _round_id,
+		"visible": _jelly_publication_visible(), "phase": view.game.phase,
+		"paused": view._paused, "pause": {"active": _jelly_pause_open()},
+		"error": view.game.error,
+		"campaign_map": {"visible": _campaign != null and _campaign.is_open()},
+	}
+
+
+func _jelly_publication_visible() -> bool:
+	return _is_jelly_mode() and _active_jelly().is_visible_in_tree() and not _jelly_rewards_shown \
+		and not _round_celebration_active() and not collection_page.visible and not _page_hidden \
+		and not _mode_menu_open() and not (_campaign != null and _campaign.is_open())
 
 
 func _publish_serialized_jelly(serialized: String, source_mode: String = "") -> void:
@@ -2985,7 +3016,7 @@ func _jelly_publication_overrides(state: Dictionary, source_mode: String = "") -
 	if _releasing_professional_views or _host == null or (not source_mode.is_empty() and source_mode != _mode_id):
 		return {}
 	return {
-		"visible": _is_jelly_mode() and _active_jelly().is_visible_in_tree() and not _jelly_rewards_shown and not _round_celebration_active() and not collection_page.visible and not _page_hidden and not _mode_menu_open() and not (_campaign != null and _campaign.is_open()),
+		"visible": _jelly_publication_visible(),
 		"mode": _mode_id,
 		"round_id": _round_id,
 		"finish_confirmation": _finish_confirmation.snapshot() if is_instance_valid(_finish_confirmation) else {"visible": false},
@@ -5516,6 +5547,7 @@ func _connect_browser() -> void:
 	_host = JavaScriptBridge.get_interface("wordBuddiesHost")
 	if _host == null:
 		return
+	_word_jelly.publication_diagnostics = bool(_host.jellyDiagnosticsEnabled())
 	_hidden_callback = JavaScriptBridge.create_callback(func(_arguments: Array) -> void: on_page_hidden())
 	_visible_callback = JavaScriptBridge.create_callback(func(_arguments: Array) -> void: on_page_visible())
 	_motion_callback = JavaScriptBridge.create_callback(func(arguments: Array) -> void:

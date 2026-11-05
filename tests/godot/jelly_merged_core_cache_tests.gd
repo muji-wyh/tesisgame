@@ -118,7 +118,7 @@ func _within_rgba8_budget(error: Dictionary) -> bool:
 		and int(error.different_pixels) <= float(error.pixel_count) * MAX_RGBA8_OUTLIER_RATIO
 
 
-func _check_subset_parity(tiles: Array, changed: Array, label: String) -> void:
+func _check_subset_parity(tiles: Array, changed: Array, label: String, resume_idle: bool = false) -> void:
 	var cached: Image = await _image()
 	var cached_draws: int = RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME)
 	for tile in changed:
@@ -130,6 +130,8 @@ func _check_subset_parity(tiles: Array, changed: Array, label: String) -> void:
 	check(_within_rgba8_budget(error), label + " preserves exact source tints, neighbor order, text and effect phases within the existing RGBA8 budget")
 	check(cached_draws < source_draws, label + " replaces source paint with fewer real rendered draw calls")
 	for tile in changed:
+		if resume_idle:
+			tile.set_idle_cached(true)
 		tile.set_merged_core_cache_enabled(true)
 	check(await _settle_cores(tiles), label + " restores bounded shared-atlas ownership after the reference capture")
 
@@ -194,6 +196,101 @@ func _check_static_hint_layer(tiles: Array) -> void:
 	check(await _settle_cores(tiles), "Layer-guard checks leave no missing merged-core owners")
 
 
+func _check_motion_retention(tiles: Array) -> void:
+	var pool: Node = root.get_node(Cache.POOL_NAME)
+	var textures: Array = []
+	var positions: Array[Vector2] = []
+	for tile in tiles:
+		textures.append(tile._merged_core_texture)
+		positions.append(tile.position)
+	var bakes: int = int(pool.snapshot().bakes)
+	for frame in range(8):
+		var retained: bool = true
+		for index in range(tiles.size()):
+			var tile = tiles[index]
+			tile.position = positions[index] + Vector2(float(frame) * 0.25, float(frame) * 0.125)
+			tile.set_motion_cached(true)
+			var compatible_phase: bool = index != 55 or frame == 0
+			retained = retained and bool(tile.merged_core_snapshot().cached) == compatible_phase \
+				and bool(tile.merged_core_snapshot().requested) and tile._merged_core_texture == textures[index]
+		check(retained, "Pixel-snapped moving cores reuse paint while the rotated fractional-phase source falls back without losing its texture")
+		await process_frame
+	check(int(pool.snapshot().bakes) == bakes,
+		"Translating a full merged board never schedules replacement core captures")
+	await _check_subset_parity(tiles, tiles, "translated-frozen-cores", true)
+	var selected = tiles[0]
+	var retained_texture: Texture2D = selected._merged_core_texture
+	var retained_key: String = selected._merged_core_key
+	var retained_revision: int = selected._merged_core_revision
+	bakes = int(pool.snapshot().bakes)
+	var face_rect := Rect2(selected._picture.position, selected._picture.size)
+	var label_rect := Rect2(selected._label.position, selected._label.size)
+	selected.set_motion_cached(true)
+	selected.deform(0.0, 0.0, Vector2(1.08, 0.86))
+	check(not selected.merged_core_snapshot().cached and selected.merged_core_snapshot().requested \
+		and selected._merged_core_texture == retained_texture and selected._merged_core_hidden.is_empty(),
+		"Landing squash suspends the whole core and restores separate source paint without releasing its texture")
+	check(not selected.idle_cache_snapshot().cached and selected._surface.material == selected._gel \
+		and Rect2(selected._picture.position, selected._picture.size) == face_rect \
+		and Rect2(selected._label.position, selected._label.size) == label_rect,
+		"Squash uses native source sampling while picture and learning text keep their native geometry")
+	selected.set_preview_pressure(0.05, 0.01, 0.04, false)
+	selected.set_contact("touch", Vector2.RIGHT, 0.5)
+	selected.set_motion_cached(false)
+	check(selected._surface.material == selected._gel and not selected.merged_core_snapshot().cached \
+		and selected.merged_core_snapshot().requested and selected._merged_core_key == retained_key \
+		and selected._merged_core_texture == retained_texture,
+		"Nonlinear pressure and contact use native feedback while retaining the bounded neutral-core reservation")
+	selected.set_contact("none")
+	selected.set_preview_pressure(0.0, 0.0, 0.0, false)
+	selected.deform(0.0, 0.0)
+	selected.set_idle_cached(true)
+	check(selected.merged_core_snapshot().cached and selected._merged_core_texture == retained_texture \
+		and selected._merged_core_revision == retained_revision and int(pool.snapshot().bakes) == bakes,
+		"Neutral contact release and landing reuse the existing core immediately without another bake")
+	selected.set_motion_cached(true)
+	selected.rotation += 0.03
+	selected.set_motion_cached(true)
+	check(not selected.merged_core_snapshot().cached and selected._merged_core_texture == retained_texture,
+		"A changed rotation suspends screen-raster paint rather than rotating an already rasterized composite")
+	selected.rotation -= 0.03
+	selected.set_motion_cached(true)
+	check(selected.merged_core_snapshot().cached and int(pool.snapshot().bakes) == bakes,
+		"Returning to the captured rotation restores its neutral texture without recapture")
+	for index in range(tiles.size()):
+		tiles[index].position = positions[index]
+		tiles[index].set_idle_cached(true)
+	check(await _settle_cores(tiles), "Motion checks restore every original merged core and native sibling layer")
+
+
+func _check_interrupted_warmup(tiles: Array) -> void:
+	var pool: Node = root.get_node(Cache.POOL_NAME)
+	var interrupted = tiles.back()
+	var retained_key: String = interrupted._merged_core_key
+	var retained_revision: int = interrupted._merged_core_revision
+	var initial_bakes: int = int(pool.snapshot().bakes)
+	check(interrupted._merged_core_requested and interrupted._merged_core_texture == null,
+		"The interrupted owner holds a genuine pending core reservation before its first bake")
+	interrupted.set_preview_pressure(0.05, 0.01, 0.04, false)
+	interrupted.set_motion_cached(false)
+	check(await _settle_cores(tiles.slice(0, tiles.size() - 1)),
+		"Other pending owners warm while one reserved source remains under live pressure")
+	check(not pool._pending.has(retained_key) and not pool._rendering.has(retained_key) \
+		and not bool(pool._entries[retained_key].ready) \
+		and interrupted._merged_core_requested and interrupted._merged_core_texture == null,
+		"An ineligible pending owner leaves the queue without losing its unbaked reservation")
+	check(int(pool.snapshot().bakes) == initial_bakes + tiles.size() - 1,
+		"Only the other eligible sources consume the bounded warmup budget")
+	interrupted.set_preview_pressure(0.0, 0.0, 0.0, false)
+	interrupted.set_idle_cached(true)
+	check(interrupted._merged_core_key == retained_key \
+		and interrupted._merged_core_revision == retained_revision \
+		and int(pool.snapshot().entries) == tiles.size() and int(pool.snapshot().owners) == tiles.size(),
+		"Recovery requeues the exact same core lease and revision without allocating another cell")
+	check(await _settle_cores(tiles) and int(pool.snapshot().bakes) == initial_bakes + tiles.size(),
+		"The recovered pending owner finishes exactly one bake instead of remaining permanently native")
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1366, 768)
@@ -220,6 +317,7 @@ func _run() -> void:
 		tile.set_merged_core_cache_enabled(true)
 	if OS.get_cmdline_user_args().has("--atlas-diagnostic"):
 		root.get_node(Cache.POOL_NAME)._diagnostic_enabled = true
+	await _check_interrupted_warmup(tiles)
 	check(await _settle_cores(tiles), "All 56 frozen merged cores warm within the bounded frame budget")
 	var cached: Image = await _image()
 	var debug_pool: Node = root.get_node_or_null(Cache.POOL_NAME)
@@ -263,6 +361,7 @@ func _run() -> void:
 	check(pool != null and int(pool.snapshot().entries) <= Cache.CAPACITY \
 		and int(pool.snapshot().bytes) == Cache.ATLAS_EDGE * Cache.ATLAS_EDGE * 4,
 		"All cores share one bounded GPU atlas without pixel readback")
+	await _check_motion_retention(tiles)
 	var selected = tiles[0]
 	selected.set_ambient_animation(true)
 	check(not selected.merged_core_snapshot().cached and selected._merged_core_hidden.is_empty(),

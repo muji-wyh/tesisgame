@@ -1,5 +1,5 @@
 extends SceneTree
-## Cached bodies preserve the acquired shader paint and wake on every active pose.
+## Cached bodies retain neutral motion and use exact source paint for stretch.
 
 const Tile = preload("res://scripts/jelly_tile.gd")
 const Cache = preload("res://scripts/jelly_idle_body_cache.gd")
@@ -105,6 +105,38 @@ func _run() -> void:
 		cached.set_idle_cached(true)
 	check(cached._surface.texture == cached_texture and int(pool.snapshot().bakes) == 1,
 		"Unchanged poses and repeated requests neither invalidate nor bake again")
+	var face_rect := Rect2(cached._label.position, cached._label.size)
+	var motion_raster: Vector2i = cached._idle_raster_size
+	cached.set_motion_cached(true)
+	for step in range(12):
+		cached.position = Vector2(180.0 + float(step) * 0.25, 20.0 + float(step) * 0.125)
+		cached.deform(0.0, 0.0)
+		cached.set_motion_cached(true)
+		check(cached._surface.texture == cached_texture and cached._idle_raster_size == motion_raster,
+			"Neutral translation retains its original cached raster")
+		check(Rect2(cached._label.position, cached._label.size) == face_rect,
+			"Cached motion never deforms or moves the learning face")
+	check(int(pool.snapshot().bakes) == 1,
+		"Changing neutral motion positions do not schedule another body bake")
+	cached.position = Vector2(180.0, 20.0)
+	live.set_idle_cached(false)
+	for tile in [live, cached]:
+		tile.deform(0.0, 0.0, Vector2(1.06, 0.94))
+	cached.set_motion_cached(true)
+	check(not cached.idle_cache_snapshot().cached and cached._surface.material == cached._gel \
+		and Rect2(cached._label.position, cached._label.size) == face_rect,
+		"Affine motion restores exact source sampling while preserving the learning face")
+	await RenderingServer.frame_post_draw
+	image = root.get_texture().get_image()
+	error = _pixel_error(image, Rect2i(12, 12, 136, 106), Rect2i(172, 12, 136, 106))
+	print("Affine motion native fallback pixel error: ", error)
+	check(float(error.mean) <= 2.0 / 255.0 and float(error.maximum) <= 5.0 / 255.0,
+		"Affine native fallback exactly preserves the acquired silhouette and lighting")
+	for tile in [live, cached]:
+		tile.deform(0.0, 0.0)
+		tile.set_idle_cached(true)
+	check(cached._surface.texture == cached_texture and int(pool.snapshot().bakes) == 1,
+		"Landing at the neutral pose reuses its original body paint immediately")
 	cached.set_contact("touch", Vector2.RIGHT, 0.4)
 	check(cached._surface.material == cached._gel and cached._surface.texture == SKIN,
 		"Contact restores the original artwork and live material in the same call")

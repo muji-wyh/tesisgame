@@ -126,7 +126,7 @@ for (const scenario of ['early repeated taps', 'short tap crossing natural compl
     page.on('pageerror', error => errors.push(error.message));
     page.on('console', message => { if (message.type() === 'error') errors.push(message.text()); });
     await page.emulateMedia({ reducedMotion: 'no-preference' });
-    await page.goto('/');
+    await page.goto('/?jellyDiagnostics=1');
     await enterGame(page, { home: true });
     await chooseMode(page, 'word_jelly');
     await expect.poll(async () => {

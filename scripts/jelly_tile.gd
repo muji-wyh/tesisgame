@@ -2,6 +2,7 @@ extends Button
 ## Authored gel artwork with a separate, undistorted learning label.
 
 signal idle_paint_changed
+signal idle_pose_changed
 
 const Style = preload("res://scripts/ui_style.gd")
 const WordArt = preload("res://scripts/word_art.gd")
@@ -49,6 +50,7 @@ var _idle_source_texture: Texture2D
 var _idle_source_stretch_mode: int = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 var _idle_raster_size := Vector2i.ZERO
 var _idle_cache_fallback: String = "disabled"
+var _motion_cache_requested: bool = false
 
 func _init() -> void:
 	text = ""
@@ -134,7 +136,7 @@ func set_marked(value: bool, picked: bool = false, enabled: bool = true, reduced
 	_refresh_feedback(motion_changed)
 
 func _refresh_feedback(reset_motion: bool = false) -> void:
-	_invalidate_idle_cache()
+	_invalidate_idle_cache(false)
 	# Pointer selection, drop contact and keyboard focus have separate weights.
 	var mark: int = (3 if highlighted else 2 if selected else 1 if has_focus() else 0) if _feedback_enabled else 0
 	_gel.set_shader_parameter("rim_color", Color("#507968") if _projection else Color("#ae702b") if mark == 3 else _accent)
@@ -184,13 +186,14 @@ func _set_surface_parameter(parameter: StringName, value: Variant) -> void:
 	# the rim directly, so their feedback parameters stay outside this cache.
 	if _surface_parameters.has(parameter) and _surface_parameters[parameter] == value:
 		return
-	_invalidate_idle_cache()
+	var transient: bool = parameter in [&"bend", &"beat", &"preview_pressure", &"preview_sway", &"preview_pull", &"contact_strength"]
+	_invalidate_idle_cache(not transient)
 	_surface_parameters[parameter] = value
 	_gel.set_shader_parameter(parameter, value)
 
 func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
 	if amount != 0.0:
-		_invalidate_idle_cache()
+		_invalidate_idle_cache(false)
 	_set_surface_parameter(&"bend", amount)
 	_set_surface_parameter(&"beat", 0.0 if is_zero_approx(amount) else beat)
 	var pivot: Vector2 = size * Vector2(0.5, Motion.FOOT_Y)
@@ -198,19 +201,21 @@ func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
 		_surface.pivot_offset = pivot
 	_base_stretch = stretch * (Vector2(1.025, 0.97) if _mark == 3 and not _reduced_motion else Vector2.ONE)
 	if _surface.scale != _base_stretch:
-		_invalidate_idle_cache()
+		_invalidate_idle_cache(false)
 		_surface.scale = _base_stretch
+		idle_pose_changed.emit()
 
-func set_preview_pressure(pressure: float, sway: float, pull: float = 0.0) -> void:
+func set_preview_pressure(pressure: float, sway: float, pull: float = 0.0, update_support: bool = true) -> void:
 	_set_surface_parameter(&"preview_pressure", pressure)
 	_set_surface_parameter(&"preview_sway", sway)
 	_set_surface_parameter(&"preview_pull", pull)
-	_update_support(0.0, clampf(pressure / 0.20 + pull, 0.0, 1.0), true, size.y * Motion.FOOT_Y * pull)
+	if update_support:
+		_update_support(0.0, clampf(pressure / 0.20 + pull, 0.0, 1.0), true, size.y * Motion.FOOT_Y * pull)
 
 func set_contact(kind_value: String, direction: Vector2 = Vector2.ZERO, strength: float = 0.0, reduced: bool = false) -> void:
 	if kind_value == "none" and _contact_kind == "none":
 		return
-	_invalidate_idle_cache()
+	_invalidate_idle_cache(false)
 	_contact_kind = kind_value
 	# Both learning faces stay above the overlapping skins during contact.
 	_picture.z_index = 45 if kind_value != "none" else 0
@@ -306,8 +311,30 @@ func set_idle_cached(enabled: bool) -> void:
 	# Board presentation opts in only for settled paint outside live animation.
 	# Other modes keep their existing live shader until explicitly opted in.
 	if not enabled:
-		_invalidate_idle_cache()
+		_motion_cache_requested = false
+		_invalidate_idle_cache(false)
 		return
+	# Returning from motion at a neutral pose reuses its original raster. A
+	# genuinely enlarged static hint keeps the existing exact-resolution policy.
+	if _motion_cache_requested and not _surface.scale.is_equal_approx(Vector2.ONE):
+		_motion_cache_requested = false
+		_invalidate_idle_cache(false)
+	else:
+		_motion_cache_requested = false
+	_request_idle_cache()
+
+
+func set_motion_cached(enabled: bool) -> void:
+	_motion_cache_requested = enabled
+	if not enabled:
+		_invalidate_idle_cache(false)
+		return
+	_request_idle_cache()
+
+
+func _request_idle_cache() -> void:
+	if _idle_cache_requested and _idle_pixel_extent() != _idle_raster_size:
+		_invalidate_idle_cache()
 	if _idle_cache_requested and not _idle_cache_key.is_empty():
 		return
 	if not _idle_cache_eligible():
@@ -335,7 +362,8 @@ func set_idle_cached(enabled: bool) -> void:
 
 func _idle_cache_eligible() -> bool:
 	if not is_inside_tree() or _surface.texture == null or _gel.shader != Surface \
-		or _projection or _mark != 0 or _contact_kind != "none":
+		or _projection or _mark != 0 or _contact_kind != "none" \
+		or (_motion_cache_requested and not _surface.scale.is_equal_approx(Vector2.ONE)):
 		return false
 	for parameter: StringName in [&"bend", &"preview_pressure", &"preview_sway", &"preview_pull", &"contact_strength"]:
 		var value: Variant = _gel.get_shader_parameter(parameter)
@@ -365,10 +393,12 @@ func _idle_cache_ready(key: String, texture: Texture2D, material: ShaderMaterial
 	_surface.stretch_mode = TextureRect.STRETCH_SCALE
 	_surface.material = material if material != null else IdleBodyCache.display_material()
 	_idle_cache_fallback = ""
-	idle_paint_changed.emit()
+	idle_pose_changed.emit()
 
-func _invalidate_idle_cache() -> void:
+func _invalidate_idle_cache(paint_changed: bool = true) -> void:
 	if not _idle_cache_requested:
+		if paint_changed:
+			idle_paint_changed.emit()
 		return
 	_idle_cache_requested = false
 	set_notify_transform(false)
@@ -384,14 +414,17 @@ func _invalidate_idle_cache() -> void:
 		if is_instance_valid(pool) and not pool.is_queued_for_deletion():
 			pool.release(self)
 	_idle_cache_pool = null
-	idle_paint_changed.emit()
+	if paint_changed:
+		idle_paint_changed.emit()
+	else:
+		idle_pose_changed.emit()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_TRANSFORM_CHANGED and _idle_cache_requested:
 		if _idle_pixel_extent() != _idle_raster_size:
 			_invalidate_idle_cache()
 		else:
-			idle_paint_changed.emit()
+			idle_pose_changed.emit()
 
 func _exit_tree() -> void:
 	_invalidate_idle_cache()

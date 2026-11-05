@@ -79,7 +79,7 @@ func is_open() -> bool:
 
 func _publish() -> void:
 	if _app._host != null and not _app._releasing_professional_views and is_instance_valid(_app._active_jelly()):
-		_app._publish_jelly(_app._active_jelly().snapshot())
+		_app._publish_active_jelly()
 
 
 func set_active(active: bool) -> void:

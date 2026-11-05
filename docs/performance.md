@@ -259,3 +259,26 @@ can establish a repeatable improvement on this native software-rendered workload
 but cannot establish a hardware-GPU or mobile-browser performance improvement.
 The comparator records the full adapter string and labels recognized software
 adapters in its result and scope description.
+
+## Jelly Web publication modes
+
+Normal Web Word Jelly play publishes a small host envelope containing visibility,
+mode, round identity, phase, pause and error state. It selects this path before
+constructing model/view snapshots or encoding body arrays. Canvas touch behavior
+and the separate live announcements remain available. Native gameplay, collision,
+wallet, learning and rendering state do not depend on diagnostic DOM snapshots.
+
+Open the game with `?jellyDiagnostics=1` to retain complete `data-jelly` model and
+presentation snapshots. The flag is explicit for that navigation and is not a
+saved preference. Public native `snapshot()` remains complete, and native
+`changed` observers retain the original full publication path, signal order,
+deduplication and JSON payloads. Standalone native views default to full mode.
+
+The browser `openGame()` helper enables full diagnostics by default for existing
+geometry and observer regressions; pass `{ jellyDiagnostics: false }` to exercise
+the normal Web path. Dedicated legacy idle/runtime diagnostic cases also opt in
+and include that overhead. Performance captures intended to represent ordinary
+Web play must disable full diagnostics and avoid native `changed` subscriptions
+during the measured interval. Use separate lightweight counters or inspect full
+snapshots outside that interval. Diagnostic and lean results are different
+workloads and must be labeled accordingly.

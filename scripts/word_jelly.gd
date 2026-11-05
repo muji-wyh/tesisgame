@@ -1451,50 +1451,44 @@ func _sync_positions() -> void:
 			tile.hide()
 			continue
 		var live: bool = _active_tile_ids.has(id) or (tile.valid_word and id in ambient_ids)
-		if live:
-			tile.set_idle_cached(false)
-		tile.set_merged_presentation(_presentation_elapsed, reduced_motion)
 		var rect: Rect2 = _tile_rect(cell)
 		if _rest_rects.has(id) and _rest_rects[id] != rect and not reduced_motion:
 			_reflow[id] = {"from": tile.position, "started": 0.0 if bool(cell.get("falling", false)) else float(cell.age), "falling": bool(cell.get("falling", false))}
 			_active_tile_ids[id] = true
 			_dynamic_tile_ids[id] = true
 			live = true
-			tile.set_idle_cached(false)
 			if bool(cell.get("falling", false)):
 				# One motion owns the new destination. Continuing a snapback first
 				# would rewind the body when the slower fall takes over afterward.
 				_snapbacks.erase(id)
 		_rest_rects[id] = rect
-		tile.size = rect.size
-		tile._surface.show()
-		tile.modulate.a = 1.0
-		tile.visible = true
 		var dragging: bool = id == _source and _dragging
-		tile.z_index = 40 if dragging else 4 if tile.completion_hint else 1
+		var pose_size: Vector2 = rect.size
+		var pose_position: Vector2 = _drag_point - _drag_offset if dragging else rect.position
+		var pose_visible: bool = true
+		var pose_layer: int = 40 if dragging else 4 if tile.completion_hint else 1
 		var stretch: Vector2 = Vector2.ONE
 		var compression: float = 0.0
 		var arrival: bool = bool(cell.get("arrival", false)) and not game.is_settled(cell)
 		var shadow_visible: bool = true
-		tile.set_preview_pressure(0.0, 0.0)
-		if dragging:
-			tile.position = _drag_point - _drag_offset
-		else:
-			tile.position = rect.position
+		var pressure: float = 0.0
+		var sway: float = 0.0
+		var pull: float = 0.0
+		if not dragging:
 			if arrival and not reduced_motion:
 				# A rapid release may reserve another body in the same tray slot.
 				# Let its predecessor leave before showing the waiting replacement.
 				var slot: int = int(_arrival_origins.get(id, {}).get("slot", -1))
 				if float(cell.age) < _arrival_delay(cell) and preview_owners.has(slot):
-					tile.visible = tile.visible and int(preview_owners[slot].id) == id
+					pose_visible = int(preview_owners[slot].id) == id
 				var source: Rect2 = _arrival_rect(cell)
 				var age: float = maxf(0.0, float(cell.age) - _arrival_delay(cell))
 				var contact: float = WordModel.arrival_contact_at(cell) - _arrival_delay(cell)
 				var fall: float = clampf(age / contact, 0.0, 1.0)
 				# Establish the lane near the rim; the body then accelerates vertically.
 				var align: float = smoothstep(0.0, minf(0.28, contact * 0.45), age)
-				tile.size = source.size.lerp(rect.size, align)
-				tile.position = Vector2(lerpf(source.get_center().x, rect.get_center().x, align) - tile.size.x * 0.5,
+				pose_size = source.size.lerp(rect.size, align)
+				pose_position = Vector2(lerpf(source.get_center().x, rect.get_center().x, align) - pose_size.x * 0.5,
 					lerpf(source.position.y, rect.position.y, fall * fall))
 				var moving: Dictionary = cell.duplicate()
 				moving.age = age
@@ -1504,23 +1498,24 @@ func _sync_positions() -> void:
 				var source_pose: Dictionary = _arrival_origins.get(id, {})
 				var release: float = 1.0 - smoothstep(0.0, 0.12, age)
 				var source_pull: float = float(source_pose.get("pull", 0.0))
-				tile.set_preview_pressure(float(source_pose.get("pressure", 0.0)) * release, float(source_pose.get("sway", 0.0)) * release,
-					source_pull * release)
+				pressure = float(source_pose.get("pressure", 0.0)) * release
+				sway = float(source_pose.get("sway", 0.0)) * release
+				pull = source_pull * release
 				# Start the fall at the loaded belly, not the undeformed rectangle.
 				# Releasing tension must never pull the visible foot back uphill.
 				var loaded_foot: float = source.size.y * Motion.FOOT_Y * source_pull
-				var remaining_pull: float = tile.size.y * Motion.FOOT_Y * source_pull * release * stretch.y
-				tile.position.y += loaded_foot * (1.0 - fall * fall) - remaining_pull
+				var remaining_pull: float = pose_size.y * Motion.FOOT_Y * source_pull * release * stretch.y
+				pose_position.y += loaded_foot * (1.0 - fall * fall) - remaining_pull
 				shadow_visible = align >= 1.0
-				tile.z_index = 3
+				pose_layer = 3
 			elif _snapbacks.has(id) and not reduced_motion:
 				var p: float = clampf(float(_snapbacks[id].elapsed) / 0.24, 0.0, 1.0)
-				tile.position = Vector2(_snapbacks[id].from).lerp(rect.position, 1.0 - pow(1.0 - p, 3.0))
+				pose_position = Vector2(_snapbacks[id].from).lerp(rect.position, 1.0 - pow(1.0 - p, 3.0))
 			elif _reflow.has(id) and not reduced_motion:
 				var p: float = clampf((float(cell.age) - float(_reflow[id].started)) / WordModel.SETTLE_SECONDS, 0.0, 1.0)
 				var falling: bool = bool(_reflow[id].falling)
 				var travel: float = pow(minf(1.0, p / WordModel.FALL_CONTACT_RATIO), 2.0) if falling else smoothstep(0.0, 1.0, p)
-				tile.position = Vector2(_reflow[id].from).lerp(rect.position, travel)
+				pose_position = Vector2(_reflow[id].from).lerp(rect.position, travel)
 				if falling and p >= WordModel.FALL_CONTACT_RATIO:
 					var landing: float = (p - WordModel.FALL_CONTACT_RATIO) / (1.0 - WordModel.FALL_CONTACT_RATIO)
 					var squash: float = sin(landing * TAU) * (1.0 - landing) * 0.12
@@ -1531,11 +1526,28 @@ func _sync_positions() -> void:
 				var p: float = clampf(float(cell.age) / WordModel.SETTLE_SECONDS, 0.0, 1.0)
 				var bounce: float = sin(p * PI) * (1.0 - p) * 0.14
 				stretch = Vector2(1.0 + bounce, 1.0 - bounce)
+		# Commit the final pose once: intermediate destination and shadow resets
+		# otherwise trigger extra layout, transform and cache notifications.
+		tile.size = pose_size
+		tile.position = pose_position
+		tile.z_index = pose_layer
+		tile.visible = pose_visible
+		tile.modulate.a = 1.0
+		tile._surface.show()
+		tile.set_merged_presentation(_presentation_elapsed, reduced_motion)
+		tile.set_preview_pressure(pressure, sway, pull, false)
 		tile.deform(0.0, 0.0, DRAG_STRETCH if dragging and not reduced_motion else stretch)
-		var support_lift: float = maxf(0.0, rect.position.y - tile.position.y) if arrival or bool(cell.get("falling", false)) else 0.0
+		var support_lift: float = maxf(0.0, rect.position.y - pose_position.y) if arrival or bool(cell.get("falling", false)) else 0.0
 		tile.set_support(6.0 / Style.ui_scale(self) if dragging else support_lift, compression, shadow_visible)
-		# Request only after the final static pose; changed geometry falls back live.
-		if not live:
+		var cache_motion: bool = _dynamic_tile_ids.has(id) and not _interactive_tile_ids.has(id) \
+			and not _hint_live_ids.has(id) and id != _ambient_hover_id \
+			and not tile.has_focus() and not tile.is_hovered() \
+			and pose_size.is_equal_approx(rect.size) \
+			and not (tile.valid_word and id in ambient_ids)
+		# Moving bodies keep their physical poses live while reusing suitable paint.
+		if live:
+			tile.set_motion_cached(cache_motion)
+		else:
 			tile.set_idle_cached(bool(_view_settled.get(id, false)))
 		_settled_body_layer.refresh(tile, not live and id != _ambient_hover_id)
 	_ambient_budget.end_priority_update()
@@ -2697,6 +2709,8 @@ func _can_play() -> bool:
 func _publish() -> void:
 	if _processing_generation == _generation:
 		_publish_pending = true
+		return
+	if _publish_lean():
 		return
 	_publish_elapsed = 0.0
 	var state: Dictionary = snapshot()

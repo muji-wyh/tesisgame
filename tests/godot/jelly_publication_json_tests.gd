@@ -4,6 +4,41 @@ extends SceneTree
 const PublicationJSON = preload("res://scripts/jelly_publication_json.gd")
 const WordJellyModel = preload("res://scripts/word_jelly_model.gd")
 
+class ObservedCache extends "res://scripts/word_jelly_publication_cache.gd":
+	var base_calls: int = 0
+	var host_calls: int = 0
+
+	func encode_base(state: Dictionary) -> Dictionary:
+		base_calls += 1
+		return super.encode_base(state)
+
+	func encode_host(state: Dictionary, encoded: Dictionary, overrides: Dictionary) -> String:
+		host_calls += 1
+		return super.encode_host(state, encoded, overrides)
+
+
+class StubWordJelly extends "res://scripts/word_jelly.gd":
+	var snapshot_calls: int = 0
+	var publication_state: Dictionary = {"visible": true, "mode": "word_jelly", "clock": 0,
+		"cells": [{"id": 1, "age": 0.0, "word": {"id": "cat", "meaning": "a small cat"}}],
+		"tiles": [{"id": 1, "age": 0.0, "settled": false, "rect": [0, 0, 40, 40]}]}
+
+	func _ready() -> void:
+		pass
+
+	func _process(_delta: float) -> void:
+		pass
+
+	func _layout() -> void:
+		pass
+
+	func _visibility_changed() -> void:
+		pass
+
+	func snapshot() -> Dictionary:
+		snapshot_calls += 1
+		return publication_state
+
 class StubJelly extends "res://scripts/jelly_match.gd":
 	var publication_state: Dictionary = {
 		"visible": true, "mode": "jelly", "clock": 0,
@@ -222,9 +257,96 @@ func _check_hosted_publication() -> void:
 	view.free()
 
 
+func _check_lean_word_publication() -> void:
+	var view := StubWordJelly.new()
+	var cache := ObservedCache.new()
+	view._publication_cache = cache
+	view.publication_diagnostics = false
+	var status: Dictionary = {"schema": 1, "diagnostics": false, "mode": "word_jelly",
+		"round_id": "lean-round", "visible": true, "phase": "playing", "pause": {"active": false}, "error": ""}
+	var callbacks: Dictionary = {"status": 0, "overrides": 0}
+	view.publication_status = func() -> Dictionary:
+		callbacks.status += 1
+		return status
+	view.publication_overrides = func(_state: Dictionary) -> Dictionary:
+		callbacks.overrides += 1
+		return {"round_id": "full-round", "visible": false}
+	var events: Dictionary = {"serialized": [], "native": [], "order": []}
+	view.serialized_changed.connect(func(serialized: String) -> void:
+		events.serialized.append(serialized)
+		events.order.append("serialized"))
+	for frame in range(24):
+		view.publication_state.clock = frame
+		view.publication_state.cells[0].age += 0.01667
+		view.publication_state.tiles[0].rect[1] = frame
+		view._publish_elapsed = 0.1
+		view._publish()
+	check(view.snapshot_calls == 0 and cache.base_calls == 0 and cache.host_calls == 0,
+		"Normal hosted publication never constructs or encodes full snapshots while body poses advance")
+	check(callbacks.status == 24 and callbacks.overrides == 0,
+		"Lean publication bypasses full campaign and presentation overlays")
+	check(events.serialized.size() == 1 and events.serialized[0] == JSON.stringify(status),
+		"An unchanged lean envelope publishes once while diagnostic ages and positions continue changing")
+	check(is_zero_approx(view._publish_elapsed) and view._last_published.is_empty(),
+		"Lean duplicate checks reset the timer without replacing the full-mode equality baseline")
+	status.pause.active = true
+	view._publish()
+	check(events.serialized.size() == 2 and JSON.parse_string(events.serialized.back()).pause.active,
+		"Pausing publishes the current lean state immediately")
+	status.visible = false
+	status.error = "Save unavailable"
+	view._publish()
+	check(events.serialized.size() == 3 and not JSON.parse_string(events.serialized.back()).visible
+		and JSON.parse_string(events.serialized.back()).error == "Save unavailable",
+		"Visibility and save errors remain visible to the host without tile diagnostics")
+	check(view.snapshot_calls == 0 and cache.base_calls == 0 and cache.host_calls == 0,
+		"Lean interaction transitions still avoid complete snapshot construction and encoding")
+	# Full diagnostics retain exact bytes even after the lean branch has run.
+	view.publication_diagnostics = true
+	view._publish()
+	var expected: String = _native_host(view.publication_state, {"round_id": "full-round", "visible": false})
+	check(view.snapshot_calls == 1 and cache.base_calls == 1 and cache.host_calls == 1
+		and events.serialized.back() == expected and callbacks.overrides == 1,
+		"Explicit diagnostics restore the complete original base and hosted JSON path")
+	view.publication_diagnostics = false
+	var native_observer: Callable = func(state: Dictionary) -> void:
+		events.native.append(state)
+		events.order.append("native")
+	view.changed.connect(native_observer)
+	view.publication_state.clock += 1
+	expected = _native_host(view.publication_state, {"round_id": "full-round", "visible": false})
+	view._publish()
+	check(view.snapshot_calls == 2 and cache.base_calls == 2 and cache.host_calls == 2
+		and events.native.size() == 1 and is_same(events.native[0], view.publication_state),
+		"Native snapshot observers retain full data and the original base-driven publication cadence")
+	check(events.order.slice(-2) == ["serialized", "native"],
+		"Native snapshot observers still run after encoded observers")
+	view.changed.disconnect(native_observer)
+	var published: int = events.serialized.size()
+	view._publish()
+	check(events.serialized.size() == published + 1 and events.serialized.back() == JSON.stringify(status)
+		and view.snapshot_calls == 2 and cache.base_calls == 2 and cache.host_calls == 2,
+		"Removing the native observer restores an unchanged lean envelope without constructing full state")
+	view._publish()
+	check(events.serialized.size() == published + 1 and view.snapshot_calls == 2,
+		"Steady lean publications resume deduplication after the policy transition")
+	view.changed.connect(native_observer)
+	view._publish()
+	check(events.serialized.size() == published + 2 and events.serialized.back() == expected
+		and events.native.size() == 2,
+		"Adding a native observer restores full host data even when the previous full base is unchanged")
+	check(events.order.slice(-2) == ["serialized", "native"],
+		"Restoring full publication keeps encoded-before-native signal order")
+	view._publish()
+	check(events.serialized.size() == published + 2 and events.native.size() == 2,
+		"Steady full publications retain original base deduplication after the policy transition")
+	view.free()
+
+
 func _run() -> void:
 	_check_native_values()
 	_check_default_publication()
 	_check_hosted_publication()
+	_check_lean_word_publication()
 	print("Jelly publication JSON: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

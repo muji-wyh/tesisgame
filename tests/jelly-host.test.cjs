@@ -6,7 +6,7 @@ const vm = require('node:vm');
 
 const shell = fs.readFileSync(path.resolve(__dirname, '../web/shell.html'), 'utf8').replace(/\r\n/g, '\n');
 const rewardKey = 'growWithPip.jellyRewards.v1';
-const methods = ['phraseStatus', 'jellyStatus', 'jellyRewardState', 'saveJellyRewardState', 'jellyRewardStatus'];
+const methods = ['phraseStatus', 'jellyDiagnosticsEnabled', 'jellyStatus', 'jellyRewardState', 'saveJellyRewardState', 'jellyRewardStatus'];
 const blocks = methods.map(name => {
   const block = shell.match(new RegExp(`        ${name}\\([^)]*\\) \\{[\\s\\S]*?\\n        \\}`))?.[0];
   assert.ok(block, `The host exposes ${name}`);
@@ -21,7 +21,7 @@ function element(dataset = {}) {
   };
 }
 
-function host(storage = {}, game = element(), reward = element()) {
+function host(storage = {}, game = element(), reward = element(), search = '') {
   const canvas = { style: { touchAction: 'manipulation' } };
   const document = {
     getElementById(id) {
@@ -30,7 +30,9 @@ function host(storage = {}, game = element(), reward = element()) {
       assert.fail(`Unexpected status element: ${id}`);
     }
   };
-  const bridge = vm.runInNewContext(`({${blocks.join(',')}})`, { localStorage: storage, document, canvas });
+  const bridge = vm.runInNewContext(`({${blocks.join(',')}})`, {
+    localStorage: storage, document, canvas, window: { location: { search } }, URLSearchParams
+  });
   return { bridge, canvas, game, reward };
 }
 
@@ -42,6 +44,28 @@ function memoryStorage(entries = []) {
     setItem: (key, value) => records.set(key, value)
   };
 }
+
+test('Jelly diagnostics require an explicit startup flag and do not persist a preference', () => {
+  const storage = memoryStorage();
+  for (const search of ['', '?jellyDiagnostics=0', '?jellyDiagnostics=true', '?other=1'])
+    assert.equal(host(storage, element(), element(), search).bridge.jellyDiagnosticsEnabled(), false);
+  for (const search of ['?jellyDiagnostics=1', '?other=1&jellyDiagnostics=1'])
+    assert.equal(host(storage, element(), element(), search).bridge.jellyDiagnosticsEnabled(), true);
+  assert.equal(storage.records.size, 0);
+});
+
+test('Lean Jelly status retains touch behavior without requiring diagnostic tile arrays', () => {
+  const { bridge, canvas, game } = host();
+  const status = { schema: 1, diagnostics: false, visible: true, mode: 'word_jelly',
+    phase: 'playing', round_id: 'lean-round', pause: { active: false }, error: '' };
+  bridge.jellyStatus(JSON.stringify(status));
+  assert.deepEqual(JSON.parse(game.dataset.jelly), status);
+  assert.equal(canvas.style.touchAction, 'pinch-zoom');
+  bridge.phraseStatus('{"visible":false,"options":[]}');
+  assert.equal(canvas.style.touchAction, 'pinch-zoom');
+  bridge.jellyStatus(JSON.stringify({ ...status, visible: false }));
+  assert.equal(canvas.style.touchAction, 'manipulation');
+});
 
 test('Jelly treasures survive a new host and remain isolated from growth, Pop, and presentation saves', () => {
   const existing = [

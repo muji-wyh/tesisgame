@@ -72,6 +72,12 @@ var _merged_core_pool: WeakRef
 var _merged_core_texture: Texture2D
 var _merged_core_size := Vector2.ZERO
 var _merged_core_hidden: Array[CanvasItem] = []
+var _merged_motion_cache: bool = false
+var _merged_core_pose_key: Array = []
+var _merged_phase_known: bool = false
+var _merged_phase_world := Transform2D.IDENTITY
+var _merged_phase_viewport := Transform2D.IDENTITY
+var _merged_phase_origin := Vector2.ZERO
 const MERGED_COLORS: Array[Color] = [Color("#f7c45c"), Color("#f7c45c"), Color("#9ee8f3"),
 	Color("#b6c3ff"), Color("#ffd16f"), Color("#ffb4dc"), Color("#f4daff"),
 	Color("#b3f1dd"), Color("#cbd9ff"), Color("#ffe397")]
@@ -85,6 +91,7 @@ func _init() -> void:
 	move_child(_merged_core_proxy, _visual.get_index())
 	_merged_core_proxy.hide()
 	idle_paint_changed.connect(_merged_body_paint_changed)
+	idle_pose_changed.connect(_merged_body_pose_changed)
 	visibility_changed.connect(_merged_visibility_changed)
 	_picture_shadow = _texture()
 	_picture_shadow.name = "WordPictureShadow"
@@ -607,17 +614,39 @@ func set_fragment_arrival(age: float, reduced: bool = false) -> void:
 
 
 func set_idle_cached(enabled: bool) -> void:
+	_merged_motion_cache = false
 	_merged_core_allowed = enabled
+	if enabled and _merged_core_requested and not _merged_local_pose_matches():
+		# A changed settled reference needs new paint; temporary moving poses
+		# instead keep their old reservation suspended until it matches again.
+		_invalidate_merged_core()
 	super.set_idle_cached(enabled)
 	if enabled:
 		_request_merged_core()
 	else:
-		_invalidate_merged_core()
+		_suspend_merged_core()
+
+
+func set_motion_cached(enabled: bool) -> void:
+	_merged_motion_cache = enabled
+	_merged_core_allowed = enabled
+	super.set_motion_cached(enabled)
+	if enabled:
+		_request_merged_core()
+	else:
+		_suspend_merged_core()
 
 
 func _merged_body_paint_changed() -> void:
 	_invalidate_merged_core()
 	_request_merged_core()
+
+
+func _merged_body_pose_changed() -> void:
+	if _merged_core_eligible():
+		_request_merged_core()
+	else:
+		_suspend_merged_core()
 
 
 func _merged_visibility_changed() -> void:
@@ -630,12 +659,54 @@ func _merged_core_eligible() -> bool:
 	# tile layer. The proxy inherits that layer; text, badges and shadows stay native.
 	var cache_layer: bool = z_index == 1 or (z_index == 4 and completion_hint \
 		and (not _completion_animated or _completion_reduced))
+	var same_pose: bool = not _merged_core_requested or _merged_local_pose_matches()
+	var neutral_motion: bool = not _merged_motion_cache or _surface.scale.is_equal_approx(Vector2.ONE)
 	return _merged_core_enabled and _merged_core_allowed and is_inside_tree() and is_visible_in_tree() \
 		and valid_word and not _projection and not _ambient_animation and cache_layer \
+		and same_pose and neutral_motion \
 		and _mark == 0 and _contact_kind == "none" and not has_focus() and not is_hovered() \
 		and (not completion_hint or not _completion_animated or _completion_reduced) \
 		and (_fragment_arrival_age < 0.0 or _fragment_arrival_age >= 0.48 or _reduced_motion) \
 		and _idle_cache_requested and _surface.material != _gel and _idle_cache_eligible()
+
+
+func _merged_local_pose_key() -> Array:
+	# A whole-core capture may translate with its owner, but skin-only squash
+	# must restore the separate source picture, ornaments and learning face.
+	var raster: Transform2D = get_viewport_transform() * get_global_transform()
+	return [_surface.scale, _surface.position, _surface.pivot_offset, _visual.position,
+		_picture.position, _picture.size, raster.x, raster.y, _merged_render_origin()]
+
+
+func _merged_local_pose_matches() -> bool:
+	var raster: Transform2D = get_viewport_transform() * get_global_transform()
+	if _merged_core_pose_key.size() != 9:
+		return false
+	var shift: Vector2 = _merged_render_origin() - Vector2(_merged_core_pose_key[8])
+	var phase_error: Vector2 = (shift - shift.round()).abs()
+	return phase_error.x <= 0.0001 and phase_error.y <= 0.0001 \
+		and _surface.scale.is_equal_approx(_merged_core_pose_key[0]) \
+		and _surface.position.is_equal_approx(_merged_core_pose_key[1]) \
+		and _surface.pivot_offset.is_equal_approx(_merged_core_pose_key[2]) \
+		and _visual.position.is_equal_approx(_merged_core_pose_key[3]) \
+		and _picture.position.is_equal_approx(_merged_core_pose_key[4]) \
+		and _picture.size.is_equal_approx(_merged_core_pose_key[5]) \
+		and raster.x.is_equal_approx(_merged_core_pose_key[6]) \
+		and raster.y.is_equal_approx(_merged_core_pose_key[7])
+
+
+func _merged_render_origin() -> Vector2:
+	var world: Transform2D = get_global_transform()
+	var viewport: Transform2D = get_viewport_transform()
+	if not _merged_phase_known or world != _merged_phase_world or viewport != _merged_phase_viewport:
+		_merged_phase_known = true
+		_merged_phase_world = world
+		_merged_phase_viewport = viewport
+		# A cached composite may translate only by complete backing pixels.
+		# Rotated controls and fractional display scales can otherwise change
+		# source raster phase even when the body's logical pose is unchanged.
+		_merged_phase_origin = _render_global_transform(self).origin
+	return _merged_phase_origin
 
 
 func set_merged_core_cache_enabled(enabled: bool) -> void:
@@ -647,8 +718,22 @@ func set_merged_core_cache_enabled(enabled: bool) -> void:
 
 
 func _request_merged_core() -> void:
-	if _merged_core_requested or _merged_core_rejected_revision == _merged_core_revision \
-		or not _merged_core_eligible():
+	if not _merged_core_eligible():
+		_suspend_merged_core()
+		return
+	if _merged_core_requested:
+		if _merged_core_texture != null:
+			_show_merged_core()
+		else:
+			var retained_pool: Node = _merged_core_pool.get_ref() if _merged_core_pool != null else null
+			if is_instance_valid(retained_pool) and not retained_pool.is_queued_for_deletion():
+				var resumed: Dictionary = retained_pool.request(self, _merged_core_revision)
+				if not resumed.is_empty() and resumed.texture != null:
+					_merged_core_ready(resumed.key, resumed.texture, resumed.bounds)
+		return
+	# Reuse warm neutral captures while moving. New falling bodies keep their
+	# cached skin and native ornaments until idle can schedule a bounded bake.
+	if _merged_motion_cache or _merged_core_rejected_revision == _merged_core_revision:
 		return
 	var pool = MergedCoreCache.obtain(get_viewport())
 	if pool == null:
@@ -657,21 +742,27 @@ func _request_merged_core() -> void:
 	if request.is_empty():
 		return
 	_merged_core_requested = true
+	_merged_core_pose_key = _merged_local_pose_key()
 	_merged_core_key = request.key
 	_merged_core_pool = weakref(pool)
 	if request.texture != null:
 		_merged_core_ready(request.key, request.texture, request.bounds)
 
 
-func _invalidate_merged_core() -> void:
-	_merged_core_revision += 1
+func _suspend_merged_core() -> void:
 	for subject: CanvasItem in _merged_core_hidden:
 		if is_instance_valid(subject):
 			RenderingServer.canvas_item_set_visible(subject.get_canvas_item(), subject.is_visible_in_tree())
 	_merged_core_hidden.clear()
 	if _merged_core_proxy != null:
 		_merged_core_proxy.hide()
+
+
+func _invalidate_merged_core() -> void:
+	_merged_core_revision += 1
+	_suspend_merged_core()
 	_merged_core_texture = null
+	_merged_core_pose_key.clear()
 	_merged_core_requested = false
 	_merged_core_key = ""
 	if _merged_core_pool != null:
@@ -746,13 +837,25 @@ func _capture_merged_core() -> Dictionary:
 
 
 func _merged_core_ready(key: String, texture: Texture2D, bounds: Rect2) -> void:
-	if not _merged_core_requested or _merged_core_key != key or not _merged_core_eligible():
+	if not _merged_core_requested or _merged_core_key != key:
 		return
 	_merged_core_texture = texture
 	_merged_core_size = bounds.size
 	var screen := Transform2D.IDENTITY
 	screen.origin = bounds.position
 	_merged_core_proxy.transform = _render_global_transform(self).affine_inverse() * screen
+	if _merged_core_eligible():
+		_show_merged_core()
+	else:
+		_suspend_merged_core()
+
+
+func _show_merged_core() -> void:
+	if _merged_core_proxy.visible:
+		# A final view pose can explicitly show the surface without changing its
+		# logical source state. The cached composite continues to own that paint.
+		RenderingServer.canvas_item_set_visible(_surface.get_canvas_item(), false)
+		return
 	var painted: Array[Control] = []
 	if _merged_glow != null:
 		_core_painted_nodes(_merged_glow, painted)
