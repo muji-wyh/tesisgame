@@ -253,17 +253,21 @@ func test_selection(app) -> void:
 	check(not view.powerup_buttons.has("family_merge") and view.find_child("PowerupMagnet", true, false) == null,
 		"Magnet is removed, including its native focus and input target")
 	var button = goal_button(view, str(words[0].id))
-	check(button != null and not button.disabled and button.snapshot().price == 75,
+	check(button != null and not button.disabled and button.snapshot().price == 25,
 		"The actual pending goal advertises its exact first family-merge price")
 	if button == null:
 		return
 	var other_button = goal_button(view, str(words[1].id))
 	var balance_callback: Callable = view.coin_balance
-	view.coin_balance = func() -> int: return 50
+	view.coin_balance = func() -> int: return 24
 	view._refresh_controls()
-	check(other_button != null and button.snapshot().price == 75 and not button.snapshot().affordable
-		and other_button.snapshot().price == 25 and other_button.snapshot().affordable,
-		"The same wallet affords the smaller family while the larger family's own quantity quote remains unaffordable")
+	check(other_button != null and button.snapshot().price == 25 and not button.snapshot().affordable
+		and other_button.snapshot().price == 25 and not other_button.snapshot().affordable,
+		"Different family sizes share the same first-use price and insufficient-funds threshold")
+	view.coin_balance = func() -> int: return 25
+	view._refresh_controls()
+	check(button.snapshot().affordable and other_button.snapshot().affordable,
+		"The exact first-use balance affords either legal family regardless of ingredient count")
 	view.coin_balance = balance_callback
 	view._refresh_controls()
 	await capture("goal-idle")
@@ -289,29 +293,29 @@ func test_selection(app) -> void:
 	await click(button)
 	check(model.powerup_active() and model.powerup_snapshot().kind == "family_merge"
 		and model.powerup_snapshot().family_word_id == words[0].id
-		and app.coin_wallet.balance == before - 75 and app.coin_wallet._receipts.size() == receipts + 1
+		and app.coin_wallet.balance == before - 25 and app.coin_wallet._receipts.size() == receipts + 1
 		and app._status_announcement.contains("Auto merge " + str(words[0].text)),
 		"One actual goal click durably buys only the named family, without a second target-selection gesture")
-	check(app._coin_flight.snapshot().debit_active and app._coin_flight.snapshot().debit_amount == 75
+	check(app._coin_flight.snapshot().debit_active and app._coin_flight.snapshot().debit_amount == 25
 		and app._coin_flight._debit.destination.is_equal_approx(destination)
-		and app._coin_counter.target == before - 75
-		and app._coin_counter.displayed >= float(before - 75) and app._coin_counter.displayed <= float(before),
+		and app._coin_counter.target == before - 25
+		and app._coin_counter.displayed >= float(before - 25) and app._coin_counter.displayed <= float(before),
 		"The accepted receipt owns the downward wallet roll, exact negative amount and coin flight into this goal")
 	check(not app._coin_flight._debit.inline_caption,
 		"A desktop goal puts its debit below the wallet, never across the neighboring Pause control")
-	check(button.snapshot().spent_coins == 75 and button.snapshot().price == 150,
+	check(button.snapshot().spent_coins == 25 and button.snapshot().price == 50,
 		"The paid feedback keeps its actual debit separate from the next advertised price")
 	var paid_receipt: String = str(model.powerup_snapshot().receipt_id)
-	var mismatched: Dictionary = app._purchase_word_jelly_powerup(paid_receipt, "family_merge", 150)
-	check(not bool(mismatched.get("ok", false)) and app.coin_wallet.balance == before - 75
+	var mismatched: Dictionary = app._purchase_word_jelly_powerup(paid_receipt, "family_merge", 50)
+	check(not bool(mismatched.get("ok", false)) and app.coin_wallet.balance == before - 25
 		and app.coin_wallet._receipts.size() == receipts + 1,
 		"The next family quote cannot rewrite the amount of the already paid receipt")
-	var duplicate: Dictionary = app._purchase_word_jelly_powerup(paid_receipt, "family_merge", 75)
+	var duplicate: Dictionary = app._purchase_word_jelly_powerup(paid_receipt, "family_merge", 25)
 	check(bool(duplicate.get("ok", false)) and bool(duplicate.get("duplicate", false))
-		and app.coin_wallet.balance == before - 75 and app.coin_wallet._receipts.size() == receipts + 1,
-		"Retrying the original quantity-priced receipt preserves its exact amount without a second debit")
+		and app.coin_wallet.balance == before - 25 and app.coin_wallet._receipts.size() == receipts + 1,
+		"Retrying the original use-tier receipt preserves its exact amount without a second debit")
 	await click(button)
-	check(app.coin_wallet._receipts.size() == receipts + 1 and app.coin_wallet.balance == before - 75,
+	check(app.coin_wallet._receipts.size() == receipts + 1 and app.coin_wallet.balance == before - 25,
 		"A repeat press during the paid operation cannot debit another goal")
 	view._process(0.16)
 	app._coin_flight.advance(0.16)
@@ -326,11 +330,11 @@ func test_selection(app) -> void:
 		"Roots, pictures and different levels of the chosen family finish one real Lv6 Jelly")
 	check(not model.cell(unrelated[0]).is_empty() and not model.cell(unrelated[1]).is_empty()
 		and spoken.is_empty() and model.cleared_pairs == 0 and model.combo_coins == 0
-		and app.growth.snapshot().streaks == growth and app.coin_wallet.balance == before - 75,
+		and app.growth.snapshot().streaks == growth and app.coin_wallet.balance == before - 25,
 		"A paid goal cannot accidentally collect, pronounce, spend again or consume another family")
 	check(button.disabled and button.snapshot().price == 50
 		and other_button.snapshot().price == 50 and not other_button.disabled,
-		"Settlement recomputes each family's remaining quantity and disables a card without another complete path")
+		"Settlement disables a family without another complete path while both cards retain the second-use price")
 	view._process(1.3)
 	await settle()
 	check(not button.snapshot().targeting and not button.has_focus()

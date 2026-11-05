@@ -47,13 +47,14 @@ static func memory_peek_price(successful_uses: int) -> int:
 	return MEMORY_PEEK_PRICES[clampi(successful_uses, 0, MEMORY_PEEK_PRICES.size() - 1)]
 
 
-static func powerup_price(kind: String, successful_uses: int, _auto_merge_level: int = 1, reduction_count: int = 1) -> int:
+# Optional level and reduction arguments remain compatible with older callers.
+static func powerup_price(kind: String, successful_uses: int, _auto_merge_level: int = 1, _reduction_count: int = 1) -> int:
 	if not POWERUP_BASE_PRICES.has(kind):
 		return 0
 	if kind == "extra_time":
 		return 100 + 50 * clampi(successful_uses, 0, 4095)
 	if kind in ["auto_merge", "family_merge"]:
-		return MERGE_UNIT_PRICES[clampi(successful_uses, 0, MERGE_UNIT_PRICES.size() - 1)] * maxi(1, reduction_count)
+		return MERGE_UNIT_PRICES[clampi(successful_uses, 0, MERGE_UNIT_PRICES.size() - 1)]
 	var extra: int = 100
 	return int(POWERUP_BASE_PRICES[kind]) + extra * clampi(successful_uses, 0, 2)
 

@@ -6,7 +6,7 @@ Coins remain saved help for a difficult moment. Ordinary play is free, the
 wallet starts at zero, and purchases never gate finishing or learning. Existing
 balances and paid receipts keep their original amounts. New chest rewards
 include Pip's level bonus. Auto Merge and word-goal merge prices use the same
-unit price for the legal board reduction they provide.
+capped per-use ladder, independent of the number of Jellies merged.
 
 The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 
@@ -16,8 +16,8 @@ The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 | Levelled chest | The ordinary payout multiplied by chest level |
 | Match Hint | 100, 150, then 200; no per-round use limit |
 | Memory observation | A free initial 10-second observation, then optional 5-second reveals costing 100, 200, 300, then 300 |
-| Auto Merge | 25, 50, 75, then capped at 75 per board body removed by its legal merge forecast |
-| Pending word goal (family merge) | The same 25, 50, 75, then capped at 75 per board body removed by the chosen family's complete legal merge |
+| Auto Merge | 25 for the first successful use, 50 for the second, then capped at 75 per use |
+| Pending word goal (family merge) | The same 25, 50, 75 per-use ladder, with its own successful-use counter |
 | Permanent merged Jelly levels, Lv2-Lv9 | 50, 100, 200, 350, 550, 800, 1100, 1500 |
 | Permanent Auto merge levels, Lv2-Lv9 | 50, 100, 200, 350, 550, 800, 1100, 1500; capacity rises from 3 at free Lv1 to 11 at Lv9 |
 
@@ -25,29 +25,16 @@ Only successful per-round help purchases advance their item's price. All pending
 share one family-merge counter, separate from Auto Merge.
 A new round resets the prices; a menu, pause, rejected
 payment, or wallet retry does not. The current price is shown before purchase.
-Both prices use the net reduction in original board bodies after a forecast of
-the actual operation. A two-body merge removes one body and costs 25 coins on
-its first use; combining four bodies into one removes three and costs 75.
-For a fixed reduction, the second successful use costs twice the first, and the
-third and all later uses cost three times the first. The 75-coin unit ceiling
-bounds repeat-use inflation while larger useful operations still cost more.
-Auto Merge pays for its actual paths, including purchases with fewer eligible
-paths than its owned capacity. Higher levels have no flat price surcharge.
-Unmatched roots, frozen or locked bodies, and capped Jellies that remain on the
-board do not increase the quote. Intermediate joins are counted once through
-their net reduction. Goal progress units and collected word levels are separate
-from this calculation. Quotes are cached for unchanged legal board states;
-payment locks the exact selected quote before calling the wallet.
-For settled one-cell complete words, pictures and merged bodies whose total
-level fits the unlocked cap, the count uses an exact direct calculation: each
-root/picture pair frees one space, then all completed units join into one.
-Positive levels ensure no intermediate subset reaches the cap before the final
-unit joins. Partial spellings, moving inputs, larger bodies and totals above
-the cap use the real automatic timeline on isolated data. At the Lv1 cap, each
-complete root/picture pair directly frees one space and leaves a capped body.
-Those fallback cache
-keys retain airborne timing, since arrival order can affect capped results.
-Settled idle age does not invalidate either quote cache.
+Both tools cost 25 coins on their first successful use, 50 on their second,
+and 75 on their third and all later uses in that round. Combining two bodies
+or many bodies has the same price at the same successful-use tier. The owned
+Auto Merge level changes capacity without changing this price ladder.
+Goal-family availability still reports legal merge metadata, including board
+reduction; those values do not multiply the price. Generic
+price and snapshot reads do not simulate a merge to calculate its cost.
+Payment locks the selected price before calling the wallet. Existing paid
+receipts retain their exact original amounts, including purchases made under
+the previous quantity-based policy; retrying a receipt never reprices it.
 Auto Merge launches an eligible pair every 100 ms. Each 320 ms flight can overlap
 the next flight, then completes a 110 ms fusion and 30 ms settlement; the next
 launch does not wait for that full sequence. It never collects the resulting
@@ -84,29 +71,27 @@ results, and no complete path means no charge or partial spelling.
 Goal-family purchases and collection blasts have no such capacity cap.
 The gameplay button's sourced gel-and-number badge always shows the owned
 capacity, not the last level previewed or a countdown of remaining matches.
-Each gameplay purchase costs `reduction_count * unit_price`, where `unit_price`
-is 25 for the first successful use, 50 for the second, and 75 for the third and
-all later uses. The forecast counts original board bodies removed rather than
-output slots, intermediate joins, or collected word levels. All quotes use the
-wallet's 25-coin purchase unit. Use counters reset with a round; permanent
-capacity does not reset.
+Each gameplay purchase costs 25 for the first successful use, 50 for the
+second, and 75 for the third and all later uses. Output slots, board reduction,
+intermediate joins and collected word levels do not change the price. All
+quotes use the wallet's 25-coin purchase unit. Use counters reset with a round;
+permanent capacity does not reset.
 
-The following examples assume full capacity with one root/picture pair per
-output, so `reduction_count = capacity`. They are modeled examples, not fixed
-owned-level quotes. A partial board costs less; multipart morphology paths
-can remove more than one body per output and therefore cost more.
+Every owned Auto Merge level shares the following per-use prices. A partial
+board or a multipart morphology path has the same price as a full-capacity
+operation at the same successful-use tier.
 
 | Owned Auto Merge level | Capacity | First use | Second use | Third and later |
 | ---: | ---: | ---: | ---: | ---: |
-| 1 | 3 | 75 | 150 | 225 |
-| 2 | 4 | 100 | 200 | 300 |
-| 3 | 5 | 125 | 250 | 375 |
-| 4 | 6 | 150 | 300 | 450 |
-| 5 | 7 | 175 | 350 | 525 |
-| 6 | 8 | 200 | 400 | 600 |
-| 7 | 9 | 225 | 450 | 675 |
-| 8 | 10 | 250 | 500 | 750 |
-| 9 | 11 | 275 | 550 | 825 |
+| 1 | 3 | 25 | 50 | 75 |
+| 2 | 4 | 25 | 50 | 75 |
+| 3 | 5 | 25 | 50 | 75 |
+| 4 | 6 | 25 | 50 | 75 |
+| 5 | 7 | 25 | 50 | 75 |
+| 6 | 8 | 25 | 50 | 75 |
+| 7 | 9 | 25 | 50 | 75 |
+| 8 | 10 | 25 | 50 | 75 |
+| 9 | 11 | 25 | 50 | 75 |
 
 Campaign format 5 stores both global upgrade levels, the Jelly introduction state
 and one bounded, kind-specific pending quote. The quote is saved before the
@@ -236,10 +221,10 @@ Match's expectation includes the three-round guarantee:
 whole round is completed; leaving an unfinished round earns nothing. Previously
 earned Memory chests retain their original payouts.
 
-Using chest income alone, collecting ordinary Jelly words at Lv1 requires eight source words to fund
-the first 50-coin Lv2 unlock or the first 75-coin full-capacity Lv1 Auto Merge
-example (38 for the 275-coin full-capacity Lv9 example),
-when every naturally marked half is collected in one round. Partial rounds can
+Using chest income alone, collecting eight ordinary source words at Lv1 unlocks
+the first 75-coin chest when every naturally marked half is collected in one
+round. That chest can fund the first 50-coin Lv2 unlock or the first 25-coin
+Auto Merge use at any owned capacity. Partial rounds can
 finish below a chest threshold, and upgraded bodies combine source words, so
 these are explicit planning units rather than observed player behavior.
 
@@ -316,25 +301,25 @@ negative net values mean savings are spent. Treasure calculations optimistically
 retain every injected fragment. Auto Merge uses the same completed workload,
 without treating convenience as new supply. Each modeled Auto Merge purchase
 uses all 11 owned Lv9 output slots with a two-piece root/picture path per
-output, removing 11 board bodies. Its first use costs 275 coins. Actual legal
-board forecasts can cost less or more; the capacity examples above are not
-fixed live prices. One session is one fresh round.
+output, removing 11 board bodies. Its first use costs 25 coins, the same as a
+purchase with fewer legal paths or a different owned capacity. One session is
+one fresh round.
 
 | Supplied words | Collection chance | No paid aid: expected coins | One Treasure: net coins | One Auto Merge: net coins | Three Treasure uses: net coins |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 20 | 60% | 74.37 | -49.85 | -200.63 | -599.99 |
-| 20 | 100% | 150.00 | 3.57 | -125.00 | -540.31 |
-| 40 | 60% | 164.55 | 40.10 | -110.45 | -509.99 |
-| 40 | 100% | 300.00 | 153.57 | 25.00 | -390.31 |
-| 60 | 60% | 255.00 | 130.00 | -20.00 | -420.00 |
-| 60 | 100% | 450.00 | 303.57 | 175.00 | -240.31 |
+| 20 | 60% | 74.37 | -49.85 | 49.37 | -599.99 |
+| 20 | 100% | 150.00 | 3.57 | 125.00 | -540.31 |
+| 40 | 60% | 164.55 | 40.10 | 139.55 | -509.99 |
+| 40 | 100% | 300.00 | 153.57 | 275.00 | -390.31 |
+| 60 | 60% | 255.00 | 130.00 | 230.00 | -420.00 |
+| 60 | 100% | 450.00 | 303.57 | 425.00 | -240.31 |
 
 The archived policy allowed the smallest modeled workload to save while buying
 one Treasure every three fresh rounds on average under the increased chest policy.
 Repeated purchases still consume savings. Three archived Treasure purchases cost
-900. Three Auto Merge uses that each remove 11 bodies cost 1650; three uses that
-each remove three bodies cost 450. Different actual reductions change those
-totals regardless of the owned level.
+900. Three Auto Merge uses cost 150 in total at every owned level and affected
+quantity. Three family-merge uses also cost 150 through their independent
+counter. Later uses of either item remain capped at 75 each within that round.
 
 ## Archived retired-Treasure comparison
 

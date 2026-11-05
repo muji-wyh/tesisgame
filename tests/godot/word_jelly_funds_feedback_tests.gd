@@ -140,15 +140,16 @@ func _run() -> void:
 		await capture("1366x768-reduced")
 	if not baseline:
 		var price: int = view.game.powerup_price("auto_merge")
-		var partial_balance: int = price - 25
+		var shortfall: int = 10
+		var partial_balance: int = price - shortfall
 		check(partial_balance > 0 and app.coin_wallet.credit_amount("fixture:partial-item-cost", partial_balance).ok,
-			"Use a real partially funded wallet below the actual quantity quote")
+			"Use a real partially funded wallet below the fixed first-use quote")
 		app._coin_flight.sync(app.coin_wallet.balance)
 		view._refresh_controls()
 		var button = view.powerup_buttons.auto_merge
 		button.reset()
 		await click(view, button)
-		check(button.snapshot().funds_warning and button.snapshot().missing_coins == 25
+		check(button.snapshot().funds_warning and button.snapshot().missing_coins == shortfall
 			and button.snapshot().price_text == str(price) and app.coin_wallet.balance == partial_balance,
 			"A partially funded purchase explains only the real shortfall and never changes its price or balance")
 	app.audio.halt()

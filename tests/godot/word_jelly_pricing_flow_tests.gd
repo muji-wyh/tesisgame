@@ -129,61 +129,65 @@ func _run() -> void:
 		app.free()
 		quit(1)
 		return
-	check(cat_button.snapshot().price == 75 and dog_button.snapshot().price == 25
+	check(cat_button.snapshot().price == 25 and dog_button.snapshot().price == 25
 		and not cat_button.disabled and not dog_button.disabled,
-		"The larger legal family advertises 75 coins while a single root-picture reduction advertises 25")
-	view.coin_balance = func() -> int: return 50
+		"Different legal family sizes advertise the same first-use price")
+	view.coin_balance = func() -> int: return 24
 	view._refresh_controls()
-	check(not cat_button.snapshot().affordable and dog_button.snapshot().affordable
+	check(not cat_button.snapshot().affordable and not dog_button.snapshot().affordable
 		and not cat_button.disabled and not dog_button.disabled,
-		"One wallet balance computes affordability separately while preserving insufficient-funds feedback")
+		"A balance below the shared price preserves insufficient-funds feedback on both legal families")
+	view.coin_balance = func() -> int: return 25
+	view._refresh_controls()
+	check(cat_button.snapshot().affordable and dog_button.snapshot().affordable,
+		"Both family sizes become affordable at the same exact first-use price")
 	view.coin_balance = func() -> int: return app.coin_wallet.balance
 	for level: int in [1, 2, 9]:
 		model.auto_merge_level = level
 		view._refresh_controls()
 		var reduction: int = int(model.auto_merge_preview().reduction_count)
-		check(reduction > 0 and view.powerup_buttons.auto_merge.snapshot().price == 25 * reduction
-			and model.powerup_price("auto_merge") == 25 * reduction,
-			"The visible Auto merge quote charges actual useful quantity within its owned capacity")
+		check(reduction > 0 and view.powerup_buttons.auto_merge.snapshot().price == 25
+			and model.powerup_price("auto_merge") == 25,
+			"Each owned Auto merge capacity preserves a useful hover prediction and the same first-use quote")
 	model.auto_merge_level = 1
 	view._refresh_controls()
 	var payments: Array[Dictionary] = []
 	view.purchase_powerup = func(event_id: String, kind: String, price: int) -> Dictionary:
 		var before: int = app.coin_wallet.balance
-		check(model._powerup_purchasing and price == 75 and kind == "family_merge",
-			"The chosen card captures its quantity price before the durable host callback locks the board")
-		var wrong_price: Dictionary = app._purchase_word_jelly_powerup(event_id, kind, 25)
+		check(model._powerup_purchasing and price == 25 and kind == "family_merge",
+			"The chosen card captures its current use-tier price before the durable host callback locks the board")
+		var wrong_price: Dictionary = app._purchase_word_jelly_powerup(event_id, kind, 50)
 		var wrong_receipt: Dictionary = app._purchase_word_jelly_powerup(event_id + ":stale", kind, price)
 		check(not bool(wrong_price.get("ok", false)) and not bool(wrong_receipt.get("ok", false))
 			and app.coin_wallet.balance == before,
-			"The locked host refuses a smaller family's unit price and a different receipt without spending")
+			"The locked host refuses a different tier price and a different receipt without spending")
 		var paid: Dictionary = app._purchase_word_jelly_powerup(event_id, kind, price)
 		payments.append(paid)
 		return paid
 	var receipts: int = app.coin_wallet._receipts.size()
 	cat_button.pressed.emit()
 	check(payments.size() == 1 and bool(payments[0].get("ok", false)) and model.powerup_active()
-		and app.coin_wallet.balance == 925 and app.coin_wallet._receipts.size() == receipts + 1,
-		"The actual goal activation debits its displayed 75 coins through the production host exactly once")
-	check(cat_button.snapshot().spent_coins == 75 and cat_button.snapshot().price == 150
-		and app._coin_flight.snapshot().debit_amount == 75 and app._coin_counter.target == 925,
-		"Paid feedback retains the exact debit while the cached busy quantity uses the next successful-use tier")
+		and app.coin_wallet.balance == 975 and app.coin_wallet._receipts.size() == receipts + 1,
+		"The actual goal activation debits its displayed 25 coins through the production host exactly once")
+	check(cat_button.snapshot().spent_coins == 25 and cat_button.snapshot().price == 50
+		and app._coin_flight.snapshot().debit_amount == 25 and app._coin_counter.target == 975,
+		"Paid feedback retains the exact debit while the busy button quotes the next successful-use tier")
 	var receipt: String = str(model.powerup_snapshot().receipt_id)
-	var mismatch: Dictionary = app._purchase_word_jelly_powerup(receipt, "family_merge", 150)
-	var duplicate: Dictionary = app._purchase_word_jelly_powerup(receipt, "family_merge", 75)
+	var mismatch: Dictionary = app._purchase_word_jelly_powerup(receipt, "family_merge", 50)
+	var duplicate: Dictionary = app._purchase_word_jelly_powerup(receipt, "family_merge", 25)
 	check(not bool(mismatch.get("ok", false)) and bool(duplicate.get("ok", false))
-		and bool(duplicate.get("duplicate", false)) and app.coin_wallet.balance == 925
+		and bool(duplicate.get("duplicate", false)) and app.coin_wallet.balance == 975
 		and app.coin_wallet._receipts.size() == receipts + 1,
-		"An immutable quantity-priced receipt rejects the new quote and accepts only its original exact duplicate")
+		"An immutable use-tier receipt rejects the next quote and accepts only its original exact duplicate")
 	model.finish_powerup()
 	view._refresh_controls()
 	check(model.cells.size() == 3 and cat_button.disabled and cat_button.snapshot().price == 50
 		and not dog_button.disabled and dog_button.snapshot().price == 50,
-		"After settlement each goal recomputes its legal remaining reduction without retaining an expensive stale quote")
+		"Settlement updates family eligibility while both goals retain the same second-use price")
 	view.purchase_powerup = Callable()
 	app.free()
 	for file: String in DirAccess.get_files_at(directory):
 		DirAccess.remove_absolute(directory.path_join(file))
 	DirAccess.remove_absolute(directory)
-	print("Jelly level and quantity pricing flow: %d checks, %d failures" % [checks, failures])
+	print("Jelly successful-use pricing flow: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

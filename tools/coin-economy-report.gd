@@ -98,8 +98,8 @@ static func scenario(supplied_words: int, success: float) -> Dictionary:
 	var bonus: float = supplied_words * success * Economy.jelly_bonus_chance(1) * Economy.jelly_bonus(1)
 	var total: float = chest + bonus
 	var with_treasure: float = expected_chest(marked, success, 1) + bonus - purchase_total("fragments", 1)
-	# Model full-capacity root/picture paths, each freeing exactly one board body.
-	# Real quotes instead use the current legal forecast, including partial capacity.
+	# Model full-capacity root/picture paths for capacity context only.
+	# Each purchase has the same price regardless of its legal board reduction.
 	var auto_level: int = Economy.MAX_UPGRADE_LEVEL
 	var auto_reduction: int = Economy.auto_merge_capacity(auto_level)
 	return {
@@ -144,9 +144,9 @@ static func build_report() -> Dictionary:
 			"Net budgets assume enough previously saved coins to buy the specified items.",
 			"Auto Merge uses the same completed workload; no automatic collection or bonus income is assumed.",
 			"Workload Auto Merge comparisons model owned Lv9 using all 11 output slots with two-piece root/picture paths, freeing 11 board bodies per purchase.",
-			"The Auto Merge table models full-capacity root/picture paths: reduction_count equals capacity. Live partial or morphology paths can have different reductions and prices.",
-			"Both merge items cost 25, 50, then at most 75 coins per forecast board body removed. Owned level changes Auto Merge capacity, not the unit price.",
-			"Family merge totals use a separate shared goal counter; Auto Merge uses its own counter. A default purchase_total example frees one board body per purchase.",
+			"The Auto Merge table models full-capacity root/picture paths: reduction_count equals capacity. Live partial or morphology paths can have different reductions at the same per-use price.",
+			"Both merge items cost 25, 50, then at most 75 coins per successful use, regardless of board reduction or owned Auto Merge level.",
+			"Family merge totals use a separate shared goal counter; Auto Merge uses its own counter. Capacity and reduction examples do not change either price ladder.",
 			"One modeled session is one round; fresh rounds reset repeat prices."
 		],
 		"scenarios": scenarios, "upgraded_collections": upgraded_collections,

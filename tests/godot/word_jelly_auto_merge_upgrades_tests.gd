@@ -87,7 +87,7 @@ func _test_three_completed_results() -> void:
 		check(tile.jelly_kind == "merged" and tile.merge_level == 1 and tile.word.id == "cat",
 			"Each surviving product is a complete Lv1 word, not three animations folded into one upgrade")
 	check(fragments == 6 and model.cleared_pairs == 0 and model.collected_coins == 0
-		and paid.size() == 1 and paid[0][2] == 75,
+		and paid.size() == 1 and paid[0][2] == 25,
 		"The three outputs preserve fragments, learning ownership and one exact debit")
 	model.purchase_powerup = Callable()
 
@@ -173,19 +173,18 @@ func _test_exact_capacities() -> void:
 			remaining_fragments += int(tile.fragments)
 		check(remaining_fragments == fragments and model.cleared_pairs == 0 and model.collected_coins == 0,
 			"Capacity limiting preserves all carried fragments and never collects or grants pickup income")
-		var first_use_price: int = 25 * capacity
-		check(paid.size() == 1 and paid[0][1] == "auto_merge" and paid[0][2] == first_use_price,
-			"Each capacity saves one exact debit for its actual removed bodies")
+		check(paid.size() == 1 and paid[0][1] == "auto_merge" and paid[0][2] == 25,
+			"Every owned capacity pays the same exact first-use price")
 		# Releasing the completed timeline can start ordinary stack settlement.
-		# A disabled item retains its previous quantity until that movement ends.
+		# Wait for settlement before checking the next actionable hover prediction.
 		for frame in range(200):
 			if model._powerup_inputs_ready():
 				break
 			model.step(0.025)
 		check(model._powerup_inputs_ready(), "The completed operation returns a settled board to item input")
 		var next_reduction: int = int(model.auto_merge_preview().reduction_count)
-		check(next_reduction > 0 and model.powerup_price("auto_merge") == 50 * next_reduction,
-			"The next ready board quotes its actual removed bodies at the second-use rate")
+		check(next_reduction > 0 and model.powerup_price("auto_merge") == 50,
+			"The next useful board has the fixed second-use price regardless of its reduction")
 		check(model.snapshot().auto_merge_level == level and model.snapshot().auto_merge_capacity == capacity,
 			"The public game snapshot advertises the same level and capacity that actually executed")
 		model.purchase_powerup = Callable()
@@ -241,8 +240,8 @@ func _test_shortage() -> void:
 	drain(model)
 	check(model.powerup_snapshot().completed_results == 2 and model.collectable_ids().size() == 2
 		and model.cells.size() == 3 and model.cells.any(func(tile: Dictionary) -> bool: return tile.jelly_kind == "root")
-		and paid.size() == 1 and paid[0][2] == 50,
-		"A missing picture preserves the unmatched root and charges only for the two actual results")
+		and paid.size() == 1 and paid[0][2] == 25,
+		"A missing picture preserves the unmatched root while a useful partial use pays the fixed first-use price")
 	model.purchase_powerup = Callable()
 	var missing = pictured_fixture(1)
 	missing.cells.pop_back()
@@ -258,8 +257,8 @@ func _test_family_is_independent() -> void:
 	var paid: Array = payments(model)
 	check(model.activate_family_merge("cat"), "Paid goal-family merging is still available at Auto merge Lv1")
 	drain(model)
-	check(model.cells.size() == 1 and model.merged_count == 6 and paid.size() == 1 and paid[0][2] == 150,
-		"Goal-family merging remains uncapped and charges for all six removed board Jellies")
+	check(model.cells.size() == 1 and model.merged_count == 6 and paid.size() == 1 and paid[0][2] == 25,
+		"Goal-family merging remains uncapped and pays its independent first-use price")
 	model.purchase_powerup = Callable()
 
 
@@ -296,8 +295,8 @@ func _test_read_only_preview() -> void:
 		consumed.sort()
 		expected.sort()
 		check(consumed == expected and model.powerup_snapshot().completed_results == capacity and paid.size() == 1
-			and paid[0][2] == 25 * int(preview.reduction_count),
-			"The highlighted originals and their reduction quote match what the subsequent saved use consumes")
+			and paid[0][2] == 25,
+			"The saved first-use price preserves exact parity between highlighted originals and consumed inputs")
 		model.purchase_powerup = Callable()
 	for triple: bool in [false, true]:
 		var authored: Dictionary = authored_word(triple)
@@ -322,8 +321,8 @@ func _test_read_only_preview() -> void:
 		consumed.sort()
 		expected.sort()
 		check(consumed == expected and model.powerup_snapshot().completed_results == 3
-			and paid.size() == 1 and paid[0][2] == (225 if triple else 150),
-			"Full authored hover paths and quantity prices count each net join exactly once")
+			and paid.size() == 1 and paid[0][2] == 25,
+			"Full authored hover paths retain every net join while both ingredient counts pay the same first-use price")
 		model.purchase_powerup = Callable()
 	var unavailable = pictured_fixture(1)
 	unavailable.cells.pop_back()

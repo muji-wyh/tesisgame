@@ -663,23 +663,17 @@ func _auto_merge_hit_stop_remaining() -> float:
 	return maxf(0.0, BLAST_FREEZE_SECONDS - float(_powerup.clock))
 
 
-func powerup_price(kind: String, family: String = "") -> int:
+func powerup_price(kind: String, _family: String = "") -> int:
 	if not POWERUP_PRICES.has(kind):
 		return 0
-	var reduction: int = 1
-	if kind == "auto_merge":
-		if _powerup_inputs_ready():
-			reduction = int(auto_merge_preview().get("reduction_count", 0))
-		else:
-			reduction = int(_auto_merge_preview_cache.get("reduction_count", 0))
-	elif not family.is_empty():
-		reduction = _family_merge_reduction(family)
-	return CoinEconomy.powerup_price(kind, int(_powerup_uses.get(kind, 0)), auto_merge_level, reduction)
+	# Visible prices depend only on this round's successful uses. Reading a
+	# quote never needs to predict a merge or advance an isolated board.
+	return CoinEconomy.powerup_price(kind, int(_powerup_uses.get(kind, 0)))
 
 
 func powerup_quote_is_current(event_id: String, kind: String, price: int) -> bool:
-	# Payment callbacks run with the board locked. Validate the captured quote,
-	# rather than recomputing a family preview that is unavailable under that lock.
+	# Payment callbacks validate the captured amount before the successful-use
+	# counter advances, including while persistence keeps the board locked.
 	if not _pending_powerup_quote.is_empty():
 		return event_id == _pending_powerup_quote.event_id and kind == _pending_powerup_quote.kind \
 			and price == int(_pending_powerup_quote.price)
@@ -691,10 +685,11 @@ func family_merge_quotes(families: Array[String]) -> Dictionary:
 	if ready:
 		_refresh_family_merge_preview_key()
 	var quotes: Dictionary = {}
+	var price: int = powerup_price("family_merge")
 	for family: String in families:
 		var reduction: int = _cached_family_merge_reduction(family, ready)
 		quotes[family] = {"reduction_count": reduction, "available": ready and reduction > 0,
-			"price": CoinEconomy.powerup_price("family_merge", int(_powerup_uses.family_merge), auto_merge_level, reduction)}
+			"price": price}
 	return quotes
 
 
@@ -1019,9 +1014,12 @@ func _purchase_powerup(kind: String, family: String = "", selected_id: int = -1)
 	var receipt_id: String = _event_id("powerup-" + kind)
 	var previous_timeline: String = str(_powerup.get("receipt_id", ""))
 	var price: int = powerup_price(kind, family)
-	if kind == "auto_merge" and int(_auto_merge_preview_cache.get("reduction_count", 0)) <= 0:
+	# Validate a legal action at purchase time without relying on a pricing
+	# read to populate hover forecasts as a hidden prerequisite.
+	if kind == "auto_merge" and _powerup_pair(false).is_empty():
 		return false
-	if kind == "family_merge" and _family_merge_reduction(family) <= 0:
+	if kind == "family_merge" and (family.is_empty() \
+		or authored_completion_plan(false, family).get("status") != "complete"):
 		return false
 	# Lock the board while persistence runs, including reentrant lifecycle calls.
 	_pending_powerup_quote = {"event_id": receipt_id, "kind": kind, "price": price}

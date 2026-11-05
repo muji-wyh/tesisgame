@@ -238,7 +238,7 @@ test('Auto merge charging migrates independently and recovers its own paid progr
   const before = await jelly(page);
   expect(before.powerup_buttons.auto_merge).toMatchObject({ auto_merge_level: 2, capacity: 4,
     capacity_badge: { visible: true, text: '4' } });
-  expect(before.powerup_buttons.auto_merge.price, 'Four simple word pairs use the shared first-use rate').toBe(100);
+  expect(before.powerup_buttons.auto_merge.price, 'Four outputs at owned Lv2 keep the fixed first-use price').toBe(25);
   await press(page, before.powerup_buttons.auto_merge.rect);
   await expect.poll(async () => (await wallet(page)).balance)
     .toBe(1950 - before.powerup_buttons.auto_merge.price);
@@ -251,6 +251,9 @@ test('Auto merge charging migrates independently and recovers its own paid progr
   expect(used.powerup.completed_results).toBe(4);
   expect(used.powerup.result_ids).toHaveLength(4);
   expect(used.powerup.affected_jellies).toBe(8);
+  expect(used.powerup_uses).toEqual({ auto_merge: 1, family_merge: 0 });
+  expect(used.powerup_prices).toEqual({ auto_merge: 50, family_merge: 25 });
+  expect(used.powerup_buttons.auto_merge.price).toBe(50);
   expect(used.powerup_buttons.auto_merge.capacity_badge.text).toBe('4');
   await page.screenshot({ path: info.outputPath('auto-merge-lv2-gameplay.png'), scale: 'css' });
   fs.writeFileSync(info.outputPath('auto-merge-upgrade-journey.json'), JSON.stringify({ pending, partial, owned, used }, null, 2));
