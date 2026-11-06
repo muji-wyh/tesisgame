@@ -450,7 +450,10 @@ func _layout() -> void:
 	if _visual == null:
 		return
 	_invalidate_merged_core()
-	super._layout()
+	# Preserve Control offset rounding while skipping the superseded caption fit.
+	_layout_surface_geometry()
+	_layout_picture_geometry()
+	set_support(0.0, 0.0, not _projection)
 	_badge.hide()
 	_surface.stretch_mode = TextureRect.STRETCH_SCALE
 	_unit = minf(size.y, size.x)

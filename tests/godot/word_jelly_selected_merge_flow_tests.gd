@@ -100,6 +100,24 @@ func move_mouse(at: Vector2, buttons: int = 0) -> void:
 	await process_frame
 
 
+func focus_tool(control: Control, controller: bool = false) -> void:
+	await move_mouse(Vector2(2, 2))
+	if controller:
+		for value: float in [0.7, 0.0]:
+			var motion := InputEventJoypadMotion.new()
+			motion.axis = JOY_AXIS_RIGHT_X
+			motion.axis_value = value
+			root.push_input(motion)
+	else:
+		for pressed: bool in [true, false]:
+			var key := InputEventKey.new()
+			key.keycode = KEY_SHIFT
+			key.pressed = pressed
+			root.push_input(key)
+	control.grab_focus()
+	await process_frame
+
+
 func put(model, tile: Dictionary) -> void:
 	var at: Vector2i = model._free_position(model._occupied(), 1, 1)
 	tile.column = at.x
@@ -167,9 +185,7 @@ func test_auto_hover(app) -> void:
 	check(not view.snapshot().auto_merge_hover.active and view._tiles.values().all(
 		func(tile) -> bool: return not tile.completion_hint and not tile.match_dimmed),
 		"Leaving the Auto merge target restores all original acquired gel surfaces")
-	button._pointer_input = false
-	button.grab_focus()
-	await process_frame
+	await focus_tool(button)
 	check(view.snapshot().auto_merge_hover.input_ids == expected, "Keyboard/controller focus exposes the same legal input prediction")
 	view._fill_button.grab_focus()
 	await process_frame
@@ -332,9 +348,9 @@ func test_selection(app) -> void:
 		and spoken.is_empty() and model.cleared_pairs == 0 and model.combo_coins == 0
 		and app.growth.snapshot().streaks == growth and app.coin_wallet.balance == before - 25,
 		"A paid goal cannot accidentally collect, pronounce, spend again or consume another family")
-	check(button.disabled and button.snapshot().price == 50
+	check(not button.disabled and button.snapshot().price == 50
 		and other_button.snapshot().price == 50 and not other_button.disabled,
-		"Settlement disables a family without another complete path while both cards retain the second-use price")
+		"Settlement retains actionable unknown tools at the second-use price until a fresh preview is requested")
 	view._process(1.3)
 	await settle()
 	check(not button.snapshot().targeting and not button.has_focus()
@@ -345,6 +361,13 @@ func test_selection(app) -> void:
 	check(view.snapshot().goal_hover.word_id.is_empty()
 		and view._tiles.values().all(func(tile) -> bool: return not tile.completion_hint and not tile.match_dimmed),
 		"Moving away after purchasing cannot leave a mouse-acquired focus or board-family highlight behind")
+	await move_mouse(button.get_global_rect().get_center())
+	check(button.disabled and not button.snapshot().available and button.snapshot().price == 50
+		and not other_button.disabled and other_button.snapshot().price == 50,
+		"A fresh settled-family hover resolves its absent merge path without computing the other card")
+	await move_mouse(Vector2(1300, 720))
+	check(not button.disabled and button.snapshot().price == 50,
+		"Leaving the unavailable preview restores its unknown actionable state without changing the use price")
 	await move_mouse(other_button.get_global_rect().get_center())
 	check(other_button.snapshot().targeting and view.snapshot().goal_hover.word_id == str(words[1].id),
 		"A fresh hover can preview the remaining legal family without spending")
@@ -445,7 +468,7 @@ func test_keyboard_and_controller(app) -> void:
 		var view = app._word_jelly
 		var before: int = app.coin_wallet.balance
 		var button: Button = goal_button(view, str(words[0].id))
-		button.grab_focus()
+		await focus_tool(button, controller)
 		check(view.navigation_controls().has(button) and view.snapshot().goal_hover.word_id == words[0].id,
 			"Keyboard and controller focus expose the same goal-family highlight as mouse hover")
 		for pressed: bool in [true, false]:
@@ -505,12 +528,17 @@ func test_goal_rejection(app) -> void:
 	view._sync_tiles()
 	view._refresh_controls()
 	balance = app.coin_wallet.balance
+	check(not button.disabled and button.snapshot().available and button.snapshot().price == 25
+		and not goal_button(view, str(words[1].id)).disabled,
+		"Untouched pending goals retain their static actionable price without checking every family's legal path")
+	await move_mouse(Vector2(2, 2))
+	await move_mouse(button.get_global_rect().get_center())
 	var family_ids: Array[String] = [str(words[0].id), str(words[1].id)]
 	var quotes: Dictionary = view.game.family_merge_quotes(family_ids)
 	check(button.disabled and not button.snapshot().available
 		and not quotes[str(words[0].id)].available and quotes[str(words[0].id)].reduction_count == 0
 		and quotes[str(words[1].id)].available and not goal_button(view, str(words[1].id)).disabled,
-		"A pending goal with no legal partner is unavailable even while another family can still merge")
+		"An explicit settled hover marks only its partnerless family unavailable while another family remains actionable")
 	var receipts: Dictionary = app.coin_wallet._receipts.duplicate(true)
 	var board: Array = view.game.cells.duplicate(true)
 	var uses: Dictionary = view.game._powerup_uses.duplicate(true)

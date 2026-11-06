@@ -55,8 +55,9 @@ func _init() -> void:
 	_scroll.interaction_allowed = func() -> bool: return not _paused
 	# The rail consumes pointer events before this panel's _input.
 	_scroll.held_button_changed.connect(func(button: Button) -> void:
-		if button != null:
-			_pointer_input = true)
+		if button != null and not _pointer_input:
+			_pointer_input = true
+			_refresh_hover())
 	add_child(_scroll)
 	_scroll.add_child(_content)
 	visibility_changed.connect(func() -> void:
@@ -68,11 +69,14 @@ func _init() -> void:
 func _input(event: InputEvent) -> void:
 	if not is_visible_in_tree():
 		return
-	if event is InputEventMouseButton or event is InputEventScreenTouch:
+	var was_pointer: bool = _pointer_input
+	if event is InputEventMouseMotion or event is InputEventMouseButton or event is InputEventScreenTouch:
 		_pointer_input = true
 	elif event is InputEventKey or event is InputEventJoypadButton \
 		or event is InputEventJoypadMotion and absf(event.axis_value) > 0.3:
 		_pointer_input = false
+	if was_pointer != _pointer_input:
+		_refresh_hover()
 
 
 func set_stage(state: Dictionary) -> void:
@@ -303,7 +307,7 @@ func _refresh_hover() -> void:
 			if not row.mastered and not row.retired and not row.preview_consumed and row.surface.is_hovered():
 				selected = row
 				break
-		if selected.is_empty():
+		if selected.is_empty() and not _pointer_input:
 			for row: Dictionary in _rows:
 				if not row.mastered and not row.retired and not row.preview_consumed and row.surface.has_focus():
 					selected = row

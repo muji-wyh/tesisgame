@@ -138,6 +138,7 @@ func _run() -> void:
 		"Rotated source skins preserve the original render-only Control snapping")
 	check(geometry == [tile.get_rect(), tile.contact_bounds(), tile._label.get_rect(), tile._picture.get_rect()],
 		"Batching leaves hit geometry and learning layout unchanged")
+	await _check_refresh_boundaries(layer, tile, picture, rotated)
 	tile.deform(0.03, 0.6)
 	check(tile._surface.visible and tile._surface.material == tile._gel and layer.snapshot().bodies == 2,
 		"Deformation restores the original live skin synchronously")
@@ -198,6 +199,60 @@ func _run() -> void:
 	quit(1 if failures else 0)
 
 
+func _check_refresh_boundaries(layer, tile, picture, rotated) -> void:
+	var redraws: int = int(layer.snapshot().draws)
+	for frame in range(12):
+		for subject in [tile, picture, rotated]:
+			layer.refresh(subject)
+		check(int(layer.snapshot().dirty) == 0 and not layer._blockers_dirty,
+			"Unchanged allowed refreshes do not invalidate retained paint or blocker geometry")
+		await process_frame
+	check(int(layer.snapshot().draws) == redraws,
+		"Repeated allowed refreshes do not redraw unchanged batched skins")
+	var id: int = tile.get_instance_id()
+	var original_position: Vector2 = tile.position
+	var original_transform: Transform2D = layer._paint[id].transform
+	tile.position += Vector2(3.75, 2.25)
+	check(layer._dirty.has(id), "Actual rectangle changes invalidate retained geometry through its watcher")
+	await _render_frame()
+	check(layer._paint[id].transform != original_transform,
+		"Moving an allowed body updates retained geometry without an explicit refresh")
+	tile.position = original_position
+	await _render_frame()
+	for property: Dictionary in [{"node": tile, "field": "modulate"},
+		{"node": tile._visual, "field": "modulate"}, {"node": tile._surface, "field": "modulate"},
+		{"node": tile._surface, "field": "self_modulate"}]:
+		var original: Color = property.node.get(property.field)
+		property.node.set(property.field, original * Color(0.88, 0.93, 0.81, 0.76))
+		layer.refresh(tile)
+		check(layer._dirty.has(id), "A direct %s tint update invalidates retained paint" % str(property.field))
+		await _render_frame()
+		var expected: Color = tile._surface.self_modulate * tile._surface.modulate * tile._visual.modulate * tile.modulate
+		check(layer._paint[id].color == expected,
+			"The retained tint includes every original local ancestor and self-modulate factor")
+		property.node.set(property.field, original)
+		layer.refresh(tile)
+		await _render_frame()
+	var original_self: Color = tile._surface.self_modulate
+	for dimmed: bool in [true, false]:
+		tile.set_match_dimmed(dimmed)
+		layer.refresh(tile)
+		check(layer._dirty.has(id), "Dim and undim transitions update the retained body tint")
+		await _render_frame()
+		check(layer._paint[id].tint_inputs[0] == tile._surface.self_modulate,
+			"Matching feedback retains the exact current skin tint")
+	tile._surface.self_modulate = original_self
+	layer.refresh(tile)
+	await _render_frame()
+	tile.set_palette(1, 0.31)
+	check(tile._surface.visible and layer.snapshot().bodies == 2,
+		"Actual source paint changes restore native skin through the paint watcher")
+	check(await _settle_cache(tile), "The changed source paint warms its genuine atlas entry")
+	await _render_frame()
+	check(layer.snapshot().bodies == 3 and not tile._surface.visible,
+		"A warmed changed skin returns to retained paint through its cache watcher")
+
+
 func _check_mixed_neighbors(holder: Control, layer) -> void:
 	var merged = _tile(holder, 4, Vector2(140, 140), "merged")
 	var neighbor = _tile(holder, 5, Vector2(268, 140))
@@ -211,23 +266,26 @@ func _check_mixed_neighbors(holder: Control, layer) -> void:
 	check(float(error.maximum) <= 2.0 / 255.0 and neighbor._surface.visible \
 		and int(layer.snapshot().occluded) == 1,
 		"An earlier merged halo retains its original overlap beneath the adjacent ordinary skin")
+	var redraws: int = int(layer.snapshot().draws)
+	for frame in range(4):
+		layer.refresh(merged)
+		layer.refresh(neighbor)
+		await process_frame
+	check(int(layer.snapshot().draws) == redraws and not layer._blockers_dirty,
+		"Unchanged merged refreshes do not rebuild fixed blocker bounds or redraw neighbors")
 	merged.position.y -= 160.0
-	layer.refresh(merged)
+	check(layer._blockers_dirty, "A real merged blocker move invalidates occlusion through its rectangle watcher")
 	await _render_frame()
 	check(layer.snapshot().bodies == 1 and not neighbor._surface.visible,
 		"Moving a merged effect away makes the separated ordinary skin eligible")
-	layer.refresh(neighbor, false)
 	neighbor.position.y -= 160.0
-	layer.refresh(neighbor)
 	await _render_frame()
 	check(layer.snapshot().bodies == 0 and neighbor._surface.visible,
 		"An ordinary skin released beside a fixed merged effect retains original overlap")
 	neighbor.position.y += 160.0
-	layer.refresh(neighbor)
 	await _render_frame()
 	check(layer.snapshot().bodies == 1, "Moving the ordinary skin away clears its occlusion exclusion")
 	merged.position.y += 160.0
-	layer.refresh(merged)
 	await _render_frame()
 	check(layer.snapshot().bodies == 0 and neighbor._surface.visible,
 		"Moving a merged effect back restores the original neighbor compositing")

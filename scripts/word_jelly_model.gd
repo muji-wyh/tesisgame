@@ -2140,10 +2140,12 @@ func step(delta: float) -> void:
 
 
 func _fill_boundary() -> float:
-	if not fill_mode or not can_drop_now() or _powerup_purchasing or _finishing_powerup \
+	if not fill_mode or _powerup_purchasing or _finishing_powerup \
 		or _held_tile_id >= 0 or _dragged_tile_id >= 0 or not fusions.is_empty() \
 		or not _blast_queue.is_empty() or not _collection_hit_stop.is_empty() \
 		or stage_run != null and (not stage_run.outcome.is_empty() or stage_run.remaining <= EPSILON):
+		return INF
+	if not can_drop_now():
 		return INF
 	var settling: float = _settling_remaining(boss.broken_remaining > EPSILON)
 	if settling > EPSILON:
@@ -3162,7 +3164,7 @@ func _preferred_size(_mass: int) -> Vector2i:
 	return Vector2i.ONE
 
 
-func _fill_upcoming() -> void:
+func _fill_upcoming(spawn_operation: Dictionary = {}) -> void:
 	if authored_morphology:
 		while upcoming.size() < UPCOMING_COUNT:
 			upcoming.append({})
@@ -3173,6 +3175,10 @@ func _fill_upcoming() -> void:
 			if not has_gap:
 				return
 			if _supply.is_empty():
+				# Supply weights may call application code. The packet must read
+				# live occupancy again after that callback boundary.
+				if not spawn_operation.is_empty():
+					spawn_operation.valid = false
 				_build_supply()
 			if _supply.is_empty():
 				return
@@ -3349,6 +3355,11 @@ func _spawn_drop(streaming: bool = false) -> void:
 	var delays: Dictionary = _arrival_entry_delays(streaming)
 	var column_delays: Dictionary = delays.columns
 	var slot_delays: Dictionary = delays.slots
+	# A packet has no presentation callbacks between ordinary lane releases.
+	# Keep this map local, and retain fresh dragged-return queries throughout
+	# the legacy/drag paths because each addition can move that reservation.
+	var spawn_operation: Dictionary = {"valid": false, "occupied": {}} \
+		if authored_morphology and _dragged_tile_id < 0 else {}
 	var dispatched: int = 0
 	for index in range(DROP_COUNT):
 		if not _can_continue(generation):
@@ -3357,9 +3368,25 @@ func _spawn_drop(streaming: bool = false) -> void:
 			break
 		if not advertised.has(index) or int(upcoming[index].get("id", -1)) != int(advertised[index]):
 			continue
-		if streaming and _fill_slot_delay(index, delays, _occupied()) > EPSILON:
+		if not authored_morphology or _dragged_tile_id >= 0:
+			spawn_operation.clear()
+		var occupied: Dictionary = {}
+		if not spawn_operation.is_empty():
+			if not bool(spawn_operation.valid):
+				spawn_operation.occupied = _occupied()
+				spawn_operation.valid = true
+			occupied = spawn_operation.occupied
+		elif streaming:
+			occupied = _occupied()
+		if streaming and _fill_slot_delay(index, delays, occupied) > EPSILON:
 			continue
-		if not _spawn_tile(true, index):
+		var spawned: bool = _spawn_tile(true, index) if spawn_operation.is_empty() else \
+			_spawn_tile_with_occupancy(true, index, occupied, spawn_operation)
+		# A supply-weight callback can pause or replace the round. No closing
+		# packet work may then read or modify the replacement board's last body.
+		if not _can_continue(generation):
+			return
+		if not spawned:
 			continue
 		dispatched += 1
 		var tile: Dictionary = cells.back()
@@ -3383,6 +3410,11 @@ func _spawn_drop(streaming: bool = false) -> void:
 
 
 func _spawn_tile(arrival: bool, arrival_index: int = 0) -> bool:
+	return _spawn_tile_with_occupancy(arrival, arrival_index)
+
+
+func _spawn_tile_with_occupancy(arrival: bool, arrival_index: int, occupied_override: Variant = null,
+	spawn_operation: Dictionary = {}) -> bool:
 	if upcoming.is_empty() or (arrival and (arrival_index < 0 or arrival_index >= upcoming.size())):
 		return false
 	if authored_morphology and not arrival:
@@ -3396,7 +3428,7 @@ func _spawn_tile(arrival: bool, arrival_index: int = 0) -> bool:
 	if not upcoming[arrival_index].has("id"):
 		return false
 	var preview: Dictionary = upcoming[arrival_index] if arrival or authored_morphology else upcoming[0]
-	var occupied: Dictionary = _occupied()
+	var occupied: Dictionary = _occupied() if occupied_override == null else occupied_override
 	var width: int = int(preview.width) if authored_morphology else 1
 	var height: int = int(preview.height) if authored_morphology else 1
 	var position: Vector2i = _arrival_position(occupied, arrival_index, width, height) if arrival else _free_position(occupied, width, height)
@@ -3420,7 +3452,9 @@ func _spawn_tile(arrival: bool, arrival_index: int = 0) -> bool:
 	tile.falling_rows = position.y + height if arrival else 0
 	cells.append(tile)
 	generated_tiles += 1
-	_fill_upcoming()
+	if not spawn_operation.is_empty():
+		_occupy(occupied, int(tile.column), int(tile.row), width, height)
+	_fill_upcoming(spawn_operation)
 	return true
 
 

@@ -128,9 +128,9 @@ func _run() -> void:
 	view._configured = true
 	model.availability_queries = 0
 	view._refresh_controls()
-	check(model.availability_queries == 1, "Toolbar and word goals share one availability query per refresh")
+	check(model.availability_queries == 0, "An unrequested control refresh never plans toolbar or goal merges")
 	view._refresh_goal_buttons()
-	check(model.availability_queries == 2, "A standalone word-goal refresh still asks for current availability")
+	check(model.availability_queries == 0, "A standalone unrequested goal refresh does not search for a merge")
 	view.free()
 	print("Word Jelly feedback space: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

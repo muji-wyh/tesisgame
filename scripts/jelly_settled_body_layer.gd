@@ -50,7 +50,17 @@ func watch(tile: Tile) -> void:
 func refresh(tile: Tile, allowed: bool = true) -> void:
 	watch(tile)
 	var id: int = tile.get_instance_id()
-	_tracked[id].allowed = allowed
+	if bool(_tracked[id].allowed) == allowed:
+		if not allowed or tile.valid_word or not _paint.has(id):
+			return
+		# CanvasItem tint properties have no change signal. Preserve direct tint
+		# updates while rectangle, visibility and cache changes use their watchers.
+		var tint: Array = _paint[id].tint_inputs
+		if tint[0] == tile._surface.self_modulate and tint[1] == tile._surface.modulate \
+			and tint[2] == tile._visual.modulate and tint[3] == tile.modulate:
+			return
+	else:
+		_tracked[id].allowed = allowed
 	if not allowed:
 		_remove_paint(id)
 	_changed(id)
@@ -159,7 +169,8 @@ func _sync_dirty() -> void:
 			tint *= ancestor.modulate
 			ancestor = ancestor.get_parent() as CanvasItem
 		_paint[id] = {"transform": transform,
-			"texture": surface.texture, "size": surface.size, "color": tint}
+			"texture": surface.texture, "size": surface.size, "color": tint,
+			"tint_inputs": [surface.self_modulate, surface.modulate, tile._visual.modulate, tile.modulate]}
 		_visibility_depth += 1
 		surface.hide()
 		_visibility_depth -= 1

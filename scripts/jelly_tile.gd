@@ -281,6 +281,12 @@ func _update_support(lift: float, compression: float, visible_shadow: bool, drop
 func _layout() -> void:
 	if _visual == null:
 		return
+	_layout_surface_geometry()
+	_layout_learning_face()
+	set_support(0.0, 0.0, not _projection)
+
+
+func _layout_surface_geometry() -> void:
 	_invalidate_idle_cache()
 	_visual.size = size
 	_content_offset = Vector2.ZERO
@@ -288,10 +294,12 @@ func _layout() -> void:
 	_set_surface_parameter(&"surface_size", size)
 	# Stay within the artwork's transparent margin, including tiny landscape tiles.
 	_set_surface_parameter(&"rim_uv", clampf(2.8 / maxf(1.0, size.x * Style.ui_scale(self)), 0.014, 0.03))
+
+
+func _layout_learning_face() -> void:
 	_picture.visible = not _projection and (kind == "picture" or combined)
 	_label.visible = not _projection and (kind == "word" or combined)
-	_picture.position = size * (Vector2(0.26, 0.18) if combined else Vector2(0.18, 0.20))
-	_picture.size = size * (Vector2(0.48, 0.42) if combined else Vector2(0.64, 0.58))
+	_layout_picture_geometry()
 	_label.position = size * Vector2(0.13, 0.60 if combined else 0.35)
 	_label.size = size * Vector2(0.74, 0.20 if combined else 0.30)
 	var scale_factor: float = Style.ui_scale(self)
@@ -304,7 +312,11 @@ func _layout() -> void:
 	_label.add_theme_font_size_override("font_size", font_size)
 	_badge.position = size * Vector2(0.69, 0.70)
 	_badge.size = size * 0.30
-	set_support(0.0, 0.0, not _projection)
+
+
+func _layout_picture_geometry() -> void:
+	_picture.position = size * (Vector2(0.26, 0.18) if combined else Vector2(0.18, 0.20))
+	_picture.size = size * (Vector2(0.48, 0.42) if combined else Vector2(0.64, 0.58))
 
 
 func set_idle_cached(enabled: bool) -> void:

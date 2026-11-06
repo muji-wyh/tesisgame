@@ -90,16 +90,19 @@ func _init() -> void:
 func _input(event: InputEvent) -> void:
 	if not is_visible_in_tree() or _kind != "auto_merge" or not _goal.is_empty():
 		return
-	if event is InputEventMouseButton or event is InputEventScreenTouch:
+	var was_pointer: bool = _pointer_input
+	if event is InputEventMouseMotion or event is InputEventMouseButton or event is InputEventScreenTouch:
 		_pointer_input = true
 	elif event is InputEventKey or event is InputEventJoypadButton \
 		or event is InputEventJoypadMotion and absf(event.axis_value) > 0.3:
 		_pointer_input = false
+	if was_pointer != _pointer_input:
+		_refresh_preview()
 
 
 func _refresh_preview() -> void:
 	var active: bool = _kind == "auto_merge" and _goal.is_empty() and not _preview_consumed \
-		and not disabled and not _paused and is_visible_in_tree() and (is_hovered() or has_focus())
+		and not disabled and not _paused and is_visible_in_tree() and (is_hovered() or has_focus() and not _pointer_input)
 	if active == _preview_active:
 		return
 	_preview_active = active

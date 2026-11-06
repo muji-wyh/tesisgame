@@ -1615,6 +1615,8 @@ func _goal_hovered(word_id: String) -> void:
 	_goal_hover_word = next
 	_goal_hover_elapsed = 0.0
 	_hint_key.clear()
+	_controls_key.clear()
+	_refresh_goal_buttons()
 	_refresh_marks()
 	_publish()
 
@@ -1632,9 +1634,20 @@ func _auto_merge_hover_changed(active: bool) -> void:
 func _auto_merge_hover_preview() -> Dictionary:
 	if not _auto_merge_hovered or not _can_play() or _source >= 0 or _keyboard_source >= 0 \
 		or _pointer != NO_POINTER or _finish_is_pulling() or _hover_preview_kind() != "auto_merge" \
-		or game.powerup_active() or game.collection_batch_active():
+		or not game._powerup_inputs_ready() or game._settling_remaining(true) > WordModel.EPSILON:
 		return {"capacity": game.auto_merge_capacity(), "result_count": 0, "input_ids": []}
 	return game.auto_merge_preview()
+
+
+func _goal_merge_hover_quotes() -> Dictionary:
+	if _goal_hover_word.is_empty() or _hover_preview_kind() != "goal" or not _can_play() \
+		or _source >= 0 or _keyboard_source >= 0 or _pointer != NO_POINTER \
+		or _finish_is_pulling() or not game._powerup_inputs_ready() \
+		or game._settling_remaining(true) > WordModel.EPSILON:
+		return {}
+	# Coalesce exact planning at settlement instead of replaying each airborne age.
+	var families: Array[String] = [_goal_hover_word]
+	return game.family_merge_quotes(families)
 
 
 func _hover_preview_kind() -> String:
@@ -2045,13 +2058,15 @@ func _refresh_completion_hints() -> void:
 	var playing: bool = _can_play()
 	var source: int = (_source if _source >= 0 else _keyboard_source) if playing and not game.collection_batch_active() else -1
 	var hover_kind: String = _hover_preview_kind()
+	var merge_hover_ready: bool = hover_kind in ["goal", "auto_merge"] and game._powerup_inputs_ready()
+	var merge_preview_settled: bool = merge_hover_ready and game._settling_remaining(true) <= WordModel.EPSILON
 	var key: Array = [_view_board_revision, _boss_status_revision, source, _goal_hover_word,
 		_auto_merge_hovered, _auto_collect_hovered, playing, game.powerup_active(), game.collection_batch_active(),
 		_pointer, _finish_is_pulling(), str(_fusion_drag.get("event_id", "")), reduced_motion,
 		game.paused, game._held_tile_id, not game._combo_pending.is_empty(), game.stage_ending(),
-		collect_button.disabled if collect_button != null else true, hover_kind]
+		collect_button.disabled if collect_button != null else true, hover_kind, merge_hover_ready, merge_preview_settled]
 	var elapsed: float = _completion_elapsed
-	if hover_kind == "goal" and playing and _source < 0 and _keyboard_source < 0 \
+	if hover_kind == "goal" and merge_hover_ready and playing and _source < 0 and _keyboard_source < 0 \
 		and not game.powerup_active() and not game.collection_batch_active():
 		elapsed = _goal_hover_elapsed
 	elif hover_kind == "auto_collect":
@@ -2065,7 +2080,7 @@ func _refresh_completion_hints() -> void:
 	_presentation_work.hint_searches += 1
 	var matching_ids: Array[int] = []
 	var hover: bool = false
-	if hover_kind == "goal" and playing and _source < 0 and _keyboard_source < 0 \
+	if hover_kind == "goal" and merge_hover_ready and playing and _source < 0 and _keyboard_source < 0 \
 		and not game.powerup_active() and not game.collection_batch_active():
 		hover = true
 		for id: int in _tiles:
@@ -2861,7 +2876,9 @@ func _refresh_controls() -> void:
 	if collect_button == null:
 		return
 	_refresh_collect_button()
-	var merge_available: bool = game.can_activate_powerup("auto_merge")
+	# Unknown legal-path availability keeps the static-price tools actionable.
+	# Exact planning belongs to hover previews and the purchase-time check.
+	var merge_available: bool = game._powerup_inputs_ready()
 	_refresh_powerup_buttons(merge_available)
 	_refresh_goal_buttons(merge_available)
 	_fill_button.visible = _configured and game.phase == "playing"
@@ -2885,14 +2902,10 @@ func _refresh_goal_buttons(available: Variant = null) -> void:
 	if _practice_panel == null:
 		return
 	var balance: int = int(coin_balance.call()) if coin_balance.is_valid() else -1
-	var families: Array[String] = []
-	for row: Dictionary in _practice_panel._rows:
-		if not row.mastered and not row.retired:
-			families.append(str(row.family_word_id))
 	_practice_panel.set_purchase_state(game.powerup_price("family_merge"), balance,
 		_can_play() and not _finish_is_pulling() and _pointer == NO_POINTER and _keyboard_source < 0,
 		game.powerup_active() or game.collection_batch_active() or game.stage_ending(), _paused,
-		game.can_activate_powerup("family_merge") if available == null else bool(available), game.family_merge_quotes(families))
+		game._powerup_inputs_ready() if available == null else bool(available), _goal_merge_hover_quotes())
 
 func _refresh_collect_button() -> void:
 	if collect_button == null:
