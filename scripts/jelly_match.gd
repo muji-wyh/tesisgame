@@ -288,11 +288,11 @@ func host_header_chest(header: Control) -> void:
 	header.add_child(_header_chest_host)
 	for control: Control in [_loot_meter, _loot_icon, _chest_tap]:
 		control.reparent(_header_chest_host, false)
-	_header_chest_level = _label(_header_chest_host, "Lv%d" % _displayed_chest_tier, 12)
+	_header_chest_level = _label(_chest_tap.artwork_host(), "Lv%d" % _displayed_chest_tier, 12)
 	_header_chest_level.name = "JellyChestLevel"
 	_header_chest_level.add_theme_font_override("font", Style.HEADING_FONT)
 	_header_chest_level.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_header_chest_level.z_index = _chest_tap.z_index + 1
+	_header_chest_level.z_index = 1
 	_header_chest_host.resized.connect(layout_header_chest)
 	_header_chest_host.item_rect_changed.connect(_sync_header_chest_anchor)
 	item_rect_changed.connect(_sync_header_chest_anchor)
@@ -335,7 +335,8 @@ func _layout_header_chest_level() -> void:
 	_header_chest_level.add_theme_stylebox_override("normal", surface)
 	var text_width: float = Style.HEADING_FONT.get_string_size(_header_chest_level.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
 	_header_chest_level.size = Vector2(minf(width, maxf(30.0 / s, text_width + 8.0 / s)), _header_chest_level.get_minimum_size().y)
-	_header_chest_level.position = _header_chest_host.size - _header_chest_level.size
+	_header_chest_level.position = _header_chest_host.size - _header_chest_level.size - _chest_tap.position - _chest_tap.size * 0.5
+	_chest_tap.refresh_artwork_pose()
 
 func chest_anchor_rect() -> Rect2:
 	return get_global_transform().affine_inverse() * _loot_icon.get_global_rect()
@@ -345,6 +346,7 @@ func chest_meter_rect() -> Rect2:
 
 func _sync_header_chest_anchor() -> void:
 	if is_inside_tree() and is_instance_valid(_reward_presentation):
+		_chest_tap.refresh_artwork_pose()
 		_reward_presentation.set_chest_anchor(chest_anchor_rect())
 		queue_redraw()
 

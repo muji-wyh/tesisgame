@@ -42,6 +42,7 @@ func _run() -> void:
 		if view is WordJellyView:
 			_check_collection_gate(view)
 		view.free()
+		await _check_hosted_header(scene)
 	await process_frame
 	print("Jelly chest tap: %d assertions, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -53,8 +54,10 @@ func _check_component() -> void:
 	tap.position = Vector2(48, 80)
 	tap.size = Vector2(64, 64)
 	var resting: Rect2 = tap.get_rect()
+	var resting_layer: int = tap.z_index
 	check(not tap.is_active(), "The decorative chest response begins idle")
 	tap.play(CHEST, 1.0, false)
+	check(tap.z_index > resting_layer, "An active chest and its attached label rise above the static HUD")
 	var peak_scale: float = 1.0
 	var peak_rotation: float = 0.0
 	var peak_light: float = 0.0
@@ -69,6 +72,7 @@ func _check_component() -> void:
 	check(peak_scale > 3.10 and peak_rotation > 0.05 and peak_light > 0.1,
 		"An ordinary tap triples the former scale amplitude while retaining its turn and light")
 	check(not tap.is_active(), "The chest response finishes within a short finite timeline")
+	check(tap.z_index == resting_layer, "Completion restores the ordinary chest drawing layer")
 	var idle: Dictionary = tap.snapshot()
 	check(is_equal_approx(float(idle.scale), 1.0) and is_zero_approx(float(idle.rotation))
 		and is_zero_approx(float(idle.light)), "Completion restores the idle pose without residual light")
@@ -85,6 +89,7 @@ func _check_component() -> void:
 	tap.play(CHEST, 1.0, false)
 	tap.advance(0.2)
 	tap.clear()
+	check(tap.z_index == resting_layer, "Canceling chest feedback also restores its drawing layer")
 	tap.advance(0.2)
 	check(not tap.is_active() and is_zero_approx(float(tap.snapshot().light)),
 		"Clearing a response removes it immediately and cannot replay it on the next frame")
@@ -241,3 +246,172 @@ func _check_collection_gate(view) -> void:
 	view._chest_tap.pressed.emit()
 	check(not view._chest_tap.is_active() and view.game.collection_batch_snapshot() == batch,
 		"A chest tap during Collect cannot interrupt or advance the pending word payout")
+
+
+func _header_anchors(view) -> Dictionary:
+	return {"hit": view._chest_tap.get_global_rect(), "icon": view._loot_icon.get_global_rect(),
+		"flight": view.chest_anchor_rect(), "meter": view.chest_meter_rect(),
+		"reward": view._reward_presentation._anchor}
+
+
+func _header_artwork_points(view) -> Array[Vector2]:
+	var tap: Tap = view._chest_tap
+	var label: Label = view._header_chest_level
+	var artwork: Vector2 = view._loot_icon.texture.get_size()
+	artwork *= minf(tap.size.x, tap.size.y) * 0.67 / maxf(artwork.x, artwork.y)
+	var offset: Vector2 = view._header_chest_host.size - label.size - tap.position - tap.size * 0.5
+	return [-artwork * 0.5, Vector2(artwork.x, -artwork.y) * 0.5, artwork * 0.5,
+		Vector2(-artwork.x, artwork.y) * 0.5, offset, offset + Vector2(label.size.x, 0.0),
+		offset + label.size, offset + Vector2(0.0, label.size.y)]
+
+
+func _expected_artwork_pose(view) -> Transform2D:
+	var tap: Tap = view._chest_tap
+	var state: Dictionary = tap.snapshot()
+	var center: Vector2 = tap.size * 0.5
+	var turn: float = float(state.rotation)
+	var zoom: float = float(state.scale)
+	if bool(state.active) and not view.reduced_motion:
+		# Fit the independent transformed corners of both acquired artwork and badge.
+		# The shared translation must keep the whole visible pair within the viewport.
+		var canvas: Transform2D = tap.get_global_transform_with_canvas()
+		var pose := Transform2D(turn, Vector2.ONE * zoom, 0.0, center)
+		var points: Array[Vector2] = _header_artwork_points(view)
+		var bounds := Rect2(canvas * pose * points[0], Vector2.ZERO)
+		for point: Vector2 in points:
+			bounds = bounds.expand(canvas * pose * point)
+		var viewport: Vector2 = tap.get_viewport_rect().size
+		var shift := Vector2.ZERO
+		if bounds.position.x < 4.0:
+			shift.x = 4.0 - bounds.position.x
+		elif bounds.end.x > viewport.x - 4.0:
+			shift.x = viewport.x - 4.0 - bounds.end.x
+		if bounds.position.y < 4.0:
+			shift.y = 4.0 - bounds.position.y
+		elif bounds.end.y > viewport.y - 4.0:
+			shift.y = viewport.y - 4.0 - bounds.end.y
+		center = canvas.affine_inverse() * (canvas * center + shift)
+	return Transform2D(turn, Vector2.ONE * zoom, 0.0, center)
+
+
+func _check_header_pose(view, anchors: Dictionary, context: String) -> void:
+	var tap: Tap = view._chest_tap
+	var host: Node2D = tap.artwork_host()
+	var label: Label = view._header_chest_level
+	var expected: Transform2D = _expected_artwork_pose(view)
+	var offset: Vector2 = view._header_chest_host.size - label.size - tap.position - tap.size * 0.5
+	check(host.get_parent() == tap and label.get_parent() == host,
+		context + " keeps the level attached to the chest artwork anchor")
+	check(host.transform.is_equal_approx(expected),
+		context + " retains the chest's fitted center, turn and amplified scale")
+	check(label.position.is_equal_approx(offset),
+		context + " preserves the badge's resting bottom-right offset within the shared pose")
+	var canvas: Transform2D = tap.get_global_transform_with_canvas() * expected
+	var corners: Array[Vector2] = [Vector2.ZERO, Vector2(label.size.x, 0.0), label.size,
+		Vector2(0.0, label.size.y)]
+	for corner: Vector2 in corners:
+		check((label.get_global_transform_with_canvas() * corner).is_equal_approx(canvas * (offset + corner)),
+			context + " moves every badge corner with the chest's complete affine transform")
+	var current: Dictionary = _header_anchors(view)
+	for key: String in anchors:
+		var rectangle: Rect2 = current[key]
+		check(rectangle.is_equal_approx(anchors[key]),
+			context + " preserves the independent " + key + " target")
+	if tap.is_active() and not view.reduced_motion:
+		var viewport: Vector2 = tap.get_viewport_rect().size
+		for point: Vector2 in _header_artwork_points(view):
+			var fitted: Vector2 = host.get_global_transform_with_canvas() * point
+			check(fitted.x >= 3.99 and fitted.y >= 3.99
+				and fitted.x <= viewport.x - 3.99 and fitted.y <= viewport.y - 3.99,
+				context + " keeps the complete chest and level inside the viewport")
+
+
+func _check_hosted_header(scene) -> void:
+	var frame := Control.new()
+	root.add_child(frame)
+	frame.position = Vector2(12, 6)
+	frame.size = Vector2(root.size)
+	var header := Control.new()
+	frame.add_child(header)
+	header.size = Vector2(80, 64)
+	header.position = Vector2(908, 2)
+	var view = scene.new()
+	frame.add_child(view)
+	view.set_process(false)
+	view.size = Vector2(1000, 720)
+	view.host_header_chest(header)
+	view._header_chest_host.size = header.size
+	_reset(view)
+	var tap: Tap = view._chest_tap
+	var label: Label = view._header_chest_level
+	check(label.mouse_filter == Control.MOUSE_FILTER_IGNORE and label.focus_mode == Control.FOCUS_NONE,
+		"The hosted level leaves pointer and keyboard ownership on the chest button")
+	check(not tap.is_processing() and tap.artwork_host().is_visible_in_tree() and label.is_visible_in_tree(),
+		"The hosted level remains visible at rest without an idle polling process")
+	for tier: int in [0, 99]:
+		view._displayed_chest_tier = tier
+		view._refresh_hud()
+		var anchors: Dictionary = _header_anchors(view)
+		var resting: Transform2D = label.get_global_transform_with_canvas()
+		var context: String = "%s hosted Lv%d" % [view.name, tier]
+		_check_header_pose(view, anchors, context + " at rest")
+		view._tap_chest()
+		var elapsed: float = 0.0
+		for sample: float in [0.0, 0.14, 0.34, 0.50, 0.66, 0.92]:
+			tap.advance(sample - elapsed)
+			elapsed = sample
+			_check_header_pose(view, anchors, context + " at %.2f seconds" % sample)
+			if is_equal_approx(sample, 0.34):
+				check(not tap.artwork_host().position.is_equal_approx(tap.size * 0.5)
+					and not label.get_global_transform_with_canvas().is_equal_approx(resting),
+					context + " shares the nonzero edge-fit translation and peak motion")
+		tap.advance(Tap.DURATION)
+		view._sync_chest_tap()
+		check(not tap.is_active() and view._loot_icon.visible and label.is_visible_in_tree()
+			and label.get_global_transform_with_canvas().is_equal_approx(resting) and label.text == "Lv%d" % tier,
+			context + " restores the original visible badge after the animation endpoint")
+
+	view._tap_chest()
+	tap.advance(0.34)
+	header.size = Vector2(96, 72)
+	view._header_chest_host.size = header.size
+	view.layout_header_chest()
+	var elapsed_before_resize: float = float(tap.snapshot().elapsed)
+	_check_header_pose(view, _header_anchors(view), "An in-flight header resize")
+	frame.scale = Vector2.ONE * 1.35
+	header.position = Vector2((float(root.size.x) - frame.position.x - 8.0) / frame.scale.x - header.size.x,
+		(8.0 - frame.position.y) / frame.scale.y)
+	await process_frame
+	_check_header_pose(view, _header_anchors(view), "A uniformly scaled and moved header ancestor")
+	check(is_equal_approx(float(tap.snapshot().elapsed), elapsed_before_resize),
+		"Header geometry changes update the badge pose without advancing its animation clock")
+	for action: String in ["clear", "pause", "reduced"]:
+		tap.clear()
+		view._sync_chest_tap()
+		view._tap_chest()
+		tap.advance(0.34)
+		var anchors: Dictionary = _header_anchors(view)
+		match action:
+			"clear":
+				tap.clear()
+				view._sync_chest_tap()
+			"pause":
+				view.pause(true)
+				view.pause(false)
+			"reduced":
+				view.set_reduced_motion(true)
+		check(not tap.is_active() and label.is_visible_in_tree(),
+			"The hosted badge immediately returns after " + action)
+		_check_header_pose(view, anchors, "Hosted restoration after " + action)
+	view._tap_chest()
+	tap.advance(0.15)
+	var reduced: Dictionary = tap.snapshot()
+	check(bool(reduced.active) and is_equal_approx(float(reduced.scale), 1.0)
+		and is_zero_approx(float(reduced.rotation)) and float(reduced.light) > 0.0,
+		"The hosted badge retains reduced-motion light feedback without scale or rotation")
+	_check_header_pose(view, _header_anchors(view), "Hosted reduced-motion acknowledgment")
+	tap.advance(Tap.REDUCED_DURATION)
+	view._sync_chest_tap()
+	_check_header_pose(view, _header_anchors(view), "The reduced-motion endpoint")
+	view.free()
+	frame.free()

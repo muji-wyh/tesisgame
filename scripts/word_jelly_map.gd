@@ -100,7 +100,6 @@ func _init() -> void:
 	_wallet = _label(self, "", 16)
 	_wallet_icon = _image(self, COIN)
 	_upgrades.name = "JellyUpgrades"
-	_upgrades.tooltip_text = "Upgrade Jelly powers and Auto merge capacity with saved coins"
 	add_child(_upgrades)
 	_upgrades.add_child(_merged_level_badge)
 	_upgrade_label = _label(_upgrades, "Upgrade", 13)
@@ -599,6 +598,7 @@ func _layout() -> void:
 	_upgrades.add_theme_stylebox_override("normal",
 		Style.box(Color("#edfff1"), Color("#a8c9ae"), ceili(12.0 / s), maxi(1, roundi(1.0 / s))))
 	_merged_level_badge.set_level(int(_state.get("merged_level", 1)))
+	_merged_level_badge.tooltip_text = ""
 	_merged_level_badge.layout_badge(Rect2(Vector2(7, 8) / s, Vector2(96, 28) / s), s)
 	_merged_level_badge.add_theme_stylebox_override("panel", StyleBoxEmpty.new())
 	_upgrade_label.position = Vector2(106.0 / s, 0)

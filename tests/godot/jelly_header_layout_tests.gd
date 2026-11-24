@@ -109,7 +109,7 @@ func check_chest_levels(app, view, dimensions: Vector2i) -> void:
 		var ink: Vector2 = Vector2(font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x,
 			font.get_height(pixels))
 		var available: Vector2 = label.size - surface.get_minimum_size()
-		check(label.is_visible_in_tree() and label.get_parent() == view._header_chest_host
+		check(label.is_visible_in_tree() and label.get_parent() == view._chest_tap.artwork_host()
 			and label.text == "Lv%d" % expected_tier, context + " visibly identifies the capped earned chest level")
 		check(dock_before.grow(0.1).encloses(badge) and badge.has_area()
 			and badge.end.distance_to(dock_before.end) < 0.1,
@@ -120,7 +120,7 @@ func check_chest_levels(app, view, dimensions: Vector2i) -> void:
 			context + " retains the bold twelve-pixel reading size")
 		check(label.mouse_filter == Control.MOUSE_FILTER_IGNORE and label.focus_mode == Control.FOCUS_NONE,
 			context + " passes pointer and keyboard input to the existing chest action")
-		check(label.z_index > view._chest_tap.z_index,
+		check(label.z_index > view._chest_tap.artwork_host().z_index,
 			context + " keeps the level readable over the chest tap response")
 		check(view._header_chest_host.get_global_rect().is_equal_approx(dock_before)
 			and view._loot_icon.get_global_rect().is_equal_approx(icon_before)

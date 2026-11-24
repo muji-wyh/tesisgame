@@ -260,16 +260,16 @@ func test_rating_segments() -> void:
 		"seconds_total": 90.0, "seconds_remaining": 90.0, "time_elapsed": 0.0, "stars_now": 3}
 	banner.set_stage(state, true)
 	var slots: Array = banner.snapshot().get("rating_segments", [])
-	check(slots.size() == 3, "The timer exposes one separate star for each of its three progress segments")
+	check(slots.size() == 3, "The stage timer keeps three distinct rating stars beside its countdown")
 	check(banner._label.get_line_count() == 1,
-		"The timed-stage caption stays on one row above the rating stars")
+		"The timed-stage countdown stays on one row beside the rating stars")
 	for slot: Dictionary in slots:
 		var star: Rect2 = Rect2(slot.star[0], slot.star[1], slot.star[2], slot.star[3])
 		var bar: Rect2 = Rect2(slot.bar[0], slot.bar[1], slot.bar[2], slot.bar[3])
 		check(star.get_center().x >= bar.position.x and star.get_center().x <= bar.end.x,
-			"Each rating star is horizontally centered over its own progress segment")
+			"Each rating star stays horizontally inside its allotted slot")
 		check(not banner._label.get_rect().intersects(star),
-			"Clock text cannot wrap down into the star row after a taller timer layout")
+			"The countdown digits and rating artwork occupy separate space")
 	state.time_elapsed = 31.0
 	state.seconds_remaining = 59.0
 	state.stars_now = 2
@@ -291,7 +291,84 @@ func test_rating_segments() -> void:
 	banner.set_stage(state)
 	check(not banner.snapshot().get("star_loss_active", false),
 		"Reduced motion updates the earned star slots without flying or flashing")
+	for layout: Dictionary in [
+		{"name": "1366 desktop", "viewport": Vector2(1366, 768), "width": 900.0, "height": 44.0, "scale": 1.0},
+		{"name": "393 portrait", "viewport": Vector2(393, 852), "width": 240.0, "height": 44.0, "scale": 0.8125},
+		{"name": "844 short-landscape rail", "viewport": Vector2(844, 390), "width": 184.0, "height": 46.0, "scale": 1.0},
+		{"name": "4K scaled desktop", "viewport": Vector2(3840, 2160), "width": 900.0, "height": 44.0, "scale": 2.0}]:
+		var ui_scale: float = float(layout.scale)
+		var badge := Rect2(Vector2(16, 8) / ui_scale,
+			Vector2(float(layout.width), float(layout.height)) / ui_scale)
+		banner.size = layout.viewport / ui_scale
+		banner.configure_layout(badge, Rect2(Vector2(16, 70) / ui_scale,
+			Vector2(float(layout.width), 250.0) / ui_scale), ui_scale)
+		for rating: Dictionary in [
+			{"stars": 3, "remaining": 90.0}, {"stars": 2, "remaining": 59.0},
+			{"stars": 1, "remaining": 18.0}, {"stars": 0, "remaining": 0.0}]:
+			state.stars_now = int(rating.stars)
+			state.seconds_remaining = float(rating.remaining)
+			state.time_elapsed = 90.0 - float(rating.remaining)
+			banner.set_stage(state)
+			_check_timer_geometry(banner, badge, ui_scale, int(rating.stars),
+				float(rating.remaining) / 90.0, "%s with %d stars" % [layout.name, int(rating.stars)])
+		state.kind = "challenge"
+		state.seconds_remaining = 120.0
+		banner.set_stage(state)
+		check(is_equal_approx(float(banner.snapshot().timer_ratio), 1.0) and banner._label.text == "2:00",
+			"%s: committed bonus time remains readable while the single ribbon clamps to its full width" % layout.name)
+		state.kind = "main"
 	banner.free()
+
+
+func _timer_rect(state: Dictionary, key: String, context: String) -> Rect2:
+	var values: Array = state.get(key, [])
+	check(values.size() == 4, context + ": the timer exposes its actual " + key + " geometry")
+	if values.size() != 4:
+		return Rect2()
+	return Rect2(values[0], values[1], values[2], values[3])
+
+
+func _check_timer_geometry(banner, badge: Rect2, ui_scale: float, stars: int, ratio: float, context: String) -> void:
+	var state: Dictionary = banner.snapshot()
+	var surface: Rect2 = _timer_rect(state, "surface_rect", context)
+	var track: Rect2 = _timer_rect(state, "timer_track", context)
+	var fill: Rect2 = _timer_rect(state, "timer_fill", context)
+	var clock: Rect2 = _timer_rect(state, "clock_rect", context)
+	check(surface.has_area() and badge.grow(0.1).encloses(surface)
+		and surface.size.x * ui_scale <= 280.1
+		and is_equal_approx(surface.get_center().x, badge.get_center().x),
+		context + ": the compact timer surface stays centered inside its reserved responsive area")
+	check(track.has_area() and surface.grow(0.1).encloses(track)
+		and fill.position.is_equal_approx(track.position)
+		and is_equal_approx(fill.size.y, track.size.y)
+		and is_equal_approx(fill.size.x, track.size.x * ratio)
+		and is_equal_approx(float(state.timer_ratio), ratio),
+		context + ": one continuous ribbon shows the actual remaining-time proportion")
+	var caption: Rect2 = banner._label.get_rect()
+	var narrow_main: bool = state.get("kind") == "main" and surface.size.x * ui_scale < 208.0
+	var clock_fits: bool = not clock.has_area() if narrow_main else clock.has_area() and surface.grow(0.1).encloses(clock)
+	check(clock_fits
+		and surface.grow(0.1).encloses(caption) and not clock.intersects(caption)
+		and not track.intersects(caption),
+		context + ": the timer preserves readable digits and ribbon, omitting the clock artwork only on the narrow rail")
+	var font: Font = banner._label.get_theme_font("font")
+	var font_size: int = banner._label.get_theme_font_size("font_size")
+	check(banner._label.get_line_count() == 1
+		and font.get_string_size(banner._label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size).x <= caption.size.x + 0.1
+		and font.get_height(font_size) <= caption.size.y + 0.1,
+		context + ": the countdown fits its real font metrics without wrapping or clipping")
+	var slots: Array = state.get("rating_segments", [])
+	check(slots.size() == 3, context + ": all three rating slots remain available")
+	var previous := Rect2()
+	for index in range(slots.size()):
+		var slot: Dictionary = slots[index]
+		var star := Rect2(slot.star[0], slot.star[1], slot.star[2], slot.star[3])
+		check(star.has_area() and surface.grow(0.1).encloses(star)
+			and not star.intersects(clock) and not star.intersects(caption)
+			and not star.intersects(track) and (index == 0 or not star.intersects(previous))
+			and bool(slot.active) == (index < stars),
+			context + ": rating star %d keeps the real active state and clear artwork bounds" % (index + 1))
+		previous = star
 
 
 func test_settlement_caption_scaling(room) -> void:
