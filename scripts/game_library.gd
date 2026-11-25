@@ -24,6 +24,7 @@ const GrowthMeterShader = preload("res://scripts/home_growth_meter.gdshader")
 const LearningSelector = preload("res://scripts/learning_path_selector.gd")
 const LearningThemeArt = preload("res://scripts/learning_theme_art.gd")
 const Context = preload("res://scripts/learning_context.gd")
+const FEATURED_STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 const CATALOG := [
 	{"id": "word_jelly", "title": "Jelly Words", "copy": "Build words. Match pictures.\nMerge and level up.", "detail": "MATCH · MERGE · COLLECT", "tint": Color("#eee5f4")},
 	{"id": "match", "title": "Match", "copy": "Match a picture\nto its word.", "detail": "5 PAIRS", "tint": Color("#e6efe3")},
@@ -43,6 +44,8 @@ var scroll: ResultScroll
 var pip: DuckMascot
 var coin_counter: CoinCounter
 var _stage: Control
+var _paper_backdrop: ColorRect
+var _paper_material: ShaderMaterial
 var _top: Control
 var _brand: Label
 var _body: VBoxContainer
@@ -104,10 +107,17 @@ func _init() -> void:
 	_stage = Control.new()
 	_stage.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_stage)
+	_paper_backdrop = ColorRect.new()
+	_paper_backdrop.name = "HomePaperGrain"
+	_paper_backdrop.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_paper_backdrop.focus_mode = Control.FOCUS_NONE
+	_paper_material = Style.paper_material(Style.PAPER, Color("#e8f2ea"), 0.30, 0.017)
+	_paper_backdrop.material = _paper_material
+	_stage.add_child(_paper_backdrop)
 	_top = Control.new()
 	_top.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_stage.add_child(_top)
-	_brand = Style.label(Data.GAME_NAME, 22)
+	_brand = Style.display_heading(Data.GAME_NAME, 22)
 	_top.add_child(_brand)
 	coin_counter = CoinCounter.new()
 	coin_counter.name = "HomeCoins"
@@ -158,7 +168,7 @@ func _init() -> void:
 	_pip_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_pip_caption.add_theme_color_override("font_color", Style.MUTED)
 	_hero.add_child(_pip_caption)
-	heading = Style.label("Let's grow together.", 32)
+	heading = Style.display_heading("Let's grow together.", 32)
 	_hero.add_child(heading)
 	_build_growth_journey()
 	_hero.move_child(_journey, 0)
@@ -460,9 +470,15 @@ func configure_theme(id: String, disabled: bool, save_failed: bool) -> void:
 
 
 func _style_surface() -> void:
-	var surface := Style.box(Style.PAPER.lerp(_learning_palette.get("background", Data.theme(_theme_id).background), 0.16), Color.TRANSPARENT, 0, 0)
+	var base: Color = Style.PAPER.lerp(_learning_palette.get("background", Data.theme(_theme_id).background), 0.16)
+	var surface := Style.box(base, Color.TRANSPARENT, 0, 0)
 	surface.set_content_margin_all(0)
 	add_theme_stylebox_override("panel", surface)
+	if _paper_material != null:
+		var accent: Color = _learning_palette.get("accent", Data.theme(_theme_id).accent)
+		var wash: Color = base.lerp(accent.lightened(0.76), 0.45)
+		_paper_material.set_shader_parameter("paper_tint", base)
+		_paper_material.set_shader_parameter("top_wash", wash)
 
 
 func _style_theme_choices() -> void:
@@ -548,7 +564,17 @@ func _add_game_card(entry: Dictionary) -> void:
 	var current := Style.label("CONTINUE", 10)
 	current.add_theme_color_override("font_color", Style.GOOD)
 	tile.add_child(current)
-	var info := {"button": tile, "preview": preview, "title": title, "copy": copy, "current": current, "entry": entry}
+	var featured: TextureRect = null
+	if str(entry.id) == "word_jelly":
+		featured = TextureRect.new()
+		featured.name = "FeaturedBadge"
+		featured.texture = FEATURED_STAR
+		featured.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+		featured.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		featured.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		featured.focus_mode = Control.FOCUS_NONE
+		tile.add_child(featured)
+	var info := {"button": tile, "preview": preview, "title": title, "copy": copy, "current": current, "featured": featured, "entry": entry}
 	_tiles.append(info)
 	tile.resized.connect(_layout_tile.bind(info))
 	for interaction: Signal in [tile.mouse_entered, tile.mouse_exited, tile.focus_entered, tile.focus_exited]:
@@ -650,6 +676,9 @@ func fit(available: Vector2, factor: float) -> void:
 	_style_surface()
 	custom_minimum_size = Vector2.ZERO
 	size = available
+	if _paper_backdrop != null:
+		_paper_backdrop.position = Vector2.ZERO
+		_paper_backdrop.size = available
 	_top.position = Vector2(content_x, top_y)
 	_top.size = Vector2(content_width, top_height)
 	var coin_width: float = (100.0 if css.x < 420 else 112.0) / _factor
@@ -721,19 +750,21 @@ func _style_footer() -> void:
 
 func _style_tile(tile: Dictionary) -> void:
 	var radius: int = ceili(20.0 / _factor)
+	var featured: bool = str(tile.entry.id) == "word_jelly"
 	for state: String in ["normal", "hover", "pressed", "hover_pressed", "disabled"]:
 		var pressed: bool = state in ["pressed", "hover_pressed"]
 		var tint: Color = tile.entry.tint
 		var disabled: bool = state == "disabled"
-		var surface := Style.box(tint.lightened(0.32 if state == "normal" else 0.08),
-			Style.GOOD if pressed else tint.darkened(0.13), radius, maxi(1, roundi(1.0 / _factor)))
+		var border_tint: Color = Style.GOOD if pressed else Color("#cfab65") if featured else tint.darkened(0.15)
+		var fill_tint: Color = tint.lightened(0.28 if featured else 0.32) if state == "normal" else tint.lightened(0.08)
+		var surface := Style.box(fill_tint, border_tint, radius, maxi(1, roundi((1.5 if featured else 1.0) / _factor)))
 		if disabled:
 			surface.bg_color = Style.PAPER.lerp(tint, 0.28)
 			surface.border_color = Style.EDGE
-		surface.border_width_bottom = ceili((1.0 if disabled else 2.0 if pressed else 3.0) / _factor)
-		surface.shadow_color = Color(tint.darkened(0.55), 0.06 if pressed else 0.11)
-		surface.shadow_size = 0 if disabled else ceili((1.0 if pressed else 3.0) / _factor)
-		surface.shadow_offset = Vector2(0, (1.0 if pressed else 2.0) / _factor)
+		surface.border_width_bottom = ceili((1.0 if disabled else 2.0 if pressed else 4.0 if featured else 3.0) / _factor)
+		surface.shadow_color = Color(Color("#8c6b2d") if featured else tint.darkened(0.55), 0.08 if pressed else 0.16 if featured else 0.11)
+		surface.shadow_size = 0 if disabled else ceili((2.0 if pressed else 6.0 if featured else 4.0) / _factor)
+		surface.shadow_offset = Vector2(0, (1.0 if pressed else 3.0 if featured else 2.0) / _factor)
 		tile.button.add_theme_stylebox_override(state, surface)
 	# Programmatic focus restores navigation after Home. Show its outline only
 	# after keyboard/controller input, rather than leaving a dark pointer border.
@@ -775,7 +806,8 @@ func _layout_hero() -> void:
 	_hero.custom_minimum_size = Vector2(0, hero_height)
 	_journey.position = Vector2(left, 0)
 	_journey.size = Vector2(group_width, hero_height)
-	var surface := Style.box(Color("#f5f2e7"), Color.TRANSPARENT, ceili(24.0 / _factor), 0)
+	var surface := Style.card_box(Color("#f8f5ea"), Color("#e0dfd1"), ceili(24.0 / _factor), maxi(1, roundi(1.0 / _factor)), 1.0, _factor)
+	surface.border_width_bottom = ceili(2.5 / _factor)
 	surface.set_content_margin_all(0)
 	_journey.add_theme_stylebox_override("panel", surface)
 	var art_side: float = (168.0 if generous else 136.0) / _factor if wide else clampf(css_width * 0.28, 84.0, 112.0) / _factor
@@ -800,7 +832,11 @@ func _layout_hero() -> void:
 	var title_width: float = copy_width if wide else group_width - pad * 2.0
 	heading.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if wide else HORIZONTAL_ALIGNMENT_CENTER
 	heading.position = Vector2(left + title_x, (22.0 if wide else 14.0) / _factor)
-	heading.add_theme_font_size_override("font_size", ceili((32.0 if generous else 26.0 if wide else 24.0) / _factor))
+	var heading_pixels: int = ceili((32.0 if generous else 26.0 if wide else 24.0) / _factor)
+	var heading_font: Font = heading.get_theme_font("font")
+	while heading_pixels > ceili(14.0 / _factor) and heading_font.get_string_size(heading.text, HORIZONTAL_ALIGNMENT_LEFT, -1, heading_pixels).x > title_width:
+		heading_pixels -= 1
+	heading.add_theme_font_size_override("font_size", heading_pixels)
 	heading.size = Vector2(title_width, (46.0 if wide else 38.0) / _factor)
 	_journey_heading.horizontal_alignment = heading.horizontal_alignment
 	_journey_heading.position = Vector2(title_x, (77.0 if wide else 58.0) / _factor)
@@ -841,6 +877,11 @@ func _layout_tile(tile: Dictionary) -> void:
 	tile.current.position = Vector2(pad, 5.0 / _factor)
 	tile.current.add_theme_font_size_override("font_size", ceili(9.0 / _factor))
 	tile.current.visible = not _current.is_empty() and tile.entry.id == _current
+	if tile.get("featured") != null:
+		var star: TextureRect = tile.featured
+		var star_edge: float = 16.0 / _factor
+		star.size = Vector2.ONE * star_edge
+		star.position = Vector2(area.x - pad - star_edge, 6.0 / _factor)
 	var title_size: int = ceili((20.0 if grid.columns == 3 else 18.0) / _factor)
 	var title_font: Font = tile.title.get_theme_font("font")
 	while title_size > ceili(14.0 / _factor) and title_font.get_string_size(tile.title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, title_size).x > tile.title.size.x:

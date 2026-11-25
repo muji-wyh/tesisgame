@@ -161,6 +161,11 @@ var _boss_rect_key: Array = []
 var _powerup_pose_active: bool = false
 var _powerup_fragment_ids: Array[int] = []
 var _board_had_loot_flights: bool = false
+var _well_impulse_elapsed: float = 1.0
+var _well_impulse_strength: float = 0.0
+var _well_impulse_tint: Color = Color("#ffde7a")
+var _well_base_pos: Vector2 = Vector2.ZERO
+const WELL_IMPULSE_SECONDS: float = 0.22
 var _presentation_work: Dictionary = {"view_passes": 0, "tiles_classified": 0,
 	"tiles_posed": 0, "topology_passes": 0, "palette_passes": 0,
 	"mark_passes": 0, "control_passes": 0, "hint_searches": 0, "boss_passes": 0}
@@ -248,7 +253,14 @@ func _init() -> void:
 	_practice_panel.merge_requested.connect(_activate_goal_merge)
 	add_child(_practice_panel)
 	_boss_view = BossView.new()
-	_boss_view.audio_requested.connect(func(cue: String) -> void: audio_requested.emit(cue))
+	_boss_view.audio_requested.connect(func(cue: String) -> void:
+		audio_requested.emit(cue)
+		if cue == "boss-hit":
+			_trigger_well_impulse(0.75, Color("#ffd466"))
+		elif cue == "boss-win":
+			_trigger_well_impulse(1.0, Color("#ffe38a"))
+		elif cue == "boss-kick":
+			_trigger_well_impulse(0.55, Color("#e8a26a")))
 	add_child(_boss_view)
 	_merged_level_badge.z_index = 36
 	add_child(_merged_level_badge)
@@ -501,6 +513,8 @@ func set_reduced_motion(value: bool) -> void:
 	_fill_button.set_reduced_motion(value)
 	for kind: String in powerup_buttons:
 		powerup_buttons[kind].set_reduced_motion(value)
+	if value:
+		_reset_well_impulse()
 	super.set_reduced_motion(value)
 
 func _visibility_changed() -> void:
@@ -516,6 +530,7 @@ func _finished(result: Dictionary) -> void:
 	_word_reveal.reset()
 	_collection_effects.reset()
 	_powerup_effects.hide()
+	_reset_well_impulse()
 	super._finished(result)
 
 
@@ -979,6 +994,8 @@ func _collection_started(fusion: Dictionary) -> void:
 	_collection_origins[str(fusion.attempt_id)] = origin
 	var word: Dictionary = fusion.word
 	var merge_level: int = clampi(int(fusion.get("merge_level", fusion.a.get("merge_level", 1))), 1, WordModel.MAX_MERGE_LEVEL)
+	if merge_level >= 4:
+		_trigger_well_impulse(clampf(0.45 + float(merge_level - 4) * 0.14, 0.45, 1.0), Color("#ffde7a"))
 	_word_reveal.set_reduced_motion(reduced_motion)
 	var batch: bool = bool(fusion.get("batch", false))
 	var reveal_delay: float = float(fusion.pop_at)
@@ -1980,6 +1997,7 @@ func _advance_board_presentation(delta: float) -> void:
 		_auto_merge_hover_elapsed += delta
 	if _auto_collect_hovered:
 		_auto_collect_hover_elapsed += delta
+	_advance_well_impulse(delta)
 
 
 func _process(delta: float) -> void:
@@ -3110,7 +3128,8 @@ func _layout() -> void:
 		_snapbacks.clear()
 	_board = next_board
 	var well_bounds: Rect2 = _board.grow(-2.0 / s)
-	_well_art.position = well_bounds.position
+	_well_base_pos = well_bounds.position
+	_well_art.position = _well_base_pos + _well_impulse_offset()
 	_well_art.size = well_bounds.size
 	_well_art.material.set_shader_parameter("region_size", well_bounds.size * s)
 	_well_art.material.set_shader_parameter("corner_radius", ceilf(16.0 / s) * s)
@@ -3311,6 +3330,72 @@ func _layout() -> void:
 	_refresh_hud()
 	queue_redraw()
 	_publish()
+
+
+func _trigger_well_impulse(strength: float, tint: Color = Color("#ffde7a")) -> void:
+	if reduced_motion or not is_finite(strength) or strength <= 0.0:
+		return
+	_well_impulse_strength = maxf(_well_impulse_strength, clampf(strength, 0.0, 1.0))
+	_well_impulse_tint = tint
+	_well_impulse_elapsed = 0.0
+	_apply_well_impulse()
+
+
+func _reset_well_impulse() -> void:
+	_well_impulse_elapsed = WELL_IMPULSE_SECONDS
+	_well_impulse_strength = 0.0
+	if _well_art != null:
+		_well_art.position = _well_base_pos
+		if _well_art.material != null:
+			_well_art.material.set_shader_parameter("rim_pulse", 0.0)
+
+
+func _well_impulse_offset() -> Vector2:
+	if reduced_motion or _well_impulse_strength <= 0.0 or _well_impulse_elapsed >= WELL_IMPULSE_SECONDS:
+		return Vector2.ZERO
+	var p: float = clampf(_well_impulse_elapsed / WELL_IMPULSE_SECONDS, 0.0, 1.0)
+	var envelope: float = (1.0 - p) * exp(-p * 4.5) * _well_impulse_strength
+	var u: float = 1.0 / maxf(0.1, Style.ui_scale(self))
+	return Vector2(sin(p * TAU * 3.0) * 1.4, sin(p * TAU * 2.0 + 0.7) * 2.8) * envelope * u
+
+
+func _apply_well_impulse() -> void:
+	if _well_art == null:
+		return
+	_well_art.position = _well_base_pos + _well_impulse_offset()
+	if _well_art.material != null:
+		var pulse: float = 0.0
+		if not reduced_motion and _well_impulse_strength > 0.0 and _well_impulse_elapsed < WELL_IMPULSE_SECONDS:
+			var p: float = clampf(_well_impulse_elapsed / WELL_IMPULSE_SECONDS, 0.0, 1.0)
+			pulse = (1.0 - p) * (1.0 - p) * _well_impulse_strength
+		_well_art.material.set_shader_parameter("rim_pulse", pulse)
+		_well_art.material.set_shader_parameter("rim_color", _well_impulse_tint)
+
+
+func _advance_well_impulse(delta: float) -> void:
+	if _well_impulse_strength <= 0.0:
+		return
+	if reduced_motion:
+		_reset_well_impulse()
+		return
+	_well_impulse_elapsed = minf(WELL_IMPULSE_SECONDS, _well_impulse_elapsed + minf(delta, 0.05))
+	if _well_impulse_elapsed >= WELL_IMPULSE_SECONDS:
+		_reset_well_impulse()
+		return
+	_apply_well_impulse()
+
+
+func apply_atmosphere(atmosphere: Dictionary) -> void:
+	if _well_art != null and _well_art.material != null:
+		var tint: Color = atmosphere.get("well_tint", Color(0.90, 0.94, 0.94, 1.0))
+		var warmth: float = float(atmosphere.get("warmth", 0.16))
+		_well_art.material.set_shader_parameter("chapter_tint", tint)
+		_well_art.material.set_shader_parameter("warmth", warmth)
+	if _boss_view != null and _boss_view._actor != null:
+		_boss_view._actor.set_atmosphere(
+			atmosphere.get("key_light", Color("#fff0d1")),
+			atmosphere.get("ambient_light", Color("#e0edff")))
+
 
 func _preview_row_count() -> int:
 	if _preview_layout_generation != game._generation:

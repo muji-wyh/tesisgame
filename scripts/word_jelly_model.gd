@@ -695,9 +695,9 @@ func _auto_merge_hit_stop_remaining() -> float:
 func powerup_price(kind: String, _family: String = "") -> int:
 	if not POWERUP_PRICES.has(kind):
 		return 0
-	# Visible prices depend only on this round's successful uses. Reading a
-	# quote never needs to predict a merge or advance an isolated board.
-	return CoinEconomy.powerup_price(kind, int(_powerup_uses.get(kind, 0)))
+	# Visible prices depend only on this round's successful uses (and Auto merge Lv6+ discount).
+	# Reading a quote never needs to predict a merge or advance an isolated board.
+	return CoinEconomy.powerup_price(kind, int(_powerup_uses.get(kind, 0)), auto_merge_level)
 
 
 func powerup_quote_is_current(event_id: String, kind: String, price: int) -> bool:
@@ -2745,8 +2745,10 @@ func finish_round(reason: String = "finished") -> Dictionary:
 	for tile: Dictionary in cells:
 		tile.lifted = false
 	_combo_pending = ""
+	var paid_powerups_used: int = int(_powerup_uses.get("auto_merge", 0)) + int(_powerup_uses.get("family_merge", 0))
 	_result = {"reason": _finish_reason, "cleared_pairs": cleared_pairs, "score": score(), "coins": collected_coins + combo_coins,
-		"combo_coins": combo_coins, "best_combo": combo_best, "max_merge_level": max_merge_level_reached, "words": []}
+		"combo_coins": combo_coins, "best_combo": combo_best, "max_merge_level": max_merge_level_reached,
+		"paid_powerups_used": paid_powerups_used, "words": []}
 	_result.merge(reward_progress(fragment_count), true)
 	if stage_run != null:
 		_result["campaign"] = stage_run.snapshot()
@@ -3788,8 +3790,10 @@ func _complete_collection(completed: Dictionary) -> void:
 	_queue_collection_blast(completed)
 	_advance_combo(str(completed.attempt_id), 0, false)
 	if not _stage_ending:
+		var charm_damage_scale: float = 1.0 + CoinEconomy.star_charm_boss_damage_bonus(star_charm_level)
 		boss.collect_hit(str(completed.attempt_id), int(completed.get("merge_level", 1)), combo_actions,
-			{"column": int(completed.a.column), "row": int(completed.a.row)}, stage_run != null and stage_run.boss_objective)
+			{"column": int(completed.a.column), "row": int(completed.a.row)}, stage_run != null and stage_run.boss_objective,
+			charm_damage_scale)
 		boss.forget(int(completed.a_id))
 		if stage_run != null and stage_run.boss_objective and boss.health == 0 and not stage_run.boss_defeated:
 			stage_run.record_boss_defeat()

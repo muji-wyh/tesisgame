@@ -129,7 +129,7 @@ func _verify() -> void:
 		if coin == null or coin.get_size() != expected_size:
 			printerr("The reviewed coin artwork is missing or incorrectly sized in the startup pack: " + coin_path)
 			failures += 1
-	for name in ["body", "heading"]:
+	for name in ["body", "heading", "display"]:
 		var font: Font = load("res://assets/fonts/" + name + ".tres") as Font
 		if font == null or font.get_string_size("Pip's world").x <= 0.0:
 			printerr("An active interface font is missing from the startup pack: " + name)

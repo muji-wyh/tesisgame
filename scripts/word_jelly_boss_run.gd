@@ -95,7 +95,8 @@ func enter_final_chase() -> void:
 		_event("final_chase", {"text": "Final chase!\nDouble charge!"})
 
 
-func collect_hit(receipt: String, level: int, combo: int, origin: Dictionary, wait_for_goals: bool = false) -> bool:
+func collect_hit(receipt: String, level: int, combo: int, origin: Dictionary,
+		wait_for_goals: bool = false, damage_scale: float = 1.0) -> bool:
 	error = ""
 	if not fighting() or _receipts.has(receipt):
 		return false
@@ -104,7 +105,8 @@ func collect_hit(receipt: String, level: int, combo: int, origin: Dictionary, wa
 		return false
 	_receipts[receipt] = true
 	var charge_used: int = charge
-	var damage: int = ceili(Catalog.DAMAGE[level] * (1.0 + minf(combo, 12) * 0.035) * (1.0 + charge_used * 0.025))
+	var damage: int = ceili(Catalog.DAMAGE[level] * (1.0 + minf(combo, 12) * 0.035)
+		* (1.0 + charge_used * 0.025) * maxf(1.0, damage_scale))
 	var power_hit: bool = charge_used >= POWER_CHARGE_THRESHOLD
 	charge = 0
 	if clones > 0:

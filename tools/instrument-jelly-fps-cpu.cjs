@@ -31,7 +31,7 @@ const targets = [
   { file: 'scripts/word_jelly_model.gd', method: '_queue_collection_blast', parameters: 'completed: Dictionary', arguments: 'completed', returns: 'void', label: 'WordModel._queue_collection_blast' },
   { file: 'scripts/word_jelly_model.gd', method: '_blast_target_ids', parameters: 'origin: Dictionary, level: int', arguments: 'origin, level', returns: 'Array[int]', label: 'WordModel._blast_target_ids' },
   { file: 'scripts/word_jelly_model.gd', method: '_restore_growth', parameters: 'excluded_id: int = -1', arguments: 'excluded_id', returns: 'void', label: 'WordModel._restore_growth' },
-  { file: 'scripts/word_jelly_boss_run.gd', method: 'collect_hit', parameters: 'receipt: String, level: int, combo: int, origin: Dictionary, wait_for_goals: bool = false', arguments: 'receipt, level, combo, origin, wait_for_goals', returns: 'bool', label: 'BossRun.collect_hit' },
+  { file: 'scripts/word_jelly_boss_run.gd', method: 'collect_hit', parameters: 'receipt: String, level: int, combo: int, origin: Dictionary,\n\t\twait_for_goals: bool = false, damage_scale: float = 1.0', arguments: 'receipt, level, combo, origin, wait_for_goals, damage_scale', returns: 'bool', label: 'BossRun.collect_hit' },
   { file: 'scripts/word_jelly.gd', method: '_collected', parameters: 'event_id: String, word: Dictionary, coins: int, fragments: int', arguments: 'event_id, word, coins, fragments', returns: 'void', label: 'WordJelly._collected' },
   { file: 'scripts/word_jelly.gd', method: '_refresh_hud', parameters: '', arguments: '', returns: 'void', label: 'WordJelly._refresh_hud' },
   { file: 'scripts/word_jelly.gd', method: '_refresh_controls', parameters: '', arguments: '', returns: 'void', label: 'WordJelly._refresh_controls' },

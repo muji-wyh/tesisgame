@@ -119,6 +119,15 @@ static func build_report() -> Dictionary:
 	var scenarios: Array[Dictionary] = []
 	var upgraded_collections: Array[Dictionary] = []
 	var auto_merge_prices: Array[Dictionary] = []
+	var upgrade_totals: Dictionary = {"jelly": 0, "auto_merge": 0, "star_charm": 0, "combined": 0}
+	for level in range(2, Economy.MAX_UPGRADE_LEVEL + 1):
+		for kind: String in ["jelly", "auto_merge", "star_charm"]:
+			var price: int = Economy.permanent_upgrade_price(kind, level)
+			upgrade_totals[kind] = int(upgrade_totals[kind]) + price
+			upgrade_totals["combined"] = int(upgrade_totals["combined"]) + price
+	var boss_first_victory_bounties: Array[int] = []
+	for boss_id in range(1, Economy.BOSS_FIRST_VICTORY_BOUNTIES.size()):
+		boss_first_victory_bounties.append(Economy.boss_first_victory_bounty(boss_id))
 	for level in range(1, Jelly.MAX_MERGE_LEVEL + 1):
 		var capacity: int = Economy.auto_merge_capacity(level)
 		auto_merge_prices.append({"owned_level": level, "capacity": capacity,
@@ -145,10 +154,17 @@ static func build_report() -> Dictionary:
 			"Auto Merge uses the same completed workload; no automatic collection or bonus income is assumed.",
 			"Workload Auto Merge comparisons model owned Lv9 using all 11 output slots with two-piece root/picture paths, freeing 11 board bodies per purchase.",
 			"The Auto Merge table models full-capacity root/picture paths: reduction_count equals capacity. Live partial or morphology paths can have different reductions at the same per-use price.",
-			"Both merge items cost 25, 50, then at most 75 coins per successful use, regardless of board reduction or owned Auto Merge level.",
-			"Family merge totals use a separate shared goal counter; Auto Merge uses its own counter. Capacity and reduction examples do not change either price ladder.",
+			"Auto Merge costs 50, 100, then at most 150 coins per successful use at Lv1-5, and drops by 25 coins (25, 75, 125) from owned Auto Merge Lv6+. Targeted Word Goal Family Merge remains 25, 50, then 75 coins.",
+			"Family merge totals use a separate shared goal counter; Auto Merge uses its own counter.",
+			"Permanent upgrade curves are differentiated across Merged Jelly (4,650), Auto Merge (3,700), and Star Charm (5,225) for 13,575 combined, followed by Golden Crown prestige ranks starting at 1,000 (+250/rank, up to rank 50).",
+			"Main-stage settlement uses jelly-stage-clear-v2: 50% base on replay, +35 coins per improved star, +20% base Pure Clear bonus on first clear without paid powerups, chest star multiplier capped at 200 coins (excess paid 1x), and 15 coins per leftover unconverted chest fragment.",
 			"One modeled session is one round; fresh rounds reset repeat prices."
 		],
 		"scenarios": scenarios, "upgraded_collections": upgraded_collections,
-		"auto_merge_prices": auto_merge_prices
+		"auto_merge_prices": auto_merge_prices,
+		"family_merge_prices": Economy.MERGE_UNIT_PRICES,
+		"upgrade_totals": upgrade_totals,
+		"boss_first_victory_bounties": boss_first_victory_bounties,
+		"prestige_sink": {"max_rank": Economy.MAX_PRESTIGE_RANK,
+			"base_price": Economy.PRESTIGE_BASE_PRICE, "price_step": Economy.PRESTIGE_PRICE_STEP}
 	}

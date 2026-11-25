@@ -5,8 +5,9 @@
 Coins remain saved help for a difficult moment. Ordinary play is free, the
 wallet starts at zero, and purchases never gate finishing or learning. Existing
 balances and paid receipts keep their original amounts. New chest rewards
-include Pip's level bonus. Auto Merge and word-goal merge prices use the same
-capped per-use ladder, independent of the number of Jellies merged.
+include Pip's level bonus. Auto Merge and targeted word-goal (family) merge
+use differentiated capped per-use ladders, independent of the number of Jellies
+merged, rewarding both manual construction and permanent progression.
 
 The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 
@@ -16,19 +17,28 @@ The shared policy is [coin_economy.gd](../scripts/coin_economy.gd):
 | Levelled chest | The ordinary payout multiplied by chest level |
 | Match Hint | 100, 150, then 200; no per-round use limit |
 | Memory observation | A free initial 10-second observation, then optional 5-second reveals costing 100, 200, 300, then 300 |
-| Auto Merge | 25 for the first successful use, 50 for the second, then capped at 75 per use |
-| Pending word goal (family merge) | The same 25, 50, 75 per-use ladder, with its own successful-use counter |
-| Permanent merged Jelly levels, Lv2-Lv9 | 50, 100, 200, 350, 550, 800, 1100, 1500 |
-| Permanent Auto merge levels, Lv2-Lv9 | 50, 100, 200, 350, 550, 800, 1100, 1500; capacity rises from 3 at free Lv1 to 11 at Lv9 |
+| Auto Merge (Lv1-5) | 50 for the first successful use, 100 for the second, then capped at 150 per use |
+| Auto Merge (Lv6-9) | Permanent -25 coin discount: 25 for the first successful use, 75 for the second, then capped at 125 per use |
+| Pending word goal (family merge) | 25 for the first successful use, 50 for the second, then capped at 75 per use, with its own successful-use counter |
+| Permanent merged Jelly levels, Lv2-Lv9 | 50, 100, 200, 350, 550, 800, 1100, 1500 (4,650 total) |
+| Permanent Auto merge levels, Lv2-Lv9 | 50, 100, 175, 275, 425, 625, 875, 1175 (3,700 total); capacity rises from 3 at free Lv1 to 11 at Lv9, plus -25 in-round cost from Lv6+ |
+| Permanent Star charm levels, Lv2-Lv9 | 50, 125, 225, 375, 600, 900, 1250, 1700 (5,225 total); +0.3s combo window and +3% fragment chance per level, wrong-merge grace at Lv2/Lv6, +8% Boss damage at Lv5 and +15% at Lv9 |
+| Golden Crown prestige ranks (1-50) | Unlocked when all three permanent tracks reach Lv9; costs `1000 + 250 * (rank - 1)` coins per rank |
+| Main-story Boss first-victory bounties | 100, 125, 150, 200, 250, 300, 350, 500 coins for Bosses 1-8 (1,975 total, one-time per Boss ID) |
+| Pirate Mini-Raid clear bonus | +75 coins on chapter finale stages 27, 45, 54, 72, 81, 90 |
+| Chapter Star Milestones | +100 at 12★, +200 at 21★, +350 at 27★ per chapter (one-time per chapter/threshold) |
+| Survival Challenge bonuses | Cumulative `50 * k` coins every 5th stage reached (50 at Stage 5, 150 at Stage 10, 300 at Stage 15...), plus +75 New Record bonus when surpassing previous best at Stage 3+ |
 
 Only successful per-round help purchases advance their item's price. All pending word goals
 share one family-merge counter, separate from Auto Merge.
 A new round resets the prices; a menu, pause, rejected
 payment, or wallet retry does not. The current price is shown before purchase.
-Both tools cost 25 coins on their first successful use, 50 on their second,
-and 75 on their third and all later uses in that round. Combining two bodies
-or many bodies has the same price at the same successful-use tier. The owned
-Auto Merge level changes capacity without changing this price ladder.
+Auto Merge costs 50, 100, then 150 coins per use at owned Lv1-5, and drops by
+25 coins (25, 75, 125) once owned Auto Merge reaches Lv6+. Targeted word-goal
+family merges keep the accessible 25, 50, 75 per-use ladder so manual focus
+and single-family assists stay cheaper than full-board Auto Merge early on.
+Combining two bodies or many bodies has the same price at the same
+successful-use tier.
 Goal-family availability still reports legal merge metadata, including board
 reduction; those values do not multiply the price. Generic
 price and snapshot reads do not simulate a merge to calculate its cost.
@@ -48,61 +58,72 @@ Challenge time awarded once per complete target batch.
 
 ## Permanent Jelly upgrades
 
-Lv1 is free. Higher merged levels unlock sequentially from the map's Jelly
-upgrade page and stay owned across rounds and all Jelly World learning routes.
+Lv1 is free on all three tracks. Higher levels unlock sequentially from the
+map's Jelly Upgrades page via 25-coin hold-to-charge contributions and stay
+owned across rounds and all Jelly World learning routes. When the saved balance
+is below 25 coins, the charge button explains the exact remaining shortfall
+(`Need N more coins`) without showing a storage error.
 These prices do not reset with a round, and defeating a Boss no longer buys or
-grants a level. Any locked level's actual collection ability, coin bonus and
-base Boss attack can be previewed without spending or granting learning credit.
+grants a level (instead paying a one-time Boss first-victory coin bounty). Any
+locked level's actual collection ability, coin bonus and base Boss attack can
+be previewed without spending or granting learning credit.
 
 The first saved Stage 1 clear guarantees at least 50 clear coins with no chest.
-The existing 75-coin base and star multipliers are retained rather than replaced
-by an extra or lower 50-coin payment. Once settlement is safely saved, an
+The existing 75-coin base, star multipliers, and +20% Pure Clear bonus (when
+finishing a first clear with zero paid powerups) are preserved rather than
+replaced by a lower 50-coin payment. Once settlement is safely saved, an
 introduction leads to an explicit 50-coin Lv2 purchase. The guide never pays or
 grants the upgrade automatically and can be postponed without losing progress.
 
-The same page has a separate **Auto merge** category. Its free Lv1 can use up to
-three completed, collectable Jellies per purchase; each permanent level adds one, up to
-eleven at Lv9. The next levels use the same increasing price curve as merged
-Jellies, but their ownership and receipts are independent. Each completed product
-uses one output slot and remains separate for the current use. Original ingredients
-and intermediate joins do not use slots; every accepted path must still finish a
-legal word. Missing partners are never invented: fewer legal paths produce fewer
-results, and no complete path means no charge or partial spelling.
-Goal-family purchases and collection blasts have no such capacity cap.
-The gameplay button's sourced gel-and-number badge always shows the owned
-capacity, not the last level previewed or a countdown of remaining matches.
-Each gameplay purchase costs 25 for the first successful use, 50 for the
-second, and 75 for the third and all later uses. Output slots, board reduction,
-intermediate joins and collected word levels do not change the price. All
-quotes use the wallet's 25-coin purchase unit. Use counters reset with a round;
-permanent capacity does not reset.
+The same page offers three independent permanent tracks with differentiated
+total costs (13,575 coins combined):
 
-Every owned Auto Merge level shares the following per-use prices. A partial
-board or a multipart morphology path has the same price as a full-capacity
-operation at the same successful-use tier.
+- **Merged Jelly** (4,650 total): `50, 100, 200, 350, 550, 800, 1100, 1500`.
+- **Auto merge** (3,700 total): `50, 100, 175, 275, 425, 625, 875, 1175`. Free
+  Lv1 handles up to three completed, collectable Jellies per purchase; each
+  permanent level adds one, up to eleven at Lv9. Reaching **Lv6+** also grants
+  a permanent **-25 coin in-round discount** on Auto Merge (`25 / 75 / 125`).
+- **Star charm** (5,225 total): `50, 125, 225, 375, 600, 900, 1250, 1700`.
+  Always active in campaign and Challenge: adds `+0.3s` combo timer and `+3%`
+  fragment spawn chance per level, `1` wrong-merge combo grace at Lv2 (`2` at
+  Lv6+), and **+8% Boss hit damage at Lv5** (**+15% at Lv9**).
+- **Golden Crown prestige** (endgame coin sink): unlocked once all three tracks
+  reach Lv9, offering up to 50 prestige ranks starting at 1,000 coins and
+  increasing by 250 per rank (`jelly-prestige-v1:N`), displayed on the map and
+  upgrades page.
+
+Each Auto Merge completed product uses one output slot and remains separate for
+the current use. Original ingredients and intermediate joins do not use slots;
+every accepted path must still finish a legal word. Missing partners are never
+invented: fewer legal paths produce fewer results, and no complete path means
+no charge or partial spelling. Goal-family purchases and collection blasts have
+no such capacity cap. The gameplay button's sourced gel-and-number badge always
+shows the owned capacity, not the last level previewed or a countdown of
+remaining matches. All quotes use the wallet's 25-coin purchase unit. Use
+counters reset with a round; permanent capacity and the Lv6+ discount do not
+reset.
 
 | Owned Auto Merge level | Capacity | First use | Second use | Third and later |
 | ---: | ---: | ---: | ---: | ---: |
-| 1 | 3 | 25 | 50 | 75 |
-| 2 | 4 | 25 | 50 | 75 |
-| 3 | 5 | 25 | 50 | 75 |
-| 4 | 6 | 25 | 50 | 75 |
-| 5 | 7 | 25 | 50 | 75 |
-| 6 | 8 | 25 | 50 | 75 |
-| 7 | 9 | 25 | 50 | 75 |
-| 8 | 10 | 25 | 50 | 75 |
-| 9 | 11 | 25 | 50 | 75 |
+| 1 | 3 | 50 | 100 | 150 |
+| 2 | 4 | 50 | 100 | 150 |
+| 3 | 5 | 50 | 100 | 150 |
+| 4 | 6 | 50 | 100 | 150 |
+| 5 | 7 | 50 | 100 | 150 |
+| 6 | 8 | 25 | 75 | 125 |
+| 7 | 9 | 25 | 75 | 125 |
+| 8 | 10 | 25 | 75 | 125 |
+| 9 | 11 | 25 | 75 | 125 |
 
-Campaign format 5 stores both global upgrade levels, the Jelly introduction state
+Campaign format 8 stores all three global upgrade levels (`level`,
+`auto_merge_level`, `star_charm_level`), `prestige_rank`, partial 25-coin
+`funded` balances, the Jelly introduction state, per-context `chapter_milestones`,
 and one bounded, kind-specific pending quote. The quote is saved before the
-wallet's exact `jelly-level-v1:N` or `auto-merge-level-v1:N` debit.
-Ownership commits only with proof of that track's saved debit;
-reload and Retry can complete a paid quote without another debit. Reading old
-campaign formats neither rewrites them nor changes their wallet. Previously
-earned levels are retained once during migration, not recalculated from future
-Boss victories. Version-four Jelly ownership and already-paid quotes retain
-their exact values; Auto merge begins at free Lv1. Neither a migration read nor
-switching preview categories spends coins or rewrites a save.
+wallet's exact debit (`jelly-charge-v1:...`, `jelly-level-v1:N`,
+`auto-merge-level-v1:N`, `star-charm-level-v1:N`, or `jelly-prestige-v1:N`).
+Ownership commits only with proof of that track's saved debit; reload and Retry
+can complete a paid quote without another debit. Reading older campaign formats
+(versions 1-7) migrates in memory without rewriting them or changing the wallet.
 
 ## Pip-level chest rewards
 
@@ -162,14 +183,14 @@ root count, mass, word length, and carried fragments do not affect either.
 | Merged level | Chance on collection | Coins on a successful drop | Expected bonus per collected body |
 | ---: | ---: | ---: | ---: |
 | 1 | 0% | 0 | 0 |
-| 2 | 2% | 50 | 1 |
-| 3 | 4% | 100 | 4 |
-| 4 | 12% | 150 | 18 |
-| 5 | 20% | 200 | 40 |
-| 6 | 30% | 250 | 75 |
-| 7 | 40% | 300 | 120 |
-| 8 | 50% | 350 | 175 |
-| 9 | 80% | 450 | 360 |
+| 2 | 12% | 50 | 6 |
+| 3 | 22% | 100 | 22 |
+| 4 | 32% | 150 | 48 |
+| 5 | 42% | 200 | 84 |
+| 6 | 52% | 250 | 130 |
+| 7 | 62% | 300 | 186 |
+| 8 | 72% | 350 | 252 |
+| 9 | 85% | 450 | 382.5 |
 
 The expected values are averages over repeated independent collections, not a
 promise for any particular collection. Building higher levels consumes matching
@@ -178,7 +199,7 @@ words, so this table does not imply an income rate or a typical player level mix
 Identical words add their levels when merged, including different levels, provided
 the total is at most nine. A LvN body therefore represents `N` completed Lv1 words,
 regardless of the merge order. Divide each body's expected bonus by that source
-count. The maximum is Lv9: `360 / 9 = 40` expected bonus coins per
+count. The maximum is Lv9: `382.5 / 9 = 42.5` expected bonus coins per
 source word. This counts completed words, not their component roots, and does not
 award bonuses during upgrading. Collect starts ready words at 140 ms intervals;
 its cadence does not change their reward probabilities.
@@ -186,7 +207,7 @@ its cadence does not change their reward probabilities.
 With every natural fragment retained and eventually collected, ordinary supply
 provides about 7.5 chest coins per source word in the long run. The modeled
 chest share of expected chest-plus-collection coins is therefore at least
-`7.5 / (7.5 + 360 / 9)`, approximately 15.79%, across any mix of collection levels.
+`7.5 / (7.5 + 382.5 / 9)`, exactly 15.00%, across any mix of collection levels.
 At high levels, expected collection bonuses can exceed chest income per source word.
 This comparison excludes the combo income described below. It is a long-run
 budget bound under perfect retention, not observed player income or a guarantee
@@ -264,25 +285,14 @@ coin payout. Manual merges pay according to the count reached by that merge:
 | 1-2 | 0 |
 | 3-5 | 1 |
 | 6-9 | 2 |
-| 10+ | 3 |
+| 10-14 | 4 |
+| 15+ | 6 |
 
 The cap is independent of visual ranks, which continue through D/C/B/A/S/SS/SSS.
 Each paying action consumes two existing bodies and creates one, so extra
-income is bounded by three coins per body removed through manual merging.
-For ordinary two-part words plus their picture, two merges add at most six
-combo coins per source word. With 7.5 expected chest coins, the long-run
-ceiling becomes 13.5 coins per ordinary source word, or 121.5-243 coins per
-minute at automatic supply speed and perfect retention. These are bounds,
-not measured earnings; early combos and mistakes pay less. Preview drops
-remain unlimited and require the same manual work. Nine such words upgraded
-to Lv9 require twenty-six merges, giving at most 8.67 combo coins per source
-word. The Lv9 collection bonus and chest income bring that modeled
-total to 56.17 coins per source word. Paid Auto Merge does not create combo
-income, and Treasure does not create extra mergeable bodies or change rewards.
-At Pip Lv99, the corresponding ordinary-source bound is 15.9 coins per word
-(143.1-286.2 per minute at automatic supply speed), and the Lv9 source bound is
-58.57. Only the chest component increases; these remain perfect-retention bounds,
-not observed player income.
+income is bounded by six coins per body removed through manual merging at chains
+15+. Paid Auto Merge does not create combo income, and Treasure does not create
+extra mergeable bodies or change rewards.
 
 ### Chest-only workload baselines
 
@@ -317,9 +327,10 @@ one fresh round.
 The archived policy allowed the smallest modeled workload to save while buying
 one Treasure every three fresh rounds on average under the increased chest policy.
 Repeated purchases still consume savings. Three archived Treasure purchases cost
-900. Three Auto Merge uses cost 150 in total at every owned level and affected
-quantity. Three family-merge uses also cost 150 through their independent
-counter. Later uses of either item remain capped at 75 each within that round.
+900. Three Auto Merge uses cost 300 in total at owned Lv1-5 (`50 + 100 + 150`)
+and 225 at owned Lv6-9 (`25 + 75 + 125`). Three family-merge uses cost 150
+(`25 + 50 + 75`) through their independent counter. Later uses stay capped at
+150 (125 at Lv6+) for Auto Merge and 75 for family merge within that round.
 
 ## Archived retired-Treasure comparison
 

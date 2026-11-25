@@ -107,6 +107,7 @@ var _result_boss := ResultTaunt.new()
 func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_PASS
 	_heading = _label("Your treasure", 28)
+	_heading.add_theme_font_override("font", Style.DISPLAY_FONT)
 	_progress = _label("", 14)
 	_result_score = _label("", 14)
 	_result_score.add_theme_color_override("font_color", Style.MUTED)
@@ -1223,10 +1224,13 @@ func _refresh() -> void:
 			var stats_line: String = "Stage %d · %d collected" % [reached, int(summary.get("collection_count", campaign.get("collection_count", 0)))]
 			var best_combo: int = int(summary.get("best_combo", _result_context.get("best_combo", 0)))
 			var max_lv: int = int(summary.get("max_merge_level", _result_context.get("max_merge_level", 1)))
+			var bonus_coins: int = int(summary.get("bonus_coins", 0))
 			if best_combo >= 2:
 				stats_line += " · %dx combo" % best_combo
 			if max_lv >= 2:
 				stats_line += " · Max Lv%d" % max_lv
+			if bonus_coins > 0:
+				stats_line += " · +%d coins" % bonus_coins
 			_result_score.text = stats_line
 			_challenge_record.reduced_motion = reduced_motion
 			_challenge_record.set_record(int(summary.get("best", reached)))
@@ -1240,8 +1244,9 @@ func _refresh() -> void:
 				_heading.text = "The chase begins!"
 			var quote: Dictionary = _result_context.get("stage_bonus", {})
 			var quoted: bool = bool(quote.get("ok", false))
+			var weighted_chest: int = int(quote.get("weighted_chest", quote.get("chest_coins", 0)))
 			_result_score.text = ("%d stars  ·  %d ×%s = %d coins" % [rating,
-				int(quote.chest_coins) + int(quote.base), str(quote.factor).trim_suffix(".0"), int(quote.total)] if quoted \
+				weighted_chest + int(quote.base), str(quote.factor).trim_suffix(".0"), int(quote.total)] if quoted \
 				else "%d stars  ·  Reward pending" % rating) if rating > 0 else "No clear bonus. Treasure is kept."
 			_stage_bonus_label.text = ("+%d\nclear coins" % int(quote.bonus) if quoted else "Reward\npending") \
 				if rating > 0 else "No clear\nbonus"

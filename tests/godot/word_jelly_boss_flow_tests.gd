@@ -204,8 +204,8 @@ func _run() -> void:
 		"The complete first Boss journey persists its victory and next stage without a Jelly unlock")
 	var result: Dictionary = app._round_result
 	check(result.get("boss", {}).get("outcome") == "defeated" and result.campaign.outcome == "cleared"
-		and app.coin_wallet.balance == 150 and store.pending("growth").is_empty(),
-		"Boss celebration/escape keeps the existing exact clear coins and fully completed settlement")
+		and app.coin_wallet.balance == 265 and store.pending("growth").is_empty(),
+		"First Boss clear pays 150 base*2 + 15 Pure Clear + 100 Boss first-victory bounty = 265 coins")
 	var map_state: Dictionary = app._campaign.map.snapshot()
 	check(map_state.boss_markers == [3, 5] and map_state.merged_level == 1,
 		"The map keeps the unlocked rematch and exposes only the next future Boss")
@@ -214,8 +214,8 @@ func _run() -> void:
 	app._word_jelly.set_process(false)
 	check(app._word_jelly.game.merged_level_limit == 1, "The next real attempt still uses the coin-owned level")
 	await defeat(app)
-	check(store.merged_level() == 1 and app.coin_wallet.balance == 300,
-		"A full rematch pays its normal clear reward without changing Jelly ownership")
+	check(store.merged_level() == 1 and app.coin_wallet.balance == 341,
+		"A full Boss rematch pays 50%-base replay reward (76) without repeating the first-victory bounty")
 	app.audio.halt()
 	app.free()
 	await settle()

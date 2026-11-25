@@ -334,9 +334,10 @@ After the ambush, the map names the next real Boss stage. Its separate
 **Jelly LvN / Upgrade** control opens the coin-funded Jelly upgrade page.
 Short, trick-specific challenges and an admitted defeat replace generic banter.
 
-Boss victories retain their story, map markers, stars and clear rewards, but
-never unlock a merged level or open a skill-unlock settlement. Previewing and
-buying Jelly levels is independent of fighting Pirate.
+Boss victories retain their story, map markers, stars and clear rewards, plus
+one-time **Boss first-victory bounties** (`100, 125, 150, 200, 250, 300, 350,
+500` coins across Bosses 1–8), while never unlocking a merged level directly.
+Previewing and buying Jelly levels stays independent of fighting Pirate.
 
 **Attacking:** a successfully committed merged-word collection fires an attack.
 Lv1 already deals 14 base damage; Lv2–Lv9 deal 38, 72, 116, 176, 248, 344, 464
@@ -415,13 +416,21 @@ before purchase. The view-only seven-by-eight demonstration uses the actual
 campaign target selector and shows the collection footprint, pickup-coin odds
 and base Boss damage without changing learning, rewards or wallet state.
 
-The same page also provides two independent permanent tracks on the same
-**50, 100, 200, 350, 550, 800, 1100, 1500** coin curve:
-- **Auto merge**: upgrades its permanent capacity from **3 completed, collectable Jellies** at Lv1
-  up to **11** at Lv9 (one more per level).
-- **Star charm**: a passive progression charm active in campaign and Challenge rounds.
-  Each level adds **+0.3s combo window** (up to +2.4s at Lv9) and **+3% chest fragment spawn chance**
-  (up to +24% at Lv9), plus **1 wrong-merge combo grace** starting at Lv2 (**2** at Lv6+).
+The same page also provides two independent permanent tracks with differentiated
+coin curves, plus an endgame coin sink once all three tracks reach Lv9:
+- **Auto merge** (`50, 100, 175, 275, 425, 625, 875, 1175` — 3,700 total):
+  upgrades permanent capacity from **3 completed, collectable Jellies** at Lv1
+  up to **11** at Lv9 (one more per level), and unlocks a permanent **-25 coin
+  in-round discount** from **Lv6+** (`25 / 75 / 125` instead of `50 / 100 / 150`).
+- **Star charm** (`50, 125, 225, 375, 600, 900, 1250, 1700` — 5,225 total): a
+  passive progression charm active in campaign and Challenge rounds. Each level
+  adds **+0.3s combo window** (up to +2.4s at Lv9) and **+3% chest fragment
+  spawn chance** (up to +24% at Lv9), plus **1 wrong-merge combo grace**
+  starting at Lv2 (**2** at Lv6+) and **+8% Boss hit damage** at Lv5 (**+15%**
+  at Lv9).
+- **Golden Crown prestige** (ranks 1–50): unlocks when all three tracks reach
+  Lv9, costing `1000 + 250 * (rank - 1)` coins per rank with receipt-backed
+  persistence (`jelly-prestige-v1:N`) and map badge recognition.
 
 Inspecting an Auto merge level shows that exact capacity using the existing acquired Jelly
 and wand artwork. The live Auto merge button has a stable gel-and-number badge
@@ -460,10 +469,10 @@ real wallet and commits ownership only after that exact debit is present. A
 failed final save retains the paid intent and offers Retry without charging
 again, including if another upgrade category is being inspected. Stale tabs
 cannot overwrite another purchase or apply its debit to the other upgrade.
-Campaign save versions 1-6 migrate in memory without rewriting on read: legitimately earned old levels,
+Campaign save versions 1-7 migrate in memory without rewriting on read: legitimately earned old levels,
 stages, recipes, stars, pending settlements, funded contributions and coins are preserved.
-The next actual save writes version 7 with all three independent upgrade tracks (`level`,
-`auto_merge_level`, `star_charm_level`) and per-context `chapter_milestones`. Buying Auto merge or
+The next actual save writes version 8 with all three independent upgrade tracks (`level`,
+`auto_merge_level`, `star_charm_level`), `prestige_rank`, and per-context `chapter_milestones`. Buying Auto merge or
 Star charm does not complete or suppress the first-clear Jelly introduction.
 
 Stage 1 has three word goals, adding one per stage up to eight. Each attempt
@@ -592,7 +601,9 @@ batches 1-5, three in seven for 6-10, and four in six afterward.
 Only a **complete batch** refunds time: 12 seconds for batches 1-5, 10 for 6-10,
 then eight (plus **+2s** when clearing a batch at Combo Rank **S+**), capped at the actual headroom below 90 remaining seconds.
 Every 5th Challenge stage (**Stage 5, 10, 15...**) triggers a celebratory **Bonus wave!** banner
-with doubled chest-fragment supply (`2× Treasure`).
+with doubled chest-fragment supply (`2× Treasure`) and adds cumulative **milestone coin bonuses**
+(`+50` at Stage 5, `+150` at Stage 10, `+300` at Stage 15...) at settlement; setting a new personal
+record at Stage 3+ adds an extra **+75 coins**.
 Partial targets, redundant pickups and repeated receipts never refund time.
 There are no random extra-time drops or paid Challenge time purchases.
 Pending/failed/duplicate collection receipts cannot grant time or advance a stage.
@@ -650,7 +661,7 @@ and a genuine scroll range.
 
 Paying combo merges launch their earned coins from the gold **COMBO BONUS**
 display into the header wallet. Its saved total is authoritative immediately,
-but the displayed number rolls upward only as each coin arrives. One to three
+but the displayed number rolls upward only as each coin arrives. One to six
 acquired sprites represent the exact bonus; manual pause freezes the flight and
 number roll. Save retries cannot duplicate the reward or its presentation.
 
@@ -822,8 +833,9 @@ once per action. Reaching Rank **B, A, S, SS, and SSS** for the first time in a 
 Preview drops and stage transitions do not directly reset or refill it.
 Pauses, saving waits and automatic matching sequences freeze its clock.
 Automatic Collect and committed automatic matches add one progress point without
-minting manual-merge coins. Manual merges retain the original **raw successful-action**
-income schedule: one coin on action 3-5, two on 6-9 and three from action 10 onward.
+minting manual-merge coins. Manual merges follow the **raw successful-action**
+income schedule: `1` coin on action `3–5`, `2` on `6–9`, `4` on `10–14`, and
+`6` from action `15` onward.
 Boss combo damage likewise retains the raw chain length; slower displayed
 level-ups do not nerf either policy. Collection still uses its separate level-based coin chance. A rank
 badge advances through D/C/B/A/S/SS/SSS with sourced sparkle/ray flares and a
@@ -911,8 +923,10 @@ Lv1-Lv3 stay unchanged. Board effects, reading art and ambient motion use the
 model's actual consumed motion segments, so a coarse frame cannot skip the freeze.
 The interface/audio keep their own clocks and `Engine.time_scale` remains one.
 
-Auto merge costs **25, 50, then 75 coins** per round, independent of its owned permanent level.
-Word-goal family merges likewise use their shared **25, 50, then 75 coin** per-use ladder per round.
+Auto merge costs **50, 100, then 150 coins** per round at owned Lv1–Lv5, and
+drops by 25 coins (**25, 75, then 125 coins**) once owned Auto merge reaches
+Lv6+. Word-goal family merges keep their accessible **25, 50, then 75 coin**
+per-use ladder per round.
 Unmatched, capped, frozen and locked leftovers are left untouched.
 Its button displays the next price and current Jelly capacity. The Treasure and +30 sec purchase cards and
 their live purchase routes are removed; naturally earned chest fragments and

@@ -10,6 +10,8 @@ const SURFACE := Color("#fffdf7")
 const SOFT := Color("#edf2e9")
 const BODY_FONT = preload("res://assets/fonts/body.tres")
 const HEADING_FONT = preload("res://assets/fonts/heading.tres")
+const DISPLAY_FONT = preload("res://assets/fonts/display.tres")
+const PAPER_GRAIN = preload("res://scripts/paper_grain.gdshader")
 static var _pixel_ratio_frame: int = -1
 static var _pixel_ratio_window := Vector2i.ZERO
 static var _pixel_ratio: float = 1.0
@@ -52,6 +54,26 @@ static func box(fill: Color, border: Color, radius: int = 16, width: int = 2) ->
 	return style
 
 
+static func card_box(fill: Color, border: Color, radius: int = 18, width: int = 1, elevation: float = 1.0, scale: float = 1.0) -> StyleBoxFlat:
+	var style := box(fill, border, radius, width)
+	var u: float = 1.0 / maxf(0.1, scale)
+	style.shadow_color = Color(INK, clampf(0.08 * elevation, 0.0, 0.24))
+	style.shadow_size = ceili(clampf(8.0 * elevation, 2.0, 22.0) * u)
+	style.shadow_offset = Vector2(0.0, clampf(3.0 * elevation, 1.0, 8.0) * u)
+	style.anti_aliasing = true
+	return style
+
+
+static func paper_material(tint: Color, top_wash: Color = Color("#e8f2ea"), wash_strength: float = 0.28, grain_strength: float = 0.018) -> ShaderMaterial:
+	var material := ShaderMaterial.new()
+	material.shader = PAPER_GRAIN
+	material.set_shader_parameter("paper_tint", tint)
+	material.set_shader_parameter("top_wash", top_wash)
+	material.set_shader_parameter("wash_strength", wash_strength)
+	material.set_shader_parameter("grain_strength", grain_strength)
+	return material
+
+
 static func button(control: Button, accent: Color, minimum_width: float = 72.0) -> void:
 	control.custom_minimum_size = Vector2(minimum_width, 72)
 	control.focus_mode = Control.FOCUS_ALL
@@ -87,19 +109,34 @@ static func action_button(control: Button, accent: Color, primary: bool = false)
 	var scale: float = ui_scale(control)
 	var radius: int = ceili(12 / scale)
 	var border: int = maxi(1, roundi(1 / scale))
+	var lip: int = maxi(border + 1, ceili(3.0 / scale))
 	var fill: Color = accent.darkened(0.12) if primary else SURFACE
-	var edge: Color = accent.darkened(0.12) if primary else EDGE
-	control.add_theme_stylebox_override("normal", box(fill, edge, radius, border))
-	control.add_theme_stylebox_override("hover", box(accent.darkened(0.04) if primary else accent.lightened(0.92), edge, radius, border))
-	control.add_theme_stylebox_override("pressed", box(accent.darkened(0.22) if primary else accent.lightened(0.82), accent, radius, border))
-	control.add_theme_stylebox_override("disabled", box(SOFT, EDGE, radius, border))
+	var edge: Color = accent.darkened(0.28) if primary else EDGE.darkened(0.06)
+	var normal := box(fill, edge, radius, border)
+	normal.border_width_bottom = lip
+	normal.shadow_color = Color(accent.darkened(0.45) if primary else INK, 0.14 if primary else 0.08)
+	normal.shadow_size = ceili(3.0 / scale)
+	normal.shadow_offset = Vector2(0.0, 1.5 / scale)
+	var hover := box(accent.darkened(0.04) if primary else accent.lightened(0.92), accent.darkened(0.22) if primary else accent.lightened(0.32), radius, border)
+	hover.border_width_bottom = lip
+	hover.shadow_color = Color(accent.darkened(0.42) if primary else INK, 0.18 if primary else 0.10)
+	hover.shadow_size = ceili(4.0 / scale)
+	hover.shadow_offset = Vector2(0.0, 2.0 / scale)
+	var pressed := box(accent.darkened(0.22) if primary else accent.lightened(0.82), accent.darkened(0.26) if primary else accent, radius, border)
+	pressed.border_width_bottom = border
+	var disabled := box(SOFT, EDGE, radius, border)
+	control.add_theme_stylebox_override("normal", normal)
+	control.add_theme_stylebox_override("hover", hover)
+	control.add_theme_stylebox_override("pressed", pressed)
+	control.add_theme_stylebox_override("disabled", disabled)
 	control.add_theme_stylebox_override("focus", box(Color.TRANSPARENT, accent, radius, maxi(2, roundi(2 / scale))))
+	var press_shift: float = maxf(1.0, float(lip - border))
 	for state in ["normal", "hover", "pressed", "disabled", "focus"]:
 		var surface: StyleBox = control.get_theme_stylebox(state)
 		surface.content_margin_left = 12 / scale
 		surface.content_margin_right = 12 / scale
-		surface.content_margin_top = 6 / scale
-		surface.content_margin_bottom = 6 / scale
+		surface.content_margin_top = (6 / scale) + (press_shift if state == "pressed" else 0.0)
+		surface.content_margin_bottom = maxf(2.0 / scale, (6 / scale) - (press_shift if state == "pressed" else 0.0))
 	control.custom_minimum_size = Vector2(0, ceilf(48 / scale))
 	control.add_theme_font_size_override("font_size", ceili(15 / scale))
 	control.autowrap_mode = TextServer.AUTOWRAP_OFF
@@ -161,6 +198,12 @@ static func label(text: String, font_size: int = 24) -> Label:
 static func heading(text: String, font_size: int = 24) -> Label:
 	var control := label(text, font_size)
 	control.add_theme_font_override("font", HEADING_FONT)
+	return control
+
+
+static func display_heading(text: String, font_size: int = 32) -> Label:
+	var control := label(text, font_size)
+	control.add_theme_font_override("font", DISPLAY_FONT)
 	return control
 
 

@@ -10,6 +10,18 @@ Nunito by the Nunito Project Authors is acquired from the Google Fonts repositor
 - Integration: local body and heading resources use weights 600 and 850. No remote
   font request is required while playing. This is a font, with no animation.
 
+Fredoka by Milena Brandao and Hafontia is acquired from the Google Fonts repository
+for major display titles (`assets/fonts/display.tres`).
+
+- Source: https://github.com/google/fonts/tree/main/ofl/fredoka
+- Upstream: https://github.com/hafontia/Fredoka
+- License: SIL Open Font License 1.1, retained in [OFL-Fredoka.txt](OFL-Fredoka.txt).
+- Acquired file: `Fredoka.ttf`, the original `Fredoka[wdth,wght].ttf` variable font.
+- SHA-256: `2ba02e68b152868aef9ba28e24b3648c7d457fe6f25c761f2c2c53fb61a73fc8`.
+- Integration: local display resource `display.tres` uses weight 650 for storybook
+  display headings without altering `body.tres` or `heading.tres`. No remote font
+  request is required while playing. This is a font, with no animation.
+
 The browser shell embeds static weight 600 and 800 instances (`Nunito-600.ttf`
 and `Nunito-800.ttf`). Windows WebKit rendered the original variable font at its
 200 default even with an explicit CSS axis; static instances were visually

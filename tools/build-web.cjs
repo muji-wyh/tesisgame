@@ -71,5 +71,6 @@ require('./package-professional-media.cjs').packageProfessionalMedia(root, outpu
 fs.copyFileSync(path.join(root, 'web', 'staticwebapp.config.json'), path.join(output, 'staticwebapp.config.json'));
 fs.copyFileSync(path.join(root, 'web', 'map-credits.html'), path.join(output, 'map-credits.html'));
 fs.copyFileSync(path.join(root, 'assets', 'fonts', 'OFL.txt'), path.join(output, 'nunito-license.txt'));
+fs.copyFileSync(path.join(root, 'assets', 'fonts', 'OFL-Fredoka.txt'), path.join(output, 'fredoka-license.txt'));
 writeBuildReceipt(root, inputs, { professionalDomain: domainEvidence });
 console.log(`Godot Web game exported to build\\web (${(downloadBytes / 1000000).toFixed(2)} MB core startup plus the selected age pack; ten on-demand vocabulary packs and ${audio.length} audio resources verified).`);

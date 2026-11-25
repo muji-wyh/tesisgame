@@ -9,6 +9,8 @@ const CompanionCelebration = preload("res://scripts/round_celebration.gd")
 const RewardRoom = preload("res://scripts/pop_reward_room.gd")
 
 var panel: Panel
+var _panel_paper: ColorRect
+var _panel_paper_material: ShaderMaterial
 var _shade: ColorRect
 var _room: Control
 var _palette: Dictionary = {}
@@ -31,7 +33,16 @@ func _init() -> void:
 	panel.name = "SettlementPanel"
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	panel.focus_mode = Control.FOCUS_ALL
+	panel.clip_children = CanvasItem.CLIP_CHILDREN_AND_DRAW
 	add_child(panel)
+	_panel_paper = ColorRect.new()
+	_panel_paper.name = "SettlementPaperGrain"
+	_panel_paper.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_panel_paper.focus_mode = Control.FOCUS_NONE
+	_panel_paper_material = Style.paper_material(Style.PAPER, Color("#f2f6ec"), 0.24, 0.015)
+	_panel_paper.material = _panel_paper_material
+	panel.add_child(_panel_paper)
+	_panel_paper.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	resized.connect(_layout)
 	hide()
 
@@ -81,11 +92,15 @@ func _layout() -> void:
 		return
 	var s: float = Style.ui_scale(self)
 	var accent: Color = _palette.get("accent", Style.GOOD)
-	var surface := Style.box(Style.PAPER, accent.lightened(0.70), ceili(24 / s), maxi(1, roundi(1 / s)))
-	surface.shadow_color = Color(Style.INK, 0.22)
-	surface.shadow_size = ceili(18 / s)
-	surface.shadow_offset = Vector2(0, 6 / s)
+	var surface := Style.box(Style.PAPER, accent.lightened(0.65), ceili(24 / s), maxi(1, roundi(1.5 / s)))
+	surface.border_width_bottom = ceili(3.0 / s)
+	surface.shadow_color = Color(Style.INK, 0.26)
+	surface.shadow_size = ceili(22 / s)
+	surface.shadow_offset = Vector2(0, 8 / s)
 	panel.add_theme_stylebox_override("panel", surface)
+	if _panel_paper_material != null:
+		_panel_paper_material.set_shader_parameter("paper_tint", Style.PAPER)
+		_panel_paper_material.set_shader_parameter("top_wash", Style.PAPER.lerp(accent.lightened(0.84), 0.55))
 	# Keep the reward close to its result and actions, even on a large canvas.
 	# A wide, short viewport still needs room for the two-column arrangement.
 	var landscape: bool = size.x * s >= 600 and size.y * s < 480

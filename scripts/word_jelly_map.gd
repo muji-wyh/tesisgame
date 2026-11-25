@@ -100,6 +100,7 @@ func _init() -> void:
 	_sky.modulate = Color(0.93, 0.98, 1.0, 1.0)
 	add_child(_sky)
 	_heading = _label(self, "Jelly Journey", 30)
+	_heading.add_theme_font_override("font", Style.DISPLAY_FONT)
 	_subtitle = _label(self, "99 little adventures. Collect words, earn stars.", 14)
 	_wallet = _label(self, "", 16)
 	_wallet_icon = _image(self, COIN)
@@ -151,6 +152,7 @@ func _init() -> void:
 		banner.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		_content.add_child(banner)
 		var title: Label = _label(banner, Catalog.CHAPTERS[chapter], 27)
+		title.add_theme_font_override("font", Style.DISPLAY_FONT)
 		title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		var number: Label = _label(banner, "CHAPTER %02d" % (chapter + 1), 11)
 		number.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -382,10 +384,14 @@ func configure(state: Dictionary, reduced_motion: bool = false) -> void:
 	_upgrades.disabled = blocked
 	_upgrades.focus_mode = Control.FOCUS_NONE if blocked else Control.FOCUS_ALL
 	var affordable: bool = not blocked and bool(state.get("upgrade_affordable", false))
+	var prestige: int = int(state.get("prestige_rank", 0))
 	_upgrade_sparkle.visible = affordable
-	_upgrades.accessibility_name = "Jelly Lv%d. Auto merge Lv%d. Star charm Lv%d. Open permanent upgrades.%s Higher levels cost coins." % [
+	_upgrade_label.text = "Crown ★%d" % prestige if prestige > 0 else "Upgrade"
+	_upgrades.accessibility_name = "Jelly Lv%d. Auto merge Lv%d. Star charm Lv%d.%s Open permanent upgrades.%s Higher levels cost coins." % [
 		int(state.get("merged_level", 1)), int(state.get("auto_merge_level", 1)),
-		int(state.get("star_charm_level", 1)), " An upgrade is ready." if affordable else ""]
+		int(state.get("star_charm_level", 1)),
+		" Golden Crown rank %d." % prestige if prestige > 0 else "",
+		" An upgrade is ready." if affordable else ""]
 	_refresh_chapter_milestones(blocked)
 	_wallet.text = str(int(state.get("coins", 0)))
 	_wallet.tooltip_text = "%s saved coins" % _wallet.text
@@ -708,7 +714,8 @@ func _layout() -> void:
 	var title_end: float = _wallet_icon.position.x - (12.0 if narrow else 28.0) / s
 	var title_width: float = maxf(1.0, title_end - _heading.position.x)
 	var heading_pixels: int = ceili((22.0 if narrow else 28.0) / s)
-	var heading_ink: float = Style.HEADING_FONT.get_string_size(_heading.text, HORIZONTAL_ALIGNMENT_LEFT, -1, heading_pixels).x
+	var heading_font: Font = _heading.get_theme_font("font")
+	var heading_ink: float = heading_font.get_string_size(_heading.text, HORIZONTAL_ALIGNMENT_LEFT, -1, heading_pixels).x
 	if heading_ink > title_width:
 		heading_pixels = maxi(1, floori(heading_pixels * title_width / heading_ink))
 	_heading.add_theme_font_size_override("font_size", heading_pixels)
@@ -768,7 +775,8 @@ func _layout() -> void:
 		milestone.position = Vector2(section.banner.position.x + (banner_width - milestone.size.x) * 0.5,
 			section.banner.position.y - milestone.size.y - 4.0 / s)
 		var pixels: int = ceili((18.0 if size.x * s < 600.0 else 20.0) / s)
-		while pixels > 1 and Style.HEADING_FONT.get_string_size(section.title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x > chapter_title_width:
+		var title_font: Font = section.title.get_theme_font("font")
+		while pixels > 1 and title_font.get_string_size(section.title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x > chapter_title_width:
 			pixels -= 1
 		section.title.add_theme_font_size_override("font_size", pixels)
 		var scenery_width: float = minf(width * 0.38, 270.0 / s)
@@ -1222,6 +1230,7 @@ func snapshot() -> Dictionary:
 		"merged_level": int(_state.get("merged_level", 1)),
 		"auto_merge_level": int(_state.get("auto_merge_level", 1)),
 		"star_charm_level": int(_state.get("star_charm_level", 1)),
+		"prestige_rank": int(_state.get("prestige_rank", 0)),
 		"upgrade_affordable": bool(_state.get("upgrade_affordable", false)),
 		"chapter_milestones": _state.get("chapter_milestones", []).duplicate(),
 		"frontier_pill": _control(_frontier_pill),

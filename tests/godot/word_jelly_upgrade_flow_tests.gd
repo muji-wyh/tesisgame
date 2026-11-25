@@ -319,9 +319,9 @@ func _run() -> void:
 		advance(app, 0.025)
 	check(not view.game.powerup_active() and view.game.powerup_snapshot().affected_jellies == 8
 		and view.game.powerup_snapshot().completed_results == 4 and view.game.collectable_ids().size() == 4
-		and view.game.cells.size() == 4 and app.coin_wallet.balance == before_use - 25
+		and view.game.cells.size() == 4 and app.coin_wallet.balance == before_use - 50
 		and view.snapshot().powerup_buttons.auto_merge.capacity_badge.text == "4",
-		"A genuine touch pays once and leaves exactly four complete Jellies matching its badge")
+		"A genuine touch pays once (50 at Lv2) and leaves exactly four complete Jellies matching its badge")
 	await capture_ui("auto-merge-lv2-gameplay")
 	app.audio.halt()
 	app.queue_free()

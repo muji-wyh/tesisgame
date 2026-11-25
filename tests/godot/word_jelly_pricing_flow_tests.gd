@@ -146,9 +146,10 @@ func _run() -> void:
 		model.auto_merge_level = level
 		view._refresh_controls()
 		var reduction: int = int(model.auto_merge_preview().reduction_count)
-		check(reduction > 0 and view.powerup_buttons.auto_merge.snapshot().price == 25
-			and model.powerup_price("auto_merge") == 25,
-			"Each owned Auto merge capacity preserves a useful hover prediction and the same first-use quote")
+		var expected_auto: int = 25 if level >= 6 else 50
+		check(reduction > 0 and view.powerup_buttons.auto_merge.snapshot().price == expected_auto
+			and model.powerup_price("auto_merge") == expected_auto,
+			"Owned Auto merge Lv%d advertises its exact first-use quote (%d) with a useful hover prediction" % [level, expected_auto])
 	model.auto_merge_level = 1
 	view._refresh_controls()
 	var payments: Array[Dictionary] = []

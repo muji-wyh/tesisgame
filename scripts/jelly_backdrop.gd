@@ -22,17 +22,17 @@ const CHAPTER_PROPS: Array[Texture2D] = [
 	preload("res://assets/images/jelly-campaign/castle.png")]
 # Gentle per-chapter atmospheric presets (1..11) keeping central playfield contrast high.
 const CHAPTER_THEMES: Array[Dictionary] = [
-	{"hill": Color(0.90, 0.94, 0.79, 0.36), "hill2": Color(0.84, 0.93, 0.75, 0.42), "prop": Color(0.82, 0.90, 0.76, 0.34), "warmth_bias": 0.0},
-	{"hill": Color(0.84, 0.93, 0.78, 0.36), "hill2": Color(0.78, 0.90, 0.74, 0.42), "prop": Color(0.76, 0.88, 0.74, 0.36), "warmth_bias": -0.02},
-	{"hill": Color(0.80, 0.90, 0.82, 0.36), "hill2": Color(0.74, 0.86, 0.78, 0.42), "prop": Color(0.74, 0.86, 0.78, 0.36), "warmth_bias": -0.04},
-	{"hill": Color(0.92, 0.91, 0.80, 0.36), "hill2": Color(0.88, 0.88, 0.76, 0.42), "prop": Color(0.92, 0.89, 0.80, 0.36), "warmth_bias": 0.05},
-	{"hill": Color(0.96, 0.88, 0.74, 0.36), "hill2": Color(0.94, 0.82, 0.68, 0.42), "prop": Color(0.96, 0.84, 0.68, 0.38), "warmth_bias": 0.10},
-	{"hill": Color(0.86, 0.93, 0.98, 0.38), "hill2": Color(0.82, 0.90, 0.98, 0.44), "prop": Color(0.88, 0.95, 1.0, 0.38), "warmth_bias": -0.06},
-	{"hill": Color(0.82, 0.91, 0.97, 0.38), "hill2": Color(0.78, 0.88, 0.96, 0.44), "prop": Color(0.84, 0.92, 0.98, 0.38), "warmth_bias": -0.06},
-	{"hill": Color(0.86, 0.95, 0.90, 0.36), "hill2": Color(0.80, 0.92, 0.88, 0.42), "prop": Color(0.82, 0.94, 0.84, 0.36), "warmth_bias": 0.06},
-	{"hill": Color(0.96, 0.89, 0.76, 0.36), "hill2": Color(0.94, 0.84, 0.70, 0.42), "prop": Color(0.92, 0.86, 0.74, 0.36), "warmth_bias": 0.12},
-	{"hill": Color(0.86, 0.89, 0.95, 0.36), "hill2": Color(0.80, 0.85, 0.93, 0.42), "prop": Color(0.84, 0.88, 0.95, 0.38), "warmth_bias": -0.04},
-	{"hill": Color(0.90, 0.87, 0.95, 0.36), "hill2": Color(0.85, 0.82, 0.92, 0.42), "prop": Color(0.90, 0.86, 0.94, 0.38), "warmth_bias": 0.04}]
+	{"hill": Color(0.90, 0.94, 0.79, 0.36), "hill2": Color(0.84, 0.93, 0.75, 0.42), "prop": Color(0.82, 0.90, 0.76, 0.34), "warmth_bias": 0.0, "mote": Color("#fff9dc"), "key_light": Color("#fff2d4"), "ambient_light": Color("#e4f2e8"), "well_tint": Color("#e9f4ea")},
+	{"hill": Color(0.84, 0.93, 0.78, 0.36), "hill2": Color(0.78, 0.90, 0.74, 0.42), "prop": Color(0.76, 0.88, 0.74, 0.36), "warmth_bias": -0.02, "mote": Color("#f3ffe0"), "key_light": Color("#f7f4d8"), "ambient_light": Color("#dcefe4"), "well_tint": Color("#e4f2e9")},
+	{"hill": Color(0.80, 0.90, 0.82, 0.36), "hill2": Color(0.74, 0.86, 0.78, 0.42), "prop": Color(0.74, 0.86, 0.78, 0.36), "warmth_bias": -0.04, "mote": Color("#e8fbf2"), "key_light": Color("#edf6e6"), "ambient_light": Color("#d6ece8"), "well_tint": Color("#e2f0ee")},
+	{"hill": Color(0.92, 0.91, 0.80, 0.36), "hill2": Color(0.88, 0.88, 0.76, 0.42), "prop": Color(0.92, 0.89, 0.80, 0.36), "warmth_bias": 0.05, "mote": Color("#fff3cf"), "key_light": Color("#ffedd0"), "ambient_light": Color("#ebe9dc"), "well_tint": Color("#f2efe4")},
+	{"hill": Color(0.96, 0.88, 0.74, 0.36), "hill2": Color(0.94, 0.82, 0.68, 0.42), "prop": Color(0.96, 0.84, 0.68, 0.38), "warmth_bias": 0.10, "mote": Color("#ffe2b8"), "key_light": Color("#ffe2bd"), "ambient_light": Color("#f2e4d8"), "well_tint": Color("#f6ece0")},
+	{"hill": Color(0.86, 0.93, 0.98, 0.38), "hill2": Color(0.82, 0.90, 0.98, 0.44), "prop": Color(0.88, 0.95, 1.0, 0.38), "warmth_bias": -0.06, "mote": Color("#f4fbff"), "key_light": Color("#eef6ff"), "ambient_light": Color("#d6e8fb"), "well_tint": Color("#e6f0f8")},
+	{"hill": Color(0.82, 0.91, 0.97, 0.38), "hill2": Color(0.78, 0.88, 0.96, 0.44), "prop": Color(0.84, 0.92, 0.98, 0.38), "warmth_bias": -0.06, "mote": Color("#edf8ff"), "key_light": Color("#e8f2ff"), "ambient_light": Color("#d0e4fa"), "well_tint": Color("#e2edf8")},
+	{"hill": Color(0.86, 0.95, 0.90, 0.36), "hill2": Color(0.80, 0.92, 0.88, 0.42), "prop": Color(0.82, 0.94, 0.84, 0.36), "warmth_bias": 0.06, "mote": Color("#fff8d6"), "key_light": Color("#fff0cc"), "ambient_light": Color("#daf1ec"), "well_tint": Color("#e5f4ef")},
+	{"hill": Color(0.96, 0.89, 0.76, 0.36), "hill2": Color(0.94, 0.84, 0.70, 0.42), "prop": Color(0.92, 0.86, 0.74, 0.36), "warmth_bias": 0.12, "mote": Color("#ffe6ba"), "key_light": Color("#ffe5bf"), "ambient_light": Color("#f4e8d6"), "well_tint": Color("#f6eee1")},
+	{"hill": Color(0.86, 0.89, 0.95, 0.36), "hill2": Color(0.80, 0.85, 0.93, 0.42), "prop": Color(0.84, 0.88, 0.95, 0.38), "warmth_bias": -0.04, "mote": Color("#eef1ff"), "key_light": Color("#edf0ff"), "ambient_light": Color("#dce2f4"), "well_tint": Color("#e8ebf6")},
+	{"hill": Color(0.90, 0.87, 0.95, 0.36), "hill2": Color(0.85, 0.82, 0.92, 0.42), "prop": Color(0.90, 0.86, 0.94, 0.38), "warmth_bias": 0.04, "mote": Color("#fff1ff"), "key_light": Color("#f8ecff"), "ambient_light": Color("#e6dff5"), "well_tint": Color("#efeaf7")}]
 
 var _header_wash := GradientTexture2D.new()
 var _elapsed: float = 0.0
@@ -126,6 +126,28 @@ func _update_daylight() -> void:
 		"aspect": size.x / maxf(1.0, size.y)}
 	for key: String in _daylight:
 		_sky_material.set_shader_parameter(key, _daylight[key])
+	_sky_material.set_shader_parameter("mote_time", phase)
+	_sky_material.set_shader_parameter("mote_strength", 0.0 if _reduced_motion else 1.0)
+	_sky_material.set_shader_parameter("mote_color", theme.get("mote", Color("#fff9dc")))
+
+
+static func chapter_atmosphere(chapter: int) -> Dictionary:
+	var index: int = clampi(chapter - 1, 0, CHAPTER_THEMES.size() - 1) if chapter >= 1 else 0
+	var theme: Dictionary = CHAPTER_THEMES[index]
+	return {
+		"chapter": chapter,
+		"warmth": clampf(0.16 + float(theme.get("warmth_bias", 0.0)), 0.0, 0.45),
+		"well_tint": theme.get("well_tint", Color("#e9f4ea")),
+		"key_light": theme.get("key_light", Color("#fff2d4")),
+		"ambient_light": theme.get("ambient_light", Color("#e4f2e8")),
+		"mote": theme.get("mote", Color("#fff9dc"))
+	}
+
+
+func atmosphere() -> Dictionary:
+	var info: Dictionary = chapter_atmosphere(_chapter)
+	info["warmth"] = float(_daylight.get("warmth", info.warmth))
+	return info
 
 
 func snapshot() -> Dictionary:

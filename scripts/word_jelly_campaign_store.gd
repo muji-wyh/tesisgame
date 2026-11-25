@@ -5,7 +5,7 @@ const Catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
 const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
 const Economy = preload("res://scripts/coin_economy.gd")
 const Wallet = preload("res://scripts/coin_wallet.gd")
-const VERSION: int = 7
+const VERSION: int = 8
 const UPGRADE_LEVEL_KEYS: Dictionary = {"jelly": "level", "auto_merge": "auto_merge_level",
 	"star_charm": "star_charm_level"}
 const MAX_CONTEXTS: int = 256
@@ -28,8 +28,8 @@ var _path: String
 var _host: Object
 var _saved_text: Variant = null
 var _contexts: Dictionary = {}
-var _upgrades: Dictionary = {"level": 1, "auto_merge_level": 1, "star_charm_level": 1, "pending": {},
-	"intro": "unseen", "funded": {"jelly": 0, "auto_merge": 0, "star_charm": 0}}
+var _upgrades: Dictionary = {"level": 1, "auto_merge_level": 1, "star_charm_level": 1, "prestige_rank": 0,
+	"pending": {}, "intro": "unseen", "funded": {"jelly": 0, "auto_merge": 0, "star_charm": 0}}
 
 
 func _init(path: String = "user://jelly-campaign-v1.cfg", host: Object = null) -> void:
@@ -50,15 +50,15 @@ func load_state() -> bool:
 	if not stored.ok:
 		return false
 	var next_contexts: Dictionary = {}
-	var next_upgrades: Dictionary = {"level": 1, "auto_merge_level": 1, "star_charm_level": 1, "pending": {},
-		"intro": "unseen", "funded": {"jelly": 0, "auto_merge": 0, "star_charm": 0}}
+	var next_upgrades: Dictionary = {"level": 1, "auto_merge_level": 1, "star_charm_level": 1, "prestige_rank": 0,
+		"pending": {}, "intro": "unseen", "funded": {"jelly": 0, "auto_merge": 0, "star_charm": 0}}
 	if stored.text != null:
 		var config := ConfigFile.new()
 		if config.parse(stored.text) != OK or config.get_sections().size() != 1 \
 			or not config.has_section("campaign"):
 			return _fail("Your campaign save could not be understood. It has not been reset.")
 		var version: Variant = config.get_value("campaign", "version", null)
-		if not version is int or version not in [1, 2, 3, 4, 5, 6, VERSION]:
+		if not version is int or version not in [1, 2, 3, 4, 5, 6, 7, VERSION]:
 			return _fail("This campaign save needs a supported version.")
 		var keys: PackedStringArray = config.get_section_keys("campaign")
 		if keys.size() != (3 if version >= 4 else 2) or not "contexts" in keys \
@@ -107,6 +107,12 @@ func load_state() -> bool:
 				upgrades = upgrades.duplicate(true)
 				upgrades.star_charm_level = 1
 				upgrades.funded["star_charm"] = 0
+			if version <= 7:
+				if not upgrades is Dictionary or upgrades.size() != 6 \
+					or not upgrades.has_all(["level", "auto_merge_level", "star_charm_level", "pending", "intro", "funded"]):
+					return _fail("Your saved Jelly upgrades need their complete level and purchase journal.")
+				upgrades = upgrades.duplicate(true)
+				upgrades.prestige_rank = 0
 			var upgrade_error: String = _upgrades_error(upgrades)
 			if not upgrade_error.is_empty():
 				return _fail(upgrade_error)
@@ -165,6 +171,35 @@ func auto_merge_level() -> int:
 
 func star_charm_level() -> int:
 	return upgrade_level("star_charm")
+
+
+func prestige_rank() -> int:
+	return int(_upgrades.get("prestige_rank", 0)) if _upgrades_readable() else 0
+
+
+func all_tracks_maxed() -> bool:
+	return _upgrades_readable() and int(_upgrades.level) >= Economy.MAX_UPGRADE_LEVEL \
+		and int(_upgrades.auto_merge_level) >= Economy.MAX_UPGRADE_LEVEL \
+		and int(_upgrades.star_charm_level) >= Economy.MAX_UPGRADE_LEVEL
+
+
+func purchase_prestige_rank(wallet: Wallet) -> bool:
+	error = ""
+	if not _upgrades_readable() or not _current_snapshot_matches():
+		return false
+	if not all_tracks_maxed():
+		return _fail("Max all three upgrade tracks before forging a Golden Crown rank.")
+	var current: int = int(_upgrades.prestige_rank)
+	if current >= Economy.MAX_PRESTIGE_RANK:
+		return _fail("Golden Crown has reached its maximum rank.")
+	var next_rank: int = current + 1
+	var price: int = Economy.prestige_price(next_rank)
+	var receipt: String = "jelly-prestige-v1:%d" % next_rank
+	if wallet == null or not wallet.ready or not wallet.has_purchase(receipt, price):
+		return _fail("The Golden Crown rank needs its exact saved coin purchase before unlocking.")
+	var next: Dictionary = _upgrades.duplicate(true)
+	next.prestige_rank = next_rank
+	return _commit(_contexts.duplicate(true), next)
 
 
 func chapter_stars(context: String, chapter: int) -> int:
@@ -527,13 +562,19 @@ func _upgrades_readable() -> bool:
 
 
 func _upgrades_error(value: Variant) -> String:
-	if not value is Dictionary or value.size() != 6 \
-		or not value.has_all(["level", "auto_merge_level", "star_charm_level", "pending", "intro", "funded"]) \
+	if not value is Dictionary or value.size() != 7 \
+		or not value.has_all(["level", "auto_merge_level", "star_charm_level", "prestige_rank", "pending", "intro", "funded"]) \
 		or not value.level is int or value.level < 1 or value.level > Economy.MAX_UPGRADE_LEVEL \
 		or not value.auto_merge_level is int or value.auto_merge_level < 1 \
 		or value.auto_merge_level > Economy.MAX_UPGRADE_LEVEL \
 		or not value.star_charm_level is int or value.star_charm_level < 1 \
-		or value.star_charm_level > Economy.MAX_UPGRADE_LEVEL or not value.pending is Dictionary \
+		or value.star_charm_level > Economy.MAX_UPGRADE_LEVEL \
+		or not value.prestige_rank is int or value.prestige_rank < 0 \
+		or value.prestige_rank > Economy.MAX_PRESTIGE_RANK \
+		or (value.prestige_rank > 0 and (value.level < Economy.MAX_UPGRADE_LEVEL \
+			or value.auto_merge_level < Economy.MAX_UPGRADE_LEVEL \
+			or value.star_charm_level < Economy.MAX_UPGRADE_LEVEL)) \
+		or not value.pending is Dictionary \
 		or not value.intro is String or value.intro not in ["unseen", "offer", "guide", "complete"] \
 		or (value.level > 1 and value.intro != "complete"):
 		return "Your Jelly upgrades need their saved level, introduction and purchase journal."
@@ -581,7 +622,7 @@ func _legacy_upgrades(contexts: Dictionary) -> Dictionary:
 			if bool(result.get("boss_victory", false)) and int(result.boss_id) not in state.boss_victories:
 				earned += 1
 		level = maxi(level, mini(9, earned))
-	return {"level": level, "auto_merge_level": 1, "star_charm_level": 1, "pending": {},
+	return {"level": level, "auto_merge_level": 1, "star_charm_level": 1, "prestige_rank": 0, "pending": {},
 		"funded": {"jelly": 0, "auto_merge": 0, "star_charm": 0},
 		"intro": "complete" if played or level > 1 else "unseen"}
 

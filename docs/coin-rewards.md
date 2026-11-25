@@ -3,9 +3,10 @@
 The numerical policy, affordability targets and reproducible budget scenarios
 are documented in [Coin economy](coin-economy.md). Paid receipts and saved wallet
 balances retain their previous values. Future purchases use escalating per-round
-prices. Jelly Words collection bonuses now follow the merged-level table: Lv1
-has no bonus; Lv2-6 have respective chances of 2%, 4%, 12%, 20% and 30%, with
-winning amounts of 50, 100, 150, 200 and 250 coins. Only collecting a valid merged word can award this level bonus;
+prices. Jelly Words collection bonuses follow the merged-level table: Lv1
+has no bonus; Lv2-Lv9 have respective chances of 12%, 22%, 32%, 42%, 52%, 62%,
+72%, and 85%, with winning amounts of 50, 100, 150, 200, 250, 300, 350, and 450
+coins. Only collecting a valid merged word can award this level bonus;
 root count and mass do not determine it. The same reserved outcome and receipt
 survive persistence retries, preventing rerolls or duplicate payment.
 
@@ -26,8 +27,9 @@ The opening retains the existing chest performance. At completion, eight to four
 
 Paying manual merges launch coins from the gold **COMBO BONUS** coin in the combo
 display, not from a collected jelly or a random screen position. The existing
-acquired gold atlas supplies one, two or three sprites for the exact one-, two-
-or three-coin reward. A compact lift leads into curved travel to the header's
+acquired gold atlas supplies one to six sprites matching the exact one-, two-,
+four-, or six-coin reward (`0 / 1 / 2 / 4 / 6` for chains `1-2 / 3-5 / 6-9 /
+10-14 / 15+`). A compact lift leads into curved travel to the header's
 coin icon; the existing bonus caption stays at its source instead of duplicating
 a large floating amount.
 
@@ -40,17 +42,39 @@ static acknowledgement and updates the exact total without flight or rolling.
 
 ## Campaign stars
 
-New numbered-stage settlements add a separate immutable clear receipt. The base
-is `75 + 15 * (chapter - 1)` coins. For one, two or three stars, the total of that
-base and the current stage's already-quoted chest is weighted by **1x, 1.5x or 2x**,
-rounding upward. The chest is still paid through its original receipt; the clear
-receipt pays only the difference. Already credited combo and rare-pickup coins
-are not multiplied again. Failures and timed Challenges earn no clear bonus.
+New numbered-stage settlements add a separate immutable clear receipt under the
+`jelly-stage-clear-v2` policy:
 
-For example, stage 1 with no chest pays 75, 113 or 150 clear coins. A 75-coin
-chest plus a three-star stage-1 clear totals 300 settlement coins: 75 from the
-unchanged chest quote and 225 from the stage receipt. Replays have their own
-round receipt; retrying that same settlement cannot pay twice or downgrade stars.
+- **First-clear base**: `75 + 15 * (chapter - 1)` coins (`75` in Chapter 1 up to
+  `225` in Chapter 11). Replaying an already-cleared stage uses **50%** of that
+  base (`round(raw_base * 0.5)`).
+- **Star multiplier & chest cap**: For 1, 2 or 3 stars, the sum of the stage base
+  and up to **200 coins** of the current stage's already-quoted chest
+  (`weighted_chest = min(chest_coins, 200)`) is multiplied by **1x, 1.5x or 2x**
+  (rounding upward). Any chest coins above 200 are paid in full (`1x`) without
+  multiplication so high-tier chests cannot explode payouts.
+- **Pure Clear bonus**: First-time clears completed with **0 paid powerups**
+  earn an extra **+20% of base** (`+15` on Stage 1 up to `+45` on Stage 99).
+- **Star-upgrade bonus**: Replaying a stage and improving its best star rating
+  awards **+35 coins per newly earned star**.
+- **Leftover fragment rebate**: Unconverted chest fragments left at settlement
+  (`fragments < 4` or `(fragments - 4) % 5`) convert at **15 coins per fragment**,
+  including on failed runs and Challenges.
+- **Boss & Challenge bonuses**: Defeating one of the 8 main-story Bosses for the
+  first time pays a one-time bounty (`100, 125, 150, 200, 250, 300, 350, 500`);
+  Pirate Mini-Raids pay `+75`. Survival Challenge awards cumulative `50 * k`
+  milestone coins every 5th stage reached plus `+75` for setting a new record at
+  Stage 3+.
+
+The chest is still paid through its original receipt; the clear receipt pays
+only the difference plus applicable bonuses. Already credited combo and
+rare-pickup coins are not multiplied again. Replays have their own round
+receipt; retrying that same settlement cannot pay twice or downgrade stars.
+
+For example, a Stage 1 first clear with no chest and zero paid powerups pays
+`75 + 15 = 90` (1★), `113 + 15 = 128` (2★), or `150 + 15 = 165` (3★). Replaying
+Stage 1 for 3★ with no chest pays `round(75 * 0.5) * 2 = 76` coins (plus `+35`
+per star if improving an earlier 1★ or 2★ record).
 
 Newly earned chests stop upgrading at **Lv30**. Existing historical quotes and
 their paid receipts remain valid without silently changing their original tier

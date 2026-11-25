@@ -67,7 +67,7 @@ func present(id: String, reward: Dictionary, source: Vector2, with_release_sound
 	if _events.is_empty():
 		_visual_total = int(reward.before)
 		counter.sync(_visual_total)
-	var count: int = clampi(int(reward.amount), 1, 3) if kind == "combo" else clampi(7 + int(reward.amount) / 50, 8, 14)
+	var count: int = clampi(int(reward.amount), 1, 6) if kind == "combo" else clampi(7 + int(reward.amount) / 50, 8, 14)
 	_events.append({"id": id, "amount": int(reward.amount), "source": source,
 		"kind": kind, "elapsed": 0.0, "count": count, "arrivals": 0, "release_pending": with_release_sound})
 	queue_redraw()

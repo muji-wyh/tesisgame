@@ -4,6 +4,7 @@ extends Control
 signal back_requested
 signal purchase_requested(level: int, kind: String)
 signal contribution_requested(kind: String, amount: int)
+signal prestige_requested
 signal audio_requested(cue: String)
 signal charging_changed(active: bool)
 signal intro_accepted
@@ -42,6 +43,7 @@ var _active := true
 var _reduced := false
 var _charging := false
 var _retry_press_armed := false
+var _prestige_press_armed := false
 var _charge_wait := 0.0
 var _elapsed := 0.0
 var _pulse := 0.0
@@ -122,6 +124,7 @@ func _init() -> void:
 			stop_charging()
 			back_requested.emit())
 	_heading = _label(self, "Jelly Upgrades", 26)
+	_heading.add_theme_font_override("font", Style.DISPLAY_FONT)
 	_heading.clip_text = true
 	_wallet = _label(self, "", 20)
 	_wallet.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
@@ -148,6 +151,7 @@ func _init() -> void:
 	_texture(_wand, WAND, _stage)
 	_wand.modulate = Color("#7950a6")
 	_tier = _label(_stage, "", 42)
+	_tier.add_theme_font_override("font", Style.DISPLAY_FONT)
 	_name = _label(_stage, "", 22)
 	_description = _label(_stage, "", 16)
 	_benefits = _label(_stage, "", 13)
@@ -180,14 +184,20 @@ func _init() -> void:
 	_footer.add_child(_buy)
 	_buy.button_down.connect(func() -> void:
 		_retry_press_armed = bool(_state.get("retry", false)) and not _buy.disabled
-		start_charging())
+		_prestige_press_armed = _can_prestige() and not _retry_press_armed and not _buy.disabled
+		if not _prestige_press_armed:
+			start_charging())
 	_buy.button_up.connect(stop_charging)
 	_buy.mouse_exited.connect(stop_charging)
 	_buy.pressed.connect(func() -> void:
 		var armed: bool = _retry_press_armed
+		var prestige_armed: bool = _prestige_press_armed
 		_retry_press_armed = false
+		_prestige_press_armed = false
 		if armed:
-			retry_saving())
+			retry_saving()
+		elif prestige_armed:
+			prestige_requested.emit())
 	_texture(_buy_coin, COIN, _buy)
 	_effects.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_effects)
@@ -196,6 +206,7 @@ func _init() -> void:
 	add_child(_shade)
 	add_child(_offer)
 	_offer_title = _label(_offer, "New Jelly powers!", 25)
+	_offer_title.add_theme_font_override("font", Style.DISPLAY_FONT)
 	_offer_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_offer_jelly.disabled = true
 	_offer_jelly.focus_mode = Control.FOCUS_NONE
@@ -423,6 +434,29 @@ func _can_charge() -> bool:
 		and str(_state.get("error", "")).is_empty() and not bool(_state.get("retry", false)) \
 		and _state.get("pending", {}).is_empty()
 
+
+func _all_tracks_maxed() -> bool:
+	return bool(_state.get("all_tracks_maxed", false)) \
+		or (int(_state.get("level", 1)) >= 9 and int(_state.get("auto_merge_level", 1)) >= 9 \
+			and int(_state.get("star_charm_level", 1)) >= 9)
+
+
+func _prestige_rank() -> int:
+	return int(_state.get("prestige_rank", 0))
+
+
+func _next_prestige_price() -> int:
+	var rank: int = _prestige_rank()
+	return Economy.prestige_price(rank + 1) if rank < Economy.MAX_PRESTIGE_RANK else 0
+
+
+func _can_prestige() -> bool:
+	var price: int = _next_prestige_price()
+	return _active and is_visible_in_tree() and not _offering and _all_tracks_maxed() \
+		and price > 0 and int(_state.get("balance", 0)) >= price \
+		and not bool(_state.get("busy", false)) and str(_state.get("error", "")).is_empty() \
+		and not bool(_state.get("retry", false)) and _state.get("pending", {}).is_empty()
+
 func start_charging() -> void:
 	if _charging or not _can_charge():
 		return
@@ -495,15 +529,42 @@ func _refresh() -> void:
 		tab.button.disabled = busy
 		tab.button.accessibility_name = "Preview Lv%d. %s" % [tab.level, "Owned" if int(tab.level) <= owned else "Locked"]
 	_update_funding_text()
+	var balance: int = int(_state.get("balance", 0))
+	var maxed_all: bool = _all_tracks_maxed()
+	var rank: int = _prestige_rank()
+	var next_crown_price: int = _next_prestige_price()
 	_progress.accessibility_name = "%d of %d coins saved toward Lv%d. %d coins remaining." % [_funded(), _price(), mini(9, owned + 1), maxi(0, _price() - _funded())]
 	if owned == 9:
-		_progress.accessibility_name = "Lv9. All milestones complete."
-	_buy.disabled = not _can_charge()
-	_buy.text = "    Hold to charge" if owned < 9 else "Lv 9"
+		if maxed_all and rank > 0:
+			_progress.accessibility_name = "Lv9. Golden Crown rank %d." % rank
+		else:
+			_progress.accessibility_name = "Lv9. All milestones complete."
+	if owned < 9:
+		_buy.disabled = not _can_charge()
+		if balance < PULSE_AMOUNT and not bool(_state.get("retry", false)) and error.is_empty():
+			_buy.text = "Need %d more coins" % (PULSE_AMOUNT - balance)
+		else:
+			_buy.text = "    Hold to charge"
+	elif maxed_all and next_crown_price > 0:
+		_buy.disabled = not _can_prestige()
+		_buy.text = "Crown ★%d · %d" % [rank + 1, next_crown_price] if balance >= next_crown_price \
+			else "Crown ★%d · Need %d" % [rank + 1, next_crown_price - balance]
+	else:
+		_buy.disabled = true
+		_buy.text = "Crown ★%d MAX" % rank if maxed_all and rank >= Economy.MAX_PRESTIGE_RANK else "Lv 9"
 	if bool(_state.get("retry", false)) and not busy:
 		_buy.disabled = false
 		_buy.text = "Retry saving"
-	_buy.accessibility_name = "Hold to invest coins toward Lv%d. Release to stop. %s" % [mini(9, owned + 1), _progress.accessibility_name] if not bool(_state.get("retry", false)) else "Retry saving. Your paid coins will not be charged again."
+	if bool(_state.get("retry", false)):
+		_buy.accessibility_name = "Retry saving. Your paid coins will not be charged again."
+	elif owned < 9 and balance < PULSE_AMOUNT:
+		_buy.accessibility_name = "Need %d more coins to deposit 25 toward Lv%d. %s" % [
+			PULSE_AMOUNT - balance, mini(9, owned + 1), _progress.accessibility_name]
+	elif owned == 9 and maxed_all and next_crown_price > 0:
+		_buy.accessibility_name = "Forge Golden Crown rank %d for %d coins. Current rank %d." % [
+			rank + 1, next_crown_price, rank]
+	else:
+		_buy.accessibility_name = "Hold to invest coins toward Lv%d. Release to stop. %s" % [mini(9, owned + 1), _progress.accessibility_name]
 	_notice.text = error
 	_notice.add_theme_color_override("font_color", Style.WRONG)
 	_offer_caption.text = error if not error.is_empty() else "%d coins saved.\nHold to charge your first Jelly power." % int(_state.get("balance", 0))
@@ -879,7 +940,8 @@ func _layout() -> void:
 	_style_charge_button(u)
 	_buy_coin.position = Vector2(_buy.size.x * 0.5 - 104 * u, (_buy.size.y - 32 * u) * 0.5 - 2 * u)
 	_buy_coin.size = Vector2.ONE * 32 * u
-	_buy_coin.visible = _owned_level() < 9 and not bool(_state.get("retry", false))
+	_buy_coin.visible = _owned_level() < 9 and not bool(_state.get("retry", false)) \
+		and int(_state.get("balance", 0)) >= PULSE_AMOUNT
 	_notice.position = Vector2(0, _buy.position.y + _buy.size.y + 4 * u)
 	_notice.size = Vector2(footer_width, 42 * u)
 	_notice.visible = not _notice.text.is_empty()
@@ -894,7 +956,8 @@ func _layout() -> void:
 
 func _presentation_layout_state() -> Array:
 	return [_kind, _selected, _owned_level(), _offering, not _notice.text.is_empty(),
-		bool(_state.get("retry", false)), Style.ui_scale(self)]
+		bool(_state.get("retry", false)), int(_state.get("balance", 0)) >= PULSE_AMOUNT,
+		_all_tracks_maxed(), _prestige_rank(), Style.ui_scale(self)]
 
 func _layout_funding() -> void:
 	if _footer.size.x <= 0.0:
@@ -914,7 +977,8 @@ func _update_funding_text() -> void:
 	var level: int = clampi(floori(_visual_progress + 0.0000001) + 1, 1, _owned_level())
 	var price: int = Economy.permanent_upgrade_price(_kind, level + 1) if level < 9 else 0
 	var amount: int = clampi(roundi((_visual_progress - float(level - 1)) * price), 0, price)
-	var text: String = "%d / %d" % [amount, price] if level < 9 else "Lv 9"
+	var text: String = "%d / %d" % [amount, price] if level < 9 \
+		else "Crown ★%d" % _prestige_rank() if _all_tracks_maxed() and _prestige_rank() > 0 else "Lv 9"
 	if _progress.text != text or _progress_coin.visible != (level < 9):
 		_progress.text = text
 		_progress_coin.visible = level < 9
@@ -1130,6 +1194,7 @@ func snapshot() -> Dictionary:
 	return {"visible": is_visible_in_tree(), "mode": "offer" if _offering else "page", "kind": _kind,
 		"owned_level": _owned_level(), "auto_merge_level": int(_state.get("auto_merge_level", 1)),
 		"star_charm_level": int(_state.get("star_charm_level", 1)),
+		"prestige_rank": _prestige_rank(), "all_tracks_maxed": _all_tracks_maxed(),
 		"selected_level": _selected, "level": int(_state.get("level", 1)), "funded": _funded(),
 		"displayed_level": _displayed_level, "level_reveal_pending": _level_reveal_pending,
 		"stage": _rect(_stage), "hero": _rect(_hero),

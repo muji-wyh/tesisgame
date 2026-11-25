@@ -60,7 +60,7 @@ func _init() -> void:
 	_medal.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_medal.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_visual.add_child(_medal)
-	_heading = Style.heading("", 60)
+	_heading = Style.display_heading("", 60)
 	_caption = Style.label("Let's see what you earned.", 20)
 	_eyebrow = Style.label("ROUND ENDED", 11)
 	_eyebrow.add_theme_font_override("font", Style.HEADING_FONT)
@@ -158,10 +158,11 @@ func _layout() -> void:
 	if _failed:
 		width = maxf(1.0, _failure_bounds.size.x - 40.0 / s)
 	var pixels: int = maxi(1, floori(minf((38.0 if _failed else 60.0) / s, size.y * 0.16)))
-	while pixels > 1 and Style.HEADING_FONT.get_string_size(_heading.text,
+	var heading_font: Font = _heading.get_theme_font("font")
+	while pixels > 1 and heading_font.get_string_size(_heading.text,
 		HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x > width:
 		pixels -= 1
-	var height: float = Style.HEADING_FONT.get_height(pixels) + 8.0 / s
+	var height: float = heading_font.get_height(pixels) + 8.0 / s
 	_heading.add_theme_font_size_override("font_size", pixels)
 	_heading.position = Vector2((size.x - width) * 0.5, size.y * (0.48 if _failed else 0.58) - height * 0.5)
 	if _failed:

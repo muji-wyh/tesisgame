@@ -61,7 +61,7 @@ func _encode(upgrades: Dictionary, version: int = Store.VERSION) -> String:
 
 
 func _empty_upgrades() -> Dictionary:
-	return {"level": 1, "auto_merge_level": 1, "star_charm_level": 1, "pending": {}, "intro": "unseen",
+	return {"level": 1, "auto_merge_level": 1, "star_charm_level": 1, "prestige_rank": 0, "pending": {}, "intro": "unseen",
 		"funded": {"jelly": 0, "auto_merge": 0, "star_charm": 0}}
 
 
@@ -238,6 +238,9 @@ func _test_invalid_funding_and_pending() -> void:
 	legacy_over_funding.funded.jelly = 25
 	legacy_over_funding.pending = {"kind": "jelly", "level": 2, "price": 50, "id": "jelly-level-v1:2"}
 	invalids.append(legacy_over_funding)
+	var premature_prestige: Dictionary = _empty_upgrades()
+	premature_prestige.prestige_rank = 1
+	invalids.append(premature_prestige)
 	for invalid: Dictionary in invalids:
 		var rejected_host := Host.new()
 		rejected_host.campaign = _encode(invalid)

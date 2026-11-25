@@ -56,7 +56,9 @@ func _init() -> void:
 	_content.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_content)
 	_rank_label = _label("ComboRank")
+	_rank_label.add_theme_font_override("font", Style.DISPLAY_FONT)
 	_count_label = _label("ComboCount")
+	_count_label.add_theme_font_override("font", Style.DISPLAY_FONT)
 	_caption = _label("ComboCaption")
 	_caption.text = "COMBO"
 	_bonus_label = _label("ComboBonus")
@@ -219,9 +221,11 @@ func reset() -> void:
 
 func _fit_font(label: Label, region: Rect2, desired: float) -> void:
 	var pixels: int = maxi(1, floori(desired))
+	var font: Font = label.get_theme_font("font")
 	var room: Vector2 = (region.size - Vector2(4.0, 1.0) / _ui_scale).max(Vector2.ONE)
-	while pixels > 1 and (Style.HEADING_FONT.get_string_size(label.text,
-		HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x > room.x or Style.HEADING_FONT.get_height(pixels) > room.y):
+	while pixels > 1 and (maxf(font.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x,
+		Style.HEADING_FONT.get_string_size(label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x) > room.x
+		or maxf(font.get_height(pixels), Style.HEADING_FONT.get_height(pixels)) > room.y):
 		pixels -= 1
 	label.add_theme_font_size_override("font_size", pixels)
 	label.position = region.position

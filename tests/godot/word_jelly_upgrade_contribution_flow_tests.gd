@@ -263,7 +263,28 @@ func _run() -> void:
 		and unpaid.campaign.store.upgrade_state().funded.jelly == 0
 		and unpaid.campaign.store.upgrade_state().pending.is_empty(),
 		"Only the fresh resume gesture debits and commits the exact saved track and amount")
-	for fixture: Dictionary in [flow, resumed, poor, unpaid]:
+	# Test Golden Crown prestige coordinator flow when all three tracks are Lv9.
+	var prestige_host := Host.new()
+	var prestige_flow := setup(prestige_host)
+	check(prestige_flow.app.coin_wallet.credit_amount("fixture:prestige-coord", 20000).ok,
+		"Fund isolated prestige coordinator test")
+	for kind: String in ["jelly", "auto_merge", "star_charm"]:
+		for lv in range(2, 10):
+			check(prestige_flow.campaign.store.begin_upgrade(lv, kind), "Begin %s Lv%d" % [kind, lv])
+			var p: Dictionary = prestige_flow.campaign.store.upgrade_state().pending
+			check(prestige_flow.app.coin_wallet.spend(p.id, p.price).ok
+				and prestige_flow.campaign.store.complete_upgrade(lv, prestige_flow.app.coin_wallet, kind),
+				"Complete %s Lv%d" % [kind, lv])
+	prestige_flow.campaign.upgrades.configure(prestige_flow.campaign._upgrade_state())
+	var before_crown: int = prestige_flow.app.coin_wallet.balance
+	check(prestige_flow.campaign._upgrade_affordable() and prestige_flow.campaign.store.all_tracks_maxed(),
+		"Maxed campaign marks Golden Crown rank 1 affordable with sufficient coins")
+	prestige_flow.campaign.upgrades.prestige_requested.emit()
+	check(prestige_flow.campaign.store.prestige_rank() == 1
+		and prestige_flow.app.coin_wallet.balance == before_crown - 1000
+		and prestige_flow.campaign.upgrades.snapshot().prestige_rank == 1,
+		"Coordinator spends 1000 coins and persists Golden Crown rank 1")
+	for fixture: Dictionary in [flow, resumed, poor, unpaid, prestige_flow]:
 		fixture.app.queue_free()
 	await process_frame
 	print("Jelly contribution coordinator: %d checks, %d failures" % [checks, failures])

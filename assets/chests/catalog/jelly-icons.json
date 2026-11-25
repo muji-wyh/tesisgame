@@ -1,35 +1,35 @@
 {
-  "adapter": "ANGLE (Microsoft, Microsoft Basic Render Driver (0x0000008C) Direct3D11 vs_5_0 ps_5_0, D3D11-10.0.26100.9711)",
+  "adapter": "ANGLE (Microsoft, Microsoft Basic Render Driver (0x0000008C) Direct3D11 vs_5_0 ps_5_0, D3D11-10.0.26100.9818)",
   "crop_policy": "get_used_rect().grow(2).intersection(full_image_rect); no resize or postprocessing",
   "dependencies": [
     {
       "path": "assets/chests/catalog/atelier.json",
-      "sha256": "21d3884fd7c684f7323094be9a8719a40cc011a60067578941d21593fac80660",
+      "sha256": "ff5ed9994065bc5cbaaffc95499bc37a50ed1ba904dfd771a60fd7864ce57460",
       "text_sha256": "21d3884fd7c684f7323094be9a8719a40cc011a60067578941d21593fac80660"
     },
     {
       "path": "assets/chests/catalog/chest-levels.json",
-      "sha256": "2f6b351deb87da6e0490f857ac02a8ba482e1af4110f6cf29e3fcbbd09428a7f",
+      "sha256": "e56ac8ef77afb5487c1dbba2971c4e1be346f4b0af56a2baf8e6dc3b43a55608",
       "text_sha256": "2f6b351deb87da6e0490f857ac02a8ba482e1af4110f6cf29e3fcbbd09428a7f"
     },
     {
       "path": "assets/chests/catalog/chest-state-assets.json",
-      "sha256": "53133120473c5002d49c6a5befe1392cd9d4631f90efb7dfcf0441e6a8354078",
+      "sha256": "a8ed3a4ece64fbb25d6a58af7d943add053cdb2e33636de1cf025f17b7e2f357",
       "text_sha256": "53133120473c5002d49c6a5befe1392cd9d4631f90efb7dfcf0441e6a8354078"
     },
     {
       "path": "assets/chests/catalog/chest-states.json",
-      "sha256": "0344cbeeb517a7972d89c005dfca7996b821ce89f1f4ef29e94f2a3a42d0f7a5",
+      "sha256": "ad898f8da44fceb42d1d811787645ce14d02b54dab9dbbebacaad0be03903379",
       "text_sha256": "0344cbeeb517a7972d89c005dfca7996b821ce89f1f4ef29e94f2a3a42d0f7a5"
     },
     {
       "path": "assets/chests/catalog/gameplay-chests.json",
-      "sha256": "7202532d57ff243c0e555246f9d209969669ceb092ae1f72b1dd0ece3649e8ad",
+      "sha256": "60afd47fcd6afd00ead7df34b77df865bd63bec5f6136634243ad5353269826c",
       "text_sha256": "7202532d57ff243c0e555246f9d209969669ceb092ae1f72b1dd0ece3649e8ad"
     },
     {
       "path": "assets/chests/models/atelier/aegis-transit/aegis-transit-states.tscn",
-      "sha256": "2f7af0f028443af2b7b52b9c09846b67321aa166afe5f78e9fec90bc599b2342",
+      "sha256": "0cfd7b38284fc26d40813a5081f279be6a9906a918d9e4a49f572f8dcbbad4da",
       "text_sha256": "2f7af0f028443af2b7b52b9c09846b67321aa166afe5f78e9fec90bc599b2342"
     },
     {
@@ -84,7 +84,7 @@
     },
     {
       "path": "assets/chests/models/atelier/aether-vault/aether-vault-states.tscn",
-      "sha256": "37f5f313595c01f1ca21b6b555c96eb8eb81d11f21e703bf6a797cfff9b1c5bd",
+      "sha256": "4e53320c79ed52fa2619f4cf709889b9b1af9c7398ff3cd80b2232c71551d7f5",
       "text_sha256": "37f5f313595c01f1ca21b6b555c96eb8eb81d11f21e703bf6a797cfff9b1c5bd"
     },
     {
@@ -199,7 +199,7 @@
     },
     {
       "path": "assets/chests/models/atelier/cobalt-vault/cobalt-vault-states.tscn",
-      "sha256": "3ca899e7900d29f17a7c8d14d6106e49f3ec2347d094bb6e5d7b1f43a38aca01",
+      "sha256": "f006e975635dca1c28c443094d189b62be6c66156b6d2dedcd7b937554e491da",
       "text_sha256": "3ca899e7900d29f17a7c8d14d6106e49f3ec2347d094bb6e5d7b1f43a38aca01"
     },
     {
@@ -263,7 +263,7 @@
     },
     {
       "path": "assets/chests/models/atelier/cooper-star/cooper-star-states.tscn",
-      "sha256": "903f34b7972dc1f5f8167263a085f1483e11cd38ac6080a52734b0b86346e4c9",
+      "sha256": "a64006f97e5244b8bb177102a15781d7f37869cc1fdc0a7aad12e71367ca567a",
       "text_sha256": "903f34b7972dc1f5f8167263a085f1483e11cd38ac6080a52734b0b86346e4c9"
     },
     {
@@ -309,7 +309,7 @@
     },
     {
       "path": "assets/chests/models/atelier/crimson-citadel/crimson-citadel-states.tscn",
-      "sha256": "113ca9c213442cab02d41d09fbf444187e5c895a8cf678979de86b5a714dc35a",
+      "sha256": "f01a8511e9f523ec3ab152789e701dce2b9e6fd2937e88d19bba4e4a0644fd17",
       "text_sha256": "113ca9c213442cab02d41d09fbf444187e5c895a8cf678979de86b5a714dc35a"
     },
     {
@@ -373,7 +373,7 @@
     },
     {
       "path": "assets/chests/models/atelier/dungeon-keeper/dungeon-keeper-states.tscn",
-      "sha256": "e85e996b0e3e525bc6326147a7b2fb96d9f3ecac199e10cbbf563aa406c3bb6e",
+      "sha256": "b239f57f2fce2c76f7ff28e81bdb354d53a5f432a7b9e788a016e278aa31950d",
       "text_sha256": "e85e996b0e3e525bc6326147a7b2fb96d9f3ecac199e10cbbf563aa406c3bb6e"
     },
     {
@@ -419,7 +419,7 @@
     },
     {
       "path": "assets/chests/models/atelier/duskwatch-coffer/duskwatch-coffer-states.tscn",
-      "sha256": "b4db03ef7669286a849c0ccf4c90b703d231980ce8f3c1e1741b99506e21556a",
+      "sha256": "440452be29d91a4524ec6f8177c5477da9c27e646ee2cd08edf135d8705a0cea",
       "text_sha256": "b4db03ef7669286a849c0ccf4c90b703d231980ce8f3c1e1741b99506e21556a"
     },
     {
@@ -465,7 +465,7 @@
     },
     {
       "path": "assets/chests/models/atelier/frost-relay/frost-relay-states.tscn",
-      "sha256": "6cb374a2ab62cece7397d6036ec322800ba68bec8cb6cb1a3bbc2b6df78f5190",
+      "sha256": "c3528f9acbec99dd3669f3ddf31c70e9c7ee8ef6b21c7a3f22b9356bd52b14ac",
       "text_sha256": "6cb374a2ab62cece7397d6036ec322800ba68bec8cb6cb1a3bbc2b6df78f5190"
     },
     {
@@ -529,7 +529,7 @@
     },
     {
       "path": "assets/chests/models/atelier/gilded-waywatch/gilded-waywatch-states.tscn",
-      "sha256": "8f44d3d1992dc576f53b1f649b4e482c71086e1cbf879a9f43314933c164da6f",
+      "sha256": "1ecf076170e887992c70eb07205a46336cc295658589cb3b8809683741ef3407",
       "text_sha256": "8f44d3d1992dc576f53b1f649b4e482c71086e1cbf879a9f43314933c164da6f"
     },
     {
@@ -603,7 +603,7 @@
     },
     {
       "path": "assets/chests/models/atelier/ironbound-trail/ironbound-trail-states.tscn",
-      "sha256": "78e43a6e63f3da66f0ef2b7bda32e40d0a732421abbd884283a858f373e6d5eb",
+      "sha256": "2eb30c1c64357c39a147d446143471666e82548db13c867e1ad16ec7a07bcd6d",
       "text_sha256": "78e43a6e63f3da66f0ef2b7bda32e40d0a732421abbd884283a858f373e6d5eb"
     },
     {
@@ -649,7 +649,7 @@
     },
     {
       "path": "assets/chests/models/atelier/jade-reliquary/jade-reliquary-states.tscn",
-      "sha256": "eda6c37874dfebc2c9b5d7dd6358ae6e1a8cd3867634fa090005143da18a4764",
+      "sha256": "acde0baab024f2c9d8ea50d8939ff800f3fe8e46fedcc6dae0dce5d86e5d5e83",
       "text_sha256": "eda6c37874dfebc2c9b5d7dd6358ae6e1a8cd3867634fa090005143da18a4764"
     },
     {
@@ -805,7 +805,7 @@
     },
     {
       "path": "assets/chests/models/atelier/moonbound/moonbound-states.tscn",
-      "sha256": "19f3a26da56e80be971ed9f01be32da2ef4e6a358e49a385b4ca696a4b461f4b",
+      "sha256": "01ee60515f8c1e6504cf85587a761625e3a81a671e66e9085af58e844c42c421",
       "text_sha256": "19f3a26da56e80be971ed9f01be32da2ef4e6a358e49a385b4ca696a4b461f4b"
     },
     {
@@ -888,7 +888,7 @@
     },
     {
       "path": "assets/chests/models/atelier/nova-buddy/nova-buddy-states.tscn",
-      "sha256": "99ddc9ebb8ab650dd5ca7523bb4a9732a16584fe788dbdcfc72c3f69dc23f9e2",
+      "sha256": "b7d53f2307993ca5a7ee1bcccbc53e9c89e023cf055268359724acd7ab470e5a",
       "text_sha256": "99ddc9ebb8ab650dd5ca7523bb4a9732a16584fe788dbdcfc72c3f69dc23f9e2"
     },
     {
@@ -952,7 +952,7 @@
     },
     {
       "path": "assets/chests/models/atelier/prism-signal/prism-signal-states.tscn",
-      "sha256": "9c7f91c46a7a5bef5e539ad3bc09ecfd7de2b499e92be122a0bb966c5a8fcf01",
+      "sha256": "6d4e13650e8bc8a380a11107dedbf964594047f4d26879161589de5ea81f42dc",
       "text_sha256": "9c7f91c46a7a5bef5e539ad3bc09ecfd7de2b499e92be122a0bb966c5a8fcf01"
     },
     {
@@ -1016,7 +1016,7 @@
     },
     {
       "path": "assets/chests/models/atelier/regent-wings/regent-wings-states.tscn",
-      "sha256": "01934a9f1330d94499583a12367e015b8493b9c0a9bb89798046fe6fd4ba4546",
+      "sha256": "1829dc9444b50292f23eee36a48015c5db76c09962f126c2fdcce4d8d454a47c",
       "text_sha256": "01934a9f1330d94499583a12367e015b8493b9c0a9bb89798046fe6fd4ba4546"
     },
     {
@@ -1062,7 +1062,7 @@
     },
     {
       "path": "assets/chests/models/atelier/royal-rose/royal-rose-states.tscn",
-      "sha256": "a153efd0859f04c22dfb14900bb3a9a0a79b5d11fad6b7846b4e42113aaede68",
+      "sha256": "6f6c000646c5f941cb1c6b8f6c26ce643dd12582f7b623c65b69515f88421969",
       "text_sha256": "a153efd0859f04c22dfb14900bb3a9a0a79b5d11fad6b7846b4e42113aaede68"
     },
     {
@@ -1117,7 +1117,7 @@
     },
     {
       "path": "assets/chests/models/atelier/rune-sentinel/rune-sentinel-states.tscn",
-      "sha256": "817c8ec79794a4415d6add6641404fdf5f895925b72fd0c3987bdddc89e85b07",
+      "sha256": "25eda403a7bfe6bec860805c97a470f501707d1f14f55ff2a8cf5bf1d14ef4f3",
       "text_sha256": "817c8ec79794a4415d6add6641404fdf5f895925b72fd0c3987bdddc89e85b07"
     },
     {
@@ -1172,7 +1172,7 @@
     },
     {
       "path": "assets/chests/models/atelier/solar-relay/solar-relay-states.tscn",
-      "sha256": "6d1021ac4f4fc1180bd679625f1c19616add78dfa751d1d7d518765fc2f36752",
+      "sha256": "abc8780ce39972289bfb377172e9890f2b706aafbb1cb45b97b5f47113f3e21d",
       "text_sha256": "6d1021ac4f4fc1180bd679625f1c19616add78dfa751d1d7d518765fc2f36752"
     },
     {
@@ -1236,7 +1236,7 @@
     },
     {
       "path": "assets/chests/models/atelier/sunward/sunward-states.tscn",
-      "sha256": "d2b81607bc96a1a82bc2ecb6e517dd35f7d23b5611b55fe2a8bd724e2ea3b8a6",
+      "sha256": "8cd6595537755d116a797a69057c995132689c30a3797f87121520fed8aa5060",
       "text_sha256": "d2b81607bc96a1a82bc2ecb6e517dd35f7d23b5611b55fe2a8bd724e2ea3b8a6"
     },
     {
@@ -1291,7 +1291,7 @@
     },
     {
       "path": "assets/chests/models/atelier/tideguard/tideguard-states.tscn",
-      "sha256": "4d56b234a53ecf3a7faafc66e77f7008707102de8a0ce633a44213b762bdb2c1",
+      "sha256": "9d17adadf52612987d059e00a1180287ee563326560d5511caa4b01413612c07",
       "text_sha256": "4d56b234a53ecf3a7faafc66e77f7008707102de8a0ce633a44213b762bdb2c1"
     },
     {
@@ -1346,7 +1346,7 @@
     },
     {
       "path": "assets/chests/models/atelier/velvet-parcel/velvet-parcel-states.tscn",
-      "sha256": "542cb872c71fcebd45242d91cb743041b792bae746ada993b6822b57aba7edb3",
+      "sha256": "8eaadd8ae9fa6585070f0a11a6f5e06aec78f0e5249f1d30d58fc0908f1f4ab7",
       "text_sha256": "542cb872c71fcebd45242d91cb743041b792bae746ada993b6822b57aba7edb3"
     },
     {
@@ -1392,7 +1392,7 @@
     },
     {
       "path": "assets/chests/models/atelier/verdant-oath/verdant-oath-states.tscn",
-      "sha256": "99c8188b47995d4d57e72b90bf3d07ed8ea3b72246aa2e45d66b4cb19681d954",
+      "sha256": "0eca75adc1f4e0caa8a65c01d87c03667d215b61546d84642494c233db579dac",
       "text_sha256": "99c8188b47995d4d57e72b90bf3d07ed8ea3b72246aa2e45d66b4cb19681d954"
     },
     {
@@ -1447,7 +1447,7 @@
     },
     {
       "path": "assets/chests/models/atelier/wayfarer-oak/wayfarer-oak-states.tscn",
-      "sha256": "6cf3f64fa1f3d78f3a0e72a6f9d73113e9e2fddfe683740ca66994f3285e2ce9",
+      "sha256": "dd74e2029d1932414d4d1aebfd635fd1be412ee05c2ff28138d2ba2845107c37",
       "text_sha256": "6cf3f64fa1f3d78f3a0e72a6f9d73113e9e2fddfe683740ca66994f3285e2ce9"
     },
     {
@@ -1584,7 +1584,7 @@
     },
     {
       "path": "scripts/chest_asset_states.gd",
-      "sha256": "a605d73f33464c12b2881c5ee1ff0dec0316bddf5d9ece5447ebab2924c0b5bb",
+      "sha256": "97a8cd9640e9673fdadb0b35ce91ca66e799bc01184870f7ef4570af82d58d68",
       "text_sha256": "a605d73f33464c12b2881c5ee1ff0dec0316bddf5d9ece5447ebab2924c0b5bb"
     },
     {
@@ -1594,8 +1594,8 @@
     },
     {
       "path": "scripts/chest_model_view.gd",
-      "sha256": "4fbcdf68e3969438ea28a27055633e5afd51c883a0fa41b54c1faaa4c45a5f90",
-      "text_sha256": "894d53331f2855f3e8c80ce1793f5b5ee53b50456d1555497303fc68ed991b86"
+      "sha256": "6b9fe3e8cfa05368be394fc1d0c49e430cc59de0cd82daab9c6df5867c1c6523",
+      "text_sha256": "09ceba449841d92387146fbe8c9f8d4476ba7dcb7e850b3f2c164c839b29a94f"
     },
     {
       "path": "scripts/chest_opening_effect.gd",
@@ -1609,7 +1609,7 @@
     },
     {
       "path": "scripts/chest_surface.gdshader",
-      "sha256": "becc19716424f432b4e28fa6b2f30e7e4fddf3c9ed31547b1d1269540092aa69",
+      "sha256": "b61109aa2c04bc3997082e6450e9471d9091f0d20887b18a26324880639777dd",
       "text_sha256": "becc19716424f432b4e28fa6b2f30e7e4fddf3c9ed31547b1d1269540092aa69"
     },
     {
@@ -1619,8 +1619,8 @@
     },
     {
       "path": "scripts/chest_view.gd",
-      "sha256": "5c56563f1e8fd066122c325d74e9aa5ff0af29b97a3b650fce9f8aa294af297d",
-      "text_sha256": "c9dbed5d3ae57d40bba200a42d5af9d5528a37eef7f6b96d9759f917616aeb91"
+      "sha256": "520066029c3111d822635276b7155a1045abfae9ec61dae85befa1b6a26a06d1",
+      "text_sha256": "07c4a694705103fea59694c66b089637245795bf53ae65eae0f94930d3688290"
     },
     {
       "path": "scripts/game_data.gd",
@@ -1634,7 +1634,7 @@
     },
     {
       "path": "tools/render-jelly-chest-icons.gd",
-      "sha256": "a97f4bb11ffaf23bd2f1e4e28c41cd79a4f0475534d64a28f024c2bf959454e4",
+      "sha256": "75de91f7cccfecf5b6a9bb4e632b1d4194d3068eadeb49914904cba2b0091bc6",
       "text_sha256": "a97f4bb11ffaf23bd2f1e4e28c41cd79a4f0475534d64a28f024c2bf959454e4"
     }
   ],
@@ -1690,8 +1690,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/wayfarer-oak/closed-jelly.png",
-      "rgba_sha256": "102bc6461be69cdb1ff758d59c38cc7d73bb7efb1c8dc905b9145615befc103d",
-      "sha256": "e6abdcb67563368d0ef19653c33c65a3da5e984c3b6e44c0b51bbd985fc76843",
+      "rgba_sha256": "2700fc71d6a5400e20d11843779e01d223efe5a44ef384a0b8ed3110af4943b9",
+      "sha256": "4d65222086eb3c087a5c67e6a1b56b6d2f1f0ff55efbfb102db6a7d135a7a1fd",
       "source": {
         "creator": "Kenney",
         "file": "sources/kenney-survival/chest.glb",
@@ -2103,7 +2103,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/wayfarer-oak/wayfarer-oak-states.tscn",
-        "sha256": "6cf3f64fa1f3d78f3a0e72a6f9d73113e9e2fddfe683740ca66994f3285e2ce9",
+        "sha256": "dd74e2029d1932414d4d1aebfd635fd1be412ee05c2ff28138d2ba2845107c37",
         "text_sha256": "6cf3f64fa1f3d78f3a0e72a6f9d73113e9e2fddfe683740ca66994f3285e2ce9"
       },
       "theme": "jungle",
@@ -2153,8 +2153,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/ironbound-trail/closed-jelly.png",
-      "rgba_sha256": "00455cd328c83afdaad521d52954100ab6e8316f80e8afb9518e94b092c0308c",
-      "sha256": "f44a59f71f984ad8bfc6a8041587911cb88fa895705a68dede2b51053091df86",
+      "rgba_sha256": "a6beb70f990a8c16bd785a1501477e38b19f8adf75422cef7a50059b03c8e9fc",
+      "sha256": "436723e3627222daceeb19c0f295bbfe43a5cb480ad94ecdf3181436e2b27249",
       "source": {
         "creator": "Kenney",
         "file": "sources/kenney-platformer/chest.glb",
@@ -2566,7 +2566,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/ironbound-trail/ironbound-trail-states.tscn",
-        "sha256": "78e43a6e63f3da66f0ef2b7bda32e40d0a732421abbd884283a858f373e6d5eb",
+        "sha256": "2eb30c1c64357c39a147d446143471666e82548db13c867e1ad16ec7a07bcd6d",
         "text_sha256": "78e43a6e63f3da66f0ef2b7bda32e40d0a732421abbd884283a858f373e6d5eb"
       },
       "theme": "autumn",
@@ -2616,8 +2616,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/duskwatch-coffer/closed-jelly.png",
-      "rgba_sha256": "e92a7bacb91f690d74d2e0a3e2bc6cb11763cdd24a9e0d9448f33456509bcdd0",
-      "sha256": "3577fdb3fbf30e97b27c59fdd9baa9fd94052cba9bb9b05a93b559037330ad0c",
+      "rgba_sha256": "7ac825221ef0e90b66d9fb0e1bfc99b5605b1314caea4e244475a119852c0789",
+      "sha256": "d2cbe9635cd051878ff58992b09c324d1dccaa74c2bcc4cf7c4342f3d74c0168",
       "source": {
         "creator": "Kenney",
         "file": "sources/kenney-mini-dungeon/chest.glb",
@@ -3029,7 +3029,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/duskwatch-coffer/duskwatch-coffer-states.tscn",
-        "sha256": "b4db03ef7669286a849c0ccf4c90b703d231980ce8f3c1e1741b99506e21556a",
+        "sha256": "440452be29d91a4524ec6f8177c5477da9c27e646ee2cd08edf135d8705a0cea",
         "text_sha256": "b4db03ef7669286a849c0ccf4c90b703d231980ce8f3c1e1741b99506e21556a"
       },
       "theme": "ocean",
@@ -3079,8 +3079,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/dungeon-keeper/closed-jelly.png",
-      "rgba_sha256": "f8edb329a34f4b7a5c7cc487da8d7333aa7da10f01bdf65e308b0f9ecbfb52c5",
-      "sha256": "81404fcc3d3289ea6dad790426ec8d23ebb21ff96157018228932866a1cb3a61",
+      "rgba_sha256": "7e5186e8c587a04903cd210ba1b1b38aff1c7851923e5617fc7ee47ce216d755",
+      "sha256": "c375a2fc4c3cb8e1e92299242554252360d59871ea02eabddce7e1d89035a757",
       "source": {
         "creator": "Kay Lousberg",
         "file": "sources/kaykit-dungeon/chest.glb",
@@ -3492,7 +3492,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/dungeon-keeper/dungeon-keeper-states.tscn",
-        "sha256": "e85e996b0e3e525bc6326147a7b2fb96d9f3ecac199e10cbbf563aa406c3bb6e",
+        "sha256": "b239f57f2fce2c76f7ff28e81bdb354d53a5f432a7b9e788a016e278aa31950d",
         "text_sha256": "e85e996b0e3e525bc6326147a7b2fb96d9f3ecac199e10cbbf563aa406c3bb6e"
       },
       "theme": "space",
@@ -3542,8 +3542,8 @@
         704
       ],
       "path": "assets/chests/models/atelier/cooper-star/closed-jelly.png",
-      "rgba_sha256": "715d5c51f5cbdf45e2505aef92228aba0a123d71b20161dc14ba3c8023e99420",
-      "sha256": "01aa92ffe73515c53e598830cb557071472c526c26f9122283110f96ffee1fca",
+      "rgba_sha256": "52748de174925cb6cc9cd64394c156e35829865ee50b39286a53a1134e3def25",
+      "sha256": "49dcaba97496ff3f7575341e8babf3fe200e16e4d9803b3f6c1ecef8edecd3f8",
       "source": {
         "acquisition_status": "acquired-local-original-source; source preview and mesh inspected",
         "animations": [],
@@ -4093,7 +4093,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/cooper-star/cooper-star-states.tscn",
-        "sha256": "903f34b7972dc1f5f8167263a085f1483e11cd38ac6080a52734b0b86346e4c9",
+        "sha256": "a64006f97e5244b8bb177102a15781d7f37869cc1fdc0a7aad12e71367ca567a",
         "text_sha256": "903f34b7972dc1f5f8167263a085f1483e11cd38ac6080a52734b0b86346e4c9"
       },
       "theme": "spring",
@@ -4143,8 +4143,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/tideguard/closed-jelly.png",
-      "rgba_sha256": "dbde048d2a127f06ac1f6fdc737001edbd0901e9cbe50ad3c3ab16b9f964ebea",
-      "sha256": "23e63395186d6e198b352ff2051e4b28027380b4c3039a55d6e2cca25bd00545",
+      "rgba_sha256": "9ea59cdec3d5e9563cd6db2a13139f2f78f296c9e236fd8ebb7f6cffc2973851",
+      "sha256": "d54a1432e4e5221720032ec716879b58348af04c4006d2459ce47dbc3e41a97b",
       "source": {
         "creator": "Kay Lousberg",
         "license": "CC0-1.0",
@@ -4607,7 +4607,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/tideguard/tideguard-states.tscn",
-        "sha256": "4d56b234a53ecf3a7faafc66e77f7008707102de8a0ce633a44213b762bdb2c1",
+        "sha256": "9d17adadf52612987d059e00a1180287ee563326560d5511caa4b01413612c07",
         "text_sha256": "4d56b234a53ecf3a7faafc66e77f7008707102de8a0ce633a44213b762bdb2c1"
       },
       "theme": "winter",
@@ -4657,8 +4657,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/meadow-cabinet/closed-jelly.png",
-      "rgba_sha256": "a28ddaa0885d6df1538545c76fbc1d1814bd494938696fd841b49fcbcfd9c6a5",
-      "sha256": "0eab50d5954063def077555cf19d3dcffb67eb16a44a5c8a113929200f03cbf8",
+      "rgba_sha256": "da9eaa59d33cdfa5a48261ae0fae2fa9de9136183f997029ba52b9c9a23ba5e7",
+      "sha256": "d4f17a44acd7743dd1d4efca248871b9d17fc3b003a37dd7b4f1bccfa5e8d58d",
       "source": {
         "creator": "Ekrem C.",
         "license": "Unity Asset Store Standard EULA; private embedded game artwork only",
@@ -5128,8 +5128,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/sunward/closed-jelly.png",
-      "rgba_sha256": "5ab46eb55b4682065863be6873088138005af3c23afd090d1e821ec541bdc5f8",
-      "sha256": "378cfea47d4626d8bec30ea96706e543288eca49b66fdb1354cba2c312d9b988",
+      "rgba_sha256": "dd099b58f5b70649394cb1c4bd1ae54e4491d5eee3c6ced0fb399408f08fef56",
+      "sha256": "74309d19cfe95520e13ceda217e55c1d7b48a35af6b81cf658bab368a68b059c",
       "source": {
         "creator": "Kenney",
         "license": "CC0-1.0",
@@ -5594,7 +5594,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/sunward/sunward-states.tscn",
-        "sha256": "d2b81607bc96a1a82bc2ecb6e517dd35f7d23b5611b55fe2a8bd724e2ea3b8a6",
+        "sha256": "8cd6595537755d116a797a69057c995132689c30a3797f87121520fed8aa5060",
         "text_sha256": "d2b81607bc96a1a82bc2ecb6e517dd35f7d23b5611b55fe2a8bd724e2ea3b8a6"
       },
       "theme": "winter",
@@ -5644,8 +5644,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/harvest-strongbox/closed-jelly.png",
-      "rgba_sha256": "02f681cefd81a673de804ccdfa5bf5d24db88e94d631809646ecc6df77f65690",
-      "sha256": "9e00518e7d230616dacfe5ab92810e238a6c83fb1194cf5d4e374e1722667686",
+      "rgba_sha256": "df257b050e5b80d02f5656c0319ccfd21da54b6af7dc98c0db5b5dc95dab3b2b",
+      "sha256": "3bb2de254202fbd4196658e2209e6192d476d3288b1f77a6bd624da8f12d0602",
       "source": {
         "creator": "Batata Studio",
         "license": "Unity Asset Store Standard EULA; private embedded game artwork only",
@@ -6074,8 +6074,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/gilded-waywatch/closed-jelly.png",
-      "rgba_sha256": "438bb4f9a402885a21459b4f9e5bfb9c4cefd48142693a484253223bd8551bea",
-      "sha256": "d51361a316b58bfc624aae34ab033a597ca02cc08a0514287cf5b724f50f1d8f",
+      "rgba_sha256": "a8d6669a10b51b66829b906100d49d6543fdc9955e583a1f00ee763edd4418e9",
+      "sha256": "4e8aef5cf44253a7c658181918415d7618d39149f25cad3fffe2b8c1a7bb96c0",
       "source": {
         "creator": "Kenney",
         "file": "sources/kenney-platformer/chest.glb",
@@ -6640,7 +6640,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/gilded-waywatch/gilded-waywatch-states.tscn",
-        "sha256": "8f44d3d1992dc576f53b1f649b4e482c71086e1cbf879a9f43314933c164da6f",
+        "sha256": "1ecf076170e887992c70eb07205a46336cc295658589cb3b8809683741ef3407",
         "text_sha256": "8f44d3d1992dc576f53b1f649b4e482c71086e1cbf879a9f43314933c164da6f"
       },
       "theme": "winter",
@@ -6690,8 +6690,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/verdant-oath/closed-jelly.png",
-      "rgba_sha256": "93d4028b00bef0718b801b800464a8699fc9bfdd18672189efc6c7a1ceb3f97b",
-      "sha256": "3ae8741295c7858496e784cda50601f1c49efb0f119a961b03a04e74c786d8db",
+      "rgba_sha256": "cabbd9e16613f08fa50c9ddfb2f299ac74d069bac200d39f24971c63ed27667b",
+      "sha256": "f67fa32eed05dc895db6ec50ac92db5eb65286fa5926fe9d6c945eee504a273a",
       "source": {
         "creator": "Kenney",
         "file": "sources/kenney-survival/chest.glb",
@@ -7274,7 +7274,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/verdant-oath/verdant-oath-states.tscn",
-        "sha256": "99c8188b47995d4d57e72b90bf3d07ed8ea3b72246aa2e45d66b4cb19681d954",
+        "sha256": "0eca75adc1f4e0caa8a65c01d87c03667d215b61546d84642494c233db579dac",
         "text_sha256": "99c8188b47995d4d57e72b90bf3d07ed8ea3b72246aa2e45d66b4cb19681d954"
       },
       "theme": "winter",
@@ -7324,8 +7324,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/bonbon-keepsake/closed-jelly.png",
-      "rgba_sha256": "ec5280d98f13df9f20906cff06a812678f44cd4e121b29172279572a9c8e6487",
-      "sha256": "cdc80a14fea30566eea41d6e7683bbfbf385e85d996eb9ea9a1e8045d6b2fbac",
+      "rgba_sha256": "1763797966fbd38c45831aa05eebadef5f8af5000361d7992ca2906be3c09998",
+      "sha256": "bd13132b9a1efaa2699d6859cd4f93cdd1ff441092467694b7652aec933b168e",
       "source": {
         "creator": "Batata Studio",
         "license": "Unity Asset Store Standard EULA; private embedded game artwork only",
@@ -7795,8 +7795,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/velvet-parcel/closed-jelly.png",
-      "rgba_sha256": "7008ed147c2a300a82667b8894a821c89829511d6710eb09989fa702b36b7cca",
-      "sha256": "dc5a6232f29a72ac1695616c30bb2598ba2e84889d279bfd46f2242812fdcfb5",
+      "rgba_sha256": "d4d4f27d54f616110d426c91b93b89c64f3b9547b6cec99d8d1c037f6ee0145e",
+      "sha256": "bacb92a3ad6090794aec7eae54296a07bba731013b0ad48ced699eca911bd06b",
       "source": {
         "creator": "Kenney",
         "file": "sources/expansion/kenney-blaster/crate-wide.glb",
@@ -8321,7 +8321,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/velvet-parcel/velvet-parcel-states.tscn",
-        "sha256": "542cb872c71fcebd45242d91cb743041b792bae746ada993b6822b57aba7edb3",
+        "sha256": "8eaadd8ae9fa6585070f0a11a6f5e06aec78f0e5249f1d30d58fc0908f1f4ab7",
         "text_sha256": "542cb872c71fcebd45242d91cb743041b792bae746ada993b6822b57aba7edb3"
       },
       "theme": "winter",
@@ -8371,8 +8371,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/moonbound/closed-jelly.png",
-      "rgba_sha256": "7245826fd977c056069ffcea95e384490899f137937fbd60d3177bc2e29b8fe0",
-      "sha256": "28b2a5ebc76ef57666ab022b9862de1100eaacd324f8fe0d3045e7709adbdd19",
+      "rgba_sha256": "cf9fc5e88e6516afcc420e6a68ed026f3a3a9e97359bfd974830ca80277fecc5",
+      "sha256": "d4a5318e70ef77dbb213c5dda6ce5969f1f6d12c4fb7e189506feb5bbab6fe5f",
       "source": {
         "creator": "Kenney",
         "license": "CC0-1.0",
@@ -8859,7 +8859,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/moonbound/moonbound-states.tscn",
-        "sha256": "19f3a26da56e80be971ed9f01be32da2ef4e6a358e49a385b4ca696a4b461f4b",
+        "sha256": "01ee60515f8c1e6504cf85587a761625e3a81a671e66e9085af58e844c42c421",
         "text_sha256": "19f3a26da56e80be971ed9f01be32da2ef4e6a358e49a385b4ca696a4b461f4b"
       },
       "theme": "winter",
@@ -8909,8 +8909,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/royal-rose/closed-jelly.png",
-      "rgba_sha256": "16dccc20b5e8a7987cae12210dbae54962be6fc5ab9c7f7efe1dfec548aeea0b",
-      "sha256": "1c44fa5740873eef762c71708870f4697450b6bc3a7f0361721f8983dda912f2",
+      "rgba_sha256": "a548a5db712bd2542178a8cb8e6e999e990ee5494314029386786ae59c5af16f",
+      "sha256": "3582d54e29cdebb7345db8700a54d4d29f81e205fbb28652073e625e69a3529a",
       "source": {
         "creator": "Kenney",
         "license": "CC0-1.0",
@@ -9397,7 +9397,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/royal-rose/royal-rose-states.tscn",
-        "sha256": "a153efd0859f04c22dfb14900bb3a9a0a79b5d11fad6b7846b4e42113aaede68",
+        "sha256": "6f6c000646c5f941cb1c6b8f6c26ce643dd12582f7b623c65b69515f88421969",
         "text_sha256": "a153efd0859f04c22dfb14900bb3a9a0a79b5d11fad6b7846b4e42113aaede68"
       },
       "theme": "winter",
@@ -9447,8 +9447,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/lagoon-reliquary/closed-jelly.png",
-      "rgba_sha256": "09969d85a81e4d1ef7958b87a01e89588d735fee6cd5b544406b4672fac86dc9",
-      "sha256": "7f18be3ff93b59394178e6cbcf9aa786aaf58b9256efe49ab2faf03e11589c2d",
+      "rgba_sha256": "d0aab6b4ce86680a4877fee65e3fe748dd73d2a68e85ad8d923d58b79af099ad",
+      "sha256": "062018bf02d0722c67a38d5ccdfe526111f4f261299381bde86a814280e263e0",
       "source": {
         "creator": "Batata Studio",
         "license": "Unity Asset Store Standard EULA; private embedded game artwork only",
@@ -9918,8 +9918,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/moonstone-crown/closed-jelly.png",
-      "rgba_sha256": "9bfb21820adede1d932c7bf253a3efb3a6c26f1f63f43fea393c706bdc542a4a",
-      "sha256": "bed4cfb52db9c1c5948d660300e9ff319ac4c4c5a9922536bd940274d609623b",
+      "rgba_sha256": "2d311cd2918c9973cbb96658d086139ffb1db51b8f8a87d3aec4faa26f18f9c4",
+      "sha256": "d9d2a339e16dd804231fc88d873728334ce3cdcd2ecf321dee68730d0d40f56b",
       "source": {
         "creator": "Bobardo",
         "license": "Unity Asset Store Standard EULA; private embedded game artwork only",
@@ -10378,8 +10378,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/prism-signal/closed-jelly.png",
-      "rgba_sha256": "822169f7634470e48a821dea8c012370dd11bfec601dd3e378e4e2b897cfe0b1",
-      "sha256": "eeb7bcced8f045d5fc52801918b26755ae80acfee3ff3d7396d4ef63bcc01659",
+      "rgba_sha256": "dafb6501a69e6a43cf14f252a35872009a58a925d783fd1f896b99e2bd6dd063",
+      "sha256": "e99a337d1a37c6d87b93d3149ef0aed44f5d0bec3bf67a193f08759eed601a85",
       "source": {
         "creator": "Kenney",
         "license": "CC0-1.0",
@@ -10880,7 +10880,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/prism-signal/prism-signal-states.tscn",
-        "sha256": "9c7f91c46a7a5bef5e539ad3bc09ecfd7de2b499e92be122a0bb966c5a8fcf01",
+        "sha256": "6d4e13650e8bc8a380a11107dedbf964594047f4d26879161589de5ea81f42dc",
         "text_sha256": "9c7f91c46a7a5bef5e539ad3bc09ecfd7de2b499e92be122a0bb966c5a8fcf01"
       },
       "theme": "winter",
@@ -10930,8 +10930,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/aegis-transit/closed-jelly.png",
-      "rgba_sha256": "1a649996b310a84dee0a21689c45bff4027d0fee486a7523f0b9162667929677",
-      "sha256": "65628a9c1d1b7912674152e309ead95b2e78c51e139a33a5e880c7dd795a1b37",
+      "rgba_sha256": "96ec22bfc55978e669c72761df83e3ca7f7755f9d08da239907ccf5eb8984b26",
+      "sha256": "1260bac72b54fdb09917d8d767213cfda4997b8303734de595536f0cf0a35247",
       "source": {
         "acquisition_status": "acquired-local-original-source; source preview and mesh inspected",
         "animations": [
@@ -11490,7 +11490,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/aegis-transit/aegis-transit-states.tscn",
-        "sha256": "2f7af0f028443af2b7b52b9c09846b67321aa166afe5f78e9fec90bc599b2342",
+        "sha256": "0cfd7b38284fc26d40813a5081f279be6a9906a918d9e4a49f572f8dcbbad4da",
         "text_sha256": "2f7af0f028443af2b7b52b9c09846b67321aa166afe5f78e9fec90bc599b2342"
       },
       "theme": "winter",
@@ -11540,8 +11540,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/frost-relay/closed-jelly.png",
-      "rgba_sha256": "b9a6dccd29cd974983b68a0295547899f8f07504ba0778272ba676fa31caee66",
-      "sha256": "224f24ab4701ebdead9b964e2d28e858f19a0ae80760eb791b810275ef53403d",
+      "rgba_sha256": "5fed31869c5390f0be0e395756bd9d0c4be9239e2f874e32361421f0f76d3f2c",
+      "sha256": "5269a728aef76ba119bef9f46f14263ba29aeb5c731bf0a3e26f9f0243e8d6de",
       "source": {
         "creator": "Kenney",
         "license": "CC0-1.0",
@@ -12042,7 +12042,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/frost-relay/frost-relay-states.tscn",
-        "sha256": "6cb374a2ab62cece7397d6036ec322800ba68bec8cb6cb1a3bbc2b6df78f5190",
+        "sha256": "c3528f9acbec99dd3669f3ddf31c70e9c7ee8ef6b21c7a3f22b9356bd52b14ac",
         "text_sha256": "6cb374a2ab62cece7397d6036ec322800ba68bec8cb6cb1a3bbc2b6df78f5190"
       },
       "theme": "winter",
@@ -12092,8 +12092,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/solar-relay/closed-jelly.png",
-      "rgba_sha256": "48e338dc8f3de64b38c25ce904894b341f61e40f3ae93d6ecacfd03825d4556a",
-      "sha256": "17e495ebbf47d9306b43731d3d3c6582ccef5fd8de7f70031c1a9d29362536d3",
+      "rgba_sha256": "dbbd09320bbf3d00bcb296e6f1ba76229952e88a96692282cf42bbf53b114038",
+      "sha256": "86c240fd4fe7a046832442f669118db48023b4fe401c4b3e73084f46c22bf1ce",
       "source": {
         "creator": "Kenney",
         "license": "CC0-1.0",
@@ -12594,7 +12594,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/solar-relay/solar-relay-states.tscn",
-        "sha256": "6d1021ac4f4fc1180bd679625f1c19616add78dfa751d1d7d518765fc2f36752",
+        "sha256": "abc8780ce39972289bfb377172e9890f2b706aafbb1cb45b97b5f47113f3e21d",
         "text_sha256": "6d1021ac4f4fc1180bd679625f1c19616add78dfa751d1d7d518765fc2f36752"
       },
       "theme": "winter",
@@ -12644,8 +12644,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/nova-buddy/closed-jelly.png",
-      "rgba_sha256": "3141e13e93f99c6d71b89d4ef6e8751dd8910f0bef3d4dacbbf306258bd69717",
-      "sha256": "ace240557148e8b1376b23268f83f2405329c99b149df390864a542725b4b5d3",
+      "rgba_sha256": "ece7f51c26adede79e51fbbb338c969d8702c7bd94c7d00c6da0f68bba864422",
+      "sha256": "92d20eeb443e9a6de8fe2b32416cb28684350dd681428ced2d557bb12e238ce7",
       "source": {
         "creator": "Kenney",
         "license": "CC0-1.0",
@@ -13146,7 +13146,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/nova-buddy/nova-buddy-states.tscn",
-        "sha256": "99ddc9ebb8ab650dd5ca7523bb4a9732a16584fe788dbdcfc72c3f69dc23f9e2",
+        "sha256": "b7d53f2307993ca5a7ee1bcccbc53e9c89e023cf055268359724acd7ab470e5a",
         "text_sha256": "99ddc9ebb8ab650dd5ca7523bb4a9732a16584fe788dbdcfc72c3f69dc23f9e2"
       },
       "theme": "winter",
@@ -13196,8 +13196,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/jade-reliquary/closed-jelly.png",
-      "rgba_sha256": "c5ed7c8ffa2ebabfb6db26b7d8a7bf2353a2a5e164499071d44000b57f9abd01",
-      "sha256": "84e932e924de2adca0aad748b1cc1949831095b839d7dc3a74a8c2c894c51da1",
+      "rgba_sha256": "67533a2ac28aef61c849e720412063f01ac6da7173c4580cc5395665c19697ef",
+      "sha256": "6900102edbdc07d55d8c2a47de2bb4ac9d08ccf4548656238f3b4be42b1de95b",
       "source": {
         "creator": "Kenney",
         "license": "CC0-1.0",
@@ -13734,7 +13734,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/jade-reliquary/jade-reliquary-states.tscn",
-        "sha256": "eda6c37874dfebc2c9b5d7dd6358ae6e1a8cd3867634fa090005143da18a4764",
+        "sha256": "acde0baab024f2c9d8ea50d8939ff800f3fe8e46fedcc6dae0dce5d86e5d5e83",
         "text_sha256": "eda6c37874dfebc2c9b5d7dd6358ae6e1a8cd3867634fa090005143da18a4764"
       },
       "theme": "winter",
@@ -13784,8 +13784,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/crimson-citadel/closed-jelly.png",
-      "rgba_sha256": "3765bbb7556b4a2ec0bf7bd0a8b47210006259c02a7bd0a90b4c7b9e0f4953dd",
-      "sha256": "dc5bb9478b170f42e9677b7cd9eab250637d91baf27a6990b8c11bf2cee1cd17",
+      "rgba_sha256": "9f0d4d32dcc9aee43abc0c646bca4532a875c0cbcb945c04cb5df5664fc862f3",
+      "sha256": "4a38d1921792902859bac3454acf1a1594c22bbfea5c3dc6e88130621d0dee39",
       "source": {
         "creator": "Kenney",
         "license": "CC0-1.0",
@@ -14286,7 +14286,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/crimson-citadel/crimson-citadel-states.tscn",
-        "sha256": "113ca9c213442cab02d41d09fbf444187e5c895a8cf678979de86b5a714dc35a",
+        "sha256": "f01a8511e9f523ec3ab152789e701dce2b9e6fd2937e88d19bba4e4a0644fd17",
         "text_sha256": "113ca9c213442cab02d41d09fbf444187e5c895a8cf678979de86b5a714dc35a"
       },
       "theme": "winter",
@@ -14336,8 +14336,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/regent-wings/closed-jelly.png",
-      "rgba_sha256": "1e22b5dfc0a1389730a575ed4d1127550260e25903b1aacf3e677bd402193584",
-      "sha256": "d318d0540c3324eeabd713755a0064bc88135261fe879fa72da163520c048629",
+      "rgba_sha256": "46eebacb4e6c91d225a119a52b44d0b41d42d3f155e5f8125309ae43d4a7192c",
+      "sha256": "ec426f58c55e469bbbe51c972229d8275e9cadb59ded8559b6b1787414bb6769",
       "source": {
         "creator": "Kenney",
         "file": "sources/kenney-platformer/chest.glb",
@@ -14890,7 +14890,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/regent-wings/regent-wings-states.tscn",
-        "sha256": "01934a9f1330d94499583a12367e015b8493b9c0a9bb89798046fe6fd4ba4546",
+        "sha256": "1829dc9444b50292f23eee36a48015c5db76c09962f126c2fdcce4d8d454a47c",
         "text_sha256": "01934a9f1330d94499583a12367e015b8493b9c0a9bb89798046fe6fd4ba4546"
       },
       "theme": "winter",
@@ -14940,8 +14940,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/cobalt-vault/closed-jelly.png",
-      "rgba_sha256": "2f03575cd79069f62b8fcd4ce0575fc1fe9b366c601c115df55a8ea8947427e2",
-      "sha256": "b9aa6495394d76638291a52ca5bc4364f0bce3cd7d9d99df37daec2f01e1c4f0",
+      "rgba_sha256": "66510c8992356686692f808f8ab4fcf1c4ed2e7e6afa5ea15879b7e56c6b9b46",
+      "sha256": "7909b4a4bbc75bb80a5a403d36ef8572d378105382c8a96c7b8842f62f7bd868",
       "source": {
         "creator": "Kenney",
         "license": "CC0-1.0",
@@ -15478,7 +15478,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/cobalt-vault/cobalt-vault-states.tscn",
-        "sha256": "3ca899e7900d29f17a7c8d14d6106e49f3ec2347d094bb6e5d7b1f43a38aca01",
+        "sha256": "f006e975635dca1c28c443094d189b62be6c66156b6d2dedcd7b937554e491da",
         "text_sha256": "3ca899e7900d29f17a7c8d14d6106e49f3ec2347d094bb6e5d7b1f43a38aca01"
       },
       "theme": "winter",
@@ -15528,8 +15528,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/rune-sentinel/closed-jelly.png",
-      "rgba_sha256": "574edc11d5bb19810fa0b71a8d9176bff57ae78ba50338a781645a1026730273",
-      "sha256": "269a3c808b877760187afe1e5e5da3eaa79b4084615b3a2228311da1b2f15467",
+      "rgba_sha256": "399a04c089c8f2313080e511bf06fbac2e044d18cfd575ec8eb7c5acf81854f5",
+      "sha256": "70a3ee5fbdf828d84f18912b80de52b634c49747648149c7a3248c2fb9fe635d",
       "source": {
         "creator": "Kenney",
         "file": "sources/kenney-mini-dungeon/chest.glb",
@@ -16094,7 +16094,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/rune-sentinel/rune-sentinel-states.tscn",
-        "sha256": "817c8ec79794a4415d6add6641404fdf5f895925b72fd0c3987bdddc89e85b07",
+        "sha256": "25eda403a7bfe6bec860805c97a470f501707d1f14f55ff2a8cf5bf1d14ef4f3",
         "text_sha256": "817c8ec79794a4415d6add6641404fdf5f895925b72fd0c3987bdddc89e85b07"
       },
       "theme": "winter",
@@ -16144,8 +16144,8 @@
         640
       ],
       "path": "assets/chests/models/atelier/aether-vault/closed-jelly.png",
-      "rgba_sha256": "8323eb54c34e743d21f68c4f94521dc90f5457360117df413d43f52ac0422d91",
-      "sha256": "a26d1f0316b1828c4f4ed2bb56d0431e47640c3c67b93a46d73c92eba7cef7e6",
+      "rgba_sha256": "7a53aa7948c2a36da3587ea992db2950cf1462262c22c53f7018ec41a672ad62",
+      "sha256": "da4d12d7db20f62d74a53022d686933028a1d6b331f18a48671353f9c9a64776",
       "source": {
         "creator": "Kenney",
         "license": "CC0-1.0",
@@ -16682,7 +16682,7 @@
       },
       "state_scene": {
         "path": "assets/chests/models/atelier/aether-vault/aether-vault-states.tscn",
-        "sha256": "37f5f313595c01f1ca21b6b555c96eb8eb81d11f21e703bf6a797cfff9b1c5bd",
+        "sha256": "4e53320c79ed52fa2619f4cf709889b9b1af9c7398ff3cd80b2232c71551d7f5",
         "text_sha256": "37f5f313595c01f1ca21b6b555c96eb8eb81d11f21e703bf6a797cfff9b1c5bd"
       },
       "theme": "winter",

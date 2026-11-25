@@ -113,7 +113,7 @@ func test_frontier_pressure_refresh(app) -> void:
 		"Real campaign preparation tightens a cached frontier without changing its saved seed, words or goals")
 	check(coordinator.store.recipe("growth", 2).seconds == prepared.seconds
 		and coordinator.store.recipe("growth", 1) == original
-		and coordinator.store.best_stars("growth", 1) == 3 and app.coin_wallet.balance == 150,
+		and coordinator.store.best_stars("growth", 1) == 3 and app.coin_wallet.balance == 165,
 		"The returned harder plan is already durable and preserves the completed rating and exact wallet balance")
 	coordinator.starting = false
 	coordinator.selected_stage = 1
@@ -167,8 +167,8 @@ func test_retained_treasure_does_not_block_empty_clear(app) -> void:
 	var before: int = app.coin_wallet.balance
 	finish_live_stage(app)
 	check(app._campaign.map.visible and not room.has_pending()
-		and app.coin_wallet.balance == before + amount + 150,
-		"A no-new-chest clear settles retained treasure separately and returns to its map without weighting it again")
+		and app.coin_wallet.balance == before + amount + 76,
+		"A no-new-chest replay clear settles retained treasure separately and returns to its map without weighting it again")
 
 
 func test_home_confirmation_and_feedback(app) -> void:
@@ -522,9 +522,9 @@ func _run() -> void:
 	check(app._campaign.map.visible and app._campaign.store.highest_cleared("growth") == 1
 		and app._campaign.store.best_stars("growth", 1) == 3,
 		"An automatic completed settlement returns to the map and persists the best three-star clear")
-	check(app.coin_wallet.balance == 150 and app._coin_counter.target == 150
+	check(app.coin_wallet.balance == 165 and app._coin_counter.target == 165
 		and app._campaign.store.pending("growth").is_empty(),
-		"Three-star weighting pays one exact 150-coin first-stage bonus before unlocking")
+		"Three-star Pure Clear pays one exact 165-coin first-stage bonus before unlocking")
 	check(stage_presentations.any(func(state: Dictionary) -> bool: return state.get("phase") == "stars")
 		and stage_presentations.any(func(state: Dictionary) -> bool: return state.get("phase") == "bonus"),
 		"Settlement presents the earned stars sequentially and then animates their coin multiplier before wallet arrival")
@@ -542,8 +542,8 @@ func _run() -> void:
 	view.set_process(false)
 	view.game.stage_run.advance(view.game.stage_run.initial_seconds * 0.70)
 	finish_live_stage(app)
-	check(app._campaign.store.best_stars("growth", 1) == 3 and app.coin_wallet.balance == 225,
-		"A one-star replay pays its own exact reward without downgrading the saved three stars")
+	check(app._campaign.store.best_stars("growth", 1) == 3 and app.coin_wallet.balance == 203,
+		"A one-star replay pays its own 50%-base reward (38) without downgrading the saved three stars")
 	app._campaign.request_stage(1)
 	await settle()
 	view.set_process(false)
@@ -551,7 +551,7 @@ func _run() -> void:
 	app.coin_wallet._path = directory + "/missing/coins.cfg"
 	finish_live_stage(app)
 	check(app._campaign.settling and not app._campaign.error.is_empty()
-		and not app._campaign.store.pending("growth").is_empty() and app.coin_wallet.balance == 225,
+		and not app._campaign.store.pending("growth").is_empty() and app.coin_wallet.balance == 203,
 		"A failed star-bonus save retains the immutable settlement journal without claiming payment")
 	check(app._jelly_rewards._retry.is_visible_in_tree() and not app._jelly_rewards._retry.disabled
 		and app._valid_focus(app._jelly_rewards._retry)
@@ -570,11 +570,11 @@ func _run() -> void:
 	app._campaign.error = ""
 	app._campaign._result_draft.clear()
 	app._campaign.open_map()
-	check(app._campaign.map.visible and app.coin_wallet.balance == 375
+	check(app._campaign.map.visible and app.coin_wallet.balance == 279
 		and app._campaign.store.pending("growth").is_empty(),
-		"Opening the map after a lost coordinator recovers and pays the original pending result once")
+		"Opening the map after a lost coordinator recovers and pays the original pending replay result once")
 	app._campaign.open_map()
-	check(app.coin_wallet.balance == 375,
+	check(app.coin_wallet.balance == 279,
 		"Opening a recovered map again cannot repeat its star bonus")
 	check(app.growth.record_attempt("challenge-current-targets", ["cat", "dog", "duck"], false).save_ok,
 		"Leave the three visible learning targets outstanding independently of earlier clears")
@@ -648,7 +648,7 @@ func _run() -> void:
 		if app._campaign.map.visible:
 			break
 	check(app._campaign.map.visible and app._campaign.store.best_stars("growth", 1) == 3
-		and app.coin_wallet.balance == 375,
+		and app.coin_wallet.balance == 279,
 		"A paused pull settles the abandoned stage once without a clear bonus or lost best rating")
 	test_map_chest_retry(app)
 	await test_retained_treasure_does_not_block_empty_clear(app)

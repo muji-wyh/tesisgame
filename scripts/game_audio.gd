@@ -37,6 +37,13 @@ const FRAGMENT_ARRIVE_PATH := "res://assets/audio/fragments/arrive.wav"
 const FRAGMENT_CHANNELS := 4
 const FRAGMENT_GAIN := 0.45
 const FRAGMENT_MIN_INTERVAL_MS := 60
+const PENTATONIC_SCALE: Array[float] = [1.0, 1.122462, 1.259921, 1.498307, 1.681793, 2.0]
+const FRAGMENT_CHAIN_RESET_MS := 950
+const MUSIC_BUS_NAME := "Music"
+const MUSIC_LPF_OPEN_HZ := 20500.0
+const MUSIC_LPF_MUFFLED_HZ := 920.0
+const MUSIC_MUFFLED_DB := -3.5
+const MUSIC_CROSSFADE_SECONDS := 0.45
 const JELLY_PATHS := {
 	"pop": "res://assets/audio/jelly-match/collect-pop.wav",
 	"jelly-collect-lv2": "res://assets/audio/jelly-match/collect-lv2.wav",
@@ -123,6 +130,12 @@ const CHEST_EVENT_CHANNELS := 3
 signal status_changed(message: String)
 
 var music: AudioStreamPlayer
+var _music_fade: AudioStreamPlayer
+var _music_crossfade_elapsed: float = MUSIC_CROSSFADE_SECONDS
+var _music_muffled: bool = false
+var _music_muffle_blend: float = 0.0
+var _music_bus_index: int = -1
+var _music_lpf: AudioEffectLowPassFilter
 var effect: AudioStreamPlayer
 var round_end: AudioStreamPlayer
 var voice: AudioStreamPlayer
@@ -186,6 +199,8 @@ var _upgrade_charge_time := 0.0
 var _fragment_players: Array[AudioStreamPlayer] = []
 var _fragment_next_player: int = 0
 var _fragment_last_ms: Dictionary = {}
+var _fragment_chain_step: int = 0
+var _fragment_chain_ms: int = 0
 
 
 func _ready() -> void:
@@ -229,7 +244,12 @@ func _ready() -> void:
 	_stream(UPGRADE_CHARGE_PATH, true)
 	_stream(FRAGMENT_APPEAR_PATH)
 	_stream(FRAGMENT_ARRIVE_PATH)
+	_setup_music_bus()
 	music = _player(0.12)
+	_music_fade = _player(0.0001)
+	if _music_bus_index >= 0:
+		music.bus = MUSIC_BUS_NAME
+		_music_fade.bus = MUSIC_BUS_NAME
 	effect = _player(0.24)
 	round_end = _player(0.55)
 	for path: String in ROUND_END_PATHS.values():
@@ -238,6 +258,65 @@ func _ready() -> void:
 	voice.finished.connect(_voice_finished)
 	if OS.has_feature("web"):
 		available = bool(JavaScriptBridge.eval("Boolean(window.AudioContext || window.webkitAudioContext)"))
+
+
+func _setup_music_bus() -> void:
+	_music_bus_index = AudioServer.get_bus_index(MUSIC_BUS_NAME)
+	if _music_bus_index < 0:
+		_music_bus_index = AudioServer.bus_count
+		AudioServer.add_bus(_music_bus_index)
+		AudioServer.set_bus_name(_music_bus_index, MUSIC_BUS_NAME)
+		AudioServer.set_bus_send(_music_bus_index, &"Master")
+	for index in range(AudioServer.get_bus_effect_count(_music_bus_index)):
+		var existing: AudioEffect = AudioServer.get_bus_effect(_music_bus_index, index)
+		if existing is AudioEffectLowPassFilter:
+			_music_lpf = existing
+			break
+	if _music_lpf == null:
+		_music_lpf = AudioEffectLowPassFilter.new()
+		_music_lpf.cutoff_hz = MUSIC_LPF_OPEN_HZ
+		_music_lpf.resonance = 0.5
+		AudioServer.add_bus_effect(_music_bus_index, _music_lpf)
+	_apply_music_filter()
+
+
+func _teardown_music_bus() -> void:
+	_music_lpf = null
+	if _music_bus_index >= 0 and _music_bus_index < AudioServer.bus_count \
+		and AudioServer.get_bus_name(_music_bus_index) == MUSIC_BUS_NAME:
+		AudioServer.remove_bus(_music_bus_index)
+	_music_bus_index = -1
+
+
+func _apply_music_filter() -> void:
+	if _music_bus_index < 0 or _music_bus_index >= AudioServer.bus_count:
+		return
+	var blend: float = clampf(_music_muffle_blend, 0.0, 1.0)
+	if _music_lpf != null:
+		# Perceptually smooth logarithmic sweep between 20.5 kHz (open) and 920 Hz (under-blanket pause).
+		var open_log: float = log(MUSIC_LPF_OPEN_HZ)
+		var muffled_log: float = log(MUSIC_LPF_MUFFLED_HZ)
+		_music_lpf.cutoff_hz = exp(lerpf(open_log, muffled_log, blend))
+	AudioServer.set_bus_volume_db(_music_bus_index, MUSIC_MUFFLED_DB * blend)
+
+
+func set_music_muffled(enabled: bool, immediate: bool = false) -> void:
+	_music_muffled = enabled
+	if immediate:
+		_music_muffle_blend = 1.0 if enabled else 0.0
+		_apply_music_filter()
+		return
+	var target: float = 1.0 if enabled else 0.0
+	if not is_equal_approx(_music_muffle_blend, target):
+		set_process(true)
+
+
+func music_muffled() -> bool:
+	return _music_muffled
+
+
+func music_lpf_cutoff() -> float:
+	return _music_lpf.cutoff_hz if _music_lpf != null else MUSIC_LPF_OPEN_HZ
 
 
 func _player(gain: float) -> AudioStreamPlayer:
@@ -262,6 +341,17 @@ func interact(theme_id: String, play_music: bool = true) -> void:
 		return
 	if current_theme == theme_id and music.playing and not _music_error:
 		return
+	var previous_stream: AudioStream = music.stream if music != null and music.playing and not current_theme.is_empty() and current_theme != theme_id else null
+	var previous_pos: float = music.get_playback_position() if previous_stream != null else 0.0
+	if previous_stream != null and _music_fade != null:
+		_music_fade.stop()
+		_music_fade.stream = previous_stream
+		_music_fade.volume_db = music.volume_db
+		_music_fade.play(previous_pos)
+		_music_crossfade_elapsed = 0.0
+		set_process(true)
+	else:
+		_stop_music_fade()
 	current_theme = theme_id
 	_play(music, "res://assets/audio/bgm/" + theme_id + ".wav", true)
 
@@ -401,6 +491,15 @@ func _play_fragment(path: String) -> void:
 	# Group simultaneous fragments without stealing merges, warning beats or coins.
 	var player: AudioStreamPlayer = _fragment_players[_fragment_next_player]
 	_fragment_next_player = (_fragment_next_player + 1) % FRAGMENT_CHANNELS
+	if path == FRAGMENT_ARRIVE_PATH:
+		if now - _fragment_chain_ms > FRAGMENT_CHAIN_RESET_MS:
+			_fragment_chain_step = 0
+		var note_index: int = mini(_fragment_chain_step, PENTATONIC_SCALE.size() - 1)
+		player.pitch_scale = PENTATONIC_SCALE[note_index]
+		_fragment_chain_step += 1
+		_fragment_chain_ms = now
+	else:
+		player.pitch_scale = 1.0
 	_update_fragment_gain()
 	_play(player, path)
 	set_process(true)
@@ -410,8 +509,11 @@ func stop_fragment_sounds() -> void:
 	for player: AudioStreamPlayer in _fragment_players:
 		_stop(player)
 		player.stream = null
+		player.pitch_scale = 1.0
 	_fragment_next_player = 0
 	_fragment_last_ms.clear()
+	_fragment_chain_step = 0
+	_fragment_chain_ms = 0
 
 
 func _update_fragment_gain() -> void:
@@ -689,6 +791,14 @@ func _update_round_celebration_gain() -> void:
 
 
 func _process(delta: float) -> void:
+	var step: float = clampf(delta, 0.0, 0.05) if is_finite(delta) and delta > 0.0 else 0.0
+	var muffle_target: float = 1.0 if _music_muffled else 0.0
+	var muffle_moving: bool = not is_equal_approx(_music_muffle_blend, muffle_target)
+	if muffle_moving and step > 0.0:
+		var rate: float = 1.0 / (0.26 if _music_muffled else 0.32)
+		_music_muffle_blend = move_toward(_music_muffle_blend, muffle_target, step * rate)
+		_apply_music_filter()
+		muffle_moving = not is_equal_approx(_music_muffle_blend, muffle_target)
 	if muted or not active or not available:
 		stop_round_celebration()
 		stop_pair_chest_discovery()
@@ -696,8 +806,11 @@ func _process(delta: float) -> void:
 		stop_upgrade_milestone()
 		stop_upgrade_charge()
 		stop_coin_sounds()
-		set_process(false)
+		_stop_music_fade()
+		if not muffle_moving:
+			set_process(false)
 		return
+	var crossfading: bool = _advance_music_crossfade(step)
 	var jelly_playing: bool = (pair_chest_discovery != null and pair_chest_discovery.playing) \
 		or (upgrade_milestone != null and upgrade_milestone.playing) or _upgrade_charging \
 		or (upgrade_charge != null and upgrade_charge.playing)
@@ -713,11 +826,36 @@ func _process(delta: float) -> void:
 	for player: AudioStreamPlayer in _fragment_players:
 		fragment_playing = fragment_playing or player.playing
 	_update_fragment_gain()
-	if _round_celebration_id.is_empty() and not jelly_playing and not coin_playing and not fragment_playing:
+	if _round_celebration_id.is_empty() and not jelly_playing and not coin_playing and not fragment_playing \
+		and not crossfading and not muffle_moving:
 		set_process(false)
 		return
 	# Actual playback, including a natural word ending, controls the cue mix.
 	_update_round_celebration_gain()
+
+
+func _advance_music_crossfade(step: float) -> bool:
+	if _music_fade == null or not _music_fade.playing:
+		_music_crossfade_elapsed = MUSIC_CROSSFADE_SECONDS
+		return false
+	_music_crossfade_elapsed = minf(MUSIC_CROSSFADE_SECONDS, _music_crossfade_elapsed + step)
+	var p: float = clampf(_music_crossfade_elapsed / MUSIC_CROSSFADE_SECONDS, 0.0, 1.0)
+	if p >= 1.0:
+		_stop_music_fade()
+		_update_music_gain()
+		return false
+	var target_linear: float = _target_music_linear()
+	_music_fade.volume_db = linear_to_db(maxf(0.0001, target_linear * (1.0 - p)))
+	if music != null and music.playing:
+		music.volume_db = linear_to_db(maxf(0.0001, target_linear * p))
+	return true
+
+
+func _stop_music_fade() -> void:
+	_music_crossfade_elapsed = MUSIC_CROSSFADE_SECONDS
+	if _music_fade != null:
+		_music_fade.stop()
+		_music_fade.stream = null
 
 
 func last_pop_player() -> AudioStreamPlayer:
@@ -1140,11 +1278,22 @@ func _voice_finished() -> void:
 	_update_music_gain()
 
 
+func _target_music_linear() -> float:
+	var speaking: bool = voice != null and voice.playing
+	var celebration_scale: float = db_to_linear(ROUND_CELEBRATION_MUSIC_DB) if not _round_celebration_id.is_empty() else 1.0
+	return (0.04 if speaking else 0.12) * _chest_music_duck * celebration_scale
+
+
 func _update_music_gain() -> void:
 	if music != null:
 		var speaking: bool = voice != null and voice.playing
 		var celebration_db: float = ROUND_CELEBRATION_MUSIC_DB if not _round_celebration_id.is_empty() else 0.0
-		music.volume_db = linear_to_db((0.04 if speaking else 0.12) * _chest_music_duck) + celebration_db
+		var base_db: float = linear_to_db((0.04 if speaking else 0.12) * _chest_music_duck) + celebration_db
+		if _music_fade != null and _music_fade.playing and _music_crossfade_elapsed < MUSIC_CROSSFADE_SECONDS:
+			var p: float = clampf(_music_crossfade_elapsed / MUSIC_CROSSFADE_SECONDS, 0.0, 1.0)
+			music.volume_db = linear_to_db(maxf(0.0001, db_to_linear(base_db) * maxf(0.05, p)))
+		else:
+			music.volume_db = base_db
 	_update_round_celebration_gain()
 	_update_coin_gain()
 	_update_fragment_gain()
@@ -1160,6 +1309,7 @@ func set_muted(value: bool) -> void:
 
 func stop_music() -> void:
 	current_theme = ""
+	_stop_music_fade()
 	_stop(music)
 
 
@@ -1192,4 +1342,10 @@ func halt(keep_pair_feedback: bool = false) -> void:
 
 func _exit_tree() -> void:
 	stop_ui_click()
+	set_music_muffled(false, true)
 	halt()
+	if music != null:
+		music.bus = &"Master"
+	if _music_fade != null:
+		_music_fade.bus = &"Master"
+	_teardown_music_bus()

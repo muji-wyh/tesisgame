@@ -340,11 +340,11 @@ func test_family_payment_lifecycle() -> void:
 		check(model.activate_powerup("family_merge", int(root.id)),
 			"Each selected-family repeat pays its own exact capped use tier")
 		drain(model)
-		check(f.payments.back().price == prices[index] and model.powerup_price("auto_merge") == 25
+		check(f.payments.back().price == prices[index] and model.powerup_price("auto_merge") == 50
 			and model.auto_merge_level == 1 and model.powerup_price("fragments") == 0,
 			"A family purchase changes neither Auto merge prices nor capacity and cannot restore retired tools")
 	check(model.configure([cat, dog], 3, 92) and model.powerup_price("family_merge") == 25
-		and model.powerup_price("auto_merge") == 25 and model.snapshot().powerup_uses.family_merge == 0,
+		and model.powerup_price("auto_merge") == 50 and model.snapshot().powerup_uses.family_merge == 0,
 		"A new round resets the selected-family use counter and its capped quote")
 	model.purchase_powerup = Callable()
 

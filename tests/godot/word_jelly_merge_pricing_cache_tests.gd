@@ -117,8 +117,9 @@ func _test_simple_parity() -> void:
 		check(preview == timeline_preview(model),
 			"Simple mixed-family, mixed-level paths preserve actual input order, result count and board reduction at Lv%d" % owned_level)
 		check(gameplay_state(model) == before, "Neither forecasting route changes the live board, vocabulary or random streams")
-		check(model.powerup_price("auto_merge") == 25,
-			"The displayed first-use quote stays fixed across capacities and forecast quantities")
+		var expected_price: int = 25 if owned_level >= 6 else 50
+		check(model.powerup_price("auto_merge") == expected_price,
+			"The displayed first-use quote reflects the Lv6+ discount without forecasting quantities")
 		check(model.simple_calls == 1 and model.timeline_calls == 1,
 			"Reading the price never requests another semantic preview or simulated timeline")
 
@@ -135,12 +136,12 @@ func _test_price_and_preview_reuse() -> void:
 		effects.append("wallet")
 		return {"ok": true}
 	var before: Dictionary = gameplay_state(model)
-	check(model.powerup_price("auto_merge") == 25 and model.preview_calls == 0
+	check(model.powerup_price("auto_merge") == 50 and model.preview_calls == 0
 		and model.simple_calls == 0 and model.timeline_calls == 0,
 		"A visible fixed price does not request or warm the pointer preview")
 	var expected: Dictionary = model.auto_merge_preview()
 	for query in range(30):
-		check(model.auto_merge_preview() == expected and model.powerup_price("auto_merge") == 25,
+		check(model.auto_merge_preview() == expected and model.powerup_price("auto_merge") == 50,
 			"Pointer-preview consumers retain one legal result while price refreshes stay independent")
 	check(effects.is_empty() and gameplay_state(model) == before,
 		"Price and hover queries cannot spend, emit audio or feedback, consume RNG, allocate gameplay IDs or change live state")
@@ -150,11 +151,11 @@ func _test_price_and_preview_reuse() -> void:
 	check(model.simple_calls == 1 and model.timeline_calls == 0, "Stable repeated consumers perform no additional path search")
 	for frame in range(30):
 		model.step(1.0 / 60.0)
-		check(model.powerup_price("auto_merge") == 25 and model.auto_merge_preview() == expected,
+		check(model.powerup_price("auto_merge") == 50 and model.auto_merge_preview() == expected,
 			"Actual settled idle time retains the exact quote and pointer-preview set")
 	check(model.simple_calls == 1 and model.timeline_calls == 0, "Idle age never invalidates the common-case pointer-preview cache")
 	model.set_paused(true)
-	check(model.auto_merge_preview().input_ids.is_empty() and model.powerup_price("auto_merge") == 25,
+	check(model.auto_merge_preview().input_ids.is_empty() and model.powerup_price("auto_merge") == 50,
 		"Pause hides actionable targets while retaining the fixed per-use quote")
 	model.set_paused(false)
 	check(model.auto_merge_preview() == expected and model.simple_calls == 1,
@@ -166,23 +167,23 @@ func _test_rule_and_status_invalidation() -> void:
 	var model := fixture()
 	for index in range(12):
 		merged(model, words[0], 1)
-	check(model.powerup_price("auto_merge") == 25 and model.auto_merge_preview().result_count == 3,
-		"A simple board has three previewed outputs at the fixed first-use price")
+	check(model.powerup_price("auto_merge") == 50 and model.auto_merge_preview().result_count == 3,
+		"A simple board has three previewed outputs at the fixed Lv1 first-use price")
 	model.auto_merge_level = 4
-	check(model.powerup_price("auto_merge") == 25 and model.simple_calls == 1,
-		"Increasing owned capacity leaves the fixed price independent from the preview cache")
+	check(model.powerup_price("auto_merge") == 50 and model.simple_calls == 1,
+		"Increasing owned capacity below Lv6 leaves the fixed price independent from the preview cache")
 	check(model.auto_merge_preview().result_count == 6 and model.simple_calls == 2,
 		"Increasing owned capacity still refreshes the semantic preview to six real paths")
 	model.merged_level_limit = 1
 	check(model.auto_merge_preview().result_count == 0 and model.simple_calls == 3,
 		"Changing the merged-level cap removes newly ineligible inputs from the cached operation")
 	model.merged_level_limit = 9
-	check(model.auto_merge_preview().result_count == 6 and model.powerup_price("auto_merge") == 25
+	check(model.auto_merge_preview().result_count == 6 and model.powerup_price("auto_merge") == 50
 		and model.simple_calls == 4,
 		"Restoring the cap restores the complete preview without changing the use-tier price")
 	model.boss.configure(BossCatalog.encounter(7), 71)
 	model.boss.apply_status("freeze", int(model.cells[0].id))
-	check(model.auto_merge_preview().result_count == 5 and model.powerup_price("auto_merge") == 25
+	check(model.auto_merge_preview().result_count == 5 and model.powerup_price("auto_merge") == 50
 		and model.simple_calls == 5,
 		"A new frozen input reduces the semantic preview while leaving the fixed price unchanged")
 	model.boss.apply_status("lock", int(model.cells[1].id))
@@ -202,7 +203,7 @@ func _test_airborne_and_large_fallback() -> void:
 	var model := fixture()
 	for index in range(5):
 		pair(model, words[0])
-	check(model.powerup_price("auto_merge") == 25 and model.auto_merge_preview().result_count == 3,
+	check(model.powerup_price("auto_merge") == 50 and model.auto_merge_preview().result_count == 3,
 		"The airborne fixture begins with an explicit settled preview and an independent fixed quote")
 	var incoming: Dictionary = model.cells[0]
 	incoming.arrival = true
@@ -250,13 +251,14 @@ func _test_partial_morphology_fallback() -> void:
 	var preview: Dictionary = model.auto_merge_preview()
 	check(model.timeline_calls == 1 and preview.result_count == 3 and preview.reduction_count == 6,
 		"Partial spellings retain the accurate full timeline and count all six net joins")
-	check(preview == timeline_preview(model) and model.powerup_price("auto_merge") == 25,
+	check(preview == timeline_preview(model) and model.powerup_price("auto_merge") == 50,
 		"The multipart fallback preserves the original inputs without changing the fixed first-use debit")
 
 
 func _test_moving_prices_and_snapshots() -> void:
 	for owned_level: int in [1, 9]:
 		var model := fixture(owned_level)
+		var expected_auto: int = 25 if owned_level >= 6 else 50
 		for index in range(6):
 			pair(model, words[index % words.size()])
 		for index in range(model.cells.size()):
@@ -272,12 +274,12 @@ func _test_moving_prices_and_snapshots() -> void:
 		for frame in range(24):
 			model.step(1.0 / 60.0)
 			var before: Dictionary = gameplay_state(model)
-			check(model.powerup_price("auto_merge") == 25
+			check(model.powerup_price("auto_merge") == expected_auto
 				and model.powerup_price("family_merge", "cat") == 25
 				and model.powerup_price("family_merge", "dog") == 25,
 				"Changing arrival ages never changes either tool's first-use price")
 			var state: Dictionary = model.snapshot()
-			check(state.powerup_prices.auto_merge == 25 and state.powerup_prices.family_merge == 25
+			check(state.powerup_prices.auto_merge == expected_auto and state.powerup_prices.family_merge == 25
 				and state.powerup_uses.auto_merge == 0 and state.powerup_uses.family_merge == 0,
 				"The ordinary full snapshot exposes both fixed quotes and untouched successful-use counters")
 			check(model.preview_calls == 0 and model.simple_calls == 0 and model.timeline_calls == 0
@@ -291,7 +293,7 @@ func _test_moving_prices_and_snapshots() -> void:
 			"An explicit airborne hover preview still predicts the actual legal captured paths")
 		var forecasts: int = model.timeline_calls
 		var previews: int = model.preview_calls
-		check(model.powerup_price("auto_merge") == 25 and model.snapshot().powerup_prices.auto_merge == 25
+		check(model.powerup_price("auto_merge") == expected_auto and model.snapshot().powerup_prices.auto_merge == expected_auto
 			and model.timeline_calls == forecasts and model.preview_calls == previews,
 			"Reading prices after hover remains independent from the semantic preview and its cache")
 
@@ -327,9 +329,10 @@ func _test_successful_use_prices() -> void:
 			"The payment callback validates the exact captured use-tier quote")
 		payments.append(price)
 		return {"ok": true}
-	var prices: Array[int] = [25, 50, 75, 75]
 	var capacities: Array[int] = [1, 9, 3, 7]
 	var pairs: Array[int] = [1, 5, 2, 7]
+	var prices: Array[int] = [50, 75, 150, 125]
+	var next_prices: Array[int] = [100, 125, 150, 125]
 	for index in range(prices.size()):
 		model.cells.clear()
 		model._growth_pending = false
@@ -340,22 +343,22 @@ func _test_successful_use_prices() -> void:
 		var before_count: int = model.cells.size()
 		check(model.powerup_price("auto_merge") == prices[index]
 			and model.powerup_price("family_merge", "cat") == 25,
-			"Only prior Auto Merge successes determine its quote across different owned levels and quantities")
+			"Prior Auto Merge successes and Lv6+ discount determine its quote without forecasting quantities")
 		check(model.activate_powerup("auto_merge"),
 			"A legal Auto Merge activates without any preceding hover preview or quantity quote")
 		model.finish_powerup()
 		check(not model.powerup_active() and model.error.is_empty() and model.cells.size() < before_count
 			and payments.size() == index + 1 and payments.back() == prices[index]
 			and model._powerup_uses.auto_merge == index + 1
-			and model.powerup_price("auto_merge") == prices[mini(index + 1, prices.size() - 1)]
+			and model.powerup_price("auto_merge") == next_prices[index]
 			and model.powerup_price("family_merge") == 25,
-			"One paid useful operation advances only its own counter once and caps the next quote at 75 coins")
+			"One paid useful operation advances only its own counter once and caps the next quote")
 		model.cells.clear()
 		put(model, model._new_word_root(words[0]))
 		check(not model.activate_powerup("auto_merge") and payments.size() == index + 1
 			and model._powerup_uses.auto_merge == index + 1,
 			"A later empty operation cannot advance an established successful-use tier")
-	check(model.configure(words, 3, 95104) and model.powerup_price("auto_merge") == 25
+	check(model.configure(words, 3, 95104) and model.powerup_price("auto_merge") == 50
 		and model.powerup_price("family_merge") == 25 and model._powerup_uses.auto_merge == 0,
 		"Configuring a new round resets the successful Auto Merge counter and both first-use quotes")
 	model.purchase_powerup = Callable()

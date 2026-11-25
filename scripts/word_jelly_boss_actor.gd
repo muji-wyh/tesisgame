@@ -19,6 +19,12 @@ var _world := Node3D.new()
 var _rig := Node3D.new()
 var _camera := Camera3D.new()
 var _pirate := Pirate.new()
+var _environment: Environment
+var _key_light: DirectionalLight3D
+var _fill_light: DirectionalLight3D
+const BASE_KEY_LIGHT := Color("#fff0d1")
+const BASE_AMBIENT_LIGHT := Color("#e0edff")
+const BASE_FILL_LIGHT := Color("#d9e8ff")
 # These aliases retain the viewport's inspection API without inventing a skeleton.
 var _model: Node3D
 var _player: AnimationPlayer
@@ -56,21 +62,43 @@ func _init() -> void:
 	_camera.far = 100.0
 	_camera.current = true
 	var studio := WorldEnvironment.new()
-	var environment := Environment.new()
-	environment.background_mode = Environment.BG_CLEAR_COLOR
-	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	environment.ambient_light_color = Color("#e0edff")
-	environment.ambient_light_energy = 0.65
-	studio.environment = environment
+	_environment = Environment.new()
+	_environment.background_mode = Environment.BG_CLEAR_COLOR
+	_environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	_environment.ambient_light_color = BASE_AMBIENT_LIGHT
+	_environment.ambient_light_energy = 0.65
+	studio.environment = _environment
 	_world.add_child(studio)
-	for spec: Array in [[Vector3(-35, -30, 0), Color("#fff0d1"), 1.0],
-		[Vector3(-15, 125, 0), Color("#d9e8ff"), 0.6]]:
+	for spec: Array in [[Vector3(-35, -30, 0), BASE_KEY_LIGHT, 1.0, true],
+		[Vector3(-15, 125, 0), BASE_FILL_LIGHT, 0.6, false]]:
 		var light := DirectionalLight3D.new()
 		light.rotation_degrees = spec[0]
 		light.light_color = spec[1]
 		light.light_energy = spec[2]
 		_world.add_child(light)
+		if spec[3]:
+			_key_light = light
+		else:
+			_fill_light = light
 	set_process(false)
+
+
+func set_atmosphere(key_tint: Color, ambient_tint: Color) -> void:
+	var blended_key: Color = BASE_KEY_LIGHT.lerp(key_tint, 0.28)
+	var blended_ambient: Color = BASE_AMBIENT_LIGHT.lerp(ambient_tint, 0.28)
+	var blended_fill: Color = BASE_FILL_LIGHT.lerp(ambient_tint, 0.22)
+	var changed: bool = false
+	if _key_light != null and _key_light.light_color != blended_key:
+		_key_light.light_color = blended_key
+		changed = true
+	if _fill_light != null and _fill_light.light_color != blended_fill:
+		_fill_light.light_color = blended_fill
+		changed = true
+	if _environment != null and _environment.ambient_light_color != blended_ambient:
+		_environment.ambient_light_color = blended_ambient
+		changed = true
+	if changed and _loaded:
+		render_target_update_mode = SubViewport.UPDATE_ONCE
 
 
 func load_character() -> bool:

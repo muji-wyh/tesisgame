@@ -56,6 +56,7 @@ const ProfessionalWordLibrary = preload("res://scripts/professional_word_library
 const GameLibrary = preload("res://scripts/game_library.gd")
 const PresentationPreferences = preload("res://scripts/presentation_preferences.gd")
 const UiClick = preload("res://scripts/ui_click.gd")
+const ScreenVeil = preload("res://scripts/screen_veil.gd")
 const MODES := {"match": "Match", "memory": "Memory", "pop": "Voice Pop", "phrase": "Phrase Builder", "jelly": "Jelly Match", "word_jelly": "Jelly Words"}
 const HOLD_SECONDS: float = ChestFeel.HOLD_SECONDS
 const MATCH_FEEDBACK_SECONDS: float = 0.7
@@ -357,6 +358,7 @@ var _professional_button: Button
 var _professional_heading: Label
 var _professional_progress_label: Label
 var _learning_backdrop: LearningThemeArt
+var _screen_veil: ScreenVeil
 var _round_result: Dictionary = {}
 var _professional_callbacks_closed := false
 var _releasing_professional_views := false
@@ -399,6 +401,8 @@ func _ready() -> void:
 	_preferred_theme = _presentation.preferred_theme
 	reduced_motion = _presentation.reduced_motion
 	_jelly_backdrop.set_reduced_motion(reduced_motion)
+	if _screen_veil != null:
+		_screen_veil.set_reduced_motion(reduced_motion)
 	WordArt.set_reduced_motion(reduced_motion)
 	audio.set_muted(_presentation.muted)
 	call_deferred("_sync_controller_accept_startup")
@@ -1048,6 +1052,9 @@ func _build_controls() -> void:
 	add_child(_jelly_pause_shade)
 	_jelly_pause_shade.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	_jelly_pause_shade.hide()
+	_screen_veil = ScreenVeil.new()
+	add_child(_screen_veil)
+	_screen_veil.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	visibility_changed.connect(_sync_reward_confetti)
 	# Input is dispatched child-first; observe it before interactive descendants consume it.
 	var observer := InputActivityObserver.new()
@@ -1135,6 +1142,26 @@ func _play_ui_click(source: Control = null) -> void:
 	audio.play_ui_click()
 
 
+func trigger_haptic(kind: String = "tap") -> void:
+	if reduced_motion or _page_hidden or _host == null:
+		return
+	if _host.has_method("haptic"):
+		_host.haptic(kind)
+
+
+func pulse_screen_veil(tint: Color = Style.PAPER) -> void:
+	if is_instance_valid(_screen_veil) and not _vocabulary_booting and not _page_hidden:
+		_screen_veil.pulse(tint)
+
+
+func _sync_music_filter() -> void:
+	if not is_instance_valid(audio):
+		return
+	var muffled: bool = _jelly_pause_open() or _finish_confirmation_open() \
+		or _settlement_dialog_open() or (is_instance_valid(collection_page) and collection_page.visible)
+	audio.set_music_muffled(muffled, reduced_motion)
+
+
 func _show_mode_menu() -> void:
 	if _campaign != null and _campaign.settling:
 		return
@@ -1157,6 +1184,7 @@ func _show_mode_menu() -> void:
 		_mode_menu_resume_pop = false
 		return
 	_mode_menu.show()
+	pulse_screen_veil(Style.PAPER)
 	_coin_flight.sync(coin_wallet.balance)
 	_sync_round_celebration()
 	_on_input_canceled()
@@ -1292,6 +1320,8 @@ func _hide_mode_menu(restore_focus: bool = true, resume_game: bool = true) -> vo
 		return
 	_mode_menu_pointer = -2
 	_mode_menu.hide()
+	if resume_game:
+		pulse_screen_veil(Style.PAPER)
 	_sync_reward_confetti()
 	for control in _mode_menu_focus_modes:
 		if is_instance_valid(control):
@@ -2579,6 +2609,8 @@ func _sync_jelly() -> void:
 		backdrop_chapter = _word_jelly.game.stage_run._chapter if _word_jelly.game.stage_run.kind == "main" \
 			else ((_word_jelly.game.stage_run.challenge_stage - 1) % 11) + 1
 	_jelly_backdrop.set_chapter(backdrop_chapter)
+	var atmosphere: Dictionary = _jelly_backdrop.atmosphere()
+	_word_jelly.apply_atmosphere(atmosphere)
 	_learning_backdrop.visible = _learning_backdrop.has_art() and not _page_hidden and not collection_page.visible and not _mode_menu_open()
 	var career_backdrop: bool = _round_context.get("track") == "professional" and _learning_backdrop.visible
 	_jelly.set_learning_backdrop(career_backdrop)
@@ -2596,6 +2628,7 @@ func _sync_jelly() -> void:
 		_default_focus().grab_focus()
 	_publish_active_jelly()
 	_publish_jelly_rewards(_jelly_rewards.snapshot())
+	_sync_music_filter()
 
 
 func _jelly_hear(word: Dictionary, source_mode: String = "") -> void:
@@ -2617,6 +2650,16 @@ func _jelly_audio(cue: String, source_mode: String = "") -> void:
 		return
 	if (not source_mode.is_empty() and source_mode != _mode_id) or not _jelly_interaction_allowed():
 		return
+	if cue == "merge":
+		trigger_haptic("merge")
+	elif cue in ["boss-hit", "boss-win", "goal_complete", "blast_wave"]:
+		trigger_haptic("impact")
+	elif cue.begins_with("jelly-collect-lv"):
+		var level_num: int = cue.trim_prefix("jelly-collect-lv").to_int()
+		if level_num >= 4:
+			trigger_haptic("impact")
+		else:
+			trigger_haptic("merge")
 	if cue == "danger_end":
 		audio.stop_jelly_danger()
 	elif cue in ["wrong", "powerup_wrong"]:
@@ -2682,10 +2725,16 @@ func _jelly_growth_answer(id: String, words: Array[String], correct: bool, sourc
 
 func _credit_word_jelly(event_id: String, amount: int) -> Dictionary:
 	if _mode_id != "word_jelly" or (not _jelly_interaction_allowed() and not _jelly_settling) or event_id.is_empty() \
-		or amount <= 0 or amount % CoinWallet.COINS_PER_TIER != 0:
+		or amount <= 0 or amount % CoinWallet.PURCHASE_UNIT != 0:
 		return {"ok": false, "duplicate": false, "amount": 0, "error": "This word cannot be collected yet."}
 	var receipt: String = _round_id + ":" + event_id
-	var credit: Dictionary = _credit_coins(receipt, int(amount / CoinWallet.COINS_PER_TIER))
+	if not coin_wallet.ready or not coin_wallet.error.is_empty():
+		coin_wallet.load_state()
+	var credit: Dictionary = coin_wallet.credit_amount(receipt, amount)
+	_coin_counter.available = coin_wallet.ready and bool(credit.get("ok", false))
+	_coin_counter._update_description()
+	_coin_counter.queue_redraw()
+	_publish_coins()
 	if bool(credit.get("ok", false)):
 		# Keep the first committed result until the view finishes removing the tile.
 		# An idempotent retry must not replace its pending visual amount with zero.
@@ -2697,7 +2746,7 @@ func _credit_word_jelly(event_id: String, amount: int) -> Dictionary:
 
 
 func _credit_word_jelly_combo(event_id: String, amount: int) -> Dictionary:
-	if _mode_id != "word_jelly" or _round_id.is_empty() or event_id.is_empty() or amount < 1 or amount > 3:
+	if _mode_id != "word_jelly" or _round_id.is_empty() or event_id.is_empty() or amount < 1 or amount > 6:
 		return {"ok": false, "error": "This combo reward is no longer active."}
 	if not coin_wallet.ready or not coin_wallet.error.is_empty():
 		coin_wallet.load_state()
@@ -2966,6 +3015,7 @@ func _sync_settlement_dialog() -> void:
 		_settlement_dialog.close()
 	if is_instance_valid(_coin_flight):
 		_coin_flight.z_index = 95 if _settlement_dialog_open() else 85
+	_sync_music_filter()
 
 
 func _restore_jelly_reward_host() -> void:
@@ -4566,6 +4616,8 @@ func set_reduced_motion(value: bool) -> void:
 	if _campaign != null and _campaign.is_open():
 		_campaign.set_reduced_motion(value)
 	_jelly_backdrop.set_reduced_motion(value)
+	if is_instance_valid(_screen_veil):
+		_screen_veil.set_reduced_motion(value)
 	_jelly_rewards.set_reduced_motion(value)
 	_memory.set_reduced_motion(value)
 	_phrase.set_reduced_motion(value)
@@ -6220,6 +6272,7 @@ func _show_collection() -> void:
 			control.focus_mode = Control.FOCUS_NONE
 	_catalog_age = growth.learning_age()
 	collection_page.show()
+	pulse_screen_veil(Style.PAPER)
 	_sync_jelly()
 	_publish_jelly_rewards(_jelly_rewards.snapshot())
 	_refresh_collection()
@@ -6238,6 +6291,8 @@ func _hide_collection() -> void:
 	_cancel_collection_rails()
 	_professional_library.clear()
 	collection_page.hide()
+	if not _collection_from_home:
+		pulse_screen_veil(Style.PAPER)
 	_collection_selection.clear()
 	_mode_panel.learning.set_selection(_home_context if _collection_from_home else _round_context)
 	for control in _collection_focus_modes:
@@ -6250,6 +6305,7 @@ func _hide_collection() -> void:
 	feedback_timer.paused = _page_hidden or _mode_menu_open()
 	_memory.pause(_page_hidden or _mode_menu_open() or _professional_input_blocked())
 	_refresh()
+	_sync_music_filter()
 	if _mode_id == "pop" and _pop_rewards_shown and not _page_hidden and not _mode_menu_open():
 		_pop_rewards.resume()
 	if _valid_focus(_focus_before_collection):

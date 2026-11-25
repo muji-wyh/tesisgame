@@ -66,6 +66,7 @@ func configure(app, path: String, host: Object = null) -> void:
 	upgrades.back_requested.connect(close_upgrades)
 	upgrades.purchase_requested.connect(purchase_upgrade)
 	upgrades.contribution_requested.connect(contribute_upgrade)
+	upgrades.prestige_requested.connect(purchase_prestige_rank)
 	upgrades.audio_requested.connect(_upgrade_audio)
 	upgrades.charging_changed.connect(_upgrade_charging_changed)
 	upgrades.retry_requested.connect(retry)
@@ -118,7 +119,7 @@ func _preview_word() -> Dictionary:
 func _upgrade_state() -> Dictionary:
 	var state: Dictionary = store.upgrade_state() if store.ready else \
 		upgrades._state.duplicate(true) if not upgrades._state.is_empty() else \
-			{"level": 1, "auto_merge_level": 1, "star_charm_level": 1,
+			{"level": 1, "auto_merge_level": 1, "star_charm_level": 1, "prestige_rank": 0,
 				"funded": {"jelly": 0, "auto_merge": 0, "star_charm": 0},
 				"pending": {}, "intro": "unseen"}
 	var pending: Dictionary = state.pending
@@ -133,6 +134,7 @@ func _upgrade_state() -> Dictionary:
 	state["retry"] = not storage_error.is_empty() or not pending.is_empty()
 	state["just_unlocked"] = _last_unlocked
 	state["just_unlocked_kind"] = _last_unlocked_kind
+	state["all_tracks_maxed"] = store.all_tracks_maxed() if store.ready else false
 	return state
 
 
@@ -152,6 +154,8 @@ func _show_upgrades() -> void:
 	if not upgrades.present(_upgrade_state(), _preview_word(), _app.reduced_motion):
 		_upgrade_failed("The Jelly ability preview could not load its existing artwork.")
 		return
+	if _app.has_method("pulse_screen_veil"):
+		_app.pulse_screen_veil()
 	_app._sync_jelly()
 	_app._refresh()
 	_publish()
@@ -166,6 +170,8 @@ func close_upgrades() -> void:
 	upgrades.close()
 	map.configure(_map_state(), _app.reduced_motion)
 	map.show()
+	if _app.has_method("pulse_screen_veil"):
+		_app.pulse_screen_veil()
 	_app._sync_jelly()
 	_app._refresh()
 	map._upgrades.grab_focus.call_deferred()
@@ -246,8 +252,12 @@ func _upgrade_charging_changed(charging: bool) -> void:
 func _upgrade_audio(cue: String) -> void:
 	if cue == "upgrade_coin":
 		_app.audio.play_upgrade_coin_spend()
+		if _app.has_method("trigger_haptic"):
+			_app.trigger_haptic("tap")
 	elif cue == "goal_complete":
 		_app.audio.play_upgrade_milestone()
+		if _app.has_method("trigger_haptic"):
+			_app.trigger_haptic("impact")
 	else:
 		_app.audio.play_jelly_cue(cue)
 
@@ -363,6 +373,53 @@ func purchase_upgrade(level: int, kind: String = "jelly") -> void:
 	_publish()
 
 
+func purchase_prestige_rank() -> void:
+	if _buying_upgrade or _app._page_hidden or starting or settling or not upgrades.visible \
+		or not upgrades._active or upgrades.is_offer() or not store.ready or not error.is_empty() \
+		or not store.all_tracks_maxed():
+		return
+	var current: int = store.prestige_rank()
+	if current >= Economy.MAX_PRESTIGE_RANK:
+		return
+	if not _app.coin_wallet.ready or not _app.coin_wallet.error.is_empty():
+		_upgrade_failed(_app.coin_wallet.error)
+		return
+	var next_rank: int = current + 1
+	var price: int = Economy.prestige_price(next_rank)
+	var receipt: String = "jelly-prestige-v1:%d" % next_rank
+	var paid: bool = _app.coin_wallet.has_purchase(receipt, price)
+	if _app.coin_wallet.balance < price and not paid:
+		_upgrade_error = "Need %d more coins. Earn them by playing stages." % (price - _app.coin_wallet.balance)
+		upgrades.configure(_upgrade_state())
+		_publish()
+		return
+	_buying_upgrade = true
+	_upgrade_error = ""
+	if not paid:
+		var spent: Dictionary = _app.coin_wallet.spend(receipt, price)
+		if not spent.ok:
+			if spent.get("reason") == "insufficient":
+				_buying_upgrade = false
+				_upgrade_error = "Need %d more coins." % (price - _app.coin_wallet.balance)
+				upgrades.configure(_upgrade_state())
+				_publish()
+			else:
+				_upgrade_failed(_app.coin_wallet.error)
+			return
+	if not store.purchase_prestige_rank(_app.coin_wallet):
+		_upgrade_failed(store.error)
+		return
+	_buying_upgrade = false
+	error = ""
+	_upgrade_error = ""
+	_app._coin_flight.sync(_app.coin_wallet.balance, false)
+	_app.audio.play_upgrade_milestone()
+	upgrades.configure(_upgrade_state())
+	_app._sync_jelly()
+	_app._refresh()
+	_publish()
+
+
 func _key(context: Dictionary) -> String:
 	return "professional:%s:%s" % [context.get("course_id", ""), context.get("module_id", "")] \
 		if context.get("track") == "professional" else "growth"
@@ -392,6 +449,8 @@ func _show_map() -> void:
 	upgrades.close()
 	_sync_map_audio()
 	map.open(_map_state(), _app.reduced_motion)
+	if _app.has_method("pulse_screen_veil"):
+		_app.pulse_screen_veil()
 	_app._sync_jelly()
 	_app._refresh()
 	_maybe_offer_upgrade()
@@ -410,6 +469,8 @@ func _upgrade_affordable() -> bool:
 			var remaining: int = Economy.permanent_upgrade_price(kind, owned + 1) - int(state.funded.get(kind, 0))
 			if remaining > 0 and balance >= mini(remaining, 50):
 				return true
+	if store.all_tracks_maxed() and store.prestige_rank() < Economy.MAX_PRESTIGE_RANK:
+		return balance >= Economy.prestige_price(store.prestige_rank() + 1)
 	return false
 
 
@@ -464,6 +525,7 @@ func _map_state() -> Dictionary:
 		"merged_level": store.merged_level() if store.ready else 1,
 		"auto_merge_level": store.auto_merge_level() if store.ready else 1,
 		"star_charm_level": store.star_charm_level() if store.ready else 1,
+		"prestige_rank": store.prestige_rank() if store.ready else 0,
 		"upgrade_affordable": _upgrade_affordable(),
 		"chapter_stars": chapter_stars_map,
 		"chapter_milestones": store.chapter_milestones(context_key) if store.ready else []}
@@ -571,6 +633,8 @@ func round_started() -> void:
 	error = ""
 	map.close()
 	upgrades.close()
+	if _app.has_method("pulse_screen_veil"):
+		_app.pulse_screen_veil()
 	pending_plan.clear()
 	_challenge_previous_best = store.challenge_best_stage(active_context_key)
 	if _app._word_jelly.game.stage_run.kind == "challenge":
@@ -602,7 +666,12 @@ func capture_result(result: Dictionary) -> bool:
 			error = _app._jelly_rewards.rewards.error
 			return false
 		chest_coins = int(_app.coin_wallet.chest_reward(reward_id).get("total", 0))
-	var quote: Dictionary = Catalog.clear_reward(int(stage.number), int(stage.stars), chest_coins)
+	var number: int = int(stage.number)
+	var previous_stars: int = store.best_stars(active_context_key, number) if stage.kind == "main" and number > 0 else 0
+	var paid_powerups: int = int(result.get("paid_powerups_used", 0))
+	var fragments: int = int(result.get("fragment_count", 0))
+	var quote: Dictionary = Catalog.clear_reward(number, int(stage.stars), chest_coins,
+		previous_stars, paid_powerups, fragments)
 	if not quote.ok:
 		error = str(quote.error)
 		return false
@@ -615,18 +684,31 @@ func capture_result(result: Dictionary) -> bool:
 		"collection_count": stage.collection_count, "chest_count": result.chest_count,
 		"chest_tier": result.chest_tier, "chest_coins": chest_coins,
 		"bonus": quote.bonus, "completed_word_ids": []}
+	if int(quote.get("pure_clear_bonus", 0)) > 0:
+		_result_draft["pure_clear"] = true
+	if int(quote.get("fragment_rebate", 0)) > 0:
+		_result_draft["fragment_rebate"] = int(quote.fragment_rebate)
 	if stage.kind == "challenge":
-		_result_draft["challenge_stage"] = int(stage.get("challenge_stage", 1))
+		var reached: int = int(stage.get("challenge_stage", 1))
+		var milestone_bonus: int = Economy.challenge_milestone_bonus(reached)
+		var new_record_bonus: int = Economy.CHALLENGE_NEW_RECORD_BONUS if reached > _challenge_previous_best and reached >= 3 else 0
+		var challenge_bonus: int = milestone_bonus + new_record_bonus
+		if challenge_bonus > 0:
+			_result_draft["bonus"] = int(_result_draft.bonus) + challenge_bonus
+			quote["bonus"] = int(quote.bonus) + challenge_bonus
+			quote["total"] = int(quote.total) + challenge_bonus
+		_result_draft["challenge_stage"] = reached
 		_result_draft["challenge_previous_best"] = _challenge_previous_best
 		_result_draft["best_combo"] = int(result.get("best_combo", 0))
 		_result_draft["max_merge_level"] = int(result.get("max_merge_level", 1))
 		_app._round_result["challenge_result"] = {
-			"stage": int(stage.get("challenge_stage", 1)),
+			"stage": reached,
 			"previous_best": _challenge_previous_best,
-			"best": maxi(int(stage.get("challenge_stage", 1)), store.challenge_best_stage(active_context_key)),
+			"best": maxi(reached, store.challenge_best_stage(active_context_key)),
 			"collection_count": int(stage.collection_count),
 			"best_combo": int(result.get("best_combo", 0)),
 			"max_merge_level": int(result.get("max_merge_level", 1)),
+			"bonus_coins": int(_result_draft.bonus),
 			"new_best": false, "confirmed": false}
 	var boss: Dictionary = result.get("boss", {})
 	if bool(boss.get("active", false)):
@@ -634,13 +716,21 @@ func capture_result(result: Dictionary) -> bool:
 		if boss_id > 0:
 			_result_draft["boss_roster_version"] = 2
 			_result_draft["boss_id"] = boss_id
-			_result_draft["boss_victory"] = boss.get("outcome") == "defeated" and stage.outcome == "cleared"
+			var victory: bool = boss.get("outcome") == "defeated" and stage.outcome == "cleared"
+			_result_draft["boss_victory"] = victory
 			_result_draft["boss_outcome"] = str(boss.get("outcome", ""))
+			if victory and boss_id not in store.boss_victories(active_context_key):
+				var bounty: int = Economy.boss_first_victory_bounty(boss_id)
+				if bounty > 0:
+					_result_draft["boss_first_bounty"] = bounty
+					_result_draft["bonus"] = int(_result_draft.bonus) + bounty
+					quote["bonus"] = int(quote.bonus) + bounty
+					quote["total"] = int(quote.total) + bounty
 		elif bool(boss.definition.get("mini", false)) and boss.get("outcome") == "defeated" and stage.outcome == "cleared":
 			_result_draft["mini_raid_victory"] = true
-			_result_draft["bonus"] = int(_result_draft.bonus) + 75
-			quote["bonus"] = int(quote.bonus) + 75
-			quote["total"] = int(quote.total) + 75
+			_result_draft["bonus"] = int(_result_draft.bonus) + Economy.MINI_RAID_VICTORY_BONUS
+			quote["bonus"] = int(quote.bonus) + Economy.MINI_RAID_VICTORY_BONUS
+			quote["total"] = int(quote.total) + Economy.MINI_RAID_VICTORY_BONUS
 	for word: Dictionary in result.get("words", []):
 		_result_draft.completed_word_ids.append(str(word.id))
 	_app._round_result["stage_bonus"] = quote.duplicate(true)
@@ -726,6 +816,7 @@ func advance(delta: float) -> void:
 					"collection_count": int(_result_draft.collection_count),
 					"best_combo": int(_result_draft.get("best_combo", 0)),
 					"max_merge_level": int(_result_draft.get("max_merge_level", 1)),
+					"bonus_coins": int(_result_draft.get("bonus", 0)),
 					"confirmed": true,
 					"new_best": reached > _challenge_previous_best and reached >= best}
 				_app._round_result["challenge_result"] = summary.duplicate(true)

@@ -235,29 +235,53 @@ static func recipe_error(value: Variant) -> String:
 	return ""
 
 
-static func clear_reward(number: int, stars: int, chest_coins: int) -> Dictionary:
-	if number < 0 or number > MAX_STAGE or stars < 0 or stars > 3 or chest_coins < 0 or chest_coins > MAX_COINS:
-		return _failure("A clear quote needs a supported stage, star rating and nonnegative chest amount.")
-	var base: int = 0 if number == 0 else 75 + 15 * (ceili(float(number) / 9.0) - 1)
+static func clear_reward(number: int, stars: int, chest_coins: int, previous_stars: int = 0,
+		paid_powerups_used: int = 0, leftover_fragments: int = 0) -> Dictionary:
+	if number < 0 or number > MAX_STAGE or stars < 0 or stars > 3 or chest_coins < 0 or chest_coins > MAX_COINS \
+		or previous_stars < 0 or previous_stars > 3 or paid_powerups_used < 0 or leftover_fragments < 0:
+		return _failure("A clear quote needs a supported stage, star rating and nonnegative coin inputs.")
+	var Economy = preload("res://scripts/coin_economy.gd")
+	var chapter: int = ceili(float(number) / 9.0) if number > 0 else 0
+	var raw_base: int = 0 if number == 0 else 75 + 15 * (chapter - 1)
 	if number == 1:
-		base = maxi(base, preload("res://scripts/coin_economy.gd").JELLY_FIRST_CLEAR_MIN_COINS)
+		raw_base = maxi(raw_base, Economy.JELLY_FIRST_CLEAR_MIN_COINS)
+	var is_replay: bool = number > 0 and previous_stars > 0
+	var base: int = roundi(float(raw_base) * Economy.REPLAY_BASE_RATIO) if is_replay else raw_base
+	var weighted_chest: int = mini(chest_coins, 200) if number > 0 else 0
+	var unmultiplied_chest: int = chest_coins - weighted_chest
 	var total: int = chest_coins
 	var factor: float = 0.0
+	var star_upgrade_bonus: int = 0
+	var pure_clear_bonus: int = 0
+	var fragment_rebate: int = Economy.leftover_fragment_coins(leftover_fragments)
 	if number != 0 and stars != 0:
 		if chest_coins > MAX_COINS - base:
 			return _failure("This stage settlement exceeds the supported coin amount.")
-		var combined: int = chest_coins + base
+		var combined: int = weighted_chest + base
 		factor = [0.0, 1.0, 1.5, 2.0][stars]
+		var scaled: int
 		if stars == 2:
 			@warning_ignore("integer_division")
 			var weighted: int = (combined * 3 + 1) / 2
-			total = weighted
+			scaled = weighted
 		else:
-			total = combined * (2 if stars == 3 else 1)
+			scaled = combined * (2 if stars == 3 else 1)
+		if is_replay and stars > previous_stars:
+			star_upgrade_bonus = (stars - previous_stars) * Economy.STAR_UPGRADE_COIN_STEP
+		if paid_powerups_used == 0 and not is_replay:
+			pure_clear_bonus = roundi(float(base) * Economy.PURE_CLEAR_BONUS_RATIO)
+		total = unmultiplied_chest + scaled + star_upgrade_bonus + pure_clear_bonus + fragment_rebate
 		if total > MAX_COINS:
 			return _failure("This star-weighted settlement exceeds the supported coin amount.")
-	return {"ok": true, "error": "", "policy": "jelly-stage-clear-v1", "number": number,
-		"stars": stars, "base": base, "factor": factor, "chest_coins": chest_coins,
+	elif fragment_rebate > 0:
+		total = chest_coins + fragment_rebate
+		if total > MAX_COINS:
+			return _failure("This stage settlement exceeds the supported coin amount.")
+	return {"ok": true, "error": "", "policy": "jelly-stage-clear-v2", "number": number,
+		"stars": stars, "previous_stars": previous_stars, "is_replay": is_replay,
+		"base": base, "factor": factor, "chest_coins": chest_coins,
+		"weighted_chest": weighted_chest, "star_upgrade_bonus": star_upgrade_bonus,
+		"pure_clear_bonus": pure_clear_bonus, "fragment_rebate": fragment_rebate,
 		"bonus": total - chest_coins, "total": total}
 
 

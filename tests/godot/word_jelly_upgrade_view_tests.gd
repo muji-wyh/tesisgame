@@ -147,10 +147,15 @@ func _test_previews_and_no_fake_progress() -> void:
 	page.select_upgrade("star_charm")
 	page.select_level(6)
 	var charm_snap: Dictionary = page.snapshot()
-	check(charm_snap.kind == "star_charm" and charm_snap.preview.kind == "star_charm"
+	check(page.snapshot().kind == "star_charm" and charm_snap.preview.kind == "star_charm"
 		and charm_snap.preview.combo_bonus > 1.0 and charm_snap.preview.fragment_bonus > 0.1
+		and charm_snap.preview.coins.contains("+8% Boss hit")
 		and charm_snap.owned_level == 1 and charm_snap.star_charm_level == 1,
-		"Star charm preview displays combo and treasure bonuses independently")
+		"Star charm preview displays combo, treasure, and Boss hit bonuses independently")
+	page.select_upgrade("auto_merge")
+	page.select_level(6)
+	check(page.snapshot().preview.coins.contains("25 / 75 / 125"),
+		"Auto merge Lv6+ preview advertises the -25 in-round coin discount")
 
 
 func _cancel_check(action: Callable, reason: String) -> void:
@@ -779,6 +784,30 @@ func _test_reduced_motion_and_charge_gates() -> void:
 		_frames(8)
 		check(not page.snapshot().buy.enabled and not page.snapshot().charging and requests.is_empty(),
 			"The %s gate blocks all contribution requests" % gate)
+		if gate == "balance":
+			check(page.snapshot().buy.text == "Need 1 more coins" and page.snapshot().notice.is_empty(),
+				"Sub-25 balance explains the exact shortfall on the charge button without inventing a storage notice")
+	var maxed: Dictionary = _initial_state()
+	maxed.level = 9
+	maxed.auto_merge_level = 9
+	maxed.star_charm_level = 9
+	maxed.prestige_rank = 0
+	maxed.all_tracks_maxed = true
+	maxed.intro = "complete"
+	maxed.balance = 1000
+	page.present(maxed, word, false)
+	var prestige_clicks: Array[bool] = []
+	var on_prestige := func() -> void: prestige_clicks.append(true)
+	page.prestige_requested.connect(on_prestige)
+	check(page.snapshot().all_tracks_maxed and page.snapshot().buy.enabled
+		and page.snapshot().buy.text.contains("Crown ★1"),
+		"Maxing all three tracks unlocks the Golden Crown prestige button")
+	page._buy.button_down.emit()
+	page._buy.button_up.emit()
+	page._buy.pressed.emit()
+	check(prestige_clicks == [true] and requests.is_empty(),
+		"Activating Golden Crown emits prestige_requested without emitting a 25-coin track contribution")
+	page.prestige_requested.disconnect(on_prestige)
 	page.present(_initial_state(), word, true, 2, true)
 	requests.clear()
 	page.start_charging()

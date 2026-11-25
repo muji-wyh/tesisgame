@@ -57,7 +57,7 @@ func _init() -> void:
 	_card.z_index = 30
 	_card.draw.connect(_draw_card)
 	add_child(_card)
-	_title = Style.label("", 28)
+	_title = Style.display_heading("", 28)
 	_title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	_title.autowrap_mode = TextServer.AUTOWRAP_OFF
 	_title.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
@@ -305,7 +305,8 @@ func configure_layout(badge: Rect2, board: Rect2, ui_scale: float) -> void:
 	var title_width: float = maxf(1.0, _card.size.x - 16.0 / _scale)
 	var title_pixels: int = ceili((minf(24.0, _card.size.x * _scale / 10.0) \
 		if _state.get("complete", false) else 48.0) / _scale)
-	var measured: float = Style.HEADING_FONT.get_string_size(_title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, title_pixels).x
+	var title_font: Font = _title.get_theme_font("font")
+	var measured: float = title_font.get_string_size(_title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, title_pixels).x
 	if measured > title_width:
 		title_pixels = maxi(1, floori(float(title_pixels) * title_width / measured))
 	_title.add_theme_font_size_override("font_size", title_pixels)
@@ -462,13 +463,15 @@ func _update_label() -> void:
 		var bounds: Rect2 = _surface_bounds()
 		var seconds: int = maxi(0, ceili(float(_state.get("seconds_remaining", 0.0))))
 		_label.text = "%d:%02d" % [seconds / 60, seconds % 60]
+		_label.self_modulate.a = 0.0
 		_label.position = Vector2(bounds.end.x - _timer_width(), bounds.position.y + 1.0 / _scale)
 		_label.size = Vector2(_timer_width() - 12.0 / _scale, 32.0 / _scale)
 		if _state.get("kind") == "main" and _clock_bounds().has_area():
 			_label.position.x += 26.0 / _scale
 			_label.size.x -= 26.0 / _scale
 		var pixels: int = ceili(21.0 / _scale)
-		var measured: float = Style.HEADING_FONT.get_string_size(_label.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
+		var sample_text: String = "00:00" if _label.text.length() >= 5 else "0:00"
+		var measured: float = Style.HEADING_FONT.get_string_size(sample_text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
 		if measured > _label.size.x:
 			pixels = maxi(1, floori(float(pixels) * _label.size.x / measured))
 		_label.add_theme_font_size_override("font_size", pixels)
@@ -476,6 +479,7 @@ func _update_label() -> void:
 		_fill_style.bg_color = Color("#7bbcaf") if _timer_ratio() > 0.60 else Color("#8cb9cf") \
 			if _timer_ratio() > 0.30 else Color("#dba15c")
 		return
+	_label.self_modulate.a = 1.0
 	_label.text = "Stage %d%s%d / %d mastered" % [_state.number, separator, _state.mastered, _state.total]
 
 
@@ -514,11 +518,43 @@ func _draw() -> void:
 			var clock: Rect2 = _clock_bounds()
 			if clock.has_area() and not (_state.get("kind") == "challenge" and _time_bonus_remaining > 0.0):
 				draw_texture_rect(CLOCK, clock, false)
+			_draw_tabular_timer()
 		return
 	var progress: float = float(_state.get("mastered", 0)) / maxf(1.0, float(_state.get("total", 10)))
 	var track := Rect2(_badge.position + Vector2(12.0 / _scale, _badge.size.y - 3.0 / _scale), Vector2((_badge.size.x - 24.0 / _scale) * progress, 2.0 / _scale))
 	if track.size.x > 0.0:
 		draw_rect(track, Style.GOOD)
+
+
+func _draw_tabular_timer() -> void:
+	var text: String = _label.text
+	if text.is_empty():
+		return
+	var font: Font = Style.HEADING_FONT
+	var pixels: int = _label.get_theme_font_size("font_size")
+	var digit_w: float = font.get_string_size("0", HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
+	var colon_w: float = font.get_string_size(":", HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
+	var total_w: float = 0.0
+	for index in range(text.length()):
+		total_w += colon_w if text.substr(index, 1) == ":" else digit_w
+	var color: Color = _label.get_theme_color("font_color")
+	var scale_x: float = _label.scale.x
+	var baseline: float = _label.position.y + (_label.size.y - font.get_height(pixels)) * 0.5 + font.get_ascent(pixels)
+	var right_x: float = _label.position.x + _label.size.x
+	var cursor: float = right_x - total_w
+	if not is_equal_approx(scale_x, 1.0):
+		var pivot := Vector2(right_x, _label.position.y + _label.size.y * 0.5)
+		draw_set_transform(pivot, 0.0, _label.scale)
+		cursor -= pivot.x
+		baseline -= pivot.y
+	for index in range(text.length()):
+		var ch: String = text.substr(index, 1)
+		var slot: float = colon_w if ch == ":" else digit_w
+		var glyph_w: float = font.get_string_size(ch, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
+		draw_string(font, Vector2(cursor + (slot - glyph_w) * 0.5, baseline), ch, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels, color)
+		cursor += slot
+	if not is_equal_approx(scale_x, 1.0):
+		draw_set_transform(Vector2.ZERO)
 
 
 func _draw_card() -> void:

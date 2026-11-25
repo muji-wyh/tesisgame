@@ -254,7 +254,7 @@ func _check_storage_failure(app) -> void:
 	_drain(view)
 	check(app.coin_wallet._receipts.size() == receipts.size() + 1 and cues.count("powerup_success") == 1,
 		"Storage retry creates exactly one debit and one successful action")
-	check(view.game.powerup_price("auto_merge") == 50 and view.powerup_buttons.auto_merge.snapshot().price == 50,
+	check(view.game.powerup_price("auto_merge") == 100 and view.powerup_buttons.auto_merge.snapshot().price == 100,
 		"Only the recovered successful payment advances the visible price")
 
 
@@ -263,7 +263,7 @@ func _check_escalating_prices(app) -> void:
 	var view = app._word_jelly
 	var game = view.game
 	var pieces: Array = game.cells.duplicate(true)
-	var expected: Dictionary = {"auto_merge": [25, 50, 75, 75]}
+	var expected: Dictionary = {"auto_merge": [50, 100, 150, 150]}
 	for index in range(4):
 		for kind: String in ["auto_merge"]:
 			game.cells.assign(pieces.duplicate(true))
@@ -285,7 +285,7 @@ func _check_escalating_prices(app) -> void:
 				and game.snapshot().powerup_uses[kind] == index + 1,
 				"The button and model show the same independently escalating capped price")
 	await _prepare(app, 1)
-	check(view.powerup_buttons.auto_merge.snapshot().price == 25,
+	check(view.powerup_buttons.auto_merge.snapshot().price == 50,
 		"Starting a new round resets the remaining displayed price")
 
 

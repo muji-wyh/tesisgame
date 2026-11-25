@@ -207,8 +207,8 @@ func _test_auto_merge_purchases() -> void:
 		check(store.begin_upgrade(level, "auto_merge"), "Reserve the next permanent Auto merge upgrade")
 		var pending: Dictionary = store.upgrade_state().pending
 		check(pending.kind == "auto_merge" and pending.id == "auto-merge-level-v1:%d" % level
-			and pending.price == Economy.JELLY_UPGRADE_PRICES[level - 2],
-			"Auto merge has an exact increasing quote and a separate immutable receipt identity")
+			and pending.price == Economy.AUTO_MERGE_UPGRADE_PRICES[level - 2],
+			"Auto merge has its differentiated increasing quote and a separate immutable receipt identity")
 		check(not store.begin_upgrade(2) and not store.complete_upgrade(2, wallet)
 			and store.merged_level() == 1, "An Auto merge intent cannot buy or complete the Jelly upgrade instead")
 		if level == 2:
@@ -260,6 +260,28 @@ func _test_auto_merge_purchases() -> void:
 	check(charm_reload.load_state() and charm_reload.star_charm_level() == 2
 		and charm_reload.merged_level() == 2 and charm_reload.auto_merge_level() == 9,
 		"All three permanent upgrade tracks persist independently across reload")
+	check(not charm_reload.all_tracks_maxed() and not charm_reload.purchase_prestige_rank(wallet),
+		"Golden Crown prestige cannot unlock until all three tracks reach Lv9")
+	check(wallet.credit_amount("fixture:prestige-bank", 20000).ok, "Fund Golden Crown endgame test")
+	for kind: String in ["jelly", "star_charm"]:
+		for level in range(3, 10):
+			check(charm_reload.begin_upgrade(level, kind), "Reserve %s Lv%d" % [kind, level])
+			var p: Dictionary = charm_reload.upgrade_state().pending
+			check(p.price == Economy.permanent_upgrade_price(kind, level),
+				"Track %s Lv%d uses its differentiated price curve" % [kind, level])
+			check(wallet.spend(p.id, p.price).ok and charm_reload.complete_upgrade(level, wallet, kind),
+				"Complete %s Lv%d" % [kind, level])
+	check(charm_reload.all_tracks_maxed() and charm_reload.prestige_rank() == 0,
+		"Maxing all three tracks unlocks Golden Crown prestige starting at rank 0")
+	var crown_price: int = Economy.prestige_price(1)
+	check(not charm_reload.purchase_prestige_rank(wallet) and charm_reload.prestige_rank() == 0,
+		"Golden Crown rank requires its exact saved wallet receipt before unlocking")
+	check(wallet.spend("jelly-prestige-v1:1", crown_price).ok and charm_reload.purchase_prestige_rank(wallet)
+		and charm_reload.prestige_rank() == 1,
+		"Forging Golden Crown rank 1 persists with its exact receipt")
+	var crown_reload := Store.new("user://auto-merge-upgrades.cfg", host)
+	check(crown_reload.load_state() and crown_reload.prestige_rank() == 1 and crown_reload.all_tracks_maxed(),
+		"Golden Crown rank survives reload in store v8")
 
 
 func _test_chapter_star_milestones() -> void:

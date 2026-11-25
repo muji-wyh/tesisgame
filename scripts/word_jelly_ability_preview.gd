@@ -138,14 +138,17 @@ func description() -> String:
 
 func coin_description() -> String:
 	if _kind == "auto_merge":
-		return "Saved across rounds. Use costs %d / %d / %d coins." % [
+		var discount_note: String = " (-25 discount at Lv6+)" if _level >= 6 else ""
+		return "Saved across rounds. Use costs %d / %d / %d coins%s." % [
 			Economy.powerup_price("auto_merge", 0, _level), Economy.powerup_price("auto_merge", 1, _level),
-			Economy.powerup_price("auto_merge", 2, _level)]
+			Economy.powerup_price("auto_merge", 2, _level), discount_note]
 	if _kind == "star_charm":
 		var grace: int = Economy.star_charm_grace_charges(_level)
 		var grace_text: String = "No extra wrong-merge grace" if grace <= 0 \
 			else "%d wrong-merge grace charge%s per chain" % [grace, "s" if grace > 1 else ""]
-		return "Always active in campaign and Challenge. %s." % grace_text
+		var boss_pct: int = roundi(Economy.star_charm_boss_damage_bonus(_level) * 100.0)
+		var boss_text: String = " · +%d%% Boss hit" % boss_pct if boss_pct > 0 else ""
+		return "Always active in campaign and Challenge. %s%s." % [grace_text, boss_text]
 	var bonus: String = "No pickup coin bonus" if _level == 1 else "%d%% chance of +%d coins" % [
 		roundi(Economy.jelly_bonus_chance(_level) * 100.0), Economy.jelly_bonus(_level)]
 	return "%s  ·  Base Boss hit: %d" % [bonus, BossCatalog.DAMAGE[_level]]

@@ -19,6 +19,12 @@ var _world := Node3D.new()
 var _rig := Node3D.new()
 var _camera := Camera3D.new()
 var _interior_light := OmniLight3D.new()
+var _environment: Environment
+var _key_light: DirectionalLight3D
+var _fill_light: DirectionalLight3D
+const BASE_KEY_LIGHT := Color("#fff3db")
+const BASE_AMBIENT_LIGHT := Color("#dce5f0")
+const BASE_FILL_LIGHT := Color("#bfd6ff")
 var _model: Node3D
 var _composer: AssetStates
 var _base_frame: Node3D
@@ -89,17 +95,17 @@ func _init() -> void:
 	_camera.far = 40.0
 	_camera.current = true
 	var studio := WorldEnvironment.new()
-	var environment := Environment.new()
-	environment.background_mode = Environment.BG_CLEAR_COLOR
-	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	environment.ambient_light_color = Color("#dce5f0")
-	environment.ambient_light_energy = 0.42
-	environment.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
-	environment.sky = _get_studio_sky()
-	studio.environment = environment
+	_environment = Environment.new()
+	_environment.background_mode = Environment.BG_CLEAR_COLOR
+	_environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	_environment.ambient_light_color = BASE_AMBIENT_LIGHT
+	_environment.ambient_light_energy = 0.42
+	_environment.reflected_light_source = Environment.REFLECTION_SOURCE_SKY
+	_environment.sky = _get_studio_sky()
+	studio.environment = _environment
 	_world.add_child(studio)
-	_add_light("Key", Vector3(-42.0, -36.0, 0.0), Color("#fff3db"), 0.85, true)
-	_add_light("Fill", Vector3(-20.0, 138.0, 0.0), Color("#bfd6ff"), 0.28, false)
+	_key_light = _add_light("Key", Vector3(-42.0, -36.0, 0.0), BASE_KEY_LIGHT, 0.85, true)
+	_fill_light = _add_light("Fill", Vector3(-20.0, 138.0, 0.0), BASE_FILL_LIGHT, 0.28, false)
 	_add_light("Rim", Vector3(-32.0, 208.0, 0.0), Color("#fff2dd"), 0.40, false)
 	_world.add_child(_interior_light)
 	_interior_light.name = "TreasureLight"
@@ -123,7 +129,7 @@ static func _get_studio_sky() -> Sky:
 	return _studio_sky
 
 
-func _add_light(label: String, angles: Vector3, color: Color, energy: float, shadows: bool) -> void:
+func _add_light(label: String, angles: Vector3, color: Color, energy: float, shadows: bool) -> DirectionalLight3D:
 	var light := DirectionalLight3D.new()
 	light.name = label
 	light.rotation_degrees = angles
@@ -135,6 +141,26 @@ func _add_light(label: String, angles: Vector3, color: Color, energy: float, sha
 	# The shared reflection environment is static, independent of each studio.
 	light.sky_mode = DirectionalLight3D.SKY_MODE_LIGHT_ONLY
 	_world.add_child(light)
+	return light
+
+
+func set_atmosphere(key_tint: Color, ambient_tint: Color) -> void:
+	var blended_key: Color = BASE_KEY_LIGHT.lerp(key_tint, 0.24)
+	var blended_ambient: Color = BASE_AMBIENT_LIGHT.lerp(ambient_tint, 0.24)
+	var blended_fill: Color = BASE_FILL_LIGHT.lerp(ambient_tint, 0.18)
+	var changed: bool = false
+	if _key_light != null and _key_light.light_color != blended_key:
+		_key_light.light_color = blended_key
+		changed = true
+	if _fill_light != null and _fill_light.light_color != blended_fill:
+		_fill_light.light_color = blended_fill
+		changed = true
+	if _environment != null and _environment.ambient_light_color != blended_ambient:
+		_environment.ambient_light_color = blended_ambient
+		changed = true
+	if changed and _available:
+		_dirty = true
+		_request_render()
 
 
 func configure(style: Dictionary) -> bool:

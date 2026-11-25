@@ -5,6 +5,9 @@ uniform float aspect = 1.0;
 uniform float yaw = 0.0;
 uniform float warmth = 0.16;
 uniform float light_strength = 0.17;
+uniform float mote_time = 0.0;
+uniform float mote_strength = 0.0;
+uniform vec4 mote_color : source_color = vec4(1.0, 0.96, 0.84, 1.0);
 
 void fragment() {
 	// Project the acquired panorama into its upper hemisphere, with a paused game clock.
@@ -28,5 +31,24 @@ void fragment() {
 	sky = mix(sky, vec3(1.0, 0.965, 0.86), sunlight);
 	float horizon_haze = smoothstep(0.46, 1.0, UV.y);
 	sky = mix(sky, vec3(0.89, 0.94, 0.89), horizon_haze * 0.58);
+	// Soft sunlit atmospheric motes drifting slowly through the outer sky (0 when reduced motion).
+	if (mote_strength > 0.001) {
+		float motes = 0.0;
+		for (int i = 0; i < 8; i++) {
+			float fi = float(i);
+			float seed_x = fract(sin(fi * 78.233 + 12.9898) * 43758.5453);
+			float seed_y = fract(sin(fi * 39.425 + 91.713) * 24634.6345);
+			float drift_x = fract(seed_x + mote_time * (0.006 + 0.003 * fract(fi * 0.37)) + sin(mote_time * 0.35 + fi * 1.9) * 0.018);
+			float drift_y = fract(seed_y - mote_time * (0.009 + 0.004 * fract(fi * 0.53)));
+			vec2 delta = (UV - vec2(drift_x, drift_y)) * vec2(aspect, 1.0);
+			float radius = mix(0.0045, 0.0095, fract(fi * 0.618));
+			float dot_glow = exp(-dot(delta, delta) / (radius * radius));
+			float twinkle = 0.55 + 0.45 * sin(mote_time * (0.9 + fract(fi * 0.29) * 0.8) + fi * 2.7);
+			// Keep motes gentle near the top and periphery so central board contrast stays untouched.
+			float mask = smoothstep(0.95, 0.15, UV.y);
+			motes += dot_glow * twinkle * mask;
+		}
+		sky = mix(sky, mote_color.rgb, clamp(motes * mote_strength * 0.34, 0.0, 0.36));
+	}
 	COLOR = vec4(sky, 1.0);
 }

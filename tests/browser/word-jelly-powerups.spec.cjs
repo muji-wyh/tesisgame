@@ -146,7 +146,7 @@ function expectLayout(state, bounds, affordable) {
     const button = state.powerup_buttons[kind];
     expect(button.visible).toBe(true);
     expect(button.enabled, 'An unaffordable powerup remains tappable for negative feedback').toBe(true);
-    expect(button.price).toBe(25);
+    expect(button.price).toBe(50);
     expect(button.price_text).toBe(String(button.price));
     expect(button.title.replace(/\s+/g, ' ')).toBe('Auto merge');
     expect(button.affordable).toBe(affordable);
@@ -367,7 +367,7 @@ test('upgraded Auto merge caps completed outputs while keeping its overlapping 1
   before = await hover();
   const forecast = before.auto_merge_hover;
   const price = before.powerup_buttons.auto_merge.price;
-  expect(price, 'The first use has a fixed price regardless of preview quantity or owned level').toBe(25);
+  expect(price, 'The first use at Lv4 has the Lv1-5 fixed price (50) regardless of preview quantity').toBe(50);
   await pressRect(page, before.powerup_buttons.auto_merge.rect, bounds);
   await expect.poll(async () => (await wallet(page)).balance).toBe(5000 - price);
   expect((await jelly(page)).auto_merge_hover.active).toBe(false);
@@ -402,8 +402,8 @@ test('upgraded Auto merge caps completed outputs while keeping its overlapping 1
   const freedSpaces = before.tiles.length + after.generated_tiles - before.generated_tiles - after.tiles.length;
   expect(freedSpaces).toBe(forecast.input_ids.length - forecast.result_count);
   expect(after.powerup_uses).toEqual({ auto_merge: 1, family_merge: 0 });
-  expect(after.powerup_prices).toEqual({ auto_merge: 50, family_merge: 25 });
-  expect(after.powerup_buttons.auto_merge.price).toBe(50);
+  expect(after.powerup_prices).toEqual({ auto_merge: 100, family_merge: 25 });
+  expect(after.powerup_buttons.auto_merge.price).toBe(100);
   expect(after.auto_merge_hover.active, 'Finishing under the pointer cannot latch the consumed preview').toBe(false);
   expect(after.powerup.result_ids.every(id => after.tiles.some(tile =>
     tile.id === id && tile.jelly_kind === 'merged')),
@@ -490,7 +490,7 @@ test('word goals hover their matching Jellies and buy only that family while Cha
   expect(freedSpaces, 'The paid family merge genuinely reduces the board').toBeGreaterThan(0);
   expect(goalPrice, 'The first family use has a fixed price regardless of board reduction').toBe(25);
   expect(after.powerup_uses).toEqual({ auto_merge: 0, family_merge: 1 });
-  expect(after.powerup_prices).toEqual({ auto_merge: 25, family_merge: 50 });
+  expect(after.powerup_prices).toEqual({ auto_merge: 50, family_merge: 50 });
   expect(after.practice.words.every(item => item.price === 50),
     'All families share the next quote while Auto Merge keeps its independent first-use price').toBe(true);
   const persisted = await storedWallet(page);
@@ -535,7 +535,7 @@ test('a pending word goal reports its exact shortfall without spending or mergin
   expect((await jelly(page)).merged_count).toBe(opening.merged_count);
   expect((await jelly(page)).powerup.active).toBe(false);
   expect((await jelly(page)).powerup_uses).toEqual({ auto_merge: 0, family_merge: 0 });
-  expect((await jelly(page)).powerup_prices).toEqual({ auto_merge: 25, family_merge: 25 });
+  expect((await jelly(page)).powerup_prices).toEqual({ auto_merge: 50, family_merge: 25 });
   expect(errors).toEqual([]);
 });
 

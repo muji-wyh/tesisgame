@@ -16,5 +16,7 @@ static func _on_pressed(button: BaseButton) -> void:
 	while ancestor != null:
 		if ancestor.has_method("_play_ui_click"):
 			ancestor.call("_play_ui_click", button)
+			if ancestor.has_method("trigger_haptic"):
+				ancestor.call("trigger_haptic", "tap")
 			return
 		ancestor = ancestor.get_parent()

@@ -384,17 +384,36 @@ func _test_exact_replay_recipes() -> void:
 
 func _test_star_weighted_clear_quotes() -> void:
 	var chest: int = 100
-	var expected: Array[int] = [0, 75, 163, 250]
+	var expected: Array[int] = [0, 90, 178, 265]
 	for stars in range(4):
 		var reward: Dictionary = _catalog.clear_reward(1, stars, chest)
 		check(reward.get("ok", false) and str(reward.get("error", "")).is_empty()
 			and int(reward.get("bonus", -1)) == expected[stars],
-			"Stage settlement adds the rounded star-weighted bonus without rewriting the paid chest")
+			"First clear adds rounded star-weighted bonus plus Pure Clear 20% base bonus without rewriting the paid chest")
 		check(_catalog.clear_reward(1, stars, chest) == reward and chest == 100,
 			"A clear reward is an immutable deterministic quote, not a coin or receipt mutation")
+	var assisted: Dictionary = _catalog.clear_reward(1, 3, chest, 0, 1)
+	check(assisted.get("ok", false) and int(assisted.get("bonus", -1)) == 250 and int(assisted.get("pure_clear_bonus", -1)) == 0,
+		"Using a paid powerup waives the Pure Clear bonus while retaining base star weighting")
+	var replay_same: Dictionary = _catalog.clear_reward(1, 3, 0, 3, 0)
+	check(replay_same.get("ok", false) and replay_same.is_replay and int(replay_same.base) == 38
+		and int(replay_same.bonus) == 76 and int(replay_same.pure_clear_bonus) == 0,
+		"Replaying a cleared stage uses 50% base and no repeat Pure Clear bonus")
+	var replay_upgrade: Dictionary = _catalog.clear_reward(1, 3, 0, 1, 0)
+	check(replay_upgrade.get("ok", false) and int(replay_upgrade.star_upgrade_bonus) == 70
+		and int(replay_upgrade.bonus) == 76 + 70,
+		"Improving stars on replay awards +35 coins per newly earned star")
+	var capped_chest: Dictionary = _catalog.clear_reward(1, 3, 500, 0, 1)
+	check(capped_chest.get("ok", false) and int(capped_chest.weighted_chest) == 200
+		and int(capped_chest.bonus) == 350 and int(capped_chest.total) == 850,
+		"Chest coins above 200 are paid 1x without star multiplication")
+	var rebate: Dictionary = _catalog.clear_reward(1, 1, 0, 0, 1, 3)
+	check(rebate.get("ok", false) and int(rebate.fragment_rebate) == 45 and int(rebate.bonus) == 120,
+		"Leftover unconverted chest fragments pay a 15-coin rebate per fragment")
 	var late: Dictionary = _catalog.clear_reward(99, 3, 101)
-	check(late.get("ok", false) and int(late.get("bonus", -1)) == 551,
-		"Chapter eleven uses a 225-coin base and doubles only chest-plus-clear settlement")
+	check(late.get("ok", false) and int(late.get("bonus", -1)) == 596
+		and int(late.get("pure_clear_bonus", -1)) == 45,
+		"Chapter eleven uses a 225-coin base plus Pure Clear bonus on first clear")
 	check(_catalog.clear_reward(0, 0, chest).get("bonus", -1) == 0,
 		"An untimed challenge receives no main-stage clear bonus")
 	for arguments: Array in [[-1, 1, 0], [100, 1, 0], [1, -1, 0], [1, 4, 0], [1, 1, -1]]:

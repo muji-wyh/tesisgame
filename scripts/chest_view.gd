@@ -154,6 +154,7 @@ func configure_tier(tier: int, palette: Dictionary, manifest: Dictionary) -> voi
 	_charge_spark = palette.get("spark", _glint_color).lightened(0.25)
 	_release_color = Feel.FLASH_COLORS.get(theme_id, _glint_color)
 	if unchanged:
+		_sync_model_atmosphere()
 		return
 	_finish_flourish = false
 	stop_reaction()
@@ -217,7 +218,16 @@ func _load_model(style: Dictionary) -> void:
 	_pieces.append({"node": sprite, "rest": Transform2D.IDENTITY, "role": "body"})
 	_model_view.resolution_changed.connect(_sync_model_surface)
 	_sync_model_surface()
+	_sync_model_atmosphere()
 	_model_view.set_render_active(is_visible_in_tree() and not _idle_paused)
+
+
+func _sync_model_atmosphere() -> void:
+	if not is_instance_valid(_model_view):
+		return
+	var accent: Color = _charge_color if _charge_color != Color.WHITE else Color("#fff3db")
+	var light: Color = _glint_color if _glint_color != Color.WHITE else Color("#dce5f0")
+	_model_view.set_atmosphere(accent.lightened(0.68), light.lightened(0.45))
 
 
 func _sync_model_surface() -> void:

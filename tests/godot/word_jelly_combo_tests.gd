@@ -121,7 +121,7 @@ func _begin_pair(model: RefCounted) -> Dictionary:
 func _test_manual_rewards() -> void:
 	var fixture: Dictionary = _fixture()
 	var model: RefCounted = fixture.model
-	var expected: Array[int] = [0, 0, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3]
+	var expected: Array[int] = [0, 0, 1, 1, 1, 2, 2, 2, 2, 4, 4, 4]
 	var total: int = 0
 	var ids: Array[String] = []
 	for index in range(expected.size()):
@@ -134,7 +134,7 @@ func _test_manual_rewards() -> void:
 		var level: int = 1 if index + 1 < 3 else 2 if index + 1 < 7 else 3 if index + 1 < 12 else 4
 		check(combo.actions == index + 1 and combo.count == level and combo.best == level and combo.bonus == expected[index]
 			and combo.coins == total and fixture.wallet.balance == total,
-			"Committed manual merges follow the 0, 1, 2, 3 coin schedule exactly")
+			"Committed manual merges follow the 0, 1, 2, 4, 6 coin schedule exactly")
 		check(not model.cell(int(operation.result.id)).is_empty() and model.cell(int(operation.a_id)).is_empty()
 			and model.cell(int(operation.b_id)).is_empty(), "A counted merge consumes both source bodies once")
 		ids.append(str(combo.event_id))
@@ -142,12 +142,14 @@ func _test_manual_rewards() -> void:
 		model.retry_combo_credit()
 		check(model.combo_snapshot() == combo and fixture.wallet.balance == total,
 			"Duplicate completion and retry calls cannot count or credit an already finished merge")
-	check(fixture.payments.size() == 10 and fixture.changes.size() == 12 and total == 20,
+	check(fixture.payments.size() == 10 and fixture.changes.size() == 12 and total == 23,
 		"The first two successes need no payment; every later completion has one payment and one combo event")
 	for index in range(ids.size()):
 		check(ids.count(ids[index]) == 1, "Each counted success has a distinct stable event identity")
-	for count: int in [10, 25, 40, 100, 1000000]:
-		check(Economy.jelly_combo_bonus(count) == 3, "Long chains retain the three-coin reward cap")
+	for count: int in [10, 14]:
+		check(Economy.jelly_combo_bonus(count) == 4, "Chains 10-14 pay four combo coins")
+	for count: int in [15, 25, 40, 100, 1000000]:
+		check(Economy.jelly_combo_bonus(count) == 6, "Long chains 15+ retain the six-coin reward cap")
 	var wrong_root: Dictionary = _put(model, model._new_word_root(_word(), 0))
 	var wrong_picture: Dictionary = _put(model, model._new_picture_tile(_word("dog"), 0))
 	check(model.try_merge(int(wrong_root.id), int(wrong_picture.id)) == "wrong"

@@ -608,6 +608,12 @@ func test_challenge_results() -> void:
 			and app._round_result.challenge_result.new_best == bool(example.record)
 			and room._challenge_record.value == maxi(int(example.best), int(example.reached)),
 			"Lower, tied, higher and first records display truthful reached and historical Stages")
+		var expected_challenge_bonus: int = preload("res://scripts/coin_economy.gd").challenge_milestone_bonus(int(example.reached)) \
+			+ (preload("res://scripts/coin_economy.gd").CHALLENGE_NEW_RECORD_BONUS if int(example.reached) > int(example.best) and int(example.reached) >= 3 else 0)
+		check(int(app._round_result.challenge_result.get("bonus_coins", -1)) == expected_challenge_bonus
+			and app.coin_wallet.balance >= expected_challenge_bonus,
+			"Challenge settlement awards exact stage-5 milestone and new-record coin bonuses: got=%d expected=%d" % [
+				int(app._round_result.challenge_result.get("bonus_coins", -1)), expected_challenge_bonus])
 		check(notifications.size() == (1 if bool(example.record) else 0),
 			"Only a genuinely surpassed old record emits the breakthrough effect once")
 		check(room._back.visible and not room._back.disabled and room._back.text == "Back to map"
