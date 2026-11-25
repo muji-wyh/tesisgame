@@ -392,14 +392,14 @@ func _run() -> void:
 			check(tile.size == Vector2.ONE * side, "Merged level %d keeps the ordinary body size" % level)
 			check(tile.valid_word and tile._picture.visible and tile._label.visible, "Merged faces show picture and full word")
 			check(tile.presentation_snapshot().merged_light and tile.presentation_snapshot().merged_glints == 2, "Merged levels have a permanent sourced readiness light")
-			check(tile.presentation_snapshot().level_badge == (str(level) if level > 1 else ""), "Only upgraded merged words carry the upper-right numeral")
+			check(tile.presentation_snapshot().level_badge == str(level), "All merged words (Lv1–Lv9) carry the upper-right level numeral")
 			var guidance: String = str(tile.get("accessibility_name"))
 			check(guidance.contains("add their levels") and guidance.contains("capped at 9"),
 				"Merged-word guidance describes additive levels and the capped final tier")
 			check(not guidance.contains("same level"), "Mixed-level word merges are discoverable to screen-reader users")
 			check(not tile._label.get_rect().intersects(tile._picture.get_rect()), "Merged picture and caption have separate space")
 			check(_inside(tile, tile._label.get_rect()) and _inside(tile, tile._picture.get_rect()), "Merged learning content fits the ordinary square")
-			if level > 1:
+			if level >= 1:
 				var fragment_rect: Array = tile.fragment_badge_snapshot().rect
 				check(not Rect2(fragment_rect[0], fragment_rect[1], fragment_rect[2], fragment_rect[3]).intersects(tile._level_badge.get_rect()), "Level and fragment badges occupy different corners")
 				check(_inside(tile, tile._level_badge.get_rect()) and tile._level_badge.position.x > side * 0.5, "Level numeral stays in the upper-right corner")

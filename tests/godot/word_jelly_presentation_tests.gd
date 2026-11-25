@@ -162,7 +162,7 @@ func test_skills(word: Dictionary) -> void:
 		skill.size = Vector2(390, 500)
 		check(skill.present(level, word, false) and skill.snapshot().level == level
 			and not skill.snapshot().description.is_empty(), "Every level explains its actual collection skill before purchase")
-		check(skill.snapshot().target_count == [2, 4, 6, 8, 7, 13, 12, 22, 55][level - 1],
+		check(skill.snapshot().target_count == [0, 4, 6, 8, 7, 13, 12, 22, 55][level - 1],
 			"Skill %d previews its correct full seven-column campaign footprint" % level)
 		skill.advance(0.1)
 		for dimensions: Vector2 in [Vector2(320, 220), Vector2(393, 500), Vector2(1000, 600)]:

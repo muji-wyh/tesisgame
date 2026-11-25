@@ -92,7 +92,7 @@ func _test_previews_and_no_fake_progress() -> void:
 	_reset()
 	var deposits: int = page.snapshot().deposit_count
 	var milestones: int = page.snapshot().level_up_count
-	var counts: Array[int] = [2, 4, 6, 8, 7, 13, 12, 22, 55]
+	var counts: Array[int] = [0, 4, 6, 8, 7, 13, 12, 22, 55]
 	for level in range(1, 10):
 		page.select_level(level)
 		var actual: Dictionary = page.snapshot()

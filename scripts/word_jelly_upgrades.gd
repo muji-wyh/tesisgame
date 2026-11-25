@@ -518,6 +518,7 @@ func _refresh() -> void:
 	_description.text = "%d ready Jellies" % Economy.auto_merge_capacity(_selected) if _kind == "auto_merge" \
 		else "+%.1fs combo · +%d%% treasure" % [Economy.star_charm_combo_bonus(_selected),
 			roundi(Economy.star_charm_fragment_bonus(_selected) * 100.0)] if _kind == "star_charm" \
+		else "Direct collection only" if _selected <= 1 \
 		else "%d nearby Jellies" % _preview.snapshot().target_count
 	_benefits.text = "Lv %d  >  Lv %d" % [owned, mini(9, owned + 1)] if owned < 9 else "Lv 9"
 	_benefits.accessibility_name = _preview.coin_description()

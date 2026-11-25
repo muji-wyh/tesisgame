@@ -1347,7 +1347,7 @@ func _blast_target_ids(origin: Dictionary, level: int) -> Array[int]:
 	var inner: Array[int] = []
 	var outer: Array[int] = []
 	var selected: Array[int] = []
-	if level <= 1 and not _campaign_level_rules:
+	if level <= 1:
 		return selected
 	for tile: Dictionary in cells:
 		var id: int = int(tile.id)
@@ -1370,7 +1370,7 @@ func _blast_target_ids(origin: Dictionary, level: int) -> Array[int]:
 		var ordered_inner: Array[int] = _prioritize_blast_ids(inner) if _campaign_level_rules else inner
 		if not _campaign_level_rules:
 			_shuffle_blast_ids(ordered_inner)
-		var count: int = [0, 2, 4, 6, 8][level] if _campaign_level_rules else level - 1
+		var count: int = [0, 0, 4, 6, 8][level] if _campaign_level_rules else level - 1
 		selected.assign(ordered_inner.slice(0, mini(count, ordered_inner.size())))
 		return selected
 	selected = inner
@@ -1422,32 +1422,11 @@ func _queue_collection_blast(completed: Dictionary) -> void:
 	var raw_level: int = clampi(int(completed.get("merge_level", 1)), 1, MAX_MERGE_LEVEL)
 	var supernova: int = boon_stacks("supernova_blast")
 	var level: int = clampi(raw_level + supernova * 2, 1, MAX_MERGE_LEVEL)
-	if (level <= 1 and not _campaign_level_rules) or not _finish_reason.is_empty() or _stage_ending:
+	if level <= 1 or not _finish_reason.is_empty() or _stage_ending:
 		return
 	var targets: Array[int] = _blast_target_ids(completed.a, level)
 	if targets.is_empty():
 		return
-	if level <= 1:
-		# Keep Lv1 Little spark snappy and non-disruptive: only spark when at least
-		# one marked neighbor is settled and has a legal settled partner on the board.
-		var has_partner: bool = false
-		for id: int in targets:
-			var source: Dictionary = cell(id)
-			if source.is_empty() or not is_settled(source):
-				continue
-			for candidate: Dictionary in cells:
-				var other_id: int = int(candidate.id)
-				if other_id == id or not is_settled(candidate) or is_fusing(other_id) or is_lifted(other_id) \
-					or _reserved_for_collection(other_id) or _reserved_for_powerup(other_id) \
-					or not boss_interactable(other_id, false):
-					continue
-				if parts_compatible(source, candidate) or parts_compatible(candidate, source):
-					has_partner = true
-					break
-			if has_partner:
-				break
-		if not has_partner:
-			return
 	var origin: Dictionary = {"column": completed.a.column, "row": completed.a.row,
 		"width": 1, "height": 1, "level": level}
 	_blast_queue.append({"event_id": str(completed.attempt_id), "level": level,

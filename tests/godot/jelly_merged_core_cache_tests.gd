@@ -351,8 +351,8 @@ func _run() -> void:
 		check(tile._merged_effect_frame == phases[index] and tile._merged_effect.texture == Tile.MERGED_EFFECT_ATLAS,
 			"The captured level retains its exact fractional phase and original atlas resource")
 		check(tile._label.visible and tile._picture.visible and tile._shadow.visible \
-			and tile._level_badge.visible == (tile.merge_level > 1),
-			"Original learning and elevated badge nodes retain logical visibility and layout")
+			and tile._level_badge.visible == (tile.valid_word and tile.merge_level >= 1),
+			"Original learning and level badge nodes retain logical visibility and layout")
 		check(not tile._merged_core_hidden.has(tile._label) \
 			and not tile._merged_core_hidden.has(tile._fragment_count) \
 			and tile._fragment_holder.is_visible_in_tree() == (tile.fragments > 0),

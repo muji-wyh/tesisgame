@@ -621,9 +621,9 @@ func _test_campaign_combo_depth() -> void:
 		var iso: Dictionary = blast_model._new_word_root(word1, 0)
 		iso.merge({"column": pos.x, "row": pos.y, "age": 100.0, "settling": false, "arrival": false, "falling": false}, true)
 		blast_model.cells.append(iso)
-	var picked: Array[int] = blast_model._blast_target_ids(origin, 1)
-	check(picked.size() == 2 and int(matchable_tile.id) in picked,
-		"Campaign blast prioritizes adjacent neighbors that have legal partners on the board")
+	var picked: Array[int] = blast_model._blast_target_ids(origin, 2)
+	check(picked.size() == 4 and int(matchable_tile.id) in picked,
+		"Campaign Lv2+ blast prioritizes adjacent neighbors that have legal partners on the board")
 
 
 func _settle_ui() -> void:

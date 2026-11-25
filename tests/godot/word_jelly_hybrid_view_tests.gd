@@ -78,6 +78,7 @@ func _run() -> void:
 	check(view.game.cells.size() == 1 and view.game.cells[0].jelly_kind == "merged", "Dragging word onto picture creates a merged Jelly")
 	var merged: Dictionary = view.game.cells[0]
 	check(view._tiles[int(merged.id)]._picture.visible and view._tiles[int(merged.id)]._label.visible, "Merged Jelly displays picture and word")
+	check(view._tiles[int(merged.id)].presentation_snapshot().level_badge == "1", "Lv1 badge is visible on newly merged Jelly")
 	check(attempts.is_empty(), "Picture fusion does not prematurely grant mastery")
 	var second: Dictionary = merged.duplicate(true)
 	second.id = view.game._next_tile_id

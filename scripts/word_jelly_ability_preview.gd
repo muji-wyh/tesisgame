@@ -14,7 +14,7 @@ const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const WAND = preload("res://assets/images/ui/jelly-powerups/auto-merge-wand.svg")
 const STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
-const NAMES: Array[String] = ["", "Little spark", "Neighbor burst", "Wider burst",
+const NAMES: Array[String] = ["", "Direct pickup", "Neighbor burst", "Wider burst",
 	"Surrounding burst", "Column burst", "Cross burst", "Extended ring", "Double ring", "Board burst"]
 
 var reduced_motion := false
@@ -129,6 +129,8 @@ func description() -> String:
 		var combo_bonus: float = Economy.star_charm_combo_bonus(_level)
 		var frag_pct: int = roundi(Economy.star_charm_fragment_bonus(_level) * 100.0)
 		return "+%.1fs combo timer  ·  +%d%% treasure fragments." % [combo_bonus, frag_pct]
+	if _level <= 1:
+		return "Direct collection only.\nMerge two Lv1 Jellies to unlock chain bursts at Lv2+."
 	var reach: String = "up to %d nearby Jellies" % _targets.size() if _level <= 4 \
 		else "its entire column" if _level == 5 else "its row and column" if _level == 6 \
 		else "the inner ring and 4 outer Jellies" if _level == 7 \

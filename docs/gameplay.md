@@ -727,7 +727,7 @@ clamps to the permanently unlocked coin-bought cap rather than rejecting an over
 With Lv4 unlocked, Lv2 + Lv3 produces Lv4 in either direction, manually or through
 Auto merge. All input mass and carried fragments survive the clamp.
 For example, Lv2 plus Lv7 and Lv7 plus Lv5 both produce
-Lv9; all input fragments and mass survive. Levels 2–9 have an upper-right numeral.
+Lv9; all input fragments and mass survive. Levels 1–9 have an upper-right numeral.
 Each of the nine levels has a distinct collection effect and sound. Board
 Lv4–9 pickups use a compact, short outward burst without falling embers; their
 separate top popovers retain the larger firework and falling tails. Every board and top-popover
@@ -903,9 +903,8 @@ then applies this footprint to current board bodies:
 | Lv8 | Two surrounding rings, capped at eight inner and fourteen outer bodies |
 | Lv9 | Every other available board body |
 
-Jelly World's campaign rules strengthen the early support footprint:
-Lv1 marks **two** adjacent bodies (with a lightweight **60 ms windup / 220 ms flight** and no slow-motion
-freeze, firing when at least one marked neighbor has a legal board partner), Lv2 four, Lv3 six, and Lv4 the complete
+Jelly World's campaign rules keep **Lv1** as direct collection only (no chain blast),
+and strengthen the Lv2+ support footprint: Lv2 marks **four** adjacent bodies, Lv3 six, and Lv4 the complete
 one-cell ring. Lv5 retains its column identity and Lv6 its cross; Lv7 adds up
 to four outer-ring bodies to the full inner ring, Lv8 retains its capped two
 rings, and Lv9 retains the board. Campaign blasts prioritize neighbors that have legal partners on the board.

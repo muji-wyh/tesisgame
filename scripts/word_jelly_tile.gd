@@ -489,8 +489,8 @@ func _layout_compact_label() -> void:
 	_label.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 	_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	var inset: float = size.x * 0.10
-	var label_top: float = size.y * (0.54 if has_picture else 0.36 if fragments > 0 or merge_level > 1 else 0.21)
-	var label_bottom: float = size.y * (0.85 if has_picture else 0.89 if fragments > 0 or merge_level > 1 else 0.79)
+	var label_top: float = size.y * (0.54 if has_picture else 0.36 if fragments > 0 or (valid_word and merge_level >= 1) else 0.21)
+	var label_bottom: float = size.y * (0.85 if has_picture else 0.89 if fragments > 0 or (valid_word and merge_level >= 1) else 0.79)
 	var label_size := Vector2(size.x - inset * 2.0, label_bottom - label_top)
 	var minimum: int = ceili(13.0 / s)
 	var pixels: int = maxi(minimum, mini(roundi(_unit * (0.25 if has_picture else 0.34)), ceili((22.0 if has_picture else 28.0) / s)))
@@ -526,7 +526,7 @@ func _layout_compact_label() -> void:
 		# Reserve the full receive bounce, not only the currently painted badge.
 		var extent: Vector2 = _fragment_holder.size * float(_fragment_holder.get_meta("fit", 1.0))
 		picture_left = size.x * 0.02 + extent.x * 1.06 + 1.0 / s
-	if merge_level > 1 and _level_badge != null:
+	if valid_word and merge_level >= 1 and _level_badge != null:
 		picture_right = _level_badge.position.x - 1.0 / s
 	var picture_edge: float = maxf(0.0, minf(picture_right - picture_left, _label.position.y - picture_top - 1.0 / s))
 	_picture.size = Vector2.ONE * picture_edge
@@ -552,8 +552,9 @@ func _layout_corner_fragments() -> void:
 func _layout_level_badge() -> void:
 	if _level_badge == null:
 		return
-	_level_badge.visible = valid_word and merge_level > 1 and not _projection
-	_level_badge.text = str(merge_level) if merge_level > 1 else ""
+	var show_level: bool = valid_word and merge_level >= 1 and not _projection
+	_level_badge.visible = show_level
+	_level_badge.text = str(merge_level) if valid_word and merge_level >= 1 else ""
 	var ui_scale: float = Style.ui_scale(self)
 	var pixels: int = maxi(ceili(10.0 / ui_scale), roundi(minf(_unit * 0.20, 15.0 / ui_scale)))
 	_level_badge.add_theme_font_size_override("font_size", pixels)

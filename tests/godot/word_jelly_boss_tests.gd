@@ -143,29 +143,24 @@ func test_levels_and_story() -> void:
 	check(model.try_merge(int(second.id), int(first.id)) == "unlocked"
 		and model.boss.locks(int(first.id)) == 0 and model.cells.size() == 2,
 		"A level cap cannot make a matching locked merged word permanently impossible to unlock")
-	check(model._blast_target_ids({"id": -1, "column": 0, "row": 6}, 1).size() == 2,
-		"Lv1 now reaches two nearby bodies instead of having no support ability")
-	var spark_model = make_model(3, 1)
-	var spark_word: Dictionary = spark_model.stage_run.words[0]
-	var other_word: Dictionary = spark_model.stage_run.words[1]
-	var spark_source: Dictionary = spark_model._new_word_root(spark_word)
-	spark_model._set_merged_word(spark_source, spark_word, 1, true)
-	put(spark_model, spark_source, 2)
-	var spark_root: Dictionary = put(spark_model, spark_model._new_word_root(other_word), 1)
-	var spark_picture: Dictionary = put(spark_model, spark_model._new_picture_tile(other_word), 5)
-	check(spark_model.collect(int(spark_source.id)), "Campaign Lv1 collection queues a lightweight Little spark")
-	spark_model.step(Model.collection_seconds(1) + 0.01)
-	check(spark_model.powerup_active() and spark_model.powerup_snapshot().kind == "blast"
-		and is_equal_approx(spark_model.gameplay_time_scale(), 1.0)
-		and not spark_model.hit_stop_snapshot().active,
-		"Campaign Lv1 Little spark fires without slow-motion hit-stop")
-	for step_idx in range(60):
-		spark_model.step(0.04)
-		if not spark_model.powerup_active() and spark_model.fusions.is_empty():
-			break
-	check(spark_model.merged_count == 1 and spark_model.cell(int(spark_root.id)).is_empty()
-		and spark_model.cell(int(spark_picture.id)).is_empty(),
-		"Campaign Lv1 Little spark actually auto-merges its marked neighbor")
+	check(model._blast_target_ids({"id": -1, "column": 0, "row": 6}, 1).is_empty(),
+		"Lv1 performs direct collection only without a chain blast")
+	var lv1_model = make_model(3, 1)
+	var lv1_word: Dictionary = lv1_model.stage_run.words[0]
+	var other_word: Dictionary = lv1_model.stage_run.words[1]
+	var lv1_source: Dictionary = lv1_model._new_word_root(lv1_word)
+	lv1_model._set_merged_word(lv1_source, lv1_word, 1, true)
+	put(lv1_model, lv1_source, 2)
+	var neighbor_root: Dictionary = put(lv1_model, lv1_model._new_word_root(other_word), 1)
+	var neighbor_picture: Dictionary = put(lv1_model, lv1_model._new_picture_tile(other_word), 5)
+	check(lv1_model.collect(int(lv1_source.id)), "Campaign Lv1 collection succeeds directly")
+	lv1_model.step(Model.collection_seconds(1) + 0.01)
+	check(not lv1_model.powerup_active() and not lv1_model.hit_stop_snapshot().active
+		and lv1_model.merged_count == 0 and not lv1_model.cell(int(neighbor_root.id)).is_empty()
+		and not lv1_model.cell(int(neighbor_picture.id)).is_empty(),
+		"Campaign Lv1 direct collection does not trigger a chain blast or auto-merge neighbors")
+	check(lv1_model._blast_target_ids({"id": -1, "column": 2, "row": 7}, 2).size() == 1,
+		"Lv2 begins campaign chain-blast targeting on adjacent neighbors")
 	var dodge_model = make_model(3, 1)
 	var dodge_word: Dictionary = dodge_model.stage_run.words[0]
 	var dodge_a: Dictionary = put(dodge_model, dodge_model._new_word_root(dodge_word), 0)
