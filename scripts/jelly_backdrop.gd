@@ -52,6 +52,17 @@ var _reduced_motion: bool = false
 var _sky: TextureRect
 var _sky_material := ShaderMaterial.new()
 var _daylight: Dictionary = {}
+var _impact_glow: float = 0.0
+var _impact_glow_value: float = 0.0
+var _impact_glow_elapsed: float = 1.0
+var _impact_glow_duration: float = 0.36
+var _impact_glow_color := Color("#ffea98")
+var _boss_kick_strength: float = 0.0
+var _boss_kick_elapsed: float = 1.0
+var _boss_kick_duration: float = 0.42
+var _boss_kick_dir := Vector2(0.0, 1.0)
+var _boss_kick_offset := Vector2.ZERO
+var _boss_kick_zoom: float = 0.0
 
 
 func _init() -> void:
@@ -80,6 +91,7 @@ func _init() -> void:
 	visibility_changed.connect(_sync_motion)
 	set_process(false)
 	_update_daylight()
+	_apply_impact_shader()
 
 
 func _ready() -> void:
@@ -94,8 +106,76 @@ func set_ambient_active(value: bool) -> void:
 
 func set_reduced_motion(value: bool) -> void:
 	_reduced_motion = value
+	if value:
+		_clear_impact_effects()
 	_update_daylight()
 	_sync_motion()
+
+
+func pulse_ambient_glow(strength: float, color: Color = Color("#ffea98"), duration: float = 0.34) -> void:
+	if _reduced_motion or not is_finite(strength) or strength <= 0.0:
+		return
+	var next: float = clampf(strength, 0.0, 1.0)
+	if next >= _impact_glow * 0.65 or _impact_glow_elapsed >= _impact_glow_duration:
+		_impact_glow = maxf(_impact_glow * 0.6, next)
+		_impact_glow_color = color
+		_impact_glow_duration = clampf(duration, 0.16, 0.65)
+		_impact_glow_elapsed = 0.0
+		_apply_impact_shader()
+
+
+func trigger_boss_shockwave(strength: float, color: Color = Color("#ffe58f"), direction: Vector2 = Vector2(0.0, 1.0)) -> void:
+	if _reduced_motion or not is_finite(strength) or strength <= 0.0:
+		return
+	var next: float = clampf(strength, 0.25, 1.25)
+	_boss_kick_strength = maxf(_boss_kick_strength * 0.7, next)
+	_boss_kick_dir = direction.normalized() if direction.length_squared() > 0.01 else Vector2(0.0, 1.0)
+	_boss_kick_duration = 0.48 if next >= 1.0 else 0.38
+	_boss_kick_elapsed = 0.0
+	pulse_ambient_glow(minf(1.0, next * 0.95), color, _boss_kick_duration + 0.10)
+	_apply_impact_shader()
+	queue_redraw()
+
+
+func _clear_impact_effects() -> void:
+	var had_kick: bool = not _boss_kick_offset.is_zero_approx() or _boss_kick_zoom > 0.0001
+	_impact_glow = 0.0
+	_impact_glow_elapsed = _impact_glow_duration
+	_boss_kick_strength = 0.0
+	_boss_kick_elapsed = _boss_kick_duration
+	_boss_kick_offset = Vector2.ZERO
+	_boss_kick_zoom = 0.0
+	_apply_impact_shader()
+	if had_kick:
+		queue_redraw()
+
+
+func _apply_impact_shader() -> void:
+	var glow_val: float = 0.0
+	if not _reduced_motion and _impact_glow > 0.0 and _impact_glow_elapsed < _impact_glow_duration:
+		var gp: float = clampf(_impact_glow_elapsed / _impact_glow_duration, 0.0, 1.0)
+		# Instant-attack glow peak at t=0 (1.0 -> silky exponential decay) so frame-0 hits read immediately.
+		var rise: float = lerpf(0.72, 1.0, smoothstep(0.0, 0.08, gp))
+		glow_val = rise * pow(1.0 - gp, 1.75) * _impact_glow
+	_impact_glow_value = glow_val
+	_sky_material.set_shader_parameter("impact_glow", glow_val)
+	_sky_material.set_shader_parameter("impact_color", _impact_glow_color)
+	var u: float = 1.0 / maxf(0.1, Style.ui_scale(self))
+	var kick_offset := Vector2.ZERO
+	var kick_zoom: float = 0.0
+	if not _reduced_motion and _boss_kick_strength > 0.0 and _boss_kick_elapsed < _boss_kick_duration:
+		var kp: float = clampf(_boss_kick_elapsed / _boss_kick_duration, 0.0, 1.0)
+		# Dramatic Boss finisher / POWER! smash: big heavy downward slam (up to 16px on
+		# foreground scenery + 3.2% panoramic punch-zoom) with one deep cushion rebound!
+		var env: float = pow(1.0 - kp, 1.55) * exp(-kp * 3.1) * _boss_kick_strength
+		var wave: float = cos(kp * TAU * 0.95)
+		kick_offset = (_boss_kick_dir * (14.5 * wave) + Vector2(0.0, 4.5 * sin(kp * PI))) * env * u
+		kick_zoom = clampf(pow(1.0 - kp, 1.8) * exp(-kp * 2.2) * 0.032 * _boss_kick_strength, 0.0, 0.045)
+	_boss_kick_offset = kick_offset
+	_boss_kick_zoom = kick_zoom
+	var uv_shift := Vector2(kick_offset.x / maxf(1.0, size.x), kick_offset.y / maxf(1.0, size.y)) * 0.55
+	_sky_material.set_shader_parameter("impact_zoom", kick_zoom)
+	_sky_material.set_shader_parameter("impact_shift", uv_shift)
 
 
 func set_chapter(chapter: int) -> void:
@@ -117,6 +197,24 @@ func _process(delta: float) -> void:
 		return
 	_elapsed = fmod(_elapsed + delta * clampf(motion_scale, 0.0, 1.0), 360.0)
 	_update_daylight()
+	var dt: float = minf(delta, 0.05)
+	var impact_dirty: bool = false
+	var needs_redraw: bool = false
+	if _impact_glow > 0.0 and _impact_glow_elapsed < _impact_glow_duration:
+		_impact_glow_elapsed = minf(_impact_glow_duration, _impact_glow_elapsed + dt)
+		impact_dirty = true
+		if _impact_glow_elapsed >= _impact_glow_duration:
+			_impact_glow = 0.0
+	if _boss_kick_strength > 0.0 and _boss_kick_elapsed < _boss_kick_duration:
+		_boss_kick_elapsed = minf(_boss_kick_duration, _boss_kick_elapsed + dt)
+		impact_dirty = true
+		needs_redraw = true
+		if _boss_kick_elapsed >= _boss_kick_duration:
+			_boss_kick_strength = 0.0
+	if impact_dirty:
+		_apply_impact_shader()
+	if needs_redraw:
+		queue_redraw()
 
 
 func _layout() -> void:
@@ -163,7 +261,10 @@ func atmosphere() -> Dictionary:
 func snapshot() -> Dictionary:
 	var result := _daylight.duplicate()
 	result.merge({"elapsed": _elapsed, "active": is_processing(), "reduced_motion": _reduced_motion,
-		"chapter": _chapter})
+		"chapter": _chapter,
+		"impact_glow": _impact_glow_value,
+		"boss_kick_offset": [_boss_kick_offset.x, _boss_kick_offset.y],
+		"boss_kick_zoom": _boss_kick_zoom})
 	return result
 
 
@@ -183,15 +284,19 @@ func _draw() -> void:
 	var hill2_tint: Color = Color(theme.hill2.r, theme.hill2.g, theme.hill2.b, 0.84)
 	var prop_tint: Color = Color(theme.prop.r, theme.prop.g, theme.prop.b, 0.86)
 	var right_tint: Color = Color(theme.prop.r, theme.prop.g, theme.prop.b, 0.78)
-	_stamp(HILLS, Vector2(size.x * 0.43, size.y * 0.80), hill_width, Vector2(0.5, 0.0), hill_tint)
+	# Layered parallax displacement ONLY during dramatic Boss shockwaves (0px during ordinary play!).
+	var far_kick: Vector2 = _boss_kick_offset * 0.45
+	var mid_kick: Vector2 = _boss_kick_offset * 0.82
+	var near_kick: Vector2 = _boss_kick_offset * 1.18
+	_stamp(HILLS, Vector2(size.x * 0.43, size.y * 0.80) + far_kick, hill_width, Vector2(0.5, 0.0), hill_tint)
 	var portrait: bool = size.x < size.y
 	var tree_height: float = minf(minf(size.y * 0.27, size.x * 0.48), 255.0 / scale)
 	var left_prop: Texture2D = CHAPTER_PROPS[_chapter - 1] if _chapter >= 2 else TREE
 	var right_prop: Texture2D = CHAPTER_PROPS[_chapter - 1] if _chapter >= 3 else TREE_LONG
-	_stamp(left_prop, Vector2(size.x * (0.01 if portrait else 0.048), size.y * 1.01), tree_height * left_prop.get_width() / left_prop.get_height(), Vector2(0.5, 1.0), prop_tint)
-	_stamp(right_prop, Vector2(size.x * 0.965, size.y * 1.01), tree_height * 0.90 * right_prop.get_width() / right_prop.get_height(), Vector2(0.5, 1.0), right_tint)
-	_stamp(HILLS, Vector2(size.x * 0.56, size.y * 0.92), hill_width, Vector2(0.5, 0.0), hill2_tint)
+	_stamp(left_prop, Vector2(size.x * (0.01 if portrait else 0.048), size.y * 1.01) + mid_kick, tree_height * left_prop.get_width() / left_prop.get_height(), Vector2(0.5, 1.0), prop_tint)
+	_stamp(right_prop, Vector2(size.x * 0.965, size.y * 1.01) + mid_kick, tree_height * 0.90 * right_prop.get_width() / right_prop.get_height(), Vector2(0.5, 1.0), right_tint)
+	_stamp(HILLS, Vector2(size.x * 0.56, size.y * 0.92) + mid_kick, hill_width, Vector2(0.5, 0.0), hill2_tint)
 	var foliage_width: float = minf(size.x * 0.28, 220.0 / scale)
-	_stamp(FOLIAGE, Vector2(0.0, size.y * 1.04), foliage_width, Vector2(0.32, 1.0), prop_tint)
-	_stamp(FOLIAGE, Vector2(size.x, size.y * 1.05), foliage_width * 0.88, Vector2(0.68, 1.0), right_tint)
+	_stamp(FOLIAGE, Vector2(0.0, size.y * 1.04) + near_kick, foliage_width, Vector2(0.32, 1.0), prop_tint)
+	_stamp(FOLIAGE, Vector2(size.x, size.y * 1.05) + near_kick, foliage_width * 0.88, Vector2(0.68, 1.0), right_tint)
 	draw_texture_rect(_header_wash, Rect2(Vector2.ZERO, Vector2(size.x, minf(size.y * 0.25, 220.0 / scale))), false, Color(1, 1, 1, 0.58))

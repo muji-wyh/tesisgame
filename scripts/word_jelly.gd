@@ -179,10 +179,10 @@ var _tile_flashes: Dictionary = {}
 var _tile_aftershocks: Dictionary = {}
 var _contact_pop_pulse: Dictionary = {}
 var _last_contact_match_pair := Vector2i(-1, -1)
-const WELL_IMPULSE_SECONDS: float = 0.28
-const BOARD_RIPPLE_SECONDS: float = 0.30
+const WELL_IMPULSE_SECONDS: float = 0.14
+const BOARD_RIPPLE_SECONDS: float = 0.22
 const MERGE_IMPACT_P: float = 0.22
-const MERGE_AFTERSHOCK_SECONDS: float = 0.22
+const MERGE_AFTERSHOCK_SECONDS: float = 0.20
 var _presentation_work: Dictionary = {"view_passes": 0, "tiles_classified": 0,
 	"tiles_posed": 0, "topology_passes": 0, "palette_passes": 0,
 	"mark_passes": 0, "control_passes": 0, "hint_searches": 0, "boss_passes": 0}
@@ -1130,7 +1130,8 @@ func _merge(first: int, second: int, from: Vector2, held: Dictionary = {}, held_
 			if direction.length_squared() < 0.1:
 				direction = (_tile_rect(_cell(second)).get_center() - _tile_rect(_cell(first)).get_center()).normalized()
 			_rejection = {"a": first, "b": second, "elapsed": 0.0, "direction": direction}
-			_trigger_well_impulse(0.38, Color("#e46464"), Vector2(1.0 if direction.x >= 0.0 else -1.0, 0.0))
+			# Rim flash only on wrong bump; the two tiles already visibly recoil apart.
+			_trigger_well_impulse(0.24, Color("#e46464"), Vector2(0.0, 1.0))
 			audio_requested.emit("wrong-bounce")
 		_snap_back(first, from)
 	_sync_tiles()
@@ -2691,17 +2692,16 @@ func _pose_collection_charge(fusion: Dictionary, visual: Dictionary, rect: Rect2
 		merged.modulate.a = 1.0 - smoothstep(pop_at, pop_at + 0.14, elapsed)
 		merged.set_impact_flash(0.0, true)
 	elif elapsed < pop_at:
-		var jitter_px: Vector2 = Vector2(sin(elapsed * 95.0), cos(elapsed * 113.0)) * (2.6 * late_swell * u)
-		merged.position = rect.position + _board_recoil_offset + jitter_px
+		merged.position = rect.position + _board_recoil_offset
 		merged.scale = Vector2(pre_pop_scale * (1.0 + late_swell * 0.06), pre_pop_scale * (1.0 - late_swell * 0.05))
-		merged.rotation = sin(elapsed * 72.0) * 0.045 * late_swell
+		merged.rotation = sin(elapsed * 42.0) * 0.025 * late_swell
 		merged.modulate.a = 1.0
 		merged.set_impact_flash(late_swell * 0.72, false, Color("#fff3a8"))
 	elif in_hit_stop:
-		var shake_px: Vector2 = Vector2(sin(post_pop * 170.0), cos(post_pop * 205.0)) * (3.6 * u)
-		merged.position = rect.position + _board_recoil_offset + shake_px
+		# Clean frozen Nintendo hit-stop silhouette without dizzying 2D jitter.
+		merged.position = rect.position + _board_recoil_offset
 		merged.scale = Vector2(1.34, 1.24)
-		merged.rotation = 0.06 if int(fusion.a_id) % 2 == 0 else -0.06
+		merged.rotation = 0.04 if int(fusion.a_id) % 2 == 0 else -0.04
 		merged.modulate.a = 1.0
 		merged.set_impact_flash(1.0, false, Color("#fff9cc"))
 	else:
@@ -2766,12 +2766,14 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 			if not reduced_motion and _can_play():
 				var gel_col: Color = _palette_color_for_id(int(fusion.a_id))
 				var pop_tint: Color = WordTile.MERGED_COLORS[merge_level] if merge_level >= 2 else gel_col
-				var recoil_str: float = clampf(0.46 + float(merge_level - 1) * 0.095, 0.46, 1.0)
-				if batch:
-					recoil_str *= 0.62
+				# Keep batch auto-collects and small pops rim-only (0px board shift) to avoid
+				# repetitive camera motion; reserve the subtle single-dip thud for Lv4+ manual pops.
+				var recoil_str: float = 0.22 if batch else (
+					clampf(0.58 + float(merge_level - 4) * 0.08, 0.58, 1.0) if merge_level >= 4 else 0.24
+				)
 				_trigger_well_impulse(recoil_str, pop_tint, Vector2(0.0, 1.0))
 				_spawn_board_ripple(Vector2(float(fusion.a.column), float(fusion.a.row)),
-					clampf(0.68 + float(merge_level) * 0.11, 0.68, 1.35) * (0.72 if batch else 1.0),
+					clampf(0.55 + float(merge_level) * 0.08, 0.55, 1.05) * (0.60 if batch else 1.0),
 					int(fusion.a_id))
 				if _collection_effects != null:
 					var badge_txt: String = ""
@@ -2801,16 +2803,14 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 				var sx: float = 1.0 + dip * 1.15 + swell * 0.24
 				var sy: float = 1.0 - dip * 1.05 + swell * 0.20
 				merged.scale = Vector2(sx, sy)
-				var buzz: Vector2 = Vector2(sin(elapsed * 115.0), cos(elapsed * 138.0)) * (2.2 * swell * u)
-				merged.position = rect.position + _board_recoil_offset + buzz
-				merged.rotation = sin(elapsed * 85.0) * 0.045 * swell
+				merged.position = rect.position + _board_recoil_offset
+				merged.rotation = sin(elapsed * 46.0) * 0.025 * swell
 				merged.modulate.a = 1.0
 				merged.set_impact_flash(swell * 0.65, false, Color("#fffef2"))
 			elif post_pop < hit_stop_sec:
-				var shake: Vector2 = Vector2(sin(post_pop * 190.0), cos(post_pop * 220.0)) * (2.8 * u)
-				merged.position = rect.position + _board_recoil_offset + shake
+				merged.position = rect.position + _board_recoil_offset
 				merged.scale = Vector2(1.36, 1.24)
-				merged.rotation = 0.055 if int(fusion.a_id) % 2 == 0 else -0.055
+				merged.rotation = 0.04 if int(fusion.a_id) % 2 == 0 else -0.04
 				merged.modulate.a = 1.0
 				merged.set_impact_flash(1.0, false, Color("#fff9cc") if merge_level >= 2 else Color.WHITE)
 			else:
@@ -2869,14 +2869,8 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 	var push_dir: Vector2 = (destination - origin_a).normalized()
 	if push_dir.length_squared() < 0.05:
 		push_dir = Vector2(0.0, 1.0)
-	var u: float = 1.0 / maxf(0.1, Style.ui_scale(self))
 	var in_hit_stop: bool = not reduced_motion and not auto_merge and p >= MERGE_IMPACT_P and p < hit_stop_end_p
-	var tremor := Vector2.ZERO
-	if in_hit_stop:
-		var hs_t: float = (p - MERGE_IMPACT_P) * duration_sec
-		var tremor_mag: float = (3.0 if is_upgrade else 2.1) * u
-		tremor = Vector2(sin(hs_t * 210.0), cos(hs_t * 255.0)) * tremor_mag
-	var visual_dest: Vector2 = destination + (Vector2.ZERO if reduced_motion else _board_recoil_offset + tremor)
+	var visual_dest: Vector2 = destination + (Vector2.ZERO if reduced_motion else _board_recoil_offset)
 	var a: Vector2 = origin_a.lerp(visual_dest, clampf(joining + pull_back, -0.14, 1.0))
 	var b: Vector2 = origin_b.lerp(visual_dest, clampf(joining + pull_back * 0.45, -0.07, 1.0))
 	var extent_a: Vector2 = _tile_rect(fusion.a).size.lerp(target_size, joining)
@@ -2931,12 +2925,12 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 			if _collection_effects != null:
 				_collection_effects.set_reduced_motion(false)
 				_collection_effects.present_merge_pop(destination, result_level, is_upgrade, pop_tint, badge_txt, gel_color)
-			var well_str: float = clampf(0.58 + float(result_level) * 0.085, 0.58, 1.0) if is_upgrade else (0.48 if result_level >= 1 else 0.34)
+			var well_str: float = clampf(0.56 + float(result_level) * 0.08, 0.56, 1.0) if is_upgrade else (0.24 if result_level >= 1 else 0.16)
 			if auto_merge:
-				well_str *= 0.48
-			_trigger_well_impulse(well_str, pop_tint, push_dir)
+				well_str = minf(well_str, 0.24)
+			_trigger_well_impulse(well_str, pop_tint, Vector2(0.0, 1.0))
 			_spawn_board_ripple(Vector2(float(fusion.result.column), float(fusion.result.row)),
-				clampf(0.82 + float(result_level) * 0.11, 0.82, 1.35) if is_upgrade else (0.72 if result_level >= 1 else 0.54),
+				clampf(0.68 + float(result_level) * 0.08, 0.68, 1.08) if is_upgrade else (0.56 if result_level >= 1 else 0.42),
 				int(fusion.result.id))
 	var handover: float = smoothstep(0.68, 0.88, p)
 	if reduced_motion:
@@ -2947,7 +2941,7 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 		art.pose(a, b, visual_dest, extent_a * stretch, extent_b * stretch, _pitch, minf(0.62, p * 0.92), charge_val, bead_release, 1.0 - handover)
 	merged.size = target_size
 	# Preserve exact convergence to _tile_rect(fusion.result) at the handover end of the fusion.
-	var merge_offset: Vector2 = Vector2.ZERO if (reduced_motion or p >= 0.96) else (_board_recoil_offset + tremor)
+	var merge_offset: Vector2 = Vector2.ZERO if (reduced_motion or p >= 0.96) else _board_recoil_offset
 	merged.position = destination - target_size * 0.5 + merge_offset
 	merged.pivot_offset = target_size * 0.5
 	merged.rotation = 0.0 if (reduced_motion or p >= 0.96) else merge_rot
@@ -3702,15 +3696,17 @@ func _reset_well_impulse() -> void:
 func _well_impulse_offset() -> Vector2:
 	if reduced_motion or _well_impulse_strength <= 0.0 or _well_impulse_elapsed >= WELL_IMPULSE_SECONDS:
 		return Vector2.ZERO
+	# Comfort-first Nintendo tactile thud: light impacts pulse only the rim glow
+	# (0px board shift); heavy upgrades, Lv4+ pops & Boss strikes perform one crisp,
+	# strictly downward critically-damped micro-dip (<=2.6px) with zero oscillation
+	# and zero sideways sway so reading the board never feels dizzying.
+	var motion_strength: float = clampf((_well_impulse_strength - 0.32) / 0.68, 0.0, 1.0)
+	if motion_strength <= 0.0:
+		return Vector2.ZERO
 	var p: float = clampf(_well_impulse_elapsed / WELL_IMPULSE_SECONDS, 0.0, 1.0)
-	# Crisp Nintendo underdamped recoil: strong initial punch (up to 12.5px) that
-	# rebounds cleanly once and settles without noisy camera jitter.
-	var envelope: float = (1.0 - p) * exp(-p * 4.4) * _well_impulse_strength
+	var dip: float = pow(1.0 - p, 2.1) * exp(-p * 2.6) * motion_strength
 	var u: float = 1.0 / maxf(0.1, Style.ui_scale(self))
-	var primary: float = cos(p * TAU * 1.55) * 12.5
-	var perp := Vector2(-_well_impulse_dir.y, _well_impulse_dir.x)
-	var cross: float = sin(p * TAU * 2.4) * 2.8
-	return (_well_impulse_dir * primary + perp * cross) * envelope * u
+	return Vector2(0.0, dip * 2.6 * u)
 
 
 func _apply_board_recoil(offset: Vector2) -> void:
@@ -3805,21 +3801,19 @@ func _advance_impact_ripples(delta: float) -> void:
 				continue
 			var diff: Vector2 = pos - Vector2(ripple.origin)
 			var dist: float = absf(diff.x) + absf(diff.y)
-			var max_dist: float = 3.4 if float(ripple.strength) >= 0.9 else 2.6
+			var max_dist: float = 2.15 if float(ripple.strength) >= 0.8 else 1.55
 			if dist < 0.5 or dist > max_dist:
 				continue
-			var local_t: float = float(ripple.elapsed) - (dist - 1.0) * 0.032
+			var local_t: float = float(ripple.elapsed) - (dist - 1.0) * 0.028
 			if local_t <= 0.0 or local_t >= BOARD_RIPPLE_SECONDS:
 				continue
 			var p: float = local_t / BOARD_RIPPLE_SECONDS
-			var decay: float = (1.0 - p) * exp(-p * 3.1) / pow(dist, 0.85)
-			var wave: float = sin(p * PI * 2.15) * decay * float(ripple.strength)
-			var hop: float = sin(clampf(p / 0.52, 0.0, 1.0) * PI) * decay * float(ripple.strength)
+			# Single clean cushion pulse on immediate neighbors (no multi-cycle ringing or
+			# dizzying rotation): plush local gel squish while words stay calm & legible.
+			var pulse: float = sin(p * PI) * (1.0 - p) * exp(-p * 1.4) / dist * float(ripple.strength)
 			var dir: Vector2 = diff.normalized()
-			# Nintendo trampoline board ripple: visible push + cheerful upward bounce + jiggle + tilt.
-			offset += dir * wave * 12.2 * u + Vector2(0.0, -hop * 6.8 * u)
-			squeeze += wave * 0.19
-			tilt += dir.x * wave * 0.085
+			offset += dir * pulse * 3.4 * u + Vector2(0.0, -pulse * 1.6 * u)
+			squeeze += pulse * 0.14
 		if _tile_aftershocks.has(id):
 			var info: Dictionary = _tile_aftershocks[id]
 			var ap: float = clampf(float(info.elapsed) / MERGE_AFTERSHOCK_SECONDS, 0.0, 1.0)

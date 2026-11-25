@@ -12,6 +12,7 @@ const BossView = preload("res://scripts/word_jelly_boss_view.gd")
 const BossRun = preload("res://scripts/word_jelly_boss_run.gd")
 const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
 const Audio = preload("res://scripts/game_audio.gd")
+const Backdrop = preload("res://scripts/jelly_backdrop.gd")
 const Data = preload("res://scripts/game_data.gd")
 
 var checks: int = 0
@@ -105,9 +106,11 @@ func test_merge_impact_and_board_ripple() -> void:
 	check(int(fx_snap.get("merge_pop_count", 0)) >= 1 and int(fx_snap.get("splatter_count", 0)) >= 1,
 		"Upgrade merge spawns Merge Pop shockwave/Lv4! badge plus glossy jelly splatter droplets")
 	check(view._well_impulse_strength > 0.55 and not view._board_ripples.is_empty(),
-		"Merge snap fires directional whole-board recoil and neighborhood trampoline ripple")
+		"Merge snap fires single-dip board cushion thud and neighborhood ripple")
 	check(not view._board_recoil_offset.is_zero_approx() and view._settled_body_layer.position.is_equal_approx(view._board_recoil_offset),
-		"Whole-board recoil drives SettledBodyLayer together with the well art")
+		"Board micro-dip drives SettledBodyLayer together with the well art")
+	check(is_zero_approx(view._board_recoil_offset.x) and view._board_recoil_offset.y > 0.0 and view._board_recoil_offset.y <= 3.0,
+		"Board micro-dip stays strictly vertical, non-oscillating, and <=3px for visual comfort (got=%s)" % str(view._board_recoil_offset))
 
 	# Advance slightly so ripple reaches distance-1 neighbor without shifting its Control hit rect
 	_advance_view(view, 0.06)
@@ -253,6 +256,44 @@ func test_layered_audio_cues() -> void:
 	await process_frame
 
 
+func test_backdrop_glow_and_boss_shockwave() -> void:
+	var backdrop := Backdrop.new()
+	root.add_child(backdrop)
+	backdrop.size = Vector2(1000, 760)
+	backdrop.set_ambient_active(true)
+	backdrop.set_process(false)
+	# 1. Ordinary merge/collect glow pulses light only (0px shift, 0 zoom) -> zero motion sickness!
+	backdrop.pulse_ambient_glow(0.8, Color("#fff0a8"), 0.34)
+	backdrop._process(0.05)
+	var glow_snap: Dictionary = backdrop.snapshot()
+	check(float(glow_snap.impact_glow) > 0.3 and is_zero_approx(float(glow_snap.boss_kick_zoom))
+		and is_zero_approx(float(glow_snap.boss_kick_offset[0])) and is_zero_approx(float(glow_snap.boss_kick_offset[1])),
+		"Backdrop ambient glow pulses light without displacing scenery during normal merges/pops")
+	# 2. Boss shockwave delivers dramatic parallax scenery slam + panoramic punch-zoom!
+	backdrop.trigger_boss_shockwave(1.22, Color("#fff2a6"), Vector2(0.18, 1.0))
+	backdrop._process(0.02)
+	var boss_snap: Dictionary = backdrop.snapshot()
+	var kick_vec := Vector2(float(boss_snap.boss_kick_offset[0]), float(boss_snap.boss_kick_offset[1]))
+	check(kick_vec.length() > 8.0 and float(boss_snap.boss_kick_zoom) > 0.015 and float(boss_snap.impact_glow) > 0.3,
+		"Boss finisher shockwave drives dramatic parallax scenery kick and punch-zoom (len=%.1f zoom=%.3f)" % [kick_vec.length(), float(boss_snap.boss_kick_zoom)])
+	# 3. Decays cleanly back to neutral rest pose
+	for step in range(30):
+		backdrop._process(0.025)
+	var rest_snap: Dictionary = backdrop.snapshot()
+	check(is_zero_approx(float(rest_snap.impact_glow)) and is_zero_approx(float(rest_snap.boss_kick_zoom))
+		and is_zero_approx(float(rest_snap.boss_kick_offset[0])) and is_zero_approx(float(rest_snap.boss_kick_offset[1])),
+		"Backdrop glow and Boss shockwave decay cleanly back to neutral rest")
+	# 4. Reduced motion strictly disables both glow and Boss shockwave
+	backdrop.set_reduced_motion(true)
+	backdrop.trigger_boss_shockwave(1.22, Color("#fff2a6"), Vector2(0.0, 1.0))
+	var still_snap: Dictionary = backdrop.snapshot()
+	check(is_zero_approx(float(still_snap.impact_glow)) and is_zero_approx(float(still_snap.boss_kick_zoom))
+		and is_zero_approx(float(still_snap.boss_kick_offset[1])),
+		"Reduced motion strictly suppresses backdrop glow and Boss shockwave")
+	backdrop.free()
+	await process_frame
+
+
 func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(1000, 760)
@@ -260,6 +301,7 @@ func _run() -> void:
 	await test_merge_impact_and_board_ripple()
 	await test_boss_combat_impact_vfx()
 	await test_layered_audio_cues()
+	await test_backdrop_glow_and_boss_shockwave()
 	await create_timer(0.15).timeout
 	print("Word Jelly impact feel: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures > 0 else 0)

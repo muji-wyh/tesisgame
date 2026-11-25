@@ -2652,16 +2652,50 @@ func _jelly_audio(cue: String, source_mode: String = "") -> void:
 		return
 	if cue == "merge":
 		trigger_haptic("merge")
+	elif cue.begins_with("merge-impact:"):
+		var parts: PackedStringArray = cue.split(":")
+		var kind: String = parts[1] if parts.size() > 1 else "word"
+		var lv: int = int(parts[2]) if parts.size() > 2 and parts[2].is_valid_int() else 1
+		if _jelly_backdrop != null and _jelly_backdrop.visible:
+			if kind == "upgrade":
+				_jelly_backdrop.pulse_ambient_glow(clampf(0.45 + float(lv) * 0.07, 0.45, 0.92), Color("#fff0a8"), 0.36)
+			elif kind == "word":
+				_jelly_backdrop.pulse_ambient_glow(0.34, Color("#d8fff0"), 0.28)
 	elif cue.begins_with("merge-upgrade:"):
 		trigger_haptic("merge_up")
 	elif cue == "contact_match":
 		trigger_haptic("tap")
-	elif cue in ["boss-hit-power", "boss-win"]:
+	elif cue == "boss-win":
 		trigger_haptic("boss_power")
+		if _jelly_backdrop != null and _jelly_backdrop.visible:
+			_jelly_backdrop.trigger_boss_shockwave(1.22, Color("#fff2a6"), Vector2(0.18, 1.0))
+	elif cue == "boss-hit-power":
+		trigger_haptic("boss_power")
+		if _jelly_backdrop != null and _jelly_backdrop.visible:
+			_jelly_backdrop.trigger_boss_shockwave(1.05, Color("#ffe384"), Vector2(0.28, 0.96))
+	elif cue == "boss-ward-break":
+		trigger_haptic("impact")
+		if _jelly_backdrop != null and _jelly_backdrop.visible:
+			_jelly_backdrop.trigger_boss_shockwave(0.76, Color("#98ebff"), Vector2(0.22, 0.97))
+	elif cue == "boss-hit-heavy":
+		trigger_haptic("impact")
+		if _jelly_backdrop != null and _jelly_backdrop.visible:
+			_jelly_backdrop.trigger_boss_shockwave(0.58, Color("#ffd574"), Vector2(0.20, 0.98))
 	elif cue == "boss-thaw":
 		trigger_haptic("dodge")
-	elif cue in ["boss-hit", "boss-hit-heavy", "boss-ward-break", "boss-clone-pop", "goal_complete", "blast_wave"]:
+	elif cue in ["boss-hit", "boss-clone-pop", "goal_complete", "blast_wave"]:
 		trigger_haptic("impact")
+		if _jelly_backdrop != null and _jelly_backdrop.visible:
+			var glow_tint := Color("#d7b5ff") if cue == "boss-clone-pop" else Color("#ffe896")
+			_jelly_backdrop.pulse_ambient_glow(0.56 if cue == "blast_wave" else 0.42, glow_tint, 0.34)
+	elif cue.begins_with("collect-punch:"):
+		var parts: PackedStringArray = cue.split(":")
+		var lv: int = int(parts[1]) if parts.size() > 1 and parts[1].is_valid_int() else 1
+		var batch_step: int = int(parts[3]) if parts.size() > 3 and parts[3].is_valid_int() else 0
+		if _jelly_backdrop != null and _jelly_backdrop.visible and (lv >= 2 or batch_step == 0):
+			var strength: float = clampf(0.32 + float(lv - 1) * 0.09, 0.32, 0.95) * (0.48 if batch_step > 0 else 1.0)
+			var glow_col := Color("#ffe99c") if lv >= 4 else Color("#d6fff2")
+			_jelly_backdrop.pulse_ambient_glow(strength, glow_col, 0.42 if lv >= 4 else 0.28)
 	elif cue.begins_with("jelly-collect-lv"):
 		var level_num: int = cue.trim_prefix("jelly-collect-lv").to_int()
 		if level_num >= 4:

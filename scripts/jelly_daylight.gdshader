@@ -8,10 +8,15 @@ uniform float light_strength = 0.17;
 uniform float mote_time = 0.0;
 uniform float mote_strength = 0.0;
 uniform vec4 mote_color : source_color = vec4(1.0, 0.96, 0.84, 1.0);
+uniform float impact_glow = 0.0;
+uniform vec4 impact_color : source_color = vec4(1.0, 0.92, 0.62, 1.0);
+uniform float impact_zoom = 0.0;
+uniform vec2 impact_shift = vec2(0.0, 0.0);
 
 void fragment() {
 	// Project the acquired panorama into its upper hemisphere, with a paused game clock.
-	vec2 screen = UV * 2.0 - 1.0;
+	vec2 shifted_uv = (UV - vec2(0.5)) / (1.0 + clamp(impact_zoom, 0.0, 0.06)) + vec2(0.5) - impact_shift;
+	vec2 screen = shifted_uv * 2.0 - 1.0;
 	float field_of_view = mix(0.94, 0.78, smoothstep(0.5, 1.8, aspect));
 	vec3 view_ray = normalize(vec3(screen.x * field_of_view * aspect, -screen.y * field_of_view, 1.0));
 	float pitch = 0.34;
@@ -49,6 +54,16 @@ void fragment() {
 			motes += dot_glow * twinkle * mask;
 		}
 		sky = mix(sky, mote_color.rgb, clamp(motes * mote_strength * 0.34, 0.0, 0.36));
+	}
+	if (impact_glow > 0.001) {
+		// Luminous radial aura framing the board during heavy merges/pops & Boss finishers
+		// (pure light pulse with zero displacement during ordinary play).
+		vec2 radial = (UV - vec2(0.5, 0.46)) * vec2(aspect * 0.85, 1.0);
+		float halo = exp(-dot(radial, radial) * 2.6);
+		float edge_aura = smoothstep(0.18, 0.95, length(radial));
+		float boost = clamp(impact_glow, 0.0, 1.0);
+		sky = mix(sky, impact_color.rgb, clamp((halo * 0.24 + edge_aura * 0.20) * boost, 0.0, 0.42));
+		sky += impact_color.rgb * (halo * 0.14 * boost);
 	}
 	COLOR = vec4(sky, 1.0);
 }
