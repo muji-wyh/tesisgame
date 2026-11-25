@@ -371,6 +371,20 @@ func test_selection(app) -> void:
 	await move_mouse(other_button.get_global_rect().get_center())
 	check(other_button.snapshot().targeting and view.snapshot().goal_hover.word_id == str(words[1].id),
 		"A fresh hover can preview the remaining legal family without spending")
+	var balance_before_locate: int = app.coin_wallet.balance
+	var pic_rect: Rect2 = other_button.get("_icon_rect")
+	var pic_point: Vector2 = other_button.get_global_transform() * pic_rect.get_center()
+	for pressed_flag: bool in [true, false]:
+		var ev := InputEventMouseButton.new()
+		ev.button_index = MOUSE_BUTTON_LEFT
+		ev.pressed = pressed_flag
+		ev.position = pic_point
+		ev.global_position = pic_point
+		Input.parse_input_event(ev)
+		await process_frame
+	check(app.coin_wallet.balance == balance_before_locate and not model.powerup_active()
+		and view._goal_locate_word == str(words[1].id) and spoken.has(words[1].id),
+		"Clicking a goal card's picture locates and pronounces the word for free without spending coins")
 	await move_mouse(Vector2(1300, 720))
 	view.word_requested.disconnect(on_word)
 

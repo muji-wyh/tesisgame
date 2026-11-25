@@ -46,6 +46,8 @@ var _goal_merge_id: String = ""
 var _goal_merge_price: int = 0
 var _goal_hover_word: String = ""
 var _goal_hover_elapsed: float = 0.0
+var _goal_locate_word: String = ""
+var _goal_locate_remaining: float = 0.0
 var _auto_merge_hovered: bool = false
 var _auto_merge_hover_elapsed: float = 0.0
 var _auto_collect_hovered: bool = false
@@ -242,6 +244,7 @@ func _init() -> void:
 		if complete and _can_play():
 			audio_requested.emit("goal_complete"))
 	_practice_panel.word_hovered.connect(_goal_hovered)
+	_practice_panel.word_locate_requested.connect(_locate_goal_word)
 	_practice_panel.merge_requested.connect(_activate_goal_merge)
 	add_child(_practice_panel)
 	_boss_view = BossView.new()
@@ -527,6 +530,8 @@ func cancel_input() -> void:
 	_end_view_update()
 	_goal_hover_word = ""
 	_goal_hover_elapsed = 0.0
+	_goal_locate_word = ""
+	_goal_locate_remaining = 0.0
 	_auto_merge_hovered = false
 	_auto_merge_hover_elapsed = 0.0
 	_auto_collect_hovered = false
@@ -1607,6 +1612,21 @@ func goal_merge_button() -> Button:
 	return _practice_panel.button_for_goal(_goal_merge_id)
 
 
+func _locate_goal_word(_goal_id: String, word_id: String) -> void:
+	if not _can_play() or _pointer != NO_POINTER or _keyboard_source >= 0 or _finish_is_pulling() \
+		or game.powerup_active() or game.collection_batch_active() or word_id.is_empty():
+		return
+	_goal_locate_word = word_id
+	_goal_locate_remaining = 2.0
+	_goal_hover_elapsed = 0.0
+	_hint_key.clear()
+	_refresh_marks()
+	var word: Dictionary = game._words_by_id.get(word_id, {})
+	if not str(word.get("audio", "")).is_empty():
+		word_requested.emit(word.duplicate(true))
+	_publish()
+
+
 func _goal_hovered(word_id: String) -> void:
 	var next: String = word_id if _can_play() and _pointer == NO_POINTER and _keyboard_source < 0 \
 		and not game.powerup_active() and not game.collection_batch_active() else ""
@@ -1814,8 +1834,10 @@ func _pose_blast_marks(state: Dictionary, stamps: Array[Dictionary], unit: float
 	var blast: Dictionary = state.get("blast", {})
 	var ids: Array = blast.get("target_ids", [])
 	var group_size: int = maxi(1, int(blast.get("group_size", 1)))
+	var windup: float = float(blast.get("windup", WordModel.BLAST_MARK_WINDUP_SECONDS))
+	var flight: float = float(blast.get("flight", WordModel.BLAST_MARK_FLIGHT_SECONDS))
 	var clock: float = float(state.clock)
-	var last_launch: float = WordModel.BLAST_MARK_WINDUP_SECONDS \
+	var last_launch: float = windup \
 		+ floorf(float(maxi(0, ids.size() - 1)) / group_size) * WordModel.BLAST_MARK_BEAT_SECONDS
 	var sources: Dictionary = {}
 	for index in range(ids.size()):
@@ -1830,26 +1852,26 @@ func _pose_blast_marks(state: Dictionary, stamps: Array[Dictionary], unit: float
 		var source_key := Vector2i(int(origin.column), int(origin.row))
 		if not sources.has(source_key) and clock < last_launch + 0.20:
 			sources[source_key] = true
-			var charge: float = 1.0 if reduced_motion else smoothstep(0.0, WordModel.BLAST_MARK_WINDUP_SECONDS, clock)
+			var charge: float = 1.0 if reduced_motion else smoothstep(0.0, windup, clock)
 			var source_fade: float = 1.0 - smoothstep(last_launch, last_launch + 0.20, clock)
 			_powerup_stamp(stamps, COLLECTION_GLOW, start, Vector2.ONE * unit * (1.0 + charge * 1.10),
 				Color(tint, source_fade * 0.82))
 			_powerup_stamp(stamps, POWERUP_RAYS, start, Vector2.ONE * unit * (0.48 + charge * 0.72),
 				Color(tint.lightened(0.35), source_fade * 0.72))
-		var launch_at: float = WordModel.BLAST_MARK_WINDUP_SECONDS \
+		var launch_at: float = windup \
 			+ floorf(float(index) / group_size) * WordModel.BLAST_MARK_BEAT_SECONDS
 		var age: float = clock - launch_at
 		if age < 0.0:
 			continue
-		var impact_age: float = age - WordModel.BLAST_MARK_FLIGHT_SECONDS
+		var impact_age: float = age - flight
 		if impact_age < 0.0:
 			if not reduced_motion:
 				var direction: Vector2 = center - start
-				var travel: float = pow(clampf(age / WordModel.BLAST_MARK_FLIGHT_SECONDS, 0.0, 1.0), 2.2)
+				var travel: float = pow(clampf(age / flight, 0.0, 1.0), 2.2)
 				var point: Vector2 = start.lerp(center, travel)
 				for tail in range(5, 0, -1):
 					var prior: float = maxf(0.0, age - tail * 0.018)
-					var behind: Vector2 = start.lerp(center, pow(prior / WordModel.BLAST_MARK_FLIGHT_SECONDS, 2.2))
+					var behind: Vector2 = start.lerp(center, pow(prior / flight, 2.2))
 					var strength: float = 1.0 - tail / 6.0
 					_powerup_stamp(stamps, POWERUP_SPARKLE, behind,
 						Vector2(unit * (0.22 + strength * 0.22), unit * 0.12),
@@ -1947,6 +1969,13 @@ func _advance_board_presentation(delta: float) -> void:
 		_completion_elapsed += delta
 	if not _goal_hover_word.is_empty():
 		_goal_hover_elapsed += delta
+	if _goal_locate_remaining > 0.0:
+		_goal_locate_remaining = maxf(0.0, _goal_locate_remaining - delta)
+		_goal_hover_elapsed += delta
+		if _goal_locate_remaining <= 0.0:
+			_goal_locate_word = ""
+			_hint_key.clear()
+			_refresh_marks()
 	if _auto_merge_hovered:
 		_auto_merge_hover_elapsed += delta
 	if _auto_collect_hovered:
@@ -2060,13 +2089,14 @@ func _refresh_completion_hints() -> void:
 	var hover_kind: String = _hover_preview_kind()
 	var merge_hover_ready: bool = hover_kind in ["goal", "auto_merge"] and game._powerup_inputs_ready()
 	var merge_preview_settled: bool = merge_hover_ready and game._settling_remaining(true) <= WordModel.EPSILON
-	var key: Array = [_view_board_revision, _boss_status_revision, source, _goal_hover_word,
+	var active_goal_word: String = _goal_hover_word if not _goal_hover_word.is_empty() else _goal_locate_word
+	var key: Array = [_view_board_revision, _boss_status_revision, source, active_goal_word,
 		_auto_merge_hovered, _auto_collect_hovered, playing, game.powerup_active(), game.collection_batch_active(),
 		_pointer, _finish_is_pulling(), str(_fusion_drag.get("event_id", "")), reduced_motion,
 		game.paused, game._held_tile_id, not game._combo_pending.is_empty(), game.stage_ending(),
 		collect_button.disabled if collect_button != null else true, hover_kind, merge_hover_ready, merge_preview_settled]
 	var elapsed: float = _completion_elapsed
-	if hover_kind == "goal" and merge_hover_ready and playing and _source < 0 and _keyboard_source < 0 \
+	if (hover_kind == "goal" and merge_hover_ready or not _goal_locate_word.is_empty()) and playing and _source < 0 and _keyboard_source < 0 \
 		and not game.powerup_active() and not game.collection_batch_active():
 		elapsed = _goal_hover_elapsed
 	elif hover_kind == "auto_collect":
@@ -2080,11 +2110,11 @@ func _refresh_completion_hints() -> void:
 	_presentation_work.hint_searches += 1
 	var matching_ids: Array[int] = []
 	var hover: bool = false
-	if hover_kind == "goal" and merge_hover_ready and playing and _source < 0 and _keyboard_source < 0 \
+	if (hover_kind == "goal" and merge_hover_ready or not _goal_locate_word.is_empty()) and playing and _source < 0 and _keyboard_source < 0 \
 		and not game.powerup_active() and not game.collection_batch_active():
 		hover = true
 		for id: int in _tiles:
-			if game.family_word_id(id) == _goal_hover_word and not game.is_fusing(id) and game.boss_interactable(id, false):
+			if game.family_word_id(id) == active_goal_word and not game.is_fusing(id) and game.boss_interactable(id, false):
 				matching_ids.append(id)
 	else:
 		var collecting: Dictionary = _auto_collect_hover_preview()
@@ -2695,7 +2725,7 @@ func _frame_hud_content_key() -> Array:
 		_compact_hud, has_header_chest(), _chest_tap.is_active(), ceili(game.full_elapsed), game.error,
 		game._collection_batch_active, game._collection_batch_cursor,
 		game._collection_batch_event_id, game._collection_batch_ids.size(),
-		game.pip_level, _can_play(), _pointer, game.powerup_active(), _finish_is_pulling()]
+		game.pip_level, game.campaign_auto_collect_unlocked, _can_play(), _pointer, game.powerup_active(), _finish_is_pulling()]
 
 
 func _refresh_frame_hud() -> void:
@@ -2802,6 +2832,10 @@ func _request_finish() -> void:
 	if can_finish_round() and _pointer == NO_POINTER and not _finish_is_pulling():
 		finish_requested.emit()
 
+func _request_pause() -> void:
+	if can_finish_round() and _pointer == NO_POINTER and not _finish_is_pulling():
+		pause_requested.emit()
+
 func _finish_round() -> void:
 	if not can_finish_round() or _pointer != NO_POINTER or _finish_is_pulling():
 		return
@@ -2829,10 +2863,10 @@ func _recovery_reading_bounds() -> Array[Rect2]:
 func _refresh_controls() -> void:
 	var balance: int = int(coin_balance.call()) if coin_balance.is_valid() else -1
 	var key: Array = [_view_board_revision, _boss_status_revision, _pose_revision,
-		_configured, game.phase, _paused, _can_play(), _pointer, _preview_first_id,
+		_configured, game.phase, _paused, _requested_pause, _can_play(), can_finish_round(), _pointer, _preview_first_id,
 		_keyboard_source, _layout_too_small, _finish_is_pulling(), finish_button.paused_state,
 		game.collection_batch_active(), game.powerup_active(), game.stage_ending(),
-		game.full_elapsed >= 0.0, game.fill_mode, game.fill_mode_locked(), game.pip_level,
+		game.full_elapsed >= 0.0, game.fill_mode, game.fill_mode_locked(), game.pip_level, game.campaign_auto_collect_unlocked,
 		game._held_tile_id, game._dragged_tile_id, game._growth_pending, game._gravity_pending,
 		hash(game._drag_gravity_delays), game.fall_speed_scale, game.boss.broken_remaining > WordModel.EPSILON,
 		balance, game.auto_merge_level, hash(game._powerup_uses), _stage_banner.visible, _stage_banner.ready_pending()]
@@ -2916,7 +2950,7 @@ func _refresh_collect_button() -> void:
 	_action_divider.visible = collect_button.visible
 	_action_panel.visible = collect_button.visible
 	collect_button.disabled = not game.auto_collect_unlocked() or not _can_play() or _finish_is_pulling() or _pointer != NO_POINTER or bool(batch.active) or game.powerup_active() or count == 0
-	collect_button.set_pip_level(game.pip_level)
+	collect_button.set_pip_level(game.pip_level, game.campaign_auto_collect_unlocked)
 	collect_button.set_reduced_motion(reduced_motion)
 	collect_button.set_state(count, _configured and bool(batch.active), int(batch.remaining) if _configured else 0, int(batch.total) if _configured else 0)
 

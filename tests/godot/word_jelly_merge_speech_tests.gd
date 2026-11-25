@@ -144,7 +144,7 @@ func _check_merge_events() -> void:
 	for reduced: bool in [false, true]:
 		_reset_view(view, ["cat-root", "cat-picture", "dog-root", "dog-picture"], reduced)
 		check(view.game.activate_powerup("auto_merge"), "Auto Merge starts with two distinct word-picture pairs")
-		view._process(view.game.POWERUP_DRAG_SECONDS)
+		view._process(view.game.BLAST_FREEZE_SECONDS + view.game.POWERUP_DRAG_SECONDS)
 		check(view.game.fusions.size() == 1 and bool(view.game.fusions[0].automatic),
 			"An automatic fusion retains its origin through the delayed completion")
 		view.pause(true)

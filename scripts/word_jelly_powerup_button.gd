@@ -44,6 +44,8 @@ var _chest_region := Rect2(Vector2.ZERO, CHEST.get_size())
 var _icon_rect := Rect2()
 var _coin_rect := Rect2()
 var _price_pill := Rect2()
+var _last_pointer_local := Vector2(-1.0, -1.0)
+var _last_pointer_valid: bool = false
 var _title := Label.new()
 var _price_label := Label.new()
 var _capacity_label := Label.new()
@@ -87,8 +89,35 @@ func _init() -> void:
 	configure("auto_merge", Model.POWERUP_PRICES.auto_merge, false)
 
 
+func _gui_input(event: InputEvent) -> void:
+	if _goal.is_empty():
+		return
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
+		_last_pointer_local = event.position
+		_last_pointer_valid = true
+	elif event is InputEventScreenTouch:
+		_last_pointer_local = event.position
+		_last_pointer_valid = true
+
+
+func goal_picture_hit(local_point: Vector2 = _last_pointer_local, explicit: bool = false) -> bool:
+	if _goal.is_empty() or (not explicit and not _last_pointer_valid) or not _icon_rect.has_area():
+		return false
+	return _icon_rect.grow(3.0 / _ui_scale).has_point(local_point) and not _price_pill.grow(4.0 / _ui_scale).has_point(local_point)
+
+
+func clear_last_pointer() -> void:
+	_last_pointer_valid = false
+	_last_pointer_local = Vector2(-1.0, -1.0)
+
+
 func _input(event: InputEvent) -> void:
-	if not is_visible_in_tree() or _kind != "auto_merge" or not _goal.is_empty():
+	if not is_visible_in_tree():
+		return
+	if event is InputEventKey or event is InputEventJoypadButton \
+		or event is InputEventJoypadMotion and absf(event.axis_value) > 0.3:
+		_last_pointer_valid = false
+	if _kind != "auto_merge" or not _goal.is_empty():
 		return
 	var was_pointer: bool = _pointer_input
 	if event is InputEventMouseMotion or event is InputEventMouseButton or event is InputEventScreenTouch:
@@ -552,6 +581,13 @@ func _draw() -> void:
 	var coin_size: Vector2 = _coin_rect.size * float(pose.coin_scale)
 	var coin_center: Vector2 = _coin_rect.get_center() + Vector2(pose.price_offset)
 	if not mastered:
+		if not _goal.is_empty() and _price_pill.has_area():
+			var pill := StyleBoxFlat.new()
+			pill.bg_color = Color("#fff4d8") if _affordable and not disabled else Color("#f1ede3")
+			pill.border_color = Color("#e0bc68") if _affordable and not disabled else Color("#cfc9bc")
+			pill.set_border_width_all(maxi(1, roundi(unit)))
+			pill.set_corner_radius_all(maxi(1, roundi(8.0 * unit)))
+			draw_style_box(pill, _price_pill.grow_individual(3.0 * unit, 0.0, 2.0 * unit, 0.0))
 		draw_texture_rect(COIN, Rect2(coin_center - coin_size * 0.5, coin_size), false,
 			Color(1.0, 1.0, 1.0, 0.75 if disabled and not celebrating and not funds else 1.0))
 	if not _goal.is_empty() and celebrating and _spent_coins > 0 and not _goal_geometry.is_empty():

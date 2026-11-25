@@ -1071,9 +1071,21 @@ func _check_stage_medallions(view: Control) -> void:
 	var finale: Dictionary = _state(99)
 	finale["boss_victories"] = [8]
 	finale["merged_level"] = 2
+	finale["upgrade_affordable"] = true
 	view.call("configure", finale, true)
+	await _settle()
 	check(str(view.get("_subtitle").text) == "Compass recovered!",
 		"A genuine final victory closes the pursuit instead of asking the player to chase a beaten Boss forever")
+	check(bool(view.get("_upgrade_sparkle").visible) and bool(_snapshot(view).get("upgrade_affordable", false)),
+		"An affordable upgrade illuminates the map Upgrade badge sparkle")
+	view.call("show_chapter", 1)
+	await _settle()
+	check(bool(_snapshot(view).get("frontier_pill", {}).get("visible", false)),
+		"Scrolling multiple chapters away from the frontier exposes the quick Back-to-frontier pill")
+	view.call("focus_frontier")
+	await _settle()
+	check(not bool(_snapshot(view).get("frontier_pill", {}).get("visible", true)),
+		"Returning to the frontier hides the quick Back-to-frontier pill")
 
 
 func _run() -> void:

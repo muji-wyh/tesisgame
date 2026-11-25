@@ -53,7 +53,8 @@ func check(value: bool, message: String) -> void:
 
 
 func _initial_state() -> Dictionary:
-	return {"level": 1, "auto_merge_level": 1, "funded": {"jelly": 0, "auto_merge": 0},
+	return {"level": 1, "auto_merge_level": 1, "star_charm_level": 1,
+		"funded": {"jelly": 0, "auto_merge": 0, "star_charm": 0},
 		"pending": {}, "intro": "guide", "balance": 5000, "error": "", "busy": false, "retry": false}
 
 
@@ -143,6 +144,13 @@ func _test_previews_and_no_fake_progress() -> void:
 	check(requests.back() == {"kind": "auto_merge", "amount": 25}
 		and page.snapshot().selected_level == 2 and page.snapshot().auto_merge_level == 1,
 		"A future Auto merge preview still contributes toward its own next level")
+	page.select_upgrade("star_charm")
+	page.select_level(6)
+	var charm_snap: Dictionary = page.snapshot()
+	check(charm_snap.kind == "star_charm" and charm_snap.preview.kind == "star_charm"
+		and charm_snap.preview.combo_bonus > 1.0 and charm_snap.preview.fragment_bonus > 0.1
+		and charm_snap.owned_level == 1 and charm_snap.star_charm_level == 1,
+		"Star charm preview displays combo and treasure bonuses independently")
 
 
 func _cancel_check(action: Callable, reason: String) -> void:

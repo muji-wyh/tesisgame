@@ -6,11 +6,13 @@ signal challenge_selected
 signal home_requested
 signal retry_requested
 signal upgrades_requested
+signal chapter_milestone_requested(chapter: int, threshold: int)
 signal changed
 
 const Style = preload("res://scripts/ui_style.gd")
 const Scroll = preload("res://scripts/result_scroll.gd")
 const Catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
+const Economy = preload("res://scripts/coin_economy.gd")
 const Icons = preload("res://scripts/icon_button.gd")
 const LevelBadge = preload("res://scripts/word_jelly_level_badge.gd")
 const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
@@ -62,6 +64,8 @@ var _wallet_icon: TextureRect
 var _merged_level_badge := LevelBadge.new()
 var _upgrades := Button.new()
 var _upgrade_label: Label
+var _upgrade_sparkle: TextureRect
+var _frontier_pill: Button
 var _status: Label
 var _home: Button
 var _challenge: Button
@@ -104,6 +108,9 @@ func _init() -> void:
 	_upgrades.add_child(_merged_level_badge)
 	_upgrade_label = _label(_upgrades, "Upgrade", 13)
 	_upgrade_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_upgrade_sparkle = _image(_upgrades, SPARKLE)
+	_upgrade_sparkle.modulate = Color("#ffd859")
+	_upgrade_sparkle.hide()
 	_upgrades.pressed.connect(func() -> void:
 		if _active and not _upgrades.disabled:
 			upgrades_requested.emit())
@@ -147,6 +154,13 @@ func _init() -> void:
 		title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		var number: Label = _label(banner, "CHAPTER %02d" % (chapter + 1), 11)
 		number.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		var milestone := Button.new()
+		milestone.name = "ChapterMilestone%d" % (chapter + 1)
+		milestone.z_index = 2
+		milestone.focus_mode = Control.FOCUS_NONE
+		milestone.pressed.connect(_claim_chapter_milestone.bind(chapter + 1))
+		_content.add_child(milestone)
+		milestone.hide()
 		var left: TextureRect = _image(_content, SCENERY[chapter])
 		var right: TextureRect = _image(_content, SCENERY[chapter])
 		var hills: TextureRect = _image(_content, HILLS)
@@ -160,7 +174,8 @@ func _init() -> void:
 			right.material = fade
 		var shrubs: TextureRect = _image(_content, FOLIAGE)
 		var grove: TextureRect = _image(_content, TREE)
-		_chapters.append({"banner": banner, "title": title, "number": number, "left": left, "right": right,
+		_chapters.append({"banner": banner, "title": title, "number": number, "milestone": milestone,
+			"milestone_threshold": 0, "left": left, "right": right,
 			"hills": hills, "shrubs": shrubs, "grove": grove})
 	for number in range(1, 100):
 		var button := Button.new()
@@ -236,6 +251,14 @@ func _init() -> void:
 	_pip.focus_mode = Control.FOCUS_NONE
 	_pip.set_idle_paused(true)
 	_content.add_child(_pip)
+	_frontier_pill = _button("Stage 1", "Return to your current frontier stage")
+	_frontier_pill.name = "BackToFrontier"
+	_frontier_pill.z_index = 4
+	_frontier_pill.focus_mode = Control.FOCUS_NONE
+	_frontier_pill.pressed.connect(func() -> void:
+		if _active and not _frontier_pill.disabled:
+			focus_frontier())
+	_frontier_pill.hide()
 	resized.connect(_layout)
 	visibility_changed.connect(func() -> void:
 		if not is_visible_in_tree():
@@ -358,8 +381,12 @@ func configure(state: Dictionary, reduced_motion: bool = false) -> void:
 	_challenge.focus_mode = Control.FOCUS_NONE if blocked else Control.FOCUS_ALL
 	_upgrades.disabled = blocked
 	_upgrades.focus_mode = Control.FOCUS_NONE if blocked else Control.FOCUS_ALL
-	_upgrades.accessibility_name = "Jelly Lv%d. Auto merge Lv%d. Open permanent upgrades. Higher levels cost coins." % [
-		int(state.get("merged_level", 1)), int(state.get("auto_merge_level", 1))]
+	var affordable: bool = not blocked and bool(state.get("upgrade_affordable", false))
+	_upgrade_sparkle.visible = affordable
+	_upgrades.accessibility_name = "Jelly Lv%d. Auto merge Lv%d. Star charm Lv%d. Open permanent upgrades.%s Higher levels cost coins." % [
+		int(state.get("merged_level", 1)), int(state.get("auto_merge_level", 1)),
+		int(state.get("star_charm_level", 1)), " An upgrade is ready." if affordable else ""]
+	_refresh_chapter_milestones(blocked)
 	_wallet.text = str(int(state.get("coins", 0)))
 	_wallet.tooltip_text = "%s saved coins" % _wallet.text
 	_wallet.set("accessibility_name", _wallet.tooltip_text)
@@ -463,6 +490,65 @@ func focus_frontier() -> void:
 		button.grab_focus()
 	else:
 		_home.grab_focus()
+
+
+func _claim_chapter_milestone(chapter: int) -> void:
+	if not _active or not is_visible_in_tree() or chapter < 1 or chapter > _chapters.size():
+		return
+	var threshold: int = int(_chapters[chapter - 1].get("milestone_threshold", 0))
+	if threshold > 0:
+		chapter_milestone_requested.emit(chapter, threshold)
+
+
+func _chapter_earned_stars(chapter: int) -> int:
+	var supplied: Dictionary = _state.get("chapter_stars", {})
+	if supplied.has(chapter):
+		return int(supplied[chapter])
+	if supplied.has(str(chapter)):
+		return int(supplied[str(chapter)])
+	var ratings: Dictionary = _state.get("best_stars", {})
+	var total: int = 0
+	var first: int = (chapter - 1) * STAGES_PER_CHAPTER + 1
+	for number in range(first, first + STAGES_PER_CHAPTER):
+		total += int(ratings.get(str(number), 0))
+	return total
+
+
+func _refresh_chapter_milestones(blocked: bool) -> void:
+	var claimed: Array = _state.get("chapter_milestones", [])
+	for index in range(_chapters.size()):
+		var chapter: int = index + 1
+		var section: Dictionary = _chapters[index]
+		var stars: int = _chapter_earned_stars(chapter)
+		var next_claim: int = 0
+		for threshold: int in Economy.CHAPTER_STAR_MILESTONES:
+			if stars >= threshold and ("%d:%d" % [chapter, threshold]) not in claimed:
+				next_claim = threshold
+				break
+		section["milestone_threshold"] = next_claim
+		var button: Button = section.milestone
+		button.visible = next_claim > 0
+		button.disabled = blocked or next_claim <= 0
+		if next_claim > 0:
+			var coins: int = Economy.chapter_milestone_reward(next_claim)
+			button.text = "Claim +%d" % coins
+			button.accessibility_name = "Claim %d coins for reaching %d stars in %s" % [
+				coins, next_claim, Catalog.CHAPTERS[index]]
+
+
+func _sync_frontier_pill() -> void:
+	if _frontier_pill == null or _nodes.is_empty():
+		return
+	var blocked: bool = bool(_state.get("loading", false)) or not str(_state.get("error", "")).is_empty()
+	var highest: int = clampi(int(_state.get("highest_cleared", 0)), 0, 99)
+	var frontier: int = mini(highest + 1, 99)
+	var frontier_chapter: int = (frontier - 1) / STAGES_PER_CHAPTER
+	var far_away: bool = abs(_chapter_index - frontier_chapter) >= 2
+	_frontier_pill.visible = is_visible_in_tree() and not blocked and far_away
+	_frontier_pill.disabled = blocked
+	if _frontier_pill.visible:
+		_frontier_pill.text = "↑ Stage %d" % frontier if frontier_chapter > _chapter_index else "↓ Stage %d" % frontier
+		_frontier_pill.accessibility_name = "Jump back to frontier Stage %d" % frontier
 
 
 func _select(number: int) -> void:
@@ -595,8 +681,10 @@ func _layout() -> void:
 	_upgrades.size = Vector2(ceilf(upgrade_width), ceilf(44.0 / s))
 	Style.action_button(_upgrades, Style.GOOD)
 	_upgrades.custom_minimum_size = Vector2.ZERO
+	var affordable: bool = not _upgrades.disabled and bool(_state.get("upgrade_affordable", false))
 	_upgrades.add_theme_stylebox_override("normal",
-		Style.box(Color("#edfff1"), Color("#a8c9ae"), ceili(12.0 / s), maxi(1, roundi(1.0 / s))))
+		Style.box(Color("#fff8dc") if affordable else Color("#edfff1"),
+			Color("#d8a642") if affordable else Color("#a8c9ae"), ceili(12.0 / s), maxi(1, roundi((2.0 if affordable else 1.0) / s))))
 	_merged_level_badge.set_level(int(_state.get("merged_level", 1)))
 	_merged_level_badge.tooltip_text = ""
 	_merged_level_badge.layout_badge(Rect2(Vector2(7, 8) / s, Vector2(96, 28) / s), s)
@@ -604,6 +692,8 @@ func _layout() -> void:
 	_upgrade_label.position = Vector2(106.0 / s, 0)
 	_upgrade_label.size = Vector2(maxf(1.0, upgrade_width - 114.0 / s), 44.0 / s)
 	_upgrade_label.add_theme_font_size_override("font_size", ceili((12.0 if narrow else 13.0) / s))
+	_upgrade_sparkle.size = Vector2.ONE * 16.0 / s
+	_upgrade_sparkle.position = Vector2(_upgrades.size.x - 14.0 / s, 2.0 / s)
 	_wallet.visible = true
 	var wallet_pixels: int = ceili((15.0 if narrow else 16.0) / s)
 	_wallet.add_theme_font_size_override("font_size", wallet_pixels)
@@ -659,13 +749,24 @@ func _layout() -> void:
 		section.banner.add_theme_stylebox_override("panel",
 			Style.box(Color("#fffaf0"), Color("#d5e4db"), ceili(16.0 / s), maxi(1, roundi(1.0 / s))))
 		var chapter_title_width: float = banner_width - 24.0 / s
-		section.number.text = "CHAPTER %02d / 11 · %d-%d" % [
-			index + 1, index * STAGES_PER_CHAPTER + 1, (index + 1) * STAGES_PER_CHAPTER]
+		var chapter_stars: int = _chapter_earned_stars(index + 1)
+		section.number.text = "CH %02d · %d-%d · %d/27 ★" % [
+			index + 1, index * STAGES_PER_CHAPTER + 1, (index + 1) * STAGES_PER_CHAPTER, chapter_stars]
 		section.number.position = Vector2(12, 25) / s
 		section.number.size = Vector2(chapter_title_width, 18.0 / s)
 		section.number.add_theme_font_size_override("font_size", ceili(11.0 / s))
 		section.title.position = Vector2(12, 1) / s
 		section.title.size = Vector2(chapter_title_width, 24.0 / s)
+		var milestone: Button = section.milestone
+		Style.action_button(milestone, Color("#a36927"))
+		milestone.custom_minimum_size = Vector2.ZERO
+		milestone.add_theme_stylebox_override("normal",
+			Style.box(Color("#ffdf73"), Color("#b87c2a"), ceili(14.0 / s), maxi(1, roundi(1.5 / s))))
+		milestone.add_theme_color_override("font_color", Color("#563812"))
+		milestone.add_theme_font_size_override("font_size", ceili(12.0 / s))
+		milestone.size = Vector2(minf(116.0 / s, banner_width * 0.42), 30.0 / s)
+		milestone.position = Vector2(section.banner.position.x + (banner_width - milestone.size.x) * 0.5,
+			section.banner.position.y - milestone.size.y - 4.0 / s)
 		var pixels: int = ceili((18.0 if size.x * s < 600.0 else 20.0) / s)
 		while pixels > 1 and Style.HEADING_FONT.get_string_size(section.title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x > chapter_title_width:
 			pixels -= 1
@@ -766,6 +867,14 @@ func _layout() -> void:
 	_earned_points = earned.get_baked_points()
 	_pip.custom_minimum_size = Vector2.ZERO
 	_pip.size = Vector2(112, 84) / s
+	Style.action_button(_frontier_pill, Style.GOOD)
+	_frontier_pill.custom_minimum_size = Vector2.ZERO
+	_frontier_pill.add_theme_stylebox_override("normal",
+		Style.box(Color("#fff9e8"), Color("#8cb89b"), ceili(18.0 / s), maxi(1, roundi(1.5 / s))))
+	_frontier_pill.add_theme_font_size_override("font_size", ceili(13.0 / s))
+	_frontier_pill.size = Vector2(minf(132.0 / s, width * 0.45), 36.0 / s)
+	_frontier_pill.position = Vector2(left + (width - _frontier_pill.size.x) * 0.5,
+		_scroll.get_rect().end.y - _frontier_pill.size.y - 10.0 / s)
 	_cache_journey_route()
 	_position_guide()
 	_refresh_locks()
@@ -921,6 +1030,7 @@ func _refresh_viewport() -> void:
 	_pose_nodes()
 	_pose_scenery()
 	_sync_guide()
+	_sync_frontier_pill()
 
 
 func _pose_nodes(delta: float = 0.0) -> void:
@@ -1111,6 +1221,10 @@ func snapshot() -> Dictionary:
 		"error": str(_state.get("error", "")),
 		"merged_level": int(_state.get("merged_level", 1)),
 		"auto_merge_level": int(_state.get("auto_merge_level", 1)),
+		"star_charm_level": int(_state.get("star_charm_level", 1)),
+		"upgrade_affordable": bool(_state.get("upgrade_affordable", false)),
+		"chapter_milestones": _state.get("chapter_milestones", []).duplicate(),
+		"frontier_pill": _control(_frontier_pill),
 		"final_boss_stage": 99,
 		"merged_level_indicator": _merged_level_badge.snapshot(),
 		"upgrades_entry": _control(_upgrades),

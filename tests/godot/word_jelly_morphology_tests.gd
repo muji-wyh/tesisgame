@@ -256,7 +256,7 @@ func _test_atomic_exposure_and_retry() -> void:
 	var right: Dictionary = _sources(model, "MRI")[0]
 	whole = _merge(model, left, right)
 	check(whole.merge_level == 2 and Model.coins_for_tile(whole) == 50
-		and is_equal_approx(Model.coin_drop_chance_for_tile(whole), 0.02),
+		and is_equal_approx(Model.coin_drop_chance_for_tile(whole), 0.12),
 		"Two identical atomic words upgrade into an eligible Lv2 collection")
 	model.word_attempted.connect(func(event_id: String, ids: Array[String], correct: bool): attempts.append([event_id, ids, correct]))
 	model.credit_collection = func(event_id: String, coins: int) -> Dictionary:
@@ -521,7 +521,7 @@ func _test_preview_and_arrival() -> void:
 	model._spawn_drop()
 	var follower: Dictionary = model.cell(int(other.id))
 	check(not follower.is_empty() and follower.column == 0 and follower.row == 6
-		and float(follower.arrival_delay) >= 0.1 + sqrt(2.0 / 12.5),
+		and float(follower.arrival_delay) >= 0.1 + sqrt(2.0 / 12.5) / Model.FALL_SPEED_SCALE - 0.0001,
 		"Successive unit bodies reserve separate destinations and preserve shared-lane entry clearance")
 
 

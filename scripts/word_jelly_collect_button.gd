@@ -33,6 +33,7 @@ var _beat_elapsed: float = BEAT_SECONDS
 var _beat_count: int = 0
 var _reduced_motion: bool = false
 var _pip_level: int = 0
+var _campaign_unlocked: bool = false
 var _locked: bool = true
 var _preview_active: bool = false
 var _preview_consumed: bool = false
@@ -128,9 +129,10 @@ func set_state(count: int, active: bool, remaining: int, total: int) -> void:
 	queue_redraw()
 
 
-func set_pip_level(level: int) -> void:
+func set_pip_level(level: int, campaign_unlocked: bool = false) -> void:
 	_pip_level = maxi(0, level)
-	var next_locked: bool = _pip_level < UNLOCK_LEVEL
+	_campaign_unlocked = campaign_unlocked
+	var next_locked: bool = _pip_level < UNLOCK_LEVEL and not _campaign_unlocked
 	mouse_default_cursor_shape = Control.CURSOR_ARROW if next_locked else Control.CURSOR_POINTING_HAND
 	if next_locked != _locked:
 		_locked = next_locked

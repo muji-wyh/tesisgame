@@ -473,7 +473,7 @@ func check_combo_coins() -> void:
 			storage.coin_writable = true
 			check(app.coin_wallet.load_state(), "The failed combo wallet can recover")
 			view.game.retry_combo_credit()
-		check(view.game.combo_count == count and app.coin_wallet.balance == expected + bonus,
+		check(view.game.combo_actions == count and app.coin_wallet.balance == expected + bonus,
 			"Combo %d persists its exact reward once before presentation" % count)
 		if bonus == 0:
 			check(not app._coin_flight.snapshot().active,

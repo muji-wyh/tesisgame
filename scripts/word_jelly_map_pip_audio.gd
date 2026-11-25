@@ -75,6 +75,13 @@ func _stop_players() -> void:
 			player.stop()
 
 
+func _exit_tree() -> void:
+	_stop_players()
+	for player: AudioStreamPlayer in [_snore, _wake]:
+		if is_instance_valid(player):
+			player.stream = null
+
+
 func snapshot() -> Dictionary:
 	return {"enabled": _enabled, "sleeping": _sleeping,
 		"snore_playing": is_instance_valid(_snore) and _snore.playing,

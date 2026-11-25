@@ -256,6 +256,9 @@ func test_challenge_best_hud() -> void:
 	await capture_ui("challenge-stage-1-best-5")
 	var goals: Array = view.game.stage_run.snapshot().practice.duplicate(true)
 	view.game.cells.clear()
+	view.game.set_fill_mode(false)
+	view.game.spawn_interval = 10000.0
+	view.game._stage_spawn_interval = 10000.0
 	for goal: Dictionary in goals:
 		var definition: Dictionary = view.game.stage_run.words.filter(func(word: Dictionary) -> bool:
 			return str(word.id) == str(goal.word_id))[0]

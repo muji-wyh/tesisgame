@@ -2313,6 +2313,8 @@ func _sync_stage_heading() -> void:
 func _challenge_stage_reached(stage: int) -> void:
 	_campaign.record_challenge_stage(stage)
 	_sync_stage_heading()
+	if stage >= 5 and stage % 5 == 0 and _mode_id == "word_jelly" and _word_jelly.game.stage_run != null:
+		_word_jelly.set_stage_progress(_jelly_campaign_snapshot(), true)
 	if stage > 1 and not reduced_motion and not _round_id.is_empty() and _reward_confetti_allowed():
 		_sync_reward_confetti()
 		_reward_confetti.burst_small("%s:challenge:stage:%d" % [_round_id, stage - 1])
@@ -2572,6 +2574,11 @@ func _sync_jelly() -> void:
 	_jelly_pause_button.disabled = not allowed and not (_jelly_pause_open() and not _page_hidden and not _speech_debug_active)
 	_jelly_pause_shade.visible = _jelly_pause_open() and not _page_hidden and not _speech_debug_active
 	_jelly_backdrop.visible = _round_context.get("track") != "professional" and _is_jelly_mode() and (_active_jelly().visible or (_jelly_rewards_shown and not _jelly_rewards._result_context.is_empty())) and not _page_hidden and not collection_page.visible
+	var backdrop_chapter: int = 0
+	if _mode_id == "word_jelly" and _word_jelly.game.stage_run != null:
+		backdrop_chapter = _word_jelly.game.stage_run._chapter if _word_jelly.game.stage_run.kind == "main" \
+			else ((_word_jelly.game.stage_run.challenge_stage - 1) % 11) + 1
+	_jelly_backdrop.set_chapter(backdrop_chapter)
 	_learning_backdrop.visible = _learning_backdrop.has_art() and not _page_hidden and not collection_page.visible and not _mode_menu_open()
 	var career_backdrop: bool = _round_context.get("track") == "professional" and _learning_backdrop.visible
 	_jelly.set_learning_backdrop(career_backdrop)

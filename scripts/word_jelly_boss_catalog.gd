@@ -2,6 +2,7 @@ extends RefCounted
 ## One recurring trickster, eight earned rematches, and a nonpunitive opening ambush.
 
 const STAGES: Array[int] = [3, 5, 7, 9, 18, 36, 63, 99]
+const MINI_RAID_STAGES: Array[int] = [27, 45, 54, 72, 81, 90]
 const LEGACY_STAGES: Array[int] = [9, 18, 27, 36, 45, 63, 81, 99]
 const DAMAGE: Array[int] = [0, 14, 38, 72, 116, 176, 248, 344, 464, 620]
 const TITLES: Array[String] = [
@@ -49,14 +50,38 @@ static func encounter(number: int, intro: bool = false) -> Dictionary:
 			"escape": "Mine now!\nCatch me at Stage 3!",
 			"reply": "That compass is ours.\nWe're coming, Pirate!"}
 	var index: int = STAGES.find(number)
-	if index < 0:
+	if index >= 0:
+		return {"id": index + 1, "stage": number, "intro": false, "name": "Pirate",
+			"title": TITLES[index], "health": HEALTH[index], "interval": maxf(2.8, 6.5 - index * 0.55),
+			"starting_clones": 2 if number == 99 else 1 if number == 9 else 0,
+			"abilities": ABILITIES.slice(0, index + 1), "new_ability": ABILITIES[index],
+			"retreat": RETREATS[index], "entrance": ENTRANCES[index], "escape": ESCAPES[index],
+			"reply": REPLIES[index], "next_stage": STAGES[index + 1] if index + 1 < STAGES.size() else 0}
+	return mini_encounter(number)
+
+
+static func mini_encounter(number: int) -> Dictionary:
+	var raid: int = MINI_RAID_STAGES.find(number)
+	if raid < 0:
 		return {}
-	return {"id": index + 1, "stage": number, "intro": false, "name": "Pirate",
-		"title": TITLES[index], "health": HEALTH[index], "interval": maxf(2.8, 6.5 - index * 0.55),
-		"starting_clones": 2 if number == 99 else 1 if number == 9 else 0,
-		"abilities": ABILITIES.slice(0, index + 1), "new_ability": ABILITIES[index],
-		"retreat": RETREATS[index], "entrance": ENTRANCES[index], "escape": ESCAPES[index],
-		"reply": REPLIES[index], "next_stage": STAGES[index + 1] if index + 1 < STAGES.size() else 0}
+	var raid_hp: Array[int] = [340, 480, 560, 700, 800, 920]
+	var raid_tricks: Array = [
+		["freeze", "ink"],
+		["lock", "freeze"],
+		["ink", "snatch"],
+		["kick", "lock"],
+		["snatch", "ward"],
+		["ward", "freeze", "lock"]
+	]
+	var tricks: Array = raid_tricks[raid]
+	return {"id": 0, "mini": true, "stage": number, "intro": false, "name": "Pirate",
+		"title": "Pirate Raid", "health": raid_hp[raid], "interval": maxf(3.6, 5.4 - raid * 0.28),
+		"starting_clones": 0, "abilities": tricks, "new_ability": tricks[0],
+		"retreat": "scramble",
+		"entrance": "Passing through?\nTry this chapter's finale!",
+		"escape": "Not bad!\nSee you up the trail!",
+		"reply": "Chapter cleared!\nOnward to the compass!",
+		"next_stage": chase_target(number)}
 
 
 static func chase_target(highest_cleared: int) -> int:

@@ -5,8 +5,9 @@ const Catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
 const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
 const Economy = preload("res://scripts/coin_economy.gd")
 const Wallet = preload("res://scripts/coin_wallet.gd")
-const VERSION: int = 6
-const UPGRADE_LEVEL_KEYS: Dictionary = {"jelly": "level", "auto_merge": "auto_merge_level"}
+const VERSION: int = 7
+const UPGRADE_LEVEL_KEYS: Dictionary = {"jelly": "level", "auto_merge": "auto_merge_level",
+	"star_charm": "star_charm_level"}
 const MAX_CONTEXTS: int = 256
 const MAX_COMPLETED: int = 64
 const MAX_RESULT_FIELDS: int = 32
@@ -15,7 +16,7 @@ const MAX_ID_LENGTH: int = 512
 const MAX_SAVE_BYTES: int = 2 * 1024 * 1024
 const MAX_SCALAR: int = 9007199254740991
 const CONTEXT_KEYS: Array[String] = ["highest_cleared", "recipes", "ratings", "pending", "completed",
-	"boss_victories", "challenge_best_stage"]
+	"boss_victories", "challenge_best_stage", "chapter_milestones"]
 const RESULT_KEYS: Array[String] = ["kind", "number", "outcome", "stars"]
 const TIME_FIELDS: Array[String] = ["time_elapsed", "seconds_remaining", "seconds_total", "seconds_added"]
 const TRANSIENT_FIELDS: Array[String] = ["words", "practice", "image", "audio", "morphology",
@@ -27,8 +28,8 @@ var _path: String
 var _host: Object
 var _saved_text: Variant = null
 var _contexts: Dictionary = {}
-var _upgrades: Dictionary = {"level": 1, "auto_merge_level": 1, "pending": {}, "intro": "unseen",
-	"funded": {"jelly": 0, "auto_merge": 0}}
+var _upgrades: Dictionary = {"level": 1, "auto_merge_level": 1, "star_charm_level": 1, "pending": {},
+	"intro": "unseen", "funded": {"jelly": 0, "auto_merge": 0, "star_charm": 0}}
 
 
 func _init(path: String = "user://jelly-campaign-v1.cfg", host: Object = null) -> void:
@@ -49,28 +50,30 @@ func load_state() -> bool:
 	if not stored.ok:
 		return false
 	var next_contexts: Dictionary = {}
-	var next_upgrades: Dictionary = {"level": 1, "auto_merge_level": 1, "pending": {}, "intro": "unseen",
-		"funded": {"jelly": 0, "auto_merge": 0}}
+	var next_upgrades: Dictionary = {"level": 1, "auto_merge_level": 1, "star_charm_level": 1, "pending": {},
+		"intro": "unseen", "funded": {"jelly": 0, "auto_merge": 0, "star_charm": 0}}
 	if stored.text != null:
 		var config := ConfigFile.new()
 		if config.parse(stored.text) != OK or config.get_sections().size() != 1 \
 			or not config.has_section("campaign"):
 			return _fail("Your campaign save could not be understood. It has not been reset.")
 		var version: Variant = config.get_value("campaign", "version", null)
-		if not version is int or version not in [1, 2, 3, 4, 5, VERSION]:
+		if not version is int or version not in [1, 2, 3, 4, 5, 6, VERSION]:
 			return _fail("This campaign save needs a supported version.")
 		var keys: PackedStringArray = config.get_section_keys("campaign")
 		if keys.size() != (3 if version >= 4 else 2) or not "contexts" in keys \
 			or (version >= 4 and not "upgrades" in keys):
 			return _fail("Your campaign save needs its complete progression and upgrade journal.")
 		var contexts: Variant = config.get_value("campaign", "contexts", null)
-		if version < 3 and contexts is Dictionary:
+		if version < 7 and contexts is Dictionary:
 			contexts = contexts.duplicate(true)
 			for state: Variant in contexts.values():
 				if version == 1 and state is Dictionary and state.size() == 5 and not state.has("boss_victories"):
 					state["boss_victories"] = []
-				if state is Dictionary and state.size() == 6 and not state.has("challenge_best_stage"):
+				if version < 3 and state is Dictionary and state.size() == 6 and not state.has("challenge_best_stage"):
 					state["challenge_best_stage"] = 0
+				if state is Dictionary and state.size() == 7 and not state.has("chapter_milestones"):
+					state["chapter_milestones"] = []
 		var validation_error: String = _contexts_error(contexts)
 		if not validation_error.is_empty():
 			return _fail(validation_error)
@@ -95,6 +98,15 @@ func load_state() -> bool:
 					return _fail("Your saved Jelly upgrades need their complete level and purchase journal.")
 				upgrades = upgrades.duplicate(true)
 				upgrades.funded = {"jelly": 0, "auto_merge": 0}
+			if version <= 6:
+				if not upgrades is Dictionary or upgrades.size() != 5 \
+					or not upgrades.has_all(["level", "auto_merge_level", "pending", "intro", "funded"]) \
+					or not upgrades.funded is Dictionary or upgrades.funded.size() != 2 \
+					or not upgrades.funded.has_all(["jelly", "auto_merge"]):
+					return _fail("Your saved Jelly upgrades need their complete level and purchase journal.")
+				upgrades = upgrades.duplicate(true)
+				upgrades.star_charm_level = 1
+				upgrades.funded["star_charm"] = 0
 			var upgrade_error: String = _upgrades_error(upgrades)
 			if not upgrade_error.is_empty():
 				return _fail(upgrade_error)
@@ -151,11 +163,60 @@ func auto_merge_level() -> int:
 	return upgrade_level("auto_merge")
 
 
+func star_charm_level() -> int:
+	return upgrade_level("star_charm")
+
+
+func chapter_stars(context: String, chapter: int) -> int:
+	if not _readable(context) or chapter < 1 or chapter > Catalog.CHAPTERS.size():
+		return 0
+	var ratings: Dictionary = _context(context).ratings
+	var total: int = 0
+	var first: int = (chapter - 1) * 9 + 1
+	for number in range(first, first + 9):
+		total += int(ratings.get(str(number), 0))
+	return total
+
+
+func chapter_milestones(context: String) -> Array:
+	if not _readable(context):
+		return []
+	return _context(context).chapter_milestones.duplicate()
+
+
+static func chapter_milestone_key(chapter: int, threshold: int) -> String:
+	return "%d:%d" % [chapter, threshold]
+
+
+func claim_chapter_milestone(context: String, chapter: int, threshold: int) -> bool:
+	error = ""
+	if not _readable(context):
+		return false
+	if chapter < 1 or chapter > Catalog.CHAPTERS.size() or threshold not in Economy.CHAPTER_STAR_MILESTONES:
+		return _fail("Choose a valid chapter star milestone.")
+	if chapter_stars(context, chapter) < threshold:
+		return _fail("Earn more stars in this chapter before claiming this milestone.")
+	if not _current_snapshot_matches():
+		return false
+	var state: Dictionary = _context(context)
+	var key: String = chapter_milestone_key(chapter, threshold)
+	if key in state.chapter_milestones:
+		return true
+	if not _can_add_context(context):
+		return false
+	var next: Dictionary = _contexts.duplicate(true)
+	var changed: Dictionary = state.duplicate(true)
+	changed.chapter_milestones.append(key)
+	changed.chapter_milestones.sort()
+	next[context] = changed
+	return _commit(next)
+
+
 func upgrade_level(kind: String) -> int:
 	if not _upgrades_readable():
 		return 1
 	if not UPGRADE_LEVEL_KEYS.has(kind):
-		_fail("Choose Jelly powers or Auto merge before reading an upgrade.")
+		_fail("Choose Jelly powers, Auto merge or Star charm before reading an upgrade.")
 		return 1
 	return int(_upgrades[UPGRADE_LEVEL_KEYS[kind]])
 
@@ -258,7 +319,11 @@ static func _contribution_receipt(kind: String, level: int, funded: int, amount:
 
 
 static func _upgrade_receipt(kind: String, level: int) -> String:
-	return ("auto-merge-level-v1:%d" if kind == "auto_merge" else "jelly-level-v1:%d") % level
+	if kind == "auto_merge":
+		return "auto-merge-level-v1:%d" % level
+	if kind == "star_charm":
+		return "star-charm-level-v1:%d" % level
+	return "jelly-level-v1:%d" % level
 
 
 func begin_upgrade_guide() -> bool:
@@ -462,17 +527,19 @@ func _upgrades_readable() -> bool:
 
 
 func _upgrades_error(value: Variant) -> String:
-	if not value is Dictionary or value.size() != 5 \
-		or not value.has_all(["level", "auto_merge_level", "pending", "intro", "funded"]) \
+	if not value is Dictionary or value.size() != 6 \
+		or not value.has_all(["level", "auto_merge_level", "star_charm_level", "pending", "intro", "funded"]) \
 		or not value.level is int or value.level < 1 or value.level > Economy.MAX_UPGRADE_LEVEL \
 		or not value.auto_merge_level is int or value.auto_merge_level < 1 \
-		or value.auto_merge_level > Economy.MAX_UPGRADE_LEVEL or not value.pending is Dictionary \
+		or value.auto_merge_level > Economy.MAX_UPGRADE_LEVEL \
+		or not value.star_charm_level is int or value.star_charm_level < 1 \
+		or value.star_charm_level > Economy.MAX_UPGRADE_LEVEL or not value.pending is Dictionary \
 		or not value.intro is String or value.intro not in ["unseen", "offer", "guide", "complete"] \
 		or (value.level > 1 and value.intro != "complete"):
 		return "Your Jelly upgrades need their saved level, introduction and purchase journal."
-	if not value.funded is Dictionary or value.funded.size() != 2 \
+	if not value.funded is Dictionary or value.funded.size() != UPGRADE_LEVEL_KEYS.size() \
 		or not value.funded.has_all(UPGRADE_LEVEL_KEYS.keys()):
-		return "Your Jelly upgrades need their saved coin contributions for both powers."
+		return "Your Jelly upgrades need their saved coin contributions for all powers."
 	for kind: String in UPGRADE_LEVEL_KEYS:
 		var funded: Variant = value.funded[kind]
 		var owned: int = int(value[UPGRADE_LEVEL_KEYS[kind]])
@@ -514,7 +581,8 @@ func _legacy_upgrades(contexts: Dictionary) -> Dictionary:
 			if bool(result.get("boss_victory", false)) and int(result.boss_id) not in state.boss_victories:
 				earned += 1
 		level = maxi(level, mini(9, earned))
-	return {"level": level, "auto_merge_level": 1, "pending": {}, "funded": {"jelly": 0, "auto_merge": 0},
+	return {"level": level, "auto_merge_level": 1, "star_charm_level": 1, "pending": {},
+		"funded": {"jelly": 0, "auto_merge": 0, "star_charm": 0},
 		"intro": "complete" if played or level > 1 else "unseen"}
 
 
@@ -621,7 +689,8 @@ func _can_add_context(context: String) -> bool:
 
 func _context(context: String) -> Dictionary:
 	return _contexts.get(context, {"highest_cleared": 0, "recipes": {}, "ratings": {},
-		"pending": {}, "completed": [], "boss_victories": [], "challenge_best_stage": 0})
+		"pending": {}, "completed": [], "boss_victories": [], "challenge_best_stage": 0,
+		"chapter_milestones": []})
 
 
 func _contexts_error(value: Variant) -> String:
@@ -649,6 +718,25 @@ func _context_error(value: Variant) -> String:
 		return "Your campaign contains invalid Boss victory evidence."
 	if not value.challenge_best_stage is int or value.challenge_best_stage < 0 or value.challenge_best_stage > 16384:
 		return "Your Challenge best stage must be a supported nonnegative whole stage."
+	if not value.chapter_milestones is Array or value.chapter_milestones.size() > Catalog.CHAPTERS.size() * Economy.CHAPTER_STAR_MILESTONES.size():
+		return "Your campaign contains invalid chapter star milestone evidence."
+	var seen_milestones: Dictionary = {}
+	for entry: Variant in value.chapter_milestones:
+		if not entry is String or seen_milestones.has(entry):
+			return "Chapter star milestones must be valid, distinct claims."
+		var parts: PackedStringArray = entry.split(":", true)
+		if parts.size() != 2 or not parts[0].is_valid_int() or not parts[1].is_valid_int():
+			return "Chapter star milestones must identify a chapter and star threshold."
+		var chapter_num: int = int(parts[0])
+		var threshold_num: int = int(parts[1])
+		if chapter_num < 1 or chapter_num > Catalog.CHAPTERS.size() or threshold_num not in Economy.CHAPTER_STAR_MILESTONES:
+			return "Chapter star milestones must reference an authored chapter and supported threshold."
+		var earned_stars: int = 0
+		for num in range((chapter_num - 1) * 9 + 1, chapter_num * 9 + 1):
+			earned_stars += int(value.ratings.get(str(num), 0))
+		if earned_stars < threshold_num:
+			return "Chapter star milestones must match earned stars in that chapter."
+		seen_milestones[entry] = true
 	var previous_boss: int = 0
 	for id: Variant in value.boss_victories:
 		if not id is int or id <= previous_boss or id > BossCatalog.STAGES.size() \

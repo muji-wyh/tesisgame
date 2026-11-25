@@ -13,6 +13,7 @@ const QUIET_ALT = preload("res://assets/images/jelly-match/gel-lilac.png")
 const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const WAND = preload("res://assets/images/ui/jelly-powerups/auto-merge-wand.svg")
+const STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 const NAMES: Array[String] = ["", "Little spark", "Neighbor burst", "Wider burst",
 	"Surrounding burst", "Column burst", "Cross burst", "Extended ring", "Double ring", "Board burst"]
 
@@ -104,10 +105,30 @@ func present_auto_merge(level: int, word: Dictionary, steady: bool) -> bool:
 	return true
 
 
+func present_star_charm(level: int, word: Dictionary, steady: bool) -> bool:
+	if level < 1 or level > Economy.MAX_UPGRADE_LEVEL or word.is_empty():
+		push_error("A Star charm preview needs real Jelly artwork and a level from 1 to 9.")
+		return false
+	_kind = "star_charm"
+	_level = level
+	_elapsed = 0.0
+	reduced_motion = steady
+	_picture = WordArt.texture(str(word.get("image", "")), self)
+	_jelly.hide()
+	_layout()
+	set("accessibility_name", "Star charm Lv%d. %s %s" % [level, description(), coin_description()])
+	queue_redraw()
+	return true
+
+
 func description() -> String:
 	if _kind == "auto_merge":
 		return "Finish up to %d Jellies.\nEach result is ready to collect." \
 			% Economy.auto_merge_capacity(_level)
+	if _kind == "star_charm":
+		var combo_bonus: float = Economy.star_charm_combo_bonus(_level)
+		var frag_pct: int = roundi(Economy.star_charm_fragment_bonus(_level) * 100.0)
+		return "+%.1fs combo timer  ·  +%d%% treasure fragments." % [combo_bonus, frag_pct]
 	var reach: String = "up to %d nearby Jellies" % _targets.size() if _level <= 4 \
 		else "its entire column" if _level == 5 else "its row and column" if _level == 6 \
 		else "the inner ring and 4 outer Jellies" if _level == 7 \
@@ -120,6 +141,11 @@ func coin_description() -> String:
 		return "Saved across rounds. Use costs %d / %d / %d coins." % [
 			Economy.powerup_price("auto_merge", 0, _level), Economy.powerup_price("auto_merge", 1, _level),
 			Economy.powerup_price("auto_merge", 2, _level)]
+	if _kind == "star_charm":
+		var grace: int = Economy.star_charm_grace_charges(_level)
+		var grace_text: String = "No extra wrong-merge grace" if grace <= 0 \
+			else "%d wrong-merge grace charge%s per chain" % [grace, "s" if grace > 1 else ""]
+		return "Always active in campaign and Challenge. %s." % grace_text
 	var bonus: String = "No pickup coin bonus" if _level == 1 else "%d%% chance of +%d coins" % [
 		roundi(Economy.jelly_bonus_chance(_level) * 100.0), Economy.jelly_bonus(_level)]
 	return "%s  ·  Base Boss hit: %d" % [bonus, BossCatalog.DAMAGE[_level]]
@@ -226,6 +252,9 @@ func _draw() -> void:
 	if _kind == "auto_merge":
 		_draw_auto_merge()
 		return
+	if _kind == "star_charm":
+		_draw_star_charm()
+		return
 	draw_style_box(_backplate, _board.grow(_pitch * 0.25))
 	var age: float = fposmod(_elapsed, 3.6)
 	var fade: float = 1.0 if reduced_motion else 1.0 - smoothstep(3.0, 3.6, age)
@@ -283,6 +312,27 @@ func _draw_auto_merge() -> void:
 	_draw_upgrade_flash(wand_center, _auto_pitch)
 
 
+func _draw_star_charm() -> void:
+	var center: Vector2 = size * 0.5
+	var base: float = minf(size.x, size.y)
+	var glow_edge: float = base * (0.72 + _charge_energy * 0.16 + _paid_pulse * 0.08)
+	draw_texture_rect(GLOW, Rect2(center - Vector2.ONE * glow_edge * 0.5, Vector2.ONE * glow_edge),
+		false, Color(1.0, 0.88, 0.48, 0.30 + _charge_energy * 0.28 + _paid_pulse * 0.14))
+	var star_edge: float = base * (0.34 + float(_level - 1) * 0.015)
+	draw_texture_rect(STAR, Rect2(center - Vector2.ONE * star_edge * 0.5, Vector2.ONE * star_edge), false)
+	var orbit_count: int = clampi(_level, 1, 9)
+	var orbit_radius: float = base * 0.32
+	for index in range(orbit_count):
+		var angle: float = float(index) * TAU / float(orbit_count) - PI * 0.5
+		if not reduced_motion:
+			angle += _elapsed * 0.65
+		var at: Vector2 = center + Vector2.from_angle(angle) * orbit_radius
+		var mini_edge: float = base * 0.11
+		draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * mini_edge * 0.5, Vector2.ONE * mini_edge),
+			false, Color(1.0, 0.95, 0.68, 0.86))
+	_draw_upgrade_flash(center, base * 0.24)
+
+
 func _draw_upgrade_flash(center: Vector2, pitch: float) -> void:
 	if _upgrade_payoff <= 0.001:
 		return
@@ -303,8 +353,11 @@ func snapshot() -> Dictionary:
 	for cell: Dictionary in _model.cells:
 		if int(cell.id) in _targets:
 			targets.append({"column": cell.column, "row": cell.row})
-	return {"kind": _kind, "level": _level, "name": "Auto merge" if _kind == "auto_merge" else NAMES[_level],
+	return {"kind": _kind, "level": _level,
+		"name": "Auto merge" if _kind == "auto_merge" else "Star charm" if _kind == "star_charm" else NAMES[_level],
 		"capacity": Economy.auto_merge_capacity(_level) if _kind == "auto_merge" else 0,
+		"combo_bonus": Economy.star_charm_combo_bonus(_level) if _kind == "star_charm" else 0.0,
+		"fragment_bonus": Economy.star_charm_fragment_bonus(_level) if _kind == "star_charm" else 0.0,
 		"columns": Model.COLUMNS, "rows": Model.ROWS,
 		"origin": [_origin.x, _origin.y], "target_count": _targets.size(), "targets": targets,
 		"description": description(), "coins": coin_description(), "reduced_motion": reduced_motion,

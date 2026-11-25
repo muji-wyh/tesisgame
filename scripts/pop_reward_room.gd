@@ -1197,7 +1197,8 @@ func _refresh() -> void:
 	var campaign: Dictionary = _result_context.get("campaign", {})
 	var campaign_result: bool = campaign.get("kind", "") == "main"
 	var challenge_result: bool = campaign.get("kind", "") == "challenge"
-	var show_boss: bool = wants_result_boss() and (_challenge_return_ready or _stage_failure_ready) and not failed
+	var show_boss: bool = is_visible_in_tree() and not _paused and wants_result_boss() \
+		and (_challenge_return_ready or _stage_failure_ready) and not failed
 	var boss_loaded: bool = false
 	if show_boss:
 		boss_loaded = _result_boss.present(_stage_feedback_round, reduced_motion,
@@ -1219,7 +1220,14 @@ func _refresh() -> void:
 			var summary: Dictionary = _result_context.get("challenge_result", {})
 			var reached: int = int(summary.get("stage", campaign.get("challenge_stage", 1)))
 			_heading.text = "New best!" if _challenge_return_ready and summary.get("new_best", false) else "Challenge over"
-			_result_score.text = "Reached Stage %d · %d collected" % [reached, int(summary.get("collection_count", campaign.get("collection_count", 0)))]
+			var stats_line: String = "Stage %d · %d collected" % [reached, int(summary.get("collection_count", campaign.get("collection_count", 0)))]
+			var best_combo: int = int(summary.get("best_combo", _result_context.get("best_combo", 0)))
+			var max_lv: int = int(summary.get("max_merge_level", _result_context.get("max_merge_level", 1)))
+			if best_combo >= 2:
+				stats_line += " · %dx combo" % best_combo
+			if max_lv >= 2:
+				stats_line += " · Max Lv%d" % max_lv
+			_result_score.text = stats_line
 			_challenge_record.reduced_motion = reduced_motion
 			_challenge_record.set_record(int(summary.get("best", reached)))
 			_result_caption.text = failure if failed else "Your record is saved." if _challenge_return_ready else "Saving your results..."

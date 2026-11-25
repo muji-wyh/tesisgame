@@ -61,8 +61,8 @@ func _encode(upgrades: Dictionary, version: int = Store.VERSION) -> String:
 
 
 func _empty_upgrades() -> Dictionary:
-	return {"level": 1, "auto_merge_level": 1, "pending": {}, "intro": "unseen",
-		"funded": {"jelly": 0, "auto_merge": 0}}
+	return {"level": 1, "auto_merge_level": 1, "star_charm_level": 1, "pending": {}, "intro": "unseen",
+		"funded": {"jelly": 0, "auto_merge": 0, "star_charm": 0}}
 
 
 func _test_progress_and_milestones() -> void:
@@ -71,8 +71,8 @@ func _test_progress_and_milestones() -> void:
 	var wallet := Wallet.new("user://contribution-progress-coins.cfg", host)
 	check(store.load_state() and wallet.load_state() and wallet.credit_amount("fixture:charge", 5000).ok,
 		"Load an isolated real-wallet contribution fixture")
-	check(store.upgrade_state().funded == {"jelly": 0, "auto_merge": 0},
-		"Both upgrade tracks begin with zero saved funding")
+	check(store.upgrade_state().funded == {"jelly": 0, "auto_merge": 0, "star_charm": 0},
+		"All upgrade tracks begin with zero saved funding")
 	check(_pulse(store, wallet, "jelly") and store.merged_level() == 1
 		and store.upgrade_state().funded.jelly == 25 and wallet.balance == 4975,
 		"A paid twenty-five-coin pulse persists halfway to Lv2 without unlocking early")
@@ -81,15 +81,18 @@ func _test_progress_and_milestones() -> void:
 	check(restored.load_state() and restored.upgrade_state().funded.jelly == 25,
 		"Partial upgrade funding survives reload")
 	check(_pulse(restored, wallet, "auto_merge") and restored.auto_merge_level() == 1
-		and restored.upgrade_state().funded == {"jelly": 25, "auto_merge": 25},
+		and restored.upgrade_state().funded == {"jelly": 25, "auto_merge": 25, "star_charm": 0},
 		"Each upgrade track keeps its own partial contribution")
 	check(_pulse(restored, wallet, "jelly") and restored.merged_level() == 2
 		and restored.auto_merge_level() == 1 and restored.upgrade_state().intro == "complete"
-		and restored.upgrade_state().funded == {"jelly": 0, "auto_merge": 25},
+		and restored.upgrade_state().funded == {"jelly": 0, "auto_merge": 25, "star_charm": 0},
 		"Exactly reaching the milestone unlocks one level and resets only its own funding")
+	check(_pulse(restored, wallet, "star_charm") and _pulse(restored, wallet, "star_charm")
+		and restored.star_charm_level() == 2 and restored.upgrade_state().funded.star_charm == 0,
+		"Star charm reaches Lv2 independently after two paid pulses")
 	check(_pulse(restored, wallet, "auto_merge") and restored.auto_merge_level() == 2
-		and restored.merged_level() == 2 and wallet.balance == 4900,
-		"Equal-price milestones require separate debits on both tracks")
+		and restored.merged_level() == 2 and wallet.balance == 4850,
+		"Equal-price milestones require separate debits on all tracks")
 	check(not restored.begin_upgrade_contribution("jelly", 125)
 		and not restored.begin_upgrade_contribution("jelly", 1)
 		and not restored.begin_upgrade_contribution("missing")
@@ -184,9 +187,10 @@ func _test_version_five_and_legacy_purchase() -> void:
 	var original: String = host.campaign
 	var store := Store.new("user://contribution-v5.cfg", host)
 	var wallet := Wallet.new("user://contribution-v5-coins.cfg", host)
-	check(store.load_state() and store.upgrade_state().funded == {"jelly": 0, "auto_merge": 0}
-		and store.merged_level() == 2 and store.auto_merge_level() == 3 and host.campaign == original,
-		"Version five gains zero funding in memory without rewriting or changing ownership")
+	check(store.load_state() and store.upgrade_state().funded == {"jelly": 0, "auto_merge": 0, "star_charm": 0}
+		and store.merged_level() == 2 and store.auto_merge_level() == 3 and store.star_charm_level() == 1
+		and host.campaign == original,
+		"Version five gains zero funding and Star charm Lv1 in memory without rewriting or changing ownership")
 	check(not store.begin_upgrade_contribution("jelly") and not store.complete_upgrade_contribution(wallet),
 		"A historical whole-price intent remains separate from the new contribution journal")
 	check(wallet.load_state() and wallet.credit_amount("fixture:v5", 500).ok

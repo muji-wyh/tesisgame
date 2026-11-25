@@ -122,6 +122,10 @@ func test_levels_and_story() -> void:
 			"Each encounter uses short authored setup, admitted defeat and pursuit beats that fit two subtitles")
 	check(BossCatalog.STAGES.size() == 8 and not BossCatalog.new().has_method("merged_level"),
 		"The eight story encounters no longer define Jelly level ownership")
+	for raid_stage: int in BossCatalog.MINI_RAID_STAGES:
+		var raid: Dictionary = BossCatalog.encounter(raid_stage)
+		check(bool(raid.get("mini", false)) and int(raid.get("id", -1)) == 0 and int(raid.get("health", 0)) >= 300,
+			"Non-Boss chapter finale stage %d hosts a Pirate Mini-Raid without altering story Boss IDs" % raid_stage)
 	check(BossCatalog.map_markers(1) == [3] and BossCatalog.map_markers(20) == [3, 5, 7, 9, 18, 36],
 		"Map markers include unlocked Bosses and only the next future encounter")
 	var model = make_model()
@@ -141,6 +145,44 @@ func test_levels_and_story() -> void:
 		"A level cap cannot make a matching locked merged word permanently impossible to unlock")
 	check(model._blast_target_ids({"id": -1, "column": 0, "row": 6}, 1).size() == 2,
 		"Lv1 now reaches two nearby bodies instead of having no support ability")
+	var spark_model = make_model(3, 1)
+	var spark_word: Dictionary = spark_model.stage_run.words[0]
+	var other_word: Dictionary = spark_model.stage_run.words[1]
+	var spark_source: Dictionary = spark_model._new_word_root(spark_word)
+	spark_model._set_merged_word(spark_source, spark_word, 1, true)
+	put(spark_model, spark_source, 2)
+	var spark_root: Dictionary = put(spark_model, spark_model._new_word_root(other_word), 1)
+	var spark_picture: Dictionary = put(spark_model, spark_model._new_picture_tile(other_word), 5)
+	check(spark_model.collect(int(spark_source.id)), "Campaign Lv1 collection queues a lightweight Little spark")
+	spark_model.step(Model.collection_seconds(1) + 0.01)
+	check(spark_model.powerup_active() and spark_model.powerup_snapshot().kind == "blast"
+		and is_equal_approx(spark_model.gameplay_time_scale(), 1.0)
+		and not spark_model.hit_stop_snapshot().active,
+		"Campaign Lv1 Little spark fires without slow-motion hit-stop")
+	for step_idx in range(60):
+		spark_model.step(0.04)
+		if not spark_model.powerup_active() and spark_model.fusions.is_empty():
+			break
+	check(spark_model.merged_count == 1 and spark_model.cell(int(spark_root.id)).is_empty()
+		and spark_model.cell(int(spark_picture.id)).is_empty(),
+		"Campaign Lv1 Little spark actually auto-merges its marked neighbor")
+	var dodge_model = make_model(3, 1)
+	var dodge_word: Dictionary = dodge_model.stage_run.words[0]
+	var dodge_a: Dictionary = put(dodge_model, dodge_model._new_word_root(dodge_word), 0)
+	var dodge_b: Dictionary = put(dodge_model, dodge_model._new_picture_tile(dodge_word), 1)
+	dodge_model.try_merge(int(dodge_a.id), int(dodge_b.id))
+	dodge_model.step(Model.FUSION_SECONDS + 0.01)
+	var combo_before_dodge: float = float(dodge_model.combo_snapshot().remaining)
+	var dodge_target: Dictionary = put(dodge_model, dodge_model._new_word_root(dodge_word), 4)
+	dodge_model.boss._projectile("freeze", dodge_target)
+	dodge_model.step(0.4)
+	var charge_before_dodge: int = dodge_model.boss.charge
+	dodge_model.reposition(int(dodge_target.id), 6, 7)
+	dodge_model.step(Boss.WINDUP_SECONDS + Boss.FLIGHT_SECONDS)
+	check(dodge_model.boss.charge == mini(20, charge_before_dodge + Boss.DODGE_CHARGE)
+		and dodge_model.boss.snapshot().events.any(func(ev: Dictionary) -> bool: return ev.kind == "miss" and int(ev.column) == 4)
+		and float(dodge_model.combo_snapshot().remaining) >= combo_before_dodge - 0.5,
+		"Dodging a Pirate projectile grants charge, emits cell coordinates, and refreshes active combo")
 	var intro := Boss.new()
 	intro.configure(BossCatalog.encounter(1, true), 71)
 	intro.begin_ending("cleared")
@@ -204,8 +246,12 @@ func test_boss_word_requirements() -> void:
 				model.step(Model.COLLECT_SECONDS)
 		if not boss_first:
 			check(model.stage_run.snapshot().remaining == 0 and model.boss.health > 0
-				and model.stage_run.outcome.is_empty() and not model.stage_ending(),
-				"Finishing all words cannot clear while the Boss is still unbeaten")
+				and model.stage_run.outcome.is_empty() and not model.stage_ending()
+				and model.boss.final_chase,
+				"Finishing all words while Boss remains activates Final Chase acceleration")
+			model.boss.charge = 0
+			model.boss.charge_merge(false, true)
+			check(model.boss.charge == 6, "Final Chase doubles manual merge charge gain")
 			model.boss.health = 1
 			var word: Dictionary = model.stage_run.words[0]
 			var tile: Dictionary = model._new_word_root(word)

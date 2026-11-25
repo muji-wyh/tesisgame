@@ -58,6 +58,9 @@ const BLAST_FREEZE_SECONDS: float = 0.10
 const BLAST_MARK_WINDUP_SECONDS: float = 0.18
 const BLAST_MARK_FLIGHT_SECONDS: float = 0.42
 const BLAST_MARK_RECOVERY_SECONDS: float = 0.10
+const LIGHT_BLAST_WINDUP_SECONDS: float = 0.06
+const LIGHT_BLAST_FLIGHT_SECONDS: float = 0.22
+const LIGHT_BLAST_RECOVERY_SECONDS: float = 0.04
 const STAGE_CLEAR_SLOW_SECONDS: float = 0.35
 const STAGE_CLEAR_NOTICE_SECONDS: float = 1.0
 const AUTO_COLLECT_UNLOCK_LEVEL: int = 3
@@ -114,10 +117,16 @@ var _combo_event: String = ""
 var _combo_pending: String = ""
 var _combo_committing: bool = false
 var _finish_after_combo: bool = false
+var _combo_milestone_ranks: Dictionary = {}
+var _combo_grace_remaining: int = 0
+var _next_drop_combo_extended: bool = false
+var max_merge_level_reached: int = 1
+var star_charm_level: int = 1
 var commit_collection: Callable
 var purchase_powerup: Callable
 var allow_cross_age: bool = false
 var pip_level: int = 0
+var campaign_auto_collect_unlocked: bool = false
 
 var _words: Array[Dictionary] = []
 var _word_lookup: Dictionary = {}
@@ -210,6 +219,7 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	boss.configure({})
 	merged_level_limit = MAX_MERGE_LEVEL
 	auto_merge_level = 1
+	campaign_auto_collect_unlocked = false
 	_boss_returning.clear()
 	_campaign_level_rules = false
 	_stage_ending = false
@@ -255,6 +265,11 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	_combo_pending = ""
 	_combo_committing = false
 	_finish_after_combo = false
+	_combo_milestone_ranks.clear()
+	_combo_grace_remaining = 0
+	_next_drop_combo_extended = false
+	max_merge_level_reached = 1
+	star_charm_level = 1
 	spawn_interval = INITIAL_SPAWN_INTERVAL
 	spawn_elapsed = 0.0
 	full_elapsed = -1.0
@@ -362,7 +377,13 @@ func bind_stage(plan: Dictionary) -> bool:
 	stage_run = attempt
 	merged_level_limit = clampi(int(plan.get("merged_level_limit", MAX_MERGE_LEVEL)), 1, MAX_MERGE_LEVEL)
 	auto_merge_level = auto_level
+	star_charm_level = clampi(int(plan.get("star_charm_level", 1)), 1, CoinEconomy.MAX_UPGRADE_LEVEL)
+	campaign_auto_collect_unlocked = bool(plan.get("auto_collect_campaign_unlocked", false))
 	_campaign_level_rules = plan.has("merged_level_limit")
+	_combo_milestone_ranks.clear()
+	_combo_grace_remaining = _base_combo_grace()
+	_next_drop_combo_extended = false
+	max_merge_level_reached = 1
 	boss.configure(plan.get("boss", {}), int(plan.get("seed", 0)))
 	stage_run.boss_objective = boss.active() and not bool(boss.definition.get("intro", false))
 	_stage_spawn_interval = float(plan.spawn_interval)
@@ -530,6 +551,12 @@ func _advance_boss(delta: float, running: bool) -> void:
 		boss.forget(id)
 		_gravity_pending = true
 		_refresh_full_recovery()
+	if boss._next_id != before and combo_count > 0:
+		for event: Dictionary in boss._events:
+			if int(event.id) >= before and str(event.kind) == "miss":
+				_combo_remaining = combo_window()
+				combo_changed.emit(combo_snapshot())
+				break
 	if not boss.error.is_empty():
 		error = boss.error
 	if boss._next_id != before:
@@ -617,6 +644,8 @@ func gameplay_time_scale() -> float:
 	if _stage_clear_feedback > STAGE_CLEAR_NOTICE_SECONDS + EPSILON:
 		return BLAST_TIME_SCALE
 	if bool(_powerup.get("active", false)) and str(_powerup.kind) == "blast" and str(_powerup.stage) == "mark":
+		if bool(_powerup.get("blast", {}).get("light", false)):
+			return 1.0
 		return 0.0 if float(_powerup.elapsed) + EPSILON < BLAST_FREEZE_SECONDS else BLAST_TIME_SCALE
 	return 1.0
 
@@ -1119,15 +1148,47 @@ func _blast_target_ids(origin: Dictionary, level: int) -> Array[int]:
 	if level in [5, 6, 9]:
 		return selected
 	if level <= 4:
-		_shuffle_blast_ids(inner)
+		var ordered_inner: Array[int] = _prioritize_blast_ids(inner) if _campaign_level_rules else inner
+		if not _campaign_level_rules:
+			_shuffle_blast_ids(ordered_inner)
 		var count: int = [0, 2, 4, 6, 8][level] if _campaign_level_rules else level - 1
-		selected.assign(inner.slice(0, mini(count, inner.size())))
+		selected.assign(ordered_inner.slice(0, mini(count, ordered_inner.size())))
 		return selected
 	selected = inner
 	if level == 8 or _campaign_level_rules and level == 7:
-		_shuffle_blast_ids(outer)
-		selected.append_array(outer.slice(0, mini(4 if level == 7 else 14, outer.size())))
+		var ordered_outer: Array[int] = _prioritize_blast_ids(outer) if _campaign_level_rules else outer
+		if not _campaign_level_rules:
+			_shuffle_blast_ids(ordered_outer)
+		selected.append_array(ordered_outer.slice(0, mini(4 if level == 7 else 14, ordered_outer.size())))
 	return selected
+
+
+func _prioritize_blast_ids(ids: Array[int]) -> Array[int]:
+	var matchable: Array[int] = []
+	var other: Array[int] = []
+	for id: int in ids:
+		var source: Dictionary = cell(id)
+		var has_partner: bool = false
+		if not source.is_empty():
+			for candidate: Dictionary in cells:
+				var other_id: int = int(candidate.id)
+				if other_id == id or is_fusing(other_id) or is_lifted(other_id) \
+					or _reserved_for_collection(other_id) or _reserved_for_powerup(other_id) \
+					or not boss_interactable(other_id, false):
+					continue
+				if parts_compatible(source, candidate) or parts_compatible(candidate, source):
+					has_partner = true
+					break
+		if has_partner:
+			matchable.append(id)
+		else:
+			other.append(id)
+	_shuffle_blast_ids(matchable)
+	_shuffle_blast_ids(other)
+	var ordered: Array[int] = []
+	ordered.append_array(matchable)
+	ordered.append_array(other)
+	return ordered
 
 
 func _shuffle_blast_ids(ids: Array[int]) -> void:
@@ -1140,11 +1201,32 @@ func _shuffle_blast_ids(ids: Array[int]) -> void:
 
 func _queue_collection_blast(completed: Dictionary) -> void:
 	var level: int = clampi(int(completed.get("merge_level", 1)), 1, MAX_MERGE_LEVEL)
-	if level <= 1 or not _finish_reason.is_empty() or _stage_ending:
+	if (level <= 1 and not _campaign_level_rules) or not _finish_reason.is_empty() or _stage_ending:
 		return
 	var targets: Array[int] = _blast_target_ids(completed.a, level)
 	if targets.is_empty():
 		return
+	if level <= 1:
+		# Keep Lv1 Little spark snappy and non-disruptive: only spark when at least
+		# one marked neighbor has a legal partner on the board.
+		var has_partner: bool = false
+		for id: int in targets:
+			var source: Dictionary = cell(id)
+			if source.is_empty():
+				continue
+			for candidate: Dictionary in cells:
+				var other_id: int = int(candidate.id)
+				if other_id == id or is_fusing(other_id) or is_lifted(other_id) \
+					or _reserved_for_collection(other_id) or _reserved_for_powerup(other_id) \
+					or not boss_interactable(other_id, false):
+					continue
+				if parts_compatible(source, candidate) or parts_compatible(candidate, source):
+					has_partner = true
+					break
+			if has_partner:
+				break
+		if not has_partner:
+			return
 	var origin: Dictionary = {"column": completed.a.column, "row": completed.a.row,
 		"width": 1, "height": 1, "level": level}
 	_blast_queue.append({"event_id": str(completed.attempt_id), "level": level,
@@ -1181,12 +1263,17 @@ func _start_pending_blast() -> void:
 	targets.sort_custom(func(a: int, b: int) -> bool:
 		return a < b if is_equal_approx(float(distances[a]), float(distances[b])) else distances[a] < distances[b])
 	_begin_powerup_timeline("blast", "blast:" + event_id)
+	var light: bool = level <= 1
+	var windup: float = LIGHT_BLAST_WINDUP_SECONDS if light else BLAST_MARK_WINDUP_SECONDS
+	var flight: float = LIGHT_BLAST_FLIGHT_SECONDS if light else BLAST_MARK_FLIGHT_SECONDS
+	var recovery: float = LIGHT_BLAST_RECOVERY_SECONDS if light else BLAST_MARK_RECOVERY_SECONDS
 	var group_size: int = maxi(1, ceili(targets.size() / 6.0))
 	var groups: int = ceili(float(targets.size()) / group_size)
-	var first_impact: float = BLAST_MARK_WINDUP_SECONDS + BLAST_MARK_FLIGHT_SECONDS
+	var first_impact: float = windup + flight
 	_powerup.stage = "mark"
 	_powerup.duration = first_impact + (groups - 1) * BLAST_MARK_BEAT_SECONDS
-	_powerup.blast = {"level": level, "target_ids": targets, "origins": origins,
+	_powerup.blast = {"level": level, "light": light, "windup": windup, "flight": flight,
+		"recovery": recovery, "target_ids": targets, "origins": origins,
 		"marked": 0, "group_size": group_size, "next_mark_at": first_impact, "used_ids": {}}
 	cue_requested.emit("blast_wave")
 
@@ -1375,10 +1462,11 @@ func _advance_powerup() -> void:
 				return
 		if float(_powerup.elapsed) + EPSILON < float(_powerup.duration):
 			return
+		var recovery: float = float(blast.get("recovery", BLAST_MARK_RECOVERY_SECONDS))
 		_powerup.stage = "ready"
 		_powerup.elapsed = 0.0
-		_powerup.duration = BLAST_MARK_RECOVERY_SECONDS
-		_powerup.next_launch_at = float(_powerup.clock) + BLAST_MARK_RECOVERY_SECONDS
+		_powerup.duration = recovery
+		_powerup.next_launch_at = float(_powerup.clock) + recovery
 	if str(_powerup.kind) == "blast" and str(_powerup.stage) == "ready" and int(_powerup.total) == 0 \
 		and float(_powerup.clock) + EPSILON < float(_powerup.next_launch_at):
 		return
@@ -1513,7 +1601,7 @@ func _powerup_boundary() -> float:
 		return next
 	if str(_powerup.kind) == "blast" and str(_powerup.stage) == "mark":
 		var boundary: float = maxf(0.0, float(_powerup.duration) - float(_powerup.elapsed))
-		if float(_powerup.elapsed) + EPSILON < BLAST_FREEZE_SECONDS:
+		if not bool(_powerup.blast.get("light", false)) and float(_powerup.elapsed) + EPSILON < BLAST_FREEZE_SECONDS:
 			boundary = minf(boundary, BLAST_FREEZE_SECONDS - float(_powerup.elapsed))
 		if int(_powerup.blast.marked) < _powerup.blast.target_ids.size():
 			boundary = minf(boundary, maxf(0.0, float(_powerup.blast.next_mark_at) - float(_powerup.elapsed)))
@@ -1617,7 +1705,12 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dic
 		return "ignored"
 	if not candidate.status in ["partial", "complete"]:
 		var generation: int = _generation
-		_reset_combo()
+		if combo_count > 0 and _combo_grace_remaining > 0 and _combo_remaining > 3.0 + EPSILON:
+			_combo_grace_remaining -= 1
+			_combo_remaining = maxf(0.0, _combo_remaining - 3.0)
+			combo_changed.emit(combo_snapshot())
+		else:
+			_reset_combo()
 		if generation != _generation:
 			return "wrong"
 		cue_requested.emit("wrong")
@@ -1813,7 +1906,7 @@ func set_pip_level(level: int) -> void:
 
 
 func auto_collect_unlocked() -> bool:
-	return pip_level >= AUTO_COLLECT_UNLOCK_LEVEL
+	return pip_level >= AUTO_COLLECT_UNLOCK_LEVEL or campaign_auto_collect_unlocked
 
 
 func collection_batch_active() -> bool:
@@ -2465,6 +2558,10 @@ func drop_now(expected_first_id: int = -1) -> bool:
 		return false
 	spawn_elapsed = 0.0
 	_spawn_drop()
+	if stage_run != null and combo_count > 0 and not _next_drop_combo_extended:
+		_next_drop_combo_extended = true
+		_combo_remaining = minf(combo_window(), _combo_remaining + 1.5)
+		combo_changed.emit(combo_snapshot())
 	changed.emit()
 	return true
 
@@ -2649,7 +2746,7 @@ func finish_round(reason: String = "finished") -> Dictionary:
 		tile.lifted = false
 	_combo_pending = ""
 	_result = {"reason": _finish_reason, "cleared_pairs": cleared_pairs, "score": score(), "coins": collected_coins + combo_coins,
-		"combo_coins": combo_coins, "best_combo": combo_best, "words": []}
+		"combo_coins": combo_coins, "best_combo": combo_best, "max_merge_level": max_merge_level_reached, "words": []}
 	_result.merge(reward_progress(fragment_count), true)
 	if stage_run != null:
 		_result["campaign"] = stage_run.snapshot()
@@ -3255,7 +3352,12 @@ func _build_supply() -> void:
 		var authored_parts: Array = _morphology.source_tiles(str(_authored_words[word.id])) if _authored_words.has(word.id) else []
 		var root_count: int = maxi(1, authored_parts.size())
 		var part_count: int = root_count + (1 if _has_word_picture(word) else 0)
-		var marked: int = _rng.randi_range(0, part_count - 1) if _supply_words % 2 == 0 else -1
+		var bonus_wave: bool = stage_run != null and (stage_run._profile == "Reward" \
+			or (stage_run.kind == "challenge" and stage_run.challenge_stage % 5 == 0))
+		var mark_fragment: bool = bonus_wave or _supply_words % 2 == 0
+		if not mark_fragment and star_charm_level > 1:
+			mark_fragment = _blast_rng.randf() < CoinEconomy.star_charm_fragment_bonus(star_charm_level)
+		var marked: int = _rng.randi_range(0, part_count - 1) if mark_fragment else -1
 		for index in range(part_count):
 			var fragments: int = 1 if index == marked else 0
 			var tile: Dictionary
@@ -3616,7 +3718,12 @@ func _complete_merge(completed: Dictionary) -> void:
 	completed.result = cell(int(result.id))
 	completed.word = completed.result.word.duplicate(true)
 	var generation: int = _generation
-	_advance_combo(str(completed.attempt_id), int(completed.get("combo_bonus", 0)))
+	var result_level: int = int(completed.result.get("merge_level", 0))
+	if result_level > max_merge_level_reached:
+		max_merge_level_reached = result_level
+	var progress_gain: int = 2 if stage_run != null and not bool(completed.get("automatic", false)) \
+		and str(completed.get("merge_kind", "")) == "upgrade" else 1
+	_advance_combo(str(completed.attempt_id), int(completed.get("combo_bonus", 0)), true, progress_gain)
 	if generation != _generation:
 		return
 	fusion_completed.emit(completed, 0)
@@ -3660,7 +3767,9 @@ func _complete_collection(completed: Dictionary) -> void:
 	_completed_words[str(completed.word.id)] = completed.word.duplicate(true)
 	if stage_run != null and not _stage_ending:
 		var before_stage: int = stage_run.challenge_stage
-		stage_run.record_collection(str(completed.attempt_id), str(completed.word.id), int(completed.get("merge_level", 1)))
+		var rank_bonus_seconds: int = 2 if stage_run.kind == "challenge" and combo_count >= 5 else 0
+		stage_run.record_collection(str(completed.attempt_id), str(completed.word.id),
+			int(completed.get("merge_level", 1)), rank_bonus_seconds)
 		if stage_run.kind == "challenge":
 			added_time = stage_run.take_time_bonus()
 			_sync_challenge_pressure()
@@ -3684,6 +3793,9 @@ func _complete_collection(completed: Dictionary) -> void:
 		boss.forget(int(completed.a_id))
 		if stage_run != null and stage_run.boss_objective and boss.health == 0 and not stage_run.boss_defeated:
 			stage_run.record_boss_defeat()
+		elif stage_run != null and stage_run.boss_objective and stage_run._goals_met() and boss.fighting() and not boss.final_chase:
+			boss.enter_final_chase()
+			boss_changed.emit()
 	if generation != _generation:
 		return
 	# A committed pickup owns its learning evidence, including paused settlement.
@@ -3720,6 +3832,21 @@ func _complete_collection(completed: Dictionary) -> void:
 		changed.emit()
 
 
+func _base_combo_grace() -> int:
+	if stage_run == null:
+		return 0
+	return 1 + (1 if star_charm_level >= 6 else 0)
+
+
+func combo_window() -> float:
+	var seconds: float = COMBO_SECONDS
+	if stage_run != null and stage_run._profile == "Flow":
+		seconds += 1.0
+	if star_charm_level > 1:
+		seconds += float(star_charm_level - 1) * 0.3
+	return seconds
+
+
 func _reset_combo() -> void:
 	combo_count = 0
 	combo_progress = 0
@@ -3727,6 +3854,8 @@ func _reset_combo() -> void:
 	_combo_bonus = 0
 	_combo_remaining = 0.0
 	_combo_event = ""
+	_combo_grace_remaining = _base_combo_grace()
+	_next_drop_combo_extended = false
 	combo_changed.emit(combo_snapshot())
 
 
@@ -3737,24 +3866,50 @@ func combo_snapshot() -> Dictionary:
 		"progress_ratio": float(combo_progress) / combo_requirement(combo_count),
 		"rank": ["D", "C", "B", "A", "S", "SS", "SSS"][tier], "tier": tier,
 		"bonus": _combo_bonus, "next_bonus": CoinEconomy.jelly_combo_bonus(combo_actions + 1),
-		"remaining": _combo_remaining, "seconds": COMBO_SECONDS,
+		"remaining": _combo_remaining, "seconds": combo_window(),
+		"grace_remaining": _combo_grace_remaining,
 		"event_id": _combo_event, "pending": not _combo_pending.is_empty() and not _combo_committing}
 
 
-func _advance_combo(event_id: String, bonus: int, feedback: bool = true) -> void:
+func _advance_combo(event_id: String, bonus: int, feedback: bool = true, progress_gain: int = 1) -> void:
+	var was_zero: bool = combo_count == 0
+	var previous_count: int = combo_count
 	combo_count = maxi(1, combo_count)
+	if was_zero:
+		_combo_grace_remaining = _base_combo_grace()
+	_next_drop_combo_extended = false
 	combo_actions += 1
-	combo_progress += 1
-	if combo_progress >= combo_requirement(combo_count):
+	combo_progress += maxi(1, progress_gain)
+	while combo_progress >= combo_requirement(combo_count):
 		combo_progress -= combo_requirement(combo_count)
 		combo_count += 1
 	combo_best = maxi(combo_best, combo_count)
 	combo_coins += bonus
 	_combo_bonus = bonus
-	_combo_remaining = COMBO_SECONDS
+	_combo_remaining = combo_window()
 	_combo_event = event_id
+	if stage_run != null and combo_count > previous_count:
+		for milestone: int in range(maxi(3, previous_count + 1), mini(combo_count, 7) + 1):
+			if not _combo_milestone_ranks.has(milestone):
+				_combo_milestone_ranks[milestone] = true
+				_award_combo_rank_fragment(milestone)
 	if feedback:
 		combo_changed.emit(combo_snapshot())
+
+
+func _award_combo_rank_fragment(milestone: int) -> void:
+	var eligible: Array[Dictionary] = []
+	for tile: Dictionary in cells:
+		var id: int = int(tile.id)
+		if int(tile.get("fragments", 0)) == 0 and not is_fusing(id) and not is_lifted(id):
+			eligible.append(tile)
+	if eligible.is_empty():
+		return
+	var pick: Dictionary = eligible[_blast_rng.randi_range(0, eligible.size() - 1)]
+	_grant_powerup_fragment(pick)
+	powerup_fragment_arrived.emit({"tile_id": int(pick.id), "index": 0, "total": 1,
+		"fragments": int(pick.fragments), "receipt_id": "combo-rank:%d" % milestone,
+		"timeline_id": "", "at": 0.0})
 
 
 static func combo_requirement(level: int) -> int:

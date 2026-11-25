@@ -20,6 +20,7 @@ const SKY = preload("res://assets/images/jelly-match/sky/day.png")
 const COIN = preload("res://assets/coins/gold-coin.png")
 const SKIN = preload("res://assets/images/jelly-match/gel-mint.png")
 const WAND = preload("res://assets/images/ui/jelly-powerups/auto-merge-wand.svg")
+const STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const RAYS = preload("res://assets/chests/shared/effects/rays.png")
 const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
@@ -131,9 +132,9 @@ func _init() -> void:
 	add_child(_wallet_roll)
 	_wallet_roll.draw.connect(_draw_wallet_digits)
 	add_child(_categories)
-	for kind: String in ["jelly", "auto_merge"]:
+	for kind: String in ["jelly", "auto_merge", "star_charm"]:
 		var category := Button.new()
-		category.text = "Merged Jelly" if kind == "jelly" else "Auto merge"
+		category.text = "Merged Jelly" if kind == "jelly" else "Auto merge" if kind == "auto_merge" else "Star charm"
 		category.pressed.connect(select_upgrade.bind(kind))
 		_categories.add_child(category)
 		_category_buttons[kind] = category
@@ -269,8 +270,8 @@ func configure(state: Dictionary) -> void:
 	var previous_balance: int = int(_state.get("balance", 0))
 	var committed_kind := ""
 	var level_changed := false
-	for kind: String in ["jelly", "auto_merge"]:
-		var key: String = "level" if kind == "jelly" else "auto_merge_level"
+	for kind: String in ["jelly", "auto_merge", "star_charm"]:
+		var key: String = _level_key(kind)
 		var advanced: bool = int(state.get(key, 1)) > int(_state.get(key, 1))
 		if advanced or int(state.get("funded", {}).get(kind, 0)) > int(_state.get("funded", {}).get(kind, 0)):
 			committed_kind = kind
@@ -363,7 +364,9 @@ func _tile_data(level: int) -> Dictionary:
 func _present_preview() -> bool:
 	if _word.is_empty():
 		return false
-	var valid: bool = _preview.present_auto_merge(_selected, _word, _reduced) if _kind == "auto_merge" else _preview.present(_selected, _word, _reduced)
+	var valid: bool = _preview.present_auto_merge(_selected, _word, _reduced) if _kind == "auto_merge" \
+		else _preview.present_star_charm(_selected, _word, _reduced) if _kind == "star_charm" \
+		else _preview.present(_selected, _word, _reduced)
 	_picture = WordArt.texture(str(_word.get("image", "")), self)
 	_hero.configure(_tile_data(_displayed_level), SKIN, _picture, null, Style.GOOD, true)
 	_hero._level_badge.hide()
@@ -381,7 +384,7 @@ func _set_displayed_level(level: int) -> void:
 		_hero.configure(_tile_data(next), SKIN, _picture, null, Style.GOOD, true)
 		_hero._level_badge.hide()
 	_tier.text = "Lv %d" % _displayed_level
-	_name.text = "Auto merge" if _kind == "auto_merge" else Preview.NAMES[_displayed_level]
+	_name.text = "Auto merge" if _kind == "auto_merge" else "Star charm" if _kind == "star_charm" else Preview.NAMES[_displayed_level]
 
 func _reveal_earned_level() -> void:
 	_level_reveal_pending = false
@@ -399,8 +402,11 @@ func _settle_showcase() -> void:
 	_preview.set_upgrade_feedback(0.0)
 	_animate_subject()
 
+static func _level_key(kind: String) -> String:
+	return "auto_merge_level" if kind == "auto_merge" else "star_charm_level" if kind == "star_charm" else "level"
+
 func _owned_level() -> int:
-	return int(_state.get("auto_merge_level" if _kind == "auto_merge" else "level", 1))
+	return int(_state.get(_level_key(_kind), 1))
 
 func _funded() -> int:
 	return int(_state.get("funded", {}).get(_kind, 0))
@@ -474,15 +480,17 @@ func _refresh() -> void:
 	_update_wallet_text()
 	_wallet.accessibility_name = "%d saved coins" % int(_state.get("balance", 0))
 	_tier.text = "Lv %d" % _displayed_level
-	_name.text = "Auto merge" if _kind == "auto_merge" else Preview.NAMES[_displayed_level]
+	_name.text = "Auto merge" if _kind == "auto_merge" else "Star charm" if _kind == "star_charm" else Preview.NAMES[_displayed_level]
 	_description.text = "%d ready Jellies" % Economy.auto_merge_capacity(_selected) if _kind == "auto_merge" \
+		else "+%.1fs combo · +%d%% treasure" % [Economy.star_charm_combo_bonus(_selected),
+			roundi(Economy.star_charm_fragment_bonus(_selected) * 100.0)] if _kind == "star_charm" \
 		else "%d nearby Jellies" % _preview.snapshot().target_count
 	_benefits.text = "Lv %d  >  Lv %d" % [owned, mini(9, owned + 1)] if owned < 9 else "Lv 9"
 	_benefits.accessibility_name = _preview.coin_description()
 	for kind: String in _category_buttons:
 		var category: Button = _category_buttons[kind]
 		category.disabled = busy
-		category.accessibility_name = "%s upgrades. Current Lv%d" % [category.text, int(_state.get("auto_merge_level" if kind == "auto_merge" else "level", 1))]
+		category.accessibility_name = "%s upgrades. Current Lv%d" % [category.text, int(_state.get(_level_key(kind), 1))]
 	for tab: Dictionary in _tabs:
 		tab.button.disabled = busy
 		tab.button.accessibility_name = "Preview Lv%d. %s" % [tab.level, "Owned" if int(tab.level) <= owned else "Locked"]
@@ -782,8 +790,12 @@ func _layout() -> void:
 	_heading.text = "Upgrades" if width < 340 * u else "Jelly Upgrades"
 	_heading.size = Vector2(maxf(1.0, width - 184 * u), 44 * u)
 	_heading.add_theme_font_size_override("font_size", ceili((18 if width < 500 * u else 26) * u))
-	_categories.size = Vector2(minf(width, 420 * u), 44 * u)
+	_categories.size = Vector2(minf(width, 520 * u), 44 * u)
 	_categories.position = Vector2((size.x - _categories.size.x) * 0.5, 68 * u)
+	var category_count: int = maxi(1, _category_buttons.size())
+	var category_gap: float = (6.0 if width < 400.0 * u else 8.0) * u
+	var category_width: float = (_categories.size.x - category_gap * float(category_count - 1)) / float(category_count)
+	var category_font: int = ceili((12.0 if width < 360.0 * u else 14.0 if width < 440.0 * u else 15.0) * u)
 	var category_index := 0
 	for kind: String in _category_buttons:
 		var category: Button = _category_buttons[kind]
@@ -791,9 +803,9 @@ func _layout() -> void:
 		var fill: Color = Color("#fff9e6") if kind == _kind else Color(Style.PAPER, 0.45)
 		category.add_theme_stylebox_override("normal", Style.box(fill, Color.TRANSPARENT, ceili(22 * u), 0))
 		category.custom_minimum_size = Vector2.ZERO
-		category.position = Vector2(category_index * (_categories.size.x + 8 * u) * 0.5, 0)
-		category.size = Vector2((_categories.size.x - 8 * u) * 0.5, 44 * u)
-		category.add_theme_font_size_override("font_size", ceili(15 * u))
+		category.position = Vector2(category_index * (category_width + category_gap), 0)
+		category.size = Vector2(category_width, 44 * u)
+		category.add_theme_font_size_override("font_size", category_font)
 		category_index += 1
 	var error_height: float = 44 * u if not _notice.text.is_empty() else 0.0
 	_footer.size = Vector2(width * 0.48 if landscape else width, (184 if short else 214) * u + error_height)
@@ -992,6 +1004,17 @@ func _draw_stage() -> void:
 			if _picture != null:
 				_stage.draw_texture_rect(_picture, Rect2(at - Vector2.ONE * jelly_edge * 0.30, Vector2.ONE * jelly_edge * 0.60), false)
 		_stage.draw_set_transform(Vector2.ZERO)
+	elif _kind == "star_charm":
+		_stage.draw_set_transform(_hero.position + Vector2.ONE * _hero_edge * 0.5, 0.0, _hero.scale)
+		var star_edge: float = _hero_edge * 0.72
+		_stage.draw_texture_rect(STAR, Rect2(-Vector2.ONE * star_edge * 0.5, Vector2.ONE * star_edge), false)
+		var crown_edge: float = _hero_edge * 0.22
+		for idx in range(3):
+			var angle: float = -PI * 0.75 + float(idx) * PI * 0.25
+			var at: Vector2 = Vector2.from_angle(angle) * _hero_edge * 0.44
+			_stage.draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * crown_edge * 0.5, Vector2.ONE * crown_edge),
+				false, Color(1.0, 0.94, 0.64, 0.92))
+		_stage.draw_set_transform(Vector2.ZERO)
 
 func _draw_rail() -> void:
 	var u: float = _rail_unit
@@ -1106,6 +1129,7 @@ func _rect(control: Control) -> Array:
 func snapshot() -> Dictionary:
 	return {"visible": is_visible_in_tree(), "mode": "offer" if _offering else "page", "kind": _kind,
 		"owned_level": _owned_level(), "auto_merge_level": int(_state.get("auto_merge_level", 1)),
+		"star_charm_level": int(_state.get("star_charm_level", 1)),
 		"selected_level": _selected, "level": int(_state.get("level", 1)), "funded": _funded(),
 		"displayed_level": _displayed_level, "level_reveal_pending": _level_reveal_pending,
 		"stage": _rect(_stage), "hero": _rect(_hero),

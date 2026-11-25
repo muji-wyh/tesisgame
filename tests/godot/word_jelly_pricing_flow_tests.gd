@@ -181,8 +181,12 @@ func _run() -> void:
 		"An immutable use-tier receipt rejects the next quote and accepts only its original exact duplicate")
 	model.finish_powerup()
 	view._refresh_controls()
-	check(model.cells.size() == 3 and cat_button.disabled and cat_button.snapshot().price == 50
-		and not dog_button.disabled and dog_button.snapshot().price == 50,
+	var families: Array[String] = [str(cat.id), str(dog.id)]
+	var settled_quotes: Dictionary = model.family_merge_quotes(families)
+	check(model.cells.size() == 3 and not settled_quotes[str(cat.id)].available
+		and cat_button.snapshot().price == 50
+		and settled_quotes[str(dog.id)].available and not dog_button.disabled
+		and dog_button.snapshot().price == 50,
 		"Settlement updates family eligibility while both goals retain the same second-use price")
 	view.purchase_powerup = Callable()
 	app.free()

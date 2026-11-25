@@ -89,8 +89,22 @@ func _run() -> void:
 		"The full-body Boss stands in the side dock, not inside the board or an information row")
 	var state: Dictionary = view.snapshot()
 	check(state.heading.is_empty() and state.health_text.is_empty() and state.energy_segments == 8
-		and is_equal_approx(float(state.health_fraction), 1.0),
+		and is_equal_approx(float(state.health_fraction), 1.0) and int(state.charge) == 0,
 		"Health uses sourced energy effects without permanent names, instructions or a numeric HP panel")
+	run.charge_merge(false, true)
+	run.charge_merge(false, true)
+	run.charge_merge(false, true)
+	run.charge_merge(false, true)
+	view.sync(run.snapshot(), {}, 1, false)
+	check(int(view.snapshot().charge) == 12 and float(view.snapshot().charge_fraction) > 0.5,
+		"Boss view reflects manual-merge charge readiness")
+	run._projectile("freeze", {"id": 999, "column": 2, "row": 5})
+	run.advance(Run.WINDUP_SECONDS + Run.FLIGHT_SECONDS + 0.01, [], true)
+	view.sync(run.snapshot(), {}, 1, false)
+	check(bool(view.snapshot().dodge_active),
+		"Boss view celebrates dodged projectiles with transient feedback")
+	run.charge = 0
+	view.sync(run.snapshot(), {}, 1, false)
 	var cues: Array[String] = []
 	view.audio_requested.connect(func(cue: String) -> void: cues.append(cue))
 	run.collect_hit("presentation:hit", 1, 0, {})

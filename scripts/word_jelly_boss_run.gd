@@ -11,11 +11,14 @@ const ENDING_SECONDS: float = 7.0
 const MAX_EVENTS: int = 96
 const MAX_RECEIPTS: int = 16384
 const EPSILON: float = 0.000001
+const DODGE_CHARGE: int = 4
+const POWER_CHARGE_THRESHOLD: int = 10
 
 var error: String = ""
 var definition: Dictionary = {}
 var health: int = 0
 var charge: int = 0
+var final_chase: bool = false
 var clones: int = 0
 var ward: int = 0
 var broken_remaining: float = 0.0
@@ -39,6 +42,7 @@ func configure(value: Dictionary, seed_value: int = 0) -> void:
 	health = int(definition.get("health", 0))
 	phase = "watching" if bool(definition.get("intro", false)) else "arriving" if not definition.is_empty() else "inactive"
 	charge = 0
+	final_chase = false
 	clones = int(definition.get("starting_clones", 0))
 	ward = 0
 	broken_remaining = 0.0
@@ -80,7 +84,15 @@ func status(id: int) -> Dictionary:
 
 func charge_merge(automatic: bool, complete: bool) -> void:
 	if fighting() and not automatic:
-		charge = mini(20, charge + (3 if complete else 1))
+		var cap: int = 40 if final_chase else 20
+		var gain: int = (6 if complete else 2) if final_chase else (3 if complete else 1)
+		charge = mini(cap, charge + gain)
+
+
+func enter_final_chase() -> void:
+	if fighting() and not final_chase:
+		final_chase = true
+		_event("final_chase", {"text": "Final chase!\nDouble charge!"})
 
 
 func collect_hit(receipt: String, level: int, combo: int, origin: Dictionary, wait_for_goals: bool = false) -> bool:
@@ -91,7 +103,9 @@ func collect_hit(receipt: String, level: int, combo: int, origin: Dictionary, wa
 		error = "This Boss attack needs a valid, unique collected-word receipt and merged level."
 		return false
 	_receipts[receipt] = true
-	var damage: int = ceili(Catalog.DAMAGE[level] * (1.0 + minf(combo, 12) * 0.035) * (1.0 + charge * 0.025))
+	var charge_used: int = charge
+	var damage: int = ceili(Catalog.DAMAGE[level] * (1.0 + minf(combo, 12) * 0.035) * (1.0 + charge_used * 0.025))
+	var power_hit: bool = charge_used >= POWER_CHARGE_THRESHOLD
 	charge = 0
 	if clones > 0:
 		clones -= 1
@@ -101,7 +115,8 @@ func collect_hit(receipt: String, level: int, combo: int, origin: Dictionary, wa
 		_event("ward_hit", {"damage": 0, "origin": origin, "remaining": ward})
 	else:
 		health = maxi(0, health - damage)
-		_event("player_hit", {"damage": damage, "level": level, "origin": origin, "health_after": health})
+		_event("player_hit", {"damage": damage, "level": level, "origin": origin, "health_after": health,
+			"charge_used": charge_used, "power_hit": power_hit})
 		if health == 0:
 			if wait_for_goals:
 				phase = "exhausted"
@@ -234,7 +249,10 @@ func advance(delta: float, candidates: Array[Dictionary], allow_attacks: bool = 
 		var id: int = int(projectile.target)
 		if not available.has(id) or int(available[id].column) != int(projectile.column) \
 			or int(available[id].row) != int(projectile.row):
-			_event("miss", {"target": id, "status": projectile.status})
+			var cap: int = 40 if final_chase else 20
+			charge = mini(cap, charge + DODGE_CHARGE)
+			_event("miss", {"target": id, "column": int(projectile.column), "row": int(projectile.row),
+				"status": projectile.status, "charge_after": charge})
 			continue
 		if projectile.status == "snatch":
 			impacts.append({"kind": "snatch", "target": id})
@@ -303,6 +321,7 @@ func _event(kind: String, data: Dictionary = {}) -> void:
 func snapshot() -> Dictionary:
 	return {"active": active(), "definition": definition.duplicate(true), "phase": phase,
 		"health": health, "max_health": int(definition.get("health", 0)), "charge": charge,
+		"charge_max": 40 if final_chase else 20, "final_chase": final_chase,
 		"clones": clones, "ward": ward, "elapsed": elapsed, "outcome": outcome,
 		"ending_elapsed": ending_elapsed, "broken_remaining": broken_remaining,
 		"drop_limit": 2 if broken_remaining > EPSILON else 7,

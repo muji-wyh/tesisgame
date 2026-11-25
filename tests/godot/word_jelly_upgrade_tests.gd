@@ -247,6 +247,46 @@ func _test_auto_merge_purchases() -> void:
 	var restored := Store.new("user://auto-merge-upgrades.cfg", host)
 	check(restored.load_state() and restored.auto_merge_level() == 9 and restored.merged_level() == 2,
 		"Both permanent upgrade tracks survive reload without merging their ownership")
+	check(restored.star_charm_level() == 1 and restored.begin_upgrade(2, "star_charm"),
+		"Star charm starts independently at Lv1 and reserves its own Lv2 quote")
+	var charm_pending: Dictionary = restored.upgrade_state().pending
+	check(charm_pending.kind == "star_charm" and charm_pending.id == "star-charm-level-v1:2"
+		and charm_pending.price == 50,
+		"Star charm uses its own immutable receipt identity and standard fifty-coin Lv2 quote")
+	check(wallet.spend(charm_pending.id, charm_pending.price).ok
+		and restored.complete_upgrade(2, wallet, "star_charm") and restored.star_charm_level() == 2,
+		"Star charm unlocks Lv2 with its exact matching receipt")
+	var charm_reload := Store.new("user://auto-merge-upgrades.cfg", host)
+	check(charm_reload.load_state() and charm_reload.star_charm_level() == 2
+		and charm_reload.merged_level() == 2 and charm_reload.auto_merge_level() == 9,
+		"All three permanent upgrade tracks persist independently across reload")
+
+
+func _test_chapter_star_milestones() -> void:
+	var host := Host.new()
+	var store := Store.new("user://chapter-milestones.cfg", host)
+	check(store.load_state() and store.chapter_stars("growth", 1) == 0,
+		"New campaign starts with zero chapter stars")
+	check(not store.claim_chapter_milestone("growth", 1, 12),
+		"Cannot claim 12-star milestone before earning 12 stars in Chapter 1")
+	for number in range(1, 5):
+		var plan: Dictionary = Catalog.make_plan(number, words, 3, 71)
+		check(store.reserve_plan("growth", plan), "Reserve Chapter 1 stage %d" % number)
+		var id := "milestone-clear:%d" % number
+		check(store.queue_result("growth", id, {"kind": "main", "number": number, "outcome": "cleared", "stars": 3})
+			and store.complete_result("growth", id), "Clear stage %d with 3 stars" % number)
+	check(store.chapter_stars("growth", 1) == 12, "Four 3-star clears reach 12 Chapter 1 stars")
+	check(store.claim_chapter_milestone("growth", 1, 12)
+		and "1:12" in store.chapter_milestones("growth"),
+		"Claiming the 12-star chapter milestone persists its claim key")
+	check(store.claim_chapter_milestone("growth", 1, 12)
+		and store.chapter_milestones("growth").size() == 1,
+		"Duplicate milestone claims are idempotent")
+	check(not store.claim_chapter_milestone("growth", 1, 21),
+		"Cannot claim 21-star milestone with only 12 stars")
+	var reloaded := Store.new("user://chapter-milestones.cfg", host)
+	check(reloaded.load_state() and reloaded.chapter_milestones("growth") == ["1:12"],
+		"Claimed chapter star milestones survive reload")
 
 
 func _test_version_four_upgrade_migration() -> void:
@@ -300,6 +340,7 @@ func _run() -> void:
 	_test_legacy_and_stale_tabs()
 	_test_invalid_upgrade_saves()
 	_test_auto_merge_purchases()
+	_test_chapter_star_milestones()
 	_test_version_four_upgrade_migration()
 	print("Coin-bought Jelly levels: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)

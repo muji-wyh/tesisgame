@@ -56,6 +56,7 @@ func configure(app, path: String, host: Object = null) -> void:
 	map.home_requested.connect(_home)
 	map.retry_requested.connect(retry)
 	map.upgrades_requested.connect(open_upgrades)
+	map.chapter_milestone_requested.connect(claim_chapter_milestone)
 	map.changed.connect(_publish)
 	if app.audio.has_signal("status_changed"):
 		app.audio.connect("status_changed", func(_message: String) -> void: _sync_map_audio())
@@ -117,7 +118,8 @@ func _preview_word() -> Dictionary:
 func _upgrade_state() -> Dictionary:
 	var state: Dictionary = store.upgrade_state() if store.ready else \
 		upgrades._state.duplicate(true) if not upgrades._state.is_empty() else \
-			{"level": 1, "auto_merge_level": 1, "funded": {"jelly": 0, "auto_merge": 0},
+			{"level": 1, "auto_merge_level": 1, "star_charm_level": 1,
+				"funded": {"jelly": 0, "auto_merge": 0, "star_charm": 0},
 				"pending": {}, "intro": "unseen"}
 	var pending: Dictionary = state.pending
 	var storage_error: String = error
@@ -260,6 +262,7 @@ func contribute_upgrade(kind: String, amount: int = 25, resume_pending: bool = f
 	if not resume_pending and (str(upgrades.snapshot().get("kind", "")) != kind \
 		or int(upgrades._state.get("level", 0)) != int(current.level) \
 		or int(upgrades._state.get("auto_merge_level", 0)) != int(current.auto_merge_level) \
+		or int(upgrades._state.get("star_charm_level", 0)) != int(current.star_charm_level) \
 		or upgrades._state.get("funded", {}) != current.funded):
 		return
 	var pending: Dictionary = current.pending
@@ -394,11 +397,63 @@ func _show_map() -> void:
 	_maybe_offer_upgrade()
 
 
+func _upgrade_affordable() -> bool:
+	if not store.ready or not _app.coin_wallet.ready:
+		return false
+	var balance: int = _app.coin_wallet.balance
+	if balance < 25:
+		return false
+	var state: Dictionary = store.upgrade_state()
+	for kind: String in Store.UPGRADE_LEVEL_KEYS:
+		var owned: int = int(state.get(Store.UPGRADE_LEVEL_KEYS[kind], 1))
+		if owned < Economy.MAX_UPGRADE_LEVEL:
+			var remaining: int = Economy.permanent_upgrade_price(kind, owned + 1) - int(state.funded.get(kind, 0))
+			if remaining > 0 and balance >= mini(remaining, 50):
+				return true
+	return false
+
+
+func claim_chapter_milestone(chapter: int, threshold: int) -> bool:
+	if starting or settling or not map.visible or upgrades.visible or not store.ready \
+		or not error.is_empty() or _app._page_hidden:
+		return false
+	var reward: int = Economy.chapter_milestone_reward(threshold)
+	if reward <= 0 or store.chapter_stars(context_key, chapter) < threshold:
+		return false
+	var key: String = Store.chapter_milestone_key(chapter, threshold)
+	if key in store.chapter_milestones(context_key):
+		return true
+	if not _app.coin_wallet.ready or not _app.coin_wallet.error.is_empty():
+		error = _app.coin_wallet.error if not _app.coin_wallet.error.is_empty() \
+			else "Load your saved coins before claiming a chapter reward."
+		map.configure(_map_state(), _app.reduced_motion)
+		return false
+	var receipt: String = "jelly-chapter-milestone:%s:%d:%d" % [context_key, chapter, threshold]
+	var credited: Dictionary = _app.coin_wallet.credit_amount(receipt, reward)
+	if not credited.ok:
+		error = _app.coin_wallet.error
+		map.configure(_map_state(), _app.reduced_motion)
+		return false
+	if not store.claim_chapter_milestone(context_key, chapter, threshold):
+		error = store.error
+		map.configure(_map_state(), _app.reduced_motion)
+		return false
+	_app._coin_flight.sync(_app.coin_wallet.balance)
+	_app.audio.play_upgrade_milestone()
+	map.configure(_map_state(), _app.reduced_motion)
+	_app._refresh()
+	_publish()
+	return true
+
+
 func _map_state() -> Dictionary:
 	var highest: int = store.highest_cleared(context_key) if store.ready else 0
 	var ratings: Dictionary = {}
 	for number in range(1, highest + 1):
 		ratings[str(number)] = store.best_stars(context_key, number)
+	var chapter_stars_map: Dictionary = {}
+	for chapter in range(1, Catalog.CHAPTERS.size() + 1):
+		chapter_stars_map[chapter] = store.chapter_stars(context_key, chapter) if store.ready else 0
 	return {"highest_cleared": highest, "best_stars": ratings, "frontier": mini(highest + 1, 99),
 		"context_key": context_key,
 		"pip_age": _app.growth.age, "pip_profile": _app._professional_profile_for(request_context),
@@ -407,7 +462,11 @@ func _map_state() -> Dictionary:
 		"boss_markers": BossCatalog.map_markers(mini(highest + 1, 99)),
 		"boss_victories": store.boss_victories(context_key) if store.ready else [],
 		"merged_level": store.merged_level() if store.ready else 1,
-		"auto_merge_level": store.auto_merge_level() if store.ready else 1}
+		"auto_merge_level": store.auto_merge_level() if store.ready else 1,
+		"star_charm_level": store.star_charm_level() if store.ready else 1,
+		"upgrade_affordable": _upgrade_affordable(),
+		"chapter_stars": chapter_stars_map,
+		"chapter_milestones": store.chapter_milestones(context_key) if store.ready else []}
 
 
 func request_stage(number: int) -> void:
@@ -489,6 +548,8 @@ func prepare_plan(words: Array, seed: int) -> Dictionary:
 		return {"ok": false, "error": error}
 	result["merged_level_limit"] = store.merged_level()
 	result["auto_merge_level"] = store.auto_merge_level()
+	result["star_charm_level"] = store.star_charm_level()
+	result["auto_collect_campaign_unlocked"] = store.highest_cleared(context_key) >= 1
 	result["boss"] = BossCatalog.encounter(selected_stage, not challenge and selected_stage == 1 \
 		and store.highest_cleared(context_key) == 0)
 	pending_plan = result.duplicate(true)
@@ -557,17 +618,29 @@ func capture_result(result: Dictionary) -> bool:
 	if stage.kind == "challenge":
 		_result_draft["challenge_stage"] = int(stage.get("challenge_stage", 1))
 		_result_draft["challenge_previous_best"] = _challenge_previous_best
+		_result_draft["best_combo"] = int(result.get("best_combo", 0))
+		_result_draft["max_merge_level"] = int(result.get("max_merge_level", 1))
 		_app._round_result["challenge_result"] = {
 			"stage": int(stage.get("challenge_stage", 1)),
 			"previous_best": _challenge_previous_best,
 			"best": maxi(int(stage.get("challenge_stage", 1)), store.challenge_best_stage(active_context_key)),
-			"collection_count": int(stage.collection_count), "new_best": false, "confirmed": false}
+			"collection_count": int(stage.collection_count),
+			"best_combo": int(result.get("best_combo", 0)),
+			"max_merge_level": int(result.get("max_merge_level", 1)),
+			"new_best": false, "confirmed": false}
 	var boss: Dictionary = result.get("boss", {})
 	if bool(boss.get("active", false)):
-		_result_draft["boss_roster_version"] = 2
-		_result_draft["boss_id"] = int(boss.definition.get("id", 0))
-		_result_draft["boss_victory"] = boss.get("outcome") == "defeated" and stage.outcome == "cleared"
-		_result_draft["boss_outcome"] = str(boss.get("outcome", ""))
+		var boss_id: int = int(boss.definition.get("id", 0))
+		if boss_id > 0:
+			_result_draft["boss_roster_version"] = 2
+			_result_draft["boss_id"] = boss_id
+			_result_draft["boss_victory"] = boss.get("outcome") == "defeated" and stage.outcome == "cleared"
+			_result_draft["boss_outcome"] = str(boss.get("outcome", ""))
+		elif bool(boss.definition.get("mini", false)) and boss.get("outcome") == "defeated" and stage.outcome == "cleared":
+			_result_draft["mini_raid_victory"] = true
+			_result_draft["bonus"] = int(_result_draft.bonus) + 75
+			quote["bonus"] = int(quote.bonus) + 75
+			quote["total"] = int(quote.total) + 75
 	for word: Dictionary in result.get("words", []):
 		_result_draft.completed_word_ids.append(str(word.id))
 	_app._round_result["stage_bonus"] = quote.duplicate(true)
@@ -650,7 +723,10 @@ func advance(delta: float) -> void:
 				var best: int = store.challenge_best_stage(_result_context_key)
 				var reached: int = int(_result_draft.challenge_stage)
 				var summary := {"stage": reached, "previous_best": _challenge_previous_best, "best": best,
-					"collection_count": int(_result_draft.collection_count), "confirmed": true,
+					"collection_count": int(_result_draft.collection_count),
+					"best_combo": int(_result_draft.get("best_combo", 0)),
+					"max_merge_level": int(_result_draft.get("max_merge_level", 1)),
+					"confirmed": true,
 					"new_best": reached > _challenge_previous_best and reached >= best}
 				_app._round_result["challenge_result"] = summary.duplicate(true)
 				room.present_challenge_result(summary)

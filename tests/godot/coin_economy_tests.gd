@@ -95,7 +95,7 @@ func _test_economy_ladder() -> void:
 		and Economy.powerup_price("family_merge", 0, 1, -1) == 25
 		and Economy.powerup_price("auto_merge", 0, 9, 0) == 25,
 		"Legacy reduction arguments do not change either tool's first-use price")
-	var chances: Array[float] = [0.0, 0.02, 0.04, 0.12, 0.20, 0.30, 0.40, 0.50, 0.80]
+	var chances: Array[float] = [0.0, 0.12, 0.22, 0.32, 0.42, 0.52, 0.62, 0.72, 0.85]
 	var amounts: Array[int] = [0, 50, 100, 150, 200, 250, 300, 350, 450]
 	# Higher merged levels improve both the chance and potential payout.
 	for level in range(1, 10):
@@ -107,7 +107,7 @@ func _test_economy_ladder() -> void:
 				and Economy.jelly_bonus(level) > Economy.jelly_bonus(level - 1),
 				"Upgrading through Lv9 never reduces the collection chance or potential payout")
 	check(Economy.jelly_bonus(0) == 0 and Economy.jelly_bonus(-1) == 0
-		and Economy.jelly_bonus(999) == 450 and is_equal_approx(Economy.jelly_bonus_chance(999), 0.80),
+		and Economy.jelly_bonus(999) == 450 and is_equal_approx(Economy.jelly_bonus_chance(999), 0.85),
 		"Reward lookup uses bounded merged levels and never infers a reward from mass")
 	check(Economy.chest_coins(0) == 50 and Economy.chest_coins(1) == 50 and Economy.chest_coins(6) == 300,
 		"Ordinary and existing levelled chest rewards keep their saved meaning")
@@ -188,8 +188,8 @@ func _test_supply_and_budget() -> void:
 			check(is_equal_approx(float(row.free_play_total), int(row.supplied_words) * 7.5),
 				"Perfect Lv1 completion earns 7.5 chest coins per source word in full ten-word blocks")
 	check(report.upgraded_collections.size() == 9, "The report includes all nine playable merge levels")
-	var expected_per_source: Array[float] = [0.0, 0.5, 4.0 / 3.0, 18.0 / 4.0, 40.0 / 5.0, 75.0 / 6.0,
-		120.0 / 7.0, 175.0 / 8.0, 360.0 / 9.0]
+	var expected_per_source: Array[float] = [0.0, 6.0 / 2.0, 22.0 / 3.0, 48.0 / 4.0, 84.0 / 5.0, 130.0 / 6.0,
+		186.0 / 7.0, 252.0 / 8.0, 382.5 / 9.0]
 	var source_counts: Array[int] = []
 	for row: Dictionary in report.upgraded_collections:
 		check(is_equal_approx(float(row.expected_bonus), Economy.jelly_bonus_chance(int(row.merge_level)) * Economy.jelly_bonus(int(row.merge_level))),

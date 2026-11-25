@@ -183,7 +183,7 @@ func _run() -> void:
 	tile.set_merged_presentation(10.0, false)
 	check(tile._merged_glow.modulate != light_tint and tile._level_badge.text == "6",
 		"Reusing the same tile at a new level updates readiness tint and badge")
-	var chances: Array[int] = [0, 2, 4, 12, 20, 30, 40, 50, 80]
+	var chances: Array[int] = [0, 12, 22, 32, 42, 52, 62, 72, 85]
 	var coins: Array[int] = [0, 50, 100, 150, 200, 250, 300, 350, 450]
 	for level in range(1, 10):
 		tile.configure(_cell(level), SKIN, PICTURE, CHEST, Color("#357d70"))

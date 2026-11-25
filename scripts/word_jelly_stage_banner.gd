@@ -15,9 +15,11 @@ const CLOCK = preload("res://assets/images/ui/jelly-goals/clock.webp")
 const DURATION: float = 1.8
 const READY_SECONDS: float = 0.82
 const STAR_LOSS_SECONDS: float = 0.60
+const STAR_WARN_SECONDS: float = 5.0
 const TIME_BONUS_SECONDS: float = 1.6
 var reduced_motion: bool = false
 var _state: Dictionary = {}
+var _warn_elapsed: float = 0.0
 var _label: Label
 var _title: Label
 var _detail: Label
@@ -106,14 +108,23 @@ func set_stage(state: Dictionary, celebrate: bool = false) -> void:
 		_card_duration = DURATION
 		_entry = not state.get("complete", false) and state.get("kind", "") in ["main", "challenge"]
 		if state.get("kind") == "challenge":
-			_title.text = "Challenge"
-			_detail.text = "Stage %d" % int(state.get("challenge_stage", 1))
+			var c_stage: int = int(state.get("challenge_stage", 1))
+			_title.text = "Bonus wave!" if c_stage % 5 == 0 else "Challenge"
+			_detail.text = "Stage %d · 2× Treasure" % c_stage if c_stage % 5 == 0 else "Stage %d" % c_stage
 		else:
 			_title.text = "All words mastered!" if state.get("complete", false) else "Stage %d" % state.number
-			_detail.text = "Beautiful work!" if state.get("complete", false) else "%d word goals" % state.total \
-				if state.get("kind") == "main" else "%d new words to master" % state.total
+			var profile: String = str(state.get("profile", ""))
+			if state.get("complete", false):
+				_detail.text = "Beautiful work!"
+			elif state.get("kind") == "main":
+				var suffix: String = " · 2× Treasure" if profile == "Reward" \
+					else " · Combo rush" if profile == "Flow" \
+					else " · Relaxed pace" if profile == "Breather" else ""
+				_detail.text = "%d word goals%s" % [state.total, suffix]
+			else:
+				_detail.text = "%d new words to master" % state.total
 			if state.get("objective", "") == "boss":
-				_detail.text = "Word goals + Boss"
+				_detail.text = "Word goals + Pirate Raid" if int(state.get("number", 0)) in [27, 45, 54, 72, 81, 90] else "Word goals + Boss"
 	_refresh_motion()
 	queue_redraw()
 
@@ -145,10 +156,23 @@ func ready_pending() -> bool:
 	return _entry and visible and _elapsed < READY_SECONDS
 
 
+func _star_warning_index() -> int:
+	if _state.get("kind") != "main" or not str(_state.get("outcome", "")).is_empty():
+		return -1
+	var drop_in: float = float(_state.get("next_star_drop_in", -1.0))
+	var active_stars: int = int(_state.get("stars_now", 0))
+	if active_stars >= 2 and drop_in > 0.0 and drop_in <= STAR_WARN_SECONDS:
+		return active_stars - 1
+	return -1
+
+
 func advance(delta: float) -> void:
 	if not is_finite(delta) or delta <= 0.0:
 		return
-	var moving: bool = _elapsed < _card_duration or _time_bonus_remaining > 0.0 or rating_feedback_active()
+	var warning: bool = not reduced_motion and _star_warning_index() >= 0
+	var moving: bool = _elapsed < _card_duration or _time_bonus_remaining > 0.0 or rating_feedback_active() or warning
+	if warning:
+		_warn_elapsed = fmod(_warn_elapsed + delta, 100.0)
 	_time_bonus_remaining = maxf(0.0, _time_bonus_remaining - delta)
 	_pose_time_feedback()
 	for index in range(3):
@@ -391,12 +415,20 @@ func rating_geometry(bounds: Rect2, ui_scale: float, compact: bool = false) -> A
 
 func draw_rating(canvas: CanvasItem, bounds: Rect2, ui_scale: float, compact: bool = false) -> void:
 	var slots: Array[Dictionary] = rating_geometry(bounds, ui_scale, compact)
+	var warn_index: int = _star_warning_index()
 	for index in range(3):
 		var slot: Dictionary = slots[index]
 		var star := Rect2(slot.star[0], slot.star[1], slot.star[2], slot.star[3])
 		var active: bool = bool(slot.active)
 		var texture: Texture2D = STAR_TEXTURES[index]
-		canvas.draw_texture_rect(texture, star, false, Color.WHITE if active else Color(0.65, 0.70, 0.70, 0.32))
+		if active and index == warn_index:
+			var pulse_w: float = 0.55 if reduced_motion else 0.5 + 0.5 * sin(_warn_elapsed * TAU * 2.2)
+			var warn_star: Rect2 = star if reduced_motion else star.grow(star.size.x * 0.08 * pulse_w)
+			canvas.draw_texture_rect(GLOW, warn_star.grow(star.size.x * 0.28), false,
+				Color(1.0, 0.72, 0.28, 0.26 + 0.30 * pulse_w))
+			canvas.draw_texture_rect(texture, warn_star, false, Color.WHITE.lerp(Color("#ffe2a0"), 0.25 * pulse_w))
+		else:
+			canvas.draw_texture_rect(texture, star, false, Color.WHITE if active else Color(0.65, 0.70, 0.70, 0.32))
 		if reduced_motion or _star_loss_elapsed[index] >= STAR_LOSS_SECONDS:
 			continue
 		var p: float = _star_loss_elapsed[index] / STAR_LOSS_SECONDS
@@ -441,8 +473,8 @@ func _update_label() -> void:
 			pixels = maxi(1, floori(float(pixels) * _label.size.x / measured))
 		_label.add_theme_font_size_override("font_size", pixels)
 		_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		_fill_style.bg_color = Color("#7bbcaf") if _timer_ratio() > 2.0 / 3.0 else Color("#8cb9cf") \
-			if _timer_ratio() > 1.0 / 3.0 else Color("#dba15c")
+		_fill_style.bg_color = Color("#7bbcaf") if _timer_ratio() > 0.60 else Color("#8cb9cf") \
+			if _timer_ratio() > 0.30 else Color("#dba15c")
 		return
 	_label.text = "Stage %d%s%d / %d mastered" % [_state.number, separator, _state.mastered, _state.total]
 
@@ -475,7 +507,7 @@ func _draw() -> void:
 			if fill.has_area():
 				draw_style_box(_fill_style, fill)
 			if _state.get("kind") == "main":
-				for boundary in [1.0 / 3.0, 2.0 / 3.0]:
+				for boundary in [0.30, 0.60]:
 					var point: Vector2 = track.position + Vector2(track.size.x * boundary, 0.0)
 					draw_line(point, point + Vector2(0.0, track.size.y), Color("#fff9e9"), 2.0 / _scale)
 				draw_rating(self, _rating_bounds(), _scale)

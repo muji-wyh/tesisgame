@@ -1,6 +1,6 @@
 const { expect } = require('@playwright/test');
 
-const CHANCES = [0, 0, 0.02, 0.04, 0.12, 0.20, 0.30, 0.40, 0.50, 0.80];
+const CHANCES = [0, 0, 0.12, 0.22, 0.32, 0.42, 0.52, 0.62, 0.72, 0.85];
 const AMOUNTS = [0, 0, 50, 100, 150, 200, 250, 300, 350, 450];
 
 function expectCollectionReward(tile) {

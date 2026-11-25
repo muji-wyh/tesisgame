@@ -509,6 +509,7 @@ func _layout_compact_label() -> void:
 	tooltip_text = _spelling + ("\nHold to read. Keyboard: R." if requires_read else "\nKeyboard: R to read.")
 	_label.add_theme_font_size_override("font_size", pixels)
 	_label.text = "\n".join(lines)
+	_label.update_minimum_size()
 	# Apply font and text first so Label's minimum height reflects this layout.
 	_label.position = Vector2(inset, label_top)
 	_label.size = Vector2(label_size.x, maxf(label_size.y, font.get_height(pixels) * lines.size()))

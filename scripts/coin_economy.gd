@@ -11,7 +11,7 @@ const MEMORY_PEEK_PRICES: Array[int] = [0, 100, 200, 300]
 # Retired quotes remain available to historical reports, not the live tool catalog.
 const POWERUP_BASE_PRICES: Dictionary = {"auto_merge": 25, "family_merge": 25, "fragments": 200, "extra_time": 100}
 const MERGE_UNIT_PRICES: Array[int] = [25, 50, 75]
-const JELLY_BONUS_CHANCES: Array[float] = [0.0, 0.02, 0.04, 0.12, 0.20, 0.30, 0.40, 0.50, 0.80]
+const JELLY_BONUS_CHANCES: Array[float] = [0.0, 0.12, 0.22, 0.32, 0.42, 0.52, 0.62, 0.72, 0.85]
 const JELLY_BONUS_AMOUNTS: Array[int] = [0, 50, 100, 150, 200, 250, 300, 350, 450]
 const TREASURE_FRAGMENT_MIN: int = 2
 const TREASURE_FRAGMENT_MAX: int = 8
@@ -19,6 +19,12 @@ const JELLY_UPGRADE_PRICES: Array[int] = [50, 100, 200, 350, 550, 800, 1100, 150
 const JELLY_FIRST_CLEAR_MIN_COINS: int = 50
 const MAX_UPGRADE_LEVEL: int = 9
 const AUTO_MERGE_BASE_CAPACITY: int = 3
+const CHAPTER_STAR_MILESTONES: Array[int] = [12, 21, 27]
+const CHAPTER_MILESTONE_COINS: Dictionary = {12: 100, 21: 200, 27: 350}
+
+
+static func chapter_milestone_reward(threshold: int) -> int:
+	return int(CHAPTER_MILESTONE_COINS.get(threshold, 0))
 
 
 static func jelly_upgrade_price(level: int) -> int:
@@ -29,14 +35,27 @@ static func jelly_upgrade_price(level: int) -> int:
 
 
 static func permanent_upgrade_price(kind: String, level: int) -> int:
-	if kind not in ["jelly", "auto_merge"]:
-		push_error("Choose Jelly powers or Auto merge before pricing an upgrade.")
+	if kind not in ["jelly", "auto_merge", "star_charm"]:
+		push_error("Choose Jelly powers, Auto merge or Star charm before pricing an upgrade.")
 		return 0
 	return jelly_upgrade_price(level)
 
 
 static func auto_merge_capacity(level: int) -> int:
 	return AUTO_MERGE_BASE_CAPACITY + clampi(level, 1, MAX_UPGRADE_LEVEL) - 1
+
+
+static func star_charm_combo_bonus(level: int) -> float:
+	return float(clampi(level, 1, MAX_UPGRADE_LEVEL) - 1) * 0.3
+
+
+static func star_charm_fragment_bonus(level: int) -> float:
+	return float(clampi(level, 1, MAX_UPGRADE_LEVEL) - 1) * 0.03
+
+
+static func star_charm_grace_charges(level: int) -> int:
+	var clamped: int = clampi(level, 1, MAX_UPGRADE_LEVEL)
+	return 2 if clamped >= 6 else 1 if clamped >= 2 else 0
 
 
 static func match_hint_price(successful_uses: int) -> int:

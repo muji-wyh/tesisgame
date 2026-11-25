@@ -135,8 +135,8 @@ func test_timer_pause_without_paid_time() -> void:
 	check(not model.activate_powerup("extra_time") and model.powerup_price("extra_time") == 0
 		and is_equal_approx(model.stage_run.remaining, 61.0) and attempts.is_empty(),
 		"The retired paid extension cannot charge or add time even with an accepting purchase adapter")
-	model.step(2.0)
-	check(model.stage_run.stars_now() == 2 and is_equal_approx(model.stage_run.remaining, 59.0),
+	model.step(8.0)
+	check(model.stage_run.stars_now() == 2 and is_equal_approx(model.stage_run.remaining, 53.0),
 		"The original active-play clock and star thresholds continue without a paid rescue")
 	model.purchase_powerup = Callable()
 

@@ -468,14 +468,14 @@ func _test_run_validation() -> void:
 
 
 func _test_original_budget_star_boundaries() -> void:
-	for example: Array in [[0.0, 3], [29.0, 3], [30.0, 2], [59.0, 2], [60.0, 1], [90.0, 1]]:
+	for example: Array in [[0.0, 3], [35.0, 3], [36.0, 2], [62.0, 2], [63.0, 1], [90.0, 1]]:
 		var run = _run_script.new()
 		check(run.configure(_timed_plan()), "Configure an original ninety-second star budget")
 		run.advance(float(example[0]))
 		var state: Dictionary = run.snapshot()
 		check(run.stars_now() == int(example[1]) and state.stars_now == int(example[1]) and state.stars == 0,
-			"The first and second exact third boundaries lower the live rating; active runs have no final stars")
-	for example: Array in [[0.0, 3], [30.0, 2], [60.0, 1]]:
+			"The 40% and 70% elapsed boundaries lower the live rating; active runs have no final stars")
+	for example: Array in [[0.0, 3], [36.0, 2], [63.0, 1]]:
 		var run = _run_script.new()
 		run.configure(_timed_plan())
 		run.advance(float(example[0]))
@@ -484,16 +484,16 @@ func _test_original_budget_star_boundaries() -> void:
 			"A clear freezes the rating earned against the original active-play budget")
 	var run = _run_script.new()
 	run.configure(_timed_plan())
-	run.advance(60.0)
-	check(run.add_time("purchase:first") and run.remaining == 60.0 and run.elapsed == 60.0
+	run.advance(63.0)
+	check(run.add_time("purchase:first") and run.remaining == 57.0 and run.elapsed == 63.0
 		and run.initial_seconds == 90.0 and run.stars_now() == 1,
 		"A paid thirty seconds extends only the deadline, never elapsed time or original star thresholds")
 	var before: Dictionary = run.snapshot()
 	check(not run.add_time("purchase:first") and run.error.is_empty() and run.snapshot() == before,
 		"A duplicate saved time purchase is a benign no-change, not another extension")
-	check(run.add_time("purchase:second", 30) and run.remaining == 90.0 and run.stars_now() == 1,
+	check(run.add_time("purchase:second", 30) and run.remaining == 87.0 and run.stars_now() == 1,
 		"Independent paid extensions do not restore a lost second or third star")
-	run.advance(90.0)
+	run.advance(87.0)
 	check(run.remaining == 0.0 and run.elapsed == 150.0 and run.outcome.is_empty(),
 		"Consuming original plus paid time still leaves the exact boundary undecided")
 	check(run.check_deadline() and run.outcome == "timeout" and run.snapshot().stars == 0,

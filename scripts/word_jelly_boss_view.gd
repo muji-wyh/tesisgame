@@ -40,6 +40,7 @@ var _taunt_serial: int = 0
 var _gesture_at: float = 0.0
 var _dialogue_until: float = 0.0
 var _sparks: Array[Dictionary] = []
+var _dodges: Array[Dictionary] = []
 var _tile_rects: Dictionary = {}
 var _last_pose_frame: int = -1
 var _last_pose_clip: String = ""
@@ -136,6 +137,7 @@ func sync(state: Dictionary, tiles: Dictionary, generation: int, active_clock: b
 		_last_impact_event = 0
 		_victory_announced = false
 		_sparks.clear()
+		_dodges.clear()
 		_snatch.clear()
 		_thrown.clear()
 	for event: Dictionary in state.get("events", []):
@@ -190,6 +192,10 @@ func _handle_event(event: Dictionary, audible: bool, visuals: Dictionary) -> voi
 		_dialogue_until = float(event.at) + 3.0
 	if kind in ["status_hit", "thaw", "clear_ink", "unlock", "lock_resisted", "kick", "sky_repaired"]:
 		_sparks.append({"event": event, "until": float(event.at) + 0.65})
+	if kind == "miss":
+		_dodges.append({"event": event, "until": float(event.at) + 0.95})
+		if audible:
+			audio_requested.emit("boss-thaw")
 	var cues: Dictionary = {"throw": "boss-throw", "kick": "boss-kick", "snatch": "boss-throw",
 		"unlock": "boss-unlock", "thaw": "boss-thaw",
 		"sky_repaired": "boss-thaw", "clones": "boss-trick", "ward": "boss-trick",
@@ -413,6 +419,7 @@ func _pose() -> void:
 		clone.size = _character.size * 0.8
 		clone.position = _character.position + Vector2((8.0 if index == 0 else _character.size.x * 0.24), 8.0 / _scale)
 	_sparks = _sparks.filter(func(item: Dictionary) -> bool: return float(item.until) > elapsed)
+	_dodges = _dodges.filter(func(item: Dictionary) -> bool: return float(item.until) > elapsed)
 	_thrown = _thrown.filter(func(item: Dictionary) -> bool: return elapsed - float(item.at) < 1.2)
 	queue_redraw()
 
@@ -450,6 +457,35 @@ func _draw() -> void:
 				false, Color(0.72, 0.52, 1.0, 0.45 * filled))
 			draw_texture_rect(SPARKLE, Rect2(point - Vector2.ONE * edge * 0.5, Vector2.ONE * edge),
 				false, Color(0.86, 0.72, 1.0, 0.10 + 0.90 * filled))
+		var charge: int = int(_state.get("charge", 0))
+		if charge > 0:
+			var charge_max: float = maxf(1.0, float(_state.get("charge_max", 20)))
+			var ratio: float = clampf(float(charge) / charge_max, 0.0, 1.0)
+			var power_ready: bool = charge >= Run.POWER_CHARGE_THRESHOLD
+			var held_compass: Vector2 = _anchor_point("compass")
+			var orbit_count: int = clampi(ceili(ratio * 5.0), 1, 5)
+			var halo: float = (34.0 + ratio * 18.0) / _scale
+			draw_texture_rect(GLOW, Rect2(held_compass - Vector2.ONE * halo, Vector2.ONE * halo * 2.0),
+				false, Color(1.0, 0.84, 0.30, 0.22 + ratio * (0.40 if power_ready else 0.24)))
+			if power_ready and not reduced_motion:
+				var ray_edge: float = (46.0 + 6.0 * sin(float(_state.elapsed) * 6.0)) / _scale
+				draw_texture_rect(RAYS, Rect2(held_compass - Vector2.ONE * ray_edge * 0.5, Vector2.ONE * ray_edge),
+					false, Color(1.0, 0.88, 0.42, 0.45))
+			for idx in range(orbit_count):
+				var spin: float = 0.0 if reduced_motion else float(_state.elapsed) * (2.6 if power_ready else 1.5)
+				var angle: float = spin + TAU * float(idx) / float(orbit_count)
+				var radius: float = (20.0 + (4.0 if power_ready else 0.0)) / _scale
+				var pt: Vector2 = held_compass + Vector2(cos(angle), sin(angle)) * radius
+				var sp_edge: float = (11.0 if power_ready else 8.0) / _scale
+				draw_texture_rect(SPARKLE, Rect2(pt - Vector2.ONE * sp_edge * 0.5, Vector2.ONE * sp_edge),
+					false, Color(1.0, 0.90, 0.45, 0.92 if power_ready else 0.72))
+			var bonus_pct: int = roundi(charge * 2.5)
+			var charge_text: String = "+%d%%" % bonus_pct
+			var ch_pixels: int = ceili((13.0 if power_ready else 11.0) / _scale)
+			var ch_width: float = Style.HEADING_FONT.get_string_size(charge_text, HORIZONTAL_ALIGNMENT_LEFT, -1, ch_pixels).x
+			var ch_color := Color("#a86414") if power_ready else Color("#6e5739")
+			draw_string(Style.HEADING_FONT, held_compass + Vector2(-ch_width * 0.5, -24.0 / _scale),
+				charge_text, HORIZONTAL_ALIGNMENT_LEFT, -1, ch_pixels, ch_color)
 	if float(_state.broken_remaining) > 0.0:
 		var rail_height: float = 7.0 / _scale
 		var half: float = _preview.size.x * 0.5 - 10 / _scale
@@ -501,14 +537,21 @@ func _draw() -> void:
 			draw_texture_rect(GLOW, Rect2(at - Vector2.ONE * edge, Vector2.ONE * edge * 2), false, Color("#fff0a6"))
 			draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false, Color("#ffe799"))
 		else:
-			draw_texture_rect(RAYS, Rect2(target - Vector2.ONE * edge * 1.6, Vector2.ONE * edge * 3.2), false,
+			var power_hit: bool = event.kind == "player_hit" and bool(event.get("power_hit", false))
+			draw_texture_rect(RAYS, Rect2(target - Vector2.ONE * edge * (2.1 if power_hit else 1.6), Vector2.ONE * edge * (4.2 if power_hit else 3.2)), false,
 				Color(1, 0.85, 0.5, 1 - (age - HIT_FLIGHT_SECONDS) / 0.3))
 			var text: String = "Decoy!" if event.kind == "clone_hit" else "Shield!" if event.kind == "ward_hit" \
-				else "-%d" % int(event.damage)
-			var pixels: int = ceili(18.0 / _scale)
+				else "-%d!" % int(event.damage) if power_hit else "-%d" % int(event.damage)
+			var pixels: int = ceili((22.0 if power_hit else 18.0) / _scale)
 			var width: float = Style.HEADING_FONT.get_string_size(text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x
 			draw_string(Style.HEADING_FONT, target - Vector2(width * 0.5, 12.0 / _scale),
-				text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels, Color("#75426f"))
+				text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels, Color("#c87210") if power_hit else Color("#75426f"))
+			if power_hit:
+				var p_text := "POWER!"
+				var p_px: int = ceili(12.0 / _scale)
+				var p_w: float = Style.HEADING_FONT.get_string_size(p_text, HORIZONTAL_ALIGNMENT_LEFT, -1, p_px).x
+				draw_string(Style.HEADING_FONT, target - Vector2(p_w * 0.5, 32.0 / _scale),
+					p_text, HORIZONTAL_ALIGNMENT_LEFT, -1, p_px, Color("#b85f0e"))
 	if _state.phase not in ["ending", "done"]:
 		var held_compass: Vector2 = _anchor_point("compass")
 		var edge: float = 28.0 / _scale
@@ -551,17 +594,45 @@ func _draw() -> void:
 		at.y -= 4.0 * progress * (1.0 - progress) * maxf(30 / _scale, start.distance_to(destination) * 0.24)
 		var tint: Color = COLORS.get(projectile.status, Color.WHITE)
 		var edge: float = 30 / _scale
+		var cell_pitch: float = _board.size.x / Model.COLUMNS
+		var icon: Texture2D = LOCK if projectile.status == "lock" else INK if projectile.status == "ink" else CLOCK
 		if progress <= 0.0 or reduced_motion:
-			draw_texture_rect(GLOW, Rect2(destination - Vector2.ONE * edge, Vector2.ONE * edge * 2), false, Color(tint, 0.35))
+			var windup_ratio: float = clampf(float(projectile.elapsed) / maxf(0.01, float(projectile.windup)), 0.0, 1.0)
+			var ring_radius: float = cell_pitch * (0.48 if reduced_motion else lerpf(0.66, 0.42, windup_ratio))
+			draw_texture_rect(GLOW, Rect2(destination - Vector2.ONE * edge * 1.15, Vector2.ONE * edge * 2.3), false, Color(tint, 0.30 + 0.25 * windup_ratio))
+			draw_arc(destination, ring_radius, 0.0, TAU, 24, Color(tint, 0.85), maxf(2.0, 3.0 / _scale), true)
+			draw_texture_rect(icon, Rect2(destination - Vector2.ONE * edge * 0.28, Vector2.ONE * edge * 0.56), false, Color(1, 1, 1, 0.88))
 			continue
+		draw_arc(destination, cell_pitch * 0.44, 0.0, TAU, 24, Color(tint, 0.55), maxf(1.5, 2.0 / _scale), true)
 		for sample in range(5):
 			var tail: float = maxf(0.0, progress - sample * 0.025)
 			var point: Vector2 = start.lerp(destination, tail)
 			point.y -= 4.0 * tail * (1.0 - tail) * maxf(30 / _scale, start.distance_to(destination) * 0.24)
 			draw_texture_rect(GLOW, Rect2(point - Vector2.ONE * edge * 0.5, Vector2.ONE * edge), false, Color(tint, 0.5 - sample * 0.075))
 		draw_texture_rect(SPARKLE, Rect2(at - Vector2.ONE * edge * 0.35, Vector2.ONE * edge * 0.7), false, tint)
-		var icon: Texture2D = LOCK if projectile.status == "lock" else INK if projectile.status == "ink" else CLOCK
 		draw_texture_rect(icon, Rect2(at - Vector2.ONE * edge * 0.25, Vector2.ONE * edge * 0.5), false)
+	for item: Dictionary in _dodges:
+		var event: Dictionary = item.event
+		var age: float = clampf(float(_state.elapsed) - float(event.at), 0.0, 0.95)
+		var p: float = age / 0.95
+		var cell_pitch: float = _board.size.x / Model.COLUMNS
+		var origin: Vector2 = _board.position + Vector2(float(event.get("column", 3)) + 0.5,
+			float(event.get("row", 4)) + 0.5) * cell_pitch
+		var alpha: float = 1.0 - smoothstep(0.55, 1.0, p)
+		var rise: float = 0.0 if reduced_motion else p * 26.0 / _scale
+		var glow_edge: float = cell_pitch * (0.85 if reduced_motion else 0.75 + p * 0.45)
+		draw_texture_rect(GLOW, Rect2(origin - Vector2.ONE * glow_edge * 0.5, Vector2.ONE * glow_edge),
+			false, Color("#8ee6b2", alpha * 0.55))
+		if not reduced_motion:
+			for index in range(4):
+				var pt: Vector2 = origin + Vector2.from_angle(TAU * index / 4.0 + 0.4) * cell_pitch * p * 0.55
+				var sp: float = 10.0 / _scale * (1.0 - p)
+				draw_texture_rect(SPARKLE, Rect2(pt - Vector2.ONE * sp * 0.5, Vector2.ONE * sp), false, Color("#ffe896", alpha))
+		var label := "Dodged!"
+		var px: int = ceili(14.0 / _scale)
+		var lw: float = Style.HEADING_FONT.get_string_size(label, HORIZONTAL_ALIGNMENT_LEFT, -1, px).x
+		draw_string(Style.HEADING_FONT, origin + Vector2(-lw * 0.5, -rise),
+			label, HORIZONTAL_ALIGNMENT_LEFT, -1, px, Color("#247858", alpha))
 	for item: Dictionary in _sparks:
 		var event: Dictionary = item.event
 		var sky_effect: bool = event.kind in ["kick", "sky_repaired"]
@@ -587,6 +658,9 @@ func snapshot() -> Dictionary:
 		"presentation": "side_character", "clip": _last_pose_clip, "gesture": _gesture,
 		"model": Actor.MODEL, "actor": _actor.snapshot(), "heading": "", "health_text": "",
 		"health_fraction": float(_state.get("health", 0)) / maxf(1.0, float(_state.get("max_health", 1))),
+		"charge": int(_state.get("charge", 0)),
+		"charge_fraction": float(_state.get("charge", 0)) / maxf(1.0, float(_state.get("charge_max", 20))),
+		"dodge_active": not _dodges.is_empty(),
 		"energy_fraction": _energy_ratio(), "energy_segments": 8,
 		"impact_serial": _last_impact_event, "victory_announced": _victory_announced,
 		"compass_visible": visible and not _state.is_empty(),

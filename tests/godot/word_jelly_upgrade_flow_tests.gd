@@ -204,7 +204,7 @@ func _run() -> void:
 		"Only a saved unlock completes the introduction while further charging follows the available balance")
 	check(page.snapshot().milestone_pending and charge_audio.count("goal_complete") == 0,
 		"The earned level waits for its visible rail marker before success feedback")
-	for frame in range(3):
+	for frame in range(7):
 		page.advance(0.05)
 	check(charge_audio.count("upgrade_coin") == 2 and charge_audio.count("goal_complete") == 1
 		and page.snapshot().level_up_count == 1,
@@ -270,7 +270,7 @@ func _run() -> void:
 		and campaign.store.upgrade_state().funded.auto_merge == 0
 		and page.snapshot().buy.enabled == (app.coin_wallet.balance >= 25)
 		and page.snapshot().preview.capacity == 4, "Only the committed Auto merge upgrade owns four output slots")
-	for frame in range(3):
+	for frame in range(7):
 		page.advance(0.05)
 	check(charge_audio.count("upgrade_coin") == 4 and charge_audio.count("goal_complete") == 2
 		and page.snapshot().level_up_count == 2,
@@ -319,7 +319,7 @@ func _run() -> void:
 		advance(app, 0.025)
 	check(not view.game.powerup_active() and view.game.powerup_snapshot().affected_jellies == 8
 		and view.game.powerup_snapshot().completed_results == 4 and view.game.collectable_ids().size() == 4
-		and view.game.cells.size() == 4 and app.coin_wallet.balance == before_use - 250
+		and view.game.cells.size() == 4 and app.coin_wallet.balance == before_use - 25
 		and view.snapshot().powerup_buttons.auto_merge.capacity_badge.text == "4",
 		"A genuine touch pays once and leaves exactly four complete Jellies matching its badge")
 	await capture_ui("auto-merge-lv2-gameplay")

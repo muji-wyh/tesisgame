@@ -209,17 +209,22 @@ A failed save keeps settlement open for retry.
 ## Jelly Words
 
 Jelly Words opens a **continuous 99-stage journey**, visually divided into eleven
-nine-stage scenic chapters. Chapter titles and real stage ranges belong to the
-route, not a page selector. Swipe or scroll directly between neighboring stages,
+nine-stage scenic chapters. Chapter titles, earned chapter star counters (`0/27 ★`),
+and real stage ranges belong to the route, not a page selector. Each chapter awards
+one-time **Chapter Star Milestones** at **12★ (+100 coins)**, **21★ (+200 coins)**,
+and **27★ (+350 coins)** claimable directly on the chapter banner with receipt-backed
+persistence. Swipe or scroll directly between neighboring stages,
 including across chapter boundaries, without replacing the visible stage set.
-Entry scrolls to and focuses the earned frontier. Page Up/Page Down scroll the
+Scrolling two or more chapters away from the frontier reveals a quick **Stage N**
+return pill that jumps straight back to the frontier. Entry scrolls to and focuses the earned frontier. Page Up/Page Down scroll the
 same route. Future chapters can be inspected, but
 their stages remain locked. Browsing never changes stars, unlocks, recipes or
 coins. A wallet/status refresh preserves the actual scroll offset; reopening or
 returning to the frontier restores its position. Acquired adventure medallions keep numbers
 and their three rating stars separate. A permanently named **Challenge** action
 with the acquired mastery medal sits at the upper right, with a 44-pixel touch
-height. Its wallet font follows UI scale and its title fits the remaining header,
+height. The adjacent **Upgrade** entry lights up with a warm gold border and sparkle
+whenever an affordable permanent upgrade contribution is ready. Its wallet font follows UI scale and its title fits the remaining header,
 so neither the action nor a giant tooltip covers the coin total. There is no
 large wooden footer taking space from the map.
 Cleared stages can be replayed; only the next uncleared
@@ -269,16 +274,16 @@ when entering or reloading do not refill the list. Completed rows show no Done
 label, countdown, fraction or increment text; reduced motion shows the full check
 without drawing or scaling it and retains the same silent three-second wait.
 
-### Bramble and the stolen Word Compass
+### Pirate and the stolen Word Compass
 
-Jelly World now follows **Bramble**, a smug, mischievous mint-jade frog who steals Pip's
+Jelly World follows **Pirate**, a mischievous rival who steals Pip's
 Word Compass. The same rival returns with a new trick at each encounter, so the
 chase has a recognizable opponent rather than unrelated disposable enemies.
 His teasing targets the chase and stolen treasure, never the learner's
 intelligence, English mistakes or personal characteristics.
 
 On a new journey, stage 1 first teaches ordinary construction and collection.
-After its real word goals are completed, Bramble ambushes Pip, claims the compass,
+After its real word goals are completed, Pirate ambushes Pip, claims the compass,
 laughs and escapes toward the next encounter at stage 3. This is a **story defeat**, not a failed
 learning assessment: committed learning, coins and treasure remain safe, stage 2
 opens normally, and no Boss-victory medal or merged-level unlock is fabricated.
@@ -289,24 +294,28 @@ produces collectible Lv1 Jelly; the cap restricts higher merged upgrades, not
 the root/picture match. Blocked gestures give a compact material response rather
 than the misleading, board-covering "Make room" panel.
 
-| Boss stage | New trick and story beat | First-victory merged cap | Retreat |
-| --- | --- | --- | --- |
-| 3 | Freeze; Pip catches the compass thief's trail | Lv2 | Scrambles away |
-| 5 | Ink; a new crossing reveals that the compass can open hidden routes | Lv3 | Distracts Pip and slips away |
-| 7 | Two-layer locks; matching words break Bramble's locked passage | Lv4 | Pretends it was only a warm-up |
-| 9 | Shadow doubles; two collected-word hits disperse the decoys | Lv5 | Panics when his real identity is found |
-| 18 | Giant kick; Pip repairs the broken sky and continues the chase | Lv6 | Promises a new surprise farther ahead |
-| 36 | Snatch; Bramble grabs a construction piece, flings it away, and loses it back into Next | Lv7 | Runs off without taking earned words |
-| 63 | Borrowed shield; two hits break his last defensive trick | Lv8 | Leaves a final challenge at the castle |
-| 99 | Mixed-color storm; all the learned tricks combine in the last rematch | Lv9 | Returns the compass and admits defeat |
+| Boss stage | New trick and story beat | Retreat |
+| --- | --- | --- |
+| 3 | Freeze; Pip catches the compass thief's trail | Scrambles away |
+| 5 | Ink; a new crossing reveals that the compass can open hidden routes | Distracts Pip and slips away |
+| 7 | Two-layer locks; matching words break Pirate's locked passage | Pretends it was only a warm-up |
+| 9 | Shadow doubles; two collected-word hits disperse the decoys | Panics when his real identity is found |
+| 18 | Giant kick; Pip repairs the broken sky and continues the chase | Promises a new surprise farther ahead |
+| 36 | Snatch; Pirate grabs a construction piece, flings it away, and loses it back into Next | Runs off without taking earned words |
+| 63 | Borrowed shield; two hits break his last defensive trick | Leaves a final challenge at the castle |
+| 99 | Mixed-color storm; all the learned tricks combine in the last rematch | Returns the compass and admits defeat |
+
+Non-Boss chapter finales (**stages 27, 45, 54, 72, 81, and 90**) host **Pirate Mini-Raids**:
+shorter skirmishes with chapter-appropriate trick mixes that award **+75 bonus clear coins**
+without altering the eight story Boss victory IDs.
 
 Only the next **ordinary future** Boss is marked on the map. Every already-unlocked
 Boss stage retains its marker for rematches; later locked Boss locations are
 not all revealed. The finale at stage 99 is an intentional exception: an enlarged
-actual Bramble portrait, dark-purple sourced rays and extra summit space make
+actual Pirate portrait, dark-purple sourced rays and extra summit space make
 the final opponent visible and imposing without horror art. Its locked marker
 cannot start the stage. Stage 1 remains unmarked to preserve its surprise.
-Boss markers use Bramble's actual portrait rather than a `BOSS` text
+Boss markers use Pirate's actual portrait rather than a `BOSS` text
 badge; the face can open its unlocked stage without covering the number or
 earned stars. Both the map and active board show a separate acquired-Jelly
 **Jelly LvN** badge for the unlocked merged-level cap, not Pip's level or chest tier.
@@ -314,11 +323,8 @@ The eight encounter identities remain stable after this schedule change, so
 previously earned levels remain earned. A pending old-roster victory can still
 finish its original journal; newly authored settlements identify the new roster.
 
-Bramble's full acquired, skinned body stands beside the well throughout battle
+Pirate's full acquired 3D character stands beside the well throughout battle
 and the ending; it never moves into an information bar or a giant story dialog.
-Game-authored broad hand gestures, a one-eye wink, blinking and wide-eyed hit
-reactions animate the acquired Frog's actual skeleton and original eye surfaces.
-The source mouth stays gentle; a cream belly replaces the heavy dark body patch.
 Eight sourced purple energy glints and draining local light
 represent his health; there is no permanent name/instruction block or numeric HP
 rail. Taunts use bounded two-line subtitles. The ambush enters from the edge,
@@ -330,30 +336,36 @@ Short, trick-specific challenges and an admitted defeat replace generic banter.
 
 Boss victories retain their story, map markers, stars and clear rewards, but
 never unlock a merged level or open a skill-unlock settlement. Previewing and
-buying Jelly levels is independent of fighting Bramble.
+buying Jelly levels is independent of fighting Pirate.
 
 **Attacking:** a successfully committed merged-word collection fires an attack.
 Lv1 already deals 14 base damage; Lv2–Lv9 deal 38, 72, 116, 176, 248, 344, 464
-and 620. Manual construction charges the next shot, and an active combo adds
-damage. A pending/failed save and duplicate acknowledgement cannot fire another
-attack. Automatic construction still earns no learning by itself; collecting
-its completed word uses the normal learning rules and can attack. Boss stages
-require **both** Bramble's defeat and every fixed word quota. Finishing only one
-cannot announce a clear or grant a level. If Bramble is defeated first, he stays
+and 620. Manual construction charges the next shot (+3 per merge, +1 per combo bonus,
+or doubled during **Final Chase** once all word goals finish while Pirate is still fighting),
+and an active combo adds damage. Golden sparkles and a `+XX%` readout around the compass
+visualize stored charge; reaching 10+ charge lights pulsing rays and turns the next
+collection into a larger golden **POWER!** strike. A pending/failed save and duplicate
+acknowledgement cannot fire another attack. Automatic construction still earns no learning
+by itself; collecting its completed word uses the normal learning rules and can attack.
+Boss stages require **both** Pirate's defeat and every fixed word quota. Finishing only one
+cannot announce a clear or grant a level. If Pirate is defeated first, he stays
 exhausted beside the board with no attacks, victory speech or retreat while
 the remaining word goals continue. Reviewed partners remain available when
-all words are done first but the Boss still needs hits.
-The visible attack takes 550 ms to reach Bramble. Its hit cue, skeletal response,
+all words are done first but the Boss still needs hits; entering this **Final Chase**
+doubles manual charge gain (up to +100% power) so finishing the fight feels brisk and rewarding.
+The visible attack takes 550 ms to reach Pirate. Its hit cue, animation response,
 small planted recoil and 240 ms energy depletion share that contact boundary.
 The authoritative collection receipt and damage still commit at collection;
 the presentation does not defer a save or grant a second hit. Decoys and shields
 name their blocked impact instead of showing a misleading zero-damage number.
 Reduced motion presents the real hit immediately without travel or recoil.
 
-**Counterplay:** attacks have a visible wind-up and distinct blue, purple and
-golden projectiles. Their paths use a fixed launch/landing position and a
-gravity-shaped arc. Moving a targeted body, holding it, or accepting an operation
-before impact makes an obsolete shot miss rather than hit a different word.
+**Counterplay:** attacks have a visible wind-up, a colored targeting ring over the
+targeted tile, and distinct blue, purple and golden projectiles. Their paths use a
+fixed launch/landing position and a gravity-shaped arc. Moving a targeted body, holding it,
+or accepting an operation before impact makes an obsolete shot miss, displaying a golden
+**Dodged!** cue, granting **+4 charge** toward the next Boss strike, and refreshing any
+active combo timer.
 
 - Blue freeze prevents selection, dragging, matching and collection for exactly
   three active-play seconds. A clock/progress effect counts down; a sourced
@@ -381,12 +393,12 @@ motion retains readable targeting/status marks without leaps, spins or particle
 travel. Freeze and lock state is cleared for the already-established terminal
 collection sweep, so the final overlay cannot strand a remaining merged word.
 
-On a loss, Bramble taunts and leaves a renewed challenge. On a win, Pip celebrates,
-the characters exchange a short readable reply, and Bramble's escape uses its
+On a loss, Pirate taunts and leaves a renewed challenge. On a win, Pip celebrates,
+the characters exchange a short readable reply, and Pirate's escape uses its
 encounter's scramble, distraction, swagger or panic style. His final defeat
 returns the compass. These performances finish before the ordinary Round
 complete/settlement sequence; rewards still use their original saved receipts.
-The decisive impact explicitly announces Bramble's defeat; he does not resume a
+The decisive impact explicitly announces Pirate's defeat; he does not resume a
 smug taunt immediately after losing. His concession and Pip's next-stage pursuit
 occupy separate short beats. The finale admits defeat and visibly returns the
 same compass; its larger theft/return framing uses the original acquired art.
@@ -394,19 +406,24 @@ The vocal reaction is an acquired human laugh with subtitle dialogue, not a
 claim that every written line has a corresponding spoken recording.
 
 Merged Lv1 is free. The **Jelly Upgrades** page permanently unlocks Lv2 through
-Lv9 in order for **50, 100, 200, 350, 550, 800, 1100 and 1500 coins**. Ownership
+Lv9 in order for **50, 100, 200, 350, 550, 800, 1100 and 1500 coins** via
+hold-to-charge 25-coin contributions. Ownership
 is shared across all Everyday and professional Jelly World journeys; stage
-recipes, stars, Boss victories and Challenge records retain their separate
+recipes, stars, Boss victories, chapter star milestones and Challenge records retain their separate
 learning-context histories. Every level, including locked ones, can be inspected
 before purchase. The view-only seven-by-eight demonstration uses the actual
 campaign target selector and shows the collection footprint, pickup-coin odds
 and base Boss damage without changing learning, rewards or wallet state.
 
-The same page's **Auto merge** category upgrades its independent permanent
-capacity. Lv1 is free and can produce up to **3 completed, collectable Jellies** per use;
-Lv2-Lv9 produce **4-11**, one more per level. Their sequential prices are the
-same increasing **50, 100, 200, 350, 550, 800, 1100, 1500** coin curve.
-Inspecting a level shows that exact capacity using the existing acquired Jelly
+The same page also provides two independent permanent tracks on the same
+**50, 100, 200, 350, 550, 800, 1100, 1500** coin curve:
+- **Auto merge**: upgrades its permanent capacity from **3 completed, collectable Jellies** at Lv1
+  up to **11** at Lv9 (one more per level).
+- **Star charm**: a passive progression charm active in campaign and Challenge rounds.
+  Each level adds **+0.3s combo window** (up to +2.4s at Lv9) and **+3% chest fragment spawn chance**
+  (up to +24% at Lv9), plus **1 wrong-merge combo grace** starting at Lv2 (**2** at Lv6+).
+
+Inspecting an Auto merge level shows that exact capacity using the existing acquired Jelly
 and wand artwork. The live Auto merge button has a stable gel-and-number badge
 for its owned capacity; inspecting a future level cannot change it.
 Each completed product occupies one output slot and remains separate until this
@@ -443,21 +460,17 @@ real wallet and commits ownership only after that exact debit is present. A
 failed final save retains the paid intent and offers Retry without charging
 again, including if another upgrade category is being inspected. Stale tabs
 cannot overwrite another purchase or apply its debit to the other upgrade.
-Campaign save versions 1-3 migrate without rewriting on read: legitimately earned old levels are kept,
-including an already journaled old Boss victory, but future Boss wins never
-advance them. Existing stages, recipes, stars, pending settlements and coins are
-not reset, and old ordinary clears do not invent Boss victories. Version-four
-Jelly ownership and pending quotes are kept exactly; Auto merge begins at Lv1.
-The next actual save writes version five with both independent levels and one
-kind-specific purchase journal. Buying Auto merge does not complete or suppress
-the first-clear Jelly introduction.
-See [Bramble's source and animation record](../assets/jelly-boss/SOURCE.md).
+Campaign save versions 1-6 migrate in memory without rewriting on read: legitimately earned old levels,
+stages, recipes, stars, pending settlements, funded contributions and coins are preserved.
+The next actual save writes version 7 with all three independent upgrade tracks (`level`,
+`auto_merge_level`, `star_charm_level`) and per-context `chapter_milestones`. Buying Auto merge or
+Star charm does not complete or suppress the first-clear Jelly introduction.
 
 Stage 1 has three word goals, adding one per stage up to eight. Each attempt
 starts its counters at zero, separately from Pip's permanent three-answer
 mastery. A committed **LvN** collection contributes **N goal units**, including
-**Auto Collect** and a later collection of a word constructed by automatic
-matching. Quotas clamp at their required amount; overflow does not skip a later
+**Auto Collect** (unlocked in campaign as soon as Stage 1 is cleared, or at Pip Lv3 in unbound play)
+and a later collection of a word constructed by automatic matching. Quotas clamp at their required amount; overflow does not skip a later
 Challenge batch. The pickup, wallet receipt and learning attempt still happen
 only once. Merely merging
 does not fill a collection goal. Outside Boss encounters, words whose quota is satisfied stop creating
@@ -466,9 +479,12 @@ available: retiring a word must never strand an old piece.
 
 Difficulty follows a nine-stage wave: Discover, Practice, Build, Breather, Mix,
 Flow, Reward, Prepare and Finale. Chapter quotas gradually grow from one to six,
-with selected extra repetitions and chapter finales. Breather and Reward stages
-give more room instead of increasing pressure every time. Time budgets now use
-the actual **21 opening pieces and seven-piece supply**, reviewed parts and
+with selected extra repetitions and chapter finales. Each wave profile also carries
+distinct play flavor: **Reward** stages double chest-fragment frequency (`2× Treasure`),
+**Flow** stages add **+1.0s** to the combo timer (`Combo rush`), and **Breather** stages
+give extra time and calmer arrival cadence (`Relaxed pace`). The active board garden backdrop
+adapts to all eleven chapters using existing chapter scenery props and warm/cool seasonal tints.
+Time budgets use the actual **21 opening pieces and seven-piece supply**, reviewed parts and
 necessary picture partners. The basic first stage retains 90 seconds; subsequent
 ordinary minimums move from 65 to 55 seconds by stage 18. The ordinary cap is
 130 seconds for pictured atomic words, scaled by the actual average multipart
@@ -485,11 +501,12 @@ Already stricter recipes are never loosened. Cleared replay parameters, best
 stars, pending settlements and permanent-upgrade purchase journals stay exact.
 
 The countdown has three star phases based on the **original active-play budget**:
-clearing before its first third earns three stars, before its second third earns
-two, and later earns one. Pauses, reading overlays, automatic sequences and
+clearing within the first **40%** of the budget earns three stars, within **70%** earns
+two, and later earns one. Five seconds before a star boundary drops, the active top
+star breathes with a warm golden warning glow. Pauses, reading overlays, automatic sequences and
 pending saves do not consume active time. The paid **+30 sec** item is removed;
 coins cannot extend the numbered-stage deadline. Remaining time drains a fine separate clock track,
-with a right-aligned clock and a dark-teal rating dock on a warm cream surface.
+with boundary markers at 60% and 30% remaining time, a right-aligned clock and a dark-teal rating dock on a warm cream surface.
 The left-to-right bronze, silver and gold stars grow in size and preciousness;
 the highest tier has local sourced rays and bounded glints. These are source-derived
 materials, not a change to the one/two/three-star rules. The current Stage
@@ -501,14 +518,13 @@ A failed or duplicate purchase cannot charge twice.
 
 Completing every goal locks a clear; timer expiry locks a failure. A settled,
 blocked top starts a flashing recovery countdown, not an immediate failure.
-Stage 1 retains ten seconds and one-space rescue. Stages 2-17 require two
-reachable spaces within eight seconds, 18-62 require three within seven,
-and 63-99 require four within six. The existing level-badge area temporarily
-names the remaining rescue with **Free N spaces**; goals stay on the left.
+Recovery frees the blocked well by requiring **1 reachable top space** within the
+stage's recovery window (**Free 1 space**; 10s on Stage 1, 8s on Stages 2-17, 7s on
+Stages 18-62, 6s on Stages 63-99). The existing level-badge area temporarily
+names the remaining rescue with **Free 1 space**; goals stay on the left.
 Only top-connected space counts, including real body, fusion-destination and
 drag-return reservations; inaccessible internal holes do not. The advertised
-Next supply must also have a legal entry. One small merge no longer resets
-late-game danger. Recovery blocks new Fill, manual Next and timed dispatch,
+Next supply must also have a legal entry. Recovery blocks new Fill, manual Next and timed dispatch,
 while already launched bodies finish normally. Pause and automatic/pending
 transactions freeze the countdown. An announced warning keeps its duration
 and target even if a Challenge batch advances. Its expiry locks a failure.
@@ -534,17 +550,17 @@ automatically. A saved clear returns to the map. Numbered-stage timeouts and
 full-board failures instead retain their saved result with **Try again**,
 **Jelly Upgrades** and **Back to map**; the entry does not disappear on a timer.
 Try again restarts the same numbered stage. Jelly Upgrades opens the existing
-permanent merged-Jelly and Auto merge page without buying anything or repeating
+permanent merged-Jelly, Auto merge and Star charm page without buying anything or repeating
 the finished round's rewards. Back from that page follows its usual map route.
 Navigation is unavailable until treasure, coins and the campaign journal have
 saved; a failure keeps **Retry save** rather than allowing the player to discard
 an unpaid result. Successful stages and voluntary Home exits retain their
 existing automatic destinations. A pending
 settlement survives reload and is recovered with its original receipt.
-Once a genuine Game over result is saved, Bramble replaces the empty-star
-display with his acquired articulated body, real raised-hand taunt and wink.
+Once a genuine Game over result is saved, Pirate replaces the empty-star
+display with his acquired 3D character taunt.
 A short sourced violet hand-light and sparkle response follows the actual
-palm joints; it runs once, then holds instead of repeating over the actions.
+hat and body landmarks; it runs once, then holds instead of repeating over the actions.
 **Try again**, **Jelly Upgrades** and **Back to map** remain usable immediately.
 Challenge records keep their medal and a positive short line rather than a
 taunt that insults the learner. Storage errors, voluntary exits and cleared
@@ -574,7 +590,9 @@ Supply starts at twelve seconds, accelerates toward three, and actual descent
 increases toward 2.2. Full-board recovery needs two spaces in eight seconds for
 batches 1-5, three in seven for 6-10, and four in six afterward.
 Only a **complete batch** refunds time: 12 seconds for batches 1-5, 10 for 6-10,
-then eight, capped at the actual headroom below 90 remaining seconds.
+then eight (plus **+2s** when clearing a batch at Combo Rank **S+**), capped at the actual headroom below 90 remaining seconds.
+Every 5th Challenge stage (**Stage 5, 10, 15...**) triggers a celebratory **Bonus wave!** banner
+with doubled chest-fragment supply (`2× Treasure`).
 Partial targets, redundant pickups and repeated receipts never refund time.
 There are no random extra-time drops or paid Challenge time purchases.
 Pending/failed/duplicate collection receipts cannot grant time or advance a stage.
@@ -609,7 +627,7 @@ only after saving and opens the same permanent-upgrade page as the map.
 The upgrade action uses a third column on wide dialogs or a full-width second
 row on phones, retaining a full touch target instead of squeezing three labels.
 None of the actions breathes, scales or cycles idle sparkles. It shows the reached Stage, level-weighted
-active collection total and saved record medal. The comparison freezes the old
+active collection total, highest combo chain, highest merged Jelly level reached, and saved record medal. The comparison freezes the old
 best before the first eager save of the run: saving the reached Stage early
 cannot suppress a genuine breakthrough. A new best adds the numeric medal
 animation and one reduced-count paper celebration after durable settlement.
@@ -725,11 +743,12 @@ seven-column well, including on phones. Narrow cards keep their sourced picture,
 word, price and progress in separate areas; long lists scroll vertically rather
 than moving to a top strip. Actions and Boss presentation move below the well
 when a right rail would violate the existing readable cell minimum.
-The card displays its next coin cost alongside its completion count.
-Click that card to automatically merge only its exact word family's roots,
-pictures and differently leveled merged Jellies. One valid purchase costs 50,
-then 75, then 100 coins per round, with that family-use tier shared across all
-goals and independent of other items. Payment must be saved and the current
+The card displays its next coin cost inside a golden coin pill alongside its completion count.
+Tapping the goal card's **word picture** locates and highlights that word family on the board for 2 seconds
+and pronounces the word **for free** without spending coins. Clicking the rest of the card or its coin pill
+(or activating via keyboard/controller) automatically merges only its exact word family's roots,
+pictures and differently leveled merged Jellies. One valid purchase costs **25, then 50, then 75 coins**
+per round, with that family-use tier shared across all goals and independent of other items. Payment must be saved and the current
 family must have a legal complete path. No unrelated target or missing partner
 is substituted. A paid click shows the exact wallet debit, a coin flight into the
 goal, and local cost feedback without changing the hit target. Ordinary legality,
@@ -773,27 +792,33 @@ by a tap or Collect has one independent chance of a level-based bonus:
 | Merge level | Coin chance | Coins when awarded |
 | --- | ---: | ---: |
 | Lv1 | 0% | 0 |
-| Lv2 | 2% | 50 |
-| Lv3 | 4% | 100 |
-| Lv4 | 12% | 150 |
-| Lv5 | 20% | 200 |
-| Lv6 | 30% | 250 |
-| Lv7 | 40% | 300 |
-| Lv8 | 50% | 350 |
-| Lv9 | 80% | 450 |
+| Lv2 | 12% | 50 |
+| Lv3 | 22% | 100 |
+| Lv4 | 32% | 150 |
+| Lv5 | 42% | 200 |
+| Lv6 | 52% | 250 |
+| Lv7 | 62% | 300 |
+| Lv8 | 72% | 350 |
+| Lv9 | 85% | 450 |
 
 Higher levels increase both the chance and the award; component count and footprint
 do not change that level's policy. Opening chests provides additional coins.
 Collection banks all carried fragments. A manually solved
 picture match or root composition records learning only on collection;
 automatic merges and image-free atomic exposure do not earn mastery.
-Successful merges and collections add a point toward a visible combo **level**,
+Successful merges and collections add a point toward a visible combo **level**
+(manual **upgrade merges** in campaign award **+2** combo progress),
 with a separate cumulative progress bar and fraction. The first upgrade needs
 three actions, the next four, then five and so on. The displayed level therefore
 does not increment on every pickup or merge. Each success also refills the
-independent eight-second countdown bar. That bar drains during active play; reaching zero
-or an invalid merge ends the current chain, without removing saved coins or its
-best level. A success completed at or after expiry starts a fresh chain.
+independent eight-second countdown bar (extended by **+1.0s** on `Flow` stages and
+**+0.3s per Star Charm level** above Lv1). That bar drains during active play; reaching zero
+ends the current chain, without removing saved coins or its best level.
+In campaign play, an invalid merge uses one **combo grace** charge (1 by default, 2 at Star Charm Lv6+)
+to deduct **3.0s** instead of wiping an active chain with more than 3 seconds remaining; further mistakes
+or low timers still break the chain. Manually tapping **Next** extends an active combo timer by **+1.5s**
+once per action. Reaching Rank **B, A, S, SS, and SSS** for the first time in a campaign run attaches
+1 free chest fragment onto a board tile. A success completed at or after expiry starts a fresh chain.
 Preview drops and stage transitions do not directly reset or refill it.
 Pauses, saving waits and automatic matching sequences freeze its clock.
 Automatic Collect and committed automatic matches add one progress point without
@@ -829,18 +854,19 @@ then applies this footprint to current board bodies:
 | Lv8 | Two surrounding rings, capped at eight inner and fourteen outer bodies |
 | Lv9 | Every other available board body |
 
-Jelly World's Boss-progression rules strengthen the early support footprint:
-Lv1 marks **two** adjacent bodies, Lv2 four, Lv3 six, and Lv4 the complete
+Jelly World's campaign rules strengthen the early support footprint:
+Lv1 marks **two** adjacent bodies (with a lightweight **60 ms windup / 220 ms flight** and no slow-motion
+freeze, firing when at least one marked neighbor has a legal board partner), Lv2 four, Lv3 six, and Lv4 the complete
 one-cell ring. Lv5 retains its column identity and Lv6 its cross; Lv7 adds up
 to four outer-ring bodies to the full inner ring, Lv8 retains its capped two
-rings, and Lv9 retains the board. Frozen/locked/reserved bodies are not consumed
+rings, and Lv9 retains the board. Campaign blasts prioritize neighbors that have legal partners on the board.
+Frozen/locked/reserved bodies are not consumed
 by a paid or automatic matching plan. The older unbound model reference above
 remains for compatibility tests; active campaign/challenge play uses these
 stronger footprints. Coin odds and immutable wallet quotes are unchanged.
 
 Edges clip the footprint; absent neighbors are not replaced by distant bodies.
-Random selection does not favor bodies with a match and uses a separate stream
-from word supply and coin rolls. Held, already fusing and promised batch
+Selection uses a separate stream from word supply and coin rolls. Held, already fusing and promised batch
 collection bodies are protected.
 
 After collection commits, a blast with affected bodies first holds the world
@@ -885,12 +911,9 @@ Lv1-Lv3 stay unchanged. Board effects, reading art and ambient motion use the
 model's actual consumed motion segments, so a coarse frame cannot skip the freeze.
 The interface/audio keep their own clocks and `Engine.time_scale` remains one.
 
-Auto merge costs 200, 300, then 400 coins at owned Lv1 in the same round.
-Its first-use base adds 50 coins per owned level, reaching 600 at Lv9; the second
-successful use costs 1.5 times that base and later uses cost twice the base.
-Word-goal purchases use their shared 50, 75, then 100 coin unit tier multiplied
-by the net board spaces the chosen family's complete legal operation will free.
-Unmatched, capped, frozen and locked leftovers do not increase the quote.
+Auto merge costs **25, 50, then 75 coins** per round, independent of its owned permanent level.
+Word-goal family merges likewise use their shared **25, 50, then 75 coin** per-use ladder per round.
+Unmatched, capped, frozen and locked leftovers are left untouched.
 Its button displays the next price and current Jelly capacity. The Treasure and +30 sec purchase cards and
 their live purchase routes are removed; naturally earned chest fragments and
 ordinary treasure settlement remain. Auto merge follows validated paths of root joins, picture matches and

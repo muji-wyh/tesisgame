@@ -521,7 +521,7 @@ func test_main_pressure() -> void:
 			"Actual main-stage binding dispatches its real next advertised packet")
 	var early_body: Dictionary = early.cells.filter(func(tile: Dictionary) -> bool: return tile.arrival)[0]
 	var late_body: Dictionary = late.cells.filter(func(tile: Dictionary) -> bool: return tile.arrival)[0]
-	check(early.spawn_interval > late.spawn_interval and float(late_body.motion_speed_scale) == 1.4
+	check(early.spawn_interval > late.spawn_interval and is_equal_approx(float(late_body.motion_speed_scale), 1.6)
 		and Model.arrival_contact_at(late_body) < Model.arrival_contact_at(early_body),
 		"Later main stages actually dispatch more often and land faster, not merely report harder catalog metadata")
 

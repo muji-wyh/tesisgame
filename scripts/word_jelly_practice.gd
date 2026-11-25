@@ -3,6 +3,7 @@ extends Panel
 
 signal word_progressed(word_id: String, complete: bool)
 signal word_hovered(word_id: String)
+signal word_locate_requested(goal_id: String, word_id: String)
 signal merge_requested(goal_id: String, word_id: String)
 
 const Style = preload("res://scripts/ui_style.gd")
@@ -165,8 +166,19 @@ func set_stage(state: Dictionary) -> void:
 		_rows.append(row)
 		surface.pressed.connect(func() -> void:
 			if _interactive and not _paused and not _busy and not row.mastered and not row.retired:
+				var picture_locate: bool = false
+				if _scroll._last_tap_valid:
+					var local_tap: Vector2 = surface.get_global_transform_with_canvas().affine_inverse() * _scroll._last_tap_global
+					picture_locate = surface.goal_picture_hit(local_tap, true)
+				elif _pointer_input:
+					picture_locate = surface.goal_picture_hit()
+				surface.clear_last_pointer()
 				if _pointer_input:
 					surface.release_focus()
+				if picture_locate:
+					row.preview_consumed = false
+					word_locate_requested.emit(str(row.word_id), str(row.family_word_id))
+					return
 				row.preview_consumed = true
 				_refresh_hover()
 				merge_requested.emit(str(row.word_id), str(row.family_word_id)))

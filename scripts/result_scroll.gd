@@ -21,6 +21,8 @@ var _multiple_touches := false
 var _suppress_emulated_mouse := false
 var _native_touch := false
 var _origin := Vector2.ZERO
+var _last_tap_global := Vector2(-1.0, -1.0)
+var _last_tap_valid: bool = false
 var _scroll_origin := 0
 var _travel := 0.0
 var _dragging := false
@@ -196,8 +198,11 @@ func _finish(point: Vector2, canceled: bool = false) -> void:
 	set_process(_motion.is_active())
 	# Focus on release, so focus reveal cannot add a jump to the held drag.
 	if tapped and is_instance_valid(target) and target == _button_at(point):
+		_last_tap_global = point
+		_last_tap_valid = true
 		target.grab_focus()
 		target.pressed.emit()
+		_last_tap_valid = false
 
 
 func _process(delta: float) -> void:

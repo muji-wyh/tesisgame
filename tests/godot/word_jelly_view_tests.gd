@@ -420,7 +420,7 @@ func _check_powerup_paused_resize(view) -> void:
 			_install(view, ["root:cat", "picture:cat"])
 			view._activate_powerup("auto_merge")
 			var fusion_elapsed: float = Model.POWERUP_FUSION_SECONDS * 0.5
-			_advance(view, Model.POWERUP_DRAG_SECONDS * 0.5 if stage == "drag" else Model.POWERUP_DRAG_SECONDS + fusion_elapsed)
+			_advance(view, Model.BLAST_FREEZE_SECONDS + (Model.POWERUP_DRAG_SECONDS * 0.5 if stage == "drag" else Model.POWERUP_DRAG_SECONDS + fusion_elapsed))
 			check(view.game.powerup_snapshot().stage == stage,
 				"responsive powerup coverage reaches the paid " + stage + " stage")
 			view.pause(true)
@@ -481,7 +481,7 @@ func _check_concurrent_powerup_resize(view) -> void:
 		var ids: Array[int] = _completion_board(view, ["root:cat", "picture:cat", "root:caterpillar", "picture:caterpillar"], [1, 2, 3, 4])
 		view.game.auto_merge_level = 2
 		view._activate_powerup("auto_merge")
-		_advance(view, (Model.POWERUP_MERGE_BEAT_SECONDS + Model.POWERUP_DRAG_SECONDS) * 0.5)
+		_advance(view, Model.BLAST_FREEZE_SECONDS + (Model.POWERUP_MERGE_BEAT_SECONDS + Model.POWERUP_DRAG_SECONDS) * 0.5)
 		var moving: Dictionary = view.game.powerup_snapshot()
 		check(moving.drags.size() == 2 and view.game.fusions.is_empty(), "two independent Auto flights overlap before the first reaches contact")
 		var bodies: Array = []
@@ -1589,7 +1589,7 @@ func _check_word_reveal_levels(view) -> void:
 			var advertised: Array = view.snapshot().tiles
 			for index in range(ids.size()):
 				var reward: Dictionary = advertised.filter(func(tile: Dictionary) -> bool: return int(tile.id) == ids[index])[0]
-				check(is_equal_approx(float(reward.coin_drop_chance), [0.0, 0.12, 0.30][index])
+				check(is_equal_approx(float(reward.coin_drop_chance), [0.0, 0.32, 0.52][index])
 					and int(reward.coins) == [0, 150, 250][index],
 					"the view snapshot advertises exact Lv1, Lv4 and Lv6 collection odds and payouts")
 			if batch:

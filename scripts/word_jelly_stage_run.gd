@@ -58,7 +58,7 @@ func configure(plan: Dictionary) -> bool:
 	return true
 
 
-func record_collection(event_id: String, word_id: String, units: int = 1) -> bool:
+func record_collection(event_id: String, word_id: String, units: int = 1, extra_batch_seconds: int = 0) -> bool:
 	error = ""
 	if not _active():
 		return false
@@ -84,7 +84,7 @@ func record_collection(event_id: String, word_id: String, units: int = 1) -> boo
 				goal.mastered = true
 				if _challenge_goals.all(func(item: Dictionary) -> bool:
 					return int(item.stage) != challenge_stage or bool(item.mastered)):
-					var reward: int = 12 if challenge_stage <= 5 else 10 if challenge_stage <= 10 else 8
+					var reward: int = (12 if challenge_stage <= 5 else 10 if challenge_stage <= 10 else 8) + maxi(0, extra_batch_seconds)
 					_pending_time_bonus += grant_challenge_time("challenge-batch:%d" % challenge_stage, reward)
 					challenge_stage += 1
 					_append_challenge_stage()
@@ -200,16 +200,30 @@ func add_time(receipt_id: String, seconds: int = 30) -> bool:
 	return true
 
 
+const STAR_THREE_RATIO: float = 0.40
+const STAR_TWO_RATIO: float = 0.70
+
 func stars_now() -> int:
 	if not _configured or kind != "main":
 		return 0
 	if not outcome.is_empty():
 		return _final_stars if outcome == "cleared" else 0
-	if elapsed < initial_seconds / 3.0:
+	if elapsed < initial_seconds * STAR_THREE_RATIO:
 		return 3
-	if elapsed < initial_seconds * 2.0 / 3.0:
+	if elapsed < initial_seconds * STAR_TWO_RATIO:
 		return 2
 	return 1
+
+
+func next_star_drop_in() -> float:
+	if not _configured or kind != "main" or not outcome.is_empty():
+		return -1.0
+	var current_stars: int = stars_now()
+	if current_stars == 3:
+		return maxf(0.0, initial_seconds * STAR_THREE_RATIO - elapsed)
+	if current_stars == 2:
+		return maxf(0.0, initial_seconds * STAR_TWO_RATIO - elapsed)
+	return -1.0
 
 
 func challenge_pressure() -> Dictionary:
@@ -268,6 +282,7 @@ func snapshot() -> Dictionary:
 				remaining_ids.append(str(goal.id))
 	return {"kind": kind, "number": number, "chapter": _chapter, "title": _title,
 		"profile": _profile, "outcome": outcome, "stars_now": stars_now(),
+		"next_star_drop_in": next_star_drop_in(),
 		"stars": _final_stars if outcome == "cleared" else 0, "time_elapsed": elapsed,
 		"seconds_remaining": remaining, "seconds_total": initial_seconds,
 		"seconds_added": float(_added_seconds) + _challenge_added_seconds if kind == "challenge" else _added_seconds,

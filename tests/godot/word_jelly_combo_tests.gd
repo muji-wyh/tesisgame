@@ -51,6 +51,7 @@ func _run() -> void:
 	_test_finish_and_reconfigure()
 	_test_payment_reentrancy()
 	_test_committed_learning_reentrancy()
+	_test_campaign_combo_depth()
 	await _test_game_ui_wallet()
 	print("Word Jelly combo: %d checks, %d failures" % [checks, failures])
 	quit(1 if failures else 0)
@@ -534,6 +535,93 @@ func _test_committed_learning_reentrancy() -> void:
 	check(learned.size() == 1 and bool(learned[0][2]),
 		"An already committed collection records its learning evidence before combo presentation can replace the round")
 	model.credit_combo = Callable()
+
+
+func _test_campaign_combo_depth() -> void:
+	var catalog = preload("res://scripts/word_jelly_stage_catalog.gd")
+	var morphology = preload("res://scripts/growth_morphology.gd")
+	var data := Data.new()
+	check(data.load_all(), "Load vocabulary for campaign combo depth checks")
+	var pool: Array = data.words.filter(func(word: Dictionary) -> bool:
+		return Data.word_age(word) == 3 and not str(word.get("image", "")).is_empty()).slice(0, 6).map(
+		func(word: Dictionary) -> Dictionary: return morphology.decorate(word))
+	var plan: Dictionary = catalog.make_plan(2, pool, 3, 71)
+	plan["merged_level_limit"] = 9
+	var model := Model.new()
+	check(model.configure(plan.words, 3, 71) and model.bind_stage(plan), "Bind real campaign stage for M2 combo rules")
+	model.cells.clear()
+	model.spawn_interval = 10000.0
+	model._stage_spawn_interval = 10000.0
+	var word0: Dictionary = plan.words[0]
+	var word1: Dictionary = plan.words[1]
+	# Manual upgrade grants +2 combo progress in campaign.
+	var up_a: Dictionary = model._new_word_root(word0, 0)
+	model._set_merged_word(up_a, word0, 1, true)
+	_put(model, up_a)
+	var up_b: Dictionary = model._new_word_root(word0, 0)
+	model._set_merged_word(up_b, word0, 1, true)
+	_put(model, up_b)
+	check(model.try_merge(int(up_a.id), int(up_b.id)) == "merged", "Manual upgrade merge accepted in campaign")
+	model.step(Model.FUSION_SECONDS + 0.01)
+	check(model.combo_count == 1 and model.combo_progress == 2 and model.max_merge_level_reached == 2,
+		"Manual upgrade grants +2 combo progress and tracks max_merge_level_reached")
+	# Forgiving wrong-merge grace deducts 3s instead of full reset once.
+	var wrong_a: Dictionary = _put(model, model._new_word_root(word0, 0))
+	var wrong_b: Dictionary = _put(model, model._new_picture_tile(word1, 0))
+	var remaining_before: float = float(model.combo_snapshot().remaining)
+	check(model.try_merge(int(wrong_a.id), int(wrong_b.id)) == "wrong"
+		and model.combo_count == 1 and float(model.combo_snapshot().remaining) < remaining_before
+		and int(model.combo_snapshot().grace_remaining) == 0,
+		"First wrong merge in campaign consumes grace and trims 3s instead of wiping combo")
+	# Manual Next drop extends active combo once per batch.
+	var before_drop: float = float(model.combo_snapshot().remaining)
+	check(model.drop_now() and float(model.combo_snapshot().remaining) > before_drop,
+		"Manual Next drop extends active campaign combo once")
+	var after_first_drop: float = float(model.combo_snapshot().remaining)
+	model.step(1.0)
+	check(model.drop_now() and float(model.combo_snapshot().remaining) <= after_first_drop - 0.9,
+		"Second consecutive Next drop without a combo action does not farm extra combo time")
+	# Reaching Rank B (combo_count 3) attaches a free chest fragment to an unmarked tile once.
+	var fragments_before: int = 0
+	for tile: Dictionary in model.cells:
+		fragments_before += int(tile.get("fragments", 0))
+	for step_i in range(4):
+		var ra: Dictionary = model._new_word_root(word0, 0)
+		model._set_merged_word(ra, word0, 1, true)
+		_put(model, ra)
+		var rb: Dictionary = model._new_word_root(word0, 0)
+		model._set_merged_word(rb, word0, 1, true)
+		_put(model, rb)
+		model.try_merge(int(ra.id), int(rb.id))
+		model.step(Model.FUSION_SECONDS + 0.01)
+		if model.combo_count >= 3:
+			break
+	var fragments_after: int = 0
+	for tile: Dictionary in model.cells:
+		fragments_after += int(tile.get("fragments", 0))
+	check(model.combo_count >= 3 and fragments_after == fragments_before + 1,
+		"Reaching Rank B for the first time in a stage attaches a free chest fragment onto a board tile")
+	# Smart blast neighbor preference prefers a matchable neighbor over isolated neighbors.
+	var blast_model := Model.new()
+	var bplan: Dictionary = catalog.make_plan(2, pool, 3, 71)
+	bplan["merged_level_limit"] = 2
+	check(blast_model.configure(bplan.words, 3, 71) and blast_model.bind_stage(bplan), "Bind smart blast fixture")
+	blast_model.cells.clear()
+	var origin := {"id": 9999, "column": 3, "row": 4}
+	# Fill all 8 adjacent cells: 7 isolated roots of word1 (no picture), 1 root of word0 whose picture is at (0,0).
+	var matchable_tile: Dictionary = blast_model._new_word_root(word0, 0)
+	matchable_tile.merge({"column": 2, "row": 3, "age": 100.0, "settling": false, "arrival": false, "falling": false}, true)
+	blast_model.cells.append(matchable_tile)
+	var partner_pic: Dictionary = blast_model._new_picture_tile(word0, 0)
+	partner_pic.merge({"column": 0, "row": 0, "age": 100.0, "settling": false, "arrival": false, "falling": false}, true)
+	blast_model.cells.append(partner_pic)
+	for pos: Vector2i in [Vector2i(3, 3), Vector2i(4, 3), Vector2i(2, 4), Vector2i(4, 4), Vector2i(2, 5), Vector2i(3, 5), Vector2i(4, 5)]:
+		var iso: Dictionary = blast_model._new_word_root(word1, 0)
+		iso.merge({"column": pos.x, "row": pos.y, "age": 100.0, "settling": false, "arrival": false, "falling": false}, true)
+		blast_model.cells.append(iso)
+	var picked: Array[int] = blast_model._blast_target_ids(origin, 1)
+	check(picked.size() == 2 and int(matchable_tile.id) in picked,
+		"Campaign blast prioritizes adjacent neighbors that have legal partners on the board")
 
 
 func _settle_ui() -> void:

@@ -1215,7 +1215,7 @@ func _test_merging_and_collection() -> void:
 
 
 func _test_rare_coin_drop_boundary() -> void:
-	var chances: Array[float] = [0.0, 0.02, 0.04, 0.12, 0.20, 0.30, 0.40, 0.50, 0.80]
+	var chances: Array[float] = [0.0, 0.12, 0.22, 0.32, 0.42, 0.52, 0.62, 0.72, 0.85]
 	var amounts: Array[int] = [0, 50, 100, 150, 200, 250, 300, 350, 450]
 	var rejected_model = _model([_word("cat")], false)
 	_board(rejected_model, ["cat", "picture:cat"])
@@ -1280,7 +1280,7 @@ func _test_rare_coin_drop_boundary() -> void:
 func _test_collection_without_coin_drop() -> void:
 	var model = _model([_word("cat")], false)
 	model.cells.assign([_reward_tile(1000, "cat", 0, 7, 2, 4, _word("cat"))])
-	model._coin_rng.seed = _coin_seed_between(0.1, 0.9)
+	model._coin_rng.seed = _coin_seed_between(0.2, 0.9)
 	var calls: Array = []
 	model.credit_collection = func(receipt: String, coins: int) -> Dictionary:
 		calls.append([receipt, coins])
@@ -1327,7 +1327,7 @@ func _test_rare_coin_drop_retry_and_pause() -> void:
 	check(calls == [[receipt, 50]] and model.cells.size() == 1 and model.collected_coins == 0
 		and int(model._collection_coin_rewards[receipt]) == 50,
 		"a failed wallet keeps the winning outcome and the original word without granting rewards")
-	model._coin_rng.seed = _coin_seed_between(0.1, 0.9)
+	model._coin_rng.seed = _coin_seed_between(0.2, 0.9)
 	var retry_rng_state: int = model._coin_rng.state
 	check(model.collect(1000) and model._coin_rng.state == retry_rng_state and int(model.fusions[0].coins) == 50,
 		"retrying a winning collection reuses its outcome without consuming even a losing next roll")
@@ -1356,7 +1356,7 @@ func _test_rare_coin_drop_batch() -> void:
 	var mixed_seed: int = -1
 	for seed_value in range(100000):
 		probe.seed = seed_value
-		if probe.randf() >= 0.02 and probe.randf() < 0.02 and probe.randf() >= 0.02:
+		if probe.randf() >= 0.12 and probe.randf() < 0.12 and probe.randf() >= 0.12:
 			mixed_seed = seed_value
 			break
 	check(mixed_seed >= 0, "a real seeded batch contains nonwinning, winning, and nonwinning words")
@@ -1411,7 +1411,7 @@ func _test_rare_coin_drop_frequency_and_independence() -> void:
 	var wins: int = 0
 	const SAMPLES: int = 20000
 	for sample in range(SAMPLES):
-		var expected_win: bool = probe.randf() < 0.02
+		var expected_win: bool = probe.randf() < 0.12
 		wins += int(expected_win)
 		for model in [small, large]:
 			var mass: int = 2 if model == small else 12
@@ -1423,8 +1423,8 @@ func _test_rare_coin_drop_frequency_and_independence() -> void:
 				"every collection draws exactly once with mass-independent odds and an independent board RNG")
 			# Commit the normal transaction directly; probability checks do not need animation frames.
 			model._complete_operation(str(model.fusions[0].attempt_id))
-	check(wins >= 280 and wins <= 520,
-		"twenty thousand deterministic collection chances keep the long-run rate near two percent")
+	check(wins >= 2100 and wins <= 2700,
+		"twenty thousand deterministic collection chances keep the long-run rate near twelve percent")
 	check(small.collected_coins == wins * 50 and large.collected_coins == wins * 50
 		and small.cleared_pairs == SAMPLES and large.cleared_pairs == SAMPLES,
 		"rare bonuses are identical for two-piece and larger words and leaving most collections coin-free")
@@ -2797,8 +2797,8 @@ func _test_repeated_merge_cell_size() -> void:
 		_assert_board(model, "level %d ordinary geometry" % level)
 	check(current.width == 1 and current.height == 1 and current.merge_level == 9,
 		"The highest merged level keeps precisely the ordinary source size")
-	check(Model.coins_for_tile(current) == 450 and is_equal_approx(Model.coin_drop_chance_for_tile(current), 0.80),
-		"The real Lv9 upgrade chain grants an eighty-percent chance of its 450-coin reward")
+	check(Model.coins_for_tile(current) == 450 and is_equal_approx(Model.coin_drop_chance_for_tile(current), 0.85),
+		"The real Lv9 upgrade chain grants an eighty-five-percent chance of its 450-coin reward")
 
 func _test_target_placement() -> void:
 	var model = _model([_word("cat")])

@@ -169,6 +169,11 @@ func check_standalone() -> void:
 	backdrop.set_ambient_active(false)
 	backdrop.set_reduced_motion(false)
 	await check_frozen(backdrop, "Enabling motion in an inactive garden")
+	for chapter in range(1, 12):
+		backdrop.set_chapter(chapter)
+		check(int(backdrop.snapshot().chapter) == chapter,
+			"Chapter %d applies its distinct themed backdrop state" % chapter)
+	backdrop.set_chapter(0)
 	holder.free()
 	await process_frame
 

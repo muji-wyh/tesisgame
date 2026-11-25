@@ -55,6 +55,7 @@ func _check_mode(app, mode: String) -> void:
 		root.size = dimensions
 		await settle()
 		var s: float = app.Style.ui_scale(app)
+		var size_paused: bool = mode == "word_jelly" and bool(view.get("_layout_too_small"))
 		var button_rect: Rect2 = pause_button.get_global_rect()
 		check(pause_button == view.finish_button and pause_button.is_visible_in_tree() and not pause_button.disabled
 			and app._header.get_global_rect().grow(0.1).encloses(button_rect)
@@ -119,11 +120,12 @@ func _check_mode(app, mode: String) -> void:
 			resume_event.pressed = pressed
 			root.push_input(resume_event, true)
 			view._process(0.03)
-		check(not app._jelly_pause_open() and not view.game.paused and app._round_id == round_id,
+		check(not app._jelly_pause_open() and view.game.paused == size_paused and app._round_id == round_id,
 			mode + ": Resume restores the same round at the exact paused clock")
 		var elapsed: float = view.game.spawn_elapsed
 		view._process(0.10)
-		check(view.game.spawn_elapsed > elapsed, mode + ": supply resumes only after deliberate Resume")
+		check((view.game.spawn_elapsed == elapsed if size_paused else view.game.spawn_elapsed > elapsed),
+			mode + ": supply resumes only after deliberate Resume")
 	_key(app, KEY_P)
 	check(app._jelly_pause_open(), mode + ": P pauses the live Jelly game")
 	_key(app, KEY_ESCAPE)

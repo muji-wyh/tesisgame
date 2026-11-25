@@ -121,7 +121,10 @@ func set_framing(height: float, center_y: float) -> void:
 	_frame_center_y = center_y
 	_camera.size = height
 	_camera.position = Vector3(0.0, center_y, 8.0)
-	_camera.look_at(Vector3(0.0, center_y, 0.0))
+	if _camera.is_inside_tree():
+		_camera.look_at(Vector3(0.0, center_y, 0.0))
+	else:
+		_camera.look_at_from_position(_camera.position, Vector3(0.0, center_y, 0.0))
 	if _loaded:
 		render_target_update_mode = SubViewport.UPDATE_ONCE
 
