@@ -46,11 +46,14 @@ const DROP_COUNT: int = COLUMNS
 const UPCOMING_COUNT: int = COLUMNS
 const SETTLE_SECONDS: float = 0.36
 const FALL_SPEED_SCALE: float = 1.4
+const FILL_STREAM_SPEED_SCALE: float = 2.6
+const FILL_STREAM_STAGGER: float = 0.025
 const FALL_CONTACT_RATIO: float = 0.70 / FALL_SPEED_SCALE
 const DRAG_GRAVITY_DELAY_SECONDS: float = 0.60
 const ARRIVAL_STAGGER: float = 0.15
 const ARRIVAL_SLOT_CLEARANCE: float = 0.36
 const ARRIVAL_ORDER: Array[int] = [0, 4, 1, 5, 2, 6, 3]
+const STAGE_WARNING_SECONDS: float = 10.0
 const FUSION_SECONDS: float = 0.76
 const COLLECT_SECONDS: float = 0.42
 const POP_SECONDS: float = 0.18
@@ -427,8 +430,9 @@ func bind_stage(plan: Dictionary) -> bool:
 	stage_run.boss_objective = boss.active() and not bool(boss.definition.get("intro", false))
 	_stage_spawn_interval = float(plan.spawn_interval)
 	fall_speed_scale = float(plan.fall_speed_scale)
+	fill_mode = true
+	full_elapsed = -1.0
 	if stage_run.kind == "challenge":
-		fill_mode = true
 		_sync_challenge_pressure()
 	_schedule_spawn_interval()
 	spawn_elapsed = 0.0
@@ -439,6 +443,10 @@ func bind_stage(plan: Dictionary) -> bool:
 
 func stage_ending() -> bool:
 	return _stage_ending
+
+
+func full_board_danger_enabled() -> bool:
+	return stage_run == null
 
 
 func fill_mode_locked() -> bool:
@@ -2327,17 +2335,27 @@ func step(delta: float) -> void:
 			if time_scale > 0.0:
 				consumed = minf(consumed, maxf(0.0, boundary - float(active.elapsed)) / time_scale)
 		var full: bool = not _has_board_space()
+		var full_danger_allowed: bool = full_board_danger_enabled()
 		var ending_wait: bool = _finish_after_collection_commit or _stage_ending
-		if full and full_elapsed < 0.0 and _settling_remaining() <= EPSILON and not powerup_running and not impact_running and not ending_wait:
+		if full_danger_allowed and full and full_elapsed < 0.0 and _settling_remaining() <= EPSILON and not powerup_running and not impact_running and not ending_wait:
 			_begin_full_warning()
 			if not _can_continue(generation):
 				break
-		var danger_running: bool = full_elapsed >= 0.0 and not powerup_running and not impact_running and not ending_wait and pending_boon_options.is_empty() \
+		if not full_danger_allowed and full_elapsed >= 0.0:
+			full_elapsed = -1.0
+		var danger_running: bool = full_danger_allowed and full_elapsed >= 0.0 and not powerup_running and not impact_running and not ending_wait and pending_boon_options.is_empty() \
 			and (stage_run == null or not collection_batch_active() and not _has_pending_collection_commit())
 		var next_second: float = minf(full_warning_seconds(), floorf(full_elapsed + EPSILON) + 1.0)
+		var stage_tick_before: int = ceili(stage_run.remaining) if stage_clock and stage_run.remaining <= STAGE_WARNING_SECONDS + EPSILON else -1
+		if stage_clock and stage_run.remaining > EPSILON and stage_run.remaining <= STAGE_WARNING_SECONDS + EPSILON:
+			var next_stage_tick: float = maxf(0.0, float(ceili(stage_run.remaining) - 1))
+			if stage_run.remaining - next_stage_tick > EPSILON:
+				consumed = minf(consumed, stage_run.remaining - next_stage_tick)
+		elif stage_clock and stage_run.remaining > STAGE_WARNING_SECONDS + EPSILON:
+			consumed = minf(consumed, stage_run.remaining - STAGE_WARNING_SECONDS)
 		if danger_running:
 			consumed = minf(consumed, maxf(0.0, next_second - full_elapsed))
-		elif full and not powerup_running and not impact_running and not ending_wait and pending_boon_options.is_empty():
+		elif full_danger_allowed and full and not powerup_running and not impact_running and not ending_wait and pending_boon_options.is_empty():
 			var settling: float = _settling_remaining()
 			if settling > EPSILON:
 				consumed = minf(consumed, maxf(0.0, settling))
@@ -2387,7 +2405,14 @@ func step(delta: float) -> void:
 		if _stage_grace_remaining > EPSILON and not paused and pending_boon_options.is_empty():
 			_stage_grace_remaining = maxf(0.0, _stage_grace_remaining - consumed)
 		if stage_clock:
+			var before_remaining: float = stage_run.remaining
 			stage_run.advance(consumed)
+			if stage_run.outcome.is_empty() and stage_run.remaining > EPSILON and stage_run.remaining <= STAGE_WARNING_SECONDS + EPSILON:
+				var tick_after: int = ceili(stage_run.remaining)
+				if (before_remaining > STAGE_WARNING_SECONDS + EPSILON) or (stage_tick_before > 0 and tick_after < stage_tick_before):
+					cue_requested.emit("danger")
+					if not _can_continue(generation):
+						break
 		_advance_boss(0.0 if auto_impact_running else consumed, stage_clock)
 		if combo_running:
 			_combo_remaining = maxf(0.0, _combo_remaining - consumed)
@@ -2442,13 +2467,15 @@ func step(delta: float) -> void:
 				break
 			continue
 		var blocked: bool = not _has_board_space()
+		if not full_danger_allowed:
+			full_elapsed = -1.0
 		if full_elapsed >= 0.0 and not blocked:
 			full_elapsed = -1.0
-		if blocked and full_elapsed < 0.0 and _settling_remaining() <= EPSILON:
+		if full_danger_allowed and blocked and full_elapsed < 0.0 and _settling_remaining() <= EPSILON:
 			_begin_full_warning()
 			if not _can_continue(generation):
 				break
-		if full_elapsed >= 0.0:
+		if full_danger_allowed and full_elapsed >= 0.0:
 			if danger_running and full_elapsed + EPSILON >= next_second:
 				if full_elapsed + EPSILON >= full_warning_seconds():
 					finish_round("danger")
@@ -2839,8 +2866,12 @@ func is_contactable(tile: Dictionary) -> bool:
 	return bool(tile.get("falling", false)) or tile.has("settle_seconds")
 
 
+static func arrival_speed_scale(tile: Dictionary) -> float:
+	return FILL_STREAM_SPEED_SCALE if bool(tile.get("fill_stream", false)) else FALL_SPEED_SCALE
+
+
 static func arrival_contact_at(tile: Dictionary) -> float:
-	return arrival_delay(tile) + Motion.contact_at(tile, FALL_SPEED_SCALE)
+	return arrival_delay(tile) + Motion.contact_at(tile, arrival_speed_scale(tile))
 
 
 static func arrival_delay(tile: Dictionary) -> float:
@@ -2851,16 +2882,17 @@ static func arrival_slot_clearance(tile: Dictionary) -> float:
 	if not bool(tile.get("fill_stream", false)):
 		return ARRIVAL_SLOT_CLEARANCE
 	var speed: float = clampf(float(tile.get("motion_speed_scale", 1.0)), 1.0, 2.2)
-	return sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed / FALL_SPEED_SCALE
+	return sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed / arrival_speed_scale(tile)
 
 
-static func _scheduled_arrival_delay(slot: int) -> float:
-	return float(maxi(0, ARRIVAL_ORDER.find(slot))) * ARRIVAL_STAGGER
+static func _scheduled_arrival_delay(slot: int, streaming: bool = false) -> float:
+	var stagger: float = FILL_STREAM_STAGGER if streaming else ARRIVAL_STAGGER
+	return float(maxi(0, ARRIVAL_ORDER.find(slot))) * stagger
 
 
 static func settle_duration(tile: Dictionary) -> float:
 	if bool(tile.get("arrival", false)):
-		return arrival_delay(tile) + Motion.ready_at(tile, FALL_SPEED_SCALE)
+		return arrival_delay(tile) + Motion.ready_at(tile, arrival_speed_scale(tile))
 	return float(tile.get("settle_seconds", SETTLE_SECONDS))
 
 
@@ -2934,6 +2966,8 @@ func snapshot() -> Dictionary:
 
 func finish_round(reason: String = "finished") -> Dictionary:
 	if stage_run != null and not _stage_finalizing and phase != "finished":
+		if reason == "danger" and not full_board_danger_enabled():
+			return _result.duplicate(true)
 		if _powerup_purchasing:
 			_finish_after_purchase = true
 			return _result.duplicate(true)
@@ -3690,7 +3724,7 @@ func _arrival_entry_delays(streaming: bool = false) -> Dictionary:
 			var slot: int = int(tile.get("arrival_index", 0))
 			var departure: float = arrival_delay(tile) - float(tile.age)
 			var speed: float = clampf(float(tile.get("motion_speed_scale", 1.0)), 1.0, 2.2) if streaming else 1.0
-			var clearance: float = departure + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed / FALL_SPEED_SCALE
+			var clearance: float = departure + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed / arrival_speed_scale(tile)
 			for column in range(int(tile.column), int(tile.column) + int(tile.width)):
 				column_delays[column] = maxf(float(column_delays.get(column, -INF)), clearance)
 			slot_delays[slot] = maxf(float(slot_delays.get(slot, -INF)),
@@ -3749,6 +3783,9 @@ func _spawn_drop(streaming: bool = false) -> void:
 			tile.fill_stream = true
 			if slot_delays.has(index):
 				tile.arrival_delay = 0.0
+			else:
+				var stream_stagger: float = _scheduled_arrival_delay(index, true)
+				tile.arrival_delay = stream_stagger / fall_speed_scale if stage_run != null else stream_stagger
 		else:
 			tile.erase("fill_stream")
 		tile.arrival_delay = maxf(float(tile.arrival_delay), float(slot_delays.get(index, 0.0)))
@@ -3757,7 +3794,7 @@ func _spawn_drop(streaming: bool = false) -> void:
 				tile.arrival_delay = maxf(float(tile.arrival_delay), float(column_delays[column]))
 		for column in range(int(tile.column), int(tile.column) + int(tile.width)):
 			var speed: float = clampf(float(tile.get("motion_speed_scale", 1.0)), 1.0, 2.2) if streaming else 1.0
-			column_delays[column] = float(tile.arrival_delay) + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed / FALL_SPEED_SCALE
+			column_delays[column] = float(tile.arrival_delay) + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed / arrival_speed_scale(tile)
 	if generated_tiles > previous_generated:
 		# Completed collections set the next packet's pace. Keep the current
 		# Next timer intact so a late Collect cannot unexpectedly release it.
@@ -4487,12 +4524,14 @@ func danger_recovery_snapshot() -> Dictionary:
 			if occupied.has(row * COLUMNS + column):
 				break
 			reachable += 1
-	return {"active": full_elapsed >= 0.0, "duration": full_warning_seconds(),
+	return {"active": full_board_danger_enabled() and full_elapsed >= 0.0, "duration": full_warning_seconds(),
 		"required_spaces": target, "empty_spaces": empty_spaces, "reachable_spaces": reachable,
 		"spaces_needed": maxi(0, target - empty_spaces), "can_receive_next": _has_free_cell()}
 
 
 func _begin_full_warning() -> void:
+	if not full_board_danger_enabled():
+		return
 	_full_warning_limit = (stage_run.full_warning_seconds() if stage_run != null else FULL_SECONDS) \
 		+ float(rpg_profile.get("danger_bonus", 0.0))
 	full_elapsed = 0.0

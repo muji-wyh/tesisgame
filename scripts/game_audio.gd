@@ -74,8 +74,12 @@ const JELLY_PATHS := {
 	"release": "res://assets/imported-audio/chest-reference/step.wav",
 	"land": "res://assets/audio/jelly-match/land.wav",
 	"contact": "res://assets/imported-audio/jelly-interaction/contact.wav",
-	"contact_match": "res://assets/imported-audio/jelly-interaction/contact.wav",
+	"contact_match": "res://assets/audio/jelly-impact/contact-snap.wav",
 	"merge": "res://assets/imported-audio/jelly-interaction/merge-together-v3.wav",
+	"merge-snap": "res://assets/audio/jelly-impact/merge-snap.wav",
+	"merge-thump": "res://assets/audio/jelly-impact/merge-thump.wav",
+	"collect-charge": "res://assets/audio/jelly-impact/collect-charge.wav",
+	"wrong-bounce": "res://assets/audio/jelly-impact/wrong-bounce.wav",
 	"danger": "res://assets/audio/jelly-match/danger.wav",
 	"reward": "res://assets/imported-audio/chest-reference/reward.wav",
 	"assemble": "res://assets/imported-audio/chest-reference/step-detail.wav",
@@ -87,17 +91,20 @@ const JELLY_GAINS := {
 	"boss-taunt": 0.28, "boss-throw": 0.32, "boss-hit": 0.44, "boss-hit-heavy": 0.56,
 	"boss-hit-power": 0.52, "boss-ward-break": 0.50, "boss-clone-pop": 0.42, "boss-kick": 0.52,
 	"boss-unlock": 0.46, "boss-thaw": 0.40, "boss-trick": 0.35, "boss-win": 0.52,
-	"pick": 0.64, "release": 0.38, "land": 0.35, "contact": 1.0, "contact_match": 0.82,
-	"merge": 1.0, "pop": 0.90, "danger": 0.52, "reward": 0.36,
+	"pick": 0.64, "release": 0.38, "land": 0.35, "contact": 1.0, "contact_match": 0.78,
+	"merge": 1.0, "merge-snap": 0.86, "merge-thump": 0.72, "collect-charge": 0.42, "wrong-bounce": 0.66,
+	"pop": 0.90, "danger": 0.52, "reward": 0.36,
 	"assemble": 0.28,
 	"jelly-collect-lv2": 0.90, "jelly-collect-lv3": 0.90,
 	"jelly-collect-lv4": 0.90, "jelly-collect-lv5": 0.90,
 	"jelly-collect-lv6": 0.90, "jelly-collect-lv7": 0.90,
 	"jelly-collect-lv8": 0.90, "jelly-collect-lv9": 0.90,
 }
-const JELLY_SECONDARY_CUES := ["pick", "release", "land", "contact", "contact_match", "blast_mark"]
+const JELLY_SECONDARY_CUES := ["pick", "release", "land", "contact", "contact_match", "blast_mark", "collect-charge", "wrong-bounce"]
 const JELLY_SPEECH_DB: float = -6.0
 const JELLY_LEVEL_CHANNELS: int = 8
+const JELLY_IMPACT_CHANNELS: int = 6
+const MAJOR_SCALE: Array[float] = [1.0, 1.122462, 1.259921, 1.334840, 1.498307, 1.681793, 1.887749, 2.0]
 const WORD_JELLY_COMBO_PATHS: Array[String] = [
 	"res://assets/audio/jelly-combo/step.wav",
 	"res://assets/audio/jelly-combo/bright.wav",
@@ -191,7 +198,9 @@ var _round_celebration_next_player: int = 0
 var _jelly_players: Array[AudioStreamPlayer] = []
 var _jelly_level_players: Array[AudioStreamPlayer] = []
 var _jelly_combo_players: Array[AudioStreamPlayer] = []
+var _jelly_impact_players: Array[AudioStreamPlayer] = []
 var _jelly_combo_next: int = 0
+var _jelly_impact_next: int = 0
 var _jelly_level_next: int = 0
 var _jelly_gains: Dictionary = {}
 var _jelly_cues: Dictionary = {}
@@ -213,6 +222,8 @@ func _ready() -> void:
 	set_process(false)
 	_pop_slice_rng.randomize()
 	_stream(JELLY_PATHS["pop"])
+	for impact_cue: String in ["merge-snap", "merge-thump", "collect-charge", "contact_match", "wrong-bounce"]:
+		_stream(JELLY_PATHS[impact_cue])
 	for path: String in WORD_JELLY_COMBO_PATHS:
 		_stream(path)
 	for path in POP_SLICE_PATHS:
@@ -558,18 +569,65 @@ func play_jelly_cue(cue_name: String) -> void:
 		if count_text.is_valid_int():
 			play_word_jelly_combo(int(count_text))
 		return
+	if cue_name.begins_with("merge-impact:"):
+		# 0ms A/V-locked 3-layer Nintendo merge impact:
+		# (1) crisp snap pop, (2) bouncy low-mid rubbery thump, (3) harmonic scale chime.
+		var parts: PackedStringArray = cue_name.split(":")
+		var kind: String = parts[1] if parts.size() > 1 else "word"
+		var lv: int = int(parts[2]) if parts.size() > 2 and parts[2].is_valid_int() else 1
+		var cmb: int = int(parts[3]) if parts.size() > 3 and parts[3].is_valid_int() else 0
+		var is_upg: bool = kind == "upgrade"
+		var scale_idx: int = clampi((lv - 1) + maxi(0, cmb - 1), 0, PENTATONIC_SCALE.size() - 1)
+		var pent: float = PENTATONIC_SCALE[scale_idx]
+		var snap_pitch: float = clampf(0.96 + float(mini(lv, 8)) * 0.045 + float(mini(cmb, 6)) * 0.03, 0.94, 1.42)
+		_play_impact_layer(str(JELLY_PATHS["merge-snap"]), 0.72 if is_upg else (0.64 if kind == "word" else 0.50), snap_pitch)
+		var thump_gain: float = clampf(0.56 + float(mini(lv, 8)) * 0.035, 0.56, 0.84) if is_upg else (0.48 if kind == "word" else 0.34)
+		var thump_pitch: float = clampf(1.04 - float(mini(lv, 8)) * 0.025, 0.82, 1.06)
+		_play_impact_layer(str(JELLY_PATHS["merge-thump"]), thump_gain, thump_pitch)
+		if is_upg:
+			var chime_path: String = WORD_JELLY_COMBO_PATHS[2 if lv >= 4 else 1]
+			_play_impact_layer(chime_path, 0.44 + minf(0.14, float(lv) * 0.015), clampf(0.94 + (pent - 1.0) * 0.62, 0.94, 1.56))
+		elif kind == "word":
+			_play_impact_layer(WORD_JELLY_COMBO_PATHS[0], 0.34, clampf(0.96 + (pent - 1.0) * 0.48, 0.96, 1.42))
+		else:
+			_play_impact_layer(WORD_JELLY_COMBO_PATHS[0], 0.20, clampf(1.0 + float(mini(cmb, 5)) * 0.05, 1.0, 1.25))
+		return
+	if cue_name.begins_with("collect-charge:"):
+		var lv_str: String = cue_name.trim_prefix("collect-charge:")
+		var lv: int = int(lv_str) if lv_str.is_valid_int() else 1
+		var pitch: float = clampf(1.12 - float(mini(lv, 9) - 1) * 0.045, 0.76, 1.15)
+		_play_impact_layer(str(JELLY_PATHS["collect-charge"]), 0.36 + minf(0.18, float(lv - 1) * 0.025), pitch)
+		return
+	if cue_name.begins_with("collect-punch:"):
+		# 0ms A/V-locked punch layer fired alongside the preserved approved collect-pop/lv2..9 audio!
+		var parts: PackedStringArray = cue_name.split(":")
+		var lv: int = int(parts[1]) if parts.size() > 1 and parts[1].is_valid_int() else 1
+		var cmb: int = int(parts[2]) if parts.size() > 2 and parts[2].is_valid_int() else 0
+		var batch_step: int = int(parts[3]) if parts.size() > 3 and parts[3].is_valid_int() else 0
+		var thump_gain: float = clampf(0.42 + float(mini(lv, 9) - 1) * 0.055, 0.42, 0.82) * (0.72 if batch_step > 0 else 1.0)
+		var thump_pitch: float = clampf(1.12 - float(mini(lv, 9) - 1) * 0.035, 0.80, 1.14)
+		_play_impact_layer(str(JELLY_PATHS["merge-thump"]), thump_gain, thump_pitch)
+		if batch_step > 0:
+			# Mario coin-run major scale climb across sequential auto-collect pops!
+			var note: float = MAJOR_SCALE[posmod(batch_step - 1, MAJOR_SCALE.size())]
+			_play_impact_layer(WORD_JELLY_COMBO_PATHS[1 if batch_step >= 4 else 0], 0.30, clampf(0.88 * note, 0.88, 1.82))
+		elif lv >= 2 or cmb >= 2:
+			var note_idx: int = clampi(maxi(lv - 2, cmb - 1), 0, PENTATONIC_SCALE.size() - 1)
+			_play_impact_layer(WORD_JELLY_COMBO_PATHS[2 if lv >= 5 else 1], 0.34, clampf(0.95 * PENTATONIC_SCALE[note_idx], 0.95, 1.65))
+		return
 	if cue_name.begins_with("merge-upgrade:"):
 		var parts: PackedStringArray = cue_name.split(":")
 		var lv: int = int(parts[1]) if parts.size() > 1 and parts[1].is_valid_int() else 2
 		var cmb: int = int(parts[2]) if parts.size() > 2 and parts[2].is_valid_int() else 1
-		_play_impact_accent(WORD_JELLY_COMBO_PATHS[1 if lv < 5 else 2], 0.42 + minf(0.14, float(lv) * 0.015),
+		# Light confirmation chime on accept; main Nintendo crunch hits at MERGE_IMPACT_P via merge-impact.
+		_play_impact_accent(WORD_JELLY_COMBO_PATHS[1 if lv < 5 else 2], 0.24 + minf(0.08, float(lv) * 0.01),
 			clampf(0.96 + float(mini(lv, 8)) * 0.045 + float(mini(cmb, 6)) * 0.025, 0.95, 1.48))
 		return
 	if cue_name.begins_with("merge-chain:"):
 		var cmb_str: String = cue_name.trim_prefix("merge-chain:")
 		var cmb: int = int(cmb_str) if cmb_str.is_valid_int() else 2
 		var pent: float = PENTATONIC_SCALE[clampi(cmb - 1, 0, PENTATONIC_SCALE.size() - 1)]
-		_play_impact_accent(WORD_JELLY_COMBO_PATHS[0], 0.24, clampf(0.92 + (pent - 1.0) * 0.42, 0.92, 1.34))
+		_play_impact_accent(WORD_JELLY_COMBO_PATHS[0], 0.20, clampf(0.92 + (pent - 1.0) * 0.42, 0.92, 1.34))
 		return
 	if muted or not active or not available or not JELLY_PATHS.has(cue_name):
 		return
@@ -624,6 +682,26 @@ func _play_impact_accent(path: String, gain: float, pitch: float) -> void:
 	_jelly_combo_next = (_jelly_combo_next + 1) % WORD_JELLY_COMBO_CHANNELS
 	_jelly_gains[player] = gain
 	_jelly_cues[player] = "impact-layer"
+	player.pitch_scale = clampf(pitch, 0.5, 2.0)
+	_update_jelly_gain()
+	_play(player, path)
+	set_process(true)
+
+
+func _play_impact_layer(path: String, gain: float, pitch: float) -> void:
+	if muted or not active or not available or path.is_empty():
+		return
+	if _jelly_impact_players.is_empty():
+		for index in range(JELLY_IMPACT_CHANNELS):
+			var channel: AudioStreamPlayer = _player(1.0)
+			channel.finished.connect(func() -> void: _jelly_cues.erase(channel))
+			_jelly_impact_players.append(channel)
+	# Dedicated 6-channel impact pool on Master bus: layers snap + thump + chime
+	# concurrently without ever stealing combo, level, warning, or speech lanes.
+	var player: AudioStreamPlayer = _jelly_impact_players[_jelly_impact_next]
+	_jelly_impact_next = (_jelly_impact_next + 1) % JELLY_IMPACT_CHANNELS
+	_jelly_gains[player] = gain
+	_jelly_cues[player] = "impact-foley"
 	player.pitch_scale = clampf(pitch, 0.5, 2.0)
 	_update_jelly_gain()
 	_play(player, path)
@@ -753,7 +831,7 @@ func _update_jelly_gain() -> void:
 		pair_chest_discovery.volume_db = linear_to_db(PAIR_CHEST_DISCOVERY_GAIN) + duck_db
 	if upgrade_milestone != null:
 		upgrade_milestone.volume_db = linear_to_db(float(JELLY_GAINS.goal_complete)) + duck_db
-	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players + _jelly_combo_players:
+	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players + _jelly_combo_players + _jelly_impact_players:
 		player.volume_db = linear_to_db(float(_jelly_gains.get(player, 1.0))) + duck_db
 
 
@@ -769,13 +847,14 @@ func stop_jelly_danger() -> void:
 
 func stop_jelly_sounds() -> void:
 	stop_fragment_sounds()
-	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players + _jelly_combo_players:
+	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players + _jelly_combo_players + _jelly_impact_players:
 		_stop(player)
 		player.stream = null
 	_jelly_cues.clear()
 	_jelly_next_player = 0
 	_jelly_level_next = 0
 	_jelly_combo_next = 0
+	_jelly_impact_next = 0
 
 
 func begin_round_celebration(round_id: String) -> void:
@@ -829,7 +908,7 @@ func stop_round_celebration() -> void:
 		_stop(player)
 		player.stream = null
 		player.volume_db = linear_to_db(float(_round_celebration_gains.get(player, 1.0)))
-	set_process(not _jelly_players.is_empty() or not _jelly_level_players.is_empty() or not _jelly_combo_players.is_empty() or not _coin_players.is_empty() or not _fragment_players.is_empty() \
+	set_process(not _jelly_players.is_empty() or not _jelly_level_players.is_empty() or not _jelly_combo_players.is_empty() or not _jelly_impact_players.is_empty() or not _coin_players.is_empty() or not _fragment_players.is_empty() \
 		or (upgrade_milestone != null and upgrade_milestone.playing) or _upgrade_charging \
 		or (upgrade_charge != null and upgrade_charge.playing))
 	_update_music_gain()
@@ -867,7 +946,7 @@ func _process(delta: float) -> void:
 		or (upgrade_milestone != null and upgrade_milestone.playing) or _upgrade_charging \
 		or (upgrade_charge != null and upgrade_charge.playing)
 	_advance_upgrade_charge(delta)
-	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players + _jelly_combo_players:
+	for player: AudioStreamPlayer in _jelly_players + _jelly_level_players + _jelly_combo_players + _jelly_impact_players:
 		jelly_playing = jelly_playing or player.playing
 	_update_jelly_gain()
 	var coin_playing: bool = false

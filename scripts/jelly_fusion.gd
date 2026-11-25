@@ -60,8 +60,9 @@ func configure(colors: Array, a: int, b: int, surface: Texture2D) -> void:
 	for bead: TextureRect in _beads:
 		bead.texture = surface
 
-func set_impact_flash(value: float) -> void:
+func set_impact_flash(value: float, tint: Color = Color(1.0, 0.995, 0.95)) -> void:
 	_gel.set_shader_parameter("impact_flash", clampf(value, 0.0, 1.0))
+	_gel.set_shader_parameter("impact_tint", Vector3(tint.r, tint.g, tint.b))
 
 func set_contact(kind: String, direction: Vector2, strength: float, reduced: bool) -> void:
 	_gel.set_shader_parameter("contact_kind", 2 if kind == "match" else 1 if kind == "touch" else 0)

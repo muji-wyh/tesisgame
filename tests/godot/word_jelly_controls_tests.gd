@@ -33,7 +33,7 @@ func capture(view, name: String) -> void:
 	await RenderingServer.frame_post_draw
 	var image: Image = root.get_texture().get_image()
 	check(image.save_png(output + "/" + name + ".png") == OK, "Save the real " + name)
-	var area: Rect2 = view._fill_button.get_global_rect().merge(view.collect_button.get_global_rect())
+	var area: Rect2 = view.collect_button.get_global_rect()
 	for button: Control in view.powerup_buttons.values():
 		if button.visible:
 			area = area.merge(button.get_global_rect())
@@ -74,13 +74,13 @@ func geometry(view) -> void:
 			one_column = one_column and is_equal_approx(button.position.x, reference.position.x)
 		check(one_row or one_column,
 			"Paid tools form one even row or column instead of an incomplete two-column grid")
-	var free_area: Rect2 = view._fill_button.get_rect().merge(view.collect_button.get_rect())
+	var free_area: Rect2 = view.collect_button.get_rect()
 	check(is_equal_approx(free_area.position.x, tools.position.x)
 		and is_equal_approx(free_area.size.x, tools.size.x)
-		and is_equal_approx(view._fill_button.size.x * _scale(view), 56.0),
-		"Compact Fill and primary Collect share the paid-tool group without an empty full-row switch")
+		and not view._fill_button.visible,
+		"Primary Collect spans the full paid-tool group with the Fill button retired")
 	if not view._layout_too_small:
-		var actions: Array[Control] = [view._fill_button, view.collect_button]
+		var actions: Array[Control] = [view.collect_button]
 		actions.append_array(visible_tools)
 		for heading: Control in [view._merged_level_badge, view._stage_banner._label]:
 			if not heading.is_visible_in_tree():

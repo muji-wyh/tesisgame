@@ -206,6 +206,8 @@ func test_snatch_recovery() -> void:
 	var restored: Array = model.upcoming.filter(func(item: Dictionary) -> bool: return int(item.get("id", -1)) == id)
 	if restored.is_empty():
 		restored = model._supply.filter(func(item: Dictionary) -> bool: return int(item.get("id", -1)) == id)
+	if restored.is_empty():
+		restored = model.cells.filter(func(item: Dictionary) -> bool: return int(item.get("id", -1)) == id)
 	check(restored.size() == 1 and int(restored[0].fragments) == 3
 		and restored[0].source_word_id == tile.source_word_id,
 		"The exact grabbed identity and carried fragments return once, without orphaning a partner")

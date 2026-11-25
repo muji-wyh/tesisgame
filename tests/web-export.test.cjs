@@ -504,6 +504,9 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
   for (const cue of ['collect-pop', 'land', 'danger']) fixture.writeImport(`assets/audio/jelly-match/${cue}.wav`);
   for (let level = 2; level <= 9; level++) fixture.writeImport(`assets/audio/jelly-match/collect-lv${level}.wav`);
   for (const cue of ['step', 'bright', 'crown']) fixture.writeImport(`assets/audio/jelly-combo/${cue}.wav`);
+  for (const cue of ['merge-snap', 'merge-thump', 'collect-charge', 'contact-snap', 'wrong-bounce']) {
+    fixture.writeImport(`assets/audio/jelly-impact/${cue}.wav`);
+  }
   for (const cue of ['contact', 'merge-together-v3']) fixture.writeImport(`assets/imported-audio/jelly-interaction/${cue}.wav`);
   require('./helpers/pair-feedback-assets.cjs').pairFeedbackFixture(fixture.directory, fixture.writeImport);
   require('./helpers/ui-click-assets.cjs').uiClickFixture(fixture.directory, fixture.writeImport);
@@ -513,14 +516,14 @@ test('the complete Voice Pop reference bank joins the required in-pack audio inv
     fixture.writeImport(`assets/audio/bgm/${theme}.wav`);
   }
   const required = collectRequiredAudio(fixture.directory);
-  assert.equal(required.length, 387);
+  assert.equal(required.length, 392);
   assert.ok(required.every(asset => !asset.source.includes('/jelly-fireworks/')),
     'Deferred top-popover firework recordings are not added to the gameplay release');
   assert.equal(fs.existsSync(path.join(fixture.directory, 'assets/audio/chests')), false,
     'Packaging succeeds without the archived theme recordings');
   assert.ok(required.every(asset => !asset.source.startsWith('res://assets/audio/chests/')),
     'The reviewed shared bank replaces every former theme-specific chest cue');
-  assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction|jelly-finish|jelly-combo|jelly-boss)\//.test(asset.source)).length, 18,
+  assert.equal(required.filter(asset => /\/(jelly-match|jelly-interaction|jelly-finish|jelly-combo|jelly-impact|jelly-boss)\//.test(asset.source)).length, 23,
     'Every Jelly cue is required in the startup pack');
   assert.deepEqual(required.filter(asset => asset.source.includes('/jelly-match/collect-')).map(asset => asset.source),
     ['res://assets/audio/jelly-match/collect-pop.wav',

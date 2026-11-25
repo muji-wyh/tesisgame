@@ -27,6 +27,7 @@ func make_model(seconds: float = 90.0, challenge: bool = false):
 	model.allow_cross_age = true
 	var selected: Array = plan.words.slice(0, 3) if challenge else plan.words
 	check(model.configure(selected, 3, 71) and model.bind_stage(plan), "Bind an actual campaign attempt to normal Jelly physics")
+	model.set_fill_mode(false)
 	model.cells.clear()
 	model.spawn_elapsed = 0.0
 	return model
@@ -165,15 +166,17 @@ func test_challenge_pressure_and_blocked_top() -> void:
 		tile.arrival = false
 		model.cells.append(tile)
 	model.step(0.01)
-	check(model.phase == "playing" and model.stage_run.outcome.is_empty() and model.full_elapsed >= 0.0,
-		"A full challenge starts the flashing danger countdown instead of failing immediately")
-	model.step(model.full_warning_seconds() - 0.1)
-	check(model.phase == "playing" and model.stage_run.outcome.is_empty(),
-		"The board remains playable throughout its actual eight-second Challenge warning")
-	model.step(0.1)
-	check(model.phase == "finished" and model.stage_run.outcome == "blocked"
+	check(model.phase == "playing" and model.stage_run.outcome.is_empty() and model.full_elapsed < 0.0,
+		"A full Challenge board stays playable without starting a full-board danger countdown")
+	model.step(12.0)
+	check(model.phase == "playing" and model.stage_run.outcome.is_empty() and model.full_elapsed < 0.0,
+		"Full board never causes Game Over in Challenge while timer remains")
+	model.stage_run.advance(model.stage_run.remaining)
+	model.step(0.05)
+	advance_until_ended(model)
+	check(model.phase == "finished" and model.stage_run.outcome == "timeout"
 		and model.finish_round().campaign.stars == 0,
-		"An expired full-board countdown ends through the normal failed campaign sweep")
+		"Only stage timer expiry ends Challenge in Game Over")
 
 
 func test_main_stage_full_warning() -> void:
@@ -187,20 +190,21 @@ func test_main_stage_full_warning() -> void:
 		model.cells.append(tile)
 	model.step(0.01)
 	check(model.phase == "playing" and model.stage_run.outcome.is_empty()
-		and model.full_elapsed >= 0.0 and model.stage_run.remaining < 90.0,
-		"A numbered stage keeps its independent countdown while the full-board warning starts")
-	model.step(3.0)
-	var warning: float = model.full_elapsed
+		and model.full_elapsed < 0.0 and model.stage_run.remaining < 90.0,
+		"A full numbered stage keeps running on its timer without starting a full-board warning")
+	model.step(15.0)
+	check(model.phase == "playing" and model.stage_run.outcome.is_empty() and model.full_elapsed < 0.0,
+		"A full numbered stage never ends early from full-board danger")
 	var deadline: float = model.stage_run.remaining
 	model.set_paused(true)
 	model.step(20.0)
-	check(model.full_elapsed == warning and model.stage_run.remaining == deadline,
-		"Explicit pause freezes both the stage deadline and full-board warning")
+	check(model.stage_run.remaining == deadline,
+		"Explicit pause freezes the stage deadline")
 	model.set_paused(false)
-	model.cells.pop_front()
-	model.step(0.01)
-	check(model.full_elapsed < 0.0 and model.stage_run.outcome.is_empty(),
-		"Making room cancels the warning without ending the stage")
+	model.stage_run.advance(model.stage_run.remaining)
+	model.step(0.05)
+	check(model.stage_ending() and model.stage_run.outcome == "timeout",
+		"Stage timer reaching zero triggers timeout Game Over")
 
 
 func test_full_board_pending_collection() -> void:

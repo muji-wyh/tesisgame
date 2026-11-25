@@ -37,7 +37,11 @@ var _contact_kind: String = "none"
 var _base_stretch := Vector2.ONE
 var _ripple_offset := Vector2.ZERO
 var _ripple_stretch := Vector2.ONE
+var _ripple_rotation: float = 0.0
+var _board_recoil := Vector2.ZERO
+var _visual_lift_y: float = 0.0
 var _impact_flash: float = 0.0
+var _impact_tint := Color(1.0, 0.995, 0.94)
 var _content_offset := Vector2.ZERO
 var _contact_outline := PackedVector2Array()
 var _surface_parameters: Dictionary = {}
@@ -150,12 +154,37 @@ func _refresh_feedback(reset_motion: bool = false) -> void:
 	_mark = mark
 	if _lift != null:
 		_lift.kill()
-	_visual.position = Vector2.ZERO
+	_visual_lift_y = 0.0
+	_apply_visual_offset()
 	if mark == 2 and not _reduced_motion and is_inside_tree():
 		var rise: float = minf(size.y * 0.035, 3.0 / Style.ui_scale(self))
 		_lift = create_tween()
-		_lift.tween_property(_visual, "position:y", -rise * 1.2, 0.09).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-		_lift.tween_property(_visual, "position:y", -rise, 0.14).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+		_lift.tween_method(_set_visual_lift_y, 0.0, -rise * 1.2, 0.09).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		_lift.tween_method(_set_visual_lift_y, -rise * 1.2, -rise, 0.14).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+
+
+func _set_visual_lift_y(value: float) -> void:
+	_visual_lift_y = value
+	_apply_visual_offset()
+
+
+func _apply_visual_offset() -> void:
+	var target_pos := Vector2(_board_recoil.x, _visual_lift_y + _board_recoil.y)
+	if _visual.position != target_pos:
+		_visual.position = target_pos
+
+
+func set_board_recoil(offset: Vector2, reduced: bool = false) -> void:
+	var next: Vector2 = Vector2.ZERO if reduced else offset
+	if _board_recoil.is_equal_approx(next):
+		return
+	_board_recoil = next
+	# Board-wide recoil shifts the visual subtree and shadow without moving the
+	# Control hit rectangle or invalidating settled body caches.
+	_apply_visual_offset()
+	_update_support(_support_lift if is_finite(_support_lift) else 0.0,
+		_support_compression if is_finite(_support_compression) else 0.0,
+		_support_visible, _support_drop if is_finite(_support_drop) else 0.0)
 
 func set_chest_texture(texture: Texture2D) -> void:
 	_badge.texture = texture
@@ -189,31 +218,39 @@ func _set_surface_parameter(parameter: StringName, value: Variant) -> void:
 	# the rim directly, so their feedback parameters stay outside this cache.
 	if _surface_parameters.has(parameter) and _surface_parameters[parameter] == value:
 		return
-	var transient: bool = parameter in [&"bend", &"beat", &"preview_pressure", &"preview_sway", &"preview_pull", &"contact_strength", &"impact_flash"]
+	var transient: bool = parameter in [&"bend", &"beat", &"preview_pressure", &"preview_sway", &"preview_pull", &"contact_strength", &"impact_flash", &"impact_tint"]
 	_invalidate_idle_cache(not transient)
 	_surface_parameters[parameter] = value
 	_gel.set_shader_parameter(parameter, value)
 
-func set_impact_flash(strength: float, reduced: bool = false) -> void:
+func set_impact_flash(strength: float, reduced: bool = false, tint: Color = Color(1.0, 0.995, 0.94)) -> void:
 	var next: float = 0.0 if reduced else clampf(strength, 0.0, 1.0)
-	if is_equal_approx(_impact_flash, next):
+	if is_equal_approx(_impact_flash, next) and _impact_tint.is_equal_approx(tint):
 		return
 	_impact_flash = next
+	_impact_tint = tint
 	if next > 0.001:
 		_invalidate_idle_cache(false)
 	_set_surface_parameter(&"impact_flash", next)
+	_set_surface_parameter(&"impact_tint", Vector3(tint.r, tint.g, tint.b))
 
-func set_board_ripple(offset: Vector2, stretch: Vector2 = Vector2.ONE, reduced: bool = false) -> void:
+func set_board_ripple(offset: Vector2, stretch: Vector2 = Vector2.ONE, reduced: bool = false, tilt: float = 0.0) -> void:
 	var next_offset: Vector2 = Vector2.ZERO if reduced else offset
 	var next_stretch: Vector2 = Vector2.ONE if reduced else stretch
-	if _ripple_offset.is_equal_approx(next_offset) and _ripple_stretch.is_equal_approx(next_stretch):
+	var next_rot: float = 0.0 if reduced else tilt
+	if _ripple_offset.is_equal_approx(next_offset) and _ripple_stretch.is_equal_approx(next_stretch) and is_equal_approx(_ripple_rotation, next_rot):
 		return
 	_ripple_offset = next_offset
 	_ripple_stretch = next_stretch
+	_ripple_rotation = next_rot
 	if _contact_kind == "none":
+		var pivot: Vector2 = size * Vector2(0.5, Motion.FOOT_Y)
+		if _surface.pivot_offset != pivot:
+			_surface.pivot_offset = pivot
 		_surface.position = _ripple_offset
 		_surface.scale = _base_stretch * _ripple_stretch
-	if not _ripple_offset.is_zero_approx() or not _ripple_stretch.is_equal_approx(Vector2.ONE):
+		_surface.rotation = _ripple_rotation
+	if not _ripple_offset.is_zero_approx() or not _ripple_stretch.is_equal_approx(Vector2.ONE) or not is_zero_approx(_ripple_rotation):
 		_invalidate_idle_cache(false)
 
 func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
@@ -263,19 +300,22 @@ func set_contact(kind_value: String, direction: Vector2 = Vector2.ZERO, strength
 	_gel.set_shader_parameter("rim_width", 1.0)
 	if reduced:
 		_surface.scale = Vector2.ONE
+		_surface.rotation = 0.0
 		if _lift != null:
 			_lift.kill()
+		_visual_lift_y = 0.0
+		_board_recoil = Vector2.ZERO
 		_visual.position = Vector2.ZERO
 		return
-	# A match leans toward its partner; only neutral/rejected contact recoils.
-	var pull: float = strength * (0.035 if kind_value == "match" else -0.16)
+	# A match leans eagerly toward its partner while staying tightly attached to the pointer; only neutral/rejected contact recoils.
+	var pull: float = strength * (0.04 if kind_value == "match" else -0.16)
 	_surface.position = direction * size * pull
 	_content_offset = _surface.position
 	_picture.position += _content_offset
 	_label.position += _content_offset
 	# Pressure changes the gel skin, never the word, picture or hit rectangle.
 	var along := Vector2(absf(direction.x), absf(direction.y))
-	_surface.scale = _base_stretch * (Vector2.ONE + (along * 2.0 - Vector2.ONE) * strength * (0.08 if kind_value == "match" else -0.10))
+	_surface.scale = _base_stretch * (Vector2.ONE + (along * 2.0 - Vector2.ONE) * strength * (0.14 if kind_value == "match" else -0.11))
 
 
 func set_support(lift: float = 0.0, compression: float = 0.0, visible_shadow: bool = true) -> void:
@@ -293,7 +333,7 @@ func _update_support(lift: float, compression: float, visible_shadow: bool, drop
 	# The source-painted shadow stays on the support while the body descends.
 	var distance: float = clampf(lift / maxf(1.0, size.y * 2.0), 0.0, 1.0)
 	var extent := size * Vector2(lerpf(0.64, 0.94, distance) + compression * 0.07, lerpf(0.082, 0.19, distance))
-	var origin := Vector2((size.x - extent.x) * 0.5, size.y * Motion.FOOT_Y + lift - extent.y * 0.6 + drop)
+	var origin := Vector2((size.x - extent.x) * 0.5, size.y * Motion.FOOT_Y + lift - extent.y * 0.6 + drop) + _board_recoil
 	var alpha: float = lerpf(1.0, 0.16, distance)
 	if _shadow.visible != visible_shadow:
 		_shadow.visible = visible_shadow
@@ -407,7 +447,7 @@ func _idle_cache_eligible() -> bool:
 		var value: Variant = _gel.get_shader_parameter(parameter)
 		if value != null and not is_zero_approx(float(value)):
 			return false
-	if not _ripple_offset.is_zero_approx() or not _ripple_stretch.is_equal_approx(Vector2.ONE):
+	if not _ripple_offset.is_zero_approx() or not _ripple_stretch.is_equal_approx(Vector2.ONE) or not is_zero_approx(_ripple_rotation):
 		return false
 	var completion_value: Variant = _gel.get_shader_parameter("completion_strength")
 	var completion: float = 0.0 if completion_value == null else float(completion_value)

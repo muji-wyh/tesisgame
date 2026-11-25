@@ -715,33 +715,23 @@ func test_space_pressure(data, words: Array) -> void:
 		view.game.cells.append(tile)
 	var ids: Array = view.game.cells.slice(0, 4).map(func(tile: Dictionary) -> int: return int(tile.id))
 	view.game.step(0.01)
-	check(view.game.collect(int(ids[0])), "One free Jelly provides the real one-space rescue")
-	view.game.step(Jelly.WordModel.COLLECT_SECONDS + 0.001)
-	check(view.game.full_elapsed < 0.0 and cues.count("danger_end") == 1,
-		"The first vacancy immediately stops full-board danger and owns its end cue")
 	view._refresh_controls()
 	view._refresh_danger()
-	check(not view.danger_feedback().active and not view._danger_frame.visible and not view._recovery_hint.visible,
-		"With stage time still available, the first vacancy immediately removes the full-board border and countdown hint")
-	check(view.game.drop_now(), "The single freed entrance can be refilled through real Next input")
-	view.game.step(2.0)
-	check(view.game.full_elapsed >= 0.0,
-		"A genuinely full well starts a new warning after its replacement lands")
+	check(view.game.full_elapsed < 0.0 and not view.danger_feedback().active and not view._danger_frame.visible and not view._recovery_hint.visible,
+		"A full Jelly World board stays calm with no full-board danger frame or Free 1 space hint")
+	check(view.game.collect(int(ids[0])), "One free Jelly can be collected on a full board")
+	view.game.step(Jelly.WordModel.COLLECT_SECONDS + 0.001)
 	view.game.step(Jelly.BossView.HIT_FLIGHT_SECONDS + 0.001)
-	view.game.step(maxf(0.0, 1.05 - view.game.full_elapsed))
+	check(view.game.full_elapsed < 0.0 and cues.count("danger") == 0,
+		"Full board produces no full-board danger cues before the stage deadline")
 	view.game.stage_run.advance(view.game.stage_run.remaining - 6.0)
 	view.set_stage_progress(view.game.stage_run.snapshot(), false)
 	view._sync_tiles()
 	view._sync_boss()
 	view._refresh_controls()
 	view._refresh_danger()
-	check(view.danger_feedback().source == "full" and view.danger_feedback().duration == 6.0,
-		"The six-second rescue outranks a six-second stage deadline by actual remaining time, not unlike elapsed values")
-	check(cues.count("danger_end") == 1, "The refilled well keeps its new warning until another real vacancy")
-	check(view._word_reveal._reading_exclusions.has(view._board)
-		and view._word_reveal._reading_exclusions.has(view._preview_rect)
-		and view._word_reveal._reading_exclusions.has(view._stage_banner._badge),
-		"Recovery protects live cells, Next and the clock immediately, without depending on a resize")
+	check(view.danger_feedback().active and view.danger_feedback().source == "stage" and view.danger_feedback().duration == 10.0,
+		"Only the stage timer's final ten seconds activates the danger border")
 	check(view._boss_view._doubles[0].visible and not view._boss_view._doubles[1].visible,
 		"The first real hit visibly disperses one starting decoy rather than hitting an invisible shield")
 	for dimensions: Vector2i in [Vector2i(393, 852), Vector2i(390, 664), Vector2i(1366, 768), Vector2i(844, 390)]:
@@ -750,30 +740,12 @@ func test_space_pressure(data, words: Array) -> void:
 			await process_frame
 		view._layout()
 		view._refresh_danger()
-		var hint: Label = view._recovery_hint
-		var badge: Rect2 = view._merged_level_badge.get_rect()
-		check(not view._layout_too_small and hint.is_visible_in_tree() and hint.text == "Free 1 space"
-			and not view._merged_level_badge.visible,
-			"The full-board warning consistently asks for only one space at %s" % dimensions)
-		check(badge.is_equal_approx(hint.get_rect()) and hint.mouse_filter == Control.MOUSE_FILTER_IGNORE,
-			"The hint replaces only the secondary badge bounds without taking input ownership")
-		var font: Font = hint.get_theme_font("font")
-		var pixels: int = hint.get_theme_font_size("font_size")
-		check(font.get_string_size(hint.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x <= hint.size.x + 0.1
-			and font.get_height(pixels) <= hint.size.y + 0.1,
-			"The complete recovery instruction fits its real native font, not an approximate character width")
-		for reserved: Rect2 in [view._board, view._preview_rect, view._practice_panel.get_rect(),
-				view.collect_button.get_rect(), view._combo_hud.get_rect(), view._boss_view._character_rect]:
-			check(not hint.get_rect().intersects(reserved), "Recovery text leaves the board, left goals, actions and Boss unoccluded")
+		check(not view._layout_too_small and not view._recovery_hint.visible and view._merged_level_badge.visible,
+			"Full board keeps the owned-level badge instead of a Free 1 space warning at %s" % dimensions)
 		check(not view._practice_panel._compact and view._practice_panel.get_rect().end.x <= view._board.position.x,
-			"More pressure never relocates the goals or shrinks them into a top carousel")
-		check(view.danger_feedback().active and view._danger_frame.is_visible_in_tree(),
-			"The sourced warning is actually drawn while the board is genuinely full")
-		for entry in view._word_reveal._entries:
-			var envelope := Rect2(view._word_reveal.position + entry.rest_position - entry.size * 0.11, entry.size * 1.22)
-			for protected: Rect2 in [view._board, view._preview_rect, view._stage_banner._badge, view._recovery_hint.get_rect()]:
-				check(not entry._visual.is_visible_in_tree() or not envelope.intersects(protected),
-					"A short-screen reading popover cannot obscure the well, Next, clock or actual rescue instruction")
+			"Goals remain anchored on the left at %s" % dimensions)
+		check(view.danger_feedback().active and view.danger_feedback().source == "stage" and view._danger_frame.is_visible_in_tree(),
+			"The sourced stage deadline warning is drawn during the final ten seconds at %s" % dimensions)
 		await capture_ui("recovery-one-space-%dx%d" % [dimensions.x, dimensions.y])
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
 	root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
@@ -782,34 +754,18 @@ func test_space_pressure(data, words: Array) -> void:
 	for frame in range(6):
 		await process_frame
 	view._layout()
-	check(not view._layout_too_small and view._recovery_hint.visible
+	check(not view._layout_too_small and not view._recovery_hint.visible
 		and is_equal_approx(view.Style.ui_scale(view), 376.0 / 480.0),
-		"The warning and readable well survive the actual fractional Web canvas-items scale")
+		"The readable well survives the actual fractional Web canvas-items scale")
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(393, 852)
 	for frame in range(6):
 		await process_frame
-	var full_remaining: float = view.game.full_warning_seconds() - view.game.full_elapsed
-	view.game.stage_run.advance(view.game.stage_run.remaining - maxf(0.5, full_remaining - 0.25))
-	view._refresh_danger()
-	check(view.danger_feedback().source == "stage" and view.danger_feedback().duration == 10.0,
-		"A now shorter actual stage deadline owns the same sourced frame with its own duration")
-	view.game.stage_run.advance(0.0)
 	view.set_reduced_motion(true)
 	view._refresh_danger()
-	check(not view._danger_frame.state.get("moving", true) and view._recovery_hint.visible,
-		"Reduced motion preserves the recovery instruction without flashing or traveling glints")
+	check(not view._danger_frame.state.get("moving", true) and view.danger_feedback().source == "stage",
+		"Reduced motion preserves the stage deadline border without flashing or traveling glints")
 	await capture_ui("recovery-reduced-motion")
-	for id: int in ids.slice(1, 2):
-		check(view.game.collect(id), "Unpurchased Lv1 ends the new warning with just one vacancy")
-		view.game.step(Jelly.WordModel.COLLECT_SECONDS + 0.001)
-	view._refresh_controls()
-	view._layout()
-	check(view.game.full_elapsed < 0.0 and not view._recovery_hint.visible and view._merged_level_badge.visible,
-		"The first real vacancy restores the ordinary owned-level badge")
-	check(cues.count("danger_end") == 2, "Each actual full-to-vacant transition owns exactly one danger-end cue")
-	check(view.danger_feedback().active and view.danger_feedback().source == "stage",
-		"Ending the full-board warning does not stop or hide the independent stage deadline")
 	view.free()
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	await process_frame

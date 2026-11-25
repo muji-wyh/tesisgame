@@ -49,7 +49,7 @@ func _run() -> void:
 	check(view.configure(words, app.growth.learning_age(), Data.theme(app.model.theme_id),
 		app.data.chests, false, 1901), "Use the existing production Jelly artwork and supply")
 	check(view.game.bind_stage(Catalog.make_plan(2, words, app.growth.learning_age(), 1901)),
-		"Use ordinary timed play with its optional Fill switch")
+		"Use ordinary timed play with automatic Fill on by default")
 	var speed: float = 2.2 if OS.get_cmdline_user_args().has("--fast") else 1.0
 	view.game.fall_speed_scale = speed
 	output += "-fast" if speed > 1.0 else "-normal"
@@ -64,15 +64,8 @@ func _run() -> void:
 		view._process(0.05)
 	view._layout()
 	await settle()
-	for pressed: bool in [true, false]:
-		var event := InputEventMouseButton.new()
-		event.button_index = MOUSE_BUTTON_LEFT
-		event.pressed = pressed
-		event.position = view._fill_button.get_global_rect().get_center()
-		event.global_position = event.position
-		root.push_input(event)
-		await process_frame
-	check(view.game.fill_mode and view._fill_button.button_pressed, "A real Fill click owns the continuous stream")
+	check(view.game.fill_mode and not view._fill_button.visible,
+		"Main stages default to auto-fill on with the Fill toggle button retired")
 	var capturing: bool = OS.get_cmdline_user_args().has("--capture") and DisplayServer.get_name() != "headless"
 	if capturing:
 		DirAccess.make_dir_recursive_absolute(output + "/frames")
@@ -121,8 +114,10 @@ func _run() -> void:
 			if (frame + 1) * 0.025 >= settled_at + 0.3:
 				break
 	check(overlapping, "The real view paints a later arrival in the same lane while its predecessor is still visibly airborne")
-	check(view.game.cells.size() == view.WordModel.CAPACITY and settled_at > 0.0,
-		"The visible stream fills and settles the entire well")
+	check(view.game.cells.size() == view.WordModel.CAPACITY and settled_at > 0.0 and settled_at < 2.2,
+		"The brisk visible stream fills and settles the entire well promptly (settled_at=%.2fs)" % settled_at)
+	check(view.game.full_elapsed < 0.0 and not view.danger_feedback().active,
+		"A full Jelly World board stays calm without starting a full-board danger countdown")
 	if capturing:
 		var file := FileAccess.open(output + "/timeline.json", FileAccess.WRITE)
 		file.store_string(JSON.stringify({"fps": 40, "fall_speed_scale": speed,

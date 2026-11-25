@@ -15,6 +15,7 @@ uniform float flow = 0.0;
 uniform float mixing = 0.0;
 uniform float charge = 0.0;
 uniform float impact_flash = 0.0;
+uniform vec3 impact_tint : source_color = vec3(1.0, 0.995, 0.95);
 uniform float opacity = 1.0;
 uniform float palette_hue_a = -1.0;
 uniform float palette_hue_b = -1.0;
@@ -87,7 +88,8 @@ void fragment() {
 	paint = mix(paint, vec3(1.0, 0.995, 0.94), sheen * charge * 0.34);
 	paint += vec3(0.06, 0.10, 0.07) * charge * (1.0 - edge);
 	if (impact_flash > 0.0) {
-		paint = mix(paint, vec3(1.0, 0.995, 0.95), clamp(impact_flash, 0.0, 1.0) * (0.48 + edge * 0.42));
+		float f = clamp(impact_flash, 0.0, 1.0);
+		paint = mix(paint, impact_tint, pow(f, 0.68) * (0.86 + edge * 0.14));
 	}
 	COLOR = vec4(paint, alpha * opacity);
 }

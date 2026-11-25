@@ -575,29 +575,16 @@ A saved extension refills the remaining-time bar independently of the rating:
 the bar uses remaining seconds, while lost stars stay lost.
 A failed or duplicate purchase cannot charge twice.
 
-Completing every goal locks a clear; timer expiry locks a failure. A settled,
-blocked top starts a flashing recovery countdown, not an immediate failure.
-Recovery frees the blocked well by requiring **1 reachable top space** within the
-stage's recovery window (**Free 1 space**; 10s on Stage 1, 8s on Stages 2-17, 7s on
-Stages 18-62, 6s on Stages 63-99). The existing level-badge area temporarily
-names the remaining rescue with **Free 1 space**; goals stay on the left.
-Only top-connected space counts, including real body, fusion-destination and
-drag-return reservations; inaccessible internal holes do not. The advertised
-Next supply must also have a legal entry. Recovery blocks new Fill, manual Next and timed dispatch,
-while already launched bodies finish normally. Pause and automatic/pending
-transactions freeze the countdown. An announced warning keeps its duration
-and target even if a Challenge batch advances. Its expiry locks a failure.
-An intermediate pickup or merge does not play the danger-end cue. Reading
-popovers prefer space outside the live well, Next, clock and rescue hint; if a short screen has no safe room
-during recovery, only their opaque card is hidden on its existing clock.
-Body labels, pronunciation, local effects, learning and rewards remain intact.
+Completing every goal locks a clear; timer expiry locks a failure. Jelly World
+automatically streams incoming jellies briskly into open columns by default (the
+separate Auto Fill toggle button is removed). A full Jelly World board pauses
+further streaming without starting a full-board danger countdown or ending the
+round; only the final ten seconds of the stage timer trigger the danger border
+and countdown toward Game Over. Pauses, reading overlays, automatic sequences
+and pending saves freeze the timer.
 The remaining merged words are then automatically
 collected; these cleanup pickups cannot change the locked goals, outcome or
 star rating. Existing reward/save rules apply, with Retry saving on failure.
-The same sourced frame warns during the final ten seconds of a stage deadline,
-even on a non-full board. If both warnings apply, the more urgent clock owns one
-frame rather than stacking flashes. Added time above ten seconds clears the
-deadline warning without changing the saved star thresholds.
 After a genuine clear, the board first runs at 0.12 speed for 350 ms, then shows
 the clear notice and cheer for one second. Only afterward does it automatically
 collect leftover merged Jellies, including their high-level impact freezes.
@@ -605,8 +592,8 @@ Settlement waits for the full sweep and its board bursts, reading tails and
 treasure feedback. It does not repeat a second late clear announcement.
 Failure keeps its separate Game over handoff after safe cleanup.
 Treasure opening and arrival-driven coins then finish
-automatically. A saved clear returns to the map. Numbered-stage timeouts and
-full-board failures instead retain their saved result with **Try again**,
+automatically. A saved clear returns to the map. Numbered-stage timeouts
+retain their saved result with **Try again**,
 **Jelly Upgrades** and **Back to map**; the entry does not disappear on a timer.
 Try again restarts the same numbered stage. Jelly Upgrades opens the existing
 permanent merged-Jelly, Auto merge and Star charm page without buying anything or repeating

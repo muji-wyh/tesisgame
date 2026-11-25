@@ -105,88 +105,49 @@ func _test_single_space_recovery() -> void:
 	for number: int in [1, 6, 18, 36, 63, 99, 0]:
 		var model = _full_model(number)
 		var warning: Dictionary = model.danger_recovery_snapshot()
-		check(model.full_elapsed >= 0.0 and warning.required_spaces == 1 and warning.spaces_needed == 1,
-			"Every stage and Challenge asks for only one real empty cell")
-		var committed: Array[Dictionary] = []
-		model.collected.connect(func(_id: String, _word: Dictionary, _coins: int, _fragments: int) -> void:
-			committed.append(model.danger_recovery_snapshot()), CONNECT_ONE_SHOT)
-		check(model.collect(int(model.cells[0].id)), "Free Lv1 provides a legal one-cell recovery")
-		model.step(Model.COLLECT_SECONDS - 0.001)
-		check(model.full_elapsed >= 0.0, "A still-owned collection footprint does not invent an early vacancy")
-		model.step(0.002)
-		var recovery: Dictionary = model.danger_recovery_snapshot()
-		check(committed.size() == 1 and not committed[0].active and committed[0].empty_spaces == 1
-			and committed[0].spaces_needed == 0 and model.full_elapsed < 0.0 and model.stage_run.outcome.is_empty(),
-			"The first committed vacancy immediately stops danger before any following dispatch")
-		if number == 0:
-			check(model.fill_mode and model.fill_mode_locked(),
-				"Challenge keeps its actual automatic Fill rule after a one-space rescue")
-		else:
-			check(recovery.empty_spaces == 1 and model.can_drop_now(),
-				"The one freed entrance immediately restores legal manual Next input")
-		model.step(0.1)
-		check(model.full_elapsed < 0.0, "A remaining vacancy cannot restart the full-board countdown")
-		if number != 0:
-			check(model.drop_now(), "A genuinely freed entrance can accept its advertised replacement")
-		model.step(2.0)
-		check(model.cells.size() == Model.CAPACITY and model.full_elapsed >= 0.0 and model.full_elapsed < 2.0,
-			"Refilling the final vacancy starts a fresh warning only after the new body settles")
-	var paused = _full_model(36)
-	paused.step(1.0)
-	var elapsed: float = paused.full_elapsed
-	paused.set_paused(true)
-	paused.step(20.0)
-	check(paused.full_elapsed == elapsed, "Explicit pause cannot consume the harder rescue window")
+		check(model.fill_mode and not model.full_board_danger_enabled() and model.full_elapsed < 0.0 and not warning.active,
+			"Every Jelly World stage and Challenge defaults to auto-fill and never triggers full-board danger")
+		model.step(15.0)
+		check(model.phase == "playing" and model.stage_run.outcome.is_empty() and model.full_elapsed < 0.0,
+			"A full Jelly World board never causes a full-board Game Over while stage time remains")
+		check(model.collect(int(model.cells[0].id)), "Free Lv1 can be collected on a full Jelly World board")
+		model.step(Model.COLLECT_SECONDS + 0.05)
+		check(model.full_elapsed < 0.0 and model.stage_run.outcome.is_empty(),
+			"Collecting on a full board stays calm and automatically refills opened space")
+	var timed = _full_model(36)
+	timed.stage_run.advance(timed.stage_run.remaining - 2.0)
+	var cues: Array[String] = []
+	timed.cue_requested.connect(func(cue: String) -> void: cues.append(cue))
+	timed.step(1.5)
+	check(timed.phase == "playing" and timed.stage_run.outcome.is_empty() and cues.count("danger") >= 1,
+		"Only the stage timer's final countdown emits danger warnings")
+	timed.step(1.0)
+	check(timed.stage_ending() and timed.stage_run.outcome == "timeout",
+		"Running out of stage time ends Jelly World in timeout Game Over")
 
 
 func _test_recovery_geometry_and_ownership() -> void:
-	var hidden = _full_model(36)
-	for index in range(hidden.cells.size() - 1, -1, -1):
-		if int(hidden.cells[index].row) == 3 and int(hidden.cells[index].column) == 0:
-			hidden.cells.remove_at(index)
-	var holes: Dictionary = hidden.danger_recovery_snapshot()
-	check(holes.reachable_spaces == 0 and holes.empty_spaces == 1 and holes.spaces_needed == 0
-		and not holes.can_receive_next,
-		"A single internal vacancy counts even while every advertised entry remains blocked")
-	hidden._refresh_full_recovery()
-	check(hidden.full_elapsed < 0.0, "Any real vacancy ends the warning without an extra reachable-space requirement")
-	hidden.step(0.1)
-	check(hidden.full_elapsed < 0.0 and not hidden.can_drop_now(),
-		"Blocked Next input cannot restart a full-board warning while an internal vacancy remains")
-	var held = _full_model(36)
-	var held_id: int = int(held.cells[0].id)
-	held.set_held_tile(held_id)
-	check(held.begin_drag(held_id), "A legal drag keeps its safe cancellation destination")
-	check(held.danger_recovery_snapshot().empty_spaces == 0,
-		"A lifted body still owns its return cell and cannot fake a committed vacancy")
-	held._refresh_full_recovery()
-	check(held.full_elapsed >= 0.0, "Holding a body does not clear a full board before an actual release")
-	held.set_held_tile()
+	var model = _full_model(36)
+	var held_id: int = int(model.cells[0].id)
+	model.set_held_tile(held_id)
+	check(model.begin_drag(held_id), "A legal drag works on a full Jelly World board")
+	check(model.danger_recovery_snapshot().empty_spaces == 0 and not model.danger_recovery_snapshot().active,
+		"A lifted body retains its return cell without activating full-board danger")
+	model.set_held_tile()
 	var merging = _full_model(36)
 	merging.merged_level_limit = 9
 	check(merging.try_merge(int(merging.cells[0].id), int(merging.cells[1].id)) == "merged",
-		"An actual legal merge reserves its destination rather than a test-only geometry placeholder")
-	check(merging.danger_recovery_snapshot().empty_spaces == 0,
-		"The in-flight fusion cannot release its source or future destination early")
-	merging.step(Model.FUSION_SECONDS + 0.001)
-	check(merging.danger_recovery_snapshot().empty_spaces == 1 and merging.full_elapsed < 0.0,
-		"The committed two-to-one merge immediately ends danger with its single real vacancy")
-	var challenge = _full_model(0)
-	var original: Dictionary = challenge.danger_recovery_snapshot()
-	challenge.stage_run.challenge_stage = 11
-	challenge._sync_challenge_pressure()
-	var continued: Dictionary = challenge.danger_recovery_snapshot()
-	check(original.duration == 8.0 and original.required_spaces == 1
-		and continued.duration == original.duration and continued.required_spaces == original.required_spaces,
-		"A new Challenge batch retains the announced warning duration and the same one-space recovery rule")
-	var incoming = _full_model(36)
-	incoming.cells[10].age = 0.0
-	incoming.cells[10].arrival = true
-	incoming.cells[10].arrival_delay = 0.15
-	var generated: int = incoming.generated_tiles
-	incoming.step(0.2)
-	check(incoming.cells[10].age > 0.19 and incoming.generated_tiles == generated and incoming.full_elapsed >= 0.0,
-		"Already owned airborne bodies keep moving while recovery blocks only new dispatch")
+		"An actual legal merge works on a full Jelly World board")
+	merging.step(Model.FUSION_SECONDS + 0.01)
+	check(merging.full_elapsed < 0.0 and merging.stage_run.outcome.is_empty(),
+		"Merging on a full board stays active and auto-fills without danger countdown")
+	var paused = _full_model(36)
+	paused.stage_run.advance(paused.stage_run.remaining - 5.0)
+	var remaining: float = paused.stage_run.remaining
+	paused.set_paused(true)
+	paused.step(20.0)
+	check(is_equal_approx(paused.stage_run.remaining, remaining) and paused.phase == "playing",
+		"Explicit pause freezes the stage timer countdown")
 
 
 func _run() -> void:

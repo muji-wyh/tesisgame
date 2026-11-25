@@ -377,19 +377,20 @@ func _check_responsive_actions(app) -> void:
 		view.set_process(false)
 		view._process(0.0)
 		var scale: float = app.Style.ui_scale(app)
-		var buttons: Array = [view.powerup_buttons.auto_merge, view.collect_button, view._fill_button]
+		var buttons: Array = [view.powerup_buttons.auto_merge, view.collect_button]
 		var context: String = " at " + str(dimensions)
+		check(not view._fill_button.visible, "The retired Fill toggle stays hidden" + context)
 		for index in range(buttons.size()):
 			var button = buttons[index]
 			var bounds: Rect2 = button.get_global_rect()
 			check(button.is_visible_in_tree() and view.get_global_rect().grow(0.1).encloses(bounds)
 				and bounds.size.x * scale >= 44.0 - 0.1 and bounds.size.y * scale >= 44.0 - 0.1,
-				"All three gameplay actions fit with full touch targets" + context)
+				"All gameplay actions fit with full touch targets" + context)
 			check(not bounds.intersects(view._global_rect(view._board)) and not bounds.intersects(view.drop_button.get_global_rect())
 				and not bounds.intersects(view._loot_meter.get_global_rect()) and not bounds.intersects(view.finish_button.get_global_rect()),
 				"Powerups and Collect remain separate from the board, supply, chest, and Finish" + context)
 			for previous in range(index):
-				check(not bounds.intersects(buttons[previous].get_global_rect()), "The three action targets never overlap" + context)
+				check(not bounds.intersects(buttons[previous].get_global_rect()), "The action targets never overlap" + context)
 		check(view.powerup_buttons.auto_merge.snapshot().get("price", 0) == price
 			and view.powerup_buttons.keys() == ["auto_merge"],
 			"Responsive layouts expose only the remaining paid tool and its exact price" + context)
@@ -426,11 +427,11 @@ func _check_items_during_fill(app) -> void:
 		game._stage_spawn_interval = 10000.0
 		game.spawn_interval = 10000.0
 		view.set_stage_progress(game.stage_run.snapshot())
-		game.set_fill_mode(false)
 		view._refresh_controls()
 		view._layout()
-		await _click_live(view, view._fill_button)
-		view._process(0.25)
+		check(game.fill_mode and not view._fill_button.visible,
+			"Main stage starts with Auto Fill enabled by default and no Fill toggle button")
+		view._process(0.12)
 		view.set_process(false)
 		check(game.fill_mode and game._settling_remaining() > game.EPSILON,
 			"Native item input is exercised while Auto Fill is genuinely dispatching")
@@ -448,7 +449,7 @@ func _check_items_during_fill(app) -> void:
 		check(purchases.size() == 1 and purchases[0] == {"kind": kind, "success": true},
 			"The normal success route, not a forced button signal, owns the purchase")
 		_drain(view)
-		check(game.fill_mode and view._fill_button.button_pressed, "Item completion retains the visible Auto Fill selection")
+		check(game.fill_mode and not view._fill_button.visible, "Item completion retains active Auto Fill without showing a toggle")
 
 
 func _run() -> void:

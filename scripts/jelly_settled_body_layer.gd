@@ -15,6 +15,14 @@ var _blockers_dirty: bool = true
 var _visibility_depth: int = 0
 var _drawing: bool = false
 var _draws: int = 0
+var _board_recoil := Vector2.ZERO
+
+
+func set_board_recoil(offset: Vector2) -> void:
+	if _board_recoil.is_equal_approx(offset):
+		return
+	_board_recoil = offset
+	position = offset
 
 
 func _init() -> void:
@@ -89,6 +97,10 @@ func _changed(id: int) -> void:
 	if _visibility_depth > 0 or not _tracked.has(id):
 		return
 	var tile: Tile = _tracked[id].tile.get_ref()
+	if is_instance_valid(tile) and _paint.has(id) and not _board_recoil.is_zero_approx():
+		# Pure board-recoil translation already shifts this layer as a unit;
+		# do not invalidate cached tile paint while the tile visual rides the recoil.
+		return
 	if is_instance_valid(tile) and (tile.valid_word or _blockers.has(id)):
 		_blockers_dirty = true
 		if not tile.valid_word:
@@ -182,6 +194,12 @@ func _render_transform(control: Control) -> Transform2D:
 	var snap: bool = get_viewport().is_snap_controls_to_pixels_enabled()
 	while ancestor != get_parent():
 		var local: Transform2D = ancestor.get_transform()
+		if ancestor == control.get_parent() and ancestor is Control:
+			# Strip transient board recoil from _visual so cached skins stay at
+			# neutral local coordinates and move strictly via layer.position.
+			var owner_tile: Tile = ancestor.get_parent() as Tile
+			if owner_tile != null and not owner_tile._board_recoil.is_zero_approx():
+				local.origin -= owner_tile._board_recoil
 		# Control rounds its render origin separately from get_transform().
 		# Match each local node before composing the retained drawing transform.
 		var gui: Control = ancestor as Control
@@ -189,7 +207,10 @@ func _render_transform(control: Control) -> Transform2D:
 			local.origin = (local.origin + Vector2(0.5, 0.5)).floor()
 		transform = local * transform
 		ancestor = ancestor.get_parent() as CanvasItem
-	return get_transform().affine_inverse() * transform
+	# Neutralize transient board recoil on the layer itself so transforms stay local.
+	var inv: Transform2D = get_transform()
+	inv.origin -= _board_recoil
+	return inv.affine_inverse() * transform
 
 
 func _canvas_rect(control: Control, expansion: float = 1.0) -> Rect2:

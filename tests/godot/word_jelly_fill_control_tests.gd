@@ -97,7 +97,7 @@ func _run() -> void:
 			func(word: Dictionary) -> Dictionary: return Morphology.decorate(word))
 	check(view.configure(words, app.growth.learning_age(), Data.theme(app.model.theme_id),
 		app.data.chests, false, 1901), "Use production artwork")
-	check(view.game.bind_stage(Catalog.make_plan(2, words, app.growth.learning_age(), 1901)), "Bind ordinary optional Fill")
+	check(view.game.bind_stage(Catalog.make_plan(2, words, app.growth.learning_age(), 1901)), "Bind main stage with default auto-fill")
 	view.game._stage_spawn_interval = 10000.0
 	view.game.spawn_interval = 10000.0
 	Fixture.unlock_auto_collect(app)
@@ -113,75 +113,28 @@ func _run() -> void:
 		view.set_process(false)
 		view._layout()
 		view._refresh_controls()
-		await capture(view, "%dx%d-off" % [dimensions.x, dimensions.y])
-		var interactive: bool = not view._fill_button.disabled
-		if interactive:
-			await click(view)
-			check(view.game.fill_mode and view._fill_button.button_pressed, "Actual input switches Fill on")
-		else:
-			check(view._layout_too_small, "Only the established size pause owns this unavailable switch")
-			view.game.set_fill_mode(true)
-			view._refresh_controls()
-		if not baseline:
-			check(view._fill_button.text.is_empty() and view._fill_button.get_children().is_empty(),
-				"No Fill, On, Off or other visible text is substituted for artwork")
-			if view._fill_button.has_method("snapshot"):
-				var before: float = float(view._fill_button.snapshot().elapsed)
-				view._fill_button.advance(0.4)
-				check(view._paused or float(view._fill_button.snapshot().elapsed) > before, "Enabled unpaused local feedback keeps running")
-		await capture(view, "%dx%d-on" % [dimensions.x, dimensions.y])
-		if dimensions.x == 393:
-			await capture_flow(view)
-		if interactive:
-			await click(view)
-			check(not view.game.fill_mode, "Actual input switches Fill back off")
-		else:
-			view.game.set_fill_mode(false)
-			view._refresh_controls()
-	if not baseline:
-		root.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
-		root.content_scale_size = Vector2i(480, 480)
-		root.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
-		root.size = Vector2i(1473, 1175)
-		await settle()
-		view.set_process(false)
-		view.game.set_fill_mode(true)
-		view._layout()
-		view._refresh_controls()
-		await capture(view, "1473x1175-scaled-on")
+		check(view.game.fill_mode and not view._fill_button.visible and view._fill_button.disabled,
+			"Main stage keeps auto-fill on by default with the Fill toggle button removed at %s" % dimensions)
+		check(not view.snapshot().fill_control.visible and bool(view.snapshot().fill_control.on),
+			"View snapshot reports retired Fill button while auto-fill stays active at %s" % dimensions)
+		check(is_equal_approx(view.collect_button.size.x, view.powerup_buttons.auto_merge.size.x),
+			"Auto Collect spans the full free-action width without reserving Fill button space at %s" % dimensions)
+		check(not view.navigation_controls().has(view._fill_button),
+			"Hidden Fill button is excluded from keyboard/controller navigation at %s" % dimensions)
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	root.size = Vector2i(393, 852)
 	await settle()
 	view.set_process(false)
-	check(view.game.bind_stage(Catalog.make_plan(0, words, app.growth.learning_age(), 1901, true)), "Use actual forced Challenge Fill")
+	check(view.game.bind_stage(Catalog.make_plan(0, words, app.growth.learning_age(), 1901, true)), "Use actual Challenge Fill")
 	view._refresh_controls()
 	view._layout()
-	await click(view)
-	check(view.game.fill_mode and view._fill_button.disabled, "Locked Challenge input cannot switch Fill off")
-	if not baseline and view._fill_button.has_method("snapshot"):
-		view._fill_button.advance(0.4)
-		check(view._fill_button.snapshot().locked and view._fill_button.snapshot().flowing,
-			"Locked does not make an enabled mode look inactive")
-		view.game.step(4.0)
-		var elapsed: float = view._fill_button.snapshot().elapsed
-		view._process(0.05)
-		view.set_process(false)
-		check(view.game.cells.size() == view.WordModel.CAPACITY
-			and view._fill_button.snapshot().elapsed > elapsed,
-			"The real owner keeps the mode cue running even after the well is full")
-	await capture(view, "393x852-challenge")
-	if not baseline and view._fill_button.has_method("snapshot"):
-		view.pause(true)
-		var before: Dictionary = view._fill_button.snapshot()
-		view._fill_button.advance(2.0)
-		check(view._fill_button.snapshot().elapsed == before.elapsed, "Actual pause freezes the feedback clock")
-		await capture(view, "393x852-paused")
-		view.pause(false)
-		view.set_process(false)
-		view.set_reduced_motion(true)
-		check(not view._fill_button.snapshot().flowing and view._fill_button.snapshot().on,
-			"Reduced motion preserves the active style without moving effects")
-		await capture(view, "393x852-reduced")
+	check(view.game.fill_mode and not view._fill_button.visible and view._fill_button.disabled,
+		"Challenge also keeps auto-fill on with the Fill toggle button removed")
+	view.game.step(3.0)
+	view._process(0.05)
+	view.set_process(false)
+	check(view.game.cells.size() == view.WordModel.CAPACITY and view.game.full_elapsed < 0.0 and not view.danger_feedback().active,
+		"Auto-fill fills the well promptly and never triggers full-board danger")
 	app.audio.halt()
 	app.queue_free()
 	await settle()

@@ -1,0 +1,193 @@
+{
+  "version": 1,
+  "created_on": "2026-11-25",
+  "name": "Jelly Words Nintendo-grade tactile impact foley",
+  "tool": "tools/prepare-jelly-impact-audio.py",
+  "runtime_script": "scripts/game_audio.gd",
+  "base_pop": {
+    "path": "assets/audio/jelly-match/collect-pop.wav",
+    "creator": "farfadet46",
+    "license": "CC0-1.0",
+    "sha256": "17fc1d02e944481eda7f392e1a5a1a1b375693a2868692ff85966b19048e1b3a"
+  },
+  "audio_sources": [
+    {
+      "id": "soft_heavy",
+      "creator": "Kenney",
+      "pack": "Impact Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_in_collection": "Impact Sounds/Audio/impactSoft_heavy_001.ogg",
+      "path": "docs/assets/sources/jelly-impact/impactSoft_heavy_001.ogg",
+      "sha256": "2b36cd469413095d397f46370b84cea5e362e0719b53defe9898696947e141ff"
+    },
+    {
+      "id": "soft_med",
+      "creator": "Kenney",
+      "pack": "Impact Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_in_collection": "Impact Sounds/Audio/impactSoft_medium_002.ogg",
+      "path": "docs/assets/sources/jelly-impact/impactSoft_medium_002.ogg",
+      "sha256": "3c1fce0d7b26e958f4887ffd9edc2d087dc477e81147750e79422ca1535cfa5a"
+    },
+    {
+      "id": "punch_med",
+      "creator": "Kenney",
+      "pack": "Impact Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/impact-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_in_collection": "Impact Sounds/Audio/impactPunch_medium_001.ogg",
+      "path": "docs/assets/sources/jelly-impact/impactPunch_medium_001.ogg",
+      "sha256": "d47307d8bf17d3db0e4fdc781c06af80413c28be97172ae52ff24f29a681fe89"
+    },
+    {
+      "id": "drop_1",
+      "creator": "Kenney",
+      "pack": "Interface Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_in_collection": "Interface Sounds/Audio/drop_002.ogg",
+      "path": "docs/assets/sources/jelly-impact/drop_002.ogg",
+      "sha256": "978c28bfc517f54fc956f7491e33f37802809d938933bf5071f39423089554d3"
+    },
+    {
+      "id": "drop_2",
+      "creator": "Kenney",
+      "pack": "Interface Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_in_collection": "Interface Sounds/Audio/drop_004.ogg",
+      "path": "docs/assets/sources/jelly-impact/drop_004.ogg",
+      "sha256": "2b3d5e9436b4f34614d7fefbad3297db7f9c0c0b0182f4acffd172e770343a7d"
+    },
+    {
+      "id": "pluck_1",
+      "creator": "Kenney",
+      "pack": "Interface Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_in_collection": "Interface Sounds/Audio/pluck_001.ogg",
+      "path": "docs/assets/sources/jelly-impact/pluck_001.ogg",
+      "sha256": "73b7ada3cb7be3ca1fcd7fc377a728fdc595b133afa51b9471988d0120fc688b"
+    },
+    {
+      "id": "pluck_2",
+      "creator": "Kenney",
+      "pack": "Interface Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_in_collection": "Interface Sounds/Audio/pluck_002.ogg",
+      "path": "docs/assets/sources/jelly-impact/pluck_002.ogg",
+      "sha256": "3a53befc241ed573f37521b20dd0aa8399cd51ad7e083da642e21273d14e6e1e"
+    },
+    {
+      "id": "max_rise",
+      "creator": "Kenney",
+      "pack": "Interface Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_in_collection": "Interface Sounds/Audio/maximize_006.ogg",
+      "path": "docs/assets/sources/jelly-impact/maximize_006.ogg",
+      "sha256": "a62654b30eb1812f1830049671ea0de88c859de053fcee56c118ca0aa6e89d44"
+    },
+    {
+      "id": "bong",
+      "creator": "Kenney",
+      "pack": "Interface Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_in_collection": "Interface Sounds/Audio/bong_001.ogg",
+      "path": "docs/assets/sources/jelly-impact/bong_001.ogg",
+      "sha256": "742ee48b51ba5a8607449482efbf03eaa64cd736848e2c1118af563a2e0ee329"
+    },
+    {
+      "id": "confirm",
+      "creator": "Kenney",
+      "pack": "Interface Sounds 1.0",
+      "source_page": "https://kenney.nl/assets/interface-sounds",
+      "license": "CC0-1.0",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "original_in_collection": "Interface Sounds/Audio/confirmation_002.ogg",
+      "path": "docs/assets/sources/jelly-impact/confirmation_002.ogg",
+      "sha256": "9f3a15ffd9d8e031e2afa17539baa4ef3655b2ad06fcf9d44e5d3bd0d0ec64e2"
+    }
+  ],
+  "audio": [
+    {
+      "id": "merge-snap",
+      "path": "assets/audio/jelly-impact/merge-snap.wav",
+      "sha256": "8c567476f941b4b8c3f22c18e9f1df7fc50a830a5e188ffbc8e63724f04968d7",
+      "seconds": 0.38,
+      "frames": 16758,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -6.5,
+      "rms_dbfs": -26.343,
+      "onset_minus_40_dbfs_seconds": 0.000204
+    },
+    {
+      "id": "merge-thump",
+      "path": "assets/audio/jelly-impact/merge-thump.wav",
+      "sha256": "e12005b10c74e7ac4a66ecc275fddcd3b25de2c2e7efc54bce636e0ad639824f",
+      "seconds": 0.32,
+      "frames": 14112,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -6.801,
+      "rms_dbfs": -21.068,
+      "onset_minus_40_dbfs_seconds": 0.000544
+    },
+    {
+      "id": "collect-charge",
+      "path": "assets/audio/jelly-impact/collect-charge.wav",
+      "sha256": "15624b5530a4736efde4a5acf9778737394a5edb4bc5f19047083e79ccc7f6e9",
+      "seconds": 0.147075,
+      "frames": 6486,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -9.999,
+      "rms_dbfs": -20.824,
+      "onset_minus_40_dbfs_seconds": 0.000227
+    },
+    {
+      "id": "contact-snap",
+      "path": "assets/audio/jelly-impact/contact-snap.wav",
+      "sha256": "facc27be441d9356ab330652fda07f0a1ed1b245eb9d40366db9e4beed435cea",
+      "seconds": 0.069546,
+      "frames": 3067,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -8.5,
+      "rms_dbfs": -22.399,
+      "onset_minus_40_dbfs_seconds": 0.000159
+    },
+    {
+      "id": "wrong-bounce",
+      "path": "assets/audio/jelly-impact/wrong-bounce.wav",
+      "sha256": "b2e21ce496b792068ff334b2753630e2e9f50c55cb2efc3823ab066bd3ae0eb0",
+      "seconds": 0.247732,
+      "frames": 10925,
+      "sample_rate": 44100,
+      "channels": 1,
+      "pcm_bits": 16,
+      "peak_dbfs": -8.0,
+      "rms_dbfs": -24.582,
+      "onset_minus_40_dbfs_seconds": 0.000635
+    }
+  ],
+  "processing": "Float decode; mono 44.1 kHz PCM16; leading-silence trim (<2ms onset); lowpass body sculpting & deterministic CC0 layering; smooth zero endpoints. No oscillators."
+}

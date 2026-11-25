@@ -22,6 +22,7 @@ uniform float palette_hue = -1.0;
 uniform float completion_strength = 0.0;
 uniform float completion_glint = -2.0;
 uniform float impact_flash = 0.0;
+uniform vec3 impact_tint : source_color = vec3(1.0, 0.995, 0.94);
 varying vec4 gel_modulate;
 
 vec3 palette(vec3 paint) {
@@ -132,7 +133,10 @@ void fragment() {
 		gel = vec4((gel.rgb * gel.a + light_color * bloom) / max(alpha, 0.001), alpha);
 	}
 	if (impact_flash > 0.0) {
-		gel.rgb = mix(gel.rgb, vec3(1.0, 0.995, 0.94), clamp(impact_flash, 0.0, 1.0) * 0.56);
+		float f = clamp(impact_flash, 0.0, 1.0);
+		// Crisp Nintendo hit-frame: near-pure white/gold silhouette at f=1.0 with
+		// a luminous core lift so impacts pop immediately on every hue.
+		gel.rgb = mix(gel.rgb, impact_tint, pow(f, 0.72) * 0.92);
 	}
 	COLOR = gel * gel_modulate;
 }

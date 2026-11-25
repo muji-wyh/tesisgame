@@ -94,35 +94,65 @@ func test_merge_impact_and_board_ripple() -> void:
 	check(view.game.fusions.size() == 1 and cues.any(func(c: String) -> bool: return c.begins_with("merge-upgrade:")),
 		"Upgrade merge emits pitched merge-upgrade audio accent")
 
-	# Advance right past the p=0.44 snap impact boundary!
-	_advance_view(view, Model.FUSION_SECONDS * 0.48)
+	# Advance right into the p=0.22 Nintendo impact + hit-stop window (165ms from release)!
+	_advance_view(view, Model.FUSION_SECONDS * 0.24)
 	var visual: Dictionary = view._fusion_visuals.values()[0]
 	var flash_u: float = float(visual.art._gel.get_shader_parameter("impact_flash"))
-	check(flash_u > 0.1, "Merge snap drives shader impact_flash on the liquid union (got=%.3f)" % flash_u)
-	check(int(view._collection_effects.snapshot().get("merge_pop_count", 0)) >= 1,
-		"Upgrade merge spawns a crisp Merge Pop shockwave/star/Lv4! badge effect")
-	check(view._well_impulse_strength > 0.25 and not view._board_ripples.is_empty(),
-		"Merge snap fires directional well impulse and neighborhood board ripple")
+	check(flash_u >= 0.9, "Merge hit-stop locks near-pure white shader impact_flash (got=%.3f)" % flash_u)
+	check(cues.any(func(c: String) -> bool: return c.begins_with("merge-impact:upgrade:4:")),
+		"Merge collision emits 0ms A/V-locked merge-impact cue right at MERGE_IMPACT_P")
+	var fx_snap: Dictionary = view._collection_effects.snapshot()
+	check(int(fx_snap.get("merge_pop_count", 0)) >= 1 and int(fx_snap.get("splatter_count", 0)) >= 1,
+		"Upgrade merge spawns Merge Pop shockwave/Lv4! badge plus glossy jelly splatter droplets")
+	check(view._well_impulse_strength > 0.55 and not view._board_ripples.is_empty(),
+		"Merge snap fires directional whole-board recoil and neighborhood trampoline ripple")
+	check(not view._board_recoil_offset.is_zero_approx() and view._settled_body_layer.position.is_equal_approx(view._board_recoil_offset),
+		"Whole-board recoil drives SettledBodyLayer together with the well art")
 
 	# Advance slightly so ripple reaches distance-1 neighbor without shifting its Control hit rect
 	_advance_view(view, 0.06)
 	var nb_tile = view._tiles[int(neighbor.id)]
 	check(nb_tile.get_rect().is_equal_approx(neighbor_rect),
-		"Board ripple never alters the neighbor Control hit rect")
+		"Board ripple and whole-board recoil never alter the neighbor Control hit rect")
 	check(not nb_tile._ripple_offset.is_zero_approx() or not nb_tile._ripple_stretch.is_equal_approx(Vector2.ONE),
 		"Neighbor gel surface visibly ripples away from the merge impact")
 
-	# Finish merge and let ripples decay cleanly to rest
-	_advance_view(view, Model.FUSION_SECONDS + 0.5)
-	check(nb_tile._ripple_offset.is_zero_approx() and nb_tile._ripple_stretch.is_equal_approx(Vector2.ONE),
-		"Board ripple decays completely back to neutral rest pose")
+	# Finish merge and let ripples + aftershocks decay cleanly to rest
+	_advance_view(view, Model.FUSION_SECONDS + 0.6)
+	check(nb_tile._ripple_offset.is_zero_approx() and nb_tile._ripple_stretch.is_equal_approx(Vector2.ONE)
+		and is_zero_approx(nb_tile._ripple_rotation) and view._board_recoil_offset.is_zero_approx(),
+		"Board ripple, tilt, and whole-board recoil decay completely back to neutral rest pose")
 
-	# Reduced motion suppresses all flash, ripple, and well impulse
+	# Collect timing sync: recoil & splatter wait for pop_at, then fire right on the pop beat!
+	var lv4_id: int = -1
+	for cell: Dictionary in view.game.cells:
+		if int(cell.get("merge_level", 0)) == 4:
+			lv4_id = int(cell.id)
+			break
+	check(lv4_id >= 0, "Merged Lv4 tile is present on the board after fusion")
+	cues.clear()
+	check(view.game.collect(lv4_id), "Upgraded Lv4 merged word begins collection")
+	view._refresh_fusion()
+	check(is_zero_approx(view._well_impulse_strength),
+		"Collection recoil waits during anticipation instead of firing prematurely at click time")
+	var pop_at: float = Model.collection_pop_seconds(4)
+	_advance_view(view, pop_at - 0.02)
+	check(is_zero_approx(view._well_impulse_strength),
+		"Before pop_at, collection stays in anticipation without premature board shake")
+	_advance_view(view, 0.03)
+	check(view._well_impulse_strength > 0.5 and not view._board_ripples.is_empty()
+		and cues.any(func(c: String) -> bool: return c.begins_with("collect-punch:4:"))
+		and int(view._collection_effects.snapshot().get("splatter_count", 0)) >= 1,
+		"At pop_at, collection fires synchronized recoil, board ripple, splatter droplets, and collect-punch audio")
+	_advance_view(view, 0.6)
+
+	# Reduced motion suppresses all flash, ripple, splatter, and well impulse
 	view.set_reduced_motion(true)
 	view._trigger_well_impulse(0.9, Color.WHITE, Vector2.RIGHT)
 	view._spawn_board_ripple(Vector2(3, 7), 1.0)
-	check(is_zero_approx(view._well_impulse_strength) and view._board_ripples.is_empty(),
-		"Reduced motion strictly suppresses well impulse and board ripples")
+	check(is_zero_approx(view._well_impulse_strength) and view._board_ripples.is_empty()
+		and view._board_recoil_offset.is_zero_approx(),
+		"Reduced motion strictly suppresses well impulse, board recoil, and ripples")
 
 	view.free()
 	await process_frame
@@ -203,6 +233,11 @@ func test_layered_audio_cues() -> void:
 	var audio := Audio.new()
 	root.add_child(audio)
 	audio.interact("spring", true)
+	audio.play_jelly_cue("merge-impact:upgrade:4:3")
+	audio.play_jelly_cue("collect-charge:4")
+	audio.play_jelly_cue("collect-punch:4:2:0")
+	audio.play_jelly_cue("collect-punch:1:0:3")
+	audio.play_jelly_cue("wrong-bounce")
 	audio.play_jelly_cue("merge-upgrade:4:3")
 	audio.play_jelly_cue("merge-chain:5")
 	audio.play_jelly_cue("contact_match")
@@ -210,8 +245,9 @@ func test_layered_audio_cues() -> void:
 	audio.play_jelly_cue("boss-hit-power")
 	audio.play_jelly_cue("boss-ward-break")
 	audio.play_jelly_cue("boss-clone-pop")
-	check(audio._jelly_combo_players.size() == Audio.WORD_JELLY_COMBO_CHANNELS,
-		"Layered impact audio reuses the bounded combo accent pool without allocating extra buses")
+	check(audio._jelly_combo_players.size() == Audio.WORD_JELLY_COMBO_CHANNELS
+		and audio._jelly_impact_players.size() == Audio.JELLY_IMPACT_CHANNELS,
+		"Layered Nintendo impact audio reuses bounded combo and impact pools without allocating extra buses")
 	audio.halt()
 	audio.queue_free()
 	await process_frame

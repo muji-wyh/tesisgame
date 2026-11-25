@@ -62,6 +62,7 @@ func prepare(app) -> Array:
 	check(view.game.bind_stage(Catalog.make_plan(1, words, app.growth.learning_age(), seed_value)),
 		"Bind actual pending word goals before testing their paid actions")
 	view.set_stage_progress(view.game.stage_run.snapshot())
+	view.game.set_fill_mode(false)
 	view.game.cells.clear()
 	view.game.spawn_interval = 10000.0
 	view.game._stage_spawn_interval = 10000.0
@@ -187,7 +188,7 @@ func test_auto_hover(app) -> void:
 		"Leaving the Auto merge target restores all original acquired gel surfaces")
 	await focus_tool(button)
 	check(view.snapshot().auto_merge_hover.input_ids == expected, "Keyboard/controller focus exposes the same legal input prediction")
-	view._fill_button.grab_focus()
+	view.collect_button.grab_focus()
 	await process_frame
 	check(not view.snapshot().auto_merge_hover.active, "Focus navigation removes the old Auto merge prediction")
 	var saved_balance: Callable = view.coin_balance
@@ -450,30 +451,25 @@ func test_cancel_and_fill(app) -> void:
 	check(view.snapshot().goal_hover.word_id.is_empty() and app.coin_wallet.balance == before,
 		"Pause clears goal hover and blocks payment, not just the board gesture")
 	view.pause(false)
-	var generated: int = view.game.generated_tiles
-	check(view.navigation_controls().has(view._fill_button),
-		"The optional Fill switch belongs to the actual controller navigation surface")
-	await click(view._fill_button)
-	view._process(0.01)
-	check(view.game.fill_mode and view.game.generated_tiles > generated,
-		"The real unified Fill switch starts normal advertised supply flights")
-	await click(view._fill_button)
-	check(not view.game.fill_mode, "Main/unbound play can turn Fill back off while already launched pieces settle")
-	view._process(2.0)
-	await click(view._fill_button)
-	check(view.game.fill_mode, "The ordinary Fill preference can be on before entering Challenge")
+	check(not view._fill_button.visible and not view.navigation_controls().has(view._fill_button),
+		"The retired Fill toggle stays hidden and out of the controller navigation surface")
 	var words: Array = view.game._words.duplicate(true)
+	var main_plan: Dictionary = Catalog.make_plan(2, words, app.growth.learning_age(), seed_value, false)
+	check(view.game.bind_stage(main_plan), "Bind a real numbered stage")
+	view._refresh_controls()
+	view._layout()
+	var generated: int = view.game.generated_tiles
+	view._process(0.05)
+	check(view.game.fill_mode and view.game.generated_tiles > generated and not view._fill_button.visible,
+		"Main stages default to auto-fill on and stream supply immediately without a Fill switch")
+	view._process(2.0)
 	var plan: Dictionary = Catalog.make_plan(0, words, app.growth.learning_age(), seed_value, true)
 	check(view.game.bind_stage(plan), "Bind the actual ninety-second Challenge model: " + str(plan.get("error", "")) + view.game.error)
 	view._refresh_controls()
 	view._layout()
-	await click(view._fill_button)
-	check(view._fill_button.disabled and view._fill_button.button_pressed and view.game.fill_mode
-		and view.snapshot().fill_control.locked and view._fill_button.snapshot().unified_switch,
-		"Challenge keeps the single whole-row switch On and rejects a real attempt to turn it off")
-	check(view.configure(words, app.growth.learning_age(), Data.theme(app.model.theme_id), app.data.chests, false, seed_value)
-		and view.game.fill_mode and not view.game.fill_mode_locked(),
-		"Leaving Challenge restores the independent ordinary Fill preference rather than persisting the forced lock")
+	check(not view._fill_button.visible and view._fill_button.disabled and view.game.fill_mode
+		and view.snapshot().fill_control.locked,
+		"Challenge also runs with auto-fill active and the Fill toggle retired")
 
 
 func test_keyboard_and_controller(app) -> void:
@@ -684,7 +680,7 @@ func test_layouts(app) -> void:
 		view.set_process(false)
 		view._layout()
 		view._refresh_controls()
-		var controls: Array = [view._fill_button, view.collect_button]
+		var controls: Array = [view.collect_button]
 		controls.append_array(view.powerup_buttons.values())
 		for index in range(controls.size()):
 			var bounds: Rect2 = controls[index].get_global_rect()
@@ -692,13 +688,12 @@ func test_layouts(app) -> void:
 				and not bounds.intersects(view._global_rect(view._board))
 				and bounds.size.x * app.Style.ui_scale(app) >= 43.9
 				and bounds.size.y * app.Style.ui_scale(app) >= 43.9,
-				"Fill, Collect and every paid target fit without covering Jelly reading space at %s: %s" % [dimensions, bounds])
+				"Collect and every paid target fit without covering Jelly reading space at %s: %s" % [dimensions, bounds])
 			for previous in range(index):
 				check(not bounds.intersects(controls[previous].get_global_rect()),
-					"No paid, free or fill targets overlap at %s" % dimensions)
-		check(not view._fill_button.get_global_rect().intersects(view.collect_button.get_global_rect())
-			and is_equal_approx(view._fill_button.size.x * app.Style.ui_scale(app), 56.0),
-			"Fill stays compact beside Collect, or above it only when the rail cannot fit both")
+					"No paid or free action targets overlap at %s" % dimensions)
+		check(not view._fill_button.visible and is_equal_approx(view.collect_button.size.x, view.powerup_buttons.auto_merge.size.x),
+			"Fill button is retired and Collect fills the full free-action row at %s" % dimensions)
 		if dimensions.x == 393:
 			await capture("phone-controls")
 

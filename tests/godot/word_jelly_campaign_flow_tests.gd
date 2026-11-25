@@ -416,8 +416,8 @@ func test_stage_deadline_border(app) -> void:
 	view.reduced_motion = reduced
 	game.full_elapsed = 8.0
 	view._refresh_danger()
-	check(view.snapshot().danger.get("source") == "full" and view.snapshot().danger.get("elapsed") == 8.0,
-		"A more urgent full-board clock owns the single border instead of stacking another flash")
+	check(view.snapshot().danger.get("source") == "stage",
+		"In Jelly World, only the stage timer deadline drives the danger border (never full-board)")
 	game.full_elapsed = -1.0
 	view.pause(true)
 	var before: float = attempt.remaining

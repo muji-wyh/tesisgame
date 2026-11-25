@@ -62,6 +62,8 @@ var _picture_shadow: TextureRect
 var _boss_status: Dictionary = {}
 var _boss_overlay := Control.new()
 var _merged_core_proxy := Node2D.new()
+var _merged_core_base_transform := Transform2D.IDENTITY
+var _merged_glow_base_pos := Vector2.ZERO
 var _merged_core_allowed: bool = false
 var _merged_core_enabled: bool = true
 var _merged_core_requested: bool = false
@@ -245,7 +247,8 @@ func set_merged_presentation(elapsed: float, reduced: bool = false) -> void:
 			_merged_effect_material.set_shader_parameter("tier_row", float(maxi(0, merge_level - 1)))
 			# The sourced readiness light has fixed geometry between layout changes.
 			_merged_glow.size = size * 1.30
-			_merged_glow.position = (size - _merged_glow.size) * 0.5 - Vector2(0.0, size.y * 0.025)
+			_merged_glow_base_pos = (size - _merged_glow.size) * 0.5 - Vector2(0.0, size.y * 0.025)
+			_merged_glow.position = _merged_glow_base_pos + _board_recoil
 			var tint: Color = MERGED_COLORS[clampi(merge_level, 1, WordModel.MAX_MERGE_LEVEL)]
 			tint.a = 0.48 + float(maxi(0, merge_level - 1)) * 0.025
 			_merged_glow.modulate = tint
@@ -677,8 +680,10 @@ func _merged_core_eligible() -> bool:
 func _merged_local_pose_key() -> Array:
 	# A whole-core capture may translate with its owner, but skin-only squash
 	# must restore the separate source picture, ornaments and learning face.
+	# Only neutral visual position matches; subtract transient board recoil so
+	# cached merged cores translate cleanly with the whole board without re-baking.
 	var raster: Transform2D = get_viewport_transform() * get_global_transform()
-	return [_surface.scale, _surface.position, _surface.pivot_offset, _visual.position,
+	return [_surface.scale, _surface.position, _surface.pivot_offset, _visual.position - _board_recoil,
 		_picture.position, _picture.size, raster.x, raster.y, _merged_render_origin()]
 
 
@@ -692,7 +697,7 @@ func _merged_local_pose_matches() -> bool:
 		and _surface.scale.is_equal_approx(_merged_core_pose_key[0]) \
 		and _surface.position.is_equal_approx(_merged_core_pose_key[1]) \
 		and _surface.pivot_offset.is_equal_approx(_merged_core_pose_key[2]) \
-		and _visual.position.is_equal_approx(_merged_core_pose_key[3]) \
+		and (_visual.position - _board_recoil).is_equal_approx(_merged_core_pose_key[3]) \
 		and _picture.position.is_equal_approx(_merged_core_pose_key[4]) \
 		and _picture.size.is_equal_approx(_merged_core_pose_key[5]) \
 		and raster.x.is_equal_approx(_merged_core_pose_key[6]) \
@@ -840,6 +845,21 @@ func _capture_merged_core() -> Dictionary:
 	return {"bounds": bounds, "sources": sources}
 
 
+func set_board_recoil(offset: Vector2, reduced: bool = false) -> void:
+	var prev: Vector2 = _board_recoil
+	super.set_board_recoil(offset, reduced)
+	if _board_recoil.is_equal_approx(prev):
+		return
+	if _merged_glow != null:
+		_merged_glow.position = _merged_glow_base_pos + _board_recoil
+	if _merged_core_proxy != null and _merged_core_requested:
+		var t: Transform2D = _merged_core_base_transform
+		t.origin += _board_recoil
+		_merged_core_proxy.transform = t
+	if _boss_overlay != null:
+		_boss_overlay.position = _board_recoil
+
+
 func _merged_core_ready(key: String, texture: Texture2D, bounds: Rect2) -> void:
 	if not _merged_core_requested or _merged_core_key != key:
 		return
@@ -847,7 +867,10 @@ func _merged_core_ready(key: String, texture: Texture2D, bounds: Rect2) -> void:
 	_merged_core_size = bounds.size
 	var screen := Transform2D.IDENTITY
 	screen.origin = bounds.position
-	_merged_core_proxy.transform = _render_global_transform(self).affine_inverse() * screen
+	_merged_core_base_transform = _render_global_transform(self).affine_inverse() * screen
+	var applied: Transform2D = _merged_core_base_transform
+	applied.origin += _board_recoil
+	_merged_core_proxy.transform = applied
 	if _merged_core_eligible():
 		_show_merged_core()
 	else:

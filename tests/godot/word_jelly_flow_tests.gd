@@ -323,9 +323,8 @@ func check_finish_header(app, view) -> void:
 		var board: Rect2 = view._global_rect(view._board)
 		# Inspect actual controls after their minimum sizes resolve, including
 		# the hosted 320-pixel viewport where nominal footer widths can be smaller.
-		var fill: Rect2 = view._fill_button.get_global_rect()
-		var free_area: Rect2 = fill.merge(collect)
-		var actions: Dictionary = {"Collect": collect, "Fill": fill}
+		var free_area: Rect2 = collect
+		var actions: Dictionary = {"Collect": collect}
 		var paid_area: Rect2 = view.powerup_buttons.auto_merge.get_global_rect()
 		for kind: String in view.powerup_buttons:
 			var button: Control = view.powerup_buttons[kind]
@@ -335,8 +334,9 @@ func check_finish_header(app, view) -> void:
 		var auto_merge: Rect2 = actions["auto_merge"]
 		check(absf(free_area.position.x - auto_merge.position.x) < 0.1
 			and absf(auto_merge.position.y - collect.end.y - 14.0 / s) < 0.1
-			and absf(free_area.size.x - paid_area.size.x) < 0.1,
-			"Compact Fill and Collect fill the free-action row above the fourteen-pixel divider band" + context)
+			and absf(free_area.size.x - paid_area.size.x) < 0.1
+			and not view._fill_button.visible,
+			"Collect fills the free-action row above the fourteen-pixel divider band with Fill retired" + context)
 		var divider_state: Dictionary = view.snapshot().get("action_divider", {})
 		var divider_rect: Array = divider_state.get("rect", [])
 		check(bool(divider_state.get("visible", false)) and divider_rect.size() == 4,
@@ -407,7 +407,7 @@ func check_finish_header(app, view) -> void:
 			if view._stage_banner.visible and badge.position.x < board.end.x and badge.end.y <= view.drop_button.get_global_rect().position.y:
 				top_limit = maxf(top_limit, badge.end.y + 8.0 / s)
 			var bottom_limit: float = playfield.end.y - 12.0 / s if view._compact_hud \
-				else view._fill_button.get_global_rect().position.y - (4.0 if authored else 6.0) / s
+				else view.collect_button.get_global_rect().position.y - (4.0 if authored else 6.0) / s
 			var height_budget: float = (bottom_limit - top_limit) * s
 			var height_pitch: float = (height_budget - 9.0) / (view.WordModel.ROWS + view._preview_row_count()) if authored \
 				else (height_budget - 12.0) / (view.WordModel.ROWS + 0.91)

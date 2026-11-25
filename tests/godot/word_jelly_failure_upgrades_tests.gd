@@ -313,10 +313,10 @@ func _run() -> void:
 	root.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 	for settings: Dictionary in [
 			{"name": "timeout-phone", "size": Vector2i(393, 852), "reason": "timeout", "action": "upgrades"},
-			{"name": "blocked-treasure-desktop", "size": Vector2i(1366, 900), "reason": "blocked",
+			{"name": "timeout-treasure-desktop", "size": Vector2i(1366, 900), "reason": "timeout",
 				"treasure": true, "save_failure": true, "action": "upgrades"},
 			{"name": "retry-landscape", "size": Vector2i(844, 390), "reason": "timeout", "action": "retry"},
-			{"name": "map-small-phone", "size": Vector2i(320, 480), "reason": "blocked", "reduce": true, "action": "map"},
+			{"name": "map-small-phone", "size": Vector2i(320, 480), "reason": "timeout", "reduce": true, "action": "map"},
 			{"name": "challenge-phone", "size": Vector2i(393, 852), "reason": "timeout",
 				"challenge": true, "leave_at_peak": true, "action": "upgrades"}]:
 		if OS.get_cmdline_user_args().has("--save-error-only") and not settings.get("save_failure", false):

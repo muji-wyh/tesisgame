@@ -63,6 +63,9 @@ class ReferenceModel extends CountedModel:
 				tile.fill_stream = true
 				if slot_delays.has(index):
 					tile.arrival_delay = 0.0
+				else:
+					var stream_stagger: float = _scheduled_arrival_delay(index, true)
+					tile.arrival_delay = stream_stagger / fall_speed_scale if stage_run != null else stream_stagger
 			else:
 				tile.erase("fill_stream")
 			tile.arrival_delay = maxf(float(tile.arrival_delay), float(slot_delays.get(index, 0.0)))
@@ -71,7 +74,7 @@ class ReferenceModel extends CountedModel:
 					tile.arrival_delay = maxf(float(tile.arrival_delay), float(column_delays[column]))
 			for column in range(int(tile.column), int(tile.column) + int(tile.width)):
 				var speed: float = clampf(float(tile.get("motion_speed_scale", 1.0)), 1.0, 2.2) if streaming else 1.0
-				column_delays[column] = float(tile.arrival_delay) + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed / FALL_SPEED_SCALE
+				column_delays[column] = float(tile.arrival_delay) + sqrt(2.0 * int(tile.height) / Motion.ARRIVAL_GRAVITY) / speed / arrival_speed_scale(tile)
 		if generated_tiles > previous_generated:
 			_schedule_spawn_interval()
 

@@ -26,10 +26,20 @@ const CONSTELLATION_PALETTE: Array[Color] = [Color("#f0bc42"), Color("#57bddd"),
 
 var _entries: Array[Dictionary] = []
 var _merge_pops: Array[Dictionary] = []
+var _splatters: Array[Dictionary] = []
 var _reduced_motion: bool = false
 var _ui_scale: float = 1.0
 var _serial: int = 0
 var _board_pitch: float = 0.0
+var _board_recoil := Vector2.ZERO
+
+
+func set_board_recoil(offset: Vector2) -> void:
+	if _board_recoil.is_equal_approx(offset):
+		return
+	_board_recoil = offset
+	if visible:
+		queue_redraw()
 
 
 func _init() -> void:
@@ -107,18 +117,72 @@ func reanchor_pending(anchor_id: String, origin: Vector2) -> void:
 		queue_redraw()
 
 
-func present_merge_pop(origin: Vector2, level: int, upgrade: bool, tint: Color, badge_text: String = "") -> void:
+func present_merge_pop(origin: Vector2, level: int, upgrade: bool, tint: Color, badge_text: String = "", gel_color: Color = Color(0, 0, 0, 0)) -> void:
 	if not origin.is_finite():
 		return
-	var duration: float = 0.24 if _reduced_motion else (0.46 if upgrade else 0.34)
+	var duration: float = 0.24 if _reduced_motion else (0.52 if upgrade else 0.38)
 	_serial += 1
+	var drop_tint: Color = gel_color if gel_color.a > 0.01 else tint
 	_merge_pops.append({
 		"id": _serial, "origin": origin - position, "level": clampi(level, 0, 9),
-		"upgrade": upgrade, "tint": tint, "badge": badge_text,
+		"upgrade": upgrade, "tint": tint, "gel_color": drop_tint, "badge": badge_text,
 		"elapsed": 0.0, "duration": duration
 	})
 	while _merge_pops.size() > MAX_ACTIVE:
 		_merge_pops.pop_front()
+	if not _reduced_motion:
+		var droplet_count: int = (10 + mini(level, 6) * 2) if upgrade else (8 if level >= 1 else 6)
+		present_jelly_splatter(origin, drop_tint, level if upgrade else maxi(1, level), upgrade, false, droplet_count)
+	show()
+	queue_redraw()
+
+
+func present_jelly_splatter(origin: Vector2, gel_color: Color, level: int = 1, heavy: bool = false,
+		is_collect: bool = true, count_override: int = -1, badge_text: String = "") -> void:
+	if _reduced_motion or not origin.is_finite():
+		return
+	var clamped_lv: int = clampi(level, 1, 9)
+	var count: int = count_override if count_override > 0 else (7 + clamped_lv * 2 if is_collect else 6 + clamped_lv)
+	count = mini(count, 24)
+	_serial += 1
+	var sid: int = _serial
+	var unit: float = _board_pitch if _board_pitch > 0.0 else 56.0 / _ui_scale
+	var droplets: Array[Dictionary] = []
+	for index in range(count):
+		var frac: float = float(index) / float(maxi(1, count))
+		var jitter: float = float(posmod(sid * 17 + index * 31, 19)) / 19.0 - 0.5
+		var angle: float = frac * TAU + jitter * 0.42 - PI * 0.5
+		var speed_var: float = 0.58 + float(posmod(sid * 13 + index * 23, 11)) / 11.0 * 0.85
+		var speed_scale: float = (1.18 + float(mini(clamped_lv, 6)) * 0.14) if (heavy or is_collect) else 0.96
+		var vel: Vector2 = Vector2.from_angle(angle) * unit * 2.55 * speed_scale * speed_var
+		# Gentle upward bias so droplets pop into joyful Nintendo arcs before gravity pulls them down.
+		vel.y -= unit * (0.65 if is_collect else 0.45) * (0.7 + float(index % 3) * 0.25)
+		var size_factor: float = 0.095 + float(index % 4) * 0.032 + (0.025 if heavy or clamped_lv >= 4 else 0.0)
+		var tint_shift: float = (float(index % 3) - 1.0) * 0.09
+		var d_color: Color = gel_color.lightened(maxf(0.0, tint_shift)) if tint_shift >= 0.0 else gel_color.darkened(-tint_shift)
+		droplets.append({
+			"vel": vel,
+			"radius": unit * size_factor,
+			"color": d_color,
+			"life": 0.34 + float(posmod(index * 7 + sid, 9)) / 9.0 * 0.24,
+			"gloss": 0.78 + float(index % 2) * 0.18
+		})
+	var line_count: int = 8 + mini(clamped_lv, 6) if (heavy or clamped_lv >= 4) else 6
+	_splatters.append({
+		"id": sid,
+		"origin": origin - position,
+		"color": gel_color,
+		"level": clamped_lv,
+		"heavy": heavy or clamped_lv >= 4,
+		"is_collect": is_collect,
+		"badge": badge_text,
+		"droplets": droplets,
+		"line_count": line_count,
+		"elapsed": 0.0,
+		"duration": 0.60 if (heavy or clamped_lv >= 4) else 0.48
+	})
+	while _splatters.size() > MAX_ACTIVE:
+		_splatters.pop_front()
 	show()
 	queue_redraw()
 
@@ -134,18 +198,27 @@ func advance(delta: float) -> void:
 		_merge_pops[index].elapsed += delta
 		if float(_merge_pops[index].elapsed) >= float(_merge_pops[index].duration):
 			_merge_pops.remove_at(index)
-	visible = not _entries.is_empty() or not _merge_pops.is_empty()
+	for index in range(_splatters.size() - 1, -1, -1):
+		_splatters[index].elapsed += delta
+		if float(_splatters[index].elapsed) >= float(_splatters[index].duration):
+			_splatters.remove_at(index)
+	visible = not _entries.is_empty() or not _merge_pops.is_empty() or not _splatters.is_empty()
 	queue_redraw()
 
 
 func set_reduced_motion(value: bool) -> void:
 	_reduced_motion = value
+	if value:
+		_splatters.clear()
+		_board_recoil = Vector2.ZERO
 	queue_redraw()
 
 
 func reset() -> void:
 	_entries.clear()
 	_merge_pops.clear()
+	_splatters.clear()
+	_board_recoil = Vector2.ZERO
 	hide()
 	queue_redraw()
 
@@ -162,8 +235,8 @@ func snapshot() -> Dictionary:
 			"duration": entry.duration, "origin": [entry.origin.x + position.x, entry.origin.y + position.y],
 			"burst_only": bool(entry.burst_only), "radius": _radius(entry),
 			"reduced_motion": _reduced_motion})
-	return {"visible": visible and (not states.is_empty() or not _merge_pops.is_empty()), "active_count": states.size(),
-		"merge_pop_count": _merge_pops.size(),
+	return {"visible": visible and (not states.is_empty() or not _merge_pops.is_empty() or not _splatters.is_empty()), "active_count": states.size(),
+		"merge_pop_count": _merge_pops.size(), "splatter_count": _splatters.size(),
 		"entries": states, "reduced_motion": _reduced_motion, "input_transparent": mouse_filter == Control.MOUSE_FILTER_IGNORE}
 
 
@@ -182,11 +255,104 @@ func _draw() -> void:
 	for pop: Dictionary in _merge_pops:
 		var p: float = clampf(float(pop.elapsed) / maxf(0.01, float(pop.duration)), 0.0, 1.0)
 		_draw_merge_pop(pop, p)
+	if not _reduced_motion:
+		for splat: Dictionary in _splatters:
+			_draw_jelly_splatter(splat)
 	draw_set_transform(Vector2.ZERO)
 
 
+func _draw_jelly_splatter(splat: Dictionary) -> void:
+	var t: float = float(splat.elapsed)
+	var dur: float = maxf(0.01, float(splat.duration))
+	var p: float = clampf(t / dur, 0.0, 1.0)
+	var origin: Vector2 = Vector2(splat.origin) + _board_recoil
+	var unit: float = _board_pitch if _board_pitch > 0.0 else 56.0 / _ui_scale
+	var heavy: bool = bool(splat.heavy)
+	var is_collect: bool = bool(splat.is_collect)
+	var base_color: Color = splat.color
+	var level: int = int(splat.level)
+	# 1. Crisp 2-stage Nintendo shock-rings (bright white inner snap + tinted outer echo).
+	var inner_p: float = clampf(t / 0.16, 0.0, 1.0)
+	if inner_p < 1.0:
+		var er: float = 1.0 - pow(1.0 - inner_p, 3.2)
+		var max_r: float = unit * ((1.28 + float(mini(level, 6)) * 0.09) if (is_collect or heavy) else 0.92)
+		var ring_r: float = lerpf(unit * 0.22, max_r, er)
+		var ring_w: float = maxf(1.4, lerpf(5.8 if (heavy or is_collect) else 3.8, 0.6, er) / _ui_scale)
+		draw_set_transform(Vector2.ZERO)
+		draw_arc(origin, ring_r, 0.0, TAU, 32, Color(1.0, 0.99, 0.92, (1.0 - inner_p) * 0.92), ring_w, true)
+	var outer_t: float = t - 0.025
+	if outer_t > 0.0 and outer_t < 0.22:
+		var outer_p: float = outer_t / 0.22
+		var eo: float = 1.0 - pow(1.0 - outer_p, 2.6)
+		var out_r: float = unit * lerpf(0.32, (1.58 + float(mini(level, 6)) * 0.11) if (is_collect or heavy) else 1.12, eo)
+		var out_w: float = maxf(1.0, lerpf(3.2 if heavy else 2.2, 0.5, eo) / _ui_scale)
+		draw_set_transform(Vector2.ZERO)
+		draw_arc(origin, out_r, 0.0, TAU, 32, Color(base_color.lightened(0.30), (1.0 - outer_p) * 0.78), out_w, true)
+	# 2. Snappy comic speed-lines radiating on the first 120ms of impact.
+	var line_p: float = clampf(t / 0.125, 0.0, 1.0)
+	if line_p < 1.0:
+		var lines: int = int(splat.line_count)
+		var alpha: float = (1.0 - line_p) * (0.92 if heavy else 0.78)
+		var el: float = 1.0 - pow(1.0 - line_p, 2.4)
+		var line_w: float = maxf(1.3, lerpf(3.2 if heavy else 2.2, 0.6, line_p) / _ui_scale)
+		draw_set_transform(Vector2.ZERO)
+		for index in range(lines):
+			var a: float = TAU * float(index) / float(lines) + float(int(splat.id) % 7) * 0.23
+			var dir: Vector2 = Vector2.from_angle(a)
+			var inner_d: float = unit * lerpf(0.30, 0.85 if heavy else 0.68, el)
+			var seg_len: float = unit * lerpf(0.42 if heavy else 0.30, 0.10, line_p) * (0.78 + float(index % 3) * 0.16)
+			var col: Color = Color(1.0, 0.97, 0.80, alpha) if index % 2 == 0 else Color(base_color.lightened(0.45), alpha)
+			draw_line(origin + dir * inner_d, origin + dir * (inner_d + seg_len), col, line_w, true)
+	# 3. Glossy color-matched jelly droplets with velocity stretch, rim outline & specular highlight.
+	var gravity: float = unit * 7.8
+	var drag: float = 4.6
+	var inv_drag: float = 1.0 / drag
+	var exp_term: float = 1.0 - exp(-drag * t)
+	var vel_decay: float = exp(-drag * t)
+	for drop: Dictionary in splat.droplets:
+		var life: float = float(drop.life)
+		if t >= life:
+			continue
+		var dp: float = clampf(t / life, 0.0, 1.0)
+		var v0: Vector2 = drop.vel
+		var pos: Vector2 = origin + v0 * (exp_term * inv_drag) + Vector2(0.0, 0.5 * gravity * t * t)
+		var v_now: Vector2 = v0 * vel_decay + Vector2(0.0, gravity * t)
+		var speed: float = v_now.length()
+		var scale_env: float = lerpf(0.55, 1.18, clampf(dp / 0.14, 0.0, 1.0)) if dp < 0.14 else (1.0 - smoothstep(0.45, 1.0, dp)) * 1.18
+		var r: float = float(drop.radius) * scale_env
+		if r < 0.8:
+			continue
+		var stretch_x: float = clampf(1.0 + speed / maxf(1.0, unit * 5.2), 1.0, 1.85)
+		var stretch_y: float = 1.0 / sqrt(stretch_x)
+		var fade: float = 1.0 - smoothstep(0.62, 1.0, dp)
+		var dc: Color = drop.color
+		dc.a = fade * 0.94
+		var outline_c: Color = dc.darkened(0.38)
+		outline_c.a = fade * 0.72
+		var angle: float = v_now.angle() if speed > 1.0 else 0.0
+		draw_set_transform(pos, angle, Vector2(stretch_x, stretch_y))
+		draw_circle(Vector2.ZERO, r + 1.0 / _ui_scale, outline_c)
+		draw_circle(Vector2.ZERO, r, dc)
+		# Crisp candy-gel white specular dot offset toward upper-left crown.
+		draw_circle(Vector2(-r * 0.22, -r * 0.28), maxf(1.0, r * 0.34), Color(1.0, 1.0, 1.0, fade * float(drop.gloss)))
+	# 4. Optional comic pop stamp for juicy collect beats (Lv2+ or combo).
+	var badge: String = str(splat.badge)
+	if not badge.is_empty():
+		var Style = preload("res://scripts/ui_style.gd")
+		var pop_scale: float = lerpf(0.45, 1.44, clampf(p / 0.13, 0.0, 1.0)) if p < 0.13 else lerpf(1.44, 0.96, smoothstep(0.13, 0.34, p))
+		var b_alpha: float = 1.0 - smoothstep(0.58, 1.0, p)
+		var rise: float = unit * (0.36 + 0.62 * (1.0 - pow(1.0 - p, 2.5)))
+		var px: int = maxi(10, ceili(15.5 * pop_scale / _ui_scale))
+		var w: float = Style.HEADING_FONT.get_string_size(badge, HORIZONTAL_ALIGNMENT_LEFT, -1, px).x
+		var pos := origin + Vector2(-w * 0.5, -rise)
+		var tilt: float = sin(p * PI * 2.0) * (1.0 - p) * 0.09 * (-1.0 if int(splat.id) % 2 == 0 else 1.0)
+		draw_set_transform(pos + Vector2(w * 0.5, 0.0), tilt)
+		draw_string_outline(Style.HEADING_FONT, Vector2(-w * 0.5, 0.0), badge, HORIZONTAL_ALIGNMENT_LEFT, -1, px, maxi(2, ceili(3.4 / _ui_scale)), Color("#2b233d", b_alpha * 0.90))
+		draw_string(Style.HEADING_FONT, Vector2(-w * 0.5, 0.0), badge, HORIZONTAL_ALIGNMENT_LEFT, -1, px, Color("#fff4b8", b_alpha))
+
+
 func _draw_merge_pop(pop: Dictionary, p: float) -> void:
-	var origin: Vector2 = pop.origin
+	var origin: Vector2 = Vector2(pop.origin) + _board_recoil
 	var level: int = int(pop.level)
 	var upgrade: bool = bool(pop.upgrade)
 	var tint: Color = pop.tint
@@ -195,44 +361,46 @@ func _draw_merge_pop(pop: Dictionary, p: float) -> void:
 		var steady_alpha: float = 1.0 - smoothstep(0.45, 1.0, p)
 		_stamp(GLOW, origin, Vector2.ONE * unit * (1.35 if upgrade else 1.05), Color(tint, steady_alpha * 0.42))
 		return
-	var ring_p: float = clampf(p / 0.55, 0.0, 1.0)
+	var ring_p: float = clampf(p / 0.48, 0.0, 1.0)
 	if ring_p < 1.0:
-		var ease_r: float = 1.0 - pow(1.0 - ring_p, 3.0)
-		var ring_r: float = unit * lerpf(0.26, 0.96 + float(mini(level, 6)) * 0.07 if upgrade else 0.78, ease_r)
-		var ring_w: float = maxf(1.2, lerpf(4.2 if upgrade else 2.6, 0.6, ease_r) / _ui_scale)
+		var ease_r: float = 1.0 - pow(1.0 - ring_p, 3.2)
+		var ring_r: float = unit * lerpf(0.24, 1.18 + float(mini(level, 6)) * 0.09 if upgrade else 0.92, ease_r)
+		var ring_w: float = maxf(1.4, lerpf(5.4 if upgrade else 3.4, 0.6, ease_r) / _ui_scale)
 		draw_set_transform(Vector2.ZERO)
-		draw_arc(origin, ring_r, 0.0, TAU, 28, Color(tint.lightened(0.45), (1.0 - ring_p) * (0.88 if upgrade else 0.68)), ring_w, true)
-	var flash: float = 1.0 - smoothstep(0.0, 0.28, p)
+		draw_arc(origin, ring_r, 0.0, TAU, 32, Color(tint.lightened(0.52), (1.0 - ring_p) * (0.95 if upgrade else 0.78)), ring_w, true)
+	var flash: float = 1.0 - smoothstep(0.0, 0.24, p)
 	if flash > 0.005:
-		_stamp(GLOW, origin, Vector2.ONE * unit * lerpf(0.75, 1.55 if upgrade else 1.20, p),
-			Color(tint.lightened(0.5), flash * (0.58 if upgrade else 0.36)))
-		if upgrade:
-			var star_s: float = unit * lerpf(0.35, 1.15 + float(mini(level, 6)) * 0.06, 1.0 - pow(1.0 - minf(1.0, p / 0.28), 2.4))
-			_stamp(IMPACT_STAR, origin, Vector2.ONE * star_s, Color(1.0, 0.96, 0.72, flash * 0.92), p * 0.6)
-			_stamp(RAYS, origin, Vector2.ONE * star_s * 1.45, Color(tint.lightened(0.3), flash * 0.62), -p * 0.45)
-	var spark_count: int = (6 + mini(level, 5)) if upgrade else 5
-	var spread: float = unit * (0.92 + float(mini(level, 6)) * 0.08 if upgrade else 0.68)
-	var travel: float = 1.0 - pow(1.0 - p, 2.8)
-	var spark_fade: float = 1.0 - smoothstep(0.35, 1.0, p)
+		_stamp(GLOW, origin, Vector2.ONE * unit * lerpf(0.88, 1.85 if upgrade else 1.42, p),
+			Color(tint.lightened(0.58), flash * (0.76 if upgrade else 0.52)))
+		var star_s: float = unit * lerpf(0.45, (1.42 + float(mini(level, 6)) * 0.08) if upgrade else 0.96, 1.0 - pow(1.0 - minf(1.0, p / 0.24), 2.8))
+		_stamp(IMPACT_STAR, origin, Vector2.ONE * star_s, Color(1.0, 0.98, 0.78, flash * (0.98 if upgrade else 0.80)), p * 0.75)
+		if upgrade or level >= 1:
+			_stamp(RAYS, origin, Vector2.ONE * star_s * (1.55 if upgrade else 1.25), Color(tint.lightened(0.35), flash * (0.78 if upgrade else 0.48)), -p * 0.55)
+	var spark_count: int = (8 + mini(level, 6)) if upgrade else 6
+	var spread: float = unit * (1.12 + float(mini(level, 6)) * 0.10 if upgrade else 0.82)
+	var travel: float = 1.0 - pow(1.0 - p, 3.0)
+	var spark_fade: float = 1.0 - smoothstep(0.38, 1.0, p)
 	for index in range(spark_count):
 		var angle: float = TAU * float(index) / float(spark_count) + float(int(pop.id) % 5) * 0.27 - PI * 0.5
-		var dist: float = spread * (0.72 + float(index % 3) * 0.14) * travel
+		var dist: float = spread * (0.72 + float(index % 3) * 0.16) * travel
 		var pt: Vector2 = origin + Vector2.from_angle(angle) * dist
-		var sp_edge: float = (9.5 if upgrade else 6.8) / _ui_scale * lerpf(1.15, 0.35, p)
-		_stamp(SPARKLE, pt, Vector2(sp_edge * 1.35, sp_edge * 0.78),
-			Color(Color("#fff5be") if index % 2 == 0 else tint.lightened(0.25), spark_fade), angle)
+		var sp_edge: float = (11.5 if upgrade else 8.4) / _ui_scale * lerpf(1.22, 0.35, p)
+		_stamp(SPARKLE, pt, Vector2(sp_edge * 1.45, sp_edge * 0.82),
+			Color(Color("#fff8c8") if index % 2 == 0 else tint.lightened(0.30), spark_fade), angle)
 	var badge: String = str(pop.badge)
 	if not badge.is_empty():
 		var Style = preload("res://scripts/ui_style.gd")
-		var pop_scale: float = lerpf(0.65, 1.22, clampf(p / 0.16, 0.0, 1.0)) if p < 0.16 else lerpf(1.22, 1.0, smoothstep(0.16, 0.38, p))
-		var b_alpha: float = 1.0 - smoothstep(0.55, 1.0, p)
-		var rise: float = unit * (0.42 + 0.55 * (1.0 - pow(1.0 - p, 2.2)))
-		var px: int = maxi(10, ceili(15.0 * pop_scale / _ui_scale))
+		# Nintendo bubble-pop overshoot: punchy 1.48x pop with elastic rebound and slight comic tilt.
+		var pop_scale: float = lerpf(0.48, 1.48, clampf(p / 0.12, 0.0, 1.0)) if p < 0.12 else lerpf(1.48, 0.96, smoothstep(0.12, 0.30, p)) + sin(maxf(0.0, p - 0.30) * PI * 3.0) * (1.0 - p) * 0.08
+		var b_alpha: float = 1.0 - smoothstep(0.60, 1.0, p)
+		var rise: float = unit * (0.44 + 0.64 * (1.0 - pow(1.0 - p, 2.5)))
+		var px: int = maxi(11, ceili(16.5 * pop_scale / _ui_scale))
 		var w: float = Style.HEADING_FONT.get_string_size(badge, HORIZONTAL_ALIGNMENT_LEFT, -1, px).x
 		var pos := origin + Vector2(-w * 0.5, -rise)
-		draw_set_transform(Vector2.ZERO)
-		draw_string_outline(Style.HEADING_FONT, pos, badge, HORIZONTAL_ALIGNMENT_LEFT, -1, px, maxi(2, ceili(3.0 / _ui_scale)), Color("#2b233d", b_alpha * 0.85))
-		draw_string(Style.HEADING_FONT, pos, badge, HORIZONTAL_ALIGNMENT_LEFT, -1, px, Color("#fff3b8", b_alpha))
+		var tilt: float = sin(p * PI * 2.2) * (1.0 - p) * 0.10 * (-1.0 if int(pop.id) % 2 == 0 else 1.0)
+		draw_set_transform(pos + Vector2(w * 0.5, 0.0), tilt)
+		draw_string_outline(Style.HEADING_FONT, Vector2(-w * 0.5, 0.0), badge, HORIZONTAL_ALIGNMENT_LEFT, -1, px, maxi(2, ceili(3.6 / _ui_scale)), Color("#2b233d", b_alpha * 0.92))
+		draw_string(Style.HEADING_FONT, Vector2(-w * 0.5, 0.0), badge, HORIZONTAL_ALIGNMENT_LEFT, -1, px, Color("#fff4b8", b_alpha))
 
 
 func _radius(entry: Dictionary) -> float:
