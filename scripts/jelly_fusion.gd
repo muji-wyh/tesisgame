@@ -60,6 +60,9 @@ func configure(colors: Array, a: int, b: int, surface: Texture2D) -> void:
 	for bead: TextureRect in _beads:
 		bead.texture = surface
 
+func set_impact_flash(value: float) -> void:
+	_gel.set_shader_parameter("impact_flash", clampf(value, 0.0, 1.0))
+
 func set_contact(kind: String, direction: Vector2, strength: float, reduced: bool) -> void:
 	_gel.set_shader_parameter("contact_kind", 2 if kind == "match" else 1 if kind == "touch" else 0)
 	_gel.set_shader_parameter("contact_direction", direction)
@@ -91,9 +94,9 @@ func pose(a: Vector2, b: Vector2, destination: Vector2, extent_a: Vector2, exten
 	_gel.set_shader_parameter("opacity", opacity)
 	var center: Vector2 = destination - position
 	var bloom: float = sin(clampf(release / 0.72, 0.0, 1.0) * PI)
-	_glow.size = Vector2.ONE * unit * lerpf(1.0, 2.1, release)
+	_glow.size = Vector2.ONE * unit * lerpf(0.92, 2.25, release)
 	_glow.position = center - _glow.size * 0.5
-	_glow.modulate.a = bloom * 0.52
+	_glow.modulate.a = bloom * 0.62
 	_glow.visible = bloom > 0.004
 	if release > 0.0 and release < 1.0:
 		_ensure_beads()

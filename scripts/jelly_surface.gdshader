@@ -21,6 +21,7 @@ uniform bool contact_match = false;
 uniform float palette_hue = -1.0;
 uniform float completion_strength = 0.0;
 uniform float completion_glint = -2.0;
+uniform float impact_flash = 0.0;
 varying vec4 gel_modulate;
 
 vec3 palette(vec3 paint) {
@@ -129,6 +130,9 @@ void fragment() {
 		float bloom = light_alpha * (1.0 - gel.a);
 		float alpha = gel.a + bloom;
 		gel = vec4((gel.rgb * gel.a + light_color * bloom) / max(alpha, 0.001), alpha);
+	}
+	if (impact_flash > 0.0) {
+		gel.rgb = mix(gel.rgb, vec3(1.0, 0.995, 0.94), clamp(impact_flash, 0.0, 1.0) * 0.56);
 	}
 	COLOR = gel * gel_modulate;
 }

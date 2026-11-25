@@ -40,6 +40,9 @@ var _action_span: float = 0.0
 var _loaded: bool = false
 var _frame_height: float = CAMERA_HEIGHT
 var _frame_center_y: float = CAMERA_CENTER_Y
+var _hit_flash_intensity: float = 0.0
+var _hit_flash_tint: Color = Color(1.0, 0.96, 0.84)
+var _flash_materials: Array[BaseMaterial3D] = []
 
 
 func _init() -> void:
@@ -114,6 +117,12 @@ func load_character() -> bool:
 		or not _body.get_parent().get_parent() is Node3D:
 		return _fail("The Pirate Boss needs its authored elastic body and rigid hat mesh nodes.")
 	_animated_root = _body.get_parent().get_parent() as Node3D
+	_flash_materials.clear()
+	for mesh: MeshInstance3D in _pirate._meshes:
+		for surface: int in range(mesh.mesh.get_surface_count()):
+			var mat: BaseMaterial3D = mesh.get_active_material(surface) as BaseMaterial3D
+			if mat != null and not _flash_materials.has(mat):
+				_flash_materials.append(mat)
 	_build_anchors()
 	_rig.rotation.y = -0.15
 	set_framing(CAMERA_HEIGHT, CAMERA_CENTER_Y)
@@ -139,6 +148,22 @@ func _build_anchors() -> void:
 		"foot": Vector3(center.x, body_bounds.position.y, center.z),
 		"body_left": Vector3(body_bounds.position.x, center.y, center.z),
 		"body_right": Vector3(body_bounds.end.x, center.y, center.z)}
+
+
+func set_hit_flash(intensity: float, tint: Color = Color(1.0, 0.96, 0.84)) -> void:
+	var clamped: float = clampf(intensity, 0.0, 1.0)
+	if is_equal_approx(_hit_flash_intensity, clamped) and _hit_flash_tint.is_equal_approx(tint):
+		return
+	_hit_flash_intensity = clamped
+	_hit_flash_tint = tint
+	var active: bool = clamped > 0.005
+	for mat: BaseMaterial3D in _flash_materials:
+		mat.emission_enabled = active
+		if active:
+			mat.emission = tint
+			mat.emission_energy_multiplier = clamped * 1.65
+	if _loaded:
+		render_target_update_mode = SubViewport.UPDATE_ONCE
 
 
 func set_framing(height: float, center_y: float) -> void:
@@ -241,6 +266,7 @@ func snapshot() -> Dictionary:
 			points[anchor] = [point.x, point.y]
 	return {"loaded": _loaded, "model": MODEL, "clip": _clip, "gesture": _gesture,
 		"time": _native_time, "duration": clip_duration(_clip), "action_duration": _action_span,
+		"hit_flash": _hit_flash_intensity,
 		"animations": animation_names(), "anchor_sources": sources, "anchors": points,
 		"camera_height": _camera.size, "camera_center_y": _camera.position.y,
 		"auto_advance": _pirate.auto_advance, "last_error": last_error}

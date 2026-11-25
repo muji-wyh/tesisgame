@@ -6,5 +6,5 @@ const POLICY_VERSION: String = "ordinary-lexical-v3"
 const CONTEXT_BOUNDARY: String = "containing-modules-v1"
 const DESCRIPTOR_PATH: String = "res://data/professional/domain-policy/generated/release.json"
 const DESCRIPTOR_BYTES: int = 954
-const DESCRIPTOR_SHA256: String = "b471f01e672fe676c429b775e56aecae0d8a2e21ccf503693545ae6833d7e08e"
+const DESCRIPTOR_SHA256: String = "a0db5c853165cb000b3afeb32c55c199fd5669b3187881d6c2f71674c3e70953"
 const GENERATED_ROOT: String = "res://data/professional/domain-policy/generated/"

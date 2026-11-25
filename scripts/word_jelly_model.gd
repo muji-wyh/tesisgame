@@ -1421,15 +1421,15 @@ func _queue_collection_blast(completed: Dictionary) -> void:
 		return
 	if level <= 1:
 		# Keep Lv1 Little spark snappy and non-disruptive: only spark when at least
-		# one marked neighbor has a legal partner on the board.
+		# one marked neighbor is settled and has a legal settled partner on the board.
 		var has_partner: bool = false
 		for id: int in targets:
 			var source: Dictionary = cell(id)
-			if source.is_empty():
+			if source.is_empty() or not is_settled(source):
 				continue
 			for candidate: Dictionary in cells:
 				var other_id: int = int(candidate.id)
-				if other_id == id or is_fusing(other_id) or is_lifted(other_id) \
+				if other_id == id or not is_settled(candidate) or is_fusing(other_id) or is_lifted(other_id) \
 					or _reserved_for_collection(other_id) or _reserved_for_powerup(other_id) \
 					or not boss_interactable(other_id, false):
 					continue

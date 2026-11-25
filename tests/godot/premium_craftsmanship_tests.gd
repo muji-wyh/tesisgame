@@ -46,10 +46,16 @@ func _check_typography_and_materials() -> void:
 	check(mat != null and mat.shader == Style.PAPER_GRAIN, "paper_material attaches the paper grain shader")
 	var btn := Button.new()
 	Style.action_button(btn, Style.GOOD, true)
-	var normal: StyleBoxFlat = btn.get_theme_stylebox("normal") as StyleBoxFlat
-	var pressed: StyleBoxFlat = btn.get_theme_stylebox("pressed") as StyleBoxFlat
-	check(normal != null and pressed != null and normal.border_width_bottom > pressed.border_width_bottom,
-		"action_button has a tactile 3D lip that compresses on press")
+	var normal: StyleBox = btn.get_theme_stylebox("normal")
+	var pressed: StyleBox = btn.get_theme_stylebox("pressed")
+	check(normal != null and pressed != null and normal != pressed,
+		"action_button has distinct normal and pressed tactile states")
+	if normal is StyleBoxFlat and pressed is StyleBoxFlat:
+		check((normal as StyleBoxFlat).border_width_bottom > (pressed as StyleBoxFlat).border_width_bottom,
+			"flat action_button has a tactile 3D lip that compresses on press")
+	elif normal is StyleBoxTexture and pressed is StyleBoxTexture:
+		check((normal as StyleBoxTexture).texture != (pressed as StyleBoxTexture).texture,
+			"textured action_button switches to a distinct compressed pressed surface")
 	check(pressed.content_margin_top > normal.content_margin_top,
 		"action_button shifts content down cleanly on press without changing hit rect")
 	btn.free()

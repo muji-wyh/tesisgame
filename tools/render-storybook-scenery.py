@@ -263,10 +263,45 @@ def frame_camera(all_meshes, width, height, elevation_deg=15.0, azimuth_deg=0.0,
     return cam_obj
 
 
+def add_storybook_island(radius=1.15, depth=0.28, top_color=(0.36, 0.64, 0.34), rim_color=(0.56, 0.42, 0.28)):
+    """Give every map diorama a cozy rounded storybook meadow/earth/snow island base so props
+    never look like floating objects pasted onto blue sky."""
+    bpy.ops.mesh.primitive_cylinder_add(vertices=40, radius=radius, depth=depth, location=(0, 0, -depth * 0.46))
+    base = bpy.context.active_object
+    base.scale = (1.0, 0.72, 1.0)
+    bpy.ops.object.transform_apply(scale=True)
+    bev = base.modifiers.new("Bevel", "BEVEL")
+    bev.width = 0.08
+    bev.segments = 4
+    bpy.ops.object.shade_smooth()
+    mat_rim = bpy.data.materials.new("IslandRim")
+    mat_rim.use_nodes = True
+    bsdf = mat_rim.node_tree.nodes.get("Principled BSDF")
+    bsdf.inputs["Base Color"].default_value = (*rim_color, 1.0)
+    bsdf.inputs["Roughness"].default_value = 0.72
+    base.data.materials.append(mat_rim)
+
+    bpy.ops.mesh.primitive_cylinder_add(vertices=40, radius=radius * 0.98, depth=0.10, location=(0, 0, -0.02))
+    cap = bpy.context.active_object
+    cap.scale = (1.0, 0.72, 1.0)
+    bpy.ops.object.transform_apply(scale=True)
+    bev2 = cap.modifiers.new("Bevel", "BEVEL")
+    bev2.width = 0.045
+    bev2.segments = 4
+    bpy.ops.object.shade_smooth()
+    mat_top = bpy.data.materials.new("IslandTop")
+    mat_top.use_nodes = True
+    bsdf2 = mat_top.node_tree.nodes.get("Principled BSDF")
+    bsdf2.inputs["Base Color"].default_value = (*top_color, 1.0)
+    bsdf2.inputs["Roughness"].default_value = 0.66
+    cap.data.materials.append(mat_top)
+    return [base, cap]
+
+
 def render_diorama(spec):
     clear_scene()
     w, h = spec["size"]
-    setup_render(w, h, transparent=True, samples=spec.get("samples", 24))
+    setup_render(w, h, transparent=True, samples=spec.get("samples", 28))
     setup_world_light(
         sky_color=spec.get("world_color", (0.86, 0.93, 0.99)),
         strength=spec.get("world_strength", 0.72),
@@ -279,6 +314,14 @@ def render_diorama(spec):
     )
     all_meshes = []
     used_sources = []
+    island = spec.get("island")
+    if island:
+        all_meshes.extend(add_storybook_island(
+            radius=island.get("radius", 1.15),
+            depth=island.get("depth", 0.28),
+            top_color=island.get("top", (0.36, 0.64, 0.34)),
+            rim_color=island.get("rim", (0.56, 0.42, 0.28)),
+        ))
     for item in spec["models"]:
         _, created, src_path = import_glb(
             item["kit"],
@@ -317,28 +360,33 @@ def render_diorama(spec):
 
 
 DIORAMAS = [
-    # --- Garden / Board & Early Chapter Props ---
+    # --- Garden / Board & Early Chapter Props (grounded on warm storybook miniature islands) ---
     {
         "id": "garden_tree",
         "output": OUT_GARDEN / "tree.png",
-        "size": (280, 440),
-        "elev": 12.0, "az": 15.0, "margin": 1.06,
+        "size": (360, 420),
+        "elev": 16.0, "az": 16.0, "margin": 1.06,
+        "island": {"radius": 1.32, "depth": 0.30, "top": (0.34, 0.62, 0.32), "rim": (0.54, 0.40, 0.27)},
         "models": [
-            {"kit": "Nature Kit", "name": "tree_oak", "loc": (0.0, 0.0, 0.0), "rot": (0, 0, 18), "scale": 1.05},
-            {"kit": "Nature Kit", "name": "plant_bushDetailed", "loc": (-0.65, -0.35, 0.0), "rot": (0, 0, 35), "scale": 0.65},
-            {"kit": "Nature Kit", "name": "flower_yellowA", "loc": (0.48, -0.45, 0.0), "rot": (0, 0, 10), "scale": 0.9},
-            {"kit": "Nature Kit", "name": "flower_redA", "loc": (-0.25, -0.58, 0.0), "rot": (0, 0, -25), "scale": 0.85},
+            {"kit": "Nature Kit", "name": "tree_detailed", "loc": (-0.10, 0.08, 0.0), "rot": (0, 0, 18), "scale": 1.05, "tint": (0.72, 0.92, 0.60, 0.42)},
+            {"kit": "Nature Kit", "name": "tree_small", "loc": (0.68, -0.08, 0.0), "rot": (0, 0, -24), "scale": 0.72, "tint": (0.78, 0.95, 0.64, 0.38)},
+            {"kit": "Nature Kit", "name": "plant_bushDetailed", "loc": (-0.72, -0.25, 0.0), "rot": (0, 0, 35), "scale": 0.70, "tint": (0.74, 0.90, 0.58, 0.35)},
+            {"kit": "Nature Kit", "name": "flower_yellowA", "loc": (0.36, -0.52, 0.0), "rot": (0, 0, 10), "scale": 0.95},
+            {"kit": "Nature Kit", "name": "flower_redA", "loc": (-0.32, -0.55, 0.0), "rot": (0, 0, -25), "scale": 0.90},
+            {"kit": "Nature Kit", "name": "rock_smallA", "loc": (0.85, -0.35, 0.0), "rot": (0, 0, 12), "scale": 0.55},
         ],
     },
     {
         "id": "garden_tree_long",
         "output": OUT_GARDEN / "tree-long.png",
-        "size": (240, 480),
-        "elev": 11.0, "az": -12.0, "margin": 1.06,
+        "size": (320, 440),
+        "elev": 15.0, "az": -14.0, "margin": 1.06,
+        "island": {"radius": 1.15, "depth": 0.28, "top": (0.34, 0.60, 0.34), "rim": (0.52, 0.39, 0.26)},
         "models": [
-            {"kit": "Nature Kit", "name": "tree_tall", "loc": (0.0, 0.0, 0.0), "rot": (0, 0, -22), "scale": 1.05},
-            {"kit": "Nature Kit", "name": "tree_thin", "loc": (0.55, 0.25, 0.0), "rot": (0, 0, 30), "scale": 0.72},
-            {"kit": "Nature Kit", "name": "grass_large", "loc": (-0.32, -0.35, 0.0), "rot": (0, 0, 15), "scale": 0.85},
+            {"kit": "Nature Kit", "name": "tree_detailed", "loc": (0.0, 0.06, 0.0), "rot": (0, 0, -22), "scale": (0.82, 0.82, 1.18), "tint": (0.66, 0.88, 0.56, 0.45)},
+            {"kit": "Nature Kit", "name": "tree_oak", "loc": (0.56, 0.14, 0.0), "rot": (0, 0, 30), "scale": 0.68, "tint": (0.76, 0.94, 0.60, 0.40)},
+            {"kit": "Nature Kit", "name": "plant_bushSmall", "loc": (-0.48, -0.28, 0.0), "rot": (0, 0, 15), "scale": 0.78},
+            {"kit": "Nature Kit", "name": "flower_purpleA", "loc": (0.28, -0.45, 0.0), "rot": (0, 0, 15), "scale": 0.9},
         ],
     },
     {
@@ -347,9 +395,9 @@ DIORAMAS = [
         "size": (420, 220),
         "elev": 14.0, "az": 6.0, "margin": 1.04, "bottom_flush": True,
         "models": [
-            {"kit": "Nature Kit", "name": "plant_bushLarge", "loc": (-0.75, 0.0, 0.0), "rot": (0, 0, 12), "scale": 1.0},
-            {"kit": "Nature Kit", "name": "plant_bushDetailed", "loc": (0.05, -0.15, 0.0), "rot": (0, 0, -25), "scale": 1.15},
-            {"kit": "Nature Kit", "name": "plant_bushSmall", "loc": (0.85, 0.05, 0.0), "rot": (0, 0, 40), "scale": 1.05},
+            {"kit": "Nature Kit", "name": "plant_bushLarge", "loc": (-0.75, 0.0, 0.0), "rot": (0, 0, 12), "scale": 1.0, "tint": (0.72, 0.90, 0.58, 0.38)},
+            {"kit": "Nature Kit", "name": "plant_bushDetailed", "loc": (0.05, -0.15, 0.0), "rot": (0, 0, -25), "scale": 1.15, "tint": (0.74, 0.92, 0.60, 0.38)},
+            {"kit": "Nature Kit", "name": "plant_bushSmall", "loc": (0.85, 0.05, 0.0), "rot": (0, 0, 40), "scale": 1.05, "tint": (0.70, 0.88, 0.56, 0.38)},
             {"kit": "Nature Kit", "name": "flower_yellowB", "loc": (-0.35, -0.55, 0.0), "rot": (0, 0, 10), "scale": 1.1},
             {"kit": "Nature Kit", "name": "flower_purpleA", "loc": (0.50, -0.52, 0.0), "rot": (0, 0, -15), "scale": 1.1},
             {"kit": "Nature Kit", "name": "mushroom_redGroup", "loc": (0.12, -0.58, 0.0), "rot": (0, 0, 20), "scale": 0.85},
@@ -361,38 +409,40 @@ DIORAMAS = [
         "size": (1024, 340),
         "elev": 12.0, "az": 0.0, "margin": 1.01, "bottom_flush": True,
         "models": [
-            {"kit": "Nature Kit", "name": "ground_grass", "loc": (-2.4, 0.2, 0.0), "rot": (0, 0, 0), "scale": (3.2, 1.8, 1.4)},
-            {"kit": "Nature Kit", "name": "ground_grass", "loc": (0.0, 0.4, 0.0), "rot": (0, 0, 0), "scale": (3.6, 2.0, 1.8)},
-            {"kit": "Nature Kit", "name": "ground_grass", "loc": (2.4, 0.2, 0.0), "rot": (0, 0, 0), "scale": (3.2, 1.8, 1.3)},
-            {"kit": "Nature Kit", "name": "plant_bushLarge", "loc": (-2.6, 0.1, 0.05), "rot": (0, 0, 15), "scale": (1.9, 1.3, 1.15)},
-            {"kit": "Nature Kit", "name": "plant_bushLarge", "loc": (-1.1, 0.3, 0.05), "rot": (0, 0, -20), "scale": (2.3, 1.4, 1.45)},
-            {"kit": "Nature Kit", "name": "plant_bushDetailed", "loc": (0.4, 0.25, 0.05), "rot": (0, 0, 35), "scale": (2.4, 1.4, 1.55)},
-            {"kit": "Nature Kit", "name": "plant_bushLarge", "loc": (1.8, 0.15, 0.05), "rot": (0, 0, 10), "scale": (2.1, 1.3, 1.30)},
-            {"kit": "Nature Kit", "name": "plant_bushDetailed", "loc": (2.9, 0.05, 0.05), "rot": (0, 0, -30), "scale": (1.7, 1.2, 1.05)},
-            {"kit": "Nature Kit", "name": "tree_small", "loc": (-1.9, 0.35, 0.35), "rot": (0, 0, 15), "scale": 0.72},
-            {"kit": "Nature Kit", "name": "tree_oak", "loc": (1.5, 0.35, 0.38), "rot": (0, 0, -20), "scale": 0.64},
+            {"kit": "Nature Kit", "name": "ground_grass", "loc": (-2.4, 0.2, 0.0), "rot": (0, 0, 0), "scale": (3.2, 1.8, 1.4), "tint": (0.76, 0.92, 0.64, 0.35)},
+            {"kit": "Nature Kit", "name": "ground_grass", "loc": (0.0, 0.4, 0.0), "rot": (0, 0, 0), "scale": (3.6, 2.0, 1.8), "tint": (0.76, 0.92, 0.64, 0.35)},
+            {"kit": "Nature Kit", "name": "ground_grass", "loc": (2.4, 0.2, 0.0), "rot": (0, 0, 0), "scale": (3.2, 1.8, 1.3), "tint": (0.76, 0.92, 0.64, 0.35)},
+            {"kit": "Nature Kit", "name": "plant_bushLarge", "loc": (-2.6, 0.1, 0.05), "rot": (0, 0, 15), "scale": (1.9, 1.3, 1.15), "tint": (0.74, 0.90, 0.60, 0.38)},
+            {"kit": "Nature Kit", "name": "plant_bushLarge", "loc": (-1.1, 0.3, 0.05), "rot": (0, 0, -20), "scale": (2.3, 1.4, 1.45), "tint": (0.74, 0.90, 0.60, 0.38)},
+            {"kit": "Nature Kit", "name": "plant_bushDetailed", "loc": (0.4, 0.25, 0.05), "rot": (0, 0, 35), "scale": (2.4, 1.4, 1.55), "tint": (0.74, 0.90, 0.60, 0.38)},
+            {"kit": "Nature Kit", "name": "plant_bushLarge", "loc": (1.8, 0.15, 0.05), "rot": (0, 0, 10), "scale": (2.1, 1.3, 1.30), "tint": (0.74, 0.90, 0.60, 0.38)},
+            {"kit": "Nature Kit", "name": "plant_bushDetailed", "loc": (2.9, 0.05, 0.05), "rot": (0, 0, -30), "scale": (1.7, 1.2, 1.05), "tint": (0.74, 0.90, 0.60, 0.38)},
+            {"kit": "Nature Kit", "name": "tree_small", "loc": (-1.9, 0.35, 0.35), "rot": (0, 0, 15), "scale": 0.72, "tint": (0.72, 0.90, 0.58, 0.38)},
+            {"kit": "Nature Kit", "name": "tree_detailed", "loc": (1.5, 0.35, 0.38), "rot": (0, 0, -20), "scale": 0.64, "tint": (0.72, 0.90, 0.58, 0.38)},
             {"kit": "Nature Kit", "name": "flower_yellowA", "loc": (-0.65, -0.35, 0.06), "rot": (0, 0, 0), "scale": 0.85},
             {"kit": "Nature Kit", "name": "flower_purpleB", "loc": (0.85, -0.32, 0.06), "rot": (0, 0, 15), "scale": 0.85},
         ],
     },
-    # --- 9 Campaign Chapter Landmarks (replaces 1.7KB-7.9KB flat Kenney PNGs) ---
+    # --- 9 Campaign Chapter Landmarks (each grounded on a matching storybook biome island) ---
     {
         "id": "campaign_tree_pine",
         "output": OUT_CAMPAIGN / "tree-pine.png",
-        "size": (280, 480),
-        "elev": 12.0, "az": 16.0, "margin": 1.06,
+        "size": (340, 440),
+        "elev": 15.0, "az": 16.0, "margin": 1.06,
+        "island": {"radius": 1.25, "depth": 0.30, "top": (0.28, 0.54, 0.34), "rim": (0.48, 0.38, 0.28)},
         "models": [
-            {"kit": "Nature Kit", "name": "tree_pineTallA_detailed", "loc": (0.0, 0.0, 0.0), "rot": (0, 0, 14), "scale": 1.0},
-            {"kit": "Nature Kit", "name": "tree_pineSmallA", "loc": (-0.65, -0.18, 0.0), "rot": (0, 0, -25), "scale": 0.85},
-            {"kit": "Nature Kit", "name": "rock_smallA", "loc": (0.52, -0.32, 0.0), "rot": (0, 0, 22), "scale": 0.72},
-            {"kit": "Nature Kit", "name": "mushroom_red", "loc": (-0.28, -0.52, 0.0), "rot": (0, 0, 10), "scale": 0.78},
+            {"kit": "Nature Kit", "name": "tree_pineTallA_detailed", "loc": (0.0, 0.05, 0.0), "rot": (0, 0, 14), "scale": 1.0},
+            {"kit": "Nature Kit", "name": "tree_pineSmallA", "loc": (-0.65, -0.15, 0.0), "rot": (0, 0, -25), "scale": 0.85},
+            {"kit": "Nature Kit", "name": "rock_smallA", "loc": (0.58, -0.28, 0.0), "rot": (0, 0, 22), "scale": 0.72},
+            {"kit": "Nature Kit", "name": "mushroom_red", "loc": (-0.28, -0.50, 0.0), "rot": (0, 0, 10), "scale": 0.78},
         ],
     },
     {
         "id": "campaign_cottage",
         "output": OUT_CAMPAIGN / "cottage.png",
-        "size": (400, 340),
-        "elev": 18.0, "az": 26.0, "margin": 1.08,
+        "size": (420, 360),
+        "elev": 18.0, "az": 26.0, "margin": 1.07,
+        "island": {"radius": 1.65, "depth": 0.32, "top": (0.38, 0.64, 0.34), "rim": (0.55, 0.41, 0.28)},
         "models": [
             {"kit": "Holiday Kit", "name": "cabin-wall", "loc": (0.0, 0.5, 0.0), "rot": (0, 0, 180), "scale": 1.0},
             {"kit": "Holiday Kit", "name": "cabin-wall", "loc": (-0.5, 0.0, 0.0), "rot": (0, 0, -90), "scale": 1.0},
@@ -401,8 +451,8 @@ DIORAMAS = [
             {"kit": "Holiday Kit", "name": "cabin-window-b", "loc": (0.52, -0.02, 0.0), "rot": (0, 0, 90), "scale": 1.0},
             {"kit": "Holiday Kit", "name": "cabin-roof-point", "loc": (0.0, 0.0, 0.96), "rot": (0, 0, 0), "scale": (1.18, 1.18, 1.12)},
             {"kit": "Holiday Kit", "name": "cabin-roof-chimney", "loc": (0.26, 0.14, 1.16), "rot": (0, 0, 0), "scale": 0.9},
-            {"kit": "Nature Kit", "name": "tree_oak", "loc": (-1.15, 0.25, 0.0), "rot": (0, 0, 15), "scale": 0.65},
-            {"kit": "Nature Kit", "name": "plant_bushDetailed", "loc": (0.95, -0.35, 0.0), "rot": (0, 0, 20), "scale": 0.68},
+            {"kit": "Nature Kit", "name": "tree_detailed", "loc": (-1.15, 0.20, 0.0), "rot": (0, 0, 15), "scale": 0.65, "tint": (0.74, 0.92, 0.58, 0.38)},
+            {"kit": "Nature Kit", "name": "plant_bushDetailed", "loc": (0.95, -0.30, 0.0), "rot": (0, 0, 20), "scale": 0.68},
             {"kit": "Nature Kit", "name": "flower_redA", "loc": (-0.68, -0.68, 0.0), "rot": (0, 0, 0), "scale": 0.85},
             {"kit": "Nature Kit", "name": "flower_yellowA", "loc": (0.55, -0.72, 0.0), "rot": (0, 0, 12), "scale": 0.85},
         ],
@@ -410,49 +460,53 @@ DIORAMAS = [
     {
         "id": "campaign_tree_orange",
         "output": OUT_CAMPAIGN / "tree-orange.png",
-        "size": (280, 480),
-        "elev": 12.0, "az": -15.0, "margin": 1.06,
+        "size": (340, 440),
+        "elev": 15.0, "az": -15.0, "margin": 1.06,
         "sun_color": (1.0, 0.88, 0.70), "sun_energy": 3.5,
+        "island": {"radius": 1.28, "depth": 0.30, "top": (0.76, 0.56, 0.28), "rim": (0.52, 0.36, 0.22)},
         "models": [
-            {"kit": "Nature Kit", "name": "tree_oak_fall", "loc": (0.0, 0.0, 0.0), "rot": (0, 0, -18), "scale": 1.05},
-            {"kit": "Nature Kit", "name": "tree_small_fall", "loc": (0.62, 0.15, 0.0), "rot": (0, 0, 32), "scale": 0.74},
-            {"kit": "Nature Kit", "name": "log_stack", "loc": (-0.52, -0.35, 0.0), "rot": (0, 0, 22), "scale": 0.65},
+            {"kit": "Nature Kit", "name": "tree_detailed_fall", "loc": (-0.05, 0.05, 0.0), "rot": (0, 0, -18), "scale": 1.05},
+            {"kit": "Nature Kit", "name": "tree_small_fall", "loc": (0.64, 0.12, 0.0), "rot": (0, 0, 32), "scale": 0.74},
+            {"kit": "Nature Kit", "name": "log_stack", "loc": (-0.54, -0.32, 0.0), "rot": (0, 0, 22), "scale": 0.65},
             {"kit": "Nature Kit", "name": "mushroom_tanGroup", "loc": (0.28, -0.48, 0.0), "rot": (0, 0, -10), "scale": 0.78},
         ],
     },
     {
         "id": "campaign_tree_snow",
         "output": OUT_CAMPAIGN / "tree-snow.png",
-        "size": (280, 460),
-        "elev": 13.0, "az": 15.0, "margin": 1.06,
+        "size": (340, 440),
+        "elev": 15.0, "az": 15.0, "margin": 1.06,
         "world_color": (0.82, 0.92, 1.0), "sun_color": (0.96, 0.97, 1.0),
+        "island": {"radius": 1.24, "depth": 0.30, "top": (0.88, 0.94, 0.98), "rim": (0.56, 0.66, 0.78)},
         "models": [
-            {"kit": "Holiday Kit", "name": "tree-snow-a", "loc": (0.0, 0.0, 0.0), "rot": (0, 0, 12), "scale": 1.12},
-            {"kit": "Holiday Kit", "name": "snow-pile", "loc": (-0.42, -0.25, 0.0), "rot": (0, 0, 25), "scale": 0.85},
-            {"kit": "Holiday Kit", "name": "snowman-hat", "loc": (0.58, -0.32, 0.0), "rot": (0, 0, -18), "scale": 0.65},
+            {"kit": "Holiday Kit", "name": "tree-snow-a", "loc": (-0.05, 0.05, 0.0), "rot": (0, 0, 12), "scale": 1.10},
+            {"kit": "Holiday Kit", "name": "snow-pile", "loc": (-0.45, -0.22, 0.0), "rot": (0, 0, 25), "scale": 0.85},
+            {"kit": "Holiday Kit", "name": "snowman-hat", "loc": (0.56, -0.28, 0.0), "rot": (0, 0, -18), "scale": 0.65},
         ],
     },
     {
         "id": "campaign_tree_pine_snow",
         "output": OUT_CAMPAIGN / "tree-pine-snow.png",
-        "size": (280, 480),
-        "elev": 13.0, "az": -16.0, "margin": 1.06,
+        "size": (340, 440),
+        "elev": 15.0, "az": -16.0, "margin": 1.06,
         "world_color": (0.80, 0.90, 1.0), "sun_color": (0.94, 0.96, 1.0),
+        "island": {"radius": 1.24, "depth": 0.30, "top": (0.84, 0.92, 0.98), "rim": (0.50, 0.60, 0.74)},
         "models": [
-            {"kit": "Holiday Kit", "name": "tree-snow-b", "loc": (0.0, 0.0, 0.0), "rot": (0, 0, -15), "scale": 1.15},
+            {"kit": "Holiday Kit", "name": "tree-snow-b", "loc": (0.0, 0.05, 0.0), "rot": (0, 0, -15), "scale": 1.12},
             {"kit": "Holiday Kit", "name": "tree-snow-c", "loc": (-0.56, 0.14, 0.0), "rot": (0, 0, 24), "scale": 0.78},
-            {"kit": "Holiday Kit", "name": "rocks-small", "loc": (0.45, -0.35, 0.0), "rot": (0, 0, 18), "scale": 0.85},
+            {"kit": "Holiday Kit", "name": "rocks-small", "loc": (0.48, -0.30, 0.0), "rot": (0, 0, 18), "scale": 0.85},
         ],
     },
     {
         "id": "campaign_tree_palm",
         "output": OUT_CAMPAIGN / "tree-palm.png",
-        "size": (380, 460),
-        "elev": 12.0, "az": 16.0, "margin": 1.06,
+        "size": (400, 440),
+        "elev": 15.0, "az": 16.0, "margin": 1.06,
         "sun_color": (1.0, 0.94, 0.78), "sun_energy": 3.5,
+        "island": {"radius": 1.38, "depth": 0.30, "top": (0.92, 0.82, 0.56), "rim": (0.34, 0.72, 0.76)},
         "models": [
-            {"kit": "Pirate Kit", "name": "palm-detailed-bend", "loc": (-0.15, 0.0, 0.0), "rot": (0, 0, 12), "scale": 1.05},
-            {"kit": "Pirate Kit", "name": "palm-detailed-straight", "loc": (0.62, 0.25, 0.0), "rot": (0, 0, -28), "scale": 0.78},
+            {"kit": "Pirate Kit", "name": "palm-detailed-bend", "loc": (-0.15, 0.05, 0.0), "rot": (0, 0, 12), "scale": 1.05},
+            {"kit": "Pirate Kit", "name": "palm-detailed-straight", "loc": (0.62, 0.22, 0.0), "rot": (0, 0, -28), "scale": 0.78},
             {"kit": "Pirate Kit", "name": "rocks-sand-a", "loc": (-0.58, -0.25, 0.0), "rot": (0, 0, 20), "scale": 0.85},
             {"kit": "Pirate Kit", "name": "chest", "loc": (0.42, -0.45, 0.0), "rot": (0, 0, -22), "scale": 0.65},
         ],
@@ -460,13 +514,14 @@ DIORAMAS = [
     {
         "id": "campaign_cactus",
         "output": OUT_CAMPAIGN / "cactus.png",
-        "size": (260, 360),
-        "elev": 13.0, "az": -18.0, "margin": 1.08,
+        "size": (320, 380),
+        "elev": 15.0, "az": -18.0, "margin": 1.08,
         "sun_color": (1.0, 0.90, 0.72), "sun_energy": 3.6,
+        "island": {"radius": 1.18, "depth": 0.28, "top": (0.86, 0.68, 0.44), "rim": (0.68, 0.46, 0.28)},
         "models": [
-            {"kit": "Nature Kit", "name": "cactus_tall", "loc": (0.0, 0.0, 0.0), "rot": (0, 0, 15), "scale": 1.15},
+            {"kit": "Nature Kit", "name": "cactus_tall", "loc": (0.0, 0.05, 0.0), "rot": (0, 0, 15), "scale": 1.12},
             {"kit": "Nature Kit", "name": "cactus_short", "loc": (0.58, -0.15, 0.0), "rot": (0, 0, -35), "scale": 0.85},
-            {"kit": "Nature Kit", "name": "rock_largeB", "loc": (-0.55, 0.22, 0.0), "rot": (0, 0, 12), "scale": 0.62, "tint": (1.0, 0.82, 0.64, 0.55)},
+            {"kit": "Nature Kit", "name": "rock_largeB", "loc": (-0.55, 0.20, 0.0), "rot": (0, 0, 12), "scale": 0.62, "tint": (1.0, 0.82, 0.64, 0.55)},
             {"kit": "Nature Kit", "name": "flower_yellowC", "loc": (0.22, -0.42, 0.0), "rot": (0, 0, 0), "scale": 0.85},
         ],
     },
@@ -490,9 +545,10 @@ DIORAMAS = [
     {
         "id": "campaign_castle",
         "output": OUT_CAMPAIGN / "castle.png",
-        "size": (420, 380),
+        "size": (440, 400),
         "elev": 17.0, "az": 20.0, "margin": 1.06,
         "world_color": (0.90, 0.88, 1.0), "sun_color": (1.0, 0.92, 0.84),
+        "island": {"radius": 1.95, "depth": 0.36, "top": (0.42, 0.66, 0.42), "rim": (0.58, 0.54, 0.62)},
         "models": [
             {"kit": "Castle Kit", "name": "gate", "loc": (0.0, -0.55, 0.0), "rot": (0, 0, 0), "scale": 0.95},
             {"kit": "Castle Kit", "name": "wall", "loc": (-0.75, -0.55, 0.0), "rot": (0, 0, 0), "scale": 0.95},
@@ -507,8 +563,8 @@ DIORAMAS = [
             {"kit": "Castle Kit", "name": "tower-hexagon-mid", "loc": (0.0, 0.35, 0.95), "rot": (0, 0, 0), "scale": 1.05},
             {"kit": "Castle Kit", "name": "tower-hexagon-roof", "loc": (0.0, 0.35, 1.85), "rot": (0, 0, 0), "scale": 1.05},
             {"kit": "Castle Kit", "name": "flag-pennant", "loc": (0.0, 0.35, 2.75), "rot": (0, 0, 15), "scale": 0.9},
-            {"kit": "Nature Kit", "name": "tree_small", "loc": (-1.65, -0.58, 0.0), "rot": (0, 0, 0), "scale": 0.62},
-            {"kit": "Nature Kit", "name": "plant_bushDetailed", "loc": (1.60, -0.58, 0.0), "rot": (0, 0, 22), "scale": 0.65},
+            {"kit": "Nature Kit", "name": "tree_detailed", "loc": (-1.55, -0.45, 0.0), "rot": (0, 0, 0), "scale": 0.56, "tint": (0.72, 0.90, 0.58, 0.38)},
+            {"kit": "Nature Kit", "name": "plant_bushDetailed", "loc": (1.50, -0.48, 0.0), "rot": (0, 0, 22), "scale": 0.62},
         ],
     },
 ]

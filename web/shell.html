@@ -3186,7 +3186,7 @@
           if (document.hidden || document.documentElement.dataset.reducedMotion === 'true') return false;
           if (typeof navigator === 'undefined' || typeof navigator.vibrate !== 'function') return false;
           if (navigator.userActivation && !navigator.userActivation.hasBeenActive) return false;
-          const patterns = { tap: 8, merge: 14, impact: [16, 22, 12] };
+          const patterns = { tap: 8, merge: 14, merge_up: [12, 18, 16], dodge: [10, 14, 10], impact: [16, 22, 12], boss_power: [24, 18, 30] };
           const pattern = patterns[kind] ?? patterns.tap;
           try { return Boolean(navigator.vibrate(pattern)); }
           catch { return false; }

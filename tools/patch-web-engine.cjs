@@ -112,6 +112,19 @@ return idx;
     after: `async connectPositionWorklet(start){const ctx=GodotAudio.ctx;if(!ctx||this.isCanceled){return}if(GodotAudio.audioPositionWorkletReadyContext!==ctx){await GodotAudio.audioPositionWorkletPromise}if(this.isCanceled||GodotAudio.ctx!==ctx){return}this._source.connect(this.getPositionWorklet());if(start){this.start()}}`
   },
   {
+    name: "keep Master audio bus connected to AudioContext destination when dynamic buses are added",
+    // Godot 4.7.2 Web's Bus.setSend / set_sample_bus_send falls back to connecting
+    // bus 0 to itself when Godot sends sendIndex=-1 (Master has no send bus), which
+    // disconnects Master from AudioContext.destination and silences ALL WebAudio!
+    before: `set_sample_bus_send:function(busIndex,sendIndex){const bus=GodotAudio.Bus.getBusOrNull(busIndex);if(bus==null){return}let targetBus=GodotAudio.Bus.getBusOrNull(sendIndex);if(targetBus==null){targetBus=GodotAudio.Bus.getBus(0)}bus.setSend(targetBus)}`,
+    after: `set_sample_bus_send:function(busIndex,sendIndex){const bus=GodotAudio.Bus.getBusOrNull(busIndex);if(bus==null){return}if(busIndex===0){bus.setSend(null);return}let targetBus=GodotAudio.Bus.getBusOrNull(sendIndex);if(targetBus==null){targetBus=GodotAudio.Bus.getBus(0)}bus.setSend(targetBus)}`
+  },
+  {
+    name: "prevent GodotAudio.Bus.connect from disconnecting bus 0 from destination on self-send",
+    before: `setSend(val){this._send=val;if(val==null){if(this.getId()==0){this.getOutputNode().connect(GodotAudio.ctx.destination);return}`,
+    after: `setSend(val){if(this.getId()==0){this._send=null;try{this.getOutputNode().disconnect()}catch(_){}this.getOutputNode().connect(GodotAudio.ctx.destination);return}this._send=val;if(val==null){`
+  },
+  {
     name: "preserve playback pitch when a WebAudio sample restarts",
     // A loop's ended callback replaces the source outside the game frame.
     // Restore its rate before start(), rather than waiting for the next frame.

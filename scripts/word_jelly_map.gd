@@ -377,7 +377,7 @@ func configure(state: Dictionary, reduced_motion: bool = false) -> void:
 		var unlocked: bool = number <= mini(highest + 1, 99)
 		var is_boss_stage: bool = number == 99 or number > 1 and number in state.get("boss_markers", [])
 		item.face.texture = STAGE_BOSS if (unlocked and is_boss_stage) else STAGE_OPEN if unlocked else STAGE_LOCKED
-		item.label.add_theme_color_override("font_color", Color("#fff6d6") if (unlocked and is_boss_stage) else Style.INK if unlocked else Color("#d8e3e6"))
+		item.label.add_theme_color_override("font_color", Color("#fff6d6") if (unlocked and is_boss_stage) else Style.INK if unlocked else Color("#3c4e57"))
 		for index in range(3):
 			item.stars[index].visible = number <= highest
 			item.stars[index].modulate = Color.WHITE if index < stars else Color(0.57, 0.49, 0.36, 0.28)
@@ -781,31 +781,39 @@ func _layout() -> void:
 		milestone.add_theme_stylebox_override("normal", Style.gold_button_box(s, false))
 		milestone.add_theme_stylebox_override("hover", Style.gold_button_box(s, true))
 		milestone.add_theme_color_override("font_color", Color("#563812"))
-		milestone.add_theme_font_size_override("font_size", ceili(12.0 / s))
-		milestone.size = Vector2(minf(116.0 / s, banner_width * 0.42), 30.0 / s)
-		milestone.position = Vector2(section.banner.position.x + (banner_width - milestone.size.x) * 0.5,
-			section.banner.position.y - milestone.size.y - 4.0 / s)
+		milestone.add_theme_font_size_override("font_size", ceili(11.5 / s))
+		milestone.size = Vector2(minf(112.0 / s, banner_width * 0.40), 28.0 / s)
+		# Place milestone claim pill cleanly beside the chapter banner (right side, or tucked cleanly below banner)
+		# so it NEVER collides with Stage 1 / 10 / 19 medallion above the banner!
+		var side_space: float = width - section.banner.get_rect().end.x - 10.0 / s
+		if side_space >= milestone.size.x:
+			milestone.position = Vector2(section.banner.get_rect().end.x + 8.0 / s,
+				section.banner.position.y + (section.banner.size.y - milestone.size.y) * 0.5)
+		else:
+			milestone.position = Vector2(section.banner.position.x + (banner_width - milestone.size.x) * 0.5,
+				section.banner.get_rect().end.y + 3.0 / s)
 		var pixels: int = ceili((18.0 if size.x * s < 600.0 else 20.0) / s)
 		var title_font: Font = section.title.get_theme_font("font")
 		while pixels > 1 and title_font.get_string_size(section.title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x > chapter_title_width:
 			pixels -= 1
 		section.title.add_theme_font_size_override("font_size", pixels)
-		var scenery_width: float = minf(width * 0.40, 285.0 / s)
-		section.left.position = Vector2(8.0 / s, y + 745.0 / s)
-		section.left.size = Vector2(scenery_width, 245.0 / s)
-		section.left.modulate.a = 0.90
-		section.right.position = Vector2(width - scenery_width - 8.0 / s, y + 235.0 / s)
+		# Keep chapter scenery grounded softly along the horizon bands rather than floating randomly in mid-sky.
+		var scenery_width: float = minf(width * 0.42, 300.0 / s)
+		section.hills.position = Vector2(0, y + chapter_height - 290.0 / s)
+		section.hills.size = Vector2(width, 280.0 / s)
+		section.hills.modulate = Color(0.92, 0.97, 0.94, 0.62)
+		section.left.position = Vector2(10.0 / s, y + chapter_height - 310.0 / s)
+		section.left.size = Vector2(scenery_width, 250.0 / s)
+		section.left.modulate.a = 0.88
+		section.right.position = Vector2(width - scenery_width - 10.0 / s, y + 320.0 / s)
 		section.right.size = Vector2(scenery_width, 260.0 / s)
-		section.right.modulate.a = 0.94
-		section.hills.position = Vector2(0, y + 70.0 / s)
-		section.hills.size = Vector2(width, 260.0 / s)
-		section.hills.modulate = Color(0.95, 0.98, 0.96, 0.78)
-		section.shrubs.position = Vector2(12.0 / s, y + 55.0 / s)
-		section.shrubs.size = Vector2(width * 0.36, 86.0 / s)
-		section.shrubs.modulate.a = 0.92
-		section.grove.position = Vector2(width * 0.70, y + 500.0 / s)
-		section.grove.size = Vector2(minf(width * 0.27, 185.0 / s), 220.0 / s)
-		section.grove.modulate = Color(0.96, 1.0, 0.98, 0.78)
+		section.right.modulate.a = 0.88
+		section.shrubs.position = Vector2(16.0 / s, y + chapter_height - 135.0 / s)
+		section.shrubs.size = Vector2(width * 0.34, 84.0 / s)
+		section.shrubs.modulate.a = 0.88
+		section.grove.position = Vector2(width - minf(width * 0.28, 195.0 / s) - 10.0 / s, y + chapter_height - 280.0 / s)
+		section.grove.size = Vector2(minf(width * 0.28, 195.0 / s), 220.0 / s)
+		section.grove.modulate = Color(0.95, 0.99, 0.97, 0.82)
 		for key: String in ["left", "right", "grove", "shrubs"]:
 			section[key].pivot_offset = Vector2(section[key].size.x * 0.5, section[key].size.y)
 	for item: Dictionary in _nodes:

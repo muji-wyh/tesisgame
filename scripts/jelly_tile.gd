@@ -35,6 +35,9 @@ var _lift: Tween
 var _projection: bool = false
 var _contact_kind: String = "none"
 var _base_stretch := Vector2.ONE
+var _ripple_offset := Vector2.ZERO
+var _ripple_stretch := Vector2.ONE
+var _impact_flash: float = 0.0
 var _content_offset := Vector2.ZERO
 var _contact_outline := PackedVector2Array()
 var _surface_parameters: Dictionary = {}
@@ -186,10 +189,32 @@ func _set_surface_parameter(parameter: StringName, value: Variant) -> void:
 	# the rim directly, so their feedback parameters stay outside this cache.
 	if _surface_parameters.has(parameter) and _surface_parameters[parameter] == value:
 		return
-	var transient: bool = parameter in [&"bend", &"beat", &"preview_pressure", &"preview_sway", &"preview_pull", &"contact_strength"]
+	var transient: bool = parameter in [&"bend", &"beat", &"preview_pressure", &"preview_sway", &"preview_pull", &"contact_strength", &"impact_flash"]
 	_invalidate_idle_cache(not transient)
 	_surface_parameters[parameter] = value
 	_gel.set_shader_parameter(parameter, value)
+
+func set_impact_flash(strength: float, reduced: bool = false) -> void:
+	var next: float = 0.0 if reduced else clampf(strength, 0.0, 1.0)
+	if is_equal_approx(_impact_flash, next):
+		return
+	_impact_flash = next
+	if next > 0.001:
+		_invalidate_idle_cache(false)
+	_set_surface_parameter(&"impact_flash", next)
+
+func set_board_ripple(offset: Vector2, stretch: Vector2 = Vector2.ONE, reduced: bool = false) -> void:
+	var next_offset: Vector2 = Vector2.ZERO if reduced else offset
+	var next_stretch: Vector2 = Vector2.ONE if reduced else stretch
+	if _ripple_offset.is_equal_approx(next_offset) and _ripple_stretch.is_equal_approx(next_stretch):
+		return
+	_ripple_offset = next_offset
+	_ripple_stretch = next_stretch
+	if _contact_kind == "none":
+		_surface.position = _ripple_offset
+		_surface.scale = _base_stretch * _ripple_stretch
+	if not _ripple_offset.is_zero_approx() or not _ripple_stretch.is_equal_approx(Vector2.ONE):
+		_invalidate_idle_cache(false)
 
 func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
 	if amount != 0.0:
@@ -200,9 +225,10 @@ func deform(amount: float, beat: float, stretch: Vector2 = Vector2.ONE) -> void:
 	if _surface.pivot_offset != pivot:
 		_surface.pivot_offset = pivot
 	_base_stretch = stretch * (Vector2(1.025, 0.97) if _mark == 3 and not _reduced_motion else Vector2.ONE)
-	if _surface.scale != _base_stretch:
+	var target_scale: Vector2 = _base_stretch * _ripple_stretch
+	if _surface.scale != target_scale:
 		_invalidate_idle_cache(false)
-		_surface.scale = _base_stretch
+		_surface.scale = target_scale
 		idle_pose_changed.emit()
 
 func set_preview_pressure(pressure: float, sway: float, pull: float = 0.0, update_support: bool = true) -> void:
@@ -377,10 +403,12 @@ func _idle_cache_eligible() -> bool:
 		or _projection or _mark != 0 or _contact_kind != "none" \
 		or (_motion_cache_requested and not _surface.scale.is_equal_approx(Vector2.ONE)):
 		return false
-	for parameter: StringName in [&"bend", &"preview_pressure", &"preview_sway", &"preview_pull", &"contact_strength"]:
+	for parameter: StringName in [&"bend", &"preview_pressure", &"preview_sway", &"preview_pull", &"contact_strength", &"impact_flash"]:
 		var value: Variant = _gel.get_shader_parameter(parameter)
 		if value != null and not is_zero_approx(float(value)):
 			return false
+	if not _ripple_offset.is_zero_approx() or not _ripple_stretch.is_equal_approx(Vector2.ONE):
+		return false
 	var completion_value: Variant = _gel.get_shader_parameter("completion_strength")
 	var completion: float = 0.0 if completion_value == null else float(completion_value)
 	var glint_value: Variant = _gel.get_shader_parameter("completion_glint")

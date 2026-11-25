@@ -61,6 +61,10 @@ const JELLY_PATHS := {
 	"boss-taunt": "res://assets/audio/jelly-boss/bramble-laugh.ogg",
 	"boss-throw": "res://assets/audio/fragments/appear.wav",
 	"boss-hit": "res://assets/audio/chest-kenney/step-detail.wav",
+	"boss-hit-heavy": "res://assets/audio/chest-kenney/settle.wav",
+	"boss-hit-power": "res://assets/audio/jelly-combo/crown.wav",
+	"boss-ward-break": "res://assets/audio/chest-kenney/unlock.wav",
+	"boss-clone-pop": "res://assets/audio/chest-kenney/release.wav",
 	"boss-kick": "res://assets/audio/chest-kenney/settle.wav",
 	"boss-unlock": "res://assets/audio/chest-kenney/step-detail.wav",
 	"boss-thaw": "res://assets/audio/chest-kenney/reward.wav",
@@ -70,6 +74,7 @@ const JELLY_PATHS := {
 	"release": "res://assets/imported-audio/chest-reference/step.wav",
 	"land": "res://assets/audio/jelly-match/land.wav",
 	"contact": "res://assets/imported-audio/jelly-interaction/contact.wav",
+	"contact_match": "res://assets/imported-audio/jelly-interaction/contact.wav",
 	"merge": "res://assets/imported-audio/jelly-interaction/merge-together-v3.wav",
 	"danger": "res://assets/audio/jelly-match/danger.wav",
 	"reward": "res://assets/imported-audio/chest-reference/reward.wav",
@@ -79,9 +84,10 @@ const JELLY_GAINS := {
 	"finish_ready": 0.40,
 	"blast_wave": 0.55, "blast_mark": 0.36,
 	"goal_complete": 0.42,
-	"boss-taunt": 0.28, "boss-throw": 0.32, "boss-hit": 0.38, "boss-kick": 0.48,
-	"boss-unlock": 0.44, "boss-thaw": 0.38, "boss-trick": 0.35, "boss-win": 0.48,
-	"pick": 0.64, "release": 0.38, "land": 0.35, "contact": 1.0,
+	"boss-taunt": 0.28, "boss-throw": 0.32, "boss-hit": 0.44, "boss-hit-heavy": 0.56,
+	"boss-hit-power": 0.52, "boss-ward-break": 0.50, "boss-clone-pop": 0.42, "boss-kick": 0.52,
+	"boss-unlock": 0.46, "boss-thaw": 0.40, "boss-trick": 0.35, "boss-win": 0.52,
+	"pick": 0.64, "release": 0.38, "land": 0.35, "contact": 1.0, "contact_match": 0.82,
 	"merge": 1.0, "pop": 0.90, "danger": 0.52, "reward": 0.36,
 	"assemble": 0.28,
 	"jelly-collect-lv2": 0.90, "jelly-collect-lv3": 0.90,
@@ -89,7 +95,7 @@ const JELLY_GAINS := {
 	"jelly-collect-lv6": 0.90, "jelly-collect-lv7": 0.90,
 	"jelly-collect-lv8": 0.90, "jelly-collect-lv9": 0.90,
 }
-const JELLY_SECONDARY_CUES := ["pick", "release", "land", "contact", "blast_mark"]
+const JELLY_SECONDARY_CUES := ["pick", "release", "land", "contact", "contact_match", "blast_mark"]
 const JELLY_SPEECH_DB: float = -6.0
 const JELLY_LEVEL_CHANNELS: int = 8
 const WORD_JELLY_COMBO_PATHS: Array[String] = [
@@ -261,6 +267,13 @@ func _ready() -> void:
 
 
 func _setup_music_bus() -> void:
+	# On single-threaded Web export, Godot's WebAudio sample driver does not process
+	# GDScript AudioEffects and dynamic AudioServer.add_bus() can re-sync Master bus routing.
+	# Keep Web BGM on Master and apply warm volume ducking directly instead.
+	if OS.has_feature("web"):
+		_music_bus_index = -1
+		_music_lpf = null
+		return
 	_music_bus_index = AudioServer.get_bus_index(MUSIC_BUS_NAME)
 	if _music_bus_index < 0:
 		_music_bus_index = AudioServer.bus_count
@@ -289,9 +302,10 @@ func _teardown_music_bus() -> void:
 
 
 func _apply_music_filter() -> void:
-	if _music_bus_index < 0 or _music_bus_index >= AudioServer.bus_count:
-		return
 	var blend: float = clampf(_music_muffle_blend, 0.0, 1.0)
+	if _music_bus_index < 0 or _music_bus_index >= AudioServer.bus_count:
+		_update_music_gain()
+		return
 	if _music_lpf != null:
 		# Perceptually smooth logarithmic sweep between 20.5 kHz (open) and 920 Hz (under-blanket pause).
 		var open_log: float = log(MUSIC_LPF_OPEN_HZ)
@@ -544,6 +558,19 @@ func play_jelly_cue(cue_name: String) -> void:
 		if count_text.is_valid_int():
 			play_word_jelly_combo(int(count_text))
 		return
+	if cue_name.begins_with("merge-upgrade:"):
+		var parts: PackedStringArray = cue_name.split(":")
+		var lv: int = int(parts[1]) if parts.size() > 1 and parts[1].is_valid_int() else 2
+		var cmb: int = int(parts[2]) if parts.size() > 2 and parts[2].is_valid_int() else 1
+		_play_impact_accent(WORD_JELLY_COMBO_PATHS[1 if lv < 5 else 2], 0.42 + minf(0.14, float(lv) * 0.015),
+			clampf(0.96 + float(mini(lv, 8)) * 0.045 + float(mini(cmb, 6)) * 0.025, 0.95, 1.48))
+		return
+	if cue_name.begins_with("merge-chain:"):
+		var cmb_str: String = cue_name.trim_prefix("merge-chain:")
+		var cmb: int = int(cmb_str) if cmb_str.is_valid_int() else 2
+		var pent: float = PENTATONIC_SCALE[clampi(cmb - 1, 0, PENTATONIC_SCALE.size() - 1)]
+		_play_impact_accent(WORD_JELLY_COMBO_PATHS[0], 0.24, clampf(0.92 + (pent - 1.0) * 0.42, 0.92, 1.34))
+		return
 	if muted or not active or not available or not JELLY_PATHS.has(cue_name):
 		return
 	if cue_name.begins_with("jelly-collect-lv"):
@@ -573,8 +600,33 @@ func play_jelly_cue(cue_name: String) -> void:
 	_jelly_gains[player] = float(JELLY_GAINS[cue_name])
 	_jelly_cues[player] = cue_name
 	_update_jelly_gain()
-	player.pitch_scale = 1.0
+	player.pitch_scale = 1.18 if cue_name == "contact_match" else 0.78 if cue_name == "boss-hit-heavy" else 1.06 if cue_name == "boss-ward-break" else 1.0
 	_play(player, JELLY_PATHS[cue_name])
+	if cue_name == "boss-hit":
+		# Punchy sub-thud under the crisp hit detail for physical impact weight.
+		_play_impact_accent(str(JELLY_PATHS["boss-kick"]), 0.34, 0.84)
+	elif cue_name == "boss-hit-power":
+		_play_impact_accent(str(JELLY_PATHS["boss-kick"]), 0.48, 0.72)
+	elif cue_name == "boss-win":
+		_play_impact_accent(str(JELLY_PATHS["boss-kick"]), 0.44, 0.76)
+	set_process(true)
+
+
+func _play_impact_accent(path: String, gain: float, pitch: float) -> void:
+	if muted or not active or not available or path.is_empty():
+		return
+	if _jelly_combo_players.is_empty():
+		for index in range(WORD_JELLY_COMBO_CHANNELS):
+			var channel: AudioStreamPlayer = _player(1.0)
+			channel.finished.connect(func() -> void: _jelly_cues.erase(channel))
+			_jelly_combo_players.append(channel)
+	var player: AudioStreamPlayer = _jelly_combo_players[_jelly_combo_next]
+	_jelly_combo_next = (_jelly_combo_next + 1) % WORD_JELLY_COMBO_CHANNELS
+	_jelly_gains[player] = gain
+	_jelly_cues[player] = "impact-layer"
+	player.pitch_scale = clampf(pitch, 0.5, 2.0)
+	_update_jelly_gain()
+	_play(player, path)
 	set_process(true)
 
 
@@ -1281,14 +1333,16 @@ func _voice_finished() -> void:
 func _target_music_linear() -> float:
 	var speaking: bool = voice != null and voice.playing
 	var celebration_scale: float = db_to_linear(ROUND_CELEBRATION_MUSIC_DB) if not _round_celebration_id.is_empty() else 1.0
-	return (0.04 if speaking else 0.12) * _chest_music_duck * celebration_scale
+	var muffle_scale: float = db_to_linear(MUSIC_MUFFLED_DB * clampf(_music_muffle_blend, 0.0, 1.0)) if _music_bus_index < 0 else 1.0
+	return (0.04 if speaking else 0.12) * _chest_music_duck * celebration_scale * muffle_scale
 
 
 func _update_music_gain() -> void:
 	if music != null:
 		var speaking: bool = voice != null and voice.playing
 		var celebration_db: float = ROUND_CELEBRATION_MUSIC_DB if not _round_celebration_id.is_empty() else 0.0
-		var base_db: float = linear_to_db((0.04 if speaking else 0.12) * _chest_music_duck) + celebration_db
+		var muffle_db: float = MUSIC_MUFFLED_DB * clampf(_music_muffle_blend, 0.0, 1.0) if _music_bus_index < 0 else 0.0
+		var base_db: float = linear_to_db((0.04 if speaking else 0.12) * _chest_music_duck) + celebration_db + muffle_db
 		if _music_fade != null and _music_fade.playing and _music_crossfade_elapsed < MUSIC_CROSSFADE_SECONDS:
 			var p: float = clampf(_music_crossfade_elapsed / MUSIC_CROSSFADE_SECONDS, 0.0, 1.0)
 			music.volume_db = linear_to_db(maxf(0.0001, db_to_linear(base_db) * maxf(0.05, p)))

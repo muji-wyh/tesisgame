@@ -2652,7 +2652,15 @@ func _jelly_audio(cue: String, source_mode: String = "") -> void:
 		return
 	if cue == "merge":
 		trigger_haptic("merge")
-	elif cue in ["boss-hit", "boss-win", "goal_complete", "blast_wave"]:
+	elif cue.begins_with("merge-upgrade:"):
+		trigger_haptic("merge_up")
+	elif cue == "contact_match":
+		trigger_haptic("tap")
+	elif cue in ["boss-hit-power", "boss-win"]:
+		trigger_haptic("boss_power")
+	elif cue == "boss-thaw":
+		trigger_haptic("dodge")
+	elif cue in ["boss-hit", "boss-hit-heavy", "boss-ward-break", "boss-clone-pop", "goal_complete", "blast_wave"]:
 		trigger_haptic("impact")
 	elif cue.begins_with("jelly-collect-lv"):
 		var level_num: int = cue.trim_prefix("jelly-collect-lv").to_int()

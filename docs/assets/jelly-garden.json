@@ -37,10 +37,10 @@
     {
       "id": "hills",
       "path": "assets/images/jelly-match/garden/hills.png",
-      "source": "Nature Kit/Models/GLTF format/ground_grass.glb, Nature Kit/Models/GLTF format/plant_bushLarge.glb, Nature Kit/Models/GLTF format/plant_bushDetailed.glb, Nature Kit/Models/GLTF format/tree_small.glb, Nature Kit/Models/GLTF format/tree_oak.glb, Nature Kit/Models/GLTF format/flower_yellowA.glb, Nature Kit/Models/GLTF format/flower_purpleB.glb",
-      "source_sha256": "a053982aa35054419e9a4d620e822890cf9bcedbafdb9d5b0af666090c1872b2",
-      "sha256": "a053982aa35054419e9a4d620e822890cf9bcedbafdb9d5b0af666090c1872b2",
-      "bytes": 177593,
+      "source": "Nature Kit/Models/GLTF format/ground_grass.glb, Nature Kit/Models/GLTF format/plant_bushLarge.glb, Nature Kit/Models/GLTF format/plant_bushDetailed.glb, Nature Kit/Models/GLTF format/tree_small.glb, Nature Kit/Models/GLTF format/tree_detailed.glb, Nature Kit/Models/GLTF format/flower_yellowA.glb, Nature Kit/Models/GLTF format/flower_purpleB.glb",
+      "source_sha256": "ba4ac6738fe8f809531a1acf610e8de65155b031d5014c279d44967453719f63",
+      "sha256": "ba4ac6738fe8f809531a1acf610e8de65155b031d5014c279d44967453719f63",
+      "bytes": 187540,
       "size": [
         1024,
         340
@@ -93,13 +93,13 @@
     {
       "id": "tree",
       "path": "assets/images/jelly-match/garden/tree.png",
-      "source": "Nature Kit/Models/GLTF format/tree_oak.glb, Nature Kit/Models/GLTF format/plant_bushDetailed.glb, Nature Kit/Models/GLTF format/flower_yellowA.glb, Nature Kit/Models/GLTF format/flower_redA.glb",
-      "source_sha256": "1ed3e3cf43661bfd4c7024bfead2fe9be191e5fff71ca447bded87b0f4e1431f",
-      "sha256": "1ed3e3cf43661bfd4c7024bfead2fe9be191e5fff71ca447bded87b0f4e1431f",
-      "bytes": 74645,
+      "source": "Nature Kit/Models/GLTF format/tree_detailed.glb, Nature Kit/Models/GLTF format/tree_small.glb, Nature Kit/Models/GLTF format/plant_bushDetailed.glb, Nature Kit/Models/GLTF format/flower_yellowA.glb, Nature Kit/Models/GLTF format/flower_redA.glb, Nature Kit/Models/GLTF format/rock_smallA.glb",
+      "source_sha256": "70aef67b9d9cefc43217c909fa4497407f3bda7c085d21b92fdc45ce67c0b7d0",
+      "sha256": "70aef67b9d9cefc43217c909fa4497407f3bda7c085d21b92fdc45ce67c0b7d0",
+      "bytes": 91136,
       "size": [
-        280,
-        440
+        360,
+        420
       ],
       "mode": "RGBA",
       "processing": "Rendered from user-supplied CC0 Kenney 3D GLBs via Blender 5.3 Cycles (tools/render-storybook-scenery.py)"
@@ -107,13 +107,13 @@
     {
       "id": "tree-long",
       "path": "assets/images/jelly-match/garden/tree-long.png",
-      "source": "Nature Kit/Models/GLTF format/tree_tall.glb, Nature Kit/Models/GLTF format/tree_thin.glb, Nature Kit/Models/GLTF format/grass_large.glb",
-      "source_sha256": "c5eb4207420a24b55646cd5d2b8a78323720c8dddbaa9bfcba35c5acd8acaf8a",
-      "sha256": "c5eb4207420a24b55646cd5d2b8a78323720c8dddbaa9bfcba35c5acd8acaf8a",
-      "bytes": 79525,
+      "source": "Nature Kit/Models/GLTF format/tree_detailed.glb, Nature Kit/Models/GLTF format/tree_oak.glb, Nature Kit/Models/GLTF format/plant_bushSmall.glb, Nature Kit/Models/GLTF format/flower_purpleA.glb",
+      "source_sha256": "ed6615ddfc25535b52f76776730046f776f17bf1f38d8d8ad73024f6cd31131c",
+      "sha256": "ed6615ddfc25535b52f76776730046f776f17bf1f38d8d8ad73024f6cd31131c",
+      "bytes": 85716,
       "size": [
-        240,
-        480
+        320,
+        440
       ],
       "mode": "RGBA",
       "processing": "Rendered from user-supplied CC0 Kenney 3D GLBs via Blender 5.3 Cycles (tools/render-storybook-scenery.py)"
@@ -122,9 +122,9 @@
       "id": "foliage",
       "path": "assets/images/jelly-match/garden/foliage.png",
       "source": "Nature Kit/Models/GLTF format/plant_bushLarge.glb, Nature Kit/Models/GLTF format/plant_bushDetailed.glb, Nature Kit/Models/GLTF format/plant_bushSmall.glb, Nature Kit/Models/GLTF format/flower_yellowB.glb, Nature Kit/Models/GLTF format/flower_purpleA.glb, Nature Kit/Models/GLTF format/mushroom_redGroup.glb",
-      "source_sha256": "7e0c098afd541799eefa442b3000507bfe4d0da7b84afb009c59b050c40274e3",
-      "sha256": "7e0c098afd541799eefa442b3000507bfe4d0da7b84afb009c59b050c40274e3",
-      "bytes": 58588,
+      "source_sha256": "927bf3ba2f4f1947c846de54cf601af0e46b259c30339653794ea7d3aaf80144",
+      "sha256": "927bf3ba2f4f1947c846de54cf601af0e46b259c30339653794ea7d3aaf80144",
+      "bytes": 58220,
       "size": [
         420,
         220

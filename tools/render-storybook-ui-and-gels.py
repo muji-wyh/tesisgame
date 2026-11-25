@@ -529,7 +529,7 @@ def main():
     make_medallion(OUT_MAP_UI / "stage-open.png",
                    rim_color=(0.86, 0.64, 0.28), face_color=(0.99, 0.96, 0.88), accent_color=(0.95, 0.78, 0.36), metallic_rim=0.58)
     make_medallion(OUT_MAP_UI / "stage-locked.png",
-                   rim_color=(0.45, 0.54, 0.62), face_color=(0.56, 0.65, 0.72), accent_color=(0.70, 0.78, 0.84), metallic_rim=0.45)
+                   rim_color=(0.44, 0.54, 0.64), face_color=(0.76, 0.83, 0.88), accent_color=(0.60, 0.70, 0.78), metallic_rim=0.42)
     make_medallion(OUT_MAP_UI / "stage-boss.png",
                    rim_color=(0.82, 0.58, 0.22), face_color=(0.46, 0.26, 0.58), accent_color=(0.98, 0.80, 0.34), metallic_rim=0.72, notches=8)
 

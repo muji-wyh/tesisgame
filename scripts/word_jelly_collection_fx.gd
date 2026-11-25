@@ -4,7 +4,9 @@ extends Control
 const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const RAYS = preload("res://assets/chests/shared/effects/rays.png")
 const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
-const MAX_ACTIVE: int = 12
+const IMPACT_STAR = preload("res://assets/images/jelly-level-fx/impact-star.png")
+const SOFT_POOF = preload("res://assets/images/jelly-level-fx/soft-poof.png")
+const MAX_ACTIVE: int = 16
 const PROFILES: Array[Dictionary] = [
 	{"name": "Pearl pop", "pattern": "pearl", "seconds": 0.80, "radius": 40.0, "sparks": 9, "bursts": 1, "hue": 0.44},
 	{"name": "Twin ripple", "pattern": "ripple", "seconds": 1.10, "radius": 58.0, "sparks": 16, "bursts": 2, "hue": 0.51},
@@ -23,6 +25,7 @@ const AURORA_PALETTE: Array[Color] = [Color("#b68aeb"), Color("#55d5b8"), Color(
 const CONSTELLATION_PALETTE: Array[Color] = [Color("#f0bc42"), Color("#57bddd"), Color("#ef84bc"), Color("#b9a0ee")]
 
 var _entries: Array[Dictionary] = []
+var _merge_pops: Array[Dictionary] = []
 var _reduced_motion: bool = false
 var _ui_scale: float = 1.0
 var _serial: int = 0
@@ -104,6 +107,22 @@ func reanchor_pending(anchor_id: String, origin: Vector2) -> void:
 		queue_redraw()
 
 
+func present_merge_pop(origin: Vector2, level: int, upgrade: bool, tint: Color, badge_text: String = "") -> void:
+	if not origin.is_finite():
+		return
+	var duration: float = 0.24 if _reduced_motion else (0.46 if upgrade else 0.34)
+	_serial += 1
+	_merge_pops.append({
+		"id": _serial, "origin": origin - position, "level": clampi(level, 0, 9),
+		"upgrade": upgrade, "tint": tint, "badge": badge_text,
+		"elapsed": 0.0, "duration": duration
+	})
+	while _merge_pops.size() > MAX_ACTIVE:
+		_merge_pops.pop_front()
+	show()
+	queue_redraw()
+
+
 func advance(delta: float) -> void:
 	if not is_finite(delta) or delta <= 0.0:
 		return
@@ -111,7 +130,11 @@ func advance(delta: float) -> void:
 		_entries[index].elapsed += delta
 		if float(_entries[index].elapsed) >= float(_entries[index].delay) + float(_entries[index].duration):
 			_entries.remove_at(index)
-	visible = not _entries.is_empty()
+	for index in range(_merge_pops.size() - 1, -1, -1):
+		_merge_pops[index].elapsed += delta
+		if float(_merge_pops[index].elapsed) >= float(_merge_pops[index].duration):
+			_merge_pops.remove_at(index)
+	visible = not _entries.is_empty() or not _merge_pops.is_empty()
 	queue_redraw()
 
 
@@ -122,6 +145,7 @@ func set_reduced_motion(value: bool) -> void:
 
 func reset() -> void:
 	_entries.clear()
+	_merge_pops.clear()
 	hide()
 	queue_redraw()
 
@@ -138,7 +162,8 @@ func snapshot() -> Dictionary:
 			"duration": entry.duration, "origin": [entry.origin.x + position.x, entry.origin.y + position.y],
 			"burst_only": bool(entry.burst_only), "radius": _radius(entry),
 			"reduced_motion": _reduced_motion})
-	return {"visible": visible and not states.is_empty(), "active_count": states.size(),
+	return {"visible": visible and (not states.is_empty() or not _merge_pops.is_empty()), "active_count": states.size(),
+		"merge_pop_count": _merge_pops.size(),
 		"entries": states, "reduced_motion": _reduced_motion, "input_transparent": mouse_filter == Control.MOUSE_FILTER_IGNORE}
 
 
@@ -154,7 +179,60 @@ func _draw() -> void:
 			_draw_fireworks(entry, progress)
 		else:
 			_draw_burst(entry, progress)
+	for pop: Dictionary in _merge_pops:
+		var p: float = clampf(float(pop.elapsed) / maxf(0.01, float(pop.duration)), 0.0, 1.0)
+		_draw_merge_pop(pop, p)
 	draw_set_transform(Vector2.ZERO)
+
+
+func _draw_merge_pop(pop: Dictionary, p: float) -> void:
+	var origin: Vector2 = pop.origin
+	var level: int = int(pop.level)
+	var upgrade: bool = bool(pop.upgrade)
+	var tint: Color = pop.tint
+	var unit: float = _board_pitch if _board_pitch > 0.0 else 56.0 / _ui_scale
+	if _reduced_motion:
+		var steady_alpha: float = 1.0 - smoothstep(0.45, 1.0, p)
+		_stamp(GLOW, origin, Vector2.ONE * unit * (1.35 if upgrade else 1.05), Color(tint, steady_alpha * 0.42))
+		return
+	var ring_p: float = clampf(p / 0.55, 0.0, 1.0)
+	if ring_p < 1.0:
+		var ease_r: float = 1.0 - pow(1.0 - ring_p, 3.0)
+		var ring_r: float = unit * lerpf(0.26, 0.96 + float(mini(level, 6)) * 0.07 if upgrade else 0.78, ease_r)
+		var ring_w: float = maxf(1.2, lerpf(4.2 if upgrade else 2.6, 0.6, ease_r) / _ui_scale)
+		draw_set_transform(Vector2.ZERO)
+		draw_arc(origin, ring_r, 0.0, TAU, 28, Color(tint.lightened(0.45), (1.0 - ring_p) * (0.88 if upgrade else 0.68)), ring_w, true)
+	var flash: float = 1.0 - smoothstep(0.0, 0.28, p)
+	if flash > 0.005:
+		_stamp(GLOW, origin, Vector2.ONE * unit * lerpf(0.75, 1.55 if upgrade else 1.20, p),
+			Color(tint.lightened(0.5), flash * (0.58 if upgrade else 0.36)))
+		if upgrade:
+			var star_s: float = unit * lerpf(0.35, 1.15 + float(mini(level, 6)) * 0.06, 1.0 - pow(1.0 - minf(1.0, p / 0.28), 2.4))
+			_stamp(IMPACT_STAR, origin, Vector2.ONE * star_s, Color(1.0, 0.96, 0.72, flash * 0.92), p * 0.6)
+			_stamp(RAYS, origin, Vector2.ONE * star_s * 1.45, Color(tint.lightened(0.3), flash * 0.62), -p * 0.45)
+	var spark_count: int = (6 + mini(level, 5)) if upgrade else 5
+	var spread: float = unit * (0.92 + float(mini(level, 6)) * 0.08 if upgrade else 0.68)
+	var travel: float = 1.0 - pow(1.0 - p, 2.8)
+	var spark_fade: float = 1.0 - smoothstep(0.35, 1.0, p)
+	for index in range(spark_count):
+		var angle: float = TAU * float(index) / float(spark_count) + float(int(pop.id) % 5) * 0.27 - PI * 0.5
+		var dist: float = spread * (0.72 + float(index % 3) * 0.14) * travel
+		var pt: Vector2 = origin + Vector2.from_angle(angle) * dist
+		var sp_edge: float = (9.5 if upgrade else 6.8) / _ui_scale * lerpf(1.15, 0.35, p)
+		_stamp(SPARKLE, pt, Vector2(sp_edge * 1.35, sp_edge * 0.78),
+			Color(Color("#fff5be") if index % 2 == 0 else tint.lightened(0.25), spark_fade), angle)
+	var badge: String = str(pop.badge)
+	if not badge.is_empty():
+		var Style = preload("res://scripts/ui_style.gd")
+		var pop_scale: float = lerpf(0.65, 1.22, clampf(p / 0.16, 0.0, 1.0)) if p < 0.16 else lerpf(1.22, 1.0, smoothstep(0.16, 0.38, p))
+		var b_alpha: float = 1.0 - smoothstep(0.55, 1.0, p)
+		var rise: float = unit * (0.42 + 0.55 * (1.0 - pow(1.0 - p, 2.2)))
+		var px: int = maxi(10, ceili(15.0 * pop_scale / _ui_scale))
+		var w: float = Style.HEADING_FONT.get_string_size(badge, HORIZONTAL_ALIGNMENT_LEFT, -1, px).x
+		var pos := origin + Vector2(-w * 0.5, -rise)
+		draw_set_transform(Vector2.ZERO)
+		draw_string_outline(Style.HEADING_FONT, pos, badge, HORIZONTAL_ALIGNMENT_LEFT, -1, px, maxi(2, ceili(3.0 / _ui_scale)), Color("#2b233d", b_alpha * 0.85))
+		draw_string(Style.HEADING_FONT, pos, badge, HORIZONTAL_ALIGNMENT_LEFT, -1, px, Color("#fff3b8", b_alpha))
 
 
 func _radius(entry: Dictionary) -> float:
@@ -227,7 +305,18 @@ func _draw_burst(entry: Dictionary, progress: float) -> void:
 	if bool(entry.batch):
 		count = maxi(6, roundi(count * 0.66))
 	var peak: float = smoothstep(0.0, 0.06, progress) * (1.0 - smoothstep(0.14, 0.56, progress))
+	var shock_p: float = clampf(progress / 0.24, 0.0, 1.0)
+	if shock_p < 1.0:
+		var ring_r: float = radius * lerpf(0.24, 1.08, 1.0 - pow(1.0 - shock_p, 2.8))
+		draw_set_transform(Vector2.ZERO)
+		draw_arc(origin, ring_r, 0.0, TAU, 28,
+			Color(_palette(entry, 0).lightened(0.45), (1.0 - shock_p) * 0.78),
+			maxf(1.2, lerpf(3.4, 0.6, shock_p) / _ui_scale), true)
 	_stamp(GLOW, origin, Vector2.ONE * radius * lerpf(0.55, 2.1, progress), Color(_palette(entry, 0), peak * 0.34))
+	if level >= 2 and progress < 0.26:
+		var star_p: float = clampf(progress / 0.26, 0.0, 1.0)
+		_stamp(IMPACT_STAR, origin, Vector2.ONE * radius * lerpf(0.42, 1.12, 1.0 - pow(1.0 - star_p, 2.4)),
+			Color(1.0, 0.96, 0.76, (1.0 - star_p) * 0.85), star_p * 0.4)
 	if level >= 3:
 		_stamp(RAYS, origin, Vector2.ONE * radius * (1.0 + progress * 1.55),
 			Color(_palette(entry, 1), peak * 0.52), progress * 0.28)
@@ -314,6 +403,15 @@ func _draw_fireworks(entry: Dictionary, progress: float) -> void:
 	var radius: float = _radius(entry)
 	var level: int = int(entry.profile.level)
 	var burst_only: bool = bool(entry.get("burst_only", false))
+	var shock_p: float = clampf(progress / 0.16, 0.0, 1.0)
+	if shock_p < 1.0:
+		var sr: float = radius * lerpf(0.28, 1.28, 1.0 - pow(1.0 - shock_p, 3.0))
+		draw_set_transform(Vector2.ZERO)
+		draw_arc(entry.origin, sr, 0.0, TAU, 32,
+			Color(1.0, 0.96, 0.74, (1.0 - shock_p) * 0.85),
+			maxf(1.5, lerpf(4.4, 0.8, shock_p) / _ui_scale), true)
+		_stamp(IMPACT_STAR, entry.origin, Vector2.ONE * radius * lerpf(0.48, 1.26, 1.0 - pow(1.0 - shock_p, 2.5)),
+			Color(1.0, 0.95, 0.72, (1.0 - shock_p) * 0.90), shock_p * 0.35)
 	# Every colored layer launches from the collected body, including delayed blooms.
 	for geometry: Dictionary in entry.fireworks:
 		var group: int = int(geometry.group)

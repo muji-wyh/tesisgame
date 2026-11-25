@@ -1339,6 +1339,33 @@ test('the patched engine shares and releases its existing context and tolerates 
   assert.doesNotThrow(() => sandbox._godot_audio_resume());
 });
 
+test('the patched engine keeps Master bus 0 routed to AudioContext.destination when a dynamic bus is added', () => {
+  const { patchWebEngine } = require('../tools/patch-web-engine.cjs');
+  const destination = { id: 'DEST' };
+  const connected = [];
+  let disconnects = 0;
+  const masterOut = {
+    connect(target) { connected.push(target); },
+    disconnect() { disconnects++; }
+  };
+  const sandbox = { GodotAudio: { ctx: { destination } }, window: {} };
+  require('node:vm').runInNewContext(patchWebEngine(startupFixture), sandbox);
+  const master = new sandbox.BusFixture(0, masterOut);
+  const music = new sandbox.BusFixture(1, { connect() {}, disconnect() {} });
+  sandbox.GodotAudio.Bus = {
+    getBus: idx => (idx === 0 ? master : music),
+    getBusOrNull: idx => (idx === 0 ? master : idx === 1 ? music : null)
+  };
+  // Godot sends sendIndex=-1 for Master (bus 0) during bus layout sync after add_bus().
+  sandbox.audioBusFixture.set_sample_bus_send(0, -1);
+  assert.equal(connected.at(-1), destination, 'Master bus 0 must remain connected to AudioContext.destination');
+  assert.equal(master._send, null, 'Master bus 0 must never self-send into its own input node');
+  // Calling setSend(master) directly on bus 0 must also stay wired to destination.
+  master.setSend(master);
+  assert.equal(connected.at(-1), destination);
+  assert.ok(disconnects >= 1);
+});
+
 function positionWorkletHarness(source = require('../tools/patch-web-engine.cjs').patchWebEngine(startupFixture)) {
   const events = [];
   const sandbox = { GodotAudio: {}, window: {} };
@@ -1682,6 +1709,15 @@ function audioInitFixture(opts){const ctx=new(window.AudioContext||window.webkit
 function positionWorkletInitFixture(ctx,path){GodotAudio.audioPositionWorkletPromise=ctx.audioWorklet.addModule(path);}
 var audioCloseFixture={close_async:function(resolve,reject){const ctx=GodotAudio.ctx;GodotAudio.ctx=null;if(!ctx){resolve();return}ctx.close().then(resolve)}};
 function _godot_audio_resume(){if(GodotAudio.ctx&&GodotAudio.ctx.state!=="running"){GodotAudio.ctx.resume()}}
+var audioBusFixture={set_sample_bus_send:function(busIndex,sendIndex){const bus=GodotAudio.Bus.getBusOrNull(busIndex);if(bus==null){return}let targetBus=GodotAudio.Bus.getBusOrNull(sendIndex);if(targetBus==null){targetBus=GodotAudio.Bus.getBus(0)}bus.setSend(targetBus)}};
+var BusFixture = class BusFixture {
+  constructor(id, out) { this._id = id; this._out = out; this._in = {}; this._send = null; }
+  getId(){return this._id}
+  getInputNode(){return this._in}
+  getOutputNode(){return this._out}
+  connect(bus){this.getOutputNode().disconnect();this.getOutputNode().connect(bus.getInputNode());return bus}
+  setSend(val){this._send=val;if(val==null){if(this.getId()==0){this.getOutputNode().connect(GodotAudio.ctx.destination);return}throw new Error("Cannot send to null")}this.connect(val)}
+};
 
 var SampleNode = class SampleNode {
 getPlaybackRate(){return this._playbackRate}getPitchScale(){return this._pitchScale}getOutputNode(){return this._source}

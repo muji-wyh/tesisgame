@@ -14,6 +14,7 @@ uniform float neck = 10.0;
 uniform float flow = 0.0;
 uniform float mixing = 0.0;
 uniform float charge = 0.0;
+uniform float impact_flash = 0.0;
 uniform float opacity = 1.0;
 uniform float palette_hue_a = -1.0;
 uniform float palette_hue_b = -1.0;
@@ -83,7 +84,10 @@ void fragment() {
 	vec2 local = (point - mix(body_a.xy, body_b.xy, 0.5)) / body_b.zw;
 	float sheen = exp(-pow((local.x + 0.23 - flow * 0.12) / 0.07, 2.0)
 		- pow((local.y + 0.18) / 0.18, 2.0));
-	paint = mix(paint, vec3(1.0, 0.995, 0.94), sheen * charge * 0.25);
+	paint = mix(paint, vec3(1.0, 0.995, 0.94), sheen * charge * 0.34);
 	paint += vec3(0.06, 0.10, 0.07) * charge * (1.0 - edge);
+	if (impact_flash > 0.0) {
+		paint = mix(paint, vec3(1.0, 0.995, 0.95), clamp(impact_flash, 0.0, 1.0) * (0.48 + edge * 0.42));
+	}
 	COLOR = vec4(paint, alpha * opacity);
 }

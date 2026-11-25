@@ -91,21 +91,25 @@ static func nine_slice(texture: Texture2D, margin: float = 24.0, content_h: floa
 	return style
 
 
-static func parchment_panel(scale: float = 1.0, pad_h: float = 16.0, pad_v: float = 14.0) -> StyleBoxTexture:
+static func parchment_panel(scale: float = 1.0, pad_h: float = 16.0, pad_v: float = 14.0) -> StyleBoxFlat:
+	# Clean warm storybook parchment with subtle brass-oak trim & diffused shadow;
+	# scales cleanly across every viewport DPR without 9-slice corner clipping.
 	var u: float = 1.0 / maxf(0.1, scale)
-	return nine_slice(TEX_PANEL_PARCHMENT, 28.0, pad_h * u, pad_v * u)
+	var style := card_box(Color("#fcf7ea"), Color("#cbb284"), ceili(22.0 * u), maxi(1, roundi(2.0 * u)), 1.6, scale)
+	style.border_width_bottom = ceili(4.0 * u)
+	style.content_margin_left = pad_h * u
+	style.content_margin_right = pad_h * u
+	style.content_margin_top = pad_v * u
+	style.content_margin_bottom = pad_v * u
+	return style
 
 
-static func chapter_banner_box(scale: float = 1.0) -> StyleBoxTexture:
+static func chapter_banner_box(scale: float = 1.0) -> StyleBoxFlat:
 	var u: float = 1.0 / maxf(0.1, scale)
-	var style := StyleBoxTexture.new()
-	style.texture = TEX_BANNER_CHAPTER
-	style.texture_margin_left = 26.0
-	style.texture_margin_right = 26.0
-	style.texture_margin_top = 20.0
-	style.texture_margin_bottom = 22.0
-	style.content_margin_left = 10.0 * u
-	style.content_margin_right = 10.0 * u
+	var style := card_box(Color("#fff9ec"), Color("#cfa86a"), ceili(16.0 * u), maxi(1, roundi(1.8 * u)), 0.9, scale)
+	style.border_width_bottom = ceili(3.2 * u)
+	style.content_margin_left = 12.0 * u
+	style.content_margin_right = 12.0 * u
 	style.content_margin_top = 4.0 * u
 	style.content_margin_bottom = 4.0 * u
 	return style
@@ -122,18 +126,19 @@ static func well_frame_box() -> StyleBoxTexture:
 	return style
 
 
-static func gold_button_box(scale: float = 1.0, hovered: bool = false) -> StyleBoxTexture:
+static func gold_button_box(scale: float = 1.0, hovered: bool = false) -> StyleBoxFlat:
 	var u: float = 1.0 / maxf(0.1, scale)
-	var style := StyleBoxTexture.new()
-	style.texture = TEX_BTN_GOLD_HOVER if hovered else TEX_BTN_GOLD
-	style.texture_margin_left = 22.0
-	style.texture_margin_right = 22.0
-	style.texture_margin_top = 18.0
-	style.texture_margin_bottom = 22.0
+	var fill := Color("#ffe588") if hovered else Color("#ffd868")
+	var edge := Color("#c6862a") if hovered else Color("#b87924")
+	var style := box(fill, edge, ceili(14.0 * u), maxi(1, roundi(1.5 * u)))
+	style.border_width_bottom = ceili(3.0 * u)
+	style.shadow_color = Color("#7a4f12", 0.18 if hovered else 0.14)
+	style.shadow_size = ceili(4.0 * u)
+	style.shadow_offset = Vector2(0.0, 2.0 * u)
 	style.content_margin_left = 10.0 * u
 	style.content_margin_right = 10.0 * u
-	style.content_margin_top = 5.0 * u
-	style.content_margin_bottom = 6.0 * u
+	style.content_margin_top = 4.0 * u
+	style.content_margin_bottom = 5.0 * u
 	return style
 
 
@@ -185,33 +190,20 @@ static func action_button(control: Button, accent: Color, primary: bool = false)
 	var lip: int = maxi(border + 1, ceili(3.0 / scale))
 	var fill: Color = accent.darkened(0.12) if primary else SURFACE
 	var edge: Color = accent.darkened(0.28) if primary else EDGE.darkened(0.06)
-	var normal: StyleBox
-	var hover: StyleBox
-	var pressed: StyleBox
-	if primary and accent.is_equal_approx(GOOD):
-		normal = nine_slice(TEX_BTN_PRIMARY, 22.0, 12.0 / scale, 6.0 / scale)
-		hover = nine_slice(TEX_BTN_PRIMARY_HOVER, 22.0, 12.0 / scale, 6.0 / scale)
-		pressed = nine_slice(TEX_BTN_PRIMARY_PRESSED, 22.0, 12.0 / scale, 6.0 / scale)
-	elif not primary:
-		normal = nine_slice(TEX_BTN_SECONDARY, 22.0, 12.0 / scale, 6.0 / scale)
-		hover = nine_slice(TEX_BTN_SECONDARY_HOVER, 22.0, 12.0 / scale, 6.0 / scale)
-		pressed = nine_slice(TEX_BTN_SECONDARY_PRESSED, 22.0, 12.0 / scale, 6.0 / scale)
-	else:
-		var flat_normal := box(fill, edge, radius, border)
-		flat_normal.border_width_bottom = lip
-		flat_normal.shadow_color = Color(accent.darkened(0.45), 0.14)
-		flat_normal.shadow_size = ceili(3.0 / scale)
-		flat_normal.shadow_offset = Vector2(0.0, 1.5 / scale)
-		normal = flat_normal
-		var flat_hover := box(accent.darkened(0.04), accent.darkened(0.22), radius, border)
-		flat_hover.border_width_bottom = lip
-		flat_hover.shadow_color = Color(accent.darkened(0.42), 0.18)
-		flat_hover.shadow_size = ceili(4.0 / scale)
-		flat_hover.shadow_offset = Vector2(0.0, 2.0 / scale)
-		hover = flat_hover
-		var flat_pressed := box(accent.darkened(0.22), accent.darkened(0.26), radius, border)
-		flat_pressed.border_width_bottom = border
-		pressed = flat_pressed
+	# Crisp, DPI-aware tactile vector pill with 3D bottom lip & soft diffused shadow.
+	# Never distorts or clips at compact heights (30-44 logical px) under high ui_scale.
+	var normal := box(fill, edge, radius, border)
+	normal.border_width_bottom = lip
+	normal.shadow_color = Color(accent.darkened(0.45) if primary else INK, 0.16 if primary else 0.09)
+	normal.shadow_size = ceili(4.0 / scale)
+	normal.shadow_offset = Vector2(0.0, 2.0 / scale)
+	var hover := box(accent.darkened(0.04) if primary else accent.lightened(0.92), accent.darkened(0.22) if primary else accent.lightened(0.32), radius, border)
+	hover.border_width_bottom = lip
+	hover.shadow_color = Color(accent.darkened(0.42) if primary else INK, 0.20 if primary else 0.12)
+	hover.shadow_size = ceili(5.0 / scale)
+	hover.shadow_offset = Vector2(0.0, 2.5 / scale)
+	var pressed := box(accent.darkened(0.22) if primary else accent.lightened(0.82), accent.darkened(0.26) if primary else accent, radius, border)
+	pressed.border_width_bottom = border
 	var disabled := box(SOFT, EDGE, radius, border)
 	control.add_theme_stylebox_override("normal", normal)
 	control.add_theme_stylebox_override("hover", hover)

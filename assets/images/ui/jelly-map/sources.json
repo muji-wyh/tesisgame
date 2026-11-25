@@ -24,17 +24,17 @@
         160,
         160
       ],
-      "sha256": "3ee9d1585017e667260e637d24f0dd297640affb3bdcfecb929174885728a320",
+      "sha256": "48cebf09dd85d75908735135f656227e0e5c8a10b71a1abc952f1a569d6975b2",
       "source": "tools/render-storybook-ui-and-gels.py"
     },
     {
       "file": "stage-locked.png",
-      "bytes": 33326,
+      "bytes": 32413,
       "size": [
         160,
         160
       ],
-      "sha256": "f32f7ac7e6e64412abe6fca75a960d4d71e53c58138e62f99860e65cbb6711e1",
+      "sha256": "0b78a60b06ea8191eaf783f704c963740c199c0e15c227e4ebd7389cb22a8de7",
       "source": "tools/render-storybook-ui-and-gels.py"
     },
     {
@@ -44,7 +44,7 @@
         160,
         160
       ],
-      "sha256": "9e43f15e16e8d2da8853bdbb66fa616b3f71c578363882c620ea5db15d7be0ba",
+      "sha256": "ed9bfe022705a401ab5c7609f72bc17e6a800abcd50a762620d7385fec3da9fc",
       "source": "tools/render-storybook-ui-and-gels.py"
     },
     {

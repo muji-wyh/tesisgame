@@ -170,8 +170,14 @@ var _board_had_loot_flights: bool = false
 var _well_impulse_elapsed: float = 1.0
 var _well_impulse_strength: float = 0.0
 var _well_impulse_tint: Color = Color("#ffde7a")
+var _well_impulse_dir: Vector2 = Vector2(0.0, 1.0)
 var _well_base_pos: Vector2 = Vector2.ZERO
-const WELL_IMPULSE_SECONDS: float = 0.22
+var _board_ripples: Array[Dictionary] = []
+var _ripple_tile_ids: Dictionary = {}
+var _tile_flashes: Dictionary = {}
+var _last_contact_match_pair := Vector2i(-1, -1)
+const WELL_IMPULSE_SECONDS: float = 0.24
+const BOARD_RIPPLE_SECONDS: float = 0.24
 var _presentation_work: Dictionary = {"view_passes": 0, "tiles_classified": 0,
 	"tiles_posed": 0, "topology_passes": 0, "palette_passes": 0,
 	"mark_passes": 0, "control_passes": 0, "hint_searches": 0, "boss_passes": 0}
@@ -284,11 +290,19 @@ func _init() -> void:
 	_boss_view.audio_requested.connect(func(cue: String) -> void:
 		audio_requested.emit(cue)
 		if cue == "boss-hit":
-			_trigger_well_impulse(0.75, Color("#ffd466"))
+			_trigger_well_impulse(0.68, Color("#ffd466"), Vector2(1.0, -0.35))
+		elif cue == "boss-hit-heavy":
+			_trigger_well_impulse(0.82, Color("#ffcf56"), Vector2(1.0, -0.30))
+		elif cue == "boss-hit-power":
+			_trigger_well_impulse(0.95, Color("#ffe382"), Vector2(1.0, -0.25))
+		elif cue == "boss-ward-break":
+			_trigger_well_impulse(0.62, Color("#8ce0ff"), Vector2(1.0, -0.25))
+		elif cue == "boss-clone-pop":
+			_trigger_well_impulse(0.45, Color("#c79cfa"), Vector2(1.0, -0.20))
 		elif cue == "boss-win":
-			_trigger_well_impulse(1.0, Color("#ffe38a"))
+			_trigger_well_impulse(1.0, Color("#ffe38a"), Vector2(1.0, -0.25))
 		elif cue == "boss-kick":
-			_trigger_well_impulse(0.55, Color("#e8a26a")))
+			_trigger_well_impulse(0.75, Color("#e8a26a"), Vector2(0.0, 1.0)))
 	add_child(_boss_view)
 	_merged_level_badge.z_index = 36
 	add_child(_merged_level_badge)
@@ -431,6 +445,8 @@ func stop() -> void:
 	_powerup_pose_active = false
 	_powerup_fragment_ids.clear()
 	_board_had_loot_flights = false
+	_clear_impact_ripples()
+	_last_contact_match_pair = Vector2i(-1, -1)
 	_fill_button.reset()
 	_fill_button.hide()
 	_queued_collections.clear()
@@ -554,6 +570,7 @@ func set_reduced_motion(value: bool) -> void:
 		powerup_buttons[kind].set_reduced_motion(value)
 	if value:
 		_reset_well_impulse()
+		_clear_impact_ripples()
 	super.set_reduced_motion(value)
 
 func _visibility_changed() -> void:
@@ -571,6 +588,7 @@ func _finished(result: Dictionary) -> void:
 	_powerup_effects.hide()
 	_boon_draft.dismiss()
 	_reset_well_impulse()
+	_clear_impact_ripples()
 	super._finished(result)
 
 
@@ -1048,7 +1066,12 @@ func _collection_started(fusion: Dictionary) -> void:
 	var word: Dictionary = fusion.word
 	var merge_level: int = clampi(int(fusion.get("merge_level", fusion.a.get("merge_level", 1))), 1, WordModel.MAX_MERGE_LEVEL)
 	if merge_level >= 4:
-		_trigger_well_impulse(clampf(0.45 + float(merge_level - 4) * 0.14, 0.45, 1.0), Color("#ffde7a"))
+		_trigger_well_impulse(clampf(0.45 + float(merge_level - 4) * 0.14, 0.45, 1.0), Color("#ffde7a"), Vector2(0.0, 1.0))
+	elif merge_level >= 2:
+		_trigger_well_impulse(0.24 + float(merge_level - 2) * 0.08, Color("#ffe39b"), Vector2(0.0, 1.0))
+	if not reduced_motion:
+		_spawn_board_ripple(Vector2(float(fusion.a.column), float(fusion.a.row)),
+			clampf(0.42 + float(merge_level) * 0.11, 0.45, 1.15), int(fusion.a_id))
 	_word_reveal.set_reduced_motion(reduced_motion)
 	var batch: bool = bool(fusion.get("batch", false))
 	var reveal_delay: float = float(fusion.pop_at)
@@ -1102,6 +1125,7 @@ func _merge(first: int, second: int, from: Vector2, held: Dictionary = {}, held_
 			if direction.length_squared() < 0.1:
 				direction = (_tile_rect(_cell(second)).get_center() - _tile_rect(_cell(first)).get_center()).normalized()
 			_rejection = {"a": first, "b": second, "elapsed": 0.0, "direction": direction}
+			_trigger_well_impulse(0.28, Color("#d45d5d"), Vector2(1.0 if direction.x >= 0.0 else -1.0, 0.0))
 		_snap_back(first, from)
 	_sync_tiles()
 	_refresh_fusion()
@@ -1451,8 +1475,22 @@ func _sync_boss() -> void:
 		var status: Dictionary = game.boss.status(id)
 		var previous: Dictionary = _boss_statuses.get(id, {})
 		if previous != status or _tiles[id]._boss_overlay.size != _tiles[id].size:
+			var newly_hit: bool = (float(previous.get("freeze", 0.0)) <= 0.0 and float(status.get("freeze", 0.0)) > 0.0) \
+				or (float(previous.get("ink", 0.0)) <= 0.0 and float(status.get("ink", 0.0)) > 0.0) \
+				or int(status.get("locks", 0)) > int(previous.get("locks", 0))
+			var newly_unlocked: bool = int(previous.get("locks", 0)) > int(status.get("locks", 0))
 			_boss_statuses[id] = status.duplicate(true)
 			_tiles[id].set_boss_status(status, reduced_motion)
+			if newly_hit and not reduced_motion:
+				var hit_cell: Dictionary = _cell(id)
+				_tile_flashes[id] = 0.14
+				if not hit_cell.is_empty():
+					_spawn_board_ripple(Vector2(float(hit_cell.column), float(hit_cell.row)), 0.42, -1)
+				var tint := Color("#6cdffb") if float(status.get("freeze", 0.0)) > 0.0 else Color("#c39afa") if float(status.get("ink", 0.0)) > 0.0 else Color("#ffc75d")
+				_trigger_well_impulse(0.24, tint, Vector2(0.0, 1.0))
+			elif newly_unlocked and not reduced_motion:
+				_tile_flashes[id] = 0.14
+				_trigger_well_impulse(0.22, Color("#ffe38a"), Vector2(0.0, -1.0))
 			if (float(previous.get("freeze", 0.0)) > 0.0) != (float(status.get("freeze", 0.0)) > 0.0) \
 				or (float(previous.get("ink", 0.0)) > 0.0) != (float(status.get("ink", 0.0)) > 0.0) \
 				or int(previous.get("locks", 0)) != int(status.get("locks", 0)):
@@ -2051,6 +2089,7 @@ func _advance_board_presentation(delta: float) -> void:
 	if _auto_collect_hovered:
 		_auto_collect_hover_elapsed += delta
 	_advance_well_impulse(delta)
+	_advance_impact_ripples(delta)
 
 
 func _process(delta: float) -> void:
@@ -2500,6 +2539,10 @@ func _refresh_contact() -> void:
 	for id: int in involved:
 		var direction: Vector2 = Vector2(state.direction) * (1.0 if id == int(state.source) else -1.0)
 		_tiles[id].set_contact(str(state.kind), direction, float(state.strength), reduced_motion)
+	var match_pair := Vector2i(int(state.source), int(state.target)) if state.kind == "match" else Vector2i(-1, -1)
+	if match_pair.x >= 0 and match_pair != _last_contact_match_pair and _can_play():
+		audio_requested.emit("contact_match")
+	_last_contact_match_pair = match_pair
 	_contact_tile_ids = involved
 	for event_id: String in _fusion_visuals:
 		var visual: Dictionary = _fusion_visuals[event_id]
@@ -2673,7 +2716,15 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 		var pop_progress: float = float(fusion.pop_at) / float(fusion.duration)
 		var charge: float = smoothstep(0.0, pop_progress, p)
 		var release: float = smoothstep(pop_progress, 1.0, p)
-		merged.scale = Vector2.ONE if reduced_motion else Vector2(1.0 + charge * 0.12, 1.0 - charge * 0.12).lerp(Vector2.ONE * 0.18, release)
+		var pop_flare: float = sin(minf(1.0, release / 0.35) * PI) * 0.22 if release > 0.0 else 0.0
+		if reduced_motion:
+			merged.scale = Vector2.ONE
+			merged.set_impact_flash(0.0, true)
+		else:
+			var charge_squash := Vector2(1.0 + charge * 0.17, 1.0 - charge * 0.16)
+			var release_scale: Vector2 = charge_squash.lerp(Vector2.ONE * 0.16, release) + Vector2.ONE * pop_flare
+			merged.scale = release_scale
+			merged.set_impact_flash(smoothstep(0.55, 1.0, charge) * 0.45 + pop_flare * 2.2, false)
 		merged.modulate.a = 1.0 - release
 		if not bool(fusion.get("batch", false)) and int(fusion.get("merge_level", 1)) >= 4:
 			_pose_collection_charge(fusion, visual, rect)
@@ -2699,27 +2750,61 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 		visual.origin_a = contact
 		visual.origin_b = contact
 		visual.start = contact
-	var joining: float = smoothstep(0.0, 0.68, p)
+	var is_upgrade: bool = str(fusion.get("merge_kind", "")) == "upgrade"
+	var result_level: int = int(fusion.get("merge_level", fusion.result.get("merge_level", 0)))
+	var auto_merge: bool = bool(fusion.get("automatic", false))
+	# Three-beat elastic merge: anticipation pull (0..0.14) -> expo snap impact (0.14..0.44) -> spring wobble (0.44..1.0).
+	var snap_t: float = clampf((p - 0.12) / 0.34, 0.0, 1.0)
+	var joining: float = pow(snap_t, 2.2) if p >= 0.12 else 0.0
+	var pull_back: float = -sin(clampf(p / 0.14, 0.0, 1.0) * PI) * 0.065 if (not reduced_motion and not auto_merge) else 0.0
+	var hue_t: float = smoothstep(0.0, 0.58, p)
 	# Let the flowing paint reach the new pair's hue before the skin handover.
 	var from_hue: float = Palette.hue(int(visual.palette_b))
 	var to_hue: float = Palette.hue(merged.palette_index)
-	art._gel.set_shader_parameter("palette_hue_b", fposmod(from_hue + (fposmod(to_hue - from_hue + 0.5, 1.0) - 0.5) * joining, 1.0))
-	var a: Vector2 = Vector2(visual.origin_a).lerp(destination, joining)
-	var b: Vector2 = Vector2(visual.origin_b).lerp(destination, joining)
+	art._gel.set_shader_parameter("palette_hue_b", fposmod(from_hue + (fposmod(to_hue - from_hue + 0.5, 1.0) - 0.5) * hue_t, 1.0))
+	var origin_a: Vector2 = Vector2(visual.origin_a)
+	var origin_b: Vector2 = Vector2(visual.origin_b)
+	var a: Vector2 = origin_a.lerp(destination, clampf(joining + pull_back, -0.10, 1.0))
+	var b: Vector2 = origin_b.lerp(destination, clampf(joining + pull_back * 0.5, -0.05, 1.0))
 	var extent_a: Vector2 = _tile_rect(fusion.a).size.lerp(target_size, joining)
 	var extent_b: Vector2 = _tile_rect(fusion.b).size.lerp(target_size, joining)
-	var wobble: float = sin((p - 0.64) * TAU * 2.0) * (1.0 - smoothstep(0.64, 1.0, p)) * 0.045 if p > 0.64 else 0.0
-	var stretch := Vector2(1.0 + wobble, 1.0 - wobble)
-	var handover: float = smoothstep(0.78, 0.96, p)
+	var impact_age: float = clampf((p - 0.44) / 0.56, 0.0, 1.0)
+	var amp: float = (0.19 + minf(0.09, float(maxi(0, result_level - 1)) * 0.018)) if is_upgrade else 0.13
+	var squash: float = exp(-impact_age * 5.8) * cos(impact_age * TAU * 1.95) * amp if p >= 0.44 else 0.0
+	var stretch := Vector2(1.0 + squash, 1.0 - squash * 0.88)
+	var charge_val: float = smoothstep(0.0, 0.42, p) * (1.0 - smoothstep(0.46, 0.72, p)) * (0.95 if is_upgrade else 0.65)
+	var flash_val: float = (1.0 - smoothstep(0.44, 0.62, p)) * smoothstep(0.38, 0.45, p) * (0.92 if is_upgrade else 0.58)
+	var bead_release: float = clampf((p - 0.44) / 0.48, 0.0, 1.0) if (p >= 0.44 and not reduced_motion and not auto_merge) else 0.0
+	if p >= 0.44 and not bool(visual.get("impact_triggered", false)):
+		visual["impact_triggered"] = true
+		if not reduced_motion and _can_play():
+			var pop_tint: Color = WordTile.MERGED_COLORS[clampi(result_level, 1, WordModel.MAX_MERGE_LEVEL)] if result_level > 0 else _theme.get("accent", Style.GOOD)
+			var badge_txt: String = "Lv%d!" % result_level if is_upgrade and result_level >= 2 else ""
+			if _collection_effects != null:
+				_collection_effects.set_reduced_motion(false)
+				_collection_effects.present_merge_pop(destination, result_level, is_upgrade, pop_tint, badge_txt)
+			var push_dir: Vector2 = (destination - origin_a).normalized()
+			if push_dir.length_squared() < 0.05:
+				push_dir = Vector2(0.0, 1.0)
+			var well_str: float = clampf(0.30 + float(result_level) * 0.075, 0.30, 0.88) if is_upgrade else (0.24 if result_level >= 1 else 0.14)
+			if auto_merge:
+				well_str *= 0.45
+			_trigger_well_impulse(well_str, pop_tint, push_dir)
+			_spawn_board_ripple(Vector2(float(fusion.result.column), float(fusion.result.row)),
+				clampf(0.48 + float(result_level) * 0.10, 0.45, 1.10) if is_upgrade else 0.36, int(fusion.result.id))
+	var handover: float = smoothstep(0.76, 0.94, p)
 	if reduced_motion:
 		art.hide()
+		art.set_impact_flash(0.0)
 	else:
-		art.pose(a, b, destination, extent_a * stretch, extent_b * stretch, _pitch, minf(0.55, p * 0.8), 0.0, 0.0, 1.0 - handover)
+		art.set_impact_flash(flash_val)
+		art.pose(a, b, destination, extent_a * stretch, extent_b * stretch, _pitch, minf(0.62, p * 0.92), charge_val, bead_release, 1.0 - handover)
 	merged.size = target_size
 	merged.position = destination - target_size * 0.5
 	merged._surface.visible = reduced_motion or handover > 0.0
 	merged._surface.modulate.a = 1.0 if reduced_motion else handover
-	merged.modulate.a = 1.0 if reduced_motion else smoothstep(0.34, 0.65, p)
+	merged.modulate.a = 1.0 if reduced_motion else smoothstep(0.34, 0.62, p)
+	merged.set_impact_flash(flash_val, reduced_motion)
 	merged.deform(0.0, 0.0, Vector2.ONE if reduced_motion else stretch)
 	if str(_fusion_drag.get("event_id", "")) == str(fusion.attempt_id):
 		art.position += Vector2(_fusion_drag.offset)
@@ -2729,6 +2814,13 @@ func _pose_fusion(fusion: Dictionary, visual: Dictionary) -> void:
 	merged.show()
 
 func _merge_started(fusion: Dictionary) -> void:
+	if str(fusion.get("operation", "")) == "merge" and _can_play():
+		var merge_level: int = int(fusion.get("merge_level", fusion.get("result", {}).get("merge_level", 0)))
+		var is_upgrade: bool = str(fusion.get("merge_kind", "")) == "upgrade"
+		if is_upgrade and merge_level >= 2:
+			audio_requested.emit("merge-upgrade:%d:%d" % [merge_level, game.combo_count])
+		elif not bool(fusion.get("automatic", false)) and game.combo_count >= 2:
+			audio_requested.emit("merge-chain:%d" % game.combo_count)
 	if str(fusion.get("operation", "")) == "merge" and _can_play() \
 		and not bool(fusion.get("automatic", false)) and not game.collection_batch_active() \
 		and game.is_valid_word(fusion.get("result", {})):
@@ -2761,6 +2853,8 @@ func _fusion_completed(fusion: Dictionary, _awarded: int) -> void:
 		var visual: Dictionary = _fusion_visuals.get(str(fusion.attempt_id), {})
 		if not visual.is_empty():
 			_snapbacks[int(fusion.result.id)] = {"from": visual.merged.position, "elapsed": 0.0}
+			if str(fusion.get("merge_kind", "")) == "upgrade":
+				_tile_flashes[int(fusion.result.id)] = 0.16
 	_refresh_hud()
 
 func _landing_contact_at(cell: Dictionary) -> float:
@@ -3414,18 +3508,22 @@ func _layout() -> void:
 	_publish()
 
 
-func _trigger_well_impulse(strength: float, tint: Color = Color("#ffde7a")) -> void:
+func _trigger_well_impulse(strength: float, tint: Color = Color("#ffde7a"), direction: Vector2 = Vector2(0.0, 1.0)) -> void:
 	if reduced_motion or not is_finite(strength) or strength <= 0.0:
 		return
-	_well_impulse_strength = maxf(_well_impulse_strength, clampf(strength, 0.0, 1.0))
-	_well_impulse_tint = tint
-	_well_impulse_elapsed = 0.0
+	var next_str: float = clampf(strength, 0.0, 1.0)
+	if next_str >= _well_impulse_strength * 0.7 or _well_impulse_elapsed >= WELL_IMPULSE_SECONDS:
+		_well_impulse_strength = maxf(_well_impulse_strength * 0.85, next_str)
+		_well_impulse_tint = tint
+		_well_impulse_dir = direction.normalized() if direction.length_squared() > 0.01 else Vector2(0.0, 1.0)
+		_well_impulse_elapsed = 0.0
 	_apply_well_impulse()
 
 
 func _reset_well_impulse() -> void:
 	_well_impulse_elapsed = WELL_IMPULSE_SECONDS
 	_well_impulse_strength = 0.0
+	_well_impulse_dir = Vector2(0.0, 1.0)
 	if _well_art != null:
 		_well_art.position = _well_base_pos
 		if _well_frame != null:
@@ -3439,9 +3537,94 @@ func _well_impulse_offset() -> Vector2:
 	if reduced_motion or _well_impulse_strength <= 0.0 or _well_impulse_elapsed >= WELL_IMPULSE_SECONDS:
 		return Vector2.ZERO
 	var p: float = clampf(_well_impulse_elapsed / WELL_IMPULSE_SECONDS, 0.0, 1.0)
-	var envelope: float = (1.0 - p) * exp(-p * 4.5) * _well_impulse_strength
+	var envelope: float = (1.0 - p) * exp(-p * 5.2) * _well_impulse_strength
 	var u: float = 1.0 / maxf(0.1, Style.ui_scale(self))
-	return Vector2(sin(p * TAU * 3.0) * 1.4, sin(p * TAU * 2.0 + 0.7) * 2.8) * envelope * u
+	var primary: float = cos(p * TAU * 2.15) * 4.4
+	var perp := Vector2(-_well_impulse_dir.y, _well_impulse_dir.x)
+	var cross: float = sin(p * TAU * 3.1) * 1.4
+	return (_well_impulse_dir * primary + perp * cross) * envelope * u
+
+
+func _spawn_board_ripple(grid_origin: Vector2, strength: float, excluded_id: int = -1) -> void:
+	if reduced_motion or strength <= 0.0:
+		return
+	_board_ripples.append({
+		"origin": grid_origin, "strength": clampf(strength, 0.1, 1.25),
+		"elapsed": 0.0, "excluded": excluded_id
+	})
+	while _board_ripples.size() > 6:
+		_board_ripples.pop_front()
+
+
+func _clear_impact_ripples() -> void:
+	_board_ripples.clear()
+	for id: int in _ripple_tile_ids.keys():
+		if _tiles.has(id):
+			_tiles[id].set_board_ripple(Vector2.ZERO, Vector2.ONE, true)
+	_ripple_tile_ids.clear()
+	for id: int in _tile_flashes.keys():
+		if _tiles.has(id):
+			_tiles[id].set_impact_flash(0.0, true)
+	_tile_flashes.clear()
+
+
+func _advance_impact_ripples(delta: float) -> void:
+	if reduced_motion:
+		if not _board_ripples.is_empty() or not _ripple_tile_ids.is_empty() or not _tile_flashes.is_empty():
+			_clear_impact_ripples()
+		return
+	for id: int in _tile_flashes.keys():
+		var left: float = float(_tile_flashes[id]) - delta
+		if left <= 0.0 or not _tiles.has(id):
+			if _tiles.has(id):
+				_tiles[id].set_impact_flash(0.0, false)
+			_tile_flashes.erase(id)
+		else:
+			_tile_flashes[id] = left
+			_tiles[id].set_impact_flash(clampf(left / 0.16, 0.0, 1.0) * 0.72, false)
+	if _board_ripples.is_empty():
+		if not _ripple_tile_ids.is_empty():
+			for id: int in _ripple_tile_ids.keys():
+				if _tiles.has(id):
+					_tiles[id].set_board_ripple(Vector2.ZERO, Vector2.ONE, false)
+			_ripple_tile_ids.clear()
+		return
+	for idx in range(_board_ripples.size() - 1, -1, -1):
+		_board_ripples[idx].elapsed = float(_board_ripples[idx].elapsed) + minf(delta, 0.05)
+		if float(_board_ripples[idx].elapsed) >= BOARD_RIPPLE_SECONDS + 0.08:
+			_board_ripples.remove_at(idx)
+	var next_active: Dictionary = {}
+	var u: float = 1.0 / maxf(0.1, Style.ui_scale(self))
+	for cell: Dictionary in game.cells:
+		var id: int = int(cell.id)
+		if not _tiles.has(id) or id == _source or game.is_fusing(id) or bool(cell.get("lifted", false)):
+			continue
+		var pos := Vector2(float(cell.column), float(cell.row))
+		var offset := Vector2.ZERO
+		var squeeze: float = 0.0
+		for ripple: Dictionary in _board_ripples:
+			if id == int(ripple.excluded):
+				continue
+			var diff: Vector2 = pos - Vector2(ripple.origin)
+			var dist: float = absf(diff.x) + absf(diff.y)
+			if dist < 0.5 or dist > 2.5:
+				continue
+			var local_t: float = float(ripple.elapsed) - (dist - 1.0) * 0.036
+			if local_t <= 0.0 or local_t >= BOARD_RIPPLE_SECONDS:
+				continue
+			var p: float = local_t / BOARD_RIPPLE_SECONDS
+			var decay: float = (1.0 - p) * exp(-p * 3.8) / dist
+			var wave: float = sin(p * PI * 1.85) * decay * float(ripple.strength)
+			var dir: Vector2 = diff.normalized()
+			offset += dir * wave * 4.8 * u
+			squeeze += wave * 0.065
+		if offset.length_squared() > 0.01 or absf(squeeze) > 0.002:
+			_tiles[id].set_board_ripple(offset, Vector2(1.0 + squeeze, 1.0 - squeeze * 0.85), false)
+			next_active[id] = true
+	for id: int in _ripple_tile_ids.keys():
+		if not next_active.has(id) and _tiles.has(id):
+			_tiles[id].set_board_ripple(Vector2.ZERO, Vector2.ONE, false)
+	_ripple_tile_ids = next_active
 
 
 func _apply_well_impulse() -> void:
