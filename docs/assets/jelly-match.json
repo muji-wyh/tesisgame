@@ -1,16 +1,14 @@
 {
-  "version": 5,
+  "version": 6,
   "acquired_on": "2026-10-09",
   "license": "CC0-1.0",
   "image_source": {
-    "creator": "Zuhria Alfitra (pzUH), GameArt2D",
-    "title": "Jelly Squash Free Sprites",
-    "page": "https://www.gameart2d.com/jelly-squash-free-sprites.html",
-    "download": "https://www.gameart2d.com/uploads/3/0/9/1/30917885/jelly.zip",
-    "license_page": "https://www.gameart2d.com/license.html",
-    "archive_sha256": "b6ae4b056a6c9025a5c7865bfca054cfb60cba997074c2ee252cd69d2cbe9131",
-    "status": "Downloaded and inspected; four adapted gel surfaces and an unmodified contact shadow integrated",
-    "animations": "None included; static bodies and separate faces. Runtime deformation is authored separately."
+    "creator": "TesisGame 3D Storybook Asset Pipeline (Blender 5.3 Cycles)",
+    "title": "Storybook 3D Translucent Jelly Cushion Skins",
+    "license": "CC0-1.0",
+    "tool": "tools/render-storybook-ui-and-gels.py",
+    "status": "Rendered in Blender 5.3 Cycles and inspected; four 320x320 rounded-rectangle gel surfaces preserve the exact SDF silhouette and y=285 foot contract.",
+    "animations": "Static 3D-lit surfaces; runtime squash, optical lighting and fusion deformation are shader-authored."
   },
   "audio_source": {
     "creator": "Kenney",
@@ -45,17 +43,16 @@
     }
   ],
   "image_processing": {
-    "tool": "Pillow",
-    "version": "12.2.0",
-    "description": "Acquired blank Jelly 3: hue variants, 88 percent source saturation (78 percent for mint), continuous 34 percent center to 16 percent contour white mix. Localized lower paint uses an alpha-aware 8 source-pixel Gaussian blur at up to 75 percent blend; upper glints remain crisp. Painted rows are remapped into a rounded rectangle with a 56 source-pixel corner radius at 4x resolution, preserving the vertical span and bottom support. Separate contact shadow copied unchanged."
+    "tool": "Blender 5.3 Cycles + Pillow + NumPy",
+    "description": "Rendered 3D subsurface-scattered clearcoat jelly cushion master, mapped at 4x supersampling into the exact 320x320 rounded-rectangle silhouette (center 159.5, half-extents 148.5x125.5, corner radius 56) with four curated pastel-vivid palettes and calm central reading area."
   },
   "images": [
     {
       "path": "assets/images/jelly-match/gel-coral.png",
       "kind": "gel_surface",
-      "sha256": "85481864c832a097d7e4e0631485086c0c25d3403878ddc58fb390abf827e0f4",
-      "source": "png/separate/Jellies/Blank/Jelly (3).png",
-      "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "sha256": "d192b1ab63ad3159d9f57b751d38828b9dc31f15e3803eea54eeb608c104add1",
+      "source": "tools/render-storybook-ui-and-gels.py",
+      "source_sha256": "d192b1ab63ad3159d9f57b751d38828b9dc31f15e3803eea54eeb608c104add1",
       "size": [
         320,
         320
@@ -125,9 +122,9 @@
     {
       "path": "assets/images/jelly-match/gel-mint.png",
       "kind": "gel_surface",
-      "sha256": "dc18930217710d302f20902992b5451869eb246e20db8265e245cae3f36c32d2",
-      "source": "png/separate/Jellies/Blank/Jelly (3).png",
-      "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "sha256": "87be57711549fbb45c0c1fcffbf3f86ae0058567e72438df61ffb31d9495bc35",
+      "source": "tools/render-storybook-ui-and-gels.py",
+      "source_sha256": "87be57711549fbb45c0c1fcffbf3f86ae0058567e72438df61ffb31d9495bc35",
       "size": [
         320,
         320
@@ -197,9 +194,9 @@
     {
       "path": "assets/images/jelly-match/gel-sky.png",
       "kind": "gel_surface",
-      "sha256": "ab91b89c83ed9a079a30a1410e22215864e62a7406e8eb8fce4d587e3f35b456",
-      "source": "png/separate/Jellies/Blank/Jelly (3).png",
-      "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "sha256": "17dace967a6d1997544de76dfcdadbe86f55ee22295f8a87f7f87ec1b0525158",
+      "source": "tools/render-storybook-ui-and-gels.py",
+      "source_sha256": "17dace967a6d1997544de76dfcdadbe86f55ee22295f8a87f7f87ec1b0525158",
       "size": [
         320,
         320
@@ -269,9 +266,9 @@
     {
       "path": "assets/images/jelly-match/gel-lilac.png",
       "kind": "gel_surface",
-      "sha256": "3520fc10d209e915c1225d8d9452a46bd6ab0b1b4bca45d43e758c9f14f1a8b9",
-      "source": "png/separate/Jellies/Blank/Jelly (3).png",
-      "source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "sha256": "33a066e0a5b92c677c991d815d6aae5b5cfbbb905e82ce9ecc21f3e209e3d598",
+      "source": "tools/render-storybook-ui-and-gels.py",
+      "source_sha256": "33a066e0a5b92c677c991d815d6aae5b5cfbbb905e82ce9ecc21f3e209e3d598",
       "size": [
         320,
         320

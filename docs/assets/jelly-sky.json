@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "imported_on": "2026-10-14",
   "source": {
     "title": "Skyboxes (1.0)",
@@ -16,7 +16,7 @@
     "license_source_sha256": "bba7de4552f4a86589fbef2d694c02609643c8d4680e9dbe00407b3474b4a993",
     "license_sha256": "bba7de4552f4a86589fbef2d694c02609643c8d4680e9dbe00407b3474b4a993",
     "attribution": "Kenney credit is welcomed but not required by the supplied CC0 license",
-    "status": "Original daytime panorama inspected and converted into the repository; runtime integration and review evidence are documented in jelly-sky.md",
+    "status": "Daytime, golden-hour morning, and twilight night panoramas imported from user-supplied CC0 Kenney Skyboxes 1.0 for multi-biome chapter variety.",
     "animations": "Static equirectangular PNG panoramas with baked clouds and sun; no source animation clips, sunlight simulation, or day/night engine system"
   },
   "images": [
@@ -47,6 +47,44 @@
         "other_changes": "No painted additions, alpha extraction, or source-preview content"
       },
       "conversion_tool": "Python with Pillow 12.2.0"
+    },
+    {
+      "id": "morning",
+      "path": "assets/images/jelly-match/sky/morning.png",
+      "source": "Skyboxes/skybox-morning.png",
+      "source_sha256": "7b445e959e7e65c2aad962028826434fda90d7b21f00f451767344970efa9e1e",
+      "source_bytes": 899710,
+      "sha256": "c7bc18280e43f2920c319a4dd09beb8bb6ea1da0f79aad50b9663f2f36276f7c",
+      "bytes": 201788,
+      "size": [
+        1536,
+        768
+      ],
+      "mode": "RGB",
+      "processing": {
+        "color_conversion": "Pillow Image.convert('RGB')",
+        "resize": "Pillow Image.resize((1536, 768), Image.Resampling.LANCZOS)",
+        "encoding": "PNG RGB with optimize=True"
+      }
+    },
+    {
+      "id": "night",
+      "path": "assets/images/jelly-match/sky/night.png",
+      "source": "Skyboxes/skybox-night.png",
+      "source_sha256": "2276d9e1adee0db84255fe63e13f172b338d4257e312603a3abba89b512419ba",
+      "source_bytes": 1099375,
+      "sha256": "400bb10fa0a9400735b5cc9279800c1e18e249d2a2d5692e3553bd76be752f95",
+      "bytes": 283297,
+      "size": [
+        1536,
+        768
+      ],
+      "mode": "RGB",
+      "processing": {
+        "color_conversion": "Pillow Image.convert('RGB')",
+        "resize": "Pillow Image.resize((1536, 768), Image.Resampling.LANCZOS)",
+        "encoding": "PNG RGB with optimize=True"
+      }
     }
   ],
   "review": {

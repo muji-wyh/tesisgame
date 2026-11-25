@@ -841,6 +841,9 @@ func _result_error(value: Variant, context: Dictionary) -> String:
 			return "A Boss victory needs the original cleared Boss stage and its matching encounter identity."
 	if value.has("boss_roster_version") and (not value.boss_roster_version is int or value.boss_roster_version != 2):
 		return "The Boss settlement has an unsupported encounter roster."
+	if value.has("boss_ascension") and (value.kind != "main" or not value.boss_ascension is int \
+		or value.boss_ascension < 0 or value.boss_ascension > 2):
+		return "A Boss settlement needs a supported ascension tier."
 	if value.has("challenge_stage") and (value.kind != "challenge" or not value.challenge_stage is int \
 		or value.challenge_stage < 1 or value.challenge_stage > 16384):
 		return "A Challenge result needs its actual supported stage."

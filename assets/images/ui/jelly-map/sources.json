@@ -1,15 +1,15 @@
 {
-  "version": 1,
+  "version": 2,
   "source": {
-    "title": "UI Pack - Adventure",
+    "title": "Storybook 3D Sculpted Medallions (Blender 5.3 Cycles) + Kenney UI Pack - Adventure 1.1",
     "version": "1.1",
-    "creator": "Kenney",
+    "creator": "TesisGame 3D Pipeline & Kenney",
     "url": "https://kenney.nl/assets/ui-pack-adventure",
     "license": "CC0-1.0",
     "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
     "acquisition": "Original byte copies from the already-acquired Kenney Game Assets All-in-1 3.7.0 UI assets library.",
     "review": "Actual original pack preview and each selected PNG inspected before integration.",
-    "animations": "Static interface artwork; no source animation clips."
+    "animations": "Static 3D-lit medallions and nine-slice panel; hover/unlock animations are game-authored."
   },
   "license": {
     "file": "LICENSE-CC0.txt",
@@ -19,27 +19,43 @@
   "images": [
     {
       "file": "stage-open.png",
-      "original": "PNG/Double/round_brown.png",
-      "sha256": "d418543a4da683eb9322f8ee0f2856103ef07fdb9a25a38124fdc308e7433341",
-      "bytes": 2333,
-      "size": [128, 128],
-      "processing": "Unmodified original PNG; displayed as an upright aspect-preserved medallion."
+      "bytes": 31043,
+      "size": [
+        160,
+        160
+      ],
+      "sha256": "3ee9d1585017e667260e637d24f0dd297640affb3bdcfecb929174885728a320",
+      "source": "tools/render-storybook-ui-and-gels.py"
     },
     {
       "file": "stage-locked.png",
-      "original": "PNG/Double/round_grey_dark.png",
-      "sha256": "87720c433c2a33f88abb2e35c9d18efe724ce011332da0df6d6c97e216774a36",
-      "bytes": 1841,
-      "size": [128, 128],
-      "processing": "Unmodified original PNG; displayed as an upright aspect-preserved locked medallion."
+      "bytes": 33326,
+      "size": [
+        160,
+        160
+      ],
+      "sha256": "f32f7ac7e6e64412abe6fca75a960d4d71e53c58138e62f99860e65cbb6711e1",
+      "source": "tools/render-storybook-ui-and-gels.py"
+    },
+    {
+      "file": "stage-boss.png",
+      "bytes": 36210,
+      "size": [
+        160,
+        160
+      ],
+      "sha256": "9e43f15e16e8d2da8853bdbb66fa616b3f71c578363882c620ea5db15d7be0ba",
+      "source": "tools/render-storybook-ui-and-gels.py"
     },
     {
       "file": "adventure-panel.png",
-      "original": "PNG/Double/panel_brown.png",
-      "sha256": "e5bcda84c20a4d2f44082a9ab8094c959b339cfaffa21e67fcb6b4b6a7f09d36",
       "bytes": 447,
-      "size": [128, 128],
-      "processing": "Unmodified original PNG; nine-slice layout preserves the original frame corners."
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "e5bcda84c20a4d2f44082a9ab8094c959b339cfaffa21e67fcb6b4b6a7f09d36",
+      "source": "Kenney UI Pack - Adventure 1.1"
     }
   ],
   "reuse": [
@@ -53,7 +69,7 @@
     {
       "file": "assets/images/ui/controls/home.svg",
       "record": "assets/images/ui/controls/sources.json",
-      "creator": "Paweł Kuna",
+      "creator": "Pawe\u0142 Kuna",
       "license": "MIT",
       "status": "Existing acquired Tabler icon reused through the shared IconButton."
     }

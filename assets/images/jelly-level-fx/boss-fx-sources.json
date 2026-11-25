@@ -1,0 +1,57 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "file": "assets/images/jelly-level-fx/frost-flake.png",
+      "source": "Toon FX [1.52]/Textures/snowflake.png",
+      "source_sha256": "83c451213929423de7916a092736e5e31ecb454b232d299fdd48aac1760b662e",
+      "sha256": "015a48d2aa4d5bd1dac383a12d80b2a8a511b2c7ee7a11b5420008bbfe79cd45",
+      "bytes": 5438,
+      "size": [
+        128,
+        128
+      ],
+      "creator": "Kenneth Foldal Moe / Archanor VFX",
+      "license": "Standard Unity Asset Store EULA"
+    },
+    {
+      "file": "assets/images/jelly-level-fx/ink-splat.png",
+      "source": "Toon FX [1.52]/Textures/splat01.png",
+      "source_sha256": "b5654af6a8725d99d39dc4f22448a659b5e063e5ae4aad4d8ba159e58013348d",
+      "sha256": "602358d85c98f4c843637bbe453b48b703fa9a00d06ec2dec8bbb19d4d7aa8cf",
+      "bytes": 10227,
+      "size": [
+        128,
+        128
+      ],
+      "creator": "Kenneth Foldal Moe / Archanor VFX",
+      "license": "Standard Unity Asset Store EULA"
+    },
+    {
+      "file": "assets/images/jelly-level-fx/impact-star.png",
+      "source": "Toon FX [1.52]/Textures/star.png",
+      "source_sha256": "d82ce5749291fbff8a90b30c3b98523f77a1b24e0b7e52d6131a6a836a28a8dd",
+      "sha256": "4d25fd8a88008e2cd39083606242b8ab3b716c12f88cd4c586936c5058ba7286",
+      "bytes": 21038,
+      "size": [
+        128,
+        128
+      ],
+      "creator": "Kenneth Foldal Moe / Archanor VFX",
+      "license": "Standard Unity Asset Store EULA"
+    },
+    {
+      "file": "assets/images/jelly-level-fx/soft-poof.png",
+      "source": "Toon FX [1.52]/Textures/poof.png",
+      "source_sha256": "41c0225237b8590ca2a536542d03af95e0ff3df0098ae0b2024a188c3616e28f",
+      "sha256": "05ffc35c2c59c51f6ae91ea274a0ff981e7e2099667d3cfe016cbd2ce5738f51",
+      "bytes": 8873,
+      "size": [
+        128,
+        128
+      ],
+      "creator": "Kenneth Foldal Moe / Archanor VFX",
+      "license": "Standard Unity Asset Store EULA"
+    }
+  ]
+}

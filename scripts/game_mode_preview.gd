@@ -13,6 +13,7 @@ const CHEST = preload("res://assets/chests/shared/ui/chest.png")
 const CHEST_OPEN = preload("res://assets/chests/shared/ui/chest-open.png")
 const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
+const CARD_BACK = preload("res://assets/images/ui/memory/card-back-picture.png")
 const DESIGN_SIZE := Vector2(220, 112)
 const DURATION := 5.8
 const PHASE_OFFSETS := {"match": 0.0, "memory": 0.85, "pop": 1.7, "phrase": 2.55, "jelly": 3.4, "word_jelly": 4.25}
@@ -172,8 +173,8 @@ func _draw_match(moving: bool) -> void:
 
 
 func _draw_memory(moving: bool) -> void:
-	_card(Rect2(9, 28, 55, 70), Color("#e3ddeb"), PURPLE)
-	_text("Aa", Vector2(36.5, 63), 27, PURPLE)
+	draw_texture_rect(CARD_BACK, Rect2(9, 28, 55, 70), false)
+	_text("Aa", Vector2(36.5, 63), 24, Color("#fff7dc"))
 	var first: float = smoothstep(0.65, 1.25, _elapsed) if moving else 1.0
 	var second: float = smoothstep(1.6, 2.2, _elapsed) if moving else 1.0
 	var lift: float = _hop(2.25, 0.55, 5.0) if moving else 0.0
@@ -191,11 +192,14 @@ func _flip_card(center: Vector2, progress: float, picture: bool, edge: Color) ->
 	var width: float = maxf(2, absf(cos(progress * PI)) * 60)
 	var face: bool = progress > 0.5
 	var rect := Rect2(center - Vector2(width, 74) * 0.5, Vector2(width, 74))
-	_card(rect, Color("#fffdf6") if face else Color("#e3ddeb"), edge)
+	if face:
+		_card(rect, Color("#fffdf6"), edge)
+	else:
+		draw_texture_rect(CARD_BACK, rect, false)
 	if face and picture:
 		_art(CAT, Rect2(center - Vector2(width * 0.44, 28), Vector2(width * 0.88, 52)))
 	elif width > 32:
-		_text("cat" if face else "Aa", center, mini(25, int(width * 0.48)), Style.INK if face else PURPLE)
+		_text("cat" if face else "Aa", center, mini(24, int(width * 0.46)), Style.INK if face else Color("#fff7dc"))
 
 
 func _shift(points: PackedVector2Array, offset: Vector2) -> PackedVector2Array:

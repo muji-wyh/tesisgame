@@ -21,6 +21,7 @@ const ResultScroll = preload("res://scripts/result_scroll.gd")
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const ChestCelebration = preload("res://scripts/jelly_chest_celebration.gd")
 const ChestArt = preload("res://scripts/voice_pop_chest_art.gd")
+const NIGHT_SKY = preload("res://assets/images/jelly-match/sky/night.png")
 const NAVY := Color("#102a2a")
 const SURFACE := Color("#203f3e")
 const CYAN := Color("#a7e4cf")
@@ -316,7 +317,7 @@ func _build() -> void:
 	_gate.add_child(_gate_body)
 	_gate_art = TextureRect.new()
 	_gate_art.name = "VoicePopRocket"
-	_gate_art.texture = preload("res://assets/images/ui/modes/rocket.svg")
+	_gate_art.texture = preload("res://assets/images/ui/modes/rocket.webp")
 	_gate_art.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_gate_art.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	_gate_art.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -1360,6 +1361,7 @@ func _draw() -> void:
 	_ensure_draw_styles(scale)
 	draw_style_box(_backdrop_style, Rect2(Vector2.ZERO, size))
 	if not _learning_backdrop_active:
+		draw_texture_rect(NIGHT_SKY, Rect2(Vector2.ZERO, size), false, Color(0.55, 0.72, 0.78, 0.28))
 		_draw_atmosphere(scale)
 	if _hud != null and _hud.visible:
 		var side: float = time_label.size.x

@@ -6,7 +6,7 @@ signal preview_changed(active: bool)
 const Style = preload("res://scripts/ui_style.gd")
 const Model = preload("res://scripts/word_jelly_model.gd")
 const Economy = preload("res://scripts/coin_economy.gd")
-const WAND = preload("res://assets/images/ui/jelly-powerups/auto-merge-wand.svg")
+const WAND = preload("res://assets/images/ui/jelly-powerups/auto-merge-wand.webp")
 const MAGNET = preload("res://assets/images/ui/jelly-powerups/family-magnet.webp")
 const CHEST = preload("res://assets/chests/shared/ui/chest.png")
 const COIN = preload("res://assets/coins/gold-coin.png")
@@ -542,7 +542,7 @@ func _draw() -> void:
 	_price_label.add_theme_color_override("font_color", ink if disabled and not celebrating else price_color)
 	_price_label.position = _price_position + Vector2(pose.price_offset)
 	var center: Vector2 = _icon_rect.get_center() + Vector2(pose.offset)
-	var tint := Color("#8e68b5") if _kind == "auto_merge" else Color.WHITE
+	var tint := Color.WHITE
 	if disabled and not celebrating:
 		tint.a = 0.70
 	elif not _affordable and not celebrating:

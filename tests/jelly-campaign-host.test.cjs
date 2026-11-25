@@ -55,3 +55,26 @@ test('blocked campaign storage remains an explicit failure and can recover witho
   assert.equal(bridge.saveJellyCampaignState('new progress', 'previous progress'), true);
   assert.equal(bridge.jellyCampaignState(), 'new progress');
 });
+
+const rpgMethods = ['jellyRpgState', 'saveJellyRpgState'].map(name => {
+  const source = shell.match(new RegExp(`        ${name}\\([^)]*\\) \\{[\\s\\S]*?\\n        \\}`))?.[0];
+  assert.ok(source, `The actual shell exposes ${name}`);
+  return source;
+});
+function rpgHost(storage) {
+  return vm.runInNewContext(`({${rpgMethods.join(',')}})`, { localStorage: storage, TextEncoder });
+}
+
+test('jelly RPG saves stay isolated in growWithPip.jellyRpg.v1 with CAS and 512KB cap', () => {
+  const records = new Map([['growWithPip.jellyCampaign.v1', 'campaign']]);
+  const storage = { getItem: k => records.get(k) ?? null, setItem: (k, v) => records.set(k, v) };
+  const bridge = rpgHost(storage);
+  assert.equal(bridge.jellyRpgState(), null);
+  assert.equal(bridge.saveJellyRpgState('rpg-v1', null), true);
+  assert.equal(bridge.saveJellyRpgState('stale-write', null), false);
+  assert.equal(bridge.saveJellyRpgState('rpg-v2', 'rpg-v1'), true);
+  assert.equal(bridge.jellyRpgState(), 'rpg-v2');
+  assert.equal(records.get('growWithPip.jellyCampaign.v1'), 'campaign');
+  assert.equal(bridge.saveJellyRpgState('界'.repeat(200000), 'rpg-v2'), false);
+  assert.equal(bridge.saveJellyRpgState('', 'rpg-v2'), false);
+});

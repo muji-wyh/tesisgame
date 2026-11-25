@@ -2,21 +2,19 @@
   "version": 1,
   "source_manifest": "docs/assets/jelly-match.json",
   "source": {
-    "creator": "Zuhria Alfitra (pzUH), GameArt2D",
-    "title": "Jelly Squash Free Sprites",
-    "page": "https://www.gameart2d.com/jelly-squash-free-sprites.html",
-    "download": "https://www.gameart2d.com/uploads/3/0/9/1/30917885/jelly.zip",
-    "license_page": "https://www.gameart2d.com/license.html",
-    "archive_sha256": "b6ae4b056a6c9025a5c7865bfca054cfb60cba997074c2ee252cd69d2cbe9131",
-    "status": "Downloaded and inspected; four adapted gel surfaces and an unmodified contact shadow integrated",
-    "animations": "None included; static bodies and separate faces. Runtime deformation is authored separately."
+    "creator": "TesisGame 3D Storybook Asset Pipeline (Blender 5.3 Cycles)",
+    "title": "Storybook 3D Translucent Jelly Cushion Skins",
+    "license": "CC0-1.0",
+    "tool": "tools/render-storybook-ui-and-gels.py",
+    "status": "Rendered in Blender 5.3 Cycles and inspected; four 320x320 rounded-rectangle gel surfaces preserve the exact SDF silhouette and y=285 foot contract.",
+    "animations": "Static 3D-lit surfaces; runtime squash, optical lighting and fusion deformation are shader-authored."
   },
   "license": "CC0-1.0",
   "status": "Derived from the integrated acquired artwork; material maps for runtime shader sampling",
   "animation": "No baked animation. Runtime distance-field blending deforms the acquired painted surfaces.",
   "processing": {
     "tool": "tools/prepare-jelly-material.py",
-    "pillow_version": "12.2.0",
+    "pillow_version": "13.0.0",
     "dimensions": [
       320,
       320
@@ -35,11 +33,11 @@
   "images": [
     {
       "path": "assets/images/jelly-match/gel-coral-material.png",
-      "sha256": "60269e63f72daadc736e9543acb99725cebac76ade2b4a88e1da7c0c109c883c",
+      "sha256": "d764ee2b6d3802e9b8f19fd8004f5fd9933a75d9224c8933160094b944cbac25",
       "source": "assets/images/jelly-match/gel-coral.png",
-      "source_sha256": "85481864c832a097d7e4e0631485086c0c25d3403878ddc58fb390abf827e0f4",
-      "original_source": "png/separate/Jellies/Blank/Jelly (3).png",
-      "original_source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "source_sha256": "d192b1ab63ad3159d9f57b751d38828b9dc31f15e3803eea54eeb608c104add1",
+      "original_source": "tools/render-storybook-ui-and-gels.py",
+      "original_source_sha256": "d192b1ab63ad3159d9f57b751d38828b9dc31f15e3803eea54eeb608c104add1",
       "size": [
         320,
         320
@@ -50,11 +48,11 @@
     },
     {
       "path": "assets/images/jelly-match/gel-mint-material.png",
-      "sha256": "8649f2f1d6dfe89be31c1a9f5da1938167a898d1949d58cbf40749b8bc1c3e0b",
+      "sha256": "4bb585bec1889c7193ebf55f90b23bf5ef825ca768caa9b01adf4817735ed194",
       "source": "assets/images/jelly-match/gel-mint.png",
-      "source_sha256": "dc18930217710d302f20902992b5451869eb246e20db8265e245cae3f36c32d2",
-      "original_source": "png/separate/Jellies/Blank/Jelly (3).png",
-      "original_source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "source_sha256": "87be57711549fbb45c0c1fcffbf3f86ae0058567e72438df61ffb31d9495bc35",
+      "original_source": "tools/render-storybook-ui-and-gels.py",
+      "original_source_sha256": "87be57711549fbb45c0c1fcffbf3f86ae0058567e72438df61ffb31d9495bc35",
       "size": [
         320,
         320
@@ -65,11 +63,11 @@
     },
     {
       "path": "assets/images/jelly-match/gel-sky-material.png",
-      "sha256": "3f539f14ea89c6576b55d3a1fba02f7822e332f6974c02e43db98040597dfe4e",
+      "sha256": "5053d8d1f404b8c756c1600e36e2ebc25069818d10e92f05e383c6264150a719",
       "source": "assets/images/jelly-match/gel-sky.png",
-      "source_sha256": "ab91b89c83ed9a079a30a1410e22215864e62a7406e8eb8fce4d587e3f35b456",
-      "original_source": "png/separate/Jellies/Blank/Jelly (3).png",
-      "original_source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "source_sha256": "17dace967a6d1997544de76dfcdadbe86f55ee22295f8a87f7f87ec1b0525158",
+      "original_source": "tools/render-storybook-ui-and-gels.py",
+      "original_source_sha256": "17dace967a6d1997544de76dfcdadbe86f55ee22295f8a87f7f87ec1b0525158",
       "size": [
         320,
         320
@@ -80,11 +78,11 @@
     },
     {
       "path": "assets/images/jelly-match/gel-lilac-material.png",
-      "sha256": "9c7aaf2fffc3eadeda4f87f31ec91b0c5926f911b0a261434785ae9437a794d9",
+      "sha256": "ac93eb9a59d6d9444005b2309a59f7fdcb8b4e9f6d6dd15297bc63749b8c02d3",
       "source": "assets/images/jelly-match/gel-lilac.png",
-      "source_sha256": "3520fc10d209e915c1225d8d9452a46bd6ab0b1b4bca45d43e758c9f14f1a8b9",
-      "original_source": "png/separate/Jellies/Blank/Jelly (3).png",
-      "original_source_sha256": "4c64f9f230c420aa4ee8ce341b35175d7360481722a79c0628d6c0c2d631881d",
+      "source_sha256": "33a066e0a5b92c677c991d815d6aae5b5cfbbb905e82ce9ecc21f3e209e3d598",
+      "original_source": "tools/render-storybook-ui-and-gels.py",
+      "original_source_sha256": "33a066e0a5b92c677c991d815d6aae5b5cfbbb905e82ce9ecc21f3e209e3d598",
       "size": [
         320,
         320

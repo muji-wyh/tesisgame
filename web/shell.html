@@ -3240,6 +3240,19 @@
             return localStorage.getItem('growWithPip.jellyCampaign.v1') === text;
           } catch { return false; }
         },
+        jellyRpgState() {
+          try { return localStorage.getItem('growWithPip.jellyRpg.v1'); }
+          catch { return false; }
+        },
+        saveJellyRpgState(text, expectedText) {
+          if (typeof text !== 'string' || !text.length || new TextEncoder().encode(text).length > 512 * 1024) return false;
+          if (expectedText !== null && typeof expectedText !== 'string') return false;
+          try {
+            if (localStorage.getItem('growWithPip.jellyRpg.v1') !== expectedText) return false;
+            localStorage.setItem('growWithPip.jellyRpg.v1', text);
+            return localStorage.getItem('growWithPip.jellyRpg.v1') === text;
+          } catch { return false; }
+        },
         saveJellyRewardState(text) {
           if (typeof text !== 'string' || !text.length || text.length > 2 * 1024 * 1024) return false;
           try {

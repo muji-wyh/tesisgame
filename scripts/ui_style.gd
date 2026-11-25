@@ -12,6 +12,18 @@ const BODY_FONT = preload("res://assets/fonts/body.tres")
 const HEADING_FONT = preload("res://assets/fonts/heading.tres")
 const DISPLAY_FONT = preload("res://assets/fonts/display.tres")
 const PAPER_GRAIN = preload("res://scripts/paper_grain.gdshader")
+const TEX_PANEL_PARCHMENT = preload("res://assets/images/ui/chrome/panel-parchment.png")
+const TEX_PANEL_CARD = preload("res://assets/images/ui/chrome/panel-card.png")
+const TEX_BANNER_CHAPTER = preload("res://assets/images/ui/chrome/banner-chapter.png")
+const TEX_BTN_PRIMARY = preload("res://assets/images/ui/chrome/btn-primary.png")
+const TEX_BTN_PRIMARY_HOVER = preload("res://assets/images/ui/chrome/btn-primary-hover.png")
+const TEX_BTN_PRIMARY_PRESSED = preload("res://assets/images/ui/chrome/btn-primary-pressed.png")
+const TEX_BTN_GOLD = preload("res://assets/images/ui/chrome/btn-gold.png")
+const TEX_BTN_GOLD_HOVER = preload("res://assets/images/ui/chrome/btn-gold-hover.png")
+const TEX_BTN_SECONDARY = preload("res://assets/images/ui/chrome/btn-secondary.png")
+const TEX_BTN_SECONDARY_HOVER = preload("res://assets/images/ui/chrome/btn-secondary-hover.png")
+const TEX_BTN_SECONDARY_PRESSED = preload("res://assets/images/ui/chrome/btn-secondary-pressed.png")
+const TEX_WELL_FRAME = preload("res://assets/images/ui/chrome/well-frame.png")
 static var _pixel_ratio_frame: int = -1
 static var _pixel_ratio_window := Vector2i.ZERO
 static var _pixel_ratio: float = 1.0
@@ -64,6 +76,67 @@ static func card_box(fill: Color, border: Color, radius: int = 18, width: int = 
 	return style
 
 
+static func nine_slice(texture: Texture2D, margin: float = 24.0, content_h: float = 12.0, content_v: float = 8.0, tint: Color = Color.WHITE) -> StyleBoxTexture:
+	var style := StyleBoxTexture.new()
+	style.texture = texture
+	style.texture_margin_left = margin
+	style.texture_margin_right = margin
+	style.texture_margin_top = margin
+	style.texture_margin_bottom = margin
+	style.content_margin_left = content_h
+	style.content_margin_right = content_h
+	style.content_margin_top = content_v
+	style.content_margin_bottom = content_v
+	style.modulate_color = tint
+	return style
+
+
+static func parchment_panel(scale: float = 1.0, pad_h: float = 16.0, pad_v: float = 14.0) -> StyleBoxTexture:
+	var u: float = 1.0 / maxf(0.1, scale)
+	return nine_slice(TEX_PANEL_PARCHMENT, 28.0, pad_h * u, pad_v * u)
+
+
+static func chapter_banner_box(scale: float = 1.0) -> StyleBoxTexture:
+	var u: float = 1.0 / maxf(0.1, scale)
+	var style := StyleBoxTexture.new()
+	style.texture = TEX_BANNER_CHAPTER
+	style.texture_margin_left = 26.0
+	style.texture_margin_right = 26.0
+	style.texture_margin_top = 20.0
+	style.texture_margin_bottom = 22.0
+	style.content_margin_left = 10.0 * u
+	style.content_margin_right = 10.0 * u
+	style.content_margin_top = 4.0 * u
+	style.content_margin_bottom = 4.0 * u
+	return style
+
+
+static func well_frame_box() -> StyleBoxTexture:
+	var style := StyleBoxTexture.new()
+	style.texture = TEX_WELL_FRAME
+	style.texture_margin_left = 22.0
+	style.texture_margin_right = 22.0
+	style.texture_margin_top = 22.0
+	style.texture_margin_bottom = 22.0
+	style.draw_center = false
+	return style
+
+
+static func gold_button_box(scale: float = 1.0, hovered: bool = false) -> StyleBoxTexture:
+	var u: float = 1.0 / maxf(0.1, scale)
+	var style := StyleBoxTexture.new()
+	style.texture = TEX_BTN_GOLD_HOVER if hovered else TEX_BTN_GOLD
+	style.texture_margin_left = 22.0
+	style.texture_margin_right = 22.0
+	style.texture_margin_top = 18.0
+	style.texture_margin_bottom = 22.0
+	style.content_margin_left = 10.0 * u
+	style.content_margin_right = 10.0 * u
+	style.content_margin_top = 5.0 * u
+	style.content_margin_bottom = 6.0 * u
+	return style
+
+
 static func paper_material(tint: Color, top_wash: Color = Color("#e8f2ea"), wash_strength: float = 0.28, grain_strength: float = 0.018) -> ShaderMaterial:
 	var material := ShaderMaterial.new()
 	material.shader = PAPER_GRAIN
@@ -112,18 +185,33 @@ static func action_button(control: Button, accent: Color, primary: bool = false)
 	var lip: int = maxi(border + 1, ceili(3.0 / scale))
 	var fill: Color = accent.darkened(0.12) if primary else SURFACE
 	var edge: Color = accent.darkened(0.28) if primary else EDGE.darkened(0.06)
-	var normal := box(fill, edge, radius, border)
-	normal.border_width_bottom = lip
-	normal.shadow_color = Color(accent.darkened(0.45) if primary else INK, 0.14 if primary else 0.08)
-	normal.shadow_size = ceili(3.0 / scale)
-	normal.shadow_offset = Vector2(0.0, 1.5 / scale)
-	var hover := box(accent.darkened(0.04) if primary else accent.lightened(0.92), accent.darkened(0.22) if primary else accent.lightened(0.32), radius, border)
-	hover.border_width_bottom = lip
-	hover.shadow_color = Color(accent.darkened(0.42) if primary else INK, 0.18 if primary else 0.10)
-	hover.shadow_size = ceili(4.0 / scale)
-	hover.shadow_offset = Vector2(0.0, 2.0 / scale)
-	var pressed := box(accent.darkened(0.22) if primary else accent.lightened(0.82), accent.darkened(0.26) if primary else accent, radius, border)
-	pressed.border_width_bottom = border
+	var normal: StyleBox
+	var hover: StyleBox
+	var pressed: StyleBox
+	if primary and accent.is_equal_approx(GOOD):
+		normal = nine_slice(TEX_BTN_PRIMARY, 22.0, 12.0 / scale, 6.0 / scale)
+		hover = nine_slice(TEX_BTN_PRIMARY_HOVER, 22.0, 12.0 / scale, 6.0 / scale)
+		pressed = nine_slice(TEX_BTN_PRIMARY_PRESSED, 22.0, 12.0 / scale, 6.0 / scale)
+	elif not primary:
+		normal = nine_slice(TEX_BTN_SECONDARY, 22.0, 12.0 / scale, 6.0 / scale)
+		hover = nine_slice(TEX_BTN_SECONDARY_HOVER, 22.0, 12.0 / scale, 6.0 / scale)
+		pressed = nine_slice(TEX_BTN_SECONDARY_PRESSED, 22.0, 12.0 / scale, 6.0 / scale)
+	else:
+		var flat_normal := box(fill, edge, radius, border)
+		flat_normal.border_width_bottom = lip
+		flat_normal.shadow_color = Color(accent.darkened(0.45), 0.14)
+		flat_normal.shadow_size = ceili(3.0 / scale)
+		flat_normal.shadow_offset = Vector2(0.0, 1.5 / scale)
+		normal = flat_normal
+		var flat_hover := box(accent.darkened(0.04), accent.darkened(0.22), radius, border)
+		flat_hover.border_width_bottom = lip
+		flat_hover.shadow_color = Color(accent.darkened(0.42), 0.18)
+		flat_hover.shadow_size = ceili(4.0 / scale)
+		flat_hover.shadow_offset = Vector2(0.0, 2.0 / scale)
+		hover = flat_hover
+		var flat_pressed := box(accent.darkened(0.22), accent.darkened(0.26), radius, border)
+		flat_pressed.border_width_bottom = border
+		pressed = flat_pressed
 	var disabled := box(SOFT, EDGE, radius, border)
 	control.add_theme_stylebox_override("normal", normal)
 	control.add_theme_stylebox_override("hover", hover)

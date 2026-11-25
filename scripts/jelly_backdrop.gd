@@ -3,11 +3,20 @@ extends Control
 
 const Style = preload("res://scripts/ui_style.gd")
 const SKY = preload("res://assets/images/jelly-match/sky/day.png")
+const SKY_MORNING = preload("res://assets/images/jelly-match/sky/morning.png")
+const SKY_NIGHT = preload("res://assets/images/jelly-match/sky/night.png")
 const DAYLIGHT = preload("res://scripts/jelly_daylight.gdshader")
 const HILLS = preload("res://assets/images/jelly-match/garden/hills.png")
 const TREE = preload("res://assets/images/jelly-match/garden/tree.png")
 const TREE_LONG = preload("res://assets/images/jelly-match/garden/tree-long.png")
 const FOLIAGE = preload("res://assets/images/jelly-match/garden/foliage.png")
+const CHAPTER_SKIES: Array[Texture2D] = [
+	SKY, SKY, SKY, SKY,
+	SKY_MORNING,
+	SKY_NIGHT, SKY_NIGHT,
+	SKY_MORNING, SKY_MORNING,
+	SKY_NIGHT, SKY_NIGHT
+]
 const CHAPTER_PROPS: Array[Texture2D] = [
 	HILLS,
 	TREE,
@@ -94,6 +103,7 @@ func set_chapter(chapter: int) -> void:
 	if next == _chapter:
 		return
 	_chapter = next
+	_sky.texture = CHAPTER_SKIES[_chapter - 1] if _chapter >= 1 and _chapter <= CHAPTER_SKIES.size() else SKY
 	_update_daylight()
 	queue_redraw()
 
@@ -168,16 +178,20 @@ func _draw() -> void:
 	var scale: float = Style.ui_scale(self)
 	var theme: Dictionary = CHAPTER_THEMES[_chapter - 1] if _chapter >= 1 else CHAPTER_THEMES[0]
 	var hill_width: float = maxf(size.x, size.y) * 1.25
-	_stamp(HILLS, Vector2(size.x * 0.43, size.y * 0.82), hill_width, Vector2(0.5, 0.0), theme.hill)
+	# Upgraded 3D diorama props deserve crisp, rich visibility along board edges while keeping central playfield calm.
+	var hill_tint: Color = Color(theme.hill.r, theme.hill.g, theme.hill.b, 0.72)
+	var hill2_tint: Color = Color(theme.hill2.r, theme.hill2.g, theme.hill2.b, 0.84)
+	var prop_tint: Color = Color(theme.prop.r, theme.prop.g, theme.prop.b, 0.86)
+	var right_tint: Color = Color(theme.prop.r, theme.prop.g, theme.prop.b, 0.78)
+	_stamp(HILLS, Vector2(size.x * 0.43, size.y * 0.80), hill_width, Vector2(0.5, 0.0), hill_tint)
 	var portrait: bool = size.x < size.y
-	var tree_height: float = minf(minf(size.y * 0.24, size.x * 0.46), 230.0 / scale)
+	var tree_height: float = minf(minf(size.y * 0.27, size.x * 0.48), 255.0 / scale)
 	var left_prop: Texture2D = CHAPTER_PROPS[_chapter - 1] if _chapter >= 2 else TREE
 	var right_prop: Texture2D = CHAPTER_PROPS[_chapter - 1] if _chapter >= 3 else TREE_LONG
-	_stamp(left_prop, Vector2(size.x * (0.005 if portrait else 0.045), size.y * 1.02), tree_height * left_prop.get_width() / left_prop.get_height(), Vector2(0.5, 1.0), theme.prop)
-	var right_tint: Color = Color(theme.prop.r, theme.prop.g, theme.prop.b, maxf(0.24, theme.prop.a - 0.04))
-	_stamp(right_prop, Vector2(size.x * 0.97, size.y * 1.02), tree_height * 0.88 * right_prop.get_width() / right_prop.get_height(), Vector2(0.5, 1.0), right_tint)
-	_stamp(HILLS, Vector2(size.x * 0.56, size.y * 0.94), hill_width, Vector2(0.5, 0.0), theme.hill2)
-	var foliage_width: float = minf(size.x * 0.26, 200.0 / scale)
-	_stamp(FOLIAGE, Vector2(0.0, size.y * 1.05), foliage_width, Vector2(0.35, 1.0), theme.prop)
-	_stamp(FOLIAGE, Vector2(size.x, size.y * 1.06), foliage_width * 0.86, Vector2(0.65, 1.0), right_tint)
+	_stamp(left_prop, Vector2(size.x * (0.01 if portrait else 0.048), size.y * 1.01), tree_height * left_prop.get_width() / left_prop.get_height(), Vector2(0.5, 1.0), prop_tint)
+	_stamp(right_prop, Vector2(size.x * 0.965, size.y * 1.01), tree_height * 0.90 * right_prop.get_width() / right_prop.get_height(), Vector2(0.5, 1.0), right_tint)
+	_stamp(HILLS, Vector2(size.x * 0.56, size.y * 0.92), hill_width, Vector2(0.5, 0.0), hill2_tint)
+	var foliage_width: float = minf(size.x * 0.28, 220.0 / scale)
+	_stamp(FOLIAGE, Vector2(0.0, size.y * 1.04), foliage_width, Vector2(0.32, 1.0), prop_tint)
+	_stamp(FOLIAGE, Vector2(size.x, size.y * 1.05), foliage_width * 0.88, Vector2(0.68, 1.0), right_tint)
 	draw_texture_rect(_header_wash, Rect2(Vector2.ZERO, Vector2(size.x, minf(size.y * 0.25, 220.0 / scale))), false, Color(1, 1, 1, 0.58))

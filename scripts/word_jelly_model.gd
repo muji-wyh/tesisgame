@@ -23,6 +23,10 @@ signal motion_advanced(delta: float)
 signal challenge_time_awarded(seconds: float)
 signal challenge_stage_reached(stage: int)
 signal stage_clear_announced
+signal companion_skill_changed(state: Dictionary)
+signal companion_skill_triggered(payload: Dictionary)
+signal challenge_boon_draft_requested(options: Array)
+signal challenge_boon_applied(boon: Dictionary)
 
 const RewardProgress = preload("res://scripts/jelly_reward_progress.gd")
 const Motion = preload("res://scripts/jelly_motion.gd")
@@ -31,6 +35,7 @@ const CoinEconomy = preload("res://scripts/coin_economy.gd")
 const MorphologyResolver = preload("res://scripts/morphology_resolver.gd")
 const StageRun = preload("res://scripts/word_jelly_stage_run.gd")
 const BossRun = preload("res://scripts/word_jelly_boss_run.gd")
+const RpgCatalog = preload("res://scripts/word_jelly_rpg_catalog.gd")
 const LABEL_FONT = preload("res://assets/fonts/heading.tres")
 const COLUMNS: int = StageRun.Catalog.BOARD_COLUMNS
 const ROWS: int = 8
@@ -203,6 +208,17 @@ var merged_level_limit: int = MAX_MERGE_LEVEL
 var auto_merge_level: int = 1
 var _boss_returning: Array[Dictionary] = []
 var _campaign_level_rules: bool = false
+var rpg_profile: Dictionary = {}
+var mastered_word_ids: Dictionary = {}
+var skill_energy: float = 0.0
+var skill_uses: int = 0
+var high_collects_count: int = 0
+var mastered_collect_hits: int = 0
+var challenge_boons: Array[String] = []
+var pending_boon_options: Array[Dictionary] = []
+var _challenge_boon_drafted_stages: Dictionary = {}
+var _stage_grace_remaining: float = 0.0
+var _challenge_boon_seed: int = 0
 
 
 func configure(words: Array, level: int, seed_value: int = -1) -> bool:
@@ -222,6 +238,17 @@ func configure(words: Array, level: int, seed_value: int = -1) -> bool:
 	campaign_auto_collect_unlocked = false
 	_boss_returning.clear()
 	_campaign_level_rules = false
+	rpg_profile = {}
+	mastered_word_ids = {}
+	skill_energy = 0.0
+	skill_uses = 0
+	high_collects_count = 0
+	mastered_collect_hits = 0
+	challenge_boons.clear()
+	pending_boon_options.clear()
+	_challenge_boon_drafted_stages.clear()
+	_stage_grace_remaining = 0.0
+	_challenge_boon_seed = 0
 	_stage_ending = false
 	_stage_finalizing = false
 	_stage_pressure_level = 0
@@ -384,7 +411,19 @@ func bind_stage(plan: Dictionary) -> bool:
 	_combo_grace_remaining = _base_combo_grace()
 	_next_drop_combo_extended = false
 	max_merge_level_reached = 1
+	rpg_profile = plan.get("rpg_profile", {}).duplicate(true)
+	mastered_word_ids = plan.get("mastered_word_ids", {}).duplicate(true)
+	skill_energy = float(clampi(int(rpg_profile.get("start_skill_energy", 0)), 0, 100))
+	skill_uses = 0
+	high_collects_count = 0
+	mastered_collect_hits = 0
+	challenge_boons.clear()
+	pending_boon_options.clear()
+	_challenge_boon_drafted_stages.clear()
+	_stage_grace_remaining = 0.0
+	_challenge_boon_seed = int(plan.get("seed", 0))
 	boss.configure(plan.get("boss", {}), int(plan.get("seed", 0)))
+	boss.set_rpg_modifiers(rpg_profile)
 	stage_run.boss_objective = boss.active() and not bool(boss.definition.get("intro", false))
 	_stage_spawn_interval = float(plan.spawn_interval)
 	fall_speed_scale = float(plan.fall_speed_scale)
@@ -418,6 +457,7 @@ func set_fill_mode(enabled: bool) -> bool:
 func _stage_clock_running() -> bool:
 	return stage_run != null and not _stage_ending and not powerup_active() \
 		and not collection_batch_active() and _collection_hit_stop.is_empty() \
+		and pending_boon_options.is_empty() and _stage_grace_remaining <= EPSILON \
 		and not _has_pending_collection_commit() and error.is_empty()
 
 
@@ -532,9 +572,17 @@ func _advance_boss(delta: float, running: bool) -> void:
 	if not boss.active():
 		return
 	if running:
+		var relics: Dictionary = rpg_profile.get("active_relics", {})
 		for returning: Dictionary in _boss_returning.duplicate():
 			returning.remaining = maxf(0.0, float(returning.remaining) - delta)
 			if float(returning.remaining) <= EPSILON:
+				if relics.has("echo_clasp"):
+					var extra_frags: int = int(relics.echo_clasp.get("fragments", 1))
+					returning.tile.fragments = int(returning.tile.get("fragments", 0)) + extra_frags
+					returning.tile.chest = true
+					var clasp_skill: int = int(relics.echo_clasp.get("skill_gain", 0))
+					if clasp_skill > 0:
+						_add_skill_energy(float(clasp_skill))
 				_supply.push_front(returning.tile)
 				boss.restore_jelly(int(returning.tile.id))
 				_boss_returning.erase(returning)
@@ -551,12 +599,25 @@ func _advance_boss(delta: float, running: bool) -> void:
 		boss.forget(id)
 		_gravity_pending = true
 		_refresh_full_recovery()
-	if boss._next_id != before and combo_count > 0:
+	if boss._next_id != before:
+		var relics: Dictionary = rpg_profile.get("active_relics", {})
 		for event: Dictionary in boss._events:
-			if int(event.id) >= before and str(event.kind) == "miss":
-				_combo_remaining = combo_window()
+			if int(event.id) < before:
+				continue
+			var ekind: String = str(event.kind)
+			if ekind == "miss":
+				_add_skill_energy(20.0)
+				if combo_count > 0:
+					var thaw_extra: float = float(relics.get("thaw_bell", {}).get("combo_restore", 0.0))
+					_combo_remaining = minf(combo_window() + thaw_extra, combo_window() + thaw_extra)
+					combo_changed.emit(combo_snapshot())
+			elif ekind == "thaw" and relics.has("thaw_bell") and combo_count > 0:
+				_combo_remaining = minf(combo_window(), _combo_remaining + float(relics.thaw_bell.get("combo_restore", 1.5)))
 				combo_changed.emit(combo_snapshot())
-				break
+			elif ekind == "clear_ink" and relics.has("clarity_lens"):
+				var ink_skill: int = int(relics.clarity_lens.get("skill_gain", 0))
+				if ink_skill > 0:
+					_add_skill_energy(float(ink_skill))
 	if not boss.error.is_empty():
 		error = boss.error
 	if boss._next_id != before:
@@ -814,7 +875,157 @@ func _simple_family_merge_reduction(family: String) -> int:
 
 
 func auto_merge_capacity() -> int:
-	return CoinEconomy.auto_merge_capacity(auto_merge_level)
+	return CoinEconomy.auto_merge_capacity(auto_merge_level) + (4 * boon_stacks("free_wand"))
+
+
+func boon_stacks(boon_id: String) -> int:
+	var count: int = 0
+	for id: String in challenge_boons:
+		if id == boon_id:
+			count += 1
+	return count
+
+
+func companion_skill_snapshot() -> Dictionary:
+	var stance_id: String = str(rpg_profile.get("stance", "scholar"))
+	var stance: Dictionary = RpgCatalog.stance_by_id(stance_id)
+	return {
+		"enabled": stage_run != null,
+		"stance": stance_id,
+		"name": str(stance.skill_name),
+		"desc": str(stance.skill_desc),
+		"energy": skill_energy,
+		"ready": stage_run != null and skill_energy >= 100.0 - EPSILON,
+		"uses": skill_uses,
+		"boons": challenge_boons.duplicate(),
+		"pending_boon_draft": pending_boon_options.duplicate(true)
+	}
+
+
+func _add_skill_energy(base_amount: float) -> void:
+	if stage_run == null or base_amount <= 0.0:
+		return
+	var scale: float = float(rpg_profile.get("skill_charge_scale", 1.0))
+	var overdrive: int = boon_stacks("overdrive_skill")
+	if overdrive > 0:
+		scale *= 1.0 + 1.2 * float(overdrive)
+	var before: float = skill_energy
+	skill_energy = minf(100.0, skill_energy + base_amount * scale)
+	if not is_equal_approx(before, skill_energy):
+		companion_skill_changed.emit(companion_skill_snapshot())
+
+
+func can_trigger_companion_skill() -> bool:
+	return stage_run != null and phase == "playing" and not paused and not _stage_ending \
+		and skill_energy >= 100.0 - EPSILON and pending_boon_options.is_empty() \
+		and not powerup_active() and not collection_batch_active() and _combo_pending.is_empty()
+
+
+func trigger_companion_skill() -> Dictionary:
+	if not can_trigger_companion_skill():
+		return {"ok": false}
+	var stance_id: String = str(rpg_profile.get("stance", "scholar"))
+	var stance: Dictionary = RpgCatalog.stance_by_id(stance_id)
+	skill_energy = 0.0
+	skill_uses += 1
+	var summary: Dictionary = {"ok": true, "stance": stance_id, "name": str(stance.skill_name),
+		"cleansed": 0, "boss_damage": 0, "fragments_added": 0, "free_merges": 0, "time_bonus": 0.0}
+	if stance_id == "hunter":
+		summary.cleansed = boss.cleanse_all_statuses()
+		if boss.fighting():
+			var wit: int = int(rpg_profile.get("stats", {}).get("wit", 20))
+			var beam_damage: int = ceili((110.0 + float(wit) * 2.5) * (1.0 + float(rpg_profile.get("boss_damage_bonus", 0.0))))
+			boss.direct_skill_hit(beam_damage, {"column": 3, "row": 3}, stage_run.boss_objective)
+			summary.boss_damage = beam_damage
+			if stage_run.boss_objective and boss.health == 0 and not stage_run.boss_defeated:
+				stage_run.record_boss_defeat()
+				if stage_run.outcome == "cleared":
+					_decide_stage("cleared")
+		else:
+			# Outside a Boss fight, Compass Strike still surges combo and auto-links 1 pair.
+			summary.free_merges = _trigger_free_companion_merges(1)
+		if combo_count > 0:
+			_combo_remaining = combo_window()
+			combo_changed.emit(combo_snapshot())
+		boss_changed.emit()
+	elif stance_id == "seeker":
+		var eligible: Array[Dictionary] = []
+		for tile: Dictionary in cells:
+			var id: int = int(tile.id)
+			if int(tile.get("fragments", 0)) == 0 and not is_fusing(id) and not is_lifted(id):
+				eligible.append(tile)
+		for idx in range(mini(3, eligible.size())):
+			var pick_i: int = _blast_rng.randi_range(0, eligible.size() - 1)
+			var pick: Dictionary = eligible[pick_i]
+			eligible.remove_at(pick_i)
+			_grant_powerup_fragment(pick)
+			summary.fragments_added += 1
+			powerup_fragment_arrived.emit({"tile_id": int(pick.id), "index": idx, "total": 3,
+				"fragments": int(pick.fragments), "receipt_id": "skill-seeker:%d:%d" % [skill_uses, idx],
+				"timeline_id": "", "at": 0.0})
+		if combo_count > 0:
+			_combo_remaining = minf(combo_window() + 4.0, _combo_remaining + 4.0)
+			combo_changed.emit(combo_snapshot())
+		if stage_run.kind == "challenge":
+			var gained: float = stage_run.grant_challenge_time("skill-seeker:%d" % skill_uses, 4)
+			summary.time_bonus = gained
+			if gained > 0.0:
+				challenge_time_awarded.emit(gained)
+		else:
+			_stage_grace_remaining = maxf(_stage_grace_remaining, 4.0)
+			summary.time_bonus = 4.0
+	else:
+		# Spark Scholar: free auto-match up to 2 board pairs + refresh combo.
+		summary.free_merges = _trigger_free_companion_merges(2)
+		if combo_count > 0:
+			_combo_remaining = combo_window()
+			combo_changed.emit(combo_snapshot())
+	cue_requested.emit("goal_complete")
+	companion_skill_changed.emit(companion_skill_snapshot())
+	companion_skill_triggered.emit(summary)
+	changed.emit()
+	return summary
+
+
+func _trigger_free_companion_merges(max_pairs: int) -> int:
+	if max_pairs <= 0 or powerup_active():
+		return 0
+	var pair: Array[int] = _powerup_pair(false)
+	if pair.is_empty():
+		return 0
+	_begin_powerup_timeline("auto_merge", "skill-auto:%d" % skill_uses)
+	_powerup.capacity = maxi(1, max_pairs)
+	_powerup.free_skill = true
+	_advance_powerup()
+	return maxi(1, max_pairs)
+
+
+func select_challenge_boon(boon_id: String) -> Dictionary:
+	if pending_boon_options.is_empty():
+		return {"ok": false}
+	var chosen: Dictionary = {}
+	for opt: Dictionary in pending_boon_options:
+		if str(opt.id) == boon_id:
+			chosen = opt.duplicate(true)
+			break
+	if chosen.is_empty():
+		return {"ok": false}
+	challenge_boons.append(boon_id)
+	pending_boon_options.clear()
+	if boon_id == "overdrive_skill":
+		skill_energy = minf(100.0, skill_energy + 50.0)
+		companion_skill_changed.emit(companion_skill_snapshot())
+	elif boon_id == "chain_echo":
+		_combo_grace_remaining += 3
+		combo_changed.emit(combo_snapshot())
+	elif boon_id == "chrono_flow" and combo_count > 0:
+		_combo_remaining = combo_window()
+		combo_changed.emit(combo_snapshot())
+	cue_requested.emit("goal_complete")
+	challenge_boon_applied.emit(chosen)
+	companion_skill_changed.emit(companion_skill_snapshot())
+	changed.emit()
+	return {"ok": true, "boon": chosen}
 
 
 func powerup_snapshot() -> Dictionary:
@@ -877,7 +1088,7 @@ func _can_activate_powerup_now(kind: String) -> bool:
 func _powerup_inputs_ready() -> bool:
 	# Supply owns its landing slots, not the toolbar. Real board settlement still blocks items.
 	if _stage_ending or phase != "playing" or paused or _powerup_purchasing \
-		or powerup_active() \
+		or powerup_active() or not pending_boon_options.is_empty() \
 		or _finishing_powerup or collection_batch_active() or _held_tile_id >= 0 \
 		or not fusions.is_empty() or not _blast_queue.is_empty() or _settling_remaining(false) > EPSILON or cells.is_empty():
 		return false
@@ -1200,7 +1411,9 @@ func _shuffle_blast_ids(ids: Array[int]) -> void:
 
 
 func _queue_collection_blast(completed: Dictionary) -> void:
-	var level: int = clampi(int(completed.get("merge_level", 1)), 1, MAX_MERGE_LEVEL)
+	var raw_level: int = clampi(int(completed.get("merge_level", 1)), 1, MAX_MERGE_LEVEL)
+	var supernova: int = boon_stacks("supernova_blast")
+	var level: int = clampi(raw_level + supernova * 2, 1, MAX_MERGE_LEVEL)
 	if (level <= 1 and not _campaign_level_rules) or not _finish_reason.is_empty() or _stage_ending:
 		return
 	var targets: Array[int] = _blast_target_ids(completed.a, level)
@@ -1643,7 +1856,7 @@ func _grant_powerup_fragment(tile: Dictionary) -> void:
 func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dictionary = {}) -> String:
 	if _stage_ending and not _powerup_committing:
 		return "ignored"
-	if not _combo_pending.is_empty():
+	if not _combo_pending.is_empty() or (not pending_boon_options.is_empty() and not _powerup_committing):
 		return "ignored"
 	var pending_result: Dictionary = merging_result(b_id)
 	if not pending_result.is_empty():
@@ -1683,12 +1896,20 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dic
 			and str(b.get("jelly_kind", "")) == "merged" and _merged_upgrade_level(a, b) > 0
 		if matching_words or parts_compatible(a, b) or parts_compatible(b, a):
 			boss.unlock_pair(a_id, b_id)
-			_restore_dragged_tile()
-			_held_tile_id = -1
+			var master_key: Dictionary = rpg_profile.get("active_relics", {}).get("master_key", {})
+			if not master_key.is_empty() and int(master_key.get("skill_gain", 0)) > 0:
+				_add_skill_energy(float(master_key.get("skill_gain", 0)))
+			var merge_through: bool = bool(master_key.get("auto_merge_through", false)) \
+				and boss.locks(a_id) == 0 and boss.locks(b_id) == 0
+			if not merge_through:
+				_restore_dragged_tile()
+				_held_tile_id = -1
+				cue_requested.emit("boss-unlock")
+				boss_changed.emit()
+				changed.emit()
+				return "unlocked"
 			cue_requested.emit("boss-unlock")
 			boss_changed.emit()
-			changed.emit()
-			return "unlocked"
 	# Validate spelling and the full result rectangle before consuming IDs.
 	var reverse: bool = automatic and bool(powerup_job.get("reverse", false))
 	var candidate: Dictionary = merge_candidate(b, a, false) if reverse else merge_candidate(a, b)
@@ -1716,6 +1937,9 @@ func try_merge(a_id: int, b_id: int, held_source: bool = false, powerup_job: Dic
 		cue_requested.emit("wrong")
 		return "wrong"
 	var result: Dictionary = candidate.result
+	if not automatic and boon_stacks("giant_leap") > 0 and str(result.get("jelly_kind", "")) == "merged":
+		var boosted_lv: int = clampi(int(result.get("merge_level", 1)) + boon_stacks("giant_leap"), 1, merged_level_limit)
+		result.merge_level = boosted_lv
 	result.id = _next_tile_id
 	_next_tile_id += 1
 	if automatic:
@@ -1788,7 +2012,7 @@ func complete_merge_drag(event_id: String) -> void:
 
 
 func collect(tile_id: int) -> bool:
-	if _stage_ending or powerup_active() or collection_batch_active():
+	if _stage_ending or powerup_active() or collection_batch_active() or not pending_boon_options.is_empty():
 		return false
 	return _begin_collection(tile_id)
 
@@ -1826,7 +2050,9 @@ func _begin_collection(tile_id: int, batch_index: int = 0) -> bool:
 		_collection_event_ids[tile_id] = _event_id("collect")
 		# Eligible collections reserve one independent roll; retries reuse its outcome.
 		var chance: float = coin_drop_chance_for_tile(tile)
-		_collection_coin_rewards[_collection_event_ids[tile_id]] = coins_for_tile(tile) if chance > 0.0 and _coin_rng.randf() < chance else 0
+		var base_coins: int = coins_for_tile(tile) if chance > 0.0 and _coin_rng.randf() < chance else 0
+		var frenzy_bonus: int = 15 * boon_stacks("treasure_frenzy")
+		_collection_coin_rewards[_collection_event_ids[tile_id]] = base_coins + frenzy_bonus
 	var active: Dictionary = {
 		"operation": "collect", "a_id": tile_id, "b_id": tile_id,
 		"a": tile.duplicate(true), "b": tile.duplicate(true), "result": {},
@@ -1927,7 +2153,7 @@ func collection_batch_snapshot() -> Dictionary:
 func start_collection_batch() -> bool:
 	if (not auto_collect_unlocked() and not _stage_ending) or not _combo_pending.is_empty():
 		return false
-	if phase != "playing" or paused or powerup_active() or collection_batch_active() or _held_tile_id >= 0:
+	if phase != "playing" or paused or powerup_active() or collection_batch_active() or _held_tile_id >= 0 or not pending_boon_options.is_empty():
 		return false
 	var ids: Array[int] = collectable_ids()
 	if ids.is_empty():
@@ -2064,7 +2290,7 @@ func step(delta: float) -> void:
 		var impact_running: bool = not _collection_hit_stop.is_empty()
 		var auto_impact_running: bool = _auto_merge_hit_stop_remaining() > EPSILON
 		var time_scale: float = gameplay_time_scale()
-		var combo_running: bool = combo_count > 0 and not powerup_running and not impact_running and not _has_pending_collection_commit()
+		var combo_running: bool = combo_count > 0 and not powerup_running and not impact_running and not _has_pending_collection_commit() and pending_boon_options.is_empty()
 		var stage_clock: bool = _stage_clock_running()
 		var consumed: float = remaining
 		if _stage_clear_feedback > EPSILON:
@@ -2072,6 +2298,9 @@ func step(delta: float) -> void:
 				if _stage_clear_feedback > STAGE_CLEAR_NOTICE_SECONDS + EPSILON else _stage_clear_feedback)
 		if impact_running:
 			consumed = minf(consumed, float(_collection_hit_stop.remaining))
+		var grace_step: bool = _stage_grace_remaining > EPSILON and not paused and pending_boon_options.is_empty()
+		if grace_step:
+			consumed = minf(consumed, _stage_grace_remaining)
 		if stage_clock:
 			consumed = minf(consumed, boss.next_boundary())
 		if stage_clock:
@@ -2103,16 +2332,16 @@ func step(delta: float) -> void:
 			_begin_full_warning()
 			if not _can_continue(generation):
 				break
-		var danger_running: bool = full_elapsed >= 0.0 and not powerup_running and not impact_running and not ending_wait \
+		var danger_running: bool = full_elapsed >= 0.0 and not powerup_running and not impact_running and not ending_wait and pending_boon_options.is_empty() \
 			and (stage_run == null or not collection_batch_active() and not _has_pending_collection_commit())
 		var next_second: float = minf(full_warning_seconds(), floorf(full_elapsed + EPSILON) + 1.0)
 		if danger_running:
 			consumed = minf(consumed, maxf(0.0, next_second - full_elapsed))
-		elif full and not powerup_running and not impact_running and not ending_wait:
+		elif full and not powerup_running and not impact_running and not ending_wait and pending_boon_options.is_empty():
 			var settling: float = _settling_remaining()
 			if settling > EPSILON:
 				consumed = minf(consumed, maxf(0.0, settling))
-		elif full_elapsed < 0.0 and not powerup_running and not impact_running and not ending_wait:
+		elif full_elapsed < 0.0 and not powerup_running and not impact_running and not ending_wait and pending_boon_options.is_empty():
 			consumed = minf(consumed, maxf(0.0, spawn_interval - spawn_elapsed))
 		# Mark impacts keep real-time deadlines while only the board's motion slows.
 		var motion_delta: float = consumed * time_scale
@@ -2144,7 +2373,7 @@ func step(delta: float) -> void:
 			_collection_batch_next_in = maxf(0.0, _collection_batch_next_in - (0.0 if impact_running else consumed))
 		if danger_running:
 			full_elapsed += consumed
-		elif not full and full_elapsed < 0.0 and not powerup_running and not impact_running and not ending_wait:
+		elif not full and full_elapsed < 0.0 and not powerup_running and not impact_running and not ending_wait and pending_boon_options.is_empty():
 			spawn_elapsed += consumed
 		remaining -= consumed
 		if _stage_ending:
@@ -2155,6 +2384,8 @@ func step(delta: float) -> void:
 				stage_clear_announced.emit()
 				if not _can_continue(generation):
 					break
+		if _stage_grace_remaining > EPSILON and not paused and pending_boon_options.is_empty():
+			_stage_grace_remaining = maxf(0.0, _stage_grace_remaining - consumed)
 		if stage_clock:
 			stage_run.advance(consumed)
 		_advance_boss(0.0 if auto_impact_running else consumed, stage_clock)
@@ -2195,7 +2426,8 @@ func step(delta: float) -> void:
 			_resume_pending_motion()
 			if stage_run.outcome == "cleared":
 				_decide_stage("cleared")
-			elif stage_clock and stage_run.check_deadline():
+			elif (stage_clock or (stage_run.remaining <= EPSILON and _stage_grace_remaining <= EPSILON)) and stage_run.check_deadline():
+				pending_boon_options.clear()
 				_decide_stage("timeout")
 		_pump_stage_finish()
 		if not _can_continue(generation):
@@ -2205,7 +2437,7 @@ func step(delta: float) -> void:
 		_advance_powerup()
 		if not _can_continue(generation):
 			break
-		if powerup_running or impact_running or not _collection_hit_stop.is_empty() or _finish_after_collection_commit or _stage_ending:
+		if powerup_running or impact_running or not _collection_hit_stop.is_empty() or _finish_after_collection_commit or _stage_ending or not pending_boon_options.is_empty():
 			if _finishing_powerup and not powerup_active():
 				break
 			continue
@@ -2549,7 +2781,7 @@ func reposition(tile_id: int, column: int, row: int) -> bool:
 
 
 func can_drop_now() -> bool:
-	return full_elapsed < 0.0 and not _stage_ending and phase == "playing" and not paused and _combo_pending.is_empty() and not powerup_active() and not collection_batch_active() and not _first_preview_tile().is_empty() and _has_free_cell()
+	return full_elapsed < 0.0 and not _stage_ending and phase == "playing" and not paused and _combo_pending.is_empty() and pending_boon_options.is_empty() and not powerup_active() and not collection_batch_active() and not _first_preview_tile().is_empty() and _has_free_cell()
 
 
 func drop_now(expected_first_id: int = -1) -> bool:
@@ -2560,7 +2792,16 @@ func drop_now(expected_first_id: int = -1) -> bool:
 	_spawn_drop()
 	if stage_run != null and combo_count > 0 and not _next_drop_combo_extended:
 		_next_drop_combo_extended = true
-		_combo_remaining = minf(combo_window(), _combo_remaining + 1.5)
+		var next_ext: float = 1.5
+		var gale: Dictionary = rpg_profile.get("active_relics", {}).get("gale_feather", {})
+		if not gale.is_empty():
+			next_ext = maxf(next_ext, float(gale.get("next_combo", 2.0)))
+			if int(gale.get("skill_gain", 0)) > 0:
+				_add_skill_energy(float(gale.get("skill_gain", 0)))
+		if boon_stacks("lightning_hands") > 0:
+			next_ext += 4.0 * float(boon_stacks("lightning_hands"))
+			_add_skill_energy(20.0 * float(boon_stacks("lightning_hands")))
+		_combo_remaining = minf(combo_window(), _combo_remaining + next_ext)
 		combo_changed.emit(combo_snapshot())
 	changed.emit()
 	return true
@@ -2680,6 +2921,10 @@ func snapshot() -> Dictionary:
 		"powerup_uses": _powerup_uses.duplicate(),
 		"powerup_prices": {"auto_merge": powerup_price("auto_merge"), "family_merge": powerup_price("family_merge")},
 		"auto_merge_level": auto_merge_level, "auto_merge_capacity": auto_merge_capacity(),
+		"companion_skill": companion_skill_snapshot(),
+		"rpg_stance": str(rpg_profile.get("stance", "scholar")),
+		"challenge_boons": challenge_boons.duplicate(),
+		"pending_boon_draft": pending_boon_options.duplicate(true),
 		"error": error, "result": _result.duplicate(true)
 	}
 	state.authored_morphology = authored_morphology
@@ -2748,7 +2993,10 @@ func finish_round(reason: String = "finished") -> Dictionary:
 	var paid_powerups_used: int = int(_powerup_uses.get("auto_merge", 0)) + int(_powerup_uses.get("family_merge", 0))
 	_result = {"reason": _finish_reason, "cleared_pairs": cleared_pairs, "score": score(), "coins": collected_coins + combo_coins,
 		"combo_coins": combo_coins, "best_combo": combo_best, "max_merge_level": max_merge_level_reached,
-		"paid_powerups_used": paid_powerups_used, "words": []}
+		"paid_powerups_used": paid_powerups_used, "skills_used": skill_uses,
+		"high_collects": high_collects_count, "boss_dodges": boss.dodge_count,
+		"mastered_collect_hits": mastered_collect_hits, "challenge_boons": challenge_boons.duplicate(),
+		"words": []}
 	_result.merge(reward_progress(fragment_count), true)
 	if stage_run != null:
 		_result["campaign"] = stage_run.snapshot()
@@ -3357,8 +3605,11 @@ func _build_supply() -> void:
 		var bonus_wave: bool = stage_run != null and (stage_run._profile == "Reward" \
 			or (stage_run.kind == "challenge" and stage_run.challenge_stage % 5 == 0))
 		var mark_fragment: bool = bonus_wave or _supply_words % 2 == 0
-		if not mark_fragment and star_charm_level > 1:
-			mark_fragment = _blast_rng.randf() < CoinEconomy.star_charm_fragment_bonus(star_charm_level)
+		if not mark_fragment:
+			var extra_frag_chance: float = (CoinEconomy.star_charm_fragment_bonus(star_charm_level) if star_charm_level > 1 else 0.0) \
+				+ float(rpg_profile.get("fragment_bonus", 0.0)) + 0.60 * float(boon_stacks("golden_cascade"))
+			if extra_frag_chance > 0.0:
+				mark_fragment = _blast_rng.randf() < minf(0.95, extra_frag_chance)
 		var marked: int = _rng.randi_range(0, part_count - 1) if mark_fragment else -1
 		for index in range(part_count):
 			var fragments: int = 1 if index == marked else 0
@@ -3667,7 +3918,11 @@ func _complete_merge(completed: Dictionary) -> void:
 	var result: Dictionary = completed.result.duplicate(true)
 	boss.forget(int(a.id))
 	boss.forget(int(b.id))
-	boss.charge_merge(bool(completed.get("automatic", false)), is_valid_word(result))
+	var manual_merge: bool = not bool(completed.get("automatic", false))
+	var is_upgrade_merge: bool = str(completed.get("merge_kind", "")) == "upgrade"
+	boss.charge_merge(not manual_merge, is_valid_word(result), is_upgrade_merge)
+	if manual_merge:
+		_add_skill_energy(12.0 if is_valid_word(result) else 6.0)
 	# The final wobble still gates picking up or collecting this body, but a held
 	# matching drop can join it continuously across the fusion/settlement handoff.
 	var held_for_drag: bool = bool(completed.get("held_for_drag", false))
@@ -3725,6 +3980,7 @@ func _complete_merge(completed: Dictionary) -> void:
 		max_merge_level_reached = result_level
 	var progress_gain: int = 2 if stage_run != null and not bool(completed.get("automatic", false)) \
 		and str(completed.get("merge_kind", "")) == "upgrade" else 1
+	progress_gain += 2 * boon_stacks("chain_echo")
 	_advance_combo(str(completed.attempt_id), int(completed.get("combo_bonus", 0)), true, progress_gain)
 	if generation != _generation:
 		return
@@ -3759,6 +4015,16 @@ func _complete_collection(completed: Dictionary) -> void:
 	_gravity_pending = true
 	var coins: int = int(completed.coins)
 	var awarded: int = int(completed.fragments)
+	var merge_level: int = clampi(int(completed.get("merge_level", 1)), 1, MAX_MERGE_LEVEL)
+	if merge_level >= 2:
+		high_collects_count += 1
+	var word_mastered: bool = mastered_word_ids.has(str(completed.word.id))
+	if word_mastered:
+		mastered_collect_hits += 1
+	_add_skill_energy(15.0 + (5.0 if word_mastered else 0.0))
+	var frenzy: int = boon_stacks("treasure_frenzy")
+	if frenzy > 0 and _blast_rng.randf() < minf(0.90, 0.30 * float(frenzy)):
+		awarded += 1
 	cleared_pairs += 1
 	collected_coins += coins
 	fragment_count += awarded
@@ -3769,17 +4035,34 @@ func _complete_collection(completed: Dictionary) -> void:
 	_completed_words[str(completed.word.id)] = completed.word.duplicate(true)
 	if stage_run != null and not _stage_ending:
 		var before_stage: int = stage_run.challenge_stage
-		var rank_bonus_seconds: int = 2 if stage_run.kind == "challenge" and combo_count >= 5 else 0
+		var rank_bonus_seconds: int = (2 if stage_run.kind == "challenge" and combo_count >= 5 else 0) \
+			+ (6 * boon_stacks("chrono_flow") if stage_run.kind == "challenge" else 0)
 		stage_run.record_collection(str(completed.attempt_id), str(completed.word.id),
-			int(completed.get("merge_level", 1)), rank_bonus_seconds)
+			merge_level, rank_bonus_seconds)
 		if stage_run.kind == "challenge":
 			added_time = stage_run.take_time_bonus()
 			_sync_challenge_pressure()
 			if stage_run.challenge_stage != before_stage:
 				reached_challenge_stage = stage_run.challenge_stage
+				if boon_stacks("free_wand") > 0:
+					_trigger_free_companion_merges(2 * boon_stacks("free_wand"))
+				# Every 5th Challenge stage clears trigger an exaggerated Roguelite Boon 3-pick draft!
+				if before_stage % 5 == 0 and not _challenge_boon_drafted_stages.has(before_stage) and stage_run.remaining > EPSILON:
+					_challenge_boon_drafted_stages[before_stage] = true
+					pending_boon_options = RpgCatalog.draft_challenge_boons(_challenge_boon_seed, before_stage, challenge_boons)
 		elif not stage_run.boss_objective and stage_run.current.has(str(completed.word.id)) \
 			and int(stage_run.current[completed.word.id]) >= int(stage_run.goals[completed.word.id]):
 			_words = _words.filter(func(word: Dictionary) -> bool: return str(word.id) != str(completed.word.id))
+	if str(rpg_profile.get("stance", "")) == "scholar" and merge_level >= 3 and not _stage_ending:
+		# Spark Scholar passive: Lv3+ collects can chain-upgrade 1 adjacent merged jelly (+1 level up to cap).
+		for neighbor: Dictionary in cells:
+			if str(neighbor.get("jelly_kind", "")) == "merged" and int(neighbor.get("merge_level", 1)) < merged_level_limit:
+				var dx: int = absi(int(neighbor.column) - int(completed.a.column))
+				var dy: int = absi(int(neighbor.row) - int(completed.a.row))
+				if maxi(dx, dy) <= 1:
+					neighbor.merge_level = mini(merged_level_limit, int(neighbor.merge_level) + 1)
+					max_merge_level_reached = maxi(max_merge_level_reached, int(neighbor.merge_level))
+					break
 	if bool(completed.get("batch", false)) and int(completed.get("batch_id", -1)) == _collection_batch_serial:
 		_collection_batch_completed += 1
 		_collection_batch_event_id = ""
@@ -3788,12 +4071,13 @@ func _complete_collection(completed: Dictionary) -> void:
 			_collection_batch_next_in = 0.0
 	_refresh_full_recovery()
 	_queue_collection_blast(completed)
-	_advance_combo(str(completed.attempt_id), 0, false)
+	_advance_combo(str(completed.attempt_id), 0, false, 1 + 2 * boon_stacks("chain_echo"))
 	if not _stage_ending:
-		var charm_damage_scale: float = 1.0 + CoinEconomy.star_charm_boss_damage_bonus(star_charm_level)
-		boss.collect_hit(str(completed.attempt_id), int(completed.get("merge_level", 1)), combo_actions,
+		var total_damage_scale: float = 1.0 + CoinEconomy.star_charm_boss_damage_bonus(star_charm_level) \
+			+ float(rpg_profile.get("boss_damage_bonus", 0.0)) + (0.15 if word_mastered else 0.0)
+		boss.collect_hit(str(completed.attempt_id), merge_level, combo_actions,
 			{"column": int(completed.a.column), "row": int(completed.a.row)}, stage_run != null and stage_run.boss_objective,
-			charm_damage_scale)
+			total_damage_scale)
 		boss.forget(int(completed.a_id))
 		if stage_run != null and stage_run.boss_objective and boss.health == 0 and not stage_run.boss_defeated:
 			stage_run.record_boss_defeat()
@@ -3813,6 +4097,10 @@ func _complete_collection(completed: Dictionary) -> void:
 		challenge_stage_reached.emit(reached_challenge_stage)
 		if generation != _generation:
 			return
+		if not pending_boon_options.is_empty():
+			challenge_boon_draft_requested.emit(pending_boon_options.duplicate(true))
+			if generation != _generation:
+				return
 	if added_time > 0.0:
 		challenge_time_awarded.emit(added_time)
 		if generation != _generation:
@@ -3839,7 +4127,7 @@ func _complete_collection(completed: Dictionary) -> void:
 func _base_combo_grace() -> int:
 	if stage_run == null:
 		return 0
-	return 1 + (1 if star_charm_level >= 6 else 0)
+	return 1 + (1 if star_charm_level >= 6 else 0) + 3 * boon_stacks("chain_echo")
 
 
 func combo_window() -> float:
@@ -3848,6 +4136,8 @@ func combo_window() -> float:
 		seconds += 1.0
 	if star_charm_level > 1:
 		seconds += float(star_charm_level - 1) * 0.3
+	seconds += float(rpg_profile.get("combo_window_bonus", 0.0))
+	seconds += 5.0 * float(boon_stacks("chrono_flow"))
 	return seconds
 
 
@@ -3924,7 +4214,12 @@ func _credit_merge_combo(event_id: String) -> bool:
 	var index: int = _fusion_index(event_id)
 	var active: Dictionary = fusions[index]
 	if not active.has("combo_bonus"):
-		active.combo_bonus = CoinEconomy.jelly_combo_bonus(combo_actions + 1)
+		var raw_combo_bonus: int = CoinEconomy.jelly_combo_bonus(combo_actions + 1)
+		if boon_stacks("golden_cascade") > 0:
+			raw_combo_bonus *= 2
+		if str(rpg_profile.get("stance", "")) == "seeker" and combo_count >= 4 and raw_combo_bonus > 0:
+			raw_combo_bonus += 2
+		active.combo_bonus = raw_combo_bonus
 	if int(active.combo_bonus) == 0 or bool(active.get("combo_credited", false)) or not credit_combo.is_valid():
 		return true
 	var generation: int = _generation
@@ -4178,7 +4473,8 @@ func _has_board_space() -> bool:
 func full_warning_seconds() -> float:
 	if full_elapsed >= 0.0:
 		return _full_warning_limit
-	return stage_run.full_warning_seconds() if stage_run != null else FULL_SECONDS
+	var base: float = stage_run.full_warning_seconds() if stage_run != null else FULL_SECONDS
+	return base + float(rpg_profile.get("danger_bonus", 0.0))
 
 
 func danger_recovery_snapshot() -> Dictionary:
@@ -4197,7 +4493,8 @@ func danger_recovery_snapshot() -> Dictionary:
 
 
 func _begin_full_warning() -> void:
-	_full_warning_limit = stage_run.full_warning_seconds() if stage_run != null else FULL_SECONDS
+	_full_warning_limit = (stage_run.full_warning_seconds() if stage_run != null else FULL_SECONDS) \
+		+ float(rpg_profile.get("danger_bonus", 0.0))
 	full_elapsed = 0.0
 	cue_requested.emit("danger")
 

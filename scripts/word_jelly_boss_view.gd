@@ -11,6 +11,9 @@ const Model = preload("res://scripts/word_jelly_model.gd")
 const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const RAYS = preload("res://assets/chests/shared/effects/rays.png")
+const FROST_FLAKE = preload("res://assets/images/jelly-level-fx/frost-flake.png")
+const INK_SPLAT = preload("res://assets/images/jelly-level-fx/ink-splat.png")
+const IMPACT_STAR = preload("res://assets/images/jelly-level-fx/impact-star.png")
 const LOCK = preload("res://assets/images/ui/controls/lock.svg")
 const CLOCK = preload("res://assets/images/ui/jelly-goals/clock.webp")
 const INK = preload("res://assets/images/ui/controls/eye-closed.svg")
@@ -540,6 +543,9 @@ func _draw() -> void:
 			var power_hit: bool = event.kind == "player_hit" and bool(event.get("power_hit", false))
 			draw_texture_rect(RAYS, Rect2(target - Vector2.ONE * edge * (2.1 if power_hit else 1.6), Vector2.ONE * edge * (4.2 if power_hit else 3.2)), false,
 				Color(1, 0.85, 0.5, 1 - (age - HIT_FLIGHT_SECONDS) / 0.3))
+			if power_hit:
+				draw_texture_rect(IMPACT_STAR, Rect2(target - Vector2.ONE * edge * 1.4, Vector2.ONE * edge * 2.8), false,
+					Color(1.0, 0.92, 0.55, 1.0 - (age - HIT_FLIGHT_SECONDS) / 0.3))
 			var text: String = "Decoy!" if event.kind == "clone_hit" else "Shield!" if event.kind == "ward_hit" \
 				else "-%d!" % int(event.damage) if power_hit else "-%d" % int(event.damage)
 			var pixels: int = ceili((22.0 if power_hit else 18.0) / _scale)
@@ -595,7 +601,7 @@ func _draw() -> void:
 		var tint: Color = COLORS.get(projectile.status, Color.WHITE)
 		var edge: float = 30 / _scale
 		var cell_pitch: float = _board.size.x / Model.COLUMNS
-		var icon: Texture2D = LOCK if projectile.status == "lock" else INK if projectile.status == "ink" else CLOCK
+		var icon: Texture2D = LOCK if projectile.status == "lock" else INK_SPLAT if projectile.status == "ink" else FROST_FLAKE if projectile.status == "freeze" else CLOCK
 		if progress <= 0.0 or reduced_motion:
 			var windup_ratio: float = clampf(float(projectile.elapsed) / maxf(0.01, float(projectile.windup)), 0.0, 1.0)
 			var ring_radius: float = cell_pitch * (0.48 if reduced_motion else lerpf(0.66, 0.42, windup_ratio))

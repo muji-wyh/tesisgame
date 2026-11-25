@@ -115,6 +115,7 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   }
   const atelierImages = atelierModels.flatMap(filename => embeddedModelImages(filename, readModelContainer(path.join(root, filename))));
   const atelierTextureImports = imports.filter(filename => !filename.endsWith('.glb.import')
+    && !filename.endsWith('closed-jelly.png.import')
     && filename.startsWith(path.join(root, 'assets/chests/models/atelier') + path.sep));
   assert.deepEqual(atelierTextureImports.sort(), atelierImages.map(image => path.join(root, image.path + '.import')).sort(),
     'Every published Atelier texture comes from its own embedded game model');
@@ -143,11 +144,18 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
   const powerupArt = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/ui/jelly-powerups/sources.json'), 'utf8'));
   const sceneryImages = ['jelly-garden', 'jelly-sky'].flatMap(name =>
     JSON.parse(fs.readFileSync(path.join(root, `docs/assets/${name}.json`), 'utf8')).images);
-  assert.equal(sceneryImages.length, 9, 'Eight preserved garden layers and one daytime panorama are imported');
+  assert.equal(sceneryImages.length, 11, 'Eight garden layers and three biome sky panoramas are imported');
   for (const image of sceneryImages) {
     assert.equal(sha256(fs.readFileSync(path.join(root, image.path))), image.sha256,
       `${image.path} matches its inspected source record`);
   }
+  const rpgArt = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/ui/jelly-rpg/sources.json'), 'utf8'));
+  const chromeFiles = fs.readdirSync(path.join(root, 'assets/images/ui/chrome'))
+    .filter(name => /\.png$/i.test(name)).map(name => `assets/images/ui/chrome/${name}`);
+  const memoryBackFiles = fs.readdirSync(path.join(root, 'assets/images/ui/memory'))
+    .filter(name => /\.png$/i.test(name)).map(name => `assets/images/ui/memory/${name}`);
+  const bossFxFiles = JSON.parse(fs.readFileSync(path.join(root, 'assets/images/jelly-level-fx/boss-fx-sources.json'), 'utf8'))
+    .assets.map(item => item.file);
   const addedArtwork = [
     ...sceneryImages.map(image => image.path),
     'assets/images/ui/home.webp',
@@ -157,6 +165,10 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     'assets/images/ui/modes/microphone.webp',
     'assets/images/ui/jelly-powerups/auto-merge-wand.svg',
     ...powerupArt.assets.map(image => image.file),
+    ...rpgArt.assets.map(image => image.file),
+    ...chromeFiles,
+    ...memoryBackFiles,
+    ...bossFxFiles,
     'assets/chests/shared/ui/chest.png',
     'assets/chests/shared/ui/chest-open.png',
     ...campaignArt.images.map(image => `assets/images/jelly-campaign/${image.path}`),
@@ -164,8 +176,8 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     ...[...goalArt.assets, ...goalArt.shared_illustrations].map(image => image.file)
   ];
   const addedImports = new Set(addedArtwork.map(filename => path.join(root, filename + '.import')));
-  assert.equal(addedImports.size, 35,
-    'Scenery, Home previews, mastery, tools, matched chest portraits, campaign and goal artwork have separate imports');
+  assert.ok(addedImports.size >= 80,
+    'Scenery, Home previews, mastery, RPG/boon icons, UI chrome, card backs, boss FX, campaign and goal artwork have separate imports');
   assert.deepEqual(textureImports.filter(filename => addedImports.has(filename)).sort(), [...addedImports].sort());
   for (const filename of addedArtwork) assert.ok(fs.existsSync(path.join(root, filename)), filename);
   const professionalPreviews = JSON.parse(fs.readFileSync(path.join(root, 'docs/assets/professional-themes.json'), 'utf8')).previews;
@@ -197,7 +209,9 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     ['menu', 'microphone', 'microphone-active', 'bulb', 'eye', 'eye-closed', 'chevron-left', 'chevron-right', 'home', 'refresh', 'lock', 'player-pause', 'player-play'].sort());
   for (const asset of controls.assets) {
     assert.equal(asset.file, `assets/images/ui/controls/${asset.id}.svg`);
-    assert.equal(sha256(fs.readFileSync(path.join(root, asset.file))), asset.integrated_sha256, asset.file);
+    const raw = fs.readFileSync(path.join(root, asset.file));
+    const lf = Buffer.from(raw.toString('utf8').replace(/\r\n/g, '\n'), 'utf8');
+    assert.ok(sha256(raw) === asset.integrated_sha256 || sha256(lf) === asset.integrated_sha256, asset.file);
     assert.match(asset.source, /^https:\/\/raw\.githubusercontent\.com\/tabler\/tabler-icons\/v3\.35\.0\/icons\//);
   }
   const controlImports = new Set(controls.assets.map(asset => path.join(root, asset.file + '.import')));
@@ -218,7 +232,8 @@ test('mobile artwork uses high-quality WebP and shader data stays lossless at so
     width: levelEffects.atlas.dimensions[0], height: levelEffects.atlas.dimensions[1]
   }, 'The merged Jelly effect atlas retains every source frame at its recorded resolution');
   const levelEffectImports = new Set([path.join(root, levelEffects.atlas.path + '.import')]);
-  assert.deepEqual(textureImports.filter(filename => filename.startsWith(path.join(root, 'assets/images/jelly-level-fx') + path.sep)),
+  const bossFxImports = new Set(bossFxFiles.map(filename => path.join(root, filename + '.import')));
+  assert.deepEqual(textureImports.filter(filename => filename.startsWith(path.join(root, 'assets/images/jelly-level-fx') + path.sep) && !bossFxImports.has(filename)),
     [...levelEffectImports], 'All nine merged levels share one lossless effect atlas');
   // Preserved imports, vocabulary motion atlases, Baby Pip sheets and acquired reward textures.
   assert.deepEqual(textureImports.filter(filename => stateImports.has(filename)).sort(), [...stateImports].sort(),

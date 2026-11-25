@@ -9,9 +9,18 @@ const Feel = preload("res://scripts/chest_feel.gd")
 const BossCatalog = preload("res://scripts/word_jelly_boss_catalog.gd")
 const Upgrades = preload("res://scripts/word_jelly_upgrades.gd")
 const Economy = preload("res://scripts/coin_economy.gd")
+const RpgCatalog = preload("res://scripts/word_jelly_rpg_catalog.gd")
+const RpgStore = preload("res://scripts/word_jelly_rpg_store.gd")
+const RpgOverlay = preload("res://scripts/word_jelly_rpg_overlay.gd")
 var map: Map
 var upgrades: Upgrades
 var store: Store
+var rpg_store: RpgStore
+var rpg_overlay: RpgOverlay
+var selected_ascensions: Dictionary = {}
+var _rpg_notice: String = ""
+var _last_round_new_relics: Array[String] = []
+var _last_round_tokens: int = 0
 var starting: bool = false
 var settling: bool = false
 var return_home_after_settlement: bool = false
@@ -48,6 +57,13 @@ func configure(app, path: String, host: Object = null) -> void:
 	store = Store.new(path, host)
 	if not store.load_state():
 		error = store.error
+	var rpg_path: String = "user://jelly-rpg-v1.cfg"
+	if not path.is_empty():
+		var dir: String = path.get_base_dir()
+		var base: String = path.get_file().get_basename()
+		rpg_path = "%s/%s-rpg.cfg" % [dir, base] if not dir.is_empty() else "%s-rpg.cfg" % base
+	rpg_store = RpgStore.new(rpg_path, host)
+	rpg_store.load_state()
 	map = Map.new()
 	app.add_child(map)
 	map.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -56,6 +72,7 @@ func configure(app, path: String, host: Object = null) -> void:
 	map.home_requested.connect(_home)
 	map.retry_requested.connect(retry)
 	map.upgrades_requested.connect(open_upgrades)
+	map.rpg_requested.connect(open_rpg)
 	map.chapter_milestone_requested.connect(claim_chapter_milestone)
 	map.changed.connect(_publish)
 	if app.audio.has_signal("status_changed"):
@@ -73,10 +90,21 @@ func configure(app, path: String, host: Object = null) -> void:
 	upgrades.intro_accepted.connect(_accept_upgrade_intro)
 	upgrades.intro_dismissed.connect(_dismiss_upgrade_intro)
 	upgrades.changed.connect(_publish)
+	rpg_overlay = RpgOverlay.new()
+	app.add_child(rpg_overlay)
+	rpg_overlay.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	rpg_overlay.closed.connect(close_rpg)
+	rpg_overlay.stance_selected.connect(select_rpg_stance)
+	rpg_overlay.relic_toggled.connect(toggle_rpg_relic)
+	rpg_overlay.relic_upgrade_requested.connect(upgrade_rpg_relic)
+	rpg_overlay.bounty_claimed.connect(claim_rpg_bounty)
+	rpg_overlay.deed_claimed.connect(claim_rpg_deed)
+	rpg_overlay.ascension_selected.connect(select_boss_ascension)
 
 
 func is_open() -> bool:
-	return is_instance_valid(map) and map.visible or is_instance_valid(upgrades) and upgrades.visible
+	return is_instance_valid(map) and map.visible or is_instance_valid(upgrades) and upgrades.visible \
+		or is_instance_valid(rpg_overlay) and rpg_overlay.visible
 
 
 func _publish() -> void:
@@ -85,9 +113,10 @@ func _publish() -> void:
 
 
 func set_active(active: bool) -> void:
-	map.set_active(active and not upgrades.visible)
+	var rpg_open: bool = is_instance_valid(rpg_overlay) and rpg_overlay.visible
+	map.set_active(active and not upgrades.visible and not rpg_open)
 	_sync_map_audio()
-	upgrades.set_active(active)
+	upgrades.set_active(active and not rpg_open)
 
 
 func _sync_map_audio() -> void:
@@ -99,17 +128,184 @@ func _sync_map_audio() -> void:
 func set_reduced_motion(value: bool) -> void:
 	map.set_reduced_motion(value)
 	upgrades.set_reduced_motion(value)
+	if is_instance_valid(rpg_overlay) and rpg_overlay.visible:
+		rpg_overlay.configure(_rpg_overlay_payload(), value)
 
 
 func allows_focus(control: Control) -> bool:
+	if is_instance_valid(rpg_overlay) and rpg_overlay.visible:
+		return rpg_overlay.is_ancestor_of(control)
 	return upgrades.is_ancestor_of(control) if upgrades.visible else map.is_ancestor_of(control)
 
 
 func default_focus() -> Control:
+	if is_instance_valid(rpg_overlay) and rpg_overlay.visible:
+		return rpg_overlay._close_button
 	if upgrades.visible:
 		return upgrades.default_focus()
 	var controls: Array[Control] = map.navigation_controls()
 	return controls.back() if not controls.is_empty() else map
+
+
+func _total_chapter_stars() -> int:
+	if not store.ready:
+		return 0
+	var total: int = 0
+	for ch in range(1, Catalog.CHAPTERS.size() + 1):
+		total += store.chapter_stars(context_key, ch)
+	return total
+
+
+func _mastered_word_lookup() -> Dictionary:
+	if _app == null or _app.growth == null:
+		return {}
+	return _app.growth._mastered_words.duplicate()
+
+
+func rpg_profile_snapshot() -> Dictionary:
+	var ctx: String = active_context_key if not active_context_key.is_empty() else context_key
+	var victories: Array = store.boss_victories(ctx) if store.ready and not ctx.is_empty() else []
+	var pip_lv: int = _app.growth.level if _app != null and _app.growth != null else 0
+	var pip_age: int = _app.growth.age if _app != null and _app.growth != null else 0
+	var upg: Dictionary = store.upgrade_state() if store.ready else {}
+	var rstate: Dictionary = rpg_store.state() if rpg_store != null and rpg_store.ready else {}
+	if rpg_store != null and rpg_store.ready and not victories.is_empty():
+		var slots: int = RpgCatalog.relic_slot_capacity(victories.size(), pip_lv)
+		rpg_store.sync_boss_victories(victories, slots)
+		rstate = rpg_store.state()
+	return RpgCatalog.compute_profile(pip_lv, pip_age, upg, rstate,
+		_mastered_word_lookup(), victories.size(), _total_chapter_stars())
+
+
+func _rpg_overlay_payload() -> Dictionary:
+	var profile: Dictionary = rpg_profile_snapshot()
+	var rstate: Dictionary = rpg_store.state() if rpg_store != null and rpg_store.ready else {}
+	var deeds_prog: Dictionary = {}
+	if rpg_store != null and rpg_store.ready:
+		for deed: Dictionary in RpgStore.DEEDS:
+			deeds_prog[str(deed.id)] = rpg_store.deed_progress(deed)
+	return {
+		"profile": profile,
+		"rpg_state": rstate,
+		"relic_levels": rstate.get("relic_levels", {}),
+		"boss_tokens": rpg_store.boss_tokens() if rpg_store != null and rpg_store.ready else 0,
+		"boss_victories": store.boss_victories(context_key) if store.ready and not context_key.is_empty() else [],
+		"boss_ascensions": rstate.get("boss_ascensions", {}),
+		"selected_ascensions": selected_ascensions.duplicate(),
+		"coins": _app.coin_wallet.balance,
+		"pip_level": _app.growth.level if _app != null and _app.growth != null else 0,
+		"claimable_count": rpg_store.claimable_count() if rpg_store != null and rpg_store.ready else 0,
+		"deed_progress": deeds_prog,
+		"notice": _rpg_notice
+	}
+
+
+func open_rpg(tab: String = "build") -> void:
+	if _app._page_hidden or starting or settling or not map.visible or upgrades.visible:
+		return
+	if rpg_store == null or not rpg_store.ready:
+		return
+	_rpg_notice = ""
+	rpg_overlay.open(_rpg_overlay_payload(), tab, _app.reduced_motion)
+	_app._sync_jelly()
+	_app._refresh()
+
+
+func close_rpg() -> void:
+	if is_instance_valid(rpg_overlay) and rpg_overlay.visible:
+		rpg_overlay.hide()
+	_rpg_notice = ""
+	if map.visible:
+		map.configure(_map_state(), _app.reduced_motion)
+	_app._sync_jelly()
+	_app._refresh()
+
+
+func select_rpg_stance(stance_id: String) -> void:
+	if rpg_store == null or not rpg_store.ready:
+		return
+	if not rpg_store.set_stance(stance_id):
+		_rpg_notice = rpg_store.error
+	else:
+		_rpg_notice = ""
+		if _app.has_method("trigger_haptic"):
+			_app.trigger_haptic("tap")
+	if is_instance_valid(rpg_overlay) and rpg_overlay.visible:
+		rpg_overlay.configure(_rpg_overlay_payload(), _app.reduced_motion)
+	if map.visible:
+		map.configure(_map_state(), _app.reduced_motion)
+
+
+func toggle_rpg_relic(relic_id: String) -> void:
+	if rpg_store == null or not rpg_store.ready:
+		return
+	var profile: Dictionary = rpg_profile_snapshot()
+	if not rpg_store.toggle_equip_relic(relic_id, int(profile.slot_capacity)):
+		_rpg_notice = rpg_store.error
+	else:
+		_rpg_notice = ""
+	if is_instance_valid(rpg_overlay) and rpg_overlay.visible:
+		rpg_overlay.configure(_rpg_overlay_payload(), _app.reduced_motion)
+
+
+func upgrade_rpg_relic(relic_id: String) -> void:
+	if rpg_store == null or not rpg_store.ready:
+		return
+	var result: Dictionary = rpg_store.upgrade_relic(relic_id, _app.coin_wallet)
+	if not bool(result.get("ok", false)):
+		_rpg_notice = str(result.get("error", "Could not upgrade relic."))
+	else:
+		_rpg_notice = ""
+		_app._coin_flight.sync(_app.coin_wallet.balance)
+		_app.audio.play_upgrade_milestone()
+		if _app.has_method("trigger_haptic"):
+			_app.trigger_haptic("impact")
+	if is_instance_valid(rpg_overlay) and rpg_overlay.visible:
+		rpg_overlay.configure(_rpg_overlay_payload(), _app.reduced_motion)
+	if map.visible:
+		map.configure(_map_state(), _app.reduced_motion)
+	_app._refresh()
+
+
+func claim_rpg_bounty(uid: String) -> void:
+	if rpg_store == null or not rpg_store.ready:
+		return
+	var result: Dictionary = rpg_store.claim_bounty(uid, _app.coin_wallet)
+	if not bool(result.get("ok", false)):
+		_rpg_notice = str(result.get("error", "Could not claim bounty."))
+	else:
+		_rpg_notice = ""
+		_app._coin_flight.sync(_app.coin_wallet.balance)
+		_app.audio.play_upgrade_milestone()
+	if is_instance_valid(rpg_overlay) and rpg_overlay.visible:
+		rpg_overlay.configure(_rpg_overlay_payload(), _app.reduced_motion)
+	if map.visible:
+		map.configure(_map_state(), _app.reduced_motion)
+	_app._refresh()
+
+
+func claim_rpg_deed(deed_id: String) -> void:
+	if rpg_store == null or not rpg_store.ready:
+		return
+	var result: Dictionary = rpg_store.claim_deed(deed_id, _app.coin_wallet)
+	if not bool(result.get("ok", false)):
+		_rpg_notice = str(result.get("error", "Could not claim deed."))
+	else:
+		_rpg_notice = ""
+		_app._coin_flight.sync(_app.coin_wallet.balance)
+		_app.audio.play_upgrade_milestone()
+	if is_instance_valid(rpg_overlay) and rpg_overlay.visible:
+		rpg_overlay.configure(_rpg_overlay_payload(), _app.reduced_motion)
+	if map.visible:
+		map.configure(_map_state(), _app.reduced_motion)
+	_app._refresh()
+
+
+func select_boss_ascension(boss_id: int, tier: int) -> void:
+	selected_ascensions[str(boss_id)] = clampi(tier, 0, 2)
+	_rpg_notice = ""
+	if is_instance_valid(rpg_overlay) and rpg_overlay.visible:
+		rpg_overlay.configure(_rpg_overlay_payload(), _app.reduced_motion)
 
 
 func _preview_word() -> Dictionary:
@@ -528,7 +724,9 @@ func _map_state() -> Dictionary:
 		"prestige_rank": store.prestige_rank() if store.ready else 0,
 		"upgrade_affordable": _upgrade_affordable(),
 		"chapter_stars": chapter_stars_map,
-		"chapter_milestones": store.chapter_milestones(context_key) if store.ready else []}
+		"chapter_milestones": store.chapter_milestones(context_key) if store.ready else [],
+		"rpg_claimable": rpg_store.claimable_count() if rpg_store != null and rpg_store.ready else 0,
+		"rpg_stance_badge": str(RpgCatalog.stance_by_id(rpg_store.stance()).badge) if rpg_store != null and rpg_store.ready else "SPARK"}
 
 
 func request_stage(number: int) -> void:
@@ -612,8 +810,14 @@ func prepare_plan(words: Array, seed: int) -> Dictionary:
 	result["auto_merge_level"] = store.auto_merge_level()
 	result["star_charm_level"] = store.star_charm_level()
 	result["auto_collect_campaign_unlocked"] = store.highest_cleared(context_key) >= 1
+	result["rpg_profile"] = rpg_profile_snapshot()
+	result["mastered_word_ids"] = _mastered_word_lookup()
+	var boss_index: int = BossCatalog.STAGES.find(selected_stage)
+	var boss_id: int = boss_index + 1 if boss_index >= 0 else 0
+	var defeated_already: bool = boss_id > 0 and boss_id in store.boss_victories(context_key)
+	var asc_tier: int = int(selected_ascensions.get(str(boss_id), 0)) if defeated_already else 0
 	result["boss"] = BossCatalog.encounter(selected_stage, not challenge and selected_stage == 1 \
-		and store.highest_cleared(context_key) == 0)
+		and store.highest_cleared(context_key) == 0, asc_tier)
 	pending_plan = result.duplicate(true)
 	return result
 
@@ -670,8 +874,11 @@ func capture_result(result: Dictionary) -> bool:
 	var previous_stars: int = store.best_stars(active_context_key, number) if stage.kind == "main" and number > 0 else 0
 	var paid_powerups: int = int(result.get("paid_powerups_used", 0))
 	var fragments: int = int(result.get("fragment_count", 0))
+	var profile: Dictionary = rpg_profile_snapshot()
+	var rpg_clear_ratio: float = float(profile.get("clear_coin_bonus", 0.0))
+	var double_leftover: bool = str(profile.get("stance", "")) == "seeker"
 	var quote: Dictionary = Catalog.clear_reward(number, int(stage.stars), chest_coins,
-		previous_stars, paid_powerups, fragments)
+		previous_stars, paid_powerups, fragments, rpg_clear_ratio, double_leftover)
 	if not quote.ok:
 		error = str(quote.error)
 		return false
@@ -719,6 +926,9 @@ func capture_result(result: Dictionary) -> bool:
 			var victory: bool = boss.get("outcome") == "defeated" and stage.outcome == "cleared"
 			_result_draft["boss_victory"] = victory
 			_result_draft["boss_outcome"] = str(boss.get("outcome", ""))
+			var asc_tier: int = clampi(int(boss.definition.get("ascension", 0)), 0, 2)
+			if asc_tier > 0:
+				_result_draft["boss_ascension"] = asc_tier
 			if victory and boss_id not in store.boss_victories(active_context_key):
 				var bounty: int = Economy.boss_first_victory_bounty(boss_id)
 				if bounty > 0:
@@ -726,6 +936,13 @@ func capture_result(result: Dictionary) -> bool:
 					_result_draft["bonus"] = int(_result_draft.bonus) + bounty
 					quote["bonus"] = int(quote.bonus) + bounty
 					quote["total"] = int(quote.total) + bounty
+			elif victory and asc_tier > 0 and rpg_store != null and rpg_store.ready \
+				and asc_tier > rpg_store.highest_boss_ascension(boss_id):
+				var asc_bounty: int = int(RpgCatalog.ascension_by_tier(asc_tier).coin_bounty)
+				if asc_bounty > 0:
+					_result_draft["bonus"] = int(_result_draft.bonus) + asc_bounty
+					quote["bonus"] = int(quote.bonus) + asc_bounty
+					quote["total"] = int(quote.total) + asc_bounty
 		elif bool(boss.definition.get("mini", false)) and boss.get("outcome") == "defeated" and stage.outcome == "cleared":
 			_result_draft["mini_raid_victory"] = true
 			_result_draft["bonus"] = int(_result_draft.bonus) + Economy.MINI_RAID_VICTORY_BONUS
@@ -806,6 +1023,33 @@ func advance(delta: float) -> void:
 			room.set_settlement_error(error)
 			return
 		_result_committed = true
+		if rpg_store != null and rpg_store.ready:
+			var profile: Dictionary = rpg_profile_snapshot()
+			var rpg_summary: Dictionary = {
+				"collections": int(_result_draft.get("collection_count", 0)),
+				"high_collects": int(_app._round_result.get("high_collects", 0)),
+				"best_combo": int(_app._round_result.get("best_combo", 0)),
+				"skills_used": int(_app._round_result.get("skills_used", 0)),
+				"cleared": str(_result_draft.get("outcome", "")) == "cleared",
+				"stars": int(_result_draft.get("stars", 0)),
+				"pure_clear": bool(_result_draft.get("pure_clear", false)),
+				"boss_dodges": int(_app._round_result.get("boss_dodges", 0)),
+				"boss_victory": bool(_result_draft.get("boss_victory", false)),
+				"boss_id": int(_result_draft.get("boss_id", 0)),
+				"boss_ascension": int(_result_draft.get("boss_ascension", 0)),
+				"mini_raid_victory": bool(_result_draft.get("mini_raid_victory", false)),
+				"challenge_stage": int(_result_draft.get("challenge_stage", 0))
+			}
+			var rpg_res: Dictionary = rpg_store.record_round_progress(_result_round, rpg_summary, int(profile.slot_capacity))
+			_last_round_new_relics = rpg_res.get("new_relics", [])
+			_last_round_tokens = int(rpg_res.get("tokens_earned", 0))
+			if not _last_round_new_relics.is_empty():
+				var first_relic: Dictionary = RpgCatalog.relic_by_id(_last_round_new_relics[0])
+				if not first_relic.is_empty():
+					_app._announce_status("New Pirate Relic unlocked: %s! (+%d Boss token%s)" % [
+						str(first_relic.name), _last_round_tokens, "" if _last_round_tokens == 1 else "s"])
+			elif _last_round_tokens > 0:
+				_app._announce_status("Earned +%d Boss token%s!" % [_last_round_tokens, "" if _last_round_tokens == 1 else "s"])
 	if _needs_result_choice() and not _result_returned:
 		if not _result_summary_presented:
 			_result_summary_presented = true
@@ -988,6 +1232,9 @@ func start_failed(message: String) -> void:
 func _home() -> void:
 	if _buying_upgrade:
 		return
+	if is_instance_valid(rpg_overlay) and rpg_overlay.visible:
+		close_rpg()
+		return
 	if upgrades.visible:
 		close_upgrades()
 		return
@@ -1003,6 +1250,7 @@ func _home() -> void:
 func snapshot() -> Dictionary:
 	var state: Dictionary = map.snapshot() if map.visible else {"visible": false}
 	state["upgrades"] = upgrades.snapshot()
+	state["rpg_overlay"] = rpg_overlay.snapshot() if is_instance_valid(rpg_overlay) else {"visible": false}
 	state["settling"] = settling
 	state["context"] = context_key
 	state["error"] = error

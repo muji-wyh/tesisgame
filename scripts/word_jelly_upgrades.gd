@@ -20,7 +20,7 @@ const WordArt = preload("res://scripts/word_art.gd")
 const SKY = preload("res://assets/images/jelly-match/sky/day.png")
 const COIN = preload("res://assets/coins/gold-coin.png")
 const SKIN = preload("res://assets/images/jelly-match/gel-mint.png")
-const WAND = preload("res://assets/images/ui/jelly-powerups/auto-merge-wand.svg")
+const WAND = preload("res://assets/images/ui/jelly-powerups/auto-merge-wand.webp")
 const STAR = preload("res://assets/images/ui/jelly-goals/star.webp")
 const GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const RAYS = preload("res://assets/chests/shared/effects/rays.png")
@@ -149,7 +149,7 @@ func _init() -> void:
 	_hero.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_stage.add_child(_hero)
 	_texture(_wand, WAND, _stage)
-	_wand.modulate = Color("#7950a6")
+	_wand.modulate = Color.WHITE
 	_tier = _label(_stage, "", 42)
 	_tier.add_theme_font_override("font", Style.DISPLAY_FONT)
 	_name = _label(_stage, "", 22)

@@ -21,6 +21,9 @@ const FEEDBACK_SECONDS: float = 0.7
 class CardBack:
 	extends Control
 
+	const BACK_PICTURE = preload("res://assets/images/ui/memory/card-back-picture.png")
+	const BACK_WORD = preload("res://assets/images/ui/memory/card-back-word.png")
+
 	var accent: Color = Style.GOOD
 	var fill_color: Color = Color.WHITE
 	var ink_color: Color = Style.INK
@@ -121,10 +124,11 @@ class CardBack:
 		var surface := Rect2(Vector2.ONE * (2 / scale), size - Vector2.ONE * (4 / scale))
 		if surface.size.x <= 0 or surface.size.y <= 0:
 			return
-		draw_style_box(Style.box(fill_color, Color.TRANSPARENT, ceili(12 / scale), 0), surface)
-		draw_style_box(Style.box(Color.TRANSPARENT, Color(ink_color, 0.14), ceili(8 / scale), 1), surface.grow(-5 / scale))
-		for fraction in [Vector2(0.16, 0.26), Vector2(0.8, 0.4), Vector2(0.26, 0.76)]:
-			draw_circle(size * fraction, 2.4 / scale, Color(ink_color, 0.12))
+		var card_tex: Texture2D = BACK_PICTURE if _kind == "image" else BACK_WORD
+		var tint: Color = Color(1.0, 0.96, 0.84, 1.0) if _selected else Color.WHITE
+		draw_texture_rect(card_tex, surface, false, tint)
+		if _selected:
+			draw_style_box(Style.box(Color.TRANSPARENT, accent, ceili(12 / scale), maxi(2, roundi(2 / scale))), surface)
 		draw_circle(number_label.get_rect().get_center(), 10 / scale,
 			fill_color.darkened(0.12) if _kind == "image" else Color.WHITE)
 		var side: float = _symbol_rect.size.x

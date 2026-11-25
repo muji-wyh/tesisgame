@@ -26,6 +26,9 @@ const LevelBadge = preload("res://scripts/word_jelly_level_badge.gd")
 const AmbientBudget = preload("res://scripts/word_jelly_ambient_budget.gd")
 const SettledBodyLayer = preload("res://scripts/jelly_settled_body_layer.gd")
 const PublicationCache = preload("res://scripts/word_jelly_publication_cache.gd")
+const SkillButton = preload("res://scripts/word_jelly_skill_button.gd")
+const BoonDraft = preload("res://scripts/word_jelly_boon_draft.gd")
+const RpgCatalog = preload("res://scripts/word_jelly_rpg_catalog.gd")
 const COLLECTION_GLOW = preload("res://assets/chests/shared/effects/portal_glow.png")
 const POWERUP_SPARKLE = preload("res://assets/chests/shared/effects/sparkle.png")
 const POWERUP_RAYS = preload("res://assets/chests/shared/effects/rays.png")
@@ -89,6 +92,7 @@ var _fusion_tap: Dictionary = {}
 var _queued_collections: Dictionary = {}
 var _error_notice_reserved: bool = false
 var _well_art := TextureRect.new()
+var _well_frame := Panel.new()
 var _read_panel: ReadPanel
 var _read_cell: Dictionary = {}
 var _requested_pause: bool = false
@@ -116,6 +120,8 @@ var _drop_cache_available: bool = false
 var _view_palette_ready: bool = false
 var _boss_view: BossView
 var _merged_level_badge := LevelBadge.new()
+var _skill_button := SkillButton.new()
+var _boon_draft := BoonDraft.new()
 var _recovery_hint := Style.label("", 12)
 var _preview_drop_available: bool = false
 var _processing_generation: int = -1
@@ -190,6 +196,12 @@ func _init() -> void:
 	_well_art.material = well_material
 	add_child(_well_art)
 	move_child(_well_art, 0)
+	_well_frame.name = "StorybookWellFrame"
+	_well_frame.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_well_frame.focus_mode = Control.FOCUS_NONE
+	_well_frame.add_theme_stylebox_override("panel", Style.well_frame_box())
+	add_child(_well_frame)
+	move_child(_well_frame, 1)
 	game = WordModel.new()
 	game.finish_feedback_ready = _finish_feedback_ready
 	_palette.compatibility = game.parts_compatible
@@ -216,6 +228,22 @@ func _init() -> void:
 		_stage_banner.present_stage_clear(WordModel.STAGE_CLEAR_NOTICE_SECONDS)
 		_layout()
 		stage_clear_announced.emit())
+	game.companion_skill_changed.connect(func(_state: Dictionary) -> void:
+		_refresh_skill_button())
+	game.companion_skill_triggered.connect(func(payload: Dictionary) -> void:
+		var stance: Dictionary = RpgCatalog.stance_by_id(str(payload.get("stance", "scholar")))
+		_trigger_well_impulse(0.85, stance.accent)
+		_refresh_skill_button()
+		_sync_tiles()
+		_publish())
+	game.challenge_boon_draft_requested.connect(func(options: Array) -> void:
+		_boon_draft.present(options)
+		_publish())
+	game.challenge_boon_applied.connect(func(boon: Dictionary) -> void:
+		_boon_draft.dismiss()
+		_trigger_well_impulse(0.95, boon.get("accent", Color("#ffde7a")))
+		_refresh_skill_button()
+		_publish())
 	game.fusion_started.connect(_powerup_fusion_started)
 	for tile: Tile in _preview_tiles:
 		remove_child(tile)
@@ -265,6 +293,13 @@ func _init() -> void:
 	_merged_level_badge.z_index = 36
 	add_child(_merged_level_badge)
 	_merged_level_badge.hide()
+	_skill_button.z_index = 36
+	_skill_button.pressed.connect(_trigger_companion_skill)
+	add_child(_skill_button)
+	_boon_draft.boon_selected.connect(func(boon_id: String) -> void:
+		if _can_play():
+			game.select_challenge_boon(boon_id))
+	add_child(_boon_draft)
 	_recovery_hint.name = "WordJellyRecoveryHint"
 	_recovery_hint.z_index = 36
 	_recovery_hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -403,6 +438,10 @@ func stop() -> void:
 		_stage_banner.reset()
 	if _practice_panel != null:
 		_practice_panel.set_stage({})
+	if _skill_button != null:
+		_skill_button.hide()
+	if _boon_draft != null:
+		_boon_draft.dismiss()
 	_presentation_elapsed = 0.0
 	if _collection_effects != null:
 		_collection_effects.reset()
@@ -530,6 +569,7 @@ func _finished(result: Dictionary) -> void:
 	_word_reveal.reset()
 	_collection_effects.reset()
 	_powerup_effects.hide()
+	_boon_draft.dismiss()
 	_reset_well_impulse()
 	super._finished(result)
 
@@ -576,6 +616,8 @@ func _drag_blocked(_reason: String) -> void:
 func set_learning_backdrop(active: bool) -> void:
 	super.set_learning_backdrop(active)
 	_well_art.visible = not active
+	if _well_frame != null:
+		_well_frame.visible = not active
 
 func apply_theme(theme: Dictionary, chests: Dictionary) -> void:
 	_pose_revision += 1
@@ -614,6 +656,17 @@ func _input(event: InputEvent) -> void:
 		return
 	if game.collection_batch_active() or game.powerup_active() or game.stage_ending():
 		return
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_E \
+		and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and _can_play():
+		if game.can_trigger_companion_skill():
+			_trigger_companion_skill()
+			get_viewport().set_input_as_handled()
+			return
+	if event is InputEventJoypadButton and event.pressed and event.button_index == JOY_BUTTON_Y and _can_play():
+		if game.can_trigger_companion_skill():
+			_trigger_companion_skill()
+			get_viewport().set_input_as_handled()
+			return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R \
 		and not event.ctrl_pressed and not event.alt_pressed and not event.meta_pressed and _can_play():
 		var focused: Control = get_viewport().gui_get_focus_owner()
@@ -2044,6 +2097,7 @@ func _process(delta: float) -> void:
 			_powerup_frame_receipt = str(powerup.receipt_id)
 			_powerup_frame_generation = _generation
 		collect_button.advance(delta)
+		_skill_button.advance(delta)
 		for button: PowerupButton in powerup_buttons.values():
 			button.advance(delta)
 		for arrival: Dictionary in _powerup_arrivals:
@@ -2369,6 +2423,8 @@ func _fusion_at(point: Vector2) -> String:
 	return ""
 
 func navigation_controls() -> Array[Control]:
+	if _boon_draft != null and _boon_draft.visible:
+		return _boon_draft.navigation_controls()
 	if _read_panel != null and _read_panel.visible:
 		return _read_panel.navigation_controls()
 	if not _can_play():
@@ -2735,6 +2791,7 @@ func _refresh_hud() -> void:
 		_error_notice_reserved = has_error
 		_layout.call_deferred()
 	_refresh_collect_button()
+	_refresh_skill_button()
 
 
 func _frame_hud_content_key() -> Array:
@@ -2937,6 +2994,7 @@ func _refresh_controls() -> void:
 	_fill_button.disabled = not _can_play() or board_locked or _finish_is_pulling() or _pointer != NO_POINTER or game.fill_mode_locked()
 	_fill_button.set_state(game.fill_mode, game.fill_mode_locked(), reduced_motion)
 	_fill_button.pause_feedback(_paused)
+	_refresh_skill_button()
 
 func _refresh_powerup_buttons(available: bool) -> void:
 	var balance: int = int(coin_balance.call()) if coin_balance.is_valid() else -1
@@ -3131,6 +3189,11 @@ func _layout() -> void:
 	_well_base_pos = well_bounds.position
 	_well_art.position = _well_base_pos + _well_impulse_offset()
 	_well_art.size = well_bounds.size
+	if _well_frame != null:
+		var frame_pad: float = 5.0 / s
+		_well_frame.position = _well_art.position - Vector2.ONE * frame_pad
+		_well_frame.size = well_bounds.size + Vector2.ONE * (frame_pad * 2.0)
+		_well_frame.visible = _well_art.visible
 	_well_art.material.set_shader_parameter("region_size", well_bounds.size * s)
 	_well_art.material.set_shader_parameter("corner_radius", ceilf(16.0 / s) * s)
 	_danger_frame.layout_frame(_board.grow(2.0), s, 18.0)
@@ -3264,6 +3327,23 @@ func _layout() -> void:
 	_recovery_hint.position = level_bounds.position
 	_recovery_hint.size = level_bounds.size
 	_recovery_hint.add_theme_font_size_override("font_size", maxi(1, roundi(12.0 / s)))
+	_skill_button.set_ui_scale(s)
+	var skill_height: float = 34.0 / s
+	if side_hud:
+		var skill_y: float = level_bounds.end.y + 4.0 / s
+		if combo_bounds.position.x >= hud_x and combo_bounds.position.y < skill_y + skill_height:
+			skill_y = combo_bounds.end.y + 4.0 / s
+		_skill_button.position = Vector2(hud_x, skill_y)
+		_skill_button.size = Vector2(hud_width, skill_height)
+	else:
+		if goal_width > 0.0:
+			_skill_button.position = Vector2(level_bounds.position.x, level_bounds.end.y + 4.0 / s)
+			_skill_button.size = Vector2(maxf(88.0 / s, level_bounds.size.x), skill_height)
+		else:
+			var right_x: float = maxf(level_bounds.end.x + 6.0 / s, hud_x + footer_width - 112.0 / s)
+			_skill_button.position = Vector2(right_x, level_bounds.position.y - 2.0 / s)
+			_skill_button.size = Vector2(maxf(88.0 / s, hud_x + footer_width - right_x), skill_height)
+	_boon_draft.size = size
 	_combo_hud.configure(combo_bounds, s, reduced_motion)
 	_boss_view.size = size
 	var boss_top: float = content_top + (54.0 / s if stage_in_rail and _stage_banner.visible else 0.0)
@@ -3271,6 +3351,8 @@ func _layout() -> void:
 		boss_top = maxf(boss_top, level_bounds.end.y + 6.0 / s)
 		if combo_bounds.position.x >= hud_x:
 			boss_top = maxf(boss_top, combo_bounds.end.y + 6.0 / s)
+	if _skill_button.visible and side_hud:
+		boss_top = maxf(boss_top, _skill_button.position.y + _skill_button.size.y + 6.0 / s)
 	var boss_width: float = minf(maxf(1.0, size.x - hud_x - edge), maxf(hud_width, minf(240.0 / s, _board.size.y * 0.45)))
 	var boss_dock := Rect2(Vector2(hud_x, boss_top),
 		Vector2(boss_width, maxf(1.0, _fill_button.position.y - boss_top - 8.0 / s)))
@@ -3346,6 +3428,9 @@ func _reset_well_impulse() -> void:
 	_well_impulse_strength = 0.0
 	if _well_art != null:
 		_well_art.position = _well_base_pos
+		if _well_frame != null:
+			var frame_pad: float = 5.0 / maxf(0.1, Style.ui_scale(self))
+			_well_frame.position = _well_base_pos - Vector2.ONE * frame_pad
 		if _well_art.material != null:
 			_well_art.material.set_shader_parameter("rim_pulse", 0.0)
 
@@ -3363,6 +3448,9 @@ func _apply_well_impulse() -> void:
 	if _well_art == null:
 		return
 	_well_art.position = _well_base_pos + _well_impulse_offset()
+	if _well_frame != null:
+		var frame_pad: float = 5.0 / maxf(0.1, Style.ui_scale(self))
+		_well_frame.position = _well_art.position - Vector2.ONE * frame_pad
 	if _well_art.material != null:
 		var pulse: float = 0.0
 		if not reduced_motion and _well_impulse_strength > 0.0 and _well_impulse_elapsed < WELL_IMPULSE_SECONDS:
@@ -3395,6 +3483,27 @@ func apply_atmosphere(atmosphere: Dictionary) -> void:
 		_boss_view._actor.set_atmosphere(
 			atmosphere.get("key_light", Color("#fff0d1")),
 			atmosphere.get("ambient_light", Color("#e0edff")))
+
+
+func _trigger_companion_skill() -> void:
+	if not _can_play() or _pointer != NO_POINTER:
+		return
+	game.trigger_companion_skill()
+
+
+func _refresh_skill_button() -> void:
+	if _skill_button == null:
+		return
+	var snap: Dictionary = game.companion_skill_snapshot()
+	var stance: Dictionary = RpgCatalog.stance_by_id(str(snap.get("stance", "scholar")))
+	_skill_button.set_skill_state(snap, stance.accent, reduced_motion)
+	var show_skill: bool = _configured and game.phase == "playing" and bool(snap.get("enabled", false)) \
+		and not _recovery_hint.visible and game.skill_energy > 0.0
+	var visibility_changed_flag: bool = _skill_button.visible != show_skill
+	_skill_button.visible = show_skill
+	_skill_button.disabled = not game.can_trigger_companion_skill() or not _can_play() or _pointer != NO_POINTER
+	if visibility_changed_flag and size.x > 0.0 and size.y > 0.0:
+		_layout.call_deferred()
 
 
 func _preview_row_count() -> int:
@@ -3446,6 +3555,8 @@ func snapshot() -> Dictionary:
 	state["boss_view"] = _boss_view.snapshot() if _boss_view != null else {}
 	state["practice"] = _practice_panel.snapshot() if _practice_panel != null else {"visible": false, "words": []}
 	state["combo_hud"] = _combo_hud.snapshot() if _combo_hud != null else {"visible": false}
+	state["companion_skill_button"] = _skill_button.snapshot() if _skill_button != null else {"visible": false}
+	state["boon_draft"] = _boon_draft.snapshot() if _boon_draft != null else {"visible": false}
 	state["goal_hover"] = {"word_id": _goal_hover_word, "elapsed": _goal_hover_elapsed}
 	state["auto_merge_hover"] = _auto_merge_hover_preview()
 	state.auto_merge_hover.merge({"active": state.auto_merge_hover.result_count > 0,

@@ -22,6 +22,9 @@ var final_chase: bool = false
 var clones: int = 0
 var ward: int = 0
 var broken_remaining: float = 0.0
+var stun_remaining: float = 0.0
+var dodge_count: int = 0
+var rpg_modifiers: Dictionary = {}
 var elapsed: float = 0.0
 var phase: String = "inactive"
 var ending_elapsed: float = 0.0
@@ -44,8 +47,11 @@ func configure(value: Dictionary, seed_value: int = 0) -> void:
 	charge = 0
 	final_chase = false
 	clones = int(definition.get("starting_clones", 0))
-	ward = 0
+	ward = int(definition.get("starting_ward", 0))
 	broken_remaining = 0.0
+	stun_remaining = 0.0
+	dodge_count = 0
+	rpg_modifiers = {}
 	elapsed = 0.0
 	ending_elapsed = 0.0
 	outcome = ""
@@ -82,11 +88,60 @@ func status(id: int) -> Dictionary:
 	return _statuses.get(id, {}).duplicate(true)
 
 
-func charge_merge(automatic: bool, complete: bool) -> void:
+func set_rpg_modifiers(modifiers: Dictionary) -> void:
+	rpg_modifiers = modifiers.duplicate(true)
+
+
+func charge_merge(automatic: bool, complete: bool, upgrade_merge: bool = false) -> void:
 	if fighting() and not automatic:
 		var cap: int = 40 if final_chase else 20
 		var gain: int = (6 if complete else 2) if final_chase else (3 if complete else 1)
+		if upgrade_merge and str(rpg_modifiers.get("stance", "")) == "scholar":
+			gain += 1
 		charge = mini(cap, charge + gain)
+
+
+func direct_skill_hit(damage_amount: int, origin: Dictionary, wait_for_goals: bool = false) -> bool:
+	if not fighting() or damage_amount <= 0:
+		return false
+	# Compass Strike pierces wards/clones and interrupts Pirate's active windup.
+	clones = 0
+	ward = 0
+	stun_remaining = maxf(stun_remaining, 2.5)
+	_projectiles.clear()
+	_specials.clear()
+	health = maxi(0, health - damage_amount)
+	_event("player_hit", {"damage": damage_amount, "level": 6, "origin": origin, "health_after": health,
+		"charge_used": 0, "power_hit": true, "skill_hit": true})
+	if health == 0:
+		if wait_for_goals:
+			phase = "exhausted"
+			_clear_attacks()
+			_event("exhausted")
+		else:
+			begin_ending("defeated")
+	return true
+
+
+func cleanse_all_statuses() -> int:
+	var cleared: int = 0
+	for id: int in _statuses.keys():
+		var st: Dictionary = _statuses[id]
+		if float(st.get("freeze", 0.0)) > EPSILON:
+			_event("thaw", {"target": id})
+			cleared += 1
+		if float(st.get("ink", 0.0)) > EPSILON:
+			_event("clear_ink", {"target": id})
+			cleared += 1
+		if int(st.get("locks", 0)) > 0:
+			_event("unlock", {"target": id, "locks": 0})
+			cleared += 1
+	_statuses.clear()
+	if broken_remaining > EPSILON:
+		broken_remaining = 0.0
+		_event("sky_repaired")
+		cleared += 1
+	return cleared
 
 
 func enter_final_chase() -> void:
@@ -105,17 +160,84 @@ func collect_hit(receipt: String, level: int, combo: int, origin: Dictionary,
 		return false
 	_receipts[receipt] = true
 	var charge_used: int = charge
-	var damage: int = ceili(Catalog.DAMAGE[level] * (1.0 + minf(combo, 12) * 0.035)
-		* (1.0 + charge_used * 0.025) * maxf(1.0, damage_scale))
 	var power_hit: bool = charge_used >= POWER_CHARGE_THRESHOLD
+	var hunter: bool = str(rpg_modifiers.get("stance", "")) == "hunter"
+	var relics: Dictionary = rpg_modifiers.get("active_relics", {})
+	var bonus_scale: float = maxf(1.0, damage_scale)
+	if power_hit and hunter:
+		bonus_scale *= 1.35
+	if power_hit and relics.has("aegis_crest"):
+		bonus_scale *= 1.0 + float(relics.aegis_crest.get("power_bonus", 0.0))
+	var damage: int = ceili(Catalog.DAMAGE[level] * (1.0 + minf(combo, 12) * 0.035)
+		* (1.0 + charge_used * 0.025) * bonus_scale)
 	charge = 0
 	if clones > 0:
+		if relics.has("truth_prism") and level >= int(relics.truth_prism.get("min_level", 3)):
+			clones = 0
+			var bleed: int = maxi(1, ceili(float(damage) * float(relics.truth_prism.get("bleed", 0.30))))
+			health = maxi(0, health - bleed)
+			_event("clone_hit", {"damage": bleed, "origin": origin, "remaining": 0})
+			_event("player_hit", {"damage": bleed, "level": level, "origin": origin, "health_after": health,
+				"charge_used": charge_used, "power_hit": power_hit})
+			if health == 0:
+				if wait_for_goals:
+					phase = "exhausted"
+					_clear_attacks()
+					_event("exhausted")
+				else:
+					begin_ending("defeated")
+			return true
+		if power_hit and hunter:
+			clones = maxi(0, clones - 1)
+			health = maxi(0, health - damage)
+			_event("clone_hit", {"damage": 0, "origin": origin, "remaining": clones})
+			_event("player_hit", {"damage": damage, "level": level, "origin": origin, "health_after": health,
+				"charge_used": charge_used, "power_hit": true})
+			if health == 0:
+				if wait_for_goals:
+					phase = "exhausted"
+					_clear_attacks()
+					_event("exhausted")
+				else:
+					begin_ending("defeated")
+			return true
 		clones -= 1
 		_event("clone_hit", {"damage": 0, "origin": origin, "remaining": clones})
 	elif ward > 0:
+		if power_hit and relics.has("aegis_crest"):
+			ward = 0
+			stun_remaining = maxf(stun_remaining, float(relics.aegis_crest.get("stun", 2.5)))
+			health = maxi(0, health - damage)
+			_event("ward_hit", {"damage": damage, "origin": origin, "remaining": 0})
+			_event("player_hit", {"damage": damage, "level": level, "origin": origin, "health_after": health,
+				"charge_used": charge_used, "power_hit": true})
+			if health == 0:
+				if wait_for_goals:
+					phase = "exhausted"
+					_clear_attacks()
+					_event("exhausted")
+				else:
+					begin_ending("defeated")
+			return true
+		if power_hit and hunter:
+			ward = maxi(0, ward - 1)
+			health = maxi(0, health - damage)
+			_event("ward_hit", {"damage": 0, "origin": origin, "remaining": ward})
+			_event("player_hit", {"damage": damage, "level": level, "origin": origin, "health_after": health,
+				"charge_used": charge_used, "power_hit": true})
+			if health == 0:
+				if wait_for_goals:
+					phase = "exhausted"
+					_clear_attacks()
+					_event("exhausted")
+				else:
+					begin_ending("defeated")
+			return true
 		ward -= 1
 		_event("ward_hit", {"damage": 0, "origin": origin, "remaining": ward})
 	else:
+		if power_hit and relics.has("aegis_crest"):
+			stun_remaining = maxf(stun_remaining, float(relics.aegis_crest.get("stun", 2.5)))
 		health = maxi(0, health - damage)
 		_event("player_hit", {"damage": damage, "level": level, "origin": origin, "health_after": health,
 			"charge_used": charge_used, "power_hit": power_hit})
@@ -130,18 +252,26 @@ func collect_hit(receipt: String, level: int, combo: int, origin: Dictionary,
 
 
 func unlock_pair(first: int, second: int) -> bool:
+	var relics: Dictionary = rpg_modifiers.get("active_relics", {})
+	var strip: int = int(relics.get("master_key", {}).get("locks_broken", 1))
 	var changed: bool = false
 	for id: int in [first, second]:
 		if locks(id) > 0:
-			_statuses[id].locks = locks(id) - 1
+			_statuses[id].locks = maxi(0, locks(id) - strip)
 			_event("unlock", {"target": id, "locks": locks(id)})
 			changed = true
+	if changed and relics.has("master_key"):
+		var bonus_charge: int = int(relics.master_key.get("charge", 0))
+		if bonus_charge > 0:
+			var cap: int = 40 if final_chase else 20
+			charge = mini(cap, charge + bonus_charge)
 	return changed
 
 
 func apply_status(kind: String, id: int) -> bool:
 	if not fighting() or id < 0 or kind not in ["freeze", "ink", "lock"]:
 		return false
+	var relics: Dictionary = rpg_modifiers.get("active_relics", {})
 	var state: Dictionary = _statuses.get(id, {"freeze": 0.0, "ink": 0.0, "locks": 0})
 	if kind == "lock":
 		if int(state.locks) >= 2:
@@ -149,7 +279,12 @@ func apply_status(kind: String, id: int) -> bool:
 			return false
 		state.locks = int(state.locks) + 1
 	else:
-		state[kind] = FREEZE_SECONDS if kind == "freeze" else INK_SECONDS
+		var dur: float = FREEZE_SECONDS if kind == "freeze" else INK_SECONDS
+		if kind == "freeze" and relics.has("thaw_bell"):
+			dur *= float(relics.thaw_bell.get("freeze_scale", 1.0))
+		elif kind == "ink" and relics.has("clarity_lens"):
+			dur *= float(relics.clarity_lens.get("ink_scale", 1.0))
+		state[kind] = maxf(0.4, dur)
 	_statuses[id] = state
 	_event("status_hit", {"target": id, "status": kind, "locks": int(state.locks)})
 	return true
@@ -226,6 +361,7 @@ func advance(delta: float, candidates: Array[Dictionary], allow_attacks: bool = 
 	var available: Dictionary = {}
 	for tile: Dictionary in candidates:
 		available[int(tile.id)] = tile
+	var relics: Dictionary = rpg_modifiers.get("active_relics", {})
 	for id: int in _statuses.keys():
 		# Reserved bodies retain their status until their owning operation commits.
 		for kind: String in ["freeze", "ink"]:
@@ -233,6 +369,12 @@ func advance(delta: float, candidates: Array[Dictionary], allow_attacks: bool = 
 			_statuses[id][kind] = maxf(0.0, before - delta)
 			if before > EPSILON and float(_statuses[id][kind]) <= EPSILON:
 				_event("thaw" if kind == "freeze" else "clear_ink", {"target": id})
+				if kind == "ink" and relics.has("clarity_lens"):
+					var cap: int = 40 if final_chase else 20
+					charge = mini(cap, charge + int(relics.clarity_lens.get("charge", 0)))
+				elif kind == "freeze" and relics.has("thaw_bell"):
+					var cap: int = 40 if final_chase else 20
+					charge = mini(cap, charge + int(relics.thaw_bell.get("charge", 0)))
 	var was_broken: bool = broken_remaining > EPSILON
 	broken_remaining = maxf(0.0, broken_remaining - delta)
 	if was_broken and broken_remaining <= EPSILON:
@@ -241,8 +383,11 @@ func advance(delta: float, candidates: Array[Dictionary], allow_attacks: bool = 
 		special.remaining = maxf(0.0, float(special.remaining) - delta)
 		if float(special.remaining) <= EPSILON:
 			_specials.erase(special)
-			broken_remaining = BROKEN_SECONDS
-			_event("kick", {"seconds": BROKEN_SECONDS, "text": "Two jellies at a time. My sky, my rules!"})
+			var broken_dur: float = BROKEN_SECONDS
+			if relics.has("gale_feather"):
+				broken_dur *= float(relics.gale_feather.get("broken_scale", 1.0))
+			broken_remaining = maxf(1.2, broken_dur)
+			_event("kick", {"seconds": broken_remaining, "text": "Two jellies at a time. My sky, my rules!"})
 	for projectile: Dictionary in _projectiles.duplicate():
 		projectile.elapsed = float(projectile.elapsed) + delta
 		if float(projectile.elapsed) + EPSILON < WINDUP_SECONDS + FLIGHT_SECONDS:
@@ -252,7 +397,9 @@ func advance(delta: float, candidates: Array[Dictionary], allow_attacks: bool = 
 		if not available.has(id) or int(available[id].column) != int(projectile.column) \
 			or int(available[id].row) != int(projectile.row):
 			var cap: int = 40 if final_chase else 20
-			charge = mini(cap, charge + DODGE_CHARGE)
+			var dodge_gain: int = DODGE_CHARGE * (2 if str(rpg_modifiers.get("stance", "")) == "hunter" else 1)
+			charge = mini(cap, charge + dodge_gain)
+			dodge_count += 1
 			_event("miss", {"target": id, "column": int(projectile.column), "row": int(projectile.row),
 				"status": projectile.status, "charge_after": charge})
 			continue
@@ -261,10 +408,13 @@ func advance(delta: float, candidates: Array[Dictionary], allow_attacks: bool = 
 			_event("snatch", {"target": id, "tile": available[id]})
 		else:
 			apply_status(str(projectile.status), id)
-	_attack_in -= delta
-	if _attack_in <= EPSILON:
-		_attack_in = float(definition.interval)
-		_launch(candidates)
+	if stun_remaining > EPSILON:
+		stun_remaining = maxf(0.0, stun_remaining - delta)
+	else:
+		_attack_in -= delta
+		if _attack_in <= EPSILON:
+			_attack_in = float(definition.interval)
+			_launch(candidates)
 	return impacts
 
 
@@ -326,6 +476,7 @@ func snapshot() -> Dictionary:
 		"charge_max": 40 if final_chase else 20, "final_chase": final_chase,
 		"clones": clones, "ward": ward, "elapsed": elapsed, "outcome": outcome,
 		"ending_elapsed": ending_elapsed, "broken_remaining": broken_remaining,
+		"stun_remaining": stun_remaining, "dodge_count": dodge_count,
 		"drop_limit": 2 if broken_remaining > EPSILON else 7,
 		"statuses": _statuses.duplicate(true), "projectiles": _projectiles.duplicate(true),
 		"events": _events.duplicate(true), "next_attack": _attack_in}

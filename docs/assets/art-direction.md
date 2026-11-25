@@ -17,6 +17,30 @@ instead of filling it with placeholder art or claiming the element is finished.
 This requirement guides new work and replacements. It does not imply that
 all existing procedural artwork has already been replaced.
 
+## Storybook 2.5D Upgrade (2026-11-25)
+
+To unify the visual language around the 3D Atelier treasure chests, 3D Pirate Boss,
+3D miniature career previews, and 3D Fluent vocabulary stills:
+- **3D Miniature Diorama Scenery (`tools/render-storybook-scenery.py`)**: All nine Jelly Journey
+  chapter landmarks (`assets/images/jelly-campaign/*.png`) and four board garden layers
+  (`assets/images/jelly-match/garden/{hills,tree,tree-long,foliage}.png`) are rendered in Blender 5.3
+  Cycles from user-supplied CC0 Kenney 3D kits (`Nature Kit`, `Castle Kit`, `Holiday Kit`, `Pirate Kit`)
+  under unified warm top-left storybook lighting.
+- **Multi-Biome Skies (`docs/assets/jelly-sky.json`)**: Adds golden-hour (`morning.png`) and twilight
+  (`night.png`) panoramas from CC0 Kenney Skyboxes 1.0 alongside `day.png`.
+- **3D Translucent Gel Skins & Sculpted Medallions (`tools/render-storybook-ui-and-gels.py`)**:
+  Replaces flat gel sprites and medallions with Blender 5.3 Cycles renders while strictly preserving
+  the 320x320 rounded-rectangle SDF contract (`tools/prepare-jelly-material.py`).
+- **Tactile 9-Slice UI Chrome & Memory Card Backs**: Symmetrical sculpted parchment panels,
+  chapter banners, toybox well frame, primary/secondary/gold buttons (`assets/images/ui/chrome/`),
+  and quilted storybook Memory card backs (`assets/images/ui/memory/`).
+- **Fluent 3D RPG, Boon, Powerup & Starter Vocabulary Art**: 31 new 3D icons (`assets/images/ui/jelly-rpg/`,
+  `auto-merge-wand.webp`, `finish-flag.webp`, `modes/rocket.webp`, `modes/rainbow.webp`) and 47
+  starter Age 4–5 Mulberry vocabulary words upgraded to pinned Microsoft Fluent Emoji 3D (MIT) with
+  regenerated 32-frame motion atlases (`tools/upgrade-starter-mulberry-words.py`).
+- **Toon FX Boss & Impact Particles**: Additional frost, ink-splat, impact-star, and soft-poof textures
+  extracted from the user's licensed local Archanor VFX Toon FX 1.52 package.
+
 ## Archived Talk Quest guardian direction
 
 Talk Quest was retired on 2026-10-06. The following direction and source review

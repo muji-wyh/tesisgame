@@ -1,8 +1,8 @@
 {
-  "version": 1,
+  "version": 2,
   "imported_on": "2026-10-13",
   "source": {
-    "title": "Background Elements Remastered (1.0)",
+    "title": "Kenney 3D Nature Kit & Castle Kit Diorama Renders (with retained CC0 garden base)",
     "creator": "Kenney",
     "creator_page": "https://kenney.nl/",
     "collection": "Kenney Game Assets All-in-1 3.7.0",
@@ -16,7 +16,7 @@
     "license_source_sha256": "618ad6b7a71d4fe2861829f0dce793eec43616a064e951ed34a517cf363f8fd7",
     "license_sha256": "618ad6b7a71d4fe2861829f0dce793eec43616a064e951ed34a517cf363f8fd7",
     "attribution": "Kenney credit is welcomed but not required by the supplied CC0 license",
-    "status": "Eight original PNGs visually inspected and imported unchanged. Hills, trees and foliage remain integrated as low static scenery; the former sky and three cloud images are retained only as historical source material.",
+    "status": "Hills, trees and foliage upgraded to 3D Blender Cycles miniature storybook renders from user-supplied CC0 Kenney 3D kits.",
     "animations": "Static PNGs and vector originals; no baked environment animation clips. Retained garden scenery is static. The former game-authored horizontal motion of two clouds is retired; current panorama and daylight are documented in jelly-sky.md."
   },
   "images": [
@@ -37,16 +37,16 @@
     {
       "id": "hills",
       "path": "assets/images/jelly-match/garden/hills.png",
-      "source": "Backgrounds/Elements/hills.png",
-      "source_sha256": "3ab7cec63df2e28379c6dfd9e64dff358607a707a19042cba7dd81a8a13bf5cd",
-      "sha256": "3ab7cec63df2e28379c6dfd9e64dff358607a707a19042cba7dd81a8a13bf5cd",
-      "bytes": 4242,
+      "source": "Nature Kit/Models/GLTF format/ground_grass.glb, Nature Kit/Models/GLTF format/plant_bushLarge.glb, Nature Kit/Models/GLTF format/plant_bushDetailed.glb, Nature Kit/Models/GLTF format/tree_small.glb, Nature Kit/Models/GLTF format/tree_oak.glb, Nature Kit/Models/GLTF format/flower_yellowA.glb, Nature Kit/Models/GLTF format/flower_purpleB.glb",
+      "source_sha256": "a053982aa35054419e9a4d620e822890cf9bcedbafdb9d5b0af666090c1872b2",
+      "sha256": "a053982aa35054419e9a4d620e822890cf9bcedbafdb9d5b0af666090c1872b2",
+      "bytes": 177593,
       "size": [
         1024,
-        400
+        340
       ],
-      "mode": "P",
-      "processing": "Unmodified original PNG copied byte-for-byte from the supplied local Kenney library"
+      "mode": "RGBA",
+      "processing": "Rendered from user-supplied CC0 Kenney 3D GLBs via Blender 5.3 Cycles (tools/render-storybook-scenery.py)"
     },
     {
       "id": "cloud-bank",
@@ -93,44 +93,44 @@
     {
       "id": "tree",
       "path": "assets/images/jelly-match/garden/tree.png",
-      "source": "PNG/Retina/tree.png",
-      "source_sha256": "1aaf2cb30f614f7a58a30c91aab4250a02780fe2db22a62678d7d6e6cc6a69be",
-      "sha256": "1aaf2cb30f614f7a58a30c91aab4250a02780fe2db22a62678d7d6e6cc6a69be",
-      "bytes": 5086,
+      "source": "Nature Kit/Models/GLTF format/tree_oak.glb, Nature Kit/Models/GLTF format/plant_bushDetailed.glb, Nature Kit/Models/GLTF format/flower_yellowA.glb, Nature Kit/Models/GLTF format/flower_redA.glb",
+      "source_sha256": "1ed3e3cf43661bfd4c7024bfead2fe9be191e5fff71ca447bded87b0f4e1431f",
+      "sha256": "1ed3e3cf43661bfd4c7024bfead2fe9be191e5fff71ca447bded87b0f4e1431f",
+      "bytes": 74645,
       "size": [
-        188,
-        408
+        280,
+        440
       ],
-      "mode": "P",
-      "processing": "Unmodified original PNG copied byte-for-byte from the supplied local Kenney library"
+      "mode": "RGBA",
+      "processing": "Rendered from user-supplied CC0 Kenney 3D GLBs via Blender 5.3 Cycles (tools/render-storybook-scenery.py)"
     },
     {
       "id": "tree-long",
       "path": "assets/images/jelly-match/garden/tree-long.png",
-      "source": "PNG/Retina/treeLong.png",
-      "source_sha256": "696a83d192436b8168552258e9f2bbe893ab0cb176d046208f31adc87e60815a",
-      "sha256": "696a83d192436b8168552258e9f2bbe893ab0cb176d046208f31adc87e60815a",
-      "bytes": 3907,
+      "source": "Nature Kit/Models/GLTF format/tree_tall.glb, Nature Kit/Models/GLTF format/tree_thin.glb, Nature Kit/Models/GLTF format/grass_large.glb",
+      "source_sha256": "c5eb4207420a24b55646cd5d2b8a78323720c8dddbaa9bfcba35c5acd8acaf8a",
+      "sha256": "c5eb4207420a24b55646cd5d2b8a78323720c8dddbaa9bfcba35c5acd8acaf8a",
+      "bytes": 79525,
       "size": [
-        163,
-        498
+        240,
+        480
       ],
-      "mode": "P",
-      "processing": "Unmodified original PNG copied byte-for-byte from the supplied local Kenney library"
+      "mode": "RGBA",
+      "processing": "Rendered from user-supplied CC0 Kenney 3D GLBs via Blender 5.3 Cycles (tools/render-storybook-scenery.py)"
     },
     {
       "id": "foliage",
       "path": "assets/images/jelly-match/garden/foliage.png",
-      "source": "PNG/Retina/bushAlt1.png",
-      "source_sha256": "71d38c8a4d630365791eed935aa4155c4a951d351a983274dd753aefbba409c3",
-      "sha256": "71d38c8a4d630365791eed935aa4155c4a951d351a983274dd753aefbba409c3",
-      "bytes": 1865,
+      "source": "Nature Kit/Models/GLTF format/plant_bushLarge.glb, Nature Kit/Models/GLTF format/plant_bushDetailed.glb, Nature Kit/Models/GLTF format/plant_bushSmall.glb, Nature Kit/Models/GLTF format/flower_yellowB.glb, Nature Kit/Models/GLTF format/flower_purpleA.glb, Nature Kit/Models/GLTF format/mushroom_redGroup.glb",
+      "source_sha256": "7e0c098afd541799eefa442b3000507bfe4d0da7b84afb009c59b050c40274e3",
+      "sha256": "7e0c098afd541799eefa442b3000507bfe4d0da7b84afb009c59b050c40274e3",
+      "bytes": 58588,
       "size": [
-        282,
-        95
+        420,
+        220
       ],
-      "mode": "P",
-      "processing": "Unmodified original PNG copied byte-for-byte from the supplied local Kenney library"
+      "mode": "RGBA",
+      "processing": "Rendered from user-supplied CC0 Kenney 3D GLBs via Blender 5.3 Cycles (tools/render-storybook-scenery.py)"
     }
   ],
   "runtime": {

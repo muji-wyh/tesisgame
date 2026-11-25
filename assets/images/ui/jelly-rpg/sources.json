@@ -1,0 +1,507 @@
+{
+  "version": 1,
+  "provider": "fluent-emoji",
+  "revision": "1ffb34c752ecf5d402f04cfb4b392c77f57c54bc",
+  "creator": "Microsoft Corporation",
+  "license": "MIT",
+  "license_file": "docs/assets/licenses/fluent-emoji.txt",
+  "animations": "Static 3D illustrations; UI hover/pulse is game-authored.",
+  "assets": [
+    {
+      "file": "assets/images/ui/jelly-rpg/relic-thaw-bell.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 2910,
+      "sha256": "246c12c70fe7bdd723239d27515f84b182e47381eefca11cb436c7db2754d4e8",
+      "source_sha256": "e1c9efed838326cb746462b824456ef382742237017871f4d0fe54c407a9d5bf",
+      "id": "relic_thaw_bell",
+      "concept": "bell",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Bell/3D/bell_3d.png",
+      "source_path": "assets/Bell/3D/bell_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/relic-clarity-lens.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 3446,
+      "sha256": "b6ba721f937bfbe31489d27eb857798675b4453266e48ad5f538679593bb18ed",
+      "source_sha256": "ca7ea01bf77695eb00d246cab28e89153979469dea99ab1f0e5bc54cf127bac3",
+      "id": "relic_clarity_lens",
+      "concept": "magnifying glass tilted right",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Magnifying%20glass%20tilted%20right/3D/magnifying_glass_tilted_right_3d.png",
+      "source_path": "assets/Magnifying glass tilted right/3D/magnifying_glass_tilted_right_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/relic-master-key.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 3992,
+      "sha256": "71f42bef6c4552524bf23f2d4217f749cb0c9f1446176d1548270666d691ecd2",
+      "source_sha256": "0ecbd1db5bd96139cd676887a30973e5aebf0bbde46695df1e3c85cc642ff0c3",
+      "id": "relic_master_key",
+      "concept": "old key",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Old%20key/3D/old_key_3d.png",
+      "source_path": "assets/Old key/3D/old_key_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/relic-truth-prism.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 3198,
+      "sha256": "9bd24f81d92dadf9c5be98224d54a6accfc1724705ef8a94baa7ce4a98dd2054",
+      "source_sha256": "f42c5484bea4f33f7ba8ee2b5c7e2a51d17a9fcec36f2ba92334f62b7f95eb43",
+      "id": "relic_truth_prism",
+      "concept": "crystal ball",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Crystal%20ball/3D/crystal_ball_3d.png",
+      "source_path": "assets/Crystal ball/3D/crystal_ball_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/relic-gale-feather.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 3218,
+      "sha256": "9adea22245256ce166ad3b87021fb56c6c1d8f2f010ec1d7466b207a586ce1ac",
+      "source_sha256": "44a0b99188849335acb97e852cc0983758ebcd32dd7ad2689e461248e9c302da",
+      "id": "relic_gale_feather",
+      "concept": "feather",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Feather/3D/feather_3d.png",
+      "source_path": "assets/Feather/3D/feather_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/relic-echo-clasp.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 3134,
+      "sha256": "29723b85ff145682a70a8b0756e1c75658e42281d33eaeb1661e231975e39bd4",
+      "source_sha256": "396cc96a0163458992ac8d5ed2e362eefdd7223067345723e776f437db2fb258",
+      "id": "relic_echo_clasp",
+      "concept": "spiral shell",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Spiral%20shell/3D/spiral_shell_3d.png",
+      "source_path": "assets/Spiral shell/3D/spiral_shell_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/relic-aegis-crest.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 3022,
+      "sha256": "0a4de9e47c3e4ea12037248a796b4ea2fa6b8d3e41bccd362ce7c725b719847a",
+      "source_sha256": "3c1cc1b14f8dd43e8532f9fb751769cd68382a9f25c012b0549e352a8d953a94",
+      "id": "relic_aegis_crest",
+      "concept": "shield",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Shield/3D/shield_3d.png",
+      "source_path": "assets/Shield/3D/shield_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/stance-scholar.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 4326,
+      "sha256": "e220c038f59b68c969c08d28cee7f612e320321ac8bc94b99e87526db636d8a0",
+      "source_sha256": "e4490c9ff74a3fd73a8f99c760d65b6ed51b8a3e4ad28da137fec050b77e1058",
+      "id": "stance_scholar",
+      "concept": "sparkles",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Sparkles/3D/sparkles_3d.png",
+      "source_path": "assets/Sparkles/3D/sparkles_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/stance-hunter.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 5616,
+      "sha256": "28e238f24bedc7dffc988d9c5d0518613b9bc94e203cc497d711b6eca3a9ad31",
+      "source_sha256": "963951282ed289fa7c75a6922426c78c4853eb1ccaa5bf8f162f1acf722c2dfa",
+      "id": "stance_hunter",
+      "concept": "bow and arrow",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Bow%20and%20arrow/3D/bow_and_arrow_3d.png",
+      "source_path": "assets/Bow and arrow/3D/bow_and_arrow_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/stance-seeker.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 2696,
+      "sha256": "6e2940bc80a01518fd266180e48ca1e00291025e9fb5b7a22eecc4fa6e6bb0ce",
+      "source_sha256": "50dd4109b524203fc9e208e24498f6f468c54f104b4eb41e914dec203e841820",
+      "id": "stance_seeker",
+      "concept": "gem stone",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Gem%20stone/3D/gem_stone_3d.png",
+      "source_path": "assets/Gem stone/3D/gem_stone_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/boon-supernova.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 4214,
+      "sha256": "a47b87b321ff57a2e72b8019ca16cee6331ac247b941c6a28d04a71c9494e249",
+      "source_sha256": "124ac1fc19f11512b0370197e6ddbd7b035f193df52c75e569f8e9059b7ccc13",
+      "id": "boon_supernova_blast",
+      "concept": "collision",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Collision/3D/collision_3d.png",
+      "source_path": "assets/Collision/3D/collision_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/boon-hyper-charge.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 2070,
+      "sha256": "4f8a6a8f711ed92a23165ec6642a7980b094294f53358945568abd2876624b53",
+      "source_sha256": "f8f9d3ed8a6f350f1e3f009fb8b3f3bcc20276c008b2ce391bef057ea062ca71",
+      "id": "boon_overdrive_skill",
+      "concept": "high voltage",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/High%20voltage/3D/high_voltage_3d.png",
+      "source_path": "assets/High voltage/3D/high_voltage_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/boon-chrono-flow.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 3306,
+      "sha256": "11e7cde04eb6497fa2d94f59d3a3426cc9ccbe1e8490640db331bd546311faa2",
+      "source_sha256": "ab4183328a0ec7a0440a6fb48113fdb9145f51235e960c7f17097ebb9f13af97",
+      "id": "boon_chrono_flow",
+      "concept": "hourglass not done",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Hourglass%20not%20done/3D/hourglass_not_done_3d.png",
+      "source_path": "assets/Hourglass not done/3D/hourglass_not_done_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/boon-golden-cascade.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 3722,
+      "sha256": "c86120c854583f932943d6315529ea8e3c9c6af9f478f52cfd7d40991a7ab862",
+      "source_sha256": "cec19b9cf0beac5bbd27a07dcbe1e68c54b04112b4641165705ccb920f230292",
+      "id": "boon_golden_cascade",
+      "concept": "money bag",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Money%20bag/3D/money_bag_3d.png",
+      "source_path": "assets/Money bag/3D/money_bag_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/boon-giant-leap.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 4320,
+      "sha256": "f4f415228c6ee33e7c15c761ce8ae8ff6a5240c681ff8bf216979b5fdb4f90ac",
+      "source_sha256": "4636925a1dfc76a45dc83c08b983699d39143a0978f794a4e2dfb6cbffdcd7ab",
+      "id": "boon_giant_leap",
+      "concept": "rocket",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Rocket/3D/rocket_3d.png",
+      "source_path": "assets/Rocket/3D/rocket_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/boon-chain-echo.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 4724,
+      "sha256": "00bde59a11bac46963aae234a737a289c46e52888f9fc98a62ef541ba50772db",
+      "source_sha256": "5183597c8e1b092dadb3c88607c9b1405c1bea3b82219edc50caa4a8590fd8a8",
+      "id": "boon_chain_echo",
+      "concept": "link",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Link/3D/link_3d.png",
+      "source_path": "assets/Link/3D/link_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/boon-arcane-wand.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 4042,
+      "sha256": "9167861565b1c59f4d0f5cf89d050e0358f5b8ea1633e1676600dda485c1a963",
+      "source_sha256": "ba15c729deed09fc6d51114ab14356135e08e8562cb82d040dfe601594138308",
+      "id": "boon_free_wand",
+      "concept": "magic wand",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Magic%20wand/3D/magic_wand_3d.png",
+      "source_path": "assets/Magic wand/3D/magic_wand_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/boon-treasure-frenzy.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 4194,
+      "sha256": "28fc4faa0cc76b12463a881d6385cb2fcb65964cd9a165144a2bb67ef53ae43f",
+      "source_sha256": "817095bb1423468afa155317ba04ca333957d51757a8d3326856ee8707c0edd6",
+      "id": "boon_treasure_frenzy",
+      "concept": "crown",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Crown/3D/crown_3d.png",
+      "source_path": "assets/Crown/3D/crown_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/boon-lightning-hands.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 3250,
+      "sha256": "a3360d5ea3fc09b7e79c43af2caccfd9eb2b835d68bdc5dea4e41bf76d89c9d7",
+      "source_sha256": "d56355132d73df1741edcf37cb4e21ad54f1c46eeb76fa17224607abf4128c3f",
+      "id": "boon_lightning_hands",
+      "concept": "fire",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Fire/3D/fire_3d.png",
+      "source_path": "assets/Fire/3D/fire_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-powerups/auto-merge-wand.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 4042,
+      "sha256": "9167861565b1c59f4d0f5cf89d050e0358f5b8ea1633e1676600dda485c1a963",
+      "source_sha256": "ba15c729deed09fc6d51114ab14356135e08e8562cb82d040dfe601594138308",
+      "id": "powerup_wand",
+      "concept": "magic wand",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Magic%20wand/3D/magic_wand_3d.png",
+      "source_path": "assets/Magic wand/3D/magic_wand_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/finish-flag.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 5862,
+      "sha256": "5516ecefe58babb2d16f4a0e8898410f912bb37ddbe7e3553e858a98a895fe67",
+      "source_sha256": "7298ed973fd29a14ca32bf40885c424718e9c5117796b0c25c2fdc8223262e1c",
+      "id": "ui_finish_flag",
+      "concept": "chequered flag",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Chequered%20flag/3D/chequered_flag_3d.png",
+      "source_path": "assets/Chequered flag/3D/chequered_flag_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/modes/rainbow.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 3542,
+      "sha256": "5e1c4f1351a550f1aff8ffb913391ec6c10f807595a4bd238323d170c7f7e621",
+      "source_sha256": "81c60a96369047dd287b9fb54d02d29fe1e9b7fe3f00924330037e861b1fbd81",
+      "id": "mode_rainbow",
+      "concept": "rainbow",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Rainbow/3D/rainbow_3d.png",
+      "source_path": "assets/Rainbow/3D/rainbow_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/modes/rocket.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 4320,
+      "sha256": "f4f415228c6ee33e7c15c761ce8ae8ff6a5240c681ff8bf216979b5fdb4f90ac",
+      "source_sha256": "4636925a1dfc76a45dc83c08b983699d39143a0978f794a4e2dfb6cbffdcd7ab",
+      "id": "mode_rocket",
+      "concept": "rocket",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Rocket/3D/rocket_3d.png",
+      "source_path": "assets/Rocket/3D/rocket_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/badge-spring.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 4324,
+      "sha256": "36530a72f13dec1dd18b80e5d5c5001c6d7b2abda24108fd3ad83c64a86bb1f7",
+      "source_sha256": "91d2d16a023e8b2f4bb8de3aeb5c3e6063d5baaacc70a29f58df7133bf215d7b",
+      "id": "badge_spring",
+      "concept": "hibiscus",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Hibiscus/3D/hibiscus_3d.png",
+      "source_path": "assets/Hibiscus/3D/hibiscus_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/badge-summer.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 3338,
+      "sha256": "d212d3d578dd51260bdda4fc183002a7bd0e73492a1817786085e1c2306dcd4f",
+      "source_sha256": "c9bb15d03d4b1e6151d97e12119ac93bbd2bcb5e713a49c1fcfc11ece54caec1",
+      "id": "badge_summer",
+      "concept": "sun",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Sun/3D/sun_3d.png",
+      "source_path": "assets/Sun/3D/sun_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/badge-autumn.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 3928,
+      "sha256": "d9733d8368f016ea03088aceef191585d3a46d7a1ef104e2ada77f8e7653cd2c",
+      "source_sha256": "28004dbde0c0a6622ed4e53df0b7c0c77c3c29ad4f5b66d91819c390bcfb4f8d",
+      "id": "badge_autumn",
+      "concept": "maple leaf",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Maple%20leaf/3D/maple_leaf_3d.png",
+      "source_path": "assets/Maple leaf/3D/maple_leaf_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/badge-winter.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 6632,
+      "sha256": "03dc7b4cfd0c857ca91cf1c2b5982c1d01212bacda734b8c75da0282191f7944",
+      "source_sha256": "82f12779eb8658ebd4bae02c8136c4588bea55cdf60536d4d88f5eb530e7cb90",
+      "id": "badge_winter",
+      "concept": "snowflake",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Snowflake/3D/snowflake_3d.png",
+      "source_path": "assets/Snowflake/3D/snowflake_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/badge-ocean.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 5824,
+      "sha256": "8057af1704cb7d3c2720b26f4840ac0d3f016415e5452358e26a32d21f839b37",
+      "source_sha256": "6d54f3331c142690c6762c4cf5e2b212a45e652e16653f1a765ce3346db0f8db",
+      "id": "badge_ocean",
+      "concept": "spouting whale",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Spouting%20whale/3D/spouting_whale_3d.png",
+      "source_path": "assets/Spouting whale/3D/spouting_whale_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/badge-space.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 4672,
+      "sha256": "6247f940921c0b009ced2f839aef47949a9e477f9ca840c95c70b7626f184c38",
+      "source_sha256": "e810d03a3d347da5d0cf50cace209c413c963bae9a3c72d7e396ef858574087d",
+      "id": "badge_space",
+      "concept": "ringed planet",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Ringed%20planet/3D/ringed_planet_3d.png",
+      "source_path": "assets/Ringed planet/3D/ringed_planet_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/badge-jungle.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 2954,
+      "sha256": "16c032168ec5ae59bc7c6529264fb6358c29038e94fbf647f16a3ac6157cdc91",
+      "source_sha256": "c29dcf2e535992b76f5e400d18c0b5dfd6ad9c69f9351a394ac9d8dcc622591a",
+      "id": "badge_jungle",
+      "concept": "palm tree",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Palm%20tree/3D/palm_tree_3d.png",
+      "source_path": "assets/Palm tree/3D/palm_tree_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    },
+    {
+      "file": "assets/images/ui/jelly-rpg/badge-candy.webp",
+      "size": [
+        128,
+        128
+      ],
+      "bytes": 3752,
+      "sha256": "e4c3df2bd4043d3c4cdd40809df4af42828da3d0d900491ffb0696b5d00fcb79",
+      "source_sha256": "7ef53e6ecee64e3f032d4a6dca45f4ab6ee32df95c8d2911f934cc9d53767ee0",
+      "id": "badge_candy",
+      "concept": "lollipop",
+      "source": "https://raw.githubusercontent.com/microsoft/fluentui-emoji/1ffb34c752ecf5d402f04cfb4b392c77f57c54bc/assets/Lollipop/3D/lollipop_3d.png",
+      "source_path": "assets/Lollipop/3D/lollipop_3d.png",
+      "creator": "Microsoft Corporation",
+      "license": "MIT"
+    }
+  ]
+}

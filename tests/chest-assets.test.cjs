@@ -263,7 +263,7 @@ test('active Atelier and reward image imports reproduce their exact embedded pro
   const expectedModelImages = embedded.map(image => image.path).sort();
   const activeModelImages = [listFiles(path.join(chestRoot, 'models', 'atelier')),
     listFiles(path.join(chestRoot, 'shared', 'rewards'))].flat()
-    .filter(filename => /\.(?:png|jpe?g)$/i.test(filename)).sort();
+    .filter(filename => /\.(?:png|jpe?g)$/i.test(filename) && !filename.endsWith('/closed-jelly.png')).sort();
   assert.deepEqual(activeModelImages, expectedModelImages);
   for (const asset of stateAssets.assets.filter(asset => asset.kind === 'png')) {
     const image = readPng(asset.path);

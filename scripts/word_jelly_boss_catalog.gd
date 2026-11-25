@@ -41,7 +41,7 @@ const REPLIES: Array[String] = [
 	"We won it back!\nHome at last."]
 
 
-static func encounter(number: int, intro: bool = false) -> Dictionary:
+static func encounter(number: int, intro: bool = false, ascension_tier: int = 0) -> Dictionary:
 	if intro and number == 1:
 		return {"id": 0, "stage": 1, "intro": true, "name": "Pirate", "title": "A Sneaky Visitor",
 			"health": 98, "interval": 8.0, "abilities": ["freeze"], "new_ability": "freeze",
@@ -51,9 +51,19 @@ static func encounter(number: int, intro: bool = false) -> Dictionary:
 			"reply": "That compass is ours.\nWe're coming, Pirate!"}
 	var index: int = STAGES.find(number)
 	if index >= 0:
+		var tier: int = clampi(ascension_tier, 0, 2)
+		var hp_scale: float = 1.0 if tier == 0 else 1.45 if tier == 1 else 2.0
+		var interval_scale: float = 1.0 if tier == 0 else 0.86 if tier == 1 else 0.74
+		var extra_clones: int = 1 if tier >= 2 else 0
+		var extra_ward: int = 2 if tier >= 2 else 1 if tier == 1 else 0
+		var tier_prefix: String = "" if tier == 0 else "Elite · " if tier == 1 else "Legend · "
 		return {"id": index + 1, "stage": number, "intro": false, "name": "Pirate",
-			"title": TITLES[index], "health": HEALTH[index], "interval": maxf(2.8, 6.5 - index * 0.55),
-			"starting_clones": 2 if number == 99 else 1 if number == 9 else 0,
+			"ascension": tier,
+			"title": tier_prefix + TITLES[index],
+			"health": roundi(float(HEALTH[index]) * hp_scale),
+			"interval": maxf(2.2, (6.5 - index * 0.55) * interval_scale),
+			"starting_clones": (2 if number == 99 else 1 if number == 9 else 0) + extra_clones,
+			"starting_ward": extra_ward,
 			"abilities": ABILITIES.slice(0, index + 1), "new_ability": ABILITIES[index],
 			"retreat": RETREATS[index], "entrance": ENTRANCES[index], "escape": ESCAPES[index],
 			"reply": REPLIES[index], "next_stage": STAGES[index + 1] if index + 1 < STAGES.size() else 0}

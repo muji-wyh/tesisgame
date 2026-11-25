@@ -6,6 +6,7 @@ signal challenge_selected
 signal home_requested
 signal retry_requested
 signal upgrades_requested
+signal rpg_requested
 signal chapter_milestone_requested(chapter: int, threshold: int)
 signal changed
 
@@ -21,6 +22,7 @@ const Pip = preload("res://scripts/word_jelly_map_pip.gd")
 const SKY = preload("res://assets/images/jelly-match/sky/day.png")
 const STAGE_OPEN = preload("res://assets/images/ui/jelly-map/stage-open.png")
 const STAGE_LOCKED = preload("res://assets/images/ui/jelly-map/stage-locked.png")
+const STAGE_BOSS = preload("res://assets/images/ui/jelly-map/stage-boss.png")
 const MEDAL = preload("res://assets/images/ui/mastery-medal.webp")
 const COIN = preload("res://assets/coins/gold-coin.png")
 const PLAY = preload("res://assets/images/ui/controls/player-play.svg")
@@ -66,6 +68,7 @@ var _upgrades := Button.new()
 var _upgrade_label: Label
 var _upgrade_sparkle: TextureRect
 var _frontier_pill: Button
+var _rpg_pill: Button
 var _status: Label
 var _home: Button
 var _challenge: Button
@@ -224,8 +227,8 @@ func _init() -> void:
 		var lock_glow: TextureRect = _image(button, GLOW)
 		lock_glow.modulate = Color(0.73, 0.86, 1.0, 0.24)
 		var padlock: TextureRect = _image(button, LOCK)
-		var boss_frame: TextureRect = _image(_content, STAGE_LOCKED)
-		boss_frame.modulate = Color("#71508d")
+		var boss_frame: TextureRect = _image(_content, STAGE_BOSS)
+		boss_frame.modulate = Color.WHITE
 		boss_frame.visible = number == 99
 		var boss_aura: TextureRect = _image(_content, RAYS)
 		boss_aura.modulate = Color(0.38, 0.16, 0.56, 0.74)
@@ -261,6 +264,14 @@ func _init() -> void:
 		if _active and not _frontier_pill.disabled:
 			focus_frontier())
 	_frontier_pill.hide()
+	_rpg_pill = _button("Pip Pack", "Open Pip's RPG build, Boss Relics, Quests, and Word Codex")
+	_rpg_pill.name = "JellyRpgEntry"
+	_rpg_pill.z_index = 4
+	_rpg_pill.focus_mode = Control.FOCUS_NONE
+	_rpg_pill.pressed.connect(func() -> void:
+		if _active and not _rpg_pill.disabled:
+			rpg_requested.emit())
+	_rpg_pill.hide()
 	resized.connect(_layout)
 	visibility_changed.connect(func() -> void:
 		if not is_visible_in_tree():
@@ -364,8 +375,9 @@ func configure(state: Dictionary, reduced_motion: bool = false) -> void:
 		item.button.accessibility_name = "Stage %d. %d of 3 stars. %s." % [
 			number, stars, "Replay" if number <= highest else "Next" if number == highest + 1 else "Locked"]
 		var unlocked: bool = number <= mini(highest + 1, 99)
-		item.face.texture = STAGE_OPEN if unlocked else STAGE_LOCKED
-		item.label.add_theme_color_override("font_color", Style.INK if unlocked else Color("#cbd7da"))
+		var is_boss_stage: bool = number == 99 or number > 1 and number in state.get("boss_markers", [])
+		item.face.texture = STAGE_BOSS if (unlocked and is_boss_stage) else STAGE_OPEN if unlocked else STAGE_LOCKED
+		item.label.add_theme_color_override("font_color", Color("#fff6d6") if (unlocked and is_boss_stage) else Style.INK if unlocked else Color("#d8e3e6"))
 		for index in range(3):
 			item.stars[index].visible = number <= highest
 			item.stars[index].modulate = Color.WHITE if index < stars else Color(0.57, 0.49, 0.36, 0.28)
@@ -753,8 +765,7 @@ func _layout() -> void:
 		section.banner.position = Vector2((width - banner_width) * 0.5,
 			y + chapter_height - 74.0 / s)
 		section.banner.size = Vector2(banner_width, 44.0 / s)
-		section.banner.add_theme_stylebox_override("panel",
-			Style.box(Color("#fffaf0"), Color("#d5e4db"), ceili(16.0 / s), maxi(1, roundi(1.0 / s))))
+		section.banner.add_theme_stylebox_override("panel", Style.chapter_banner_box(s))
 		var chapter_title_width: float = banner_width - 24.0 / s
 		var chapter_stars: int = _chapter_earned_stars(index + 1)
 		section.number.text = "CH %02d · %d-%d · %d/27 ★" % [
@@ -767,8 +778,8 @@ func _layout() -> void:
 		var milestone: Button = section.milestone
 		Style.action_button(milestone, Color("#a36927"))
 		milestone.custom_minimum_size = Vector2.ZERO
-		milestone.add_theme_stylebox_override("normal",
-			Style.box(Color("#ffdf73"), Color("#b87c2a"), ceili(14.0 / s), maxi(1, roundi(1.5 / s))))
+		milestone.add_theme_stylebox_override("normal", Style.gold_button_box(s, false))
+		milestone.add_theme_stylebox_override("hover", Style.gold_button_box(s, true))
 		milestone.add_theme_color_override("font_color", Color("#563812"))
 		milestone.add_theme_font_size_override("font_size", ceili(12.0 / s))
 		milestone.size = Vector2(minf(116.0 / s, banner_width * 0.42), 30.0 / s)
@@ -779,20 +790,22 @@ func _layout() -> void:
 		while pixels > 1 and title_font.get_string_size(section.title.text, HORIZONTAL_ALIGNMENT_LEFT, -1, pixels).x > chapter_title_width:
 			pixels -= 1
 		section.title.add_theme_font_size_override("font_size", pixels)
-		var scenery_width: float = minf(width * 0.38, 270.0 / s)
-		section.left.position = Vector2(8.0 / s, y + 760.0 / s)
-		section.left.size = Vector2(scenery_width, 230.0 / s)
-		section.left.modulate.a = 0.72
-		section.right.position = Vector2(width - scenery_width - 8.0 / s, y + 250.0 / s)
-		section.right.size = Vector2(scenery_width, 250.0 / s)
-		section.right.modulate.a = 0.82
+		var scenery_width: float = minf(width * 0.40, 285.0 / s)
+		section.left.position = Vector2(8.0 / s, y + 745.0 / s)
+		section.left.size = Vector2(scenery_width, 245.0 / s)
+		section.left.modulate.a = 0.90
+		section.right.position = Vector2(width - scenery_width - 8.0 / s, y + 235.0 / s)
+		section.right.size = Vector2(scenery_width, 260.0 / s)
+		section.right.modulate.a = 0.94
 		section.hills.position = Vector2(0, y + 70.0 / s)
 		section.hills.size = Vector2(width, 260.0 / s)
+		section.hills.modulate = Color(0.95, 0.98, 0.96, 0.78)
 		section.shrubs.position = Vector2(12.0 / s, y + 55.0 / s)
-		section.shrubs.size = Vector2(width * 0.35, 75.0 / s)
-		section.grove.position = Vector2(width * 0.70, y + 510.0 / s)
-		section.grove.size = Vector2(minf(width * 0.25, 170.0 / s), 210.0 / s)
-		section.grove.modulate = Color(0.9, 1.0, 0.96, 0.50)
+		section.shrubs.size = Vector2(width * 0.36, 86.0 / s)
+		section.shrubs.modulate.a = 0.92
+		section.grove.position = Vector2(width * 0.70, y + 500.0 / s)
+		section.grove.size = Vector2(minf(width * 0.27, 185.0 / s), 220.0 / s)
+		section.grove.modulate = Color(0.96, 1.0, 0.98, 0.78)
 		for key: String in ["left", "right", "grove", "shrubs"]:
 			section[key].pivot_offset = Vector2(section[key].size.x * 0.5, section[key].size.y)
 	for item: Dictionary in _nodes:
@@ -883,6 +896,26 @@ func _layout() -> void:
 	_frontier_pill.size = Vector2(minf(132.0 / s, width * 0.45), 36.0 / s)
 	_frontier_pill.position = Vector2(left + (width - _frontier_pill.size.x) * 0.5,
 		_scroll.get_rect().end.y - _frontier_pill.size.y - 10.0 / s)
+	var rpg_ready: bool = _state.has("rpg_claimable")
+	var blocked: bool = bool(_state.get("loading", false)) or not str(_state.get("error", "")).is_empty()
+	_rpg_pill.visible = rpg_ready and not blocked and is_visible_in_tree()
+	_rpg_pill.disabled = blocked
+	if rpg_ready:
+		var claims: int = int(_state.get("rpg_claimable", 0))
+		var stance_badge: String = str(_state.get("rpg_stance_badge", "PACK"))
+		_rpg_pill.text = "%s · %d!" % [stance_badge, claims] if claims > 0 else stance_badge
+		_rpg_pill.accessibility_name = "Pip's Adventurer Pack. %s.%s" % [
+			stance_badge, " %d rewards ready to claim." % claims if claims > 0 else ""]
+		Style.action_button(_rpg_pill, Color("#b57622") if claims > 0 else Style.GOOD, claims > 0)
+		if claims > 0:
+			_rpg_pill.add_theme_stylebox_override("normal", Style.gold_button_box(s, false))
+			_rpg_pill.add_theme_stylebox_override("hover", Style.gold_button_box(s, true))
+			_rpg_pill.add_theme_color_override("font_color", Color("#563812"))
+		_rpg_pill.custom_minimum_size = Vector2.ZERO
+		_rpg_pill.add_theme_font_size_override("font_size", ceili(12.0 / s))
+		_rpg_pill.size = Vector2(minf(124.0 / s, width * 0.36), 36.0 / s)
+		_rpg_pill.position = Vector2(left + width - _rpg_pill.size.x - 4.0 / s,
+			_scroll.get_rect().end.y - _rpg_pill.size.y - 10.0 / s)
 	_cache_journey_route()
 	_position_guide()
 	_refresh_locks()
@@ -1104,7 +1137,8 @@ func _refresh_locks(visible_only: bool = false) -> void:
 			continue
 		var p: float = clampf((_unlock_elapsed - ROUTE_SECONDS) / UNLOCK_SECONDS, 0.0, 1.0) if arriving else 1.0
 		var locked: bool = number > mini(highest + 1, 99)
-		item.face.texture = STAGE_LOCKED if locked or (arriving and p <= 0.0) else STAGE_OPEN
+		var is_boss_stage: bool = bool(item.get("boss_marker", number == 99))
+		item.face.texture = STAGE_LOCKED if locked or (arriving and p <= 0.0) else (STAGE_BOSS if is_boss_stage else STAGE_OPEN)
 		item["unlock_scale"] = 1.0 + 0.12 * sin(p * PI) if arriving and not _reduced_motion else 1.0
 		item.padlock.visible = locked or (arriving and p < 1.0)
 		item.lock_glow.visible = item.padlock.visible
@@ -1120,13 +1154,20 @@ func _draw_route() -> void:
 		return
 	var points: PackedVector2Array = _route_points
 	if points.size() > 1:
-		_content.draw_polyline(points, Color(0.38, 0.55, 0.48, 0.15), 26.0 / _scale, true)
-		_content.draw_polyline(points, Color("#fff6df"), 18.0 / _scale, true)
-		_content.draw_polyline(points, Color("#dccb99"), 2.0 / _scale, true)
+		# Cobblestone storybook trail: soft ground shadow, warm stone rim, cream center & stepping stones.
+		_content.draw_polyline(points, Color(0.32, 0.42, 0.34, 0.24), 29.0 / _scale, true)
+		_content.draw_polyline(points, Color("#d4be92"), 22.0 / _scale, true)
+		_content.draw_polyline(points, Color("#fdf4dd"), 16.0 / _scale, true)
+		_content.draw_polyline(points, Color("#e4cfa0"), 2.5 / _scale, true)
+		for idx in range(0, points.size(), 4):
+			_content.draw_circle(points[idx], 4.2 / _scale, Color("#e7d4a8", 0.72))
+			_content.draw_circle(points[idx] - Vector2(0.8, 0.8) / _scale, 2.2 / _scale, Color("#fffbf0", 0.78))
 	if _earned_points.size() > 1:
-		_content.draw_polyline(_earned_points, Color("#d49c43"), 12.0 / _scale, true)
-		_content.draw_polyline(_earned_points, Color("#f9d982"), 8.0 / _scale, true)
-		_content.draw_polyline(_earned_points, Color("#fff1bf"), 2.0 / _scale, true)
+		_content.draw_polyline(_earned_points, Color("#b67a24"), 15.0 / _scale, true)
+		_content.draw_polyline(_earned_points, Color("#f6cc68"), 10.0 / _scale, true)
+		_content.draw_polyline(_earned_points, Color("#fff1bf"), 3.0 / _scale, true)
+		for idx in range(0, _earned_points.size(), 4):
+			_content.draw_circle(_earned_points[idx], 3.0 / _scale, Color("#fff7d6", 0.90))
 	if _unlock_from <= 0 or _unlock_elapsed >= ROUTE_SECONDS + UNLOCK_SECONDS:
 		return
 	var travel: float = RUN_ROUTE_END * smoothstep(0.0, 1.0,
@@ -1234,6 +1275,7 @@ func snapshot() -> Dictionary:
 		"upgrade_affordable": bool(_state.get("upgrade_affordable", false)),
 		"chapter_milestones": _state.get("chapter_milestones", []).duplicate(),
 		"frontier_pill": _control(_frontier_pill),
+		"rpg_entry": _control(_rpg_pill),
 		"final_boss_stage": 99,
 		"merged_level_indicator": _merged_level_badge.snapshot(),
 		"upgrades_entry": _control(_upgrades),

@@ -236,7 +236,8 @@ static func recipe_error(value: Variant) -> String:
 
 
 static func clear_reward(number: int, stars: int, chest_coins: int, previous_stars: int = 0,
-		paid_powerups_used: int = 0, leftover_fragments: int = 0) -> Dictionary:
+		paid_powerups_used: int = 0, leftover_fragments: int = 0,
+		rpg_clear_bonus_ratio: float = 0.0, double_leftover_fragments: bool = false) -> Dictionary:
 	if number < 0 or number > MAX_STAGE or stars < 0 or stars > 3 or chest_coins < 0 or chest_coins > MAX_COINS \
 		or previous_stars < 0 or previous_stars > 3 or paid_powerups_used < 0 or leftover_fragments < 0:
 		return _failure("A clear quote needs a supported stage, star rating and nonnegative coin inputs.")
@@ -253,7 +254,8 @@ static func clear_reward(number: int, stars: int, chest_coins: int, previous_sta
 	var factor: float = 0.0
 	var star_upgrade_bonus: int = 0
 	var pure_clear_bonus: int = 0
-	var fragment_rebate: int = Economy.leftover_fragment_coins(leftover_fragments)
+	var rpg_bonus: int = 0
+	var fragment_rebate: int = Economy.leftover_fragment_coins(leftover_fragments) * (2 if double_leftover_fragments else 1)
 	if number != 0 and stars != 0:
 		if chest_coins > MAX_COINS - base:
 			return _failure("This stage settlement exceeds the supported coin amount.")
@@ -270,7 +272,9 @@ static func clear_reward(number: int, stars: int, chest_coins: int, previous_sta
 			star_upgrade_bonus = (stars - previous_stars) * Economy.STAR_UPGRADE_COIN_STEP
 		if paid_powerups_used == 0 and not is_replay:
 			pure_clear_bonus = roundi(float(base) * Economy.PURE_CLEAR_BONUS_RATIO)
-		total = unmultiplied_chest + scaled + star_upgrade_bonus + pure_clear_bonus + fragment_rebate
+		if rpg_clear_bonus_ratio > 0.0:
+			rpg_bonus = roundi(float(scaled) * clampf(rpg_clear_bonus_ratio, 0.0, 1.5))
+		total = unmultiplied_chest + scaled + star_upgrade_bonus + pure_clear_bonus + rpg_bonus + fragment_rebate
 		if total > MAX_COINS:
 			return _failure("This star-weighted settlement exceeds the supported coin amount.")
 	elif fragment_rebate > 0:
@@ -281,8 +285,8 @@ static func clear_reward(number: int, stars: int, chest_coins: int, previous_sta
 		"stars": stars, "previous_stars": previous_stars, "is_replay": is_replay,
 		"base": base, "factor": factor, "chest_coins": chest_coins,
 		"weighted_chest": weighted_chest, "star_upgrade_bonus": star_upgrade_bonus,
-		"pure_clear_bonus": pure_clear_bonus, "fragment_rebate": fragment_rebate,
-		"bonus": total - chest_coins, "total": total}
+		"pure_clear_bonus": pure_clear_bonus, "rpg_bonus": rpg_bonus,
+		"fragment_rebate": fragment_rebate, "bonus": total - chest_coins, "total": total}
 
 
 static func _word_error(value: Variant) -> String:

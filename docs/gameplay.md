@@ -430,7 +430,57 @@ coin curves, plus an endgame coin sink once all three tracks reach Lv9:
   at Lv9).
 - **Golden Crown prestige** (ranks 1–50): unlocks when all three tracks reach
   Lv9, costing `1000 + 250 * (rank - 1)` coins per rank with receipt-backed
-  persistence (`jelly-prestige-v1:N`) and map badge recognition.
+  persistence (`jelly-prestige-v1:N`), map badge recognition, and **+1% clear
+  coins and +1% Boss damage** per rank inside Jelly World.
+
+### Pip's Adventurer Pack (Jelly World RPG progression)
+
+Jelly World includes a self-contained RPG layer stored in its own isolated
+receipt-backed save (`user://jelly-rpg-v1.cfg` / `growWithPip.jellyRpg.v1`),
+accessible from the bottom-right **Adventurer Pack** pill on the Jelly World map:
+
+- **Pip's 4 Attributes (`Wit`, `Spark`, `Tempo`, `Fortune`)**: derived purely
+  from Pip's real mastery level, growth age, permanent Jelly Upgrades, chapter
+  stars, equipped relics, Word Codex stars, and Golden Crown rank.
+- **3 Adventure Stances & Free Companion Active Skills** (charge from manual
+  merges, word collections, and Boss dodges — never spend coins; activate via
+  the in-battle skill button, `E`, or controller `Y`):
+  - **Spark Scholar (`Starburst`)**: manual upgrade merges add +1 Boss charge
+    and Lv3+ collects can chain-upgrade 1 adjacent merged jelly (+1 level up to
+    cap); **Starburst** triggers up to 2 free automatic board merges without
+    fabricating word mastery (`mastery_eligible = false`).
+  - **Compass Hunter (`Compass Strike`)**: Boss dodges grant 2× Boss charge
+    and `POWER!` strikes deal 1.35× damage while piercing 1 clone/ward;
+    **Compass Strike** cleanses freeze/ink/locks/broken sky, interrupts Pirate,
+    and fires a piercing Wit-scaled beam.
+  - **Treasure Seeker (`Lucky Shower`)**: +15% treasure fragment odds, 2×
+    leftover-fragment coin rebate at clear, and +2 extra combo coins from Rank A+;
+    **Lucky Shower** attaches fragments to 3 tiles and adds +4.0s combo & stage
+    timer grace (or +4s Challenge time).
+- **8 Pirate Compass Relics & Boss Ascension**: defeating each of the 8 story
+  Bosses (stages 3, 5, 7, 9, 18, 36, 63, 99) unlocks its unique counterplay
+  Relic (`Thaw Bell`, `Clarity Lens`, `Master Key`, `Truth Prism`, `Gale
+  Feather`, `Echo Clasp`, `Aegis Crest`, `Word Compass`). Players equip 1–3
+  relics (2nd slot at 4 Bosses or Pip Lv10; 3rd slot at 6 Bosses or Pip Lv25)
+  and upgrade relics Lv1→Lv3 using coins (`150` / `350`) and **Boss tokens**
+  earned from Boss rematches, Pirate Mini-Raids, bounties, and deeds. Defeated
+  Bosses can be replayed at **Normal (★1)**, **Elite (★2)** (1.45× HP, faster
+  attacks, +1 starting ward, 2 tokens, +200 first-clear coins), or **Legend
+  (★3)** (2.0× HP, faster attacks, +2 starting wards, +1 clone, 3 tokens, +450
+  first-clear coins).
+- **Jelly World Bounties, Deeds & Adventure Days**: 3 active Jelly World
+  bounties auto-refill as each is claimed, paired with 12 permanent Adventure
+  Deeds and a non-punitive cumulative Active Adventure Days counter.
+- **12-Theme Word Codex Synergy**: mastering 25% / 60% / 100% of each thematic
+  adventure unlocks 1★ / 2★ / 3★ permanent Jelly World bonuses (Skill Charge,
+  Rescue Time, Boss Power, Clear Coins, Combo Window, Treasure Odds), and
+  collecting a Mastered word in Jelly World deals **+15% Boss damage** and
+  grants **+5% bonus Companion Skill charge**.
+- **Survival Challenge Roguelite Boon Draft**: every 5 completed Challenge waves
+  pauses active clocks for a deterministic 3-pick draft from 9 exaggerated,
+  stackable power boons (`Supernova Blast`, `Hyper Charge`, `Chrono Flow`,
+  `Golden Cascade`, `Giant Leap`, `Chain Echo`, `Arcane Wand`, `Treasure Frenzy`,
+  `Lightning Hands`).
 
 Inspecting an Auto merge level shows that exact capacity using the existing acquired Jelly
 and wand artwork. The live Auto merge button has a stable gel-and-number badge

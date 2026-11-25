@@ -92,12 +92,7 @@ func _layout() -> void:
 		return
 	var s: float = Style.ui_scale(self)
 	var accent: Color = _palette.get("accent", Style.GOOD)
-	var surface := Style.box(Style.PAPER, accent.lightened(0.65), ceili(24 / s), maxi(1, roundi(1.5 / s)))
-	surface.border_width_bottom = ceili(3.0 / s)
-	surface.shadow_color = Color(Style.INK, 0.26)
-	surface.shadow_size = ceili(22 / s)
-	surface.shadow_offset = Vector2(0, 8 / s)
-	panel.add_theme_stylebox_override("panel", surface)
+	panel.add_theme_stylebox_override("panel", Style.parchment_panel(s, 12.0, 10.0))
 	if _panel_paper_material != null:
 		_panel_paper_material.set_shader_parameter("paper_tint", Style.PAPER)
 		_panel_paper_material.set_shader_parameter("top_wash", Style.PAPER.lerp(accent.lightened(0.84), 0.55))
